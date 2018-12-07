@@ -24,6 +24,7 @@ import sys
 import argparse
 
 import otbApplication
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
 
 linesep = os.linesep
 pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
@@ -65,8 +66,6 @@ def render_choice(app, key):
     "Render a choice parameter to rst"
 
     # First render all the choice values
-    template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
-
     choice_keys = app.GetChoiceKeys(key)
     choice_names = app.GetChoiceNames(key)
 
@@ -81,8 +80,6 @@ def render_choice(app, key):
         )
 
     # Then render the full choice parameter
-    template_parameter_choice = open("templates/parameter_choice.rst").read()
-
     return template_parameter_choice.format(
         name=app.GetParameterName(key),
         key=key,
@@ -104,49 +101,49 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         value = app.GetExampleParameterValue(idx,i)
         paramtype = app.GetParameterType(param)
         paramrole = app.GetParameterRole(param)
-        if paramtype == otbApplication.ParameterType_ListView:
+        if paramtype == ParameterType_ListView:
             break
-        if paramtype == otbApplication.ParameterType_Group:
+        if paramtype == ParameterType_Group:
             break
-        if paramtype ==  otbApplication.ParameterType_Choice:
+        if paramtype ==  ParameterType_Choice:
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
-        if paramtype == otbApplication.ParameterType_Bool:
+        if paramtype == ParameterType_Bool:
             output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")"
-        if paramtype == otbApplication.ParameterType_Int \
-                or paramtype == otbApplication.ParameterType_Radius \
-                or paramtype == otbApplication.ParameterType_RAM:
+        if paramtype == ParameterType_Int \
+                or paramtype == ParameterType_Radius \
+                or paramtype == ParameterType_RAM:
             # app.SetParameterString(param,value)
             output += "\t" + appname + ".SetParameterInt("+EncloseString(param)+", "+value+")"
-        if paramtype == otbApplication.ParameterType_Float:
+        if paramtype == ParameterType_Float:
             # app.SetParameterString(param,value)
             output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")"
-        if paramtype == otbApplication.ParameterType_String:
+        if paramtype == ParameterType_String:
             # app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
-        if paramtype == otbApplication.ParameterType_StringList:
+        if paramtype == ParameterType_StringList:
             values = value.split(" ")
             # app.SetParameterStringList(param,values)
             output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+str(values)+")"
-        if paramtype == otbApplication.ParameterType_InputFilename \
-            or paramtype == otbApplication.ParameterType_OutputFilename \
-            or paramtype == otbApplication.ParameterType_Directory:
+        if paramtype == ParameterType_InputFilename \
+            or paramtype == ParameterType_OutputFilename \
+            or paramtype == ParameterType_Directory:
             if paramrole == 0:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
                 output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand)) + ")"
             elif paramrole == 1:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
                 output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,outputpath,expand))+")"
-        if paramtype == otbApplication.ParameterType_InputImage :
+        if paramtype == ParameterType_InputImage :
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
-        if paramtype == otbApplication.ParameterType_ComplexInputImage:
+        if paramtype == ParameterType_ComplexInputImage:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
-        if paramtype == otbApplication.ParameterType_InputVectorData:
+        if paramtype == ParameterType_InputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
-        if paramtype == otbApplication.ParameterType_OutputImage :
+        if paramtype == ParameterType_OutputImage :
             foundcode,foundname = GetPixelType(value)
             if foundcode != -1:
                 output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value[:-len(foundname)],outputpath,expand))+")"
@@ -154,19 +151,19 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
                 output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")"
             else:
                 output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
-        if paramtype == otbApplication.ParameterType_ComplexOutputImage :
+        if paramtype == ParameterType_ComplexOutputImage :
             # TODO: handle complex type properly
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
             output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
-        if paramtype == otbApplication.ParameterType_OutputVectorData:
+        if paramtype == ParameterType_OutputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
             output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
-        if paramtype == otbApplication.ParameterType_InputImageList:
+        if paramtype == ParameterType_InputImageList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             # app.SetParameterStringList(param,values)
             output += "\t" + appname + ".SetParameterStringList("+EncloseString(param) + ", " + str(values) + ")"
-        if paramtype == otbApplication.ParameterType_InputVectorDataList:
+        if paramtype == ParameterType_InputVectorDataList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             #app.SetParameterStringList(param,values)
@@ -188,68 +185,57 @@ def rst_section(text, delimiter, ref=None):
     return output
 
 def rst_parameter_value(app, key):
+    "Render a parameter value to rst"
+
     type = app.GetParameterType(key)
-    if type == otbApplication.ParameterType_Bool:
-        return "bool"
-    elif (type == otbApplication.ParameterType_Int
-       or type == otbApplication.ParameterType_Radius
-       or type == otbApplication.ParameterType_RAM):
-        return "int"
-    elif type == otbApplication.ParameterType_Float:
-        return "float"
-    elif type == otbApplication.ParameterType_String:
-        return "string"
-    elif type == otbApplication.ParameterType_StringList:
-        return "string1 string2..."
-    elif (type == otbApplication.ParameterType_InputFilename
-            or type == otbApplication.ParameterType_OutputFilename):
-        return "filename"
-    elif (type == otbApplication.ParameterType_InputImage
-       or type == otbApplication.ParameterType_ComplexInputImage
-       or type == otbApplication.ParameterType_OutputImage
-       or type == otbApplication.ParameterType_ComplexOutputImage):
-        return "image"
-    elif (type == otbApplication.ParameterType_InputVectorData
-       or type == otbApplication.ParameterType_OutputVectorData):
-        return "vectorfile"
-    elif type == otbApplication.ParameterType_Directory:
-        return "directory"
-    elif type ==  otbApplication.ParameterType_Choice:
-        return "choice"
-    elif type == otbApplication.ParameterType_InputImageList:
-        return "image1 image2..."
-    elif type == otbApplication.ParameterType_InputVectorDataList:
-        return "vectorfile1 vectorfile2..."
-    elif type == otbApplication.ParameterType_InputFilenameList :
-        return "filename1 filename2..."
-    elif type == otbApplication.ParameterType_ListView:
+
+    # ListView is a special case depending on its mode
+    if type == ParameterType_ListView:
         if app.GetListViewSingleSelectionMode(key):
             return "string"
         else:
             return "string1 string2..."
-    elif type == otbApplication.ParameterType_Group:
-        return "TODO"
-    elif (type == otbApplication.ParameterType_InputProcessXML
-        or type == otbApplication.ParameterType_OutputProcessXML):
-        return "filename.xml"
+
+    # For all other types it's a simple mapping
+    values = {
+        ParameterType_Bool: "bool",
+        **dict.fromkeys([ParameterType_Int, ParameterType_Radius, ParameterType_RAM], "int"),
+        ParameterType_Float: "float",
+        ParameterType_String: "string",
+        ParameterType_StringList: "string1 string2...",
+        **dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename"),
+        **dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image"),
+        **dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"),
+        ParameterType_Directory: "directory",
+        ParameterType_Choice: "choice",
+        ParameterType_InputImageList: "image1 image2...",
+        ParameterType_InputVectorDataList: "vectorfile1 vectorfile2...",
+        ParameterType_InputFilenameList: "filename1 filename2...",
+        **dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"),
+    }
+
+    if type in values:
+        return values[type]
     else:
-        return "value"
+        raise ValueError("Cannot show parameter value for type ", type)
 
 def rst_parameter_flags(app, key):
     if app.IsMandatory(key) and not app.HasValue(key):
         return "*Mandatory* "
-    elif app.HasValue(key) and app.GetParameterType(key) != otbApplication.ParameterType_Group:
+    elif app.HasValue(key) and app.GetParameterType(key) != ParameterType_Group:
         return "*Default value: {}* ".format(app.GetParameterValue(key))
     else:
         return ""
 
 def detect_abuse(app):
+    "Detect choice parameter values which are also used as groups"
+
     fake_groups = {}
     keys = app.GetParametersKeys()
 
     # For each choice parameter
     for key in keys:
-        if app.GetParameterType(key) == otbApplication.ParameterType_Choice:
+        if app.GetParameterType(key) == ParameterType_Choice:
 
             # Consider all its possible values
             for choice_key in app.GetChoiceKeys(key):
@@ -266,9 +252,9 @@ def detect_abuse(app):
     return fake_groups
 
 def rst_parameters(app):
+    "Render application parameters to rst"
+
     output = ""
-    template_parameter = open("templates/parameter.rst").read()
-    template_parameter_group = open("templates/parameter_group.rst").read()
 
     fake_markers = detect_abuse(app)
 
@@ -278,7 +264,7 @@ def rst_parameters(app):
 
         # If reducing level not on a group parameter, render a horizontal line
         current_level = 1 + key.count(".")
-        if current_level < previous_level and type != otbApplication.ParameterType_Group:
+        if current_level < previous_level and type != ParameterType_Group:
             output += "\n\n------------\n\n"
         previous_level = current_level
 
@@ -287,13 +273,13 @@ def rst_parameters(app):
         if key in fake_markers:
             output += rst_section(app.GetParameterName(fake_markers[key]) + " options", "^")
 
-        if type == otbApplication.ParameterType_Group:
+        if type == ParameterType_Group:
             output += template_parameter_group.format(
                 name=rst_section(app.GetParameterName(key), "^"),
                 description=app.GetParameterDescription(key)
             )
 
-        elif type == otbApplication.ParameterType_Choice:
+        elif type == ParameterType_Choice:
             output += render_choice(app, key)
 
         else:
@@ -357,12 +343,9 @@ def render_see_also(app):
     "Render app See Also to rst"
 
     see_also = app.GetDocSeeAlso()
-    if len(see_also) > 2:
-        print(app.GetName(), len(see_also), see_also)
     if see_also is None or len(see_also) < 2:
         return ""
     else:
-        # TODO make links?
         return rst_section("See also", "-") + see_also
 
 def ApplicationToRst(appname):
@@ -373,7 +356,7 @@ def ApplicationToRst(appname):
 
     parameters = rst_parameters(app)
 
-    output = open("templates/application.rst").read().format(
+    output = template_application.format(
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=app.GetDocLongDescription(),
@@ -403,7 +386,6 @@ def GenerateRstForApplications(rst_dir):
     allApps = None
     try:
         allApps = otbApplication.Registry.GetAvailableApplications( )
-        print(allApps)
     except:
         print('error in otbApplication.Registry.GetAvailableApplications()')
         sys.exit(1)
@@ -414,8 +396,6 @@ def GenerateRstForApplications(rst_dir):
 
     writtenTags = []
     appNames = [app for app in allApps if app not in blackList]
-
-    print("All apps: %s" % (appNames,))
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
     appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
@@ -462,5 +442,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(usage="Export application(s) to rst file")
     parser.add_argument("rst_dir", help="Directory where rst files are generated")
     args = parser.parse_args()
+
+    # Load rst templates
+    template_application = open("templates/application.rst").read()
+    template_parameter = open("templates/parameter.rst").read()
+    template_parameter_group = open("templates/parameter_group.rst").read()
+    template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
+    template_parameter_choice = open("templates/parameter_choice.rst").read()
+
 
     GenerateRstForApplications(args.rst_dir)
