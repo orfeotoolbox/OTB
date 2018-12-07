@@ -192,6 +192,10 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     else
       (*quality) = m_RFModel->predict_confidence(sample);
     }
+
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
+
   return target[0];
 }
 
