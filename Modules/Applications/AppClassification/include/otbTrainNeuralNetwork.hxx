@@ -35,10 +35,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 ::InitNeuralNetworkParams()
 {
   AddChoice("classifier.ann", "Artificial Neural Network classifier");
-  SetParameterDescription("classifier.ann",
-    "This group of parameters allows setting Artificial Neural Network "
-    "classifier parameters. See complete documentation here "
-    "\\url{http://docs.opencv.org/modules/ml/doc/neural_networks.html}.");
+  SetParameterDescription("classifier.ann", "http://docs.opencv.org/modules/ml/doc/neural_networks.html");
 
   //TrainMethod
   AddParameter(ParameterType_Choice, "classifier.ann.t", "Train Method Type");

@@ -34,8 +34,7 @@ namespace Wrapper
   ::InitNormalBayesParams()
   {
     AddChoice("classifier.bayes", "Normal Bayes classifier");
-    SetParameterDescription("classifier.bayes", "Use a Normal Bayes Classifier. "
-        "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/normal_bayes_classifier.html}.");
+    SetParameterDescription("classifier.bayes", "http://docs.opencv.org/modules/ml/doc/normal_bayes_classifier.html");
 
   }
 

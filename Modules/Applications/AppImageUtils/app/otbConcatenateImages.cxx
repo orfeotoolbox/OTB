@@ -57,11 +57,11 @@ private:
   void DoInit() override
   {
     SetName("ConcatenateImages");
-    SetDescription("Concatenate a list of images of the same size into a single multi-channel one.");
+    SetDescription("Concatenate a list of images of the same size into a single multi-channel image.");
 
     // Documentation
     SetDocName("Images Concatenation");
-    SetDocLongDescription("This application performs images channels concatenation. "
+    SetDocLongDescription("Concatenate a list of images of the same size into a single multi-channel image. "
       "It reads the input image list (single or multi-channel) "
       "and generates a single multi-channel image. The channel order is the same as the list.");
     SetDocLimitations("All input images must have the same size.");

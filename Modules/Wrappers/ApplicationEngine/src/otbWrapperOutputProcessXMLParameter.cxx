@@ -49,8 +49,8 @@ OutputProcessXMLParameter::OutputProcessXMLParameter()
   , m_Appli()
 {
   this->SetKey("outxml");
-  this->SetName("Save otb application to xml file");
-  this->SetDescription("Save otb application to xml file");
+  this->SetName("Save parameters to XML");
+  this->SetDescription("Save application parameters to an XML file.");
   this->SetMandatory(false);
   this->SetActive(false);
   this->SetRole(Role_Output);

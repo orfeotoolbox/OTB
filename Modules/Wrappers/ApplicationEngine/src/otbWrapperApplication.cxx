@@ -2097,11 +2097,9 @@ void Application::AddRAMParameter(std::string paramKey, std::string paramName, u
 void Application::AddRAMParameter(std::string paramKey)
 {
   // Get the  RAM Parameter from the configuration manager
-  AddRAMParameter(paramKey,
-                    "Available RAM (Mb)",
-                  otb::ConfigurationManager::GetMaxRAMHint());
+  AddRAMParameter(paramKey, "Available RAM (MB)", otb::ConfigurationManager::GetMaxRAMHint());
   MandatoryOff(paramKey);
-  SetParameterDescription(paramKey, "Available memory for processing (in MB)");
+  SetParameterDescription(paramKey, "Available memory for processing (in MB).");
 }
 
 void Application::AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)

@@ -93,18 +93,21 @@ private:
     SetDescription("Change the pixel type and rescale the image's dynamic");
 
     SetDocName("Dynamic Conversion");
-    SetDocLongDescription("This application performs an image pixel type "
+    SetDocLongDescription(
+      "This application performs an image pixel type "
       "conversion (short, ushort, uchar, int, uint, float and double types are "
       "handled). The output image is written in the specified format (ie. "
-      "that corresponds to the given extension).\n The conversion can include "
-      "a rescale of the data range, by default it's set between the 2nd to "
-      "the 98th percentile. The rescale can be linear or log2. \n The choice "
+      "that corresponds to the given extension).\n"
+      "The conversion can include a rescale of the data range, by default it's set between the 2nd to "
+      "the 98th percentile. The rescale can be linear or log2. \nThe choice "
       "of the output channels can be done with the extended filename, but "
       "less easy to handle. To do this, a 'channels' parameter allows you to "
       "select the desired bands at the output. There are 3 modes, the "
-      "available choices are: \n * grayscale :  to display mono image as "
-      "standard color image \n * rgb : select 3 bands in the input image "
-      "(multi-bands) \n * all : keep all bands.");
+      "available choices are: \n"
+      " * **All**: keep all bands.\n"
+      " * **Grayscale**: to display mono image as standard color image \n"
+      " * **RGB**: select 3 bands in the input image (multi-bands) \n"
+    );
     SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Convert, Rescale");

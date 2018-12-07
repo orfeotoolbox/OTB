@@ -251,21 +251,25 @@ private:
   void DoInit() override
   {
     SetName("ColorMapping");
-    SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
+    SetDescription("Map a label image to 8-bits RGB using look-up tables.");
 
     SetDocName("Color Mapping");
-    SetDocLongDescription("This application allows one to map a label image to a 8-bits RGB image (in both ways) using different methods.\n"
-                          " -The custom method allows one to use a custom look-up table. The look-up table is loaded "
-                          "from a text file where each line describes an entry. The typical use of this method is to colorise a "
-                          "classification map.\n -The continuous method allows mapping a range of values in a scalar input image "
-                          "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
-                          "look-up tables can been chosen with different color ranges.\n-The optimal method computes an optimal "
-                          "look-up table. When processing a segmentation label image (label to color), the color difference between"
-                          " adjacent segmented regions is maximized. When processing an unknown color image (color to label), all "
-                          "the present colors are mapped to a continuous label list.\n - The support image method uses a color support "
-                          "image to associate an average color to each region.");
+    SetDocLongDescription(
+        "Map a label image to a 8-bits RGB image (both ways) using different methods:\n\n"
+        " - **Custom**: use a custom look-up table. The look-up table is loaded "
+        "from a text file where each line describes an entry. The typical use of this method is to colorise a "
+        "classification map.\n"
+        " - **Continuous**: Map a range of values in a scalar input image "
+        "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
+        "look-up tables can been chosen with different color ranges.\n"
+        " - **Optimal**: Compute an optimal "
+        "look-up table. When processing a segmentation label image (label to color), the color difference between"
+        " adjacent segmented regions is maximized. When processing an unknown color image (color to label), all "
+        "the present colors are mapped to a continuous label list.\n"
+        " - **Support image**: Use a color support image to associate an average color to each region.");
+
     SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color to label "
-                      "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping using support image is not threaded.");
+                      "is not implemented for the methods continuous LUT and support image LUT.\n\nColorMapping using support image is not threaded.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
