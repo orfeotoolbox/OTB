@@ -55,6 +55,10 @@ if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
   find_package(PythonInterp REQUIRED)
 endif()
 
+#openMP lib path
+set(OMP_LIB_DIR "" CACHE PATH "path to the corresponding openMP library")
+
+
 find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
 find_program(ZIP_EXECUTABLE NAMES 7z 7za)
