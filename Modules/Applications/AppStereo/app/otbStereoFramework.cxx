@@ -422,32 +422,32 @@ private:
     AddChoice("output.mode.user", "User Defined");
     SetParameterDescription("output.mode.user","This mode allows you to fully modify default values.");
     // Upper left point coordinates
-    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X ");
+    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X");
     SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate "
       "of upper-left corner (meters for cartographic projections, degrees for"
       " geographic ones)");
 
-    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y ");
+    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y");
     SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate "
       "of the upper-left corner (meters for cartographic projections, degrees "
       "for geographic ones)");
 
     // Size of the output image
-    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X ");
+    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X");
     SetParameterDescription("output.mode.user.sizex","Size of projected image"
       " along X (in pixels)");
 
-    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y ");
+    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y");
     SetParameterDescription("output.mode.user.sizey","Size of projected image"
       " along Y (in pixels)");
 
     // Spacing of the output image
-    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X ");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X");
     SetParameterDescription("output.mode.user.spacingx","Size of each pixel "
       "along X axis (meters for cartographic projections, degrees for geographic ones)");
 
 
-    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel "
       "along Y axis (meters for cartographic projections, degrees for geographic ones)");
 

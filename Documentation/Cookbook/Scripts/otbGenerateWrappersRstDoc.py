@@ -29,12 +29,6 @@ linesep = os.linesep
 pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
 
 
-def ConvertString(s):
-    '''Convert a string for compatibility in txt dump'''
-    s = s.strip()
-    s = s.replace('*','\*')
-    return s
-
 def EncloseString(s):
     if not s.startswith("\"") :
         s = "\"" + s
@@ -90,7 +84,7 @@ def render_choice(app, key):
     template_parameter_choice = open("templates/parameter_choice.rst").read()
 
     return template_parameter_choice.format(
-        name=ConvertString(app.GetParameterName(key)),
+        name=app.GetParameterName(key),
         key=key,
         value="[" + "|".join(choice_keys) + "]",
         flags=rst_parameter_flags(app, key),
@@ -104,7 +98,7 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     output = ""
 
     output+= "\timport otbApplication" + linesep + linesep
-    output+= "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + ConvertString(app.GetName()) + "\")" + linesep + linesep
+    output+= "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + app.GetName() + "\")" + linesep + linesep
     for i in range(0, app.GetExampleNumberOfParameters(idx)):
         param = app.GetExampleParameterKey(idx,i)
         value = app.GetExampleParameterValue(idx,i)
@@ -297,7 +291,7 @@ def rst_parameters(app):
 
         if type == otbApplication.ParameterType_Group:
             output += template_parameter_group.format(
-                name=rst_heading(ConvertString(app.GetParameterName(key)), "^"),
+                name=rst_heading(app.GetParameterName(key), "^"),
                 description=app.GetParameterDescription(key)
             )
 
@@ -306,7 +300,7 @@ def rst_parameters(app):
 
         else:
             output += template_parameter.format(
-                name=ConvertString(app.GetParameterName(key)),
+                name=app.GetParameterName(key),
                 key=key,
                 value=rst_parameter_value(app, key),
                 description=app.GetParameterDescription(key),
@@ -359,7 +353,7 @@ def render_limitations(app):
     if limitations is None or len(limitations) == 0 or limitations == "None":
         return ""
     else:
-        return rst_heading("Limitation", "-") + "\n" + ConvertString(limitations) + "\n"
+        return rst_heading("Limitation", "-") + "\n" + limitations + "\n"
 
 def render_see_also(app):
     "Render app See Also to rst"
@@ -371,7 +365,7 @@ def render_see_also(app):
         return ""
     else:
         # TODO make links?
-        return rst_heading("See also", "-") + "\n" + ConvertString(see_also)
+        return rst_heading("See also", "-") + "\n" + see_also
 
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
