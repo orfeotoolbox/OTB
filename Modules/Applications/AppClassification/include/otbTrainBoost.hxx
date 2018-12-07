@@ -34,7 +34,7 @@ namespace Wrapper
   ::InitBoostParams()
   {
     AddChoice("classifier.boost", "Boost classifier");
-    SetParameterDescription("classifier.boost", "`Boost classifier <http://docs.opencv.org/modules/ml/doc/boosting.html>`_");
+    SetParameterDescription("classifier.boost", "http://docs.opencv.org/modules/ml/doc/boosting.html");
     //BoostType
     AddParameter(ParameterType_Choice, "classifier.boost.t", "Boost Type");
     AddChoice("classifier.boost.t.discrete", "Discrete AdaBoost");

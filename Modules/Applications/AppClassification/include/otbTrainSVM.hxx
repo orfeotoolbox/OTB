@@ -34,8 +34,7 @@ namespace Wrapper
   ::InitSVMParams()
   {
     AddChoice("classifier.svm", "SVM classifier (OpenCV)");
-    SetParameterDescription("classifier.svm", "This group of parameters allows setting SVM classifier parameters. "
-        "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/support_vector_machines.html}.");
+    SetParameterDescription("classifier.svm", "http://docs.opencv.org/modules/ml/doc/support_vector_machines.html");
     AddParameter(ParameterType_Choice, "classifier.svm.m", "SVM Model Type");
     SetParameterDescription("classifier.svm.m", "Type of SVM formulation.");
     if (this->m_RegressionFlag)

@@ -43,17 +43,26 @@ public:
     // Documentation
     SetDocName( "Train a classifier from multiple images" );
     SetDocLongDescription(
-        "This application performs a classifier training from multiple pairs of input images and training vector data. "
+        "Train a classifier from multiple pairs of images and training vector data. "
         "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
-        "the ComputeImagesStatistics application.\nThe training vector data must contain polygons with a positive integer field "
-        "representing the class label. The name of this field can be set using the \"Class label field\" parameter. Training and validation "
-        "sample lists are built such that each class is equally represented in both lists. One parameter allows controlling the ratio "
+        "the ComputeImagesStatistics application.\n\n"
+
+        "The training vector data must contain polygons with a positive integer field "
+        "representing the class label. The name of this field can be set using the *Class label field* parameter.\n\n"
+
+        "Training and validation sample lists are built such that each class is equally represented in both lists. One parameter allows controlling the ratio "
         "between the number of samples in training and validation sets. Two parameters allow managing the size of the training and "
-        "validation sets per class and per image.\nSeveral classifier parameters can be set depending on the chosen classifier. In the "
-        "validation process, the confusion matrix is organized the following way: rows = reference labels, columns = produced labels. "
+        "validation sets per class and per image.\n\n"
+
+        "In the validation process, the confusion matrix is organized the following way:\n\n"
+        "* Rows: reference labels,\n"
+        "* Columns: produced labels.\n\n"
+
         "In the header of the optional confusion matrix output file, the validation (reference) and predicted (produced) class labels"
-        " are ordered according to the rows/columns of the confusion matrix.\nThis application is based on LibSVM, OpenCV Machine Learning "
-        "(2.3.1 and later), and Shark ML. The output of this application is a text model file, whose format corresponds to the "
+        " are ordered according to the rows/columns of the confusion matrix.\n\n"
+
+        "This application is based on LibSVM, OpenCV Machine Learning, and Shark ML. "
+        "The output of this application is a text model file, whose format corresponds to the "
         "ML model type chosen. There is no image nor vector data output.");
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
