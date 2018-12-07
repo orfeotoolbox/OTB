@@ -577,7 +577,7 @@ def render_all_examples_python(app):
     return output
 
 def render_limitations(app):
-    "Render app limitations to rst"
+    "Render app DocLimitations to rst"
 
     limitations = app.GetDocLimitations()
     if limitations is None or len(limitations) == 0 or limitations == "None":
@@ -586,7 +586,26 @@ def render_limitations(app):
         return rst_heading("Limitation", "-") + "\n" + ConvertString(limitations) + "\n"
 
 def render_see_also(app):
-    return ""
+    "Render app See Also to rst"
+
+    see_also = app.GetDocSeeAlso()
+    if len(see_also) > 2:
+        print(app.GetName(), len(see_also), see_also)
+    if see_also is None or len(see_also) < 2:
+        return ""
+    else:
+        # TODO make links?
+        return rst_heading("See also", "-") + "\n" + ConvertString(see_also)
+
+    if len(seealso) >=2:
+        output += RstHeading("See Also", '~')
+        output += "These additional resources can be useful for further information: " + linesep
+        # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
+        # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
+        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
+
+    return output
+
 
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
@@ -609,17 +628,6 @@ def ApplicationToRst(appname):
         limitations=render_limitations(app),
         see_also=render_see_also(app)
     )
-
-    return output
-
-    seealso = app.GetDocSeeAlso()
-    if len(seealso) >=2:
-        output += RstHeading("See Also", '~')
-#        output += ":See Also:" + linesep + linesep
-        output += "These additional resources can be useful for further information: " + linesep
-        # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
-        # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
-        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
 
     return output
 
