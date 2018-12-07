@@ -172,6 +172,16 @@ html_static_path = ['_static']
 # If true, the index is split into individual pages for each letter.
 #html_split_index = False
 
+html_context = {
+    'display_gitlab': True,
+    'gitlab_host': "gitlab.orfeo-toolbox.org",
+    'gitlab_user': 'orfeotoolbox',
+    'gitlab_repo': 'OTB',
+    'gitlab_version': 'develop',
+    'conf_py_path': '/Documentation/Cookbook/rst/',
+    #'source_url_prefix': "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/tree/develop/Documentation/Cookbook/rst/",
+}
+
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True
 
