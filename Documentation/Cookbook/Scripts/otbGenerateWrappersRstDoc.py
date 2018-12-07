@@ -27,32 +27,14 @@ import itertools
 
 import otbApplication
 
-##############################################################################
-# Parameters
 linesep = os.linesep
 pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
 
-
-#Special/Exceptional cases
-def RstifyDescription(s):
-    s = s.replace(':\n', ':\n\n')
-    s = s.replace('\n', ' ')
-    s = s.replace('*','\*')
-    if not len(s) == 0 and not s.endswith('.'):
-        s += '.'
-    return s
 
 def ConvertString(s):
     '''Convert a string for compatibility in txt dump'''
     s = s.strip()
     s = s.replace('*','\*')
-    return s
-
-def ConvertToLineBlock(s):
-    '''Convert a string into a line bloc (prefix with |) '''
-    s = s.strip()
-    s = s.replace('*','\*')
-    s = "  | " + s.replace('\n','\n  | ')
     return s
 
 def EncloseString(s):
@@ -87,20 +69,6 @@ def GetPixelType(value):
             break
     return foundcode,foundname
 
-def GetParametersDepth(paramlist):
-    depth = 0
-    for param in paramlist:
-        depth = max(param.count("."),depth)
-    return depth
-
-class ChoiceParameter:
-    def __init__(self, app, key):
-        self.name = app.GetParameterName(key)
-        self.description = app.GetParameterDescription(key)
-
-        self.keys = app.GetChoiceKeys(key)
-        self.names = app.GetChoiceNames(key)
-
 def render_choice(app, key):
     template_parameter_choice = open("templates/parameter_choice.rst").read()
     template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
@@ -125,200 +93,6 @@ def render_choice(app, key):
         description=app.GetParameterDescription(key),
         choices=choice_entries,
     )
-
-def GenerateChoice(app,param,paramlist, count = 0):
-    output = " Available choices are: " + linesep
-    spaces = ' ' * count
-    for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-        output += linesep + spaces + "- **"+ ConvertString(choicename) + "**"
-        choicedesc = app.GetParameterDescription(param+"."+choicekey)
-        if len(choicedesc) >= 2:
-            output+= " : " + ConvertString(choicedesc)
-        output += linesep + linesep
-        # List option associated to one choice
-        options = []
-        for p in paramlist:
-            if p.startswith(param+"."+choicekey+"."):
-                options.append(p)
-        if len(options) > 0:
-            count += 1
-            spaces = ' ' * count
-            for option in options:
-                output+= linesep + spaces + "- **"+ ConvertString(app.GetParameterName(option))+ "** : " + RstifyDescription(app.GetParameterDescription(option)) + linesep
-            output+= linesep
-    return output
-
-def GenerateParameterType(app,param):
-    if app.GetParameterType(param) == otbApplication.ParameterType_Empty \
-       or app.GetParameterType(param) == otbApplication.ParameterType_Bool:
-        return "Boolean"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Int \
-       or app.GetParameterType(param) == otbApplication.ParameterType_Radius \
-       or app.GetParameterType(param) == otbApplication.ParameterType_RAM:
-        return "Int"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Float:
-        return "Float"
-    if app.GetParameterType(param) == otbApplication.ParameterType_String:
-        return "String"
-    if app.GetParameterType(param) == otbApplication.ParameterType_StringList:
-        return "String list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputFilename :
-        return "Input File name"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputFilename :
-        return "Output File name"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Directory :
-        return "Directory"
-    if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-        return "Choices"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputImage \
-            or app.GetParameterType(param) == otbApplication.ParameterType_ComplexInputImage:
-        return "Input image"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputVectorData:
-        return "Input vector data"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputImage \
-            or app.GetParameterType(param) == otbApplication.ParameterType_ComplexOutputImage :
-        return "Output image"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputVectorData:
-        return "Output vector data"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputImageList:
-        return "Input image list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputVectorDataList:
-        return "Input vector data list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputFilenameList :
-        return "Input File name list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_ListView:
-        if app.GetListViewSingleSelectionMode(param):
-            return "String"
-        else:
-            return "String List"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Group:
-        return "Group"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputProcessXML:
-        return "XML input parameters file"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputProcessXML:
-        return "XML output parameters file"
-
-def FindLengthOfLargestColumnText(app,paramlist):
-    colLength = [2] * 3
-    for param in paramlist:
-        if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-            for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-                lenp= len(param + " " + choicekey)
-                if colLength[0] < lenp:
-                    colLength[0] = lenp
-                lenpdescr = len(choicename)
-                if colLength[1] < lenpdescr:
-                    colLength[1] = lenpdescr
-        else:
-            if colLength[0] < len(param):
-                colLength[0] = len(param)
-            lenpdescr = len(GenerateParameterType(app, param))
-            if colLength[2] < lenpdescr:
-                colLength[2] = lenpdescr
-        lenptype = len(app.GetParameterName(param))
-        if colLength[1] < lenptype:
-            colLength[1] = lenptype
-    return colLength
-
-def RstTableHeaderLine(strlist, listlen, delimiter):
-    line = "+"
-    for i in range(len(strlist)):
-        line += delimiter * listlen[i] + '+'
-    line += linesep
-    return line
-
-def RstTableHeading(strlist, listlen):
-    heading = RstTableHeaderLine(strlist, listlen, '-')
-    for i in range(len(strlist)):
-         spaces = ' ' * ((listlen[i] - len(strlist[i])) )
-         heading += '|' + strlist[i] +  spaces
-    heading += '|' + linesep
-    heading += RstTableHeaderLine(strlist, listlen, '=')
-    return heading
-
-def MakeText(text, size):
-    dsize = (size - len(text))
-    output= '|' + text  + ' ' * (dsize)
-    return output
-
-def GenerateParametersTable(app,paramlist):
-    colLength = FindLengthOfLargestColumnText(app, paramlist)
-
-    headerlist = ["Parameter Key", "Parameter Name", "Parameter Type"]
-    for i in range(len(headerlist)):
-        colLength[i] = len(headerlist[i]) if colLength[i] < len(headerlist[i]) else colLength[i]
-    output += RstTableHeading(headerlist, colLength)
-    for param in paramlist:
-        output += MakeText(param, colLength[0])
-        output += MakeText(app.GetParameterName(param), colLength[1])
-        output += MakeText(GenerateParameterType(app, param), colLength[2])
-        output += '|' + linesep
-        output += RstTableHeaderLine(headerlist, colLength, '-')
-        if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-            for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-                output += MakeText(param + " " + choicekey, colLength[0])
-                output += MakeText(choicename,colLength[1])
-                output += MakeText(" *Choice*", colLength[2])
-                output += '|' + linesep
-                output += RstTableHeaderLine(headerlist, colLength, '-')
-    return output
-
-def unique(seq):
-    # order preserving
-    checked = []
-    for e in seq:
-        if e not in checked:
-            checked.append(e)
-    return checked
-
-def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
-    output = ""
-    # current level
-    level = 0
-    # First run
-    if len(current)==0:
-        output += GenerateParametersTable(app,paramlist)
-    else:
-        level = len(current.split('.'))
-    indentLevel = level
-
-    if deep == False:
-        indentLevel += 1
-    # compute prefix
-    bulletStyle = "-*+"
-    prefix = ""
-    if indentLevel > 0:
-        prefix = (' ' * (indentLevel-1)) + bulletStyle[(indentLevel-1)%3] + ' '
-    # find parameter for current param
-    currentlevelparams = []
-    for param in paramlist:
-        if param.startswith(current) and len(param.split('.')) == level+1:
-            currentlevelparams.append(param)
-    if len(currentlevelparams) > 0:
-        output+= linesep
-        for param in currentlevelparams:
-            if app.GetParameterType(param) == otbApplication.ParameterType_Group and level == 0:
-                output+= prefix+"**["+ ConvertString(app.GetParameterName(param))+ "]**"
-            else:
-                output+= prefix+"**"+ ConvertString(app.GetParameterName(param))+ "**"
-            descr =  RstifyDescription(app.GetParameterDescription(param))
-            if len(descr):
-                output+= ": "+descr
-            if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                output+= " Available choices are: "
-                additionalKeys = []
-                for choiceKey in app.GetChoiceKeys(param):
-                    additionalKeys.append(param+'.'+choiceKey)
-                nextParamList = paramlist + tuple(additionalKeys)
-            else:
-                nextParamList = paramlist
-            output+= linesep
-            ret = ApplicationParametersToRstV2(app,nextParamList,deep,param)
-            if indentLevel == 0 and len(ret)==0:
-                output+= linesep
-            output+= ret
-        output+= linesep
-    return output
 
 def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outputpath=""):
     appname = "app"
@@ -597,25 +371,12 @@ def render_see_also(app):
         # TODO make links?
         return rst_heading("See also", "-") + "\n" + ConvertString(see_also)
 
-    if len(seealso) >=2:
-        output += RstHeading("See Also", '~')
-        output += "These additional resources can be useful for further information: " + linesep
-        # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
-        # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
-        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
-
-    return output
-
-
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
 
     # TODO: remove this when bug 440 is fixed
     app.Init()
 
-
-    deep = GetParametersDepth(app.GetParametersKeys()) > 0
-    #parameters = ApplicationParametersToRstV2(app,app.GetParametersKeys(), deep)
     parameters = rst_parameters(app)
 
     output = open("templates/application.rst").read().format(
