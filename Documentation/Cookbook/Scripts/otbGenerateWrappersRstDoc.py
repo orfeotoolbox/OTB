@@ -176,17 +176,16 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     output+= "\t" + appname + ".ExecuteAndWriteOutput()"+ linesep
     return output
 
-def RstHeading(text, delimiter, ref=None):
-    heading = ""
-    if ref:
-        heading += ".. _" + ref + ":" + linesep + linesep
-    heading += text + linesep
-    heading += delimiter * len(text)  + linesep
-    heading += linesep
-    return heading
+def rst_section(text, delimiter, ref=None):
+    "Make a rst section title"
 
-def rst_heading(text, delimiter, ref=None):
-    return text + "\n" + delimiter * len(text)
+    output = ""
+
+    if ref is not None:
+        output += ".. _" + ref + ":\n\n"
+
+    output += text + "\n" + delimiter * len(text) + "\n\n"
+    return output
 
 def rst_parameter_value(app, key):
     type = app.GetParameterType(key)
@@ -286,12 +285,11 @@ def rst_parameters(app):
         # Choice parameter values can act as groups
         # Detect that case to add a section title
         if key in fake_markers:
-            output += rst_heading(app.GetParameterName(fake_markers[key]) + " options", "^")
-            output += "\n"
+            output += rst_section(app.GetParameterName(fake_markers[key]) + " options", "^")
 
         if type == otbApplication.ParameterType_Group:
             output += template_parameter_group.format(
-                name=rst_heading(app.GetParameterName(key), "^"),
+                name=rst_section(app.GetParameterName(key), "^"),
                 description=app.GetParameterDescription(key)
             )
 
@@ -353,7 +351,7 @@ def render_limitations(app):
     if limitations is None or len(limitations) == 0 or limitations == "None":
         return ""
     else:
-        return rst_heading("Limitation", "-") + "\n" + limitations + "\n"
+        return rst_section("Limitation", "-") + limitations
 
 def render_see_also(app):
     "Render app See Also to rst"
@@ -365,7 +363,7 @@ def render_see_also(app):
         return ""
     else:
         # TODO make links?
-        return rst_heading("See also", "-") + "\n" + see_also
+        return rst_section("See also", "-") + see_also
 
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
@@ -376,7 +374,7 @@ def ApplicationToRst(appname):
     parameters = rst_parameters(app)
 
     output = open("templates/application.rst").read().format(
-        heading=rst_heading(app.GetName(), '='),
+        heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=app.GetDocLongDescription(),
         parameters=parameters,
@@ -393,7 +391,7 @@ def GetApplicationTags(appname):
      return app.GetDocTags()
 
 def RstPageHeading(text, maxdepth, ref=None):
-    output = RstHeading(text, "=", ref=ref) + linesep
+    output = rst_section(text, "=", ref=ref)
     output += ".. toctree::" + linesep
     output += "\t:maxdepth: " + maxdepth + linesep
     output += linesep + linesep
