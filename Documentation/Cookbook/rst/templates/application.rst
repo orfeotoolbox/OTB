@@ -1,8 +1,8 @@
 {heading}
 {description}
 
-Detailed description
---------------------
+Description
+-----------
 
 {longdescription}
 
