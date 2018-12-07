@@ -22,8 +22,6 @@
 import os
 import sys
 import argparse
-from collections import defaultdict
-import itertools
 
 import otbApplication
 
@@ -272,8 +270,6 @@ def rst_parameters(app):
     output = ""
     template_parameter = open("templates/parameter.rst").read()
     template_parameter_group = open("templates/parameter_group.rst").read()
-
-    keys = app.GetParametersKeys()
 
     fake_markers = detect_abuse(app)
 
