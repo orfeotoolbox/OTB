@@ -68,7 +68,9 @@ def GetPixelType(value):
     return foundcode,foundname
 
 def render_choice(app, key):
-    template_parameter_choice = open("templates/parameter_choice.rst").read()
+    "Render a choice parameter to rst"
+
+    # First render all the choice values
     template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
 
     choice_keys = app.GetChoiceKeys(key)
@@ -76,12 +78,16 @@ def render_choice(app, key):
 
     choice_entries = ""
     for (choice_key, choice_name) in zip(choice_keys, choice_names):
-        choice_description = app.GetParameterDescription(key + "." + choice_key)
+        # For the description, replace newlines by |br| because we are in a bullet list item
+        choice_description = app.GetParameterDescription(key + "." + choice_key).replace("\n", " |br| ")
         choice_entries += template_parameter_choice_entry.format(
             name=choice_name,
-            #key=choice_key,
+            #key=choice_key, # if we want to show the key in choice parameter values
             description=choice_description
         )
+
+    # Then render the full choice parameter
+    template_parameter_choice = open("templates/parameter_choice.rst").read()
 
     return template_parameter_choice.format(
         name=ConvertString(app.GetParameterName(key)),
