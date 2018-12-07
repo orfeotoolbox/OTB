@@ -36,8 +36,6 @@ From Python:
 
 {examples_python}
 
-
-Limitations
------------
-
 {limitations}
+
+{see_also}

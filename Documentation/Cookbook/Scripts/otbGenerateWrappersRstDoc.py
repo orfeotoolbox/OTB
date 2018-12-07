@@ -576,6 +576,18 @@ def render_all_examples_python(app):
         output += GetApplicationExamplePythonSnippet(app, i)
     return output
 
+def render_limitations(app):
+    "Render app limitations to rst"
+
+    limitations = app.GetDocLimitations()
+    if limitations is None or len(limitations) == 0 or limitations == "None":
+        return ""
+    else:
+        return rst_heading("Limitation", "-") + "\n" + ConvertString(limitations) + "\n"
+
+def render_see_also(app):
+    return ""
+
 def ApplicationToRst(appname):
     app = otbApplication.Registry.CreateApplication(appname)
 
@@ -594,20 +606,12 @@ def ApplicationToRst(appname):
         parameters=parameters,
         examples_cli=render_all_examples_cli(app),
         examples_python=render_all_examples_python(app),
-        limitations=""
+        limitations=render_limitations(app),
+        see_also=render_see_also(app)
     )
 
     return output
 
-    limitations = app.GetDocLimitations()
-    if len(limitations)>=2:
-        output += RstHeading("Limitations", '~')
-#        output += ":Limitations:" + linesep + linesep
-        output += ConvertString(app.GetDocLimitations()) + linesep + linesep
-
-    output += RstHeading("Authors", '~')
-#    output += ":Authors:" + linesep + linesep
-    output += "This application has been written by " + ConvertString(app.GetDocAuthors()) + "." + linesep + linesep
     seealso = app.GetDocSeeAlso()
     if len(seealso) >=2:
         output += RstHeading("See Also", '~')

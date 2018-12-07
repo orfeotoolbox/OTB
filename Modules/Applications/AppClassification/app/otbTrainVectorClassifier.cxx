@@ -67,7 +67,7 @@ protected:
       "Learning (2.3.1 and later), and Shark ML The output of this application "
       "is a text model file, whose format corresponds to the ML model type "
       "chosen. There is no image nor vector data output.");
-    SetDocLimitations( " " );
+    SetDocLimitations("");
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );
 
