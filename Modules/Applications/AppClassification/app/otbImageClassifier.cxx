@@ -116,17 +116,16 @@ private:
     SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
 
     AddParameter(ParameterType_OutputImage, "confmap",  "Confidence map");
-    SetParameterDescription( "confmap", "Confidence map of the produced classification. The confidence index depends on the model : \n"
-      "  - LibSVM : difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
-      "  - OpenCV\n"
-      "    * Boost : sum of votes\n"
-      "    * DecisionTree : (not supported)\n"
-      "    * GradientBoostedTree : (not supported)\n"
-      "    * KNearestNeighbors : number of neighbors with the same label\n"
-      "    * NeuralNetwork : difference between the two highest responses\n"
-      "    * NormalBayes : (not supported)\n"
-      "    * RandomForest : Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
-      "    * SVM : distance to margin (only works for 2-class models)\n");
+    SetParameterDescription( "confmap", "Confidence map of the produced classification. The confidence index depends on the model: \n\n"
+      "* LibSVM: difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
+      "* Boost: sum of votes\n"
+      "* DecisionTree: (not supported)\n"
+      "* GradientBoostedTree: (not supported)\n"
+      "* KNearestNeighbors: number of neighbors with the same label\n"
+      "* NeuralNetwork: difference between the two highest responses\n"
+      "* NormalBayes: (not supported)\n"
+      "* RandomForest: Confidence (proportion of votes for the majority class). Margin (normalized difference of the votes of the 2 majority classes) is not available for now.\n"
+      "* SVM: distance to margin (only works for 2-class models)\n");
     SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
 

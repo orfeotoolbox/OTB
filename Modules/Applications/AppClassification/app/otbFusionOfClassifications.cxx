@@ -136,7 +136,7 @@ private:
     SetParameterDescription("method.dempstershafer","Fusion of classification maps by the Dempster Shafer combination method for each output pixel.");
 
     AddParameter(ParameterType_InputFilenameList, "method.dempstershafer.cmfl", "Confusion Matrices");
-    SetParameterDescription("method.dempstershafer.cmfl", "A list of confusion matrix files (*.CSV format) to define the masses of belief and the class labels. Each file should be formatted the following way: "
+    SetParameterDescription("method.dempstershafer.cmfl", "A list of confusion matrix files (.csv format) to define the masses of belief and the class labels. Each file should be formatted the following way: "
         "the first line, beginning with a '#' symbol, should be a list of the class labels present in the corresponding input classification image, organized in the same order as the confusion matrix rows/columns.");
 
     AddParameter(ParameterType_Choice, "method.dempstershafer.mob", "Mass of belief measurement");

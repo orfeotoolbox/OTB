@@ -197,32 +197,32 @@ private:
     "For instance, it is possible to get the coherency matrix from the Sinclar one, or the Mueller matrix from the coherency one.\n"
     "The filters used in this application never handle matrices, but images where each band is related to their elements.\n"
     "As most of the time SAR polarimetry handles symmetric/hermitian matrices, only the relevant elements are stored, so that the images representing them have a minimal number of bands.\n"
-    "For instance, the coherency matrix size is 3x3 in the monostatic case, and 4x4 in the bistatic case : it will thus be stored in a 6-band or a 10-band complex image (the diagonal and the upper elements of the matrix).\n"
+    "For instance, the coherency matrix size is 3x3 in the monostatic case, and 4x4 in the bistatic case: it will thus be stored in a 6-band or a 10-band complex image (the diagonal and the upper elements of the matrix).\n"
     "\n"
-    "The Sinclair matrix is a special case : it is always represented as 3 or 4 one-band complex images (for mono- or bistatic case).\n"
+    "The Sinclair matrix is a special case: it is always represented as 3 or 4 one-band complex images (for mono- or bistatic case).\n"
     "The available conversions are listed below:\n"
     
 	"\n--- Monostatic case ---\n" 
     
-    "1 msinclairtocoherency --> Sinclair matrix to coherency matrix (input : 3 x 1 complex channel (HH, HV or VH, VV) | output :  6 complex channels)\n"
-    "2 msinclairtocovariance --> Sinclair matrix to covariance matrix (input : 3 x 1 complex channel (HH, HV or VH, VV) | output :  6 complex channels)\n"
-    "3 msinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input : 3 x 1 complex channel (HH, HV or VH, VV) | output :  6 complex channels)\n"
-    "4 mcoherencytomueller --> Coherency matrix to Mueller matrix (input : 6 complex channels | 16 real channels)\n"
-    "5 mcovariancetocoherencydegree --> Covariance matrix to coherency degree (input : 6 complex channels | 3 complex channels)\n"
-    "6 mcovariancetocoherency --> Covariance matrix to coherency matrix (input : 6 complex channels | 6 complex channels)\n"
-    "7 mlinearcovariancetocircularcovariance --> Covariance matrix to circular covariance matrix (input : 6 complex channels | output : 6 complex channels)\n"
+    "1 msinclairtocoherency --> Sinclair matrix to coherency matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
+    "2 msinclairtocovariance --> Sinclair matrix to covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
+    "3 msinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
+    "4 mcoherencytomueller --> Coherency matrix to Mueller matrix (input: 6 complex channels | 16 real channels)\n"
+    "5 mcovariancetocoherencydegree --> Covariance matrix to coherency degree (input: 6 complex channels | 3 complex channels)\n"
+    "6 mcovariancetocoherency --> Covariance matrix to coherency matrix (input: 6 complex channels | 6 complex channels)\n"
+    "7 mlinearcovariancetocircularcovariance --> Covariance matrix to circular covariance matrix (input: 6 complex channels | output: 6 complex channels)\n"
     
     "\n--- Bistatic case ---\n"
     
-    "8 bsinclairtocoherency --> Sinclair matrix to coherency matrix (input : 4 x 1 complex channel (HH, HV, VH, VV) | 10 complex channels)\n"
-    "9 bsinclairtocovariance --> Sinclair matrix to covariance matrix (input : 4 x 1 complex channel (HH, HV, VH, VV) | output : 10 complex channels)\n"
-    "10 bsinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input : 4 x 1 complex channel (HH, HV, VH, VV) | output : 10 complex channels)\n"
+    "8 bsinclairtocoherency --> Sinclair matrix to coherency matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | 10 complex channels)\n"
+    "9 bsinclairtocovariance --> Sinclair matrix to covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex channels)\n"
+    "10 bsinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex channels)\n"
     
     "\n--- Both cases ---\n"
     
-    "11 sinclairtomueller --> Sinclair matrix to Mueller matrix (input : 4 x 1 complex channel (HH, HV, VH, VV) | output : 16 real channels)\n"
-    "12 muellertomcovariance --> Mueller matrix to covariance matrix (input : 16 real channels | output : 6 complex channels)\n"
-    "13 muellertopoldegandpower --> Mueller matrix to polarization degree and power (input : 16 real channels | output : 4 real channels)"
+    "11 sinclairtomueller --> Sinclair matrix to Mueller matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 16 real channels)\n"
+    "12 muellertomcovariance --> Mueller matrix to covariance matrix (input: 16 real channels | output: 6 complex channels)\n"
+    "13 muellertopoldegandpower --> Mueller matrix to polarization degree and power (input: 16 real channels | output: 4 real channels)"
 
  );
 						  
@@ -233,28 +233,28 @@ private:
     AddDocTag(Tags::SAR);
 
     AddParameter(ParameterType_InputImage, "inc", "Input: multi-band complex image");
-    SetParameterDescription("inc", "Input : multi-band complex image");
+    SetParameterDescription("inc", "Input: multi-band complex image");
     MandatoryOff("inc");
 
     AddParameter(ParameterType_InputImage, "inf", "Input: multi-band real image");
-    SetParameterDescription("inf", "Input : multi-band real image");
+    SetParameterDescription("inf", "Input: multi-band real image");
     MandatoryOff("inf");
 
 
     AddParameter(ParameterType_InputImage, "inhh", "Input: one-band complex image (HH)");
-    SetParameterDescription("inhh", "Input : one-band complex image (HH)");
+    SetParameterDescription("inhh", "Input: one-band complex image (HH)");
     MandatoryOff("inhh");
 
     AddParameter(ParameterType_InputImage, "inhv", "Input: one-band complex image (HV)");
-    SetParameterDescription("inhv", "Input : one-band complex image (HV)");
+    SetParameterDescription("inhv", "Input: one-band complex image (HV)");
     MandatoryOff("inhv");
 
     AddParameter(ParameterType_InputImage, "invh", "Input: one-band complex image (VH)");
-    SetParameterDescription("invh", "Input : one-band complex image (VH)");
+    SetParameterDescription("invh", "Input: one-band complex image (VH)");
     MandatoryOff("invh");
 
     AddParameter(ParameterType_InputImage, "invv", "Input: one-band complex image (VV)");
-    SetParameterDescription("invv", "Input : one-band complex image (VV)");
+    SetParameterDescription("invv", "Input: one-band complex image (VV)");
     MandatoryOff("invv");
     
     AddParameter(ParameterType_OutputImage, "outc",  "Output Complex Image");
@@ -273,73 +273,73 @@ private:
     
     // #1
     // SinclairToReciprocalCoherency
-    AddChoice("conv.msinclairtocoherency","1 Monostatic : Sinclair matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocoherency","1 Monostatic :Sinclair matrix to coherency matrix (complex output)");
+    AddChoice("conv.msinclairtocoherency","1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocoherency","1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
     
     // #2
     // SinclairToReciprocalCovariance
-    AddChoice("conv.msinclairtocovariance","2 Monostatic : Sinclair matrix to covariance matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocovariance","2 Monostatic : Sinclair matrix to covariance matrix (complex output)");
+    AddChoice("conv.msinclairtocovariance","2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocovariance","2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
     
     // #3 
     // SinclairToReciprocalCircularCovariance
-    AddChoice("conv.msinclairtocircovariance","3 Monostatic : Sinclair matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocircovariance","3 Monostatic : Sinclair matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.msinclairtocircovariance","3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocircovariance","3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
     
     // #4 
     // ReciprocalCoherencyToReciprocalMuellerImageFilter
-    AddChoice("conv.mcoherencytomueller","4 Monostatic : Coherency matrix to Mueller matrix"); 
-    SetParameterDescription("conv.mcoherencytomueller","4 Monostatic : Coherency matrix to Mueller matrix"); 
+    AddChoice("conv.mcoherencytomueller","4 Monostatic: Coherency matrix to Mueller matrix"); 
+    SetParameterDescription("conv.mcoherencytomueller","4 Monostatic: Coherency matrix to Mueller matrix"); 
     
     // #5
     // ReciprocalCovarianceToCoherencyDegreeImageFilter 
-    AddChoice("conv.mcovariancetocoherencydegree","5 Monostatic : Covariance matrix to coherency degree "); 
-    SetParameterDescription("conv.mcovariancetocoherencydegree","5 Monostatic : Covariance matrix to coherency degree "); 
+    AddChoice("conv.mcovariancetocoherencydegree","5 Monostatic: Covariance matrix to coherency degree"); 
+    SetParameterDescription("conv.mcovariancetocoherencydegree","5 Monostatic: Covariance matrix to coherency degree "); 
     
     // #6
     // ReciprocalCovarianceToReciprocalCoherencyImageFilter
-    AddChoice("conv.mcovariancetocoherency","6 Monostatic : Covariance matrix to coherency matrix (complex output)"); 
-    SetParameterDescription("conv.mcovariancetocoherency","6 Monostatic : Covariance matrix to coherency matrix (complex output)");  
+    AddChoice("conv.mcovariancetocoherency","6 Monostatic: Covariance matrix to coherency matrix (complex output)"); 
+    SetParameterDescription("conv.mcovariancetocoherency","6 Monostatic: Covariance matrix to coherency matrix (complex output)");  
     
     // #7
     // ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
-    AddChoice("conv.mlinearcovariancetocircularcovariance","7 Monostatic : Covariance matrix to circular covariance matrix (complex output)"); 
-    SetParameterDescription("conv.mlinearcovariancetocircularcovariance","7 Monostatic : Covariance matrix to circular covariance matrix (complex output)");  
+    AddChoice("conv.mlinearcovariancetocircularcovariance","7 Monostatic: Covariance matrix to circular covariance matrix (complex output)"); 
+    SetParameterDescription("conv.mlinearcovariancetocircularcovariance","7 Monostatic: Covariance matrix to circular covariance matrix (complex output)");  
     
     // #8
     // MuellerToReciprocalCovarianceImageFilter 
-    AddChoice("conv.muellertomcovariance","8 Bi/mono : Mueller matrix to monostatic covariance matrix");
-    SetParameterDescription("conv.muellertomcovariance","8 Bi/mono : Mueller matrix to monostatic covariance matrix");
+    AddChoice("conv.muellertomcovariance","8 Bi/mono: Mueller matrix to monostatic covariance matrix");
+    SetParameterDescription("conv.muellertomcovariance","8 Bi/mono: Mueller matrix to monostatic covariance matrix");
     
     //Bistatic case
     
     // #9
     // SinclairToCoherency
-    AddChoice("conv.bsinclairtocoherency","9 Bistatic : Sinclair matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocoherency","9 Bistatic : Sinclair matrix to coherency matrix (complex output)");
+    AddChoice("conv.bsinclairtocoherency","9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocoherency","9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
     
     // #10
     // SinclairToCovariance  
-    AddChoice("conv.bsinclairtocovariance","10 Bistatic : Sinclair matrix to covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocovariance","10 Bistatic : Sinclair matrix to covariance matrix (complex output)");
+    AddChoice("conv.bsinclairtocovariance","10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocovariance","10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
     
     // #11
     // SinclairToCircularCovariance 
-    AddChoice("conv.bsinclairtocircovariance","11 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocircovariance","11 Bistatic : Sinclair matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.bsinclairtocircovariance","11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocircovariance","11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
     
     //Both case
     
     // #12
     // SinclairToMueller
-    AddChoice("conv.sinclairtomueller","12 Bi/mono : Sinclair matrix to Mueller matrix");
-    SetParameterDescription("conv.sinclairtomueller","12 Bi/mono : Sinclair matrix to Mueller matrix");
+    AddChoice("conv.sinclairtomueller","12 Bi/mono: Sinclair matrix to Mueller matrix");
+    SetParameterDescription("conv.sinclairtomueller","12 Bi/mono: Sinclair matrix to Mueller matrix");
     
     
     // #13
     // MuellerToPolarisationDegreeAndPowerImageFilter
-    AddChoice("conv.muellertopoldegandpower","13 Bi/mono : Mueller matrix to polarisation degree and power");
-    SetParameterDescription("conv.muellertopoldegandpower","13 Bi/mono : Mueller matrix to polarisation degree and power");
+    AddChoice("conv.muellertopoldegandpower","13 Bi/mono: Mueller matrix to polarisation degree and power");
+    SetParameterDescription("conv.muellertopoldegandpower","13 Bi/mono: Mueller matrix to polarisation degree and power");
 
     AddRAMParameter();
 
@@ -509,7 +509,7 @@ private:
 		m_RCohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input: 3 x 1 complex channel | output:  6 complex channels
 		
 		break;
 
@@ -526,7 +526,7 @@ private:
 		m_RCovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input: 3 x 1 complex channel | output:  6 complex channels
 		
 		break;
 		
@@ -544,7 +544,7 @@ private:
 		m_RCCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
 		m_RCCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
+		SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input: 3 x 1 complex channel | output:  6 complex channels
 		
 		break;
 		
@@ -554,7 +554,7 @@ private:
 		m_RCRMFilter = RCRMFilterType::New();
 		m_RCRMFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterOutputImage("outf", m_RCRMFilter->GetOutput() ); // input : 6 complex channels | 16 real channels
+		SetParameterOutputImage("outf", m_RCRMFilter->GetOutput() ); // input: 6 complex channels | 16 real channels
 		
 		break;
 		
@@ -565,7 +565,7 @@ private:
 		m_RCCDFilter = RCCDFilterType::New();
 		m_RCCDFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterOutputImage("outc", m_RCCDFilter->GetOutput() ); // input : 6 complex channels | 3 complex channels
+		SetParameterOutputImage("outc", m_RCCDFilter->GetOutput() ); // input: 6 complex channels | 3 complex channels
 		
 		break;
 
@@ -575,7 +575,7 @@ private:
 		m_RCRCFilter = RCRCFilterType::New();
 		m_RCRCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterOutputImage("outc", m_RCRCFilter->GetOutput() ); // input : 6 complex channels | 6 complex channels
+		SetParameterOutputImage("outc", m_RCRCFilter->GetOutput() ); // input: 6 complex channels | 6 complex channels
 		
 		break;
 		
@@ -586,7 +586,7 @@ private:
 		m_RLCRCCFilter = RLCRCCFilterType::New();
 		m_RLCRCCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
 		
-		SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput() ); // input : 6 complex channels | output : 6 complex channels
+		SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput() ); // input: 6 complex channels | output: 6 complex channels
 		
 		break;
 		
@@ -597,7 +597,7 @@ private:
 		
 		m_MRCFilter->SetInput(GetParameterDoubleVectorImage("inf"));
 		
-		SetParameterOutputImage("outc", m_MRCFilter->GetOutput() ); // input : 16 real channels | output : 6 complex channels
+		SetParameterOutputImage("outc", m_MRCFilter->GetOutput() ); // input: 16 real channels | output: 6 complex channels
 		
 		break;
 		
@@ -615,7 +615,7 @@ private:
 		m_CohSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_CohSRFilter->GetOutput() ); // input : 4 x 1 complex channel | 10 complex channels
+		SetParameterOutputImage("outc", m_CohSRFilter->GetOutput() ); // input: 4 x 1 complex channel | 10 complex channels
 		
 		break;
 		
@@ -630,7 +630,7 @@ private:
 		m_CovSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_CovSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
+		SetParameterOutputImage("outc", m_CovSRFilter->GetOutput() ); // input: 4 x 1 complex channel | output: 10 complex channels
 		
 		break;
 		
@@ -644,7 +644,7 @@ private:
 		m_CCSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_CCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outc", m_CCSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 10 complex channels
+		SetParameterOutputImage("outc", m_CCSRFilter->GetOutput() ); // input: 4 x 1 complex channel | output: 10 complex channels
 		
 		break;
 		
@@ -662,7 +662,7 @@ private:
 		m_MSRFilter->SetInputVH(GetParameterComplexDoubleImage("invh"));
 		m_MSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
 		
-		SetParameterOutputImage("outf", m_MSRFilter->GetOutput() ); // input : 4 x 1 complex channel | output : 16 real channels
+		SetParameterOutputImage("outf", m_MSRFilter->GetOutput() ); // input: 4 x 1 complex channel | output: 16 real channels
 		
 		break;
 		
@@ -672,7 +672,7 @@ private:
 		
 		m_MPDPFilter->SetInput(GetParameterDoubleVectorImage("inf"));
 		
-		SetParameterOutputImage("outf", m_MPDPFilter->GetOutput() ); //  input : 16 real channels | output : 4 real channels
+		SetParameterOutputImage("outf", m_MPDPFilter->GetOutput() ); //  input: 16 real channels | output: 4 real channels
 		
 		break;
 		
