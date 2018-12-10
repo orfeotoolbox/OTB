@@ -280,9 +280,7 @@ const std::string& Application::GetDocLink() const
 
 void Application::SetOfficialDocLink()
 {
-  std::string link = "http://www.orfeo-toolbox.org/Applications/";
-  link.append(this->GetName());
-  link.append(".html");
+  const std::string link = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + this->GetName() + ".html";
   this->SetDocLink(link);
 }
 
