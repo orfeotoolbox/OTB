@@ -448,5 +448,4 @@ if __name__ == "__main__":
     template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
     template_parameter_choice = open("templates/parameter_choice.rst").read()
 
-
     GenerateRstForApplications(args.rst_dir)

@@ -38,6 +38,9 @@ def application_documentation_warnings(app):
     if not longdescription[-1] == ".":
         warn("Application Long Description does not end with a period (.)")
 
+    if "\n " in longdescription:
+        warn("Application Long Description contains '\\n ' pattern (usually not intended)")
+
     if " :" in longdescription:
         warn("Application Long Description has a space before a colon")
 

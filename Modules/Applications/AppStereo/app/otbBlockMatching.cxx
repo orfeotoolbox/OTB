@@ -131,25 +131,28 @@ private:
       " between two images.");
 
     SetDocName("Pixel-wise Block-Matching");
-    SetDocLongDescription("This application allows one to performs "
+    SetDocLongDescription(
+      "This application allows one to performs "
       "block-matching to estimate pixel-wise disparities for a pair of images "
       "in epipolar geometry.\n\n"
+
       "This application is part of the stereovision pipeline. It can be used "
       "after having computed epipolar grids (with StereoRectificationGridGenerator)"
       " and resampled each input image into epipolar geometry (with "
       "GridBasedImageResampling).\n\n"
-      "The application searches locally for the displacement between a reference"
-      " image and a secondary image. The correspondence is evaluated for each "
+
+      "The application searches locally for the displacement between a reference "
+      "image and a secondary image. The correspondence is evaluated for each "
       "pixel, based on a pair of local neighborhood windows. The displacement "
       "evaluated can be 1D (along lines) or 2D. Parameters allow setting the "
       "minimum and maximum disparities to search (both for horizontal and "
       "vertical directions). A winner-take-all approach is used to select the "
       "best match. There are different metrics implemented to evaluate the "
-      "match between two local windows:\n"
-      "  * SSD : Sum of Squared Distances\n"
-      "  * NCC : Normalized Cross-Correlation\n"
-      "  * Lp  : Lp pseudo norm\n"
-      "\n"                    
+      "match between two local windows:\n\n"
+      "* SSD : Sum of Squared Distances\n"
+      "* NCC : Normalized Cross-Correlation\n"
+      "* Lp  : Lp pseudo norm\n\n"
+
       "Once the best integer disparity is found, an optional step of sub-pixel "
       "disparity estimation can be performed, with various algorithms "
       "(triangular interpolation, parabollic interpolation, dichotimic search)."

@@ -71,22 +71,23 @@ private:
       "mathematical formula is done by the muParser library.\n\n"
 
       "The formula can be written using:\n\n"
-      "  * numerical values ( 2.3, -5, 3.1e4, ...)\n"
-      "  * variables containing pixel values (e.g. : ``im2b3`` is the pixel value"
+      "* numerical values ( 2.3, -5, 3.1e4, ...)\n"
+      "* variables containing pixel values (e.g. : ``im2b3`` is the pixel value"
       " in 2nd image, 3rd band)\n"
-      "  * binary operators:\n\n"
-      "    * ``+`` addition, ``-`` subtraction, ``*`` multiplication, ``/`` division\n"
-      "    * ``^`` raise x to the power of y\n"
-      "    * ``<`` less than, ``>`` greater than, ``<=`` less or equal, ``>=`` greater or equal\n"
-      "    * ``==`` equal, ``!=`` not equal\n"
+      "* binary operators:\n\n"
+
+      "  * ``+`` addition, ``-`` subtraction, ``*`` multiplication, ``/`` division\n"
+      "  * ``^`` raise x to the power of y\n"
+      "  * ``<`` less than, ``>`` greater than, ``<=`` less or equal, ``>=`` greater or equal\n"
+      "  * ``==`` equal, ``!=`` not equal\n"
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
-      "    * ``||`` logical or, ``&&`` logical and\n"
+      "  * ``||`` logical or, ``&&`` logical and\n"
       "  * if-then-else operator: ``(condition ? value_true : value_false)``\n"
 #else
-      "    * ``or`` logical or, ``and`` logical and\n"
-      "  * if-then-else operator: ``if(condition;value_true;value_false)``\n"
+      "  * ``or`` logical or, ``and`` logical and\n"
+      "* if-then-else operator: ``if(condition;value_true;value_false)``\n"
 #endif
-      "  * functions : ``exp()``, ``log()``, ``sin()``, ``cos()``, ``min()``, ``max()``, ...\n\n"
+      "* functions : ``exp()``, ``log()``, ``sin()``, ``cos()``, ``min()``, ``max()``, ...\n\n"
 
       "The full list of features and operators is available on the muParser website [1]."
       );
