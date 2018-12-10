@@ -26,6 +26,8 @@ import argparse
 import otbApplication
 from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
 
+from otb_warnings import application_documentation_warnings
+
 linesep = os.linesep
 pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
 
@@ -348,11 +350,15 @@ def render_see_also(app):
     else:
         return rst_section("See also", "-") + see_also
 
-def ApplicationToRst(appname):
+def render_application(appname):
+    "Render app to rst"
+
     app = otbApplication.Registry.CreateApplication(appname)
 
     # TODO: remove this when bug 440 is fixed
     app.Init()
+
+    application_documentation_warnings(app)
 
     parameters = rst_parameters(app)
 
@@ -381,62 +387,49 @@ def RstPageHeading(text, maxdepth, ref=None):
     return output
 
 def GenerateRstForApplications(rst_dir):
-    out = ""
+    "Generate .rst files for all applications"
+
     blackList = ["TestApplication", "Example", "ApplicationExample"]
-    allApps = None
-    try:
-        allApps = otbApplication.Registry.GetAvailableApplications( )
-    except:
-        print('error in otbApplication.Registry.GetAvailableApplications()')
-        sys.exit(1)
+    allApps = otbApplication.Registry.GetAvailableApplications()
 
     if not allApps:
-        print('No OTB applications available. Please check OTB_APPLICATION_PATH env variable')
-        sys.exit(1)
+        raise RuntimeError("No OTB applications available. Please check OTB_APPLICATION_PATH env variable.")
 
     writtenTags = []
     appNames = [app for app in allApps if app not in blackList]
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
     appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
+
+    print("Generating rst for {} applications".format(len(appNames)))
+
     for appName in appNames:
+
+        # Get application first tag
         tags = GetApplicationTags(appName)
+        if not tags or len(tags) == 0:
+            raise RuntimeError("No tags for application: " + appName)
+        tag = tags[0].replace(' ', '_')
 
-        if not tags:
-            print("No tags for application: "  +  appName)
-            sys.exit(1)
+        # Add it to the index (i.e. https://www.orfeo-toolbox.org/CookBook/Applications.html)
+        if not tag in writtenTags:
+            appIndexFile.write('\tApplications/' + tag + '.rst\n')
+            writtenTags.append(tag)
 
-        tag = tags[0]
-
-        tag_ = tag
-        if tag.find(' '):
-            tag_ = tag.replace(' ', '_')
-
-        if not tag_:
-            print('empty tag found for ' + appName)
-
-        if not tag_ in writtenTags:
-            appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
-            writtenTags.append(tag_)
-
-        tagFileName = rst_dir + '/Applications/'  + tag_ + '.rst'
+        # Create or update tag index file (e.g. https://www.orfeo-toolbox.org/CookBook/Applications/Feature_Extraction.html)
+        tagFileName = rst_dir + '/Applications/'  + tag + '.rst'
         if os.path.isfile(tagFileName):
-            tagFile = open(tagFileName, 'a')
-            tagFile.write("\tapp_" + appName + linesep)
-            tagFile.close()
+            with open(tagFileName, 'a') as tagFile:
+                tagFile.write("\tapp_" + appName + "\n")
         else:
-            tagFile = open(tagFileName, 'w')
-            tagFile.write( RstPageHeading(tag, "1") )
-            tagFile.write("\tapp_" + appName + linesep)
-            tagFile.close()
+            with open(tagFileName, 'w') as tagFile:
+                tagFile.write( RstPageHeading(tag, "1") )
+                tagFile.write("\tapp_" + appName + "\n")
 
-        print("Generating " + appName + ".rst" +  " on tag " + tag_)
-        appFile = open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w')
-        out = ApplicationToRst(appName)
-        appFile.write(out)
-        appFile.close()
-
-    return out
+        # Write application rst
+        #print("Generating " + appName + ".rst" +  " on tag " + tag)
+        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
+            appFile.write(render_application(appName))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(usage="Export application(s) to rst file")
