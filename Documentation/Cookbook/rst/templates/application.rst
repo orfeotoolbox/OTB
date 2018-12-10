@@ -1,3 +1,5 @@
+.. _{label}:
+
 {heading}
 {description}
 
