@@ -69,13 +69,8 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToReciprocalCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, TOutput> SinclairToReciprocalCovarianceFunctorType;
 
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
+  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
-    TOutput result;
-
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
-
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
@@ -93,12 +88,18 @@ public:
 
 
     SinclairToReciprocalCovarianceFunctorType funct;
-    return ( funct(Sll, Slr, Srr ) );
+    funct(result, Sll, Slr, Srr);
   }
 
   unsigned int GetNumberOfComponentsPerPixel()
   {
     return m_NumberOfComponentsPerPixel;
+  }
+
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the  matrix
+    return 6;
   }
 
   /** Constructor */

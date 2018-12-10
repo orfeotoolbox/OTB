@@ -21,13 +21,11 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-
-
 //monostatic case
-#include "otbSinclairReciprocalImageFilter.h"
-#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
-#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
-#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+//#include "otbSinclairReciprocalImageFilter.h"
+//#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
+//#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
+//#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
 
 #include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 #include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
@@ -58,43 +56,12 @@ public:
 
 
   //Monostatic case
-    typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								RCoherencyFunctorType;
-
-    typedef otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								RCovarianceFunctorType;
-
-    typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								RCircularCovarianceFunctorType;
+  using RCohSRFilterType = SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
+  using RCovSRFilterType = SinclairToReciprocalCovarianceMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
+  using RCCSRFilterType = SinclairToReciprocalCircularCovarianceMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
 
 
-    typedef SinclairReciprocalImageFilter<ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleVectorImageType,
-											 RCoherencyFunctorType > 									RCohSRFilterType;
-
-
-    typedef SinclairReciprocalImageFilter<ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleVectorImageType,
-											 RCovarianceFunctorType > 									RCovSRFilterType;
-
-	typedef SinclairReciprocalImageFilter<ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleImageType,
-											 ComplexDoubleVectorImageType,
-											 RCircularCovarianceFunctorType > 							RCCSRFilterType;
-
-
-    typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> RCRMFilterType;
+  typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> RCRMFilterType;
 
 	typedef otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RCCDFilterType;
 
@@ -108,7 +75,6 @@ public:
   using CovSRFilterType = SinclairToCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
   using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
   using MSRFilterType   = SinclairToMuellerMatrixFilter<ComplexDoubleImageType,DoubleVectorImageType>;
-
 
 
 	typedef otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>  MRCFilterType;
@@ -441,12 +407,12 @@ private:
 	  	m_RCohSRFilter = RCohSRFilterType::New();
 
 	    if (inhv)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+		  m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCohSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+		  m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_RCohSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_RCohSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
 		SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 
@@ -458,12 +424,12 @@ private:
 		m_RCovSRFilter = RCovSRFilterType::New();
 
 		if (inhv)
-		  m_RCovSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+		  m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCovSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+		  m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_RCovSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_RCovSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
 		SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 
@@ -476,12 +442,12 @@ private:
 		m_RCCSRFilter = RCCSRFilterType::New();
 
 		if (inhv)
-		  m_RCCSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+		  m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_RCCSRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+		  m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_RCCSRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_RCCSRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
 		SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput() ); // input : 3 x 1 complex channel | output :  6 complex channels
 

@@ -29,6 +29,7 @@ namespace otb
     struct hv {};
     struct vh {};
     struct vv {};
+    struct hv_or_vh{};
   } // end namespace polarimetry_tags
 } // end namespace otb
 
