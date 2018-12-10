@@ -1633,11 +1633,11 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
 
 
     std::vector<GCPRecordType> oneBurstGCPs;
-  
+    
     // Now move GCPs
-    for(std::vector<GCPRecordType>::iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+    for (auto const& token : theGCPRecords)   
       {
-	GCPRecordType currentGCP = *gcpIt;
+	GCPRecordType currentGCP = token;
 
 	unsigned long gcpLine = std::floor(currentGCP.imPt.y+0.5);
 	unsigned long gcpSample = std::floor(currentGCP.imPt.x+0.5);
