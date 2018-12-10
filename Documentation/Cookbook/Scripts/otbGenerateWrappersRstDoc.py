@@ -354,7 +354,7 @@ def render_see_also(app):
     if see_also is None or len(see_also) < 2:
         return ""
     else:
-        return rst_section("See also", "-") + see_also
+        return rst_section("See also", "-") + "| " + see_also.replace("\n", "\n| ") # use line blocks for see also
 
 def multireplace(string, replacements):
     "multiple string replace (from https://stackoverflow.com/a/6117124/5815110)"
