@@ -94,8 +94,6 @@ public:
     result[9] = static_cast<OutputValueType>( std::norm(jHVMinusVH) );
 
     result /= 2.0;
-
-    return (result);
   }
 
   constexpr size_t OutputSize(...) const

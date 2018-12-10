@@ -27,8 +27,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToMuellerMatrixFunctor.h"
 
 
 int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char * argv[])

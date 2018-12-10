@@ -91,7 +91,7 @@ public:
     const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
     const ComplexType jS_hh = S_hh * ComplexType(0., 1.);
     const ComplexType jS_vv = S_vv * ComplexType(0., 1.);
-    
+
     const ComplexType coef(0.5);
 
     const ComplexType Sll = coef*( S_hh+jS_hv+jS_vh-S_vv );
@@ -100,7 +100,7 @@ public:
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
     SinclairToCovarianceFunctorType funct;
-    return ( funct( Sll, Slr, Srl, Srr ) );
+    funct( result, Sll, Slr, Srl, Srr );
   }
 
     constexpr size_t OutputSize(...) const

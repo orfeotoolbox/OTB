@@ -32,7 +32,7 @@ int otbSinclairToCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed
 
   OutputType  result(10);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType outputFunct(16);
 
   result[0] = ComplexType(17.,  0. );
   result[1] = ComplexType(14.,  5.);
@@ -45,8 +45,7 @@ int otbSinclairToCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed
   result[8] = ComplexType(14.,  5.);
   result[9] = ComplexType(17.,  0.);
 
-
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
+  funct.operator ()( outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
       std::abs(result[1]-outputFunct[1]) > 1e-10 ||

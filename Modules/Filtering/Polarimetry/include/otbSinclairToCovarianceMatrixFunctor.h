@@ -86,8 +86,6 @@ public:
     result[7] = static_cast<OutputValueType>( std::norm(S_vh) );
     result[8] = static_cast<OutputValueType>( S_vh*std::conj(S_vv) );
     result[9] = static_cast<OutputValueType>( std::norm(S_vv) );
-  
-    return result;
   }
 
   constexpr size_t OutputSize(...) const

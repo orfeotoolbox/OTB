@@ -118,8 +118,6 @@ public:
     result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
     result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
     result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
-
-    return (result);
   }
 
   constexpr size_t OutputSize(...) const
