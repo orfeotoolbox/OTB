@@ -32,8 +32,6 @@ From the command-line:
 
 From Python:
 
-.. code-block:: python
-
 {examples_python}
 
 {limitations}

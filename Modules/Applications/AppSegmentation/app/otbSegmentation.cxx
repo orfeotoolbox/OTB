@@ -144,18 +144,24 @@ private:
 
     // Documentation
     SetDocName("Segmentation");
-    SetDocLongDescription("This application allows one to perform various segmentation algorithms on a multispectral image."
-                          "Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"
-                          " simple pixel based connected components according to a user-defined criterion, and watershed from the gradient of the intensity"
-                          " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\nIn raster mode,"
-                          " the output of the application is a classical image of unique labels identifying the segmented regions. The labeled output can be passed to the"
-                          " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
-                          " can not handle large images. \n\n To segment large data, one can use the vector mode. In this case, the output of the application is a"
-                          " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
-                          " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get overloaded,"
-                          " and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows simplifying the geometry"
-                          " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option tries to stitch together the polygons corresponding"
-                          " to segmented region that may have been split by the tiling scheme. ");
+    SetDocLongDescription(
+        "This application allows one to perform various segmentation algorithms on a multispectral image."
+        " Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"
+        " simple pixel based connected components according to a user-defined criterion, and watershed from the gradient of the intensity"
+        " (norm of spectral bands vector). The application has two different modes that affects the nature of its output.\n\n"
+
+        "In raster mode, the output of the application is a classical image of unique labels identifying the segmented regions. The labeled output can be "
+        "passed to the"
+        " ColorMapping application to render regions with contrasted colours. Please note that this mode loads the whole input image into memory, and as such"
+        " can not handle large images.\n\n"
+
+        "To segment large data, one can use the vector mode. In this case, the output of the application is a"
+        " vector file or database. The input image is split into tiles (whose size can be set using the tilesize parameter), and each tile is loaded, segmented"
+        " with the chosen algorithm, vectorized, and written into the output file or database. This piece-wise behavior ensure that memory will never get"
+        " overloaded, and that images of any size can be processed. There are few more options in the vector mode. The simplify option allows simplifying the "
+        "geometry"
+        " (i.e. remove nodes in polygons) according to a user-defined tolerance. The stitch option tries to stitch together the polygons corresponding"
+        " to segmented region that may have been split by the tiling scheme. ");
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
                      " \nMeanShift filter results depends on the number of threads used. \nWatershed and multiscale geodesic morphology segmentation will be performed on the amplitude "

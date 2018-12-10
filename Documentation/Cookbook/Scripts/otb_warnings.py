@@ -20,8 +20,8 @@ def parameter_warnings(app_warn, app, key):
     #if description == "":
         #warn("missing description")
 
-    #if len(description) > 0 and description[-1] != ".":
-        #warn("description does not end with a period")
+    if len(description) > 0 and description[-1] != ".":
+        warn("description does not end with a period")
 
     if len(description) > 0 and " :" in description:
         warn("description has a space before a colon")

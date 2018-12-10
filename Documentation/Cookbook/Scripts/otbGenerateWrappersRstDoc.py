@@ -29,8 +29,6 @@ from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_
 from otb_warnings import application_documentation_warnings
 
 linesep = os.linesep
-pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
-
 
 def EncloseString(s):
     if not s.startswith("\"") :
@@ -54,6 +52,7 @@ def ExpandPath(filename,path,exp):
         return os.path.join(path,filename)
 
 def GetPixelType(value):
+    pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
     # look for type
     foundcode = -1
     foundname = ""
@@ -64,37 +63,15 @@ def GetPixelType(value):
             break
     return foundcode,foundname
 
-def render_choice(app, key):
-    "Render a choice parameter to rst"
-
-    # First render all the choice values
-    choice_keys = app.GetChoiceKeys(key)
-    choice_names = app.GetChoiceNames(key)
-
-    choice_entries = ""
-    for (choice_key, choice_name) in zip(choice_keys, choice_names):
-        # For the description, replace newlines by |br| because we are in a bullet list item
-        choice_description = app.GetParameterDescription(key + "." + choice_key).replace("\n", " |br| ")
-        choice_entries += template_parameter_choice_entry.format(
-            name=choice_name,
-            #key=choice_key, # if we want to show the key in choice parameter values
-            description=choice_description
-        )
-
-    # Then render the full choice parameter
-    return template_parameter_choice.format(
-        name=app.GetParameterName(key),
-        key=key,
-        value="[" + "|".join(choice_keys) + "]",
-        flags=rst_parameter_flags(app, key),
-        description=app.GetParameterDescription(key),
-        choices=choice_entries,
-    )
-
 def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outputpath=""):
     appname = "app"
-
     output = ""
+
+    # Render example comment
+    if len(app.GetExampleComment(idx)) > 0:
+        output += app.GetExampleComment(idx) + ":\n\n"
+
+    output += ".. code-block:: python\n\n"
 
     output+= "\timport otbApplication" + linesep + linesep
     output+= "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + app.GetName() + "\")" + linesep + linesep
@@ -172,8 +149,35 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+ ", " + str(values) + ")"
         output+=linesep
     output += linesep
-    output+= "\t" + appname + ".ExecuteAndWriteOutput()"+ linesep
+    output+= "\t" + appname + ".ExecuteAndWriteOutput()" + linesep + linesep
     return output
+
+def render_choice(app, key):
+    "Render a choice parameter to rst"
+
+    # First render all the choice values
+    choice_keys = app.GetChoiceKeys(key)
+    choice_names = app.GetChoiceNames(key)
+
+    choice_entries = ""
+    for (choice_key, choice_name) in zip(choice_keys, choice_names):
+        # For the description, replace newlines by |br| because we are in a bullet list item
+        choice_description = app.GetParameterDescription(key + "." + choice_key).replace("\n", " |br| ")
+        choice_entries += template_parameter_choice_entry.format(
+            name=choice_name,
+            #key=choice_key, # if we want to show the key in choice parameter values
+            description=choice_description
+        )
+
+    # Then render the full choice parameter
+    return template_parameter_choice.format(
+        name=app.GetParameterName(key),
+        key=key,
+        value="[" + "|".join(choice_keys) + "]",
+        flags=rst_parameter_flags(app, key),
+        description=app.GetParameterDescription(key),
+        choices=choice_entries,
+    )
 
 def rst_section(text, delimiter, ref=None):
     "Make a rst section title"
@@ -235,22 +239,22 @@ def detect_abuse(app):
 
     fake_groups = {}
     keys = app.GetParametersKeys()
+    choice_keys = [k for k in keys if app.GetParameterType(k) == ParameterType_Choice]
 
     # For each choice parameter
-    for key in keys:
-        if app.GetParameterType(key) == ParameterType_Choice:
+    for key in choice_keys:
 
-            # Consider all its possible values
-            for choice_key in app.GetChoiceKeys(key):
-                fullkey = key + "." + choice_key
+        # Consider all its possible values
+        for choice_key in app.GetChoiceKeys(key):
+            fullkey = key + "." + choice_key
 
-                # See if that value is also used as a group anywhere in the application
-                for k in keys:
-                    if k.startswith(fullkey) and k != fullkey:
+            # See if that value is also used as a group anywhere in the application
+            for k in keys:
+                if k.startswith(fullkey) and k != fullkey:
 
-                        # In that case, mark the first element of that group
-                        if fullkey not in fake_groups.values():
-                            fake_groups[k] = fullkey
+                    # In that case, mark the first element of that group
+                    if fullkey not in fake_groups.values():
+                        fake_groups[k] = fullkey
 
     return fake_groups
 
