@@ -259,7 +259,7 @@ def detect_abuse(app):
 
     return fake_groups
 
-def rst_parameters(app):
+def render_parameters(app):
     "Render application parameters to rst"
 
     output = ""
@@ -378,14 +378,12 @@ def render_application(appname, allapps):
 
     application_documentation_warnings(app)
 
-    parameters = rst_parameters(app)
-
     output = template_application.format(
         label="app-" + appname,
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
-        parameters=parameters,
+        parameters=render_parameters(app),
         examples_cli=render_all_examples_cli(app),
         examples_python=render_all_examples_python(app),
         limitations=render_limitations(app),
@@ -428,15 +426,16 @@ def GenerateRstForApplications(rst_dir):
         tags = GetApplicationTags(appName)
         if not tags or len(tags) == 0:
             raise RuntimeError("No tags for application: " + appName)
-        tag = tags[0].replace(' ', '_')
+        tag = tags[0]
+        tag_ = tag.replace(" ", "_")
 
         # Add it to the index (i.e. https://www.orfeo-toolbox.org/CookBook/Applications.html)
         if not tag in writtenTags:
-            appIndexFile.write('\tApplications/' + tag + '.rst\n')
+            appIndexFile.write('\tApplications/' + tag_ + '.rst\n')
             writtenTags.append(tag)
 
         # Create or update tag index file (e.g. https://www.orfeo-toolbox.org/CookBook/Applications/Feature_Extraction.html)
-        tagFileName = rst_dir + '/Applications/'  + tag + '.rst'
+        tagFileName = rst_dir + '/Applications/'  + tag_ + '.rst'
         if os.path.isfile(tagFileName):
             with open(tagFileName, 'a') as tagFile:
                 tagFile.write("\tapp_" + appName + "\n")
@@ -446,7 +445,6 @@ def GenerateRstForApplications(rst_dir):
                 tagFile.write("\tapp_" + appName + "\n")
 
         # Write application rst
-        #print("Generating " + appName + ".rst" +  " on tag " + tag)
         with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
             appFile.write(render_application(appName, appNames))
 
