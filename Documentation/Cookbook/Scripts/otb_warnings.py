@@ -12,10 +12,10 @@ def parameter_warnings(app_warn, app, key):
         warn("name ends with a space")
 
     if ":" in name:
-        warn("name contains special character (:)")
+        warn("name contains a special character (:)")
 
     if "." in name:
-        warn("name contains special character (.)")
+        warn("name contains a special character (.)")
 
     #if description == "":
         #warn("missing description")

@@ -334,6 +334,8 @@ The available syntax for boolean options are:
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
 
+-----------------------------------------------
+
 ::
 
    &nodata=(double) value / [int:double, int:double ...]

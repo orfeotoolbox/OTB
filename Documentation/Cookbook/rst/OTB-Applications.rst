@@ -1,7 +1,7 @@
 A brief tour of OTB Applications
 ================================
 
-OTB ships with more than 90 ready to use applications for remote sensing tasks.
+OTB ships with than 100 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
 library, or integrate them into high level pipelines. OTB applications allow the user 
 to:
@@ -84,44 +84,55 @@ example based on the OrthoRectification application:
 ::
 
     $ otbcli_OrthoRectification
+    ERROR: Waiting for at least one parameter.
 
-    ERROR: Waiting for at least one parameter...
 
-    ====================== HELP CONTEXT ======================
-    NAME: OrthoRectification
-    DESCRIPTION: This application allows to ortho-rectify optical images from supported sensors.
+    This is the Ortho-rectification (OrthoRectification) application, version 6.7.0
 
-    EXAMPLE OF USE:
+    This application allows ortho-rectifying optical and radar images from supported sensors.
+    Complete documentation: https://www.orfeo-toolbox.org/CookBook/Applications/app_OrthoRectification.html or -help
+
+    Parameters:
+            -io                      <group>          Input and output data
+    MISSING -io.in                   <string>         Input Image  (mandatory)
+    MISSING -io.out                  <string> [pixel] Output Image  [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble] (default value is float) (mandatory)
+            -map                     <string>         Map Projection [utm/lambert2/lambert93/wgs/epsg] (mandatory, default value is utm)
+            -map.utm.zone            <int32>          Zone number  (mandatory, default value is 31)
+            -map.utm.northhem        <boolean>        Northern Hemisphere  (mandatory, default value is false)
+            -map.epsg.code           <int32>          EPSG Code  (mandatory, default value is 4326)
+            -outputs                 <group>          Output Image Grid
+            -outputs.mode            <string>         Parameters estimation modes [auto/autosize/autospacing/outputroi/orthofit] (mandatory, default value is auto)
+    MISSING -outputs.ulx             <float>          Upper Left X  (mandatory)
+    MISSING -outputs.uly             <float>          Upper Left Y  (mandatory)
+    MISSING -outputs.sizex           <int32>          Size X  (mandatory)
+    MISSING -outputs.sizey           <int32>          Size Y  (mandatory)
+    MISSING -outputs.spacingx        <float>          Pixel Size X  (mandatory)
+    MISSING -outputs.spacingy        <float>          Pixel Size Y  (mandatory)
+            -outputs.lrx             <float>          Lower right X  (optional, off by default)
+            -outputs.lry             <float>          Lower right Y  (optional, off by default)
+            -outputs.ortho           <string>         Model ortho-image  (optional, off by default)
+            -outputs.isotropic       <boolean>        Force isotropic spacing by default  (mandatory, default value is true)
+            -outputs.default         <float>          Default pixel value  (optional, off by default, default value is 0)
+            -elev                    <group>          Elevation management
+            -elev.dem                <string>         DEM directory  (optional, off by default)
+            -elev.geoid              <string>         Geoid File  (optional, off by default)
+            -elev.default            <float>          Default elevation  (mandatory, default value is 0)
+            -interpolator            <string>         Interpolation [bco/nn/linear] (mandatory, default value is bco)
+            -interpolator.bco.radius <int32>          Radius for bicubic interpolation  (mandatory, default value is 2)
+            -opt                     <group>          Speed optimization parameters
+            -opt.rpc                 <int32>          RPC modeling (points per axis)  (optional, off by default, default value is 10)
+            -opt.ram                 <int32>          Available RAM (MB)  (optional, off by default, default value is 128)
+            -opt.gridspacing         <float>          Resampling grid spacing  (optional, off by default, default value is 4)
+            -inxml                   <string>         Load parameters from XML  (optional, off by default)
+            -progress                <boolean>        Report progress
+            -help                    <string list>    Display long help (empty list), or help for given parameters keys
+
+    Use -help param1 [... paramN] to see detailed documentation of those parameters.
+
+    Examples:
     otbcli_OrthoRectification -io.in QB_TOULOUSE_MUL_Extract_500_500.tif -io.out QB_Toulouse_ortho.tif
 
-    DOCUMENTATION: http://www.orfeo-toolbox.org/Applications/OrthoRectification.html
-    ======================= PARAMETERS =======================
-            -progress                        <boolean>        Report progress
-    MISSING -io.in                           <string>         Input Image
-    MISSING -io.out                          <string> [pixel] Output Image  [pixel=uint8/int8/uint16/int16/uint32/int32/float/double]
-            -map                             <string>         Output Map Projection [utm/lambert2/lambert93/transmercator/wgs/epsg]
-    MISSING -map.utm.zone                    <int32>          Zone number
-            -map.utm.northhem                <boolean>        Northern Hemisphere
-            -map.transmercator.falseeasting  <float>          False easting
-            -map.transmercator.falsenorthing <float>          False northing
-            -map.transmercator.scale         <float>          Scale factor
-            -map.epsg.code                   <int32>          EPSG Code
-            -outputs.mode                    <string>         Parameters estimation modes [auto/autosize/autospacing]
-    MISSING -outputs.ulx                     <float>          Upper Left X
-    MISSING -outputs.uly                     <float>          Upper Left Y
-    MISSING -outputs.sizex                   <int32>          Size X
-    MISSING -outputs.sizey                   <int32>          Size Y
-    MISSING -outputs.spacingx                <float>          Pixel Size X
-    MISSING -outputs.spacingy                <float>          Pixel Size Y
-            -outputs.isotropic               <boolean>        Force isotropic spacing by default
-            -elev.dem                        <string>         DEM directory
-            -elev.geoid                      <string>         Geoid File
-            -elev.default                    <float>          Average Elevation
-            -interpolator                    <string>         Interpolation [nn/linear/bco]
-            -interpolator.bco.radius         <int32>          Radius for bicubic interpolation
-            -opt.rpc                         <int32>          RPC modeling (points per axis)
-            -opt.ram                         <int32>          Available memory for processing (in MB)
-            -opt.gridspacing                 <float>          Resampling grid spacing
+
 
 For a detailed description of the application behaviour and parameters,
 please check the application reference documentation presented
@@ -169,12 +180,10 @@ In this interface, every optional parameter has a check box that you
 have to tick if you want to set a value and use this parameter. The
 mandatory parameters cannot be unchecked.
 
-The interface of the application is shown here as an example.
+The interface of the application is shown here as an example:
 
 .. figure:: Art/QtImages/rescale_param.png
-.. figure:: Art/QtImages/rescale_logs.png
-.. figure:: Art/QtImages/rescale_progress.png
-.. figure:: Art/QtImages/rescale_documentation.png
+    :align: center
 
 Python interface
 ----------------
