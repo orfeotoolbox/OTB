@@ -298,6 +298,18 @@ public:
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, VariadicInputsImageFilter);
+
+  /** New() macro defined only if TFunction is default constructible */
+  template <typename F = TFunction> static std::enable_if_t<std::is_default_constructible<F>::value, Pointer> New()
+  {
+    // Explicit default construct
+    FunctorType f;
+
+    // Create a filter out of it
+    Pointer  p = new Self(f, {{0,0}});
+    p->UnRegister();
+    return p;
+  }
   
   /** Get the functor object.
    * 
@@ -417,44 +429,6 @@ template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Func
   return  NewFunctorFilter<FunctorType,TNameMap>(decoratedF,radius);
 }
 
-/**
- * \class DefaultConstructibleFunctorImageFilter
- * \brief Adds New() to FunctorImageFilter
- *
- * FunctorImageFilter is not default constructible (to support lambda
- * as template parameter), and thus does not offer the New() static method.
- * 
- * This class provides explicit default construction and New() static
- * method when it is required to stick with the ITK/OTB workflow of
- * default construction. It can not be used with lamda as TFunction.
- * 
- * \sa FunctorImageFilter
- * \ingroup OTBFunctor
- */
-
-template <class TFunction, class TNameMap = void>
-class ITK_EXPORT DefaultConstructibleFunctorImageFilter : public FunctorImageFilter<TFunction, TNameMap>
-{
-public:
-  // Standard typedefs
-  using Self         = DefaultConstructibleFunctorImageFilter;
-  using FunctorType  = TFunction;
-  using Pointer      = itk::SmartPointer<Self>;
-  using ConstPointer = itk::SmartPointer<const Self>;
-
-  // Superclass through the helper struct
-  using Superclass      = FunctorImageFilter<TFunction, TNameMap>;
-  using OutputImageType = typename Superclass::OutputImageType;
-
-  itkNewMacro(Self);
-  itkTypeMacro(DefaultConstructibleFunctorImageFilter, FunctorImageFilter);
-
-protected:
-  DefaultConstructibleFunctorImageFilter() : Superclass(TFunction{}, {{0, 0}}){};
-  DefaultConstructibleFunctorImageFilter(const Self&) = delete;
-  void operator=(const Self&)               = delete;
-  ~DefaultConstructibleFunctorImageFilter() = default;
-};
 }// namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

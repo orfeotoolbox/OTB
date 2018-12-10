@@ -162,9 +162,8 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   res = filter1->GetVariadicNamedInput(tag{});
   filter1->Update();
 
-  // Test default constructible version
-  using DefaultConstructibleFilterType = DefaultConstructibleFunctorImageFilter<decltype(functor)>;
-  auto oldStyleNewFilter = DefaultConstructibleFilterType::New();
+  // Test static New() operator
+  auto oldStyleNewFilter = FunctorImageFilter<decltype(functor)>::New();
   oldStyleNewFilter->SetVariadicInputs(in);
   oldStyleNewFilter->Update();
 
