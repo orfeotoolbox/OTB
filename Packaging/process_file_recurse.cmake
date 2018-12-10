@@ -37,10 +37,12 @@ function(process_file_recurse input_file)
         endif()
       endif()
     endif(LINUX)
-  endif() #if(NOT input_file_full_path)
+  endif() 
 
-  if( NOT input_file_full_path)
-    message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}")
+  #if(NOT input_file_full_path)
+  if( NOT input_file_full_path )
+    message(FATAL_ERROR "${input_file} not found. searched in ${PKG_SEARCHDIRS}"
+      " and in ${OMP_LIB_DIR} for openMP. ")
   endif()
 
   get_filename_component(bn_name ${input_file_full_path} NAME)

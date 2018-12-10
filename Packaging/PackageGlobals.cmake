@@ -90,7 +90,6 @@ set(LINUX_SYSTEM_DLLS
   libdl.so
   libpthread.so
   libidn.so
-  libgomp.so*
   ld-linux-x86-64.so*
   libX11.so*
   libXi.so*  #GLUT
@@ -116,6 +115,7 @@ set(LINUX_SYSTEM_DLLS
   libpq.so*
   libEGL.so*
   )
+  # libgomp.so*
   # libexpat.so.*
   # libfontconfig.so*
   # libfreetype.so*
@@ -141,8 +141,8 @@ set(APPLE_SYSTEM_DLLS
   OpenGL.framework
   libgcc_s.*dylib
   libcups.*dylib
-  libomp.dylib
   )
+  # libomp.dylib
 
 if(WIN32)
   set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
@@ -185,7 +185,6 @@ set(GTK_LIB_LIST_1
 #   libz.so.1
 #   libpng12.so.0
 #   )
-
 
 #set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
 set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1}) # ${GTK_LIB_LIST_2})

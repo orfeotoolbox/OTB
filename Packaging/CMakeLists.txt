@@ -29,7 +29,7 @@ include(CTest)
 
 #setting this variable prints a lot of debug information
 set(PKG_DEBUG OFF)
-#set( PKG_DEBUG 1)
+# set( PKG_DEBUG 1)
 
 set(CMAKE_BUILD_TYPE    Release)
 
@@ -54,6 +54,10 @@ endif()
 if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
   find_package(PythonInterp REQUIRED)
 endif()
+
+#openMP lib path
+set(OMP_LIB_DIR "" CACHE PATH "path to the corresponding openMP library")
+
 
 find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
@@ -205,6 +209,11 @@ prepare_search_dirs(PKG_SEARCHDIRS)
 
 set(PKG_PEFILES)
 prepare_file_list(PKG_PEFILES)
+
+if( UNIX )
+  include(prepare_openmp)
+endif()
+
 foreach(pfile ${PKG_PEFILES})
   process_file_recurse(${pfile})
 endforeach()
