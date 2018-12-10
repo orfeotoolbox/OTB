@@ -104,9 +104,9 @@ private:
       "less easy to handle. To do this, a 'channels' parameter allows you to "
       "select the desired bands at the output. There are 3 modes, the "
       "available choices are: \n"
-      " * **All**: keep all bands.\n"
-      " * **Grayscale**: to display mono image as standard color image \n"
-      " * **RGB**: select 3 bands in the input image (multi-bands) \n"
+      "* **All**: keep all bands.\n"
+      "* **Grayscale**: to display mono image as standard color image \n"
+      "* **RGB**: select 3 bands in the input image (multi-bands) \n"
     );
     SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
