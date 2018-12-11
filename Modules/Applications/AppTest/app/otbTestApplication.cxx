@@ -56,7 +56,6 @@ private:
     AddDocTag("Test");
 
     //std::cout << "TestApplication::DoInit" << std::endl;
-    AddParameter(ParameterType_Empty, "empty", "Boolean (old impl.)");
     AddParameter(ParameterType_Bool, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");

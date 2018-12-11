@@ -57,10 +57,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
                           "and the values of the train samples in this node are smaller than this regression accuracy parameter, "
                           "then the node will not be split.");
 
-  //UseSurrogates : don't need to be exposed !
-  //AddParameter(ParameterType_Empty, "classifier.rf.sur", "Surrogate splits will be built");
-  //SetParameterDescription("classifier.rf.sur","These splits allow working with missing data and compute variable importance correctly.");
-
   //MaxNumberOfCategories
   AddParameter(ParameterType_Int, "classifier.rf.cat",
                "Cluster possible values of a categorical variable into K <= cat clusters to find a suboptimal split");
