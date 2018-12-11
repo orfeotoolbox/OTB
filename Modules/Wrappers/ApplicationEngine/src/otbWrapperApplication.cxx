@@ -1995,9 +1995,15 @@ std::string Application::GetParameterAsString(std::string paramKey)
     {
       std::ostringstream oss;
       oss << std::setprecision(10);
-      const std::vector<std::string> strList = this->GetParameterStringList( paramKey );
-      for (unsigned int i=0; i<strList.size(); i++)
-        oss << strList[i] << std::endl;
+      const std::vector<std::string> strList = this->GetParameterStringList(paramKey);
+      for (size_t i = 0; i < strList.size(); i++)
+      {
+        if (i != 0)
+        {
+          oss << " ";
+        }
+        oss << strList[i];
+      }
       ret = oss.str();
     }
   else

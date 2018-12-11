@@ -228,10 +228,16 @@ def rst_parameter_value(app, key):
         raise ValueError("Cannot show parameter value for type ", type)
 
 def rst_parameter_flags(app, key):
+    """
+    Display the mandatory and default value flags of a parameter
+    The display logic tries to follow the logic in WrapperCommandLineLauncher::DisplayParameterHelp
+    The default value is formatted using GetParameterAsString to use the same formatting as the cli interface
+    """
+
     if app.IsMandatory(key) and not app.HasValue(key):
         return "*Mandatory* "
-    elif app.HasValue(key) and app.GetParameterType(key) != ParameterType_Group:
-        return "*Default value: {}* ".format(app.GetParameterAsString(key)) # get value as string to use the same formatting as the c++ api
+    elif app.HasValue(key) and app.GetParameterType(key) != ParameterType_Group and app.GetParameterAsString(key) != "":
+        return "*Default value: {}* ".format(app.GetParameterAsString(key))
     else:
         return ""
 
