@@ -1,7 +1,8 @@
-OTB-v.6.6.1 - Changes since version 6.6.0 (December 1st, 2018)
+OTB-v.6.6.1 - Changes since version 6.6.0 (December 12th, 2018)
 -----------------------------------------------------------
 
-Bugs fixed: 
+Bugs fixed:
+   * !314: "Add lib openMP to packages" by Antoine Regimbeau (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/314)
    * !305: "BUG: compat of QgisDescriptor with old params" by Guillaume Pasero (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/305)
    * !304: "BUG: Quick fix for Mellin test" by Antoine Regimbeau (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/304)
    * !303: "BUG: missing ComplexImage params in QGis wrapper" by Guillaume Pasero (see https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/merge_requests/303)
