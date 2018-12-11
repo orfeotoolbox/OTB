@@ -43,7 +43,8 @@ int otbSarSensorModelAdapterTest(int itkNotUsed(argc), char* argv[])
     }
 
   std::vector<std::pair<unsigned long, unsigned long> > lines;
-  success = sensorModel->Deburst(lines);
+  std::pair<unsigned long, unsigned long> samples;
+  success = sensorModel->Deburst(lines, samples);
 
   if(!success)
     {
