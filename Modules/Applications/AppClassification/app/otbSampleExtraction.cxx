@@ -129,6 +129,11 @@ private:
       ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
       ogr::Feature feature = layer.ogr().GetNextFeature();
 
+      if(!feature.addr())
+        {
+        otbAppLogFATAL(<<"No features found in "<<vectorFile);
+        }
+
       ClearChoices("field");
       
       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
