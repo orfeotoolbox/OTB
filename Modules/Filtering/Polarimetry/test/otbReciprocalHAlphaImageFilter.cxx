@@ -26,7 +26,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalHAlphaImageFilter.h"
 #include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
@@ -88,7 +87,7 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  haafilter->SetInput(perBand->GetOutput());
+  haafilter->SetInput1(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(haafilter->GetOutput());

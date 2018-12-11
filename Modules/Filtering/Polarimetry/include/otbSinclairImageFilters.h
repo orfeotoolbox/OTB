@@ -36,8 +36,18 @@
 #include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
 #include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
 
+// Decomposition functors
+#include "otbReciprocalBarnesDecompFunctor.h"
+#include "otbReciprocalHAlphaImageFunctor.h"
+#include "otbReciprocalHuynenDecompFunctor.h"
+#include "otbReciprocalPauliDecompFunctor.h"
+
 namespace otb
 {
+//#################
+// Bistatic filters
+//#################
+
 // This is the entire declaration of SinclairToCovarianceMatrixFilter
 template <typename TInputImage, typename TOutputImage>
 using SinclairToCovarianceMatrixFilter = FunctorImageFilter<
@@ -49,43 +59,86 @@ using SinclairToCovarianceMatrixFilter = FunctorImageFilter<
 template <typename TInputImage, typename TOutputImage>
 using SinclairToCircularCovarianceMatrixFilter = FunctorImageFilter<
     Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                                                       typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 
 // This is the entire declaration of SinclairToCoherencyMatrixFilter
 template <typename TInputImage, typename TOutputImage>
 using SinclairToCoherencyMatrixFilter = FunctorImageFilter<
     Functor::SinclairToCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                                              typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 
 // This is the entire declaration of SinclairToMuellerMatrixFilter
 template <typename TInputImage, typename TOutputImage>
 using SinclairToMuellerMatrixFilter = FunctorImageFilter<
     Functor::SinclairToMuellerMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                                            typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 
+//###################
 // Monostatic filters
-// Convert the Sinclair reciprocal matrix
+//###################
 
-// SinclairToReciprocalCoherencyMatrixFilter
+// This is the entire declaration of SinclairToReciprocalCoherencyMatrixFilter
 template <typename TInputImage, typename TOutputImage>
-using SinclairToReciprocalCoherencyMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToReciprocalCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-  std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
+using SinclairToReciprocalCoherencyMatrixFilter =
+    FunctorImageFilter<Functor::SinclairToReciprocalCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                                           typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
 
-// SinclairToReciprocalCoherencyMatrixFilter
+// This is the entire declaration of SinclairToReciprocalCoherencyMatrixFilter
 template <typename TInputImage, typename TOutputImage>
-using SinclairToReciprocalCovarianceMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToReciprocalCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
+using SinclairToReciprocalCovarianceMatrixFilter =
+    FunctorImageFilter<Functor::SinclairToReciprocalCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                                            typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
 
-// SinclairToReciprocalCircularCovarianceMatrixFilter
+// This is the entire declaration of SinclairToReciprocalCircularCovarianceMatrixFilter
 template <typename TInputImage, typename TOutputImage>
-using SinclairToReciprocalCircularCovarianceMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
+using SinclairToReciprocalCircularCovarianceMatrixFilter =
+    FunctorImageFilter<Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                                                    typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
+
+
+//############################
+// Polarimetric decompositions
+//############################
+
+// This is the entire declaration of ReciprocalHAlphaImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalHAlphaImageFilter =
+  FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalBarnesDecompImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalBarnesDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalBarnesDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalHuynenDecompImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalHuynenDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalPauliDecompImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalPauliDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalPauliDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+//################
+// Mueller filters
+//################
+
+// This is the entire declaration of MuellerToPolarisationDegreeAndPowerFilter
+template <typename TInputImage, typename TOutputImage>
+using MuellerToPolarisationDegreeAndPowerImageFilter =
+  FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of MuellerToReciprocalCovarianceImageFilter
+template <typename TInputImage, typename TOutputImage>
+using MuellerToReciprocalCovarianceImageFilter =
+  FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 
 

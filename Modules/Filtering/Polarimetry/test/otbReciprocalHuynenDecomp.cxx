@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkMeanImageFilter.h"
-#include "otbReciprocalHuynenDecompImageFilter.h"
+
 #include "otbPerBandVectorImageFilter.h"
 
 #include "otbSinclairImageFilters.h"
@@ -85,7 +85,7 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  huynenfilter->SetInput(perBand->GetOutput());
+  huynenfilter->SetInput1(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(huynenfilter->GetOutput());

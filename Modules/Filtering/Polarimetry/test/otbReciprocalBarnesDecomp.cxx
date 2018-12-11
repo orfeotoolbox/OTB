@@ -27,7 +27,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkMeanImageFilter.h"
-#include "otbReciprocalBarnesDecompImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
 #include "otbSinclairImageFilters.h"
@@ -89,7 +88,7 @@ int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  barnesfilter->SetInput(perBand->GetOutput());
+  barnesfilter->SetInput1(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(barnesfilter->GetOutput());

@@ -19,10 +19,9 @@
  */
 
 
-#ifndef otbMuellerToPolarisationDegreeAndPowerImageFilter_h
-#define otbMuellerToPolarisationDegreeAndPowerImageFilter_h
+#ifndef otbMuellerToPolarisationDegreeAndPowerFunctor_h
+#define otbMuellerToPolarisationDegreeAndPowerFunctor_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
@@ -84,7 +83,7 @@ public:
   typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
   typedef itk::Vector<double, 4>                   StokesVectorType;
 
-  inline TOutput operator()( const TInput & Mueller ) const
+  inline void operator()( TOutput & result, const TInput & Mueller ) const
     {
     double P;
     double deg_pol;
@@ -97,9 +96,6 @@ public:
     double l_PowerMax(itk::NumericTraits<double>::min());
     double l_PolarisationDegreeMin(itk::NumericTraits<double>::max());
     double l_PolarisationDegreeMax(itk::NumericTraits<double>::min());
-
-     TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
 
     MuellerMatrixType muellerMatrix;
     muellerMatrix[0][0] = Mueller[0];
@@ -172,14 +168,17 @@ public:
     result[1] = l_PowerMax;
     result[2] = l_PolarisationDegreeMin;
     result[3] = l_PolarisationDegreeMax;
-
-
-    return result;
     }
 
   unsigned int GetOutputSize()
   {
     return m_NumberOfComponentsPerPixel;
+  }
+
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 4;
   }
 
    /** Constructor */
@@ -193,49 +192,7 @@ private:
     const double m_Epsilon;
     const double m_PI_90;
 };
-}
-
-
-/** \class otbMuellerToPolarisationDegreeAndPowerImageFilter
- * \brief Compute the polarization degree and power (4 channels : Power min and max, Polarization degree min and max)
- * from the Mueller image (16 real channels)
- * For more details, please refer to the class MuellerToPolarisationDegreeAndPowerFunctor.
- *
- * \ingroup SARPolarimetry
- * \sa MuellerToPolarisationDegreeAndPowerFunctor
- *
- *
- * \ingroup OTBPolarimetry
- */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToPolarisationDegreeAndPowerFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef MuellerToPolarisationDegreeAndPowerImageFilter  Self;
-  typedef typename Functor::MuellerToPolarisationDegreeAndPowerFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(MuellerToPolarisationDegreeAndPowerImageFilter, UnaryFunctorImageFilter);
-
-
-protected:
-   MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  ~MuellerToPolarisationDegreeAndPowerImageFilter() override {}
-
-private:
-  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-};
+} // end namespace functor
 
 } // end namespace otb
 
