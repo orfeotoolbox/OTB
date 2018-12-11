@@ -184,6 +184,14 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
 
   if (m_OutputTransform.IsNull()) //default if we didn't manage to instantiate it before
     {
+    // In this case, if input transform is set, we set
+    // outputProjectionRef to wgs84 to ensure consistency
+    if(inputTransformIsSensor || inputTransformIsMap)
+      {
+      m_OutputProjectionRef = SpatialReference::FromWGS84().ToWkt();
+      }
+
+
     m_OutputTransform = itk::IdentityTransform<double, NOutputDimensions>::New();
     otbMsgDevMacro(<< "Output projection set to identity");
     }
