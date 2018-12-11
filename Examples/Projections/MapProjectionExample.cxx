@@ -130,8 +130,8 @@ int main(int argc, char* argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  // IGNF:LAMB93 is the IGNF code for lambert 93
-  otb::SpatialReference lamb93SRS = otb::SpatialReference::FromDescription("IGNF:LAMB93");
+  // EPSG:2154 is the EPSG code for lambert 93
+  otb::SpatialReference lamb93SRS = otb::SpatialReference::FromDescription("EPSG:3154");
   MapProjectionType::Pointer lambertProjection = MapProjectionType::New();
   lambertProjection->SetWkt(lamb93SRS.ToWkt());
 

@@ -54,7 +54,7 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
 
   TransformType::Pointer wgs2lambert    = TransformType::New();
   wgs2lambert->SetInputProjectionRef("EPSG:4326");   // WGS 84
-  wgs2lambert->SetOutputProjectionRef("IGNF:LAMBE");
+  wgs2lambert->SetOutputProjectionRef("EPSG:27572");
 
   wgs2lambert->InstantiateTransform();
 
@@ -72,14 +72,14 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
   utm2utm->InstantiateTransform();
 
   TransformType::Pointer lambert2lambert = TransformType::New();
-  lambert2lambert->SetInputProjectionRef("IGNF:LAMBE");
-  lambert2lambert->SetOutputProjectionRef("IGNF:LAMBE");
+  lambert2lambert->SetInputProjectionRef("EPSG:27572");
+  lambert2lambert->SetOutputProjectionRef("EPSG:27572");
 
   lambert2lambert->InstantiateTransform();
   
   TransformType::Pointer utm2lambert    = TransformType::New();
   utm2lambert->SetInputProjectionRef("EPSG:32631");  // UTM
-  utm2lambert->SetOutputProjectionRef("IGNF:LAMBE");
+  utm2lambert->SetOutputProjectionRef("EPSG:27572");
 
   utm2lambert->InstantiateTransform();
 

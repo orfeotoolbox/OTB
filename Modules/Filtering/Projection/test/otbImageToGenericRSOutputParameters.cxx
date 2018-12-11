@@ -78,7 +78,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   outfile<< std::endl;
 
   // Target SRS : lambertII
-  std::string  lambertRef = otb::SpatialReference::FromDescription("IGNF:LAMBE").ToWkt();
+  std::string  lambertRef = otb::SpatialReference::FromDescription("EPSG:27572").ToWkt();
 
   filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();

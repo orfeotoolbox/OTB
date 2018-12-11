@@ -113,12 +113,12 @@ const std::string MapProjectionParametersHandler::GetProjectionRefFromChoice(con
     break;
     case Map_Lambert2:
     {
-    return SpatialReference::FromDescription("IGNF:LAMBE").ToWkt();
+    return SpatialReference::FromDescription("EPSG:27572").ToWkt();
     }
     break;
     case Map_Lambert93:
     {
-    return SpatialReference::FromDescription("IGNF:LAMB93").ToWkt();
+    return SpatialReference::FromDescription("EPSG:2154").ToWkt();
     }
     break;
     case Map_WGS84:
