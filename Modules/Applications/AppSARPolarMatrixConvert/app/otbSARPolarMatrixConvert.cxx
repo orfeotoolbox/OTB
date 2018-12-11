@@ -232,28 +232,28 @@ private:
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_InputImage, "inc", "Input: multi-band complex image");
+    AddParameter(ParameterType_InputImage, "inc", "Input multi-band complex image");
     SetParameterDescription("inc", "Input: multi-band complex image");
     MandatoryOff("inc");
 
-    AddParameter(ParameterType_InputImage, "inf", "Input: multi-band real image");
+    AddParameter(ParameterType_InputImage, "inf", "Input multi-band real image");
     SetParameterDescription("inf", "Input: multi-band real image");
     MandatoryOff("inf");
 
 
-    AddParameter(ParameterType_InputImage, "inhh", "Input: one-band complex image (HH)");
+    AddParameter(ParameterType_InputImage, "inhh", "Input one-band complex image (HH)");
     SetParameterDescription("inhh", "Input: one-band complex image (HH)");
     MandatoryOff("inhh");
 
-    AddParameter(ParameterType_InputImage, "inhv", "Input: one-band complex image (HV)");
+    AddParameter(ParameterType_InputImage, "inhv", "Input one-band complex image (HV)");
     SetParameterDescription("inhv", "Input: one-band complex image (HV)");
     MandatoryOff("inhv");
 
-    AddParameter(ParameterType_InputImage, "invh", "Input: one-band complex image (VH)");
+    AddParameter(ParameterType_InputImage, "invh", "Input one-band complex image (VH)");
     SetParameterDescription("invh", "Input: one-band complex image (VH)");
     MandatoryOff("invh");
 
-    AddParameter(ParameterType_InputImage, "invv", "Input: one-band complex image (VV)");
+    AddParameter(ParameterType_InputImage, "invv", "Input one-band complex image (VV)");
     SetParameterDescription("invv", "Input: one-band complex image (VV)");
     MandatoryOff("invv");
     
