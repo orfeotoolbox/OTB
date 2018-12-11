@@ -72,7 +72,7 @@ private:
 
       "The formula can be written using:\n\n"
       "* numerical values ( 2.3, -5, 3.1e4, ...)\n"
-      "* variables containing pixel values (e.g. : ``im2b3`` is the pixel value"
+      "* variables containing pixel values (e.g. ``im2b3`` is the pixel value"
       " in 2nd image, 3rd band)\n"
       "* binary operators:\n\n"
 
@@ -87,7 +87,7 @@ private:
       "  * ``or`` logical or, ``and`` logical and\n"
       "* if-then-else operator: ``if(condition;value_true;value_false)``\n"
 #endif
-      "* functions : ``exp()``, ``log()``, ``sin()``, ``cos()``, ``min()``, ``max()``, ...\n\n"
+      "* functions: ``exp()``, ``log()``, ``sin()``, ``cos()``, ``min()``, ``max()``, ...\n\n"
 
       "The full list of features and operators is available on the muParser website [1]."
       );

@@ -304,7 +304,7 @@ private:
 
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
-    SetParameterDescription("op","Selection of the operation to execute (default is : label to color).");
+    SetParameterDescription("op", "Selection of the operation to execute (default is: label to color).");
 
     AddChoice("op.labeltocolor","Label to color");
 

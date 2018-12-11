@@ -38,8 +38,9 @@ def application_documentation_warnings(app):
     description = app.GetDescription()
     longdescription = app.GetDocLongDescription()
 
-    if not longdescription[-1] == ".":
-        warn("Application Long Description does not end with a period (.)")
+    # disable because there are so many for now
+    #if not longdescription[-1] == ".":
+        #warn("Application Long Description does not end with a period (.)")
 
     if re.search("\\n [a-zA-Z]", longdescription):
         warn("Application Long Description contains '\\n ' pattern (usually not intended)")

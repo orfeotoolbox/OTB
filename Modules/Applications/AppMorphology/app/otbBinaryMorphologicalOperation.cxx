@@ -179,7 +179,7 @@ SetOfficialDocLink();
 
 void DoUpdateParameters() override
 {
-  // Nothing to do here : all parameters are independent
+  // Nothing to do here: all parameters are independent
 }
 
 void DoExecute() override

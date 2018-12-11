@@ -108,7 +108,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
     MandatoryOff("out");
-    AddParameter(ParameterType_Group, "rescale", "Rescale Output.");
+    AddParameter(ParameterType_Group, "rescale", "Rescale Output");
 
     MandatoryOff("rescale");
     //  AddChoice("rescale.no","No rescale");
@@ -132,10 +132,10 @@ private:
     SetParameterDescription("method.pca", "Principal Component Analysis.");
     AddChoice("method.napca", "NA-PCA");
     SetParameterDescription("method.napca", "Noise Adjusted Principal Component Analysis.");
-    AddParameter(ParameterType_Int, "method.napca.radiusx", "Set the x radius of the sliding window.");
+    AddParameter(ParameterType_Int, "method.napca.radiusx", "Set the x radius of the sliding window");
     SetMinimumParameterIntValue("method.napca.radiusx", 1);
     SetDefaultParameterInt("method.napca.radiusx", 1);
-    AddParameter(ParameterType_Int, "method.napca.radiusy", "Set the y radius of the sliding window.");
+    AddParameter(ParameterType_Int, "method.napca.radiusy", "Set the y radius of the sliding window");
     SetMinimumParameterIntValue("method.napca.radiusy", 1);
     SetDefaultParameterInt("method.napca.radiusy", 1);
 
@@ -158,14 +158,14 @@ private:
     //SetParameterDescription("method.vd","Virtual Dimension.");
     //MandatoryOff("method");
 
-    AddParameter(ParameterType_Int, "nbcomp", "Number of Components.");
+    AddParameter(ParameterType_Int, "nbcomp", "Number of Components");
     SetParameterDescription("nbcomp", "Number of relevant components kept. By default all components are kept.");
     SetDefaultParameterInt("nbcomp", 0);
     MandatoryOff("nbcomp");
     SetMinimumParameterIntValue("nbcomp", 0);
 
-    AddParameter(ParameterType_Bool, "normalize", "Normalize.");
-    SetParameterDescription("normalize", "center AND reduce data before Dimensionality reduction.");
+    AddParameter(ParameterType_Bool, "normalize", "Normalize");
+    SetParameterDescription("normalize", "Center and reduce data before Dimensionality reduction.");
 
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");

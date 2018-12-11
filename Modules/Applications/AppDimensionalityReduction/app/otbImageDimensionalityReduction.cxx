@@ -137,7 +137,7 @@ private:
                           "the model. The input pixels"
                           " can be optionally centered and reduced according "
                           "to the statistics file produced by the "
-                          "ComputeImagesStatistics application. ");
+                          "ComputeImagesStatistics application.");
 
     SetDocLimitations("The input image must contain the feature bands used for"
                       " the model training. "

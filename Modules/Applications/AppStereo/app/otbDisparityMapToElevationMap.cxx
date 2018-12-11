@@ -83,7 +83,7 @@ private:
       "* skip if position is discarded by the disparity mask\n"
       "* compute left ray: transform the current position from epipolar "
       "geometry to left sensor geometry (left rectification grid)\n"
-      "* compute right ray : shift the current position with current "
+      "* compute right ray: shift the current position with current "
       "disparity and transform from epipolar geometry to right sensor (right "
       "rectification grid)\n"
       "* estimate best 3D intersection between left and right rays\n"
@@ -202,8 +202,8 @@ private:
     m_DispToElev->UpdateOutputInformation();
     FloatVectorImageType::RegionType outputRegion = m_DispToElev->GetOutput()->GetLargestPossibleRegion();
 
-    otbAppLogINFO(<<"Elevation map origin : [" << m_DispToElev->GetOutput()->GetOrigin()[0] << "," << m_DispToElev->GetOutput()->GetOrigin()[1] <<  "]" << std::endl);
-    otbAppLogINFO(<<"Elevation map size : [" << outputRegion.GetSize()[0] << "," << outputRegion.GetSize()[1] << "]" << std::endl);
+    otbAppLogINFO(<<"Elevation map origin: [" << m_DispToElev->GetOutput()->GetOrigin()[0] << "," << m_DispToElev->GetOutput()->GetOrigin()[1] <<  "]" << std::endl);
+    otbAppLogINFO(<<"Elevation map size: [" << outputRegion.GetSize()[0] << "," << outputRegion.GetSize()[1] << "]" << std::endl);
 
     this->SetParameterOutputImage("io.out",m_DispToElev->GetOutput());
   }

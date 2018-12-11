@@ -82,7 +82,7 @@ private:
     SetDescription("This application computes the chosen descriptors for each studied polyline contained in the input VectorData.");
 
     SetDocName("Compute Polyline Feature From Image");
-    SetDocLongDescription("The first step in the classifier fusion based validation is to compute the chosen descriptors for each studied polyline. ");
+    SetDocLongDescription("The first step in the classifier fusion based validation is to compute the chosen descriptors for each studied polyline.");
     SetDocLimitations("Since it does not rely on streaming process, take care of the size of input image before launching application.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

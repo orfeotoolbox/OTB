@@ -106,7 +106,7 @@ private:
 
     // Documentation
     SetDocName("DomainTransform");
-    SetDocLongDescription("Domain Transform application for wavelet and fourier");
+    SetDocLongDescription("Domain Transform application for wavelet and fourier.");
     SetDocLimitations("This application is not streamed, check your system resources when processing large images");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbWaveletImageFilter, otbWaveletInverseImageFilter, otbWaveletTransform");

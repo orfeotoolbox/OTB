@@ -102,7 +102,7 @@ private:
       "  * ``==`` equal, ``!=`` not equal\n"
       "  * logical operators: ``or``, ``and``, ``xor``\n"
       "* if-then-else operator: ``(condition ? value_true : value_false)``\n"
-      "* functions : abs(), exp(), log(), sin(), cos(), min(), max(), ...\n\n"
+      "* functions: abs(), exp(), log(), sin(), cos(), min(), max(), ...\n\n"
 
       "Always keep in mind that this application only addresses mathematically "
       "well-defined formulas. For instance, it is not possible to add vectors of"
@@ -188,7 +188,7 @@ private:
       "whereas #M allows the definition of a vector/matrix. In the latter case, "
       "elements of a row must be separated by commas, and rows must be separated"
       " by semicolons. It is also possible to define expressions within the same"
-      " txt file, with #E <expr> (see limitations, below).\n"
+      " txt file, with #E <expr> (see limitations, below)."
     );
 
     SetDocLimitations(
@@ -376,12 +376,12 @@ private:
     std::string expStr = GetParameterString("exp");
     if (useContext)
       {
-      otbAppLogINFO("Using input context : " << expStr );
+      otbAppLogINFO("Using input context: " << expStr );
       m_Filter->ImportContext(GetParameterString("incontext"));
       }
     else
       {
-      otbAppLogINFO("Using expression : " << expStr );
+      otbAppLogINFO("Using expression: " << expStr );
       m_Filter->SetExpression(expStr);
       }
 

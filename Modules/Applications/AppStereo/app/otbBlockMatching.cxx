@@ -149,9 +149,9 @@ private:
       "vertical directions). A winner-take-all approach is used to select the "
       "best match. There are different metrics implemented to evaluate the "
       "match between two local windows:\n\n"
-      "* SSD : Sum of Squared Distances\n"
-      "* NCC : Normalized Cross-Correlation\n"
-      "* Lp  : Lp pseudo norm\n\n"
+      "* SSD: Sum of Squared Distances\n"
+      "* NCC: Normalized Cross-Correlation\n"
+      "* Lp: Lp pseudo norm\n\n"
 
       "Once the best integer disparity is found, an optional step of sub-pixel "
       "disparity estimation can be performed, with various algorithms "
@@ -165,7 +165,7 @@ private:
       " by avoiding to investigate disparities that will not be reliable anyway"
       ". For efficiency reasons, if the image of optimal metric values is "
       "desired, it will be concatenated to the output image (which will then "
-      "have three bands : horizontal disparity, vertical disparity and metric "
+      "have three bands: horizontal disparity, vertical disparity and metric "
       "value). One can split these images afterward.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
