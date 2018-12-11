@@ -29,7 +29,7 @@
 #include "itkMeanImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-#include "otbSinclairImageFilters.h"
+#include "otbPolarimetricFilters.h"
 
 int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 {

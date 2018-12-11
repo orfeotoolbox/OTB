@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbSinclairImageFilters.h"
+#include "otbPolarimetricFilters.h"
 #include "itkVariableLengthVector.h"
 #include <complex>
 

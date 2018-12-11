@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairImageFilters_h
-#define otbSinclairImageFilters_h
+#ifndef otbPolarimetricFilters_h
+#define otbPolarimetricFilters_h
 
 // Generic polarimetry functors
 #include "otbPolarimetryTags.h"

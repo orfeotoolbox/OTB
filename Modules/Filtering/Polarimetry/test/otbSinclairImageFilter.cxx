@@ -26,7 +26,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbSinclairImageFilters.h"
+#include "otbPolarimetricFilters.h"
 #include "otbMultiChannelExtractROI.h"
 
 

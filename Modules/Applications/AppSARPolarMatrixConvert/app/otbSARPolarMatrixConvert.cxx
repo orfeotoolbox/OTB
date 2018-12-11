@@ -22,7 +22,7 @@
 #include "otbWrapperApplicationFactory.h"
 
 // Polarimetric filters
-#include "otbSinclairImageFilters.h"
+#include "otbPolarimetricFilters.h"
 
 namespace otb
 {
