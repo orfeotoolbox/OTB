@@ -316,7 +316,7 @@ public:
   template <typename F = TFunction> static std::enable_if_t<!std::is_default_constructible<F>::value, Pointer> New()
   {
     static_assert(std::is_default_constructible<F>::value,"Cannot call New() "
-      "methode as the functor used for the filter creation is not default "
+      "function as the functor used for the filter creation is not default "
       "constructible");
 
     return nullptr;
