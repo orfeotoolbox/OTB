@@ -26,7 +26,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
+#include "otbSinclairImageFilters.h"
 
 
 int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), char * argv[])
@@ -53,7 +53,7 @@ int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), c
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput1(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

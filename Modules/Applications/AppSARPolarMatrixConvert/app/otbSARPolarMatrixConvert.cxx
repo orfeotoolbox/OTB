@@ -21,23 +21,8 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-// monostatic case
-//#include "otbSinclairReciprocalImageFilter.h"
-//#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
-//#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
-//#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
-
-#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
-#include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
-#include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
-#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
-
-// bistatic case
+// Polarimetric filters
 #include "otbSinclairImageFilters.h"
-
-#include "otbMuellerToReciprocalCovarianceImageFilter.h"
-#include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
-
 
 namespace otb
 {
@@ -455,7 +440,7 @@ private:
     case 3: // ReciprocalCoherencyToReciprocalMuellerImageFilter
 
       m_RCRMFilter = RCRMFilterType::New();
-      m_RCRMFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
+      m_RCRMFilter->SetVariadicInput<0>(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outf", m_RCRMFilter->GetOutput()); // input : 6 complex channels | 16 real channels
 
@@ -465,7 +450,7 @@ private:
     case 4: // ReciprocalCovarianceToCoherencyDegreeImageFilter
 
       m_RCCDFilter = RCCDFilterType::New();
-      m_RCCDFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
+      m_RCCDFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RCCDFilter->GetOutput()); // input : 6 complex channels | 3 complex channels
 
@@ -475,7 +460,7 @@ private:
     case 5: // ReciprocalCovarianceToReciprocalCoherencyImageFilter
 
       m_RCRCFilter = RCRCFilterType::New();
-      m_RCRCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
+      m_RCRCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RCRCFilter->GetOutput()); // input : 6 complex channels | 6 complex channels
 
@@ -485,7 +470,7 @@ private:
     case 6: // ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
 
       m_RLCRCCFilter = RLCRCCFilterType::New();
-      m_RLCRCCFilter->SetInput(GetParameterComplexDoubleVectorImage("inc"));
+      m_RLCRCCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput()); // input : 6 complex channels | output : 6 complex channels
 
@@ -496,7 +481,7 @@ private:
 
       m_MRCFilter = MRCFilterType::New();
 
-      m_MRCFilter->SetInput(GetParameterDoubleVectorImage("inf"));
+      m_MRCFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
 
       SetParameterOutputImage("outc", m_MRCFilter->GetOutput()); // input : 16 real channels | output : 6 complex channels
 
@@ -567,7 +552,7 @@ private:
     case 12: // MuellerToPolarisationDegreeAndPowerImageFilter
       m_MPDPFilter = MPDPFilterType::New();
 
-      m_MPDPFilter->SetInput(GetParameterDoubleVectorImage("inf"));
+      m_MPDPFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
 
       SetParameterOutputImage("outf", m_MPDPFilter->GetOutput()); //  input : 16 real channels | output : 4 real channels
 

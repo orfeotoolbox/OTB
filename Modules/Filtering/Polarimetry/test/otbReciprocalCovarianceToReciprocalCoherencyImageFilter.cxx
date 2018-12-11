@@ -25,7 +25,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
+#include "otbSinclairImageFilters.h"
 
 
 int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int itkNotUsed(argc), char * argv[])
@@ -47,7 +47,7 @@ int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int itkNotUsed(argc)
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput1(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

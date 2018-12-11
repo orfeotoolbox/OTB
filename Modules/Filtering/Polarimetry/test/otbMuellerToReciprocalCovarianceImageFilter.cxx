@@ -24,8 +24,9 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "otbExtractROI.h"
+
+#include "otbSinclairImageFilters.h"
 
 int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -48,7 +49,7 @@ int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * arg
   reader->SetFileName(inputFilename );
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput1(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

@@ -19,10 +19,8 @@
  */
 
 
-#ifndef otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
-#define otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
-
-#include "otbUnaryFunctorImageFilter.h"
+#ifndef otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
+#define otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
 
 namespace otb
  {
@@ -59,22 +57,18 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline TOutput operator()( const TInput & Covariance ) const
+  inline void operator()( TOutput & result, const TInput & Covariance ) const
     {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
-   
     const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
     const ComplexType C22 =  static_cast<ComplexType>(Covariance[3]);
     const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
     const ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
-    
+
     const ComplexType two = ComplexType(2.0, 0.0);
     const ComplexType rootTwo = ComplexType(std::sqrt(2.0), 0.0);
-    
+
     result[0] = static_cast<OutputValueType>( C33 + C13 + std::conj(C13) + C11 );
     result[1] = static_cast<OutputValueType>( -C33 - C13 + std::conj(C13) + C11 );
     result[2] = static_cast<OutputValueType>( rootTwo*C12 + rootTwo*std::conj(C23) );
@@ -83,70 +77,20 @@ public:
     result[5] = static_cast<OutputValueType>( two * C22 );
 
     result /= 2.0;
-
-    return result;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 6;
+  }
 
    /** Constructor */
-   ReciprocalCovarianceToReciprocalCoherencyFunctor() : m_NumberOfComponentsPerPixel(6)  {}
-
+   ReciprocalCovarianceToReciprocalCoherencyFunctor() {}
    /** Destructor */
    virtual ~ReciprocalCovarianceToReciprocalCoherencyFunctor() {}
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
-}
-
-
-/** \class otbReciprocalCovarianceToReciprocalCoherencyImageFilter
- * \brief Compute the Coherency image (6 complex channels)
- * from the Covariance image (6 complex channels)
- *
- * For more details, please refer to the class ReciprocalCovarianceToReciprocalCoherencyFunctor.
- *
- * \ingroup SARPolarimetry
- * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
- *
- * \ingroup OTBPolarimetry
- */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalCovarianceToReciprocalCoherencyImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter  Self;
-   typedef Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctorType;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctorType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalCovarianceToReciprocalCoherencyImageFilter, UnaryFunctorImageFilter);
-
-
-protected:
-  ReciprocalCovarianceToReciprocalCoherencyImageFilter() {}
-  ~ReciprocalCovarianceToReciprocalCoherencyImageFilter() override {}
-
-private:
-  ReciprocalCovarianceToReciprocalCoherencyImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-
-
-};
-
+} // end namespace functor
 } // end namespace otb
 
 #endif

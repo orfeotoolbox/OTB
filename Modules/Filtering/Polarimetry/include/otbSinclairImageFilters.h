@@ -42,6 +42,16 @@
 #include "otbReciprocalHuynenDecompFunctor.h"
 #include "otbReciprocalPauliDecompFunctor.h"
 
+// Mueller functor
+#include "otbMuellerToPolarisationDegreeAndPowerFunctor.h"
+#include "otbMuellerToReciprocalCovarianceFunctor.h"
+
+// Other reciprocal filters
+#include "otbReciprocalCoherencyToReciprocalMuellerFunctor.h"
+#include "otbReciprocalCovarianceToCoherencyDegreeFunctor.h"
+#include "otbReciprocalCovarianceToReciprocalCoherencyFunctor.h"
+#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor.h"
+
 namespace otb
 {
 //#################
@@ -140,7 +150,30 @@ template <typename TInputImage, typename TOutputImage>
 using MuellerToReciprocalCovarianceImageFilter =
   FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
+//#########################
+// Other reciprocal filters
+//#########################
 
+// This is the entire declaration of ReciprocalCoherencyToReciprocalMuellerImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalCoherencyToReciprocalMuellerImageFilter =
+  FunctorImageFilter<Functor::
+                     ReciprocalCoherencyToReciprocalMuellerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalCovarianceToCoherencyDegreeImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalCovarianceToCoherencyDegreeImageFilter =
+  FunctorImageFilter<Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalCovarianceToReciprocalCoherencyImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalCovarianceToReciprocalCoherencyImageFilter =
+  FunctorImageFilter<Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
+// This is the entire declaration of ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter =
+  FunctorImageFilter<Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

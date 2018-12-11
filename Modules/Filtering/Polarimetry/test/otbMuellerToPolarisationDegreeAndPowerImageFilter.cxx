@@ -26,8 +26,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
-
+#include "otbSinclairImageFilters.h"
 
 int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -49,7 +48,7 @@ int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput1(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());
