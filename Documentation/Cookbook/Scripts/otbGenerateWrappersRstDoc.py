@@ -68,23 +68,23 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     appname = "app"
     output = ""
 
-    # Render example comment
-    if len(app.GetExampleComment(idx)) > 0:
-        output += app.GetExampleComment(idx) + ":\n\n"
-
     output += ".. code-block:: python\n\n"
 
-    output+= "\timport otbApplication" + linesep + linesep
-    output+= "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + app.GetName() + "\")" + linesep + linesep
+    # Render example comment
+    if len(app.GetExampleComment(idx)) > 0:
+        output += "\t# {}\n".format(app.GetExampleComment(idx))
+
+    output += "\timport otbApplication" + linesep + linesep
+    output += "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + app.GetName() + "\")" + linesep + linesep
     for i in range(0, app.GetExampleNumberOfParameters(idx)):
         param = app.GetExampleParameterKey(idx,i)
         value = app.GetExampleParameterValue(idx,i)
         paramtype = app.GetParameterType(param)
         paramrole = app.GetParameterRole(param)
         if paramtype == ParameterType_ListView:
-            break
+            break # TODO
         if paramtype == ParameterType_Group:
-            break
+            break # TODO
         if paramtype ==  ParameterType_Choice:
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
