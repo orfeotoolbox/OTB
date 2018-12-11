@@ -393,7 +393,7 @@ def render_application(appname, allapps):
         examples_cli=render_all_examples_cli(app),
         examples_python=render_all_examples_python(app),
         limitations=render_limitations(app),
-        see_also=render_see_also(app)
+        see_also=make_links(render_see_also(app), allapps)
     )
 
     return output
