@@ -27,7 +27,6 @@ otb_module(OTBMorphologicalProfiles
     OTBITK
     OTBImageBase
     OTBObjectList
-    OTBFunctor
 
   TEST_DEPENDS
     OTBImageIO

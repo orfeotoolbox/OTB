@@ -21,8 +21,7 @@
 #ifndef otbMultiScaleConvexOrConcaveClassificationFilter_h
 #define otbMultiScaleConvexOrConcaveClassificationFilter_h
 
-#include "otbFunctorImageFilter.h"
-
+#include "otbQuaternaryFunctorImageFilter.h"
 namespace otb
 {
 namespace Functor
@@ -83,10 +82,10 @@ public:
    * \param opDeChar The characteristic of the opening profile
    * \param cloDeChar The characteristic of the closing profile
    */
-  TLabeled operator ()(const TInput& opDeMax,
-                       const TInput& cloDeMax,
-                       const TLabeled& opDeChar,
-                       const TLabeled& cloDeChar) const
+  inline TLabeled operator ()(const TInput& opDeMax,
+                              const TInput& cloDeMax,
+                              const TLabeled& opDeChar,
+                              const TLabeled& cloDeChar)
   {
     TLabeled resp = 0;
 
@@ -150,15 +149,18 @@ private:
  *
  * \ingroup OTBMorphologicalProfiles
  */
-
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
-  : public FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+  : public QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
+      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
 {
 public:
   /** Standard typedefs */
   typedef MultiScaleConvexOrConcaveClassificationFilter Self;
-  typedef FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+  typedef QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
+      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType> >
   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -166,10 +168,8 @@ public:
   /** Type macro */
   itkNewMacro(Self);
 
-  static_assert(std::tuple_size<typename Superclass::InputTypesTupleType>::value == 4);
-
   /** Creation through object factory macro */
-  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, FunctorImageFilter);
+  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, QuaternaryFunctorImageFilter);
 
   /** Template class typedef */
   typedef TInputImage                         InputImageType;
@@ -230,7 +230,7 @@ public:
 
 protected:
   /** Constructor */
-  MultiScaleConvexOrConcaveClassificationFilter() : Superclass(DecisionFunctorType(), {{0,0}})
+  MultiScaleConvexOrConcaveClassificationFilter()
     {
     m_LabelSeparator = 10;
     m_Sigma          = 0.0;
