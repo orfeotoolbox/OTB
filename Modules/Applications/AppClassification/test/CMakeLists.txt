@@ -67,7 +67,7 @@ otb_test_application(NAME apTvClSOMClassificationFull
 
 # Input file types
 set(raster_input_format ".tif")
-set(vector_input_format ".shp")
+set(vector_input_format ".sqlite")
 set(stat_input_format ".xml")
 
 # Input file depending on classifier
@@ -139,7 +139,7 @@ set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
-set(classifier_without_baseline "SHARKRF" "SHARKKM")
+set(classifier_without_baseline "")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
@@ -148,10 +148,8 @@ foreach(classifier ${classifierList})
   # Derive output file name
   set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
 
-  # special case for DT, use OpenCV 2.x model file if not using OpenCV 3.x
-  if(${classifier} STREQUAL "DT" AND NOT OTB_OPENCV_3)
-    set(OUTMODELFILE clDT_ModelQB1-opencv2.dt)
-  endif()
+  # Derive confusion matrix file name
+  set(OUTCONFMATFILE cl${classifier}_ConfMatQB1${${lclassifier}_output_format})
 
 
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
@@ -159,7 +157,7 @@ foreach(classifier ${classifierList})
 
   list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
@@ -168,20 +166,20 @@ foreach(classifier ${classifierList})
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
     APP      TrainImagesClassifier
     OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format}
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
     -classifier ${lclassifier}
     ${${lclassifier}_parameters}
     -io.out ${TEMP}/${OUTMODELFILE}
-    -sample.vfn Class
+    -sample.vfn class
     -rand 121212
     -outxml ${TEMP}/cl${classifier}_OutXML1.xml
-
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
     VALID    ${valid}
   )
 
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML1_${OUTMODELFILE})
+    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
@@ -191,7 +189,7 @@ foreach(classifier ${classifierList})
     APP      TrainImagesClassifier
     OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
     -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
     VALID    ${valid}
   )
 
