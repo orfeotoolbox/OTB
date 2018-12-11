@@ -231,7 +231,7 @@ def rst_parameter_flags(app, key):
     if app.IsMandatory(key) and not app.HasValue(key):
         return "*Mandatory* "
     elif app.HasValue(key) and app.GetParameterType(key) != ParameterType_Group:
-        return "*Default value: {}* ".format(app.GetParameterValue(key))
+        return "*Default value: {}* ".format(app.GetParameterAsString(key)) # get value as string to use the same formatting as the c++ api
     else:
         return ""
 
