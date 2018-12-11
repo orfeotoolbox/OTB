@@ -18,21 +18,16 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains mono and multi-scale convex/concave
-image classification based on geodesic morphology characteristics.")
+otb_module_test()
 
-otb_module(OTBMorphologicalProfiles
-  DEPENDS
-    OTBCommon
-    OTBITK
-    OTBImageBase
-    OTBObjectList
-    OTBFunctor
-
-  TEST_DEPENDS
-    OTBImageIO
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
+set(OTBFunctorTests
+otbFunctorTestDriver.cxx
+otbFunctorImageFilter.cxx
 )
+
+add_executable(otbFunctorTestDriver ${OTBFunctorTests})
+target_link_libraries(otbFunctorTestDriver ${OTBFunctor-Test_LIBRARIES})
+otb_module_target_label(otbFunctorTestDriver)
+
+otb_add_test(NAME bfTvFunctorImageFilter COMMAND otbFunctorTestDriver
+  otbFunctorImageFilter)

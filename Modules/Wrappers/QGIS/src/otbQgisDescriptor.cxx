@@ -72,6 +72,8 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData] = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename] = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
+  parameterTypeToString[ParameterType_ComplexInputImage] = "QgsProcessingParameterRasterLayer";
+  parameterTypeToString[ParameterType_ComplexOutputImage] = "QgsProcessingParameterRasterDestination";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
   // ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
@@ -257,7 +259,8 @@ int main(int argc, char* argv[])
       // setting default_value this way is an exception for ParameterType_StringList and ParameterType_String
       default_value = "None|True";
       }
-    else if (type == ParameterType_InputImage)
+    else if (type == ParameterType_InputImage ||
+             type == ParameterType_ComplexInputImage)
       {
       // default is None and nothing to add to dFile
       }
@@ -268,7 +271,11 @@ int main(int argc, char* argv[])
     else if(type == ParameterType_Bool)
       {
       default_value = appli->GetParameterAsString(name);
-      }      
+      }
+    else if(type == ParameterType_Empty)
+      {
+      default_value = appli->IsParameterEnabled(name)?"true":"false";
+      }
     else if(type == ParameterType_Choice)
       {
       std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
@@ -283,7 +290,8 @@ int main(int argc, char* argv[])
       }
     else if(type == ParameterType_OutputVectorData ||
 	          type == ParameterType_OutputImage ||
-	          type == ParameterType_OutputFilename)
+	          type == ParameterType_OutputFilename ||
+	          type == ParameterType_ComplexOutputImage)
       {
       // No need for default_value, optional and extra fields in dFile.
       // If parameter is a destination type. qgis_type|name|description is enough.

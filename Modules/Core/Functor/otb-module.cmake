@@ -18,21 +18,18 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains mono and multi-scale convex/concave
-image classification based on geodesic morphology characteristics.")
+set(DOCUMENTATION "This module contains a generic functor filter
+implementation, that can deal with functor, std::function or lambdas
+with any number of parameters including VariableLengthVector,
+FixedArray, RGBPixel, and Neighborhood of those.")
 
-otb_module(OTBMorphologicalProfiles
+otb_module(OTBFunctor
   DEPENDS
-    OTBCommon
     OTBITK
+    OTBCommon
     OTBImageBase
-    OTBObjectList
-    OTBFunctor
-
   TEST_DEPENDS
-    OTBImageIO
     OTBTestKernel
-
-  DESCRIPTION
+DESCRIPTION
     "${DOCUMENTATION}"
 )
