@@ -27,11 +27,10 @@
 #include "otbReciprocalHuynenDecompImageFilter.h"
 #include "otbReciprocalPauliDecompImageFilter.h"
 
-#include "otbSinclairReciprocalImageFilter.h"
-#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
+#include "otbSinclairImageFilters.h"
+
 #include "otbPerBandVectorImageFilter.h"
 #include "itkMeanImageFilter.h"
-// #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 #include "otbImageListToVectorImageFilter.h"
 #include "otbImageList.h"
 
@@ -58,7 +57,7 @@ public:
                                     ComplexDoubleVectorImageType::PixelType>								FunctorType;
 
 
-  using SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType::PixelType,ComplexDoubleVectorImageType> SRFilterType;
+  using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
 
   typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;
@@ -184,9 +183,9 @@ private:
 		case 0: // H-alpha-A
 
 		if (inhv)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv>(GetParameterComplexDoubleImage("inhv"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
 		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
 		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
@@ -203,12 +202,12 @@ private:
 		case 1: // Barnes
 
 		if (inhv)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
         radius.Fill( GetParameterInt("inco.kernelsize") );
         m_MeanFilter->GetFilter()->SetRadius(radius);
@@ -222,12 +221,12 @@ private:
 		case 2: // Huynen
 
 		if (inhv)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("inhv"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
 	    else if (invh)
-		  m_SRFilter->SetInputHV_VH(GetParameterComplexDoubleImage("invh"));
+		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_SRFilter->SetInputHH(GetParameterComplexDoubleImage("inhh"));
-		m_SRFilter->SetInputVV(GetParameterComplexDoubleImage("invv"));
+		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
         radius.Fill( GetParameterInt("inco.kernelsize") );
         m_MeanFilter->GetFilter()->SetRadius(radius);
