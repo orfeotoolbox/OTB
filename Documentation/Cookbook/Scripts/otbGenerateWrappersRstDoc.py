@@ -204,23 +204,22 @@ def rst_parameter_value(app, key):
             return "string1 string2..."
 
     # For all other types it's a simple mapping
-    values = {
-        ParameterType_Bool: "bool",
-        **dict.fromkeys([ParameterType_Int, ParameterType_Radius, ParameterType_RAM], "int"),
-        ParameterType_Float: "float",
-        ParameterType_String: "string",
-        ParameterType_StringList: "string1 string2...",
-        **dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"),
-        **dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"),
-        **dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"),
-        **dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"),
-        ParameterType_Directory: "directory",
-        ParameterType_Choice: "choice",
-        ParameterType_InputImageList: "image1 image2...",
-        ParameterType_InputVectorDataList: "vectorfile1 vectorfile2...",
-        ParameterType_InputFilenameList: "filename1 filename2...",
-        **dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"),
-    }
+    values = {}
+    values.update({ParameterType_Bool: "bool"})
+    values.update(dict.fromkeys([ParameterType_Int, ParameterType_Radius, ParameterType_RAM], "int"))
+    values.update({ParameterType_Float: "float"})
+    values.update({ParameterType_String: "string"})
+    values.update({ParameterType_StringList: "string1 string2..."})
+    values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename) [dtype]"))
+    values.update(dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"))
+    values.update(dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"))
+    values.update(dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"))
+    values.update({ParameterType_Directory: "directory"})
+    values.update({ParameterType_Choice: "choice"})
+    values.update({ParameterType_InputImageList: "image1 image2..."})
+    values.update({ParameterType_InputVectorDataList: "vectorfile1 vectorfile2..."})
+    values.update({ParameterType_InputFilenameList: "filename1 filename2..."})
+    values.update(dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"))
 
     if type in values:
         return values[type]
