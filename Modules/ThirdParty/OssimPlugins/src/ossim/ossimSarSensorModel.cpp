@@ -1725,8 +1725,8 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    samples = std::make_pair(it->startSample, it->endSample);
 
    // Store halfLineOverlapBegin/End
-   unsigned long halfLineOverlapBegin[theBurstRecords.size()];
-   unsigned long halfLineOverlapEnd[theBurstRecords.size()];
+   unsigned long * halfLineOverlapBegin = new unsigned long[theBurstRecords.size()];
+   unsigned long * halfLineOverlapEnd = new unsigned long[theBurstRecords.size()];
    
    halfLineOverlapBegin[0] = 0;
 
@@ -1862,6 +1862,9 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
   
    theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
 
+   // Free Memory
+   delete [] halfLineOverlapBegin;
+   delete [] halfLineOverlapEnd;
 
    return true;
 }
