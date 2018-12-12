@@ -210,7 +210,7 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_Float: "float"})
     values.update({ParameterType_String: "string"})
     values.update({ParameterType_StringList: "string1 string2..."})
-    values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename) [dtype]"))
+    values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"))
     values.update(dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"))
     values.update(dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"))
     values.update(dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"))
