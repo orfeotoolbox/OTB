@@ -89,11 +89,6 @@ public:
     result[5] = static_cast<OutputValueType>( res[2][2] );
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
-  {
-    return NumberOfComponentsPerPixel;
-  }
-
   constexpr size_t OutputSize(...) const
   {
     // Size of the  matrix
@@ -105,14 +100,6 @@ public:
 
   /** Destructor */
   virtual ~SinclairToReciprocalCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-  //itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
-  static const unsigned int NumberOfComponentsPerPixel = 6;
-
 };
 
 } // namespace Functor

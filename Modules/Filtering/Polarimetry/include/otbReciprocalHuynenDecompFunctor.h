@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbReciprocalHuynenDecompImageFilter_h
-#define otbReciprocalHuynenDecompImageFilter_h
+#ifndef otbReciprocalHuynenDecompFunctor_h
+#define otbReciprocalHuynenDecompFunctor_h
 
 namespace otb
  {
@@ -64,11 +64,6 @@ public:
     result[8] = H;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
-
    constexpr size_t OutputSize(...) const
   {
     // Size of the result
@@ -82,7 +77,6 @@ public:
    virtual ~ReciprocalHuynenDecompFunctor() {}
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 9);
    const double m_Epsilon;
 };
 } // end namespace functor

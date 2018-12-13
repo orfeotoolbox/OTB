@@ -170,11 +170,6 @@ public:
     result[3] = l_PolarisationDegreeMax;
     }
 
-  unsigned int GetOutputSize()
-  {
-    return m_NumberOfComponentsPerPixel;
-  }
-
   constexpr size_t OutputSize(...) const
   {
     // Size of the result
@@ -182,13 +177,12 @@ public:
   }
 
    /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4), m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
+   MuellerToPolarisationDegreeAndPowerFunctor() : m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
 
    /** Destructor */
    virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
     const double m_Epsilon;
     const double m_PI_90;
 };

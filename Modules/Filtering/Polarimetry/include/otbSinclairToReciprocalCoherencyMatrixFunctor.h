@@ -70,8 +70,6 @@ public:
   typedef vnl_matrix<ComplexType>       		   VNLMatrixType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
-
   inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
@@ -95,11 +93,6 @@ public:
     result[5] = static_cast<OutputValueType>( res[2][2] );
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
-  {
-    return NumberOfComponentsPerPixel;
-  }
-
   constexpr size_t OutputSize(...) const
   {
     // Size of the  matrix
@@ -111,11 +104,6 @@ public:
 
   /** Destructor */
   virtual ~SinclairToReciprocalCoherencyMatrixFunctor() {}
-
-protected:
-
-private:
-
 };
 
 } // namespace Functor

@@ -19,10 +19,9 @@
  */
 
 
-#ifndef otbReciprocalHAlphaImageFilter_h
-#define otbReciprocalHAlphaImageFilter_h
+#ifndef otbReciprocalHAlphaFunctor_h
+#define otbReciprocalHAlphaFunctor_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
@@ -177,7 +176,6 @@ public:
    virtual ~ReciprocalHAlphaFunctor() {}
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
    static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor

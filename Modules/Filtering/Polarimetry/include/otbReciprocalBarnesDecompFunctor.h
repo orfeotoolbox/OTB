@@ -19,10 +19,9 @@
  */
 
 
-#ifndef otbReciprocalBarnesDecompImageFilter_h
-#define otbReciprocalBarnesDecompImageFilter_h
+#ifndef otbReciprocalBarnesDecompFunctor_h
+#define otbReciprocalBarnesDecompFunctor_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
@@ -97,11 +96,6 @@ public:
     result[8] = static_cast<OutputValueType>(ki[2][0]);
   }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
-
   constexpr size_t OutputSize(...) const
   {
     // Size of the result
@@ -115,7 +109,6 @@ public:
    virtual ~ReciprocalBarnesDecompFunctor() {}
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 9);
    const double m_Epsilon;
 };
 } // end namespace functor

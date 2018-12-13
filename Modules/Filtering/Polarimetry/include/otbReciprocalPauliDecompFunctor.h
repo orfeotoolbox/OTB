@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbReciprocalPauliDecompImageFilter_h
-#define otbReciprocalPauliDecompImageFilter_h
+#ifndef otbReciprocalPauliDecompFunctor_h
+#define otbReciprocalPauliDecompFunctor_h
 
 namespace otb
  {
@@ -55,11 +55,6 @@ public:
     result[2] = sqrt2*Shv;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
-
    constexpr size_t OutputSize(...) const
   {
     // Size of the result
@@ -67,14 +62,13 @@ public:
   }
 
    /** Constructor */
-   ReciprocalPauliDecompFunctor() : m_Epsilon(1e-6) {}
+   ReciprocalPauliDecompFunctor() : {}
 
    /** Destructor */
    virtual ~ReciprocalPauliDecompFunctor() {}
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
-   const double m_Epsilon;
+   static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
 } // end namespace otb

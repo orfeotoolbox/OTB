@@ -91,11 +91,6 @@ public:
     funct(result, Sll, Slr, Srr);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
-  {
-    return m_NumberOfComponentsPerPixel;
-  }
-
   constexpr size_t OutputSize(...) const
   {
     // Size of the  matrix
@@ -103,16 +98,10 @@ public:
   }
 
   /** Constructor */
-  SinclairToReciprocalCircularCovarianceMatrixFunctor() : m_NumberOfComponentsPerPixel(6) {}
+  SinclairToReciprocalCircularCovarianceMatrixFunctor() : {}
 
   /** Destructor */
   virtual ~SinclairToReciprocalCircularCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
 
 } // namespace Functor
