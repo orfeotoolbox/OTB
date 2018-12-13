@@ -1,7 +1,7 @@
 A brief tour of OTB Applications
 ================================
 
-OTB ships with than 100 ready to use applications for remote sensing tasks.
+OTB ships with more than 100 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
 library, or integrate them into high level pipelines. OTB applications allow the user 
 to:
