@@ -113,6 +113,7 @@ set(sharkkm_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
+set(ascii_confmat_comparison -- compare-ascii 1)
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 
@@ -157,7 +158,7 @@ foreach(classifier ${classifierList})
 
   list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
@@ -179,7 +180,7 @@ foreach(classifier ${classifierList})
   )
 
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
