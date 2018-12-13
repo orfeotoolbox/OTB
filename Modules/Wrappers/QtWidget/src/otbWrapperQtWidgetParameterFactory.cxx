@@ -29,7 +29,6 @@
 #include "otbWrapperQtWidgetComplexInputImageParameter.h"
 #include "otbWrapperQtWidgetComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetDirectoryParameter.h"
-#include "otbWrapperQtWidgetEmptyParameter.h"
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetIntParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
@@ -105,7 +104,6 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
     }
 
   if (0) {}
-  CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
   CREATEWIDGET(IntParameter,            QtWidgetIntParameter)
   CREATEWIDGET(FloatParameter,          QtWidgetFloatParameter)
   CREATEWIDGET(InputFilenameParameter,       QtWidgetInputFilenameParameter)

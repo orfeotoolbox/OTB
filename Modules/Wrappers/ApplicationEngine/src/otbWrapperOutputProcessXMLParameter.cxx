@@ -23,7 +23,6 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
@@ -243,26 +242,6 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
            paramExists = false;
          }
 
-       std::string emptyValue;
-       if (type == ParameterType_Empty)
-         {
-           EmptyParameter* eParam = dynamic_cast<EmptyParameter *> (param);
-
-           if(eParam!=nullptr)
-             {
-             //Don't use m_Appli->HasUserValue which returns false always because of
-             //EmptyParameter::HasValue() is false for EmptyParameter
-             if(eParam->HasUserValue())
-               {
-               paramExists = true;
-               emptyValue = "false";
-               if( eParam->GetActive() )
-                 {
-                 emptyValue = "true";
-                 }
-               }
-             }
-         }
         if(type  == ParameterType_RAM)
         {
           paramExists = true;
@@ -316,11 +295,6 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
            std::ostringstream strm;
            strm << m_Appli->GetParameterInt("rand");
            value = strm.str();
-           }
-         else if (typeAsString == "Empty")
-           {
-           //Nothing to do. copy emptyValue
-           value = emptyValue;
            }
          else if (type == ParameterType_InputProcessXML)
            {

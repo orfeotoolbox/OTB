@@ -61,6 +61,8 @@ namespace ossimplugins {
    extern const std::string keyVelZ             ;
    extern const std::string keyStartLine        ;
    extern const std::string keyEndLine          ;
+   extern const std::string keyStartSample      ;
+   extern const std::string keyEndSample        ;
    extern const std::string keyAzimuthStartTime ;
    extern const std::string keyAzimuthStopTime  ;
 } // ossimplugins namespace
