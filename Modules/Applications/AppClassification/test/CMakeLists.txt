@@ -892,8 +892,8 @@ endif()
 otb_test_application(NAME apTvClPolygonClassStatisticsTest
   APP PolygonClassStatistics
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-  -field Class
+  -vec ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+  -field class
   -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
@@ -903,8 +903,8 @@ otb_test_application(NAME apTvClPolygonClassStatisticsTest
 otb_test_application(NAME apTvClSampleSelection
   APP SampleSelection
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-  -field Class
+  -vec ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+  -field class
   -out ${TEMP}/apTvClSampleSelectionOut.sqlite
   -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
   -outrates ${TEMP}/apTvClSampleSelectionOutRates.txt
@@ -1018,7 +1018,7 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
 #----------- ZonalStatistics TESTS ----------------
 otb_test_application(NAME apTvClZonalStatisticsVec
   APP  ZonalStatistics
-  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
+  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
   VALID   --compare-ogr ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.sqlite
   ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite)
@@ -1043,7 +1043,7 @@ otb_test_application(NAME apTvClZonalStatisticsInVecOutRaster
   OPTIONS 
   -in ${INPUTDATA}/Classification/QB_1_ortho.tif 
   -inzone vector 
-  -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp  
+  -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
   -inzone.vector.reproject 1
   -out raster  
   -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif
