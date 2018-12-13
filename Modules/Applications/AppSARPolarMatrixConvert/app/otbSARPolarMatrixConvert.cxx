@@ -38,21 +38,16 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-
   // Monostatic case
   using RCohSRFilterType = SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
   using RCovSRFilterType = SinclairToReciprocalCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
   using RCCSRFilterType  = SinclairToReciprocalCircularCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
 
+  using RCRMFilterType = otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType>;
+  using RCCDFilterType = otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>;
+  using RCRCFilterType = otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>;
 
-  typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType> RCRMFilterType;
-
-  typedef otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RCCDFilterType;
-
-  typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RCRCFilterType;
-
-  typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> RLCRCCFilterType;
-
+  using RLCRCCFilterType = otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>;
 
   // Bistatic case
   using CohSRFilterType = SinclairToCoherencyMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
@@ -60,11 +55,8 @@ public:
   using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
   using MSRFilterType   = SinclairToMuellerMatrixFilter<ComplexDoubleImageType, DoubleVectorImageType>;
 
-
-  typedef otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType> MRCFilterType;
-
-  typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<DoubleVectorImageType, DoubleVectorImageType> MPDPFilterType;
-
+  using MRCFilterType = otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>;
+  using MPDPFilterType = otb::MuellerToPolarisationDegreeAndPowerImageFilter<DoubleVectorImageType, DoubleVectorImageType>;
 
   /** Standard macro */
   itkNewMacro(Self);
