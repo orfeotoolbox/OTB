@@ -22,7 +22,6 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
@@ -380,6 +379,10 @@ void Application::SetParameterInt(std::string parameter, int value, bool hasUser
     BoolParameter* paramBool = dynamic_cast<BoolParameter*>(param);
     paramBool->SetValue(static_cast<bool>(value));
     }
+  else
+    {
+    otbAppLogWARNING(<< "SetParameterInt on parameter " + parameter);
+    }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
 }
@@ -536,12 +539,6 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
-}
-
-void Application::SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag)
-{
-  this->SetParameterUserValue(parameter, hasUserValueFlag);
-  GetParameterByKey(parameter)->SetActive(value);
 }
 
 void Application::SetParameterUserValue(std::string paramKey, bool value)
@@ -1086,11 +1083,6 @@ Role Application::GetParameterRole(std::string paramKey) const
   return GetParameterByKey(paramKey)->GetRole();
 }
 
-bool Application::GetParameterEmpty(std::string paramKey)
-{
-  return GetParameterByKey(paramKey)->GetActive();
-}
-
 /* Return the role (input/output) of a parameter */
 void Application::SetParameterRole(std::string paramKey, Role role)
 {
@@ -1115,10 +1107,6 @@ ParameterType Application::GetParameterType(std::string paramKey) const
   else if (dynamic_cast<const RadiusParameter*>(param))
     {
     type = ParameterType_Radius;
-    }
-  else if (dynamic_cast<const EmptyParameter*>(param))
-    {
-    type = ParameterType_Empty;
     }
  else if (dynamic_cast<const IntParameter*>(param))
     {
@@ -1549,11 +1537,6 @@ int Application::GetParameterInt(std::string parameter)
     {
     BoolParameter* paramBool = dynamic_cast<BoolParameter*>(param);
     ret = static_cast<int>(paramBool->GetValue());
-    }
-  else if (dynamic_cast<EmptyParameter*>(param))
-    {
-    // This case is here for compatibility purpose with deprecated EmptyParameter
-    ret = static_cast<int>(this->IsParameterEnabled(parameter));
     }
   else
     {

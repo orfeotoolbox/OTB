@@ -90,6 +90,8 @@ int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
   imaginaryWriter->SetInput(imaginaryRescaler->GetOutput());
   imaginaryWriter->Update();
   // Hugly hack for cleaning fftw threads
+  #if defined( ITK_USE_FFTWF ) || defined( ITK_USE_FFTWD )
   fftw_cleanup_threads();
+  #endif
   return EXIT_SUCCESS;
 }
