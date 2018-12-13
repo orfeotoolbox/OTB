@@ -351,8 +351,8 @@ otb_test_application(NAME apTvComputeConfusionMatrixV
   APP  ComputeConfusionMatrix
   OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
   -ref vector
-  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
-  -ref.vector.field Class
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
   -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.csv
@@ -362,8 +362,8 @@ otb_test_application(NAME apTvComputeConfusionMatrixExtraReferenceLabelsV
   APP  ComputeConfusionMatrix
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
   -ref vector
-  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
-  -ref.vector.field Class
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
   -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
@@ -672,11 +672,11 @@ if(OTB_USE_LIBSVM)
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
     ${INPUTDATA}/Classification/QB_2_ortho.tif
     ${INPUTDATA}/Classification/QB_3_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    ${INPUTDATA}/Classification/VectorData_QB2.shp
-    ${INPUTDATA}/Classification/VectorData_QB3.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB2_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB3_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
-    -sample.vfn Class
+    -sample.vfn class
     -classifier libsvm
     -classifier.libsvm.opt true
     -io.out ${TEMP}/clsvmModelQB123.svm
@@ -689,11 +689,11 @@ if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
     APP  TrainImagesClassifier
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
     -classifier libsvm
     -classifier.libsvm.opt true
-    -sample.vfn Class
+    -sample.vfn class
     -io.out ${TEMP}/clsvmModelQB1.svm
     -rand 121212
     VALID   ${ascii_comparison}
@@ -705,11 +705,11 @@ if(OTB_USE_LIBSVM)
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_4_extract.tif
     ${INPUTDATA}/Classification/QB_5_extract.tif
     ${INPUTDATA}/Classification/QB_6_extract.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB4.shp
-    ${INPUTDATA}/Classification/VectorData_QB5.shp
-    ${INPUTDATA}/Classification/VectorData_QB6.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB4_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB5_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB6_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
-    -sample.vfn Class
+    -sample.vfn class
     -classifier libsvm
     -classifier.libsvm.opt true
     -io.out ${TEMP}/clsvmModelQB456.svm
@@ -723,13 +723,13 @@ if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
     APP  TrainImagesClassifier
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
     -classifier libsvm
     -sample.mv 100
     -sample.mt 100
     -sample.vtr 0.5
-    -sample.vfn Class
+    -sample.vfn class
     -classifier.libsvm.opt true
     -rand 121212
     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
