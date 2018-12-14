@@ -22,6 +22,8 @@
 #ifndef otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
 #define otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
 
+#include "otbFunctorImageFilter.h"
+
 namespace otb
  {
 
@@ -43,9 +45,9 @@ namespace Functor {
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry
- * 
+ *
  * Use ReciprocalCovarianceToReciprocalCoherencyImageFilter to apply
- * it to an image.  
+ * it to an image.
  *
  * \sa CovarianceToCircularCoherencyDegreeImageFilter
  * \sa ReciprocalCovarianceToReciprocalCoherencyDegreeImageFilter
