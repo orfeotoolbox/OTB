@@ -159,8 +159,17 @@ ParameterList< T >
 
   FromString( p, filename );
 
-  m_Parameters.insert( m_Parameters.begin() + index, p );
+  InsertElement(p, index);
+}
 
+/*****************************************************************************/
+template< typename T >
+void
+ParameterList< T >
+::InsertElement(typename T::Pointer p, std::size_t index)
+{
+  m_Parameters.insert( m_Parameters.begin() + index, p );
+  
   assert( !m_Parameters.back().IsNull() );
 
   SetActive( true );
