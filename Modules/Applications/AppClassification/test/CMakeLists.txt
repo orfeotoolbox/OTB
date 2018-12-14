@@ -113,7 +113,7 @@ set(sharkkm_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
-set(ascii_confmat_comparison --compare-ascii 1)
+set(ascii_confmat_comparison --compare-ascii 2)
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 
