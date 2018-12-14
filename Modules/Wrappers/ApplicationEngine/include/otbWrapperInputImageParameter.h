@@ -51,10 +51,26 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageParameter, Parameter);
 
+  typedef struct
+    {
+    itk::Object::Pointer app;
+    std::string key;
+    bool isMem;
+    } Connector;
+
   /** Set value from filename */
   bool SetFromFileName( const std::string & filename );
   itkGetConstReferenceMacro( FileName, std::string );
 
+  void SetConnection(Connector c)
+    {
+    m_Connection = c;
+    }
+
+  const Connector & GetConnection()
+    {
+    return m_Connection;
+    }
 
   /** Get the input image as FloatVectorImageType. */
   FloatVectorImageType* GetImage();
@@ -165,6 +181,8 @@ private:
 
   /** flag : are we using a filename or an image pointer as an input */
   bool m_UseFilename;
+
+  Connector m_Connection;
 
 }; // End class InputImage Parameter
 
