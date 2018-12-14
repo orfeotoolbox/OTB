@@ -43,6 +43,9 @@ namespace Functor {
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry
+ * 
+ * Use ReciprocalCovarianceToReciprocalCoherencyImageFilter to apply
+ * it to an image.  
  *
  * \sa CovarianceToCircularCoherencyDegreeImageFilter
  * \sa ReciprocalCovarianceToReciprocalCoherencyDegreeImageFilter
@@ -84,13 +87,21 @@ public:
     // Size of the result
     return 6;
   }
-
-   /** Constructor */
-   ReciprocalCovarianceToReciprocalCoherencyFunctor() {}
-   /** Destructor */
-   virtual ~ReciprocalCovarianceToReciprocalCoherencyFunctor() {}
 };
 } // end namespace functor
+
+/**
+ * \typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter
+ * \brief Applies ReciprocalCovarianceToReciprocalCoherencyFunctor
+ * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
+ *
+ * Set input with SetVariadicInput<0>(inputPtr);
+ *
+ */
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalCovarianceToReciprocalCoherencyImageFilter =
+  FunctorImageFilter<Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
 } // end namespace otb
 
 #endif
