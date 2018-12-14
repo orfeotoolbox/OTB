@@ -478,6 +478,14 @@ ParameterList< T >
   return FromString( parameter, s );
 }
 
+template< typename T >
+typename T::Pointer
+ParameterList< T >
+::GetNthElement(std::size_t i)
+{
+  return m_Parameters[i];
+}
+
 } // End namespace Wrapper
 
 

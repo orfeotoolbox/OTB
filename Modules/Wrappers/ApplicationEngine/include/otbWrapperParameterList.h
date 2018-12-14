@@ -118,6 +118,7 @@ public:
   /** */
   void Swap( std::size_t, std::size_t ) override;
 
+  typename T::Pointer GetNthElement(std::size_t);
 //
 // Protected methods.
 protected:
