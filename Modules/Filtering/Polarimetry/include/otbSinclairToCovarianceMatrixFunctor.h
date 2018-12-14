@@ -22,6 +22,8 @@
 #define otbSinclairToCovarianceMatrixFunctor_h
 
 #include <complex>
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -57,6 +59,8 @@ namespace Functor
  *  \sa SinclairToReciprocalCoherencyFunctor
  *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  *
+ *  Use otb::SinclairToCovarianceMatrixFilter to apply
+ *  it to an image.
  *
  * \ingroup OTBPolarimetry
  */
@@ -93,14 +97,32 @@ public:
     // Number of components in the covariance matrix
     return 10;
   }
-  /** Constructor */
-  SinclairToCovarianceMatrixFunctor() {}
-
-  /** Destructor */
-  virtual ~SinclairToCovarianceMatrixFunctor() {}
 };
-
 } // namespace Functor
+
+  /**
+   * \typedef SinclairToCovarianceMatrixFilter
+   * \brief Applies otb::Functor::SinclairToCovarianceMatrixFunctor
+   * \sa otb::Functor::SinclairToCovarianceMatrixFunctor
+   *
+   * Set inputs with:
+   * \code
+   *
+   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+   *
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+  template <typename TInputImage, typename TOutputImage>
+  using SinclairToCovarianceMatrixFilter = FunctorImageFilter<
+    Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
+
 } // namespace otb
 
 #endif
