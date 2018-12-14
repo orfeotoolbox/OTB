@@ -2614,7 +2614,7 @@ Application::ConnectImage(std::string in, Application* app, std::string out)
       {
       return false;
       }
-    inListParam->InsertNullElement();
+    inListParam->InsertElement(InputImageParameter::New(),inListParam->Size());
     inParam = (inListParam->GetNthElement(inListParam->Size() - 1)).GetPointer();
     }
   param = app->GetParameterByKey(out);
