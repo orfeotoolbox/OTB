@@ -72,6 +72,11 @@ public:
     return m_Connection;
     }
 
+  void SetConnectionMode(bool isMem)
+    {
+    m_Connection.isMem = isMem;
+    }
+
   /** Get the input image as FloatVectorImageType. */
   FloatVectorImageType* GetImage();
 
