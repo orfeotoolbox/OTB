@@ -71,7 +71,7 @@ private:
     AddParameter(ParameterType_Bool, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product.");
 
-    AddParameter(ParameterType_Choice, "lut", "Lookup table sigma /gamma/ beta/ DN.");
+    AddParameter(ParameterType_Choice, "lut", "Lookup table");
     SetParameterDescription("lut", "Lookup table values are not available with all SAR products. Products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
     AddChoice("lut.sigma", "Use sigma nought lookup");
     SetParameterDescription("lut.sigma","Use Sigma nought lookup value from product metadata");

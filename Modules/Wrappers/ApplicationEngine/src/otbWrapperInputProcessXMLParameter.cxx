@@ -47,8 +47,8 @@ namespace Wrapper
 InputProcessXMLParameter::InputProcessXMLParameter()
 {
   this->SetKey("inxml");
-  this->SetName("Load otb application from xml file");
-  this->SetDescription("Load otb application from xml file");
+  this->SetName("Load parameters from XML");
+  this->SetDescription("Load application parameters from an XML file.");
   this->SetMandatory(false);
   this->SetActive(false);
   this->SetRole(Role_Input);

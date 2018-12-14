@@ -38,8 +38,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
       "classifier.gbt",
-      "This group of parameters allows setting Gradient Boosted Tree classifier parameters. "
-      "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html}.");
+      "http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html");
 
   if (m_RegressionFlag)
     {

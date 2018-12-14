@@ -106,17 +106,21 @@ private:
       "geometry, a pair of stereo images up to the sensor model precision");
 
     SetDocName("Stereo-rectification deformation grid generator");
-    SetDocLongDescription("This application generates a pair of deformation "
+    SetDocLongDescription(
+      "This application generates a pair of deformation "
       "grid to stereo-rectify a pair of stereo images according to sensor "
       "modelling and a mean elevation hypothesis.\n\n"
+
       "This application is the first part of the stereo reconstruction "
       "framework. The output deformation grids can be passed to the "
       "GridBasedImageResampling application for actual resampling into epipolar"
       " geometry.\n\n"
-      "There are several ways to set the elevation source:\n"
-      "  * An arbitrary constant elevation\n"
-      "  * A DEM directory\n"
-      "  * Compute an average elevation from a DEM\n\n"
+
+      "There are several ways to set the elevation source:\n\n"
+      "* An arbitrary constant elevation\n"
+      "* A DEM directory\n"
+      "* Compute an average elevation from a DEM\n\n"
+
       "If needed, the application can compute inverse resampling grids (from "
       "epipolar to original sensor geometry). Don't forget to check the other "
       "outputs from the application. For instance, the application gives the "

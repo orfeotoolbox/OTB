@@ -21,6 +21,11 @@ import sphinx_rtd_theme
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('.'))
 
+# Customize read the docs theme a bit with a custom css
+# taken from https://stackoverflow.com/a/43186995/5815110
+def setup(app):
+    app.add_stylesheet("css/otb_theme.css")
+
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -75,7 +80,7 @@ release = '@OTB_VERSION@'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['@RST_BUILD_DIR@']
+exclude_patterns = ['@RST_BUILD_DIR@', 'templates/*.rst']
 #exclude_patterns = ['_build']
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -166,6 +171,16 @@ html_static_path = ['_static']
 
 # If true, the index is split into individual pages for each letter.
 #html_split_index = False
+
+html_context = {
+    'display_gitlab': True,
+    'gitlab_host': "gitlab.orfeo-toolbox.org",
+    'gitlab_user': 'orfeotoolbox',
+    'gitlab_repo': 'OTB',
+    'gitlab_version': 'develop',
+    'conf_py_path': '/Documentation/Cookbook/rst/',
+    #'source_url_prefix': "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/tree/develop/Documentation/Cookbook/rst/",
+}
 
 # If true, links to the reST sources are added to the pages.
 html_show_sourcelink = True

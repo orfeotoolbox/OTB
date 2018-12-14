@@ -58,9 +58,9 @@ private:
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
     SetDocName("Quick Look");
-    SetDocLongDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n "
+    SetDocLongDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n"
                           "This extract is subsampled using the ratio OR the output image Size.");
-    SetDocLimitations(" This application does not provide yet the optimal way to decode coarser level of resolution from JPEG2000 images (like in Monteverdi).\n"
+    SetDocLimitations("This application does not provide yet the optimal way to decode coarser level of resolution from JPEG2000 images (like in Monteverdi).\n"
                       "Trying to subsampled huge JPEG200 image with the application will lead to poor performances for now.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -100,12 +100,12 @@ private:
     MandatoryOff("sr");
 
     AddParameter(ParameterType_Int, "sx",  "Size X");
-    SetParameterDescription( "sx" , "quicklook size in x-direction (used if no sampling ration is given)" );
+    SetParameterDescription( "sx" , "quicklook size in x-direction (used if no sampling ratio is given)" );
     MandatoryOff("sx");
     DisableParameter("sx");
 
     AddParameter(ParameterType_Int, "sy",  "Size Y");
-    SetParameterDescription( "sy" , "quicklook size in y-direction (used if no sampling ration is given)" );
+    SetParameterDescription( "sy" , "quicklook size in y-direction (used if no sampling ratio is given)" );
     MandatoryOff("sy");
     DisableParameter("sy");
 

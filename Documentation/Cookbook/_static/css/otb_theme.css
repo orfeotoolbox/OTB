@@ -1,0 +1,10 @@
+.wy-nav-content {
+    max-width: 800px;
+}
+
+/* Reduce the effect of the p bottom margin before lists
+ * Very useful for choice parameters in app doc for example
+ */
+p + ul {
+    margin-top: -18px;
+}
