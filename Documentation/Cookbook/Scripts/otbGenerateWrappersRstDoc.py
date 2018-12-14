@@ -19,40 +19,17 @@
 # limitations under the License.
 #
 
-import otbApplication
 import os
 import sys
-import glob
-from optparse import OptionParser
-
-##############################################################################
-# Parameters
-linesep = os.linesep
-pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
-
+import argparse
 import re
 
-#Special/Exceptional cases
-def RstifyDescription(s):
-    s = s.replace(':\n', ':\n\n')
-    s = s.replace('\n', ' ')
-    s = s.replace('*','\*')
-    if not len(s) == 0 and not s.endswith('.'):
-        s += '.'
-    return s
+import otbApplication
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
 
-def ConvertString(s):
-    '''Convert a string for compatibility in txt dump'''
-    s = s.strip()
-    s = s.replace('*','\*')
-    return s
+from otb_warnings import application_documentation_warnings
 
-def ConvertToLineBlock(s):
-    '''Convert a string into a line bloc (prefix with |) '''
-    s = s.strip()
-    s = s.replace('*','\*')
-    s = "  | " + s.replace('\n','\n  | ')
-    return s
+linesep = os.linesep
 
 def EncloseString(s):
     if not s.startswith("\"") :
@@ -76,6 +53,7 @@ def ExpandPath(filename,path,exp):
         return os.path.join(path,filename)
 
 def GetPixelType(value):
+    pixeltypes = {' uchar' : 1, ' int8' : 0, ' uint8' : 1, ' int16' : 2, ' uint16': 3, ' int32' : 4, ' uint32' : 5, ' float' : 6, ' double': 7}
     # look for type
     foundcode = -1
     foundname = ""
@@ -86,433 +64,336 @@ def GetPixelType(value):
             break
     return foundcode,foundname
 
-def GetParametersDepth(paramlist):
-    depth = 0
-    for param in paramlist:
-        depth = max(param.count("."),depth)
-    return depth
-
-def GenerateChoice(app,param,paramlist, count = 0):
-    output = " Available choices are: " + linesep
-    spaces = ' ' * count
-    for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-        output += linesep + spaces + "- **"+ ConvertString(choicename) + "**"
-        choicedesc = app.GetParameterDescription(param+"."+choicekey)
-        if len(choicedesc) >= 2:
-            output+= " : " + ConvertString(choicedesc)
-        output += linesep + linesep
-        # List option associated to one choice
-        options = []
-        for p in paramlist:
-            if p.startswith(param+"."+choicekey+"."):
-                options.append(p)
-        if len(options) > 0:
-            count += 1
-            spaces = ' ' * count
-            for option in options:
-                output+= linesep + spaces + "- **"+ ConvertString(app.GetParameterName(option))+ "** : " + RstifyDescription(app.GetParameterDescription(option)) + linesep
-            output+= linesep
-    return output
-
-def GenerateParameterType(app,param):
-    if app.GetParameterType(param) == otbApplication.ParameterType_Bool:
-        return "Boolean"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Int \
-       or app.GetParameterType(param) == otbApplication.ParameterType_Radius \
-       or app.GetParameterType(param) == otbApplication.ParameterType_RAM:
-        return "Int"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Float:
-        return "Float"
-    if app.GetParameterType(param) == otbApplication.ParameterType_String:
-        return "String"
-    if app.GetParameterType(param) == otbApplication.ParameterType_StringList:
-        return "String list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputFilename :
-        return "Input File name"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputFilename :
-        return "Output File name"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Directory :
-        return "Directory"
-    if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-        return "Choices"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputImage \
-            or app.GetParameterType(param) == otbApplication.ParameterType_ComplexInputImage:
-        return "Input image"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputVectorData:
-        return "Input vector data"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputImage \
-            or app.GetParameterType(param) == otbApplication.ParameterType_ComplexOutputImage :
-        return "Output image"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputVectorData:
-        return "Output vector data"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputImageList:
-        return "Input image list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputVectorDataList:
-        return "Input vector data list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputFilenameList :
-        return "Input File name list"
-    if app.GetParameterType(param) == otbApplication.ParameterType_ListView:
-        if app.GetListViewSingleSelectionMode(param):
-            return "String"
-        else:
-            return "String List"
-    if app.GetParameterType(param) == otbApplication.ParameterType_Group:
-        return "Group"
-    if app.GetParameterType(param) == otbApplication.ParameterType_InputProcessXML:
-        return "XML input parameters file"
-    if app.GetParameterType(param) == otbApplication.ParameterType_OutputProcessXML:
-        return "XML output parameters file"
-
-def FindLengthOfLargestColumnText(app,paramlist):
-    output= ""
-    colLength = [2] * 3
-    for param in paramlist:
-        if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-            for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-                lenp= len(param + " " + choicekey)
-                if colLength[0] < lenp:
-                    colLength[0] = lenp
-                lenpdescr = len(choicename)
-                if colLength[1] < lenpdescr:
-                    colLength[1] = lenpdescr
-        else:
-            if colLength[0] < len(param):
-                colLength[0] = len(param)
-            lenpdescr = len(GenerateParameterType(app, param))
-            if colLength[2] < lenpdescr:
-                colLength[2] = lenpdescr
-        lenptype = len(app.GetParameterName(param))
-        if colLength[1] < lenptype:
-            colLength[1] = lenptype
-    return colLength
-
-def RstTableHeaderLine(strlist, listlen, delimiter):
-    line = "+"
-    for i in range(len(strlist)):
-        line += delimiter * listlen[i] + '+'
-    line += linesep
-    return line
-
-def RstTableHeading(strlist, listlen):
-    heading = RstTableHeaderLine(strlist, listlen, '-')
-    for i in range(len(strlist)):
-         spaces = ' ' * ((listlen[i] - len(strlist[i])) )
-         heading += '|' + strlist[i] +  spaces
-    heading += '|' + linesep
-    heading += RstTableHeaderLine(strlist, listlen, '=')
-    return heading
-
-def MakeText(text, size):
-    dsize = (size - len(text))
-    output= '|' + text  + ' ' * (dsize)
-    return output
-
-def GenerateParametersTable(app,paramlist):
-    colLength = FindLengthOfLargestColumnText(app, paramlist)
-    output = linesep + ".. [#] Table: Parameters table for " + ConvertString(app.GetDocName()) + "." + linesep + linesep
-    headerlist = ["Parameter Key", "Parameter Name", "Parameter Type"]
-    for i in range(len(headerlist)):
-        colLength[i] = len(headerlist[i]) if colLength[i] < len(headerlist[i]) else colLength[i]
-    output += RstTableHeading(headerlist, colLength)
-    for param in paramlist:
-        output += MakeText(param, colLength[0])
-        output += MakeText(app.GetParameterName(param), colLength[1])
-        output += MakeText(GenerateParameterType(app, param), colLength[2])
-        output += '|' + linesep
-        output += RstTableHeaderLine(headerlist, colLength, '-')
-        if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-            for (choicekey,choicename) in zip(app.GetChoiceKeys(param),app.GetChoiceNames(param)):
-                output += MakeText(param + " " + choicekey, colLength[0])
-                output += MakeText(choicename,colLength[1])
-                output += MakeText(" *Choice*", colLength[2])
-                output += '|' + linesep
-                output += RstTableHeaderLine(headerlist, colLength, '-')
-    return output
-
-def unique(seq):
-    # order preserving
-    checked = []
-    for e in seq:
-        if e not in checked:
-            checked.append(e)
-    return checked
-
-def ApplicationParametersToRst(app,paramlist,deep = False,current=""):
-    output = ""
-    # First run
-    if len(current)==0:
-        output += "This section describes in details the parameters available for this application. Table [#]_ presents a summary of these parameters and the parameters keys to be used in command-line and programming languages. Application key is *" + app.GetName() + "* ."  + linesep
-        output += GenerateParametersTable(app,paramlist)
-        firstlevelparams = []
-        for param in paramlist:
-            paramsplit = param.partition(".")
-            firstlevelparams.append(paramsplit[0])
-        firstlevelparams = unique(firstlevelparams)
-
-        if deep:
-            for param in firstlevelparams:
-                output += linesep
-                output += "**" + ConvertString(app.GetParameterName(param)) + "**" + linesep
-                output += RstifyDescription(app.GetParameterDescription(param))
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist)
-                    output += linesep
-                else:
-                    output += linesep
-                    output += ApplicationParametersToRst(app,paramlist,deep,param)
-        else:
-            output+= linesep
-            for param in firstlevelparams:
-                output+= "- **"+ ConvertString(app.GetParameterName(param))+ ":** " + RstifyDescription(app.GetParameterDescription(param))
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist)
-                output += linesep + linesep
-            output+=  linesep
-    else:
-        currentlevelparams = []
-        for param in paramlist:
-            if param.startswith(current+".") and param.count(".") == current.count(".")+1:
-                currentlevelparams.append(param)
-        if len(currentlevelparams) > 0:
-            output+= linesep
-            for param in currentlevelparams:
-                output+= "- **"+ ConvertString(app.GetParameterName(param))+ ":** " + RstifyDescription(app.GetParameterDescription(param)) + linesep
-                output+= ApplicationParametersToRst(app,paramlist,deep,param) + linesep
-                if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                    output += GenerateChoice(app,param,paramlist, 1)
-            output+= linesep
-
-    return output
-
-def ApplicationParametersToRstV2(app,paramlist,deep = False,current=""):
-    output = ""
-    # current level
-    level = 0
-    # First run
-    if len(current)==0:
-        output += "This section describes in details the parameters available for this application. Table [#]_ presents a summary of these parameters and the parameters keys to be used in command-line and programming languages. Application key is *" + app.GetName() + "* ."  + linesep
-        output += GenerateParametersTable(app,paramlist)
-    else:
-        level = len(current.split('.'))
-    indentLevel = level
-    if deep == False:
-        indentLevel += 1
-    # compute prefix
-    bulletStyle = "-*+"
-    prefix = ""
-    if indentLevel > 0:
-        prefix = (' ' * (indentLevel-1)) + bulletStyle[(indentLevel-1)%3] + ' '
-    # find parameter for current param
-    currentlevelparams = []
-    for param in paramlist:
-        if param.startswith(current) and len(param.split('.')) == level+1:
-            currentlevelparams.append(param)
-    if len(currentlevelparams) > 0:
-        output+= linesep
-        for param in currentlevelparams:
-            if app.GetParameterType(param) == otbApplication.ParameterType_Group and level == 0:
-                output+= prefix+"**["+ ConvertString(app.GetParameterName(param))+ "]**"
-            else:
-                output+= prefix+"**"+ ConvertString(app.GetParameterName(param))+ "**"
-            descr =  RstifyDescription(app.GetParameterDescription(param))
-            if len(descr):
-                output+= ": "+descr
-            if app.GetParameterType(param) ==  otbApplication.ParameterType_Choice:
-                output+= " Available choices are: "
-                additionalKeys = []
-                for choiceKey in app.GetChoiceKeys(param):
-                    additionalKeys.append(param+'.'+choiceKey)
-                nextParamList = paramlist + tuple(additionalKeys)
-            else:
-                nextParamList = paramlist
-            output+= linesep
-            ret = ApplicationParametersToRstV2(app,nextParamList,deep,param)
-            if indentLevel == 0 and len(ret)==0:
-                output+= linesep
-            output+= ret
-        output+= linesep
-    return output
-
-def GetApplicationExampleCommandLine(app,idx):
-
-    output = "%s%s%s\t%s" % ("::", linesep , linesep, "otbcli_")
-    output+= ConvertString(app.GetName())
-    for i in range(0, app.GetExampleNumberOfParameters(idx)):
-        output+=" -" + app.GetExampleParameterKey(idx,i)+ " " + app.GetExampleParameterValue(idx,i)
-    output += linesep + linesep
-    return output
-
 def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outputpath=""):
-    appname = app.GetName()
-    printable = []
-    output = linesep + "::" + linesep + linesep
-    output+= "\t#!/usr/bin/python" + linesep
+    appname = "app"
+    output = ""
 
-    output+= linesep
-    output+= "\t# Import the otb applications package" + linesep
-    output+= "\timport otbApplication" + linesep + linesep
-    output+= "\t# The following line creates an instance of the " + ConvertString(app.GetName()) + " application " + linesep
-    output+= "\t" + ConvertString(app.GetName()) + " = otbApplication.Registry.CreateApplication(\"" + ConvertString(app.GetName()) + "\")" + linesep + linesep
-    output+= "\t# The following lines set all the application parameters:" + linesep
+    output += ".. code-block:: python\n\n"
+
+    # Render example comment
+    if len(app.GetExampleComment(idx)) > 0:
+        output += "\t# {}\n".format(app.GetExampleComment(idx))
+
+    output += "\timport otbApplication" + linesep + linesep
+    output += "\t" + appname + " = otbApplication.Registry.CreateApplication(\"" + app.GetName() + "\")" + linesep + linesep
     for i in range(0, app.GetExampleNumberOfParameters(idx)):
         param = app.GetExampleParameterKey(idx,i)
         value = app.GetExampleParameterValue(idx,i)
         paramtype = app.GetParameterType(param)
         paramrole = app.GetParameterRole(param)
-        if paramtype == otbApplication.ParameterType_ListView:
-            break
-        if paramtype == otbApplication.ParameterType_Group:
-            break
-        if paramtype ==  otbApplication.ParameterType_Choice:
+        if paramtype == ParameterType_ListView:
+            break # TODO
+        if paramtype == ParameterType_Group:
+            break # TODO
+        if paramtype ==  ParameterType_Choice:
             #app.SetParameterString(param,value)
-            output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")" + linesep
-        if paramtype == otbApplication.ParameterType_Bool:
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")" + linesep
-        if paramtype == otbApplication.ParameterType_Int \
-                or paramtype == otbApplication.ParameterType_Radius \
-                or paramtype == otbApplication.ParameterType_RAM:
+            output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
+        if paramtype == ParameterType_Bool:
+            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+","+EncloseString(value)+")"
+        if paramtype == ParameterType_Int \
+                or paramtype == ParameterType_Radius \
+                or paramtype == ParameterType_RAM:
             # app.SetParameterString(param,value)
-            output += "\t" + appname + ".SetParameterInt("+EncloseString(param)+", "+value+")" + linesep
-        if paramtype == otbApplication.ParameterType_Float:
+            output += "\t" + appname + ".SetParameterInt("+EncloseString(param)+", "+value+")"
+        if paramtype == ParameterType_Float:
             # app.SetParameterString(param,value)
-            output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")" + linesep
-        if paramtype == otbApplication.ParameterType_String:
+            output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")"
+        if paramtype == ParameterType_String:
             # app.SetParameterString(param,value)
-            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")" + linesep
-        if paramtype == otbApplication.ParameterType_StringList:
+            output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
+        if paramtype == ParameterType_StringList:
             values = value.split(" ")
             # app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+str(values)+")" + linesep
-        if paramtype == otbApplication.ParameterType_InputFilename \
-            or paramtype == otbApplication.ParameterType_OutputFilename \
-            or paramtype == otbApplication.ParameterType_Directory:
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+str(values)+")"
+        if paramtype == ParameterType_InputFilename \
+            or paramtype == ParameterType_OutputFilename \
+            or paramtype == ParameterType_Directory:
             if paramrole == 0:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand)) + ")" + linesep
-                printable.append(["in","file",ExpandPath(value,inputpath,expand)])
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand)) + ")"
             elif paramrole == 1:
                 # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,outputpath,expand))+")" + linesep
-                printable.append(["out","file",ExpandPath(value,inputpath,expand)])
-        if paramtype == otbApplication.ParameterType_InputImage :
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,outputpath,expand))+")"
+        if paramtype == ParameterType_InputImage :
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"+linesep
-            printable.append(["in","img",ExpandPath(value,inputpath,expand)])
-        if paramtype == otbApplication.ParameterType_ComplexInputImage:
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
+        if paramtype == ParameterType_ComplexInputImage:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")" + linesep
-            printable.append(["in","cimg",ExpandPath(value,inputpath,expand)])
-        if paramtype == otbApplication.ParameterType_InputVectorData:
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
+        if paramtype == ParameterType_InputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")" + linesep
-            printable.append(["in","vdata",ExpandPath(value,inputpath,expand)])
-        if paramtype == otbApplication.ParameterType_OutputImage :
+            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
+        if paramtype == ParameterType_OutputImage :
             foundcode,foundname = GetPixelType(value)
             if foundcode != -1:
-                # app.SetParameterString(param,EncloseString(ExpandPath(value[:-len(foundname),outputpath,expand))))
-                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value[:-len(foundname)],outputpath,expand))+")" + linesep
-           #app.SetParameterOutputImagePixelType(param,foundcode)
-                if foundcode == 1:
-                    printable.append(["out","ucimg",ExpandPath(value[:len(foundname)],inputpath,expand)])
-                else:
-                    printable.append(["out","img",ExpandPath(value[:len(foundname)],inputpath,expand)])
-                output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")" + linesep
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value[:-len(foundname)],outputpath,expand))+")"
+                output += "\n"
+                output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")"
             else:
-                # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-                output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-                printable.append(["out","img",ExpandPath(value,outputpath,expand)])
-        if paramtype == otbApplication.ParameterType_ComplexOutputImage :
+                output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
+        if paramtype == ParameterType_ComplexOutputImage :
             # TODO: handle complex type properly
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-            printable.append(["out","cimg",ExpandPath(value,outputpath,expand)])
-        if paramtype == otbApplication.ParameterType_OutputVectorData:
+            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
+        if paramtype == ParameterType_OutputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")" + linesep
-            printable.append(["out","vdata",ExpandPath(value,outputpath,expand)])
-        if paramtype == otbApplication.ParameterType_InputImageList:
+            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
+        if paramtype == ParameterType_InputImageList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             # app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param) + ", " + str(values) + ")" + linesep
-        if paramtype == otbApplication.ParameterType_InputVectorDataList:
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param) + ", " + str(values) + ")"
+        if paramtype == ParameterType_InputVectorDataList:
             values = value.split(" ")
             values = [ExpandPath(val,inputpath,expand) for val in values]
             #app.SetParameterStringList(param,values)
-            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+ ", " + str(values) + ")" + linesep
+            output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+ ", " + str(values) + ")"
         output+=linesep
-    output += "\t# The following line execute the application" + linesep
-    output+= "\t" + appname + ".ExecuteAndWriteOutput()"+ linesep
-    return output,printable
-
-def GetApplicationExamplePython(app,idx):
-    output, printable = GetApplicationExamplePythonSnippet(app,idx)
-    output+= linesep
+    output += linesep
+    output+= "\t" + appname + ".ExecuteAndWriteOutput()" + linesep + linesep
     return output
 
-def RstHeading(text, delimiter, ref=None):
-    heading = ""
-    if ref:
-        heading += ".. _" + ref + ":" + linesep + linesep
-    heading += text + linesep
-    heading += delimiter * len(text)  + linesep
-    heading += linesep
-    return heading
+def render_choice(app, key):
+    "Render a choice parameter to rst"
 
-def ApplicationToRst(appname):
+    # First render all the choice values
+    choice_keys = app.GetChoiceKeys(key)
+    choice_names = app.GetChoiceNames(key)
+
+    choice_entries = ""
+    for (choice_key, choice_name) in zip(choice_keys, choice_names):
+        # For the description, replace newlines by |br| because we are in a bullet list item
+        choice_description = app.GetParameterDescription(key + "." + choice_key).replace("\n", " |br| ")
+        choice_entries += template_parameter_choice_entry.format(
+            name=choice_name,
+            #key=choice_key, # if we want to show the key in choice parameter values
+            description=choice_description
+        )
+
+    # Then render the full choice parameter
+    return template_parameter_choice.format(
+        name=app.GetParameterName(key),
+        key=key,
+        value="[" + "|".join(choice_keys) + "]",
+        flags=rst_parameter_flags(app, key),
+        description=app.GetParameterDescription(key),
+        choices=choice_entries,
+    )
+
+def rst_section(text, delimiter, ref=None):
+    "Make a rst section title"
+
     output = ""
-    app = None
-    try:
-        app = otbApplication.Registry.CreateApplication(appname)
-    except e:
-        print(e)
+
+    if ref is not None:
+        output += ".. _" + ref + ":\n\n"
+
+    output += text + "\n" + delimiter * len(text) + "\n\n"
+    return output
+
+def rst_parameter_value(app, key):
+    "Render a parameter value to rst"
+
+    type = app.GetParameterType(key)
+
+    # ListView is a special case depending on its mode
+    if type == ParameterType_ListView:
+        if app.GetListViewSingleSelectionMode(key):
+            return "string"
+        else:
+            return "string1 string2..."
+
+    # For all other types it's a simple mapping
+    values = {}
+    values.update({ParameterType_Bool: "bool"})
+    values.update(dict.fromkeys([ParameterType_Int, ParameterType_Radius, ParameterType_RAM], "int"))
+    values.update({ParameterType_Float: "float"})
+    values.update({ParameterType_String: "string"})
+    values.update({ParameterType_StringList: "string1 string2..."})
+    values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"))
+    values.update(dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"))
+    values.update(dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"))
+    values.update(dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"))
+    values.update({ParameterType_Directory: "directory"})
+    values.update({ParameterType_Choice: "choice"})
+    values.update({ParameterType_InputImageList: "image1 image2..."})
+    values.update({ParameterType_InputVectorDataList: "vectorfile1 vectorfile2..."})
+    values.update({ParameterType_InputFilenameList: "filename1 filename2..."})
+    values.update(dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"))
+
+    if type in values:
+        return values[type]
+    else:
+        raise ValueError("Cannot show parameter value for type ", type)
+
+def rst_parameter_flags(app, key):
+    """
+    Display the mandatory and default value flags of a parameter
+    The display logic tries to follow the logic in WrapperCommandLineLauncher::DisplayParameterHelp
+    The default value is formatted using GetParameterAsString to use the same formatting as the cli interface
+    """
+
+    if app.IsMandatory(key) and not app.HasValue(key):
+        return "*Mandatory* "
+    elif app.HasValue(key) and app.GetParameterType(key) != ParameterType_Group and app.GetParameterAsString(key) != "":
+        return "*Default value: {}* ".format(app.GetParameterAsString(key))
+    else:
+        return ""
+
+def detect_abuse(app):
+    "Detect choice parameter values which are also used as groups"
+
+    fake_groups = {}
+    keys = app.GetParametersKeys()
+    choice_keys = [k for k in keys if app.GetParameterType(k) == ParameterType_Choice]
+
+    # For each choice parameter
+    for key in choice_keys:
+
+        # Consider all its possible values
+        for choice_key in app.GetChoiceKeys(key):
+            fullkey = key + "." + choice_key
+
+            # See if that value is also used as a group anywhere in the application
+            for k in keys:
+                if k.startswith(fullkey) and k != fullkey:
+
+                    # In that case, mark the first element of that group
+                    if fullkey not in fake_groups.values():
+                        fake_groups[k] = fullkey
+
+    return fake_groups
+
+def render_parameters(app):
+    "Render application parameters to rst"
+
+    output = ""
+
+    fake_markers = detect_abuse(app)
+
+    previous_level = 1
+    for key in app.GetParametersKeys():
+        type = app.GetParameterType(key)
+
+        # If reducing level not on a group parameter, render a horizontal line
+        current_level = 1 + key.count(".")
+        if current_level < previous_level and type != ParameterType_Group:
+            output += "\n\n------------\n\n"
+        previous_level = current_level
+
+        # Choice parameter values can act as groups
+        # Detect that case to add a section title
+        if key in fake_markers:
+            output += rst_section(app.GetParameterName(fake_markers[key]) + " options", "^")
+
+        if type == ParameterType_Group:
+            output += template_parameter_group.format(
+                name=rst_section(app.GetParameterName(key), "^"),
+                description=app.GetParameterDescription(key)
+            )
+
+        elif type == ParameterType_Choice:
+            output += render_choice(app, key)
+
+        else:
+            output += template_parameter.format(
+                name=app.GetParameterName(key),
+                key=key,
+                value=rst_parameter_value(app, key),
+                description=app.GetParameterDescription(key),
+                flags=rst_parameter_flags(app, key),
+            )
+
+    return output
+
+def render_example_cli(app, index):
+    "Render a command line example to rst (includes indentation)"
+
+    output = ""
+
+    # Render comment
+    if len(app.GetExampleComment(index)) > 0:
+        output += "    # " + app.GetExampleComment(index) + "\n"
+
+    output += "    otbcli_" + app.GetName()
+    for i in range(app.GetExampleNumberOfParameters(index)):
+        output += " -" + app.GetExampleParameterKey(index, i) + " " + app.GetExampleParameterValue(index, i)
+    output += "\n"
+    return output
+
+def render_all_examples_cli(app):
+    "Render all command line examples to rst"
+
+    if app.GetNumberOfExamples() == 0:
+        return "    # No example found"
+    if app.GetNumberOfExamples() == 1:
+        return render_example_cli(app, 0)
+    else:
+        output = ""
+        for i in range(app.GetNumberOfExamples()):
+            if i > 0:
+                output += "\n"
+            output += render_example_cli(app, i)
+        return output
+
+def render_all_examples_python(app):
+    "Render all python examples to rst"
+    output = ""
+    for i in range(app.GetNumberOfExamples()):
+        output += GetApplicationExamplePythonSnippet(app, i)
+    return output
+
+def render_limitations(app):
+    "Render app DocLimitations to rst"
+
+    limitations = app.GetDocLimitations()
+    if limitations is None or len(limitations) == 0 or limitations == "None":
+        return ""
+    else:
+        return rst_section("Limitations", "-") + limitations
+
+def render_see_also(app):
+    "Render app See Also to rst"
+
+    see_also = app.GetDocSeeAlso()
+    if see_also is None or len(see_also) < 2:
+        return ""
+    else:
+        return rst_section("See also", "-") + "| " + see_also.replace("\n", "\n| ") # use line blocks for see also
+
+def multireplace(string, replacements):
+    "multiple string replace (from https://stackoverflow.com/a/6117124/5815110)"
+    substrs = sorted(replacements, key=len, reverse=True)
+    regexp = re.compile('|'.join(map(re.escape, substrs)))
+    return regexp.sub(lambda match: replacements[match.group(0)], string)
+
+def make_links(text, allapps):
+    "Replace name of applications by internal rst links"
+
+    rep = {appname: ":ref:`{}`".format("app-" + appname) for appname in allapps}
+    return multireplace(text, rep)
+
+def render_application(appname, allapps):
+    "Render app to rst"
+
+    app = otbApplication.Registry.CreateApplication(appname)
+
     # TODO: remove this when bug 440 is fixed
     app.Init()
-    output += RstHeading(app.GetName() + ' - ' + app.GetDocName(), '^')
-    output += app.GetDescription() + linesep * 2
-    output += RstHeading("Detailed description", '-')
-    output += app.GetDocLongDescription() + linesep * 2
-    limitations = app.GetDocLimitations()
-    output += RstHeading("Parameters", '-')
-    depth = GetParametersDepth(app.GetParametersKeys())
-    deep = depth > 0
-    output += ApplicationParametersToRstV2(app,app.GetParametersKeys(),deep) + linesep
-    if app.GetNumberOfExamples() > 1:
-        output += RstHeading("Examples", '-') + linesep
-        #output += appdetailslevel + "{Examples}" + "\\label{appexamples:" + appname + "}" + linesep
-        for i in range(0,app.GetNumberOfExamples()):
-            output += ":Example "+  str(i+1) + ':' + linesep + linesep
-#            output += RstHeading("Example "+  str(i+1) , '-')
-            output += app.GetExampleComment(i)
-            output+= "To run this example in command-line, use the following: " + linesep
-            output += linesep + GetApplicationExampleCommandLine(app,i)
-            output+= "To run this example from Python, use the following code snippet: " + linesep
-            output += GetApplicationExamplePython(app,i)
-    elif app.GetNumberOfExamples() == 1:
-        output += RstHeading("Example", '-')
-        if( len(app.GetExampleComment(0)) > 1):
-            output += app.GetExampleComment(0)
-        output+= "To run this example in command-line, use the following: " + linesep
-        output += GetApplicationExampleCommandLine(app,0)
-        output+= "To run this example from Python, use the following code snippet: " + linesep
-        output += GetApplicationExamplePython(app,0)
 
-    if len(limitations)>=2:
-        output += RstHeading("Limitations", '~')
-#        output += ":Limitations:" + linesep + linesep
-        output += ConvertString(app.GetDocLimitations()) + linesep + linesep
+    application_documentation_warnings(app)
 
-    output += RstHeading("Authors", '~')
-#    output += ":Authors:" + linesep + linesep
-    output += "This application has been written by " + ConvertString(app.GetDocAuthors()) + "." + linesep + linesep
-    seealso = app.GetDocSeeAlso()
-    if len(seealso) >=2:
-        output += RstHeading("See Also", '~')
-#        output += ":See Also:" + linesep + linesep
-        output += "These additional resources can be useful for further information: " + linesep
-        # hlink="<http://www.readthedocs.org/" + ConvertString(app.GetDocSeeAlso()) + ".html>`_ "
-        # output += linesep + "`" + ConvertString(app.GetDocSeeAlso()) + " " + hlink + linesep + linesep
-        output += ConvertToLineBlock(app.GetDocSeeAlso()) + linesep + linesep
+    output = template_application.format(
+        label="app-" + appname,
+        heading=rst_section(app.GetName(), '='),
+        description=app.GetDescription(),
+        longdescription=make_links(app.GetDocLongDescription(), allapps),
+        parameters=render_parameters(app),
+        examples_cli=render_all_examples_cli(app),
+        examples_python=render_all_examples_python(app),
+        limitations=render_limitations(app),
+        see_also=make_links(render_see_also(app), allapps)
+    )
 
     return output
 
@@ -520,87 +401,68 @@ def GetApplicationTags(appname):
      app = otbApplication.Registry.CreateApplication(appname)
      return app.GetDocTags()
 
-import shutil
-
 def RstPageHeading(text, maxdepth, ref=None):
-    output = RstHeading(text, "=", ref=ref) + linesep
+    output = rst_section(text, "=", ref=ref)
     output += ".. toctree::" + linesep
     output += "\t:maxdepth: " + maxdepth + linesep
     output += linesep + linesep
     return output
 
-def GenerateRstForApplications():
-    out = ""
+def GenerateRstForApplications(rst_dir):
+    "Generate .rst files for all applications"
+
     blackList = ["TestApplication", "Example", "ApplicationExample"]
-    allApps = None
-    try:
-        allApps = otbApplication.Registry.GetAvailableApplications( )
-        print(allApps)
-    except:
-        print('error in otbApplication.Registry.GetAvailableApplications()')
-        sys.exit(1)
+    allApps = otbApplication.Registry.GetAvailableApplications()
 
     if not allApps:
-        print('No OTB applications available. Please check OTB_APPLICATION_PATH env variable')
-        sys.exit(1)
+        raise RuntimeError("No OTB applications available. Please check OTB_APPLICATION_PATH env variable.")
 
     writtenTags = []
     appNames = [app for app in allApps if app not in blackList]
 
-    print("All apps: %s" % (appNames,))
+    appIndexFile = open(rst_dir + '/Applications.rst', 'w')
+    appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
 
-    appIndexFile = open(RST_DIR + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("Applications Reference Documentation", "2", ref="apprefdoc"))
+    print("Generating rst for {} applications".format(len(appNames)))
+
     for appName in appNames:
+
+        # Get application first tag
         tags = GetApplicationTags(appName)
-
-        if not tags:
-            print("No tags for application: "  +  appName)
-            sys.exit(1)
-
+        if not tags or len(tags) == 0:
+            raise RuntimeError("No tags for application: " + appName)
         tag = tags[0]
+        tag_ = tag.replace(" ", "_")
 
-        tag_ = tag
-        if tag.find(' '):
-            tag_ = tag.replace(' ', '_')
+        # Add it to the index (i.e. https://www.orfeo-toolbox.org/CookBook/Applications.html)
+        if not tag in writtenTags:
+            appIndexFile.write('\tApplications/' + tag_ + '.rst\n')
+            writtenTags.append(tag)
 
-        if not tag_:
-            print('empty tag found for ' + appName)
-
-        if not tag_ in writtenTags:
-            appIndexFile.write('\tApplications/' + tag_ + '.rst' + linesep)
-            writtenTags.append(tag_)
-
-        tagFileName = RST_DIR + '/Applications/'  + tag_ + '.rst'
+        # Create or update tag index file (e.g. https://www.orfeo-toolbox.org/CookBook/Applications/Feature_Extraction.html)
+        tagFileName = rst_dir + '/Applications/'  + tag_ + '.rst'
         if os.path.isfile(tagFileName):
-            tagFile = open(tagFileName, 'a')
-            tagFile.write("\tapp_" + appName + linesep)
-            tagFile.close()
+            with open(tagFileName, 'a') as tagFile:
+                tagFile.write("\tapp_" + appName + "\n")
         else:
-            tagFile = open(tagFileName, 'w')
-            tagFile.write( RstPageHeading(tag, "1") )
-            tagFile.write("\tapp_" + appName + linesep)
-            tagFile.close()
+            with open(tagFileName, 'w') as tagFile:
+                tagFile.write( RstPageHeading(tag, "1") )
+                tagFile.write("\tapp_" + appName + "\n")
 
-        print("Generating " + appName + ".rst" +  " on tag " + tag_)
-        appFile = open(RST_DIR + '/Applications/app_'  + appName + '.rst', 'w')
-        out = ApplicationToRst(appName)
-        appFile.write(out)
-        appFile.close()
-
-    return out
-
+        # Write application rst
+        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
+            appFile.write(render_application(appName, appNames))
 
 if __name__ == "__main__":
-    parser = OptionParser(usage="Export application(s) to rst file.")
-    parser.add_option("-a",dest="appname",help="Generate rst only for this application (eg: OrthoRectification)")
-    parser.add_option("-m",dest="module",help="Generate rst only for this module (eg: Image Manipulation)")
-    parser.add_option("-o",dest="rstdir",help="directory where rst files are generated")
-    (options, args) = parser.parse_args()
+    parser = argparse.ArgumentParser(usage="Export application(s) to rst file")
+    parser.add_argument("rst_dir", help="Directory where rst files are generated")
+    args = parser.parse_args()
 
-    RST_DIR = options.rstdir
+    # Load rst templates
+    template_application = open("templates/application.rst").read()
+    template_parameter = open("templates/parameter.rst").read()
+    template_parameter_group = open("templates/parameter_group.rst").read()
+    template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
+    template_parameter_choice = open("templates/parameter_choice.rst").read()
 
-    if not options.appname is None:
-        out = ApplicationToRst(options.appname)
-    else:
-        GenerateRstForApplications()
+    GenerateRstForApplications(args.rst_dir)

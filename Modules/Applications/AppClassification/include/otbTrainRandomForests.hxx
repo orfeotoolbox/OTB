@@ -34,9 +34,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 ::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
-  SetParameterDescription("classifier.rf",
-                          "This group of parameters allows setting Random Forests classifier parameters. "
-                          "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/random_trees.html}.");
+  SetParameterDescription("classifier.rf", "http://docs.opencv.org/modules/ml/doc/random_trees.html");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.rf.max", "Maximum depth of the tree");
   SetParameterInt("classifier.rf.max",5);

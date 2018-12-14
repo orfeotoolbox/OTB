@@ -108,9 +108,9 @@ private:
                             "This filter is more suited for radar images. It has a spatial parameter "
                             "to avoid speckle noise perturbations. The larger the radius is, "
                             "less sensible to the speckle noise the filter is, but micro edge will be missed.");
-    AddParameter(ParameterType_Int, "filter.touzi.xradius", "The X radius of the neighborhood.");
+    AddParameter(ParameterType_Int, "filter.touzi.xradius", "X radius of the neighborhood");
     SetDefaultParameterInt("filter.touzi.xradius", 1);
-    AddParameter(ParameterType_Int, "filter.touzi.yradius", "The Y radius of the neighborhood.");
+    AddParameter(ParameterType_Int, "filter.touzi.yradius", "Y radius of the neighborhood");
     SetDefaultParameterInt("filter.touzi.yradius", 1);
 
     // Canny Section

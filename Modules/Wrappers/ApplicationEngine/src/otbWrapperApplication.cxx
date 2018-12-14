@@ -279,9 +279,7 @@ const std::string& Application::GetDocLink() const
 
 void Application::SetOfficialDocLink()
 {
-  std::string link = "http://www.orfeo-toolbox.org/Applications/";
-  link.append(this->GetName());
-  link.append(".html");
+  const std::string link = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + this->GetName() + ".html";
   this->SetDocLink(link);
 }
 
@@ -1997,9 +1995,15 @@ std::string Application::GetParameterAsString(std::string paramKey)
     {
       std::ostringstream oss;
       oss << std::setprecision(10);
-      const std::vector<std::string> strList = this->GetParameterStringList( paramKey );
-      for (unsigned int i=0; i<strList.size(); i++)
-        oss << strList[i] << std::endl;
+      const std::vector<std::string> strList = this->GetParameterStringList(paramKey);
+      for (size_t i = 0; i < strList.size(); i++)
+      {
+        if (i != 0)
+        {
+          oss << " ";
+        }
+        oss << strList[i];
+      }
       ret = oss.str();
     }
   else
@@ -2080,11 +2084,9 @@ void Application::AddRAMParameter(std::string paramKey, std::string paramName, u
 void Application::AddRAMParameter(std::string paramKey)
 {
   // Get the  RAM Parameter from the configuration manager
-  AddRAMParameter(paramKey,
-                    "Available RAM (Mb)",
-                  otb::ConfigurationManager::GetMaxRAMHint());
+  AddRAMParameter(paramKey, "Available RAM (MB)", otb::ConfigurationManager::GetMaxRAMHint());
   MandatoryOff(paramKey);
-  SetParameterDescription(paramKey, "Available memory for processing (in MB)");
+  SetParameterDescription(paramKey, "Available memory for processing (in MB).");
 }
 
 void Application::AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue)
