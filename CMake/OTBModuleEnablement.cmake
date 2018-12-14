@@ -196,8 +196,6 @@ foreach(otb-module ${OTB_MODULES_ALL})
   if(OTB_MODULE_${otb-module}_ACTIVATION_OPTION
      AND NOT ${OTB_MODULE_${otb-module}_ACTIVATION_OPTION})
      otb_module_disable("${otb-module}" "${OTB_MODULE_${otb-module}_ACTIVATION_OPTION}")
-  elseif(OTB_MODULE_${otb-module}_IS_DEPRECATED AND NOT OTB_USE_DEPRECATED)
-     otb_module_disable("${otb-module}" "OTB_USE_DEPRECATED")
   endif()
 endforeach()
 
