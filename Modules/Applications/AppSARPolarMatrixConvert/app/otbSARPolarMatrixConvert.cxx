@@ -384,7 +384,7 @@ private:
       m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
       m_RCohSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput()); // input : 3 x 1 complex channel | output :  6 complex channels
+      SetParameterOutputImage("outc", m_RCohSRFilter->GetOutput()); // input: 3 x 1 complex channel | output :  6 complex channels
 
       break;
 
@@ -401,7 +401,7 @@ private:
       m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
       m_RCovSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput()); // input : 3 x 1 complex channel | output :  6 complex channels
+      SetParameterOutputImage("outc", m_RCovSRFilter->GetOutput()); // input: 3 x 1 complex channel | output :  6 complex channels
 
       break;
 
@@ -418,7 +418,7 @@ private:
       m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
       m_RCCSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput()); // input : 3 x 1 complex channel | output :  6 complex channels
+      SetParameterOutputImage("outc", m_RCCSRFilter->GetOutput()); // input: 3 x 1 complex channel | output :  6 complex channels
 
       break;
 
@@ -428,7 +428,7 @@ private:
       m_RCRMFilter = RCRMFilterType::New();
       m_RCRMFilter->SetVariadicInput<0>(GetParameterComplexDoubleVectorImage("inc"));
 
-      SetParameterOutputImage("outf", m_RCRMFilter->GetOutput()); // input : 6 complex channels | 16 real channels
+      SetParameterOutputImage("outf", m_RCRMFilter->GetOutput()); // input: 6 complex channels | 16 real channels
 
       break;
 
@@ -438,7 +438,7 @@ private:
       m_RCCDFilter = RCCDFilterType::New();
       m_RCCDFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
-      SetParameterOutputImage("outc", m_RCCDFilter->GetOutput()); // input : 6 complex channels | 3 complex channels
+      SetParameterOutputImage("outc", m_RCCDFilter->GetOutput()); // input: 6 complex channels | 3 complex channels
 
       break;
 
@@ -448,7 +448,7 @@ private:
       m_RCRCFilter = RCRCFilterType::New();
       m_RCRCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
-      SetParameterOutputImage("outc", m_RCRCFilter->GetOutput()); // input : 6 complex channels | 6 complex channels
+      SetParameterOutputImage("outc", m_RCRCFilter->GetOutput()); // input: 6 complex channels | 6 complex channels
 
       break;
 
@@ -458,7 +458,7 @@ private:
       m_RLCRCCFilter = RLCRCCFilterType::New();
       m_RLCRCCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
 
-      SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput()); // input : 6 complex channels | output : 6 complex channels
+      SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput()); // input: 6 complex channels | output : 6 complex channels
 
       break;
 
@@ -469,7 +469,7 @@ private:
 
       m_MRCFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
 
-      SetParameterOutputImage("outc", m_MRCFilter->GetOutput()); // input : 16 real channels | output : 6 complex channels
+      SetParameterOutputImage("outc", m_MRCFilter->GetOutput()); // input: 16 real channels | output : 6 complex channels
 
       break;
 
@@ -486,7 +486,7 @@ private:
       m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
       m_CohSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_CohSRFilter->GetOutput()); // input : 4 x 1 complex channel | 10 complex channels
+      SetParameterOutputImage("outc", m_CohSRFilter->GetOutput()); // input: 4 x 1 complex channel | 10 complex channels
 
       break;
 
@@ -499,7 +499,7 @@ private:
       m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
       m_CovSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_CovSRFilter->GetOutput()); // input : 4 x 1 complex channel | output : 10 complex channels
+      SetParameterOutputImage("outc", m_CovSRFilter->GetOutput()); // input: 4 x 1 complex channel | output : 10 complex channels
 
       break;
 
@@ -512,7 +512,7 @@ private:
       m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
       m_CCSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outc", m_CCSRFilter->GetOutput()); // input : 4 x 1 complex channel | output : 10 complex channels
+      SetParameterOutputImage("outc", m_CCSRFilter->GetOutput()); // input: 4 x 1 complex channel | output : 10 complex channels
 
       break;
 
@@ -530,7 +530,7 @@ private:
       m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::vh>(GetParameterComplexDoubleImage("invh"));
       m_MSRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-      SetParameterOutputImage("outf", m_MSRFilter->GetOutput()); // input : 4 x 1 complex channel | output : 16 real channels
+      SetParameterOutputImage("outf", m_MSRFilter->GetOutput()); // input: 4 x 1 complex channel | output : 16 real channels
 
       break;
 
@@ -540,7 +540,7 @@ private:
 
       m_MPDPFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
 
-      SetParameterOutputImage("outf", m_MPDPFilter->GetOutput()); //  input : 16 real channels | output : 4 real channels
+      SetParameterOutputImage("outf", m_MPDPFilter->GetOutput()); //  input: 16 real channels | output : 4 real channels
 
       break;
     }
