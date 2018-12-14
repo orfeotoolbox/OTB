@@ -215,7 +215,9 @@ public:
   void Init();
   void UpdateParameters();
   int Execute();
+  void WriteOutput();
   int ExecuteAndWriteOutput();
+  bool ConnectImage(std::string in, Application* app, std::string out);
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
