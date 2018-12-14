@@ -2631,6 +2631,48 @@ Application::ConnectImage(std::string in, Application* app, std::string out)
   return true;
 }
 
+void
+Application::PropagateConnectMode(bool isMem)
+{
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  std::unordered_set<Application*> targetApps;
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    std::string key = *it;
+    Parameter* param = GetParameterByKey(key);
+    InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
+    
+    if(imgParam)
+      {
+      Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
+      if(targetApp.IsNotNull())
+        {
+        imgParam->SetConnectionMode(isMem);
+        targetApps.insert(targetApp);
+        }
+      }
+    else
+      {
+      InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
+      if (imgListParam)
+        {
+        for (unsigned int i=0 ; i<imgListParam->Size(); i++)
+          {
+          Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
+          if(targetApp.IsNotNull())
+            {
+            imgListParam->GetNthElement(i)->SetConnectionMode(isMem);
+            targetApps.insert(targetApp);
+            }
+          }
+        }
+      }
+    }
+  for (auto &app : targetApps)
+    {
+    app->PropagateConnectMode(isMem);
+    }
+}
 
 }
 }

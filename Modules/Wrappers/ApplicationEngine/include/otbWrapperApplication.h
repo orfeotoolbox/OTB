@@ -142,6 +142,9 @@ public:
 
   /** Connect input image to an output image in app */
   bool ConnectImage(std::string in, Application* app, std::string out);
+
+  /** Propagate the connection mode : */
+  void PropagateConnectMode(bool isMem);
   
   /** Request the application to stop its processing */
   void Stop();
