@@ -73,9 +73,6 @@ target_link_libraries(StreamingImageReadWrite ${OTB_LIBRARIES})
 add_executable(VectorDataIOExample VectorDataIOExample.cxx)
 target_link_libraries(VectorDataIOExample ${OTB_LIBRARIES})
 
-add_executable(TileMapImageIOExample TileMapImageIOExample.cxx)
-target_link_libraries(TileMapImageIOExample ${OTB_LIBRARIES})
-
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()

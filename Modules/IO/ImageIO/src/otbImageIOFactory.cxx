@@ -33,8 +33,6 @@
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
 
-#include "otbTileMapImageIOFactory.h"
-
 namespace otb
 {
 
@@ -98,7 +96,6 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(TileMapImageIOFactory::New());
       firstTime = false;
       }
     }

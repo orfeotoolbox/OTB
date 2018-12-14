@@ -249,7 +249,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/TileMapImageIOExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/CannyEdgeDetectionImageFilter.cxx
