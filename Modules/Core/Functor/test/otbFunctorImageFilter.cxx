@@ -162,6 +162,11 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   res = filter1->GetVariadicNamedInput(tag{});
   filter1->Update();
 
+  // Test static New() operator
+  auto oldStyleNewFilter = FunctorImageFilter<decltype(functor)>::New();
+  oldStyleNewFilter->SetVariadicInputs(in);
+  oldStyleNewFilter->Update();
+
   // Hack to silent -Wunused-but-set-variable
   std::cout<<res<<std::endl;
 

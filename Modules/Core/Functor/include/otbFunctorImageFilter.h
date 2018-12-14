@@ -298,6 +298,29 @@ public:
   
   /** Run-time type information (and related methods). */
   itkTypeMacro(FunctorImageFilter, VariadicInputsImageFilter);
+
+  /** New() macro defined only if TFunction is default constructible */
+  template <typename F = TFunction> static std::enable_if_t<std::is_default_constructible<F>::value, Pointer> New()
+  {
+    // Explicit default construct
+    FunctorType f;
+
+    // Create a filter out of it
+    Pointer  p = new Self(f, {{0,0}});
+    p->UnRegister();
+    return p;
+  }
+
+    /** New() macro defined only if TFunction is NOT default constructible
+     * This will yield an error message since New() can not be implemented in this case. */
+  template <typename F = TFunction> static std::enable_if_t<!std::is_default_constructible<F>::value, Pointer> New()
+  {
+    static_assert(std::is_default_constructible<F>::value,"Cannot call New() "
+      "function as the functor used for the filter creation is not default "
+      "constructible");
+
+    return nullptr;
+  }
   
   /** Get the functor object.
    * 
@@ -416,7 +439,6 @@ template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Func
   FunctorType decoratedF(f,numberOfOutputBands);
   return  NewFunctorFilter<FunctorType,TNameMap>(decoratedF,radius);
 }
-
 
 }// namespace otb
 
