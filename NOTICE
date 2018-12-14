@@ -141,13 +141,6 @@ This software includes code from the libkml project.
   https://github.com/google/libkml/blob/master/LICENSE
 
 
-This software includes code from the Mapnik project.
-  Copyright (c) 2015, Artem Pavlenko
-  http://mapnik.org/
-  Mapnik is released under GNU LGPL v2.1 license:
-  http://mapnik.org/pages/license.html
-
-
 This software includes code from the MuParser project.
   Copyright (c) 2011-2016, Ingo Berg
   https://github.com/beltoforion/muparser
