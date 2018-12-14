@@ -218,6 +218,7 @@ public:
   void WriteOutput();
   int ExecuteAndWriteOutput();
   bool ConnectImage(std::string in, Application* app, std::string out);
+  void PropagateConnectMode(bool isMem);
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
