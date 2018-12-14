@@ -40,12 +40,14 @@
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 
+#include "otbCast.h"
 #include "otbMacro.h"
 #include "otbWrapperTypes.h"
 #include <exception>
 #include "itkMacro.h"
 #include <stack>
 #include <set>
+#include <unordered_set>
 
 namespace otb
 {
@@ -820,11 +822,114 @@ void Application::FreeRessources()
 
 int Application::Execute()
 {
+  //----------- Recursive part -------------------------------------------------
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  int status=0;
+  std::unordered_set<Application*> targetApps;
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    std::string key = *it;
+    Parameter* param = GetParameterByKey(key);
+    InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
+    
+    if(imgParam)
+      {
+      Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
+      if(targetApp.IsNotNull())
+        {
+        targetApps.insert(targetApp);
+        }
+      }
+    else
+      {
+      InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
+      if (imgListParam)
+        {
+        for (unsigned int i=0 ; i<imgListParam->Size(); i++)
+          {
+          Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
+          if(targetApp.IsNotNull())
+            {
+            targetApps.insert(targetApp);
+            }
+          }
+        }
+      } 
+    }
+  for (auto &app : targetApps)
+    {
+    // Call target Execute()
+    status = status | app->Execute();
+    }
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+    {
+    std::string key = *it;
+    Parameter* param = GetParameterByKey(key);
+    InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
+    if(imgParam)
+      {
+      Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
+      if(targetApp.IsNotNull())
+        {
+        std::string outKey = imgParam->GetConnection().key;
+        if(imgParam->GetConnection().isMem)
+          {
+          // memory connection
+          SetParameterInputImage(key,
+            targetApp->GetParameterOutputImage(outKey));
+          targetApp->DisableParameter(outKey);
+          }
+        else
+          {
+          // set input string based on out image
+          SetParameterString(key, targetApp->GetParameterString(outKey));
+          }
+        }
+      }
+    else
+      {
+      InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
+      if (imgListParam)
+        {
+        int k=0;
+        for (unsigned int i=0 ; i<imgListParam->Size() ; i++)
+          {
+          Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
+          if(targetApp.IsNotNull())
+            {
+            std::string outKey = imgListParam->GetNthElement(i)->GetConnection().key;
+            if(imgListParam->GetNthElement(i)->GetConnection().isMem)
+              {
+              // memory connection
+              SetNthParameterInputImageList(key,k,
+                targetApp->GetParameterOutputImage(outKey));
+              targetApp->DisableParameter(outKey);
+              }
+            else
+              {
+              // set input string based on out image
+              SetNthParameterStringList(key, k, targetApp->GetParameterString(outKey));
+              }
+            }
+          k++;
+          }
+        }
+      }
+    }
+  if (status != 0)
+    {
+    return status;
+    }
+  for (auto &app : targetApps)
+    {
+    app->WriteOutput();
+    }
 
+  //------------------------------------------------------------
   this->UpdateParameters();
 
   // before execute we set the seed of mersenne twister
-  std::vector<std::string> paramList = GetParametersKeys(true);
+  
   bool UseSpecificSeed = false;
 
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
@@ -870,6 +975,108 @@ int Application::Execute()
   return 0;
 }
 
+void Application::WriteOutput()
+{
+  std::vector<std::string> paramList = GetParametersKeys(true);
+  // First Get the value of the available memory to use with the
+  // writer if a RAMParameter is set
+  bool useRAM = false;
+  unsigned int ram = 0;
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+       it != paramList.end();
+       ++it)
+    {
+    std::string key = *it;
+
+    if (GetParameterType(key) == ParameterType_RAM
+        && IsParameterEnabled(key))
+      {
+      Parameter* param = GetParameterByKey(key);
+      RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
+      if(ramParam!=nullptr)
+        {
+        ram = ramParam->GetValue();
+        useRAM = true;
+        }
+      }
+    }
+
+  for (std::vector<std::string>::const_iterator it = paramList.begin();
+       it != paramList.end();
+       ++it)
+    {
+    std::string key = *it;
+    if (GetParameterType(key) == ParameterType_OutputImage
+        && IsParameterEnabled(key) && HasValue(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
+
+      if(outputParam!=nullptr)
+        {
+        std::string checkReturn = outputParam->CheckFileName(true);
+        if (!checkReturn.empty())
+          {
+          otbAppLogWARNING("Check filename: "<<checkReturn);
+          }
+        if (useRAM)
+          {
+          outputParam->SetRAMValue(ram);
+          }
+        outputParam->InitializeWriters();
+        std::ostringstream progressId;
+        progressId << "Writing " << outputParam->GetFileName() << "...";
+        AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+        }
+      }
+    else if (GetParameterType(key) == ParameterType_OutputVectorData
+             && IsParameterEnabled(key) && HasValue(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+      if(outputParam!=nullptr)
+        {
+        outputParam->InitializeWriters();
+        std::ostringstream progressId;
+        progressId << "Writing " << outputParam->GetFileName() << "...";
+        AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+        }
+      }
+    else if (GetParameterType(key) == ParameterType_ComplexOutputImage
+             && IsParameterEnabled(key) && HasValue(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
+
+      if(outputParam!=nullptr)
+        {
+        outputParam->InitializeWriters();
+        if (useRAM)
+          {
+          outputParam->SetRAMValue(ram);
+          }
+        std::ostringstream progressId;
+        progressId << "Writing " << outputParam->GetFileName() << "...";
+        AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+        }
+      }
+    //xml writer parameter
+    else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
+             && IsParameterEnabled(key) && HasValue(key) )
+      {
+      Parameter* param = GetParameterByKey(key);
+      OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
+      if(outXMLParam!=nullptr)
+        {
+        outXMLParam->Write(this);
+        }
+      }
+    }
+}
+
 int Application::ExecuteAndWriteOutput()
 {
   m_Chrono.Restart();
@@ -880,104 +1087,7 @@ int Application::ExecuteAndWriteOutput()
 
   if (status == 0)
     {
-      std::vector<std::string> paramList = GetParametersKeys(true);
-      // First Get the value of the available memory to use with the
-      // writer if a RAMParameter is set
-      bool useRAM = false;
-      unsigned int ram = 0;
-      for (std::vector<std::string>::const_iterator it = paramList.begin();
-           it != paramList.end();
-           ++it)
-        {
-        std::string key = *it;
-
-        if (GetParameterType(key) == ParameterType_RAM
-            && IsParameterEnabled(key))
-          {
-          Parameter* param = GetParameterByKey(key);
-          RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-          if(ramParam!=nullptr)
-            {
-            ram = ramParam->GetValue();
-            useRAM = true;
-            }
-          }
-        }
-
-      for (std::vector<std::string>::const_iterator it = paramList.begin();
-           it != paramList.end();
-           ++it)
-        {
-        std::string key = *it;
-        if (GetParameterType(key) == ParameterType_OutputImage
-            && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
-
-          if(outputParam!=nullptr)
-            {
-            std::string checkReturn = outputParam->CheckFileName(true);
-            if (!checkReturn.empty())
-              {
-              otbAppLogWARNING("Check filename: "<<checkReturn);
-              }
-            if (useRAM)
-              {
-              outputParam->SetRAMValue(ram);
-              }
-            outputParam->InitializeWriters();
-            std::ostringstream progressId;
-            progressId << "Writing " << outputParam->GetFileName() << "...";
-            AddProcess(outputParam->GetWriter(), progressId.str());
-            outputParam->Write();
-            }
-          }
-        else if (GetParameterType(key) == ParameterType_OutputVectorData
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-          if(outputParam!=nullptr)
-            {
-            outputParam->InitializeWriters();
-            std::ostringstream progressId;
-            progressId << "Writing " << outputParam->GetFileName() << "...";
-            AddProcess(outputParam->GetWriter(), progressId.str());
-            outputParam->Write();
-            }
-          }
-        else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-
-          if(outputParam!=nullptr)
-            {
-            outputParam->InitializeWriters();
-            if (useRAM)
-              {
-              outputParam->SetRAMValue(ram);
-              }
-            std::ostringstream progressId;
-            progressId << "Writing " << outputParam->GetFileName() << "...";
-            AddProcess(outputParam->GetWriter(), progressId.str());
-            outputParam->Write();
-            }
-          }
-        //xml writer parameter
-        else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          if(outXMLParam!=nullptr)
-            {
-            outXMLParam->Write(this);
-            }
-          }
-        }
+    this->WriteOutput();
     }
 
   this->AfterExecuteAndWriteOutputs();
@@ -2484,6 +2594,42 @@ otbGetParameterImageMacro(ComplexInt16VectorImage);
 otbGetParameterImageMacro(ComplexInt32VectorImage);
 otbGetParameterImageMacro(ComplexFloatVectorImage);
 otbGetParameterImageMacro(ComplexDoubleVectorImage);
+
+
+bool
+Application::ConnectImage(std::string in, Application* app, std::string out)
+{
+  if(app == nullptr)
+    {
+    // throw error ?
+    return false;
+    }
+
+  Parameter* param = GetParameterByKey(in);
+  InputImageParameter* inParam = dynamic_cast<InputImageParameter*>(param);
+  if(inParam == nullptr)
+    {
+    InputImageListParameter* inListParam = dynamic_cast<InputImageListParameter*>(param);
+    if (inListParam == nullptr)
+      {
+      return false;
+      }
+    inListParam->InsertNullElement();
+    inParam = (inListParam->GetNthElement(inListParam->Size() - 1)).GetPointer();
+    }
+  param = app->GetParameterByKey(out);
+  OutputImageParameter* outParam = dynamic_cast<OutputImageParameter*>(param);
+  if(outParam == nullptr)
+    {
+    return false;
+    }
+  InputImageParameter::Connector c;
+  c.app = app;
+  c.key = out;
+  c.isMem = true;
+  inParam->SetConnection(c);
+  return true;
+}
 
 
 }

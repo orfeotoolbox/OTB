@@ -126,6 +126,12 @@ public:
    */
   int Execute();
 
+  /** write all of the output to disk
+   * if they have an associated filename.
+   * This is a helper function for wrappers without pipeline support.
+   */
+  void WriteOutput();
+
   /** Run the application, then write all of the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
@@ -134,6 +140,9 @@ public:
    */
   int ExecuteAndWriteOutput();
 
+  /** Connect input image to an output image in app */
+  bool ConnectImage(std::string in, Application* app, std::string out);
+  
   /** Request the application to stop its processing */
   void Stop();
 
