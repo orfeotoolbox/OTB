@@ -111,7 +111,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   //Set the input transformation
   //*****************************
 
-    // First, try to make a geo transform
+  // First, try to make a geo transform
   if (!m_InputProjectionRef.empty()) //map projection
     {
     typedef otb::GenericMapProjection<TransformDirection::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
@@ -141,11 +141,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
       }
-    }
-
-  if (m_InputTransform.IsNull()) //default if we didn't manage to instantiate it before
-    {
-    m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
     }
 
   //*****************************
@@ -180,6 +175,19 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       otbMsgDevMacro(<< "Output projection set to sensor model");
       }
     }
+
+  if (m_InputTransform.IsNull()) //default if we didn't manage to instantiate it before
+    {
+    // In this case, if output transform is set, we set
+    // inputProjectionRef to wgs84 to ensure consistency
+    if(outputTransformIsSensor || outputTransformIsMap)
+      {
+      m_InputProjectionRef = SpatialReference::FromWGS84().ToWkt();
+      }
+
+    m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
+    }
+
 
 
   if (m_OutputTransform.IsNull()) //default if we didn't manage to instantiate it before
