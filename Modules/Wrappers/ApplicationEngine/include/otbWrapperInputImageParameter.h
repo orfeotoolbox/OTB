@@ -67,7 +67,7 @@ public:
     m_Connection = c;
     }
 
-  const Connector & GetConnection()
+  const Connector & GetConnection() const
     {
     return m_Connection;
     }
