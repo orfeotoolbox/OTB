@@ -62,7 +62,7 @@ public:
   }
 
    /** Constructor */
-   ReciprocalPauliDecompFunctor() : {}
+   ReciprocalPauliDecompFunctor() {}
 
    /** Destructor */
    virtual ~ReciprocalPauliDecompFunctor() {}

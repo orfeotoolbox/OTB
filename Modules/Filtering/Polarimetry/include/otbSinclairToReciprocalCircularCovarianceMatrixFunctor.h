@@ -98,7 +98,7 @@ public:
   }
 
   /** Constructor */
-  SinclairToReciprocalCircularCovarianceMatrixFunctor() : {}
+  SinclairToReciprocalCircularCovarianceMatrixFunctor() {}
 
   /** Destructor */
   virtual ~SinclairToReciprocalCircularCovarianceMatrixFunctor() {}
