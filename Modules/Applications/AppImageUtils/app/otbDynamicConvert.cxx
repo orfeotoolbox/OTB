@@ -22,7 +22,7 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbUnaryImageFunctorWithVectorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
@@ -38,20 +38,6 @@ namespace otb
 {
 namespace Wrapper
 {
-
-namespace Functor
-{
-  template< class TScalar >
-class ITK_EXPORT LogFunctor
-{
-public:
-  TScalar operator() (const TScalar& v) const
-  {
-    return std::log(v);
-  }
-};
-} // end namespace Functor
-
 
 
 class DynamicConvert : public Application
@@ -79,11 +65,6 @@ public:
     FloatVectorImageType> ShrinkFilterType;
 
   typedef StreamingShrinkImageFilter<UInt8ImageType, UInt8ImageType> UInt8ShrinkFilterType;
-
-  typedef Functor::LogFunctor<FloatVectorImageType::InternalPixelType> TransferLogFunctor;
-  typedef UnaryImageFunctorWithVectorImageFilter<FloatVectorImageType,
-    FloatVectorImageType,
-    TransferLogFunctor> TransferLogType;
 
 private:
 
@@ -273,13 +254,26 @@ private:
 
     if ( rescaleType == "log2")
     {
-      //define the transfer log
-      m_TransferLog = TransferLogType::New();
-      m_TransferLog->SetInput(tempImage);
-      m_TransferLog->UpdateOutputInformation();
-
-      shrinkFilter->SetInput(m_TransferLog->GetOutput());
-      rescaler->SetInput(m_TransferLog->GetOutput());
+      // define lambda function that applies a log to all bands of the input pixel
+      auto logFunction = [](FloatVectorImageType::PixelType & vectorOut, const FloatVectorImageType::PixelType & vectorIn) {
+	assert(vectorOut.Size() == vectorIn.Size() && "Input vector types don't have the same size");
+	
+	for (unsigned int i = 0; i < vectorIn.Size() ; i++) {
+	  vectorOut[i] = std::log(vectorIn[i]);
+	}
+	
+      };
+// creates functor filter
+      auto transferLogFilter = NewFunctorFilter(logFunction,tempImage->GetNumberOfComponentsPerPixel(),{{0,0}});
+      
+      // save a reference to the functor
+      m_Filters.push_back(transferLogFilter.GetPointer());
+      
+      transferLogFilter->SetVariadicInputs(tempImage);
+      transferLogFilter->UpdateOutputInformation();
+      
+      shrinkFilter->SetInput(transferLogFilter->GetOutput());
+      rescaler->SetInput(transferLogFilter->GetOutput());
       shrinkFilter->Update();
     }
     else
@@ -524,8 +518,6 @@ private:
     }
   }
 
-  itk::ProcessObject::Pointer m_TmpFilter;
-  TransferLogType::Pointer m_TransferLog;
   std::vector<itk::LightObject::Pointer> m_Filters;
 };
 

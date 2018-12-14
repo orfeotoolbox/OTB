@@ -273,13 +273,13 @@ private:
       if ( rescaleType == "log2")
         {
 	  // define lambda function that applies a log to all bands of the input pixel
-	  auto logFunction = [](const FloatVectorImageType::PixelType & vectorIn) {
-	    FloatVectorImageType::PixelType vectorOut(vectorIn.Size());
+	  auto logFunction = [](FloatVectorImageType::PixelType & vectorOut, const FloatVectorImageType::PixelType & vectorIn) {
+	    assert(vectorOut.Size() == vectorIn.Size() && "Input vector types don't have the same size");
 
 	    for (unsigned int i = 0; i < vectorIn.Size() ; i++) {
 	      vectorOut[i] = std::log(vectorIn[i]);
 	    }
-	    return vectorOut;
+	    
 	  };
 	  // creates functor filter
 	  auto transferLogFilter = NewFunctorFilter(logFunction,tempImage->GetNumberOfComponentsPerPixel(),{{0,0}});
