@@ -74,10 +74,10 @@ SarConcatenateBurstsImageFilter<TImage>
   // Output KeywordList
   ImageType * outputPtr = this->GetOutput();
 
-  m_DeburstSLCImageKWL.AddKey("support_data_number_samples", std::to_string(this->GetOutput()->
+  m_DeburstSLCImageKWL.AddKey("support_data.number_samples", std::to_string(this->GetOutput()->
 									    GetLargestPossibleRegion().
 									    GetSize()[0]));
-  m_DeburstSLCImageKWL.AddKey("support_data_number_lines", std::to_string(this->GetOutput()->
+  m_DeburstSLCImageKWL.AddKey("support_data.number_lines", std::to_string(this->GetOutput()->
 									  GetLargestPossibleRegion().
 									  GetSize()[1]));
 

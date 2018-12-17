@@ -99,8 +99,8 @@ SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   largestPossibleRegion.SetSize(burstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
 
-  newKwl.AddKey("support_data_number_samples", std::to_string(burstSize[0]));
-  newKwl.AddKey("support_data_number_lines", std::to_string(burstSize[1]));
+  newKwl.AddKey("support_data.number_samples", std::to_string(burstSize[0]));
+  newKwl.AddKey("support_data.number_lines", std::to_string(burstSize[1]));
 
   newKwl.AddKey("number_samples", std::to_string(burstSize[0]));
   newKwl.AddKey("number_lines", std::to_string(burstSize[1]));
