@@ -661,9 +661,10 @@ if(OTB_USE_LIBSVM)
     OPTIONS
     -inxml ${TEMP}/clsvmModelQB1_allOpt.xml
     -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
+    -io.confmatout ${TEMP}/clsvmConfMatQB1_allOpt_InXML.svm
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1_allOpt.svm
+    ${TEMP}/clsvmConfMatQB1_allOpt_InXML.svm)
 
   set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_allOpt)
 
@@ -695,10 +696,11 @@ if(OTB_USE_LIBSVM)
     -classifier.libsvm.opt true
     -sample.vfn class
     -io.out ${TEMP}/clsvmModelQB1.svm
+    -io.confmatout ${TEMP}/clsvmConfMatQB1.svm
     -rand 121212
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1.svm)
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1.svm
+    ${TEMP}/clsvmConfMatQB1.svm)
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB456
     APP  TrainImagesClassifier
@@ -733,10 +735,11 @@ if(OTB_USE_LIBSVM)
     -classifier.libsvm.opt true
     -rand 121212
     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
+    -io.confmatout ${TEMP}/clsvmConfMatQB1_allOpt.svm
     -outxml ${TEMP}/clsvmModelQB1_allOpt.xml
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_allOpt.svm)
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1_allOpt.svm
+    ${TEMP}/clsvmConfMatQB1_allOpt.svm)
 endif()
 
 #----------- DSFuzzyModelEstimation TESTS ----------------
