@@ -53,7 +53,7 @@ public:
   /// Destructor
   virtual ~LevelingFunctor() {}
 
-  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
+  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel) const
   {
     TOutput result;
 
