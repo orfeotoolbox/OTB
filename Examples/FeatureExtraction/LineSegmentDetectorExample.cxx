@@ -46,6 +46,12 @@
 
 int main(int argc, char * argv[])
 {
+  if (argc != 3)
+  {
+    std::cerr << "Usage: ./LineSegmentDetectorExample input output\n";
+    return EXIT_FAILURE;
+  }
+
   const char* infname  = argv[1];
   const char* outfname = argv[2];
 

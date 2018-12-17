@@ -52,11 +52,17 @@
 
 int main(int argc, char * argv[])
 {
+  if (argc != 6)
+  {
+    std::cerr << "Usage: ./RightAngleDetectionExample input lsdOutput rightAngleOutput angleThreshold distanceThreshold\n";
+    return EXIT_FAILURE;
+  }
+
   const char* infname                  = argv[1];
   const char* lsdOutputFilename        = argv[2];
   const char* rightAngleOutputFilename = argv[3];
-  double      angleThreshold           = atof(argv[5]);
-  double      distanceThreshold        = atof(argv[6]);
+  double      angleThreshold           = atof(argv[4]);
+  double      distanceThreshold        = atof(argv[5]);
 
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
