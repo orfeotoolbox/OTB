@@ -54,37 +54,6 @@
 
 namespace otb
 {
-//#################
-// Bistatic filters
-//#################
-
-// This is the entire declaration of SinclairToCovarianceMatrixFilter
-template <typename TInputImage, typename TOutputImage>
-using SinclairToCovarianceMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                               typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
-
-// This is the entire declaration of SinclairToCircularCovarianceMatrixFilter
-template <typename TInputImage, typename TOutputImage>
-using SinclairToCircularCovarianceMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                                       typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
-
-// This is the entire declaration of SinclairToCoherencyMatrixFilter
-template <typename TInputImage, typename TOutputImage>
-using SinclairToCoherencyMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                              typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
-
-// This is the entire declaration of SinclairToMuellerMatrixFilter
-template <typename TInputImage, typename TOutputImage>
-using SinclairToMuellerMatrixFilter = FunctorImageFilter<
-    Functor::SinclairToMuellerMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                            typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 
 //###################
 // Monostatic filters

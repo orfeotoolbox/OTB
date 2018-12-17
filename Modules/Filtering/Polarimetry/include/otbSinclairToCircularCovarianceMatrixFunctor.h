@@ -18,11 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToCircularCovarianceMatrixFunctor_h
-#define otbSinclairToCircularCovarianceMatrixFunctor_h
+#ifndef otbSinclairToCircularCovarianceMatrixImageFilter_h
+#define otbSinclairToCircularCovarianceMatrixImageFilter_h
 
 #include <complex>
+
 #include "otbSinclairToCovarianceMatrixFunctor.h"
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -55,6 +58,8 @@ namespace Functor
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::SinclairToCircularCovarianceMatrixImageFilter to apply it to an image.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -80,7 +85,7 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
   inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+                             const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -117,6 +122,29 @@ public:
 };
 
 } // namespace Functor
+
+  /**
+   * \typedef SinclairToCircularCovarianceMatrixImageFilter
+   * \brief Applies otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+   * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+   *
+   * Set inputs with:
+   * \code
+   *
+   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+   *
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+  template <typename TInputImage, typename TOutputImage>
+using SinclairToCircularCovarianceMatrixImageFilter = FunctorImageFilter<
+    Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                       typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 } // namespace otb
 
 #endif

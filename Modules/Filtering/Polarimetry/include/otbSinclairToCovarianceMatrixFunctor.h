@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToCovarianceMatrixFunctor_h
-#define otbSinclairToCovarianceMatrixFunctor_h
+#ifndef otbSinclairToCovarianceMatrixImageFilter_h
+#define otbSinclairToCovarianceMatrixImageFilter_h
 
 #include <complex>
 #include "otbFunctorImageFilter.h"
@@ -48,7 +48,7 @@ namespace Functor
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
- * Use otb::SinclairToCovarianceMatrixFilter to apply
+ * Use otb::SinclairToCovarianceMatrixImageFilter to apply
  *  it to an image.
  *
  *  \ingroup Functor
@@ -101,7 +101,7 @@ public:
 } // namespace Functor
 
   /**
-   * \typedef SinclairToCovarianceMatrixFilter
+   * \typedef SinclairToCovarianceMatrixImageFilter
    * \brief Applies otb::Functor::SinclairToCovarianceMatrixFunctor
    * \sa otb::Functor::SinclairToCovarianceMatrixFunctor
    *
@@ -118,7 +118,7 @@ public:
    * \ingroup OTBPolarimetry
    */
   template <typename TInputImage, typename TOutputImage>
-  using SinclairToCovarianceMatrixFilter = FunctorImageFilter<
+  using SinclairToCovarianceMatrixImageFilter = FunctorImageFilter<
     Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
                                                typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
