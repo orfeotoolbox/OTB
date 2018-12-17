@@ -39,6 +39,8 @@ struct closing_profile_characteristics {};
 /** \class MultiScaleConvexOrConcaveDecisionRule
  *  \brief This Functor apply a classification rule on two membership value along with two labels.
  *
+ * Use otb::MultiScaleConvexOrConcaveClassificationFilter to apply it image-wise.
+ *
  * \par
  * This algorithm is based on the following publication:
  * \par
@@ -151,7 +153,7 @@ private:
 };
 } //end namespace Functor
 
-/** \class MultiScaleConvexOrConcaveClassificationFilter
+/** \typedef MultiScaleConvexOrConcaveClassificationFilter
  *  \brief Apply the otb::Functor::MultiScaleConvexOrConcaveDecisionRule to whole images.
  *
  * See otb::Functor::MultiScaleConvexOrConcaveDecisionRule functor documentation for more details.

@@ -50,6 +50,8 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_ClosingCharacteristicsFilter->SetInput(m_ClosingDerivativeProfile->GetOutput());
 
   using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+  // Template keyword mandatory to avoid parsing error when using
+  // template methods within template code
   m_ClassificationFilter->template SetVariadicNamedInput<max_opening_profile_derivative>(m_OpeningCharacteristicsFilter->GetOutput());
   m_ClassificationFilter->template SetVariadicNamedInput<opening_profile_characteristics>(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
   m_ClassificationFilter->template SetVariadicNamedInput<max_closing_profile_derivative>(m_ClosingCharacteristicsFilter->GetOutput());
