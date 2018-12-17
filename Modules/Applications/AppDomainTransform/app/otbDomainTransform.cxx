@@ -106,7 +106,7 @@ private:
 
     // Documentation
     SetDocName("DomainTransform");
-    SetDocLongDescription("Domain Transform application for wavelet and fourier");
+    SetDocLongDescription("Domain Transform application for wavelet and fourier.");
     SetDocLimitations("This application is not streamed, check your system resources when processing large images");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbWaveletImageFilter, otbWaveletInverseImageFilter, otbWaveletTransform");
@@ -122,8 +122,8 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "This parameter holds the output file name to"
       " which transformed image will be written. This has a slightly different"
-      " behaviour depending on transform type. \n For Wavelet, output is a"
-      " single band image for both forward and inverse transform. \n For FFT"
+      " behaviour depending on transform type. \nFor Wavelet, output is a"
+      " single band image for both forward and inverse transform. For FFT"
       " forward transform, output is two band image where first band represents"
       " real part and second band represents imaginary part of a complex image.");
 

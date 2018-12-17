@@ -23,7 +23,6 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
@@ -48,8 +47,8 @@ namespace Wrapper
 InputProcessXMLParameter::InputProcessXMLParameter()
 {
   this->SetKey("inxml");
-  this->SetName("Load otb application from xml file");
-  this->SetDescription("Load otb application from xml file");
+  this->SetName("Load parameters from XML");
+  this->SetDescription("Load application parameters from an XML file.");
   this->SetMandatory(false);
   this->SetActive(false);
   this->SetRole(Role_Input);
@@ -418,15 +417,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       float floatValue;
       std::stringstream(value) >> floatValue;
       this_->SetParameterFloat(key, floatValue);
-      }
-    else if (type == ParameterType_Empty)
-      {
-      bool emptyValue = false;
-      if( value == "true")
-	{
-	emptyValue = true;
-	}
-      this_->SetParameterEmpty(key, emptyValue);
       }
     else if (type == ParameterType_StringList || type == ParameterType_ListView)
       {

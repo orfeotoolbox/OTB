@@ -24,7 +24,6 @@
 
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperStringParameter.h"
-#include "otbWrapperEmptyParameter.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 
@@ -84,7 +83,6 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
 
   otb::Wrapper::IntParameter::Pointer   intParam = otb::Wrapper::IntParameter::New();
   otb::Wrapper::FloatParameter::Pointer floatParam = otb::Wrapper::FloatParameter::New();
-  otb::Wrapper::EmptyParameter::Pointer emptyParam = otb::Wrapper::EmptyParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam = otb::Wrapper::ChoiceParameter::New();
 
   intParam->SetName("Int parameter");
@@ -103,10 +101,6 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   floatParam->SetMinimumValue(-3.75);
   floatParam->SetMaximumValue(4.97);
 
-  emptyParam->SetName("Empty parameter");
-  emptyParam->SetDescription("This is an empty parameter");
-  emptyParam->SetKey("empty");
-
   choiceParam->SetName("Choice parameter");
   choiceParam->SetDescription("This is a choice parameter");
   choiceParam->SetKey("choice");
@@ -116,14 +110,12 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
 
   QWidget * intWidget   = factory->CreateQtWidget(intParam, model, nullptr);
   QWidget * floatWidget = factory->CreateQtWidget(floatParam, model, nullptr);
-  QWidget * emptyWidget = factory->CreateQtWidget(emptyParam, model, nullptr);
   QWidget * choiceWidget = factory->CreateQtWidget(choiceParam, model, nullptr);
 
   if(intWidget)
     {
     intWidget->show();
     floatWidget->show();
-    emptyWidget->show();
     choiceWidget->show();
 
     //return app.exec();
@@ -146,7 +138,6 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
 
   otb::Wrapper::IntParameter::Pointer   intParam = otb::Wrapper::IntParameter::New();
   otb::Wrapper::FloatParameter::Pointer floatParam = otb::Wrapper::FloatParameter::New();
-  otb::Wrapper::EmptyParameter::Pointer emptyParam = otb::Wrapper::EmptyParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam = otb::Wrapper::ChoiceParameter::New();
   otb::Wrapper::StringParameter::Pointer stringParam = otb::Wrapper::StringParameter::New();
 
@@ -166,10 +157,6 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   floatParam->SetMinimumValue(-3.75);
   floatParam->SetMaximumValue(4.97);
 
-  emptyParam->SetName("Empty parameter");
-  emptyParam->SetDescription("This is an empty parameter");
-  emptyParam->SetKey("empty");
-
   choiceParam->SetName("Choice parameter");
   choiceParam->SetDescription("This is an choice parameter");
   choiceParam->SetKey("choice");
@@ -185,13 +172,11 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   otb::Wrapper::ParameterGroup::Pointer list = otb::Wrapper::ParameterGroup::New();
   list->AddParameter(otb::Wrapper::Parameter::Pointer(intParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(floatParam.GetPointer()));
-  list->AddParameter(otb::Wrapper::Parameter::Pointer(emptyParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(choiceParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam.GetPointer()));
 
   otb::Wrapper::IntParameter::Pointer   intParam2 = otb::Wrapper::IntParameter::New();
   otb::Wrapper::FloatParameter::Pointer floatParam2 = otb::Wrapper::FloatParameter::New();
-  otb::Wrapper::EmptyParameter::Pointer emptyParam2 = otb::Wrapper::EmptyParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam2 = otb::Wrapper::ChoiceParameter::New();
   otb::Wrapper::StringParameter::Pointer stringParam2 = otb::Wrapper::StringParameter::New();
   intParam2->SetName("Int parameter");
@@ -209,10 +194,6 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   floatParam2->SetValue(0.21);
   floatParam2->SetMinimumValue(-3.75);
   floatParam2->SetMaximumValue(4.97);
-
-  emptyParam2->SetName("Empty parameter");
-  emptyParam2->SetDescription("This is an empty parameter");
-  emptyParam2->SetKey("empty2");
 
   choiceParam2->SetName("Choice parameter");
   choiceParam2->SetDescription("This is an choice parameter");
@@ -233,7 +214,6 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
 
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(intParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(floatParam2.GetPointer()));
-  group2->AddParameter(otb::Wrapper::Parameter::Pointer(emptyParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(choiceParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(list.GetPointer()));

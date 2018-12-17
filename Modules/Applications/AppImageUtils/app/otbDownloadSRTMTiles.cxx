@@ -230,7 +230,7 @@ private:
       "check which tiles are already downloaded.");
 
     // UserDefined values
-    AddParameter(ParameterType_Choice, "mode", "Download/List corresponding SRTM tiles.");
+    AddParameter(ParameterType_Choice, "mode", "Download/List corresponding SRTM tiles");
 
     AddChoice("mode.download", "Download");
     SetParameterDescription("mode.download","Download corresponding tiles on USGE server.");

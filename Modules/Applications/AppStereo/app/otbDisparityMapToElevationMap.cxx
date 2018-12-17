@@ -68,27 +68,29 @@ private:
     SetDescription("Projects a disparity map into a regular elevation map.");
 
     SetDocName("Disparity map to elevation map");
-    SetDocLongDescription("This application uses a disparity map computed from "
+    SetDocLongDescription(
+      "This application uses a disparity map computed from "
       "a stereo image pair to produce an elevation map on the ground area "
       "covered by the stereo pair.\n\n"
       "This application is part of the stereo reconstruction pipeline. It can "
       "be used after having computed the disparity map with BlockMatching.\n\n"
-      "The needed inputs are : the disparity map, the stereo pair (in original"
+      "The needed inputs are: the disparity map, the stereo pair (in original"
       " geometry) and the epipolar deformation grids. These grids (computed by "
       "StereoRectificationGridGenerator) have to contain the transform between "
       "the original geometry (stereo pair) and the epipolar geometry (disparity"
-      " map). The algorithm for each disparity is the following :\n"
-      "  * skip if position is discarded by the disparity mask\n"
-      "  * compute left ray : transform the current position from epipolar "
+      " map). The algorithm for each disparity is the following:\n\n"
+
+      "* skip if position is discarded by the disparity mask\n"
+      "* compute left ray: transform the current position from epipolar "
       "geometry to left sensor geometry (left rectification grid)\n"
-      "  * compute right ray : shift the current position with current "
+      "* compute right ray: shift the current position with current "
       "disparity and transform from epipolar geometry to right sensor (right "
       "rectification grid)\n"
-      "  * estimate best 3D intersection between left and right rays\n"
-      "  * for the ground cell of the obtained 3D point, keep its elevation if "
+      "* estimate best 3D intersection between left and right rays\n"
+      "* for the ground cell of the obtained 3D point, keep its elevation if "
       "greater than current elevation (keeps the maximum of elevations of all "
-      "3D points in each cell)\n"
-      "\n"
+      "3D points in each cell)\n\n"
+
       "Minimum and maximum elevations settings are here to bound the "
       "reconstructed DEM.");
     SetDocLimitations("The epipolar deformation grid should be able to entirely"
@@ -200,8 +202,8 @@ private:
     m_DispToElev->UpdateOutputInformation();
     FloatVectorImageType::RegionType outputRegion = m_DispToElev->GetOutput()->GetLargestPossibleRegion();
 
-    otbAppLogINFO(<<"Elevation map origin : [" << m_DispToElev->GetOutput()->GetOrigin()[0] << "," << m_DispToElev->GetOutput()->GetOrigin()[1] <<  "]" << std::endl);
-    otbAppLogINFO(<<"Elevation map size : [" << outputRegion.GetSize()[0] << "," << outputRegion.GetSize()[1] << "]" << std::endl);
+    otbAppLogINFO(<<"Elevation map origin: [" << m_DispToElev->GetOutput()->GetOrigin()[0] << "," << m_DispToElev->GetOutput()->GetOrigin()[1] <<  "]" << std::endl);
+    otbAppLogINFO(<<"Elevation map size: [" << outputRegion.GetSize()[0] << "," << outputRegion.GetSize()[1] << "]" << std::endl);
 
     this->SetParameterOutputImage("io.out",m_DispToElev->GetOutput());
   }

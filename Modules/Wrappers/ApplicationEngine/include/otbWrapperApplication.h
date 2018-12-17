@@ -190,10 +190,6 @@ public:
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
 
-  /* Get active flag of parameter with key paramKey
-   */
-  bool GetParameterEmpty(std::string paramKey);
-
   /** Set HasUserValue flag of parameter with key paramKey
    *  Note that when this function is called from DoInit, DoUpdateParameters
    *  or DoExecute, it will always set this flag to false, because this is
@@ -226,6 +222,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Int
+   * \li ParameterType_Bool
    * \li ParameterType_Float
    * \li ParameterType_Radius
    * \li ParameterType_Choice
@@ -246,6 +243,7 @@ public:
    * \li ParameterType_InputVectorDataListParameter
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
+   * \li ParameterType_ListView
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -253,6 +251,8 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_String
+   * \li ParameterType_StringList
+   * \li ParameterType_ListView
    * \li ParameterType_InputFilename
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
@@ -267,8 +267,6 @@ public:
    * \li ParameterType_OutputVectorDataParameter
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
-
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   /** Checks if the application is ready to be executed. It checks that there
    *  is no missing parameter
@@ -431,6 +429,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Int
+   * \li ParameterType_Bool
    * \li ParameterType_Float
    * \li ParameterType_Radius
    * \li ParameterType_Choice

@@ -38,8 +38,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   AddChoice("classifier.gbt", "Gradient Boosted Tree classifier");
   SetParameterDescription(
       "classifier.gbt",
-      "This group of parameters allows setting Gradient Boosted Tree classifier parameters. "
-      "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html}.");
+      "http://docs.opencv.org/modules/ml/doc/gradient_boosted_trees.html");
 
   if (m_RegressionFlag)
     {
@@ -79,9 +78,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
         "possible depth of the tree. The actual depth may be smaller if the other termination criteria are met, and/or "
         "if the tree is pruned.");
 
-  //UseSurrogates : don't need to be exposed !
-  //AddParameter(ParameterType_Empty, "classifier.gbt.sur", "Surrogate splits will be built");
-  //SetParameterDescription("classifier.gbt.sur","These splits allow working with missing data and compute variable importance correctly.");
 #endif
 }
 

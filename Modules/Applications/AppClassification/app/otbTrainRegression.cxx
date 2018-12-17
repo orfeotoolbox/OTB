@@ -110,15 +110,17 @@ void DoInit() override
     "This application trains a classifier from multiple input images or a csv "
     "file, in order to perform regression. Predictors are composed of pixel "
     "values in each band optionally centered and reduced using an XML "
-    "statistics file produced by the ComputeImagesStatistics application.\n "
+    "statistics file produced by the ComputeImagesStatistics application.\n\n"
+
     "The output value for each predictor is assumed to be the last band "
     "(or the last column for CSV files). Training and validation predictor "
     "lists are built such that their size is inferior to maximum bounds given "
     "by the user, and the proportion corresponds to the balance parameter. "
     "Several classifier parameters can be set depending on the chosen "
     "classifier. In the validation process, the mean square error is computed "
-    "between the ground truth and the estimated model.\n"
-    " This application is based on LibSVM and on OpenCV Machine Learning "
+    "between the ground truth and the estimated model.\n\n"
+
+    "This application is based on LibSVM and on OpenCV Machine Learning "
     "classifiers, and is compatible with OpenCV 2.3.1 and later.");
   SetDocLimitations("None");
   SetDocAuthors("OTB-Team");

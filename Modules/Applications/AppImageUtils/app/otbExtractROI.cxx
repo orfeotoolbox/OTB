@@ -81,7 +81,7 @@ private:
       "allows the user to enter one point (upper left corner of the region to "
       "extract) and a size. The extent mode needs two points (upper left "
       "corner and lower right) and the radius mode need the center of the "
-      "region and the radius : it will extract the rectangle containing the "
+      "region and the radius: it will extract the rectangle containing the "
       "circle defined and limited by the image dimension. The fit mode "
       "needs a reference image or vector and the dimension of the extracted "
       "region will be the same as the extent of the reference. "
@@ -103,14 +103,14 @@ private:
     AddParameter(ParameterType_Choice,"mode","Extraction mode");
     AddChoice("mode.standard","Standard");
     SetParameterDescription("mode.standard",
-      "In standard mode extraction is done with 2 parameters : the "
+      "In standard mode extraction is done with 2 parameters: the "
       "upper left corner and the size of the region, decomposed "
       "in X and Y coordinates.");
 
-    // Fit mode : the ROI is computed through a ref vector dataset or a ref image 
+    // Fit mode: the ROI is computed through a ref vector dataset or a ref image 
     AddChoice("mode.fit","Fit");
     SetParameterDescription("mode.fit",
-      "In fit mode, extract is made from a reference : image or vector dataset.");
+      "In fit mode, extract is made from a reference: image or vector dataset.");
 
     AddParameter( ParameterType_InputImage , "mode.fit.im" , 
       "Reference image" );
@@ -122,28 +122,25 @@ private:
       "The extent of the input vector file is computed and then "
       "gives a region of interest that will be extracted." );
 
-    // Extent mode : ROI is computed with two point (upper left and lower left corners)
+    // Extent mode: ROI is computed with two point (upper left and lower left corners)
     AddChoice( "mode.extent" , "Extent" );
     SetParameterDescription( "mode.extent" ,
       "In extent mode, the ROI is defined by two points, the upper left corner "
-      "and the lower right corner, decomposed in 2 coordinates : "
+      "and the lower right corner, decomposed in 2 coordinates: "
       "X and Y. The unit for those coordinates can be set." );
-    AddParameter( ParameterType_Float , "mode.extent.ulx" ,
-                  "X coordinate of the Upper left corner" );
-    SetParameterDescription( "mode.extent.ulx" ,
-      "X coordinate of upper left corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.uly" ,
-                  "Y coordinate of Upper Left corner point." );
-    SetParameterDescription( "mode.extent.uly" ,
-      "Y coordinate of upper left corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.lrx" , 
-                  "X coordinate of Lower Right corner point." );
-    SetParameterDescription( "mode.extent.lrx" ,
-      "X coordinate of lower right corner point." );
-    AddParameter( ParameterType_Float , "mode.extent.lry" ,
-                  "Y coordinate of Lower Right corner point." );
-    SetParameterDescription( "mode.extent.lry" ,
-      "Y coordinate of lower right corner point." );
+
+    AddParameter(ParameterType_Float, "mode.extent.ulx", "X coordinate of the Upper left corner");
+    SetParameterDescription("mode.extent.ulx", "X coordinate of upper left corner point.");
+
+    AddParameter(ParameterType_Float, "mode.extent.uly", "Y coordinate of Upper Left corner point");
+    SetParameterDescription("mode.extent.uly", "Y coordinate of upper left corner point.");
+
+    AddParameter(ParameterType_Float, "mode.extent.lrx", "X coordinate of Lower Right corner point");
+    SetParameterDescription("mode.extent.lrx", "X coordinate of lower right corner point.");
+
+    AddParameter(ParameterType_Float, "mode.extent.lry", "Y coordinate of Lower Right corner point");
+    SetParameterDescription("mode.extent.lry", "Y coordinate of lower right corner point.");
+
     // Unit of extent mode
     AddParameter( ParameterType_Choice , "mode.extent.unit" , "Unit" );
     AddChoice( "mode.extent.unit.pxl" , "Pixel" );
@@ -160,7 +157,7 @@ private:
       "the latitude.");
 
 
-    // Radius mode : ROI is computed through a point and a radius
+    // Radius mode: ROI is computed through a point and a radius
     AddChoice( "mode.radius" , "Radius" );
     SetParameterDescription( "mode.radius" ,
       "In radius mode, the ROI is defined by a point and a radius. The "
