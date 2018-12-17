@@ -48,8 +48,12 @@ namespace Functor
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::SinclairToCovarianceMatrixFilter to apply
+ *  it to an image.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
+ *  \ingroup OTBPolarimetry
  *
  *  \sa SinclairImageFilter
  *  \sa SinclairToCircularCovarianceMatrixFunctor
@@ -59,10 +63,6 @@ namespace Functor
  *  \sa SinclairToReciprocalCoherencyFunctor
  *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  *
- *  Use otb::SinclairToCovarianceMatrixFilter to apply
- *  it to an image.
- *
- * \ingroup OTBPolarimetry
  */
 template <class TInput1, class TInput2, class TInput3,
           class TInput4, class TOutput>
@@ -73,7 +73,7 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
   inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+                             const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
