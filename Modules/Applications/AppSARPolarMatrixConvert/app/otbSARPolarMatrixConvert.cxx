@@ -24,6 +24,15 @@
 // Polarimetric filters
 #include "otbPolarimetricFilters.h"
 
+#include "otbSinclairToCoherencyMatrixImageFilter.h"
+#include "otbSinclairToCovarianceMatrixImageFilter.h"
+#include "otbSinclairToCircularCovarianceMatrixImageFilter.h"
+#include "otbSinclairToMuellerMatrixImageFilter.h"
+
+#include "otbSinclairToReciprocalCoherencyMatrixImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -39,9 +48,9 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Monostatic case
-  using RCohSRFilterType = SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
-  using RCovSRFilterType = SinclairToReciprocalCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
-  using RCCSRFilterType  = SinclairToReciprocalCircularCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using RCohSRFilterType = SinclairToReciprocalCoherencyMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using RCovSRFilterType = SinclairToReciprocalCovarianceMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using RCCSRFilterType  = SinclairToReciprocalCircularCovarianceMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
 
   using RCRMFilterType = otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ComplexDoubleVectorImageType, DoubleVectorImageType>;
   using RCCDFilterType = otb::ReciprocalCovarianceToCoherencyDegreeImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>;
@@ -50,10 +59,10 @@ public:
   using RLCRCCFilterType = otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>;
 
   // Bistatic case
-  using CohSRFilterType = SinclairToCoherencyMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
-  using CovSRFilterType = SinclairToCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
-  using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
-  using MSRFilterType   = SinclairToMuellerMatrixFilter<ComplexDoubleImageType, DoubleVectorImageType>;
+  using CohSRFilterType = SinclairToCoherencyMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using CovSRFilterType = SinclairToCovarianceMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using CCSRFilterType  = SinclairToCircularCovarianceMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
+  using MSRFilterType   = SinclairToMuellerMatrixImageFilter<ComplexDoubleImageType, DoubleVectorImageType>;
 
   using MRCFilterType = otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>;
   using MPDPFilterType = otb::MuellerToPolarisationDegreeAndPowerImageFilter<DoubleVectorImageType, DoubleVectorImageType>;

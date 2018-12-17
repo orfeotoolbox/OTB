@@ -19,7 +19,7 @@
  */
 
 
-#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])

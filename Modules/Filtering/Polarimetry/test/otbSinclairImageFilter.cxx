@@ -26,7 +26,12 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbPolarimetricFilters.h"
+
+#include "otbSinclairToCoherencyMatrixImageFilter.h"
+#include "otbSinclairToCovarianceMatrixImageFilter.h"
+#include "otbSinclairToCircularCovarianceMatrixImageFilter.h"
+#include "otbSinclairToMuellerMatrixImageFilter.h"
+
 #include "otbMultiChannelExtractROI.h"
 
 
@@ -92,10 +97,10 @@ int otbSinclairImageFilter(int argc, char * argv[])
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
   typedef otb::VectorImage<OutputRealPixelType, Dimension> OutputRealImageType;
 
-  using CohSRFilterType = SinclairToCoherencyMatrixFilter<InputImageType, OutputImageType>;
-  using CovSRFilterType = SinclairToCovarianceMatrixFilter<InputImageType, OutputImageType>;
-  using CCSRFilterType  = SinclairToCircularCovarianceMatrixFilter<InputImageType,OutputImageType>;
-  using MSRFilterType   = SinclairToMuellerMatrixFilter<InputImageType,OutputRealImageType>;
+  using CohSRFilterType = SinclairToCoherencyMatrixImageFilter<InputImageType, OutputImageType>;
+  using CovSRFilterType = SinclairToCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
+  using CCSRFilterType  = SinclairToCircularCovarianceMatrixImageFilter<InputImageType,OutputImageType>;
+  using MSRFilterType   = SinclairToMuellerMatrixImageFilter<InputImageType,OutputRealImageType>;
 
 
   std::string strArgv(argv[1]);

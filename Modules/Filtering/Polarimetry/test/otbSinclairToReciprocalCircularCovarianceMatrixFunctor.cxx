@@ -19,7 +19,7 @@
  */
 
 
-#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])

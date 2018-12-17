@@ -19,7 +19,7 @@
  */
 
 
-#include "otbSinclairToCoherencyMatrixFunctor.h"
+#include "otbSinclairToCoherencyMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToCoherencyMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])

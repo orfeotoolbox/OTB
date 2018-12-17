@@ -28,6 +28,7 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "otbImageList.h"
 
+#include "otbSinclairToReciprocalCoherencyMatrixImageFilter.h"
 
 namespace otb
 {
@@ -51,7 +52,7 @@ public:
                                     ComplexDoubleVectorImageType::PixelType>								FunctorType;
 
 
-  using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
+  using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixImageFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
 
   typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;

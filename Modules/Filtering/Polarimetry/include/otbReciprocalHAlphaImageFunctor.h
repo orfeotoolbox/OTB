@@ -25,6 +25,8 @@
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
+#include <vector>
+#include <complex>
 
 namespace otb
  {

@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbSinclairToCovarianceMatrixFunctor.h"
+#include "otbSinclairToCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])

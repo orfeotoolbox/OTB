@@ -29,6 +29,10 @@
 
 #include "otbMultiChannelExtractROI.h"
 
+#include "otbSinclairToReciprocalCoherencyMatrixImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixImageFilter.h"
+
 using namespace otb;
 
 template<class TFilter>
@@ -89,9 +93,9 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
-  using SToRecCohFilterType = SinclairToReciprocalCoherencyMatrixFilter<InputImageType, OutputImageType>;
-  using SToRecCovFilterType = SinclairToReciprocalCovarianceMatrixFilter<InputImageType, OutputImageType>;
-  using SToRecCircCovFilterType = SinclairToReciprocalCircularCovarianceMatrixFilter<InputImageType, OutputImageType>;
+  using SToRecCohFilterType = SinclairToReciprocalCoherencyMatrixImageFilter<InputImageType, OutputImageType>;
+  using SToRecCovFilterType = SinclairToReciprocalCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
+  using SToRecCircCovFilterType = SinclairToReciprocalCircularCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
 
   std::string strArgv(argv[1]);
   argc--;

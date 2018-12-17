@@ -30,7 +30,7 @@
 #include "otbPerBandVectorImageFilter.h"
 
 #include "otbPolarimetricFilters.h"
-
+#include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 
 int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -52,7 +52,7 @@ int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::ImageFileReader<ComplexImageType>  ReaderType;
   typedef otb::ImageFileWriter<ComplexVectorImageType> WriterType;
 
-  using SinclairToCovFilterType = otb::SinclairToReciprocalCovarianceMatrixFilter<ComplexImageType, ComplexVectorImageType>;
+  using SinclairToCovFilterType = otb::SinclairToReciprocalCovarianceMatrixImageFilter<ComplexImageType, ComplexVectorImageType>;
 
   typedef itk::MeanImageFilter<ComplexImageType, ComplexImageType>         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexVectorImageType, ComplexVectorImageType, MeanFilterType> PerBandMeanFilterType;

@@ -23,7 +23,7 @@
 
 #include <complex>
 
-#include "otbSinclairToCovarianceMatrixFunctor.h"
+#include "otbSinclairToCovarianceMatrixImageFilter.h"
 #include "otbFunctorImageFilter.h"
 #include "otbPolarimetryTags.h"
 

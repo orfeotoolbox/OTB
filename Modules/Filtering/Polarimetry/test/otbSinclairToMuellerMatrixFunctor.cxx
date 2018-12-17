@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbSinclairToMuellerMatrixFunctor.h"
+#include "otbSinclairToMuellerMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToMuellerMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
