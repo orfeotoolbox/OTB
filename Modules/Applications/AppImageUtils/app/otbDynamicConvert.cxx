@@ -111,7 +111,7 @@ private:
     );
     SetDocLimitations("The application does not support complex pixel types as output.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Convert, Rescale");
+    SetDocSeeAlso("Rescale");
 
     AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
