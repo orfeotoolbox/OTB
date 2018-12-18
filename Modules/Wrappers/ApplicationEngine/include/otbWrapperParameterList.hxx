@@ -451,9 +451,9 @@ ParameterList< T >
 {
   assert( data!=nullptr );
 
-  typename T::Pointer p;
+  typename T::Pointer p( T::New() );
 
-  return From( p, data, set, description );
+  return FromData( p, data, set, description );
 }
 
 /*****************************************************************************/
@@ -467,8 +467,6 @@ ParameterList< T >
 	    const std::string & description )
 {
   assert( data!=nullptr );
-
-  parameter = T::New();
 
   set( parameter, data );
   parameter->SetDescription( description );
