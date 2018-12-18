@@ -883,6 +883,7 @@ int Application::Execute()
           {
           // set input string based on out image
           SetParameterString(key, targetApp->GetParameterString(outKey));
+          targetApp->EnableParameter(outKey);
           }
         }
       }
@@ -891,7 +892,6 @@ int Application::Execute()
       InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
       if (imgListParam)
         {
-        int k=0;
         for (unsigned int i=0 ; i<imgListParam->Size() ; i++)
           {
           Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
@@ -901,17 +901,17 @@ int Application::Execute()
             if(imgListParam->GetNthElement(i)->GetConnection().isMem)
               {
               // memory connection
-              SetNthParameterInputImageList(key,k,
+              SetNthParameterInputImageList(key,i,
                 targetApp->GetParameterOutputImage(outKey));
               targetApp->DisableParameter(outKey);
               }
             else
               {
               // set input string based on out image
-              SetNthParameterStringList(key, k, targetApp->GetParameterString(outKey));
+              SetNthParameterStringList(key, i, targetApp->GetParameterString(outKey));
+              targetApp->EnableParameter(outKey);
               }
             }
-          k++;
           }
         }
       }
