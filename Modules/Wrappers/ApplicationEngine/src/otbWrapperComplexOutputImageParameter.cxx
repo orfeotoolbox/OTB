@@ -19,7 +19,6 @@
  */
 
 #include "otbWrapperComplexOutputImageParameter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "otbClampImageFilter.h"
 
 #ifdef OTB_USE_MPI

@@ -22,7 +22,6 @@
 #define otbBandsStatisticsAttributesLabelMapFilter_hxx
 
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 
 namespace otb
