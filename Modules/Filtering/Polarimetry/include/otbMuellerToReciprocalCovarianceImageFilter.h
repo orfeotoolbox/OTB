@@ -22,7 +22,7 @@
 #ifndef otbMuellerToReciprocalCovarianceImageFilter_h
 #define otbMuellerToReciprocalCovarianceImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -54,6 +54,8 @@ namespace Functor {
  * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::MuellerToReciprocalCovarianceImageFilter to apply
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
@@ -70,7 +72,6 @@ class MuellerToReciprocalCovarianceFunctor
 public:
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
-
 
   inline void operator()( TOutput & result, const TInput & Mueller ) const
   {
@@ -107,14 +108,25 @@ public:
     // Size of the result
     return 6;
   }
-
-  /** Constructor */
-  MuellerToReciprocalCovarianceFunctor() {}
-
-  /** Destructor */
-  virtual ~MuellerToReciprocalCovarianceFunctor() {}
 };
 } // end namespace functor
+
+    /**
+   * \typedef MuellerToReciprocalCovarianceImageFilter
+   * \brief Applies otb::Functor::MuellerToReciprocalCovarianceFunctor
+   * \sa otb::Functor::MuellerToReciprocalCovarianceFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using MuellerToReciprocalCovarianceImageFilter =
+  FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
 
 } // end namespace otb
 

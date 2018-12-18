@@ -21,7 +21,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbPolarimetricFilters.h"
+#include "otbReciprocalBarnesDecompImageFilter.h"
+#include "otbReciprocalHuynenDecompImageFilter.h"
+#include "otbReciprocalPauliDecompImageFilter.h"
+#include "otbReciprocalHAlphaImageFilter.h"
 
 #include "otbPerBandVectorImageFilter.h"
 #include "itkMeanImageFilter.h"

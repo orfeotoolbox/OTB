@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbPolarimetricFilters.h"
+#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "itkVariableLengthVector.h"
 #include <complex>
 

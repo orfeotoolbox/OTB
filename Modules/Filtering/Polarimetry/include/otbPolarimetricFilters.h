@@ -25,16 +25,6 @@
 #include "otbPolarimetryTags.h"
 #include "otbFunctorImageFilter.h"
 
-// Decomposition functors
-#include "otbReciprocalBarnesDecompFunctor.h"
-#include "otbReciprocalHAlphaImageFunctor.h"
-#include "otbReciprocalHuynenDecompFunctor.h"
-#include "otbReciprocalPauliDecompFunctor.h"
-
-// Mueller functor
-#include "otbMuellerToPolarisationDegreeAndPowerFunctor.h"
-#include "otbMuellerToReciprocalCovarianceFunctor.h"
-
 // Other reciprocal filters
 #include "otbReciprocalCoherencyToReciprocalMuellerFunctor.h"
 #include "otbReciprocalCovarianceToCoherencyDegreeFunctor.h"
@@ -43,44 +33,6 @@
 
 namespace otb
 {
-//############################
-// Polarimetric decompositions
-//############################
-
-// This is the entire declaration of ReciprocalHAlphaImageFilter
-template <typename TInputImage, typename TOutputImage>
-using ReciprocalHAlphaImageFilter =
-  FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
-// This is the entire declaration of ReciprocalBarnesDecompImageFilter
-template <typename TInputImage, typename TOutputImage>
-using ReciprocalBarnesDecompImageFilter =
-  FunctorImageFilter<Functor::ReciprocalBarnesDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
-// This is the entire declaration of ReciprocalHuynenDecompImageFilter
-template <typename TInputImage, typename TOutputImage>
-using ReciprocalHuynenDecompImageFilter =
-  FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
-// This is the entire declaration of ReciprocalPauliDecompImageFilter
-template <typename TInputImage, typename TOutputImage>
-using ReciprocalPauliDecompImageFilter =
-  FunctorImageFilter<Functor::ReciprocalPauliDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
-//################
-// Mueller filters
-//################
-
-// This is the entire declaration of MuellerToPolarisationDegreeAndPowerFilter
-template <typename TInputImage, typename TOutputImage>
-using MuellerToPolarisationDegreeAndPowerImageFilter =
-  FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
-// This is the entire declaration of MuellerToReciprocalCovarianceImageFilter
-template <typename TInputImage, typename TOutputImage>
-using MuellerToReciprocalCovarianceImageFilter =
-  FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
-
 //#########################
 // Other reciprocal filters
 //#########################

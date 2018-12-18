@@ -19,8 +19,10 @@
  */
 
 
-#ifndef otbReciprocalPauliDecompFunctor_h
-#define otbReciprocalPauliDecompFunctor_h
+#ifndef otbReciprocalPauliDecompImageFilter_h
+#define otbReciprocalPauliDecompImageFilter_h
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -31,6 +33,8 @@ namespace Functor {
  *
  * \brief Evaluate the Pauli decomposition from the reciprocal Sinclair matrix image.
  *
+ * Use otb::PauliDecompImageFilter to apply
+ *
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
@@ -40,7 +44,6 @@ public:
 
   typedef typename TInput::ValueType   InputValueType;
   typedef typename TOutput::ValueType  OutputValueType;
-
 
   inline void operator()( TOutput & result, const TInput & Sinclair ) const
     {
@@ -61,16 +64,27 @@ public:
     return 3;
   }
 
-   /** Constructor */
-   ReciprocalPauliDecompFunctor() {}
-
-   /** Destructor */
-   virtual ~ReciprocalPauliDecompFunctor() {}
-
 private:
    static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalPauliDecompImageFilter
+   * \brief Applies otb::Functor::ReciprocalPauliDecompFunctor
+   * \sa otb::Functor::ReciprocalPauliDecompFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalPauliDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalPauliDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
 } // end namespace otb
 
 #endif

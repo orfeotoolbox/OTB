@@ -19,13 +19,15 @@
  */
 
 
-#ifndef otbMuellerToPolarisationDegreeAndPowerFunctor_h
-#define otbMuellerToPolarisationDegreeAndPowerFunctor_h
+#ifndef otbMuellerToPolarisationDegreeAndPowerImageFilter_h
+#define otbMuellerToPolarisationDegreeAndPowerImageFilter_h
 
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
 #include "otbMath.h"
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -65,6 +67,8 @@ namespace Functor {
  * - channel #1 : \f$ P_{max} \f$
  * - channel #2 : \f$ DegP_{min} \f$
  * - channel #3 : \f$ DegP_{max} \f$
+ *
+ * Use otb::MuellerToPolarisationDegreeAndPowerImageFilter to apply
  *
  * \ingroup Functor
  * \ingroup SARPolarimetry
@@ -175,18 +179,28 @@ public:
     // Size of the result
     return 4;
   }
-
-   /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
-
-   /** Destructor */
-   virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
-
 private:
-    const double m_Epsilon;
-    const double m_PI_90;
+    static constexpr double m_Epsilon = 1e-6;
+    static constexpr double m_PI_90 = 2*CONST_PI_180;
 };
 } // end namespace functor
+
+   /**
+   * \typedef MuellerToPolarisationDegreeAndPowerImageFilter
+   * \brief Applies otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
+   * \sa otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using MuellerToPolarisationDegreeAndPowerImageFilter =
+  FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
 
 } // end namespace otb
 

@@ -29,7 +29,7 @@
 
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
-#include "otbPolarimetricFilters.h"
+#include "otbReciprocalPauliDecompImageFilter.h"
 
 
 int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])

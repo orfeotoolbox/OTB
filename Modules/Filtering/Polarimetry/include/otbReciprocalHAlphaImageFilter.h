@@ -19,14 +19,16 @@
  */
 
 
-#ifndef otbReciprocalHAlphaFunctor_h
-#define otbReciprocalHAlphaFunctor_h
+#ifndef otbReciprocalHAlphaImageFilter_h
+#define otbReciprocalHAlphaImageFilter_h
 
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
 #include <vector>
 #include <complex>
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -39,6 +41,8 @@ namespace Functor {
  * To process, we diagonalise the complex coherency matrix (size 3*3). We call \f$ SortedEigenValues \f$ the list that contains the
  * eigen values of the matrix sorted in decrease order. \f$ SortedEigenVector \f$ the corresponding list
  * of eigen vector.
+ *
+ * Use otb::ReciprocalHAlphaImageFilter to apply
  *
  * Output value are:
  * - channel #0 : \f$ entropy = -\sum_{i=0}^{2}{p[i].\log{p[i]}} / \log{3} \f$
@@ -170,17 +174,26 @@ public:
     // Size of the result (entropy, alpha, anisotropy)
     return 3;
   }
-
-   /** Constructor */
-   ReciprocalHAlphaFunctor() {}
-
-   /** Destructor */
-   virtual ~ReciprocalHAlphaFunctor() {}
-
 private:
    static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalHAlphaImageFilter
+   * \brief Applies otb::Functor::ReciprocalHAlphaFunctor
+   * \sa otb::Functor::ReciprocalHAlphaFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalHAlphaImageFilter =
+  FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

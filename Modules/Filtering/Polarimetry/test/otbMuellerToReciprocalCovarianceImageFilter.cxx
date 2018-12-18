@@ -26,7 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 
-#include "otbPolarimetricFilters.h"
+#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 
 int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {

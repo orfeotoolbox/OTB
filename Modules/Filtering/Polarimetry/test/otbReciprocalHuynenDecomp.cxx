@@ -30,7 +30,7 @@
 
 #include "otbPerBandVectorImageFilter.h"
 
-#include "otbPolarimetricFilters.h"
+#include "otbReciprocalHuynenDecompImageFilter.h"
 #include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 
 int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])

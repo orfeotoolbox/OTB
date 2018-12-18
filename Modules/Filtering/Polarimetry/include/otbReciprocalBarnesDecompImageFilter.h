@@ -19,12 +19,14 @@
  */
 
 
-#ifndef otbReciprocalBarnesDecompFunctor_h
-#define otbReciprocalBarnesDecompFunctor_h
+#ifndef otbReciprocalBarnesDecompImageFilter_h
+#define otbReciprocalBarnesDecompImageFilter_h
 
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -34,6 +36,8 @@ namespace Functor {
 /** \class otbBarnesDecompFunctor
  *
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
+ *
+ * Use otb::BarnesDecompImageFilter to apply
  *
  * \ingroup OTBPolarimetry
  */
@@ -101,17 +105,26 @@ public:
     // Size of the result
     return 9;
   }
-
-   /** Constructor */
-   ReciprocalBarnesDecompFunctor() : m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalBarnesDecompFunctor() {}
-
 private:
-   const double m_Epsilon;
+   static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalBarnesDecompImageFilter
+   * \brief Applies otb::Functor::ReciprocalBarnesDecompFunctor
+   * \sa otb::Functor::ReciprocalBarnesDecompFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalBarnesDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalBarnesDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

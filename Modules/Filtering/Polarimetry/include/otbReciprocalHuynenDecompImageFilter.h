@@ -18,9 +18,10 @@
  * limitations under the License.
  */
 
+#ifndef otbReciprocalHuynenDecompImageFilter_h
+#define otbReciprocalHuynenDecompImageFilter_h
 
-#ifndef otbReciprocalHuynenDecompFunctor_h
-#define otbReciprocalHuynenDecompFunctor_h
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -31,6 +32,8 @@ namespace Functor {
  *
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
  *
+ * Use otb::HuynenDecompImageFilter to apply
+ *
  * \ingroup OTBPolarimetry
  */
 template< class TInput, class TOutput>
@@ -39,7 +42,6 @@ class ReciprocalHuynenDecompFunctor
 public:
 
   typedef typename TOutput::ValueType   OutputValueType;
-
 
   inline void operator()( TOutput & result, const TInput & Covariance ) const
     {
@@ -70,16 +72,26 @@ public:
     return 9;
   }
 
-   /** Constructor */
-   ReciprocalHuynenDecompFunctor() : m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalHuynenDecompFunctor() {}
-
 private:
-   const double m_Epsilon;
+   static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalHuynenDecompImageFilter
+   * \brief Applies otb::Functor::ReciprocalHuynenDecompFunctor
+   * \sa otb::Functor::ReciprocalHuynenDecompFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalHuynenDecompImageFilter =
+  FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif
