@@ -19,8 +19,10 @@
  */
 
 
-#ifndef otbReciprocalCovarianceToCoherencyDegreeFunctor_h
-#define otbReciprocalCovarianceToCoherencyDegreeFunctor_h
+#ifndef otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
+#define otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -92,17 +94,26 @@ public:
     // Size of the result
     return 3;
   }
-
-   /** Constructor */
-   ReciprocalCovarianceToCoherencyDegreeFunctor() {}
-
-   /** Destructor */
-   virtual ~ReciprocalCovarianceToCoherencyDegreeFunctor() {}
-
 private:
     static constexpr double m_Epsilon = 1e-6;
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalCovarianceToCoherencyDegreeImageFilter
+   * \brief Applies otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
+   * \sa otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalCovarianceToCoherencyDegreeImageFilter =
+  FunctorImageFilter<Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

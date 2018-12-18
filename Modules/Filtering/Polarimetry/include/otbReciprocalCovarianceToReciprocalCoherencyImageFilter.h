@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
-#define otbReciprocalCovarianceToReciprocalCoherencyFunctor_h
+#ifndef otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
+#define otbReciprocalCovarianceToReciprocalCoherencyImageFilter_h
 
 #include "otbFunctorImageFilter.h"
 
@@ -46,7 +46,7 @@ namespace Functor {
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
- * Use ReciprocalCovarianceToReciprocalCoherencyImageFilter to apply
+ * Use otbReciprocalCovarianceToReciprocalCoherencyImageFilter to apply
  * it to an image.
  *
  * \sa CovarianceToCircularCoherencyDegreeImageFilter
@@ -97,7 +97,11 @@ public:
  * \brief Applies ReciprocalCovarianceToReciprocalCoherencyFunctor
  * \sa ReciprocalCovarianceToReciprocalCoherencyFunctor
  *
- * Set input with SetVariadicInput<0>(inputPtr);
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
  *
  */
 template <typename TInputImage, typename TOutputImage>

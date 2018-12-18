@@ -19,10 +19,10 @@
  */
 
 
-#ifndef otbReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor_h
-#define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor_h
+#ifndef otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
+#define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include <complex>
 
 namespace otb
@@ -92,14 +92,24 @@ public:
     // Size of the result (entropy, alpha, anisotropy)
     return 6;
   }
-
-   /** Constructor */
-   ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor() {}
-
-   /** Destructor */
-   virtual ~ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor() {}
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
+   * \brief Applies otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+   * \sa otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter =
+  FunctorImageFilter<Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

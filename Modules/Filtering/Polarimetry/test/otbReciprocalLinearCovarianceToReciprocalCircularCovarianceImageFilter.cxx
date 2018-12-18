@@ -25,7 +25,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbPolarimetricFilters.h"
+#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
 
 int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {

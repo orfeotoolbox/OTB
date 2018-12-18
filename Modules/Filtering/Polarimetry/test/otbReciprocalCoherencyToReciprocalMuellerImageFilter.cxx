@@ -26,7 +26,7 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbPolarimetricFilters.h"
+#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
 
 int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), char * argv[])

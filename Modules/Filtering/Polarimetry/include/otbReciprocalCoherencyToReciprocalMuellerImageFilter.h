@@ -19,8 +19,10 @@
  */
 
 
-#ifndef otbReciprocalCoherencyToReciprocalMuellerFunctor_h
-#define otbReciprocalCoherencyToReciprocalMuellerFunctor_h
+#ifndef otbReciprocalCoherencyToReciprocalMuellerImageFilter_h
+#define otbReciprocalCoherencyToReciprocalMuellerImageFilter_h
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -62,6 +64,9 @@ namespace Functor {
  *
  * The output pixel has 16 channels
  * Element are stored from left to right, line by line.
+ *
+ *  Use otb::ReciprocalCoherencyToReciprocalMuellerImageFilter to apply
+ *  it to an image.
  *
  * \ingroup SARPolarimetry
  *
@@ -109,14 +114,26 @@ public:
     // Size of the reciprocal mueller matrix
     return 16;
   }
-
-   /** Constructor */
-   ReciprocalCoherencyToReciprocalMuellerFunctor() {}
-
-   /** Destructor */
-   virtual ~ReciprocalCoherencyToReciprocalMuellerFunctor() {}
 };
 } // end namespace functor
+
+   /**
+   * \typedef ReciprocalCoherencyToReciprocalMuellerImageFilter
+   * \brief Applies otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
+   * \sa otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
+   *
+   * Set inputs with:
+   * \code
+   * SetVariadicInput<0>(inputPtr);
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
+   template <typename TInputImage, typename TOutputImage>
+using ReciprocalCoherencyToReciprocalMuellerImageFilter =
+  FunctorImageFilter<Functor::
+                     ReciprocalCoherencyToReciprocalMuellerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+
 } // end namespace otb
 
 #endif

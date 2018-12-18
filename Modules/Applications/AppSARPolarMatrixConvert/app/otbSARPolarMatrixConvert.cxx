@@ -21,9 +21,6 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-// Polarimetric filters
-#include "otbPolarimetricFilters.h"
-
 #include "otbSinclairToCoherencyMatrixImageFilter.h"
 #include "otbSinclairToCovarianceMatrixImageFilter.h"
 #include "otbSinclairToCircularCovarianceMatrixImageFilter.h"
@@ -35,6 +32,11 @@
 
 #include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
+
+#include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
+#include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
+#include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
+#include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
 
 namespace otb
 {
