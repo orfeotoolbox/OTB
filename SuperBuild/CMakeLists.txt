@@ -55,7 +55,7 @@ option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
 if(APPLE)
   if(POLICY CMP0042)
