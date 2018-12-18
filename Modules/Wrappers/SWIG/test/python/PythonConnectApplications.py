@@ -22,10 +22,12 @@
 # -*- coding: utf-8 -*-
 
 #
-#  Example on the use of the Rescale
+#  Example on the use of application connections
 #
 
 def test(otb, argv):
+  #---------------------------------------------------------------------------
+  # First run with in-memory connections by default
   app1 = otb.Registry.CreateApplication("Smoothing")
   app2 = otb.Registry.CreateApplication("Smoothing")
   app3 = otb.Registry.CreateApplication("Smoothing")
@@ -42,4 +44,13 @@ def test(otb, argv):
   app4.AddParameterStringList("il",argv[1])
 
   app4.OUT = argv[2]
+  app4.ExecuteAndWriteOutput()
+
+  #---------------------------------------------------------------------------
+  # Second run with on-disk connections
+  app1.OUT = argv[2]+"_tmp1.tif"
+  app2.OUT = argv[2]+"_tmp2.tif"
+  app3.OUT = argv[2]+"_tmp3.tif"
+
+  app4.PropagateConnectMode(False)
   app4.ExecuteAndWriteOutput()
