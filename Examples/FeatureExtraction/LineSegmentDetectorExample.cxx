@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {Scene.png}
-//    OUTPUTS: {LSDOutput.png}
+//    OUTPUTS: {LSDOutput.shp}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -136,20 +136,6 @@ int main(int argc, char * argv[])
   reader->GenerateOutputInformation();
   writer->Update();
   // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:LSD} shows the result of applying the line segment
-  // detection to an image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.35\textwidth]{Scene.eps}
-  // \includegraphics[width=0.35\textwidth]{LSDOutput.eps}
-  // \itkcaption[LSD Application]{Result of applying the
-  // \doxygen{otb}{LineSegmentDetector} to an image.}
-  // \label{fig:LSD}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

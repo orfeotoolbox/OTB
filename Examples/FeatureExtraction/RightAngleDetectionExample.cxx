@@ -24,11 +24,9 @@
 #include "otbLineSegmentDetector.h"
 #include "otbVectorDataFileWriter.h"
 
-#include "itkRescaleIntensityImageFilter.h"
-
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {Scene.png}
-//    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
+//    OUTPUTS: {rightAngleOutput.tif}
 //  0.1 20
 //  Software Guide : EndCommandLineArgs
 
@@ -52,17 +50,16 @@
 
 int main(int argc, char * argv[])
 {
-  if (argc != 6)
+  if (argc != 5)
   {
-    std::cerr << "Usage: ./RightAngleDetectionExample input lsdOutput rightAngleOutput angleThreshold distanceThreshold\n";
+    std::cerr << "Usage: ./RightAngleDetectionExample input rightAngleOutput angleThreshold distanceThreshold\n";
     return EXIT_FAILURE;
   }
 
   const char* infname                  = argv[1];
-  const char* lsdOutputFilename        = argv[2];
-  const char* rightAngleOutputFilename = argv[3];
-  double      angleThreshold           = atof(argv[4]);
-  double      distanceThreshold        = atof(argv[5]);
+  const char* rightAngleOutputFilename = argv[2];
+  double      angleThreshold           = atof(argv[3]);
+  double      distanceThreshold        = atof(argv[4]);
 
   const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
@@ -151,11 +148,7 @@ int main(int argc, char * argv[])
 
   typedef otb::VectorDataFileWriter<LsdFilterType::VectorDataType> WriterType;
 
-  auto lsdWriter = WriterType::New();
   auto rightAngleWriter = WriterType::New();
-
-  lsdWriter->SetInput(lsdFilter->GetOutput());
-  lsdWriter->SetFileName(lsdOutputFilename);
 
   rightAngleWriter->SetInput(rightAngleFilter->GetOutput());
   rightAngleWriter->SetFileName(rightAngleOutputFilename);
@@ -171,7 +164,6 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   reader->GenerateOutputInformation();
-  lsdWriter->Update();
   rightAngleWriter->Update();
   // Software Guide : EndCodeSnippet
 
