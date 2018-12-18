@@ -64,8 +64,8 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Covariance ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     const ComplexType C11 =  static_cast<ComplexType>(  Covariance[0]    );     //   <hh.hh*>
     const ComplexType C12 =  static_cast<ComplexType>(  Covariance[1]    );     //   <sqrt(2).hh.hv*>
     const ComplexType C13 =  static_cast<ComplexType>(  Covariance[2]    );     //   <hh.vv*>
@@ -87,29 +87,29 @@ public:
 	result /= 4.0;
     }
 
-  constexpr size_t OutputSize(...) const
-  {
-    // Size of the result (entropy, alpha, anisotropy)
-    return 6;
-  }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result (entropy, alpha, anisotropy)
+      return 6;
+    }
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
-   * \brief Applies otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
-   * \sa otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
-using ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter =
-  FunctorImageFilter<Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+/**
+ * \typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
+ * \brief Applies otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+ * \sa otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter = FunctorImageFilter<
+    Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

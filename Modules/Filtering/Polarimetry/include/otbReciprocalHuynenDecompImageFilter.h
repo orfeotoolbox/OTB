@@ -43,8 +43,8 @@ public:
 
   typedef typename TOutput::ValueType   OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Covariance ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     OutputValueType A0 = static_cast<OutputValueType>(Covariance[0].real() / 2.0);
     OutputValueType B0 = static_cast<OutputValueType>((Covariance[3] + Covariance[5]).real() / 2.0);
     OutputValueType B = static_cast<OutputValueType>(Covariance[3].real() - B0);
@@ -66,32 +66,32 @@ public:
     result[8] = H;
     }
 
-   constexpr size_t OutputSize(...) const
-  {
-    // Size of the result
-    return 9;
-  }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 9;
+    }
 
-private:
-   static constexpr double m_Epsilon = 1e-6;
+  private:
+    static constexpr double m_Epsilon = 1e-6;
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef ReciprocalHuynenDecompImageFilter
-   * \brief Applies otb::Functor::ReciprocalHuynenDecompFunctor
-   * \sa otb::Functor::ReciprocalHuynenDecompFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef ReciprocalHuynenDecompImageFilter
+ * \brief Applies otb::Functor::ReciprocalHuynenDecompFunctor
+ * \sa otb::Functor::ReciprocalHuynenDecompFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using ReciprocalHuynenDecompImageFilter =
-  FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

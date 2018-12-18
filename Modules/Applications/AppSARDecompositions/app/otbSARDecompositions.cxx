@@ -48,14 +48,13 @@ public:
   typedef itk::SmartPointer<const Self>       ConstPointer;
 
 
-
   typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
                                     ComplexDoubleImageType::PixelType,
                                     ComplexDoubleImageType::PixelType,
                                     ComplexDoubleVectorImageType::PixelType>								FunctorType;
 
 
-  using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixImageFilter<ComplexDoubleImageType,ComplexDoubleVectorImageType>;
+  using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
 
   typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;
@@ -83,15 +82,15 @@ private:
 
     // Documentation
     SetDocName("SARDecompositions");
-    SetDocLongDescription("From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
-                          "All the decompositions implemented are intended for the mono-static case (transmitter and receiver are co-located).\n"
-                          "There are two kinds of decomposition: coherent ones and incoherent ones.\n"
-                          "In the coherent case, only the Pauli decomposition is available.\n"
-                          "In the incoherent case, there the decompositions available: Huynen, Barnes, and H-alpha-A.\n"
-						  "User must provide three one-band complex images HH, HV or VH, and VV (mono-static case <=> HV = VH).\n"
-						  "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize."
-						  );
-
+    SetDocLongDescription(
+        "From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
+        "All the decompositions implemented are intended for the mono-static case (transmitter and receiver are co-located).\n"
+        "There are two kinds of decomposition: coherent ones and incoherent ones.\n"
+        "In the coherent case, only the Pauli decomposition is available.\n"
+        "In the incoherent case, there the decompositions available: Huynen, Barnes, and H-alpha-A.\n"
+        "User must provide three one-band complex images HH, HV or VH, and VV (mono-static case <=> HV = VH).\n"
+        "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, "
+        "thanks to the parameter inco.kernelsize.");
 
 
     SetDocLimitations("Some decompositions output real images, while this application outputs complex images for general purpose.\n"
@@ -159,82 +158,82 @@ private:
   void DoExecute() override
   {
 
-	bool inhv = HasUserValue("inhv");
+  bool inhv = HasUserValue("inhv");
 	bool invh = HasUserValue("invh");
 
-	if ( (!inhv) && (!invh) )
+  if ( (!inhv) && (!invh) )
 	  otbAppLogFATAL( << "Parameter inhv or invh not set. Please provide a HV or a VH complex image.");
 
     m_SRFilter = SRFilterType::New();
-	  m_HAFilter = HAFilterType::New();
-	  m_MeanFilter = PerBandMeanFilterType::New();
+    m_HAFilter   = HAFilterType::New();
+    m_MeanFilter = PerBandMeanFilterType::New();
     MeanFilterType::InputSizeType radius;
     m_BarnesFilter = BarnesFilterType::New();
     m_HuynenFilter = HuynenFilterType::New();
     m_PauliFilter = PauliFilterType::New();
     m_Concatener = ListConcatenerFilterType::New();
-    m_ImageList = ImageListType::New();
+    m_ImageList    = ImageListType::New();
 
     switch (GetParameterInt("decomp"))
       {
 		case 0: // H-alpha-A
 
-		if (inhv)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
-	    else if (invh)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+    if (inhv)
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      else if (invh)
+        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-    radius.Fill( GetParameterInt("inco.kernelsize") );
-    m_MeanFilter->GetFilter()->SetRadius(radius);
+      radius.Fill(GetParameterInt("inco.kernelsize"));
+      m_MeanFilter->GetFilter()->SetRadius(radius);
 
-		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-		m_HAFilter->SetInput1(m_MeanFilter->GetOutput());
-		SetParameterOutputImage("out", m_HAFilter->GetOutput() );
+      m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+      m_HAFilter->SetInput1(m_MeanFilter->GetOutput());
+      SetParameterOutputImage("out", m_HAFilter->GetOutput());
 
-		break;
+      break;
 
-		case 1: // Barnes
-
-		if (inhv)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
-	    else if (invh)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
-
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
-
-        radius.Fill( GetParameterInt("inco.kernelsize") );
-        m_MeanFilter->GetFilter()->SetRadius(radius);
-
-		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-		m_BarnesFilter->SetInput1(m_MeanFilter->GetOutput());
-		SetParameterOutputImage("out", m_BarnesFilter->GetOutput() );
-
-		break;
-
-		case 2: // Huynen
+    case 1: // Barnes
 
 		if (inhv)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
-	    else if (invh)
-		  m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      else if (invh)
+        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-		m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
-        radius.Fill( GetParameterInt("inco.kernelsize") );
-        m_MeanFilter->GetFilter()->SetRadius(radius);
+      radius.Fill(GetParameterInt("inco.kernelsize"));
+      m_MeanFilter->GetFilter()->SetRadius(radius);
 
-		m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-		m_HuynenFilter->SetInput1(m_MeanFilter->GetOutput());
-		SetParameterOutputImage("out", m_HuynenFilter->GetOutput() );
+      m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+      m_BarnesFilter->SetInput1(m_MeanFilter->GetOutput());
+      SetParameterOutputImage("out", m_BarnesFilter->GetOutput());
 
-		break;
+      break;
 
-		case 3: // Pauli
+    case 2: // Huynen
+
+		if (inhv)
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      else if (invh)
+        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+
+      radius.Fill(GetParameterInt("inco.kernelsize"));
+      m_MeanFilter->GetFilter()->SetRadius(radius);
+
+      m_MeanFilter->SetInput(m_SRFilter->GetOutput());
+      m_HuynenFilter->SetInput1(m_MeanFilter->GetOutput());
+      SetParameterOutputImage("out", m_HuynenFilter->GetOutput());
+
+      break;
+
+    case 3: // Pauli
 
         m_ImageList->PushBack(GetParameterComplexDoubleImage("inhh"));
 
@@ -245,14 +244,13 @@ private:
 
 		m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
 
-        m_Concatener->SetInput( m_ImageList );
-        m_PauliFilter->SetInput1(m_Concatener->GetOutput());
+    m_Concatener->SetInput(m_ImageList);
+    m_PauliFilter->SetInput1(m_Concatener->GetOutput());
 
-		SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
+    SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
 
-		break;
+    break;
 	  }
-
   }
 
   SRFilterType::Pointer m_SRFilter;
@@ -263,7 +261,6 @@ private:
   PerBandMeanFilterType::Pointer m_MeanFilter;
   ListConcatenerFilterType::Pointer  m_Concatener;
   ImageListType::Pointer        m_ImageList;
-
 };
 
 } //end namespace Wrapper

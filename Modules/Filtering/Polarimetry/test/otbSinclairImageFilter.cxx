@@ -37,13 +37,13 @@
 
 using namespace otb;
 
-template<class TFilter>
-int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
+template <class TFilter>
+int generic_SinclairImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * outputFilename = argv[4];
 
   using OutputImageType = typename TFilter::OutputImageType;
-  using InputImageType =  typename TFilter::Superclass::template InputImageType<0>;
+  using InputImageType  = typename TFilter::Superclass::template InputImageType<0>;
   using OutputPixelType = typename OutputImageType::InternalPixelType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -53,8 +53,8 @@ int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
   const char * inputFilename3  = argv[3];
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::MultiChannelExtractROI<OutputPixelType,OutputPixelType > ExtractROIType;
-  using FilterType = TFilter;
+  typedef otb::MultiChannelExtractROI<OutputPixelType, OutputPixelType> ExtractROIType;
+  using FilterType                     = TFilter;
   typename FilterType::Pointer filter = FilterType::New();
   typename ReaderType::Pointer reader1 = ReaderType::New();
   typename ReaderType::Pointer reader2 = ReaderType::New();
@@ -63,10 +63,10 @@ int generic_SinclairImageFilter(int itkNotUsed(argc), char * argv[])
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
-  filter->SetVariadicNamedInput(polarimetry_tags::hh{},reader1->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::hv{},reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vh{},reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vv{},reader3->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hh{}, reader1->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hv{}, reader2->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::vh{}, reader2->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::vv{}, reader3->GetOutput());
 
   filter->UpdateOutputInformation();
 
@@ -99,25 +99,21 @@ int otbSinclairImageFilter(int argc, char * argv[])
 
   using CohSRFilterType = SinclairToCoherencyMatrixImageFilter<InputImageType, OutputImageType>;
   using CovSRFilterType = SinclairToCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
-  using CCSRFilterType  = SinclairToCircularCovarianceMatrixImageFilter<InputImageType,OutputImageType>;
-  using MSRFilterType   = SinclairToMuellerMatrixImageFilter<InputImageType,OutputRealImageType>;
+  using CCSRFilterType  = SinclairToCircularCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
+  using MSRFilterType   = SinclairToMuellerMatrixImageFilter<InputImageType, OutputRealImageType>;
 
 
   std::string strArgv(argv[1]);
   argc--;
   argv++;
   if (strArgv == "SinclairToCovarianceMatrix")
-    return (generic_SinclairImageFilter<CovSRFilterType>
-                  (argc, argv));
+    return (generic_SinclairImageFilter<CovSRFilterType>(argc, argv));
   else  if (strArgv == "SinclairToCircularCovarianceMatrix")
-    return (generic_SinclairImageFilter<CCSRFilterType>
-                  (argc, argv));
+    return (generic_SinclairImageFilter<CCSRFilterType>(argc, argv));
   else  if (strArgv == "SinclairToCoherencyMatrix")
-    return (generic_SinclairImageFilter<CohSRFilterType>
-                  (argc, argv));
+    return (generic_SinclairImageFilter<CohSRFilterType>(argc, argv));
   else  if (strArgv == "SinclairToMuellerMatrix")
-    return (generic_SinclairImageFilter<MSRFilterType>
-                  (argc, argv));
+    return (generic_SinclairImageFilter<MSRFilterType>(argc, argv));
   else return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

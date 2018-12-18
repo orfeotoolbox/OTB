@@ -87,8 +87,8 @@ public:
   typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
   typedef itk::Vector<double, 4>                   StokesVectorType;
 
-  inline void operator()( TOutput & result, const TInput & Mueller ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Mueller) const
+  {
     double P;
     double deg_pol;
     double tau;
@@ -174,32 +174,32 @@ public:
     result[3] = l_PolarisationDegreeMax;
     }
 
-  constexpr size_t OutputSize(...) const
-  {
-    // Size of the result
-    return 4;
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 4;
   }
 private:
-    static constexpr double m_Epsilon = 1e-6;
-    static constexpr double m_PI_90 = 2*CONST_PI_180;
+  static constexpr double m_Epsilon = 1e-6;
+  static constexpr double m_PI_90   = 2 * CONST_PI_180;
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef MuellerToPolarisationDegreeAndPowerImageFilter
-   * \brief Applies otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
-   * \sa otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef MuellerToPolarisationDegreeAndPowerImageFilter
+ * \brief Applies otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
+ * \sa otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using MuellerToPolarisationDegreeAndPowerImageFilter =
-  FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 
 } // end namespace otb

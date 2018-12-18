@@ -45,8 +45,8 @@ public:
   typedef typename TInput::ValueType   InputValueType;
   typedef typename TOutput::ValueType  OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Sinclair ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Sinclair) const
+  {
     InputValueType sqrt2(std::sqrt(2.0),0.0);
 
     InputValueType Shh = static_cast<InputValueType>(Sinclair[0]);
@@ -58,32 +58,32 @@ public:
     result[2] = sqrt2*Shv;
     }
 
-   constexpr size_t OutputSize(...) const
-  {
-    // Size of the result
-    return 3;
-  }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 3;
+    }
 
-private:
-   static constexpr double m_Epsilon = 1e-6;
+  private:
+    static constexpr double m_Epsilon = 1e-6;
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef ReciprocalPauliDecompImageFilter
-   * \brief Applies otb::Functor::ReciprocalPauliDecompFunctor
-   * \sa otb::Functor::ReciprocalPauliDecompFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef ReciprocalPauliDecompImageFilter
+ * \brief Applies otb::Functor::ReciprocalPauliDecompFunctor
+ * \sa otb::Functor::ReciprocalPauliDecompFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using ReciprocalPauliDecompImageFilter =
-  FunctorImageFilter<Functor::ReciprocalPauliDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::ReciprocalPauliDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

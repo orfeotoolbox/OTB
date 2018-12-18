@@ -72,8 +72,7 @@ public:
   /** Some typedefs. */
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv) const
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -100,25 +99,25 @@ public:
 };
 } // namespace Functor
 
-  /**
-   * \typedef SinclairToCovarianceMatrixImageFilter
-   * \brief Applies otb::Functor::SinclairToCovarianceMatrixFunctor
-   * \sa otb::Functor::SinclairToCovarianceMatrixFunctor
-   *
-   * Set inputs with:
-   * \code
-   *
-   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
-   *
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-  template <typename TInputImage, typename TOutputImage>
-  using SinclairToCovarianceMatrixImageFilter = FunctorImageFilter<
+/**
+ * \typedef SinclairToCovarianceMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToCovarianceMatrixFunctor
+ * \sa otb::Functor::SinclairToCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToCovarianceMatrixImageFilter = FunctorImageFilter<
     Functor::SinclairToCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
                                                typename TInputImage::PixelType, typename TOutputImage::PixelType>,
     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;

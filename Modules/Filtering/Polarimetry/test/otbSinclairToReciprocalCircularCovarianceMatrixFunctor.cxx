@@ -31,7 +31,7 @@ int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int itkNotUsed(argc),
 
   OutputType  result(6);
   FunctorType funct;
-  OutputType outputFunct(6);
+  OutputType  outputFunct(6);
 
   result[0] = ComplexType( 25.,  0.);
   result[1] = ComplexType( 25.4558441227157,-1.4142135623731);
@@ -40,7 +40,7 @@ int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int itkNotUsed(argc),
   result[4] = ComplexType( 11.3137084989848,-1.41421356237309);
   result[5] = ComplexType( 5, .0);
 
-  funct.operator ()( outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.));
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
       std::abs(result[1]-outputFunct[1]) > 1e-10 ||

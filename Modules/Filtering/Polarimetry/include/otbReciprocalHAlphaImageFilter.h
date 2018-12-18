@@ -72,8 +72,8 @@ public:
   typedef typename TOutput::ValueType   OutputValueType;
 
 
-  inline void operator()( TOutput & result, const TInput & Coherency ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Coherency) const
+  {
     const double T0 = static_cast<double>(Coherency[0].real());
     const double T1 = static_cast<double>(Coherency[3].real());
     const double T2 = static_cast<double>(Coherency[5].real());
@@ -169,31 +169,31 @@ public:
     result[2] = static_cast<OutputValueType>(anisotropy);
     }
 
-  constexpr size_t OutputSize(...) const
-  {
-    // Size of the result (entropy, alpha, anisotropy)
-    return 3;
-  }
-private:
-   static constexpr double m_Epsilon = 1e-6;
-};
-} // end namespace functor
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result (entropy, alpha, anisotropy)
+      return 3;
+    }
 
-   /**
-   * \typedef ReciprocalHAlphaImageFilter
-   * \brief Applies otb::Functor::ReciprocalHAlphaFunctor
-   * \sa otb::Functor::ReciprocalHAlphaFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
-using ReciprocalHAlphaImageFilter =
-  FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+  private:
+    static constexpr double m_Epsilon = 1e-6;
+};
+} // namespace Functor
+
+/**
+ * \typedef ReciprocalHAlphaImageFilter
+ * \brief Applies otb::Functor::ReciprocalHAlphaFunctor
+ * \sa otb::Functor::ReciprocalHAlphaFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalHAlphaImageFilter = FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

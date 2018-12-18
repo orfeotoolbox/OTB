@@ -84,8 +84,7 @@ public:
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
-  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv) const
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -105,17 +104,19 @@ public:
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
     SinclairToCovarianceFunctorType funct;
-    funct( result, Sll, Slr, Srl, Srr );
+    funct(result, Sll, Slr, Srl, Srr);
   }
 
-    constexpr size_t OutputSize(...) const
+  constexpr size_t OutputSize(...) const
   {
     // Size of circular covariance matrix
     return 10;
   }
 
   /** Constructor */
-  SinclairToCircularCovarianceMatrixFunctor() {}
+  SinclairToCircularCovarianceMatrixFunctor()
+  {
+  }
 
   /** Destructor */
   virtual ~SinclairToCircularCovarianceMatrixFunctor() {}
@@ -123,24 +124,24 @@ public:
 
 } // namespace Functor
 
-  /**
-   * \typedef SinclairToCircularCovarianceMatrixImageFilter
-   * \brief Applies otb::Functor::SinclairToCircularCovarianceMatrixFunctor
-   * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
-   *
-   * Set inputs with:
-   * \code
-   *
-   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
-   *
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-  template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef SinclairToCircularCovarianceMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using SinclairToCircularCovarianceMatrixImageFilter = FunctorImageFilter<
     Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
                                                        typename TInputImage::PixelType, typename TOutputImage::PixelType>,

@@ -73,7 +73,7 @@ public:
   typedef std::complex<double>                      ComplexType;
   typedef typename TOutput::ValueType               OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Mueller ) const
+  inline void operator()(TOutput& result, const TInput& Mueller) const
   {
     // Keep the upper diagonal of the matrix
     const double M11 =  static_cast<double>(Mueller[0]);
@@ -109,23 +109,23 @@ public:
     return 6;
   }
 };
-} // end namespace functor
+} // namespace Functor
 
-    /**
-   * \typedef MuellerToReciprocalCovarianceImageFilter
-   * \brief Applies otb::Functor::MuellerToReciprocalCovarianceFunctor
-   * \sa otb::Functor::MuellerToReciprocalCovarianceFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef MuellerToReciprocalCovarianceImageFilter
+ * \brief Applies otb::Functor::MuellerToReciprocalCovarianceFunctor
+ * \sa otb::Functor::MuellerToReciprocalCovarianceFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using MuellerToReciprocalCovarianceImageFilter =
-  FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 
 } // end namespace otb

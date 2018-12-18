@@ -56,8 +56,8 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Covariance ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     /* Using the convention
      * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
      * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
@@ -89,31 +89,32 @@ public:
       }
     }
 
-  constexpr size_t OutputSize(...) const
-  {
-    // Size of the result
-    return 3;
-  }
-private:
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 3;
+    }
+
+  private:
     static constexpr double m_Epsilon = 1e-6;
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef ReciprocalCovarianceToCoherencyDegreeImageFilter
-   * \brief Applies otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
-   * \sa otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef ReciprocalCovarianceToCoherencyDegreeImageFilter
+ * \brief Applies otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
+ * \sa otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using ReciprocalCovarianceToCoherencyDegreeImageFilter =
-  FunctorImageFilter<Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

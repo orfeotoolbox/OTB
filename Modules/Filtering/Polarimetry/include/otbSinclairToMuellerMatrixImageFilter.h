@@ -92,8 +92,7 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef double                                   RealType;
 
-  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv) const
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType Txx = static_cast<ComplexType>(-Shh);
     const ComplexType Txy = static_cast<ComplexType>(-Shv);
@@ -130,7 +129,9 @@ public:
   }
 
   /** Constructor */
-  SinclairToMuellerMatrixFunctor() {}
+  SinclairToMuellerMatrixFunctor()
+  {
+  }
 
   /** Destructor */
   virtual ~SinclairToMuellerMatrixFunctor() {}
@@ -139,22 +140,22 @@ public:
 } // namespace Functor
 
 /**
-   * \typedef SinclairToMuellerMatrixImageFilter
-   * \brief Applies otb::Functor::SinclairToMuellerMatrixFunctor
-   * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
-   *
-   * Set inputs with:
-   * \code
-   *
-   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
-   *
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
+ * \typedef SinclairToMuellerMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToMuellerMatrixFunctor
+ * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
 template <typename TInputImage, typename TOutputImage>
 using SinclairToMuellerMatrixImageFilter = FunctorImageFilter<
     Functor::SinclairToMuellerMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,

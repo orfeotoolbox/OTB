@@ -74,7 +74,7 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToReciprocalCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, TOutput> SinclairToReciprocalCovarianceFunctorType;
 
-  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -104,23 +104,23 @@ public:
 };
 
 } // namespace Functor
-  /**
-   * \typedef SinclairToReciprocalCircularCovarianceMatrixImageFilter
-   * \brief Applies otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
-   * \sa otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
-   *
-   * Set inputs with:
-   * \code
-   *
-   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
-   *
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-  template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef SinclairToReciprocalCircularCovarianceMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
+ * \sa otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using SinclairToReciprocalCircularCovarianceMatrixImageFilter =
     FunctorImageFilter<Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
                                                                                     typename TInputImage::PixelType, typename TOutputImage::PixelType>,

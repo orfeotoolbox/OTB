@@ -62,8 +62,8 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Covariance ) const
-    {
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
     const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
     const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
@@ -84,13 +84,13 @@ public:
     result /= 2.0;
     }
 
-  constexpr size_t OutputSize(...) const
-  {
-    // Size of the result
-    return 6;
-  }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 6;
+    }
 };
-} // end namespace functor
+} // namespace Functor
 
 /**
  * \typedef ReciprocalCovarianceToReciprocalCoherencyImageFilter
@@ -106,7 +106,7 @@ public:
  */
 template <typename TInputImage, typename TOutputImage>
 using ReciprocalCovarianceToReciprocalCoherencyImageFilter =
-  FunctorImageFilter<Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::ReciprocalCovarianceToReciprocalCoherencyFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

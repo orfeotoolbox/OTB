@@ -54,7 +54,7 @@ int otbMuellerToReciprocalCovarianceFunctor(int itkNotUsed(argc), char * itkNotU
   result[5] = ComplexType(0.75,0);
 
   FunctorType funct;
-  funct.operator ()( outputFunct, input );
+  funct.      operator()(outputFunct, input);
   std::cout<<outputFunct<<std::endl;
 
   if( std::abs(result[0].real()-outputFunct[0].real()) > 1e-10 ||

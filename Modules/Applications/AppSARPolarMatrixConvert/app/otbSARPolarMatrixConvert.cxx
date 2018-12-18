@@ -69,7 +69,7 @@ public:
   using CCSRFilterType  = SinclairToCircularCovarianceMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
   using MSRFilterType   = SinclairToMuellerMatrixImageFilter<ComplexDoubleImageType, DoubleVectorImageType>;
 
-  using MRCFilterType = otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>;
+  using MRCFilterType  = otb::MuellerToReciprocalCovarianceImageFilter<DoubleVectorImageType, ComplexDoubleVectorImageType>;
   using MPDPFilterType = otb::MuellerToPolarisationDegreeAndPowerImageFilter<DoubleVectorImageType, DoubleVectorImageType>;
 
   /** Standard macro */
@@ -87,38 +87,42 @@ private:
     SetDocName("SARPolarMatrixConvert");
     SetDocLongDescription(
 
-    "This application allows converting classical polarimetric matrices to each other.\n"
-    "For instance, it is possible to get the coherency matrix from the Sinclar one, or the Mueller matrix from the coherency one.\n"
-    "The filters used in this application never handle matrices, but images where each band is related to their elements.\n"
-    "As most of the time SAR polarimetry handles symmetric/hermitian matrices, only the relevant elements are stored, so that the images representing them have a minimal number of bands.\n"
-    "For instance, the coherency matrix size is 3x3 in the monostatic case, and 4x4 in the bistatic case: it will thus be stored in a 6-band or a 10-band complex image (the diagonal and the upper elements of the matrix).\n"
-    "\n"
-    "The Sinclair matrix is a special case: it is always represented as 3 or 4 one-band complex images (for mono or bistatic case).\n"
-    "The available conversions are listed below:\n"
+        "This application allows converting classical polarimetric matrices to each other.\n"
+        "For instance, it is possible to get the coherency matrix from the Sinclar one, or the Mueller matrix from the coherency one.\n"
+        "The filters used in this application never handle matrices, but images where each band is related to their elements.\n"
+        "As most of the time SAR polarimetry handles symmetric/hermitian matrices, only the relevant elements are stored, so that the images representing them "
+        "have a minimal number of bands.\n"
+        "For instance, the coherency matrix size is 3x3 in the monostatic case, and 4x4 in the bistatic case: it will thus be stored in a 6-band or a 10-band "
+        "complex image (the diagonal and the upper elements of the matrix).\n"
+        "\n"
+        "The Sinclair matrix is a special case: it is always represented as 3 or 4 one-band complex images (for mono or bistatic case).\n"
+        "The available conversions are listed below:\n"
 
-	"\n--- Monostatic case ---\n"
+        "\n--- Monostatic case ---\n"
 
-    "1 msinclairtocoherency --> Sinclair matrix to coherency matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
-    "2 msinclairtocovariance --> Sinclair matrix to covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
-    "3 msinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
-    "4 mcoherencytomueller --> Coherency matrix to Mueller matrix (input: 6 complex channels | 16 real channels)\n"
-    "5 mcovariancetocoherencydegree --> Covariance matrix to coherency degree (input: 6 complex channels | 3 complex channels)\n"
-    "6 mcovariancetocoherency --> Covariance matrix to coherency matrix (input: 6 complex channels | 6 complex channels)\n"
-    "7 mlinearcovariancetocircularcovariance --> Covariance matrix to circular covariance matrix (input: 6 complex channels | output: 6 complex channels)\n"
+        "1 msinclairtocoherency --> Sinclair matrix to coherency matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
+        "2 msinclairtocovariance --> Sinclair matrix to covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex channels)\n"
+        "3 msinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 3 x 1 complex channel (HH, HV or VH, VV) | output:  6 complex "
+        "channels)\n"
+        "4 mcoherencytomueller --> Coherency matrix to Mueller matrix (input: 6 complex channels | 16 real channels)\n"
+        "5 mcovariancetocoherencydegree --> Covariance matrix to coherency degree (input: 6 complex channels | 3 complex channels)\n"
+        "6 mcovariancetocoherency --> Covariance matrix to coherency matrix (input: 6 complex channels | 6 complex channels)\n"
+        "7 mlinearcovariancetocircularcovariance --> Covariance matrix to circular covariance matrix (input: 6 complex channels | output: 6 complex channels)\n"
 
-    "\n--- Bistatic case ---\n"
+        "\n--- Bistatic case ---\n"
 
-    "8 bsinclairtocoherency --> Sinclair matrix to coherency matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | 10 complex channels)\n"
-    "9 bsinclairtocovariance --> Sinclair matrix to covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex channels)\n"
-    "10 bsinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex channels)\n"
+        "8 bsinclairtocoherency --> Sinclair matrix to coherency matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | 10 complex channels)\n"
+        "9 bsinclairtocovariance --> Sinclair matrix to covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex channels)\n"
+        "10 bsinclairtocircovariance --> Sinclair matrix to circular covariance matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 10 complex "
+        "channels)\n"
 
-    "\n--- Both cases ---\n"
+        "\n--- Both cases ---\n"
 
-    "11 sinclairtomueller --> Sinclair matrix to Mueller matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 16 real channels)\n"
-    "12 muellertomcovariance --> Mueller matrix to covariance matrix (input: 16 real channels | output: 6 complex channels)\n"
-    "13 muellertopoldegandpower --> Mueller matrix to polarization degree and power (input: 16 real channels | output: 4 real channels)"
+        "11 sinclairtomueller --> Sinclair matrix to Mueller matrix (input: 4 x 1 complex channel (HH, HV, VH, VV) | output: 16 real channels)\n"
+        "12 muellertomcovariance --> Mueller matrix to covariance matrix (input: 16 real channels | output: 6 complex channels)\n"
+        "13 muellertopoldegandpower --> Mueller matrix to polarization degree and power (input: 16 real channels | output: 4 real channels)"
 
- );
+    );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("SARPolarSynth, SARDecompositions");
@@ -180,23 +184,23 @@ private:
 
     // #4
     // ReciprocalCoherencyToReciprocalMuellerImageFilter
-    AddChoice("conv.mcoherencytomueller","4 Monostatic: Coherency matrix to Mueller matrix");
-    SetParameterDescription("conv.mcoherencytomueller","4 Monostatic: Coherency matrix to Mueller matrix");
+    AddChoice("conv.mcoherencytomueller", "4 Monostatic: Coherency matrix to Mueller matrix");
+    SetParameterDescription("conv.mcoherencytomueller", "4 Monostatic: Coherency matrix to Mueller matrix");
 
     // #5
     // ReciprocalCovarianceToCoherencyDegreeImageFilter
-    AddChoice("conv.mcovariancetocoherencydegree","5 Monostatic: Covariance matrix to coherency degree");
-    SetParameterDescription("conv.mcovariancetocoherencydegree","5 Monostatic: Covariance matrix to coherency degree ");
+    AddChoice("conv.mcovariancetocoherencydegree", "5 Monostatic: Covariance matrix to coherency degree");
+    SetParameterDescription("conv.mcovariancetocoherencydegree", "5 Monostatic: Covariance matrix to coherency degree ");
 
     // #6
     // ReciprocalCovarianceToReciprocalCoherencyImageFilter
-    AddChoice("conv.mcovariancetocoherency","6 Monostatic: Covariance matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.mcovariancetocoherency","6 Monostatic: Covariance matrix to coherency matrix (complex output)");
+    AddChoice("conv.mcovariancetocoherency", "6 Monostatic: Covariance matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.mcovariancetocoherency", "6 Monostatic: Covariance matrix to coherency matrix (complex output)");
 
     // #7
     // ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
-    AddChoice("conv.mlinearcovariancetocircularcovariance","7 Monostatic: Covariance matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.mlinearcovariancetocircularcovariance","7 Monostatic: Covariance matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.mlinearcovariancetocircularcovariance", "7 Monostatic: Covariance matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.mlinearcovariancetocircularcovariance", "7 Monostatic: Covariance matrix to circular covariance matrix (complex output)");
 
     // #8
     // MuellerToReciprocalCovarianceImageFilter

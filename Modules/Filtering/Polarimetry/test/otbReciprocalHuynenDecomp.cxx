@@ -61,7 +61,6 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::ReciprocalHuynenDecompImageFilter<ComplexVectorImageType, ComplexVectorImageType> FilterType;
 
 
-
   ReaderType::Pointer readerHH = ReaderType::New();
   ReaderType::Pointer readerHV = ReaderType::New();
   ReaderType::Pointer readerVV = ReaderType::New();
@@ -80,9 +79,9 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
 
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hh{},readerHH->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hv_or_vh{},readerHV->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::vv{},readerVV->GetOutput());
+  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
+  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
+  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
 
   perBand->SetInput(sinclairtocov->GetOutput());
 

@@ -33,8 +33,8 @@
 
 using namespace otb;
 
-template<class TFilter>
-int generic_SinclairReciprocalImageFilter(int itkNotUsed(argc), char * argv[])
+template <class TFilter>
+int generic_SinclairReciprocalImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const char * inputFilename1 = argv[1];
   const char * inputFilename2 = argv[2];
@@ -42,13 +42,13 @@ int generic_SinclairReciprocalImageFilter(int itkNotUsed(argc), char * argv[])
   const char * outputFilename = argv[4];
 
   using OutputImageType = typename TFilter::OutputImageType;
-  using InputImageType =  typename TFilter::Superclass::template InputImageType<0>;
+  using InputImageType  = typename TFilter::Superclass::template InputImageType<0>;
   using OutputPixelType = typename OutputImageType::InternalPixelType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::MultiChannelExtractROI<OutputPixelType, OutputPixelType > ExtractROIType;
+  typedef otb::MultiChannelExtractROI<OutputPixelType, OutputPixelType> ExtractROIType;
 
   using FilterType = TFilter;
 
@@ -61,9 +61,9 @@ int generic_SinclairReciprocalImageFilter(int itkNotUsed(argc), char * argv[])
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
 
-  filter->SetVariadicNamedInput(polarimetry_tags::hh{},reader1->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::hv_or_vh{},reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vv{},reader3->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hh{}, reader1->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::hv_or_vh{}, reader2->GetOutput());
+  filter->SetVariadicNamedInput(polarimetry_tags::vv{}, reader3->GetOutput());
 
   typename ExtractROIType::Pointer  extract = ExtractROIType::New();
   extract->SetStartX(10);
@@ -91,8 +91,8 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
   typedef otb::Image<InputPixelType,  Dimension>       InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
-  using SToRecCohFilterType = SinclairToReciprocalCoherencyMatrixImageFilter<InputImageType, OutputImageType>;
-  using SToRecCovFilterType = SinclairToReciprocalCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
+  using SToRecCohFilterType     = SinclairToReciprocalCoherencyMatrixImageFilter<InputImageType, OutputImageType>;
+  using SToRecCovFilterType     = SinclairToReciprocalCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
   using SToRecCircCovFilterType = SinclairToReciprocalCircularCovarianceMatrixImageFilter<InputImageType, OutputImageType>;
 
   std::string strArgv(argv[1]);
@@ -102,7 +102,7 @@ int otbSinclairReciprocalImageFilter(int argc, char * argv[])
     return generic_SinclairReciprocalImageFilter<SToRecCovFilterType>(argc, argv);
   else  if (strArgv == "SinclairToReciprocalCoherencyMatrix")
     return generic_SinclairReciprocalImageFilter<SToRecCohFilterType>(argc, argv);
-  else  if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
+  else if (strArgv == "SinclairToReciprocalCircularCovarianceMatrix")
     return generic_SinclairReciprocalImageFilter<SToRecCircCovFilterType>(argc, argv);
   else return EXIT_FAILURE;
 

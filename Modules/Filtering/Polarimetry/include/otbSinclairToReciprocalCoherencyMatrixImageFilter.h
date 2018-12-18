@@ -75,7 +75,7 @@ public:
   typedef vnl_matrix<ComplexType>       		   VNLMatrixType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline void operator ()(TOutput & result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
@@ -105,27 +105,27 @@ public:
 
 } // namespace Functor
 
-  /**
-   * \typedef SinclairToReciprocalCoherencyMatrixImageFilter
-   * \brief Applies otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor
-   * \sa otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor
-   *
-   * Set inputs with:
-   * \code
-   *
-   * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(inputPtr);
-   * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
-   *
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-  template <typename TInputImage, typename TOutputImage>
-  using SinclairToReciprocalCoherencyMatrixImageFilter =
-  FunctorImageFilter<Functor::SinclairToReciprocalCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
-                                                                         typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-                     std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
+/**
+ * \typedef SinclairToReciprocalCoherencyMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor
+ * \sa otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToReciprocalCoherencyMatrixImageFilter =
+    FunctorImageFilter<Functor::SinclairToReciprocalCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                                           typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
 
 } // namespace otb
 

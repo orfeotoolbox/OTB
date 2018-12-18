@@ -80,7 +80,7 @@ public:
   typedef typename std::complex <double>         ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline void operator()( TOutput & result, const TInput & Coherency ) const
+  inline void operator()(TOutput& result, const TInput& Coherency) const
   {
     const double T1 = static_cast<double>(Coherency[0].real());
     const double T2 = static_cast<double>(Coherency[3].real());
@@ -88,25 +88,25 @@ public:
 
     ComplexType VAL4 = static_cast<ComplexType>( (Coherency[1] - Coherency[3]) );
     ComplexType VAL5 = static_cast<ComplexType>( (Coherency[1] - Coherency[0]) );
-    ComplexType VAL0 = static_cast<ComplexType>( Coherency[5] ) + VAL5 - std::conj(VAL4);
+    ComplexType VAL0 = static_cast<ComplexType>(Coherency[5]) + VAL5 - std::conj(VAL4);
     ComplexType VAL1 = static_cast<ComplexType>( -Coherency[5] ) + VAL5 - std::conj(VAL4);
 
-    result[0] = 0.5*(T1+T2+T3);
+    result[0]  = 0.5 * (T1 + T2 + T3);
     result[1] = static_cast<double>( Coherency[1].real()+Coherency[3].imag() );
-    result[2] = static_cast<double>( Coherency[2].real() );
-    result[3] = static_cast<double>( Coherency[4].imag() );
-    result[4] = static_cast<double>( Coherency[1].real() );
-    result[5] = 0.5*(T1+T2-T3);
+    result[2]  = static_cast<double>(Coherency[2].real());
+    result[3]  = static_cast<double>(Coherency[4].imag());
+    result[4]  = static_cast<double>(Coherency[1].real());
+    result[5]  = 0.5 * (T1 + T2 - T3);
     result[6] = static_cast<double>( Coherency[4].real() );
-    result[7] = static_cast<double>( Coherency[2].imag() );
+    result[7]  = static_cast<double>(Coherency[2].imag());
     result[8] = static_cast<double>( -Coherency[2].real() );
     result[9] = static_cast<double>( -Coherency[4].real() );
-    result[10] = static_cast<double>( 0.5*VAL1.real() );
-    result[11] = static_cast<double>( 0.5*VAL0.imag() );
-    result[12] = static_cast<double>( Coherency[4].imag() );
-    result[13] = static_cast<double>( Coherency[2].imag() );
-    result[14] = static_cast<double>( 0.5*std::conj(VAL1).imag() );
-    result[15] = static_cast<double>( 0.5*VAL0.real() );
+    result[10] = static_cast<double>(0.5 * VAL1.real());
+    result[11] = static_cast<double>(0.5 * VAL0.imag());
+    result[12] = static_cast<double>(Coherency[4].imag());
+    result[13] = static_cast<double>(Coherency[2].imag());
+    result[14] = static_cast<double>(0.5 * std::conj(VAL1).imag());
+    result[15] = static_cast<double>(0.5 * VAL0.real());
   }
 
   constexpr size_t OutputSize(...) const
@@ -115,24 +115,23 @@ public:
     return 16;
   }
 };
-} // end namespace functor
+} // namespace Functor
 
-   /**
-   * \typedef ReciprocalCoherencyToReciprocalMuellerImageFilter
-   * \brief Applies otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
-   * \sa otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
-   *
-   * Set inputs with:
-   * \code
-   * SetVariadicInput<0>(inputPtr);
-   * \endcode
-   *
-   * \ingroup OTBPolarimetry
-   */
-   template <typename TInputImage, typename TOutputImage>
+/**
+ * \typedef ReciprocalCoherencyToReciprocalMuellerImageFilter
+ * \brief Applies otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
+ * \sa otb::Functor::ReciprocalCoherencyToReciprocalMuellerFunctor
+ *
+ * Set inputs with:
+ * \code
+ * SetVariadicInput<0>(inputPtr);
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
 using ReciprocalCoherencyToReciprocalMuellerImageFilter =
-  FunctorImageFilter<Functor::
-                     ReciprocalCoherencyToReciprocalMuellerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
+    FunctorImageFilter<Functor::ReciprocalCoherencyToReciprocalMuellerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 
