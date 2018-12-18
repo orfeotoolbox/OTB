@@ -66,8 +66,8 @@ private:
     SetDocAuthors("OTB-Team");
 
     AddDocTag(Tags::SAR);
-    AddDocTag("Concatenation");
-
+    AddDocTag(Tags::Calibration);
+    
     AddParameter(ParameterType_InputImageList,  "il",   "Input bursts list");
     SetParameterDescription("il", "The list of bursts to concatenate.");
 

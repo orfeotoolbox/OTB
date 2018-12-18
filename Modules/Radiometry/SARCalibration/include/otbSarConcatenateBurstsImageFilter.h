@@ -48,7 +48,7 @@ namespace otb
  *  
  *  Metadata are adapted in order to correspond to the contatenated SAR image.
  *
- * \ingroup SARCalibration
+ * \ingroup OTBSARCalibration
  * \ingroup MultiThreaded
  *
  * \ingroup OTBImageManipulation
