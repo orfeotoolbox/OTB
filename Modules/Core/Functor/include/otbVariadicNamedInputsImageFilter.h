@@ -56,27 +56,31 @@ public:
   static_assert(std::tuple_size<TInputNameMap>::value == NumberOfInputs,"Tuple for input name does not match the size of ... TInputs");
   
   itkNewMacro(Self);
+
+  using Superclass::SetInput;
   
-  template <typename Tag> void SetVariadicNamedInput(const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
+  template <typename Tag> void SetInput(const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
   {
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
     this->SetNthInput(idx,const_cast<InputImageType<idx> *>(inputPtr));
   }
 
-  template <typename Tag> void SetVariadicNamedInput(Tag,const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
+  template <typename Tag> void SetInput(Tag,const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value> * inputPtr)
   {
-    SetVariadicNamedInput<Tag>(inputPtr);
-  }
-  
-  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVariadicNamedInput()
-  {
-    constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
-    return dynamic_cast<const InputImageType<idx> *>(this->GetInput(idx));
+    SetInput<Tag>(inputPtr);
   }
 
-  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetVariadicNamedInput(Tag)
+  using Superclass::GetInput;
+
+  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetInput()
   {
-    return GetVariadicNamedInput<Tag>();
+    constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
+    return dynamic_cast<const InputImageType<idx> *>(this->Superclass::GetInput(idx));
+  }
+
+  template <typename Tag> const InputImageType<internal::tuple_index<Tag,TInputNameMap>::value> * GetInput(Tag)
+  {
+    return GetInput<Tag>();
   }
 
 protected:

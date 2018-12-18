@@ -35,12 +35,12 @@ namespace otb {
  * TInputs.
  * 
  * Inputs get be set/get with SetVariadicInput<N>() and
- * GetVariadicInput<N>(), when N is the index (first input is 0) of
+ * GetInput<N>(), when N is the index (first input is 0) of
  * the input. This is resolved at compile time: you can not call 
- * SetVariadicInput<N>() with an argument not matching the Nth input
+ * SetInput<N>() with an argument not matching the Nth input
  * type (it will lead to type mismatch compilation error).
  * 
- * Alternatively, you can call SetVariadicInputs() with all the input
+ * Alternatively, you can call SetInputs() with all the input
  * image in the same order as in the template parameters.
  *
  * Last, there is a macro that generates SetInput1() ... SetInput10()
@@ -67,17 +67,17 @@ public:
   /**
    * \param Set the Ith input
    */
-  template <std::size_t I> void SetVariadicInput(const typename std::tuple_element<I,InputTypesTupleType>::type * inputPtr)
+  template <std::size_t I = 0> void SetInput(const InputImageType<I> * inputPtr)
   {
-    static_assert(std::tuple_size<InputTypesTupleType>::value>I,"Template value I is out of range.");
-    this->SetNthInput(I,const_cast<typename std::tuple_element<I,InputTypesTupleType>::type *>(inputPtr));
+    static_assert(NumberOfInputs>I,"Template value I is out of range.");
+    this->SetNthInput(I,const_cast<InputImageType<I> *>(inputPtr));
   }
   
 #define DefineLegacySetInputMacro(n)                                                                               \
   template<typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
   void SetInput ## n(const typename std::tuple_element<n-1,Tuple>::type * img)                                           \
   {                                                                                                                \
-    this->template SetVariadicInput<n-1>(img);                                                                             \
+    this->template SetInput<n-1>(img);                                                                             \
   }
 
   // The following defines legacy setters SetInput1()
@@ -96,19 +96,39 @@ public:
 #undef DefineLegacySetInputMacro
 
   /**
+   * Set the first input (for backward compatibility with ImageToImageFilter)
+   * \param input The image to use for first input
+   */ 
+  using Superclass::SetInput;
+  // void SetInput(const InputImageType<0> * input)
+  // {
+  //   SetInput<0>(input);
+  // };
+
+  /**
+   * Get the first input (for backward compatibility with
+   * ImageToImageFilter)
+   * \return The first input
+   */
+  using Superclass::GetInput;
+  // InputImageType<0> * GetInput()
+  // {
+  //   return GetInput<0>();
+  // }
+ 
+  /**
    * \return the Ith variadic input
    */
-  template <std::size_t I> const typename std::tuple_element<I,InputTypesTupleType>::type * GetVariadicInput()
+  template <std::size_t I = 0> const InputImageType<I> * GetInput()
   {
-    static_assert(std::tuple_size<InputTypesTupleType>::value>I,"Template value I is out of range.");
-    using ImageType = typename std::tuple_element<I,InputTypesTupleType>::type;
-    return dynamic_cast<const ImageType *>(this->GetInput(I));
+    static_assert(NumberOfInputs>I,"Template value I is out of range.");
+    return dynamic_cast<const InputImageType<I> *>(this->GetInput(I));
   }
 
   /**
    * \param inputs A vararg list of inputs 
    */
-  void SetVariadicInputs(TInputs*... inputs)
+  void SetInputs(TInputs*... inputs)
   {
     auto inTuple = std::make_tuple(inputs...);
     SetInputsImpl(inTuple,std::make_index_sequence<sizeof...(inputs)>{});
@@ -117,7 +137,7 @@ public:
   /**
    * \return A tuple with all inputs
    */
-  auto GetVariadicInputs()
+  auto GetInputs()
   {
     return GetInputsImpl(std::make_index_sequence<sizeof...(TInputs)>{});
   }
@@ -133,12 +153,12 @@ protected:
 private:
   template<class Tuple, size_t...Is> auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->SetVariadicInput<Is>(std::get<Is>(t)),0)...};
+    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)),0)...};
   }
 
   template <size_t...Is> auto GetInputsImpl(std::index_sequence<Is...>)
   {
-    return std::make_tuple(this->GetVariadicInput<Is>()...);
+    return std::make_tuple(this->GetInput<Is>()...);
   }
   
   VariadicInputsImageFilter(const Self&) = delete;

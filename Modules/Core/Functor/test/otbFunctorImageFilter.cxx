@@ -143,12 +143,12 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   using FilterType = typename decltype(filter)::ObjectType;
   static_assert(FilterType::NumberOfInputs == 1,"");
   static_assert(std::is_same<typename FilterType::template InputImageType<0>, InputImageType>::value, "");
-  filter->SetVariadicInputs(in);
+  filter->SetInputs(in);
   filter->SetInput1(in);
-  filter->template SetVariadicInput<0>(in); // template keyword to
+  filter->template SetInput<0>(in); // template keyword to
                                             // avoid C++ parse
                                             // ambiguity
-  auto res = filter->template GetVariadicInput<0>();
+  auto res = filter->template GetInput<0>();
   
   filter->Update();
 
@@ -156,15 +156,15 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   struct tag{};
   using inputNames = std::tuple<tag>;
   auto filter1 = NewFunctorFilter<decltype(functor),inputNames>(functor);
-  filter1->template SetVariadicNamedInput<tag>(in);
-  filter1->SetVariadicNamedInput(tag{},in);
-  res = filter1->template GetVariadicNamedInput<tag>();
-  res = filter1->GetVariadicNamedInput(tag{});
+  filter1->template SetInput<tag>(in);
+  filter1->SetInput(tag{},in);
+  res = filter1->template GetInput<tag>();
+  res = filter1->GetInput(tag{});
   filter1->Update();
 
   // Test static New() operator
   auto oldStyleNewFilter = FunctorImageFilter<decltype(functor)>::New();
-  oldStyleNewFilter->SetVariadicInputs(in);
+  oldStyleNewFilter->SetInputs(in);
   oldStyleNewFilter->Update();
 
   // Hack to silent -Wunused-but-set-variable
@@ -183,9 +183,9 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
   filterWithNonConstOperator->SetInput1(in);
   filterWithNonConstOperator->Update();  
 
-  filterWithVoidReturn->SetVariadicInputs(in);
+  filterWithVoidReturn->SetInputs(in);
   filterWithVoidReturn->SetInput1(in);
-  filterWithVoidReturn->template SetVariadicInput<0>(in); // template keyword to avoid C++ parse ambiguity
+  filterWithVoidReturn->template SetInput<0>(in); // template keyword to avoid C++ parse ambiguity
   filterWithVoidReturn->Update();
   
   // Test with simple lambda
@@ -195,7 +195,7 @@ template <typename TOut,typename TIn> struct TestOperatorVoidReturn
                   return ret;
                 };
   auto filterWithLambda = NewFunctorFilter(lambda,1, {{0,0}});
-  filterWithLambda->SetVariadicInputs(in);
+  filterWithLambda->SetInputs(in);
   filterWithLambda->Update();
 
   // Test with standard filter use
@@ -357,33 +357,34 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   cimage->Allocate();
   cimage->FillBuffer(0);
 
-  // Test VariadicInputsImageFilter
+  // Test InputsImageFilter
   auto filter = otb::VariadicInputsImageFilter<VectorImageType,VectorImageType,ImageType>::New();
-  filter->SetVariadicInput<0>(vimage);
-  filter->SetVariadicInput<1>(image);
+  filter->SetInput(vimage);
+  filter->SetInput<0>(vimage);
+  filter->SetInput<1>(image);
 
   filter->SetInput1(vimage);
   filter->SetInput2(image);
 
-  filter->SetVariadicInputs(vimage,image);
-  std::cout<<filter->GetVariadicInput<0>()<< filter->GetVariadicInput<1>()<<std::endl;
+  filter->SetInputs(vimage,image);
+  std::cout<<filter->GetInput<0>()<< filter->GetInput<1>()<<std::endl;
 
   // Test VariadicNamedInputsImageFilter
   struct xs {};
   struct pan {};
   using Names = std::tuple<xs,pan>; 
    auto filterWithNames = otb::VariadicNamedInputsImageFilter<VectorImageType, Names, VectorImageType,ImageType>::New();
-   filterWithNames->SetVariadicNamedInput<xs>(vimage);
+   filterWithNames->SetInput<xs>(vimage);
   
   // Test FunctorImageFilter with a built-in math function
   using CosType = double(double);
   auto filterCos = NewFunctorFilter(static_cast<CosType *>(std::cos));
-  filterCos->SetVariadicInputs(image);
+  filterCos->SetInputs(image);
   filterCos->Update();
     
-   filterWithNames->SetVariadicNamedInput<pan>(image);
+   filterWithNames->SetInput<pan>(image);
 
-   std::cout<<filterWithNames->GetVariadicNamedInput<xs>()<< filterWithNames->GetVariadicNamedInput<pan>()<<std::endl;
+   std::cout<<filterWithNames->GetInput<xs>()<< filterWithNames->GetInput<pan>()<<std::endl;
 
   
   
@@ -394,7 +395,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
                  return scale*p;
                };
   auto filterLambda = NewFunctorFilter(Lambda1);
-  filterLambda->SetVariadicInputs(image);
+  filterLambda->SetInputs(image);
   filterLambda->Update();
 
   // test FunctorImageFilter with a lambda that returns a
@@ -414,50 +415,50 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // In this case, we use the helper function which allows to specify
   // the number of outputs
   auto filterLambda2  = NewFunctorFilter(Lambda2,vimage->GetNumberOfComponentsPerPixel(),{{3,3}});
-  filterLambda2->SetVariadicInputs(image);
+  filterLambda2->SetInputs(image);
   filterLambda2->Update();
   
   // Test FunctorImageFilter with the VariadicConcatenate operator
   using ConcatFunctorType = Functor::VariadicConcatenate<double, double, itk::VariableLengthVector<double> >;
   auto concatenate = NewFunctorFilter(ConcatFunctorType{});
-  concatenate->SetVariadicInputs(image,vimage);
+  concatenate->SetInputs(image,vimage);
   concatenate->Update();
   
   // Test FunctorImageFilter With VariadicAdd functor
   using AddFunctorType = Functor::VariadicAdd<double, double, double>;
   auto add = NewFunctorFilter(AddFunctorType{});
-  add->SetVariadicInput<0>(image);
-  add->SetVariadicInput<1>(image);
+  add->SetInput<0>(image);
+  add->SetInput<1>(image);
   add->Update();
 
   // Test FunctorImageFilter with BandExtraction functor
   using ExtractFunctorType = BandExtraction<double,double>;
   ExtractFunctorType extractFunctor{1,2};
   auto extract = NewFunctorFilter(extractFunctor);
-  extract->SetVariadicInputs(vimage);
+  extract->SetInputs(vimage);
   extract->Update();
   
   // Test FunctorImageFilter With Mean functor
   using MeanFunctorType = Mean<double,double>;
   auto median = NewFunctorFilter(MeanFunctorType{},{{2,2}});
-  median->SetVariadicInputs(image);
+  median->SetInputs(image);
   median->Update();
 
   // Test FunctorImageFilter with MaxInEachChannel
   using MaxInEachChannelType = MaxInEachChannel<double>;
   auto maxInEachChannel = NewFunctorFilter(MaxInEachChannelType{},{{3,3}});
-  maxInEachChannel->SetVariadicInputs(vimage);
+  maxInEachChannel->SetInputs(vimage);
   maxInEachChannel->Update();
 
   // Test FunctorImageFilter with Module (complex=
   using ModulusType = VectorModulus<double>;
   auto modulus = NewFunctorFilter(ModulusType{});
-  modulus->SetVariadicInputs(cvimage);
+  modulus->SetInputs(cvimage);
   modulus->Update();
 
   auto LambdaComplex = [] (const std::complex<double> & in) {return std::arg(in);};
   auto argFilter = NewFunctorFilter(LambdaComplex);
-  argFilter->SetVariadicInputs(cimage);
+  argFilter->SetInputs(cimage);
   argFilter->Update();
   
  return EXIT_SUCCESS;
