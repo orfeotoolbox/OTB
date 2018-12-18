@@ -33,6 +33,9 @@
 #include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 #include "otbSinclairToReciprocalCircularCovarianceMatrixImageFilter.h"
 
+#include "otbMuellerToReciprocalCovarianceImageFilter.h"
+#include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
