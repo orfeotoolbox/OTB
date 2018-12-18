@@ -40,8 +40,8 @@ otb_test_application(NAME apTvUtConvertBasic
                 	     ${TEMP}/apTvUtConvertBasicOutput.tif
 )
 
-otb_test_application(NAME apTuUtConvertExtendedFilename_writer
-                     APP  Convert
+otb_test_application(NAME apTuUtDynamicConvertExtendedFilename_writer
+                     APP  DynamicConvert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
                      )
@@ -56,8 +56,8 @@ otb_test_application(NAME apTvUtConvertWithScaling
                              ${TEMP}/apTvUtConvertWithScalingOutput.tif
 )
 
-otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
-                     APP  Convert
+otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM
+                     APP  DynamicConvert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif
                      VALID   --compare-ascii ${EPSILON_7}
