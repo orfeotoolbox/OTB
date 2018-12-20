@@ -78,16 +78,11 @@ void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, bool mustForgive)
 
 void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int * map, bool mustForgive)
 {
-#if GDAL_VERSION_NUM >= 1900
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
     }
-#else
-  itkGenericExceptionMacro("OGRLayer::SetFrom(feature, fieldmap, forgive) is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#endif
 }
 
 /*===========================================================================*/

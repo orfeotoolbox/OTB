@@ -291,12 +291,8 @@ OGRLayerStreamStitchingFilter<TInputImage>
                      }
                      else if (intersection->getGeometryType() == wkbMultiLineString)
                      {
-                         #if(GDAL_VERSION_NUM < 1800)
-                     fusion.overlap = GetLengthOGRGeometryCollection(dynamic_cast<OGRGeometryCollection *> (intersection.get()));
-                         #else
                      fusion.overlap = dynamic_cast<OGRMultiLineString *>(intersection.get())->get_Length();
-                         #endif
-                    }
+                     }
 
                      /** -Wunused-variable
                      long upperFID = upper.feat.GetFID();

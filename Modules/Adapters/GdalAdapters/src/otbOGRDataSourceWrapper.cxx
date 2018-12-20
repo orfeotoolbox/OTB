@@ -727,12 +727,7 @@ OGREnvelope otb::ogr::DataSource::GetGlobalExtent(bool force/* = false */, std::
       cExtent.MaxX = real_maxx;
       cExtent.MaxY = real_maxy;
 
-#if GDAL_VERSION_NUM >= 1700
       OGRCoordinateTransformation::DestroyCT(coordTransformation);
-#else
-#warning the following resource release may crash, please update your version of GDAL
-      delete coordTransformation; // note there is no garanty
-#endif
       }
     // else: If srs are invalid, we assume that extent are coherent
 
