@@ -27,8 +27,6 @@
 
 #cmakedefine OTB_BUILD_SHARED_LIBS
 
-#cmakedefine OTB_USE_GDAL_20
-
 #cmakedefine OTB_USE_OPENMP
 
 #cmakedefine OTB_USE_SSE_FLAGS

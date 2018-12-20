@@ -321,9 +321,6 @@ OGRLayerStreamStitchingFilter<TInputImage>
                ogr::Field field = upper.feat[0];
                try
                  {
-                 #ifdef OTB_USE_GDAL_20
-                 // In this case, the feature id can be either
-                 // OFTInteger64 or OFTInteger
                  switch(field.GetType())
                    {
                    case OFTInteger64:
@@ -336,10 +333,6 @@ OGRLayerStreamStitchingFilter<TInputImage>
                    fusionFeature[0].SetValue(field.GetValue<int>());
                    }
                    }
-                 #else
-                 // Only OFTInteger supported in this case
-                 fusionFeature[0].SetValue(field.GetValue<int>());
-                 #endif
                  m_OGRLayer.CreateFeature(fusionFeature);
                  m_OGRLayer.DeleteFeature(lower.feat.GetFID());
                  m_OGRLayer.DeleteFeature(upper.feat.GetFID());

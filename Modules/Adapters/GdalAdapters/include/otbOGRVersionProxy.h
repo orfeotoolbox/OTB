@@ -35,15 +35,8 @@
 #include "ogr_core.h" // OGR enums
 #endif
 
-
-#ifdef OTB_USE_GDAL_20
 class GDALDataset;
 class GDALDriver;
-#else
-class OGRDataSource;
-class OGRSFDriver;
-#endif
-
 class OGRFeature;
 
 #include "OTBGdalAdaptersExport.h"
@@ -77,13 +70,8 @@ OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
  * See function documentation for details.
  */
 
-  #ifdef OTB_USE_GDAL_20
   typedef GDALDataset GDALDatasetType;
   typedef GDALDriver GDALDriverType;
-  #else
-  typedef OGRDataSource GDALDatasetType;
-  typedef OGRSFDriver   GDALDriverType;
-#endif
 
   /** 
    * This function opens a file, possibly in read-only mode, and returns
