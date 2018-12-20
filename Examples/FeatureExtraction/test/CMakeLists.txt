@@ -216,25 +216,23 @@ otb_add_test(NAME feTeCloudDetectionExampleTest COMMAND ${OTB_TEST_DRIVER}
 
 # ------- Line Segment Detector test----------
 otb_add_test(NAME feTeLineSegmentDetectorExampleTest  COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
-    ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
+  --compare-ogr ${NOTOL}
+    ${BASELINE}/feTeLineSegmentDetectorExampleOutput.shp
+    ${TEMP}/feTeLineSegmentDetectorExampleOutput.shp
   Execute $<TARGET_FILE:LineSegmentDetectorExample>
-    ${INPUTDATA}/Scene.png
-    ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${TEMP}/feTeLineSegmentDetectorExampleOutput.shp
 )
 
 # ------- Right Angle Detection test----------
 
 otb_add_test(NAME feTeRightAngleDetectionExample  COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
-    ${TEMP}/feTeRightAngleDetectionExampleOutput.png
+  --compare-ogr ${NOTOL}
+    ${BASELINE}/feTeRightAngleDetectionExampleOutput.shp
+    ${TEMP}/feTeRightAngleDetectionExampleOutput.shp
   Execute $<TARGET_FILE:RightAngleDetectionExample>
-    ${INPUTDATA}/Scene.png
-    ${TEMP}/feTeRightAngleDetectionExampleOutput.png
-    ${TEMP}/PrettyRightAngleInput.png
-    ${TEMP}/PrettyRightAngleOutput.png
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${TEMP}/feTeRightAngleDetectionExampleOutput.shp
     0.1
     10.
 )

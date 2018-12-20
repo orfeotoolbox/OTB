@@ -26,7 +26,7 @@
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {Scene.png}
-//    OUTPUTS: {rightAngleOutput.tif}
+//    OUTPUTS: {rightAngleOutput.shp}
 //  0.1 20
 //  Software Guide : EndCommandLineArgs
 
