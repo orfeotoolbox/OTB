@@ -35,8 +35,8 @@ if(NOT GDAL_CONFIG_CHECKING)
   return()
 endif()
 
-set(MIN_MAJOR_VERSION 1)
-set(MIN_MINOR_VERSION 10)
+set(MIN_MAJOR_VERSION 2)
+set(MIN_MINOR_VERSION 0)
 
 # Ensure that the temporary dir always exists before starting tests
 if(NOT EXISTS ${TEMP})
