@@ -25,6 +25,7 @@
 namespace otb {
 
 /**
+ * \class VariadicInputsImageFilter
  * \brief Base class for image filter with variadic inputs.
  *
  * This filter act as a base class for all filters that will take
@@ -34,11 +35,14 @@ namespace otb {
  * Type for each input is taken from the variadic template parameter
  * TInputs.
  * 
- * Inputs get be set/get with SetVariadicInput<N>() and
+ * Inputs get be set/get with SetInput<N>() and
  * GetInput<N>(), when N is the index (first input is 0) of
  * the input. This is resolved at compile time: you can not call 
  * SetInput<N>() with an argument not matching the Nth input
  * type (it will lead to type mismatch compilation error).
+ *
+ * Note that you can also call SetInput() and GetInput() which will
+ * automatically fetch the first input.
  * 
  * Alternatively, you can call SetInputs() with all the input
  * image in the same order as in the template parameters.
@@ -63,6 +67,11 @@ public:
 
   // Good old new macro
   itkNewMacro(Self);
+
+  // Import definitions for SetInput and GetInput to avoid shadowing
+  // by SetInput<> and GetIntput<> defined in this method
+  using Superclass::SetInput;
+  using Superclass::GetInput;
 
   /**
    * \param Set the Ith input
@@ -95,30 +104,6 @@ public:
 
 #undef DefineLegacySetInputMacro
 
-  /**
-   * Set the first input (for backward compatibility with ImageToImageFilter)
-   * \param input The image to use for first input
-   */ 
-  using Superclass::SetInput;
-  // void SetInput(const InputImageType<0> * input)
-  // {
-  //   SetInput<0>(input);
-  // };
-
-  /**
-   * Get the first input (for backward compatibility with
-   * ImageToImageFilter)
-   * \return The first input
-   */
-  using Superclass::GetInput;
-  // InputImageType<0> * GetInput()
-  // {
-  //   return GetInput<0>();
-  // }
- 
-  /**
-   * \return the Ith variadic input
-   */
   template <std::size_t I = 0> const InputImageType<I> * GetInput()
   {
     static_assert(NumberOfInputs>I,"Template value I is out of range.");
