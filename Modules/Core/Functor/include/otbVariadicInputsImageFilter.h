@@ -31,26 +31,26 @@ namespace otb {
  * This filter act as a base class for all filters that will take
  * several input images with different types and produce an output
  * image.
- * 
+ *
  * Type for each input is taken from the variadic template parameter
  * TInputs.
- * 
+ *
  * Inputs get be set/get with SetInput<N>() and
  * GetInput<N>(), when N is the index (first input is 0) of
- * the input. This is resolved at compile time: you can not call 
+ * the input. This is resolved at compile time: you can not call
  * SetInput<N>() with an argument not matching the Nth input
  * type (it will lead to type mismatch compilation error).
  *
  * Note that you can also call SetInput() and GetInput() which will
  * automatically fetch the first input.
- * 
+ *
  * Alternatively, you can call SetInputs() with all the input
  * image in the same order as in the template parameters.
  *
  * Last, there is a macro that generates SetInput1() ... SetInput10()
  * (iff the number of varidic input types is large enough) for
  * backward compatibility.
- * 
+ *
  */
 template<class TOuptut, class ... TInputs> class VariadicInputsImageFilter : public itk::ImageSource<TOuptut>
 {
@@ -70,23 +70,24 @@ public:
 
   // Import definitions for SetInput and GetInput to avoid shadowing
   // by SetInput<> and GetIntput<> defined in this method
-  using Superclass::SetInput;
   using Superclass::GetInput;
+  using Superclass::SetInput;
 
   /**
    * \param Set the Ith input
    */
-  template <std::size_t I = 0> void SetInput(const InputImageType<I> * inputPtr)
+  template <std::size_t I = 0>
+  void SetInput(const InputImageType<I>* inputPtr)
   {
-    static_assert(NumberOfInputs>I,"Template value I is out of range.");
-    this->SetNthInput(I,const_cast<InputImageType<I> *>(inputPtr));
+    static_assert(NumberOfInputs > I, "Template value I is out of range.");
+    this->SetNthInput(I, const_cast<InputImageType<I>*>(inputPtr));
   }
-  
-#define DefineLegacySetInputMacro(n)                                                                               \
-  template<typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n<=std::tuple_size<Tuple>::value >::type> \
-  void SetInput ## n(const typename std::tuple_element<n-1,Tuple>::type * img)                                           \
-  {                                                                                                                \
-    this->template SetInput<n-1>(img);                                                                             \
+
+#define DefineLegacySetInputMacro(n)                                                                                                  \
+  template <typename Tuple = InputTypesTupleType, typename Check = typename std::enable_if<n <= std::tuple_size<Tuple>::value>::type> \
+  void SetInput##n(const typename std::tuple_element<n - 1, Tuple>::type* img)                                                        \
+  {                                                                                                                                   \
+    this->template SetInput<n - 1>(img);                                                                                              \
   }
 
   // The following defines legacy setters SetInput1()
@@ -104,10 +105,11 @@ public:
 
 #undef DefineLegacySetInputMacro
 
-  template <std::size_t I = 0> const InputImageType<I> * GetInput()
+  template <std::size_t I = 0>
+  const InputImageType<I>* GetInput()
   {
-    static_assert(NumberOfInputs>I,"Template value I is out of range.");
-    return dynamic_cast<const InputImageType<I> *>(this->GetInput(I));
+    static_assert(NumberOfInputs > I, "Template value I is out of range.");
+    return dynamic_cast<const InputImageType<I>*>(this->GetInput(I));
   }
 
   /**
@@ -138,7 +140,7 @@ protected:
 private:
   template<class Tuple, size_t...Is> auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)),0)...};
+    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
   template <size_t...Is> auto GetInputsImpl(std::index_sequence<Is...>)
