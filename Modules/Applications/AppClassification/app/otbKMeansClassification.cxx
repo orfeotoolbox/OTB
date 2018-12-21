@@ -404,10 +404,9 @@ private:
 
     SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Unsupervised KMeans image classification. "
-      "KMeansClassification is a composite application, "
-      "using an existing training and classification application. "
+      "This is a composite application, using existing training and classification applications. "
       "The SharkKMeans model is used.\n\n"
-      "KMeansClassification application is only available if OTB is compiled with Shark support"
+      "This application is only available if OTB is compiled with Shark support"
       "(CMake option :code:`OTB_USE_SHARK=ON`).\n\n"
 
       "The steps of this composite application:\n\n"

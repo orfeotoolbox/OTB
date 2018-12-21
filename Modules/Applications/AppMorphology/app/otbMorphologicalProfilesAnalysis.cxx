@@ -85,7 +85,7 @@ private:
                                    "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2,\n"
                                    "February 2001, p. 309-320.\n\n"
 
-                                   "Depending of the profile selection, the application provides::\n\n"
+                                   "Depending of the profile selection, the application provides:\n\n"
 
                                    "* The multi scale geodesic morphological opening or closing profile of the input image.\n"
                                    "* The multi scale derivative of the opening or closing profile.\n"
