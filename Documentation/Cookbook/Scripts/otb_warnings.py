@@ -26,8 +26,8 @@ def parameter_warnings(app_warn, app, key):
     #if len(description) > 0 and description[-1] != ".":
         #warn("description does not end with a period")
 
-    if len(description) > 0 and " :" in description:
-        warn("description has a space before a colon")
+    #if len(description) > 0 and " :" in description:
+        #warn("description has a space before a colon")
 
 def application_documentation_warnings(app):
     "Emit warnings about application documentation"
@@ -45,8 +45,8 @@ def application_documentation_warnings(app):
     if re.search("\\n [a-zA-Z]", longdescription):
         warn("Application Long Description contains '\\n ' pattern (usually not intended)")
 
-    if " :" in longdescription:
-        warn("Application Long Description has a space before a colon")
+    #if " :" in longdescription:
+        #warn("Application Long Description has a space before a colon")
 
     if app.GetNumberOfExamples() == 0:
         warn("Application has no examples")
