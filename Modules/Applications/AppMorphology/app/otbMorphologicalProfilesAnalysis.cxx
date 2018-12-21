@@ -78,28 +78,29 @@ private:
 
     // Documentation
     SetDocName( "Morphological Profiles Analysis" );
-    SetDocLongDescription( "This algorithm is derived from the following publication:\n"
-                                   "\n"
+    SetDocLongDescription( "This algorithm is derived from the following publication:\n\n"
+
                                    "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach\n"
                                    "for the morphological segmentation of high resolution satellite imagery.\n"
                                    "IEEE Transactions on geoscience and remote sensing, vol. 39, NO. 2,\n"
-                                   "February 2001, p. 309-320.\n"
-                                   "\n"
+                                   "February 2001, p. 309-320.\n\n"
+
                                    "Depending of the profile selection, the application provides::\n\n"
-                                   "- The multi scale geodesic morphological opening or closing profile of the input image.\n"
-                                   "- The multi scale derivative of the opening or closing profile.\n"
-                                   "- The parameter (called characteristic) of the maximum derivative value of the multi scale closing or opening profile for which this maxima occurs.\n"
-                                   "- The labeled classification of the input image.\n"
-                                   "\n"
-                                   "The behavior of the classification is :\n"
-                                   "\n"
+
+                                   "* The multi scale geodesic morphological opening or closing profile of the input image.\n"
+                                   "* The multi scale derivative of the opening or closing profile.\n"
+                                   "* The parameter (called characteristic) of the maximum derivative value of the multi scale closing or opening profile for which this maxima occurs.\n"
+                                   "* The labeled classification of the input image.\n\n"
+
+                                   "The behavior of the classification is:\n\n"
+
                                    "Given :math:`x_1` and :math:`x_2` two membership values,\n"
                                    ":math:`L_1, L_2` two labels associated, and :math:`\\sigma` a tolerance\n"
                                    "value, the following decision rule is applied:\n"
                                    "\n"
                                    ":math:`L = \\begin{cases}  L_{1} & : x_{1}>x_{2} \\quad and \\quad x_{1}>\\sigma \\\\ L_{2} & : x_{2}>x_{1} \\quad and \\quad x_{2}>\\sigma \\\\ 0   & : otherwise. \\end{cases}` \n"
                                    "\n"
-                                   "The output image can be :"
+                                   "The output image can be:"
                                    "- A :math:`N` multi band image for the opening/closing normal or derivative profiles.\n"
                                    "- A mono band image for the opening/closing characteristics.\n"
                                    "- A labeled image for the classification." );
@@ -121,8 +122,6 @@ private:
     SetDefaultParameterInt( "channel", 1 );
     SetMinimumParameterIntValue( "channel", 1 );
 
-    AddRAMParameter();
-
     // Structuring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
@@ -139,7 +138,7 @@ private:
     SetDefaultParameterInt( "radius", 5 );
     SetMinimumParameterIntValue( "radius", 1 );
 
-    AddParameter( ParameterType_Int, "step", "Radius step." );
+    AddParameter( ParameterType_Int, "step", "Radius step" );
     SetParameterDescription( "step", "Radius step along the profile (in pixels)" );
     SetDefaultParameterInt( "step", 1 );
     SetMinimumParameterIntValue( "step", 1 );
@@ -160,6 +159,8 @@ private:
     SetDefaultParameterFloat( "profile.classification.sigma", 1 );
     SetMinimumParameterFloatValue( "profile.classification.sigma", 0 );
 
+    AddRAMParameter();
+
     SetDocExampleParameterValue( "in", "ROI_IKO_PAN_LesHalles.tif" );
     SetDocExampleParameterValue( "channel", "1" );
     SetDocExampleParameterValue( "structype", "ball" );
@@ -175,7 +176,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here: all parameters are independent
   }
 
   void DoExecute() override

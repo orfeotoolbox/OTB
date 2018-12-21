@@ -66,8 +66,6 @@ private:
     AddParameter(ParameterType_OutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Output calibrated image. This image contains the backscatter (sigmaNought) of the input image.");
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Bool, "noise", "Disable Noise");
     SetParameterDescription("noise", "Flag to disable noise. For 5.2.0 release, the noise values are only read by TerraSARX product.");
 
@@ -82,6 +80,8 @@ private:
     AddChoice("lut.dn", "Use DN value lookup");
     SetParameterDescription("lut.dn","Use DN value lookup value from product metadata");
     SetDefaultParameterInt("lut", 0);
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "RSAT_imagery_HH.tif");

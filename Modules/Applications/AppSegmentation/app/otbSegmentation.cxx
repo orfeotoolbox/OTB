@@ -209,7 +209,7 @@ private:
     SetParameterDescription("filter.cc", "Simple pixel-based connected-components algorithm with a user-defined connection condition.");
 
     AddParameter(ParameterType_String, "filter.cc.expr", "Condition");
-    SetParameterDescription("filter.cc.expr", "User defined connection condition, written as a mathematical expression. Available variables are p(i)b(i), intensity_p(i) and distance (example of expression : distance < 10 )");
+    SetParameterDescription("filter.cc.expr", "User defined connection condition, written as a mathematical expression. Available variables are p(i)b(i), intensity_p(i) and distance (example of expression: distance < 10 )");
 
     // Watershed
     AddChoice("filter.watershed","Watershed");
@@ -247,7 +247,7 @@ private:
     SetParameterDescription("filter.mprofiles.start","Initial radius of the structuring element (in pixels)");
     SetDefaultParameterInt("filter.mprofiles.start",1);
     SetMinimumParameterIntValue("filter.mprofiles.start",1);
-    AddParameter(ParameterType_Int,"filter.mprofiles.step","Radius step.");
+    AddParameter(ParameterType_Int,"filter.mprofiles.step","Radius step");
     SetParameterDescription("filter.mprofiles.step","Radius step along the profile (in pixels)");
     SetDefaultParameterInt("filter.mprofiles.step",1);
     SetMinimumParameterIntValue("filter.mprofiles.step",1);

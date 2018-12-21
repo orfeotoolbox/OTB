@@ -213,9 +213,9 @@ private:
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddRAMParameter();
-
     AddRANDParameter();
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "support_image.tif");
