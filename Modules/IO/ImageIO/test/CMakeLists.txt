@@ -77,8 +77,6 @@ otbMultiImageFileWriterTest.cxx
 otbWriteGeomFile.cxx
 )
 
-set(OTBImageIOTests ${OTBImageIOTests} otbImageFileReaderServerName.cxx)
-
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
 target_link_libraries(otbImageIOTestDriver ${OTBImageIO-Test_LIBRARIES})
 otb_module_target_label(otbImageIOTestDriver)

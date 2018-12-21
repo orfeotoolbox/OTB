@@ -152,5 +152,4 @@ void RegisterTests()
   REGISTER_TEST(otbImageFileWriterOptBandTest);
   REGISTER_TEST(otbMultiImageFileWriterTest);
   REGISTER_TEST(otbWriteGeomFile);
-  REGISTER_TEST(otbImageFileReaderServerName);
 }
