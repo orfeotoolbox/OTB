@@ -67,27 +67,27 @@ constexpr double CONST_EULER =    0.57721566490153286060;  /* euler constant*/
    GNU extension.  Provide enough digits for the 128-bit IEEE quad.  */
 #ifdef __USE_GNU
 
-constexpr long double CONST_El =        2.7182818284590452353602874713526625L;  /* e */
-constexpr long double CONST_LOG2El =    1.4426950408889634073599246810018921L;  /* log_2 e */
-constexpr long double CONST_LOG10El =   0.4342944819032518276511289189166051L;  /* log_10 e */
-constexpr long double CONST_LN2l =      0.6931471805599453094172321214581766L;  /* log_e 2 */
-constexpr long double CONST_LN10l =     2.3025850929940456840179914546843642L;  /* log_e 10 */
-constexpr long double CONST_PIl =       3.1415926535897932384626433832795029L;  /* pi */
-constexpr long double CONST_PI_2l =     1.5707963267948966192313216916397514L;  /* pi/2 */
-constexpr long double CONST_PI_4l =     0.7853981633974483096156608458198757L;  /* pi/4 */
-constexpr long double CONST_PI_8l =     0.3926990816987241548078304229099379L;  /* pi/8 */
-constexpr long double CONST_2_PIl =     0.6366197723675813430755350534900574L;  /* 2/pi */
-constexpr long double CONST_2_SQRTPIl = 1.1283791670955125738961589031215452L;  /* 2/sqrt(pi) */
-constexpr long double CONST_2PIl =      6.2831853071795864769252867665590058L;  /* 2*pi */
-constexpr long double CONST_PI_180l =   0.0174532925199432957692369076848861L;  /* pi/180 */
-constexpr long double CONST_180_PIl =   57.295779513082320876798154814105170L;  /* 180/pi */
+const long double CONST_El =        2.7182818284590452353602874713526625L;  /* e */
+const long double CONST_LOG2El =    1.4426950408889634073599246810018921L;  /* log_2 e */
+const long double CONST_LOG10El =   0.4342944819032518276511289189166051L;  /* log_10 e */
+const long double CONST_LN2l =      0.6931471805599453094172321214581766L;  /* log_e 2 */
+const long double CONST_LN10l =     2.3025850929940456840179914546843642L;  /* log_e 10 */
+const long double CONST_PIl =       3.1415926535897932384626433832795029L;  /* pi */
+const long double CONST_PI_2l =     1.5707963267948966192313216916397514L;  /* pi/2 */
+const long double CONST_PI_4l =     0.7853981633974483096156608458198757L;  /* pi/4 */
+const long double CONST_PI_8l =     0.3926990816987241548078304229099379L;  /* pi/8 */
+const long double CONST_2_PIl =     0.6366197723675813430755350534900574L;  /* 2/pi */
+const long double CONST_2_SQRTPIl = 1.1283791670955125738961589031215452L;  /* 2/sqrt(pi) */
+const long double CONST_2PIl =      6.2831853071795864769252867665590058L;  /* 2*pi */
+const long double CONST_PI_180l =   0.0174532925199432957692369076848861L;  /* pi/180 */
+const long double CONST_180_PIl =   57.295779513082320876798154814105170L;  /* 180/pi */
 // Defined but not used?
 //const long double CONST_LNPIl =     std::log(CONST_PIl);                    /* ln(pi)*/
 //const long double CONST_SQRTPIl =   std::sqrt(CONST_PIl);                   /* sqrt(pi)*/
-constexpr long double CONST_SQRT2l =    1.4142135623730950488016887242096981L;  /* sqrt(2) */
-constexpr long double CONST_SQRT1_2l =  0.7071067811865475244008443621048490L;  /* 1/sqrt(2) */
-constexpr long double CONST_SQRT3l =    1.7320508075688772935274463415058724L;  /* sqrt(3) */
-constexpr long double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* euler constant*/
+const long double CONST_SQRT2l =    1.4142135623730950488016887242096981L;  /* sqrt(2) */
+const long double CONST_SQRT1_2l =  0.7071067811865475244008443621048490L;  /* 1/sqrt(2) */
+const long double CONST_SQRT3l =    1.7320508075688772935274463415058724L;  /* sqrt(3) */
+const long double CONST_EULERl =    0.5772156649015328606065120900824024L;  /* euler constant*/
 
 #endif
 
