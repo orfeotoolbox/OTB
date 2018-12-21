@@ -109,13 +109,13 @@ private:
       "Output image which is the result of the mathematical expressions on input"
       " image list operands.");
 
-    AddRAMParameter();
-
     AddParameter( ParameterType_String, "exp", "Expression");
     SetParameterDescription(
       "exp",
       "The muParser mathematical expression to apply on input images."
     );
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue(
