@@ -183,7 +183,7 @@ private:
         std::transform(key.begin(), key.end(), key.begin(), tolower);
 
         OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-        if(fieldType == OFTInteger ||  ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+        if(fieldType == OFTInteger ||  fieldType == OFTInteger64 || fieldType == OFTReal)
           {
           std::string tmpKey="feat."+key;
           AddChoice(tmpKey,item);

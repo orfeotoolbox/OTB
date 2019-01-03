@@ -49,18 +49,6 @@ namespace ogr
 namespace version_proxy
 {
 
-/*-------------------------[GDAL v2 API change]-------------------------------*/
-OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type)
-{
-#if GDAL_VERSION_NUM<2000000
-  (void)type;
-  return false;
-#else
-  return type == OFTInteger64;
-#endif
-}
-
-
 GDALDatasetType * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000

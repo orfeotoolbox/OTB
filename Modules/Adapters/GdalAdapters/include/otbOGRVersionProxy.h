@@ -48,12 +48,6 @@ namespace ogr
 namespace version_proxy
 {
 
-/**
-* With Gdal >= 2.0, this function will test equality between type and
-* OFTInteger64 enum. Otherwise, it returns false. 
-*/
-OTBGdalAdapters_EXPORT bool IsOFTInteger64(OGRFieldType type);
-
 /** 
  * This namespace holds proxy functions hiding interface changes in gdal 2.0 
  *

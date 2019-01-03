@@ -131,12 +131,12 @@ void TrainVectorBase::DoUpdateParameters()
 
       OGRFieldType fieldType = feature.ogr().GetFieldDefnRef( iField )->GetType();
 
-      if( fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) || fieldType == OFTReal )
+      if( fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal )
         {
         std::string tmpKey = "feat." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         AddChoice( tmpKey, item );
         }
-      if( fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64( fieldType ) )
+      if( fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64 )
         {
         std::string tmpKey = "cfield." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         AddChoice( tmpKey, item );
