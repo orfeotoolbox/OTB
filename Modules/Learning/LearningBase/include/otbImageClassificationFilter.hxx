@@ -172,6 +172,7 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
   bool validPoint = true;
   double confidenceIndex = 0.0;
   ProbaSampleType probaVector{m_NumberOfClasses};
+  probaVector.Fill(0);
   // Walk the part of the image
   for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd();
        ++inIt, ++outIt)
