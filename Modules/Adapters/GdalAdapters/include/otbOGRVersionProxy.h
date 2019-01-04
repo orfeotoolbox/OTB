@@ -155,20 +155,6 @@ namespace version_proxy
    bool SyncToDisk(GDALDatasetType * dataset);
 
   /**
-   * \return The name of the dataset class behind the implementation
-   * (OGRDataSource for gdal 1.x and GdalDataset for gdal 2.x)
-   */
-  OTBGdalAdapters_EXPORT
-  std::string GetDatasetClassName();
-
-  /**
-   * \return The name of the driver class behind the implementation
-   * (OGRSFDriver for gdal 1.x and GDALDriver for gdal 2.x)
-   */
-  OTBGdalAdapters_EXPORT 
-  std::string GetDriverClassName();
-
-  /**
    * Return the list of files composing the dataset.
    * 
    * Calls OGRDataSource::GetName() and wrap in string vector for gdal

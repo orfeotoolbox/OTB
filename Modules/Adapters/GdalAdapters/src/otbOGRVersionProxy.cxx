@@ -128,24 +128,6 @@ GDALDriverType *  GetDriverByName(const char * name)
 #endif
 }
 
-std::string GetDatasetClassName()
-{
-#if GDAL_VERSION_NUM<2000000
-  return std::string("OGRDataSource");
-#else
-  return std::string("GDALDataset");
-#endif
-}
-
-std::string GetDriverClassName()
-{
-#if GDAL_VERSION_NUM<2000000
-  return std::string("OGRSFDriver");
-#else
-  return std::string("GDALDriver");
-#endif
-}
-
 #if GDAL_VERSION_NUM>=2000000
 namespace raii
 {
