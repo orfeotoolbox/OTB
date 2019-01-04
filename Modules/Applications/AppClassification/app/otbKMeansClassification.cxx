@@ -417,7 +417,7 @@ private:
         "4) SampleExtraction: extract the samples descriptors (update of SampleSelection output file),\n"
         "5) ComputeImagesStatistics: compute images second order statistics,\n"
         "6) TrainVectorClassifier: train the SharkKMeans model,\n"
-        "7) ImageClassifier: performs the classification of the input image "
+        "7) ImageClassifier: perform the classification of the input image "
             "according to a model file.\n\n"
         "It's possible to choice random/periodic modes of the SampleSelection application.\n"
         "If you want keep the temporary files (sample selected, model file, ...), "
