@@ -42,7 +42,6 @@ ENABLE_SHARED
     OTBVectorDataManipulation
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
     OTBVectorDataIO

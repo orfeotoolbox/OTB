@@ -627,9 +627,8 @@ otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProje
 
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
-  -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  -dem ${INPUTDATA}/DEM/srtm_directory
-  -gcp
+  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+  ${INPUTDATA}/DEM/srtm_directory
   2000 2000 1.4181 43.6147 135.084
   2000 2050 1.41811 43.6135 134.185
   2000 2100 1.41812 43.6123 135.728
@@ -730,13 +729,13 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6063 144.66
   2450 2400 1.43239 43.6051 144.932
   2450 2450 1.43239 43.6038 136.794
-  -err 10 # Tolerance in meters, the first goal of this test
+  err=10 # Tolerance in meters, the first goal of this test
   )
 
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
-  -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  -gcp
+  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+  no_output
   2000 2000 1.41809 43.6143 0
   2000 2050 1.4181 43.6131 0
   2000 2100 1.4181 43.6119 0
@@ -837,7 +836,7 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6059 0
   2450 2400 1.43238 43.6047 0
   2450 2450 1.43239 43.6034 0
-  -err 10 # Tolerance in meters, the first goal of this test
+  err=10 # Tolerance in meters, the first goal of this test
   )
 
 otb_add_test(NAME prTvGeographicalDistance COMMAND otbProjectionTestDriver
