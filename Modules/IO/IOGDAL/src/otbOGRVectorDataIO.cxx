@@ -216,7 +216,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 
   //Find first the OGR driver
   ogr::version_proxy::GDALDriverType * ogrDriver =
-    ogr::version_proxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
+    GetGDALDriverManager()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == nullptr)
     {

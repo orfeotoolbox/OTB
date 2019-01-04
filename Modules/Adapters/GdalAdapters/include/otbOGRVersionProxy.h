@@ -123,21 +123,6 @@ namespace version_proxy
   bool Delete(const char * name);
 
   /**
-   * This function returns a pointer to the driver from its name.
-   * 
-   * Calls OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName() for
-   * gdal 1.x implementation and
-   * GetGDALDriverManager()->GetDriverByName() for gdal 2.x
-   * implementation.
-   * 
-   * \param name Name of the driver to retrieve
-   * 
-   * \return NULL if no driver could be retrieved.
-   */
-  OTBGdalAdapters_EXPORT 
-  GDALDriverType *  GetDriverByName(const char * name);
-
-  /**
    * Return the list of files composing the dataset.
    * 
    * Calls OGRDataSource::GetName() and wrap in string vector for gdal

@@ -119,15 +119,6 @@ bool Delete(const char * name)
   return false;
 }
 
-GDALDriverType *  GetDriverByName(const char * name)
-{
-#if GDAL_VERSION_NUM<2000000
-  return OGRSFDriverRegistrar::GetRegistrar()->GetDriverByName(name);
-#else
-  return GetGDALDriverManager()->GetDriverByName(name);
-#endif
-}
-
 #if GDAL_VERSION_NUM>=2000000
 namespace raii
 {

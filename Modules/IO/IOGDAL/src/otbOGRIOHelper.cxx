@@ -1036,7 +1036,7 @@ std::vector<OGRLayer*> OGRIOHelper
   if (inMemoryDataSource == nullptr)
     {
     const char * driverName = "Memory";
-    ogr::version_proxy::GDALDriverType * ogrDriver = ogr::version_proxy::GetDriverByName(driverName);
+    ogr::version_proxy::GDALDriverType * ogrDriver = GetGDALDriverManager()->GetDriverByName(driverName);
     inMemoryDataSource = ogr::version_proxy::Create(ogrDriver,"tempDataSource");
     }
 
