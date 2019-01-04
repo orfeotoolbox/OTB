@@ -38,7 +38,6 @@ otb_module(OTBImageManipulation
     OTBTransform
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBDensity
     OTBImageIO
     OTBTestKernel
