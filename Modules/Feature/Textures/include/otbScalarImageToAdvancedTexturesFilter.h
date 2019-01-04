@@ -43,7 +43,7 @@ namespace otb
  * window. :(where each element in GLCIL is a pair of pixel index and it's
  * frequency, $ g(i, j) $ is the frequency value of the pair having index is i, j).
  *
- * "Mean" \f$ = \sum_{i, j}i g(i, j) \f$
+ * "Mean" \f$ = f_{mean} = \sum_{i, j}i g(i, j) \f$
  *
  * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i - \mu)^2 g(i, j) \f$
  *
@@ -55,22 +55,22 @@ namespace otb
  *
  * "Sum Entropy" \f$= f_8 = -\sum_{i}g_{x+y}(i) log (g_{x+y}(i)) \f$
  *
- * "Difference variance" \f$ = f_10 = variance of g_{x-y}(i) \f$
+ * "Difference variance" \f$ = f_{10} = variance of g_{x-y}(i) \f$
  *
- * "Difference entropy" \f$ = f_11 = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) \f$
+ * "Difference entropy" \f$ = f_{11} = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) \f$
  *
- * "Information Measures of Correlation IC1" \f$ = f_12 = \frac{f_9 - HXY1}{H} \f$
+ * "Information Measures of Correlation IC1" \f$ = f_{12} = \frac{f_9 - HXY1}{H} \f$
  *
- * "Information Measures of Correlation IC2" \f$ = f_13 = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
+ * "Information Measures of Correlation IC2" \f$ = f_{13} = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
  *
  * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
- * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix simmetry), and
  *
  * \f$ \g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_[g}  \f$ and
  *
  * \f$ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_[g}-1  \f$
  *
- * Print references:
+ * References:
  *
  * Haralick, R.M., K. Shanmugam and I. Dinstein. 1973.  Textural Features for
  * Image Classification. IEEE Transactions on Systems, Man and Cybernetics.
