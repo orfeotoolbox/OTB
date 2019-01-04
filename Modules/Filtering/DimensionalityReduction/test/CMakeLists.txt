@@ -80,29 +80,33 @@ otb_add_test(NAME bfTvMNFImageFilter3 COMMAND otbDimensionalityReductionTestDriv
   ${BASELINE}/bfTvMNFImageFilter3Inv.tif
   ${TEMP}/bfTvMNFImageFilter3Inv.tif
   otbMNFImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvMNFImageFilter3.tif
-  -inv ${TEMP}/bfTvMNFImageFilter3Inv.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvMNFImageFilter3.tif
+  ${TEMP}/bfTvMNFImageFilter3Inv.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvMNFImageFilter2 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvMNFImageFilter2Inv.tif
   otbMNFImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvMNFImageFilter2.tif
-  -inv ${TEMP}/bfTvMNFImageFilter2Inv.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvMNFImageFilter2.tif
+  ${TEMP}/bfTvMNFImageFilter2Inv.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvMNFImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvMNFImageFilter1Inv.tif
   otbMNFImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvMNFImageFilter1.tif
-  -inv ${TEMP}/bfTvMNFImageFilter1Inv.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvMNFImageFilter1.tif
+  ${TEMP}/bfTvMNFImageFilter1Inv.tif
+  false
+  0)
 
 otb_add_test(NAME bfTvMNFImageFilter4 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -111,11 +115,11 @@ otb_add_test(NAME bfTvMNFImageFilter4 COMMAND otbDimensionalityReductionTestDriv
   ${BASELINE}/bfTvMNFImageFilter4Inv.tif
   ${TEMP}/bfTvMNFImageFilter4Inv.tif
   otbMNFImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvMNFImageFilter4.tif
-  -inv ${TEMP}/bfTvMNFImageFilter4Inv.tif
-  -norm
-  -n 4)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvMNFImageFilter4.tif
+  ${TEMP}/bfTvMNFImageFilter4Inv.tif
+  true
+  4)
 
 otb_add_test(NAME bfTvInnerProductPCAImageFilter_PC12 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
