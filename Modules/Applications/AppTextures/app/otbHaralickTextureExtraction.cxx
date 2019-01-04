@@ -81,16 +81,20 @@ SetDocLongDescription(
     "Entropy (measure of randomness of intensity image), Correlation (how "
     "correlated a pixel is to its neighborhood), Inverse Difference Moment (measures "
     "the texture homogeneity), Inertia (intensity contrast between a pixel and its "
-    "neighborhood), Cluster Shade, Cluster Prominence, Haralick Correlation;\n"
+    "neighborhood), Cluster Shade, Cluster Prominence, Haralick Correlation;\n\n"
     "* advanced: a set of 10 advanced Haralick features: Mean, Variance (measures the "
     "texture heterogeneity), Dissimilarity, Sum Average, Sum Variance, Sum Entropy, "
-    "Difference of Entropies, Difference of Variances, IC1, IC2;\n"
+    "Difference of Entropies, Difference of Variances, IC1, IC2;\n\n"
     "* higher: a set of 11 higher Haralick features: Short Run Emphasis (measures the "
     "texture sharpness), Long Run Emphasis (measures the texture roughness), Grey-Level "
     "Nonuniformity, Run Length Nonuniformity, Run Percentage (measures the texture "
     "sharpness homogeneity), Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, "
     "Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, Long Run Low "
-    "Grey-Level Emphasis and Long Run High Grey-Level Emphasis.");
+    "Grey-Level Emphasis and Long Run High Grey-Level Emphasis.\n\n"
+    "The documentation of textures (description are formulas) are available in corresponding doxygen documentation of filters (see section *Detailed Description* in doxygen):\n"
+    "* **simple**: otbScalarImageToTexturesFilter\n"
+    "* **advanced**: otbScalarImageToAdvancedTexturesFilter\n"
+    "* **higher**: otbScalarImageToHigherOrderTexturesFilter");
 
 SetDocLimitations("The computation of the features is based on a Gray Level Co-occurrence "
     "matrix (GLCM) from the quantized input image. Consequently the quantization "
