@@ -151,7 +151,7 @@ protected:
 
     if (m_OGRDataSourcePointer != nullptr)
       {
-      ogr::version_proxy::Close(m_OGRDataSourcePointer);
+      GDALClose(m_OGRDataSourcePointer);
       }
   }
 

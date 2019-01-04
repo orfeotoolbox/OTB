@@ -64,15 +64,6 @@ GDALDataset * Open(const char * filename, bool readOnly , std::vector< std::stri
 #endif
 }
 
-void Close(GDALDataset * dataset)
-{
-#if GDAL_VERSION_NUM<2000000
-  OGRDataSource::DestroyDataSource(dataset);
-#else
-  GDALClose(dataset);
-#endif
-}
-
 GDALDataset * Create(GDALDriver * driver, const char * name ,  std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
@@ -101,7 +92,7 @@ bool Delete(const char * name)
   if(poDS)
     {
     poDriver = poDS->GetDriver();
-    Close(poDS);
+    GDALClose(poDS);
     }
 #if GDAL_VERSION_NUM<2000000
   if(poDriver && poDriver->TestCapability(ODrCDeleteDataSource))

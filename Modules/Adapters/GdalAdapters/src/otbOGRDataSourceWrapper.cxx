@@ -54,7 +54,7 @@ void otb::ogr::DataSource::Reset(GDALDataset * source)
     // OGR makes a pointless check for non-nullity in
     // GDALDataset::DestroyDataSource (pointless because "delete 0" is
     // perfectly valid -> it's a no-op)
-    ogr::version_proxy::Close(m_DataSource); // void, noexcept
+    GDALClose(m_DataSource); // void, noexcept
   }
   m_DataSource = source;
 }
@@ -233,7 +233,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
   bool ds_exists = (ds!=nullptr);
 
-  ogr::version_proxy::Close(ds);
+  GDALClose(ds);
 
 
   if (ds_exists && mode == Modes::Overwrite)

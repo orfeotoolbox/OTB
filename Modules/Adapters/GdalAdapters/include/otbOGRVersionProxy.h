@@ -79,18 +79,6 @@ namespace version_proxy
   GDALDataset * Open(const char * filename, bool readOnly = true , std::vector< std::string > const & options = std::vector< std::string >() );
 
   /**
-   * This function closes a dataset.
-   *
-   * Calls OGRDataSource::DestroyDataSource for gdal 1.x
-   * implementation and GDALClose for gdal 2.x implementation.
-   *
-   * \param dataset Pointer to the dataset to close. Will not be
-   * checked for null pointer.
-   */
-  OTBGdalAdapters_EXPORT
-  void Close(GDALDataset * dataset);
-
-  /**
    * This function creates a new dataset.
    *
    * Calls OGRSFDriver::CreateDataSource for gdal 1.x implementation

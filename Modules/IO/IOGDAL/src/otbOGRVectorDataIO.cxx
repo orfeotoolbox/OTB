@@ -62,7 +62,7 @@ OGRVectorDataIO::CanReadFile(const char* filename) const
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
-  ogr::version_proxy::Close(poDS);
+  GDALClose(poDS);
   return true;
 }
 
@@ -184,7 +184,7 @@ OGRVectorDataIO
 void OGRVectorDataIO::CloseInternalDataSource()
 {
   assert(m_DataSource != NULL && "m_DataSource cannot be NULL");
-  ogr::version_proxy::Close(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = nullptr;
 }
 
@@ -226,7 +226,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   // free an existing previous data source, if any
   if (m_DataSource != nullptr)
     {
-    ogr::version_proxy::Close(m_DataSource);
+    GDALClose(m_DataSource);
     }
 
   // Erase the dataSource if already exist
@@ -288,7 +288,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  otb::ogr::version_proxy::Close(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = nullptr;
 
   if (oSRS != nullptr)
