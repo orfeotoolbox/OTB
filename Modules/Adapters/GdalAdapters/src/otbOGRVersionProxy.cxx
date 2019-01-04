@@ -201,15 +201,6 @@ std::vector<std::string> GetAvailableDriversAsStringVector()
   return ret;
 }
 
-std::string GetDriverNameFromDataSource(const GDALDatasetType * ds)
-{
-#if GDAL_VERSION_NUM<2000000
-  return std::string(const_cast<GDALDatasetType *>(ds)->GetDriver()->GetName());
-#else
-  return std::string(const_cast<GDALDatasetType *>(ds)->GetDriverName());
-#endif
-}
-
 /*----------------------[GDAL 2.2 change on IsFieldSet()]---------------------*/
 bool IsFieldSetAndNotNull(OGRFeature *feat, int index)
 {

@@ -137,9 +137,6 @@ namespace version_proxy
   OTBGdalAdapters_EXPORT 
   GDALDriverType *  GetDriverByName(const char * name);
 
-  OTBGdalAdapters_EXPORT
-  std::string GetDriverNameFromDataSource(const GDALDatasetType * ds);
-
   /**
    * Return the list of files composing the dataset.
    * 
