@@ -14,24 +14,168 @@ This example illustrates the use of the \doxygen{otb}{ScalarImageToTexturesFilte
 which computes the standard Haralick's textural features~\cite{Haralick1973}.
 
 The \doxygen{otb}{ScalarImageToTexturesFilter} class computes 8 local Haralick
-textures features. Their formulas are available in the
-\doxygen{otb}{ScalarImageToTexturesFilter} documentation (see section
-\textit{Detailed Description} in the doxygen).
+textures features presented in table~\ref{tab:haralickStandardFeatures},
+where $\mu_t$ and $\sigma_t$ are the mean and standard deviation of the row
+(or column, due to symmetry) sums, $ \mu =  $ (weighted pixel average)
+$ = \sum_{i,j}i \cdot g(i, j) =\sum_{i,j}j \cdot g(i, j) $ due to matrix summetry, and
+$ \sigma =  $ (weighted pixel variance) $ = \sum_{i,j}(i - \mu)^2 \cdot g(i, j) =\sum_{i,j}(j - \mu)^2 \cdot g(i, j)  $
+due to matrix symmetry.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+& \\
+Energy & $ f_1 = \sum_{i,j}g(i, j)^2 $ \\
+& \\
+\hline
+& \\
+Entropy & $ f_2 = -\sum_{i,j}g(i, j) \log_2 g(i, j)$, or 0 if $g(i, j) = 0$ \\
+& \\
+\hline
+& \\
+Correlation & $ f_3 = \sum_{i,j}\frac{(i - \mu)(j - \mu)g(i, j)}{\sigma^2} $ \\
+& \\
+\hline
+& \\
+Difference Moment &  $f_4 = \sum_{i,j}\frac{1}{1 + (i - j)^2}g(i, j) $ \\
+& \\
+\hline
+& \\
+Inertia (a.k.a. Contrast) & $ f_5 = \sum_{i,j}(i - j)^2g(i, j) $ \\
+& \\
+\hline
+& \\
+Cluster Shade & $ f_6 = \sum_{i,j}((i - \mu) + (j - \mu))^3 g(i, j) $ \\
+& \\
+\hline
+Cluster Prominence & $ f_7 = \sum_{i,j}((i - \mu) + (j - \mu))^4 g(i, j) $ \\
+& \\
+\hline
+& \\
+Haralick's Correlation & $ f_8 = \frac{\sum_{i,j}(i, j) g(i, j) -\mu_t^2}{\sigma_t^2} $ \\
+& \\
+\hline
+\end{tabular}
+\itkcaption[Haralick features]{Haralick features~\cite{Haralick1973} available in \doxygen{otb}{ScalarImageToTexturesFilter}}
+\end{center}
+\label{tab:haralickStandardFeatures}
+\end{table}
 
 Note that more features are available in
 \doxygen{otb}{ScalarImageToAdvancedTexturesFilter} and in
 \doxygen{otb}{ScalarImageToHigherOrderTexturesFilter}.
 
-\doxygen{otb}{ScalarImageToHigherOrderTexturesFilter} computes 10 advanced
-texture features. Their formulas are available in the
-\doxygen{otb}{ScalarImageToAdvancedTexturesFilter} documentation (see section
-\textit{Detailed Description} in the doxygen).
+\doxygen{otb}{ScalarImageToAdvancedTexturesFilter} computes 10 advanced
+texture features presented presented in table~\ref{tab:haralickAdvancedFeatures},
+where $ \mu = $  (weighted pixel average) = $ \sum_{i, j}i \cdot g(i, j) =
+\sum_{i,j}j \cdot g(i, j) $ (due to matrix symmetry), and $ \g_{x+y}(k) =
+\sum_{i}\sum_{j}g(i) $ where $ i+j=k $ and $ k = 2, 3, .., 2N_[g} $ and $ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i) $ where $ i-j=k $ and $ k = 0, 1, ..,N_[g}-1 $
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+& \\
+Mean & $ f_{mean} = \sum_{i, j}i g(i, j) $ \\
+& \\
+\hline
+& \\
+Sum of squares: Variance & $ f_4 = \sum_{i, j}(i - \mu)^2 g(i, j) $ \\
+& \\
+\hline
+& \\
+Dissimilarity & $ f_5 = \sum_{i, j}(i - j) g(i, j)^2 $ \\
+& \\
+\hline
+& \\
+Sum average &  $ f_6 = -\sum_{i}i g_{x+y}(i) $ \\
+& \\
+\hline
+& \\
+Sum Variance & $ f_7 = \sum_{i}(i - f_8)^2 g_{x+y}(i) $ \\
+& \\
+\hline
+& \\
+Sum Entropy & $ f_8 = -\sum_{i}g_{x+y}(i) log (g_{x+y}(i)) $ \\
+& \\
+\hline
+Difference variance & $ f_{10} = variance of g_{x-y}(i) $ \\
+& \\
+\hline
+& \\
+Difference entropy & $ f_{11} = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) $ \\
+& \\
+\hline
+& \\
+Information Measures of Correlation IC1 & $ f_{12} = \frac{f_9 - HXY1}{H} $ \\
+& \\
+\hline
+& \\
+Information Measures of Correlation IC2 & $ f_{13} = \sqrt{1 - \exp{-2}|HXY2 - f_9|} $ \\
+& \\
+\hline
+\end{tabular}
+\itkcaption[Haralick features]{Haralick features~\cite{Haralick1973} available in \doxygen{otb}{ScalarImageToAdvancedTexturesFilter}}
+\end{center}
+\label{tab:haralickAdvancedFeatures}
+\end{table}.
 
 \doxygen{otb}{ScalarImageToHigherOrderTexturesFilter} computes 11
 other local higher order statistics textures coefficients also based on the grey
-level run-length matrix. Formulas for these coefficients are also
-available in the doxygen documentation of the filter (see section
-\textit{Detailed Description} in the doxygen).
+level run-length matrix. Formulas for these coefficients are presented in
+table~\ref{tab:haralickHigherOrderFeatures},where $p(i, j)$ is the element in
+cell i, j of a normalized Run Length Matrix, $n_r$ is the total number of runs
+and $n_p$ is the total number of pixels.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+& \\
+Short Run Emphasis & $ SRE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{j^2} $ \\
+& \\
+\hline
+& \\
+Long Run Emphasis & $ LRE =  \frac{1}{n_r} \sum_{i, j}p(i, j) * j^2 $ \\
+& \\
+\hline
+& \\
+Grey-Level Nonuniformity & $ GLN = \frac{1}{n_r} \sum_{i} \left( \sum_{j}{p(i, j)} \right)^2 $ \\
+& \\
+\hline
+& \\
+Run Length Nonuniformity &  $ RLN = \frac{1}{n_r} \sum_{j} \left( \sum_{i}{p(i, j)} \right)^2 $ \\
+& \\
+\hline
+& \\
+Low Grey-Level Run Emphasis & $ LGRE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{i^2} $ \\
+& \\
+\hline
+& \\
+High Grey-Level Run Emphasis & $ HGRE = \frac{1}{n_r} \sum_{i, j}p(i, j) * i^2 $ \\
+& \\
+\hline
+Short Run Low Grey-Level Emphasis & $ SRLGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j)}{i^2 j^2} $ \\
+& \\
+\hline
+& \\
+Short Run High Grey-Level Emphasis & $ SRHGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j) * i^2}{j^2} $ \\
+& \\
+\hline
+& \\
+Long Run Low Grey-Level Emphasis & $ LRLGE = \frac{1}{n_r} \sum_{i, j}\frac{p(i, j) * j^2}{i^2} $ \\
+& \\
+\hline
+& \\
+Long Run High Grey-Level Emphasis & $ LRHGE = \frac{1}{n_r} \sum_{i, j} p(i, j) i^2 j^2 $ \\
+& \\
+\hline
+\end{tabular}
+\itkcaption[Haralick higher order features]{Haralick features~\cite{Haralick1973} available in \doxygen{otb}{ScalarImageToHigherOrderTexturesFilter}}
+\end{center}
+\label{tab:haralickHigherOrderFeatures}
+\end{table}
 
 \relatedClasses
 \begin{itemize}
