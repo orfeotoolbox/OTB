@@ -76,30 +76,6 @@ namespace version_proxy
    * 
    * \return A vector of string containing the list of files.
    */
-   
-  OTBGdalAdapters_EXPORT 
-  std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset);
-
-  /** 
-   * Return the list of available drivers.
-   *
-   * Calls OGRSFDriverRegistrar::GetRegistrar() for gdal 1.x
-   * implementation and GetGDALDriverManager() for gdal 2.x
-   * implementation.
-   *
-   * \return A vector of string containing the list of available drivers.
-   */  
-  OTBGdalAdapters_EXPORT
-  std::vector<std::string> GetAvailableDriversAsStringVector();
-
-  /**
-   * Returns true if the field 'index' is set and not-null in the given feature
-   *
-   * Before gdal 2.2, it calls OGRFeature::IsFieldSet().
-   * After gdal 2.2, it calls OGRFeature::IsFieldSetAndNotNull()
-   */
-   OTBGdalAdapters_EXPORT
-   bool IsFieldSetAndNotNull(OGRFeature *feat, int index);
 
 }
 }

@@ -42,96 +42,12 @@
 #include "ogr_feature.h"
 #endif // __GNUC__ || __clang__
 
-namespace otb
+namespace otbscon 
 {
 namespace ogr
 {
 namespace version_proxy
 {
-
-#if GDAL_VERSION_NUM>=2000000
-namespace raii
-{
-// This class is used in the next function, so as to prevent any
-// resource leak on char ** returned by dataset->GetFileList()
-class CharPPCapsule
-{
-public:
-  CharPPCapsule(char ** in)
-    : m_P(in)
-  {}
-
-  const char ** P() const
-  {
-    return const_cast<const char **>(m_P);
-  }
-
-  ~CharPPCapsule()
-  {
-    if(m_P)
-      CSLDestroy(m_P);
-  }
-
-private:
-  char ** m_P;
-};
-}
-#endif
-
-std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset)
-{
-  std::vector<std::string> ret;
-#if GDAL_VERSION_NUM<2000000
-  ret.push_back(std::string(dataset->GetName()));
-#else
-  raii::CharPPCapsule capsule(dataset->GetFileList());
-
-  std::string files_str="";
-
-  if(capsule.P())
-    {
-    unsigned int i = 0;
-    while(capsule.P()[i]!=NULL)
-      {
-      ret.push_back(std::string(capsule.P()[i]));
-      ++i;
-      }
-    }
-#endif
-  return ret;
-}
-
-std::vector<std::string> GetAvailableDriversAsStringVector()
-{
-  std::vector<std::string> ret;
-#if GDAL_VERSION_NUM<2000000
-  int nbDrivers = OGRSFDriverRegistrar::GetRegistrar()->GetDriverCount();
-
-  for(int i = 0; i < nbDrivers;++i)
-    {
-    ret.push_back(OGRSFDriverRegistrar::GetRegistrar()->GetDriver(i)->GetName());
-    }
-#else
-  int nbDrivers = GetGDALDriverManager()->GetDriverCount();
-
-  for(int i = 0; i < nbDrivers;++i)
-    {
-    ret.push_back(GDALGetDriverShortName(GetGDALDriverManager()->GetDriver(i)));
-    }
-#endif
-  return ret;
-}
-
-/*----------------------[GDAL 2.2 change on IsFieldSet()]---------------------*/
-bool IsFieldSetAndNotNull(OGRFeature *feat, int index)
-{
-#if GDAL_VERSION_NUM<2020000
-  return feat->IsFieldSet(index);
-#else
-  return feat->IsFieldSetAndNotNull(index);
-#endif
-}
-
 }
 }
 } // end namespace

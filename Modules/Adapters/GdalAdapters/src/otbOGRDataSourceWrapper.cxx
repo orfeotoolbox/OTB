@@ -829,7 +829,7 @@ void otb::ogr::DataSource::SyncToDisk()
 std::string otb::ogr::DataSource::GetDatasetDescription() const
 {
   std::vector<std::string> files = 
-    otb::ogr::version_proxy::GetFileListAsStringVector( m_DataSource );
+    otb::ogr::GetFileListAsStringVector( m_DataSource );
   std::string description = "";
   for( std::vector<std::string>::const_iterator it = files.begin() ; 
        it!=files.end() ; ++it )

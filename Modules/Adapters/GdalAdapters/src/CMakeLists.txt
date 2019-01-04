@@ -30,6 +30,7 @@ set(OTBGdalAdapters_SRC
   otbOGRDataSourceWrapper.cxx
   otbOGRVersionProxy.cxx
   otbOGRExtendedFilenameToOptions.cxx
+  otbOGRHelpers.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})
