@@ -24,6 +24,7 @@
 #include "otbGreyLevelCooccurrenceIndexedList.h"
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
+
 namespace otb
 {
 /**
