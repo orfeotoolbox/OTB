@@ -180,17 +180,6 @@ std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
   return ret;
 }
 
-bool SyncToDisk(GDALDatasetType * dataset)
-{
-#if GDAL_VERSION_NUM<2000000
-  const OGRErr res= dataset->SyncToDisk();
-  return (res == OGRERR_NONE);
-#else
-  dataset->FlushCache();
-  return true;
-#endif
-}
-
 std::vector<std::string> GetAvailableDriversAsStringVector()
 {
   std::vector<std::string> ret;

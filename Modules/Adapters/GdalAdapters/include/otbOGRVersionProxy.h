@@ -141,20 +141,6 @@ namespace version_proxy
   std::string GetDriverNameFromDataSource(const GDALDatasetType * ds);
 
   /**
-   * Sync dataset to disk.
-   *
-   * Calls OGRDataSource::SyncToDisk() for gdal 1.x implementation and
-   * GDALDataset::FlushCache() for gdal 2.x  implementation.
-   *
-   * \param dataset Pointer to the dataset to sync. Will not be
-   * checked for null pointer.
-   *
-   * \return True if sync went on without any error.
-   */
-   OTBGdalAdapters_EXPORT
-   bool SyncToDisk(GDALDatasetType * dataset);
-
-  /**
    * Return the list of files composing the dataset.
    * 
    * Calls OGRDataSource::GetName() and wrap in string vector for gdal

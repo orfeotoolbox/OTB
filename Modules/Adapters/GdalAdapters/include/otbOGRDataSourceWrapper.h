@@ -477,8 +477,6 @@ public:
     }
 
   /** Flushes all changes to disk.
-   * \throw itd::ExceptionObject in case the flush operation failed.
-   * \sa \c GDALDataset::SyncToDisk()
    */
   void SyncToDisk();
 

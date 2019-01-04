@@ -780,13 +780,7 @@ bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) cons
 void otb::ogr::DataSource::SyncToDisk()
 {
   assert(m_DataSource && "Datasource not initialized");
-  bool ret = otb::ogr::version_proxy::SyncToDisk(m_DataSource);
-
-  if(!ret)
-    {
-    itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
-      << GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
-    }
+  m_DataSource->FlushCache();
 }
 
 
