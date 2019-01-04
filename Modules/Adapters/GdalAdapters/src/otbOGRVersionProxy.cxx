@@ -49,13 +49,13 @@ namespace ogr
 namespace version_proxy
 {
 
-GDALDatasetType * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
+GDALDataset * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
   (void)options;
   return OGRSFDriverRegistrar::Open(filename,!readOnly);
 #else
-  return (GDALDatasetType *)GDALOpenEx(
+  return (GDALDataset *)GDALOpenEx(
       filename, 
       (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
       NULL,
@@ -64,7 +64,7 @@ GDALDatasetType * Open(const char * filename, bool readOnly , std::vector< std::
 #endif
 }
 
-void Close(GDALDatasetType * dataset)
+void Close(GDALDataset * dataset)
 {
 #if GDAL_VERSION_NUM<2000000
   OGRDataSource::DestroyDataSource(dataset);
@@ -73,11 +73,11 @@ void Close(GDALDatasetType * dataset)
 #endif
 }
 
-GDALDatasetType * Create(GDALDriverType * driver, const char * name ,  std::vector< std::string > const & options )
+GDALDataset * Create(GDALDriverType * driver, const char * name ,  std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
   (void)options;
-  GDALDatasetType * ds = driver->CreateDataSource(name);
+  GDALDataset * ds = driver->CreateDataSource(name);
 
   if(ds)
     ds->SetDriver(driver);
@@ -96,7 +96,7 @@ GDALDatasetType * Create(GDALDriverType * driver, const char * name ,  std::vect
 bool Delete(const char * name)
 {
   // Open dataset
-  GDALDatasetType * poDS = otb::ogr::version_proxy::Open(name,false);
+  GDALDataset * poDS = otb::ogr::version_proxy::Open(name,false);
   GDALDriverType * poDriver = NULL;
   if(poDS)
     {
@@ -148,7 +148,7 @@ private:
 }
 #endif
 
-std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset)
+std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset)
 {
   std::vector<std::string> ret;
 #if GDAL_VERSION_NUM<2000000

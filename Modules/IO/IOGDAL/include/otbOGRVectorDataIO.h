@@ -123,7 +123,7 @@ private:
 
   void CloseInternalDataSource();
 
-  ogr::version_proxy::GDALDatasetType * m_DataSource;
+  GDALDataset * m_DataSource;
 
 };
 

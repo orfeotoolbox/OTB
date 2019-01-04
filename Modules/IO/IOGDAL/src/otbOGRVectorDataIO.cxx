@@ -54,7 +54,7 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
+  GDALDataset * poDS = ogr::version_proxy::Open(filename, true);
 
   if (poDS == nullptr)
     {

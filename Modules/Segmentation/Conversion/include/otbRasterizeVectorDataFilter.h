@@ -160,7 +160,7 @@ private:
   RasterizeVectorDataFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset * m_OGRDataSourcePointer;
 
   // Vector Of LayersH
   std::vector< OGRLayerH >    m_SrcDataSetLayers;

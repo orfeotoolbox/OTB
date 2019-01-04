@@ -651,7 +651,7 @@ void OGRIOHelper
 
 unsigned int OGRIOHelper
 ::ProcessNodeWrite(InternalTreeNodeType * source,
-                   ogr::version_proxy::GDALDatasetType * m_DataSource,
+                   GDALDataset * m_DataSource,
                    OGRGeometryCollection * ogrCollection,
                    OGRLayer * ogrCurrentLayer,
                    OGRSpatialReference * oSRS)
@@ -1027,7 +1027,7 @@ unsigned int OGRIOHelper
  **/
 std::vector<OGRLayer*> OGRIOHelper
 ::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                 ogr::version_proxy::GDALDatasetType * inMemoryDataSource,
+                                 GDALDataset * inMemoryDataSource,
                                  OGRLayer* ogrCurrentLayer,
                                  OGRSpatialReference * oSRS)
 {

@@ -164,7 +164,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
+  static Pointer New(GDALDataset * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
   //@}
 
   /**\name Projection Reference property */
@@ -301,7 +301,7 @@ public:
    * \throw None
    * \post Assumes ownership of the \c source.
    */
-  void Reset(ogr::version_proxy::GDALDatasetType * source);
+  void Reset(GDALDataset * source);
 
   /**\name Layers modification */
   //@{
@@ -495,7 +495,7 @@ public:
    * \warning You must under no circumstance try to delete the \c GDALDataset
    * obtained this way.
    */
-    ogr::version_proxy::GDALDatasetType & ogr();
+    GDALDataset & ogr();
 
     void SetLayerCreationOptions( const std::vector< std::string > & options );
     void AddLayerCreationOptions( std::vector< std::string > options );
@@ -515,7 +515,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
+  DataSource(GDALDataset * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -552,7 +552,7 @@ private:
   std::string GetDatasetDescription() const;
 
 private:
-  ogr::version_proxy::GDALDatasetType *m_DataSource;
+  GDALDataset *m_DataSource;
   std::vector< std::string > m_LayerOptions;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;

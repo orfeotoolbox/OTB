@@ -48,7 +48,7 @@ bool otb::ogr::DataSource::Clear()
   return true;
 }
 
-void otb::ogr::DataSource::Reset(otb::ogr::version_proxy::GDALDatasetType * source)
+void otb::ogr::DataSource::Reset(GDALDataset * source)
 {
   if (m_DataSource) {
     // OGR makes a pointless check for non-nullity in
@@ -137,7 +137,7 @@ otb::ogr::DataSource::DataSource()
 }
 
 otb::ogr::DataSource::DataSource( 
-    otb::ogr::version_proxy::GDALDatasetType * source ,
+    GDALDataset * source ,
     Modes::type mode ,
     const std::vector< std::string > & options /*NULL*/ )
 : m_DataSource(source) ,
@@ -155,7 +155,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
 
   bool update = (mode != Modes::Read);
-  ogr::version_proxy::GDALDatasetType * source = 
+  GDALDataset * source = 
     ogr::version_proxy::Open( simpleFileName.c_str() ,
                               !update ,
                               fileNameHelper->GetGDALOpenOptions() );
@@ -228,7 +228,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
     }
 
   Drivers::Init();
-  ogr::version_proxy::GDALDatasetType * ds = 
+  GDALDataset * ds = 
     ogr::version_proxy::Open( simpleFileName.c_str() , true );
 
   bool ds_exists = (ds!=nullptr);
@@ -246,7 +246,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source , Modes::type mode , const std::vector< std::string > & layerOptions )
+otb::ogr::DataSource::New(GDALDataset * source , Modes::type mode , const std::vector< std::string > & layerOptions )
 {
   Pointer res = new DataSource( source , mode , layerOptions );
   res->UnRegister();

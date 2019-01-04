@@ -58,13 +58,12 @@ namespace version_proxy
  * 
  * Whenever GDALDataset and GDALDriver have to be used to open a
  * vector dataset (or OGRDataSource an OGRSFDriver for gdal 1.x), one
- * should use ogr::version_proxy types GDALDatasetType and
+ * should use ogr::version_proxy types GDALDataset and
  * GDALDriverType.
  * 
  * See function documentation for details.
  */
 
-  typedef GDALDataset GDALDatasetType;
   typedef GDALDriver GDALDriverType;
 
   /** 
@@ -79,7 +78,7 @@ namespace version_proxy
    * \return NULL if file could not be open.
    */
   OTBGdalAdapters_EXPORT   
-  GDALDatasetType * Open(const char * filename, bool readOnly = true , std::vector< std::string > const & options = std::vector< std::string >() );
+  GDALDataset * Open(const char * filename, bool readOnly = true , std::vector< std::string > const & options = std::vector< std::string >() );
 
   /**
    * This function closes a dataset.
@@ -91,7 +90,7 @@ namespace version_proxy
    * checked for null pointer.
    */
   OTBGdalAdapters_EXPORT
-  void Close(GDALDatasetType * dataset);
+  void Close(GDALDataset * dataset);
 
   /**
    * This function creates a new dataset.
@@ -108,7 +107,7 @@ namespace version_proxy
    * \return NULL if dataset could not be created.
    */
   OTBGdalAdapters_EXPORT
-  GDALDatasetType * Create(GDALDriverType * driver, const char * name , std::vector< std::string > const & options = std::vector< std::string >() );
+  GDALDataset * Create(GDALDriverType * driver, const char * name , std::vector< std::string > const & options = std::vector< std::string >() );
 
 
   /**
@@ -136,7 +135,7 @@ namespace version_proxy
    */
    
   OTBGdalAdapters_EXPORT 
-  std::vector<std::string> GetFileListAsStringVector(GDALDatasetType * dataset);
+  std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset);
 
   /** 
    * Return the list of available drivers.

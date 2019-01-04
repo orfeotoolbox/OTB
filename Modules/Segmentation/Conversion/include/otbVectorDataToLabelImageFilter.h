@@ -163,7 +163,7 @@ private:
   VectorDataToLabelImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset * m_OGRDataSourcePointer;
 
   // Vector Of OGRGeometyH
   std::vector< OGRGeometryH >   m_SrcDataSetGeometries;
