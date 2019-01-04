@@ -73,7 +73,7 @@ void Close(GDALDataset * dataset)
 #endif
 }
 
-GDALDataset * Create(GDALDriverType * driver, const char * name ,  std::vector< std::string > const & options )
+GDALDataset * Create(GDALDriver * driver, const char * name ,  std::vector< std::string > const & options )
 {
 #if GDAL_VERSION_NUM<2000000
   (void)options;
@@ -97,7 +97,7 @@ bool Delete(const char * name)
 {
   // Open dataset
   GDALDataset * poDS = otb::ogr::version_proxy::Open(name,false);
-  GDALDriverType * poDriver = NULL;
+  GDALDriver * poDriver = NULL;
   if(poDS)
     {
     poDriver = poDS->GetDriver();

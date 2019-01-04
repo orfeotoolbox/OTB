@@ -126,7 +126,7 @@ otb::ogr::DataSource::DataSource()
 {
   Drivers::Init();
 
-  ogr::version_proxy::GDALDriverType * d = 
+  GDALDriver * d = 
     GetGDALDriverManager()->GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
   m_DataSource = ogr::version_proxy::Create(d,"in-memory");
@@ -178,7 +178,7 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         <<simpleFileName<<">.");
       }
 
-    ogr::version_proxy::GDALDriverType * d = 
+    GDALDriver * d = 
       GetGDALDriverManager()->GetDriverByName(  driverName  );
 
     if(!d)

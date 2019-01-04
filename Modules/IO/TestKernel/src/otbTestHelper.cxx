@@ -1728,10 +1728,10 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
   GDALDataset *ref_poDS = nullptr;
-  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = nullptr;
+  GDALDriver *  ref_poDriver = nullptr;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
   GDALDataset *test_poDS = nullptr;
-  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = nullptr;
+  GDALDriver *  test_poDriver = nullptr;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
   ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
