@@ -65,17 +65,6 @@ namespace version_proxy
  */
 
   /**
-   * This function physically deletes an existing dataset.
-   * 
-   * Calls OGRDataSource::DeleteDataSource for gdal 1.x implementation
-   * and GDALDriver::Delete for gdal 2.x implementation.
-   *
-   * \param name Name of the dataset to destroy.
-   */
-  OTBGdalAdapters_EXPORT   
-  bool Delete(const char * name);
-
-  /**
    * Return the list of files composing the dataset.
    * 
    * Calls OGRDataSource::GetName() and wrap in string vector for gdal

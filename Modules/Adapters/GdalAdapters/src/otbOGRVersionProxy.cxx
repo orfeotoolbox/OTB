@@ -49,38 +49,6 @@ namespace ogr
 namespace version_proxy
 {
 
-bool Delete(const char * name)
-{
-  // Open dataset
-  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
-      name, 
-       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
-      NULL,
-      NULL,
-      NULL);
-
-  GDALDriver * poDriver = NULL;
-  if(poDS)
-    {
-    poDriver = poDS->GetDriver();
-    GDALClose(poDS);
-    }
-#if GDAL_VERSION_NUM<2000000
-  if(poDriver && poDriver->TestCapability(ODrCDeleteDataSource))
-    {
-    OGRErr ret = poDriver->DeleteDataSource(name);
-    return (ret == OGRERR_NONE);
-    }
-#else
-  if(poDriver)
-    {
-    OGRErr ret = poDriver->Delete(name);
-    return (ret == OGRERR_NONE);
-    }
-#endif
-  return false;
-}
-
 #if GDAL_VERSION_NUM>=2000000
 namespace raii
 {

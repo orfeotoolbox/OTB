@@ -218,8 +218,36 @@ void DeleteDataSource(std::string const& datasourceName)
   fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
 
-  bool ret = otb::ogr::version_proxy::Delete(simpleFileName.c_str());
-  if (!ret)
+  // Open dataset
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
+  GDALDriver * poDriver = NULL;
+  bool success =1;
+  if(poDS)
+    {
+    poDriver = poDS->GetDriver();
+    GDALClose(poDS);
+    }
+  else
+    {
+      success = false;
+    }
+  if(poDriver)
+    {
+    OGRErr ret = poDriver->Delete(simpleFileName.c_str());
+    success = ret == OGRERR_NONE;
+    }
+  else 
+    {
+      success = false;
+    }
+
+  if (!success)
     {
     itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
                              << " failed: " << CPLGetLastErrorMsg());

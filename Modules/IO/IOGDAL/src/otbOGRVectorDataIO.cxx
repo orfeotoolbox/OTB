@@ -238,7 +238,23 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
     }
 
   // Erase the dataSource if already exist
-  ogr::version_proxy::Delete(this->m_FileName.c_str());
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      this->m_FileName.c_str(), 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
+  GDALDriver * poDriver = NULL;
+  if(poDS)
+    {
+    poDriver = poDS->GetDriver();
+    GDALClose(poDS);
+    }
+  if(poDriver)
+    {
+    poDriver->Delete(this->m_FileName.c_str());
+    }
 
   m_DataSource = ogrDriver->Create( this->m_FileName.c_str(),
                     0,
