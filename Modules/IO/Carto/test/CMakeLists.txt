@@ -41,10 +41,10 @@ otb_add_test(NAME ioTvImageToOSMVectorDataGenerator COMMAND otbCartoTestDriver
   ${BASELINE_FILES}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   otbImageToOSMVectorDataGenerator
-  -in  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  -osm ${INPUTDATA}/qb_road.osm
-  -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
-  -key highvay,motorway
+  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_road.osm
+  ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
+  highvay,motorway
   )
 set_property(TEST ioTvImageToOSMVectorDataGenerator PROPERTY RESOURCE_LOCK web_access)
 
@@ -63,8 +63,8 @@ otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
   ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp
   ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   otbOSMToVectorDataGeneratorByName
-  -osm ${INPUTDATA}/qb_road.osm
-  -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
+  ${INPUTDATA}/qb_road.osm
+  ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   )
 set_property(TEST ioTvOSMToVectorDataGeneratorByName PROPERTY RESOURCE_LOCK web_access)
 

@@ -18,14 +18,11 @@
  * limitations under the License.
  */
 
-#include "otbCommandLineArgumentParser.h"
 #include "otbOSMDataToVectorDataGenerator.h"
 #include "otbVectorDataFileWriter.h"
 
-
 typedef otb::OSMDataToVectorDataGenerator                     FilterType;
 typedef otb::VectorDataFileWriter<FilterType::VectorDataType> VectorDataFileWriterType;
-
 
 int otbOSMToVectorDataGeneratorTest (int itkNotUsed(argc), char * argv[])
 {
@@ -49,29 +46,14 @@ int otbOSMToVectorDataGeneratorTest (int itkNotUsed(argc), char * argv[])
 
 int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
 {
-  // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddOption("--OSMFile","The osm file containig the points to extract",
-                    "-osm", 1, true);
-
-  parser->AddOption("--OutputVectorData","The output vectordata",
-                    "-vd", 1, true);
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
+  if (argc != 3)
     {
-    parser->ParseCommandLine(argc, argv, parseResult);
-    }
-  catch ( itk::ExceptionObject & )
-    {
+    std::cerr << "Usage: otbOSMToVectorDataGeneratorByName input output\n";
     return EXIT_FAILURE;
     }
-
+    
   FilterType::Pointer filter = FilterType::New();
-  filter->SetFileName(parseResult->GetParameterString("--OSMFile"));
+  filter->SetFileName(argv[1]);
   filter->SetUseUrl(false);
 
   // Set the extent of the request
@@ -97,7 +79,7 @@ int otbOSMToVectorDataGeneratorByName (int argc, char * argv[])
 
   // Write the VectorData
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
+  writer->SetFileName(argv[2]);
   writer->SetInput(v4);
   writer->Update();
 

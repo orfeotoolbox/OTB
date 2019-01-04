@@ -42,7 +42,6 @@ ENABLE_SHARED
     OTBVectorDataIO
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBTestKernel
 
   DESCRIPTION

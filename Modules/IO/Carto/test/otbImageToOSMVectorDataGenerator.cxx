@@ -18,16 +18,12 @@
  * limitations under the License.
  */
 
-
-#include "otbCommandLineArgumentParser.h"
-
 #include "otbImageToOSMVectorDataGenerator.h"
 
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
-
 
 typedef otb::VectorImage<unsigned int, 2>               ImageType;
 
@@ -37,28 +33,12 @@ typedef FilterType::VectorDataType                     VectorDataType;
 typedef otb::ImageFileReader<ImageType>             ReaderType;
 typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
 
-
-
-
 int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
 {
-  // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage();
-  parser->AddOption("--OutputVectorData","Output VectorData","-out", true);
-  parser->AddOption("--Key","Key to search in the XML OSM file","-key", 1, false);
-  parser->AddOption("--OSM","OSM XML file to be parsed","-osm", 1, false);
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
+  if (argc != 5)
     {
-    parser->ParseCommandLine(argc, argv, parseResult);
-    }
-  catch ( itk::ExceptionObject & )
-    {
+    std::cerr << "Usage: otbImageToOSMVectorDataGenerator input osm_xml_file "
+    "output key_name\n";
     return EXIT_FAILURE;
     }
 
@@ -68,17 +48,14 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
 
   // Instantiate the image reader
   ReaderType::Pointer      reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
+  reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
   // VectorData generator instantiation
   FilterType::Pointer vdgenerator = FilterType::New();
   vdgenerator->SetInput(reader->GetOutput());
-  if(parseResult->IsOptionPresent("--OSM"))
-    {
-    vdgenerator->SetUseUrl(false);
-    vdgenerator->SetFileName(parseResult->GetParameterString("--OSM"));
-    }
+  vdgenerator->SetUseUrl(false);
+  vdgenerator->SetFileName(argv[2]);
   vdgenerator->Update();
 
   // Split the classes to get classes and values
@@ -87,7 +64,7 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
     {
     std::string key;
     KeyValueType   currentkeyvalue;
-    std::string str = parseResult->GetParameterString("--Key");
+    std::string str = argv[4];
 
     // find the position of the separator ,
     size_t  pos = str.find(",");
@@ -106,21 +83,12 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
 
   // Write the generated vector data
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
+  writer->SetFileName(argv[3]);
 
-  if(parseResult->IsOptionPresent("--Key"))
-    {
-    const VectorDataType *vd  =
-      vdgenerator->GetVectorDataByName(keyvalueList[0].first,
+  const VectorDataType *vd  =
+    vdgenerator->GetVectorDataByName(keyvalueList[0].first,
                                        keyvalueList[0].second);
-    writer->SetInput(vd);
-    }
-  else
-    {
-    const VectorDataType *vd  =
-      vdgenerator->GetVectorDataByName("highway");
-    writer->SetInput(vd);
-    }
+  writer->SetInput(vd);
 
   // trigger the execution
   writer->Update();
