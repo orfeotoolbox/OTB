@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "otbVectorData.h"
-#include "otbOGRVersionProxy.h"
 
 #include "OTBIOGDALExport.h"
 

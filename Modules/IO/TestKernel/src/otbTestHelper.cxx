@@ -48,7 +48,6 @@
 #include "otbDifferenceImageFilter.h"
 #include "otbPrintableImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
-#include "otbOGRVersionProxy.h"
 #include "otbOGRHelpers.h"
 
 #include "otbConfigure.h"

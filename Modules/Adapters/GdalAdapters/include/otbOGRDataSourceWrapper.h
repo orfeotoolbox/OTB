@@ -45,7 +45,6 @@
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 #include "otbOGRLayerWrapper.h"
-#include "otbOGRVersionProxy.h"
 #include "otbOGRExtendedFilenameToOptions.h"
 
 class OGRLayer;

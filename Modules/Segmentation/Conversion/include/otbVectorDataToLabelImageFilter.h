@@ -29,7 +29,6 @@
 
 #include "gdal.h"
 #include "ogr_api.h"
-#include "otbOGRVersionProxy.h"
 #include <string>
 
 namespace otb {

@@ -37,7 +37,6 @@
 #endif
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
-#include "otbOGRVersionProxy.h"
 #include <boost/array.hpp>
 /*===========================================================================*/
 /*===========================[ Static Assertions ]===========================*/

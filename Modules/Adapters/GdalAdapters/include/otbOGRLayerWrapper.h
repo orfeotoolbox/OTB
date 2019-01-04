@@ -36,7 +36,6 @@
 #endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
-#include "otbOGRVersionProxy.h"
 #include <string>
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
