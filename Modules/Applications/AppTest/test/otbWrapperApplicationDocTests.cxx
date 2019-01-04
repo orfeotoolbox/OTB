@@ -62,33 +62,6 @@ bool CheckNoNewline(const DocElement & elem)
   return ret;
 }
 
-bool CheckNoTrailingNewline(const DocElement & elem)
-{
-  bool ret = true;
-  std::string whitespace(" \t\f\v\r");
-  size_t pos = elem.second.find_last_not_of(whitespace);
-  if (pos != std::string::npos && elem.second.at(pos) == '\n')
-    {
-    std::cout << "  /!\\ "<< elem.first << " should not end with a newline" << std::endl;
-    ret = false;
-    }
-  return ret;
-}
-
-bool CheckMultiline(const DocElement & elem)
-{
-  bool ret = true;
-  std::string whitespace(" \t\f\v\r");
-  size_t pos = elem.second.find('\n');
-  size_t lastPos = elem.second.find_last_not_of(whitespace);
-  if (pos == std::string::npos || pos == lastPos)
-    {
-    std::cout << "  /!\\ "<< elem.first << " should not be a single line" << std::endl;
-    ret = false;
-    }
-  return ret;
-}
-
 int otbWrapperApplicationDocTest(int argc, char* argv[])
 {
   if (argc < 2)
@@ -149,15 +122,8 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
 
     isOK = CheckNonEmpty(longDescription) && isOK;
     isOK = CheckMinimumSize(longDescription,30) && isOK;
-    isOK = CheckNoTrailingNewline(longDescription) && isOK;
-    //isOK = CheckMultiline(longDescription) && isOK;
 
     isOK = CheckNonEmpty(authors) && isOK;
-
-    isOK = CheckNonEmpty(limitations) && isOK;
-
-    isOK = CheckNonEmpty(seeAlso) && isOK;
-    // TODO : check format of SeeAlso section
 
     if( app->GetDocTags().size() == 0 )
       {
@@ -170,7 +136,7 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
     otb::Wrapper::DocExampleStructure::Pointer doc = app->GetDocExample();
     if( doc->GetApplicationName() == "" )
       {
-      std::cout<<"Error in doc example: no aaplication name found."<<std::endl;
+      std::cout<<"Error in doc example: no application name found."<<std::endl;
       isOK = false;
       }
     if( doc->GetParameterList().size() == 0 )

@@ -65,11 +65,11 @@ private:
     SetName("VectorDataReprojection");
     SetDescription("Reproject a vector data using support image projection reference, or a user specified map projection");
     SetDocName("Vector Data reprojection");
-    std::ostringstream oss;
-    oss <<" This application allows reprojecting a vector data using support image projection reference"
-        ", or a user given map projection." << std::endl;
-    oss <<" If given, image keywordlist can be added to reprojected vectordata.";
-    SetDocLongDescription(oss.str());
+
+    SetDocLongDescription(
+        "Reproject vector data using a support image as projection reference or to a user given map projection. "
+        " If given an image keywordlist can be added to the reprojected vectordata.");
+
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");

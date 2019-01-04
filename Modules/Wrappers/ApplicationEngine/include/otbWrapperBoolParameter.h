@@ -33,8 +33,6 @@ namespace Wrapper
 /** \class BoolParameter
  *  \brief This class represent a boolean parameter for the wrapper framework
  *
- *  It is intended to replace the deprecated EmptyParameter
- * 
  * \ingroup OTBApplicationEngine
  */
 class OTBApplicationEngine_EXPORT BoolParameter

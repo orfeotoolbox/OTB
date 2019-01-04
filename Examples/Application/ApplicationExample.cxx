@@ -153,7 +153,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
 
-    AddParameter(ParameterType_Empty, "param1", "Example of boolean parameter");
+    AddParameter(ParameterType_Bool, "param1", "Example of boolean parameter");
     MandatoryOff("param1");
 
     AddParameter(ParameterType_Int, "param2", "Example of integer parameter");
