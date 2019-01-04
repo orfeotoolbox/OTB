@@ -35,7 +35,6 @@ otb_module(OTBStatistics
     OTBStreaming
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBImageManipulation
     OTBInterpolation

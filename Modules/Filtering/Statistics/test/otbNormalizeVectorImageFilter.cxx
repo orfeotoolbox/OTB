@@ -22,40 +22,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
-
 #include "otbNormalizeVectorImageFilter.h"
 
 int otbNormalizeVectorImageFilterTest ( int argc, char* argv[] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddInputImage();
-  parser->AddOutputImage();
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs horizonal sobel on a vector image\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
+  if (argc != 3)
+    {
+    std::cerr << "Usage: otbNormalizeVectorImageFilterTest input output\n";
     return EXIT_FAILURE;
-  }
+    }
 
-  std::string inputImageName = parseResult->GetInputImage();
-  std::string outputImageName = parseResult->GetOutputImage();
+  std::string inputImageName = argv[1];
+  std::string outputImageName = argv[2];
 
   // Main type definition
   const unsigned int Dimension = 2;
