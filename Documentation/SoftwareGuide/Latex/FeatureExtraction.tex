@@ -69,8 +69,10 @@ Note that more features are available in
 \doxygen{otb}{ScalarImageToAdvancedTexturesFilter} computes 10 advanced
 texture features presented presented in table~\ref{tab:haralickAdvancedFeatures},
 where $ \mu = $  (weighted pixel average) = $ \sum_{i, j}i \cdot g(i, j) =
-\sum_{i,j}j \cdot g(i, j) $ (due to matrix symmetry), and $ \g_{x+y}(k) =
-\sum_{i}\sum_{j}g(i) $ where $ i+j=k $ and $ k = 2, 3, .., 2N_[g} $ and $ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i) $ where $ i-j=k $ and $ k = 0, 1, ..,N_[g}-1 $
+\sum_{i,j}j \cdot g(i, j) $ (due to matrix symmetry).
+$N_{g}$ : Number of distinct gray levels in the quantized image.
+
+$ g_{x+y}(k) = \sum_{i}\sum_{j}g(i) $ where $ i+j=k $ and $ k = 2, 3, .., 2N_{g} $ and $ g_{x-y}(k) =  \sum_{i}\sum_{j}g(i) $ where $ i-j=k $ and $ k = 0, 1, ..,N_{g}-1 $
 
 \begin{table}
 \begin{center}

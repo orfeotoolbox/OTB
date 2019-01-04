@@ -67,9 +67,10 @@ namespace otb
  * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
  * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix simmetry), and
  *
- * \f$ \g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_[g}  \f$ and
+ * \f$ g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_{g}  \f$ and
  *
- * \f$ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_[g}-1  \f$
+ * \f$ g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_{g}-1  \f$
+ * \f$N_{g}\f$ : Number of distinct gray levels in the quantized image.
  *
  * References:
  *
