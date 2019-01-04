@@ -49,45 +49,16 @@ namespace ogr
 namespace version_proxy
 {
 
-GDALDataset * Open(const char * filename, bool readOnly , std::vector< std::string > const & options )
-{
-#if GDAL_VERSION_NUM<2000000
-  (void)options;
-  return OGRSFDriverRegistrar::Open(filename,!readOnly);
-#else
-  return (GDALDataset *)GDALOpenEx(
-      filename, 
-      (readOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
-      NULL,
-      otb::ogr::StringListConverter( options ).to_ogr(),
-      NULL);
-#endif
-}
-
-GDALDataset * Create(GDALDriver * driver, const char * name ,  std::vector< std::string > const & options )
-{
-#if GDAL_VERSION_NUM<2000000
-  (void)options;
-  GDALDataset * ds = driver->CreateDataSource(name);
-
-  if(ds)
-    ds->SetDriver(driver);
-
-  return ds;
-#else
-  return driver->Create( name ,
-                         0 ,
-                         0 ,
-                         0 ,
-                         GDT_Unknown ,
-                         otb::ogr::StringListConverter( options ).to_ogr() );
-#endif
-}
-
 bool Delete(const char * name)
 {
   // Open dataset
-  GDALDataset * poDS = otb::ogr::version_proxy::Open(name,false);
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      name, 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
   GDALDriver * poDriver = NULL;
   if(poDS)
     {

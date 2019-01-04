@@ -1037,7 +1037,12 @@ std::vector<OGRLayer*> OGRIOHelper
     {
     const char * driverName = "Memory";
     GDALDriver * ogrDriver = GetGDALDriverManager()->GetDriverByName(driverName);
-    inMemoryDataSource = ogr::version_proxy::Create(ogrDriver,"tempDataSource");
+    inMemoryDataSource = ogrDriver->Create( "tempDataSource",
+                    0,
+                    0,
+                    0,
+                    GDT_Unknown,
+                    0);
     }
 
   std::vector<OGRLayer*>  ogrLayerVector;

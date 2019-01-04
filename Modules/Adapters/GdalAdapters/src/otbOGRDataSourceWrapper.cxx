@@ -129,7 +129,13 @@ otb::ogr::DataSource::DataSource()
   GDALDriver * d = 
     GetGDALDriverManager()->GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
-  m_DataSource = ogr::version_proxy::Create(d,"in-memory");
+  m_DataSource = d->Create( "in-memory" ,
+                         0 ,
+                         0 ,
+                         0 ,
+                         GDT_Unknown ,
+                         0 );
+
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " 
                       << CPLGetLastErrorMsg());
@@ -155,10 +161,12 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
 
   bool update = (mode != Modes::Read);
-  GDALDataset * source = 
-    ogr::version_proxy::Open( simpleFileName.c_str() ,
-                              !update ,
-                              fileNameHelper->GetGDALOpenOptions() );
+  GDALDataset * source = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+      (update? GDAL_OF_UPDATE: GDAL_OF_READONLY) | GDAL_OF_VECTOR,
+      NULL,
+      otb::ogr::StringListConverter( fileNameHelper->GetGDALOpenOptions() ).to_ogr(),
+      NULL);
   if (!source)
     {
     // In read mode, this is a failure
@@ -187,10 +195,13 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         << ", check your OGR configuration for available drivers." );
       }
 
-    source = ogr::version_proxy::Create( 
-                  d ,
-                  simpleFileName.c_str() ,
-                  fileNameHelper->GetGDALCreationOptions() );
+    source = d->Create( simpleFileName.c_str() ,
+                         0 ,
+                         0 ,
+                         0 ,
+                         GDT_Unknown ,
+                         otb::ogr::StringListConverter( 
+                          fileNameHelper->GetGDALCreationOptions() ).to_ogr() );
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"
         << simpleFileName << "> (driver name: <" << driverName 
@@ -228,9 +239,12 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
     }
 
   Drivers::Init();
-  GDALDataset * ds = 
-    ogr::version_proxy::Open( simpleFileName.c_str() , true );
-
+  GDALDataset * ds = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   bool ds_exists = (ds!=nullptr);
 
   GDALClose(ds);

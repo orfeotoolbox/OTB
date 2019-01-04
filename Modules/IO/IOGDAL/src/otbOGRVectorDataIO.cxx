@@ -54,8 +54,12 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  GDALDataset * poDS = ogr::version_proxy::Open(filename, true);
-
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      filename, 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (poDS == nullptr)
     {
     std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
@@ -93,8 +97,12 @@ OGRVectorDataIO
     this->CloseInternalDataSource();
     }
 
-  m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
-
+  m_DataSource = (GDALDataset *)GDALOpenEx(
+      this->m_FileName.c_str(), 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (m_DataSource == nullptr)
     {
     itkExceptionMacro(<< "Failed to open data file " << this->m_FileName);
@@ -232,9 +240,12 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   // Erase the dataSource if already exist
   ogr::version_proxy::Delete(this->m_FileName.c_str());
 
-  // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = ogr::version_proxy::Create(ogrDriver,this->m_FileName.c_str());
-
+  m_DataSource = ogrDriver->Create( this->m_FileName.c_str(),
+                    0,
+                    0,
+                    0,
+                    GDT_Unknown,
+                    0);
   // check the created data source
   if (m_DataSource == nullptr)
     {

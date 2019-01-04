@@ -64,38 +64,6 @@ namespace version_proxy
  * See function documentation for details.
  */
 
-  /** 
-   * This function opens a file, possibly in read-only mode, and returns
-   * a dataset.
-   *
-   * Calls OGRSFDriverRegistrar::Open for gdal 1.x implementation and GDALopenEx for
-   * gdal 2.x implementation.
-
-   * \param filename Filename of the file to open
-   * \param readOnly: If true, dataset is open in read-only mode.
-   * \return NULL if file could not be open.
-   */
-  OTBGdalAdapters_EXPORT   
-  GDALDataset * Open(const char * filename, bool readOnly = true , std::vector< std::string > const & options = std::vector< std::string >() );
-
-  /**
-   * This function creates a new dataset.
-   *
-   * Calls OGRSFDriver::CreateDataSource for gdal 1.x implementation
-   * and GDALDriver::Create with (0,0) raster size for gdal 2.x
-   * implementation
-   * 
-   * \param driver Pointer to the driver used for creation. Will not
-   * be checked for null pointer.
-   *
-   * \param name Name of the dataset to create.
-   * 
-   * \return NULL if dataset could not be created.
-   */
-  OTBGdalAdapters_EXPORT
-  GDALDataset * Create(GDALDriver * driver, const char * name , std::vector< std::string > const & options = std::vector< std::string >() );
-
-
   /**
    * This function physically deletes an existing dataset.
    * 

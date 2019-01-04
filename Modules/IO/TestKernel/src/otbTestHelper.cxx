@@ -1734,21 +1734,41 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   GDALDriver *  test_poDriver = nullptr;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
-  ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
+  ref_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
   if (ref_poDS == nullptr && !bReadOnly)
     {
-    ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, true);
+    ref_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+       GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
     bReadOnly = TRUE;
     if (ref_poDS != nullptr && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
-  test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
+  test_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+      (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (test_poDS == nullptr && !bReadOnly)
     {
-    test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
-
+    test_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+      (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
     bReadOnly = TRUE;
 
     if (test_poDS != nullptr && m_ReportErrors)
