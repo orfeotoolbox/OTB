@@ -27,7 +27,7 @@
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-
+#include <unordered_map>
 
 namespace otb
 {
@@ -208,10 +208,10 @@ public:
   typedef typename LabelImageType::PixelType                            LabelPixelType;
   typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
   typedef StatisticsAccumulator<RealVectorPixelType>                    AccumulatorType;
-  typedef std::map<LabelPixelType, AccumulatorType >                    AccumulatorMapType;
+  typedef std::unordered_map<LabelPixelType, AccumulatorType >                    AccumulatorMapType;
   typedef std::vector<AccumulatorMapType>                               AccumulatorMapCollectionType;
-  typedef std::map<LabelPixelType, RealVectorPixelType >  PixelValueMapType;
-  typedef std::map<LabelPixelType, double>                LabelPopulationMapType;
+  typedef std::unordered_map<LabelPixelType, RealVectorPixelType >  PixelValueMapType;
+  typedef std::unordered_map<LabelPixelType, double>                LabelPopulationMapType;
 
   itkStaticConstMacro(InputImageDimension, unsigned int,
                       TInputVectorImage::ImageDimension);

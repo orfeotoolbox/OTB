@@ -539,7 +539,7 @@ void ONERAImageIO::InternalWriteImageInformation()
       }
 
     /*-------- This part deals with writing header information ------ */
-    const std::string DataFileName = System::GetRootName(m_FileName.c_str()) + ".dat";
+    const std::string DataFileName = System::GetRootName(m_FileName) + ".dat";
 
     m_Headerfile << "#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]" <<
     std::endl;

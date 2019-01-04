@@ -63,7 +63,7 @@ GDALDataType GetGDALDataType()
    {
       if( sizeof(long) == 8 )
          {
-         //itkWarningMacro(<< "Cast a long (64 bits) image into an int (32 bits) one.")
+         //itkWarningMacro(<< "Cast a long (64 bit) image to an int (32 bit) one.")
          }
       return GDT_Int32;
    }
@@ -71,7 +71,7 @@ GDALDataType GetGDALDataType()
    {
       if( sizeof(unsigned long) == 8 )
          {
-         //itkWarningMacro(<< "Cast an unsigned long (64 bits) image into an unsigned int (32 bits) one.")
+         //itkWarningMacro(<< "Cast an unsigned long (64 bit) image to an unsigned int (32 bit) one.")
          }
       return GDT_UInt32;
    }

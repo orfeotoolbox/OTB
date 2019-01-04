@@ -1,7 +1,7 @@
 A brief tour of OTB Applications
 ================================
 
-OTB ships with more than 90 ready to use applications for remote sensing tasks.
+OTB ships with more than 100 ready to use applications for remote sensing tasks.
 They usually expose existing processing functions from the underlying C++
 library, or integrate them into high level pipelines. OTB applications allow the user 
 to:
@@ -20,7 +20,7 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    ergonomic parameters setting, display of documentation, and progress
    reporting,
 
--  A SWIG interface, which means that any application can be loaded
+-  A SWIG interface, which means that any application can be loaded,
    set-up and executed into a high-level language such as Python or Java
    for instance.
 
@@ -28,20 +28,20 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    the SWIG/Python interface is available with seamless integration within
    QGIS.
 
-The complete list of applications is described in the :ref:`apprefdoc`.
+The complete list of applications is described in the Chapter :ref:`apprefdoc`.
 
-All standard applications share the same implementation and expose
-automatically generated interfaces.
-Thus, the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
-``otbgui_``. For instance, calling ``otbcli_Convert`` will launch the
-command-line interface of the Convert application, while
-``otbgui_Convert`` will launch its GUI.
+All standard applications share the same implementation and automatically expose
+generated interfaces.
+However they are accessed in a slightly different way: the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
+``otbgui_``. For instance, calling ``otbcli_DynamicConvert`` will launch the
+command-line interface of the DynamicConvert application, while
+``otbgui_DynamicConvert`` will launch the GUI.
 
 Command-line launcher
 ---------------------
 
 The command-line application launcher loads an application
-plugin, to set its parameters, and execute it using the command line.
+plugin, allows for its parameters to be set, and can then be executed from the command line.
 Launching the ``otbApplicationLauncherCommandLine`` without any arguments provided,
 results in the following help to be displayed:
 
@@ -52,23 +52,23 @@ results in the following help to be displayed:
 
 The ``module_name`` parameter corresponds to the application name. The
 ``[MODULEPATH]`` argument is optional and allows the path to the shared library 
-(or plugin) correpsonding to the ``module_name`` to be passed to the launcher.
+(or plugin) corresponding to the ``module_name`` to be passed to the launcher.
 
 It is also possible to set this path with the environment variable
 ``OTB_APPLICATION_PATH``, making the ``[MODULEPATH]`` optional. This
 variable is checked by default when no ``[MODULEPATH]`` argument is
 given. When using multiple paths in ``OTB_APPLICATION_PATH``, one must
-make sure to use the standard path separator of the target system, which
+ensure that the standard path separator of the target system is used, which
 is ``:`` on Unix and ``;`` on Windows.
 
 An error in the application name (i.e. in parameter ``module_name``)
-will make the ``otbApplicationLauncherCommandLine`` lists the name of
+will make the ``otbApplicationLauncherCommandLine`` list the name of
 all applications found in the available path (either ``[MODULEPATH]``
 and/or ``OTB_APPLICATION_PATH``).
 
-To ease the use of the applications, and try avoiding extensive
-environment customization, ready-to-use scripts are provided by the OTB
-installation to launch each application, and takes care of adding the
+To ease the use of the applications, and to avoid extensive
+environment customizations; ready-to-use scripts are provided by the OTB
+installation to launch each application. They take care of adding the
 standard application installation path to the ``OTB_APPLICATION_PATH``
 environment variable.
 
@@ -79,57 +79,68 @@ application with the script called ``otbcli_Orthorectification``.
 Launching an application without parameters, or with incomplete parameters, will cause the
 launcher to display a summary of the parameters. This summary will display the minimum set
 of parameters that are required to execute the application. Here is an
-example with the OrthoRectification application:
+example based on the OrthoRectification application:
 
 ::
 
     $ otbcli_OrthoRectification
+    ERROR: Waiting for at least one parameter.
 
-    ERROR: Waiting for at least one parameter...
 
-    ====================== HELP CONTEXT ======================
-    NAME: OrthoRectification
-    DESCRIPTION: This application allows to ortho-rectify optical images from supported sensors.
+    This is the Ortho-rectification (OrthoRectification) application, version 6.7.0
 
-    EXAMPLE OF USE:
+    This application allows ortho-rectifying optical and radar images from supported sensors.
+    Complete documentation: https://www.orfeo-toolbox.org/CookBook/Applications/app_OrthoRectification.html or -help
+
+    Parameters:
+            -io                      <group>          Input and output data
+    MISSING -io.in                   <string>         Input Image  (mandatory)
+    MISSING -io.out                  <string> [pixel] Output Image  [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble] (default value is float) (mandatory)
+            -map                     <string>         Map Projection [utm/lambert2/lambert93/wgs/epsg] (mandatory, default value is utm)
+            -map.utm.zone            <int32>          Zone number  (mandatory, default value is 31)
+            -map.utm.northhem        <boolean>        Northern Hemisphere  (mandatory, default value is false)
+            -map.epsg.code           <int32>          EPSG Code  (mandatory, default value is 4326)
+            -outputs                 <group>          Output Image Grid
+            -outputs.mode            <string>         Parameters estimation modes [auto/autosize/autospacing/outputroi/orthofit] (mandatory, default value is auto)
+    MISSING -outputs.ulx             <float>          Upper Left X  (mandatory)
+    MISSING -outputs.uly             <float>          Upper Left Y  (mandatory)
+    MISSING -outputs.sizex           <int32>          Size X  (mandatory)
+    MISSING -outputs.sizey           <int32>          Size Y  (mandatory)
+    MISSING -outputs.spacingx        <float>          Pixel Size X  (mandatory)
+    MISSING -outputs.spacingy        <float>          Pixel Size Y  (mandatory)
+            -outputs.lrx             <float>          Lower right X  (optional, off by default)
+            -outputs.lry             <float>          Lower right Y  (optional, off by default)
+            -outputs.ortho           <string>         Model ortho-image  (optional, off by default)
+            -outputs.isotropic       <boolean>        Force isotropic spacing by default  (mandatory, default value is true)
+            -outputs.default         <float>          Default pixel value  (optional, off by default, default value is 0)
+            -elev                    <group>          Elevation management
+            -elev.dem                <string>         DEM directory  (optional, off by default)
+            -elev.geoid              <string>         Geoid File  (optional, off by default)
+            -elev.default            <float>          Default elevation  (mandatory, default value is 0)
+            -interpolator            <string>         Interpolation [bco/nn/linear] (mandatory, default value is bco)
+            -interpolator.bco.radius <int32>          Radius for bicubic interpolation  (mandatory, default value is 2)
+            -opt                     <group>          Speed optimization parameters
+            -opt.rpc                 <int32>          RPC modeling (points per axis)  (optional, off by default, default value is 10)
+            -opt.ram                 <int32>          Available RAM (MB)  (optional, off by default, default value is 128)
+            -opt.gridspacing         <float>          Resampling grid spacing  (optional, off by default, default value is 4)
+            -inxml                   <string>         Load parameters from XML  (optional, off by default)
+            -progress                <boolean>        Report progress
+            -help                    <string list>    Display long help (empty list), or help for given parameters keys
+
+    Use -help param1 [... paramN] to see detailed documentation of those parameters.
+
+    Examples:
     otbcli_OrthoRectification -io.in QB_TOULOUSE_MUL_Extract_500_500.tif -io.out QB_Toulouse_ortho.tif
 
-    DOCUMENTATION: http://www.orfeo-toolbox.org/Applications/OrthoRectification.html
-    ======================= PARAMETERS =======================
-            -progress                        <boolean>        Report progress
-    MISSING -io.in                           <string>         Input Image
-    MISSING -io.out                          <string> [pixel] Output Image  [pixel=uint8/int8/uint16/int16/uint32/int32/float/double]
-            -map                             <string>         Output Map Projection [utm/lambert2/lambert93/transmercator/wgs/epsg]
-    MISSING -map.utm.zone                    <int32>          Zone number
-            -map.utm.northhem                <boolean>        Northern Hemisphere
-            -map.transmercator.falseeasting  <float>          False easting
-            -map.transmercator.falsenorthing <float>          False northing
-            -map.transmercator.scale         <float>          Scale factor
-            -map.epsg.code                   <int32>          EPSG Code
-            -outputs.mode                    <string>         Parameters estimation modes [auto/autosize/autospacing]
-    MISSING -outputs.ulx                     <float>          Upper Left X
-    MISSING -outputs.uly                     <float>          Upper Left Y
-    MISSING -outputs.sizex                   <int32>          Size X
-    MISSING -outputs.sizey                   <int32>          Size Y
-    MISSING -outputs.spacingx                <float>          Pixel Size X
-    MISSING -outputs.spacingy                <float>          Pixel Size Y
-            -outputs.isotropic               <boolean>        Force isotropic spacing by default
-            -elev.dem                        <string>         DEM directory
-            -elev.geoid                      <string>         Geoid File
-            -elev.default                    <float>          Average Elevation
-            -interpolator                    <string>         Interpolation [nn/linear/bco]
-            -interpolator.bco.radius         <int32>          Radius for bicubic interpolation
-            -opt.rpc                         <int32>          RPC modeling (points per axis)
-            -opt.ram                         <int32>          Available memory for processing (in MB)
-            -opt.gridspacing                 <float>          Resampling grid spacing
+
 
 For a detailed description of the application behaviour and parameters,
 please check the application reference documentation presented
-chapter [chap:apprefdoc], page  or follow the ``DOCUMENTATION``
-hyperlink provided in ``otbApplicationLauncherCommandLine`` output.
+in chapter :ref:`apprefdoc`  or follow the ``DOCUMENTATION``
+hyperlink provided in the output of ``otbApplicationLauncherCommandLine``.
 Parameters are passed to the application using the parameter key (which
 might include one or several ``.`` character), prefixed by a ``-``.
-Command-line examples are provided in chapter [chap:apprefdoc], page.
+Command-line examples are provided in the chapter :ref:`apprefdoc`.
 
 Graphical launcher
 ------------------
@@ -169,12 +180,10 @@ In this interface, every optional parameter has a check box that you
 have to tick if you want to set a value and use this parameter. The
 mandatory parameters cannot be unchecked.
 
-The interface of the application is shown here as an example.
+The interface of the application is shown here as an example:
 
 .. figure:: Art/QtImages/rescale_param.png
-.. figure:: Art/QtImages/rescale_logs.png
-.. figure:: Art/QtImages/rescale_progress.png
-.. figure:: Art/QtImages/rescale_documentation.png
+    :align: center
 
 Python interface
 ----------------
@@ -193,7 +202,7 @@ environment variable ``PYTHONPATH`` to include this directory so that the module
 becomes available from Python.
 
 On Windows, you can install the ``otb-python`` package, and the module
-will be available from an OSGeo4W shell automatically.
+will be automatically available from an OSGeo4W shell.
 
 As for the command line and GUI launchers, the path to the application
 modules needs to be properly set with the ``OTB_APPLICATION_PATH``
@@ -327,7 +336,7 @@ Here is an example of MPI call on a cluster::
 
 One can see that the registration and pan-sharpening of the
 panchromatic and multi-spectral bands of a Pleiades image has been split
-among 560 cpus and only took 56 seconds.
+between 560 CPUs and only took 56 seconds to complete.
 
 Note that this MPI parallel invocation of applications is only
 available for command-line calls to OTB applications, and only for

@@ -103,8 +103,15 @@ public:
    * 
    */
   static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
- 
-  
+
+  /**
+   * If OpenMP is enabled, the number of threads for openMP is set to the
+   * same number as in ITK (see GetGlobalDefaultNumberOfThreads()). This number
+   * of threads is returned.
+   * If OpenMP is disabled, this function does nothing
+   */
+  static int InitOpenMPThreads();
+
 private:
   ConfigurationManager() = delete;
   ~ConfigurationManager() = delete;

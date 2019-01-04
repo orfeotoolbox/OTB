@@ -86,7 +86,8 @@ ossimFormosatDimapSupportData::ossimFormosatDimapSupportData ()
 {
 }
 ossimFormosatDimapSupportData::ossimFormosatDimapSupportData(const ossimFormosatDimapSupportData& rhs)
-   :ossimErrorStatusInterface(rhs),
+   :ossimObject(rhs),
+    ossimErrorStatusInterface(rhs),
     theMetadataVersion(rhs.theMetadataVersion),
     theImageID(rhs.theImageID),
     theMetadataFile (rhs.theMetadataFile),

@@ -62,7 +62,7 @@ int otbSarSensorModelAdapterTest(int itkNotUsed(argc), char* argv[])
   
 
   otb::SarSensorModelAdapter::Point2DType out1,out2;
-  otb::SarSensorModelAdapter::Point3DType in, out3, out4, out5;
+  otb::SarSensorModelAdapter::Point3DType in, out3, out4, out5, out6, out7;
 
   // GCP 99 from input geom file
   //support_data.geom.gcp[99].world_pt.hgt:  2.238244926818182e+02
@@ -78,7 +78,9 @@ int otbSarSensorModelAdapterTest(int itkNotUsed(argc), char* argv[])
 
   sensorModel->WorldToCartesian(in, out5);
   sensorModel->WorldToSatPositionAndVelocity(in,out3, out4);
-  
+
+  unsigned int ind_Line = 2;
+  sensorModel->LineToSatPositionAndVelocity(ind_Line, out6, out7);
   
   return EXIT_SUCCESS;
 }

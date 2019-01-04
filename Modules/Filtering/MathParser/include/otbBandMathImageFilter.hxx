@@ -147,7 +147,6 @@ void BandMathImageFilter<TImage>
 ::BeforeThreadedGenerateData()
 {
   typename std::vector<ParserType::Pointer>::iterator        itParser;
-  typename std::vector< std::vector<PixelType> >::iterator   itVImage;
   unsigned int nbThreads = this->GetNumberOfThreads();
   unsigned int nbInputImages = this->GetNumberOfInputs();
   unsigned int nbAccessIndex = 4; //to give access to image and physical index

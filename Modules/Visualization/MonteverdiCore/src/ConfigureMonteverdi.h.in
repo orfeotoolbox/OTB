@@ -107,7 +107,11 @@
 #endif
 
 #ifndef ECHO_QDEBUG
-#define ECHO_QDEBUG     ( ( !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG ) && 1 ) || 0 )
+#if                     !NO_QECHO && !NO_QDEBUG && defined( OTB_DEBUG )
+#define ECHO_QDEBUG     1
+#else
+#define ECHO_QDEBUG     0
+#endif
 #endif
 
 #ifndef ECHO_QWARNING
@@ -123,7 +127,11 @@
 #endif
 
 #ifndef LOG_QDEBUG
-#define LOG_QDEBUG      ( !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG ) && 0 )
+#if                     !NO_QLOG && !NO_QDEBUG && defined( OTB_DEBUG )
+#define LOG_QDEBUG      0
+#else
+#define LOG_QDEBUG      0
+#endif
 #endif
 
 #ifndef LOG_QWARNING

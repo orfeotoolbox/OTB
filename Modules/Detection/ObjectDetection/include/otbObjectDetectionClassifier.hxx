@@ -258,7 +258,6 @@ PersistentObjectDetectionClassifier<TInputImage, TOutputVectorData, TLabel, TFun
   InputImageType* input = static_cast<InputImageType*>(this->itk::ProcessObject::GetInput(0));
   const ModelType*   model = this->GetModel();
 
-  typedef typename RegionType::IndexType      IndexType;
   IndexType begin = outputRegionForThread.GetIndex();
   IndexType end = begin;
   end[0] += outputRegionForThread.GetSize(0);

@@ -101,7 +101,7 @@ StatisticsXMLFileReader<TMeasurementVector>
   unsigned int index = 0;
   for(unsigned int  idx = 0; idx < m_MeasurementVectorContainer.size() ; ++idx)
     {
-    if(strcmp(m_MeasurementVectorContainer[idx].first.c_str(), statisticName) == 0 )
+    if(m_MeasurementVectorContainer[idx].first == statisticName)
       {
       found = true;
       index = idx;

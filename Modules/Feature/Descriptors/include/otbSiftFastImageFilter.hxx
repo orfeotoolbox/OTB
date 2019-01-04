@@ -24,7 +24,7 @@
 
 #include "otbSiftFastImageFilter.h"
 
-#include "siftfast.h"
+#include "otb_siftfast.h"
 #include "itkContinuousIndex.h"
 #include "itkImageRegionConstIterator.h"
 

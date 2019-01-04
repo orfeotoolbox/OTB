@@ -115,8 +115,8 @@ public:
 
   /** Run the application.
    *
-   * For pipeline ready application, this only wire
-   * and configure the pipeline, and provides
+   * For pipeline ready application, this only wires
+   * and configures the pipeline, and provides
    * the output image or vector data parameters as pointers.
    *
    * In other cases, the application must handle
@@ -126,7 +126,7 @@ public:
    */
   int Execute();
 
-  /** Run the application, then writes all the output to disk
+  /** Run the application, then write all of the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
    *
@@ -182,17 +182,13 @@ public:
    *  (not automatically computed by the application) */
   bool HasUserValue(std::string paramKey) const;
 
-  /* If a user value was provided clear it and update the other parameters */
+  /* If a user value was provided, clear it and update the other parameters */
   void ClearValue(std::string paramKey);
 
   /* Returns true if the parameter has an associated value.
    * This value can be an automatically computed value or default value,
    * or a value set externally by user */
   bool HasValue(std::string paramKey) const;
-
-  /* Get active flag of parameter with key paramKey
-   */
-  bool GetParameterEmpty(std::string paramKey);
 
   /** Set HasUserValue flag of parameter with key paramKey
    *  Note that when this function is called from DoInit, DoUpdateParameters
@@ -226,6 +222,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Int
+   * \li ParameterType_Bool
    * \li ParameterType_Float
    * \li ParameterType_Radius
    * \li ParameterType_Choice
@@ -246,6 +243,7 @@ public:
    * \li ParameterType_InputVectorDataListParameter
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
+   * \li ParameterType_ListView
    */
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -253,6 +251,8 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_String
+   * \li ParameterType_StringList
+   * \li ParameterType_ListView
    * \li ParameterType_InputFilename
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
@@ -268,10 +268,8 @@ public:
    */
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
-
   /** Checks if the application is ready to be executed. It checks that there
-   *  is no parameter missing
+   *  is no missing parameter
    */
   bool IsApplicationReady();
 
@@ -338,7 +336,7 @@ public:
    */
   void SetDefaultOutputComplexPixelType(std::string parameter, ComplexImagePixelType type);
 
- /* Set a minimum int value, must used in the
+  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -347,7 +345,7 @@ public:
    */
   void SetMinimumParameterIntValue(std::string parameter, int value);
 
- /* Set a maximum int value, must used in the
+  /* Set a maximum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -356,7 +354,7 @@ public:
    */
   void SetMaximumParameterIntValue(std::string parameter, int value);
 
- /* Set a minimum int value, must used in the
+  /* Set a minimum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -365,7 +363,7 @@ public:
    */
   void SetMinimumParameterFloatValue(std::string parameter, float value);
 
- /* Set a maximum int value, must used in the
+  /* Set a maximum int value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -376,7 +374,7 @@ public:
 
 
   /**
-   * Enable single selection mode for list view if status in true
+   * Enable single selection mode for list view if status is true
    * (default is false).
    *
    * Can be called for types:
@@ -431,6 +429,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Int
+   * \li ParameterType_Bool
    * \li ParameterType_Float
    * \li ParameterType_Radius
    * \li ParameterType_Choice

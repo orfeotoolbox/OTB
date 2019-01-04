@@ -20,6 +20,8 @@ A simple example is given below:
 As we can see, the new band math filter works with the class
 otb::VectorImage.
 
+.. _syntax:
+
 Syntax: first elements
 ----------------------
 
@@ -134,8 +136,7 @@ or in more simple terms (and only if im2 contains two components):
 .. math:: im2* \{1,2\}'
 
 Concerning division, this operation is not originally defined between
-two vectors (see next section “New operators and functions”
--[ssec:operators]-).
+two vectors (see next section :ref:`operators`).
 
 Now, let’s go back to the first formula: this one specifies the addition
 of two images band to band. With muParserX lib, we can now define such
@@ -169,6 +170,8 @@ For instance, im1b3N3x5 represents the following neighbourhood:
 Fundamentally, a neighbourhood is represented as a matrix inside the
 muParserX framework; so the remark about mathematically well-defined
 formulas still stands.
+
+.. _operators:
 
 New operators and functions
 ---------------------------
@@ -205,7 +208,7 @@ ones. For instance:
 .. math:: im1 ~  mlt ~ 2.0
 
 Note that the operator ’\*’ could have been used instead of ’pw’ one.
-But ’pw’ is a little bit more permisive, and can tolerate a
+But ’pw’ is a little bit more permissive, and can tolerate a
 one-dimensional vector as the right operand.
 
 **Operators pow and pw** The first operator allows the definition of an
@@ -267,20 +270,20 @@ takes two inputs). For instance:
 
 .. math:: corr(im1b1N3x3,im1b2N3x3)
 
-**Function maj** This function allows to compute the most represented
+**Function maj** This function computes the most represented
 element within a vector or a matrix (the function can take as many
 inputs as needed; one maj element value is computed per input). For
 instance:
 
 .. math:: maj(im1b1N3x3,im1b2N3x3)
 
-**Function vmin and vmax** These functions allow to compute the min or
+**Function vmin and vmax** These functions calculate the min or
 max value of a given vector or neighborhood (only one input). For
 instance:
 
 .. math:: (vmax(im3b1N3x5)+vmin(im3b1N3x5)) ~ div ~ \{2.0\}
 
-**Function cat** This function allows to concatenate the results of
+**Function cat** This function concatenates the results of
 several expressions into a multidimensional vector, whatever their
 respective dimensions (the function can take as many inputs as needed).
 For instance:
@@ -293,8 +296,7 @@ application will call the function ’cat’ automatically. For instance:
 
 .. math:: filter->SetExpression("im3b1 ; vmin(im3b1N3x5) ; median(im3b1N3x5) ; vmax(im3b1N3x5)");
 
-Please, also refer to the next section “Application Programming
-Interface” ([ssec:API]).
+Please, also refer to the next section :ref:`API`. 
 
 **Function ndvi** This function implements the classical normalized
 difference vegetation index; it takes two inputs. For instance:
@@ -302,7 +304,7 @@ difference vegetation index; it takes two inputs. For instance:
 .. math:: ndvi(im1b1,im1b4)
 
 First argument is related to the visible red band, and the second one to
-the near-infrareds band.
+the near-infrared band.
 
 The table below summarises the different functions and operators.
 
@@ -366,6 +368,8 @@ Functions and operators summary:
 
 [variables]
 
+.. _API: 
+
 Application Programming Interface (API)
 ---------------------------------------
 
@@ -381,7 +385,7 @@ of the new band math filter.
     /** Return a pointer on the nth filter input */
     ImageType * GetNthInput(unsigned int idx);
 
-Refer to the section “Syntax: first elements” ([ssec:syntax]) where the
+Refer to the section :ref:`syntax`, where the
 two first functions have already been commented. The function
 GetNthInput is quite clear to understand.
 
@@ -394,13 +398,13 @@ Each time the function SetExpression is called, a new expression is
 pushed inside the filter. **There are as many outputs as there are
 expressions. The dimensions of the outputs (number of bands) are totally
 dependent on the dimensions of the related expressions (see also last
-remark of the section “Syntax: first element” -[ssec:syntax]-).** Thus,
+remark of the section :ref:`syntax`).** Thus,
 the filter always performs a pre-evaluation of each expression, in order
 to guess how to allocate the outputs.
 
 The concatenation of the results of many expressions (whose results can
 have different dimensions) into one unique output is possible. For that
-puropose, semi-colons (“;”) are used as separating characters. For
+purpose, semi-colons (“;”) are used as separating characters. For
 instance:
 
 .. math:: filter->SetExpression("im1 + im2 ; im1b1*im2b1");
@@ -494,7 +498,7 @@ expr. For instance:
       /** Export constants and expressions to a given filename */
       void ExportContext(const std::string& filename);
 
-This function allows the user to export a txt file that saves its
+This function allows the user to export a text file that saves its
 favorite constant or expression definitions. Such a file will be
 reusable by the ImportContext function (see above).
 

@@ -1548,6 +1548,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     geoTransform[2] = 0.;
     geoTransform[4] = 0.;
     dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
+
+    // Error if writing to a ENVI file with a positive Y spacing
+    if(driverShortName == "ENVI" && geoTransform[5] > 0.)
+      {
+      itkExceptionMacro(
+        << "Can not write to ENVI file format with a positive Y spacing ("
+        << m_FileName
+        <<")");
+      }
     }
 
   /* -------------------------------------------------------------------- */

@@ -22,6 +22,7 @@
 #define otbTestMain_h
 
 #include "otbConfigure.h"
+#include "otbConfigurationManager.h"
 
 #include <map>
 #include <string>
@@ -72,7 +73,7 @@ int main(int ac, char* av[])
   #ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->Init(ac,av);
   #endif
-  
+
   bool   lFlagRegression(false);
   double lToleranceDiffValue(0);
   double lEpsilon(0);
@@ -286,6 +287,8 @@ int main(int ac, char* av[])
       }
     testToRun = av[1];
     }
+
+  otb::ConfigurationManager::InitOpenMPThreads();
 
   std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.find(testToRun);
   // If the test doesn't exists

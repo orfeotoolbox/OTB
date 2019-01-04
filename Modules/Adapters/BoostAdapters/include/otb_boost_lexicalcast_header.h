@@ -18,42 +18,16 @@
  * limitations under the License.
  */
 
-#ifndef otbWrapperQtWidgetEmptyParameter_h
-#define otbWrapperQtWidgetEmptyParameter_h
+#ifndef otb_boost_lexicalcast_header_h
+#define otb_boost_lexicalcast_header_h
 
-#include <QtWidgets>
-#include "otbWrapperEmptyParameter.h"
-#include "otbWrapperQtWidgetParameterBase.h"
-
-namespace otb
-{
-namespace Wrapper
-{
-
-/** \class QtWidgetEmptyParameter
- * \brief
- *
- * \ingroup OTBQtWidget
- */
-class OTBQtWidget_EXPORT QtWidgetEmptyParameter : public QtWidgetParameterBase
-{
-  Q_OBJECT
-
-public:
-  QtWidgetEmptyParameter(EmptyParameter*, QtWidgetModel*, QWidget*);
-  ~QtWidgetEmptyParameter() override;
-
-private:
-  QtWidgetEmptyParameter(const QtWidgetEmptyParameter&) = delete;
-  void operator=(const QtWidgetEmptyParameter&) = delete;
-
-  void DoCreateWidget() override;
-
-  void DoUpdateGUI() override;
-};
-
-
-}
-}
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
+#include <boost/lexical_cast.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/lexical_cast.hpp>
+#endif
 
 #endif

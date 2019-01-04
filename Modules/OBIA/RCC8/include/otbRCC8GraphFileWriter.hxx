@@ -203,7 +203,6 @@ RCC8GraphFileWriter<TInputGraph>
 ::WriteVertex(std::ofstream& of, VertexDescriptorType index,
               VertexPointerType vertex)
 {
-  typedef typename AttributesMapType::iterator   IteratorType;
   AttributesMapType attr = vertex->GetAttributesMap();
   otbMsgDevMacro(<< "RCC8GraphFileWriter: WriteVertex call: " << index);
   of << index << " [";

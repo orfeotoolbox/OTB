@@ -84,6 +84,9 @@ private:
     AddParameter(ParameterType_StringList, "plasup", "Plausibility Support");
     SetParameterDescription("plasup", "Dempster Shafer study hypothesis to compute plausibility");
 
+    AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
+    SetParameterDescription("out", "Output VectorData containing only the validated samples");
+
     AddParameter(ParameterType_String, "cri", "Criterion");
     SetParameterDescription("cri", "Dempster Shafer criterion (by default (belief+plausibility)/2)");
     MandatoryOff("cri");
@@ -93,9 +96,6 @@ private:
     SetParameterDescription("thd", "Criterion threshold (default 0.5)");
     MandatoryOff("thd");
     SetParameterFloat("thd",0.5);
-
-    AddParameter(ParameterType_OutputVectorData, "out", "Output Vector Data");
-    SetParameterDescription("out", "Output VectorData containing only the validated samples");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp");
@@ -125,7 +125,7 @@ private:
 
     // Load the descriptors model
     std::string descModFile = GetParameterString("descmod");
-    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read(descModFile.c_str());
+    DescriptorsModelType descMod = FuzzyDescriptorsModelManager::Read(descModFile);
 
     LabelSetType Bhyp, Phyp;
     int nbSet;

@@ -19,6 +19,7 @@
  */
 
 #ifndef otb_siftfast_h
+#define otb_siftfast_h
 
 #include "otbsiftfast/siftfast.h"
 

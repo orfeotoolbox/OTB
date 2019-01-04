@@ -107,7 +107,7 @@ public:
   { return OutputVectorType(); }
 
   /**  Method to transform a vnl_vector. */
-  virtual OutputVnlVectorType TransforVector(const InputVnlVectorType &) const
+  OutputVnlVectorType TransformVector(const InputVnlVectorType &) const override
     { return OutputVnlVectorType(); }
 
   using Superclass::TransformCovariantVector;

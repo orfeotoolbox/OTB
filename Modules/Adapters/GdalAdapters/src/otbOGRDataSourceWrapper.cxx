@@ -100,7 +100,7 @@ const ExtensionDriverAssociation k_ExtensionDriverMap[] =
 char const* DeduceDriverName(std::string filename)
   {
   std::transform(filename.begin(), filename.end(), filename.begin(), (int (*)(int))toupper);
-  if (0 == strncmp(filename.c_str(), "PG:", 3))
+  if(filename.compare(0, 3, "PG:") == 0)
     {
     return "PostgreSQL";
     }

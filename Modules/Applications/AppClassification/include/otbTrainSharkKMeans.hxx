@@ -31,10 +31,7 @@ template<class TInputValue, class TOutputValue>
 void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
 {
   AddChoice( "classifier.sharkkm", "Shark kmeans classifier" );
-  SetParameterDescription( "classifier.sharkkm",
-                           "This group of parameters allows setting Shark kMeans classifier parameters. "
-                                   "See complete documentation here "
-                                   "\\url{http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html}.\n " );
+  SetParameterDescription("classifier.sharkkm", "http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html ");
   //MaxNumberOfIterations
   AddParameter( ParameterType_Int, "classifier.sharkkm.maxiter",
                 "Maximum number of iteration for the kmeans algorithm." );

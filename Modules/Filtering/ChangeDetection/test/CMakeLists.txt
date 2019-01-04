@@ -53,13 +53,13 @@ otb_add_test(NAME cdTvJHMI COMMAND otbChangeDetectionTestDriver
 
 otb_add_test(NAME cdTvMeanDiff COMMAND otbChangeDetectionTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/cdMeanDiffImage.hdr
-  ${TEMP}/cdMeanDiffImage.hdr
+  ${BASELINE}/cdMeanDiffImage.tif
+  ${TEMP}/cdMeanDiffImage.tif
   otbMeanDiffChangeDetectionTest
   ${INPUTDATA}/GomaAvant.png
   ${INPUTDATA}/GomaApres.png
   2
-  ${TEMP}/cdMeanDiffImage.hdr
+  ${TEMP}/cdMeanDiffImage.tif
   )
 
 otb_add_test(NAME cdTvMultivariateAlterationDetectorImageFilterSameNbBands COMMAND otbChangeDetectionTestDriver
@@ -113,22 +113,22 @@ otb_add_test(NAME cdTvCorrel COMMAND otbChangeDetectionTestDriver
 
 otb_add_test(NAME cdTvKullbackLeiblerProfileImageFilter COMMAND otbChangeDetectionTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
-  ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+  ${BASELINE}/cdTVKullbackLeiblerProfileImageFilterOutput.tif
+  ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.tif
   otbKullbackLeiblerProfileImageFilter
   ${INPUTDATA}/GomaAvant.png
   ${INPUTDATA}/GomaApres.png
-  ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.hdr
+  ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.tif
   5 51)
 
 otb_add_test(NAME cdTvKullbackLeiblerDistanceImageFilter COMMAND otbChangeDetectionTestDriver
   --compare-image ${EPSILON_10}
-  ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
-  ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+  ${BASELINE}/cdTVKullbackLeiblerDistanceImageFilterOutput.tif
+  ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.tif
   otbKullbackLeiblerDistanceImageFilter
   ${INPUTDATA}/GomaAvant.png
   ${INPUTDATA}/GomaApres.png
-  ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.hdr
+  ${TEMP}/cdTVKullbackLeiblerDistanceImageFilterOutput.tif
   35)
 
 otb_add_test(NAME cdTvMeanRatio COMMAND otbChangeDetectionTestDriver

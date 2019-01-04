@@ -111,7 +111,6 @@ public:
     <VectorImageType, FieldImageType, VLVToFixedArrayType>  CastFilterType;
   typedef StreamingWarpImageFilter
     <FloatVectorImageType, FloatVectorImageType, FieldImageType> WarpFilterType;
-  typedef otb::ImageFileReader<VectorImageType>         InternalReaderType;
 
 private:
   void DoInit() override
@@ -130,7 +129,8 @@ private:
       "X and Y offsets, as well as the metric value. A sub-pixel accuracy can "
       "be expected. The input images should have the same size and same "
       "physical space.");
-    SetDocLimitations("None");
+    SetDocLimitations("If the 'warp' option is activated, the pipeline will be "
+		      "executed twice.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
@@ -262,6 +262,8 @@ private:
     SetDocExampleParameterValue("ery", "2");
     SetDocExampleParameterValue("mrx", "3");
     SetDocExampleParameterValue("mry", "3");
+    SetDocExampleParameterValue("w", "StereoMoving.png");
+    SetDocExampleParameterValue("wo", "StereoMoving_FineRegistered.png");
 
     SetOfficialDocLink();
   }
@@ -473,19 +475,30 @@ private:
 
     SetParameterOutputImage<VectorImageType>("out", m_Il2vi->GetOutput());
 
+    if (HasValue("w") && !HasValue("wo"))
+      {
+	otbAppLogWARNING("You should set a filename for the warped image");
+      }
+
+    if (!HasValue("w") && HasValue("wo"))
+      {
+	// in this case, the pipeline cannot be resolved : the output image (wo)
+	// won't be computed and a segfault can occur.
+	otbAppLogFATAL("w option has not been set : the ouput image cannot be produced."
+		       "Stop execution because the pipeline cannot be resolved");
+	
+      }
+    
     // If an image to warp has been given
     if (HasValue("w") && HasValue("wo"))
       {
-      otbAppLogINFO("Doing warping : ON");
-
-      m_outputReader = InternalReaderType::New();
-      m_outputReader->SetFileName(GetParameterString("out"));
-
+      otbAppLogINFO("Output image will be warped");
+      otbAppLogWARNING("Warping will need to execute the pipeline twice");
       m_ExtractROIFilter = ExtractROIFilterType::New();
       m_ExtractROIFilter->SetChannel(1);
       m_ExtractROIFilter->SetChannel(2);
-      m_ExtractROIFilter->SetInput(m_outputReader->GetOutput());
-
+      m_ExtractROIFilter->SetInput(m_Il2vi->GetOutput());
+ 
       m_Cast = CastFilterType::New();
       m_Cast->SetInput(m_ExtractROIFilter->GetOutput());
 
@@ -501,10 +514,7 @@ private:
       SetParameterOutputImage("wo", m_Warp->GetOutput());
 
       }
-    else
-      {
-      otbAppLogINFO("Doing warping : OFF");
-      }
+   
 
   }
 
@@ -525,7 +535,6 @@ private:
 
   IL2VIFilterType::Pointer m_Il2vi;
 
-  InternalReaderType::Pointer m_outputReader;
   ExtractROIFilterType::Pointer m_ExtractROIFilter;
   CastFilterType::Pointer m_Cast;
   WarpFilterType::Pointer m_Warp;

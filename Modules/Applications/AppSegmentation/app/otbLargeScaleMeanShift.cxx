@@ -191,13 +191,13 @@ private:
       if (IsParameterEnabled("mode.vector.imfield") &&
           HasValue("mode.vector.imfield"))
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("mode.vector.imfield"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("mode.vector.imfield"));
         }
       else
         {
-        GetInternalApplication("vectorization")->SetParameterString("in",
-          GetParameterString("in"));
+        GetInternalApplication("vectorization")->SetParameterInputImage("in",
+          GetParameterImage<ImageBaseType>("in"));
         }
       GetInternalApplication("vectorization")->SetParameterString("inseg",
         tmpFilenames[2]);
@@ -209,7 +209,7 @@ private:
       }
     DisableParameter("mode.raster.out");
 
-    if( IsParameterEnabled( "cleanup" ) )
+    if( GetParameterInt( "cleanup" ) )
       {
       otbAppLogINFO( <<"Final clean-up ..." );
       for (unsigned int i=0 ; i<tmpFilenames.size() ; ++i)

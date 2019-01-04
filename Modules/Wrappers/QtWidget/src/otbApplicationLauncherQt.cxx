@@ -19,6 +19,7 @@
  */
 
 #include <QtWidgets>
+#include "otbConfigurationManager.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
@@ -42,6 +43,8 @@ int main(int argc, char* argv[])
   // QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   //////////////////////////////////////////////////////////////////*/
   QtApplication qtApp(argc, argv);
+
+  otb::ConfigurationManager::InitOpenMPThreads();
 
   if (argc < 2)
     {

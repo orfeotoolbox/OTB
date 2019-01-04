@@ -93,9 +93,9 @@ private:
     SetDocName("SARDecompositions");
     SetDocLongDescription("From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
                           "All the decompositions implemented are intended for the mono-static case (transmitter and receiver are co-located).\n"
-                          "There are two kinds of decomposition : coherent ones and incoherent ones.\n"
+                          "There are two kinds of decomposition: coherent ones and incoherent ones.\n"
                           "In the coherent case, only the Pauli decomposition is available.\n"
-                          "In the incoherent case, there the decompositions available : Huynen, Barnes, and H-alpha-A.\n"   
+                          "In the incoherent case, there the decompositions available: Huynen, Barnes, and H-alpha-A.\n"   
 						  "User must provide three one-band complex images HH, HV or VH, and VV (mono-static case <=> HV = VH).\n"
 						  "Incoherent decompositions consist in averaging 3x3 complex coherency/covariance matrices; the user must provide the size of the averaging window, thanks to the parameter inco.kernelsize."
 						  );
@@ -139,7 +139,7 @@ private:
     AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
     SetParameterDescription("inco","This group allows setting parameters related to the incoherent decompositions.");
     
-    AddParameter(ParameterType_Int, "inco.kernelsize",   "Kernel size for spatial incoherent averaging.");
+    AddParameter(ParameterType_Int, "inco.kernelsize",   "Kernel size for spatial incoherent averaging");
     SetParameterDescription("inco.kernelsize", "Minute (0-59)");
     SetMinimumParameterIntValue("inco.kernelsize", 1);
     SetDefaultParameterInt("inco.kernelsize", 3);
@@ -162,7 +162,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here: all parameters are independent
   }
 
   void DoExecute() override

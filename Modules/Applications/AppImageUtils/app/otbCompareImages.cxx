@@ -56,7 +56,10 @@ private:
 
     // Documentation
     SetDocName("Images comparison");
-    SetDocLongDescription("This application computes MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between the channel of two images (reference and measurement). The user has to set the used channel and can specify a ROI.");
+    SetDocLongDescription(
+        "Compute MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between two image bands (reference and measurement). "
+        "The user has to set the used channel and can specify a ROI."
+    );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath application, ImageStatistics");
@@ -65,17 +68,17 @@ private:
 
     AddParameter(ParameterType_Group, "ref", "Reference image properties");
     AddParameter(ParameterType_InputImage,  "ref.in",   "Reference image");
-    SetParameterDescription("ref.in", "Image used as reference in the comparison");
+    SetParameterDescription("ref.in", "Image used as reference in the comparison.");
     AddParameter(ParameterType_Int,  "ref.channel",   "Reference image channel");
-    SetParameterDescription("ref.channel", "Used channel for the reference image");
+    SetParameterDescription("ref.channel", "Used channel for the reference image.");
     SetDefaultParameterInt("ref.channel", 1);
     SetMinimumParameterIntValue("ref.channel", 1);
 
     AddParameter(ParameterType_Group, "meas", "Measured image properties");
     AddParameter(ParameterType_InputImage,  "meas.in",   "Measured image");
-    SetParameterDescription("meas.in", "Image used as measured in the comparison");
+    SetParameterDescription("meas.in", "Image used as measured in the comparison.");
     AddParameter(ParameterType_Int,  "meas.channel",   "Measured image channel");
-    SetParameterDescription("meas.channel", "Used channel for the measured image");
+    SetParameterDescription("meas.channel", "Used channel for the measured image.");
     SetDefaultParameterInt("meas.channel", 1);
     SetMinimumParameterIntValue("meas.channel", 1);
 
@@ -102,19 +105,19 @@ private:
     SetParameterDescription("roi.sizey","Size along y in pixels.");
 
     AddParameter(ParameterType_Float, "mse",  "MSE");
-    SetParameterDescription("mse", "Mean Squared Error value");
+    SetParameterDescription("mse", "Mean Squared Error value.");
     SetParameterRole("mse", Role_Output );
 
     AddParameter(ParameterType_Float, "mae",  "MAE");
-    SetParameterDescription("mae", "Mean Absolute Error value");
+    SetParameterDescription("mae", "Mean Absolute Error value.");
     SetParameterRole("mae", Role_Output );
 
     AddParameter(ParameterType_Float, "psnr",  "PSNR");
-    SetParameterDescription("psnr", "Peak Signal to Noise Ratio value");
+    SetParameterDescription("psnr", "Peak Signal to Noise Ratio value.");
     SetParameterRole("psnr", Role_Output);
 
     AddParameter(ParameterType_Float, "count",  "count");
-    SetParameterDescription("count", "Nb of pixels which are different");
+    SetParameterDescription("count", "Nb of pixels which are different.");
     SetParameterRole("count", Role_Output);
 
     AddRAMParameter();

@@ -67,7 +67,6 @@ int otbSparseWvltToAngleMapperListFilterTest ( int argc, char * argv[] )
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
     inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
-  //const char * outputImageName = parseResult->GetParameterString("--OutputImages").c_str();
   // Parameter (to be changed if necessary)
   const double threshold = parseResult->IsOptionPresent("--Threshold") ?
     parseResult->GetParameterDouble("--Threshold") : 10.;

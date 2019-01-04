@@ -31,6 +31,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/predicate.hpp>
@@ -69,7 +70,7 @@ Res LexicalCast(In const& in, std::string const& kind) {
  * \param[in] errmsg a msg complement used to build the error message to
 be shown if there is \c lexical_cast exception. See \c
 otb:Utils::LexicalCast().
- * \param delims  delimitter characters (space is default)
+ * \param delims  delimiter characters (space is default)
  * \throw std::bad_alloc in case of exhausted memory
  * \throw std::runtime_error in case an element from the input string
 cannot be converted into a valid \c T instance.
@@ -95,16 +96,16 @@ ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg,
 }
 
 /**\ingroup Utils
- * split a given std::string of into key value based on given delimitter
- * string. default delimitter is '='. If the string does not have a delimitter
+ * split a given std::string of into key value based on given delimiter
+ * string. The default delimiter is '='. If the string does not have a delimiter
  * the key is set to input string and value is set to defValue.
  * \param[in] str  input string
  * \param key[out] An std::string reference where key will be stored
  * \param value[out] a reference of \cT where value will be stored
- * \param defValue[in] a default value if there is no delimitter fo
+ * \param defValue[in] a default value if there is no delimiter fo
  * \param[in] errmsg a msg complement used to build the error message to
 be shown if there is \c lexical_cast exception. See \cotb:Utils::LexicalCast().
- * \param delims  delimitter characters (space is default)
+ * \param delims  delimiter characters (space is default)
  * \throw std::bad_alloc in case of exhausted memory
  * \throw std::runtime_error in case an element from the input string
 cannot be converted into a valid \c T instance.

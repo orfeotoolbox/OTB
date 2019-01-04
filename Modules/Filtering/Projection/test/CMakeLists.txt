@@ -412,10 +412,10 @@ otb_add_test(NAME prTvVectorDataTransformFilter COMMAND otbProjectionTestDriver
   )
 
 otb_add_test(NAME prTvRationalTransformToDisplacementFieldSourceTest COMMAND otbProjectionTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
-  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.tif
+  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.tif
   otbRationalTransformToDisplacementFieldSourceTest
-  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.tif
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProjectionTestDriver

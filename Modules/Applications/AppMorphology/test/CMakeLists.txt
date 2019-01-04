@@ -142,7 +142,7 @@ otb_test_application(NAME  apTvFEMorphologicalProfilesAnalysisClassification
 						     -radius 1
 						     -step 1
 							 -profile.classification.sigma 1
-						     -out ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif
+						     -out ${TEMP}/apTvFEMorphologicalProfilesAnalysisClassif.tif
 					 VALID   --compare-image ${NOTOL}
 							 ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
-					 		 ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif)
+							 ${TEMP}/apTvFEMorphologicalProfilesAnalysisClassif.tif)

@@ -55,7 +55,7 @@ option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
 if(APPLE)
   if(POLICY CMP0042)
@@ -329,8 +329,12 @@ else()
 endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-option(OTB_USE_QWT "Enable module QWT in OTB" ON)
+include (CMakeDependentOption)
+CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+
+option(OTB_USE_MPI "Enable MPI in OTB" OFF)
+option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT README-OTB-Data

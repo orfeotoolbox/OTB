@@ -46,7 +46,7 @@ Welford's algorithm
 SampleType EstimateStds(const SampleVectorType& samples)
 {
   const auto nbSamples = samples.size();
-  const auto nbComponents = samples[0].size();
+  const long nbComponents = static_cast<long>(samples[0].size());
   SampleType stds(nbComponents, 0.0);
   SampleType means(nbComponents, 0.0);
   for(size_t i=0; i<nbSamples; ++i)
@@ -55,7 +55,7 @@ SampleType EstimateStds(const SampleVectorType& samples)
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif 
-    for(size_t j=0; j<nbComponents; ++j)
+    for(long j=0; j< nbComponents; ++j)
       {
       const auto mu = means[j];
       const auto x = samples[i][j];
@@ -67,7 +67,7 @@ SampleType EstimateStds(const SampleVectorType& samples)
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(size_t j=0; j<nbComponents; ++j)
+  for(long j=0; j< nbComponents; ++j)
     {
     stds[j] = std::sqrt(stds[j]/nbSamples);
     }
@@ -83,11 +83,12 @@ void ReplicateSamples(const SampleVectorType& inSamples,
                     SampleVectorType& newSamples)
 {
   newSamples.resize(nbSamples);
+  const long long nbSamplesLL = static_cast<long long>(nbSamples);
   size_t imod{0};
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(size_t i=0; i<nbSamples; ++i)
+  for(long long i=0; i< nbSamplesLL; ++i)
     {
     if (imod == inSamples.size()) imod = 0;
     newSamples[i] = inSamples[imod++];
@@ -108,7 +109,7 @@ void JitterSamples(const SampleVectorType& inSamples,
                    const int seed = std::time(nullptr))
 {
   newSamples.resize(nbSamples);
-  const auto nbComponents = inSamples[0].size();
+  const long nbComponents = static_cast<long>(inSamples[0].size());
   std::random_device rd;
   std::mt19937 gen(rd());
   // The input samples are selected randomly with replacement
@@ -120,7 +121,7 @@ void JitterSamples(const SampleVectorType& inSamples,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for(size_t i=0; i<nbComponents; ++i)
+  for(long i=0; i< nbComponents; ++i)
     gaussDis[i] = std::normal_distribution<double>{0.0, stds[i]/stdFactor};
 
   for(size_t i=0; i<nbSamples; ++i)
@@ -129,7 +130,7 @@ void JitterSamples(const SampleVectorType& inSamples,
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(size_t j=0; j<nbComponents; ++j)
+    for(long j=0; j< nbComponents; ++j)
       newSamples[i][j] += gaussDis[j](gen);
     }
 }
@@ -168,19 +169,20 @@ void FindKNNIndices(const SampleVectorType& inSamples,
                     const size_t nbNeighbors,
                     NNVectorType& nnVector)
 {
-  const auto nbSamples = inSamples.size();
+  const long long nbSamples = static_cast<long long>(inSamples.size());
   nnVector.resize(nbSamples);
   #ifdef _OPENMP
   #pragma omp parallel for
   #endif
-  for(size_t sampleIdx=0; sampleIdx<nbSamples; ++sampleIdx)
+  for(long long sampleIdx=0; sampleIdx< nbSamples; ++sampleIdx)
     {
     NNIndicesType nns;
-    for(size_t neighborIdx=0; neighborIdx<nbSamples; ++neighborIdx) 
+    for(long long neighborIdx=0; neighborIdx<nbSamples; ++neighborIdx)
       {
       if(sampleIdx!=neighborIdx)
-        nns.push_back({neighborIdx, ComputeSquareDistance(inSamples[sampleIdx],
-                                                          inSamples[neighborIdx])});
+        nns.push_back({static_cast<size_t>(neighborIdx),
+          ComputeSquareDistance(inSamples[sampleIdx],
+                                inSamples[neighborIdx])});
       }  
     std::partial_sort(nns.begin(), nns.begin()+nbNeighbors, nns.end(), NeighborSorter{});
     nns.resize(nbNeighbors);
@@ -211,6 +213,7 @@ void Smote(const SampleVectorType& inSamples,
            const int seed = std::time(nullptr))
 {
   newSamples.resize(nbSamples);
+  const long long nbSamplesLL = static_cast<long long>(nbSamples);
   NNVectorType nnVector;
   FindKNNIndices(inSamples, nbNeighbors, nnVector);
   // The input samples are selected randomly with replacement
@@ -218,7 +221,7 @@ void Smote(const SampleVectorType& inSamples,
   #ifdef _OPENMP
   #pragma omp parallel for
   #endif
-  for(size_t i=0; i<nbSamples; ++i)
+  for(long long i=0; i< nbSamplesLL; ++i)
     {
     const auto sampleIdx = std::rand()%(inSamples.size());
     const auto sample = inSamples[sampleIdx];

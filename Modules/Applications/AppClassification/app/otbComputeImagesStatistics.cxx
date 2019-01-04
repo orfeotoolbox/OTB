@@ -53,7 +53,7 @@ private:
       "from a set of images and optionally saves the results in an XML file.");
     SetDocLongDescription("This application computes a global mean and standard deviation "
       "for each band of a set of images and optionally saves the results in an XML file."
-      " The output XML is intended to be used an input "
+      " The output XML is intended to be used as an input "
       "for the TrainImagesClassifier application to normalize samples before learning. "
       "You can also normalize the image with the XML file in the ImageClassifier application.");
 
@@ -66,10 +66,10 @@ private:
     AddDocTag(Tags::Analysis);
 
     AddParameter(ParameterType_InputImageList, "il", "Input images");
-    SetParameterDescription( "il", "List of input images filenames." );
+    SetParameterDescription( "il", "List of input image filenames." );
 
     AddParameter(ParameterType_Float, "bv", "Background Value");
-    SetParameterDescription( "bv", "Background value to ignore in statistics computation." );
+    SetParameterDescription( "bv", "Background value to ignore in computation of statistics." );
     MandatoryOff("bv");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output XML file");
@@ -135,7 +135,7 @@ private:
       StreamingStatisticsVImageFilterType::Pointer statsEstimator = StreamingStatisticsVImageFilterType::New();
       std::ostringstream processName;
       processName << "Processing Image (" << imageId+1 << "/" << imageList->Size() << ")";
-      AddProcess(statsEstimator->GetStreamer(), processName.str().c_str());
+      AddProcess(statsEstimator->GetStreamer(), processName.str());
       statsEstimator->SetInput(image);
       statsEstimator->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 

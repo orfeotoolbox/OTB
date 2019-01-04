@@ -166,11 +166,11 @@ otb_add_test(NAME prTvossimElevManagerTest2 COMMAND otbOSSIMAdaptersTestDriver
   )
 
 otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4
-  ${TEMP}/prTvossimElevManagerTest4.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4.tif
+  ${TEMP}/prTvossimElevManagerTest4.tif
   otbOssimElevManagerTest4
   ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/prTvossimElevManagerTest4
+  ${TEMP}/prTvossimElevManagerTest4.tif
   -1.8 52   0.02 -0.018 232 422
   )
 

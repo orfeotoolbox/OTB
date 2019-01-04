@@ -8,7 +8,7 @@ Environment variables that affect Orfeo ToolBox
 
 The following environment variables are parsed by Orfeo ToolBox. Note
 that they only affect default values, and that settings in extended
-filenames, applications, monteverdi or custom C++ code might override
+filenames, applications, Monteverdi or custom C++ code might override
 those values.
 
 * ``OTB_DEM_DIRECTORY``: Default directory were DEM tiles are
@@ -26,29 +26,29 @@ those values.
   default level is ``INFO``.
 
 In addition to OTB specific environment variables, the following
-environment variable are parsed by third party libraries and also
+environment variables are parsed by third party libraries and also
 affect how OTB works:
 
-* ``GDAL_CACHEMAX``: Gdal has an internal cache mechanism to avoid reading or decoding again image chunks. This environnement variable controls how much memory Gdal can use for caching. By default, Gdal can use up to 5 percents of available RAM on system, which may be a lot. Moreover, caching is only needed if the processing chain is likely to request the same chunk several times, which is not likely  to happen for a standard pixel based OTB pipeline. Setting a lower value allows to allocate more memory to OTB itself (using applications ``-ram`` parameter or ``OTB_MAX_RAM_HINT`` environment variable). If value is small (less than 100 000, it is assumed to be in megabytes, otherwise, it is assumed to be in bytes.
-* ``GDAL_NUM_THREADS``: Gdal can take advantage of multi-threading to decode some formats. This variable controls the number of threads Gdal is allowed to use.
-* ``OPJ_NUM_THREADS``: OpenJpeg can take advantage of mutli-threading when decoding images. This variable controls the number of threads OpenJpeg is allowed to use.
-* ``ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS``: This variable allows to control the number of threads used by ITK for processing. 
+* ``GDAL_CACHEMAX``: GDAL has an internal cache mechanism to avoid reading or decoding again image chunks. This environment variable controls the amount of memory that GDAL can use for caching. By default, GDAL can use up to 5 percent of the system's available RAM, which may be a lot. In addition, caching is only needed if the processing chain is likely to request the same chunk several times, which is unlikely to happen for a standard pixel based OTB pipeline. Setting a lower value facilitates the allocation of more memory to OTB itself (using applications ``-ram`` parameter or ``OTB_MAX_RAM_HINT`` environment variable). If the value is small, i.e. less than 100 000, it is assumed to be in megabytes, otherwise, it is assumed to be in bytes.
+* ``GDAL_NUM_THREADS``: GDAL can take advantage of multi-threading to decode some formats. This variable controls the number of threads GDAL is allowed to use.
+* ``OPJ_NUM_THREADS``: OpenJpeg can take advantage of multi-threading when decoding images. This variable controls the number of threads OpenJpeg is allowed to use.
+* ``ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS``: This variable controls the number of threads used by ITK for processing. 
   
 .. _extended-filenames:
 
 Extended filenames
 ------------------
 
-Extended filenames is an interesting feature of OTB. With it, you can control
-several aspects of the beahvior of the OTB in the OTB-Applications or in our
-own C++ applications. Historically this feature has been desingn to solve
-an issue with how to handle geo-referencing information. 
+Extended filenames are an interesting feature of OTB. With them, it is possible to control
+several aspects of the behavior of OTB in the OTB-Applications or in our
+own C++ applications. Historically this feature was designed to facilitate 
+how geo-referencing information was handled. 
 
 Indeed, there are multiple ways to define geo-referencing information. For
 instance, one can use a geographic transform, a cartographic projection,
 or a sensor model with RPC coefficients. A single image may contain
 several of these elements, such as in the “ortho-ready” products: this
-is a type of product still in sensor geometry (the sensor model is
+is a type of product that is still in sensor geometry (the sensor model is
 supplied with the image) but it also contains an approximative
 geographic transform that can be used to have a quick estimate of the
 image localisation. For instance, your product may contain a “.TIF” file
@@ -56,18 +56,18 @@ for the image, along with a “.RPB” file that contains the sensor model
 coefficients and an “.IMD” file that contains a cartographic projection.
 
 This case leads to the following question: which geo-referencing
-element should be used when opening this image in OTB. In
-fact, it depends on the users need. For an orthorectification
+element should be used when the image is opened in OTB. In
+fact, it depends on the user's requirements. For an orthorectification
 application, the sensor model must be used. In order to specify which
 information should be skipped, a syntax of extended filenames has been
 developed for both reading and writing.
 
-Since the development of this feature we have extend this mechanism for 
-other aspaects: like band or overview selection in reader part or support
-create option of gdal in writer part.The reader and writer extended filename 
+Since the development of this feature, we have extended this mechanism for 
+other aspects. This includes band or overview selection in reader part or support
+create option of GDAL in writer part. The reader and writer extended filename 
 support is based on the same syntax, only the options are different. 
-To benefit from the extended file name mechanism, the following syntax 
-is to be used:
+To benefit from the extended filename mechanism, the following syntax 
+should be used:
 
 ::
 
@@ -82,7 +82,7 @@ Reader options
 
     &geom=<path/filename.geom>
 
--  Contains the file name of a valid geom file
+-  Contains the filename of a valid geom file
 
 -  Use the content of the specified geom file instead of
    image-embedded geometric information
@@ -117,20 +117,20 @@ Reader options
 
 -  Select a subset of bands from the input image
 
--  The syntax is inspired by Python indexing syntax with
-   bands=r1,r2,r3,...,rn where each ri is a band range that can be :
+-  The syntax is inspired by the Python indexing syntax with
+   bands=r1,r2,r3,...,rn where each ri is a band range that can be:
 
    -  a single index (1-based) :
 
-      -  :code:`2` means 2nd band
+      -  :code:`2` means the second band
 
       -  :code:`-1` means last band
 
    -  or a range of bands :
 
-      -  :code:`3:` means 3rd band until the last one
+      -  :code:`3:` means from the third band until the last band 
 
-      -  :code:`:-2` means the first bands until the second to last
+      -  :code:`:-2` means the first band up until the penultimate band 
 
       -  :code:`2:4` means bands 2,3 and 4
 
@@ -158,7 +158,7 @@ Reader options
 
     &skipgeom=<(bool)true>
 
--  Skip geometric information
+-  Skip the geometric information
 
 -  Clears the keyword list
 
@@ -204,9 +204,9 @@ Writer options
 
     &gdal:co:<GDALKEY>=<VALUE>
 
--  To specify a gdal creation option
+-  To specify a GDAL creation option
 
--  For gdal creation option information, see dedicated gdal documentation for each driver. For example, you can find `here <http://www.gdal.org/frmt_gtiff.html>`_ the information about the GeoTiff create options
+-  For GDAL creation option information, see the dedicated GDAL documentation for each driver. For example, you can find `here <http://www.gdal.org/frmt_gtiff.html>`_ the information about the GeoTiff create options
 
 -  None by default
 
@@ -241,7 +241,7 @@ Writer options
 
     &streaming:sizemode=<VALUE>
 
--  Allows to choose how the size of the streaming pieces is computed
+-  Provides the option to choose how the size of the streaming pieces is computed
 
 -  Available values are:
 
@@ -270,8 +270,8 @@ Writer options
 
    -  if sizemode=nbsplits: number of requested splits for streaming
 
--  If not provided, the default value is set to 0 and result in
-   different behaviour depending on sizemode (if set to height or
+-  If not provided, the default value is set to 0 and results in
+   different behaviours depending on sizemode (if set to height or
    nbsplits, streaming is deactivated, if set to auto, value is
    fetched from configuration or cmake configuration file)
 
@@ -334,29 +334,36 @@ The available syntax for boolean options are:
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
 
+-----------------------------------------------
+
 ::
 
    &nodata=(double) value / [int:double, int:double ...]
 
--   This options allows one to set specific nodata values for all or selected bands.
+-    This options allows one to set specific nodata values for all or selected bands. The nodata values can be set in two ways: either using a simple scalar value or band,value pairs. OTB will select either one of them depending on the type of nodata value string specified.
 
-    There are two ways of setting nodata values. simple scalar values of band,value pair.
-    OTB will select either one of them depending on type of nodata value string
-   
--    If value is scalar (without bandindex), it will be applied only to first band of image.
+-    If the value is scalar (without bandindex), it will be applied only to the first band of the image.
 
--    If value is given as "bandindex:value" pair separated by a ":" then
-     nodata value is applied to only those selected band.
+-    If the value is given as "bandindex:value" pair separated by a ":" then
+     the nodata value is applied to only those selected band.
 
-- By default OTB will not alter any existing nodata value.
+-    By default OTB will not alter any existing nodata value.
+
+-    The following examples illustrate the above-mentioned points:
+
+-    Scalar value syntax : "image_filename?&nodata=-999" -> nodata value equal to -999 will be assigned to all bands
+
+-    "Band/Value pair" syntax: "image_filename?&nodata=0:-999,1:255,2:254" -> nodata value corresponds to pixels with values [-999,255,254]
+
+-    It is important to note that the band numbering in the nodata writer option follows the GDAL convention and starts at 1.
 
 OGR DataSource options
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-We extended this process to OGR DataSource. There are three different type of
-option : open, creation and layer creation. Those options come from the GDAL 
-API. In order to use them one just need to specify to which of this family 
-the option one want to use is from.
+We extended this process to OGR DataSource. There are three different types of
+options: open, creation and layer creation, which come directly from the GDAL 
+API. In order to use them, one just needs to specify the family that the option is
+from.
 
 For open option :
 
@@ -383,16 +390,16 @@ For layer creation option :
 Examples
 ^^^^^^^^^^^^^^
 
-You can find below some examples:
+Some examples are provided below: 
 
 - Write a file with blockSize equal to 256 and with DEFLATE compression
 
 ::
 
-    $ otbcli_Convert -in OTB-Data/Examples/QB_1_ortho.tif -out "/tmp/example1.tif?&gdal:co:TILED=YES&gdal:co:COMPRESS=DEFLATE"
+    $ otbcli_DynamicConvert -in OTB-Data/Examples/QB_1_ortho.tif -out "/tmp/example1.tif?&gdal:co:TILED=YES&gdal:co:COMPRESS=DEFLATE"
 
 - Process only first band from a file
 
 ::
 
-    $ otbcli_Convert -in "OTB-Data/Examples/QB_1_ortho.tif?&bands=1" -out /tmp/example2.tif
+    $ otbcli_DynamicConvert -in "OTB-Data/Examples/QB_1_ortho.tif?&bands=1" -out /tmp/example2.tif

@@ -34,9 +34,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
 ::InitRandomForestsParams()
 {
   AddChoice("classifier.rf", "Random forests classifier");
-  SetParameterDescription("classifier.rf",
-                          "This group of parameters allows setting Random Forests classifier parameters. "
-                          "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/random_trees.html}.");
+  SetParameterDescription("classifier.rf", "http://docs.opencv.org/modules/ml/doc/random_trees.html");
   //MaxDepth
   AddParameter(ParameterType_Int, "classifier.rf.max", "Maximum depth of the tree");
   SetParameterInt("classifier.rf.max",5);
@@ -58,10 +56,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
   SetParameterDescription("classifier.rf.ra", "If all absolute differences between an estimated value in a node "
                           "and the values of the train samples in this node are smaller than this regression accuracy parameter, "
                           "then the node will not be split.");
-
-  //UseSurrogates : don't need to be exposed !
-  //AddParameter(ParameterType_Empty, "classifier.rf.sur", "Surrogate splits will be built");
-  //SetParameterDescription("classifier.rf.sur","These splits allow working with missing data and compute variable importance correctly.");
 
   //MaxNumberOfCategories
   AddParameter(ParameterType_Int, "classifier.rf.cat",

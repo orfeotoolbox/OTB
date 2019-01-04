@@ -26,11 +26,11 @@
 // in OTB. This framework uses the generic programming approach. All
 // change detection filters are
 // \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter}s, that is, they
-// are filters taking two images as input and providing one image as
-// output. The change detection computation itself is performed on a
+// are filters taking two images as input and provide one image as
+// output. The change detection computation itself is performed on 
 // the neighborhood of each pixel of the input images.
 //
-// The first step required to build a change detection filter is to
+// The first step in building a change detection filter is to
 // include the header of the parent class.
 //
 // Software Guide : EndLatex
@@ -54,7 +54,7 @@
 // something accepting the syntax \code{foo()}. This can be
 // implemented using classical C/C++ functions, but it is preferable
 // to implement it using C++ functors. These are classical C++ classes
-// which overload the \code{()} operator. This allows using them with
+// which overload the \code{()} operator. This allows to be used with
 // the same syntax as C/C++ functions.
 //
 // Since change detectors operate on neighborhoods, the functor
@@ -107,7 +107,7 @@ public:
 // the functor used to perform the change detection operation.
 //
 // Inside the class only a few \code{typedef}s and the constructors
-// and destructors have to be declared.
+// and destructors need to be declared.
 //
 // Software Guide : EndLatex
 
@@ -152,8 +152,8 @@ private:
 
 // Software Guide : BeginLatex
 //
-// Pay attention to the fact that no \code{.hxx} file is needed, since
-// filtering operation is implemented in the
+// Pay particular attention to the fact that no \code{.hxx} file is needed, since
+// the filtering operation is implemented in the
 // \doxygen{otb}{BinaryFunctorNeighborhoodImageFilter} class. So all
 // the algorithmics part is inside the functor.
 //
@@ -178,7 +178,7 @@ int main(int argc, char* argv[])
   // Software Guide : BeginLatex
   //
   // As usual, we start by defining the image types. The internal
-  // computations will be performed with floating point precision,
+  // computations will be performed using floating point precision,
   // while the output image will be stored using one byte per pixel.
   //
   // SoftwareGuide : EndLatex
@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginLatex
   //
-  // The next step is declaring the filter for the change detection.
+  // The next step is to declare the filter for the change detection.
   //
   // SoftwareGuide : EndLatex
 

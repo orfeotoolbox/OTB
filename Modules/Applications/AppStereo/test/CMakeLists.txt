@@ -113,6 +113,30 @@ otb_test_application(NAME apTvDmFineRegistrationTest
                              ${TEMP}/apTvDmFineRegistrationTest.tif
                      )
 
+# test warping option 
+otb_test_application(NAME apTvDmFineRegistrationWithWarpingTest
+                     APP  FineRegistration
+                     OPTIONS -ref ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+                             -sec ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_centered_rigid.tif
+                             -out ${TEMP}/apTvDmFineRegistrationWarpingTest.tif
+                             -erx 5
+                             -ery 5
+                             -mrx 3
+                             -mry 3
+                             -ssrx 8
+                             -ssry 8
+                             -spa 0.1
+                             -cva 0.01
+                             -cox -2
+                             -vmlt 0.999
+			     -w ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_centered_rigid.tif
+			     -wo ${TEMP}/apTvDmFineRegistrationWarpedOutput.tif 
+		     VALID   --compare-image ${EPSILON_10}
+                             ${BASELINE}/apTvDmFineRegistrationWithWarpingTest.tif	     
+                             ${TEMP}/apTvDmFineRegistrationWarpedOutput.tif	     
+
+                     )
+
 
 #----------- GeneratePlyFile TESTS ----------------
 

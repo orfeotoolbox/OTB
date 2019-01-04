@@ -21,7 +21,7 @@
 #ifndef otbKNearestNeighborsMachineLearningModel_hxx
 #define otbKNearestNeighborsMachineLearningModel_hxx
 
-#include <boost/lexical_cast.hpp>
+#include "otb_boost_lexicalcast_header.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbOpenCVUtils.h"
 

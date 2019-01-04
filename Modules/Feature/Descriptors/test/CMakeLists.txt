@@ -171,14 +171,14 @@ otb_add_test(NAME feTvImageToSIFTKeyPointSetFilterQB_SuburbOutputAscii COMMAND o
 
 otb_add_test(NAME feTvForwardFourierMellinImageFilter COMMAND otbDescriptorsTestDriver
   --compare-n-images ${EPSILON_6} 2
-  ${BASELINE}/feForwardFourierMellinImageFilterReal.hdr
-  ${TEMP}/feForwardFourierMellinImageFilterReal.hdr
-  ${BASELINE}/feForwardFourierMellinImageFilterImag.hdr
-  ${TEMP}/feForwardFourierMellinImageFilterImag.hdr
+  ${BASELINE}/feForwardFourierMellinImageFilterReal.tif
+  ${TEMP}/feForwardFourierMellinImageFilterReal.tif
+  ${BASELINE}/feForwardFourierMellinImageFilterImag.tif
+  ${TEMP}/feForwardFourierMellinImageFilterImag.tif
   otbFourierMellinImageFilter
   ${INPUTDATA}/circle.hdr
-  ${TEMP}/feForwardFourierMellinImageFilterReal.hdr
-  ${TEMP}/feForwardFourierMellinImageFilterImag.hdr)
+  ${TEMP}/feForwardFourierMellinImageFilterReal.tif
+  ${TEMP}/feForwardFourierMellinImageFilterImag.tif)
 
 otb_add_test(NAME feTvImageToHessianDeterminantImageFilter COMMAND otbDescriptorsTestDriver
   --compare-image ${EPSILON_3}

@@ -60,7 +60,7 @@ otb_add_test(NAME msTvMorphoPyrSegmentBright COMMAND otbMorphologicalPyramidTest
   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
   otbMorphologicalPyramidSegmenter
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_sf.tif
   0
@@ -75,7 +75,7 @@ otb_add_test(NAME msTvMorphoPyrSegmentDark COMMAND otbMorphologicalPyramidTestDr
   ${BASELINE}/msPyrSegmenter_IKO_Halles_4_2_if.tif
   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
   otbMorphologicalPyramidSegmenter
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
   ${TEMP}/msPyrSegmenter_IKO_Halles_4_2_if.tif
   1
@@ -97,30 +97,30 @@ otb_add_test(NAME msTvMorphoPyrSynthesisFilter COMMAND otbMorphologicalPyramidTe
 
 otb_add_test(NAME msTvMorphoPyrMRToMSConverter COMMAND otbMorphologicalPyramidTestDriver
   --compare-n-images ${EPSILON_8} 3
-  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+  ${BASELINE}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
   otbMorphologicalPyramidMRToMSConverter
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.hdr
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.hdr
-  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.hdr
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_sf_full.tif
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_if_full.tif
+  ${TEMP}/msPyrMRToMS_IKO_Halles_4_2_an_full.tif
   4
   2.0)
 
 otb_add_test(NAME msTvMorphoPyrResampler COMMAND otbMorphologicalPyramidTestDriver
   --compare-n-images ${EPSILON_8} 2
-  ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.hdr
-  ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
-  ${BASELINE}/msPyrResampler_IKO_LesHalles_full.hdr
-  ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
+  ${BASELINE}/msPyrResampler_IKO_LesHalles_256_2.tif
+  ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
+  ${BASELINE}/msPyrResampler_IKO_LesHalles_full.tif
+  ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
   otbMorphologicalPyramidResampler
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
-  ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.hdr
-  ${TEMP}/msPyrResampler_IKO_LesHalles_full.hdr
+  ${TEMP}/msPyrResampler_IKO_LesHalles_256_2.tif
+  ${TEMP}/msPyrResampler_IKO_LesHalles_full.tif
   256
   256
   )
