@@ -152,7 +152,4 @@ void RegisterTests()
   REGISTER_TEST(otbImageFileWriterOptBandTest);
   REGISTER_TEST(otbMultiImageFileWriterTest);
   REGISTER_TEST(otbWriteGeomFile);
-#if OTB_USE_DEPRECATED
-  REGISTER_TEST(otbImageFileReaderServerName);
-#endif
 }

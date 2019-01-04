@@ -39,9 +39,6 @@ otb_module(OTBImageIO
     OTBObjectList
     OTBStreaming
 
-  OPTIONAL_DEPENDS
-    OTBIOTileMap #This module is deprecated
-
   TEST_DEPENDS
     OTBStatistics
     OTBTestKernel
