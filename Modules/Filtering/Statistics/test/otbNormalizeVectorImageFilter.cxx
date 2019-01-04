@@ -31,10 +31,7 @@ int otbNormalizeVectorImageFilterTest ( int argc, char* argv[] )
     std::cerr << "Usage: otbNormalizeVectorImageFilterTest input output\n";
     return EXIT_FAILURE;
     }
-
-  std::string inputImageName = argv[1];
-  std::string outputImageName = argv[2];
-
+    
   // Main type definition
   const unsigned int Dimension = 2;
   typedef double PixelType;
@@ -43,7 +40,7 @@ int otbNormalizeVectorImageFilterTest ( int argc, char* argv[] )
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(inputImageName);
+  reader->SetFileName(argv[1]);
 
   // Image filtering
   typedef otb::NormalizeVectorImageFilter< ImageType, ImageType >
@@ -57,7 +54,7 @@ int otbNormalizeVectorImageFilterTest ( int argc, char* argv[] )
 
   typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( outputImageName );
+  writer->SetFileName( argv[2] );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 
