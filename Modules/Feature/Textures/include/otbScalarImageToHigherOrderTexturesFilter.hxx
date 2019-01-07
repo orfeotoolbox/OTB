@@ -39,7 +39,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   m_SubsampleFactor(),
   m_SubsampleOffset()
 {
-  // There are 11 outputs corresponding to the 8 textures indices
+  // There are 10 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(10);
 
   // Create the 11 outputs
@@ -53,7 +53,6 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   this->SetNthOutput(7, OutputImageType::New());
   this->SetNthOutput(8, OutputImageType::New());
   this->SetNthOutput(9, OutputImageType::New());
-  this->SetNthOutput(10, OutputImageType::New());
 
   m_Radius.Fill(10);
 
@@ -135,19 +134,6 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(3));
-}
-
-template <class TInputImage, class TOutputImage>
-typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetRunPercentageOutput()
-{
-  if (this->GetNumberOfOutputs() < 5)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(4));
 }
 
 template <class TInputImage, class TOutputImage>
@@ -261,7 +247,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   typename OutputImageType::PointType outOrigin;
   this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
 
-  for (unsigned int i=0 ; i<this->GetNumberOfOutputs() ; i++)
+  for (unsigned int i=0 ; i < this->GetNumberOfOutputs() ; i++)
     {
     OutputImagePointerType outputPtr = this->GetOutput(i);
     outputPtr->SetLargestPossibleRegion(outputRegion);
@@ -269,6 +255,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     outputPtr->SetSignedSpacing(outSpacing);
     }
 }
+
 
 template <class TInputImage, class TOutputImage>
 void
@@ -300,7 +287,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   outputIndex[1] = outputIndex[1] * m_SubsampleFactor[1] + m_SubsampleOffset[1] + inputLargest.GetIndex(1);
   outputSize[0] = 1 + (outputSize[0] - 1) * m_SubsampleFactor[0];
   outputSize[1] = 1 + (outputSize[1] - 1) * m_SubsampleFactor[1];
-  
+
   InputRegionType inputRequestedRegion(outputIndex,outputSize);
 
   // Apply the radius
@@ -333,7 +320,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
   typedef typename itk::ImageRegionIterator<OutputImageType> IteratorType;
   std::vector<IteratorType> outputImagesIterators;
 
-  for (unsigned int i = 0; i < 10; ++i)
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
     {
     outputImagesIterators.push_back( IteratorType(this->GetOutput(i), outputRegionForThread) );
     outputImagesIterators[i].GoToBegin();
@@ -402,28 +389,17 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     typename ScalarImageToRunLengthFeaturesFilterType::FeatureValueVector&
       featuresMeans = *(runLengthFeatureCalculator->GetFeatureMeans().GetPointer());
 
-    // Fill outputs
-    outputImagesIterators[0].Set(featuresMeans[0]);
-    outputImagesIterators[1].Set(featuresMeans[1]);
-    outputImagesIterators[2].Set(featuresMeans[2]);
-    outputImagesIterators[3].Set(featuresMeans[3]);
-    outputImagesIterators[4].Set(featuresMeans[4]);
-    outputImagesIterators[5].Set(featuresMeans[5]);
-    outputImagesIterators[6].Set(featuresMeans[6]);
-    outputImagesIterators[7].Set(featuresMeans[7]);
-    outputImagesIterators[8].Set(featuresMeans[8]);
-    outputImagesIterators[9].Set(featuresMeans[9]);
-
+    // Fill output
+    for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
+    {
+    // Fill output
+    outputImagesIterators[i].Set(featuresMeans[i]);
+    // Increment iterators
+    ++outputImagesIterators[i];
+    }
     // Update progress
     progress.CompletedPixel();
-
-    // Increment iterators
-    for (unsigned int i = 0; i < 10; ++i)
-      {
-      ++outputImagesIterators[i];
-      }
     }
-
 }
 
 } // End namespace otb

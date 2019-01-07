@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class ScalarImageToHigherOrderTexturesFilter
- *  \brief This class compute 11 local higher order statistics textures coefficients
+ *  \brief This class compute 10 local higher order statistics textures coefficients
  *  based on the grey level run-length matrix
  *
  *  This filter computes the following Haralick textures over a sliding window with
@@ -174,9 +174,6 @@ public:
 
   /** Get the Run Length Nonuniformity output image */
   OutputImageType * GetRunLengthNonuniformityOutput();
-
-  /** Get the Run Percentage output image */
-  OutputImageType * GetRunPercentageOutput();
 
   /** Get the Low Grey-Level Run Emphasis output image */
   OutputImageType * GetLowGreyLevelRunEmphasisOutput();
