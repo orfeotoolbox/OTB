@@ -142,6 +142,19 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLowGreyLevelRunEmphasisOutput()
 {
+  if (this->GetNumberOfOutputs() < 5)
+    {
+    return nullptr;
+    }
+  return static_cast<OutputImageType *>(this->GetOutput(4));
+}
+
+template <class TInputImage, class TOutputImage>
+typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
+::OutputImageType *
+ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
+::GetHighGreyLevelRunEmphasisOutput()
+{
   if (this->GetNumberOfOutputs() < 6)
     {
     return nullptr;
@@ -153,7 +166,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetHighGreyLevelRunEmphasisOutput()
+::GetShortRunLowGreyLevelEmphasisOutput()
 {
   if (this->GetNumberOfOutputs() < 7)
     {
@@ -166,7 +179,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetShortRunLowGreyLevelEmphasisOutput()
+::GetShortRunHighGreyLevelEmphasisOutput()
 {
   if (this->GetNumberOfOutputs() < 8)
     {
@@ -179,7 +192,7 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetShortRunHighGreyLevelEmphasisOutput()
+::GetLongRunLowGreyLevelEmphasisOutput()
 {
   if (this->GetNumberOfOutputs() < 9)
     {
@@ -192,26 +205,13 @@ template <class TInputImage, class TOutputImage>
 typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::OutputImageType *
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetLongRunLowGreyLevelEmphasisOutput()
+::GetLongRunHighGreyLevelEmphasisOutput()
 {
   if (this->GetNumberOfOutputs() < 10)
     {
     return nullptr;
     }
   return static_cast<OutputImageType *>(this->GetOutput(9));
-}
-
-template <class TInputImage, class TOutputImage>
-typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
-::GetLongRunHighGreyLevelEmphasisOutput()
-{
-  if (this->GetNumberOfOutputs() < 11)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(10));
 }
 
 template <class TInputImage, class TOutputImage>

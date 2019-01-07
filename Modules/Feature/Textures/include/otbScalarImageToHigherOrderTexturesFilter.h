@@ -96,20 +96,8 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  /** Co-occurence matrix and textures calculator */
-/*  typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
-    <InputImageType>                                           RunLengthMatrixGeneratorType;
-  typedef typename RunLengthMatrixGeneratorType::Pointer       RunLengthMatrixGeneratorPointerType;
-  typedef typename RunLengthMatrixGeneratorType::OffsetType    OffsetType;
-  typedef typename RunLengthMatrixGeneratorType::HistogramType HistogramType;
-  typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
-    <HistogramType>                                            TextureCoefficientsCalculatorType;
-  typedef typename TextureCoefficientsCalculatorType::Pointer  TextureCoefficientsCalculatorPointerType;
-  */
-
   typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter
     <InputImageType> ScalarImageToRunLengthFeaturesFilterType;
-  //typedef typename ImageType::PixelType                PixelType;
   typedef typename InputImageType::OffsetType          OffsetType;
   typedef itk::VectorContainer< unsigned char, OffsetType > OffsetVector;
   typedef typename OffsetVector::Pointer               OffsetVectorPointer;
