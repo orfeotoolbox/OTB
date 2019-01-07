@@ -26,7 +26,6 @@
 // gets integrated into the main directories.
 #include "itkConfigure.h"
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkMorphologyImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 
