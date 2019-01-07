@@ -108,7 +108,7 @@ char const* DeduceDriverName(std::string filename)
   ExtensionDriverAssociation const* whichIt =
     std::find_if(
       boost::begin(k_ExtensionDriverMap), boost::end(k_ExtensionDriverMap),
-      boost::bind(&ExtensionDriverAssociation::Matches, _1, extension));
+      [&](auto const & x) { return x.Matches(extension); } );
   if (whichIt ==  boost::end(k_ExtensionDriverMap))
     {
     return nullptr; // nothing found

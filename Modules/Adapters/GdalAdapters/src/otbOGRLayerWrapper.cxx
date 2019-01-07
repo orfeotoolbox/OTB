@@ -70,7 +70,7 @@ otb::ogr::Layer::Layer(OGRLayer* layer, bool modifiable)
 }
 
 otb::ogr::Layer::Layer(OGRLayer* layer, GDALDataset& sourceInChargeOfLifeTime, bool modifiable)
-:   m_Layer(layer,  boost::bind(&GDALDataset::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+:   m_Layer(layer, [&](auto const& x) { return sourceInChargeOfLifeTime.ReleaseResultSet(x); })
   , m_Modifiable(modifiable)
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );

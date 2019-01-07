@@ -43,7 +43,7 @@
 otb::ogr::Feature::Feature(OGRFeatureDefn & definition)
 : m_Feature(
   OGRFeature::CreateFeature(&definition),
-  boost::bind(&OGRFeature::DestroyFeature, _1))
+  [&](auto const & x) {return OGRFeature::DestroyFeature(x);})
 {
   CheckInvariants();
 }
@@ -52,7 +52,7 @@ otb::ogr::Feature::Feature(OGRFeature * feature)
 {
   if (feature)
     {
-    m_Feature.reset(feature, boost::bind(&OGRFeature::DestroyFeature, _1));
+    m_Feature.reset(feature, [&](auto const & x) {return OGRFeature::DestroyFeature(x);});
     }
   // else default is perfect -> delete null
 }
