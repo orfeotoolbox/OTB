@@ -29,10 +29,10 @@ otbMNFImageFilter.cxx
 otbInnerProductPCAImageFilter.cxx
 otbEstimateInnerProductPCAImageFilter.cxx
 otbPCAImageFilter.cxx
-otbAngularProjectionSetImageFilter.cxx
+# otbAngularProjectionSetImageFilter.cxx
 otbNAPCAImageFilter.cxx
-otbAngularProjectionImageFilter.cxx
-otbAngularProjectionBinaryImageFilter.cxx
+# otbAngularProjectionImageFilter.cxx
+# otbAngularProjectionBinaryImageFilter.cxx
 # otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
@@ -388,5 +388,5 @@ otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbDimensionalityRe
   ${BASELINE}/bfTvLocalActivityVectorImageFilter.tif
   ${TEMP}/bfTvLocalActivityVectorImageFilter.tif
   otbLocalActivityVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvLocalActivityVectorImageFilter.tif)
