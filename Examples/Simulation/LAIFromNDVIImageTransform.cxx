@@ -40,7 +40,6 @@
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
 // Software Guide : EndCodeSnippet
 
-#include "otbCommandLineArgumentParser.h"
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 

@@ -26,7 +26,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbKullbackLeiblerSupervizedDistanceImageFilter.h"
 
@@ -34,36 +33,13 @@ int main(int argc, char * argv[])
 {
   try
     {
-
-    typedef otb::CommandLineArgumentParser ParserType;
-    ParserType::Pointer parser = ParserType::New();
-    parser->AddOption("--InputImage1", "Give Before image", "-1", 1, true);
-    parser->AddOption("--InputImage2", "Give After image", "-2", 1, true);
-    parser->AddOption("--Roi", "Give ROI image", "-r", 1, true);
-    parser->AddOption("--winSize",
-                      "Sliding window size (def. 35)",
-                      "-w",
-                      1,
-                      false);
-    parser->AddOutputImage();
-
-    typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer parseResult = ParserResultType::New();
-
-    try
+    if( argc < 5 )
       {
-      parser->ParseCommandLine(argc, argv, parseResult);
-      }
-    catch (itk::ExceptionObject& err)
-      {
-      std::string descriptionException = err.GetDescription();
-      if (descriptionException.find("ParseCommandLine(): Help Parser")
-          != std::string::npos) return EXIT_SUCCESS;
-      if (descriptionException.find("ParseCommandLine(): Version Parser")
-          != std::string::npos) return EXIT_SUCCESS;
+      std::cerr << "Usage: " << argv[0];
+      std::cerr << "inputNameImage1 inputNameImage2 ROIImageName outputName ";
+      std::cerr << "[winSize=35]";
       return EXIT_FAILURE;
       }
-
     /*
      *  Types declaration
      */
@@ -83,18 +59,14 @@ int main(int argc, char * argv[])
      * Extract command line parameters
      */
 
-    std::string inputImageFileName1 = parseResult->GetParameterString(
-      "--InputImage1");
-    std::string inputImageFileName2 = parseResult->GetParameterString(
-      "--InputImage2");
-    std::string inputTrainingImageFileName = parseResult->GetParameterString(
-      "--Roi");
-    std::string outputImageFileName = parseResult->GetOutputImage();
+    std::string inputImageFileName1 = argv[1];
+    std::string inputImageFileName2 = argv[2];
+    std::string inputTrainingImageFileName = argv[3];
+    std::string outputImageFileName = argv[4];
 
     int winSize = 35;
-    if (parseResult->IsOptionPresent("--winSize"))
-      winSize =
-        parseResult->GetParameterInt("--winSize");
+    if ( argc == 6 )
+      winSize = atoi(argv[5]);
 
     /*
      *  JustDoIt

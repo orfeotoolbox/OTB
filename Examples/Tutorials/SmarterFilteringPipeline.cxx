@@ -59,7 +59,7 @@
 
 // Software Guide : BeginCodeSnippet
 #include "itkMacro.h"
-#include "otbCommandLineArgumentParser.h"
+
 // Software Guide : EndCodeSnippet
 
 //  Software Guide : BeginLatex
@@ -95,96 +95,59 @@ int main(int argc, char * argv[])
   // Software Guide : BeginCodeSnippet
   try
     {
-    // Software Guide : EndCodeSnippet
+    //  Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
-    //
-    // Now, we can declare the \doxygen{otb}{CommandLineArgumentParser} which is
-    // going to parse the command line, select the proper variables, handle the
-    // missing compulsory arguments and print an error message if necessary.
-    //
-    // Let's declare the parser:
+    // 
+    //  First we document the usage of the program, and get the different 
+    //  variables $\sigma_D$ (d=), $\sigma_I$ (i=) and $\alpha$ (a=) in 
+    //  c++ variables :
     //
     //  Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
-    typedef otb::CommandLineArgumentParser ParserType;
-    ParserType::Pointer parser = ParserType::New();
-    // Software Guide : EndCodeSnippet
-
-    //  Software Guide : BeginLatex
-    //
-    //  It's now time to tell the parser what are the options we want. Special
-    //options are available for input and output images with the
-    // \code{AddInputImage()} and \code{AddOutputImage()} methods.
-    //
-    //  For the other options, we need to use the \code{AddOption()} method.
-    //  This method allows us to specify
-    //  \begin{itemize}
-    //  \item the name of the option
-    //  \item a message to explain the meaning of this option
-    //  \item a shortcut for this option
-    //  \item the number of expected parameters for this option
-    //  \item whether or not this option is compulsory
-    //  \end{itemize}
-    //
-    //  Software Guide : EndLatex
-
-    // Software Guide : BeginCodeSnippet
-    parser->SetProgramDescription(
-      "This program applies a Harris detector on the input image");
-    parser->AddInputImage();
-    parser->AddOutputImage();
-    parser->AddOption("--SigmaD",
-                      "Set the sigmaD parameter. Default is 1.0.",
-                      "-d",
-                      1,
-                      false);
-    parser->AddOption("--SigmaI",
-                      "Set the sigmaI parameter. Default is 1.0.",
-                      "-i",
-                      1,
-                      false);
-    parser->AddOption("--Alpha",
-                      "Set the alpha parameter. Default is 1.0.",
-                      "-a",
-                      1,
-                      false);
-    // Software Guide : EndCodeSnippet
-
-    //  Software Guide : BeginLatex
-    //
-    //  Now that the parser has all this information, it can actually look at
-    // the command line to parse it. We have to do this within a \code{try} -
-    // \code{catch} loop to handle exceptions nicely.
-    //
-    //  Software Guide : EndLatex
-
-    // Software Guide : BeginCodeSnippet
-    typedef otb::CommandLineArgumentParseResult ParserResultType;
-    ParserResultType::Pointer parseResult = ParserResultType::New();
-
-    try
+    //  Software Guide : BeginCodeSnippet
+    if ( argc < 3 )
       {
-      parser->ParseCommandLine(argc, argv, parseResult);
-      }
-
-    catch (itk::ExceptionObject& err)
-      {
-      std::string descriptionException = err.GetDescription();
-      if (descriptionException.find("ParseCommandLine(): Help Parser")
-          != std::string::npos)
-        {
-        return EXIT_SUCCESS;
-        }
-      if (descriptionException.find("ParseCommandLine(): Version Parser")
-          != std::string::npos)
-        {
-        return EXIT_SUCCESS;
-        }
+      std::cerr << "This program applies the Harris detector on the input "
+      << "image\n";
+      std::cerr << "Usage : " << argv[0] ;
+      std::cerr << " input_filename output_filename [d=1.0] [i=1.0] [a=1.0]\n";
+      std::cerr << "\"d=\" is for the sigmaD parameter, default value is 1.0\n"
+      std::cerr << "\"i=\" is for the sigmaI parameter, default value is 1.0\n"
+      std::cerr << "\"a=\" is for the alpha parameter, default value is 1.0\n"
       return EXIT_FAILURE;
       }
-    // Software Guide : EndCodeSnippet
+    std::string input_filename = argv[1];
+    std::string output_filename = argv[2];
+    bool is_there_sigma_d(false), is_there_sigma_i(false), 
+      is_there_alpha(false);
+    double sigma_d(1.0), sigma_i(1.0), alpha(1.0);
+    for (auto i = 3 ; i < argc ; i++ )
+      {
+      std::string temp_arg = argv[i];
+      auto pos_sigma_d = temp_arg.find("d=");
+      auto pos_sigma_i = temp_arg.find("i=");
+      auto pos_alpha = temp_arg.find("a=");
+      if ( pos_sigma_d != std::string::npos )
+        {
+        is_there_sigma_d = true;
+        sigma_d = std::stod(temp_arg.substr(pos_sigma_d+1));
+        continue;
+        }
+      if ( pos_sigma_i != std::string::npos )
+        {
+        is_there_sigma_i = true;
+        sigma_i = std::stod(temp_arg.substr(pos_sigma_i+1));
+        continue;
+        }
+      if ( pos_alpha != std::string::npos )
+        {
+        is_there_alpha = true;
+        alpha = std::stod(temp_arg.substr(pos_alpha+1));
+        continue;
+        }
+      }
+    //  Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
     //
@@ -209,14 +172,14 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginLatex
     //
-    //  We are getting the filenames for the input and the output
-    //  images directly from the parser:
+    //  We are setting the filenames of the input and the output and the
+    //  reader and writer respectively:
     //
     //  Software Guide : BeginLatex
 
     // Software Guide : BeginCodeSnippet
-    reader->SetFileName(parseResult->GetInputImage());
-    writer->SetFileName(parseResult->GetOutputImage());
+    reader->SetFileName( input_filename );
+    writer->SetFileName( output_filename );
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -236,24 +199,20 @@ int main(int argc, char * argv[])
 
     //  Software Guide : BeginLatex
     //
-    //  We set the filter parameters from the parser. The method
-    //  \code{IsOptionPresent()} let us know if an optional option
-    //  was provided in the command line.
+    //  We set the filter parameters from the variables we created from the 
+    //  commandline.
     //
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    if (parseResult->IsOptionPresent("--SigmaD"))
-      filter->SetSigmaD(
-        parseResult->GetParameterDouble("--SigmaD"));
+    if ( is_there_sigma_d )
+      filter->SetSigmaD( sigma_d );
 
-    if (parseResult->IsOptionPresent("--SigmaI"))
-      filter->SetSigmaI(
-        parseResult->GetParameterDouble("--SigmaI"));
+    if ( is_there_sigma_i )
+      filter->SetSigmaI( sigma_i );
 
-    if (parseResult->IsOptionPresent("--Alpha"))
-      filter->SetAlpha(
-        parseResult->GetParameterDouble("--Alpha"));
+    if ( is_there_alpha )
+      filter->SetAlpha( alpha );
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex

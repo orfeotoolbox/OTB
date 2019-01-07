@@ -37,7 +37,6 @@
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
-#include "otbCommandLineArgumentParser.h"
 
 // Software Guide : BeginCodeSnippet
 #include "otbNCCRegistrationFilter.h"
