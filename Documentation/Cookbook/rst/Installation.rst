@@ -24,7 +24,7 @@ Windows
 .. include:: Installation_Windows.rst
 
 Linux
-------------
+-----
 
 .. include:: Installation_Linux.rst
 

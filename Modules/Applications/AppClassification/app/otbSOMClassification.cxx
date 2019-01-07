@@ -146,10 +146,11 @@ private:
     SetParameterDescription("iv", "Maximum initial neuron weight");
     MandatoryOff("iv");
 
+    AddRANDParameter();
+
     AddRAMParameter();
     // TODO : replace StreamingLines by RAM param ?
 
-    AddRANDParameter();
     // Default parameters
     SetDefaultParameterFloat("tp", 1.0);
     SetDefaultParameterInt("sx", 32);

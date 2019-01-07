@@ -101,8 +101,6 @@ SetParameterDescription( "channel" , "The selected channel index" );
 SetDefaultParameterInt( "channel" , 1 );
 SetMinimumParameterIntValue( "channel" , 1 );
 
-AddRAMParameter();
-
 AddParameter( ParameterType_Choice , "structype" ,
  "Type of structuring element" );
 SetParameterDescription( "structype" ,
@@ -166,6 +164,8 @@ SetParameterDescription( "filter.closing.foreval" ,
   "Set the foreground value, default is 1.0." );
 SetDefaultParameterFloat( "filter.closing.foreval" , 1.0 );
 
+AddRAMParameter();
+
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
 SetDocExampleParameterValue("out", "opened.tif");
@@ -179,7 +179,7 @@ SetOfficialDocLink();
 
 void DoUpdateParameters() override
 {
-  // Nothing to do here : all parameters are independent
+  // Nothing to do here: all parameters are independent
 }
 
 void DoExecute() override

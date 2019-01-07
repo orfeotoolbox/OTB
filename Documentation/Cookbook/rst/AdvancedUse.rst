@@ -334,6 +334,8 @@ The available syntax for boolean options are:
 -  OFF, Off, off, false, False, 0 are available for setting a ’false’
    boolean value
 
+-----------------------------------------------
+
 ::
 
    &nodata=(double) value / [int:double, int:double ...]
@@ -394,10 +396,10 @@ Some examples are provided below:
 
 ::
 
-    $ otbcli_Convert -in OTB-Data/Examples/QB_1_ortho.tif -out "/tmp/example1.tif?&gdal:co:TILED=YES&gdal:co:COMPRESS=DEFLATE"
+    $ otbcli_DynamicConvert -in OTB-Data/Examples/QB_1_ortho.tif -out "/tmp/example1.tif?&gdal:co:TILED=YES&gdal:co:COMPRESS=DEFLATE"
 
 - Process only first band from a file
 
 ::
 
-    $ otbcli_Convert -in "OTB-Data/Examples/QB_1_ortho.tif?&bands=1" -out /tmp/example2.tif
+    $ otbcli_DynamicConvert -in "OTB-Data/Examples/QB_1_ortho.tif?&bands=1" -out /tmp/example2.tif

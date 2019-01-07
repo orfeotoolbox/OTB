@@ -163,6 +163,7 @@ namespace ossimplugins
       void readGeoLocationGrid(ossimXmlNode const& productRoot);
       void addOrbitStateVectors(ossimXmlNode const& orbitList);
       void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
+      void addAzimuthFmRateCoefficients(ossimXmlNode const& aziFmRateList);
       bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
       ossimFilename      theManifestDirectory;

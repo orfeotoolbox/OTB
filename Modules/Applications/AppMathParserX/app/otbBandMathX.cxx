@@ -67,7 +67,7 @@ private:
       "This application performs a mathematical operation on several multi-band "
       "images and outputs the result into an image (multi- or mono-band, as "
       "opposed to the BandMath OTB-application). The mathematical formula is "
-      "done by the muParserX libraries.\n\n"
+      "done by the muParserX library.\n\n"
 
       "The list of features and the syntax of muParserX is available at [1].\n\n"
 
@@ -81,29 +81,28 @@ private:
       "------------\n\n"
 
       "The formula can be written using:\n\n"
-      "  * numerical values ( 2.3, -5, 3.1e4, ...)\n"
-      "  * variables containing pixel values (please, note the indexing of "
+      "* numerical values ( 2.3, -5, 3.1e4, ...)\n"
+      "* variables containing pixel values (please, note the indexing of "
       "inputs from 1 to N). Examples for the first input image:\n\n"
-      "    * 'im1' a pixel from 1st input, made of n components (n bands)\n"
-      "    * 'im1b2' the 2nd component of a pixel from 1st input (band index is 1-based)\n"
-      "    * 'im1b2N3x4' a 3x4 pixels 'N'eighbourhood of a pixel the 2nd "
-      "component of a pixel from the 1st input\n"
-      "    * 'im1PhyX' horizontal (X-axis) spacing of the 1st input.\n"
-      "    * 'im1PhyY' vertical spacing of the 1st input input.\n"
-      "    * 'im1b2Mean' mean of the 2nd component of the 1st input (global statistics)\n"
-      "    * 'im1b2Mini' minimum of the 2nd component of the 1st input (global statistics)\n"
-      "    * 'im1b2Maxi' maximum of the 2nd component of the 1st input (global statistics)\n"
-      "    * 'im1b2Sum' sum of the 2nd component of the 1st input (global statistics)\n"
-      "    * 'im1b2Var' variance of the 2nd component of the 1st input (global statistics)\n"
-      "    * 'idxX' and 'idxY' are the indices of the current pixel (generic variables)\n"
-      "  * binary operators:\n\n"
-      "    * '+' addition, '-' subtraction, '*' multiplication, '/' division\n"
-      "    * '^' raise x to the power of y\n"
-      "    * '<' less than, '>' greater than, '<=' less or equal, '>=' greater or equal\n"
-      "    * '==' equal, '!=' not equal\n"
-      "    * logical operators: 'or', 'and', 'xor'\n"
-      "  * if-then-else operator: '(condition ? value_true : value_false)'\n"
-      "  * functions : abs(), exp(), log(), sin(), cos(), min(), max(), ...\n\n"
+      "  * ``im1`` a pixel from 1st input, made of n components (n bands)\n"
+      "  * ``im1b2`` the 2nd component of a pixel from 1st input (band index is 1-based)\n"
+      "  * ``im1b2N3x4`` a 3x4 pixels Neighbourhood of a pixel the 2nd component of a pixel from the 1st input\n"
+      "  * ``im1PhyX`` horizontal (X-axis) spacing of the 1st input.\n"
+      "  * ``im1PhyY`` vertical spacing of the 1st input input.\n"
+      "  * ``im1b2Mean`` mean of the 2nd component of the 1st input (global statistics)\n"
+      "  * ``im1b2Mini`` minimum of the 2nd component of the 1st input (global statistics)\n"
+      "  * ``im1b2Maxi`` maximum of the 2nd component of the 1st input (global statistics)\n"
+      "  * ``im1b2Sum`` sum of the 2nd component of the 1st input (global statistics)\n"
+      "  * ``im1b2Var`` variance of the 2nd component of the 1st input (global statistics)\n"
+      "  * ``idxX`` and ``idxY`` are the indices of the current pixel (generic variables)\n"
+      "* binary operators:\n\n"
+      "  * ``+`` addition, ``-`` subtraction, ``*`` multiplication, ``/`` division\n"
+      "  * ``^`` raise x to the power of y\n"
+      "  * ``<`` less than, ``>`` greater than, ``<=`` less or equal, ``>=`` greater or equal\n"
+      "  * ``==`` equal, ``!=`` not equal\n"
+      "  * logical operators: ``or``, ``and``, ``xor``\n"
+      "* if-then-else operator: ``(condition ? value_true : value_false)``\n"
+      "* functions: abs(), exp(), log(), sin(), cos(), min(), max(), ...\n\n"
 
       "Always keep in mind that this application only addresses mathematically "
       "well-defined formulas. For instance, it is not possible to add vectors of"
@@ -114,15 +113,15 @@ private:
       "represented as a row vector.\n\n"
 
       "Example:\n"
-      "  im1 + im2\n"
+      "  ``im1 + im2``\n"
       "  represents the addition of pixels from the 1st and 2nd inputs. This "
       "expression is consistent only if both inputs have the same number of "
       "bands.\n\n"
 
-      "Please, note that it is also possible to use the following expressions"
+      "Please note that it is also possible to use the following expressions"
       " to obtain the same result:\n\n"
-      "  * im1b1 + im2b1\n"
-      "  * im1b2 + im2b2\n"
+      "  * ``im1b1 + im2b1``\n"
+      "  * ``im1b2 + im2b2``\n"
       "  * ...\n\n"
 
       "Nevertheless, the first expression is by far much pleaseant. We call "
@@ -134,15 +133,14 @@ private:
 
       "Another new feature is the possibility to perform operations that "
       "involve neighborhoods of pixels. Variables related to such neighborhoods "
-      "are always defined following the imIbJNKxP pattern, where:\n\n"
-      "  - I is an number identifying the image input (remember, input #0 = im1, "
+      "are always defined following the ``imIbJNKxP`` pattern, where:\n\n"
+      "  - ``I`` is an number identifying the image input (remember, input #0 = im1, "
       "and so on)\n"
-      "  - J is an number identifying the band (remember, first band is indexed by"
-      "1)\n"
-      "  - KxP are two numbers that represent the size of the neighborhood (first "
+      "  - ``J`` is an number identifying the band (remember, first band is indexed by 1)\n"
+      "  - ``KxP`` are two numbers that represent the size of the neighborhood (first "
       "one is related to the horizontal direction)\n\n"
 
-      "NB: All neighborhood are centered, thus K and P must be odd numbers.\n\n"
+      "NB: All neighborhood are centered, thus ``K`` and ``P`` must be odd numbers.\n\n"
 
       "Many operators come with this new functionality:\n\n"
       "  - dotpr\n"
@@ -153,7 +151,7 @@ private:
       "  - max\n"
       "  - etc.\n\n"
 
-      "For instance, if im1 represents the pixel of 3 bands image::\n\n"
+      "For instance, if ``im1`` represents the pixel of a 3 bands image::\n\n"
       "  im1 - mean( im1b1N5x5, im1b2N5x5, im1b3N5x5 )\n\n"
       "could represent a high pass filter (note that by implying three "
       "neighborhoods, the operator mean returns a row vector of three components"
@@ -163,14 +161,14 @@ private:
       "  - existing operators/functions from muParserX, that were not originally "
       "defined for vectors and matrices (e.g. cos, sin). These new "
       "operators/functions keep the original names to which we added the prefix "
-      "'v' for vector (vcos, vsin, etc.)\n"
-      "  - mult, div and pow operators, that perform element-wise multiplication, "
-      "division or exponentiation of vector/matrices (e.g. im1 div im2).\n"
-      "  - mlt, dv and pw operators, that perform multiplication, division or "
-      "exponentiation of vector/matrices by a scalar (e.g. im1 dv 2.0).\n"
-      "  - bands, which is a very useful operator. It allows selecting specific "
-      "bands from an image, and/or to rearrange them in a new vector (e.g."
-      "bands( im1, { 1, 2, 1, 1 } ) produces a vector of 4 components made of "
+      "``v`` for vector (``vcos``, ``vsin``, etc.)\n"
+      "  - ``mult``, ``div`` and ``pow`` operators, that perform element-wise multiplication, "
+      "division or exponentiation of vector/matrices (e.g. ``im1 div im2``).\n"
+      "  - ``mlt``, ``dv`` and ``pw`` operators, that perform multiplication, division or "
+      "exponentiation of vector/matrices by a scalar (e.g. ``im1 dv 2.0``).\n"
+      "  - ``bands``, which is a very useful operator. It allows selecting specific "
+      "bands from an image, or to rearrange them in a new vector (e.g."
+      "``bands( im1, { 1, 2, 1, 1 } )`` produces a vector of 4 components made of "
       "band 1, band 2, band 1 and band 1 values from the first input.\n\n"
       "Note that curly brackets must be used in order to select the desired band"
       "indices.\n\n"
@@ -178,7 +176,7 @@ private:
       "The application itself\n"
       "----------------------\n\n"
 
-      "The application can use an expression supplied with the 'exp' parameter."
+      "The application can use an expression supplied with the ``-exp`` parameter."
       " It can also use an input context file, that defines variables and "
       "expressions. An example of context file is given below::\n\n"
       "  #F expo 1.1\n"
@@ -190,30 +188,25 @@ private:
       "whereas #M allows the definition of a vector/matrix. In the latter case, "
       "elements of a row must be separated by commas, and rows must be separated"
       " by semicolons. It is also possible to define expressions within the same"
-      " txt file, with #E <expr> (see limitations, below).\n"
-
-      "Finally, we strongly recommend to read the OTB Cookbook which can be "
-      "found at: http://www.orfeo-toolbox.org/packages/OTBCookBook.pdf"
+      " txt file, with #E <expr> (see limitations, below)."
     );
 
     SetDocLimitations(
       "The application is currently unable to produce one output image per "
-      "expression, contrary to otbBandMathXImageFilter.\n\n"
-      "Separating expressions by semi-colons ';' will concatenate their results "
+      "expression, contrary to otbBandMathXImageFilter. "
+      "Separating expressions by semicolons ``;`` will concatenate their results "
       "into a unique multiband output image."
     );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n"
+    SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n\n"
       "[2] BandMath");
     AddDocTag(Tags::Manip);
 
-    AddParameter( ParameterType_InputImageList, "il", "Input image-list" );
-    SetParameterDescription( "il", "Image-list to perform computation on." );
+    AddParameter( ParameterType_InputImageList, "il", "Input image list" );
+    SetParameterDescription( "il", "Image list to perform computation on." );
 
     AddParameter( ParameterType_OutputImage, "out", "Output Image" );
     SetParameterDescription( "out", "Output image." );
-
-    AddRAMParameter();
 
     AddParameter( ParameterType_String, "exp", "Expressions" );
     SetParameterDescription(
@@ -234,6 +227,8 @@ private:
       "A txt file where to save user's constants and expressions."
     );
     MandatoryOff( "outcontext" );
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue(
@@ -381,12 +376,12 @@ private:
     std::string expStr = GetParameterString("exp");
     if (useContext)
       {
-      otbAppLogINFO("Using input context : " << expStr );
+      otbAppLogINFO("Using input context: " << expStr );
       m_Filter->ImportContext(GetParameterString("incontext"));
       }
     else
       {
-      otbAppLogINFO("Using expression : " << expStr );
+      otbAppLogINFO("Using expression: " << expStr );
       m_Filter->SetExpression(expStr);
       }
 

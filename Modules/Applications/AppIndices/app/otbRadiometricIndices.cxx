@@ -150,8 +150,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Radiometric indices output image");
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Group, "channels", "Channels selection");
     SetParameterDescription("channels", "Channels selection");
 
@@ -178,27 +176,28 @@ private:
     //SetDefaultParameterInt("channels.rho1240", 1);
 
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
-    SetParameterDescription("list","List of available radiometric indices with their relevant channels in brackets:\n\
-        Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)\n\
-        Vegetation:TNDVI - Transformed normalized difference vegetation index (Red, NIR)\n\
-        Vegetation:RVI - Ratio vegetation index (Red, NIR)\n\
-        Vegetation:SAVI - Soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:TSAVI - Transformed soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:MSAVI - Modified soil adjusted vegetation index (Red, NIR)\n\
-        Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)\n\
-        Vegetation:GEMI - Global environment monitoring index (Red, NIR)\n\
-        Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)\n\
-        \n\
-        Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n\
-        Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n\
-        Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n\
-        Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)\n\
-        Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)\n\
-        \n\
-        Soil:RI - Redness index (Red, Green)\n\
-        Soil:CI - Color index (Red, Green)\n\
-        Soil:BI - Brightness index (Red, Green)\n\
-        Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
+    SetParameterDescription("list",
+        "List of available radiometric indices with their relevant channels in brackets:\n\n"
+        "* Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)\n"
+        "* Vegetation:TNDVI - Transformed normalized difference vegetation index (Red, NIR)\n"
+        "* Vegetation:RVI - Ratio vegetation index (Red, NIR)\n"
+        "* Vegetation:SAVI - Soil adjusted vegetation index (Red, NIR)\n"
+        "* Vegetation:TSAVI - Transformed soil adjusted vegetation index (Red, NIR)\n"
+        "* Vegetation:MSAVI - Modified soil adjusted vegetation index (Red, NIR)\n"
+        "* Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)\n"
+        "* Vegetation:GEMI - Global environment monitoring index (Red, NIR)\n"
+        "* Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)\n"
+        "* Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n"
+        "* Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n"
+        "* Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n"
+        "* Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)\n"
+        "* Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)\n"
+        "* Soil:RI - Redness index (Red, Green)\n"
+        "* Soil:CI - Color index (Red, Green)\n"
+        "* Soil:BI - Brightness index (Red, Green)\n"
+        "* Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

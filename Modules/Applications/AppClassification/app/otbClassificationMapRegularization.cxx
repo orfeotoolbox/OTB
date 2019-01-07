@@ -60,14 +60,21 @@ private:
   void DoInit() override
   {
     SetName("ClassificationMapRegularization");
-    SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood.");
+    SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood");
+
     SetDocName("Classification Map Regularization");
-    SetDocLongDescription("This application filters the input labeled image (with a maximal class label = 65535) using Majority Voting in a ball shaped neighbordhood. Majority Voting takes the more representative value of all the pixels identified by the ball shaped structuring element and then sets the center pixel to this majority label value.\n\
-    -NoData is the label of the NOT classified pixels in the input image. These input pixels keep their NoData label in the output image.\n\
-    -Pixels with more than 1 majority class are marked as Undecided if the parameter 'ip.suvbool == true', or keep their Original labels otherwise.");
+
+    SetDocLongDescription(
+        "This application filters the input labeled image (with a maximal class label = 65535) using Majority Voting in a ball shaped neighbordhood."
+        "Majority Voting takes the more representative value of all the pixels identified by the ball shaped structuring element and then sets the center pixel to this majority label value.\n\n"
+
+        "* NoData is the label of the NOT classified pixels in the input image. These input pixels keep their NoData label in the output image.\n\n"
+        "* Pixels with more than 1 majority class are marked as Undecided if the parameter 'ip.suvbool == true', or keep their Original labels otherwise.");
+
     SetDocLimitations("The input image must be a single band labeled image (with a maximal class label = 65535). The structuring element radius must have a minimum value equal to 1 pixel. Please note that the Undecided value must be different from existing labels in the input labeled image.");
+
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Documentation of the ClassificationMapRegularization application.");
+    SetDocSeeAlso("");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Analysis);
@@ -127,7 +134,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here: all parameters are independent
   }
 
   void DoExecute() override

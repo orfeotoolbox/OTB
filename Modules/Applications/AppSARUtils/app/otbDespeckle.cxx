@@ -69,11 +69,11 @@ private:
      "Several different methods are used to eliminate speckle noise, based upon"
      " different mathematical models of the phenomenon. The application includes four"
      " methods: Lee [1], Frost [2], GammaMAP [3] and Kuan [4]. \n\n"
-     "We sum up below the basic principle of this four methods:\n"
-      "  * Lee : Estimate the signal by mean square error minimization (MMSE) on a sliding window.\n"
-      "  * Frost : Also derived from the MMSE criteria with a weighted sum of the values within the window. The weighting factors decrease with distance from the pixel of interest.\n"
-      "  * GammaMAP  : Derived under the assumption of the image follows a Gamma distribution.\n"
-      "  * Kuan : Also derived from the MMSE criteria under the assumption of non stationary mean and variance. It is quite similar to Lee filter in form."
+     "We sum up below the basic principle of this four methods:\n\n"
+     "* Lee: Estimate the signal by mean square error minimization (MMSE) on a sliding window.\n"
+     "* Frost: Also derived from the MMSE criteria with a weighted sum of the values within the window. The weighting factors decrease with distance from the pixel of interest.\n"
+     "* GammaMAP: Derived under the assumption of the image follows a Gamma distribution.\n"
+     "* Kuan: Also derived from the MMSE criteria under the assumption of non stationary mean and variance. It is quite similar to Lee filter in form."
       );
 
     SetDocLimitations("The application does not handle complex image as input.");
@@ -104,8 +104,6 @@ private:
     SetParameterDescription("in", "Input image.");
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
-
-    AddRAMParameter();
 
     AddParameter(ParameterType_Choice,"filter","Speckle filtering method");
     
@@ -157,6 +155,7 @@ private:
     SetDefaultParameterInt("filter.gammamap.rad", 1);
     SetDefaultParameterFloat("filter.gammamap.nblooks", 1.);
 
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "sar.tif");
@@ -169,7 +168,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here: all parameters are independent
   }
 
   void DoExecute() override

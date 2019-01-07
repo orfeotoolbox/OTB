@@ -103,13 +103,13 @@ private:
     "spectrum associated with each pixel is a linear combination of pure"
     "materials in the recovery area, commonly known as endmembers. Endmembers can"
     "be estimated using the VertexComponentAnalysis application.\n\n"
-    "The application allows estimating the abundance maps with several algorithms :\n"
-    "  * Unconstrained Least Square (ucls)\n"
-                          //"  * Fully Constrained Least Square (fcls)\n"
-    "  * Image Space Reconstruction Algorithm (isra)\n"
-    "  * Non-negative constrained\n"
-    "  * Least Square (ncls)\n"
-    "  * Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF)."
+    "The application allows estimating the abundance maps with several algorithms:\n\n"
+    "* Unconstrained Least Square (ucls)\n"
+//  "* Fully Constrained Least Square (fcls)\n"
+    "* Image Space Reconstruction Algorithm (isra)\n"
+    "* Non-negative constrained\n"
+    "* Least Square (ncls)\n"
+    "* Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF)."
     );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

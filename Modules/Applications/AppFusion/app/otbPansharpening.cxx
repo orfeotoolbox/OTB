@@ -94,7 +94,7 @@ private:
     SetParameterDescription("inxs"," Input XS image.");
 
     AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out"," Output image.");
+    SetParameterDescription("out", "Output image.");
 
     AddParameter(ParameterType_Choice, "method", "Algorithm");
     SetParameterDescription("method", "Selection of the pan-sharpening method.");

@@ -323,30 +323,32 @@ private:
       "between one or multiple stereo pair in sensor geometry. The output is "
       "projected in desired geographic or cartographic map projection (WGS84 by"
       " default).\n\n"
+
       "This application is chaining different processing steps. Some of them "
       "are also performed by other applications in the stereo-reconstruction "
-      "framework:\n"
-      "  * StereoRectificationGridGenerator [1] : for the generation of deformation grids\n"
-      "  * GridBasedImageResampling [2] : resampling into epipolar geometry\n"
-      "  * BlockMatching [3] : estimation of dense disparity maps\n\n"
-      "The pipeline executes the following steps on each stereo pair:\n"
-      "  - compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
-      "  - resample the stereo pair into epipolar geometry using BCO interpolation\n"
-      "  - create masks for each epipolar image : remove black borders and resample"
-      " input masks\n"
-      "  - compute horizontal disparities with a block matching algorithm\n"
-      "  - refine disparities to sub-pixel precision with a dichotomy algorithm\n"
-      "  - apply an optional median filter\n"
-      "  - filter disparities based on the correlation score and exploration bounds\n"
-      "  - translate disparities in sensor geometry\n"
-      "  - convert disparity to 3D Map.\n\n"
+      "framework:\n\n"
+      "* StereoRectificationGridGenerator: for the generation of deformation grids\n"
+      "* GridBasedImageResampling: resampling into epipolar geometry\n"
+      "* BlockMatching: estimation of dense disparity maps\n\n"
+
+      "The pipeline executes the following steps on each stereo pair:\n\n"
+      "* compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
+      "* resample the stereo pair into epipolar geometry using BCO interpolation\n"
+      "* create masks for each epipolar image: remove black borders and resample input masks\n"
+      "* compute horizontal disparities with a block matching algorithm\n"
+      "* refine disparities to sub-pixel precision with a dichotomy algorithm\n"
+      "* apply an optional median filter\n"
+      "* filter disparities based on the correlation score and exploration bounds\n"
+      "* translate disparities in sensor geometry\n"
+      "* convert disparity to 3D Map.\n\n"
+
       "Then all 3D maps are fused to produce DSM. The fusion method in each "
       "DEM cell can be chosen between maximum, minimum and average.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] StereoRectificationGridGenerator\n"
-      "[2] GridBasedImageResampling\n"
-      "[3] BlockMatching");
+    SetDocSeeAlso("StereoRectificationGridGenerator\n"
+      "GridBasedImageResampling\n"
+      "BlockMatching");
 
     AddDocTag(Tags::Stereo);
 
@@ -360,7 +362,7 @@ private:
 
     AddParameter(ParameterType_String, "input.co", "Couples list");
     SetParameterDescription("input.co","List of index of couples im image list."
-      " Couples must be separated by a comma (index start at 0). For example :"
+      " Couples must be separated by a comma (index start at 0). For example:"
       " 0 1,1 2 will process a first couple composed of the first and the"
       " second image in image list, then the second and the third image\n. "
       "Note that images are handled by pairs. If left empty, couples are "
@@ -388,7 +390,7 @@ private:
     SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
-    SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");
+    SetParameterDescription("output.res","Spatial sampling distance of the output elevation: the cell size (in m)");
     SetDefaultParameterFloat("output.res",1.);
 
     AddParameter(ParameterType_Float, "output.nodata","NoData value");
@@ -422,32 +424,32 @@ private:
     AddChoice("output.mode.user", "User Defined");
     SetParameterDescription("output.mode.user","This mode allows you to fully modify default values.");
     // Upper left point coordinates
-    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X ");
+    AddParameter(ParameterType_Float, "output.mode.user.ulx", "Upper Left X");
     SetParameterDescription("output.mode.user.ulx","Cartographic X coordinate "
       "of upper-left corner (meters for cartographic projections, degrees for"
       " geographic ones)");
 
-    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y ");
+    AddParameter(ParameterType_Float, "output.mode.user.uly", "Upper Left Y");
     SetParameterDescription("output.mode.user.uly","Cartographic Y coordinate "
       "of the upper-left corner (meters for cartographic projections, degrees "
       "for geographic ones)");
 
     // Size of the output image
-    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X ");
+    AddParameter(ParameterType_Int, "output.mode.user.sizex", "Size X");
     SetParameterDescription("output.mode.user.sizex","Size of projected image"
       " along X (in pixels)");
 
-    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y ");
+    AddParameter(ParameterType_Int, "output.mode.user.sizey", "Size Y");
     SetParameterDescription("output.mode.user.sizey","Size of projected image"
       " along Y (in pixels)");
 
     // Spacing of the output image
-    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X ");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingx", "Pixel Size X");
     SetParameterDescription("output.mode.user.spacingx","Size of each pixel "
       "along X axis (meters for cartographic projections, degrees for geographic ones)");
 
 
-    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y ");
+    AddParameter(ParameterType_Float, "output.mode.user.spacingy", "Pixel Size Y");
     SetParameterDescription("output.mode.user.spacingy","Size of each pixel "
       "along Y axis (meters for cartographic projections, degrees for geographic ones)");
 

@@ -74,21 +74,24 @@ SetDescription("Computes Haralick textural features on the selected channel of t
 
 // Documentation
 SetDocName("Haralick Texture Extraction");
-SetDocLongDescription("This application computes three sets of Haralick features [1][2].\n"
-    "  * simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
+SetDocLongDescription(
+    "This application computes three sets of Haralick features [1][2].\n\n"
+
+    "* simple: a set of 8 local Haralick features: Energy (texture uniformity) , "
     "Entropy (measure of randomness of intensity image), Correlation (how "
     "correlated a pixel is to its neighborhood), Inverse Difference Moment (measures "
     "the texture homogeneity), Inertia (intensity contrast between a pixel and its "
     "neighborhood), Cluster Shade, Cluster Prominence, Haralick Correlation;\n"
-    "  * advanced: a set of 10 advanced Haralick features : Mean, Variance (measures the "
+    "* advanced: a set of 10 advanced Haralick features: Mean, Variance (measures the "
     "texture heterogeneity), Dissimilarity, Sum Average, Sum Variance, Sum Entropy, "
     "Difference of Entropies, Difference of Variances, IC1, IC2;\n"
-    "  * higher: a set of 11 higher Haralick features : Short Run Emphasis (measures the "
+    "* higher: a set of 11 higher Haralick features: Short Run Emphasis (measures the "
     "texture sharpness), Long Run Emphasis (measures the texture roughness), Grey-Level "
     "Nonuniformity, Run Length Nonuniformity, Run Percentage (measures the texture "
     "sharpness homogeneity), Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, "
     "Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, Long Run Low "
     "Grey-Level Emphasis and Long Run High Grey-Level Emphasis.");
+
 SetDocLimitations("The computation of the features is based on a Gray Level Co-occurrence "
     "matrix (GLCM) from the quantized input image. Consequently the quantization "
     "parameters (min, max, nbbin) must be appropriate to the range of the pixel values.");
@@ -116,8 +119,6 @@ SetParameterDescription("step", "Step (in pixels) to compute output texture valu
 SetDefaultParameterInt("step", 1);
 SetMinimumParameterIntValue("step", 1);
 MandatoryOff("step");
-
-AddRAMParameter();
 
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
 SetParameterDescription("parameters","This group of parameters allows one to define "
@@ -180,6 +181,7 @@ SetParameterDescription("out", "Output image containing the selected texture fea
 MandatoryOff("out");
 EnableParameter("out");
 
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

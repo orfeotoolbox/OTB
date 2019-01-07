@@ -23,7 +23,6 @@
 
 #include "otbWrapperInputImageParameter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "otbClampImageFilter.h"
 
 namespace otb

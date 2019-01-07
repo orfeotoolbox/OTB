@@ -63,10 +63,18 @@ private:
   void DoInit() override
     {
     SetName("Rasterization");
-    SetDescription("Rasterize a vector dataset.");
+    SetDescription("Reproject and rasterize a vector dataset");
 
     SetDocName("Rasterization");
-    SetDocLongDescription("This application allows reprojecting and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n There are two rasterize mode available in the application. The first is the binary mode: it allows rendering all pixels belonging to a geometry of the input dataset in the foreground color, while rendering the other in background color. The second one allows rendering pixels belonging to a geometry with respect to an attribute of this geometry. The field of the attribute to render can be set by the user. In the second mode, the background value is still used for unassociated pixels.");
+    SetDocLongDescription(
+        "Reproject and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by "
+        "setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other "
+        "parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n\n"
+
+        "There are two rasterize mode available in the application. The first is the binary mode: it allows rendering all pixels belonging to a geometry of the "
+        "input dataset in the foreground color, while rendering the other in background color. The second one allows rendering pixels belonging to a geometry "
+        "with respect to an attribute of this geometry. The field of the attribute to render can be set by the user. In the second mode, the background value "
+        "is still used for unassociated pixels.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("For now, support of input dataset with multiple layers having different projection reference system is limited.");

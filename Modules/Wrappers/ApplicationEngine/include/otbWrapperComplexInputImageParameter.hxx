@@ -22,10 +22,6 @@
 #define otbWrapperComplexInputImageParameter_hxx
 
 #include "otbWrapperComplexInputImageParameter.h"
-
-#include "itkUnaryFunctorImageFilter.h"
-// #include "itkCastImageFilter.h"
-// #include "otbImageToVectorImageCastFilter.h"
 #include "otbClampImageFilter.h"
 
 namespace otb
