@@ -53,14 +53,6 @@ add_test( NAME pyTvHyperspectralUnmixingUCLS
   ucls
   )
 
-add_test( NAME pyTvBug440
-  COMMAND ${TEST_DRIVER} Execute
-  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  Bug440
-  ${OTB_DATA_ROOT}/Input/scene.png
-  ${TEMP}/pyTvBug440Output.tif
-  )
-
 add_test( NAME pyTvBug804
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py

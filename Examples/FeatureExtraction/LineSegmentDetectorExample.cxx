@@ -19,16 +19,14 @@
  */
 
 
-
 #include "otbImageFileReader.h"
-#include "otbVectorDataToMapFilter.h"
-#include "otbAlphaBlendingFunctor.h"
 #include "itkBinaryFunctorImageFilter.h"
 #include "otbImageFileWriter.h"
+#include "otbVectorDataFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {Scene.png}
-//    OUTPUTS: {LSDOutput.png}
+//    OUTPUTS: {LSDOutput.shp}
 //  Software Guide : EndCommandLineArgs
 
 // Software Guide : BeginLatex
@@ -48,8 +46,14 @@
 
 int main(int argc, char * argv[])
 {
-  const char * infname  = argv[1];
-  const char * outfname  = argv[2];
+  if (argc != 3)
+  {
+    std::cerr << "Usage: ./LineSegmentDetectorExample input output\n";
+    return EXIT_FAILURE;
+  }
+
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   typedef unsigned char InputPixelType;
   typedef double        PrecisionType;
@@ -89,45 +93,21 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::LineSegmentDetector<ImageType,
-      PrecisionType> LsdFilterType;
+  typedef otb::LineSegmentDetector<ImageType, PrecisionType> LsdFilterType;
 
   LsdFilterType::Pointer lsdFilter = LsdFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
   //
-  // In order to be able to display the results, we will draw the
-  // detected segments on top of the input image. For this matter, we
-  // will use a \doxygen{otb}{VectorDataToMapFilter} which
-  // is templated over the input vector data type and the output image
-  // type, and a combination of a \doxygen{itk}{binaryFunctorImageFilter}
-  // and the \doxygen{otb}{Functor}{AlphaBlendingFunctor}.
-  //
-  // Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  typedef otb::VectorData<PrecisionType> VectorDataType;
-  typedef otb::VectorDataToMapFilter<VectorDataType,
-      ImageType> VectorDataRendererType;
-  VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
-
-  typedef otb::Functor::AlphaBlendingFunctor<InputPixelType,
-    InputPixelType, InputPixelType> FunctorType;
-  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
-    ImageType, FunctorType> BlendingFilterType;
-  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
   // We can now define the type for the writer, instantiate it and set
-  // the file name for the output image.
+  // the file name for the output vector data.
   //
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::VectorDataFileWriter<LsdFilterType::VectorDataType> WriterType;
+
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
   // Software Guide : EndCodeSnippet
@@ -140,16 +120,7 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   lsdFilter->SetInput(reader->GetOutput());
-
-  vectorDataRenderer->SetInput(lsdFilter->GetOutput());
-  vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
-  vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
-
-  blendingFilter->SetInput1(reader->GetOutput());
-  blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
-  blendingFilter->GetFunctor().SetAlpha(0.25);
-
-  writer->SetInput(blendingFilter->GetOutput());
+  writer->SetInput(lsdFilter->GetOutput());
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -165,20 +136,6 @@ int main(int argc, char * argv[])
   reader->GenerateOutputInformation();
   writer->Update();
   // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:LSD} shows the result of applying the line segment
-  // detection to an image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.35\textwidth]{Scene.eps}
-  // \includegraphics[width=0.35\textwidth]{LSDOutput.eps}
-  // \itkcaption[LSD Application]{Result of applying the
-  // \doxygen{otb}{LineSegmentDetector} to an image.}
-  // \label{fig:LSD}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

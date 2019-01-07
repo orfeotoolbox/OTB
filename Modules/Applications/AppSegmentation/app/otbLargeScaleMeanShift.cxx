@@ -58,9 +58,9 @@ private:
     // Documentation
     SetDocName("Large-Scale MeanShift");
     SetDocLongDescription("This application chains together the 4 steps of the "
-      "MeanShit framework, that is the MeanShiftSmoothing [1], the "
-      "LSMSSegmentation [2], the LSMSSmallRegionsMerging [3] and the "
-      "LSMSVectorization [4].\n\n"
+      "MeanShit framework, that is the MeanShiftSmoothing, the "
+      "LSMSSegmentation, the LSMSSmallRegionsMerging and the "
+      "LSMSVectorization.\n\n"
       "This application can be a preliminary step for an object-based analysis.\n\n"
       "It generates a vector data file containing the regions extracted with "
       "the MeanShift algorithm. The spatial and range radius parameters allow "
@@ -75,10 +75,10 @@ private:
       );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] MeanShiftSmoothing\n"
-      "[2] LSMSSegmentation\n"
-      "[3] LSMSSmallRegionsMerging\n"
-      "[4] LSMSVectorization");
+    SetDocSeeAlso("MeanShiftSmoothing\n"
+      "LSMSSegmentation\n"
+      "LSMSSmallRegionsMerging\n"
+      "LSMSVectorization");
 
     AddDocTag(Tags::Segmentation);
     AddDocTag("LSMS");

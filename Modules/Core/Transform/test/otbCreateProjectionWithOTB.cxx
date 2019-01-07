@@ -39,7 +39,6 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
