@@ -318,7 +318,6 @@ void DoExecute() override
     m_HigImageList->PushBack(m_HigTexFilter->GetLongRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetGreyLevelNonuniformityOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetRunLengthNonuniformityOutput());
-    m_HigImageList->PushBack(m_HigTexFilter->GetRunPercentageOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetLowGreyLevelRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetHighGreyLevelRunEmphasisOutput());
     m_HigImageList->PushBack(m_HigTexFilter->GetShortRunLowGreyLevelEmphasisOutput());
