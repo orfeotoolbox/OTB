@@ -22,7 +22,7 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbFastICAImageFilterTest);
+  // REGISTER_TEST(otbFastICAImageFilterTest);
   REGISTER_TEST(otbNormalizeInnerProductPCAImageFilter);
   REGISTER_TEST(otbMaximumAutocorrelationFactorImageFilter);
   REGISTER_TEST(otbMNFImageFilterTest);
@@ -34,5 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbAngularProjectionImageFilterTest);
   REGISTER_TEST(otbLocalActivityVectorImageFilterTest);
   REGISTER_TEST(otbAngularProjectionBinaryImageFilterTest);
-  REGISTER_TEST(otbSparseWvltToAngleMapperListFilterTest);
+  // REGISTER_TEST(otbSparseWvltToAngleMapperListFilterTest);
 }

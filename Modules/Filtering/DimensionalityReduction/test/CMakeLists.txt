@@ -22,7 +22,7 @@ otb_module_test()
 
 set(OTBDimensionalityReductionTests
 otbDimensionalityReductionTestDriver.cxx
-otbFastICAImageFilter.cxx
+# otbFastICAImageFilter.cxx
 otbNormalizeInnerProductPCAImageFilter.cxx
 otbMaximumAutocorrelationFactorImageFilter.cxx
 otbMNFImageFilter.cxx
@@ -33,7 +33,7 @@ otbAngularProjectionSetImageFilter.cxx
 otbNAPCAImageFilter.cxx
 otbAngularProjectionImageFilter.cxx
 otbAngularProjectionBinaryImageFilter.cxx
-otbSparseWvltToAngleMapperListFilter.cxx
+# otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
 
@@ -265,10 +265,11 @@ otb_add_test(NAME bfTvPCAImageFilter2 COMMAND otbDimensionalityReductionTestDriv
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvPCAImageFilter2Inv.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter2.tif
-  -inv ${TEMP}/bfTvPCAImageFilter2Inv.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter2.tif
+  ${TEMP}/bfTvPCAImageFilter2Inv.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvPCAImageFilter4 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -277,10 +278,11 @@ otb_add_test(NAME bfTvPCAImageFilter4 COMMAND otbDimensionalityReductionTestDriv
   ${BASELINE}/bfTvPCAImageFilter4Inv.tif
   ${TEMP}/bfTvPCAImageFilter4Inv.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter4.tif
-  -inv ${TEMP}/bfTvPCAImageFilter4Inv.tif
-  -n 4)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter4.tif
+  ${TEMP}/bfTvPCAImageFilter4Inv.tif
+  false
+  4)
 
 otb_add_test(NAME bfTvPCAImageFilter4Norm COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -289,11 +291,11 @@ otb_add_test(NAME bfTvPCAImageFilter4Norm COMMAND otbDimensionalityReductionTest
   ${BASELINE}/bfTvPCAImageFilter4InvNorm.tif
   ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter4Norm.tif
-  -inv ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
-  -norm
-  -n 4)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter4Norm.tif
+  ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
+  true
+  4)
 
 otb_add_test(NAME bfTvPCAImageFilter3 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -302,19 +304,23 @@ otb_add_test(NAME bfTvPCAImageFilter3 COMMAND otbDimensionalityReductionTestDriv
   ${BASELINE}/bfTvPCAImageFilter3Inv.tif
   ${TEMP}/bfTvPCAImageFilter3Inv.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter3.tif
-  -inv ${TEMP}/bfTvPCAImageFilter3Inv.tif
-  )
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter3.tif
+  ${TEMP}/bfTvPCAImageFilter3Inv.tif
+  false
+  0)
 
 otb_add_test(NAME bfTvPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvPCAImageFilter1Inv.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter1.tif
-  -inv ${TEMP}/bfTvPCAImageFilter1Inv.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter1.tif
+  ${TEMP}/bfTvPCAImageFilter1Inv.tif
+  false
+  0)
+
 
 otb_add_test(NAME bfTvPCAImageFilter3Norm COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -323,10 +329,11 @@ otb_add_test(NAME bfTvPCAImageFilter3Norm COMMAND otbDimensionalityReductionTest
   ${BASELINE}/bfTvPCAImageFilter3InvNorm.tif
   ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
   otbPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvPCAImageFilter3Norm.tif
-  -inv ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter3Norm.tif
+  ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvNAPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
