@@ -36,7 +36,7 @@ void TrainVectorBase::DoInit()
 
   AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data" );
   SetParameterDescription( "io.vd",
-    "Input geometries used for training (note : all geometries from the layer will be used)" );
+    "Input geometries used for training (note: all geometries from the layer will be used)" );
 
   AddParameter( ParameterType_InputFilename, "io.stats", "Input XML image statistics file" );
   MandatoryOff( "io.stats" );

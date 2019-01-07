@@ -126,7 +126,7 @@ private:
       "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
     SetParameterString("cfield","predicted");
 
-    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated.");
+    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated");
     SetParameterDescription("feat","List of field names in the input vector data used as features for training. "
       "Put the same field names as the TrainVectorClassifier application.");
 

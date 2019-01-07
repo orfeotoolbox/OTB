@@ -95,7 +95,7 @@ private:
     "\n"
     ":math:`f(n) = \\begin{cases} \\stackrel{\\smile}{k} & : f-\\psi_{N}(f)>\\sigma \\\\ \\stackrel{\\frown}{k} & : \\psi_{N}(f)-f>\\sigma \\\\ \\bar{k} & : \\mid f - \\psi_{N}(f) \\mid \\leq \\sigma \\end{cases}`"
     "\n\n"
-    "The output is a labeled image (0 : Flat, 1 : Convex, 2 : Concave)" );
+    "The output is a labeled image (0: Flat, 1: Convex, 2: Concave)" );
     SetDocLimitations( 
       "Generation of the morphological classification is not streamable, "
       "pay attention to this fact when setting the radius size of the "
@@ -110,17 +110,13 @@ private:
     SetParameterDescription( "in" , "The input image to be classified." );
 
     AddParameter( ParameterType_OutputImage , "out" , "Output Image" );
-    SetParameterDescription( "out",
-      "The output classified image with 3 different values (0 : Flat, "
-      "1 : Convex, 2 : Concave)" );
+    SetParameterDescription( "out", "The output classified image with 3 different values (0: Flat, 1: Convex, 2: Concave)" );
 
     AddParameter( ParameterType_Int , "channel" , "Selected Channel" );
     SetParameterDescription( "channel" , 
       "The selected channel index for input image" );
     SetDefaultParameterInt( "channel" , 1 );
     SetMinimumParameterIntValue( "channel" , 1 );
-
-    AddRAMParameter();
 
     // Structuring Element (Ball | Cross)
     AddParameter( ParameterType_Choice , "structype" ,
@@ -142,6 +138,8 @@ private:
       "Sigma value for leveling tolerance, default value is 0.5." );
     SetDefaultParameterFloat( "sigma" , 0.5 );
     SetMinimumParameterFloatValue( "sigma" , 0 );
+
+    AddRAMParameter();
 
     SetDocExampleParameterValue( "in", "ROI_IKO_PAN_LesHalles.tif" );
     SetDocExampleParameterValue( "channel", "1" );
