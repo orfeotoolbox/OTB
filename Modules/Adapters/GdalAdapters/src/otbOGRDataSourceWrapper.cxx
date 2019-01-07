@@ -235,23 +235,24 @@ void DeleteDataSource(std::string const& datasourceName)
     }
   else
     {
-      success = false;
+    itkGenericExceptionMacro(<< "Cannot open data source " << simpleFileName
+                             << ": " << CPLGetLastErrorMsg());
     }
   if(poDriver)
     {
     OGRErr ret = poDriver->Delete(simpleFileName.c_str());
-    success = ret == OGRERR_NONE;
+    if (ret != OGRERR_NONE)
+      {
+      itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
+                             << " failed: " << CPLGetLastErrorMsg());
+      }
     }
   else 
     {
-      success = false;
+    itkGenericExceptionMacro(<< "Cannot get driver associated with data source " << simpleFileName
+                             << ": " << CPLGetLastErrorMsg());
     }
 
-  if (!success)
-    {
-    itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
-                             << " failed: " << CPLGetLastErrorMsg());
-    }
 }
 
 otb::ogr::DataSource::Pointer
