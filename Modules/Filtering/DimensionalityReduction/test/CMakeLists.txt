@@ -333,9 +333,11 @@ otb_add_test(NAME bfTvNAPCAImageFilter1 COMMAND otbDimensionalityReductionTestDr
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvNAPCAImageFilter1Inv.tif
   otbNAPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNAPCAImageFilter1.tif
-  -inv ${TEMP}/bfTvNAPCAImageFilter1Inv.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNAPCAImageFilter1.tif
+  ${TEMP}/bfTvNAPCAImageFilter1Inv.tif
+  false
+  0)
 
 otb_add_test(NAME bfTvNAPCAImageFilter3 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -344,20 +346,22 @@ otb_add_test(NAME bfTvNAPCAImageFilter3 COMMAND otbDimensionalityReductionTestDr
   ${BASELINE}/bfTvNAPCAImageFilter3Inv.tif
   ${TEMP}/bfTvNAPCAImageFilter3Inv.tif
   otbNAPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNAPCAImageFilter3.tif
-  -inv ${TEMP}/bfTvNAPCAImageFilter3Inv.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNAPCAImageFilter3.tif
+  ${TEMP}/bfTvNAPCAImageFilter3Inv.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvNAPCAImageFilter2 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
   otbNAPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNAPCAImageFilter2.tif
-  -inv ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
-  -norm)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNAPCAImageFilter2.tif
+  ${TEMP}/bfTvNAPCAImageFilter2Inv.tif
+  true
+  0)
 
 otb_add_test(NAME bfTvNAPCAImageFilter4 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -366,11 +370,11 @@ otb_add_test(NAME bfTvNAPCAImageFilter4 COMMAND otbDimensionalityReductionTestDr
   ${BASELINE}/bfTvNAPCAImageFilter4Inv.tif
   ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
   otbNAPCAImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNAPCAImageFilter4.tif
-  -inv ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
-  -norm
-  -n 4)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNAPCAImageFilter4.tif
+  ${TEMP}/bfTvNAPCAImageFilter4Inv.tif
+  true
+  4)
 
 otb_add_test(NAME bfTvLocalActivityVectorImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
