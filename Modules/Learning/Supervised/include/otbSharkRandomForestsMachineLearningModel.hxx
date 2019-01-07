@@ -137,7 +137,6 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
     }
     if (proba != nullptr)
     {
-      ProbaSampleType prob{static_cast<unsigned int>(probas.size())};
       for(size_t i =0; i< probas.size();i++)
       {
         //probas contain the N class probability indexed between 0 and N-1

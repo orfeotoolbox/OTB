@@ -340,7 +340,13 @@ ImageClassificationFilter<TInputImage, TOutputImage, TMaskImage>
         }
        if(computeProbaMap)
        {
-         probaValues = probas->GetMeasurementVector(labIt.GetInstanceIdentifier());
+         //The probas may have different size than the m_NumberOfClasses set by the user
+         auto tempProbaValues = probas->GetMeasurementVector(labIt.GetInstanceIdentifier());
+         for(auto i=0; i<m_NumberOfClasses; ++i)
+         {
+           if(i<tempProbaValues.Size()) probaValues[i] = tempProbaValues[i];
+           else probaValues[i] = 0;
+         }
        }
       ++labIt;
       }
