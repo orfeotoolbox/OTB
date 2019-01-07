@@ -64,7 +64,10 @@ private:
     SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. Processing of"
                       " other Sentinel1 modes or TerrasarX images will result in no changes in"
                       " the image and metadata. Images from other sensors will lead to an"
-                      " error.");
+                      " error."
+		      " Burst extraction needs as inputs a image composed of several Bursts. A burst has to "
+		      " contain all its lines in order to have a correct extraction. "
+		      " ie : Careful with ROI.");
     
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("[1] Sentinel1 User Handbook, p. 52: https://sentinel.esa.int/documents/247904/685163/Sentinel-1_User_Handbook\n");

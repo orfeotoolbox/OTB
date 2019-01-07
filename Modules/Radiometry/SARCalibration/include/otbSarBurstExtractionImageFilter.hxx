@@ -85,15 +85,46 @@ SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   if(!saveOk)
     itkExceptionMacro(<<"Could not export deburst SAR sensor model to keyword list");
 
-  outputPtr->SetOrigin(origin);
-  
-  // Compute deburst azimuth size
+  // Move origin and size (if necessary)
+  long originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0]-0.5);
+  long originOffset_lines = static_cast<long>(this->GetInput()->GetOrigin()[1]-0.5);
+  unsigned long outputOriginSample = 0;
+  unsigned long outputOriginLine = 0;
+
   typename ImageType::SizeType burstSize = largestPossibleRegion.GetSize();
   
-  burstSize[0] = m_SamplesRecord.second - m_SamplesRecord.first + 1;
-  burstSize[1] = m_LinesRecord.second - m_LinesRecord.first + 1;
-      
+  if (static_cast<int>(m_SamplesRecord.first) > originOffset_samples)
+    {
+      outputOriginSample = 0;
+    }
+  else
+    {
+      outputOriginSample = originOffset_samples - static_cast<int>(m_SamplesRecord.first);
+    }
+
+  if (static_cast<int>(m_LinesRecord.first) > originOffset_lines)
+    {
+      outputOriginLine = 0;
+    }
+  else
+    {
+      outputOriginLine = originOffset_lines - static_cast<int>(m_LinesRecord.first);
+    }
+
+  long firstOutSample = static_cast<long>(std::max( static_cast<long>(m_SamplesRecord.first), originOffset_samples));
+  long secondOutSample = static_cast<long>(std::min(m_SamplesRecord.second, largestPossibleRegion.GetSize()[0] + originOffset_samples - 1));
+
+  long firstOutLine = static_cast<long>(std::max(static_cast<long>(m_LinesRecord.first), originOffset_lines));
+  long secondOutLine = static_cast<long>(std::min(m_LinesRecord.second, largestPossibleRegion.GetSize()[1] + originOffset_lines - 1));
+
+  burstSize[0] = secondOutSample - firstOutSample + 1;
+  burstSize[1] = secondOutLine - firstOutLine + 1;
   
+  origin[0]=0.5+outputOriginSample;
+  origin[1]=0.5+outputOriginLine;
+  
+  outputPtr->SetOrigin(origin);
+ 
   // Set largest possible region
   typename ImageType::RegionType outputLargestPossibleRegion = largestPossibleRegion;
   largestPossibleRegion.SetSize(burstSize);
@@ -117,9 +148,18 @@ SarBurstExtractionImageFilter<TImage>::OutputRegionToInputRegion(const RegionTyp
 
   typename RegionType::IndexType index = inputRegion.GetIndex();
   
-  index[0] += m_SamplesRecord.first;
-  index[1] += m_LinesRecord.first;
-  
+  long originOffset = static_cast<long>(this->GetInput()->GetOrigin()[1]-0.5);
+  long originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0]-0.5);
+
+  if (static_cast<int>(m_SamplesRecord.first) > originOffset_samples)
+    {
+      index[0] += m_SamplesRecord.first - originOffset_samples;
+    }
+  if (static_cast<int>(m_LinesRecord.first) > originOffset)
+    {
+      index[1] += m_LinesRecord.first - originOffset;
+    }
+
   inputRegion.SetIndex(index);
   
   return inputRegion;
@@ -161,20 +201,22 @@ SarBurstExtractionImageFilter<TImage>::ThreadedGenerateData(const RegionType& ou
   while(!inputIt.IsAtEnd()&&!outputIt.IsAtEnd())
     {
       typename ImageType::IndexType currentInputIndex = inputIt.GetIndex();
-     
+      PointType currentInputPoint;
+      this->GetInput()->TransformIndexToPhysicalPoint(currentInputIndex,currentInputPoint);
+  
       bool lineToKeep = false;
       bool sampleToKeep = false;
 
       // Check lines
-      if (currentInputIndex[1] >= linesRecordFirst && 
-	  currentInputIndex[1] <= linesRecordSecond)
+      if (currentInputPoint[1]-0.5 >= linesRecordFirst && 
+	  currentInputPoint[1]-0.5 <= linesRecordSecond)
 	{
 	  lineToKeep = true;
 	}
 
       // Check samples
-      if (currentInputIndex[0] >= samplesRecordFirst && 
-	  currentInputIndex[0] <= samplesRecordSecond)
+      if (currentInputPoint[0]-0.5 >= samplesRecordFirst && 
+	  currentInputPoint[0]-0.5 <= samplesRecordSecond)
 	{
 	  sampleToKeep = true;
 	} 

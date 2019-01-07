@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "otbSarDeburstImageFilter.h"
+#include "otbSarBurstExtractionImageFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -26,22 +26,16 @@
 typedef otb::Image<unsigned short>            ImageType;
 typedef otb::ImageFileReader<ImageType>       ReaderType;
 typedef otb::ImageFileWriter<ImageType>       WriterType;
-typedef otb::SarDeburstImageFilter<ImageType> DeburstFilterType;
+typedef otb::SarBurstExtractionImageFilter<ImageType> BurstExtractionFilterType;
 
-int otbSarDeburstFilterTest(int argc, char * argv[])
+int otbSarBurstExtractionFilterTest(int itkNotUsed(argc), char * argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  bool onlyValidSamples = false;
-  if (argc == 4)
-    {
-      onlyValidSamples = true;
-    }
-
-  DeburstFilterType::Pointer filter = DeburstFilterType::New();
+  BurstExtractionFilterType::Pointer filter = BurstExtractionFilterType::New();
   filter->SetInput(reader->GetOutput());
-  filter->SetOnlyValidSample(onlyValidSamples);
+  filter->SetBurstIndex(std::stoi(argv[3]));
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

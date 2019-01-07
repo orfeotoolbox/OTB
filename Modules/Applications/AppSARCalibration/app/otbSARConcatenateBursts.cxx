@@ -62,7 +62,9 @@ private:
     SetDocLongDescription("This application performs a burst concatenation and provides a SAR Deburst Image. "
 			  "It reads the input image list (single bursts) "
 			  "and generates a whole SAR image with deburst operations.");
-    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now.");
+    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. In order to concatenate several" 
+		      " bursts, all valid lines of each burst are required as inputs." 
+		      "ie : Careful with ROI extraction inside a Burst.");
     SetDocAuthors("OTB-Team");
 
     AddDocTag(Tags::SAR);
@@ -118,10 +120,12 @@ private:
 	throw std::runtime_error("Failed to retrieve bursts.number value from .geom file.");
       }
 
-    if (inList->Size() != nbBursts)
+    nbBursts = inList->Size();
+    
+    /*if (inList->Size() != nbBursts)
       {
 	throw std::runtime_error("Failed to concatenate bursts. Some bursts are missing.");
-      }
+	}*/ 
 
     // Coniguration for fusion filter
     fusionFilter->SetSLCImageKeyWorList(in->GetImageKeywordlist());
@@ -133,13 +137,31 @@ private:
 	FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
 	vectIm->UpdateOutputInformation();
 
+	unsigned long originOffset_samples = static_cast<long>(vectIm->GetOrigin()[0]-0.5);
+	unsigned long originOffset_lines = static_cast<long>(vectIm->GetOrigin()[1]-0.5);
+
 	// Retrieve start and size for each burst
 	std::pair<unsigned long,unsigned long> line = lines[i];
 	std::pair<unsigned long,unsigned long> sample = samples[i];
-	unsigned long startL = line.first;
-	unsigned long startS = sample.first;
-	unsigned long sizeL = line.second - line.first + 1;
-	unsigned long sizeS = sample.second - sample.first + 1;
+
+	int minSamples = std::min(sample.second, vectIm->GetLargestPossibleRegion().GetSize()[0]-1);
+	int minLines = std::min(line.second, vectIm->GetLargestPossibleRegion().GetSize()[1]-1);
+
+	unsigned long startL = line.first - originOffset_lines;
+	unsigned long sizeL = minLines - line.first + 1;
+	unsigned long startS = sample.first - originOffset_samples;
+	unsigned long sizeS = minSamples - sample.first + 1;
+	// Readjust if origin is superior to the first selected line/sample for the current burst
+	if (line.first < originOffset_lines) 
+	  {
+	    startL = 0;
+	    sizeL =  minLines - line.first - originOffset_lines + 1;
+	  }
+	if (sample.first < originOffset_samples) 
+	  {
+	    startS = 0;
+	    sizeS =  minSamples - sample.first - originOffset_samples + 1;
+	  }
 
 	ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
 	extractor->SetInput(vectIm);

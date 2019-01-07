@@ -96,7 +96,20 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   unsigned long outputOriginLine = 0;
   SarSensorModelAdapter::ImageLineToDeburstLine(m_LinesRecord,firstInputLine,outputOriginLine);
 
-  // std::cout<<"OutputOriginLine: "<<outputOriginLine<<std::endl;
+  long originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0]-0.5);
+  unsigned long outputOriginSample = 0;
+  if (m_OnlyValidSample)
+    {
+      if (static_cast<int>(m_SamplesRecord.first) > originOffset_samples)
+	{
+	  outputOriginSample = 0;
+	}
+      else
+	{
+	  outputOriginSample = originOffset_samples - static_cast<int>(m_SamplesRecord.first);
+	}
+        origin[0]=0.5+outputOriginSample;
+    }
   
   origin[1]=0.5+outputOriginLine;
   outputPtr->SetOrigin(origin);
@@ -122,6 +135,8 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
 
   // TODO: Ensure that records are sorted ?
 
+  
+
   // Compute deburst azimuth size
   typename ImageType::SizeType deburstSize = largestPossibleRegion.GetSize();
   deburstSize[1]=0;
@@ -135,9 +150,13 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
 
   if (m_OnlyValidSample)
     {
-      deburstSize[0] = m_SamplesRecord.second - m_SamplesRecord.first + 1;
+      long minEnd = static_cast<long>(std::min(m_SamplesRecord.second, 
+					      largestPossibleRegion.GetSize()[0] + originOffset_samples-1));
+      long maxStart = static_cast<long>(std::max(static_cast<long>(m_SamplesRecord.first), 
+						 originOffset_samples));
+      deburstSize[0] = minEnd  - maxStart + 1;
     }
-  
+
   // Set largest possible region
   typename ImageType::RegionType outputLargestPossibleRegion = largestPossibleRegion;
   largestPossibleRegion.SetSize(deburstSize);
@@ -176,6 +195,7 @@ SarDeburstImageFilter<TImage>::OutputRegionToInputRegion(const RegionType& outpu
   SarSensorModelAdapter::DeburstLineToImageLine(m_LinesRecord,lowerLeftLine,inputLowerLeftLine);
   
   long originOffset = static_cast<long>(this->GetInput()->GetOrigin()[1]-0.5);
+  long originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0]-0.5);
   
   inputUpperLeftLine-=originOffset;
   inputLowerLeftLine-=originOffset;
@@ -184,11 +204,13 @@ SarDeburstImageFilter<TImage>::OutputRegionToInputRegion(const RegionType& outpu
 
   typename RegionType::SizeType size = inputRegion.GetSize();
   typename RegionType::IndexType index = inputRegion.GetIndex();
-  
+
   if (m_OnlyValidSample)
     {
-      index[0]+= m_SamplesRecord.first;
-      //size[0]+= m_SamplesRecord.first;
+      if (static_cast<int>(m_SamplesRecord.first) > originOffset_samples)
+	{
+	  index[0]+= m_SamplesRecord.first - originOffset_samples;
+	}
     }
   
   index[1]=inputUpperLeftLine;
@@ -309,8 +331,8 @@ SarDeburstImageFilter<TImage>::ThreadedGenerateDataWithOnlyValidSamples(const Re
 	    }
 	}
 
-      if (currentInputIndex[0] >= static_cast<int>(m_SamplesRecord.first) && 
-	  currentInputIndex[0] <= static_cast<int>(m_SamplesRecord.second))
+      if (currentInputPoint[0]-0.5 >= static_cast<int>(m_SamplesRecord.first) && 
+	  currentInputPoint[1]-0.5 <= static_cast<int>(m_SamplesRecord.second))
 	{
 	  sampleToKeep = true;
 	} 
