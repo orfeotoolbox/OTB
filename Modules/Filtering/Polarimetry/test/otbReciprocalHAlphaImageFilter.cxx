@@ -88,7 +88,7 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  haafilter->SetInput1(perBand->GetOutput());
+  haafilter->SetVariadicInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(haafilter->GetOutput());

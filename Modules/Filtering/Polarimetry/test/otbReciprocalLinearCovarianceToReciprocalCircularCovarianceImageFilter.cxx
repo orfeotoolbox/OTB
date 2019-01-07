@@ -49,7 +49,7 @@ int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int i
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput1(reader->GetOutput());
+  filter->SetVariadicInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

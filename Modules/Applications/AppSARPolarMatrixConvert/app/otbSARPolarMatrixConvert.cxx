@@ -454,7 +454,7 @@ private:
     case 4: // ReciprocalCovarianceToCoherencyDegreeImageFilter
 
       m_RCCDFilter = RCCDFilterType::New();
-      m_RCCDFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
+      m_RCCDFilter->SetVariadicInput<0>(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RCCDFilter->GetOutput()); // input: 6 complex channels | 3 complex channels
 
@@ -464,7 +464,7 @@ private:
     case 5: // ReciprocalCovarianceToReciprocalCoherencyImageFilter
 
       m_RCRCFilter = RCRCFilterType::New();
-      m_RCRCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
+      m_RCRCFilter->SetVariadicInput<0>(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RCRCFilter->GetOutput()); // input: 6 complex channels | 6 complex channels
 
@@ -474,7 +474,7 @@ private:
     case 6: // ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
 
       m_RLCRCCFilter = RLCRCCFilterType::New();
-      m_RLCRCCFilter->SetInput1(GetParameterComplexDoubleVectorImage("inc"));
+      m_RLCRCCFilter->SetVariadicInput<0>(GetParameterComplexDoubleVectorImage("inc"));
 
       SetParameterOutputImage("outc", m_RLCRCCFilter->GetOutput()); // input: 6 complex channels | output : 6 complex channels
 
@@ -485,7 +485,7 @@ private:
 
       m_MRCFilter = MRCFilterType::New();
 
-      m_MRCFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
+      m_MRCFilter->SetVariadicInput<0>(GetParameterDoubleVectorImage("inf"));
 
       SetParameterOutputImage("outc", m_MRCFilter->GetOutput()); // input: 16 real channels | output : 6 complex channels
 
@@ -556,7 +556,7 @@ private:
     case 12: // MuellerToPolarisationDegreeAndPowerImageFilter
       m_MPDPFilter = MPDPFilterType::New();
 
-      m_MPDPFilter->SetInput1(GetParameterDoubleVectorImage("inf"));
+      m_MPDPFilter->SetVariadicInput<0>(GetParameterDoubleVectorImage("inf"));
 
       SetParameterOutputImage("outf", m_MPDPFilter->GetOutput()); //  input: 16 real channels | output : 4 real channels
 

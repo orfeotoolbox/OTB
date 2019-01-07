@@ -85,7 +85,7 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  huynenfilter->SetInput1(perBand->GetOutput());
+  huynenfilter->SetVariadicInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(huynenfilter->GetOutput());

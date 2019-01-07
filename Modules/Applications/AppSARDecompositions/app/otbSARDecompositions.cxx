@@ -190,7 +190,7 @@ private:
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_HAFilter->SetInput1(m_MeanFilter->GetOutput());
+      m_HAFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_HAFilter->GetOutput());
 
       break;
@@ -209,7 +209,7 @@ private:
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_BarnesFilter->SetInput1(m_MeanFilter->GetOutput());
+      m_BarnesFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_BarnesFilter->GetOutput());
 
       break;
@@ -228,7 +228,7 @@ private:
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_HuynenFilter->SetInput1(m_MeanFilter->GetOutput());
+      m_HuynenFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_HuynenFilter->GetOutput());
 
       break;
@@ -245,7 +245,7 @@ private:
 		m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
 
     m_Concatener->SetInput(m_ImageList);
-    m_PauliFilter->SetInput1(m_Concatener->GetOutput());
+    m_PauliFilter->SetVariadicInput<0>(m_Concatener->GetOutput());
 
     SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
 

@@ -87,7 +87,7 @@ int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  barnesfilter->SetInput1(perBand->GetOutput());
+  barnesfilter->SetVariadicInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(barnesfilter->GetOutput());
