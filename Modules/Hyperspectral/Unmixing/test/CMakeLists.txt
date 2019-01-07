@@ -26,7 +26,7 @@ otbMDMDNMFImageFilter.cxx
 otbNCLSUnmixingImageFilter.cxx
 otbISRAUnmixingImageFilter.cxx
 otbUnConstrainedLeastSquareImageFilter.cxx
-otbSparseUnmixingImageFilter.cxx
+# otbSparseUnmixingImageFilter.cxx
 )
 
 add_executable(otbUnmixingTestDriver ${OTBUnmixingTests})

@@ -36,7 +36,6 @@ otb_module(OTBUnmixing
     OTBWavelet
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
 
