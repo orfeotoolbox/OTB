@@ -25,7 +25,7 @@ otb_test_application(NAME apTvPrBundleToPerfectSensor
                      OPTIONS -inp  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -inxs ${INPUTDATA}/QB_Toulouse_Ortho_XS_ROI_170x230.tif
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
-                             -out ${TEMP}/apTvPrBundleToPerfectSensor.tif int16
+                             -out ${TEMP}/apTvPrBundleToPerfectSensor.tif
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
