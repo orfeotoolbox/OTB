@@ -248,7 +248,7 @@ private:
         
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
         
-        if(fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
+        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
           {
           std::string tmpKey="field."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);

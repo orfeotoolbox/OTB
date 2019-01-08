@@ -97,9 +97,10 @@ typedef mpl::map
   , mpl::pair<char*                   , mpl::int_<OFTString> >
   , mpl::pair<char const*             , mpl::int_<OFTString> >
   , mpl::pair<std::vector<std::string>, mpl::int_<OFTStringList> >
-  , mpl::pair<GIntBig, mpl::int_<OFTInteger64> >
-  , mpl::pair<std::vector<GIntBig>, mpl::int_<OFTInteger64List> >
-
+  #ifdef OTB_USE_GDAL_20
+    , mpl::pair<GIntBig, mpl::int_<OFTInteger64> >
+    , mpl::pair<std::vector<GIntBig>, mpl::int_<OFTInteger64List> >
+  #endif
   // OFTBinary
   // OFTDate
   // OFTTime
@@ -340,8 +341,10 @@ typedef mpl::map
   , mpl::pair<mpl::int_<OFTRealList>,    MemberContainerGetterPtr<double, &OGRFeature::GetFieldAsDoubleList> >
   , mpl::pair<mpl::int_<OFTString>,      MemberGetterPtr<char const*,     &OGRFeature::GetFieldAsString, std::string> >
   , mpl::pair<mpl::int_<OFTStringList>,  StringListMemberGetterPtr<std::vector<std::string> > >
+  #ifdef OTB_USE_GDAL_20
   , mpl::pair<mpl::int_<OFTInteger64>, MemberGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64> >
   , mpl::pair<mpl::int_<OFTInteger64List>, MemberContainerGetterPtr<GIntBig, &OGRFeature::GetFieldAsInteger64List> >
+  #endif
   > FieldGetters_Map;
 
 /**\ingroup GeometryInternals
@@ -357,8 +360,10 @@ typedef mpl::map
   , mpl::pair<mpl::int_<OFTRealList>,    MemberContainerSetterPtr<double, &OGRFeature::SetField> >
   , mpl::pair<mpl::int_<OFTString>,      MemberSetterPtr<char const*,     &OGRFeature::SetField/*, std::string*/> >
   , mpl::pair<mpl::int_<OFTStringList>,  StringListMemberSetterPtr<std::vector<std::string> > >
+  #ifdef OTB_USE_GDAL_20
   , mpl::pair<mpl::int_<OFTInteger64>, MemberSetterPtr<GIntBig, &OGRFeature::SetField> >
   , mpl::pair<mpl::int_<OFTInteger64List>, MemberContainerSetterPtr<const GIntBig, &OGRFeature::SetField> >
+  #endif
   > FieldSetters_Map;
 
 /**\ingroup GeometryInternals

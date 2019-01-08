@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "otbVectorData.h"
+#include "otbOGRVersionProxy.h"
 
 #include "OTBIOGDALExport.h"
 
@@ -73,14 +74,14 @@ public:
 
 
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
-                                GDALDataset * m_DataSource,
+                                ogr::version_proxy::GDALDatasetType * m_DataSource,
                                 OGRGeometryCollection * ogrCollection,
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
   /** Return a list of OGRLayer * */
   std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                                        GDALDataset * dummyDatasource,
+                                                        ogr::version_proxy::GDALDatasetType * dummyDatasource,
                                                         OGRLayer* ogrCurrentLayer,
                                                         OGRSpatialReference * oSRS);
 
