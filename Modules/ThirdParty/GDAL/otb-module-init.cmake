@@ -35,8 +35,8 @@ if(NOT GDAL_CONFIG_CHECKING)
   return()
 endif()
 
-set(MIN_MAJOR_VERSION 2)
-set(MIN_MINOR_VERSION 0)
+set(MIN_MAJOR_VERSION 1)
+set(MIN_MINOR_VERSION 10)
 
 # Ensure that the temporary dir always exists before starting tests
 if(NOT EXISTS ${TEMP})
@@ -95,6 +95,11 @@ if(EXISTS "${TEMP}/gdalVersion.txt")
   file(READ "${TEMP}/gdalVersion.txt" _GDAL_VERSION_STRING)
   #can't we use GDAL_VERSION_NUM ?
   string(SUBSTRING ${_GDAL_VERSION_STRING} 0 2 VER2)
+  if("${VER2}" STREQUAL "2.")
+    set(OTB_USE_GDAL_20 true CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+  else()
+    set(OTB_USE_GDAL_20 false CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
+  endif()
   set(GDAL_VERSION_STRING "${_GDAL_VERSION_STRING}" CACHE INTERNAL "" FORCE)
 else()
   error_message( "${TEMP}/gdalVersion.txt does not exist. Cannot continue.")

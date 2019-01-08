@@ -37,6 +37,7 @@
 #endif
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
+#include "otbOGRVersionProxy.h"
 #include <boost/array.hpp>
 /*===========================================================================*/
 /*===========================[ Static Assertions ]===========================*/
@@ -166,7 +167,7 @@ std::ostream & otb::ogr::Field::UncheckedPrintSelf(
 
 bool otb::ogr::Field::UncheckedHasBeenSet() const
 {
-  return otb::ogr::IsFieldSetAndNotNull(m_Feature.get(), m_index);
+  return otb::ogr::version_proxy::IsFieldSetAndNotNull(m_Feature.get(), m_index);
 }
 
 void otb::ogr::Field::UncheckedUnset() const
