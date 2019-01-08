@@ -46,7 +46,7 @@ int otbMNFImageFilterTest ( int , char* argv[] )
   if ( std::string(argv[4]).compare("true") == 0)
     normalization = true;
 
-  int nbComponents = atoi(argv[5]);
+  int nbComponents = std::stoi(argv[5]);
 
   // Main type definition
   const unsigned int Dimension = 2;

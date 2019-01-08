@@ -66,7 +66,7 @@ int main(int argc, char * argv[])
 
     int winSize = 35;
     if ( argc == 6 )
-      winSize = atoi(argv[5]);
+      winSize = std::stoi(argv[5]);
 
     /*
      *  JustDoIt

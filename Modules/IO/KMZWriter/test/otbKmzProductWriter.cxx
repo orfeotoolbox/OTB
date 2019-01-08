@@ -71,13 +71,13 @@ int otbKmzProductWriter(int argc, char* argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[4 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[5 + gcpId * 5]);
+    sensorPoint[0] = std::stof(argv[4 + gcpId * 5]);
+    sensorPoint[1] = std::stof(argv[5 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[6 + 5 * gcpId]);
-    geoPoint[1] = atof(argv[7 + 5 * gcpId]);
-    geoPoint[2] = atof(argv[8 + 5 * gcpId]);
+    geoPoint[0] = std::stof(argv[6 + 5 * gcpId]);
+    geoPoint[1] = std::stof(argv[7 + 5 * gcpId]);
+    geoPoint[2] = std::stof(argv[8 + 5 * gcpId]);
 
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 
@@ -133,13 +133,13 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[4 + 5 * gcpId]);
-    sensorPoint[1] = atof(argv[5 + 5 * gcpId]);
+    sensorPoint[0] = std::stof(argv[4 + 5 * gcpId]);
+    sensorPoint[1] = std::stof(argv[5 + 5 * gcpId]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[6 + 5 * gcpId]);
-    geoPoint[1] = atof(argv[7 + 5 * gcpId]);
-    geoPoint[2] = atof(argv[8 + 5 * gcpId]);
+    geoPoint[0] = std::stof(argv[6 + 5 * gcpId]);
+    geoPoint[1] = std::stof(argv[7 + 5 * gcpId]);
+    geoPoint[2] = std::stof(argv[8 + 5 * gcpId]);
 
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 

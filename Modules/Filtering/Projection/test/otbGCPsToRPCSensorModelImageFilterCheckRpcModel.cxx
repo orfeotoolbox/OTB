@@ -67,13 +67,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = atof(argv[ 3 + gcpId * 5]);
-    sensorPoint[1] = atof(argv[ 4 + gcpId * 5]);
+    sensorPoint[0] = std::stof(argv[ 3 + gcpId * 5]);
+    sensorPoint[1] = std::stof(argv[ 4 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = atof(argv[ 5 + gcpId * 5]);
-    geoPoint[1] = atof(argv[ 6 + gcpId * 5]);
-    geoPoint[2] = atof(argv[ 7 + gcpId * 5]);
+    geoPoint[0] = std::stof(argv[ 5 + gcpId * 5]);
+    geoPoint[1] = std::stof(argv[ 6 + gcpId * 5]);
+    geoPoint[2] = std::stof(argv[ 7 + gcpId * 5]);
 
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 
@@ -107,9 +107,9 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point3DType point;
-    point[0] = atof(argv[ 3 + gcpId * 5]);
-    point[1] = atof(argv[ 4 + gcpId * 5]);
-    point[2] = atof(argv[ 7 + gcpId * 5]);
+    point[0] = std::stof(argv[ 3 + gcpId * 5]);
+    point[1] = std::stof(argv[ 4 + gcpId * 5]);
+    point[2] = std::stof(argv[ 7 + gcpId * 5]);
 
     Point3DType transformedPoint;
     transformedPoint = grsTrasnform->TransformPoint(point);
@@ -120,8 +120,8 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 
     // reference point
     Point2DType geoPoint;
-    geoPoint[0] = atof(argv[ 5 + gcpId * 5]);
-    geoPoint[1] = atof(argv[ 6 + gcpId * 5]);
+    geoPoint[0] = std::stof(argv[ 5 + gcpId * 5]);
+    geoPoint[1] = std::stof(argv[ 6 + gcpId * 5]);
 
     // Search for nans
     if ( vnl_math_isnan(transformedPoint2D[0]) || vnl_math_isnan(transformedPoint2D[1]) )
