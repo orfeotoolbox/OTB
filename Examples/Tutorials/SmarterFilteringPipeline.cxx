@@ -112,9 +112,9 @@ int main(int argc, char * argv[])
       << "image\n";
       std::cerr << "Usage : " << argv[0] ;
       std::cerr << " input_filename output_filename [d=1.0] [i=1.0] [a=1.0]\n";
-      std::cerr << "\"d=\" is for the sigmaD parameter, default value is 1.0\n"
-      std::cerr << "\"i=\" is for the sigmaI parameter, default value is 1.0\n"
-      std::cerr << "\"a=\" is for the alpha parameter, default value is 1.0\n"
+      std::cerr << "\"d=\" is for the sigmaD parameter, default value is 1.0\n";
+      std::cerr << "\"i=\" is for the sigmaI parameter, default value is 1.0\n";
+      std::cerr << "\"a=\" is for the alpha parameter, default value is 1.0\n";
       return EXIT_FAILURE;
       }
     std::string input_filename = argv[1];
