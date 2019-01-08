@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbSinclairToMuellerMatrixFunctor.h"
+#include "otbSinclairToMuellerMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToMuellerMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
@@ -32,7 +32,7 @@ int otbSinclairToMuellerMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(ar
 
   OutputType  result(16);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType  outputFunct(16);
 
   result[0]  =  30.;
   result[1]  =   0.;
@@ -51,7 +51,7 @@ int otbSinclairToMuellerMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(ar
   result[14] =  20.;
   result[15] =   4.;
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.));
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
       std::abs(result[1]-outputFunct[1]) > 1e-10 ||

@@ -24,6 +24,7 @@ otb_module(OTBAppDomainTransform
 DEPENDS
   OTBWavelet
   OTBApplicationEngine
+  OTBFunctor
 
   TEST_DEPENDS
     OTBTestKernel

@@ -18,15 +18,29 @@
  * limitations under the License.
  */
 
-#define OTB_VERSION_MAJOR @OTB_VERSION_MAJOR@
-#define OTB_VERSION_MINOR @OTB_VERSION_MINOR@
-#define OTB_VERSION_PATCH @OTB_VERSION_PATCH@
-#define OTB_VERSION_STRING "@OTB_VERSION_STRING@"
+#ifndef otbPolarimetryTags_h
+#define otbPolarimetryTags_h
 
-#cmakedefine OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
+namespace otb
+{
+namespace polarimetry_tags
+{
+struct hh
+{
+};
+struct hv
+{
+};
+struct vh
+{
+};
+struct vv
+{
+};
+struct hv_or_vh
+{
+};
+} // end namespace polarimetry_tags
+} // end namespace otb
 
-#cmakedefine OTB_BUILD_SHARED_LIBS
-
-#cmakedefine OTB_USE_OPENMP
-
-#cmakedefine OTB_USE_SSE_FLAGS
+#endif

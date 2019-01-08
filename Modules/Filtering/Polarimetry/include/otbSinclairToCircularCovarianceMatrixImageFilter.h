@@ -18,11 +18,14 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToCircularCovarianceMatrixFunctor_h
-#define otbSinclairToCircularCovarianceMatrixFunctor_h
+#ifndef otbSinclairToCircularCovarianceMatrixImageFilter_h
+#define otbSinclairToCircularCovarianceMatrixImageFilter_h
 
 #include <complex>
-#include "otbSinclairToCovarianceMatrixFunctor.h"
+
+#include "otbSinclairToCovarianceMatrixImageFilter.h"
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -55,6 +58,8 @@ namespace Functor
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::SinclairToCircularCovarianceMatrixImageFilter to apply it to an image.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -79,22 +84,18 @@ public:
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
   typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
-    TOutput result;
-
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    result.SetSize(m_NumberOfComponentsPerPixel);
     const ComplexType jS_hv = S_hv * ComplexType(0., 1.);
     const ComplexType jS_vh = S_vh * ComplexType(0., 1.);
     const ComplexType jS_hh = S_hh * ComplexType(0., 1.);
     const ComplexType jS_vv = S_vv * ComplexType(0., 1.);
-    
+
     const ComplexType coef(0.5);
 
     const ComplexType Sll = coef*( S_hh+jS_hv+jS_vh-S_vv );
@@ -102,34 +103,49 @@ public:
     const ComplexType Srl = coef*( jS_hh-S_hv+S_vh+jS_vv );
     const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
 
-    //const ComplexType conjSll = std::conj(Sll);
-    //const ComplexType conjSlr = std::conj(Slr);
-    //const ComplexType conjSrl = std::conj(Srl);
-    //const ComplexType conjSrr = std::conj(Srr);
-
     SinclairToCovarianceFunctorType funct;
-    return ( funct( Sll, Slr, Srl, Srr ) );
+    funct(result, Sll, Slr, Srl, Srr);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    // Size of circular covariance matrix
+    return 10;
   }
 
   /** Constructor */
-  SinclairToCircularCovarianceMatrixFunctor() : m_NumberOfComponentsPerPixel(10) {}
+  SinclairToCircularCovarianceMatrixFunctor()
+  {
+  }
 
   /** Destructor */
   virtual ~SinclairToCircularCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
 
 } // namespace Functor
+
+/**
+ * \typedef SinclairToCircularCovarianceMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToCircularCovarianceMatrixImageFilter = FunctorImageFilter<
+    Functor::SinclairToCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                       typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 } // namespace otb
 
 #endif
