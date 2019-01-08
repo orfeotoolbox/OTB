@@ -26,6 +26,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageScanlineIterator.h"
+#include <array>
 
 namespace otb
 {

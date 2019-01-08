@@ -138,7 +138,7 @@ private:
         }
     }
 
-    constexpr size_t OutputSize(const std::array<size_t, 3> inputsNbBands) const
+    constexpr size_t OutputSize(const std::array<size_t, 3> & inputsNbBands) const
     {
       return inputsNbBands[0];
     }
