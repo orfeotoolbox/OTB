@@ -29,7 +29,7 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           LocalRxDetector
+  NAME           LocalRxDetection
   SOURCES        otbLocalRxDetector.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 

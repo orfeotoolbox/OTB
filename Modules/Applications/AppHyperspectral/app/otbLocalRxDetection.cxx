@@ -28,11 +28,11 @@ namespace otb
 namespace Wrapper
 {
 
-class LocalRxDetector : public Application
+class LocalRxDetection : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LocalRxDetector         		Self;
+  typedef LocalRxDetection              Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -40,7 +40,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(LocalRxDetector, otb::Application);
+  itkTypeMacro(LocalRxDetection, otb::Application);
 
   /** Image typedefs */
   typedef FloatVectorImageType                VectorImageType;
@@ -52,11 +52,11 @@ public:
 private:
   void DoInit() override
   {
-    SetName("LocalRxDetector");
+    SetName("LocalRxDetection");
     SetDescription(" ");
 
     // Documentation
-    SetDocName("Local Rx Detector");
+    SetDocName("Local Rx Detection");
     SetDocLongDescription(" ");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -107,4 +107,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::LocalRxDetector)
+OTB_APPLICATION_EXPORT(otb::Wrapper::LocalRxDetection)
