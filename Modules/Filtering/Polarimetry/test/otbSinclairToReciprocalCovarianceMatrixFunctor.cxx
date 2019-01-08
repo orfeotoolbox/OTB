@@ -20,7 +20,7 @@
 
 #include "itkMacro.h"
 
-#include "otbSinclairToReciprocalCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToReciprocalCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
@@ -32,7 +32,7 @@ int otbSinclairToReciprocalCovarianceMatrixFunctor(int itkNotUsed(argc), char * 
 
   OutputType  result(6);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType  outputFunct(6);
 
   result[0] = ComplexType(17.,  0.);
   result[1] = ComplexType(19.7989898732233,7.07106781186548);
@@ -41,7 +41,7 @@ int otbSinclairToReciprocalCovarianceMatrixFunctor(int itkNotUsed(argc), char * 
   result[4] = ComplexType(16.9705627484771,7.07106781186548);
   result[5] = ComplexType(13.,  0.);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.));
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
       std::abs(result[1]-outputFunct[1]) > 1e-10 ||

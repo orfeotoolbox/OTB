@@ -18,12 +18,15 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToReciprocalCovarianceMatrixFunctor_h
-#define otbSinclairToReciprocalCovarianceMatrixFunctor_h
+#ifndef otbSinclairToReciprocalCovarianceMatrixImageFilter_h
+#define otbSinclairToReciprocalCovarianceMatrixImageFilter_h
 
 #include <complex>
 #include "otbMath.h"
 #include "vnl/vnl_matrix.h"
+
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -45,6 +48,8 @@ namespace Functor
  *
  * The output pixel has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element are stored from left to right, line by line.
+ *
+ * Use otb::SinclairToReciprocalCovarianceMatrixImageFilter to apply it to an image.
  *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
@@ -68,54 +73,57 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef vnl_matrix<ComplexType>       		   VNLMatrixType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svv)
+  inline void                                      operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
   {
-    TOutput result;
-
-    result.SetSize(NumberOfComponentsPerPixel);
-
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
-    
+
     VNLMatrixType f3l(3, 1, 0.);
     f3l[0][0]=S_hh;
     f3l[1][0]=ComplexType(std::sqrt(2.0),0.0)*S_hv;
     f3l[2][0]=S_vv;
-    
+
     VNLMatrixType res = f3l*f3l.conjugate_transpose();
-    
+
     result[0] = static_cast<OutputValueType>( res[0][0] );
     result[1] = static_cast<OutputValueType>( res[0][1] );
     result[2] = static_cast<OutputValueType>( res[0][2] );
     result[3] = static_cast<OutputValueType>( res[1][1] );
     result[4] = static_cast<OutputValueType>( res[1][2] );
     result[5] = static_cast<OutputValueType>( res[2][2] );
-
-    return (result);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return NumberOfComponentsPerPixel;
+    // Size of the  matrix
+    return 6;
   }
-
-  /** Constructor */
-  SinclairToReciprocalCovarianceMatrixFunctor() {}
-
-  /** Destructor */
-  virtual ~SinclairToReciprocalCovarianceMatrixFunctor() {}
-
-protected:
-
-
-private:
-  //itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 6);
-  static const unsigned int NumberOfComponentsPerPixel = 6;
-
 };
 
 } // namespace Functor
+
+/**
+ * \typedef SinclairToReciprocalCovarianceMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor
+ * \sa otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToReciprocalCovarianceMatrixImageFilter =
+    FunctorImageFilter<Functor::SinclairToReciprocalCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                                                            typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<polarimetry_tags::hh, polarimetry_tags::hv_or_vh, polarimetry_tags::vv>>;
 } // namespace otb
 
 #endif
