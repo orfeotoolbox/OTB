@@ -27,3 +27,9 @@ otb_create_application(
   NAME           VertexComponentAnalysis
   SOURCES        otbVertexComponentAnalysis.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           LocalRxDetector
+  SOURCES        otbLocalRxDetector.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
