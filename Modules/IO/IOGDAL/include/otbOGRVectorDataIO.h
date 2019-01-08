@@ -26,7 +26,6 @@
 
 #include "otbVectorDataIOBase.h"
 #include "otbVectorData.h"
-#include "otbOGRVersionProxy.h"
 
 #include "OTBIOGDALExport.h"
 
@@ -123,7 +122,7 @@ private:
 
   void CloseInternalDataSource();
 
-  ogr::version_proxy::GDALDatasetType * m_DataSource;
+  GDALDataset * m_DataSource;
 
 };
 
