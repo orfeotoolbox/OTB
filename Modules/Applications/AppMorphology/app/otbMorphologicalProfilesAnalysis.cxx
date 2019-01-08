@@ -269,12 +269,13 @@ private:
       }
 
     classificationFilter = MultiScaleClassificationFilterType::New();
-    classificationFilter->SetOpeningProfileDerivativeMaxima( omsCharFilter->GetOutput() );
-    classificationFilter->SetOpeningProfileCharacteristics( omsCharFilter->GetOutputCharacteristics() );
-    classificationFilter->SetClosingProfileDerivativeMaxima( cmsCharFilter->GetOutput() );
-    classificationFilter->SetClosingProfileCharacteristics( cmsCharFilter->GetOutputCharacteristics() );
-    classificationFilter->SetSigma( sigma );
-    classificationFilter->SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
+    using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+    classificationFilter->SetVariadicNamedInput<max_opening_profile_derivative>( omsCharFilter->GetOutput() );
+    classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>( omsCharFilter->GetOutputCharacteristics() );
+    classificationFilter->SetVariadicNamedInput<max_closing_profile_derivative>( cmsCharFilter->GetOutput() );
+    classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>( cmsCharFilter->GetOutputCharacteristics() );
+    classificationFilter->GetModifiableFunctor().SetSigma( sigma );
+    classificationFilter->GetModifiableFunctor().SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
     AddProcess(classificationFilter, "Classification");
     classificationFilter->Update();
     SetParameterOutputImage( "out", classificationFilter->GetOutput() );
