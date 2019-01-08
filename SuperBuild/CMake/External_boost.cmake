@@ -47,9 +47,17 @@ set(BOOST_SB_CONFIG
   --with-thread
   )
 
+set(BOOST_BOOTSTRAP_OPTIONS "")
+
 if(UNIX)
   set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
   set(BOOST_B2_EXE "./b2")
+  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(BOOST_SB_CONFIG
+        ${BOOST_SB_CONFIG}
+        toolset=clang)
+    set(BOOST_BOOTSTRAP_OPTIONS "--with-toolset=clang")
+  endif()
 else()
   set(BOOST_BOOTSTRAP_FILE "bootstrap.bat")
   set(BOOST_B2_EXE "b2.exe")
@@ -57,7 +65,7 @@ endif()
 
 set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
-  ${BOOST_BOOTSTRAP_FILE}
+  ${BOOST_BOOTSTRAP_FILE} ${BOOST_BOOTSTRAP_OPTIONS}
   --prefix=${SB_INSTALL_PREFIX}
   )
 
