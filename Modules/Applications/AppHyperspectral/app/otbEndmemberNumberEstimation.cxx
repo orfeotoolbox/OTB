@@ -21,6 +21,8 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbStreamingStatisticsVectorImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -39,6 +41,9 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(EndmemberNumberEstimation, otb::Application);
+
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> 
+    StreamingStatisticsVectorImageFilterType;
 
 private:
   void DoInit() override
@@ -83,7 +88,10 @@ private:
 
   void DoExecute() override
   {
+    auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
+    statisticsFilter->SetInput(GetParameterImage("in"));
 
+    statisticsFilter->Update();
   }
 
 };
