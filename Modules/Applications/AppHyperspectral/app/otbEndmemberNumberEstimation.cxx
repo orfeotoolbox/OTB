@@ -22,6 +22,8 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbEigenvalueLikelihoodMaximisation.h"
+#include "otbVirtualDimensionality.h"
 
 namespace otb
 {
@@ -44,6 +46,8 @@ public:
 
   typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> 
     StreamingStatisticsVectorImageFilterType;
+  typedef otb::VirtualDimensionality<float> VirtualDimensionalityType;
+  typedef otb::EigenvalueLikelihoodMaximisation<float> EigenvalueLikelihoodMaximisationType;
 
 private:
   void DoInit() override
@@ -70,7 +74,7 @@ private:
     AddChoice("algo.vd", "vd");
     SetParameterDescription("algo.vd", "virtual dimensionality");
 
-    AddParameter(ParameterType_String,"number","Number of endmembers");
+    AddParameter(ParameterType_Int,"number","Number of endmembers");
     SetParameterDescription("number", "Estimated number of endmembers");
     SetParameterRole("number", Role_Output);
 
@@ -92,6 +96,27 @@ private:
     statisticsFilter->SetInput(GetParameterImage("in"));
 
     statisticsFilter->Update();
+    int numberOfEndmembers = 0;
+    const std::string algorithm = GetParameterString("algo");
+    if (algorithm=="elm")
+      {
+      auto elm = EigenvalueLikelihoodMaximisationType::New();
+      elm->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
+      elm->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
+      elm->SetNumberOfPixels(GetParameterImage("in")->GetLargestPossibleRegion().GetNumberOfPixels());
+      elm->Compute();
+      numberOfEndmembers = elm->GetNumberOfEndmembers();
+      }
+    else if (algorithm=="vd")
+      {
+      auto vd = VirtualDimensionalityType::New();
+      vd->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
+      vd->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
+      vd->SetNumberOfPixels(GetParameterImage("in")->GetLargestPossibleRegion().GetNumberOfPixels());
+      vd->Compute();
+      numberOfEndmembers = vd->GetNumberOfEndmembers();
+      }
+    SetParameterInt("number", numberOfEndmembers);
   }
 
 };
