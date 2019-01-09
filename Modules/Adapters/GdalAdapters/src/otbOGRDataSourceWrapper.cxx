@@ -227,7 +227,6 @@ void DeleteDataSource(std::string const& datasourceName)
       NULL);
 
   GDALDriver * poDriver = NULL;
-  bool success =1;
   if(poDS)
     {
     poDriver = poDS->GetDriver();
