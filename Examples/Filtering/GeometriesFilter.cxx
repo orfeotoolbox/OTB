@@ -76,10 +76,10 @@ int main (int argc, char **argv)
       = workingInplace ? input
       : outputIsStdout ? nullptr
       :                  otb::ogr::DataSource::New( outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
-    std::cout << "input: " << otb::ogr::version_proxy::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << inputFile << "\n";
+    std::cout << "input: " << otb::ogr::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << inputFile << "\n";
     if (output)
       {
-      std::cout << "output: " << otb::ogr::version_proxy::GetFileListAsStringVector(&output->ogr())[0] << " should be: " << outputFile << "\n";
+      std::cout << "output: " << otb::ogr::GetFileListAsStringVector(&output->ogr())[0] << " should be: " << outputFile << "\n";
       }
     // std::cout << "\n";
 
