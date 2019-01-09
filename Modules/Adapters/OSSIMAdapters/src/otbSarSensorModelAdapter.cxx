@@ -103,11 +103,11 @@ bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigne
 
 bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index, 
 					    std::pair<unsigned long,unsigned long> & lines, 
-					    std::pair<unsigned long,unsigned long> & samples)
+					    std::pair<unsigned long,unsigned long> & samples, bool allPixels)
 {
    if(m_SensorModel.get())
     {
-      return m_SensorModel->burstExtraction(burst_index, lines, samples);
+      return m_SensorModel->burstExtraction(burst_index, lines, samples, allPixels);
     }
 
    return false;

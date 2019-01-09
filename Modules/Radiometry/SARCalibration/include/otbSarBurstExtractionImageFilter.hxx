@@ -34,7 +34,7 @@ namespace otb
 {
 // Constructor
 template <class TImage> SarBurstExtractionImageFilter<TImage>::SarBurstExtractionImageFilter()
-  : m_LinesRecord(), m_SamplesRecord(), m_BurstIndex(0)
+  : m_LinesRecord(), m_SamplesRecord(), m_BurstIndex(0), m_AllPixels(false)
 {}
 
 // Needs to be re-implemented since size of output is modified
@@ -68,7 +68,8 @@ SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
     itkExceptionMacro(<<"Input image does not contain a valid SAR sensor model.");
   
   // Try to call the burst extraction function
-  bool burstExtractionOk = sarSensorModel->BurstExtraction(m_BurstIndex, m_LinesRecord, m_SamplesRecord);
+  bool burstExtractionOk = sarSensorModel->BurstExtraction(m_BurstIndex, m_LinesRecord, m_SamplesRecord, 
+							   m_AllPixels);
 
   if(!burstExtractionOk)
     itkExceptionMacro(<<"Could not etract Burst from input image");

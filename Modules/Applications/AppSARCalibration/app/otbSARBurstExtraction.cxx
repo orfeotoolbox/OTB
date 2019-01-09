@@ -59,7 +59,10 @@ private:
                           "Note that the output sensor model is updated accordingly. This burst"
                           " extraction is the perfect preprocessing step for S1 IW SLC"
                           " product with OTB without suffering from artifacts caused by"
-                          " bursts separation.");
+                          " bursts separation\n."
+			  
+			   "Two modes are available for the output image : with all pixels and"
+			  "with only valid pixels ");
     
     SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. Processing of"
                       " other Sentinel1 modes or TerrasarX images will result in no changes in"
@@ -89,6 +92,9 @@ private:
 			    "output filename, the generated images will had an indice (corresponding at each "
 			    "burst) between the prefix and the extension, such as: outimage_Burst0.tif and "
 			    "outimage_Burst1.tif (if 2 bursts).");
+
+    AddParameter(ParameterType_Bool, "allpixels", "Select the modes for output image");
+    SetParameterDescription("allpixels", "If true, all pixels of the current burst are selected.");
 
     AddRAMParameter();
 
@@ -121,6 +127,11 @@ private:
     // Set the filer input
     m_BurstExtractionFilter = BurstExtractionFilterType::New();
     m_BurstExtractionFilter->SetInput(in);
+
+    if (IsParameterEnabled("allpixels"))
+      {
+	m_BurstExtractionFilter->SetAllPixels(true);
+      }
 
     // Get the number of Bursts
     unsigned int nbBursts = 1;

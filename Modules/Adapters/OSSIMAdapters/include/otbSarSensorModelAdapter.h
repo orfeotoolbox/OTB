@@ -87,7 +87,7 @@ public:
 
   /** Burst extraction and return lines/samples to keep into image file (the required burst) */
   bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
-		       std::pair<unsigned long,unsigned long> & samples);
+		       std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
 
   
   /** Deburst metadata if possible and prepare the burst concatenation */	

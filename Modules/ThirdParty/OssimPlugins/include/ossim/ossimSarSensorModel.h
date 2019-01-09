@@ -333,7 +333,7 @@ public:
     * standalone burst.
     */
    bool burstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
-			std::pair<unsigned long,unsigned long> & samples);
+			std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
 
    /**
     * This method will perform a deburst and concatenation operation, and return the
@@ -494,6 +494,9 @@ protected:
    
    TimeType                                    theFirstLineTime;
    TimeType                                    theLastLineTime;
+
+   unsigned long                                theNumberOfLinesPerBurst;
+   unsigned long                                theNumberOfSamplesPerBurst;
 
    bool redaptMedataAfterDeburst;
    

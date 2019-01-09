@@ -67,7 +67,8 @@ public:
 
   // Setter
   itkSetMacro(BurstIndex, unsigned int);
-  
+  itkSetMacro(AllPixels, bool);
+
 protected:
   // Constructor
   SarBurstExtractionImageFilter();
@@ -96,9 +97,13 @@ private:
   // Pair for sample valid selection
   RecordType m_SamplesRecord;
 
+  // Burst index
   unsigned int m_BurstIndex;
 
-  
+  // Mode for extraction : 
+  // If true : all pixels of the burst are selected
+  // If false : only valid pixels are selected
+  bool m_AllPixels;  
 };
 
 } // End namespace otb

@@ -1395,17 +1395,26 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
          get(kwl, SUPPORT_DATA_PREFIX, "radar_frequency"           , theRadarFrequency     );
          double azimuthTimeInterval = 0.; // in seconds
          get(kwl, SUPPORT_DATA_PREFIX, "line_time_interval"        , azimuthTimeInterval);
+
 #if defined(USE_BOOST_TIME)
          theAzimuthTimeInterval = boost::posix_time::precise_duration(azimuthTimeInterval * 1000000.);
 #else
          theAzimuthTimeInterval = seconds(azimuthTimeInterval);
 #endif
-
          get(kwl, theOrbitRecords);
          // TODO: don't fetch burst records if already read thanks to xml loading
          // that required them
          theBurstRecords.clear();
          get(kwl, theBurstRecords);
+	 
+	 if(theBurstRecords.size() > 1)
+	   {
+	     const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
+	     const std::string BURST_NUMBER_SAMPLES_KEY    = "support_data.geom.bursts.number_samples_per_burst";      
+	     get(kwl, BURST_NUMBER_LINES_KEY, theNumberOfLinesPerBurst);
+	     get(kwl, BURST_NUMBER_SAMPLES_KEY, theNumberOfSamplesPerBurst);
+	   }
+	 
          if (isGRD())
          {
             get(kwl, SR_PREFIX, keySr0, theSlantRangeToGroundRangeRecords);
@@ -1598,7 +1607,7 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
 bool 
 ossimSarSensorModel::burstExtraction(const unsigned int burst_index, 
 				     std::pair<unsigned long,unsigned long> & lines, 
-				     std::pair<unsigned long,unsigned long> & samples)
+				     std::pair<unsigned long,unsigned long> & samples, bool allPixels)
 {
    if(theBurstRecords.empty())
     return false;
@@ -1610,27 +1619,59 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
        return false;
      }
 
-   // Retrieve into TheBurstRecord, the required index
-   BurstRecordType burstInd_Record = theBurstRecords[burst_index];
-   lines = std::make_pair(burstInd_Record.startLine, burstInd_Record.endLine);
-   samples = std::make_pair(burstInd_Record.startSample, burstInd_Record.endSample);
-   TimeType burstAzimuthStartTime = burstInd_Record.azimuthStartTime;
-   TimeType burstAzimuthStopTime = burstInd_Record.azimuthStopTime;
+   // If all pixels is required
+   if (allPixels)
+     {
+       samples = std::make_pair(0, theNumberOfSamplesPerBurst - 1);
+       lines = std::make_pair(burst_index*theNumberOfLinesPerBurst, (burst_index+1)*theNumberOfLinesPerBurst - 1);
+       
+       redaptMedataAfterDeburst = true;
+       theFirstLineTime = theBurstRecords[burst_index].azimuthStartTime - (theBurstRecords[burst_index].startLine - lines.first) * theAzimuthTimeInterval;
+       theLastLineTime = theFirstLineTime + (lines.second - lines.first) * theAzimuthTimeInterval;
 
-   // Clear the previous burst records
-   theBurstRecords.clear();
+       // Clear the previous burst records
+       theBurstRecords.clear();
 
-   // Create the single burst
-   BurstRecordType oneBurst;
-   oneBurst.startLine = 0;
-   oneBurst.azimuthStartTime = burstAzimuthStartTime;
-   oneBurst.endLine = lines.second - lines.first;
-   oneBurst.azimuthStopTime = burstAzimuthStopTime;
-   oneBurst.startSample = 0;
-   oneBurst.endSample = samples.second - samples.first;
+       // Create the single burst
+       BurstRecordType oneBurst;
+       oneBurst.startLine = 0;
+       oneBurst.azimuthStartTime = theFirstLineTime;
+       oneBurst.endLine = lines.second - lines.first;
+       oneBurst.azimuthStopTime = theLastLineTime;
+       oneBurst.startSample = 0;
+       oneBurst.endSample = samples.second - samples.first;
    
-   theBurstRecords.push_back(oneBurst);
+       theBurstRecords.push_back(oneBurst);
+     }
+   else
+     {
+       // Retrieve into TheBurstRecord, the required index
+       BurstRecordType burstInd_Record = theBurstRecords[burst_index];
+       lines = std::make_pair(burstInd_Record.startLine, burstInd_Record.endLine);
+       samples = std::make_pair(burstInd_Record.startSample, burstInd_Record.endSample);
+       TimeType burstAzimuthStartTime = burstInd_Record.azimuthStartTime;
+       TimeType burstAzimuthStopTime = burstInd_Record.azimuthStopTime;
 
+       // Clear the previous burst records
+       theBurstRecords.clear();
+
+       // Create the single burst
+       BurstRecordType oneBurst;
+       oneBurst.startLine = 0;
+       oneBurst.azimuthStartTime = burstAzimuthStartTime;
+       oneBurst.endLine = lines.second - lines.first;
+       oneBurst.azimuthStopTime = burstAzimuthStopTime;
+       oneBurst.startSample = 0;
+       oneBurst.endSample = samples.second - samples.first;
+   
+       theBurstRecords.push_back(oneBurst);
+
+       // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
+       redaptMedataAfterDeburst = true;
+       theFirstLineTime = oneBurst.azimuthStartTime;
+       theLastLineTime = oneBurst.azimuthStopTime;
+       theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
+     }
 
     std::vector<GCPRecordType> oneBurstGCPs;
     
@@ -1675,12 +1716,6 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
       }
 
   theGCPRecords.swap(oneBurstGCPs);
-
-  // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
-  redaptMedataAfterDeburst = true;
-  theFirstLineTime = oneBurst.azimuthStartTime;
-  theLastLineTime = oneBurst.azimuthStopTime;
-  theNearRangeTime += samples.first*(1/theRangeSamplingRate); 
 
   return true;
 }
