@@ -116,6 +116,7 @@ set(ascii_comparison --compare-ascii ${EPSILON_6})
 set(ascii_confmat_comparison --compare-ascii 2)
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
+set(raster_comparison_three --compare-n-images ${NOTOL} 3)
 
 # Reference ffiles depending on modes
 set(ascii_ref_path ${OTBAPP_BASELINE_FILES})
@@ -137,6 +138,7 @@ if(OTB_USE_SHARK)
 endif()
 
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
+set(classifier_with_probamap "SHARKRF")
 
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
@@ -155,6 +157,7 @@ foreach(classifier ${classifierList})
 
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
   set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
+  set(OUTPROBAMAP cl${classifier}ProbabilityMapQB1${raster_output_format})
 
   list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
   if(${_classifier_has_baseline} EQUAL -1)
@@ -197,6 +200,7 @@ foreach(classifier ${classifierList})
   set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
 
   list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
+  list(FIND classifier_with_probamap ${classifier} _classifier_has_probamap)
   if(${_classifier_has_confmap} EQUAL -1)
     otb_test_application(
       NAME     apTvClMethod${classifier}ImageClassifierQB1
@@ -211,21 +215,44 @@ foreach(classifier ${classifierList})
       ${TEMP}/${OUTRASTER}
     )
   else()
-    otb_test_application(
-      NAME     apTvClMethod${classifier}ImageClassifierQB1
-      APP      ImageClassifier
-      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-      -model ${INPUTDATA}/Classification/${OUTMODELFILE}
-      -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
-      -out ${TEMP}/${OUTRASTER} ${raster_output_option}
-      -confmap ${TEMP}/${OUTCONFMAP}
+    if(${_classifier_has_probamap} EQUAL -1)
+      otb_test_application(
+        NAME     apTvClMethod${classifier}ImageClassifierQB1
+        APP      ImageClassifier
+        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+        -model ${INPUTDATA}/Classification/${OUTMODELFILE}
+        -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+        -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+        -confmap ${TEMP}/${OUTCONFMAP}
 
-      VALID    ${raster_comparison_two}
-      ${raster_ref_path}/${OUTRASTER}
-      ${TEMP}/${OUTRASTER}
-      ${raster_ref_path}/${OUTCONFMAP}
-      ${TEMP}/${OUTCONFMAP}
-    )
+        VALID    ${raster_comparison_two}
+        ${raster_ref_path}/${OUTRASTER}
+        ${TEMP}/${OUTRASTER}
+        ${raster_ref_path}/${OUTCONFMAP}
+        ${TEMP}/${OUTCONFMAP}
+        )
+    else()
+      message(${classifier})
+      otb_test_application(
+        NAME     apTvClMethod${classifier}ImageClassifierQB1
+        APP      ImageClassifier
+        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+        -model ${INPUTDATA}/Classification/${OUTMODELFILE}
+        -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+        -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+        -confmap ${TEMP}/${OUTCONFMAP}
+        -nbclasses 4
+        -probamap ${TEMP}/${OUTPROBAMAP}
+
+        VALID    ${raster_comparison_three}
+        ${raster_ref_path}/${OUTRASTER}
+        ${TEMP}/${OUTRASTER}
+        ${raster_ref_path}/${OUTCONFMAP}
+        ${TEMP}/${OUTCONFMAP}
+        ${raster_ref_path}/${OUTPROBAMAP}
+        ${TEMP}/${OUTPROBAMAP}
+        )
+    endif()
   endif()
 
 endforeach()

@@ -102,7 +102,7 @@ template<class TInputValue, class TOutputValue>
 typename SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::TargetSampleType
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::DoPredict(const InputSampleType &value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType &value, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   shark::RealVector data( value.Size());
   for( size_t i = 0; i < value.Size(); i++ )
@@ -117,6 +117,13 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
     ( *quality ) = ConfidenceValueType( 1.);
     }
 
+  if (proba != nullptr)
+    {
+    if (!this->m_ProbaIndex)
+      {
+      itkExceptionMacro("Probability per class not available for this classifier !");
+      }
+    }
   TargetSampleType target;
   ClusteringOutputType predictedValue = (*m_ClusteringModel)( data );
   target[0] = static_cast<TOutputValue>(predictedValue);
@@ -130,7 +137,8 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
                  const unsigned int &startIndex,
                  const unsigned int &size,
                  TargetListSampleType *targets,
-                 ConfidenceListSampleType *quality) const
+                 ConfidenceListSampleType *quality,
+		 ProbaListSampleType * proba) const
 {
 
   // Perform check on input values
@@ -179,6 +187,10 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
       {
       quality->SetMeasurementVector( qid, static_cast<ConfidenceValueType>(1.) );
       }
+    }
+  if (proba !=nullptr && !this->m_ProbaIndex)
+    {
+      itkExceptionMacro("Probability per class not available for this classifier !");
     }
 }
 

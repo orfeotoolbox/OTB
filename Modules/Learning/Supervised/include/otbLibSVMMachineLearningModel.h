@@ -47,7 +47,7 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
+  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
   /** enum to choose the way confidence is computed
    *   CM_INDEX : compute the difference between highest and second highest probability
    *   CM_PROBA : returns probabilities for all classes
@@ -272,7 +272,7 @@ protected:
   ~LibSVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

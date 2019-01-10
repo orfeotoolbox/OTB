@@ -48,7 +48,7 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
+  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
   typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
 
   /** Run-time type information (and related methods). */
@@ -178,7 +178,7 @@ protected:
   ~NeuralNetworkMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
   
   void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
 

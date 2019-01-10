@@ -24,6 +24,10 @@
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
 
+//#if(GDAL_VERSION_NUM < 1800)
+//#error OGRLayerStreamStitchingFilter requires GDAL version >= 1.8.0
+//#endif
+
 #include "itkProgressReporter.h"
 
 #include <algorithm>

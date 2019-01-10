@@ -36,6 +36,7 @@
 #endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
+#include "otbOGRVersionProxy.h"
 #include <string>
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
@@ -118,7 +119,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-    Layer(OGRLayer* layer, GDALDataset& sourceInChargeOfLifeTime, bool modifiable);
+    Layer(OGRLayer* layer, otb::ogr::version_proxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */

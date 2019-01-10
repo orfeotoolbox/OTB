@@ -50,6 +50,7 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
   m_ComputeMargin(false)
 {
   this->m_ConfidenceIndex = true;
+  this->m_ProbaIndex = false;
   this->m_IsRegressionSupported = true;
 }
 
@@ -171,8 +172,9 @@ template <class TInputValue, class TOutputValue>
 typename RandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 RandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
+  //std::cout << "Enter predict" << std::endl;
   TargetSampleType target;
   //convert listsample to Mat
   cv::Mat sample;
@@ -190,6 +192,10 @@ RandomForestsMachineLearningModel<TInputValue,TOutputValue>
     else
       (*quality) = m_RFModel->predict_confidence(sample);
     }
+
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
+
   return target[0];
 }
 
