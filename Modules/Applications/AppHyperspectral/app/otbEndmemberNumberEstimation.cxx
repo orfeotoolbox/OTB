@@ -53,11 +53,32 @@ private:
   void DoInit() override
   {
     SetName("EndmemberNumberEstimation");
-    SetDescription(" ");
+    SetDescription("Estimates the number of endmembers in a hyperspectral image");
 
     // Documentation
     SetDocName("Endmember Number Estimation");
-    SetDocLongDescription(" ");
+    SetDocLongDescription("This application estimates the number of endmembers "
+    "in a hyperspectral image. It first computes statistics on the image and then "
+    "apply an endmember number estimation algorithm using these statistics. Two "
+    "algorithms are available: \n"
+    "1) Virtual Dimensionality (vd) [1][2] \n"
+    "2) Eigenvalue Likelihood Maximization (elm) [3][4] \n"
+    "The application then returns the estimated number of endmembers. \n"
+    "References : \n"
+    "[1] C.-I. Chang and Q. Du, Estimation of number of spectrally distinct signal "
+    "sources in hyperspectral imagery, IEEE Transactions on Geoscience and Remote "
+    "Sensing, vol. 43, no. 3, mar 2004. \n"
+    "[2] J. Wang and C.-I. Chang, Applications of independent component analysis "
+    "in endmember extraction and abundance quantification for hyperspectral imagery"
+    ", IEEE Transactions on Geoscience and Remote Sensing, vol. 44, no. 9, pp. "
+    "2601-1616, sep 2006. \n"
+    "[3] Unsupervised Endmember Extraction of Martian Hyperspectral Images, B.Luo, "
+    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009 \n"
+    "[4] Unsupervised classification of hyperspectral images by using "
+    "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image \n"
+    "Processing(ICIP) 2009, Cairo, Egypte, 2009"
+    );
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis, HyperspectralUnmixing");
