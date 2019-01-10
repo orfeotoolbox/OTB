@@ -60,22 +60,22 @@ private:
     SetDocLongDescription("This application estimates the number of endmembers "
     "in a hyperspectral image. It first computes statistics on the image and then "
     "apply an endmember number estimation algorithm using these statistics. Two "
-    "algorithms are available: \n"
-    "1) Virtual Dimensionality (vd) [1][2] \n"
-    "2) Eigenvalue Likelihood Maximization (elm) [3][4] \n"
-    "The application then returns the estimated number of endmembers. \n"
-    "References : \n"
+    "algorithms are available: \n\n "
+    "  1) Virtual Dimensionality (VD) [1] [2] \n "
+    "  2) Eigenvalue Likelihood Maximization (ELM) [3][4] \n"
+    "The application then returns the estimated number of endmembers. \n\n "
+    "References : \n\n "
     "[1] C.-I. Chang and Q. Du, Estimation of number of spectrally distinct signal "
     "sources in hyperspectral imagery, IEEE Transactions on Geoscience and Remote "
-    "Sensing, vol. 43, no. 3, mar 2004. \n"
+    "Sensing, vol. 43, no. 3, mar 2004. \n "
     "[2] J. Wang and C.-I. Chang, Applications of independent component analysis "
     "in endmember extraction and abundance quantification for hyperspectral imagery"
     ", IEEE Transactions on Geoscience and Remote Sensing, vol. 44, no. 9, pp. "
-    "2601-1616, sep 2006. \n"
+    "2601-1616, sep 2006. \n "
     "[3] Unsupervised Endmember Extraction of Martian Hyperspectral Images, B.Luo, "
-    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009 \n"
+    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009 \n "
     "[4] Unsupervised classification of hyperspectral images by using "
-    "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image \n"
+    "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image"
     "Processing(ICIP) 2009, Cairo, Egypte, 2009"
     );
 
@@ -85,20 +85,19 @@ private:
 
     AddDocTag(Tags::Hyperspectral);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
+    AddParameter(ParameterType_InputImage,  "in", "Input Image Filename");
     SetParameterDescription("in","The hyperspectral data cube input");
 
     AddParameter(ParameterType_Choice, "algo", "Unmixing algorithm");
     SetParameterDescription("algo", "The algorithm to use for the estimation");
     AddChoice("algo.elm", "elm");
-    SetParameterDescription("algo.elm", "Eigenvalue Likelihood Maximization");
+    SetParameterDescription("algo.elm", "Eigenvalue Likelihood Maximization algorithm");
     AddChoice("algo.vd", "vd");
-    SetParameterDescription("algo.vd", "virtual dimensionality");
+    SetParameterDescription("algo.vd", "Virtual Dimensionality algorithm");
 
-    AddParameter( ParameterType_Float , "algo.vd.far" , "false alarm rate"
-        "Maximum training predictors");
-    SetMinimumParameterFloatValue("algo.vd.far",0);
-    SetMaximumParameterFloatValue("algo.vd.far",1);
+    AddParameter( ParameterType_Float , "algo.vd.far" , "False alarm rate");
+    SetMinimumParameterFloatValue("algo.vd.far", 0);
+    SetMaximumParameterFloatValue("algo.vd.far", 1);
     SetDefaultParameterFloat( "algo.vd.far" , 1.0E-3 );
     SetParameterDescription( "algo.vd.far" , 
       "False alarm rate for the virtual dimensionality algorithm");
