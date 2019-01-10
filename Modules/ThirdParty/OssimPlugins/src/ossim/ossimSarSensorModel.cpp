@@ -1409,10 +1409,16 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 	 
 	 if(theBurstRecords.size() > 1)
 	   {
-	     const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
-	     const std::string BURST_NUMBER_SAMPLES_KEY    = "support_data.geom.bursts.number_samples_per_burst";      
-	     get(kwl, BURST_NUMBER_LINES_KEY, theNumberOfLinesPerBurst);
-	     get(kwl, BURST_NUMBER_SAMPLES_KEY, theNumberOfSamplesPerBurst);
+	     unsigned int version;
+	     get(kwl, HEADER_PREFIX, "version", version);
+
+	     if (version > 2)
+	       {
+		 const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
+		 const std::string BURST_NUMBER_SAMPLES_KEY    = "support_data.geom.bursts.number_samples_per_burst";
+		 get(kwl, BURST_NUMBER_LINES_KEY, theNumberOfLinesPerBurst);
+		 get(kwl, BURST_NUMBER_SAMPLES_KEY, theNumberOfSamplesPerBurst);
+	       }
 	   }
 	 
          if (isGRD())
