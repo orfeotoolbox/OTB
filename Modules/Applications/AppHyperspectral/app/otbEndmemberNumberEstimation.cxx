@@ -101,7 +101,7 @@ private:
     SetMaximumParameterFloatValue("algo.vd.far",1);
     SetDefaultParameterFloat( "algo.vd.far" , 1.0E-3 );
     SetParameterDescription( "algo.vd.far" , 
-        "False alarm rate for the virtual dimensionality algorithm");
+      "False alarm rate for the virtual dimensionality algorithm");
 
     AddParameter(ParameterType_Int,"number","Number of endmembers");
     SetParameterDescription("number", "Estimated number of endmembers");
@@ -109,7 +109,8 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
-    SetDocExampleParameterValue("algo", "elm");
+    SetDocExampleParameterValue("algo", "vd");
+    SetDocExampleParameterValue("algo.vd.far", "1.0E-3");
 
     SetOfficialDocLink();
   }
@@ -121,6 +122,7 @@ private:
 
   void DoExecute() override
   {
+    otbAppLogINFO("Computing statistics on input image");
     auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
     statisticsFilter->SetInput(GetParameterImage("in"));
 
@@ -129,6 +131,7 @@ private:
     const std::string algorithm = GetParameterString("algo");
     if (algorithm=="elm")
       {
+      otbAppLogINFO("Estimation algorithm : Eigenvalue Likelihood Maximization");
       auto elm = EigenvalueLikelihoodMaximisationType::New();
       elm->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
       elm->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
@@ -138,6 +141,7 @@ private:
       }
     else if (algorithm=="vd")
       {
+      otbAppLogINFO("Estimation algorithm : Virtual Dimensionality");
       auto vd = VirtualDimensionalityType::New();
       vd->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
       vd->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
