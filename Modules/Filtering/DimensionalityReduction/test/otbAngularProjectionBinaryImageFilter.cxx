@@ -25,41 +25,14 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
+int otbAngularProjectionBinaryImageFilterTest ( int , char * [] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddOption( "--InputImages", "Input Images", "-in", 2, true );
-  parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs angular projection on 2 images\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  std::string inputImageName1(parseResult->GetParameterString("--InputImages", 0));
-  std::string inputImageName2(parseResult->GetParameterString("--InputImages", 1));
-  std::string outputImageName(parseResult->GetParameterString("--OutputImages"));
+  std::string inputImageName1("");
+  std::string inputImageName2("");
+  std::string outputImageName("");
 
   // Main type definition
   const unsigned int Dimension = 2;

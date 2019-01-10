@@ -25,7 +25,6 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbAngularProjectionSetImageFilter.h"
 
@@ -35,36 +34,10 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   const unsigned int SpaceDimension = 3;
   const unsigned int nbInputImages = SpaceDimension+1;
 
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddOption( "--InputImages", "Input Images", "-in", nbInputImages, true );
-  parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs otbAngularProjectionSetImageFilterTest with " << nbInputImages << " images\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
-  std::string outputImageName = parseResult->GetParameterString("--OutputImages");
+    inputImageName[i] = "";
+  std::string outputImageName = "";
 
   // Main type definition
   typedef float  PixelType;

@@ -22,18 +22,18 @@ otb_module_test()
 
 set(OTBDimensionalityReductionTests
 otbDimensionalityReductionTestDriver.cxx
-# otbFastICAImageFilter.cxx
+otbFastICAImageFilter.cxx
 otbNormalizeInnerProductPCAImageFilter.cxx
 otbMaximumAutocorrelationFactorImageFilter.cxx
 otbMNFImageFilter.cxx
 otbInnerProductPCAImageFilter.cxx
 otbEstimateInnerProductPCAImageFilter.cxx
 otbPCAImageFilter.cxx
-# otbAngularProjectionSetImageFilter.cxx
+otbAngularProjectionSetImageFilter.cxx
 otbNAPCAImageFilter.cxx
-# otbAngularProjectionImageFilter.cxx
-# otbAngularProjectionBinaryImageFilter.cxx
-# otbSparseWvltToAngleMapperListFilter.cxx
+otbAngularProjectionImageFilter.cxx
+otbAngularProjectionBinaryImageFilter.cxx
+otbSparseWvltToAngleMapperListFilter.cxx
 otbLocalActivityVectorImageFilter.cxx
 )
 
