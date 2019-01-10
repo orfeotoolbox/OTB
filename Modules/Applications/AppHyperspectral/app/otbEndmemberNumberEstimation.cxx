@@ -122,30 +122,38 @@ private:
 
   void DoExecute() override
   {
-    otbAppLogINFO("Computing statistics on input image");
+    // Load input image
+    auto inputImage = GetParameterImage("in");
+
+    otbAppLogINFO("Computing statistics on input image ...");
     auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
-    statisticsFilter->SetInput(GetParameterImage("in"));
+    statisticsFilter->SetInput(inputImage);
 
     statisticsFilter->Update();
+
+    auto correlationMatrix = statisticsFilter->GetCorrelation().GetVnlMatrix();
+    auto covarianceMatrix = statisticsFilter->GetCovariance().GetVnlMatrix();
+    auto numberOfPixels = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
+
     int numberOfEndmembers = 0;
     const std::string algorithm = GetParameterString("algo");
     if (algorithm=="elm")
       {
-      otbAppLogINFO("Estimation algorithm : Eigenvalue Likelihood Maximization");
+      otbAppLogINFO("Estimation algorithm : Eigenvalue Likelihood Maximization.");
       auto elm = EigenvalueLikelihoodMaximisationType::New();
-      elm->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
-      elm->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
-      elm->SetNumberOfPixels(GetParameterImage("in")->GetLargestPossibleRegion().GetNumberOfPixels());
+      elm->SetCovariance(covarianceMatrix);
+      elm->SetCorrelation(correlationMatrix);
+      elm->SetNumberOfPixels(numberOfPixels);
       elm->Compute();
       numberOfEndmembers = elm->GetNumberOfEndmembers();
       }
     else if (algorithm=="vd")
       {
-      otbAppLogINFO("Estimation algorithm : Virtual Dimensionality");
+      otbAppLogINFO("Estimation algorithm : Virtual Dimensionality.");
       auto vd = VirtualDimensionalityType::New();
-      vd->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
-      vd->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
-      vd->SetNumberOfPixels(GetParameterImage("in")->GetLargestPossibleRegion().GetNumberOfPixels());
+      vd->SetCovariance(covarianceMatrix);
+      vd->SetCorrelation(correlationMatrix);
+      vd->SetNumberOfPixels(numberOfPixels);
       vd->SetFAR(GetParameterFloat("algo.vd.far"));
       vd->Compute();
       numberOfEndmembers = vd->GetNumberOfEndmembers();
