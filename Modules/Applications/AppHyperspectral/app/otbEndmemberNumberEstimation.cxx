@@ -95,6 +95,14 @@ private:
     AddChoice("algo.vd", "vd");
     SetParameterDescription("algo.vd", "virtual dimensionality");
 
+    AddParameter( ParameterType_Float , "algo.vd.far" , "false alarm rate"
+        "Maximum training predictors");
+    SetMinimumParameterFloatValue("algo.vd.far",0);
+    SetMaximumParameterFloatValue("algo.vd.far",1);
+    SetDefaultParameterFloat( "algo.vd.far" , 1.0E-3 );
+    SetParameterDescription( "algo.vd.far" , 
+        "False alarm rate for the virtual dimensionality algorithm");
+
     AddParameter(ParameterType_Int,"number","Number of endmembers");
     SetParameterDescription("number", "Estimated number of endmembers");
     SetParameterRole("number", Role_Output);
@@ -134,6 +142,7 @@ private:
       vd->SetCovariance(statisticsFilter->GetCovariance().GetVnlMatrix());
       vd->SetCorrelation(statisticsFilter->GetCorrelation().GetVnlMatrix());
       vd->SetNumberOfPixels(GetParameterImage("in")->GetLargestPossibleRegion().GetNumberOfPixels());
+      vd->SetFAR(GetParameterFloat("algo.vd.far"));
       vd->Compute();
       numberOfEndmembers = vd->GetNumberOfEndmembers();
       }
