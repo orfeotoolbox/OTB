@@ -37,9 +37,6 @@ def application_documentation_warnings(app):
     for key in app.GetParametersKeys():
         parameter_warnings(warn, app, key)
 
-    if "ram" in keys and not keys[-3] == "ram":
-        warn("'ram' parameter is not third from last")
-
     if "inxml" in keys and not keys[-2] == "inxml":
         warn("'inxml' parameter is not second from last parameter")
 

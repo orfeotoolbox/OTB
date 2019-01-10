@@ -96,25 +96,26 @@ private:
     SetParameterDescription("ip","This group allows setting parameters for classification map regularization by Majority Voting.");
 
     AddParameter(ParameterType_Int, "ip.radius", "Structuring element radius (in pixels)");
-    SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (expressed in pixels). By default, 'ip.radius = 1 pixel'.");
+    SetParameterDescription("ip.radius", "The radius of the ball shaped structuring element (in pixels).");
     SetDefaultParameterInt("ip.radius", 1.0);
 
-    AddParameter(ParameterType_Bool, "ip.suvbool", "Multiple majority: Undecided(X)/Original");
-    SetParameterDescription("ip.suvbool", "Pixels with more than 1 majority class are marked as Undecided if this parameter is checked (true), or keep their Original labels otherwise (false). Please note that the Undecided value must be different from existing labels in the input labeled image. By default, 'ip.suvbool = false'.");
+    AddParameter(ParameterType_Bool, "ip.suvbool", "Set tie pixels to undecided");
+    SetParameterDescription("ip.suvbool",
+                            "If true, set pixels with more than one majority class to an undecided value. If false, keep their original labels.");
 
     AddParameter(ParameterType_Int, "ip.nodatalabel", "Label for the NoData class");
-    SetParameterDescription("ip.nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image. By default, 'ip.nodatalabel = 0'.");
+    SetParameterDescription("ip.nodatalabel", "Label for the NoData class. Such input pixels keep their NoData label in the output image.");
     SetDefaultParameterInt("ip.nodatalabel", 0.0);
 
     AddParameter(ParameterType_Int, "ip.undecidedlabel", "Label for the Undecided class");
-    SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class. By default, 'ip.undecidedlabel = 0'.");
+    SetParameterDescription("ip.undecidedlabel", "Label for the Undecided class.");
     SetDefaultParameterInt("ip.undecidedlabel", 0.0);
 
     AddParameter(ParameterType_Bool, "ip.onlyisolatedpixels", "Process isolated pixels only");
-    SetParameterDescription("ip.onlyisolatedpixels", "Only pixels whose label is unique in the neighbordhood will be processed. By default, 'ip.onlyisolatedpixels = false'.");
+    SetParameterDescription("ip.onlyisolatedpixels", "Only pixels whose label is unique in the neighbordhood will be processed.");
 
     AddParameter(ParameterType_Int, "ip.isolatedthreshold", "Threshold for isolated pixels");
-    SetParameterDescription("ip.isolatedthreshold", "Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel. By default, 'ip.isolatedthreshold = 1'.");       
+    SetParameterDescription("ip.isolatedthreshold", "Maximum number of neighbours with the same label as the center pixel to consider that it is an isolated pixel.");
     SetDefaultParameterInt("ip.isolatedthreshold", 1);
 
 
