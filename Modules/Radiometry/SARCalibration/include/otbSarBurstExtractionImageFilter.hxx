@@ -113,10 +113,14 @@ SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
     }
 
   long firstOutSample = static_cast<long>(std::max( static_cast<long>(m_SamplesRecord.first), originOffset_samples));
-  long secondOutSample = static_cast<long>(std::min(m_SamplesRecord.second, largestPossibleRegion.GetSize()[0] + originOffset_samples - 1));
+  long secondOutSample = static_cast<long>(std::min(static_cast<long>(m_SamplesRecord.second), 
+						    static_cast<long>(largestPossibleRegion.GetSize()[0] + 
+								      originOffset_samples - 1)));
 
   long firstOutLine = static_cast<long>(std::max(static_cast<long>(m_LinesRecord.first), originOffset_lines));
-  long secondOutLine = static_cast<long>(std::min(m_LinesRecord.second, largestPossibleRegion.GetSize()[1] + originOffset_lines - 1));
+  long secondOutLine = static_cast<long>(std::min(static_cast<long>(m_LinesRecord.second), 
+						  static_cast<long>(largestPossibleRegion.GetSize()[1] + 
+								    originOffset_lines - 1)));
 
   burstSize[0] = secondOutSample - firstOutSample + 1;
   burstSize[1] = secondOutLine - firstOutLine + 1;

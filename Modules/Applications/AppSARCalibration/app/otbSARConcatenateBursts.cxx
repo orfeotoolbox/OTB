@@ -144,8 +144,8 @@ private:
 	std::pair<unsigned long,unsigned long> line = lines[i];
 	std::pair<unsigned long,unsigned long> sample = samples[i];
 
-	int minSamples = std::min(sample.second, vectIm->GetLargestPossibleRegion().GetSize()[0]-1);
-	int minLines = std::min(line.second, vectIm->GetLargestPossibleRegion().GetSize()[1]-1);
+	unsigned long minSamples = std::min(sample.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[0]-1));
+	unsigned long minLines = std::min(line.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[1]-1));
 
 	unsigned long startL = line.first - originOffset_lines;
 	unsigned long sizeL = minLines - line.first + 1;

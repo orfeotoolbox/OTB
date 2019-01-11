@@ -124,8 +124,8 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
     if((long)it->first<=lastInputLine && (long)it->second>=firstInputLine)
       {
       RecordType filteredRecord = *it;
-      filteredRecord.first = std::max((long)filteredRecord.first,firstInputLine);
-      filteredRecord.second = std::min((long)filteredRecord.second,lastInputLine);
+      filteredRecord.first = std::max(static_cast<long>(filteredRecord.first),firstInputLine);
+      filteredRecord.second = std::min(static_cast<long>(filteredRecord.second),lastInputLine);
       filteredRecords.push_back(filteredRecord);
       }
     }
@@ -150,8 +150,8 @@ SarDeburstImageFilter<TImage>::GenerateOutputInformation()
 
   if (m_OnlyValidSample)
     {
-      long minEnd = static_cast<long>(std::min(m_SamplesRecord.second, 
-					      largestPossibleRegion.GetSize()[0] + originOffset_samples-1));
+      long minEnd = static_cast<long>(std::min(static_cast<long>(m_SamplesRecord.second), 
+					       static_cast<long>(largestPossibleRegion.GetSize()[0] + originOffset_samples-1)));
       long maxStart = static_cast<long>(std::max(static_cast<long>(m_SamplesRecord.first), 
 						 originOffset_samples));
       deburstSize[0] = minEnd  - maxStart + 1;
