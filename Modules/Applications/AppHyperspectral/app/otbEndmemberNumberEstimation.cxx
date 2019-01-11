@@ -106,6 +106,8 @@ private:
     SetParameterDescription("number", "Estimated number of endmembers");
     SetParameterRole("number", Role_Output);
 
+    AddRAMParameter();
+    
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("algo", "vd");
