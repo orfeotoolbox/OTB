@@ -31,7 +31,7 @@ typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterT
 typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
 typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
 
-
+#define DEBUG 0
 
 int otbKmzProductWriter(int argc, char* argv[])
 {
@@ -78,9 +78,9 @@ int otbKmzProductWriter(int argc, char* argv[])
     geoPoint[0] = std::stof(argv[6 + 5 * gcpId]);
     geoPoint[1] = std::stof(argv[7 + 5 * gcpId]);
     geoPoint[2] = std::stof(argv[8 + 5 * gcpId]);
-
+#if DEBUG
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
-
+#endif
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
 
@@ -133,16 +133,16 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = std::stof(argv[4 + 5 * gcpId]);
-    sensorPoint[1] = std::stof(argv[5 + 5 * gcpId]);
+    sensorPoint[0] = std::stof(argv[6 + 5 * gcpId]);
+    sensorPoint[1] = std::stof(argv[7 + 5 * gcpId]);
 
     Point3DType geoPoint;
-    geoPoint[0] = std::stof(argv[6 + 5 * gcpId]);
-    geoPoint[1] = std::stof(argv[7 + 5 * gcpId]);
-    geoPoint[2] = std::stof(argv[8 + 5 * gcpId]);
-
+    geoPoint[0] = std::stof(argv[8 + 5 * gcpId]);
+    geoPoint[1] = std::stof(argv[9 + 5 * gcpId]);
+    geoPoint[2] = std::stof(argv[10 + 5 * gcpId]);
+#if DEBUG
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
-
+#endif
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
 
