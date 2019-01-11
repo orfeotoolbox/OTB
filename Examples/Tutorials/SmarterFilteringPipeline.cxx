@@ -131,19 +131,19 @@ int main(int argc, char * argv[])
       if ( pos_sigma_d != std::string::npos )
         {
         is_there_sigma_d = true;
-        sigma_d = std::stod(temp_arg.substr(pos_sigma_d+1));
+        sigma_d = std::stod( temp_arg.substr( pos_sigma_d + 2 ) );
         continue;
         }
       if ( pos_sigma_i != std::string::npos )
         {
         is_there_sigma_i = true;
-        sigma_i = std::stod(temp_arg.substr(pos_sigma_i+1));
+        sigma_i = std::stod( temp_arg.substr( pos_sigma_i + 2 ) );
         continue;
         }
       if ( pos_alpha != std::string::npos )
         {
         is_there_alpha = true;
-        alpha = std::stod(temp_arg.substr(pos_alpha+1));
+        alpha = std::stod( temp_arg.substr( pos_alpha + 2 ) );
         continue;
         }
       }
