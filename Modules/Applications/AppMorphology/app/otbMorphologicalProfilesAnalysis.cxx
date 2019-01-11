@@ -274,7 +274,7 @@ private:
     classificationFilter->SetVariadicNamedInput<max_opening_profile_derivative>( omsCharFilter->GetOutput() );
     classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>( omsCharFilter->GetOutputCharacteristics() );
     classificationFilter->SetVariadicNamedInput<max_closing_profile_derivative>( cmsCharFilter->GetOutput() );
-    classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>( cmsCharFilter->GetOutputCharacteristics() );
+    classificationFilter->SetVariadicNamedInput<closing_profile_characteristics>( cmsCharFilter->GetOutputCharacteristics() );
     classificationFilter->GetModifiableFunctor().SetSigma( sigma );
     classificationFilter->GetModifiableFunctor().SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
     AddProcess(classificationFilter, "Classification");
