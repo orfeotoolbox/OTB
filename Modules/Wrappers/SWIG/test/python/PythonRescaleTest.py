@@ -23,6 +23,9 @@
 
 #
 #  Example on the use of the Rescale
+#  This test checks that the Python wrapping works correctly. For instance, it 
+#  ensures that Init() is called on the Swig/Python interface (see bug #440, 
+#  https://bugs.orfeo-toolbox.org//view.php?id=440)
 #
 def test(otb, argv):
 	app = otb.Registry.CreateApplication("Rescale")

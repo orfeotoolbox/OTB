@@ -2101,9 +2101,9 @@ void Application::AddRANDParameter(std::string paramKey)
 {
   // Get the  RAND Parameter from the configuration file
 
-  GetParameterList()->AddParameter(ParameterType_Int, paramKey, "set user defined seed");
+  GetParameterList()->AddParameter(ParameterType_Int, paramKey, "Random seed");
   MandatoryOff(paramKey);
-  SetParameterDescription(paramKey, "Set specific seed. with integer value.");
+  SetParameterDescription(paramKey, "Set a specific random seed with integer value.");
 
 }
 

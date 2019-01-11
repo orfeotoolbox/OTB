@@ -38,6 +38,7 @@ otb_module(OTBAppImageUtils
     OTBStatistics
     OTBStreaming
     OTBTransform
+    OTBFunctor
 
   TEST_DEPENDS
     OTBCommandLine

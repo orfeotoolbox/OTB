@@ -66,7 +66,7 @@ private:
       "and generates a single multi-channel image. The channel order is the same as the list.");
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert, SplitImage");
+    SetDocSeeAlso("Rescale application, DynamicConvert, SplitImage");
 
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");

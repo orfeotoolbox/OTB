@@ -18,11 +18,29 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#ifndef otbPolarimetryTags_h
+#define otbPolarimetryTags_h
 
-void RegisterTests()
+namespace otb
 {
-  REGISTER_TEST(otbTileMapImageIOHelperTest);
-  REGISTER_TEST(otbTileMapImageIOTest);
-  REGISTER_TEST(otbTileMapWriter);
-}
+namespace polarimetry_tags
+{
+struct hh
+{
+};
+struct hv
+{
+};
+struct vh
+{
+};
+struct vv
+{
+};
+struct hv_or_vh
+{
+};
+} // end namespace polarimetry_tags
+} // end namespace otb
+
+#endif

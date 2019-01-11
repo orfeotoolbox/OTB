@@ -243,7 +243,7 @@ private:
                           "Please also note that the output image type should be set to uint32 to"
                           " ensure that there are enough labels available.\n\n"
                           "The output of this application can be passed to the"
-                          " LSMSSmallRegionMerging [3] or LSMSVectorization [4] applications to"
+                          " LSMSSmallRegionsMerging [3] or LSMSVectorization [4] applications to"
                           " complete the LSMS workflow.");
     SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation"
                       " workflow (LSMS) [1] and may not be suited for any other purpose. This"

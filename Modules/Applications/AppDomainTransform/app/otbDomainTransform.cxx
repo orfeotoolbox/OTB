@@ -28,9 +28,10 @@
 #include <itkConfigure.h>
 #include <itkForwardFFTImageFilter.h>
 #include <itkInverseFFTImageFilter.h>
-#include <itkUnaryFunctorImageFilter.h>
 #include <itkFFTShiftImageFilter.h>
 #include <itkFFTWGlobalConfiguration.h>
+
+#include "otbFunctorImageFilter.h"
 
 #include "otbComplexToVectorImageCastFilter.h"
 
@@ -38,28 +39,6 @@ namespace otb
 {
 namespace Wrapper
 {
-template< class TInput, class TOutput>
-class ToComplexPixel
-{
-public:
-  ToComplexPixel ( ) { };
-
-  ~ToComplexPixel( ) { };
-
-  bool operator!=( const ToComplexPixel & ) const
-    {
-    return false;
-    }
-  bool operator==( const ToComplexPixel & other ) const
-    {
-    return !(*this != other);
-    }
-  inline TOutput operator( )( const TInput & A ) const
-    {
-      return TOutput( static_cast<typename TOutput::value_type> ( A[0] ),
-		      static_cast<typename TOutput::value_type> ( A[1] ) );
-    }
-};
 
 class DomainTransform : public Application
 {
@@ -282,7 +261,7 @@ private:
         fwdFilter->SetInput( inImage );
 
 
-        //typedef VectorImage for output of UnaryFunctorImageFilter
+        // typedef VectorImage for output
         typedef otb::VectorImage<OutputPixelType>          TOutputImage;
 
 	typedef otb::ComplexToVectorImageCastFilter<
@@ -330,16 +309,12 @@ private:
         //typedef TOutputImage for InverseFFTImageFilter output
         typedef otb::Image< OutputPixelType >  TOutputImage;
 
-        // a unary functor to convert vectorimage to complex image
-        typedef itk::UnaryFunctorImageFilter
-          <TInputImage,
-           TComplexImage,
-           ToComplexPixel
-           <TInputImage::PixelType,
-            TComplexImage::PixelType> > UnaryFunctorImageFilter;
+        auto toComplex = [](const typename TInputImage::PixelType& A){
+            return typename TComplexImage::PixelType( static_cast<typename TComplexImage::PixelType::value_type> ( A[0] ),
+                            static_cast<typename TComplexImage::PixelType::value_type> ( A[1] ) );
+        };
 
-        UnaryFunctorImageFilter::Pointer
-          unaryFunctorImageFilter = UnaryFunctorImageFilter::New();
+        auto toComplexFilter = NewFunctorFilter( toComplex );
 
         if( shift)
           {
@@ -353,21 +328,21 @@ private:
 
           fftShiftFilter->Update();
 
-          unaryFunctorImageFilter->SetInput(fftShiftFilter->GetOutput() );
+          toComplexFilter->SetVariadicInputs( fftShiftFilter->GetOutput() );
           }
         else
           {
-          unaryFunctorImageFilter->SetInput(inImage);
+            toComplexFilter->SetVariadicInputs( inImage );
           }
 
-        unaryFunctorImageFilter->Update();
+        toComplexFilter->Update();
 
         //typedef itk::::InverseFFTImageFilter over TComplexImage
         typedef itk::InverseFFTImageFilter
           < TComplexImage,
             TOutputImage > FFTFilter;
         FFTFilter::Pointer invFilter = FFTFilter::New();
-        invFilter->SetInput( unaryFunctorImageFilter->GetOutput() );
+        invFilter->SetInput( toComplexFilter->GetOutput() );
         invFilter->Update();
 
         //set output image

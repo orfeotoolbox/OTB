@@ -37,8 +37,6 @@ target_link_libraries(OTBImageIO
   ${OTBCommon_LIBRARIES}
   ${OTBExtendedFilename_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
-  #Deprecated modules
-  ${OTBIOTileMap_LIBRARIES}
 
   )
 

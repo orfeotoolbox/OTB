@@ -24,7 +24,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbVectorImage.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbFusionImageBase.h"
+#include "otbFunctorImageFilter.h"
 #include "otbStreamingMatrixTransposeMatrixImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
@@ -100,12 +100,11 @@ public:
     return m_Vcondopt;
   }
 
-  inline TOutput operator ()(const TInputMultiSpectral& itkNotUsed(ms),
-                             const TInputMultiSpectralInterp& msi,
-                             const TInputPanchro& p)
+  void operator ()(TOutput & obs,
+                   const TInputMultiSpectral& itkNotUsed(ms),
+                   const TInputMultiSpectralInterp& msi,
+                   const TInputPanchro& p)
   {
-    TOutput obs;
-    obs.SetSize(msi.GetSize());
     MatrixType obsMat, msiVect;
     obsMat.SetSize(1, obs.GetSize());
     msiVect.SetSize(1, msi.GetSize());
@@ -145,7 +144,11 @@ public:
       {
       obs[i] = static_cast<typename TOutput::ValueType>(obsMat(0U, i));
       }
-    return obs;
+  }
+
+  constexpr size_t OutputSize(const std::array<size_t, 3> inputsNbBands) const
+  {
+    return inputsNbBands[1];
   }
 
 private:
@@ -193,14 +196,10 @@ template <class TInputMultiSpectralImage,
     class TInputPanchroImage,
     class TOutputImage>
 class ITK_EXPORT BayesianFusionFilter
-  :  public FusionImageBase<TInputMultiSpectralImage,
-      TInputMultiSpectralInterpImage,
-      TInputPanchroImage,
-      TOutputImage,
-      Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType,
-          typename TInputMultiSpectralInterpImage::PixelType,
-          typename TInputPanchroImage::PixelType,
-          typename TOutputImage::PixelType> >
+  :  public FunctorImageFilter<Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType,
+                                                        typename TInputMultiSpectralInterpImage::PixelType,
+                                                        typename TInputPanchroImage::PixelType,
+                                                        typename TOutputImage::PixelType> >
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -215,14 +214,11 @@ public:
 
   /** "typedef" for standard classes. */
   typedef BayesianFusionFilter Self;
-  typedef FusionImageBase<InputMultiSpectralImageType,
-      InputMultiSpectralInterpImageType,
-      InputPanchroImageType,
-      OutputImageType,
-      Functor::BayesianFunctor<typename InputMultiSpectralImageType::PixelType,
-          typename InputMultiSpectralInterpImageType::PixelType,
-          typename InputPanchroImageType::PixelType,
-          typename OutputImageType::PixelType> > Superclass;
+  using BayesianFunctorType = Functor::BayesianFunctor<typename TInputMultiSpectralImage::PixelType,
+                                                       typename TInputMultiSpectralInterpImage::PixelType,
+                                                       typename TInputPanchroImage::PixelType,
+                                                       typename TOutputImage::PixelType>; 
+  typedef FunctorImageFilter<BayesianFunctorType>  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -230,7 +226,7 @@ public:
   itkNewMacro(Self);
 
   /** return class name. */
-  itkTypeMacro(BayesianFusionFilter, FusionImageBase);
+  itkTypeMacro(BayesianFusionFilter, FunctorImageFilter);
 
   /** Supported images definition. */
   typedef typename InputMultiSpectralImageType::PixelType               InputMultiSpectralPixelType;
@@ -266,6 +262,36 @@ public:
   typedef ImageToVectorImageCastFilter<InputPanchroImageType,
       InputMultiSpectralImageType>              CasterType;
 
+  void SetMultiSpect(const InputMultiSpectralImageType *multiSpect)
+  {
+    this->template SetVariadicInput<0>(multiSpect);
+  }
+
+  void SetMultiSpectInterp(const InputMultiSpectralInterpImageType *multiSpectInterp)
+  {
+    this->template SetVariadicInput<1>(multiSpectInterp);
+  }
+
+  void SetPanchro(const InputPanchroImageType *panchro)
+  {
+    this->template SetVariadicInput<2>(panchro);
+  }
+
+  const InputMultiSpectralImageType* GetMultiSpect()
+  {
+    return this->template GetVariadicInput<0>();
+  }
+
+  const InputMultiSpectralInterpImageType* GetMultiSpectInterp()
+  {
+    return this->template GetVariadicInput<1>();
+  }
+
+  const InputPanchroImageType* GetPanchro()
+  {
+    return this->template GetVariadicInput<2>();
+  }
+
   /** Set the ponderation value. */
   itkSetMacro(Lambda, float);
   /** Give the ponderation value. */
@@ -297,8 +323,14 @@ public:
   itkGetConstReferenceMacro(S, float);
 
 protected:
-  BayesianFusionFilter();
-  ~BayesianFusionFilter() override;
+  BayesianFusionFilter() : Superclass(BayesianFunctorType{},{{0,0}})
+    {
+    m_Lambda = 0.9999;
+    m_S = 1;
+    m_StatisticsHaveBeenGenerated = false;
+    };
+
+  ~BayesianFusionFilter() override {};
   /** Check if internal statistics need to be computed, and do so */
   void BeforeThreadedGenerateData() override;
   /** Compute internal statistics required for fusion */

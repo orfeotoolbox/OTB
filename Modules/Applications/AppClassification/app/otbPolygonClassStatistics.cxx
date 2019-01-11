@@ -74,18 +74,18 @@ private:
 
     // Documentation
     SetDocName("Polygon Class Statistics");
-    SetDocLongDescription("The application processes a set of geometries "
-      "intended for training (they should have a field giving the associated "
-      "class). The geometries are analyzed against a support image to compute "
-      "statistics : \n"
-      "  - number of samples per class\n"
-      "  - number of samples per geometry\n"
+    SetDocLongDescription("Process a set of geometries intended for training (they should have a field giving the associated "
+      "class). The geometries are analyzed against a support image to compute statistics:\n\n"
+      "* Number of samples per class\n"
+      "* Number of samples per geometry\n\n"
+
       "An optional raster mask can be used to discard samples. Different types"
-      " of geometry are supported : polygons, lines, points. The behaviour is "
-      "different for each type of geometry :\n"
-      "  - polygon: select pixels whose center is inside the polygon\n"
-      "  - lines  : select pixels intersecting the line\n"
-      "  - points : select closest pixel to the point");
+      " of geometry are supported: polygons, lines, points. The behaviour is "
+      "different for each type of geometry:\n\n"
+      "* Polygon: select pixels whose center is inside the polygon\n"
+      "* Lines: select pixels intersecting the line\n"
+      "* Points: select closest pixel to the point");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
