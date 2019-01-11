@@ -116,4 +116,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*include.mpi_portable_platform.h.*warning.*invalid.suffix.on.literal.*"
   # Silent latex warnings in ctest
   ".*LaTeX Warning:.*"
+  ".*Package tabulary Warning:.*"
+  ".*Package rerunfilecheck Warning:.*"
   )
