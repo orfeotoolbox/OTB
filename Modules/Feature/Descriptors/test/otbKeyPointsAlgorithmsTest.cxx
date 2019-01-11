@@ -157,7 +157,7 @@ template <typename TKeyPointsFilter, typename TParameterSetter>
 
 
 
-  std::cout << "Found " << nb_matches << " with " << good_matches << " valid matches with a tolerance of 0.5 pixels"<< std::endl;
+  std::cout << "Found " << nb_matches << " matches with " << good_matches << " valid matches (tolerance of 0.5 pixels)"<< std::endl;
 
   // Quality gate
   auto printResult = [](bool value) { return value ? "Ok" : "Nok"; };
