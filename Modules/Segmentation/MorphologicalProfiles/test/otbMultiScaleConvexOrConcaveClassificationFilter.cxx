@@ -96,12 +96,13 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char 
   cmsCharFilter->SetStep(step);
 
   MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
-  classificationFilter->SetOpeningProfileDerivativeMaxima(omsCharFilter->GetOutput());
-  classificationFilter->SetOpeningProfileCharacteristics(omsCharFilter->GetOutputCharacteristics());
-  classificationFilter->SetClosingProfileDerivativeMaxima(cmsCharFilter->GetOutput());
-  classificationFilter->SetClosingProfileCharacteristics(cmsCharFilter->GetOutputCharacteristics());
-  classificationFilter->SetSigma(sigma);
-  classificationFilter->SetLabelSeparator(initialValue + profileSize * step);
+  using namespace otb::Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+  classificationFilter->SetVariadicNamedInput<max_opening_profile_derivative>(omsCharFilter->GetOutput());
+  classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>(omsCharFilter->GetOutputCharacteristics());
+  classificationFilter->SetVariadicNamedInput<max_closing_profile_derivative>(cmsCharFilter->GetOutput());
+  classificationFilter->SetVariadicNamedInput<closing_profile_characteristics>(cmsCharFilter->GetOutputCharacteristics());
+  classificationFilter->GetModifiableFunctor().SetSigma(sigma);
+  classificationFilter->GetModifiableFunctor().SetLabelSeparator(initialValue + profileSize * step);
 
   LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
 

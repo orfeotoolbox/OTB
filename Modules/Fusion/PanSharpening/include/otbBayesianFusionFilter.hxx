@@ -31,33 +31,6 @@ template <class TInputMultiSpectralImage,
     class TInputMultiSpectralInterpImage,
     class TInputPanchroImage,
     class TOutputImage>
-BayesianFusionFilter<TInputMultiSpectralImage,
-    TInputMultiSpectralInterpImage,
-    TInputPanchroImage,
-    TOutputImage>
-::BayesianFusionFilter()
-{
-  m_Lambda = 0.9999;
-  m_S = 1;
-  m_StatisticsHaveBeenGenerated = false;
-}
-
-template <class TInputMultiSpectralImage,
-    class TInputMultiSpectralInterpImage,
-    class TInputPanchroImage,
-    class TOutputImage>
-BayesianFusionFilter<TInputMultiSpectralImage,
-    TInputMultiSpectralInterpImage,
-    TInputPanchroImage,
-    TOutputImage>
-::~BayesianFusionFilter()
-{
-
-}
-template <class TInputMultiSpectralImage,
-    class TInputMultiSpectralInterpImage,
-    class TInputPanchroImage,
-    class TOutputImage>
 void
 BayesianFusionFilter<TInputMultiSpectralImage,
     TInputMultiSpectralInterpImage,
@@ -302,12 +275,12 @@ BayesianFusionFilter<TInputMultiSpectralImage,
   //**** END TODO ****/
   m_Vcondopt = m_Vcondopt.GetInverse();
   // Functor initialization
-  this->GetFunctor().SetVcondopt(m_Vcondopt);
-  this->GetFunctor().SetBeta(cutBeta);
-  this->GetFunctor().SetAlpha(m_Beta(0, 0));
-  this->GetFunctor().SetCovarianceInvMatrix(m_CovarianceInvMatrix);
-  this->GetFunctor().SetLambda(m_Lambda);
-  this->GetFunctor().SetS(m_S);
+  this->GetModifiableFunctor().SetVcondopt(m_Vcondopt);
+  this->GetModifiableFunctor().SetBeta(cutBeta);
+  this->GetModifiableFunctor().SetAlpha(m_Beta(0, 0));
+  this->GetModifiableFunctor().SetCovarianceInvMatrix(m_CovarianceInvMatrix);
+  this->GetModifiableFunctor().SetLambda(m_Lambda);
+  this->GetModifiableFunctor().SetS(m_S);
 
   // Restore the previous buffered data
   multiSpecInterp->SetRequestedRegion(msiRequestedRegion);

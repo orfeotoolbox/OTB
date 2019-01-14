@@ -234,7 +234,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Train()
 
 template<class TInputValue, class TOutputValue>
 typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType NeuralNetworkMachineLearningModel<
-  TInputValue, TOutputValue>::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+  TInputValue, TOutputValue>::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
   //convert listsample to Mat
@@ -282,6 +282,9 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
     {
     (*quality) = static_cast<ConfidenceValueType>(maxResponse) - static_cast<ConfidenceValueType>(secondResponse);
     }
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
+
   return target;
 }
 

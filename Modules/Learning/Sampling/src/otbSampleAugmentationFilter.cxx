@@ -247,7 +247,7 @@ SampleAugmentationFilter
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
   return (fieldType == OFTInteger 
-          || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+          || fieldType == OFTInteger64
           || fieldType == OFTReal);
 }
 

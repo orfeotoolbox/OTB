@@ -32,7 +32,7 @@ otb_module(OTBPanSharpening
     OTBITK
     OTBConvolution
     OTBImageManipulation
-
+    OTBFunctor
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO

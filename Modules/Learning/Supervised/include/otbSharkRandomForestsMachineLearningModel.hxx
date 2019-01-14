@@ -49,6 +49,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::SharkRandomForestsMachineLearningModel()
 {
   this->m_ConfidenceIndex = true;
+  this->m_ProbaIndex = true;
   this->m_IsRegressionSupported = false;
   this->m_IsDoPredictBatchMultiThreaded = true;
   this->m_NormalizeClassLabels = true;
@@ -120,20 +121,32 @@ template <class TInputValue, class TOutputValue>
 typename SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & value, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   shark::RealVector samples(value.Size());
   for(size_t i = 0; i < value.Size();i++)
     {
     samples.push_back(value[i]);
     }
-  if (quality != nullptr)
-    {
+  if (quality != nullptr || proba != nullptr)
+  {
     shark::RealVector probas = m_RFModel.decisionFunction()(samples);
-    (*quality) = ComputeConfidence(probas, m_ComputeMargin);
+    if (quality != nullptr)
+    {
+      (*quality) = ComputeConfidence(probas, m_ComputeMargin);
     }
+    if (proba != nullptr)
+    {
+      for(size_t i =0; i< probas.size();i++)
+      {
+        //probas contain the N class probability indexed between 0 and N-1
+        (*proba)[i] = static_cast<unsigned int>(probas[i]*1000);
+      }
+    }
+  }
   unsigned int res{0};
   m_RFModel.eval(samples, res);
+
   TargetSampleType target;
   if(m_NormalizeClassLabels)
     {
@@ -149,14 +162,15 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 template <class TInputValue, class TOutputValue>
 void
 SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * quality, ProbaListSampleType * proba) const
 {
   assert(input != nullptr);
   assert(targets != nullptr);
 
   assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
   assert(((quality==nullptr)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
-  
+  assert((proba==nullptr)||(input->Size()==proba->Size())&&"Proba sample list and target label list do not have the same size.");
+
   if(startIndex+size>input->Size())
     {
     itkExceptionMacro(<<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[");
@@ -168,11 +182,27 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 
 #ifdef _OPENMP
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
-#endif
-  
+
+  #endif
+  if( proba !=nullptr || quality != nullptr)
+  {
+    shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
+  if( proba !=nullptr)
+  {
+    unsigned int id = startIndex;
+    for(shark::RealVector && p : probas.elements())
+    {
+      ProbaSampleType prob{(unsigned int)p.size()};
+      for(size_t i =0; i< p.size();i++)
+      {
+        prob[i] =p[i]*1000;
+      }
+      proba->SetMeasurementVector(id,prob);
+      ++id;
+    }
+  }
   if(quality != nullptr)
     {
-    shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);
     unsigned int id = startIndex;
     for(shark::RealVector && p : probas.elements())
       {
@@ -183,7 +213,8 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
       ++id;
       }
     }
-    
+  }
+
   auto prediction = m_RFModel(inputSamples);
   unsigned int id = startIndex;
   for(const auto& p : prediction.elements())
