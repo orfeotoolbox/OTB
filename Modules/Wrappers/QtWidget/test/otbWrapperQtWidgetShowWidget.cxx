@@ -20,99 +20,190 @@
 
 
 #include <QtWidgets>
+
+
+#include "otbQtApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
 #include "otbWrapperQtWidgetProgressReport.h"
 #include "itksys/SystemTools.hxx"
 
+
 using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
+using otb::Wrapper::QtApplication;
 using otb::Wrapper::QtWidgetView;
 using otb::Wrapper::QtWidgetProgressReport;
 
 
-int otbWrapperQtWidgetShowWidget(int argc, char* argv[])
+#define USE_EVENT_FILTER 0
+
+
+struct static_finalizer
 {
-  QApplication qtApp(argc, argv);
+  ~static_finalizer()
+  {
+    ApplicationRegistry::CleanRegistry();
+  }
+};
 
-  std::cout << "Usage : " << argv[0] << " [module_path]" << std::endl;
 
-  // Get the module path list
-  std::list<std::string> modulePathList;
-  if (argc > 1)
-    {
-    std::copy(argv + 1, argv + argc, std::back_inserter(modulePathList));
+namespace
+{
+  static_finalizer finalizer;
+}
 
-    // Load the path in the environment
-    std::list<std::string>::const_iterator it = modulePathList.begin();
-    while( it != modulePathList.end() )
+
+#if USE_EVENT_FILTER
+
+struct CloseEventFilter : public QObject
+{
+  CloseEventFilter( QObject * parent =nullptr ) : QObject( parent ) {}
+
+  bool
+  eventFilter( QObject * o, QEvent * e ) override
+  {
+    assert( o );
+    assert( e );
+
+    if( o==qApp && e->type()==QEvent::User )
       {
-      ApplicationRegistry::AddApplicationPath( *(it) );
-      ++it;
+      assert( qApp );
+
+      qApp->quit();
       }
+
+    return true;
+  }
+};
+
+#endif // USE_EVENT_FILTER
+
+
+int
+otbWrapperQtWidgetShowWidget( int argc, char* argv[] )
+{
+  std::cout << "Usage: " << argv[0] << " [module_path]" << std::endl;
+
+  // Register module-path list.
+  std::for_each(
+    // std::advance( std::begin( argv ) ),
+    // std::end( argv ),
+    argv + 1,
+    argv + argc,
+    []( auto module_path )
+    {
+      ApplicationRegistry::AddApplicationPath( module_path );
+    }
+  );
+
+  {
+    // Create OTB-application.
+    Application::Pointer otb_application =
+      ApplicationRegistry::CreateApplication( "TestApplication" );
+
+    if( !otb_application )
+      {
+      std::cerr << "Could not find application: 'TestApplication'" << std::endl;
+
+      return EXIT_FAILURE;
+      }
+
+    // Qt application.
+    QtApplication qt_app( argc, argv );
+
+    qt_app.setQuitOnLastWindowClosed( true );
+
+    // Qt main-window.
+    QMainWindow main_window; // Stack instance acts as a
+			     // scoped-pointer inside {}.
+
+    // OTB-Application GUI.
+    {
+      QWidget * widget = new QWidget( &main_window );
+      {
+        QVBoxLayout * layout = new QVBoxLayout( widget );
+	{
+	  // Create OTB-Application widget.
+	  //
+	  // SAT: QWidget should be created without parent when adding
+	  // into QLayout (because QLayout will take ownership of the
+	  // reference-counted pointer) but OTB API doesn't defined default nullptr
+	  // value such as in Qt.
+	  QtWidgetView * qwv = new QtWidgetView( otb_application, widget );
+
+	  // SAT: Should be automatically done in QtWidgetView().
+	  qwv->CreateGui();
+
+	  // Connect the view to main-window.
+	  QObject::connect(
+	    qwv, SIGNAL( QuitSignal() ),
+	    &main_window, SLOT( close() )
+	  );
+
+	  layout->addWidget( qwv );
+
+	  // Create OTB-Application progress-report.
+	  //
+	  // SAT: QWidget should be created without parent when adding
+	  // into QLayout (because QLayout will take ownership of the
+	  // reference-counted pointer) but OTB API doesn't defined default nullptr
+	  // value such as in Qt.
+	  QtWidgetProgressReport * qwpr =
+	    new QtWidgetProgressReport( qwv->GetModel(), widget );
+
+	  qwpr->SetApplication( otb_application );
+
+	  layout->addWidget( qwpr );
+	}
+        widget->setLayout( layout );
+      }
+      main_window.setCentralWidget( widget );
     }
 
-  bool result = true;
-
-  // Get list of available applications
-  std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
-  for (std::vector<std::string>::const_iterator it = list.begin(); it != list.end(); ++it)
-    {
-    std::cout << "Testing QtWidget for application "<< (*it) << " ..." << std::endl;
-    // Create module
-    Application::Pointer app = ApplicationRegistry::CreateApplication(*it);
-    if (app.IsNull())
-      {
-      std::cerr << "Could not find application " << (*it) << std::endl;
-      result = false;
-      continue;
-      }
-  
-    // MainWidget : that contains the view and any other widget
-    // (progress, logs...)
-    QMainWindow* mainWindow =  new QMainWindow();
-  
-    // Create GUI based on module
-    QtWidgetView* gui = new QtWidgetView(app, mainWindow);
-    gui->CreateGui();
-  
-    // Connect the View "Quit" signal, to the mainWindow close slot
-    QObject::connect(gui, &QtWidgetView::QuitSignal, mainWindow, &QMainWindow::close);
-  
-    // Create a progressReport object
-    QtWidgetProgressReport* progressReport =  new QtWidgetProgressReport(gui->GetModel(), mainWindow);
-    progressReport->SetApplication(app);
-  
-    // Create a dock widget containing the progress widget
-    QDockWidget* qdock = new QDockWidget("Progress Reporting ...", mainWindow);
-    qdock->setWidget(progressReport);
-  
-    // build the main window, central widget is the plugin view, other
-    // are docked widget (progress, logs...)
-    mainWindow->setCentralWidget(gui);
-    mainWindow->addDockWidget(Qt::BottomDockWidgetArea, qdock);
-  
     // Show the main window
-    mainWindow->show();
-  
-    QTimer::singleShot(1000, &qtApp, SLOT(quit()));
-  
-    // Start event processing loop
-    if (qtApp.exec())
-      {
-      std::cerr << "Failed to show widget for application " << (*it) << std::endl;
-      result = false;
-      }
-    
-    // clean main window
-    if (mainWindow) delete mainWindow;
+    main_window.show();
+
+#if USE_EVENT_FILTER
+    {
+      qt_app.installEventFilter( new CloseEventFilter( &qt_app ) );
+
+      // Post user event to signal end of programm to Qt application.
+      // qt_app.postEvent(
+      // 	&qt_app,
+      // 	new QEvent( QEvent::User ),
+      // 	Qt::LowEventPriority
+      // );
+
+      QTimer::singleShot(
+      	1000,
+      	&qt_app,
+      	[ & qt_app ]()
+      	{
+	  qt_app.postEvent(
+	    &qt_app,
+	    new QEvent( QEvent::User ),
+	    Qt::LowEventPriority
+	  );
+      	}
+      );
     }
 
-  ApplicationRegistry::CleanRegistry();
-  
-  if (result)
-    {
-    return EXIT_SUCCESS;
-    }
-  return EXIT_FAILURE;
+#else
+    QTimer::singleShot( 1000, &qt_app, SLOT( quit() ) );
+
+#endif
+
+    // Start event processing loop
+    if( qt_app.exec() )
+      {
+      std::cerr
+    	<< "Failed to execute Qt event-loop for application 'TestApplication'"
+    	<< std::endl;
+
+      return EXIT_FAILURE;
+      }
+  }
+
+  return EXIT_SUCCESS;
 }
