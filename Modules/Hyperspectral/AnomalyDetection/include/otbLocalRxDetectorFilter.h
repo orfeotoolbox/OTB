@@ -129,22 +129,28 @@ public:
   typedef typename CovarianceCalculatorType::MatrixType                 MatrixType;
 
 private:
-  int m_InternalRadius;
+  int m_InternalRadiusX;
+  int m_InternalRadiusY;
 
 
 public:
-  localRxDetectionFunctor():m_InternalRadius(1){};
+  localRxDetectionFunctor() : m_InternalRadiusX(1), m_InternalRadiusY(1) {};
 
-  void SetInternalRadius(int internalRadius)
+  void SetInternalRadius(int internalRadiusX, int internalRadiusY)
   {
-    m_InternalRadius = internalRadius;
+    m_InternalRadiusX = internalRadiusX;
+    m_InternalRadiusY = internalRadiusY;
   };
 
-  int GetInternalRadius()
+  int GetInternalRadiusX()
   {
-    return m_InternalRadius;
+    return m_InternalRadiusX;
   };
 
+  int GetInternalRadiusY()
+  {
+    return m_InternalRadiusY;
+  };
 
   auto operator()(const itk::Neighborhood<itk::VariableLengthVector<T>> & in) const
   {
@@ -164,7 +170,7 @@ public:
       for (int x = -static_cast<int>(externalRadius[0]); x <= static_cast<int>(externalRadius[0]); x++)
         {
         off[0] = x;
-        if ((abs(x) > m_InternalRadius) || (abs(y) > m_InternalRadius))
+        if ((abs(x) > m_InternalRadiusX) || (abs(y) > m_InternalRadiusY))
           {//std::cout << in[off] << std::endl;
             listSample->PushBack(in[off] );
           }
