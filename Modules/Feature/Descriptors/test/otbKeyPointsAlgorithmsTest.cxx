@@ -146,7 +146,7 @@ template <typename TKeyPointsFilter, typename TParameterSetter>
     const auto p2_mapped = transform->TransformPoint(p2);
 
     // Check that matches are good up to 0.1 pixel
-    if (std::sqrt((p1[0] - p2_mapped[0]) * (p1[0] - p2_mapped[0]) + (p1[1] - p2_mapped[1]) * (p1[1] - p2_mapped[1])) <= threshold_for_good_match)
+    if ((p1[0] - p2_mapped[0]) * (p1[0] - p2_mapped[0]) + (p1[1] - p2_mapped[1]) * (p1[1] - p2_mapped[1]) <= threshold_for_good_match * threshold_for_good_match)
       ++good_matches;
   }
 
