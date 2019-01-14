@@ -90,11 +90,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 1)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(0));
+  this->GetOutput(0);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -103,11 +99,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 2)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(1));
+  this->GetOutput(1);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -116,11 +108,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetGreyLevelNonuniformityOutput()
 {
-  if (this->GetNumberOfOutputs() < 3)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(2));
+  this->GetOutput(2);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -129,11 +117,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetRunLengthNonuniformityOutput()
 {
-  if (this->GetNumberOfOutputs() < 4)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(3));
+  this->GetOutput(3);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -142,11 +126,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLowGreyLevelRunEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 5)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(4));
+  this->GetOutput(4);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -155,11 +135,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetHighGreyLevelRunEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 6)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(5));
+  this->GetOutput(5);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -168,11 +144,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunLowGreyLevelEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 7)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(6));
+  this->GetOutput(6);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -181,11 +153,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunHighGreyLevelEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 8)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(7));
+  this->GetOutput(7);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -194,11 +162,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunLowGreyLevelEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 9)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(8));
+  this->GetOutput(8);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -207,11 +171,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunHighGreyLevelEmphasisOutput()
 {
-  if (this->GetNumberOfOutputs() < 10)
-    {
-    return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(9));
+  this->GetOutput(9);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -229,27 +189,26 @@ void
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GenerateOutputInformation()
 {
-  // First, call superclass implementation
-  Superclass::GenerateOutputInformation();
-
   // Compute output size, origin & spacing
-  InputRegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
+  const InputImageType * inputPtr = this->GetInput();
+  InputRegionType inputRegion = inputPtr->GetLargestPossibleRegion();
   OutputRegionType outputRegion;
   outputRegion.SetIndex(0,0);
   outputRegion.SetIndex(1,0);
   outputRegion.SetSize(0, 1 + (inputRegion.GetSize(0) - 1 - m_SubsampleOffset[0]) / m_SubsampleFactor[0]);
   outputRegion.SetSize(1, 1 + (inputRegion.GetSize(1) - 1 - m_SubsampleOffset[1]) / m_SubsampleFactor[1]);
 
-  typename OutputImageType::SpacingType outSpacing = this->GetInput()->GetSignedSpacing();
+  typename OutputImageType::SpacingType outSpacing = inputPtr->GetSignedSpacing();
   outSpacing[0] *= m_SubsampleFactor[0];
   outSpacing[1] *= m_SubsampleFactor[1];
 
   typename OutputImageType::PointType outOrigin;
-  this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
+  inputPtr->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
 
   for (unsigned int i=0 ; i < this->GetNumberOfOutputs() ; i++)
     {
     OutputImagePointerType outputPtr = this->GetOutput(i);
+    outputPtr->CopyInformation(inputPtr);
     outputPtr->SetLargestPossibleRegion(outputRegion);
     outputPtr->SetOrigin(outOrigin);
     outputPtr->SetSignedSpacing(outSpacing);
@@ -315,7 +274,7 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve the input and output pointers
-  InputImagePointerType  inputPtr  = const_cast<InputImageType *>(this->GetInput());
+  const InputImageType *  inputPtr  = this->GetInput();
 
   typedef typename itk::ImageRegionIterator<OutputImageType> IteratorType;
   std::vector<IteratorType> outputImagesIterators;
@@ -368,7 +327,8 @@ ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
     localInputImage->SetRegions(inputRegion);
     localInputImage->Allocate();
     typedef itk::ImageRegionIteratorWithIndex<InputImageType> ImageRegionIteratorType;
-    ImageRegionIteratorType itInputPtr(inputPtr, inputRegion);
+    typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> ImageRegionConstIteratorType;
+    ImageRegionConstIteratorType itInputPtr(inputPtr, inputRegion);
     ImageRegionIteratorType itLocalInputImage(localInputImage, inputRegion);
     for (itInputPtr.GoToBegin(), itLocalInputImage.GoToBegin();
         !itInputPtr.IsAtEnd();
