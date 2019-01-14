@@ -51,7 +51,7 @@ public:
   typedef typename Superclass::TargetSampleType           TargetSampleType;
   typedef typename Superclass::TargetListSampleType       TargetListSampleType;
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
+  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(GradientBoostedTreeMachineLearningModel, MachineLearningModel);
@@ -130,8 +130,7 @@ protected:
   ~GradientBoostedTreeMachineLearningModel() override;
 
     /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
-
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
   
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

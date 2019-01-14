@@ -101,6 +101,7 @@ if(UNIX)
     --with-pg=no
     --with-webp=no
     --with-threads=yes
+    --with-freexl=no
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )

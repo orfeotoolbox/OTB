@@ -64,7 +64,8 @@ public:
   typedef typename Superclass::ConfidenceValueType       ConfidenceValueType;
   typedef typename Superclass::ConfidenceSampleType      ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType  ConfidenceListSampleType;
-
+  typedef typename Superclass::ProbaSampleType       ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType   ProbaListSampleType;
   typedef SOMMap<
     itk::VariableLengthVector<TInputValue>,
     itk::Statistics::EuclideanDistanceMetric<
@@ -118,7 +119,8 @@ private:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = nullptr) const override;
+    ConfidenceValueType * quality = nullptr,
+    ProbaSampleType * proba = nullptr) const override;
 
   /** Map size (width, height) */
   SizeType m_MapSize;

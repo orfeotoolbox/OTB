@@ -27,6 +27,7 @@ otb_module(OTBComplexImage
 
   TEST_DEPENDS
     OTBITK
+    OTBFunctor
     OTBImageBase
     OTBImageIO
     OTBTestKernel

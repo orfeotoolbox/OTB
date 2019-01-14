@@ -49,10 +49,13 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_OpeningCharacteristicsFilter->SetInput(m_OpeningDerivativeProfile->GetOutput());
   m_ClosingCharacteristicsFilter->SetInput(m_ClosingDerivativeProfile->GetOutput());
 
-  m_ClassificationFilter->SetOpeningProfileDerivativeMaxima(m_OpeningCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->SetOpeningProfileCharacteristics(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
-  m_ClassificationFilter->SetClosingProfileDerivativeMaxima(m_ClosingCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->SetClosingProfileCharacteristics(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
+  using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+  // Template keyword mandatory to avoid parsing error when using
+  // template methods within template code
+  m_ClassificationFilter->template SetVariadicNamedInput<max_opening_profile_derivative>(m_OpeningCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetVariadicNamedInput<opening_profile_characteristics>(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
+  m_ClassificationFilter->template SetVariadicNamedInput<max_closing_profile_derivative>(m_ClosingCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetVariadicNamedInput<closing_profile_characteristics>(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
 
   m_ConnectedComponentsFilter->SetInput(m_ClassificationFilter->GetOutput());
 
@@ -85,8 +88,8 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_ClosingCharacteristicsFilter->SetInitialValue(m_ProfileStart);
   m_ClosingCharacteristicsFilter->SetStep(m_ProfileStep);
 
-  m_ClassificationFilter->SetSigma(m_Sigma);
-  m_ClassificationFilter->SetLabelSeparator(m_ProfileStart + m_ProfileSize * m_ProfileStep);
+  m_ClassificationFilter->GetModifiableFunctor().SetSigma(m_Sigma);
+  m_ClassificationFilter->GetModifiableFunctor().SetLabelSeparator(m_ProfileStart + m_ProfileSize * m_ProfileStep);
 
   m_ConnectedComponentsFilter->GraftOutput(this->GetOutput());
   m_ConnectedComponentsFilter->Update();
