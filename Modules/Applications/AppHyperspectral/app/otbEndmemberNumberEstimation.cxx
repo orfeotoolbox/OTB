@@ -44,36 +44,40 @@ public:
 
   itkTypeMacro(EndmemberNumberEstimation, otb::Application);
 
-  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> 
-    StreamingStatisticsVectorImageFilterType;
-  typedef otb::VirtualDimensionality<float> VirtualDimensionalityType;
-  typedef otb::EigenvalueLikelihoodMaximisation<float> EigenvalueLikelihoodMaximisationType;
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> StreamingStatisticsVectorImageFilterType;
+  typedef otb::VirtualDimensionality<float>                                      VirtualDimensionalityType;
+  typedef otb::EigenvalueLikelihoodMaximisation<float>                           EigenvalueLikelihoodMaximisationType;
 
 private:
   void DoInit() override
   {
     SetName("EndmemberNumberEstimation");
-    SetDescription("Estimates the number of endmembers in a hyperspectral image");
+    SetDescription("Estimate the number of endmembers in a hyperspectral image");
 
     // Documentation
     SetDocName("Endmember Number Estimation");
-    SetDocLongDescription("This application estimates the number of endmembers "
-    "in a hyperspectral image. It first computes statistics on the image and then "
+    SetDocLongDescription("Estimate the number of endmembers "
+    "in a hyperspectral image. First, compute statistics on the image and then "
     "apply an endmember number estimation algorithm using these statistics. Two "
-    "algorithms are available: \n\n "
-    "  1) Virtual Dimensionality (VD) [1] [2] \n "
-    "  2) Eigenvalue Likelihood Maximization (ELM) [3][4] \n"
-    "The application then returns the estimated number of endmembers. \n\n "
-    "References : \n\n "
+    "algorithms are available:\n\n"
+
+    "1. Virtual Dimensionality (VD) [1][2]\n"
+    "2. Eigenvalue Likelihood Maximization (ELM) [3][4]\n\n"
+
+    "The application then returns the estimated number of endmembers.\n\n"
+
     "[1] C.-I. Chang and Q. Du, Estimation of number of spectrally distinct signal "
     "sources in hyperspectral imagery, IEEE Transactions on Geoscience and Remote "
-    "Sensing, vol. 43, no. 3, mar 2004. \n "
+    "Sensing, vol. 43, no. 3, mar 2004.\n\n"
+
     "[2] J. Wang and C.-I. Chang, Applications of independent component analysis "
     "in endmember extraction and abundance quantification for hyperspectral imagery"
     ", IEEE Transactions on Geoscience and Remote Sensing, vol. 44, no. 9, pp. "
-    "2601-1616, sep 2006. \n "
+    "2601-1616, sep 2006.\n\n"
+
     "[3] Unsupervised Endmember Extraction of Martian Hyperspectral Images, B.Luo, "
-    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009 \n "
+    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009\n\n"
+
     "[4] Unsupervised classification of hyperspectral images by using "
     "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image"
     "Processing(ICIP) 2009, Cairo, Egypte, 2009"
@@ -90,10 +94,10 @@ private:
 
     AddParameter(ParameterType_Choice, "algo", "Unmixing algorithm");
     SetParameterDescription("algo", "The algorithm to use for the estimation");
-    AddChoice("algo.elm", "elm");
-    SetParameterDescription("algo.elm", "Eigenvalue Likelihood Maximization algorithm");
-    AddChoice("algo.vd", "vd");
-    SetParameterDescription("algo.vd", "Virtual Dimensionality algorithm");
+    AddChoice("algo.elm", "Eigenvalue Likelihood Maximization");
+    SetParameterDescription("algo.elm", "");
+    AddChoice("algo.vd", "Virtual Dimensionality");
+    SetParameterDescription("algo.vd", "");
 
     AddParameter( ParameterType_Float , "algo.vd.far" , "False alarm rate");
     SetMinimumParameterFloatValue("algo.vd.far", 0);
@@ -126,7 +130,7 @@ private:
     // Load input image
     auto inputImage = GetParameterImage("in");
 
-    otbAppLogINFO("Computing statistics on input image ...");
+    otbAppLogINFO("Computing statistics on input image...");
     auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
     statisticsFilter->SetInput(inputImage);
 
@@ -140,7 +144,7 @@ private:
     const std::string algorithm = GetParameterString("algo");
     if (algorithm=="elm")
       {
-      otbAppLogINFO("Estimation algorithm : Eigenvalue Likelihood Maximization.");
+      otbAppLogINFO("Estimation algorithm: Eigenvalue Likelihood Maximization.");
       auto elm = EigenvalueLikelihoodMaximisationType::New();
       elm->SetCovariance(covarianceMatrix);
       elm->SetCorrelation(correlationMatrix);
@@ -150,7 +154,7 @@ private:
       }
     else if (algorithm=="vd")
       {
-      otbAppLogINFO("Estimation algorithm : Virtual Dimensionality.");
+      otbAppLogINFO("Estimation algorithm: Virtual Dimensionality.");
       auto vd = VirtualDimensionalityType::New();
       vd->SetCovariance(covarianceMatrix);
       vd->SetCorrelation(correlationMatrix);
