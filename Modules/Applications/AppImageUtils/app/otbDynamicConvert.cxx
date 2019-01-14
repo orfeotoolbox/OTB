@@ -273,7 +273,7 @@ private:
       // save a reference to the functor
       m_Filters.push_back(transferLogFilter.GetPointer());
       
-      transferLogFilter->SetVariadicInputs(tempImage);
+      transferLogFilter->SetInputs(tempImage);
       transferLogFilter->UpdateOutputInformation();
       
       shrinkFilter->SetInput(transferLogFilter->GetOutput());

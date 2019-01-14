@@ -97,10 +97,10 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char 
 
   MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
   using namespace otb::Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
-  classificationFilter->SetVariadicNamedInput<max_opening_profile_derivative>(omsCharFilter->GetOutput());
-  classificationFilter->SetVariadicNamedInput<opening_profile_characteristics>(omsCharFilter->GetOutputCharacteristics());
-  classificationFilter->SetVariadicNamedInput<max_closing_profile_derivative>(cmsCharFilter->GetOutput());
-  classificationFilter->SetVariadicNamedInput<closing_profile_characteristics>(cmsCharFilter->GetOutputCharacteristics());
+  classificationFilter->SetInput<max_opening_profile_derivative>(omsCharFilter->GetOutput());
+  classificationFilter->SetInput<opening_profile_characteristics>(omsCharFilter->GetOutputCharacteristics());
+  classificationFilter->SetInput<max_closing_profile_derivative>(cmsCharFilter->GetOutput());
+  classificationFilter->SetInput<closing_profile_characteristics>(cmsCharFilter->GetOutputCharacteristics());
   classificationFilter->GetModifiableFunctor().SetSigma(sigma);
   classificationFilter->GetModifiableFunctor().SetLabelSeparator(initialValue + profileSize * step);
 
