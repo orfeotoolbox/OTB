@@ -133,7 +133,8 @@ private:
     otbAppLogINFO("Computing statistics on input image...");
     auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
     statisticsFilter->SetInput(inputImage);
-
+    AddProcess(statisticsFilter->GetStreamer(), "Statistic estimation step");
+    
     statisticsFilter->Update();
 
     auto correlationMatrix = statisticsFilter->GetCorrelation().GetVnlMatrix();
