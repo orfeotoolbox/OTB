@@ -36,9 +36,6 @@ using otb::Wrapper::QtWidgetView;
 using otb::Wrapper::QtWidgetProgressReport;
 
 
-#define USE_EVENT_FILTER 0
-
-
 struct static_finalizer
 {
   ~static_finalizer()
@@ -52,32 +49,6 @@ namespace
 {
   static_finalizer finalizer;
 }
-
-
-#if USE_EVENT_FILTER
-
-struct CloseEventFilter : public QObject
-{
-  CloseEventFilter( QObject * parent =nullptr ) : QObject( parent ) {}
-
-  bool
-  eventFilter( QObject * o, QEvent * e ) override
-  {
-    assert( o );
-    assert( e );
-
-    if( o==qApp && e->type()==QEvent::User )
-      {
-      assert( qApp );
-
-      qApp->quit();
-      }
-
-    return true;
-  }
-};
-
-#endif // USE_EVENT_FILTER
 
 
 int
@@ -164,35 +135,7 @@ otbWrapperQtWidgetShowWidget( int argc, char* argv[] )
     // Show the main window
     main_window.show();
 
-#if USE_EVENT_FILTER
-    {
-      qt_app.installEventFilter( new CloseEventFilter( &qt_app ) );
-
-      // Post user event to signal end of programm to Qt application.
-      // qt_app.postEvent(
-      // 	&qt_app,
-      // 	new QEvent( QEvent::User ),
-      // 	Qt::LowEventPriority
-      // );
-
-      QTimer::singleShot(
-      	1000,
-      	&qt_app,
-      	[ & qt_app ]()
-      	{
-	  qt_app.postEvent(
-	    &qt_app,
-	    new QEvent( QEvent::User ),
-	    Qt::LowEventPriority
-	  );
-      	}
-      );
-    }
-
-#else
     QTimer::singleShot( 1000, &qt_app, SLOT( quit() ) );
-
-#endif
 
     // Start event processing loop
     if( qt_app.exec() )
