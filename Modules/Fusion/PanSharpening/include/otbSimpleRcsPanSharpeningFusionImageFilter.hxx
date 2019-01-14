@@ -174,10 +174,10 @@ SimpleRcsPanSharpeningFusionImageFilter
     m_ProgressAccumulator->RegisterInternalFilter( m_NoDataFusionFilter, 0.1 );
 
     m_NoDataFusionFilter->SetInput2( m_ConvolutionFilter->GetOutput() );
-    m_NoDataFusionFilter->GetFunctor().SetNoDataValuesXsAvailable( noDataValuesXsAvailable );
-    m_NoDataFusionFilter->GetFunctor().SetNoDataValuePanAvailable( noDataValuePanAvailable );
-    m_NoDataFusionFilter->GetFunctor().SetNoDataValuePan( noDataValuePan );
-    m_NoDataFusionFilter->GetFunctor().SetNoDataValuesXs( noDataValuesXs );
+    m_NoDataFusionFilter->GetModifiableFunctor().SetNoDataValuesXsAvailable( noDataValuesXsAvailable );
+    m_NoDataFusionFilter->GetModifiableFunctor().SetNoDataValuePanAvailable( noDataValuePanAvailable );
+    m_NoDataFusionFilter->GetModifiableFunctor().SetNoDataValuePan( noDataValuePan );
+    m_NoDataFusionFilter->GetModifiableFunctor().SetNoDataValuesXs( noDataValuesXs );
 
     m_NoDataFusionFilter->SetInput1( this->GetXsInput() );
     m_NoDataFusionFilter->SetInput2( m_ConvolutionFilter->GetOutput() );

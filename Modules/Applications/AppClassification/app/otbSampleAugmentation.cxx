@@ -94,7 +94,7 @@ private:
                             "be generated.");
     SetDefaultParameterInt("samples",100);
 
-    AddParameter(ParameterType_ListView, "exclude", "Field names for excluded features.");
+    AddParameter(ParameterType_ListView, "exclude", "Field names for excluded features");
     SetParameterDescription("exclude",
                             "List of field names in the input vector data that will not be generated in the output file.");
 
@@ -122,8 +122,7 @@ private:
                             "by using the SMOTE algorithm (http://dx.doi.org/10.1613/jair.953) "
                             "on input samples which are "
                             "randomly selected with replacement.");
-    AddParameter(ParameterType_Int, "strategy.smote.neighbors", 
-                 "Number of nearest neighbors.");
+    AddParameter(ParameterType_Int, "strategy.smote.neighbors", "Number of nearest neighbors");
     SetParameterDescription("strategy.smote.neighbors", 
                             "Number of nearest neighbors to be used in the "
                             "SMOTE algorithm");
@@ -168,7 +167,7 @@ private:
         
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
         
-        if(fieldType == OFTString || fieldType == OFTInteger || ogr::version_proxy::IsOFTInteger64(fieldType))
+        if(fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
           {
           std::string tmpKey="field."+key.substr(0, end - key.begin());
           AddChoice(tmpKey,item);

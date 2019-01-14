@@ -60,7 +60,7 @@ private:
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImageList,  "il",   "Input Tile Images");
-    SetParameterDescription("il", "Input images to concatenate (in lexicographic order, for instance : (0,0) (1,0) (0,1) (1,1)).");
+    SetParameterDescription("il", "Input images to concatenate (in lexicographic order, for instance: (0,0) (1,0) (0,1) (1,1)).");
 
     AddParameter(ParameterType_Int, "cols", "Number of tile columns");
     SetParameterDescription("cols", "Number of columns in the tile array");

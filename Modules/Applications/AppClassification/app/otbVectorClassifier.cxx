@@ -126,7 +126,7 @@ private:
       "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
     SetParameterString("cfield","predicted");
 
-    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated.");
+    AddParameter(ParameterType_ListView, "feat", "Field names to be calculated");
     SetParameterDescription("feat","List of field names in the input vector data used as features for training. "
       "Put the same field names as the TrainVectorClassifier application.");
 
@@ -183,7 +183,7 @@ private:
         std::transform(key.begin(), key.end(), key.begin(), tolower);
 
         OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-        if(fieldType == OFTInteger ||  ogr::version_proxy::IsOFTInteger64(fieldType) || fieldType == OFTReal)
+        if(fieldType == OFTInteger ||  fieldType == OFTInteger64 || fieldType == OFTReal)
           {
           std::string tmpKey="feat."+key;
           AddChoice(tmpKey,item);

@@ -105,8 +105,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "Output image.");
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Choice,"filter","Speckle filtering method");
     
     AddChoice("filter.lee","Lee");
@@ -157,6 +155,7 @@ private:
     SetDefaultParameterInt("filter.gammamap.rad", 1);
     SetDefaultParameterFloat("filter.gammamap.nblooks", 1.);
 
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "sar.tif");

@@ -109,9 +109,10 @@ int main(int argc, char * argv[])
          ;
       
       std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
+      std::pair<unsigned long, unsigned long> deburstSamples;
 
       std::cout<<"Trying to deburst data ..."<<std::endl;
-      bool deburstOk = sensor->deburst(deburstLines);
+      bool deburstOk = sensor->deburst(deburstLines, deburstSamples);
       std::cout<<"Deburst succeed: "<<(deburstOk?"yes":"no")<<std::endl;
 
       if(deburstOk)

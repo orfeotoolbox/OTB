@@ -64,13 +64,14 @@ private:
       " or CloudCompare [3]\n\n"
       "This application is part of the stereo reconstruction framework. The "
       "input data can be produced by the application DisparityMapToElevationMap.\n\n"
-      "There are two types of supported input images:\n"
-      "  * A DEM image, with a ground projection, containing elevation values. "
+      "There are two types of supported input images:\n\n"
+
+      "* A DEM image, with a ground projection, containing elevation values. "
       "Each elevation value can be considered as a 3D point.\n"
-      "  * A 3D grid image, containing 5 bands (the first 3 are the 3D "
+      "* A 3D grid image, containing 5 bands (the first 3 are the 3D "
       "coordinates of each point, the 5th is a validity mask where valid values"
-      " are larger or equal to 1)\n"
-      "\n"
+      " are larger or equal to 1)\n\n"
+
       "The user shall also give a support image that contains color values for"
       " each 3D point. The color values will be embedded in the PLY file.");
     SetDocLimitations("The input DEM image has to entirely fit into memory.");

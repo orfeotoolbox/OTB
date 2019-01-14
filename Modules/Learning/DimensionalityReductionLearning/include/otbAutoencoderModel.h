@@ -84,6 +84,8 @@ public:
   typedef typename Superclass::ConfidenceSampleType         ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType         ConfidenceListSampleType;
 
+  typedef typename Superclass::ProbaSampleType       ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType   ProbaListSampleType;
   /// Neural network related typedefs
   typedef shark::ConcatenatedModel<shark::RealVector> ModelType;
   typedef shark::LinearModel<shark::RealVector,NeuronType> LayerType;
@@ -162,14 +164,16 @@ protected:
 
   virtual TargetSampleType DoPredict(
     const InputSampleType& input,
-    ConfidenceValueType * quality = nullptr) const override;
+    ConfidenceValueType * quality = nullptr, 
+    ProbaSampleType * proba = nullptr) const override;
 
   virtual void DoPredictBatch(
     const InputListSampleType *,
     const unsigned int & startIndex,
     const unsigned int & size,
     TargetListSampleType *,
-    ConfidenceListSampleType * quality = nullptr) const override;
+    ConfidenceListSampleType * quality = nullptr,
+    ProbaListSampleType * proba = nullptr) const override;
 
 private:
   /** Internal Network */

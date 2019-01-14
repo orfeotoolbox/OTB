@@ -119,8 +119,6 @@ private:
     SetDefaultParameterInt( "channel", 1 );
     SetMinimumParameterIntValue( "channel", 1 );
 
-    AddRAMParameter();
-
     // Strucring Element (Ball | Cross)
     AddParameter( ParameterType_Choice, "structype", "Structuring Element Type" );
     SetParameterDescription( "structype", "Choice of the structuring element type" );
@@ -132,7 +130,7 @@ private:
     SetDefaultParameterInt( "radius", 5 );
     SetMinimumParameterIntValue( "radius", 1 );
 
-    AddParameter( ParameterType_Int, "step", "Radius step." );
+    AddParameter( ParameterType_Int, "step", "Radius step" );
     SetParameterDescription( "step", "Radius step along the profile (in pixels)" );
     SetDefaultParameterInt( "step", 1 );
     SetMinimumParameterIntValue( "step", 1 );
@@ -141,6 +139,8 @@ private:
     SetParameterDescription( "levels", "Number of levels use for multi scale" );
     SetDefaultParameterInt( "levels", 1 );
     SetMinimumParameterIntValue( "levels", 1 );
+
+    AddRAMParameter();
 
     SetDocExampleParameterValue("in", "ROI_IKO_PAN_LesHalles.tif");
     SetDocExampleParameterValue("structype", "ball");

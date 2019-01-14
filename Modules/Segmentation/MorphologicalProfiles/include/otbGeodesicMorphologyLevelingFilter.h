@@ -21,16 +21,25 @@
 #ifndef otbGeodesicMorphologyLevelingFilter_h
 #define otbGeodesicMorphologyLevelingFilter_h
 
-#include "itkTernaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
 {
 namespace Functor
 {
+namespace LevelingFunctor_tags
+{
+struct pixel {};
+struct convex_pixel {};
+struct concave_pixel {};
+}
 /** \class LevelingFunctor
  * \brief This functor performs the pixel-wise leveling operation needed in the
  * geodesic morphology decomposition filter. For more details, please refer to
  * the documentation of this filter.
+ * 
+ * Use otb::GeodesicMorphologyLevelingFilter to apply it image-wise.
+ * 
  * \sa GeodesicMorphologyDecompositionImageFilter
  *
  * \ingroup OTBMorphologicalProfiles
@@ -44,7 +53,7 @@ public:
   /// Destructor
   virtual ~LevelingFunctor() {}
 
-  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel)
+  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel) const
   {
     TOutput result;
 
@@ -65,77 +74,25 @@ public:
 };
 } // end namespace Functor
 
-/** \class GeodesicMorphologyLevelingFilter
+/** \typedef GeodesicMorphologyLevelingFilter
  *  \brief This filter performs the leveling operation defined in the documentation of
  *  the geodesic decomposition image filter, given the original image, convex and concave membership
  *  functions. Please refer to the documentation of this filter for more details.
  *
+ * It applies the Functor::LevelingFunctor image-wise.
+ * 
  * \sa GeodesicMorphologyDecompositionImageFilter
- *
+ * 
  * \ingroup OTBMorphologicalProfiles
  */
+
 template <class TInputImage, class TInputMaps, class TOutputImage>
-class ITK_EXPORT GeodesicMorphologyLevelingFilter
-  : public itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
-      TInputImage, TOutputImage,
-      Functor::LevelingFunctor<typename TInputImage::PixelType,
-          typename TInputMaps::PixelType,
-          typename TOutputImage::PixelType> >
-{
-public:
-  /** Standard typedefs */
-  typedef GeodesicMorphologyLevelingFilter Self;
-  typedef   itk::TernaryFunctorImageFilter<TInputImage, TInputImage,
-      TInputImage, TOutputImage,
-      Functor::LevelingFunctor<typename TInputImage::PixelType,
-          typename TInputMaps::PixelType,
-          typename TOutputImage::PixelType> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Type macro */
-  itkNewMacro(Self);
-
-  /** Creation through object factory macro */
-  itkTypeMacro(GeodesicMorphologyLevelingFilter, TernaryFunctorImageFilter);
-
-  /**
-   * Set the convex membership image.
-   */
-  void SetInputConvexMap(const TInputMaps * convexMap)
-  {
-    this->SetInput2(convexMap);
-  }
-  /**
-   * Set the concave membership image.
-   */
-  void SetInputConcaveMap(const TInputMaps * concaveMap)
-  {
-    this->SetInput3(concaveMap);
-  }
-  /**
-   * Set the original input image
-   */
-  using Superclass::SetInput;
-  void SetInput(const TInputImage * input) override
-  {
-    this->SetInput1(input);
-  }
-
-protected:
-  /** Constructor */
-  GeodesicMorphologyLevelingFilter() {};
-  /** Destructor */
-  ~GeodesicMorphologyLevelingFilter() override {}
-  /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-  }
-
-private:
-  GeodesicMorphologyLevelingFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-};
+using GeodesicMorphologyLevelingFilter = FunctorImageFilter
+  < Functor::LevelingFunctor<typename TInputImage::PixelType,
+                             typename TInputMaps::PixelType,
+                             typename TOutputImage::PixelType>, 
+    std::tuple<typename Functor::LevelingFunctor_tags::pixel,
+               typename Functor::LevelingFunctor_tags::convex_pixel,
+               typename Functor::LevelingFunctor_tags::concave_pixel > >;
 } // End namespace otb
 #endif

@@ -120,8 +120,6 @@ SetDefaultParameterInt("step", 1);
 SetMinimumParameterIntValue("step", 1);
 MandatoryOff("step");
 
-AddRAMParameter();
-
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
 SetParameterDescription("parameters","This group of parameters allows one to define "
     "texture parameters.");
@@ -183,6 +181,7 @@ SetParameterDescription("out", "Output image containing the selected texture fea
 MandatoryOff("out");
 EnableParameter("out");
 
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

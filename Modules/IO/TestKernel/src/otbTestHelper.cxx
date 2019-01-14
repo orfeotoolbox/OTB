@@ -48,7 +48,7 @@
 #include "otbDifferenceImageFilter.h"
 #include "otbPrintableImageFilter.h"
 #include "otbStreamingShrinkImageFilter.h"
-#include "otbOGRVersionProxy.h"
+#include "otbOGRHelpers.h"
 
 #include "otbConfigure.h"
 
@@ -1727,28 +1727,48 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   /*      Open data source.                                               */
   /* -------------------------------------------------------------------- */
-  otb::ogr::version_proxy::GDALDatasetType *ref_poDS = nullptr;
-  otb::ogr::version_proxy::GDALDriverType *  ref_poDriver = nullptr;
+  GDALDataset *ref_poDS = nullptr;
+  GDALDriver *  ref_poDriver = nullptr;
   //OGRGeometry *  ref_poSpatialFilter = NULL;
-  otb::ogr::version_proxy::GDALDatasetType *test_poDS = nullptr;
-  otb::ogr::version_proxy::GDALDriverType *  test_poDriver = nullptr;
+  GDALDataset *test_poDS = nullptr;
+  GDALDriver *  test_poDriver = nullptr;
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
-  ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, false);
+  ref_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
   if (ref_poDS == nullptr && !bReadOnly)
     {
-    ref_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, true);
+    ref_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+       GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
     bReadOnly = TRUE;
     if (ref_poDS != nullptr && m_ReportErrors)
       {
       std::cout << "Had to open REF data source read-only."<<std::endl;
       }
     }
-  test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
+  test_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+      (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (test_poDS == nullptr && !bReadOnly)
     {
-    test_poDS = otb::ogr::version_proxy::Open(ref_pszDataSource, bReadOnly);
-
+    test_poDS = (GDALDataset *)GDALOpenEx(
+      ref_pszDataSource, 
+      (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
     bReadOnly = TRUE;
 
     if (test_poDS != nullptr && m_ReportErrors)
@@ -1766,7 +1786,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       {
       std::cout << "FAILURE:\n" "Unable to open REF datasource `" << ref_pszDataSource << "' with the following drivers." << std::endl;
 
-      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
+      std::vector<std::string> drivers = ogr::GetAvailableDriversAsStringVector();
 
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
@@ -1784,7 +1804,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       {
       std::cout << "FAILURE:\n""Unable to open TEST datasource `" << test_pszDataSource << "' with the following drivers." << std::endl;
 
-      std::vector<std::string> drivers = ogr::version_proxy::GetAvailableDriversAsStringVector();
+      std::vector<std::string> drivers = ogr::GetAvailableDriversAsStringVector();
 
       for (std::vector<std::string>::const_iterator it = drivers.begin();it!=drivers.end();++it)
         {
@@ -1803,8 +1823,8 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
 
   // TODO: Improve this check as it will stop as soon as one of the
   // list ends (i.e. it does not guarantee that all files are present)
-  std::vector<std::string> refFileList = otb::ogr::version_proxy::GetFileListAsStringVector(ref_poDS);
-  std::vector<std::string> testFileList = otb::ogr::version_proxy::GetFileListAsStringVector(test_poDS);
+  std::vector<std::string> refFileList = otb::ogr::GetFileListAsStringVector(ref_poDS);
+  std::vector<std::string> testFileList = otb::ogr::GetFileListAsStringVector(test_poDS);
 
   unsigned int fileId = 0;
 
@@ -1941,7 +1961,7 @@ void TestHelper::DumpOGRFeature(FILE* fpOut, OGRFeature* feature, char** papszOp
               poFDefn->GetNameRef(),
               OGRFieldDefn::GetFieldTypeName(poFDefn->GetType()));
 
-      if (ogr::version_proxy::IsFieldSetAndNotNull(feature, iField)) fprintf(fpOut, "%s\n", feature->GetFieldAsString(iField));
+      if (ogr::IsFieldSetAndNotNull(feature, iField)) fprintf(fpOut, "%s\n", feature->GetFieldAsString(iField));
       else fprintf(fpOut, "(null)\n");
 
       }

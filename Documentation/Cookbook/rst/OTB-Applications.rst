@@ -33,9 +33,9 @@ The complete list of applications is described in the Chapter :ref:`apprefdoc`.
 All standard applications share the same implementation and automatically expose
 generated interfaces.
 However they are accessed in a slightly different way: the command-line interface is prefixed by ``otbcli_``, while the Qt interface is prefixed by
-``otbgui_``. For cwinstance, calling ``otbcli_Convert`` will launch the
-command-line interface of the Convert application, while
-``otbgui_Convert`` will launch the GUI.
+``otbgui_``. For instance, calling ``otbcli_DynamicConvert`` will launch the
+command-line interface of the DynamicConvert application, while
+``otbgui_DynamicConvert`` will launch the GUI.
 
 Command-line launcher
 ---------------------

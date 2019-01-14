@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToMuellerMatrixFunctor_h
-#define otbSinclairToMuellerMatrixFunctor_h
+#ifndef otbSinclairToMuellerMatrixImageFilter_h
+#define otbSinclairToMuellerMatrixImageFilter_h
 
 #include <complex>
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -65,6 +67,7 @@ namespace Functor
  * {channel #12}&{channel #13}&{channel #14}&{channel #15} \\
  * \end{pmatrix}  \f$
  *
+ * Use otb::otbSinclairToMuellerMatrixImageFilter to apply it to an image.
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -89,13 +92,8 @@ public:
   typedef typename TOutput::ValueType              OutputValueType;
   typedef double                                   RealType;
 
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
-    TOutput result;
-
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
     const ComplexType Txx = static_cast<ComplexType>(-Shh);
     const ComplexType Txy = static_cast<ComplexType>(-Shv);
     const ComplexType Tyx = static_cast<ComplexType>(Svh);
@@ -122,29 +120,48 @@ public:
     result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
     result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
     result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
-
-    return (result);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    // Size of mueller matrix
+    return 16;
   }
 
   /** Constructor */
-  SinclairToMuellerMatrixFunctor() : m_NumberOfComponentsPerPixel(16) {}
+  SinclairToMuellerMatrixFunctor()
+  {
+  }
 
   /** Destructor */
   virtual ~SinclairToMuellerMatrixFunctor() {}
-
-protected:
-
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
 };
 
 } // namespace Functor
+
+/**
+ * \typedef SinclairToMuellerMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToMuellerMatrixFunctor
+ * \sa otb::Functor::SinclairToCircularCovarianceMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToMuellerMatrixImageFilter = FunctorImageFilter<
+    Functor::SinclairToMuellerMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                            typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
+
 } // namespace otb
 
 #endif

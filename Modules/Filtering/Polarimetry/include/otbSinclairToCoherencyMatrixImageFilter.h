@@ -18,10 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef otbSinclairToCoherencyMatrixFunctor_h
-#define otbSinclairToCoherencyMatrixFunctor_h
+#ifndef otbSinclairToCoherencyMatrixImageFilter_h
+#define otbSinclairToCoherencyMatrixImageFilter_h
 
 #include <complex>
+#include "otbFunctorImageFilter.h"
+#include "otbPolarimetryTags.h"
 
 namespace otb
 {
@@ -46,6 +48,8 @@ namespace Functor
  * The output pixel has 10 channels : the diagonal and the upper element of the matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::SinclairToCoherencyMatrixImageFilter to apply it to an image.
+ *
  *  \ingroup Functor
  *  \ingroup SARPolarimetry
  *
@@ -69,13 +73,8 @@ public:
   typedef double                                   RealType;
   typedef std::complex <RealType>                  ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv,
-                             const TInput3& Svh, const TInput4& Svv)
+  inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
-    TOutput result;
-
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
     const ComplexType S_hv = static_cast<ComplexType>(Shv);
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
@@ -98,13 +97,12 @@ public:
     result[9] = static_cast<OutputValueType>( std::norm(jHVMinusVH) );
 
     result /= 2.0;
-
-    return (result);
   }
 
-  unsigned int GetNumberOfComponentsPerPixel()
+  constexpr size_t OutputSize(...) const
   {
-    return m_NumberOfComponentsPerPixel;
+    // Size of coherency matrix
+    return 10;
   }
 
   /** Constructor */
@@ -112,16 +110,32 @@ public:
 
   /** Destructor */
   virtual ~SinclairToCoherencyMatrixFunctor() {}
-
-protected:
-
-
-private:
-  //itkStaticConstMacro(NumberOfComponentsPerPixel, unsigned int, 10);
-  static const  unsigned int m_NumberOfComponentsPerPixel = 10;
 };
 
 } // namespace Functor
+
+/**
+ * \typedef SinclairToCoherencyMatrixImageFilter
+ * \brief Applies otb::Functor::SinclairToCoherencyMatrixFunctor
+ * \sa otb::Functor::SinclairToCoherencyMatrixFunctor
+ *
+ * Set inputs with:
+ * \code
+ *
+ * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
+ * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ *
+ * \endcode
+ *
+ * \ingroup OTBPolarimetry
+ */
+template <typename TInputImage, typename TOutputImage>
+using SinclairToCoherencyMatrixImageFilter = FunctorImageFilter<
+    Functor::SinclairToCoherencyMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType, typename TInputImage::PixelType,
+                                              typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+    std::tuple<polarimetry_tags::hh, polarimetry_tags::hv, polarimetry_tags::vh, polarimetry_tags::vv>>;
 } // namespace otb
 
 #endif

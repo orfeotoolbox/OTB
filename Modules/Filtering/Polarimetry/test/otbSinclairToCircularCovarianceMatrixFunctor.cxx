@@ -19,7 +19,7 @@
  */
 
 
-#include "otbSinclairToCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToCircularCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
@@ -31,7 +31,7 @@ int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * it
 
   OutputType  result(10);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType  outputFunct(10);
 
   result[0] = ComplexType( 32.,  0. );
   result[1] = ComplexType(  24., 0. );
@@ -44,7 +44,7 @@ int otbSinclairToCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * it
   result[8] = ComplexType(  4.,   0. );
   result[9] = ComplexType(  2,    0. );
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.));
 
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
