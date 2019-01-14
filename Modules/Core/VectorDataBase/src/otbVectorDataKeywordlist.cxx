@@ -106,14 +106,12 @@ VectorDataKeywordlist
         ss << std::setprecision(15) << m_FieldList[i].second.Integer;
         return ss.str();
         }
-#ifdef OTB_USE_GDAL_20
         case OFTInteger64:
         {
         std::ostringstream ss;
         ss << std::setprecision(15) << m_FieldList[i].second.Integer64;
         return ss.str();
         }
-#endif     
         case OFTReal:
         {
         std::ostringstream ss;
@@ -183,7 +181,6 @@ VectorDataKeywordlist
           {
         return (int)(m_FieldList[i].second.Integer);
         }
-#ifdef OTB_USE_GDAL_20
         // Some fields that were OFTInteger with gdal 1.x are now
         // exposed as OFTInteger64. So as to make the old code still
         // work with the same data, here we downcast to Integer (if
@@ -197,7 +194,6 @@ VectorDataKeywordlist
           
           return static_cast<int>(m_FieldList[i].second.Integer64);
           }
-#endif    
         case OFTReal:
           {
           return (int)(m_FieldList[i].second.Real);
@@ -483,13 +479,11 @@ VectorDataKeywordlist
              << field.second.Date.Hour << field.second.Date.Minute << field.second.Date.Second;
       break;
       }
-#ifdef OTB_USE_GDAL_20
     case OFTInteger64:
     {
     output << std::setprecision(15)<<field.second.Integer64;
     break;
     }
-#endif     
     default:
       output << "Type not handled for printing";
       break;
@@ -511,13 +505,11 @@ VectorDataKeywordlist
       outField.second.Integer = field.second.Integer;
       break;
       }
-#ifdef OTB_USE_GDAL_20
     case OFTInteger64:
     {
     outField.second.Integer64 = field.second.Integer64;
     break;
     }
-#endif     
     case OFTReal:
       {
       outField.second.Real = field.second.Real;
