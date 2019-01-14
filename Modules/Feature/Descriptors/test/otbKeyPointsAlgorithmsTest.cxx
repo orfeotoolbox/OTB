@@ -20,6 +20,7 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbExtractROI.h"
 #include "itkScalableAffineTransform.h"
 #include "otbStreamingResampleImageFilter.h"
 #include "otbBCOInterpolateImageFunction.h"
@@ -33,6 +34,7 @@
 
 using ImageType          = otb::Image<double>;
 using ReaderType         = otb::ImageFileReader<ImageType>;
+using ExtractType        = otb::ExtractROI<double,double>;
 using TransformType      = itk::ScalableAffineTransform<double, 2>;
 using ResamplerType      = otb::StreamingResampleImageFilter<ImageType, ImageType, double>;
 using InterpolatorType   = otb::BCOInterpolateImageFunction<ImageType, double>;
@@ -165,8 +167,14 @@ auto generateImagePair(const std::string& infname, double rotation, double scali
   // Read reference image
   auto reader = ReaderType::New();
   reader->SetFileName(infname);
-  reader->Update();
-  ImageType::Pointer reference = reader->GetOutput();
+
+  auto extractor = ExtractType::New();
+  extractor->SetInput(reader->GetOutput());
+  extractor->SetSizeX(50);
+  extractor->SetSizeY(50);
+  extractor->Update();
+
+  ImageType::Pointer reference = extractor->GetOutput();
 
   // Create secondary image
 
@@ -330,7 +338,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
     filter->SetScalesNumber(8);
   };
 
-  status = checkKeyPointsFilter<SurfFilterType>(reference, secondary, transform, configureSurf, 0.15, 0.65) && status;
+  status = checkKeyPointsFilter<SurfFilterType>(reference, secondary, transform, configureSurf, 0.13, 0.64) && status;
 
   // Test Sift filter
   std::cout << "Checking Sift implementation:" << std::endl;
@@ -344,7 +352,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
     filter->SetEdgeThreshold(10.);
   };
 
-  status = checkKeyPointsFilter<SiftFilterType>(reference, secondary, transform, configureSift, 0.45, 0.85) && status;
+  status = checkKeyPointsFilter<SiftFilterType>(reference, secondary, transform, configureSift, 0.44, 0.82) && status;
 
 #ifdef OTB_USE_SIFTFAST
   // Test SiftFast filter
@@ -354,7 +362,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
   // lambda to set specific filter parameter
   auto configureSiftFast = [](SiftFastFilterType* filter) { filter->SetScalesNumber(8); };
 
-  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 0.65, 0.95) && status;
+  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 0.73, 0.95) && status;
 #endif
 
   return status ? EXIT_SUCCESS : EXIT_FAILURE;
