@@ -107,7 +107,7 @@ private:
       "False alarm rate for the virtual dimensionality algorithm");
 
     AddParameter(ParameterType_Int,"number","Number of endmembers");
-    SetParameterDescription("number", "Estimated number of endmembers");
+    SetParameterDescription("number", "The output estimated number of endmembers");
     SetParameterRole("number", Role_Output);
 
     AddRAMParameter();
@@ -134,7 +134,7 @@ private:
     auto statisticsFilter = StreamingStatisticsVectorImageFilterType::New();
     statisticsFilter->SetInput(inputImage);
     AddProcess(statisticsFilter->GetStreamer(), "Statistic estimation step");
-    
+
     statisticsFilter->Update();
 
     auto correlationMatrix = statisticsFilter->GetCorrelation().GetVnlMatrix();
