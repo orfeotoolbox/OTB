@@ -118,4 +118,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*LaTeX Warning:.*"
   ".*Package tabulary Warning:.*"
   ".*Package rerunfilecheck Warning:.*"
+  # Silent warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas] from GCC 4.9
+  ".*warning: unknown option after \\‘\\#pragma GCC diagnostic\\’ kind \\[-Wpragmas\\]"
   )
