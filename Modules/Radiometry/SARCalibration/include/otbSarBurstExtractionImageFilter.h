@@ -18,26 +18,26 @@
  * limitations under the License.
  */
 
-#ifndef otbSarDeburstImageFilter_h
-#define otbSarDeburstImageFilter_h
+#ifndef otbSarBurstExtractionImageFilter_h
+#define otbSarBurstExtractionImageFilter_h
 
 #include "itkImageToImageFilter.h"
 #include "itkSmartPointer.h"
 
 namespace otb
 {
-/** \class SarDeburstImageFilter 
- * \brief Performs a deburst operation by removing redundant lines
+/** \class SarBurstExtractionImageFilter 
+ * \brief Performs a burst extraction by keeping only lines and samples
+ * of a required Burst
  * 
- * This filter performs a deburst operation by removing redundant
- * lines between burst. This operation is useful when dealing with
+ * This filter performs a burst extraction by keeping only lines and samples
+ * of a required burst. This operation is useful when dealing with
  * Sentinel1 IW SLC products, where each subswath is composed of
- * several overlapping burst separated by black lines. Lines to remove
- * are computed by SAR sensor model in OSSIM plugins. The output image
- * is smaller in azimuth direction than the input line, because of
- * removed lines. Note that the output sensor model is updated
- * accordingly. This deburst filter is the perfect preprocessing step
- * to orthorectify S1 IW SLC product with OTB without suffering from
+ * several overlapping burst separated by black lines. The aim is to separate
+ * bursts to be able to process each burst independently.
+ * The output image represents only one burst and is smaller in azimuth and range 
+ * direction than the input line. This filter is the perfect preprocessing step
+ * to process each burst of S1 IW SLC product with OTB without suffering from
  * artifacts caused by bursts separation.
  * 
  * Note that currently only Sentinel1 IW SLC products are supported.
@@ -45,35 +45,36 @@ namespace otb
  * \ingroup OTBSARCalibration
  */
 
-template <class TImage> class ITK_EXPORT SarDeburstImageFilter :
+template <class TImage> class ITK_EXPORT SarBurstExtractionImageFilter :
     public itk::ImageToImageFilter<TImage,TImage>
 {
 public:
   // Standard class typedefs
-  typedef SarDeburstImageFilter                  Self;
+  typedef SarBurstExtractionImageFilter                  Self;
   typedef itk::ImageToImageFilter<TImage,TImage> Superclass;
   typedef itk::SmartPointer<Self>                Pointer;
   typedef itk::SmartPointer<const Self>          ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(SarDeburstImageFilter,ImageToImageFilter);
+  itkTypeMacro(SarBurstExtractionImageFilter,ImageToImageFilter);
 
   typedef TImage                                 ImageType;
   typedef typename ImageType::RegionType         RegionType;
   typedef typename ImageType::PointType          PointType;
 
   typedef std::pair<unsigned long, unsigned long> RecordType;
-  typedef std::vector<RecordType>                 LinesRecordVectorType;
-	
+  typedef std::vector<RecordType>            LinesRecordVectorType;
+
   // Setter
-  itkSetMacro(OnlyValidSample, bool);
-  
+  itkSetMacro(BurstIndex, unsigned int);
+  itkSetMacro(AllPixels, bool);
+
 protected:
   // Constructor
-  SarDeburstImageFilter();
+  SarBurstExtractionImageFilter();
 
   // Destructor
-  virtual ~SarDeburstImageFilter() override {};
+  ~SarBurstExtractionImageFilter() override = default;
 
   // Needs to be re-implemented since size of output is modified
   virtual void GenerateOutputInformation() override;
@@ -84,29 +85,31 @@ protected:
   // Actual processing
   virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
-  void ThreadedGenerateDataWithAllSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  void ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
-
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
   
 private:
-  SarDeburstImageFilter(const Self&) = delete;
+  SarBurstExtractionImageFilter(const Self&) = delete;
   void operator=(const Self &) = delete;
-
-  // Vector of line records
-  LinesRecordVectorType m_LinesRecord;
+  
+  // Pair for sample valid selection
+  RecordType m_LinesRecord;
 
   // Pair for sample valid selection
   RecordType m_SamplesRecord;
 
-  bool m_OnlyValidSample;
- 
+  // Burst index
+  unsigned int m_BurstIndex;
+
+  // Mode for extraction : 
+  // If true : all pixels of the burst are selected
+  // If false : only valid pixels are selected
+  bool m_AllPixels;  
 };
 
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSarDeburstImageFilter.hxx"
+#include "otbSarBurstExtractionImageFilter.hxx"
 #endif
 
 
