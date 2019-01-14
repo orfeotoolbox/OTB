@@ -92,6 +92,10 @@ private:
     AddParameter(ParameterType_InputImage,  "in", "Input Image Filename");
     SetParameterDescription("in","The hyperspectral data cube input");
 
+    AddParameter(ParameterType_Int,"number","Number of endmembers");
+    SetParameterDescription("number", "The output estimated number of endmembers");
+    SetParameterRole("number", Role_Output);
+
     AddParameter(ParameterType_Choice, "algo", "Unmixing algorithm");
     SetParameterDescription("algo", "The algorithm to use for the estimation");
     AddChoice("algo.elm", "Eigenvalue Likelihood Maximization");
@@ -105,10 +109,6 @@ private:
     SetDefaultParameterFloat( "algo.vd.far" , 1.0E-3 );
     SetParameterDescription( "algo.vd.far" , 
       "False alarm rate for the virtual dimensionality algorithm");
-
-    AddParameter(ParameterType_Int,"number","Number of endmembers");
-    SetParameterDescription("number", "The output estimated number of endmembers");
-    SetParameterRole("number", Role_Output);
 
     AddRAMParameter();
     
