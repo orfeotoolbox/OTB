@@ -114,6 +114,97 @@ private:
 
 };
 
+
+template<typename T> 
+class localRxDetectionFunctor
+{
+public:
+
+  /** typedef */
+  typedef typename itk::Neighborhood<itk::VariableLengthVector<T>>::OffsetType OffsetType;
+  typedef typename itk::VariableLengthVector<T>                         VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>            ListSampleType;
+  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType>       CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::MeasurementVectorRealType  MeasurementVectorRealType;
+  typedef typename CovarianceCalculatorType::MatrixType                 MatrixType;
+
+private:
+  int m_InternalRadius;
+
+
+public:
+  localRxDetectionFunctor():m_InternalRadius(1){};
+
+  void SetInternalRadius(int internalRadius)
+  {
+    m_InternalRadius = internalRadius;
+  };
+
+  int GetInternalRadius()
+  {
+    return m_InternalRadius;
+  };
+
+
+  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<T>> & in) const
+  {
+    // Create a list sample with the pixels of the neighborhood located between
+    // the two radius.
+    typename ListSampleType::Pointer listSample = ListSampleType::New();
+
+    // The pixel on whih we will compute the Rx score, we load it now to get the input vector size.
+    auto centerPixel = in.GetCenterValue();
+    listSample->SetMeasurementVectorSize(centerPixel.Size());
+
+    OffsetType off;
+    auto externalRadius = in.GetRadius();
+    for (int y = -static_cast<int>(externalRadius[1]); y <= static_cast<int>(externalRadius[1]); y++)
+      {
+      off[1] = y;
+      for (int x = -static_cast<int>(externalRadius[0]); x <= static_cast<int>(externalRadius[0]); x++)
+        {
+        off[0] = x;
+        if ((abs(x) > m_InternalRadius) || (abs(y) > m_InternalRadius))
+          {//std::cout << in[off] << std::endl;
+            listSample->PushBack(in[off] );
+          }
+        }
+      }
+
+    // Compute mean & inverse covariance matrix
+    typename CovarianceCalculatorType::Pointer covarianceCalculator = CovarianceCalculatorType::New();
+    covarianceCalculator->SetInput(listSample);
+    covarianceCalculator->Update();
+
+    MeasurementVectorRealType meanVector = covarianceCalculator->GetMean();
+    
+    VectorMeasurementType meanVec(meanVector.GetNumberOfElements());
+    for(unsigned int i = 0; i < meanVector.GetNumberOfElements(); ++i)
+      {
+      meanVec.SetElement(i, meanVector.GetElement(i));
+      }
+
+    MatrixType covarianceMatrix = covarianceCalculator->GetCovarianceMatrix();
+    typename MatrixType::InternalMatrixType invCovMat = covarianceMatrix.GetInverse();
+
+    typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector.GetNumberOfElements(), 1);
+    
+    for (unsigned int i = 0; i < centeredTestPixMat.rows(); ++i)
+      {
+      centeredTestPixMat.put(i, 0, (centerPixel.GetElement(i) - meanVector.GetElement(i)));
+      }
+
+    // Rx score computation
+    typename MatrixType::InternalMatrixType rxValue 
+      = centeredTestPixMat.transpose() * invCovMat * centeredTestPixMat;
+
+    return rxValue.get(0, 0);
+  }
+
+};
+
+
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

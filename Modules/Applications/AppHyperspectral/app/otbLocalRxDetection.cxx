@@ -23,6 +23,8 @@
 
 #include "otbLocalRxDetectorFilter.h"
 
+#include "otbFunctorImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -43,8 +45,8 @@ public:
   itkTypeMacro(LocalRxDetection, otb::Application);
 
   /** Image typedefs */
-  typedef FloatVectorImageType                VectorImageType;
-  typedef FloatImageType                      ImageType;
+  typedef DoubleVectorImageType                VectorImageType;
+  typedef DoubleImageType                      ImageType;
 
   /** Filter typedefs */
   typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
@@ -71,6 +73,8 @@ private:
     SetParameterDescription("out","Output Rx score image");
     MandatoryOn("out");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "LocalRxScore.tif");
@@ -85,10 +89,14 @@ private:
 
   void DoExecute() override
   {
+    auto inputImage = GetParameterDoubleVectorImage("in");
+    inputImage->UpdateOutputInformation();
+    
 
+    #if 0
     auto detector = LocalRxDetectorFilterType::New();
 
-    detector->SetInput(GetParameterImage("in"));
+    detector->SetInput(inputImage);
 
     //TODO this should be app parameters
     unsigned int externalRadius = 3;
@@ -96,10 +104,22 @@ private:
 
     detector->SetInternalRadius(internalRadius);
     detector->SetExternalRadius(externalRadius);
+    //detector->Update();
 
     SetParameterOutputImage("out", detector->GetOutput());
-
     RegisterPipeline();
+
+
+    #else
+
+    localRxDetectionFunctor<double> detectorFunctor;
+    detectorFunctor.SetInternalRadius(1);
+    auto localRxDetectionFunctorFilter = otb::NewFunctorFilter(detectorFunctor ,{{3,3}});
+    localRxDetectionFunctorFilter->SetVariadicInputs(inputImage);
+    //localRxDetectionFunctorFilter->Update();
+    SetParameterOutputImage("out", localRxDetectionFunctorFilter->GetOutput());
+    RegisterPipeline();
+    #endif
   }
 
 };
