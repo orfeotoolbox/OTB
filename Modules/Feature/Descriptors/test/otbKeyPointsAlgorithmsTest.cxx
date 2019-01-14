@@ -226,7 +226,7 @@ auto generateImagePair(const std::string& infname, double rotation, double scali
 /** Perform checks for one keypoints algorithm */
 template <typename TKeyPointsFilter, typename TParameterSetter>
 bool checkKeyPointsFilter(const ImageType* reference, const ImageType* secondary, const TransformType* transform, const TParameterSetter& configureFilter,
-                          double match_rate_thresh, double good_match_rate_thresh)
+                          unsigned int nb_points_thresh, double match_rate_thresh, double good_match_rate_thresh)
 {
   // Keypoints on first image
   auto filterReference = TKeyPointsFilter::New();
@@ -283,10 +283,20 @@ bool checkKeyPointsFilter(const ImageType* reference, const ImageType* secondary
   std::cout << "Found " << nb_matches << " matches with " << good_matches << " valid matches (tolerance of 0.5 pixels)" << std::endl;
 
   // Quality gate
-  bool current_test   = reference_match_rate > match_rate_thresh;
+  bool current_test   = nbReferencePoints >= nb_points_thresh;
+  std::cout << "More than " << nb_points_thresh << " points found in reference image:\t" << printResult(current_test) << " ("
+            << nbReferencePoints << ")" << std::endl;
   bool overall_status = current_test;
+
+  current_test = nbSecondaryPoints> nb_points_thresh;
+  std::cout << "More than " << nb_points_thresh << " points found in secondary image:\t" << printResult(current_test) << " ("
+            << nbSecondaryPoints << ")" << std::endl;
+  overall_status = overall_status && current_test;
+
+  current_test   = reference_match_rate > match_rate_thresh;
   std::cout << "More than " << 100 * match_rate_thresh << "% of reference points have a match:\t" << printResult(current_test) << " ("
             << 100 * reference_match_rate << "%)" << std::endl;
+  overall_status = overall_status && current_test;
 
   current_test = secondary_match_rate > match_rate_thresh;
   std::cout << "More than " << 100 * match_rate_thresh << "% of secondary points have a match:\t" << printResult(current_test) << " ("
@@ -338,7 +348,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
     filter->SetScalesNumber(8);
   };
 
-  status = checkKeyPointsFilter<SurfFilterType>(reference, secondary, transform, configureSurf, 0.13, 0.64) && status;
+  status = checkKeyPointsFilter<SurfFilterType>(reference, secondary, transform, configureSurf, 95, 0.13, 0.64) && status;
 
   // Test Sift filter
   std::cout << "Checking Sift implementation:" << std::endl;
@@ -352,7 +362,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
     filter->SetEdgeThreshold(10.);
   };
 
-  status = checkKeyPointsFilter<SiftFilterType>(reference, secondary, transform, configureSift, 0.44, 0.82) && status;
+  status = checkKeyPointsFilter<SiftFilterType>(reference, secondary, transform, configureSift, 120, 0.44, 0.82) && status;
 
 #ifdef OTB_USE_SIFTFAST
   // Test SiftFast filter
@@ -362,7 +372,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
   // lambda to set specific filter parameter
   auto configureSiftFast = [](SiftFastFilterType* filter) { filter->SetScalesNumber(8); };
 
-  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 0.73, 0.95) && status;
+  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 100, 0.73, 0.95) && status;
 #endif
 
   return status ? EXIT_SUCCESS : EXIT_FAILURE;
