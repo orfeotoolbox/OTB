@@ -85,6 +85,8 @@ template<typename Arg, typename NotMatching, typename...Args> struct tuple_index
  *
  * \sa otb::VariadicNamedInputsImageFilter
  * \sa otb::FunctorImageFilter
+ *
+ * \ingroup OTBFunctor
  */
 template<class TOuptut, class TInputNameMap, class ... TInputs> class VariadicNamedInputsImageFilter : public VariadicInputsImageFilter<TOuptut,TInputs...>
 {

@@ -51,6 +51,7 @@ namespace otb {
  * (iff the number of varidic input types is large enough) for
  * backward compatibility.
  *
+ * \ingroup OTBFunctor
  */
 template<class TOuptut, class ... TInputs> class VariadicInputsImageFilter : public itk::ImageSource<TOuptut>
 {
