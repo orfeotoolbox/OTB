@@ -671,17 +671,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
 template <class TOutputImage, class ConvertPixelTraits>
 void
 ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const char* in)
-{
-  if (in)
-    {
-    this->SetFileName(std::string(in));
-    }
-}
-
-template <class TOutputImage, class ConvertPixelTraits>
-void
-ImageFileReader<TOutputImage, ConvertPixelTraits>
 ::SetFileName(const std::string& extendedFileName)
 {
   const std::string skip_geom_key = "skipgeom";

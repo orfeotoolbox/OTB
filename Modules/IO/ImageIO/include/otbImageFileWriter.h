@@ -172,9 +172,6 @@ public:
    *  has no output. */
   void Update() override;
 
-  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
-  virtual void SetFileName(const char* extendedFileName);
-
   virtual void SetFileName(const std::string& extendedFileName);
 
   virtual const char* GetFileName () const;
