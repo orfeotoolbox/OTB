@@ -17,7 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-message("OTB_WRAP_PYTHON : ${OTB_WRAP_PYTHON}")
+
 if (OTB_WRAP_PYTHON)
   add_subdirectory(python)
 endif()

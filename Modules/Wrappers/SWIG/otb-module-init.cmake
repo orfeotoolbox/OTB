@@ -41,16 +41,10 @@ macro(check_PIC_flag Language)
 endmacro()
 
 if ( OTB_WRAP_PYTHON )
-  set(PYTHON_EXECUTABLE "PYTHON_EXECUTABLE-NOTFOUND" CACHE FILEPATH "Path to python interpreter")
-  set(PYTHON_INCLUDE_DIR "PYTHON_INCLUDE_DIR-NOTFOUND" CACHE PATH "Path to python include directory")
-  set(PYTHON_LIBRARY "PYTHON_LIBRARY-NOTFOUND" CACHE FILEPATH "Path to python library")
-  set(PYTHON_LIBRARY_DEBUG "PYTHON_LIBRARY_DEBUG-NOTFOUND" CACHE FILEPATH "Path to python library (debug)")
-
   check_PIC_flag ( Python )
   find_package ( PythonInterp 3 REQUIRED )
   find_package ( PythonLibs 3 REQUIRED )
   find_package ( Numpy )
-
 endif()
 
 #
