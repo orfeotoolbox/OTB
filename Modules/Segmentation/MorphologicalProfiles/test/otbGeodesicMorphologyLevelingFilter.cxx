@@ -46,9 +46,10 @@ int otbGeodesicMorphologyLevelingFilter(int itkNotUsed(argc), char * argv[])
 
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput(reader->GetOutput());
-  filter->SetInputConvexMap(convreader->GetOutput());
-  filter->SetInputConcaveMap(concreader->GetOutput());
+  using namespace otb::Functor::LevelingFunctor_tags;
+  filter->SetVariadicNamedInput<pixel>(reader->GetOutput());
+  filter->SetVariadicNamedInput<convex_pixel>(convreader->GetOutput());
+  filter->SetVariadicNamedInput<concave_pixel>(concreader->GetOutput());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

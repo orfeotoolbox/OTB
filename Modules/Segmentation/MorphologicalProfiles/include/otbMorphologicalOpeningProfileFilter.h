@@ -22,7 +22,6 @@
 #define otbMorphologicalOpeningProfileFilter_h
 
 #include "otbImageToProfileFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkOpeningByReconstructionImageFilter.h"
 
 namespace otb

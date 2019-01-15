@@ -48,13 +48,13 @@ bool otb::ogr::DataSource::Clear()
   return true;
 }
 
-void otb::ogr::DataSource::Reset(otb::ogr::version_proxy::GDALDatasetType * source)
+void otb::ogr::DataSource::Reset(GDALDataset * source)
 {
   if (m_DataSource) {
     // OGR makes a pointless check for non-nullity in
     // GDALDataset::DestroyDataSource (pointless because "delete 0" is
     // perfectly valid -> it's a no-op)
-    ogr::version_proxy::Close(m_DataSource); // void, noexcept
+    GDALClose(m_DataSource); // void, noexcept
   }
   m_DataSource = source;
 }
@@ -108,7 +108,7 @@ char const* DeduceDriverName(std::string filename)
   ExtensionDriverAssociation const* whichIt =
     std::find_if(
       boost::begin(k_ExtensionDriverMap), boost::end(k_ExtensionDriverMap),
-      boost::bind(&ExtensionDriverAssociation::Matches, _1, extension));
+      [&](auto const & x) { return x.Matches(extension); } );
   if (whichIt ==  boost::end(k_ExtensionDriverMap))
     {
     return nullptr; // nothing found
@@ -126,10 +126,16 @@ otb::ogr::DataSource::DataSource()
 {
   Drivers::Init();
 
-  ogr::version_proxy::GDALDriverType * d = 
-    ogr::version_proxy::GetDriverByName("Memory");
+  GDALDriver * d = 
+    GetGDALDriverManager()->GetDriverByName("Memory");
   assert(d && "OGR Memory driver not found");
-  m_DataSource = ogr::version_proxy::Create(d,"in-memory");
+  m_DataSource = d->Create( "in-memory" ,
+                         0 ,
+                         0 ,
+                         0 ,
+                         GDT_Unknown ,
+                         0 );
+
   if (!m_DataSource) {
     itkExceptionMacro(<< "Failed to create OGRMemDataSource: " 
                       << CPLGetLastErrorMsg());
@@ -137,7 +143,7 @@ otb::ogr::DataSource::DataSource()
 }
 
 otb::ogr::DataSource::DataSource( 
-    otb::ogr::version_proxy::GDALDatasetType * source ,
+    GDALDataset * source ,
     Modes::type mode ,
     const std::vector< std::string > & options /*NULL*/ )
 : m_DataSource(source) ,
@@ -155,10 +161,12 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
 
   bool update = (mode != Modes::Read);
-  ogr::version_proxy::GDALDatasetType * source = 
-    ogr::version_proxy::Open( simpleFileName.c_str() ,
-                              !update ,
-                              fileNameHelper->GetGDALOpenOptions() );
+  GDALDataset * source = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+      (update? GDAL_OF_UPDATE: GDAL_OF_READONLY) | GDAL_OF_VECTOR,
+      NULL,
+      otb::ogr::StringListConverter( fileNameHelper->GetGDALOpenOptions() ).to_ogr(),
+      NULL);
   if (!source)
     {
     // In read mode, this is a failure
@@ -178,8 +186,8 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         <<simpleFileName<<">.");
       }
 
-    ogr::version_proxy::GDALDriverType * d = 
-      ogr::version_proxy::GetDriverByName(  driverName  );
+    GDALDriver * d = 
+      GetGDALDriverManager()->GetDriverByName(  driverName  );
 
     if(!d)
       {
@@ -187,10 +195,13 @@ otb::ogr::DataSource::Pointer otb::ogr::DataSource::OpenDataSource(std::string c
         << ", check your OGR configuration for available drivers." );
       }
 
-    source = ogr::version_proxy::Create( 
-                  d ,
-                  simpleFileName.c_str() ,
-                  fileNameHelper->GetGDALCreationOptions() );
+    source = d->Create( simpleFileName.c_str() ,
+                         0 ,
+                         0 ,
+                         0 ,
+                         GDT_Unknown ,
+                         otb::ogr::StringListConverter( 
+                          fileNameHelper->GetGDALCreationOptions() ).to_ogr() );
     if (!source) {
       itkGenericExceptionMacro(<< "Failed to create GDALDataset <"
         << simpleFileName << "> (driver name: <" << driverName 
@@ -207,12 +218,40 @@ void DeleteDataSource(std::string const& datasourceName)
   fileNameHelper->SetExtendedFileName( datasourceName.c_str() );
   std::string simpleFileName = fileNameHelper->GetSimpleFileName();
 
-  bool ret = otb::ogr::version_proxy::Delete(simpleFileName.c_str());
-  if (!ret)
+  // Open dataset
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
+
+  GDALDriver * poDriver = NULL;
+  if(poDS)
     {
-    itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
-                             << " failed: " << CPLGetLastErrorMsg());
+    poDriver = poDS->GetDriver();
+    GDALClose(poDS);
     }
+  else
+    {
+    itkGenericExceptionMacro(<< "Cannot open data source " << simpleFileName
+                             << ": " << CPLGetLastErrorMsg());
+    }
+  if(poDriver)
+    {
+    OGRErr ret = poDriver->Delete(simpleFileName.c_str());
+    if (ret != OGRERR_NONE)
+      {
+      itkGenericExceptionMacro(<< "Deletion of data source " << simpleFileName
+                             << " failed: " << CPLGetLastErrorMsg());
+      }
+    }
+  else 
+    {
+    itkGenericExceptionMacro(<< "Cannot get driver associated with data source " << simpleFileName
+                             << ": " << CPLGetLastErrorMsg());
+    }
+
 }
 
 otb::ogr::DataSource::Pointer
@@ -228,12 +267,15 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
     }
 
   Drivers::Init();
-  ogr::version_proxy::GDALDatasetType * ds = 
-    ogr::version_proxy::Open( simpleFileName.c_str() , true );
-
+  GDALDataset * ds = (GDALDataset *)GDALOpenEx(
+      simpleFileName.c_str(), 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   bool ds_exists = (ds!=nullptr);
 
-  ogr::version_proxy::Close(ds);
+  GDALClose(ds);
 
 
   if (ds_exists && mode == Modes::Overwrite)
@@ -246,7 +288,7 @@ otb::ogr::DataSource::New(std::string const& datasourceName, Modes::type mode)
 
 /*static*/
 otb::ogr::DataSource::Pointer
-otb::ogr::DataSource::New(otb::ogr::version_proxy::GDALDatasetType * source , Modes::type mode , const std::vector< std::string > & layerOptions )
+otb::ogr::DataSource::New(GDALDataset * source , Modes::type mode , const std::vector< std::string > & layerOptions )
 {
   Pointer res = new DataSource( source , mode , layerOptions );
   res->UnRegister();
@@ -727,12 +769,7 @@ OGREnvelope otb::ogr::DataSource::GetGlobalExtent(bool force/* = false */, std::
       cExtent.MaxX = real_maxx;
       cExtent.MaxY = real_maxy;
 
-#if GDAL_VERSION_NUM >= 1700
       OGRCoordinateTransformation::DestroyCT(coordTransformation);
-#else
-#warning the following resource release may crash, please update your version of GDAL
-      delete coordTransformation; // note there is no garanty
-#endif
       }
     // else: If srs are invalid, we assume that extent are coherent
 
@@ -785,20 +822,14 @@ bool otb::ogr::DataSource::HasCapability(std::string const& capabilityName) cons
 void otb::ogr::DataSource::SyncToDisk()
 {
   assert(m_DataSource && "Datasource not initialized");
-  bool ret = otb::ogr::version_proxy::SyncToDisk(m_DataSource);
-
-  if(!ret)
-    {
-    itkExceptionMacro( << "Cannot flush the pending of the OGRDataSource <"
-      << GetDatasetDescription() << ">: " << CPLGetLastErrorMsg());
-    }
+  m_DataSource->FlushCache();
 }
 
 
 std::string otb::ogr::DataSource::GetDatasetDescription() const
 {
   std::vector<std::string> files = 
-    otb::ogr::version_proxy::GetFileListAsStringVector( m_DataSource );
+    otb::ogr::GetFileListAsStringVector( m_DataSource );
   std::string description = "";
   for( std::vector<std::string>::const_iterator it = files.begin() ; 
        it!=files.end() ; ++it )
