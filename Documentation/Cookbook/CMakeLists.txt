@@ -62,9 +62,9 @@ foreach(cmd
 endforeach()
 
 # We need to set PYTHONPATH for the script otbGenerateWrappersRstDoc.py, depending on how the Python3 module was built
-if (OTB_WRAP_PYTHON3)
-    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python3")
-elseif (OTB_WRAP_PYTHON)
+if (OTB_WRAP_PYTHON)
+    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
+else()
     # Cookbook only supports Python3
     # But OTB_WRAP_PYTHON can wrap both python2 and python3
     if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
