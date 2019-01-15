@@ -19,12 +19,12 @@
 #
 
 include_directories ( ${PYTHON_INCLUDE_DIR} )
-include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
+include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/../python )
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Run swig
 set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
-if(NUMPY_FOUND)
-  include_directories(${NUMPY_INCLUDE_DIRS})
+if(NUMPY_PYTHON_FOUND)
+  include_directories(${NUMPY_PYTHON_INCLUDE_DIRS})
   list(APPEND CMAKE_SWIG_FLAGS  "-DOTB_SWIGNUMPY=1")
 endif()
 set(CMAKE_SWIG_OUTDIR ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR})
@@ -33,13 +33,14 @@ set(SWIG_MODULE_otbApplication_EXTRA_DEPS
      ${CMAKE_CURRENT_SOURCE_DIR}/../PyCommand.i
      itkPyCommand.h
      OTBApplicationEngine)
-SWIG_add_module( otbApplication python ../otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
+SWIG_add_module( otbApplication python ../otbApplication.i otbApplicationPYTHON_wrap.cxx ../python/itkPyCommand.cxx )
 SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
 set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
+set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_NAME _otbApplication)
 if(MSVC)
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
 else()
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
+  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationTHON_wrap.cxx COMPILE_FLAGS "-w" )
 endif()
 
 # byte-compile the resulting python file
