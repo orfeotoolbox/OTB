@@ -40,17 +40,13 @@ python_version="$python_major_version.$python_minor_version.$python_patch_versio
 
 python_check_failed() {
     printf %s\\n "*****Error occurred during installation******"
-    printf %s\\n "OTB python bindings requires python2.6 or python2.7 but current detected python version is $python_version"
-    printf %s\\n "If you have python2.6 or Python2.7 installed in your system "
+    printf %s\\n "OTB python bindings require python3 but current detected python version is $python_version"
+    printf %s\\n "If you have python3 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
-    printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python2.7 ./OTB-X.Y-Linux64.run"
+    printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python3 ./OTB-X.Y-Linux64.run"
     exit 1
 }
-if [ "$python_major_version" -gt 2 ]; then
-python_check_failed
-fi
-
-if [ "$python_minor_version" -lt 5 ]; then
+if [ "$python_major_version" -gt 3 ]; then
 python_check_failed
 fi
 

@@ -52,7 +52,7 @@ if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
 endif()
 
 if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
-  find_package(PythonInterp REQUIRED)
+  find_package(PythonInterp 3 REQUIRED)
 endif()
 
 find_program(FILE_COMMAND NAMES  "file")
@@ -180,11 +180,6 @@ endif()
 set(HAVE_PYTHON FALSE CACHE INTERNAL "Python wrappings")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
   set(HAVE_PYTHON TRUE)
-endif()
-
-set(HAVE_PYTHON3 FALSE CACHE INTERNAL "Python3 wrappings")
-if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python3/_otbApplication${PYMODULE_EXT}")
-  set(HAVE_PYTHON3 TRUE)
 endif()
 
 set(HAVE_JAVA FALSE CACHE INTERNAL "Java wrappings")
