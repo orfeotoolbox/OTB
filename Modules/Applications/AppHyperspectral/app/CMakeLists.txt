@@ -27,3 +27,8 @@ otb_create_application(
   NAME           VertexComponentAnalysis
   SOURCES        otbVertexComponentAnalysis.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           EndmemberNumberEstimation
+  SOURCES        otbEndmemberNumberEstimation.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
