@@ -53,22 +53,16 @@ std::string ConfigurationManager::GetGeoidFile()
 
 ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
 {
-  std::string svalue;
-  
-  RAMValueType value = 128;
-  
-  if(itksys::SystemTools::GetEnv("OTB_MAX_RAM_HINT",svalue))
-    {
-
-    unsigned long int tmp = strtoul(svalue.c_str(),nullptr,10);
-    
-    if(tmp)
-      {
-      value = static_cast<RAMValueType>(tmp);
-      }
-    }
-  
-  return value;
+  std::string max_ram_hint;
+  if (itksys::SystemTools::GetEnv("OTB_MAX_RAM_HINT", max_ram_hint))
+  {
+    return std::stoul(max_ram_hint);
+  }
+  else
+  {
+    // Default value
+    return 256;
+  }
 }
 
 itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
