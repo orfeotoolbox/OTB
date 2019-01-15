@@ -209,7 +209,7 @@ void OGRIOHelper
     otb::VectorDataKeywordlist kwl;
     for (int fieldNum = 0; fieldNum < feature->GetFieldCount(); ++fieldNum)
       {
-      if (ogr::version_proxy::IsFieldSetAndNotNull(feature, fieldNum))
+      if (ogr::IsFieldSetAndNotNull(feature, fieldNum))
         {
         kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
         }
@@ -651,7 +651,7 @@ void OGRIOHelper
 
 unsigned int OGRIOHelper
 ::ProcessNodeWrite(InternalTreeNodeType * source,
-                   ogr::version_proxy::GDALDatasetType * m_DataSource,
+                   GDALDataset * m_DataSource,
                    OGRGeometryCollection * ogrCollection,
                    OGRLayer * ogrCurrentLayer,
                    OGRSpatialReference * oSRS)
@@ -1027,7 +1027,7 @@ unsigned int OGRIOHelper
  **/
 std::vector<OGRLayer*> OGRIOHelper
 ::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                 ogr::version_proxy::GDALDatasetType * inMemoryDataSource,
+                                 GDALDataset * inMemoryDataSource,
                                  OGRLayer* ogrCurrentLayer,
                                  OGRSpatialReference * oSRS)
 {
@@ -1036,8 +1036,13 @@ std::vector<OGRLayer*> OGRIOHelper
   if (inMemoryDataSource == nullptr)
     {
     const char * driverName = "Memory";
-    ogr::version_proxy::GDALDriverType * ogrDriver = ogr::version_proxy::GetDriverByName(driverName);
-    inMemoryDataSource = ogr::version_proxy::Create(ogrDriver,"tempDataSource");
+    GDALDriver * ogrDriver = GetGDALDriverManager()->GetDriverByName(driverName);
+    inMemoryDataSource = ogrDriver->Create( "tempDataSource",
+                    0,
+                    0,
+                    0,
+                    GDT_Unknown,
+                    0);
     }
 
   std::vector<OGRLayer*>  ogrLayerVector;

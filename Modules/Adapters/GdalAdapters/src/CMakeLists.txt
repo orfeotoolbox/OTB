@@ -28,8 +28,8 @@ set(OTBGdalAdapters_SRC
   otbOGRDriversInit.cxx
   otbGeometriesToGeometriesFilter.cxx
   otbOGRDataSourceWrapper.cxx
-  otbOGRVersionProxy.cxx
   otbOGRExtendedFilenameToOptions.cxx
+  otbOGRHelpers.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})

@@ -288,12 +288,19 @@ public:
     * Note that the deburst operation has no effect if theBurstRecords
     * contains a single burst. Otherwise it will merge burst together
     * into a single burst, and update GCPs accordingly.
+    * Two modes are available for the output image : with all samples and
+    * with only valid samples. A pair of samples specifies first and last samples
     * \return true if the deburst operation succeeded. No changes is
     * made to the object if the operation fails.
     * \param lines A container for the lines ranges to keep in the
     * deburst image.
+    * \param samples A container for the samples to keep in the
+    * deburst image.
+    * \param onlyValidSample If true, the selected mode is with only valid sample.
     */
-   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+		std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+   
 
    /**
     * This is a helper function to convert image line to deburst image
@@ -313,6 +320,38 @@ public:
     * \param deburstLine The output original image line
     */
    static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
+
+   /**
+    * This method will perform an extration of one burst. It wil return the
+    * lines and samples to extract in the image file.
+    * \return true if the extraction operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param burst_index Index of Burst.
+    * \param lines A container for the lines to keep in the
+    * standalone burst.
+    * \param samples A container for the samples to keep in the
+    * standalone burst.
+    */
+   bool burstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
+			std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
+
+   /**
+    * This method will perform a deburst and concatenation operation, and return the
+    * vector of lines and the vector of samples to keep in the 
+    * image file. The lines and samples represents start/size into each indepedent bursts. 
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    * \param samples A container for the samples ranges to keep in the
+    * deburst image.
+    * \param lines A Boolean to indicate only valids samples are required.
+    */
+   bool deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts);
 
    /**
     * Returns pointer to a new instance, copy of this.
@@ -452,6 +491,14 @@ protected:
    DurationType                                theAzimuthTimeOffset; // Offset computed
    double                                      theRangeTimeOffset; // Offset in seconds, computed
    bool                                        theRightLookingFlag;
+   
+   TimeType                                    theFirstLineTime;
+   TimeType                                    theLastLineTime;
+
+   unsigned long                                theNumberOfLinesPerBurst;
+   unsigned long                                theNumberOfSamplesPerBurst;
+
+   bool redaptMedataAfterDeburst;
    
    static const double C;
 
