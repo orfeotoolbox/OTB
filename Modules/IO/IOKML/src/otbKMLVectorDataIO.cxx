@@ -22,12 +22,23 @@
 #include "otbKMLVectorDataIO.h"
 
 #include <fstream>
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 
 #include "kml/dom.h"
 #include "kml/dom/kml22.h"
 #include "kml/base/file.h"
 #include "kml/dom/kml_cast.h"
 #include "kml/engine/kml_file.h"
+#pragma GCC diagnostic pop
+#else
+#include "kml/dom.h"
+#include "kml/dom/kml22.h"
+#include "kml/base/file.h"
+#include "kml/dom/kml_cast.h"
+#include "kml/engine/kml_file.h"
+#endif
 
 #include "ogrsf_frmts.h"
 

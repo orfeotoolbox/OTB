@@ -98,7 +98,6 @@ DecisionTree<AttributeValueType, LabelType>
   otbMsgDevMacro( << "Trying to match attribute " << m_Attribute << " with value " << attrValue );
 
   bool found = false;
-  KeyType key;
   if( m_IsFinal )
     {
     typename LabelMapType::const_iterator lmIt = m_LabelMap.begin();
