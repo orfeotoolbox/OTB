@@ -161,10 +161,10 @@ private:
  * Set inputs with:
  * \code
  * 
- * SetVariadicNamedInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative>(in1);
- * SetVariadicNamedInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative>(in2);
- * SetVariadicNamedInput<MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics>(in3);
- * SetVariadicNamedInput<MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>(in4); 
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative>(in1);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative>(in2);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics>(in3);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>(in4); 
  *
  * \endcode
  * 
