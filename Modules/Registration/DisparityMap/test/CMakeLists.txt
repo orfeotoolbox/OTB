@@ -166,7 +166,7 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbD
   1 # Grid step
   0 # Initial offset x
   0 # Initial offset y
-  0 0 80 65 # region to proceed
+  0 0 32 32 # region to proceed
   )
 otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
