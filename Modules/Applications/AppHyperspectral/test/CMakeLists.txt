@@ -53,3 +53,24 @@ otb_test_application(NAME  apTvHyVertexComponentAnalysis
                   	             ${TEMP}/apTvHyVertexComponentAnalysis.tif
 )
 
+#----------- EndmemberNumberEstimation TESTS ----------------
+otb_test_application(NAME  apTvHyEndmemberNumberEstimation_vd
+                     APP  EndmemberNumberEstimation
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -algo vd
+                             -algo.vd.far 0.001
+                     TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
+                     VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                       ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
+)
+
+otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
+                     APP  EndmemberNumberEstimation
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -algo elm
+                     TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+                     VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                       ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+)

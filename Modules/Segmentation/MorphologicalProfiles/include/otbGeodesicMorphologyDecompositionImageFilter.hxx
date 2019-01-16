@@ -91,9 +91,9 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
   using namespace otb::Functor::LevelingFunctor_tags;
   // Template keyword mandatory to avoid parsing error when using
   // template methods within template code
-  m_LevelingFilter->template SetVariadicNamedInput<pixel>(this->GetInput());
-  m_LevelingFilter->template SetVariadicNamedInput<convex_pixel>(m_ConvexFilter->GetOutput());
-  m_LevelingFilter->template SetVariadicNamedInput<concave_pixel>(m_ConcaveFilter->GetOutput());
+  m_LevelingFilter->template SetInput<pixel>(this->GetInput());
+  m_LevelingFilter->template SetInput<convex_pixel>(m_ConvexFilter->GetOutput());
+  m_LevelingFilter->template SetInput<concave_pixel>(m_ConcaveFilter->GetOutput());
 
   m_ConvexFilter->GraftOutput(this->GetConvexMap());
   m_ConvexFilter->Update();
