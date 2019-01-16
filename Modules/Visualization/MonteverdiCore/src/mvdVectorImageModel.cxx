@@ -110,7 +110,7 @@ VectorImageModel
   //   << "\tstd::string: " << QFile::encodeName( GetFilename() ).constData()
   //   << std::endl;
 
-  m_ImageFileReader->SetFileName( QFile::encodeName( GetFilename() ).toStdString() );
+  m_ImageFileReader->SetFileName(GetFilename().toStdString());
   m_ImageFileReader->GetOutput()->UpdateOutputInformation();
 
   // Retrieve the list of Lod from file
@@ -180,7 +180,7 @@ VectorImageModel
       {
       fname.append(QChar('?'));
       }
-    imageFileReader->SetFileName( QFile::encodeName( fname.append(QString("&skipgeom=true"))).toStdString());
+    imageFileReader->SetFileName(fname.append(QString("&skipgeom=true")).toStdString());
     imageFileReader->GetOutput()->UpdateOutputInformation();
     }
 
