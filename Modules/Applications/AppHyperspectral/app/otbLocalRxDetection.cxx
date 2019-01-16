@@ -138,7 +138,7 @@ private:
     auto localRxDetectionFilter = otb::NewFunctorFilter
         (detectorFunctor ,{{GetParameterInt("erx"),GetParameterInt("ery")}});
 
-    localRxDetectionFilter->SetVariadicInputs(inputImage);
+    localRxDetectionFilter->SetInputs(inputImage);
     #endif
 
     SetParameterOutputImage("out", localRxDetectionFilter->GetOutput());
