@@ -22,7 +22,6 @@
 #include "otbWrapperApplicationFactory.h"
 
 #include "otbLocalRxDetectorFilter.h"
-
 #include "otbFunctorImageFilter.h"
 
 namespace otb
@@ -49,20 +48,27 @@ public:
   typedef DoubleImageType                      ImageType;
 
   /** Filter typedefs */
-  typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
-  
+  typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType; //TODO remove this
+ 
 private:
   void DoInit() override
   {
     SetName("LocalRxDetection");
-    SetDescription(" ");
+    SetDescription("Performs local Rx score computation on an hyperspectral image.");
 
     // Documentation
     SetDocName("Local Rx Detection");
-    SetDocLongDescription(" ");
+    SetDocLongDescription("Performs local Rx score computation on an input "
+      "hyperspectral image. For each hyperspectral pixel, the Rx score is "
+      "computed using statistics computed on a dual neighborhood. The dual "
+      "neighborhood is composed of all pixel that are in between two radiuses "
+      "around the center pixel. This score can then be used to detect "
+      "anomalies in the image, this can be done for example by thresholding "
+      "the result of this application with the BandMath application.");
+    
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("BandMath");
 
     AddDocTag(Tags::Hyperspectral);
 
@@ -71,7 +77,7 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out","Output Rx score image");
-    MandatoryOn("out");
+    MandatoryOff("out");
 
     AddParameter(ParameterType_Int, "irx", "X Internal radius");
     SetParameterDescription("irx", "Internal radius in pixel along the X axis");
@@ -82,11 +88,11 @@ private:
     SetDefaultParameterInt("iry", 1);
 
     AddParameter(ParameterType_Int,  "erx", "X External radius");
-    SetParameterDescription("erx","External radius in pixel");
+    SetParameterDescription("erx","External radius in pixel along the X axis");
     SetDefaultParameterInt("erx", 3);
 
     AddParameter(ParameterType_Int,  "ery", "Y External radius");
-    SetParameterDescription("ery","External radius in pixel");
+    SetParameterDescription("ery","External radius in pixel along the Y axis");
     SetDefaultParameterInt("ery", 3);
 
     AddRAMParameter();
@@ -94,6 +100,7 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "LocalRxScore.tif");
+    SetDocExampleParameterValue("threshold", "0.5");
     SetDocExampleParameterValue("irx", "1");
     SetDocExampleParameterValue("iry", "1");
     SetDocExampleParameterValue("erx", "3");
@@ -112,37 +119,30 @@ private:
     auto inputImage = GetParameterDoubleVectorImage("in");
     inputImage->UpdateOutputInformation();
     
-
     #if 0
-    auto detector = LocalRxDetectorFilterType::New();
+    auto localRxDetectionFilter = LocalRxDetectorFilterType::New();
 
-    detector->SetInput(inputImage);
+    localRxDetectionFilter->SetInput(inputImage);
     
     // the radius are the same along x and y for the filter
     unsigned int externalRadius = GetParameterInt("erx");
     unsigned int internalRadius = GetParameterInt("irx");
 
-    detector->SetInternalRadius(internalRadius);
-    detector->SetExternalRadius(externalRadius);
-    //detector->Update();
-
-    SetParameterOutputImage("out", detector->GetOutput());
-    RegisterPipeline();
-
+    localRxDetectionFilter->SetInternalRadius(internalRadius);
+    localRxDetectionFilter->SetExternalRadius(externalRadius);
 
     #else
-
     localRxDetectionFunctor<double> detectorFunctor;
     detectorFunctor.SetInternalRadius(GetParameterInt("irx"), GetParameterInt("iry"));
 
-    auto localRxDetectionFunctorFilter = otb::NewFunctorFilter
+    auto localRxDetectionFilter = otb::NewFunctorFilter
         (detectorFunctor ,{{GetParameterInt("erx"),GetParameterInt("ery")}});
 
-    localRxDetectionFunctorFilter->SetVariadicInputs(inputImage);
-
-    SetParameterOutputImage("out", localRxDetectionFunctorFilter->GetOutput());
-    RegisterPipeline();
+    localRxDetectionFilter->SetVariadicInputs(inputImage);
     #endif
+
+    SetParameterOutputImage("out", localRxDetectionFilter->GetOutput());
+    RegisterPipeline();
   }
 
 };
