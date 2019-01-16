@@ -25,8 +25,16 @@
 #include "itkObjectFactory.h"
 
 //kmz creation
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "kml/engine/kmz_file.h"
 #include "kml/base/file.h"
+#pragma GCC diagnostic pop
+#else
+#include "kml/engine/kmz_file.h"
+#include "kml/base/file.h"
+#endif
 
 // Image Tiling
 #include "otbMultiChannelExtractROI.h"

@@ -49,7 +49,7 @@ int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * arg
   reader->SetFileName(inputFilename );
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetVariadicInput<0>(reader->GetOutput());
+  filter->SetInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

@@ -50,25 +50,25 @@ private:
   void DoInit() override
   {
     SetName("VertexComponentAnalysis");
-    SetDescription("Given a set of mixed spectral vectors, estimate"
-    "reference substances also known as endmembers using the Vertex"
+    SetDescription("Given a set of mixed spectral vectors, estimate "
+    "reference substances also known as endmembers using the Vertex "
     "Component Analysis algorithm.");
 
     // Documentation
     SetDocName("Vertex Component Analysis");
-    SetDocLongDescription("Apply the Vertex Component Analysis [1] to"
-    "an hyperspectral image to extract endmembers. Given a set of mixed"
-    "spectral vectors (multispectral or hyperspectral), the application"
-    "estimates the spectral signature of reference substances also known"
+    SetDocLongDescription("Apply the Vertex Component Analysis [1] to "
+    "an hyperspectral image to extract endmembers. Given a set of mixed "
+    "spectral vectors (multispectral or hyperspectral), the application "
+    "estimates the spectral signature of reference substances also known "
     "as endmembers.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] J. M. P. Nascimento and J. M. B. Dias, Vertex"
-    "component analysis: a fast algorithm to unmix hyperspectral data,"
-    "in IEEE Transactions on Geoscience and Remote Sensing, vol. 43,"
-    "no. 4, pp. 898-910, April 2005.J. M. P. Nascimento and"
-    "J. M. B. Dias, Vertex component analysis: a fast algorithm to"
-    "unmix hyperspectral data, in IEEE Transactions on Geoscience and"
+    SetDocSeeAlso("[1] J. M. P. Nascimento and J. M. B. Dias, Vertex "
+    "component analysis: a fast algorithm to unmix hyperspectral data, "
+    "in IEEE Transactions on Geoscience and Remote Sensing, vol. 43, "
+    "no. 4, pp. 898-910, April 2005.J. M. P. Nascimento and "
+    "J. M. B. Dias, Vertex component analysis: a fast algorithm to "
+    "unmix hyperspectral data, in IEEE Transactions on Geoscience and "
     "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
 
     AddDocTag(Tags::Hyperspectral);
@@ -78,9 +78,9 @@ private:
     SetParameterDescription("in","Input hyperspectral data cube");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
-    SetParameterDescription("outendm","Endmembers, stored in a"
-    "one-line multi-spectral image.Each pixel corresponds to one"
-    "endmembers and each band values corresponds to the spectral"
+    SetParameterDescription("outendm","Endmembers, stored in a "
+    "one-line multi-spectral image.Each pixel corresponds to one "
+    "endmembers and each band values corresponds to the spectral "
     "signature of the corresponding endmember.");
     MandatoryOn("outendm");
 

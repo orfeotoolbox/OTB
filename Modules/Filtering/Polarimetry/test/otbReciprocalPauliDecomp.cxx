@@ -69,7 +69,7 @@ int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])
   nriToOneCfilter->SetInput(1,readerHV->GetOutput());
   nriToOneCfilter->SetInput(2,readerVV->GetOutput());
 
-  paulifilter->SetVariadicInput<0>(nriToOneCfilter->GetOutput());
+  paulifilter->SetInput<0>(nriToOneCfilter->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(paulifilter->GetOutput());
