@@ -49,7 +49,7 @@ public:
 
   /** Filter typedefs */
   typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType; //TODO remove this
- 
+
 private:
   void DoInit() override
   {
@@ -132,7 +132,7 @@ private:
     localRxDetectionFilter->SetExternalRadius(externalRadius);
 
     #else
-    localRxDetectionFunctor<double> detectorFunctor;
+    Functor::LocalRxDetectionFunctor<double> detectorFunctor;
     detectorFunctor.SetInternalRadius(GetParameterInt("irx"), GetParameterInt("iry"));
 
     auto localRxDetectionFilter = otb::NewFunctorFilter

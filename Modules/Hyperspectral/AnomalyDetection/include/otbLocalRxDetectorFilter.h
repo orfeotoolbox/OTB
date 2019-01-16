@@ -114,27 +114,38 @@ private:
 
 };
 
-
-template<typename T> 
-class localRxDetectionFunctor
+/** \class LocalRxDetectionFunctor
+ * \brief This functor computes a local Rx score on an input neighborhood. Pixel of the neighborhood
+ * inside the internal radius are not considered during the computation of local statistics.
+ *
+ * \ingroup ImageFilters
+ *
+ * \ingroup OTBAnomalyDetection
+ */
+namespace Functor
+{
+template<typename TInput, typename TOutput =TInput> 
+class LocalRxDetectionFunctor
 {
 public:
 
   /** typedef */
-  typedef typename itk::Neighborhood<itk::VariableLengthVector<T>>::OffsetType OffsetType;
-  typedef typename itk::VariableLengthVector<T>                         VectorMeasurementType;
+  typedef typename itk::Neighborhood<itk::VariableLengthVector<TInput>>::OffsetType OffsetType;
+  typedef typename itk::VariableLengthVector<TInput>                         VectorMeasurementType;
   typedef itk::Statistics::ListSample<VectorMeasurementType>            ListSampleType;
   typedef itk::Statistics::CovarianceSampleFilter<ListSampleType>       CovarianceCalculatorType;
   typedef typename CovarianceCalculatorType::MeasurementVectorRealType  MeasurementVectorRealType;
   typedef typename CovarianceCalculatorType::MatrixType                 MatrixType;
 
 private:
+  // Internal radius along the X axis
   int m_InternalRadiusX;
+
+  // Internal radius along the Y axis
   int m_InternalRadiusY;
 
-
 public:
-  localRxDetectionFunctor() : m_InternalRadiusX(1), m_InternalRadiusY(1) {};
+  LocalRxDetectionFunctor() : m_InternalRadiusX(1), m_InternalRadiusY(1) {};
 
   void SetInternalRadius(int internalRadiusX, int internalRadiusY)
   {
@@ -152,7 +163,7 @@ public:
     return m_InternalRadiusY;
   };
 
-  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<T>> & in) const
+  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<TInput>> & in) const
   {
     // Create a list sample with the pixels of the neighborhood located between
     // the two radius.
@@ -204,12 +215,11 @@ public:
     typename MatrixType::InternalMatrixType rxValue 
       = centeredTestPixMat.transpose() * invCovMat * centeredTestPixMat;
 
-    return rxValue.get(0, 0);
+    return static_cast<TOutput> (rxValue.get(0, 0));
   }
 
 };
-
-
+} // end namespace functor
 
 } // end namespace otb
 
