@@ -82,13 +82,13 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
 
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  haafilter->SetVariadicInput<0>(perBand->GetOutput());
+  haafilter->SetInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(haafilter->GetOutput());

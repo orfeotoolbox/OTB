@@ -264,32 +264,32 @@ public:
 
   void SetMultiSpect(const InputMultiSpectralImageType *multiSpect)
   {
-    this->template SetVariadicInput<0>(multiSpect);
+    this->template SetInput<0>(multiSpect);
   }
 
   void SetMultiSpectInterp(const InputMultiSpectralInterpImageType *multiSpectInterp)
   {
-    this->template SetVariadicInput<1>(multiSpectInterp);
+    this->template SetInput<1>(multiSpectInterp);
   }
 
   void SetPanchro(const InputPanchroImageType *panchro)
   {
-    this->template SetVariadicInput<2>(panchro);
+    this->template SetInput<2>(panchro);
   }
 
   const InputMultiSpectralImageType* GetMultiSpect()
   {
-    return this->template GetVariadicInput<0>();
+    return this->template GetInput<0>();
   }
 
   const InputMultiSpectralInterpImageType* GetMultiSpectInterp()
   {
-    return this->template GetVariadicInput<1>();
+    return this->template GetInput<1>();
   }
 
   const InputPanchroImageType* GetPanchro()
   {
-    return this->template GetVariadicInput<2>();
+    return this->template GetInput<2>();
   }
 
   /** Set the ponderation value. */

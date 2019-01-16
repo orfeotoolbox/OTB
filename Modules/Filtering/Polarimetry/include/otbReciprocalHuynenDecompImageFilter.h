@@ -84,7 +84,7 @@ public:
  *
  * Set inputs with:
  * \code
- * SetVariadicInput<0>(inputPtr);
+ * SetInput<0>(inputPtr);
  * \endcode
  *
  * \ingroup OTBPolarimetry

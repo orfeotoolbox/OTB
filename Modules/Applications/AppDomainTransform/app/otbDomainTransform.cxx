@@ -328,11 +328,11 @@ private:
 
           fftShiftFilter->Update();
 
-          toComplexFilter->SetVariadicInputs( fftShiftFilter->GetOutput() );
+          toComplexFilter->SetInputs( fftShiftFilter->GetOutput() );
           }
         else
           {
-            toComplexFilter->SetVariadicInputs( inImage );
+            toComplexFilter->SetInputs( inImage );
           }
 
         toComplexFilter->Update();

@@ -61,9 +61,9 @@ int generic_SinclairReciprocalImageFilter(int itkNotUsed(argc), char* argv[])
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
 
-  filter->SetVariadicNamedInput(polarimetry_tags::hh{}, reader1->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::hv_or_vh{}, reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vv{}, reader3->GetOutput());
+  filter->SetInput(polarimetry_tags::hh{}, reader1->GetOutput());
+  filter->SetInput(polarimetry_tags::hv_or_vh{}, reader2->GetOutput());
+  filter->SetInput(polarimetry_tags::vv{}, reader3->GetOutput());
 
   typename ExtractROIType::Pointer  extract = ExtractROIType::New();
   extract->SetStartX(10);
