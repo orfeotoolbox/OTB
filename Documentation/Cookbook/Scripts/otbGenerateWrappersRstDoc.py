@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+    #!/usr/bin/env python3
 #
 # Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
 #
@@ -69,7 +69,7 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     output = ""
 
     output += ".. code-block:: python\n\n"
-
+    print(app.GetName())
     # Render example comment
     if len(app.GetExampleComment(idx)) > 0:
         output += "\t# {}\n".format(app.GetExampleComment(idx))

@@ -90,7 +90,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunEmphasisOutput()
 {
-  this->GetOutput(0);
+  return this->GetOutput(0);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -99,7 +99,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunEmphasisOutput()
 {
-  this->GetOutput(1);
+  return this->GetOutput(1);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -108,7 +108,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetGreyLevelNonuniformityOutput()
 {
-  this->GetOutput(2);
+  return this->GetOutput(2);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -117,7 +117,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetRunLengthNonuniformityOutput()
 {
-  this->GetOutput(3);
+  return this->GetOutput(3);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -126,7 +126,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLowGreyLevelRunEmphasisOutput()
 {
-  this->GetOutput(4);
+  return this->GetOutput(4);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -135,7 +135,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetHighGreyLevelRunEmphasisOutput()
 {
-  this->GetOutput(5);
+  return this->GetOutput(5);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -144,7 +144,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunLowGreyLevelEmphasisOutput()
 {
-  this->GetOutput(6);
+  return this->GetOutput(6);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -153,7 +153,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetShortRunHighGreyLevelEmphasisOutput()
 {
-  this->GetOutput(7);
+  return this->GetOutput(7);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -162,7 +162,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunLowGreyLevelEmphasisOutput()
 {
-  this->GetOutput(8);
+  return this->GetOutput(8);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -171,7 +171,7 @@ typename ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ScalarImageToHigherOrderTexturesFilter<TInputImage, TOutputImage>
 ::GetLongRunHighGreyLevelEmphasisOutput()
 {
-  this->GetOutput(9);
+  return this->GetOutput(9);
 }
 
 template <class TInputImage, class TOutputImage>
