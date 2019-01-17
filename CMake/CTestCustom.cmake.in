@@ -63,7 +63,6 @@ set(CTEST_CUSTOM_COVERAGE_EXCLUDE
 
  # Exclude SWIG wrappers files
  ".*/Modules/Wrappers/SWIG/src/python/otbApplicationPYTHON_wrap.*"
- ".*/Modules/Wrappers/SWIG/src/python3/otbApplicationPYTHON_wrap.*"
  ".*/Modules/Wrappers/SWIG/src/java/otbApplicationJAVA_wrap.*"
 
  # Exclude Qt moc file
