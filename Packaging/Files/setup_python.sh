@@ -28,9 +28,13 @@ if [ ! -f "$OTB_PYTHON_EXE" ] ; then
 fi
 
 if [ ! -f "$OTB_PYTHON_EXE" ] ; then
-    printf %s\\n "*****Error occurred during installation******"
-    printf %s\\n "Python executable not found"
-    exit 1
+    # On old system we still have python => python2.x and python3 => python3.x
+    OTB_PYTHON_EXE=$(which python3)
+    if [ ! -f "$OTB_PYTHON_EXE" ] ; then
+      printf %s\\n "*****Error occurred during installation******"
+      printf %s\\n "Python executable not found"
+      exit 1
+    fi
 fi
 
 python_major_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[0])")
@@ -46,6 +50,7 @@ python_check_failed() {
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python3 ./OTB-X.Y-Linux64.run"
     exit 1
 }
+# Do we need the exact version of python?
 if [ "$python_major_version" -lt 3 ]; then
 python_check_failed
 fi
