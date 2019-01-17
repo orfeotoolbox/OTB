@@ -147,7 +147,7 @@ private:
 public:
   LocalRxDetectionFunctor() : m_InternalRadiusX(1), m_InternalRadiusY(1) {};
 
-  void SetInternalRadius(int internalRadiusX, int internalRadiusY)
+  void SetInternalRadius(const int internalRadiusX, const int internalRadiusY)
   {
     m_InternalRadiusX = internalRadiusX;
     m_InternalRadiusY = internalRadiusY;
