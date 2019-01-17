@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,14 @@
 /*===========================================================================*/
 #define BOOST_TEST_MODULE "otb::org::DataSource creation unit testing"
 #define BOOST_TEST_DYN_LINK
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include <boost/test/unit_test.hpp>
+#pragma GCC diagnostic pop
+#else
+#include <boost/test/unit_test.hpp>
+#endif
 #include <boost/foreach.hpp>
 #include "otb_boost_string_header.h"
 #include "itksys/SystemTools.hxx"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
@@ -173,9 +173,6 @@ ImageFileWriter<TInputImage>
   m_StreamingManager = streamingManager;
 }
 
-#ifndef ITK_LEGACY_REMOVE
-
-#endif // ITK_LEGACY_REMOVE
 /**
  *
  */

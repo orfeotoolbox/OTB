@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -122,10 +122,10 @@ public:
  * Set inputs with:
  * \code
  *
- * SetVariadicNamedInput<polarimetry_tags::hh>(inputPtr);
- * SetVariadicNamedInput<polarimetry_tags::hv>(inputPtr);
- * SetVariadicNamedInput<polarimetry_tags::vh>(inputPtr);
- * SetVariadicNamedInput<polarimetry_tags::vv>(inputPtr);
+ * SetInput<polarimetry_tags::hh>(inputPtr);
+ * SetInput<polarimetry_tags::hv>(inputPtr);
+ * SetInput<polarimetry_tags::vh>(inputPtr);
+ * SetInput<polarimetry_tags::vv>(inputPtr);
  *
  * \endcode
  *

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,7 +53,7 @@ void TrainVectorBase::DoInit()
   MandatoryOff( "layer" );
   SetDefaultParameterInt( "layer", 0 );
 
-  AddParameter(ParameterType_ListView,  "feat", "Field names for training features.");
+  AddParameter(ParameterType_ListView,  "feat", "Field names for training features");
   SetParameterDescription("feat",
     "List of field names in the input vector data to be used as features for training.");
 

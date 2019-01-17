@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,10 +52,10 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
   // Template keyword mandatory to avoid parsing error when using
   // template methods within template code
-  m_ClassificationFilter->template SetVariadicNamedInput<max_opening_profile_derivative>(m_OpeningCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->template SetVariadicNamedInput<opening_profile_characteristics>(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
-  m_ClassificationFilter->template SetVariadicNamedInput<max_closing_profile_derivative>(m_ClosingCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->template SetVariadicNamedInput<closing_profile_characteristics>(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
+  m_ClassificationFilter->template SetInput<max_opening_profile_derivative>(m_OpeningCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetInput<opening_profile_characteristics>(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
+  m_ClassificationFilter->template SetInput<max_closing_profile_derivative>(m_ClosingCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetInput<closing_profile_characteristics>(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
 
   m_ConnectedComponentsFilter->SetInput(m_ClassificationFilter->GetOutput());
 

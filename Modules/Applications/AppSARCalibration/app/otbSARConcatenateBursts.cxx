@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -82,7 +82,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in","s1_iw_slc.tif");
+    SetDocExampleParameterValue("insar","s1_iw_slc.tif");
     SetDocExampleParameterValue("il", "Burst0.png Burst1.png");
     SetDocExampleParameterValue("out", "otbConcatenateBursts.tif");
 

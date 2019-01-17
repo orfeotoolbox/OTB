@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,9 +47,9 @@ int otbGeodesicMorphologyLevelingFilter(int itkNotUsed(argc), char * argv[])
   FilterType::Pointer filter = FilterType::New();
 
   using namespace otb::Functor::LevelingFunctor_tags;
-  filter->SetVariadicNamedInput<pixel>(reader->GetOutput());
-  filter->SetVariadicNamedInput<convex_pixel>(convreader->GetOutput());
-  filter->SetVariadicNamedInput<concave_pixel>(concreader->GetOutput());
+  filter->SetInput<pixel>(reader->GetOutput());
+  filter->SetInput<convex_pixel>(convreader->GetOutput());
+  filter->SetInput<concave_pixel>(concreader->GetOutput());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);
