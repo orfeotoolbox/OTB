@@ -26,11 +26,13 @@
 #include "otbFastICAImageFilter.h"
 
 
-int otbFastICAImageFilterTest ( int , char* [] )
+int otbFastICAImageFilterTest ( int , char* argv[] )
 {
 
-  std::string inputImageName = "";
-  std::string outputImageName = "";
+  std::string inputImageName = argv[1];
+  std::string outputImageName = argv[2];
+  std::string outputInvImageName = argv[3];
+
   const unsigned int nbComponents =  0;
   const unsigned int nbIterations =  20;
   const double mu = 1.;
@@ -85,7 +87,7 @@ int otbFastICAImageFilterTest ( int , char* [] )
     std::cerr << "Reconstruction\n";
 
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
-    invWriter->SetFileName( " " );
+    invWriter->SetFileName(outputInvImageName);
     invWriter->SetInput( invFilter->GetOutput() );
     invWriter->Update();
   }
