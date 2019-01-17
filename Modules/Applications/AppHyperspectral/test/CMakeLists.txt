@@ -86,5 +86,5 @@ otb_test_application(NAME  apTvHyLocalRxDetection
                              -ery 3
                      VALID   --compare-image ${EPSILON_9}
                               ${BASELINE}/apTvHyLocalRxDetection.tif
-                              ${TEMP}/apTvHyLocalRxDetection.tif)
+                              ${TEMP}/apTvHyLocalRxDetection.tif
 )
