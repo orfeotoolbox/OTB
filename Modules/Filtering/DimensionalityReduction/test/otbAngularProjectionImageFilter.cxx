@@ -28,11 +28,11 @@
 
 #include "otbAngularProjectionImageFilter.h"
 
-int otbAngularProjectionImageFilterTest ( int , char * [] )
+int otbAngularProjectionImageFilterTest ( int , char * argv[] )
 {
-  std::string inputImageName1 = "";
-  std::string inputImageName2 = "";
-  std::string outputImageName = "";
+  std::string inputImageName1 = argv[1];
+  std::string inputImageName2 = argv[2];
+  std::string outputImageName = argv[3];
 
   // Main type definition
   const unsigned int Dimension = 2;

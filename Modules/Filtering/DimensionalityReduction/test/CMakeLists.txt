@@ -66,7 +66,17 @@ otb_add_test(NAME bfTvAngularProjectionBinaryImageFilter COMMAND otbDimensionali
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/bfTvAngularProjectionBinaryImageFilter1.tif
   ${TEMP}/bfTvAngularProjectionBinaryImageFilter2.tif
-  )
+)
+
+otb_add_test(NAME bfTvAngularProjectionImageFilter COMMAND otbDimensionalityReductionTestDriver
+  --compare-image ${EPSILON_12}
+  ${BASELINE}/bfTvAngularProjectionImageFilter.tif
+  ${TEMP}/bfTvAngularProjectionImageFilter.tif
+  otbAngularProjectionImageFilterTest
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvAngularProjectionImageFilter.tif
+)
 
 otb_add_test(NAME bfTvNormalizeInnerProductPCAImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_12}
