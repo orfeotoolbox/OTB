@@ -33,7 +33,7 @@ function(install_python_bindings)
   endforeach()
   # file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
   # Do we need to get rid of gdal python 2 bindings too?
-  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python3*")
+  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python*")
   foreach(_wrap ${gdal_python_wrappings})
     if (IS_DIRECTORY "${_wrap}")
       install(DIRECTORY ${_wrap}

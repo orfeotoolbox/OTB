@@ -46,7 +46,7 @@ python_check_failed() {
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python3 ./OTB-X.Y-Linux64.run"
     exit 1
 }
-if [ "$python_major_version" -gt 3 ]; then
+if [ "$python_major_version" -lt 3 ]; then
 python_check_failed
 fi
 
