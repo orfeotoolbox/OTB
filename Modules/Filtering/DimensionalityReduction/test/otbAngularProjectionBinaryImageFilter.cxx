@@ -28,11 +28,12 @@
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterTest ( int , char * [] )
+int otbAngularProjectionBinaryImageFilterTest ( int , char * argv[] )
 {
-  std::string inputImageName1("");
-  std::string inputImageName2("");
-  std::string outputImageName("");
+  std::string inputImageName1(argv[1]);
+  std::string inputImageName2(argv[2]);
+  std::string outputImageName1(argv[3]);
+  std::string outputImageName2(argv[4]);
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -56,7 +57,7 @@ int otbAngularProjectionBinaryImageFilterTest ( int , char * [] )
 
   std::vector< PixelType > angle;
   angle.push_back( otb::CONST_PI_2 );
-  angle.push_back( 0. );
+  angle.push_back( 0 );
 
   filter->SetAngleSet( angle );
 
@@ -67,18 +68,15 @@ int otbAngularProjectionBinaryImageFilterTest ( int , char * [] )
   filter->Update();
 
   typedef otb::ImageFileWriter< ImageType > WriterType;
-  std::vector< WriterType::Pointer > writers;
-  writers.resize( filter->GetNumberOfOutputs() );
+  auto writer1 = WriterType::New();
+  writer1->SetFileName(outputImageName1);
+  writer1->SetInput( filter->GetOutput(0) );
+  writer1->Update();
+  
+  auto writer2 = WriterType::New();
+  writer2->SetFileName(outputImageName2);
+  writer2->SetInput( filter->GetOutput(1) );
+  writer2->Update();
 
-  for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); ++i )
-  {
-    std::stringstream title;
-    title << outputImageName << "_" << i << ".hdr";
-
-    writers[i] = WriterType::New();
-    writers[i]->SetFileName( title.str() );
-    writers[i]->SetInput( filter->GetOutput(i) );
-    writers[i]->Update();
-  }
   return EXIT_SUCCESS;
 }

@@ -54,6 +54,17 @@ otb_module_target_label(otbDimensionalityReductionTestDriver)
   #-inv ${TEMP}/hyTvFastICAImageFilterInv.tif
   #-out ${TEMP}/hyTvFastICAImageFilter.tif)
 
+otb_add_test(NAME bfTvAngularProjectionBinaryImageFilter COMMAND otbDimensionalityReductionTestDriver
+  --compare-image ${EPSILON_12}
+  ${BASELINE}/bfTvAngularProjectionBinaryImageFilter1.tif
+  ${TEMP}/bfTvAngularProjectionBinaryImageFilter1.tif
+  otbAngularProjectionBinaryImageFilterTest
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvAngularProjectionBinaryImageFilter1.tif
+  ${TEMP}/bfTvAngularProjectionBinaryImageFilter2.tif
+  )
+
 otb_add_test(NAME bfTvNormalizeInnerProductPCAImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_12}
   ${BASELINE}/bfNormalizeInnerProductPCAImageFilter.tif
