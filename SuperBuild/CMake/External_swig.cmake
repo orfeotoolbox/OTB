@@ -22,8 +22,7 @@ INCLUDE_ONCE_MACRO(SWIG)
 
 SETUP_SUPERBUILD(SWIG)
 
-set(PythonInterp_FIND_VERSION 2.7)
-find_package(PythonInterp)
+find_package(PythonInterp 3 REQUIRED)
 if(PYTHONINTERP_FOUND)
   set(SWIG_SB_PYTHON_CONFIG "--with-python=${PYTHON_EXECUTABLE}")
 else()
