@@ -174,6 +174,11 @@ public:
     listSample->SetMeasurementVectorSize(centerPixel.Size());
 
     OffsetType off;
+
+    // Cache radiuses attributes for threading performances
+    const int internalRadiusX = m_InternalRadiusX;
+    const int internalRadiusY = m_InternalRadiusY;
+
     auto externalRadius = in.GetRadius();
     for (int y = -static_cast<int>(externalRadius[1]); y <= static_cast<int>(externalRadius[1]); y++)
       {
@@ -181,9 +186,9 @@ public:
       for (int x = -static_cast<int>(externalRadius[0]); x <= static_cast<int>(externalRadius[0]); x++)
         {
         off[0] = x;
-        if ((abs(x) > m_InternalRadiusX) || (abs(y) > m_InternalRadiusY))
+        if ((abs(x) > internalRadiusX) || (abs(y) > internalRadiusY))
           {
-            listSample->PushBack(in[off] );
+            listSample->PushBack(in[off]);
           }
         }
       }
