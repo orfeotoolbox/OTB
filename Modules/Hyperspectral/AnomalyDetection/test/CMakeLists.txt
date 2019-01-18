@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBAnomalyDetectionTests
 otbAnomalyDetectionTestDriver.cxx
-otbLocalRxDetectorRoiTest.cxx
 otbLocalRxDetectorTest.cxx
 )
 
