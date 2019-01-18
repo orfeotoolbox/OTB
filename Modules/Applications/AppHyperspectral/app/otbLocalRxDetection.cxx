@@ -119,7 +119,7 @@ private:
     auto inputImage = GetParameterDoubleVectorImage("in");
     inputImage->UpdateOutputInformation();
     
-    #if 0
+    #if 1
     auto localRxDetectionFilter = LocalRxDetectorFilterType::New();
 
     localRxDetectionFilter->SetInput(inputImage);
