@@ -140,6 +140,15 @@ SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
 
   newKwl.AddKey("number_samples", std::to_string(burstSize[0]));
   newKwl.AddKey("number_lines", std::to_string(burstSize[1]));
+
+  if (m_AllPixels)
+    {
+       newKwl.AddKey("support_data.invalid_pixels", "yes");
+    }
+  else
+    {
+      newKwl.AddKey("support_data.invalid_pixels", "no");
+    }
   
   // Set new keyword list to output image
   outputPtr->SetImageKeywordList(newKwl);
