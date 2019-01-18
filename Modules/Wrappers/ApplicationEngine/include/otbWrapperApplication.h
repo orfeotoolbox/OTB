@@ -1034,6 +1034,9 @@ private:
   /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
   bool m_IsInPrivateDo;
 
+  /** Flag to check if Execute has already been called */
+  bool m_ExecuteDone;
+
   /**
     * Declare the class
     * - Wrapper::MapProjectionParametersHandler

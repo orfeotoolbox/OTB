@@ -300,7 +300,8 @@ Application::Application()
     m_HaveInXML(true),
     m_HaveOutXML(true),
     m_IsInXMLParsed(false),
-    m_IsInPrivateDo(false)
+    m_IsInPrivateDo(false),
+    m_ExecuteDone(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
@@ -608,6 +609,8 @@ void Application::UpdateParameters()
   m_IsInPrivateDo = true;
   this->DoUpdateParameters();
   m_IsInPrivateDo = false;
+  // reset the flag m_ExecuteDone
+  m_ExecuteDone = false;
 }
 
 void Application::AfterExecuteAndWriteOutputs()
@@ -822,6 +825,11 @@ void Application::FreeRessources()
 
 int Application::Execute()
 {
+  if (m_ExecuteDone)
+    {
+    // avoid loops and diamonds
+    return 0;
+    }
   //----------- Recursive part -------------------------------------------------
   std::vector<std::string> paramList = GetParametersKeys(true);
   int status=0;
@@ -955,6 +963,7 @@ int Application::Execute()
   m_IsInPrivateDo = true;
   this->DoExecute();
   m_IsInPrivateDo = false;
+  m_ExecuteDone = true;
   
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
@@ -1080,6 +1089,8 @@ void Application::WriteOutput()
 int Application::ExecuteAndWriteOutput()
 {
   m_Chrono.Restart();
+  // reset the flag m_ExecuteDone
+  m_ExecuteDone = false;
 
   m_Logger->LogSetupInformation();
 
