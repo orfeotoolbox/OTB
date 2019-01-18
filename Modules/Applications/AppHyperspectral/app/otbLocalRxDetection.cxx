@@ -79,21 +79,13 @@ private:
     SetParameterDescription("out","Output Rx score image");
     MandatoryOff("out");
 
-    AddParameter(ParameterType_Int, "irx", "X Internal radius");
-    SetParameterDescription("irx", "Internal radius in pixel along the X axis");
-    SetDefaultParameterInt("irx", 1);
+    AddParameter(ParameterType_Int, "ir", "Internal radius");
+    SetParameterDescription("ir", "Internal radius in pixel");
+    SetDefaultParameterInt("ir", 1);
 
-    AddParameter(ParameterType_Int,  "iry", "Y Internal radius");
-    SetParameterDescription("iry","Internal radius in pixel along the Y axis");
-    SetDefaultParameterInt("iry", 1);
-
-    AddParameter(ParameterType_Int,  "erx", "X External radius");
-    SetParameterDescription("erx","External radius in pixel along the X axis");
-    SetDefaultParameterInt("erx", 3);
-
-    AddParameter(ParameterType_Int,  "ery", "Y External radius");
-    SetParameterDescription("ery","External radius in pixel along the Y axis");
-    SetDefaultParameterInt("ery", 3);
+    AddParameter(ParameterType_Int,  "er", "External radius");
+    SetParameterDescription("er","External radius in pixel");
+    SetDefaultParameterInt("er", 5);
 
     AddRAMParameter();
 
@@ -101,10 +93,8 @@ private:
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "LocalRxScore.tif");
     SetDocExampleParameterValue("threshold", "0.5");
-    SetDocExampleParameterValue("irx", "1");
-    SetDocExampleParameterValue("iry", "1");
-    SetDocExampleParameterValue("erx", "3");
-    SetDocExampleParameterValue("ery", "3");
+    SetDocExampleParameterValue("ir", "1");
+    SetDocExampleParameterValue("er", "5");
 
     SetOfficialDocLink();
   }
@@ -125,18 +115,18 @@ private:
     localRxDetectionFilter->SetInput(inputImage);
     
     // the radius are the same along x and y for the filter
-    unsigned int externalRadius = GetParameterInt("erx");
-    unsigned int internalRadius = GetParameterInt("irx");
+    unsigned int externalRadius = GetParameterInt("er");
+    unsigned int internalRadius = GetParameterInt("ir");
 
     localRxDetectionFilter->SetInternalRadius(internalRadius);
     localRxDetectionFilter->SetExternalRadius(externalRadius);
 
     #else
     Functor::LocalRxDetectionFunctor<double> detectorFunctor;
-    detectorFunctor.SetInternalRadius(GetParameterInt("irx"), GetParameterInt("iry"));
+    detectorFunctor.SetInternalRadius(GetParameterInt("ir"), GetParameterInt("ir"));
 
     auto localRxDetectionFilter = otb::NewFunctorFilter
-        (detectorFunctor ,{{GetParameterInt("erx"),GetParameterInt("ery")}});
+        (detectorFunctor ,{{GetParameterInt("er"),GetParameterInt("er")}});
 
     localRxDetectionFilter->SetInputs(inputImage);
     #endif
