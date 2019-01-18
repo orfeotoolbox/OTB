@@ -182,7 +182,7 @@ public:
         {
         off[0] = x;
         if ((abs(x) > m_InternalRadiusX) || (abs(y) > m_InternalRadiusY))
-          {//std::cout << in[off] << std::endl;
+          {
             listSample->PushBack(in[off] );
           }
         }
