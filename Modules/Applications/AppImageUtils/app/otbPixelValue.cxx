@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -98,7 +98,7 @@ private:
     AddParameter(ParameterType_Int , "mode.epsg.code" , "EPSG code");
     SetParameterDescription("mode.epsg.code" ,
           "This code is used to define a geographical coordinate system. "
-          "If no system is specified, WGS84 (EPSG : 4326) is used by default.");
+          "If no system is specified, WGS84 (EPSG: 4326) is used by default.");
     MandatoryOff("mode.epsg.code");
 
     AddParameter(ParameterType_ListView,"cl","Channels");

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -62,7 +62,7 @@ private:
 
     SetDocName( "Smoothing" );
     SetDocLongDescription( "This application applies a smoothing filter to an "
-      "image. Three methodes can be used : a gaussian filter , a mean filter "
+      "image. Three methodes can be used: a gaussian filter , a mean filter "
       ", or an anisotropic diffusion using the Perona-Malik algorithm." );
     SetDocLimitations( "None") ;
     SetDocAuthors( "OTB-Team" );
@@ -74,8 +74,6 @@ private:
     SetParameterDescription( "in", "Input image to smooth." );
     AddParameter( ParameterType_OutputImage , "out" , "Output Image" );
     SetParameterDescription( "out" , "Output smoothed image." );
-
-    AddRAMParameter();
 
     AddParameter( ParameterType_Choice, "type" , "Smoothing Type" );
     SetParameterDescription( "type", "Smoothing kernel to apply" );
@@ -118,6 +116,8 @@ private:
 
     SetParameterString( "type" , "anidif");
 
+    AddRAMParameter();
+
     // Doc example parameter settings
     SetExampleComment( "Image smoothing using a mean filter." , 0 );
     SetDocExampleParameterValue( "in" , "Romania_Extract.tif" );
@@ -138,7 +138,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    // Nothing to do here: all parameters are independent
   }
 
   void DoExecute() override

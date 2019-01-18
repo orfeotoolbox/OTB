@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -247,7 +247,7 @@ SampleAugmentationFilter
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
   return (fieldType == OFTInteger 
-          || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+          || fieldType == OFTInteger64
           || fieldType == OFTReal);
 }
 

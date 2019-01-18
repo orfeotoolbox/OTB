@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -68,13 +68,11 @@ target_link_libraries(HarrisExample ${OTB_LIBRARIES})
 add_executable(HuMomentsImageFunctionExample HuMomentsImageFunctionExample.cxx)
 target_link_libraries(HuMomentsImageFunctionExample ${OTB_LIBRARIES})
 
-if (Module_OTBVectorDataRendering AND OTB_USE_MAPNIK)
-  add_executable(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
-  target_link_libraries(LineSegmentDetectorExample ${OTB_LIBRARIES})
+add_executable(LineSegmentDetectorExample LineSegmentDetectorExample.cxx)
+target_link_libraries(LineSegmentDetectorExample ${OTB_LIBRARIES})
 
-  add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
-  target_link_libraries(RightAngleDetectionExample ${OTB_LIBRARIES})
-endif()
+add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
+target_link_libraries(RightAngleDetectionExample ${OTB_LIBRARIES})
 
 add_executable(LocalHoughExample LocalHoughExample.cxx)
 target_link_libraries(LocalHoughExample ${OTB_LIBRARIES})

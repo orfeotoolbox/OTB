@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -2101,9 +2101,9 @@ void Application::AddRANDParameter(std::string paramKey)
 {
   // Get the  RAND Parameter from the configuration file
 
-  GetParameterList()->AddParameter(ParameterType_Int, paramKey, "set user defined seed");
+  GetParameterList()->AddParameter(ParameterType_Int, paramKey, "Random seed");
   MandatoryOff(paramKey);
-  SetParameterDescription(paramKey, "Set specific seed. with integer value.");
+  SetParameterDescription(paramKey, "Set a specific random seed with integer value.");
 
 }
 

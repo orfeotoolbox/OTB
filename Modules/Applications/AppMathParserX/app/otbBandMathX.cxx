@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -208,8 +208,6 @@ private:
     AddParameter( ParameterType_OutputImage, "out", "Output Image" );
     SetParameterDescription( "out", "Output image." );
 
-    AddRAMParameter();
-
     AddParameter( ParameterType_String, "exp", "Expressions" );
     SetParameterDescription(
       "exp",
@@ -229,6 +227,8 @@ private:
       "A txt file where to save user's constants and expressions."
     );
     MandatoryOff( "outcontext" );
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue(

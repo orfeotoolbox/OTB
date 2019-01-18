@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,12 +27,11 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "itkMeanImageFilter.h"
-#include "otbReciprocalHuynenDecompImageFilter.h"
+
 #include "otbPerBandVectorImageFilter.h"
-#include "otbSinclairReciprocalImageFilter.h"
-#include "otbSinclairToReciprocalCoherencyMatrixFunctor.h"
 
-
+#include "otbReciprocalHuynenDecompImageFilter.h"
+#include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 
 int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -53,50 +52,40 @@ int otbReciprocalHuynenDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   typedef otb::ImageFileReader<ComplexImageType>  ReaderType;
   typedef otb::ImageFileWriter<ComplexVectorImageType> WriterType;
-  
-  
-  typedef otb::SinclairReciprocalImageFilter<ComplexImageType, ComplexImageType, ComplexImageType, ComplexVectorImageType, 
-  otb::Functor::SinclairToReciprocalCovarianceMatrixFunctor<ComplexImageType::PixelType,
-                                    ComplexImageType::PixelType,
-                                    ComplexImageType::PixelType,
-                                    ComplexVectorImageType::PixelType> > SinclairToCovFilterType;
-  
-  
+
+  using SinclairToCovFilterType = otb::SinclairToReciprocalCovarianceMatrixImageFilter<ComplexImageType, ComplexVectorImageType>;
+
   typedef itk::MeanImageFilter<ComplexImageType, ComplexImageType>         MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexVectorImageType, ComplexVectorImageType, MeanFilterType> PerBandMeanFilterType;
-  
-  
+
   typedef otb::ReciprocalHuynenDecompImageFilter<ComplexVectorImageType, ComplexVectorImageType> FilterType;
-  
-  
+
 
   ReaderType::Pointer readerHH = ReaderType::New();
   ReaderType::Pointer readerHV = ReaderType::New();
   ReaderType::Pointer readerVV = ReaderType::New();
-  
+
   WriterType::Pointer writer = WriterType::New();
 
   SinclairToCovFilterType::Pointer sinclairtocov = SinclairToCovFilterType::New();
   PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
   FilterType::Pointer huynenfilter = FilterType::New();
-        
-  
+
   MeanFilterType::InputSizeType radius;
   radius.Fill( size );
   perBand->GetFilter()->SetRadius(radius);
- 
- 
+
   readerHH->SetFileName(inputFilenameHH);
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
-  
-  sinclairtocov->SetInputHH(readerHH->GetOutput());
-  sinclairtocov->SetInputHV_VH(readerHV->GetOutput());
-  sinclairtocov->SetInputVV(readerVV->GetOutput());
- 
+
+  sinclairtocov->SetInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
+
   perBand->SetInput(sinclairtocov->GetOutput());
-  
-  huynenfilter->SetInput(perBand->GetOutput());
+
+  huynenfilter->SetInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(huynenfilter->GetOutput());

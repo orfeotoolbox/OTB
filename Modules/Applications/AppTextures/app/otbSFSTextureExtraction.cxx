@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -89,8 +89,6 @@ SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
-AddRAMParameter();
-
 AddParameter(ParameterType_Group, "parameters", "Texture feature parameters");
 SetParameterDescription("parameters","This group of parameters allows one to define SFS texture "
     "parameters. The available texture features are SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, "
@@ -118,6 +116,8 @@ SetDefaultParameterInt("parameters.maxcons", 5);
 
 AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
 SetParameterDescription("out", "Output image containing the SFS texture features.");
+
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

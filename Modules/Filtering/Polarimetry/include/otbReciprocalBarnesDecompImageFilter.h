@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,11 @@
 #ifndef otbReciprocalBarnesDecompImageFilter_h
 #define otbReciprocalBarnesDecompImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -33,8 +34,10 @@ namespace otb
 namespace Functor {
 
 /** \class otbBarnesDecompFunctor
- * 
+ *
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
+ *
+ * Use otb::BarnesDecompImageFilter to apply
  *
  * \ingroup OTBPolarimetry
  */
@@ -49,14 +52,11 @@ public:
   typedef std::vector<double>           VectorType;
   typedef typename TOutput::ValueType   OutputValueType;
 
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
 
-  inline TOutput operator()( const TInput & Covariance ) const
-    {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    
-	VNLMatrixType qi(3,1);
-	
+    VNLMatrixType qi(3, 1);
+
 
     VNLMatrixType cov(3, 3);
     cov[0][0] = ComplexType(Covariance[0]);
@@ -70,95 +70,62 @@ public:
     cov[2][2] = ComplexType(Covariance[5]);
 
 
-	qi[0][0]=ComplexType(1.,0.);
-	qi[1][0]=ComplexType(0.,0.);
-	qi[2][0]=ComplexType(0.,0.);
-	ComplexType norm =  (qi.conjugate_transpose()*cov*qi)[0][0];
-	VNLMatrixType ki = cov*qi / std::sqrt(norm);
+    qi[0][0]           = ComplexType(1., 0.);
+    qi[1][0]           = ComplexType(0., 0.);
+    qi[2][0]           = ComplexType(0., 0.);
+    ComplexType   norm = (qi.conjugate_transpose() * cov * qi)[0][0];
+    VNLMatrixType ki   = cov * qi / std::sqrt(norm);
     result[0] = static_cast<OutputValueType>(ki[0][0]);
     result[1] = static_cast<OutputValueType>(ki[1][0]);
     result[2] = static_cast<OutputValueType>(ki[2][0]);
-    
-    
-	qi[0][0]=ComplexType(0.,0.);
-	qi[1][0]=ComplexType(1./std::sqrt(2.),0.);
-	qi[2][0]=ComplexType(0.,1./std::sqrt(2.));
-	norm =  (qi.conjugate_transpose()*cov*qi)[0][0];
-	ki = cov*qi / std::sqrt(norm);
+
+
+    qi[0][0]  = ComplexType(0., 0.);
+    qi[1][0]  = ComplexType(1. / std::sqrt(2.), 0.);
+    qi[2][0]  = ComplexType(0., 1. / std::sqrt(2.));
+    norm      = (qi.conjugate_transpose() * cov * qi)[0][0];
+    ki        = cov * qi / std::sqrt(norm);
     result[3] = static_cast<OutputValueType>(ki[0][0]);
     result[4] = static_cast<OutputValueType>(ki[1][0]);
     result[5] = static_cast<OutputValueType>(ki[2][0]);
-    
-    
+
+
     qi[0][0]=ComplexType(0.,0.);
-	qi[1][0]=ComplexType(0.,1./std::sqrt(2.));
-	qi[2][0]=ComplexType(1./std::sqrt(2.),0.);
-	norm =  (qi.conjugate_transpose()*cov*qi)[0][0];
-	ki = cov*qi / std::sqrt(norm);
+    qi[1][0]  = ComplexType(0., 1. / std::sqrt(2.));
+    qi[2][0]  = ComplexType(1. / std::sqrt(2.), 0.);
+    norm      = (qi.conjugate_transpose() * cov * qi)[0][0];
+    ki        = cov * qi / std::sqrt(norm);
     result[6] = static_cast<OutputValueType>(ki[0][0]);
     result[7] = static_cast<OutputValueType>(ki[1][0]);
     result[8] = static_cast<OutputValueType>(ki[2][0]);
+  }
 
-    return result;
-    }
-
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
-
-   /** Constructor */
-   ReciprocalBarnesDecompFunctor() : m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalBarnesDecompFunctor() {}
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 9;
+  }
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 9);
-   const double m_Epsilon;
+  static constexpr double m_Epsilon = 1e-6;
 };
-}
+} // namespace Functor
 
-
-/** \class otbBarnesDecompImageFilter
- * \brief Compute the Barnes decomposition image (9 complex channels)
- * from the Reciprocal Covariance image (6 complex channels)
+/**
+ * \typedef ReciprocalBarnesDecompImageFilter
+ * \brief Applies otb::Functor::ReciprocalBarnesDecompFunctor
+ * \sa otb::Functor::ReciprocalBarnesDecompFunctor
  *
- * For more details, please refer to the class ReciprocalBarnesDecompFunctor.
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
- * \sa ReciprocalBarnesDecompFunctor
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalBarnesDecompImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalBarnesDecompFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalBarnesDecompImageFilter  Self;
-   typedef typename Functor::ReciprocalBarnesDecompFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalBarnesDecompImageFilter, UnaryFunctorImageFilter);
-
-protected:
-   ReciprocalBarnesDecompImageFilter() {}
-  ~ReciprocalBarnesDecompImageFilter() override {}
-
-private:
-  ReciprocalBarnesDecompImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-
-};
-
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalBarnesDecompImageFilter =
+    FunctorImageFilter<Functor::ReciprocalBarnesDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

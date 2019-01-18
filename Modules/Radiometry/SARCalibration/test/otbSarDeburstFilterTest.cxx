@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,13 +28,20 @@ typedef otb::ImageFileReader<ImageType>       ReaderType;
 typedef otb::ImageFileWriter<ImageType>       WriterType;
 typedef otb::SarDeburstImageFilter<ImageType> DeburstFilterType;
 
-int otbSarDeburstFilterTest(int itkNotUsed(argc), char * argv[])
+int otbSarDeburstFilterTest(int argc, char * argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
+  bool onlyValidSamples = false;
+  if (argc == 4)
+    {
+      onlyValidSamples = true;
+    }
+
   DeburstFilterType::Pointer filter = DeburstFilterType::New();
   filter->SetInput(reader->GetOutput());
+  filter->SetOnlyValidSample(onlyValidSamples);
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

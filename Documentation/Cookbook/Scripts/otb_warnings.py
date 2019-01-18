@@ -18,17 +18,6 @@ def parameter_warnings(app_warn, app, key):
     if "." in name:
         warn("name contains a special character (.)")
 
-    # disabled because there are so many for now
-    #if description == "":
-        #warn("missing description")
-
-    # disabled because there are so many for now
-    #if len(description) > 0 and description[-1] != ".":
-        #warn("description does not end with a period")
-
-    if len(description) > 0 and " :" in description:
-        warn("description has a space before a colon")
-
 def application_documentation_warnings(app):
     "Emit warnings about application documentation"
 
@@ -38,15 +27,8 @@ def application_documentation_warnings(app):
     description = app.GetDescription()
     longdescription = app.GetDocLongDescription()
 
-    # disable because there are so many for now
-    #if not longdescription[-1] == ".":
-        #warn("Application Long Description does not end with a period (.)")
-
     if re.search("\\n [a-zA-Z]", longdescription):
         warn("Application Long Description contains '\\n ' pattern (usually not intended)")
-
-    if " :" in longdescription:
-        warn("Application Long Description has a space before a colon")
 
     if app.GetNumberOfExamples() == 0:
         warn("Application has no examples")
@@ -54,9 +36,6 @@ def application_documentation_warnings(app):
     keys = app.GetParametersKeys()
     for key in app.GetParametersKeys():
         parameter_warnings(warn, app, key)
-
-    if "ram" in keys and not keys[-3] == "ram":
-        warn("'ram' parameter is not third from last")
 
     if "inxml" in keys and not keys[-2] == "inxml":
         warn("'inxml' parameter is not second from last parameter")

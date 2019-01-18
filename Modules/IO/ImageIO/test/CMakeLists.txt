@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -76,10 +76,6 @@ otbImageFileWriterOptBandTest.cxx
 otbMultiImageFileWriterTest.cxx
 otbWriteGeomFile.cxx
 )
-
-if(OTB_USE_DEPRECATED)
-  set(OTBImageIOTests ${OTBImageIOTests} otbImageFileReaderServerName.cxx)
-endif()
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
 target_link_libraries(otbImageIOTestDriver ${OTBImageIO-Test_LIBRARIES})
@@ -521,19 +517,6 @@ otb_add_test(NAME ioTvONERAImageFileWriterComplex COMMAND otbImageIOTestDriver
   otbImageFileWriterONERAComplex
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
-
-if(OTB_USE_DEPRECATED)
-  otb_add_test(NAME ioTvImageFileReaderServerNameOTBTest COMMAND otbImageIOTestDriver
-    otbImageFileReaderServerName
-    ${OTB_DATA_ROOT}/Examples/osmfile.otb)
-  set_property(TEST ioTvImageFileReaderServerNameOTBTest PROPERTY RESOURCE_LOCK web_access)
-endif()
-
-#dashboard_hell
-# otb_add_test(NAME ioTvImageFileReaderServerNameHTTPTest COMMAND otbImageIOTestDriver
-#   otbImageFileReaderServerName
-#   http://tile.openstreetmap.org/)
-# set_property(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvPipelineMetadataHandlingTest COMMAND otbImageIOTestDriver
   --compare-metadata ${EPSILON_9}

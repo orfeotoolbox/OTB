@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,20 +32,18 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
 {
   AddChoice( "classifier.sharkkm", "Shark kmeans classifier" );
   SetParameterDescription("classifier.sharkkm", "http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html ");
-  //MaxNumberOfIterations
-  AddParameter( ParameterType_Int, "classifier.sharkkm.maxiter",
-                "Maximum number of iteration for the kmeans algorithm." );
-  SetParameterInt( "classifier.sharkkm.maxiter", 10 );
-  SetMinimumParameterIntValue( "classifier.sharkkm.maxiter", 0 );
-  SetParameterDescription( "classifier.sharkkm.maxiter",
-                           "The maximum number of iteration for the kmeans algorithm. 0=unlimited" );
 
-  //MaxNumberOfIterations
-  AddParameter( ParameterType_Int, "classifier.sharkkm.k", "The number of class used for the kmeans algorithm." );
-  SetParameterInt( "classifier.sharkkm.k", 2 );
-  SetParameterDescription( "classifier.sharkkm.k",
-                           "The number of class used for the kmeans algorithm. Default set to 2 class" );
-  SetMinimumParameterIntValue( "classifier.sharkkm.k", 2 );
+  // MaxNumberOfIterations
+  AddParameter(ParameterType_Int, "classifier.sharkkm.maxiter", "Maximum number of iterations for the kmeans algorithm");
+  SetParameterInt("classifier.sharkkm.maxiter", 10);
+  SetMinimumParameterIntValue("classifier.sharkkm.maxiter", 0);
+  SetParameterDescription("classifier.sharkkm.maxiter", "The maximum number of iterations for the kmeans algorithm. 0=unlimited");
+
+  // Number of classes
+  AddParameter(ParameterType_Int, "classifier.sharkkm.k", "Number of classes for the kmeans algorithm");
+  SetParameterInt("classifier.sharkkm.k", 2);
+  SetParameterDescription("classifier.sharkkm.k", "The number of classes used for the kmeans algorithm. Default set to 2 class");
+  SetMinimumParameterIntValue("classifier.sharkkm.k", 2);
 }
 
 template<class TInputValue, class TOutputValue>

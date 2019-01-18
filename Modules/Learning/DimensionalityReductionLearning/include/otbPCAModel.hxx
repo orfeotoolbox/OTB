@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -148,7 +148,7 @@ PCAModel<TInputValue>::Load(const std::string & filename, const std::string & /*
 
 template <class TInputValue>
 typename PCAModel<TInputValue>::TargetSampleType
-PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/) const
+PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/, ProbaSampleType * /*proba*/) const
 {  
   shark::RealVector samples(value.Size());
   for(size_t i = 0; i < value.Size();i++)
@@ -173,7 +173,7 @@ PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueT
 
 template <class TInputValue>
 void PCAModel<TInputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * /*quality*/) const
+::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * /*quality*/,ProbaListSampleType * /*proba*/) const
 {
   std::vector<shark::RealVector> features;
   Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);

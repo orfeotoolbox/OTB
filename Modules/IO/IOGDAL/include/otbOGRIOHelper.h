@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "otbVectorData.h"
-#include "otbOGRVersionProxy.h"
 
 #include "OTBIOGDALExport.h"
 
@@ -74,14 +73,14 @@ public:
 
 
   unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
-                                ogr::version_proxy::GDALDatasetType * m_DataSource,
+                                GDALDataset * m_DataSource,
                                 OGRGeometryCollection * ogrCollection,
                                 OGRLayer * ogrCurrentLayer,
                                 OGRSpatialReference * oSRS);
 
   /** Return a list of OGRLayer * */
   std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                                        ogr::version_proxy::GDALDatasetType * dummyDatasource,
+                                                        GDALDataset * dummyDatasource,
                                                         OGRLayer* ogrCurrentLayer,
                                                         OGRSpatialReference * oSRS);
 

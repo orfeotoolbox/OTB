@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -80,7 +80,7 @@ protected:
     DimensionalityReductionModelFactoryType::CleanFactories();
     }
 
-private:  
+private:
   void DoInit() override
     {
     SetName("VectorDimensionalityReduction");
@@ -115,11 +115,10 @@ private:
       "In overwrite mode, the original features will be lost.");
     MandatoryOff("out");
 
-    AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction."); //
-    SetParameterDescription("feat","List of field names in the input vector "
-      "data used as features for reduction."); //
+    AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction");
+    SetParameterDescription("feat", "List of field names in the input vector data used as features for reduction.");
 
-    AddParameter(ParameterType_Choice, "featout", "Output feature"); //
+    AddParameter(ParameterType_Choice, "featout", "Output feature");
     SetParameterDescription("featout", "Naming of output features");
 
     AddChoice("featout.prefix", "Prefix");
@@ -134,22 +133,24 @@ private:
     SetParameterDescription("featout.list", "Use a list with all names");
 
     AddParameter(ParameterType_StringList, "featout.list.names", "Feature name list");
-    SetParameterDescription("featout.list.names","List of field names for the output "
-      "features which result from the reduction."); //
+    SetParameterDescription("featout.list.names",
+                            "List of field names for the output "
+                            "features which result from the reduction.");
 
-    AddParameter(ParameterType_Int, "pcadim", "Principal component dimension"); //
-    SetParameterDescription("pcadim","This optional parameter can be set to "
-      "reduce the number of eignevectors used in the PCA model file. This "
-      "parameter can't be used for other models"); //
+    AddParameter(ParameterType_Int, "pcadim", "Principal component dimension");
+    SetParameterDescription("pcadim",
+                            "This optional parameter can be set to "
+                            "reduce the number of eignevectors used in the PCA model file. This "
+                            "parameter can't be used for other models");
     MandatoryOff("pcadim");
-    
-    AddParameter(ParameterType_Choice, "mode", "Writing mode"); //
+
+    AddParameter(ParameterType_Choice, "mode", "Writing mode");
     SetParameterDescription("mode", "This parameter determines if the output "
       "file is overwritten or updated [overwrite/update]. If an output file "
       "name is given, the original file is copied before creating the new features.");
 
     AddChoice("mode.overwrite", "Overwrite");
-    SetParameterDescription("mode.overwrite","Overwrite mode"); //
+    SetParameterDescription("mode.overwrite", "Overwrite mode");
 
     AddChoice("mode.update", "Update");
     SetParameterDescription("mode.update", "Update mode");
@@ -160,7 +161,7 @@ private:
     SetDocExampleParameterValue("model", "model.txt");
     SetDocExampleParameterValue("out", "vectorDataOut.shp");
     SetDocExampleParameterValue("feat", "perimeter area width");
-    //SetOfficialDocLink(); 
+    SetOfficialDocLink();
     }
 
   void DoUpdateParameters() override

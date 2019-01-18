@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -129,8 +129,6 @@ private:
     SetParameterDescription( "foutpos", " This output image contains the 2D displacement between the input pixel spatial position and the final position after convergence. Floating point encoding is mandatory. This output can be used as input image (in) of the LSMSSegmentation application [4,5].");
     MandatoryOff("foutpos");
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Int, "spatialr", "Spatial radius");
     SetParameterDescription("spatialr", "Radius of the spatial neighborhood for averaging. Higher values will result in more smoothing and higher processing time.");
     SetDefaultParameterInt("spatialr", 5);
@@ -159,8 +157,10 @@ private:
     SetMinimumParameterFloatValue("rangeramp", 0);
     MandatoryOff("rangeramp");
 
-    AddParameter(ParameterType_Bool, "modesearch", "Mode search.");
+    AddParameter(ParameterType_Bool, "modesearch", "Mode search");
     SetParameterDescription("modesearch", "If activated pixel iterative convergence is stopped if the path crosses an already converged pixel. Be careful, with this option, the result will slightly depend on thread number and the results will not be stable (see [4] for more details).");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "maur_rgb.png");

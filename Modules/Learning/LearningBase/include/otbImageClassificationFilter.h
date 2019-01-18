@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbMachineLearningModel.h"
 #include "otbImage.h"
+#include "otbVectorImage.h"
 
 namespace otb
 {
@@ -75,6 +76,11 @@ public:
   typedef otb::Image<double>                    ConfidenceImageType;
   typedef typename ConfidenceImageType::Pointer ConfidenceImagePointerType;
 
+  /**Output type for Proba */
+  typedef otb::VectorImage<double>              ProbaImageType;
+
+  typedef typename ProbaImageType::Pointer      ProbaImagePointerType;
+  typedef itk::VariableLengthVector<double>     ProbaSampleType;
   /** Set/Get the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
@@ -87,10 +93,16 @@ public:
   itkSetMacro(UseConfidenceMap, bool);
   itkGetMacro(UseConfidenceMap, bool);
 
+  /** Set/Get the proba map flag */
+  itkSetMacro(UseProbaMap, bool);
+  itkGetMacro(UseProbaMap, bool);
+  
   itkSetMacro(BatchMode, bool);
   itkGetMacro(BatchMode, bool);
   itkBooleanMacro(BatchMode);
 
+  itkSetMacro(NumberOfClasses, unsigned int);
+  itkGetMacro(NumberOfClasses, unsigned int);
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
@@ -108,7 +120,7 @@ public:
    * Get the output confidence map
    */
   ConfidenceImageType * GetOutputConfidence(void);
-
+  ProbaImageType * GetOutputProba(void);
 protected:
   /** Constructor */
   ImageClassificationFilter();
@@ -124,6 +136,12 @@ protected:
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
+  void GenerateOutputInformation() override
+  {
+    Superclass::GenerateOutputInformation();
+    // Define the number of output bands
+    this->GetOutputProba()->SetNumberOfComponentsPerPixel(m_NumberOfClasses);
+  }
 private:
   ImageClassificationFilter(const Self &) = delete;
   void operator =(const Self&) = delete;
@@ -134,7 +152,9 @@ private:
   LabelType m_DefaultLabel;
   /** Flag to produce the confidence map (if the model supports it) */
   bool m_UseConfidenceMap;
+  bool m_UseProbaMap;
   bool m_BatchMode;
+  unsigned int m_NumberOfClasses;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -82,7 +82,18 @@ public:
   bool IsValidSensorModel() const;
 
   /** Deburst metadata if possible and return lines to keep in image file */
-  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines);
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
+	       std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+
+  /** Burst extraction and return lines/samples to keep into image file (the required burst) */
+  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
+		       std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
+
+  
+  /** Deburst metadata if possible and prepare the burst concatenation */	
+  bool DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
+			     std::vector<std::pair<unsigned long,unsigned long> > & samplesBursts);
+
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */

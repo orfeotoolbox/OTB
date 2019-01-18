@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -88,9 +88,12 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
   m_ConcaveFilter->SetInput1(m_ClosingFilter->GetOutput());
   m_ConcaveFilter->SetInput2(this->GetInput());
 
-  m_LevelingFilter->SetInput(this->GetInput());
-  m_LevelingFilter->SetInputConvexMap(m_ConvexFilter->GetOutput());
-  m_LevelingFilter->SetInputConcaveMap(m_ConcaveFilter->GetOutput());
+  using namespace otb::Functor::LevelingFunctor_tags;
+  // Template keyword mandatory to avoid parsing error when using
+  // template methods within template code
+  m_LevelingFilter->template SetInput<pixel>(this->GetInput());
+  m_LevelingFilter->template SetInput<convex_pixel>(m_ConvexFilter->GetOutput());
+  m_LevelingFilter->template SetInput<concave_pixel>(m_ConcaveFilter->GetOutput());
 
   m_ConvexFilter->GraftOutput(this->GetConvexMap());
   m_ConvexFilter->Update();

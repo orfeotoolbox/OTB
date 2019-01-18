@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -88,8 +88,7 @@ private:
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector Data");
-    SetParameterDescription("io.vd", "Input geometries used for training (note "
-      ": all geometries from the layer will be used)");
+    SetParameterDescription("io.vd", "Input geometries used for training (note: all geometries from the layer will be used)");
 
     AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
     SetParameterDescription("io.out", "Output file containing the estimated model (.txt format).");
@@ -98,9 +97,8 @@ private:
     MandatoryOff("io.stats");
     SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training."); //
-    SetParameterDescription("feat","List of field names in the input vector data"
-      " used as features for training."); //
+    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training");
+    SetParameterDescription("feat","List of field names in the input vector data used as features for training.");
 
     Superclass::DoInit();
 

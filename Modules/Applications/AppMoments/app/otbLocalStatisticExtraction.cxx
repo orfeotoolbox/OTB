@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -79,12 +79,12 @@ SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
-AddRAMParameter();
-
 AddParameter(ParameterType_Int, "radius", "Neighborhood radius");
 SetParameterDescription("radius", "The computational window radius.");
 SetMinimumParameterIntValue("radius",1);
 SetDefaultParameterInt("radius",3);
+
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

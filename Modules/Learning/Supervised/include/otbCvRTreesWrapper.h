@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,7 +65,7 @@ public:
   float predict_margin(const cv::Mat& sample,
                           const cv::Mat& missing =
                           cv::Mat()) const;
-
+  
 #ifdef OTB_OPENCV_3
 
 #define OTB_CV_WRAP_PROPERTY(type,name) \

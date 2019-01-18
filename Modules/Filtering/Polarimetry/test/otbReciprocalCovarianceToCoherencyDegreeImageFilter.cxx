@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,6 @@
 #include "otbImageFileWriter.h"
 #include "otbReciprocalCovarianceToCoherencyDegreeImageFilter.h"
 
-
 int otbReciprocalCovarianceToCoherencyDegreeImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFilename  = argv[1];
@@ -50,7 +49,7 @@ int otbReciprocalCovarianceToCoherencyDegreeImageFilter(int itkNotUsed(argc), ch
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

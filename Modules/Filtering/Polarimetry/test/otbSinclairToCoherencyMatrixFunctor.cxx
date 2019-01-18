@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,7 @@
  */
 
 
-#include "otbSinclairToCoherencyMatrixFunctor.h"
+#include "otbSinclairToCoherencyMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
 int otbSinclairToCoherencyMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
@@ -31,7 +31,7 @@ int otbSinclairToCoherencyMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(
 
   OutputType  result(10);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType  outputFunct(10);
 
   result[0] = ComplexType(25., 0.);
   result[1] = ComplexType( 0., -15.);
@@ -44,7 +44,7 @@ int otbSinclairToCoherencyMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(
   result[8] = ComplexType(-5., 0.);
   result[9] = ComplexType( 1., 0.);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.), ComplexType(4., 1.));
 
   if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
       std::abs(result[1]-outputFunct[1]) > 1e-10 ||

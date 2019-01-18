@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,9 +26,10 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalPauliDecompImageFilter.h"
+
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
+#include "otbReciprocalPauliDecompImageFilter.h"
 
 
 int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])
@@ -50,25 +51,25 @@ int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])
 
   typedef otb::ImageFileReader<RealVectorImageType>  ReaderType;
   typedef otb::ImageFileWriter<ComplexVectorImageType> WriterType;
-  
+
   typedef otb::ReciprocalPauliDecompImageFilter<ComplexVectorImageType, ComplexVectorImageType> FilterType;
-  
+
   ReaderType::Pointer readerHH = ReaderType::New();
   ReaderType::Pointer readerHV = ReaderType::New();
   ReaderType::Pointer readerVV = ReaderType::New();
   NRITOOneCFilterType::Pointer nriToOneCfilter = NRITOOneCFilterType::New();
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer paulifilter = FilterType::New();
-        
+
   readerHH->SetFileName(inputFilenameHH);
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
-  
+
   nriToOneCfilter->SetInput(0,readerHH->GetOutput());
   nriToOneCfilter->SetInput(1,readerHV->GetOutput());
   nriToOneCfilter->SetInput(2,readerVV->GetOutput());
- 
-  paulifilter->SetInput(nriToOneCfilter->GetOutput());
+
+  paulifilter->SetInput<0>(nriToOneCfilter->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(paulifilter->GetOutput());

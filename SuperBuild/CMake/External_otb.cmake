@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -199,7 +199,6 @@ ExternalProject_Add(OTB
   -DOTB_USE_CURL:BOOL=${OTB_USE_CURL}
   -DOTB_USE_LIBKML:BOOL=${OTB_USE_LIBKML}
   -DOTB_USE_LIBSVM:BOOL=${OTB_USE_LIBSVM}
-  -DOTB_USE_MAPNIK:BOOL=${OTB_USE_MAPNIK}
   -DOTB_USE_MUPARSER:BOOL=${OTB_USE_MUPARSER}
   -DOTB_USE_MUPARSERX:BOOL=${OTB_USE_MUPARSERX}
   -DOTB_USE_OPENCV:BOOL=${OTB_USE_OPENCV}

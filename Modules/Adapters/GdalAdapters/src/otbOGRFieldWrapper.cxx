@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,7 +37,6 @@
 #endif
 #include "otbOGRFeatureWrapper.h"
 #include "otbJoinContainer.h"
-#include "otbOGRVersionProxy.h"
 #include <boost/array.hpp>
 /*===========================================================================*/
 /*===========================[ Static Assertions ]===========================*/
@@ -167,7 +166,7 @@ std::ostream & otb::ogr::Field::UncheckedPrintSelf(
 
 bool otb::ogr::Field::UncheckedHasBeenSet() const
 {
-  return otb::ogr::version_proxy::IsFieldSetAndNotNull(m_Feature.get(), m_index);
+  return otb::ogr::IsFieldSetAndNotNull(m_Feature.get(), m_index);
 }
 
 void otb::ogr::Field::UncheckedUnset() const
