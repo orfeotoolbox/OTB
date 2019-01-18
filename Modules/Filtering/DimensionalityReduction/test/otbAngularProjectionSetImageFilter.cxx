@@ -28,16 +28,17 @@
 
 #include "otbAngularProjectionSetImageFilter.h"
 
-int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
+int otbAngularProjectionSetImageFilterTest ( int, char * argv[] )
 {
   const unsigned int Dimension = 2;
   const unsigned int SpaceDimension = 3;
   const unsigned int nbInputImages = SpaceDimension+1;
 
-  std::string inputImageName [ nbInputImages ];
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = "";
-  std::string outputImageName = "";
+  // Use the same input several time in this test
+  std::string inputImageName = argv[1];
+
+  // We only have one output here
+  std::string outputImageName = argv[2];
 
   // Main type definition
   typedef float  PixelType;
@@ -54,7 +55,7 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
   for ( unsigned int i = 0; i < nbInputImages; i++ )
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
+    reader->GetNthElement(i)->SetFileName( inputImageName );
     reader->GetNthElement(i)->Update();
   }
 
@@ -77,21 +78,17 @@ int otbAngularProjectionSetImageFilterTest ( int argc, char * argv[] )
     filter->SetInput( i, reader->GetNthElement(i)->GetOutput() );
   }
   filter->SetAngleList( angleList );
-
+  filter->Update();
   // Saving
   typedef otb::ImageFileWriter< ImageType > WriterType;
   typedef otb::ObjectList< WriterType > WriterListType;
   WriterListType::Pointer writers = WriterListType::New();
   writers->Resize( filter->GetOutput()->Size() );
-
-  for ( unsigned int i = 0; i < writers->Size(); i++ )
+  for ( unsigned int i = 0; i < filter->GetOutput()->Size(); i++ )
   {
-    std::ostringstream title;
-    title << outputImageName << "_" << i << ".hdr";
-
     writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
-    writer->SetFileName( title.str() );
+    writer->SetFileName( outputImageName);
     writer->SetInput( filter->GetOutput()->GetNthElement(i) );
     writer->Update();
   }

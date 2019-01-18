@@ -78,6 +78,14 @@ otb_add_test(NAME bfTvAngularProjectionImageFilter COMMAND otbDimensionalityRedu
   ${TEMP}/bfTvAngularProjectionImageFilter.tif
 )
 
+otb_add_test(NAME bfTvAngularProjectionSetImageFilter COMMAND otbDimensionalityReductionTestDriver
+  --compare-image ${EPSILON_12}
+  ${BASELINE}/bfTvAngularProjectionSetImageFilter.tif
+  ${TEMP}/bfTvAngularProjectionSetImageFilter.tif
+  otbAngularProjectionSetImageFilterTest
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvAngularProjectionSetImageFilter.tif
+)
 otb_add_test(NAME bfTvNormalizeInnerProductPCAImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_12}
   ${BASELINE}/bfNormalizeInnerProductPCAImageFilter.tif
