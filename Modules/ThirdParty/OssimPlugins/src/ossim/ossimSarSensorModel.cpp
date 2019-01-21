@@ -1870,8 +1870,7 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
 
        if (inputWithInvalidPixels)
 	 {
-	   currentStart_L = itBursts->startLine - counter*theNumberOfLinesPerBurst + 
-	     halfLineOverlapBegin[counter];
+	   currentStart_L += itBursts->startLine - counter*theNumberOfLinesPerBurst;
 	 }
 
        unsigned long currentStop_L = itBursts->endLine - itBursts->startLine - halfLineOverlapEnd[counter];
@@ -1886,15 +1885,18 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
        unsigned long currentStart_S = 0;
        unsigned long currentStop_S = samples.second-samples.first;
 
-       if (itBursts->startSample < samples.first)
-	 {
-	   currentStart_S = samples.first - itBursts->startSample;
-	 }
-       
        if (inputWithInvalidPixels)
 	 {
 	   currentStart_S = samples.first;
 	 }
+       else
+	 {
+	   if (itBursts->startSample < samples.first)
+	     {
+	       currentStart_S = samples.first - itBursts->startSample;
+	     }
+	 }
+              
        currentStop_S += currentStart_S;
 
        samplesBursts.push_back(std::make_pair(currentStart_S, currentStop_S));

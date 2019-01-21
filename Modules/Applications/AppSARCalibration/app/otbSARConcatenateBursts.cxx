@@ -80,7 +80,7 @@ private:
     SetParameterDescription("out", "The concatenated and debursted output image.");
 
     AddParameter(ParameterType_Int,  "burstindex", "Index of the first Burst");
-    SetParameterDescription("burstindex", "Index for the first required Burst (By default 0)");
+    SetParameterDescription("burstindex", "Index for the first required Burst");
     MandatoryOff("burstindex");
     SetDefaultParameterInt("burstindex", 0);
 
@@ -125,7 +125,7 @@ private:
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to retrieve bursts.number value from .geom file.");
+	otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
       }
 
     nbBursts = inList->Size();
@@ -140,14 +140,13 @@ private:
     // Get Invalid pixel Key (from Image 0) 
     FloatVectorImageType::Pointer Im0 = inList->GetNthElement(0);
     Im0->UpdateOutputInformation();
-    bool inputWithInvalidPixels = false;
-    if (Im0->GetImageKeywordlist().HasKey("support_data.invalid_pixels"))
-      {
-	if (Im0->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes")
-	  {
-	    inputWithInvalidPixels = true;
-	  }
-      }
+    
+    auto const& kwl = Im0->GetImageKeywordlist();
+
+    const bool inputWithInvalidPixels = kwl.HasKey("support_data.invalid_pixels")
+      && kwl.GetMetadataByKey("support_data.invalid_pixels") == "yes";
+ 
+
     fusionFilter->getDeburstLinesAndSamples(lines, samples, burst_index, inputWithInvalidPixels);
        
     // Split each input burst to keep only interested region
@@ -156,21 +155,14 @@ private:
 	FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
 	vectIm->UpdateOutputInformation();
 
-	bool inputWithInvalidPixels_loop = false;
-
 	// Check invalid Pixel Key
-	if (vectIm->GetImageKeywordlist().HasKey("support_data.invalid_pixels"))
-	   {
-	     if (vectIm->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes")
-	       {
-		 inputWithInvalidPixels_loop = true;
-	       }
-	   }
-	
+	const bool inputWithInvalidPixels_loop = vectIm->GetImageKeywordlist().HasKey("support_data.invalid_pixels")
+	  && vectIm->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes";
+
 	if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
 	  {
 	    // Throw an execption
-	    throw std::runtime_error("Incoherency between input images (for support_data.invalid_pixels key).");
+	    otbAppLogFATAL(<< "Incoherency between input images (for support_data.invalid_pixels key).");
 	  }
 
 	unsigned long originOffset_samples = static_cast<long>(vectIm->GetOrigin()[0]-0.5);
