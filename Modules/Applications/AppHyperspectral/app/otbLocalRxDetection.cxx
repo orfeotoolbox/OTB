@@ -92,7 +92,6 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "LocalRxScore.tif");
-    SetDocExampleParameterValue("threshold", "0.5");
     SetDocExampleParameterValue("ir", "1");
     SetDocExampleParameterValue("er", "5");
 
