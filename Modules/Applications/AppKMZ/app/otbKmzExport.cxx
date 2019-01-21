@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,7 +61,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Input image");
 
-    AddParameter(ParameterType_OutputFilename, "out",  "Output .kmz product");
+    AddParameter(ParameterType_OutputFilename, "out",  "Output KMZ product");
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
 
     AddParameter(ParameterType_Int, "tilesize",  "Tile Size");

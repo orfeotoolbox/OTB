@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -62,8 +62,11 @@ public:
   typedef typename ImageType::RegionType         RegionType;
   typedef typename ImageType::PointType          PointType;
 
-  typedef std::pair<unsigned long, unsigned long> LinesRecordType;
-  typedef std::vector<LinesRecordType>            LinesRecordVectorType;
+  typedef std::pair<unsigned long, unsigned long> RecordType;
+  typedef std::vector<RecordType>                 LinesRecordVectorType;
+	
+  // Setter
+  itkSetMacro(OnlyValidSample, bool);
   
 protected:
   // Constructor
@@ -81,6 +84,9 @@ protected:
   // Actual processing
   virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
+  void ThreadedGenerateDataWithAllSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  void ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
+
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
   
 private:
@@ -89,7 +95,12 @@ private:
 
   // Vector of line records
   LinesRecordVectorType m_LinesRecord;
-  
+
+  // Pair for sample valid selection
+  RecordType m_SamplesRecord;
+
+  bool m_OnlyValidSample;
+ 
 };
 
 } // End namespace otb

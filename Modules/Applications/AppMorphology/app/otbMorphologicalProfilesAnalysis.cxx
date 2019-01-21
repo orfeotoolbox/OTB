@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -270,12 +270,13 @@ private:
       }
 
     classificationFilter = MultiScaleClassificationFilterType::New();
-    classificationFilter->SetOpeningProfileDerivativeMaxima( omsCharFilter->GetOutput() );
-    classificationFilter->SetOpeningProfileCharacteristics( omsCharFilter->GetOutputCharacteristics() );
-    classificationFilter->SetClosingProfileDerivativeMaxima( cmsCharFilter->GetOutput() );
-    classificationFilter->SetClosingProfileCharacteristics( cmsCharFilter->GetOutputCharacteristics() );
-    classificationFilter->SetSigma( sigma );
-    classificationFilter->SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
+    using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+    classificationFilter->SetInput<max_opening_profile_derivative>( omsCharFilter->GetOutput() );
+    classificationFilter->SetInput<opening_profile_characteristics>( omsCharFilter->GetOutputCharacteristics() );
+    classificationFilter->SetInput<max_closing_profile_derivative>( cmsCharFilter->GetOutput() );
+    classificationFilter->SetInput<closing_profile_characteristics>( cmsCharFilter->GetOutputCharacteristics() );
+    classificationFilter->GetModifiableFunctor().SetSigma( sigma );
+    classificationFilter->GetModifiableFunctor().SetLabelSeparator( static_cast<unsigned short>(initValue + profileSize * step) );
     AddProcess(classificationFilter, "Classification");
     classificationFilter->Update();
     SetParameterOutputImage( "out", classificationFilter->GetOutput() );

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,10 +63,10 @@ int generic_SinclairImageFilter(int itkNotUsed(argc), char* argv[])
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   reader3->SetFileName(inputFilename3);
-  filter->SetVariadicNamedInput(polarimetry_tags::hh{}, reader1->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::hv{}, reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vh{}, reader2->GetOutput());
-  filter->SetVariadicNamedInput(polarimetry_tags::vv{}, reader3->GetOutput());
+  filter->SetInput(polarimetry_tags::hh{}, reader1->GetOutput());
+  filter->SetInput(polarimetry_tags::hv{}, reader2->GetOutput());
+  filter->SetInput(polarimetry_tags::vh{}, reader2->GetOutput());
+  filter->SetInput(polarimetry_tags::vv{}, reader3->GetOutput());
 
   filter->UpdateOutputInformation();
 

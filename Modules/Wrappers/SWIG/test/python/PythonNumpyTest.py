@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #

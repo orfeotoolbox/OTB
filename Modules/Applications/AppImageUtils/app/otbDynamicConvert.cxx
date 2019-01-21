@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -273,7 +273,7 @@ private:
       // save a reference to the functor
       m_Filters.push_back(transferLogFilter.GetPointer());
       
-      transferLogFilter->SetVariadicInputs(tempImage);
+      transferLogFilter->SetInputs(tempImage);
       transferLogFilter->UpdateOutputInformation();
       
       shrinkFilter->SetInput(transferLogFilter->GetOutput());

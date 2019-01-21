@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -81,13 +81,13 @@ int otbReciprocalBarnesDecompImageFilter(int itkNotUsed(argc), char * argv[])
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
 
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
-  sinclairtocov->SetVariadicNamedInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::hh{}, readerHH->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::hv_or_vh{}, readerHV->GetOutput());
+  sinclairtocov->SetInput(otb::polarimetry_tags::vv{}, readerVV->GetOutput());
 
   perBand->SetInput(sinclairtocov->GetOutput());
 
-  barnesfilter->SetVariadicInput<0>(perBand->GetOutput());
+  barnesfilter->SetInput<0>(perBand->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(barnesfilter->GetOutput());

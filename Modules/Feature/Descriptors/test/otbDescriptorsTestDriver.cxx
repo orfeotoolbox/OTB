@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,22 +22,11 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputDescriptorAscii);
-  REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputInterestPointAscii);
   REGISTER_TEST(otbHistogramOfOrientedGradientCovariantImageFunction);
-  REGISTER_TEST(otbImageToSURFKeyPointSetFilterOutputInterestPointAscii);
-  REGISTER_TEST(otbKeyPointSetsMatchingFilter);
-  REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputDescriptorAscii);
-  REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputAscii);
   REGISTER_TEST(otbFourierMellinImageFilter);
   REGISTER_TEST(otbImageToHessianDeterminantImageFilter);
-  REGISTER_TEST(otbImageToSIFTKeyPointSetFilterOutputImage);
   REGISTER_TEST(otbFourierMellinDescriptors);
   REGISTER_TEST(otbFourierMellinDescriptorsScaleInvariant);
   REGISTER_TEST(otbFourierMellinDescriptorsRotationInvariant);
-  REGISTER_TEST(otbImageToSIFTKeyPointSetFilterDistanceMap);
-#ifdef OTB_USE_SIFTFAST
-  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputInterestPointAscii);
-  REGISTER_TEST(otbImageToFastSIFTKeyPointSetFilterOutputDescriptorAscii);
-#endif
+  REGISTER_TEST(otbKeyPointsAlgorithmsTest);
 }

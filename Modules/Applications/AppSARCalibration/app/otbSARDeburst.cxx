@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -60,7 +60,10 @@ private:
                           "Note that the output sensor model is updated accordingly. This deburst"
                           " operation is the perfect preprocessing step to orthorectify S1 IW SLC"
                           " product with OTB [2] without suffering from artifacts caused by"
-                          " bursts separation.");
+                          " bursts separation.\n"
+
+			   "Two modes are available for the output image : with all samples and"
+			  "with only valid samples ");
     
     SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. Processing of"
                       " other Sentinel1 modes or TerrasarX images will result in no changes in"
@@ -79,6 +82,9 @@ private:
 
     AddParameter(ParameterType_OutputImage,  "out", "Output Image");
     SetParameterDescription("out", "Deburst image, with updated geom file that can be further used by Orthorectification application. If the input image is a raw Sentinel1 product, uint16 output type should be used (encoding of S1 product). Otherwise, output type should match type of input image.");
+
+    AddParameter(ParameterType_Bool, "onlyvalidsamples", "Select the modes for output image");
+    SetParameterDescription("onlyvalidsamples", "If true, the selected mode is with only valid samples.");
 
     AddRAMParameter();
 
@@ -99,6 +105,12 @@ private:
     // Set the filer input
     m_DeburstFilter = DeburstFilterType::New();
     m_DeburstFilter->SetInput(in);
+
+    if (IsParameterEnabled("onlyvalidsamples"))
+      {
+	m_DeburstFilter->SetOnlyValidSample(true);
+      }
+     
 
     // Set the output image
     SetParameterOutputImage("out", m_DeburstFilter->GetOutput());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -689,7 +689,7 @@ private:
         //Note : the GetDriver() Method has not been encapsulated in otb::ogr::DataSource,
         //so we must access the OGR pointer by using .ogr()
 
-        std::string driverName(otb::ogr::version_proxy::GetDriverNameFromDataSource(&ogrDS->ogr()));
+        std::string driverName(ogrDS->ogr().GetDriverName());
         if ( driverName.find("ESRI Shapefile") != std::string::npos)
           {
           otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,7 +43,7 @@
 otb::ogr::Feature::Feature(OGRFeatureDefn & definition)
 : m_Feature(
   OGRFeature::CreateFeature(&definition),
-  boost::bind(&OGRFeature::DestroyFeature, _1))
+  [&](auto const & x) {return OGRFeature::DestroyFeature(x);})
 {
   CheckInvariants();
 }
@@ -52,7 +52,7 @@ otb::ogr::Feature::Feature(OGRFeature * feature)
 {
   if (feature)
     {
-    m_Feature.reset(feature, boost::bind(&OGRFeature::DestroyFeature, _1));
+    m_Feature.reset(feature, [&](auto const & x) {return OGRFeature::DestroyFeature(x);});
     }
   // else default is perfect -> delete null
 }
@@ -78,16 +78,11 @@ void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, bool mustForgive)
 
 void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int * map, bool mustForgive)
 {
-#if GDAL_VERSION_NUM >= 1900
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
     }
-#else
-  itkGenericExceptionMacro("OGRLayer::SetFrom(feature, fieldmap, forgive) is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#endif
 }
 
 /*===========================================================================*/
