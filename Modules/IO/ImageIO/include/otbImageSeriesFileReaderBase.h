@@ -117,14 +117,6 @@ public:
    */
   virtual void SetFileName(const std::string& file);
 
-  /**
-   * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
-   * the number of image files to be read, the images file names, the band and region
-   * selection
-   * \deprecated const char* overload of SetFileName is deprecated, use std::string instead
-   */
-  virtual void SetFileName(const char * file);
-
   /** get the Filenames */
   std::string GetFileName(unsigned int i) const
   {

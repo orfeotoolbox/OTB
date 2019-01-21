@@ -838,19 +838,6 @@ ImageFileWriter<TInputImage>
 }
 
 template <class TInputImage>
-void
-ImageFileWriter<TInputImage>
-::SetFileName(const char* extendedFileName)
-{
-  if (extendedFileName == nullptr)
-  {
-    itkGenericExceptionMacro( << "Filename is NULL" );
-  }
-
-  this->SetFileName(std::string(extendedFileName));
-}
-
-template <class TInputImage>
 const char*
 ImageFileWriter<TInputImage>
 ::GetFileName () const
