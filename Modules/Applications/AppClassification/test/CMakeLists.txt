@@ -901,9 +901,10 @@ if(OTB_USE_OPENCV)
     -classifier.rf.ra 0.0001
     -classifier.rf.max 6
     -classifier.rf.acc 0.0005
+    TESTENVOPTIONS ${TEMP}/apTvClTrainRegressionTest_monovar.txt
     VALID    ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
-    ${TEMP}/apTvClTrainRegressionTest_monovar.rf)
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.txt
+    ${TEMP}/apTvClTrainRegressionTest_monovar.txt)
 
   #----------- PredictRegression TESTS ----------------
   otb_test_application(NAME apTvClPredictRegressionTest_monovar
