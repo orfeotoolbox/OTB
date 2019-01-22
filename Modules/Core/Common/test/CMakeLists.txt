@@ -167,7 +167,7 @@ otb_add_test(NAME coTvImageRegionNonUniformMultidimensionalSplitter COMMAND otbC
 
 otb_add_test(NAME coTvConfigurationManagerDefault COMMAND otbCommonTestDriver
   otbConfigurationManagerTest
-  128)
+  256)
 
 otb_add_test(NAME coTvConfigurationManagerEnvVar COMMAND otbTestDriver
   --add-before-env OTB_MAX_RAM_HINT "256"
