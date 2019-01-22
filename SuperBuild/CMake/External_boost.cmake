@@ -52,7 +52,7 @@ set(BOOST_BOOTSTRAP_OPTIONS "")
 if(UNIX)
   set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
   set(BOOST_B2_EXE "./b2")
-  if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  if(NOT APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(BOOST_SB_CONFIG
         ${BOOST_SB_CONFIG}
         toolset=clang)
