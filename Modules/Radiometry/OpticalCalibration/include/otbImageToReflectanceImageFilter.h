@@ -235,6 +235,12 @@ public:
   /** Set the  acquisition month. */
   itkGetConstReferenceMacro(Month, int);
 
+  /** Set the solar variability value. */
+  itkSetMacro(SolarVariability, double);
+  /** Give the solar variability value. */
+  itkGetConstReferenceMacro(SolarVariability, double);
+
+
 protected:
   /** Constructor */
   ImageToReflectanceImageFilter() :
@@ -243,7 +249,8 @@ protected:
     m_UseClamp(true),
     m_IsSetFluxNormalizationCoefficient(false),
     m_Day(0),
-    m_Month(0)
+    m_Month(0),
+    m_SolarVariability(1.0)
     {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
@@ -295,6 +302,7 @@ protected:
     otbMsgDevMacro(<< "Beta (bias):  " << m_Beta);
     otbMsgDevMacro(<< "Day:               " << m_Day);
     otbMsgDevMacro(<< "Month:             " << m_Month);
+    otbMsgDevMacro(<< "Solar Variability: " << m_SolarVariability);
     otbMsgDevMacro(<< "Solar irradiance:  " << m_SolarIllumination);
     otbMsgDevMacro(<< "Zenithal angle:    " << m_ZenithalSolarAngle);
 
@@ -315,7 +323,8 @@ protected:
         {
         if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
           {
-          double dsol = VarSol::GetVarSol(m_Day, m_Month);
+            std::cout << " image to reflect " << m_SolarVariability << std::endl;
+          double dsol = m_SolarVariability;//VarSol::GetVarSol(m_Day, m_Month);
           coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * dsol;
           }
         else
@@ -357,6 +366,8 @@ private:
   int m_Day;
   /** Acquisition Month*/
   int m_Month;
+  /** Solar variability. */
+  double m_SolarVariability;
 };
 
 } // end namespace otb
