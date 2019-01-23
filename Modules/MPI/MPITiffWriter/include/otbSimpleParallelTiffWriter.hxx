@@ -830,19 +830,6 @@ SimpleParallelTiffWriter<TInputImage>
 }
 
 template <class TInputImage>
-void
-SimpleParallelTiffWriter<TInputImage>
-::SetFileName(const char* extendedFileName)
-{
-  if (extendedFileName == nullptr)
-  {
-    itkGenericExceptionMacro( << "Filename is NULL" );
-  }
-
-  this->SetFileName(std::string(extendedFileName));
-}
-
-template <class TInputImage>
 const char*
 SimpleParallelTiffWriter<TInputImage>
 ::GetFileName () const
