@@ -108,19 +108,22 @@ private:
     auto inputImage = GetParameterDoubleVectorImage("in");
     inputImage->UpdateOutputInformation();
     
-    #if 1
+    // The localRxDetectionFilter can be replaced by a functorImageFilter using the appropriate 
+    // functor. However using functorImageFilter with neighborhood is buggy (see issue #1802). Still,
+    // the functor has been implemented and localRxDetectionFilter will be deprecated when the
+    // bug is corrected.
+    #if 1 // Using localRxDetectionFilter
     auto localRxDetectionFilter = LocalRxDetectorFilterType::New();
 
     localRxDetectionFilter->SetInput(inputImage);
     
-    // the radius are the same along x and y for the filter
     unsigned int externalRadius = GetParameterInt("er");
     unsigned int internalRadius = GetParameterInt("ir");
 
     localRxDetectionFilter->SetInternalRadius(internalRadius);
     localRxDetectionFilter->SetExternalRadius(externalRadius);
 
-    #else
+    #else // Using a functorImageFilter
     Functor::LocalRxDetectionFunctor<double> detectorFunctor;
     detectorFunctor.SetInternalRadius(GetParameterInt("ir"), GetParameterInt("ir"));
 
