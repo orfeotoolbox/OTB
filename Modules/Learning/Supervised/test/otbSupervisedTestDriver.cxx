@@ -65,11 +65,6 @@ void RegisterTests()
   REGISTER_TEST(otbDecisionTreeRegressionTests);
   REGISTER_TEST(otbKNearestNeighborsRegressionTests);
   REGISTER_TEST(otbRandomForestsRegressionTests);
-  #ifndef OTB_OPENCV_3
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModelCanRead);
-  REGISTER_TEST(otbGradientBoostedTreeMachineLearningModel);
-  REGISTER_TEST(otbGradientBoostedTreeRegressionTests);
-  #endif
 #endif
 
 #ifdef OTB_USE_SHARK
