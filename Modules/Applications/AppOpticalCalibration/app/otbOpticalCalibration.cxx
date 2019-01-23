@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbVarSol.h"
 #include "otbImageToRadianceImageFilter.h"
 #include "otbRadianceToReflectanceImageFilter.h"
 #include "otbRadianceToImageImageFilter.h"
@@ -280,6 +281,12 @@ private:
     AddParameter(ParameterType_InputFilename, "acqui.solarilluminations",   "Solar illuminations");
     SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band)");
     MandatoryOff("acqui.solarilluminations");
+    //Solar variability
+    AddParameter(ParameterType_Float, "acqui.solarvariability", "Solar variability");
+    SetParameterDescription("acqui.solarvariability", "Solar variability");
+    SetMinimumParameterFloatValue("acqui.solarvariability", 0.);
+    SetMaximumParameterFloatValue("acqui.solarvariability", 2.);
+    MandatoryOff("acqui.solarvariability");
 
     //Atmospheric parameters (TOC)
     AddParameter(ParameterType_Group,"atmo","Atmospheric parameters (for TOC)");
@@ -599,6 +606,26 @@ private:
 
       m_ReflectanceToRadianceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
     }
+
+    // Set solar variability
+    double solVar;
+    if (IsParameterEnabled("acqui.solarvariability"))
+    {
+      solVar = GetParameterFloat("acqui.solarvariability");
+    }
+    else
+    {
+      if (GetParameterInt("acqui.day") * GetParameterInt("acqui.month") != 0 && GetParameterInt("acqui.day") < 32 && GetParameterInt("acqui.month") < 13)
+      {
+        solVar = VarSol::GetVarSol(GetParameterInt("acqui.day"),GetParameterInt("acqui.month"));
+      }
+      else
+      {
+        itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
+      }
+    }
+    m_RadianceToReflectanceFilter->SetSolarVariability(solVar);
+    m_ReflectanceToRadianceFilter->SetSolarVariability(solVar);
 
     // Set Sun Elevation Angle to corresponding filters
     m_RadianceToReflectanceFilter->SetElevationSolarAngle(GetParameterFloat("acqui.sun.elev"));

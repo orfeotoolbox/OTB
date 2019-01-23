@@ -22,6 +22,7 @@
 #ifndef otbReflectanceToImageImageFilter_h
 #define otbReflectanceToImageImageFilter_h
 
+#include "otbVarSol.h"
 #include "otbRadianceToImageImageFilter.h"
 #include "otbReflectanceToRadianceImageFilter.h"
 
@@ -291,6 +292,8 @@ protected:
       itkExceptionMacro(
         << "Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
       }
+
+      std::cout << "reflectance to image filter" << std::endl;
 
     this->GetFunctorVector().clear();
     for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
