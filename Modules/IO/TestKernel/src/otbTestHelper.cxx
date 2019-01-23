@@ -635,7 +635,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
                                         const double epsilon, StringList ignoredLines) const
 {
   typedef std::vector<boost::iterator_range<std::string::const_iterator> > TokenListType;
-  
+
   std::ifstream fluxfiletest(testAsciiFileName);
   std::ifstream fluxfileref(baselineAsciiFileName);
 
@@ -1104,7 +1104,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       }
     nbdiff++;
     }
-  
+
   if (m_ReportErrors)
     {
     fluxfilediff.close();
@@ -1122,13 +1122,13 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
     std::cout << "Tolerance value     : " << epsilon << std::endl;
     std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
     std::cout << "Nb lines different : " << nbdiff << std::endl;
-    
+
     for (unsigned int i=0 ; i<listStrDiffLineFile.size() ; i++)
       {
       std::cout << listStrDiffLineFile[i] << std::endl;
       }
     }
-  
+
   return (nbdiff != 0) ? 1 : 0;
 }
 
@@ -1735,7 +1735,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
   ref_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      ref_pszDataSource,
        GDAL_OF_UPDATE | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1744,7 +1744,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (ref_poDS == nullptr && !bReadOnly)
     {
     ref_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      ref_pszDataSource,
        GDAL_OF_READONLY | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1756,7 +1756,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
     }
   test_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      test_pszDataSource,
       (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1764,7 +1764,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (test_poDS == nullptr && !bReadOnly)
     {
     test_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      test_pszDataSource,
       (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
       NULL,
       NULL,
