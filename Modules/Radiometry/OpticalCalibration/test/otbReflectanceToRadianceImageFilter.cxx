@@ -20,6 +20,7 @@
 
 #include "itkMacro.h"
 
+#include "otbVarSol.h"
 #include "otbReflectanceToRadianceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -81,6 +82,7 @@ int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
     {
     filter->SetDay(day);
     filter->SetMonth(month);
+    filter->SetSolarVariability(otb::VarSol::GetVarSol(day, month));
     }
 
   filter->SetInput(reader->GetOutput());

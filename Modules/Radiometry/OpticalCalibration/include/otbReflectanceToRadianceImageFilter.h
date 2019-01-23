@@ -22,7 +22,6 @@
 #ifndef otbReflectanceToRadianceImageFilter_h
 #define otbReflectanceToRadianceImageFilter_h
 
-#include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbMath.h"
 #include "otbMacro.h"
@@ -198,6 +197,11 @@ public:
   /** Give the month. */
   itkGetConstReferenceMacro(Month, int);
 
+  /** Set the solar variability value. */
+  itkSetMacro(SolarVariability, double);
+  /** Give the solar variability value. */
+  itkGetConstReferenceMacro(SolarVariability, double);
+
   /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
   {
@@ -225,6 +229,7 @@ protected:
     m_FluxNormalizationCoefficient(1.),
     m_Day(0),
     m_Month(0),
+    m_SolarVariability(1.0),
     m_IsSetFluxNormalizationCoefficient(false)
     {
     m_SolarIllumination.SetSize(0);
@@ -259,11 +264,12 @@ protected:
       m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation();
       }
 
-    std::cout << "Using correction parameters: " << std::endl;
-    std::cout<< "Day:               " << m_Day << std::endl;
-    std::cout<< "Month:             " << m_Month << std::endl;
-    std::cout<< "Solar irradiance:  " << m_SolarIllumination << std::endl;
-    std::cout<< "Zenithal angle:    " << m_ZenithalSolarAngle << std::endl;
+    otbMsgDevMacro(<< "Using correction parameters: ");
+    otbMsgDevMacro(<< "Day:               " << m_Day);
+    otbMsgDevMacro(<< "Month:             " << m_Month);
+    otbMsgDevMacro(<< "Solar variability: " << m_SolarVariability);
+    otbMsgDevMacro(<< "Solar irradiance:  " << m_SolarIllumination);
+    otbMsgDevMacro(<< "Zenithal angle:    " << m_ZenithalSolarAngle);
 
     if ((m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
       {
@@ -278,14 +284,7 @@ protected:
       double      coefTemp = 0.;
       if (!m_IsSetFluxNormalizationCoefficient)
         {
-        if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
-          {
-          coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day,m_Month);
-          }
-        else
-          {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
-          }
+          coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * m_SolarVariability;
         }
       else
         {
@@ -310,6 +309,8 @@ private:
   int m_Day;
   /** Acquisition month. */
   int m_Month;
+  /** Solar variability. */
+  double m_SolarVariability;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
