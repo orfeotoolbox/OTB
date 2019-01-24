@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -218,11 +218,6 @@ if(MSVC)
 else()
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 endif()
-
-#-----------------------------------------------------------------------------
-# Option to activate deprecated classes
-option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
-mark_as_advanced(OTB_USE_DEPRECATED)
 
 # Although the OpenMP option looks like a 3rd party module, it is NOT. This option
 # is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake

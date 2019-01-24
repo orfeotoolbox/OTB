@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -85,7 +85,7 @@ template <class TInputValue, class TOutputValue>
 typename NormalBayesMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 NormalBayesMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
 
@@ -107,6 +107,9 @@ NormalBayesMachineLearningModel<TInputValue,TOutputValue>
       itkExceptionMacro("Confidence index not available for this classifier !");
       }
     }
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
+
   return target;
 }
 

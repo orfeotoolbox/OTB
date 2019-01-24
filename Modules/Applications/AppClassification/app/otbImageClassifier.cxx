@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,6 +64,7 @@ public:
   typedef ClassificationFilterType::LabelType                                                  LabelType;
   typedef otb::MachineLearningModelFactory<ValueType, LabelType>                               MachineLearningModelFactoryType;
   typedef ClassificationFilterType::ConfidenceImageType                                        ConfidenceImageType;
+  typedef ClassificationFilterType::ProbaImageType                                             ProbaImageType;
 
 protected:
 
@@ -111,6 +112,7 @@ private:
     SetDefaultParameterInt("nodatalabel", 0);
     MandatoryOff("nodatalabel");
 
+   
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out", "Output image containing class labels");
     SetDefaultOutputPixelType( "out", ImagePixelType_uint8);
@@ -129,8 +131,16 @@ private:
     SetDefaultOutputPixelType( "confmap", ImagePixelType_double);
     MandatoryOff("confmap");
 
+    AddParameter(ParameterType_OutputImage,"probamap", "Probability map");
+    SetParameterDescription("probamap","Probability of each class for each pixel. This is an image having a number of bands equal to the number of classes in the model. This is only implemented for the Shark Random Forest classifier at this point.");
+    SetDefaultOutputPixelType("probamap",ImagePixelType_uint16);
+    MandatoryOff("probamap");
     AddRAMParameter();
 
+    AddParameter(ParameterType_Int, "nbclasses", "Number of classes in the model");
+    SetDefaultParameterInt("nbclasses", 20);
+    SetParameterDescription("nbclasses","The number of classes is needed for the probamap output in order to set the number of output bands.");
+   
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");
     SetDocExampleParameterValue("imstat", "EstimateImageStatisticsQB1.xml");
@@ -173,7 +183,7 @@ private:
     // Classify
     m_ClassificationFilter = ClassificationFilterType::New();
     m_ClassificationFilter->SetModel(m_Model);
-
+    
     m_ClassificationFilter->SetDefaultLabel(GetParameterInt("nodatalabel"));
 
     // Normalize input image if asked
@@ -208,9 +218,9 @@ private:
 
       m_ClassificationFilter->SetInputMask(inMask);
       }
-
     SetParameterOutputImage<OutputImageType>("out", m_ClassificationFilter->GetOutput());
-
+   
+    
     // output confidence map
     if (IsParameterEnabled("confmap") && HasValue("confmap"))
       {
@@ -225,6 +235,21 @@ private:
         this->DisableParameter("confmap");
         }
       }
+    if(IsParameterEnabled("probamap") && HasValue("probamap"))
+      {
+      m_ClassificationFilter->SetUseProbaMap(true);
+      if(m_Model->HasProbaIndex())
+	{
+	  m_ClassificationFilter->SetNumberOfClasses(GetParameterInt("nbclasses"));
+	  SetParameterOutputImage<ProbaImageType>("probamap",m_ClassificationFilter->GetOutputProba());
+	}
+      else
+	{
+	  otbAppLogWARNING("Probability map requested but the classifier doesn't support it!");
+	  this->DisableParameter("probamap");
+	}
+      }
+    
   }
 
   ClassificationFilterType::Pointer m_ClassificationFilter;

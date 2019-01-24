@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -87,7 +87,7 @@ private:
     SetDescription("Compute homologous points between images using keypoints");
     SetDocLongDescription("This application allows computing homologous points between images using keypoints. "
       " SIFT or SURF keypoints can be used and the band on which keypoints are computed can be set independently for both images."
-      " The application offers two modes :"
+      " The application offers two modes:"
       " the first is the full mode where keypoints are extracted from the full extent of both images"
       " (please note that in this mode large image file are not supported). "
       "The second mode, called geobins, allows one to set-up spatial binning to get fewer points"
@@ -143,7 +143,7 @@ private:
     SetMinimumParameterFloatValue("threshold",0.0);
     SetDefaultParameterFloat("threshold",0.6);
 
-    AddParameter(ParameterType_Bool,"backmatching","Use back-matching to filter matches.");
+    AddParameter(ParameterType_Bool,"backmatching","Use back-matching to filter matches");
     SetParameterDescription("backmatching","If set to true, matches should be consistent in both ways.");
 
     AddParameter(ParameterType_Choice,"mode","Keypoints search mode");
@@ -179,7 +179,7 @@ private:
     SetMinimumParameterIntValue("mode.geobins.margin",0);
     SetDefaultParameterInt("mode.geobins.margin",10);
 
-    AddParameter(ParameterType_Float,"precision","Estimated precision of the colocalisation function (in pixels).");
+    AddParameter(ParameterType_Float,"precision","Estimated precision of the colocalisation function (in pixels)");
     SetParameterDescription("precision","Estimated precision of the colocalisation function in pixels");
     SetDefaultParameterFloat("precision",0.);
 
@@ -425,7 +425,7 @@ private:
           largestRegion.ShrinkByRadius(image_border_margin);
           region1.Crop(largestRegion);
 
-          otbAppLogINFO("("<<i+1<<"/"<<nb_bins_x<<", "<<j+1<<"/"<<nb_bins_y<<") Considering region1 : "<<region1.GetIndex()<<", "<<region1.GetSize());
+          otbAppLogINFO("("<<i+1<<"/"<<nb_bins_x<<", "<<j+1<<"/"<<nb_bins_y<<") Considering region1: "<<region1.GetIndex()<<", "<<region1.GetSize());
 
 
           extractChannel1->SetExtractionRegion(region1);

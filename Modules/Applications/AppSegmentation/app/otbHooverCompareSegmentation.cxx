@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -144,7 +144,7 @@ private:
                           "The application can output the overall Hoover scores along with colored"
                           "images of the MS and GT segmentation showing the state of each region "
                           "(correct detection, over-segmentation, under-segmentation, missed).\n\n"
-                          "The Hoover metrics are described in : Hoover et al., \"An experimental"
+                          "The Hoover metrics are described in: Hoover et al., \"An experimental"
                           " comparison of range image segmentation algorithms\", IEEE PAMI vol. 18, no. 7, July 1996.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

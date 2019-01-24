@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,6 +26,7 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageScanlineIterator.h"
+#include <array>
 
 namespace otb
 {
@@ -252,7 +253,7 @@ FunctorImageFilter<TFunction, TNameMap>
   // Propagate to each variadic inputs, including possible radius
   // TODO: For now all inputs are padded with the radius, even if they
   // are not neighborhood based
-  functor_filter_details::SetInputRequestedRegions<InputHasNeighborhood>(this->GetVariadicInputs(),requestedRegion, m_Radius);
+  functor_filter_details::SetInputRequestedRegions<InputHasNeighborhood>(this->GetInputs(),requestedRegion, m_Radius);
 }
 
 template <class TFunction, class TNameMap>
@@ -263,7 +264,7 @@ FunctorImageFilter<TFunction, TNameMap>::GenerateOutputInformation()
   Superclass::GenerateOutputInformation();
 
   // Get All variadic inputs
-  auto inputs = this->GetVariadicInputs();
+  auto inputs = this->GetInputs();
 
   // Retrieve an array of number of components per input
   auto inputNbComps = functor_filter_details::GetNumberOfComponentsPerInput(inputs);
@@ -285,7 +286,7 @@ FunctorImageFilter<TFunction, TNameMap>
   itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
   // This will build a tuple of iterators to be used
-  auto inputIterators = functor_filter_details::MakeIterators(this->GetVariadicInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
+  auto inputIterators = functor_filter_details::MakeIterators(this->GetInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
 
   // Build a default value
   typename OutputImageType::PixelType outputValueHolder;

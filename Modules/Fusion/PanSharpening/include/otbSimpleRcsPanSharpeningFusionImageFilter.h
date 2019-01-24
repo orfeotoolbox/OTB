@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,7 @@
 
 #include "otbConvolutionImageFilter.h"
 #include "otbImage.h"
-#include "itkTernaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 #include "itkProgressAccumulator.h"
 
@@ -118,13 +118,11 @@ private:
   {
   public:
     // Implement the fusion as a three arguments operator
-    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType& xsPixel,
+    void operator()(typename TOutputImageType::PixelType & output,
+                                                    const typename TXsImageType::PixelType& xsPixel,
                                                     const TInternalPrecision& smoothPanchroPixel,
                                                     const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
-      // Build output pixel
-      typename TOutputImageType::PixelType output(xsPixel.Size());
-
       TInternalPrecision scale = 1.;
 
       if(std::abs(smoothPanchroPixel) > 1e-10)
@@ -138,8 +136,11 @@ private:
         output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
           xsPixel[i] * scale);
         }
-      // Returns the output pixel
-      return output;
+    }
+
+    constexpr size_t OutputSize(const std::array<size_t, 3> & inputsNbBands) const
+    {
+      return inputsNbBands[0];
     }
   };
 
@@ -155,13 +156,11 @@ private:
   {
   public:
     // Implement the fusion as a three arguments operator
-    typename TOutputImageType::PixelType operator()(const typename TXsImageType::PixelType& xsPixel,
-                                                    const TInternalPrecision& smoothPanchroPixel,
-                                                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
+    void operator()(typename TOutputImageType::PixelType & output,
+                    const typename TXsImageType::PixelType& xsPixel,
+                    const TInternalPrecision& smoothPanchroPixel,
+                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
-      // Build output pixel
-      typename TOutputImageType::PixelType output(xsPixel.Size());
-
       // Check for no data Pan value
       if( m_NoDataValuePanAvailable && sharpPanchroPixel == m_NoDataValuePan )
         {
@@ -169,7 +168,7 @@ private:
           {
           output[i] = static_cast<typename TOutputImageType::InternalPixelType>( m_NoDataValuesXs[i] );
           }
-        return output;
+        return;
         }
 
       TInternalPrecision scale = 1.;
@@ -186,8 +185,6 @@ private:
                     static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] ) :
                     static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] * scale );
         }
-      // Returns the output pixel
-      return output;
     }
 
     void SetNoDataValuePanAvailable(bool noDataAvailable) {
@@ -206,6 +203,12 @@ private:
       m_NoDataValuesXs = noDataValues;
     }
 
+    constexpr size_t OutputSize(const std::array<size_t, 3> inputsNbBands) const
+    {
+      return inputsNbBands[0];
+    }
+
+    NoDataFusionFunctor() : m_NoDataValuePanAvailable(false), m_NoDataValuePan(0),m_NoDataValuesXsAvailable(false), m_NoDataValuesXs() {}
 
   private:
     /** No data flags and values for APN image */
@@ -221,24 +224,16 @@ private:
 
 
   /**
-   *  Typedef of the TernaryFunctorImageFilter applying the fusion functor to
+   *  Typedef of the FunctorImageFilter applying the fusion functor to
    *  p, p_smooth and xs.
    */
-  typedef itk::TernaryFunctorImageFilter<TXsImageType,
-                                         InternalImageType,
-                                         TPanImageType,
-                                         TOutputImageType,
-                                         FusionFunctor>     FusionFilterType;
+  typedef FunctorImageFilter<FusionFunctor> FusionFilterType;
 
   /**
-   *  Typedef of the TernaryFunctorImageFilter applying the no data fusion functor to
+   *  Typedef of the FunctorImageFilter applying the no data fusion functor to
    *  p, p_smooth and xs.
    */
-  typedef itk::TernaryFunctorImageFilter<TXsImageType,
-                                         InternalImageType,
-                                         TPanImageType,
-                                         TOutputImageType,
-                                         NoDataFusionFunctor>     NoDataFusionFilterType;
+  typedef FunctorImageFilter<NoDataFusionFunctor> NoDataFusionFilterType;
 
   /** Typedef of the convolution filter performing smoothing */
   typedef otb::ConvolutionImageFilter

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -209,7 +209,7 @@ private:
     SetParameterDescription("filter.cc", "Simple pixel-based connected-components algorithm with a user-defined connection condition.");
 
     AddParameter(ParameterType_String, "filter.cc.expr", "Condition");
-    SetParameterDescription("filter.cc.expr", "User defined connection condition, written as a mathematical expression. Available variables are p(i)b(i), intensity_p(i) and distance (example of expression : distance < 10 )");
+    SetParameterDescription("filter.cc.expr", "User defined connection condition, written as a mathematical expression. Available variables are p(i)b(i), intensity_p(i) and distance (example of expression: distance < 10 )");
 
     // Watershed
     AddChoice("filter.watershed","Watershed");
@@ -247,7 +247,7 @@ private:
     SetParameterDescription("filter.mprofiles.start","Initial radius of the structuring element (in pixels)");
     SetDefaultParameterInt("filter.mprofiles.start",1);
     SetMinimumParameterIntValue("filter.mprofiles.start",1);
-    AddParameter(ParameterType_Int,"filter.mprofiles.step","Radius step.");
+    AddParameter(ParameterType_Int,"filter.mprofiles.step","Radius step");
     SetParameterDescription("filter.mprofiles.step","Radius step along the profile (in pixels)");
     SetDefaultParameterInt("filter.mprofiles.step",1);
     SetMinimumParameterIntValue("filter.mprofiles.step",1);
@@ -689,7 +689,7 @@ private:
         //Note : the GetDriver() Method has not been encapsulated in otb::ogr::DataSource,
         //so we must access the OGR pointer by using .ogr()
 
-        std::string driverName(otb::ogr::version_proxy::GetDriverNameFromDataSource(&ogrDS->ogr()));
+        std::string driverName(ogrDS->ogr().GetDriverName());
         if ( driverName.find("ESRI Shapefile") != std::string::npos)
           {
           otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -234,7 +234,7 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * or returns void and has first parameter as output (i.e. T& or itk::VariableLengthVector<T>&)
  *
  * The returned filter is ready to use. Inputs can be set through the
- * SetVariadicInputs() method (see VariadicInputsImageFilter class for
+ * SetInputs() method (see VariadicInputsImageFilter class for
  * details)
  * 
  * \param[in] the Functor to build the filter from

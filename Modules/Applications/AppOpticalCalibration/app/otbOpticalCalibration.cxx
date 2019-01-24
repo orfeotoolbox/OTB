@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -133,12 +133,12 @@ private:
     SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
 "\n--------------------------\n\n"
 "If the sensor is not supported by the metadata interface factory of OTB, users still have the possibility to give the needed parameters to the application.\n"
-"For TOA conversion, these parameters are : \n"
+"For TOA conversion, these parameters are: \n"
 "- day and month of acquisition, or flux normalization coefficient;\n"
 "- sun elevation angle;\n"
 "- gains and biases, one pair of values for each band (passed by a file);\n"
 "- solar illuminations, one value for each band (passed by a file).\n\n"
-"For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used :\n\n"
+"For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used:\n\n"
 
 "(1)\tL(b) = DN(b)/gain(b)+bias(b)\t(in W/m2/steradians/micrometers)\twith b being a band ID.\n\n"
 
@@ -147,16 +147,16 @@ private:
 "Note that sometimes, the values provided by certain metadata files assume the formula L(b) = gain(b)*DC(b)+bias(b).\n"
 "In this case, be sure to provide the inverse gain values so that the application can correctly interpret them.\n\n"
 
-"In order to convert TOA radiance to TOA reflectance, the following formula is used :\n\n"
+"In order to convert TOA radiance to TOA reflectance, the following formula is used:\n\n"
 
-"(2)\tR(b) = (pi*L(b)*d*d) / (ESUN(b)*cos(θ))\t(no dimension)\twhere : \n\n"
+"(2)\tR(b) = (pi*L(b)*d*d) / (ESUN(b)*cos(θ))\t(no dimension)\twhere: \n\n"
 
 "- L(b) is the spectral radiance for band b \n"
 "- pi is the famous mathematical constant (3.14159...) \n"
 "- d is the earth-sun distance (in astronomical units) and depends on the acquisition's day and month \n"
 "- ESUN(b) is the mean TOA solar irradiance (or solar illumination) in W/m2/micrometers\n"
 "- θ is the solar zenith angle in degrees.\n\n"
-"Note that the application asks for the solar elevation angle, and will perform the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units : degrees).\n"
+"Note that the application asks for the solar elevation angle, and will perform the conversion to the zenith angle itself (zenith_angle = 90 - elevation_angle , units: degrees).\n"
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
@@ -190,8 +190,6 @@ private:
 
     AddParameter(ParameterType_OutputImage, "out", "Output");
     SetParameterDescription("out","Output calibrated image filename");
-
-    AddRAMParameter();
 
     AddParameter(ParameterType_Choice,   "level", "Calibration Level");
     AddChoice("level.toa",     "Image to Top Of Atmosphere reflectance");
@@ -344,6 +342,8 @@ private:
     SetDefaultParameterFloat("atmo.pixsize", 1.);
 
     MandatoryOff("atmo.pixsize");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");

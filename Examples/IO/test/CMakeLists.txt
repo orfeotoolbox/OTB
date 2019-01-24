@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -99,19 +99,4 @@ otb_add_test(NAME ioTeImageToKmzAndMapFileProductExample COMMAND ${OTB_TEST_DRIV
     42.000000  232.000000 -72.426552 18.540876 0.000000
 )
 set_property(TEST ioTeImageToKmzAndMapFileProductExample PROPERTY RESOURCE_LOCK web_access)
-endif()
-
-if(OTB_USE_DEPRECATED)
-    otb_add_test(NAME ioTeTileMapImageIOExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image 10.0
-    ${BASELINE}/openStreetMap.png
-    ${TEMP}/openStreetMap.png
-  Execute $<TARGET_FILE:TileMapImageIOExample>
-    ${INPUTDATA}/osmfile.otb
-    ${TEMP}/openStreetMap.png
-    ${TEMP}
-    1.4835345
-    43.55968261
-    12
-    )
 endif()

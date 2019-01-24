@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,7 +45,6 @@
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 #include "otbOGRLayerWrapper.h"
-#include "otbOGRVersionProxy.h"
 #include "otbOGRExtendedFilenameToOptions.h"
 
 class OGRLayer;
@@ -164,7 +163,7 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
+  static Pointer New(GDALDataset * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
   //@}
 
   /**\name Projection Reference property */
@@ -301,7 +300,7 @@ public:
    * \throw None
    * \post Assumes ownership of the \c source.
    */
-  void Reset(ogr::version_proxy::GDALDatasetType * source);
+  void Reset(GDALDataset * source);
 
   /**\name Layers modification */
   //@{
@@ -477,8 +476,6 @@ public:
     }
 
   /** Flushes all changes to disk.
-   * \throw itd::ExceptionObject in case the flush operation failed.
-   * \sa \c GDALDataset::SyncToDisk()
    */
   void SyncToDisk();
 
@@ -497,7 +494,7 @@ public:
    * \warning You must under no circumstance try to delete the \c GDALDataset
    * obtained this way.
    */
-    ogr::version_proxy::GDALDatasetType & ogr();
+    GDALDataset & ogr();
 
     void SetLayerCreationOptions( const std::vector< std::string > & options );
     void AddLayerCreationOptions( std::vector< std::string > options );
@@ -517,7 +514,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
+  DataSource(GDALDataset * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -554,7 +551,7 @@ private:
   std::string GetDatasetDescription() const;
 
 private:
-  ogr::version_proxy::GDALDatasetType *m_DataSource;
+  GDALDataset *m_DataSource;
   std::vector< std::string > m_LayerOptions;
   Modes::type    m_OpenMode;
   int            m_FirstModifiableLayerID;

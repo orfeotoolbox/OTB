@@ -201,9 +201,6 @@ SimpleParallelTiffWriter<TInputImage>
   m_StreamingManager = streamingManager;
  }
 
-#ifndef ITK_LEGACY_REMOVE
-
-#endif // ITK_LEGACY_REMOVE
 /**
  *
  */
@@ -830,19 +827,6 @@ SimpleParallelTiffWriter<TInputImage>
   m_FileName = this->m_FilenameHelper->GetSimpleFileName();
   m_ImageIO = NULL;
   this->Modified();
-}
-
-template <class TInputImage>
-void
-SimpleParallelTiffWriter<TInputImage>
-::SetFileName(const char* extendedFileName)
-{
-  if (extendedFileName == nullptr)
-  {
-    itkGenericExceptionMacro( << "Filename is NULL" );
-  }
-
-  this->SetFileName(std::string(extendedFileName));
 }
 
 template <class TInputImage>

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -51,14 +51,6 @@ add_test( NAME pyTvHyperspectralUnmixingUCLS
   ${TEMP}/pyTvHyperspectralUnmixing_ucls.tif
   ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/endmembers.tif
   ucls
-  )
-
-add_test( NAME pyTvBug440
-  COMMAND ${TEST_DRIVER} Execute
-  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  Bug440
-  ${OTB_DATA_ROOT}/Input/scene.png
-  ${TEMP}/pyTvBug440Output.tif
   )
 
 add_test( NAME pyTvBug804

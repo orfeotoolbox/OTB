@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,12 +55,13 @@ private:
                           " algorithm.\n\n"
                           "The MAD algorithm produces a set of N change maps (where N is the"
                           " maximum number of bands in first and second input images), with the"
-                          " following properties:\n"
-                          " - Change maps are differences of a pair of linear combinations of "
+                          " following properties:\n\n"
+
+                          "* Change maps are differences of a pair of linear combinations of "
                           " bands from image 1 and bands from image 2 chosen to maximize the "
                           " correlation, \n"
-                          " - Each change map is orthogonal to the others.\n"
-                          " \n"
+                          "* Each change map is orthogonal to the others.\n\n"
+
                           "This is a statistical method which can handle different modalities"
                           " and even different bands and number of bands between images. \n"
                           " \n"

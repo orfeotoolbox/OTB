@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
@@ -173,9 +173,6 @@ ImageFileWriter<TInputImage>
   m_StreamingManager = streamingManager;
 }
 
-#ifndef ITK_LEGACY_REMOVE
-
-#endif // ITK_LEGACY_REMOVE
 /**
  *
  */
@@ -838,19 +835,6 @@ ImageFileWriter<TInputImage>
   m_FileName = this->m_FilenameHelper->GetSimpleFileName();
   m_ImageIO = nullptr;
   this->Modified();
-}
-
-template <class TInputImage>
-void
-ImageFileWriter<TInputImage>
-::SetFileName(const char* extendedFileName)
-{
-  if (extendedFileName == nullptr)
-  {
-    itkGenericExceptionMacro( << "Filename is NULL" );
-  }
-
-  this->SetFileName(std::string(extendedFileName));
 }
 
 template <class TInputImage>

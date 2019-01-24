@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -375,7 +375,7 @@ AutoencoderModel<TInputValue,NeuronType>
 template <class TInputValue, class NeuronType>
 typename AutoencoderModel<TInputValue,NeuronType>::TargetSampleType
 AutoencoderModel<TInputValue,NeuronType>
-::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/) const
+::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/, ProbaSampleType * /*proba*/) const
 {  
   shark::RealVector samples(value.Size());
   for(size_t i = 0; i < value.Size();i++)
@@ -408,7 +408,8 @@ AutoencoderModel<TInputValue,NeuronType>
   const unsigned int & startIndex,
   const unsigned int & size,
   TargetListSampleType * targets,
-  ConfidenceListSampleType * /*quality*/) const
+  ConfidenceListSampleType * /*quality*/,
+  ProbaListSampleType * /*proba*/) const
 {
   std::vector<shark::RealVector> features;
   Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);

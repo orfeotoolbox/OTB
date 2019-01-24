@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -50,17 +50,6 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
   AllocateListOfComponents();
 
   this->Modified();
-}
-
-template <class TImage, class TInternalImage>
-void
-ImageSeriesFileReaderBase<TImage, TInternalImage>
-::SetFileName(const char * file)
-{
-  if (file)
-  {
-    this->SetFileName(std::string(file));
-  }
 }
 
 template <class TImage, class TInternalImage>

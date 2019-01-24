@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -70,17 +70,17 @@ private:
     AddParameter(ParameterType_InputVectorData, "inshp", "Name of the input shapefile");
     SetParameterDescription("inshp","Name of the input shapefile");
 
-    AddParameter(ParameterType_InputFilename, "instats", "XML file containing mean and variance of each feature.");
+    AddParameter(ParameterType_InputFilename, "instats", "XML file containing mean and variance of each feature");
     SetParameterDescription("instats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_OutputFilename, "insvm", "Input model filename.");
+    AddParameter(ParameterType_OutputFilename, "insvm", "Input model filename");
     SetParameterDescription("insvm", "Input model filename.");
 
 
     AddParameter(ParameterType_ListView,  "feat", "Features");
     SetParameterDescription("feat","Features to be calculated");
 
-    AddParameter(ParameterType_String,"cfield","Field containing the predicted class.");
+    AddParameter(ParameterType_String,"cfield","Field containing the predicted class");
     SetParameterDescription("cfield","Field containing the predicted class");
     SetParameterString("cfield","predicted");
 

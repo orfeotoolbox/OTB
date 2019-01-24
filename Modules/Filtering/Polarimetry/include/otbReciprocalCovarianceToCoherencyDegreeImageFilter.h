@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,7 @@
 #ifndef otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
 #define otbReciprocalCovarianceToCoherencyDegreeImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -56,12 +56,8 @@ public:
   typedef typename std::complex <double>           ComplexType;
   typedef typename TOutput::ValueType              OutputValueType;
 
-  inline TOutput operator()( const TInput & Covariance ) const
-    {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    result.Fill(0.0);
-
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     /* Using the convention
      * \f$ C_{11} = S_{hh}*S_{hh}^* \f$
      * \f$ C_{12} = S_{hh}*S_{hv}^* \f$
@@ -91,71 +87,34 @@ public:
       {
       result[2] = std::abs(C12) / std::sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
       }
-
-    return result;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result
+      return 3;
+    }
 
-   /** Constructor */
-   ReciprocalCovarianceToCoherencyDegreeFunctor() : m_NumberOfComponentsPerPixel(3), m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalCovarianceToCoherencyDegreeFunctor() {}
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
-    const double m_Epsilon;
+  private:
+    static constexpr double m_Epsilon = 1e-6;
 };
-}
+} // namespace Functor
 
-
-/** \class otbReciprocalCovarianceToCoherencyDegreeImageFilter
- * \brief Compute the Coherency Degree coefficient
- * from the MLC image (6 complex channels)
- * For more details, lease refer to the class ReciprocalCovarianceToCoherencyDegreeFunctor.
+/**
+ * \typedef ReciprocalCovarianceToCoherencyDegreeImageFilter
+ * \brief Applies otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
+ * \sa otb::Functor::ReciprocalCovarianceToCoherencyDegreeFunctor
  *
- * \ingroup SARPolarimetry
- * \sa ReciprocalCovarianceToCoherencyDegreeFunctor
- *
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalCovarianceToCoherencyDegreeImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalCovarianceToCoherencyDegreeImageFilter  Self;
-   typedef typename Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalCovarianceToCoherencyDegreeImageFilter, UnaryFunctorImageFilter);
-
-
-protected:
-  ReciprocalCovarianceToCoherencyDegreeImageFilter() {}
-  ~ReciprocalCovarianceToCoherencyDegreeImageFilter() override {}
-
-private:
-  ReciprocalCovarianceToCoherencyDegreeImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-
-
-};
-
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalCovarianceToCoherencyDegreeImageFilter =
+    FunctorImageFilter<Functor::ReciprocalCovarianceToCoherencyDegreeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

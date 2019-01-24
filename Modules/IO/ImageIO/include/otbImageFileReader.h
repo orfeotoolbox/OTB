@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -139,9 +139,6 @@ public:
    * not work properly (e.g., unknown or unusual extension). */
   void  SetImageIO( otb::ImageIOBase * imageIO );
   itkGetObjectMacro(ImageIO,otb::ImageIOBase);
-
-  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
-  virtual void SetFileName(const char* extendedFileName);
 
   virtual void SetFileName(const std::string& extendedFileName);
 

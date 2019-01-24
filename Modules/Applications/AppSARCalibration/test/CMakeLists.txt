@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -54,3 +54,23 @@ otb_test_application(NAME apTvRaSarDeburst_SENTINEL1
   # Same baseline as filter test
   ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
   ${TEMP}/apTvRaSarDeburst_SENTINEL1_output.tif)
+
+otb_test_application(NAME apTvRaSarBurstExtraction_SENTINEL1
+  APP  SARBurstExtraction
+  OPTIONS -in ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+  -out ${TEMP}/apTvRaSarBurstExtraction_SENTINEL1_output.tif uint16
+  -burstindex 0
+  VALID --compare-image ${NOTOL}
+  # Same baseline as filter test
+  ${BASELINE}/apTvRaSarBurstExtraction_SENTINEL1_output.tif
+  ${TEMP}/apTvRaSarBurstExtraction_SENTINEL1_output.tif)
+
+otb_test_application(NAME apTvRaSarConcatenateBursts_SENTINEL1
+  APP  SARConcatenateBursts
+  OPTIONS -il ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst0_amp.tif ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst1_amp.tif
+  -insar ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+  -out ${TEMP}/apTvRaSarConcatenateBursts_SENTINEL1_output.tif uint16
+  VALID --compare-image ${NOTOL}
+  # Same baseline as filter test
+  ${BASELINE}/apTvRaSarConcatenateBursts_SENTINEL1_output.tif
+  ${TEMP}/apTvRaSarConcatenateBursts_SENTINEL1_output.tif)

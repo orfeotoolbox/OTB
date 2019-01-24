@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,66 +27,6 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
                              -tiledir ${INPUTDATA}/DEM/srtm_directory
                      )
 
-
-
-
-#----------- Convert TESTS ----------------
-otb_test_application(NAME apTvUtConvertBasic
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertBasicOutput.tif float
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertBasicOutput.tif
-                	     ${TEMP}/apTvUtConvertBasicOutput.tif
-)
-
-otb_test_application(NAME apTuUtConvertExtendedFilename_writer
-                     APP  Convert
-                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
-                     )
-
-otb_test_application(NAME apTvUtConvertWithScaling
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertWithScalingOutput.tif
-                             ${TEMP}/apTvUtConvertWithScalingOutput.tif
-)
-
-otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
-                     APP  Convert
-                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
-
-otb_test_application(NAME apTvUtConvertSelectChannels
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif
-                             -channels rgb
-                             -channels.rgb.red 2
-                             -channels.rgb.green 3
-                             -channels.rgb.blue 1
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
-                             ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif)
-
-otb_test_application(NAME apTvUtConvertMonoChannel
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                             -out ${TEMP}/apTvUtConvertMonoChannelOutput.tif
-                             -channels grayscale
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertMonoChannelOutput.tif
-                             ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
-
 #----------- DynamicConvert TESTS ------------
 otb_test_application(NAME apTvUtDynamicConvertBasic
                      APP DynamicConvert
@@ -100,6 +40,20 @@ otb_test_application(NAME apTvUtDynamicConvertBasic
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
                              ${TEMP}/apTvUtDynamicConvertOutput.tif)
+
+otb_test_application(NAME apTuUtDynamicConvertExtendedFilename_writer
+                     APP  DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
+                     )
+
+otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM
+                     APP  DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
 
 otb_test_application(NAME apTvUtDynamicConvertLog2
                      APP DynamicConvert

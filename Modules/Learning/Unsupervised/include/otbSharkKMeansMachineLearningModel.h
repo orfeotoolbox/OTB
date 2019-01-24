@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -87,8 +87,8 @@ public:
   typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
   typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
   typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
-
-
+  typedef typename Superclass::ProbaSampleType             ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType        ProbaListSampleType;
   typedef shark::HardClusteringModel<shark::RealVector>   ClusteringModelType;
   typedef ClusteringModelType::OutputType                 ClusteringOutputType;
 
@@ -137,11 +137,10 @@ protected:
 
   /** Predict values using the model */
   virtual TargetSampleType
-  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr) const override;
-
+  DoPredict(const InputSampleType &input, ConfidenceValueType *quality = nullptr, ProbaSampleType *proba=nullptr) const override;
 
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
-                              TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
+                              TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
 
   template<typename DataType>
   DataType NormalizeData(const DataType &data) const;

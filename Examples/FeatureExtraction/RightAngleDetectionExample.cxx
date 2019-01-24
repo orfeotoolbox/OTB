@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,18 +22,11 @@
 
 #include "otbImageFileReader.h"
 #include "otbLineSegmentDetector.h"
-#include "otbVectorDataToMapFilter.h"
-#include "otbAlphaBlendingFunctor.h"
-#include "itkBinaryFunctorImageFilter.h"
-#include "otbImageFileWriter.h"
-
-#include "itkRescaleIntensityImageFilter.h"
-
 #include "otbVectorDataFileWriter.h"
 
 //  Software Guide : BeginCommandLineArgs
 //    INPUTS: {Scene.png}
-//    OUTPUTS: {RighAngleOutput.tif}, {PrettyRighAngleInput.png},  {PrettyRighAngleOutput.png}
+//    OUTPUTS: {rightAngleOutput.shp}
 //  0.1 20
 //  Software Guide : EndCommandLineArgs
 
@@ -57,25 +50,27 @@
 
 int main(int argc, char * argv[])
 {
-  const char * infname            = argv[1];
-  const char * outfname           = argv[2];
-  const char * inprettyfname      = argv[3];
-  const char * outprettyfname     = argv[4];
-  double       angleThreshold     = atof(argv[5]);
-  double       distanceThreshold  = atof(argv[6]);
+  if (argc != 5)
+  {
+    std::cerr << "Usage: ./RightAngleDetectionExample input rightAngleOutput angleThreshold distanceThreshold\n";
+    return EXIT_FAILURE;
+  }
 
-  const unsigned int    Dimension = 2;
+  const char* infname                  = argv[1];
+  const char* rightAngleOutputFilename = argv[2];
+  double      angleThreshold           = atof(argv[3]);
+  double      distanceThreshold        = atof(argv[4]);
+
+  const unsigned int Dimension = 2;
   typedef unsigned char PixelType;
   typedef double        PrecisionType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
 
-  ReaderType::Pointer reader            = ReaderType::New();
+  auto reader = ReaderType::New();
   reader->SetFileName(infname);
   reader->GenerateOutputInformation();
-  WriterType::Pointer writer = WriterType::New();
 
   // Software Guide : BeginLatex
   //
@@ -124,8 +119,8 @@ int main(int argc, char * argv[])
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  LsdFilterType::Pointer        lsdFilter         = LsdFilterType::New();
-  RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
+  auto lsdFilter        = LsdFilterType::New();
+  auto rightAngleFilter = RightAngleFilterType::New();
   // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -151,48 +146,16 @@ int main(int argc, char * argv[])
   rightAngleFilter->SetDistanceThreshold(distanceThreshold);
   // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
-  // We will now draw the right angles on top of the input image. For
-  // this, we will draw the detected points on top of the input
-  // image. For this matter, we will use a
-  // \doxygen{otb}{VectorDataToMapFilter}  which is templated over
-  // the  input vector data type and the output image type, and a
-  // combination of a \doxygen{itk}{binaryFunctorImageFilter}
-  // and the \doxygen{otb}{Functor}{UnaryFunctorImageFilter}.
-  //
-  // Software Guide : EndLatex
+  typedef otb::VectorDataFileWriter<LsdFilterType::VectorDataType> WriterType;
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::VectorDataToMapFilter<VectorDataType,
-      ImageType> VectorDataRendererType;
-  VectorDataRendererType::Pointer vectorDataRenderer = VectorDataRendererType::New();
+  auto rightAngleWriter = WriterType::New();
 
-  typedef otb::Functor::AlphaBlendingFunctor<PixelType,
-    PixelType, PixelType> FunctorType;
-  typedef itk::BinaryFunctorImageFilter<ImageType, ImageType,
-    ImageType, FunctorType> BlendingFilterType;
-  BlendingFilterType::Pointer blendingFilter = BlendingFilterType::New();
-
-  vectorDataRenderer->SetInput(1, lsdFilter->GetOutput());
-  vectorDataRenderer->SetInput(rightAngleFilter->GetOutput());
-
-  vectorDataRenderer->SetSize(reader->GetOutput()->GetLargestPossibleRegion().GetSize());
-  vectorDataRenderer->SetOrigin(reader->GetOutput()->GetOrigin());
-  vectorDataRenderer->SetSpacing(reader->GetOutput()->GetSignedSpacing());
-  vectorDataRenderer->SetRenderingStyleType(VectorDataRendererType::Binary);
-
-  blendingFilter->SetInput1(reader->GetOutput());
-  blendingFilter->SetInput2(vectorDataRenderer->GetOutput());
-  blendingFilter->GetFunctor().SetAlpha(0.25);
-
-  writer->SetInput(blendingFilter->GetOutput());
-  writer->SetFileName(outfname);
-  // Software Guide : EndCodeSnippet
+  rightAngleWriter->SetInput(rightAngleFilter->GetOutput());
+  rightAngleWriter->SetFileName(rightAngleOutputFilename);
 
   // Software Guide : BeginLatex
   //
-  // Before calling the \code{Update()} method of the writer in order to
+  // Before calling the \code{Update()} method of the writers in order to
   // trigger the pipeline execution, we call the
   // \code{GenerateOutputInformation()} of the reader, so the
   // filter gets the information about image size and spacing.
@@ -201,50 +164,8 @@ int main(int argc, char * argv[])
 
   // Software Guide : BeginCodeSnippet
   reader->GenerateOutputInformation();
-  writer->Update();
+  rightAngleWriter->Update();
   // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:RIGHTANGLE_FILTER} shows the result of applying
-  // the right angle detection filter to an image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.25\textwidth]{PrettyRighAngleInput.eps}
-  // \includegraphics[width=0.25\textwidth]{PrettyRighAngleOutput.eps}
-  // \itkcaption[Right Angle Detection Filter]{Result of applying the
-  // \doxygen{otb}{LineSegmentDetector} and the
-  // \doxygen{otb}{VectorDataToRightAngleVectorDataFilter} to an image. From left to right :
-  // original image, detected right angles.}
-  // \label{fig:RIGHTANGLE_FILTER}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex
-
-  /************** images for printing *********/
-  typedef unsigned char OutputPixelType;
-
-  typedef otb::Image<OutputPixelType,
-      Dimension>                             OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>
-  OutputWriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescalerType;
-
-  RescalerType::Pointer     rescaler = RescalerType::New();
-  OutputWriterType::Pointer outwriter = OutputWriterType::New();
-
-  rescaler->SetOutputMinimum(0);
-  rescaler->SetOutputMaximum(255);
-
-  rescaler->SetInput(reader->GetOutput());
-  outwriter->SetInput(rescaler->GetOutput());
-  outwriter->SetFileName(inprettyfname);
-  outwriter->Update();
-
-  rescaler->SetInput(blendingFilter->GetOutput());
-  outwriter->SetInput(rescaler->GetOutput());
-  outwriter->SetFileName(outprettyfname);
-  outwriter->Update();
 
   return EXIT_SUCCESS;
 }

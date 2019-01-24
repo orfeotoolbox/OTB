@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -99,6 +99,9 @@ public:
   typedef typename MLMTargetTraits<TConfidenceValue>::SampleType ConfidenceSampleType;
   typedef itk::Statistics::ListSample<ConfidenceSampleType>      ConfidenceListSampleType;
 
+  
+  typedef itk::VariableLengthVector<double>      ProbaSampleType;
+  typedef itk::Statistics::ListSample<ProbaSampleType> ProbaListSampleType;
   /**\name Standard macros */
   //@{
   /** Run-time type information (and related methods). */
@@ -114,7 +117,7 @@ public:
     * quality value, or NULL
     * \return The predicted label
      */
-  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = nullptr) const;
+  TargetSampleType Predict(const InputSampleType& input, ConfidenceValueType *quality = nullptr, ProbaSampleType *proba = nullptr) const;
 
   /**\name Set and get the dimension of the model for dimensionality reduction models */
   //@{
@@ -130,7 +133,7 @@ public:
     * Note that this method will be multi-threaded if OTB is built
     * with OpenMP.
      */
-  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = nullptr) const;
+  typename TargetListSampleType::Pointer PredictBatch(const InputListSampleType * input, ConfidenceListSampleType * quality = nullptr, ProbaListSampleType * proba = nullptr) const;
   
 /**\name Classification model file manipulation */
 //@{
@@ -152,6 +155,8 @@ public:
 
 /** Query capacity to produce a confidence index */
   bool HasConfidenceIndex() const {return m_ConfidenceIndex;}
+  /** Query capacity to produce probability values */
+  bool HasProbaIndex() const {return m_ProbaIndex;}
 
 /**\name Input list of samples accessors */
 //@{
@@ -208,6 +213,9 @@ protected:
   /** flag that tells if the model support confidence index output */
   bool m_ConfidenceIndex;
 
+  /** flag that tells if the model support probability output */
+  bool m_ProbaIndex;
+  
   /** Is DoPredictBatch multi-threaded ? */
   bool m_IsDoPredictBatchMultiThreaded;
   
@@ -230,7 +238,7 @@ private:
     * Also set m_IsDoPredictBatchMultiThreaded to true if internal
     * implementation allows for parallel batch prediction.
     */
-  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target, ConfidenceListSampleType * quality = nullptr) const;
+  virtual void DoPredictBatch(const InputListSampleType * input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * target, ConfidenceListSampleType * quality = nullptr, ProbaListSampleType * proba = nullptr) const;
 
   /** Actual implementation of single sample prediction
    *  \param input sample to predict
@@ -238,7 +246,7 @@ private:
    *  or NULL
    *  \return The predicted label
    */ 
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= nullptr) const = 0;  
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType * quality= nullptr, ProbaSampleType *proba=nullptr) const = 0;  
  
   MachineLearningModel(const Self &) = delete;
   void operator =(const Self&) = delete;

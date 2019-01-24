@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -327,14 +327,14 @@ private:
       "This application is chaining different processing steps. Some of them "
       "are also performed by other applications in the stereo-reconstruction "
       "framework:\n\n"
-      "* StereoRectificationGridGenerator [1] : for the generation of deformation grids\n"
-      "* GridBasedImageResampling [2] : resampling into epipolar geometry\n"
-      "* BlockMatching [3] : estimation of dense disparity maps\n\n"
+      "* StereoRectificationGridGenerator: for the generation of deformation grids\n"
+      "* GridBasedImageResampling: resampling into epipolar geometry\n"
+      "* BlockMatching: estimation of dense disparity maps\n\n"
 
       "The pipeline executes the following steps on each stereo pair:\n\n"
       "* compute the epipolar displacement grids from the stereo pair (direct and inverse)\n"
       "* resample the stereo pair into epipolar geometry using BCO interpolation\n"
-      "* create masks for each epipolar image : remove black borders and resample input masks\n"
+      "* create masks for each epipolar image: remove black borders and resample input masks\n"
       "* compute horizontal disparities with a block matching algorithm\n"
       "* refine disparities to sub-pixel precision with a dichotomy algorithm\n"
       "* apply an optional median filter\n"
@@ -346,9 +346,9 @@ private:
       "DEM cell can be chosen between maximum, minimum and average.");
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] StereoRectificationGridGenerator\n"
-      "[2] GridBasedImageResampling\n"
-      "[3] BlockMatching");
+    SetDocSeeAlso("StereoRectificationGridGenerator\n"
+      "GridBasedImageResampling\n"
+      "BlockMatching");
 
     AddDocTag(Tags::Stereo);
 
@@ -362,7 +362,7 @@ private:
 
     AddParameter(ParameterType_String, "input.co", "Couples list");
     SetParameterDescription("input.co","List of index of couples im image list."
-      " Couples must be separated by a comma (index start at 0). For example :"
+      " Couples must be separated by a comma (index start at 0). For example:"
       " 0 1,1 2 will process a first couple composed of the first and the"
       " second image in image list, then the second and the third image\n. "
       "Note that images are handled by pairs. If left empty, couples are "
@@ -390,7 +390,7 @@ private:
     SetParameterString("map","wgs");
 
     AddParameter(ParameterType_Float, "output.res","Output resolution");
-    SetParameterDescription("output.res","Spatial sampling distance of the output elevation : the cell size (in m)");
+    SetParameterDescription("output.res","Spatial sampling distance of the output elevation: the cell size (in m)");
     SetDefaultParameterFloat("output.res",1.);
 
     AddParameter(ParameterType_Float, "output.nodata","NoData value");

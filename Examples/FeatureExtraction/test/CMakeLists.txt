@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -214,30 +214,25 @@ otb_add_test(NAME feTeCloudDetectionExampleTest COMMAND ${OTB_TEST_DRIVER}
     553 467 734 581 0.4 0.6 1.0
 )
 
-if (Module_OTBVectorDataRendering AND OTB_USE_MAPNIK)
+# ------- Line Segment Detector test----------
+otb_add_test(NAME feTeLineSegmentDetectorExampleTest  COMMAND ${OTB_TEST_DRIVER}
+  --compare-ogr ${NOTOL}
+    ${BASELINE}/feTeLineSegmentDetectorExampleOutput.shp
+    ${TEMP}/feTeLineSegmentDetectorExampleOutput.shp
+  Execute $<TARGET_FILE:LineSegmentDetectorExample>
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${TEMP}/feTeLineSegmentDetectorExampleOutput.shp
+)
 
-  # ------- Line Segment Detector test----------
-  otb_add_test(NAME feTeLineSegmentDetectorExampleTest  COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${NOTOL}
-      ${BASELINE}/feTeLineSegmentDetectorExampleOutput.png
-      ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
-    Execute $<TARGET_FILE:LineSegmentDetectorExample>
-      ${INPUTDATA}/Scene.png
-      ${TEMP}/feTeLineSegmentDetectorExampleOutput.png
-  )
+# ------- Right Angle Detection test----------
 
-  # ------- Right Angle Detection test----------
-
-  otb_add_test(NAME feTeRightAngleDetectionExample  COMMAND ${OTB_TEST_DRIVER}
-    --compare-image ${NOTOL}
-      ${BASELINE}/feTeRightAngleDetectionExampleOutput.png
-      ${TEMP}/feTeRightAngleDetectionExampleOutput.png
-    Execute $<TARGET_FILE:RightAngleDetectionExample>
-      ${INPUTDATA}/Scene.png
-      ${TEMP}/feTeRightAngleDetectionExampleOutput.png
-      ${TEMP}/PrettyRightAngleInput.png
-      ${TEMP}/PrettyRightAngleOutput.png
-      0.1
-      10.
-  )
-endif()
+otb_add_test(NAME feTeRightAngleDetectionExample  COMMAND ${OTB_TEST_DRIVER}
+  --compare-ogr ${NOTOL}
+    ${BASELINE}/feTeRightAngleDetectionExampleOutput.shp
+    ${TEMP}/feTeRightAngleDetectionExampleOutput.shp
+  Execute $<TARGET_FILE:RightAngleDetectionExample>
+    ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+    ${TEMP}/feTeRightAngleDetectionExampleOutput.shp
+    0.1
+    10.
+)

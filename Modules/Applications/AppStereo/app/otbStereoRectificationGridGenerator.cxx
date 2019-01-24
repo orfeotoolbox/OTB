@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -189,7 +189,7 @@ private:
       " zoomed-in (scale < 1) or zoomed-out (scale > 1) epipolar images.");
     SetDefaultParameterFloat("epi.scale",1.);
 
-    AddParameter(ParameterType_Int,"epi.step","Step of the deformation grid (in nb. of pixels)");
+    AddParameter(ParameterType_Int,"epi.step","Step of the deformation grid (in number of pixels)");
     SetParameterDescription("epi.step","Stereo-rectification deformation grid "
       "only varies slowly. Therefore, it is recommended to use a coarser grid "
       "(higher step value) in case of large images");

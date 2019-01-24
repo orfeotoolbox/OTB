@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -69,8 +69,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription( "out" , "The rescaled image filename." );
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Float,      "outmin", "Output min value");
     AddParameter(ParameterType_Float,      "outmax", "Output max value");
     SetDefaultParameterFloat("outmin", 0.0);
@@ -80,6 +78,8 @@ private:
 
     MandatoryOff("outmin");
     MandatoryOff("outmax");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_PAN.tif");

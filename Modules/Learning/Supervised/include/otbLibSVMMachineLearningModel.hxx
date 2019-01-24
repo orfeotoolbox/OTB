@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -107,7 +107,7 @@ template <class TInputValue, class TOutputValue>
 typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
   target.Fill(0);
@@ -129,6 +129,8 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   // terminate node
   x[input.Size()].index = -1;
   x[input.Size()].value = 0;
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
 
   if (quality != nullptr)
     {

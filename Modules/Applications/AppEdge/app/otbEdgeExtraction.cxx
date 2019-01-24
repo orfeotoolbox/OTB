@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -87,8 +87,6 @@ private:
     SetDefaultParameterInt("channel", 1);
     SetMinimumParameterIntValue("channel", 1);
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Choice, "filter", "Edge feature");
     SetParameterDescription("filter", "Choice of edge feature");
 
@@ -125,6 +123,8 @@ private:
     AddParameter(ParameterType_Float, "filter.canny.lowerthreshold", "");
     SetDefaultParameterFloat("filter.canny.lowerthreshold", 3.0);
     */
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

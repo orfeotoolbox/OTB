@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,9 +27,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
-#include "otbSinclairImageFilter.h"
-#include "otbSinclairToMuellerMatrixFunctor.h"
-
 
 int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -51,7 +48,7 @@ int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

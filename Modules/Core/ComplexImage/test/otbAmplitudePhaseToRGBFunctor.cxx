@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,8 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkUnaryFunctorImageFilter.h"
-#include "itkTernaryFunctorImageFilter.h"
 #include "otbAmplitudePhaseToRGBFunctor.h"
+#include "otbFunctorImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
@@ -65,11 +64,10 @@ int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char * argv[])
 
   typedef otb::Functor::AmplitudePhaseToRGBFunctor
   <PixelType, PixelType, PixelType, RGBPixelType> ColorMapFunctorType;
-  typedef itk::TernaryFunctorImageFilter
-  <ImageType, ImageType, ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  typedef otb::FunctorImageFilter<ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
-  colormapper->GetFunctor().SetMaximum(4000);
-  colormapper->GetFunctor().SetMinimum(0);
+  colormapper->GetModifiableFunctor().SetMaximum(4000);
+  colormapper->GetModifiableFunctor().SetMinimum(0);
 
   colormapper->SetInput1(modulusFilter->GetOutput());
   colormapper->SetInput2(constFilter->GetOutput());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -146,10 +146,11 @@ private:
     SetParameterDescription("iv", "Maximum initial neuron weight");
     MandatoryOff("iv");
 
+    AddRANDParameter();
+
     AddRAMParameter();
     // TODO : replace StreamingLines by RAM param ?
 
-    AddRANDParameter();
     // Default parameters
     SetDefaultParameterFloat("tp", 1.0);
     SetDefaultParameterInt("sx", 32);

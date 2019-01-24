@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -97,8 +97,6 @@ SetParameterDescription("channel", "The selected channel index");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
-AddRAMParameter();
-
 AddParameter(ParameterType_Choice, "structype", "Structuring Element Type");
 SetParameterDescription("structype", "Choice of the structuring element type");
 AddParameter(ParameterType_Int, "xradius", "Structuring element X radius");
@@ -119,6 +117,8 @@ AddChoice("filter.dilate", "Dilate");
 AddChoice("filter.erode", "Erode");
 AddChoice("filter.opening", "Opening");
 AddChoice("filter.closing", "Closing");
+
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

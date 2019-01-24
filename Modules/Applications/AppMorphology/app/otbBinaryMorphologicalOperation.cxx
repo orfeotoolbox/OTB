@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -101,8 +101,6 @@ SetParameterDescription( "channel" , "The selected channel index" );
 SetDefaultParameterInt( "channel" , 1 );
 SetMinimumParameterIntValue( "channel" , 1 );
 
-AddRAMParameter();
-
 AddParameter( ParameterType_Choice , "structype" ,
  "Type of structuring element" );
 SetParameterDescription( "structype" ,
@@ -165,6 +163,8 @@ AddParameter( ParameterType_Float , "filter.closing.foreval" ,
 SetParameterDescription( "filter.closing.foreval" ,
   "Set the foreground value, default is 1.0." );
 SetDefaultParameterFloat( "filter.closing.foreval" , 1.0 );
+
+AddRAMParameter();
 
 // Doc example parameter settings
 SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

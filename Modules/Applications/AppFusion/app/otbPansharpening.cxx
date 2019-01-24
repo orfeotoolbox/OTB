@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,8 +52,6 @@ public:
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef itk::ImageToImageFilter<FloatVectorImageType, FloatVectorImageType> FusionFilterType;
 
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType> SimpleRCSFilterType;
 
@@ -176,7 +174,9 @@ private:
 
       filter->UpdateOutputInformation();
       otbAppLogINFO( << "Simple RCS algorithm" );
-      m_FusionFilter = filter;
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
+
       break;
       }
       case 1:
@@ -203,8 +203,9 @@ private:
       filter->UpdateOutputInformation();
 
       otbAppLogINFO( << "Lmvm algorithm" );
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
 
-      m_FusionFilter = filter;
       break;
       }
       case 2:
@@ -224,7 +225,9 @@ private:
 
       filter->UpdateOutputInformation();
       otbAppLogINFO( << "Bayesian fusion algorithm" );
-      m_FusionFilter = filter;
+
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
 
       break;
       }
@@ -236,12 +239,9 @@ private:
       }
       return;
       }
-
-    SetParameterOutputImage("out", m_FusionFilter->GetOutput());
   }
 
   std::vector<itk::ProcessObject::Pointer> m_Ref;
-  FusionFilterType::Pointer m_FusionFilter;
 };
 }
 }

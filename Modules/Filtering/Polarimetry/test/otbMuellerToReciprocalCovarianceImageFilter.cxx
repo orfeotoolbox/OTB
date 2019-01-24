@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,9 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 #include "otbExtractROI.h"
+
+#include "otbMuellerToReciprocalCovarianceImageFilter.h"
 
 int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -48,7 +49,7 @@ int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * arg
   reader->SetFileName(inputFilename );
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

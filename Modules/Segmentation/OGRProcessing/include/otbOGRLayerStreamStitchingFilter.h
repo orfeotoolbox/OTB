@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,10 +23,6 @@
 
 #include "otbOGRDataSourceWrapper.h"
 #include "otbMacro.h"
-
-//#if(GDAL_VERSION_NUM < 1800)
-//#error OGRLayerStreamStitchingFilter requires GDAL version >= 1.8.0
-//#endif
 
 #include "itkProgressReporter.h"
 

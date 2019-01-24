@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -256,7 +256,7 @@ protected:
     GetInternalApplication("training")->SetParameterString("io.out", modelFileName);
 
     ExecuteInternal( "training" );
-    otbAppLogINFO("output model : " << GetInternalApplication("training")->GetParameterString("io.out"));
+    otbAppLogINFO("output model: " << GetInternalApplication("training")->GetParameterString("io.out"));
   }
 
   void ComputeImageStatistics( ImageBaseType * img,
@@ -267,7 +267,7 @@ protected:
     GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName);
 
     ExecuteInternal( "imgstats" );
-    otbAppLogINFO("image statistics file : " << GetInternalApplication("imgstats")->GetParameterString("out"));
+    otbAppLogINFO("image statistics file: " << GetInternalApplication("imgstats")->GetParameterString("out"));
   }
 
 
@@ -288,7 +288,7 @@ protected:
       std::ifstream infile(modelFileName);
       if(!infile)
       {
-        itkExceptionMacro(<< "File : " << modelFileName << " couldn't be opened");
+        itkExceptionMacro(<< "File: " << modelFileName << " couldn't be opened");
       }
 
       // get the line with the centroids (starts with "2 ")
@@ -327,7 +327,7 @@ protected:
 
   class KMeansFileNamesHandler
     {
-    public :
+    public:
       KMeansFileNamesHandler(const std::string &outPath)
       {
         tmpVectorFile = outPath + "_imgEnvelope.shp";
@@ -403,21 +403,21 @@ private:
     SetDescription("Unsupervised KMeans image classification");
 
     SetDocName("Unsupervised KMeans image classification");
-    SetDocLongDescription("Performs unsupervised KMeans image classification."
-      "KMeansClassification is a composite application, "
-      "using an existing training and classification application."
-      "The SharkKMeans model is used.\n"
-      "KMeansClassification application is only available if OTB is compiled with Shark support"
-      "(CMake option OTB_USE_SHARK=ON)\n"
-      "The steps of this composite application :\n"
-        "1) ImageEnveloppe : create a shapefile (1 polygon),\n"
-        "2) PolygonClassStatistics : compute the statistics,\n"
-        "3) SampleSelection : select the samples by constant strategy in the shapefile "
+    SetDocLongDescription("Unsupervised KMeans image classification. "
+      "This is a composite application, using existing training and classification applications. "
+      "The SharkKMeans model is used.\n\n"
+      "This application is only available if OTB is compiled with Shark support"
+      "(CMake option :code:`OTB_USE_SHARK=ON`).\n\n"
+
+      "The steps of this composite application:\n\n"
+        "1) ImageEnvelope: create a shapefile (1 polygon),\n"
+        "2) PolygonClassStatistics: compute the statistics,\n"
+        "3) SampleSelection: select the samples by constant strategy in the shapefile "
             "(1000000 samples max),\n"
-        "4) SamplesExtraction : extract the samples descriptors (update of SampleSelection output file),\n"
-        "5) ComputeImagesStatistics : compute images second order statistics,\n"
-        "6) TrainVectorClassifier : train the SharkKMeans model,\n"
-        "7) ImageClassifier : performs the classification of the input image "
+        "4) SampleExtraction: extract the samples descriptors (update of SampleSelection output file),\n"
+        "5) ComputeImagesStatistics: compute images second order statistics,\n"
+        "6) TrainVectorClassifier: train the SharkKMeans model,\n"
+        "7) ImageClassifier: perform the classification of the input image "
             "according to a model file.\n\n"
         "It's possible to choice random/periodic modes of the SampleSelection application.\n"
         "If you want keep the temporary files (sample selected, model file, ...), "
@@ -426,8 +426,8 @@ private:
 
     SetDocLimitations("The application doesn't support NaN in the input image");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("ImageEnveloppe PolygonClassStatistics SampleSelection SamplesExtraction "
-      "PolygonClassStatistics TrainVectorClassifier ImageClassifier\n"
+    SetDocSeeAlso("ImageEnvelope, PolygonClassStatistics, SampleSelection, SampleExtraction, "
+      "PolygonClassStatistics, TrainVectorClassifier, ImageClassifier.\n\n"
       "[1] http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html");
 
     AddDocTag(Tags::Learning);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -104,7 +104,7 @@ template <class TInputValue, class TOutputValue>
 typename BoostMachineLearningModel<TInputValue,TOutputValue>
 ::TargetSampleType
 BoostMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
 {
   TargetSampleType target;
 
@@ -132,6 +132,8 @@ BoostMachineLearningModel<TInputValue,TOutputValue>
 #endif
       );
     }
+ if (proba != nullptr && !this->m_ProbaIndex)
+   itkExceptionMacro("Probability per class not available for this classifier !");
 
   target[0] = static_cast<TOutputValue>(result);
   return target;

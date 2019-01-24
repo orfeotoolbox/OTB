@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -150,8 +150,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Radiometric indices output image");
 
-    AddRAMParameter();
-
     AddParameter(ParameterType_Group, "channels", "Channels selection");
     SetParameterDescription("channels", "Channels selection");
 
@@ -198,6 +196,8 @@ private:
         "* Soil:CI - Color index (Red, Green)\n"
         "* Soil:BI - Brightness index (Red, Green)\n"
         "* Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
+
+    AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");

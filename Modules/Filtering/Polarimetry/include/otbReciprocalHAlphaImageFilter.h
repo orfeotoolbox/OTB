@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,13 @@
 #ifndef otbReciprocalHAlphaImageFilter_h
 #define otbReciprocalHAlphaImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "otbMath.h"
 #include "vnl/algo/vnl_complex_eigensystem.h"
 #include <algorithm>
+#include <vector>
+#include <complex>
+
+#include "otbFunctorImageFilter.h"
 
 namespace otb
  {
@@ -38,6 +41,8 @@ namespace Functor {
  * To process, we diagonalise the complex coherency matrix (size 3*3). We call \f$ SortedEigenValues \f$ the list that contains the
  * eigen values of the matrix sorted in decrease order. \f$ SortedEigenVector \f$ the corresponding list
  * of eigen vector.
+ *
+ * Use otb::ReciprocalHAlphaImageFilter to apply
  *
  * Output value are:
  * - channel #0 : \f$ entropy = -\sum_{i=0}^{2}{p[i].\log{p[i]}} / \log{3} \f$
@@ -67,11 +72,8 @@ public:
   typedef typename TOutput::ValueType   OutputValueType;
 
 
-  inline TOutput operator()( const TInput & Coherency ) const
-    {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
+  inline void operator()(TOutput& result, const TInput& Coherency) const
+  {
     const double T0 = static_cast<double>(Coherency[0].real());
     const double T1 = static_cast<double>(Coherency[3].real());
     const double T2 = static_cast<double>(Coherency[5].real());
@@ -128,11 +130,11 @@ public:
         totalEigenValues += sortedRealEigenValues[k];
       }
 
-      
+
     for (unsigned int k = 0; k < 3; ++k)
       {
         p[k] = sortedRealEigenValues[k] / totalEigenValues;
-        
+
         if (p[k]<m_Epsilon) //n=log(n)-->0 when n-->0
 			plog[k]=0.0;
 		else
@@ -162,72 +164,36 @@ public:
     // Anisotropy estimation
     anisotropy=(sortedRealEigenValues[1] - sortedRealEigenValues[2])/(sortedRealEigenValues[1] + sortedRealEigenValues[2] + m_Epsilon);
 
-
     result[0] = static_cast<OutputValueType>(entropy);
     result[1] = static_cast<OutputValueType>(alpha);
     result[2] = static_cast<OutputValueType>(anisotropy);
-
-    return result;
     }
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
+    constexpr size_t OutputSize(...) const
+    {
+      // Size of the result (entropy, alpha, anisotropy)
+      return 3;
+    }
 
-   /** Constructor */
-   ReciprocalHAlphaFunctor() : m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalHAlphaFunctor() {}
-
-private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 3);
-   const double m_Epsilon;
+  private:
+    static constexpr double m_Epsilon = 1e-6;
 };
-}
+} // namespace Functor
 
-
-/** \class otbHAlphaImageFilter
- * \brief Compute the H-Alpha image (3 channels)
- * from the Reciprocal coherency image (6 complex channels)
+/**
+ * \typedef ReciprocalHAlphaImageFilter
+ * \brief Applies otb::Functor::ReciprocalHAlphaFunctor
+ * \sa otb::Functor::ReciprocalHAlphaFunctor
  *
- * For more details, please refer to the class ReciprocalHAlphaFunctor.
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
- * \sa ReciprocalHAlphaFunctor
- *
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalHAlphaImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHAlphaFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalHAlphaImageFilter  Self;
-   typedef typename Functor::ReciprocalHAlphaFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalHAlphaImageFilter, UnaryFunctorImageFilter);
-
-protected:
-   ReciprocalHAlphaImageFilter() {}
-  ~ReciprocalHAlphaImageFilter() override {}
-
-private:
-  ReciprocalHAlphaImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-
-};
-
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalHAlphaImageFilter = FunctorImageFilter<Functor::ReciprocalHAlphaFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -66,7 +66,7 @@ private:
       "and generates a single multi-channel image. The channel order is the same as the list.");
     SetDocLimitations("All input images must have the same size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Rescale application, Convert, SplitImage");
+    SetDocSeeAlso("Rescale application, DynamicConvert, SplitImage");
 
     AddDocTag(Tags::Manip);
     AddDocTag("Concatenation");

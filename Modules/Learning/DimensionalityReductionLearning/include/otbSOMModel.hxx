@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -212,7 +212,8 @@ template <class TInputValue, unsigned int MapDimension>
 typename SOMModel<TInputValue, MapDimension>::TargetSampleType
 SOMModel<TInputValue, MapDimension>::DoPredict(
   const InputSampleType & value,
-  ConfidenceValueType * /*quality*/) const
+  ConfidenceValueType * /*quality*/,
+  ProbaSampleType * /*proba*/) const
 {
   TargetSampleType target;
   target.SetSize(this->m_Dimension);
