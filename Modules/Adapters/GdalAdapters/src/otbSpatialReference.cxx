@@ -136,7 +136,7 @@ SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
 
 SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
 {
-  assert(zone>=0&&zone<=60&&"UTM zone should be in range [0,60]");
+  assert(zone<=60&&"UTM zone should be in range [0,60]");
   
   std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
   
@@ -268,7 +268,6 @@ void SpatialReference::UTMFromGeoPoint(double lon, double lat, unsigned int & zo
     }
 
   // post conditions
-  assert(zone>=0);
   assert(zone<=60);
 }
 }
