@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,15 +21,15 @@
 #ifndef otbOpenCVUtils_h
 #define otbOpenCVUtils_h
 
-#include <opencv2/core/core_c.h>
-
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-align"
 #include <opencv2/core/core.hpp>
+#include <opencv2/core/core_c.h>
 #pragma GCC diagnostic pop
 #else
 #include <opencv2/core/core.hpp>
+#include <opencv2/core/core_c.h>
 #endif
 
 #if defined(__GNUC__) || defined(__clang__)

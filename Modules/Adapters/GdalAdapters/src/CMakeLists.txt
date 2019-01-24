@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -28,8 +28,8 @@ set(OTBGdalAdapters_SRC
   otbOGRDriversInit.cxx
   otbGeometriesToGeometriesFilter.cxx
   otbOGRDataSourceWrapper.cxx
-  otbOGRVersionProxy.cxx
   otbOGRExtendedFilenameToOptions.cxx
+  otbOGRHelpers.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})

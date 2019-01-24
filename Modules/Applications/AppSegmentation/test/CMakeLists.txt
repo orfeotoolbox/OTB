@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,9 @@ otb_module_test()
 #----------- Segmentation TESTS ----------------
 
 # Segmentation algorithms parameters
-set(cc_parameters "-filter.cc.expr" "distance<25")
-set(edison_parameters "-filter.edison.spatialr" "5" "-filter.edison.ranger" "50" "-filter.edison.minsize" "10")
+set(cc_parameters "-filter.cc.expr" "distance<50")
 set(meanshift_parameters "-filter.meanshift.spatialr" "5" "-filter.meanshift.ranger" "50" "-filter.meanshift.minsize" "10")
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ovw")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ovw")
 
 # validation option
 set(meanshift_option "--without-threads")
@@ -59,7 +58,7 @@ set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 if(NOT (${filter} STREQUAL "Meanshift" AND ${mode} STREQUAL "Raster"))
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -79,15 +78,16 @@ set(filter "CC")
 set(mode "Vector")
 
 string(TOLOWER ${filter} lfilter)
+string(TOLOWER ${mode} lmode)
 
 # Add a test for ULOVW
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -104,11 +104,11 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -116,7 +116,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}_ULU
+                              ${${lmode}_ref_path}/apTvSeSegmentation${filter}${mode}_ULU${${lmode}_output_format}
                               ${TEMP}/${OUTFILE}
                      )
 
@@ -125,11 +125,11 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}

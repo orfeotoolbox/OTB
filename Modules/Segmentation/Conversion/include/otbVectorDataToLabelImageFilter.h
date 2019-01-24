@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,7 +29,6 @@
 
 #include "gdal.h"
 #include "ogr_api.h"
-#include "otbOGRVersionProxy.h"
 #include <string>
 
 namespace otb {
@@ -151,7 +150,7 @@ protected:
 
     if (m_OGRDataSourcePointer != nullptr)
       {
-      ogr::version_proxy::Close(m_OGRDataSourcePointer);
+      GDALClose(m_OGRDataSourcePointer);
       }
   }
 
@@ -163,7 +162,7 @@ private:
   VectorDataToLabelImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset * m_OGRDataSourcePointer;
 
   // Vector Of OGRGeometyH
   std::vector< OGRGeometryH >   m_SrcDataSetGeometries;

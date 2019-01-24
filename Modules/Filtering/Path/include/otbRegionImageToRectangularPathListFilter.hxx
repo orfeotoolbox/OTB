@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -129,7 +129,7 @@ RegionImageToRectangularPathListFilter<TInputImage, TOutputPath>
   typedef typename TInputImage::IndexType IndexType;
   std::vector<IndexType>                    regionContainer; // Pb for growing from within loop
   typename std::vector<IndexType>::iterator regionIterator;
-  typename std::vector<IndexType>::iterator regionIterator2;
+
   regionContainer.reserve(Taille[0] * Taille[1]); // to avoid growth problems
   IndexType explorerIndex; // position whose neighbors are to be checked for inclusion in current region
 

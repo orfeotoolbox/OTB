@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -159,14 +159,14 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbD
   ${EXAMPLEDATA}/StereoMoving.png # movingFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif # output correlFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
+  1 # radius
+  1 # sradius
   0.01 # precision
   2 # Mean square
   1 # Grid step
   0 # Initial offset x
   0 # Initial offset y
-  0 0 80 65 # region to proceed
+  0 0 32 32 # region to proceed
   )
 otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2

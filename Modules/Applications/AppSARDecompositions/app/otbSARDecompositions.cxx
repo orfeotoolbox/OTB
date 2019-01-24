@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -179,18 +179,18 @@ private:
 		case 0: // H-alpha-A
 
     if (inhv)
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
-        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+      m_SRFilter->SetInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
       radius.Fill(GetParameterInt("inco.kernelsize"));
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_HAFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
+      m_HAFilter->SetInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_HAFilter->GetOutput());
 
       break;
@@ -198,18 +198,18 @@ private:
     case 1: // Barnes
 
 		if (inhv)
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
-        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+      m_SRFilter->SetInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
       radius.Fill(GetParameterInt("inco.kernelsize"));
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_BarnesFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
+      m_BarnesFilter->SetInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_BarnesFilter->GetOutput());
 
       break;
@@ -217,18 +217,18 @@ private:
     case 2: // Huynen
 
 		if (inhv)
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
-        m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
-      m_SRFilter->SetVariadicNamedInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
+      m_SRFilter->SetInput<polarimetry_tags::hh>(GetParameterComplexDoubleImage("inhh"));
+      m_SRFilter->SetInput<polarimetry_tags::vv>(GetParameterComplexDoubleImage("invv"));
 
       radius.Fill(GetParameterInt("inco.kernelsize"));
       m_MeanFilter->GetFilter()->SetRadius(radius);
 
       m_MeanFilter->SetInput(m_SRFilter->GetOutput());
-      m_HuynenFilter->SetVariadicInput<0>(m_MeanFilter->GetOutput());
+      m_HuynenFilter->SetInput<0>(m_MeanFilter->GetOutput());
       SetParameterOutputImage("out", m_HuynenFilter->GetOutput());
 
       break;
@@ -245,7 +245,7 @@ private:
 		m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
 
     m_Concatener->SetInput(m_ImageList);
-    m_PauliFilter->SetVariadicInput<0>(m_Concatener->GetOutput());
+    m_PauliFilter->SetInput<0>(m_Concatener->GetOutput());
 
     SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
 

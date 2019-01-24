@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -89,11 +89,37 @@ bool SarSensorModelAdapter::IsValidSensorModel() const
   return m_SensorModel.get() != nullptr;
 }
 
-bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines)
+bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
+				      std::pair<unsigned long,unsigned long> & samples, 
+				      bool onlyValidSample)
 {
   if(m_SensorModel.get() != nullptr)
     {
-    return m_SensorModel->deburst(lines);
+      return m_SensorModel->deburst(lines, samples, onlyValidSample);
+    }
+  
+  return false;
+}
+
+bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index, 
+					    std::pair<unsigned long,unsigned long> & lines, 
+					    std::pair<unsigned long,unsigned long> & samples, bool allPixels)
+{
+   if(m_SensorModel.get())
+    {
+      return m_SensorModel->burstExtraction(burst_index, lines, samples, allPixels);
+    }
+
+   return false;
+}
+
+bool 
+SarSensorModelAdapter::DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
+					     std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+{
+  if(m_SensorModel.get())
+    {
+      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts);
     }
   
   return false;

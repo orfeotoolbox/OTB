@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -54,15 +54,19 @@ OGRVectorDataIO::~OGRVectorDataIO()
 bool
 OGRVectorDataIO::CanReadFile(const char* filename) const
 {
-  otb::ogr::version_proxy::GDALDatasetType * poDS = ogr::version_proxy::Open(filename, true);
-
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      filename, 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (poDS == nullptr)
     {
     std::cerr<<"Can not read file "<<filename<<" with GDALOpen"<<std::endl;
     return false;
     }
 //     std::cout << poDS->GetDriver()->GetName() << std::endl;
-  ogr::version_proxy::Close(poDS);
+  GDALClose(poDS);
   return true;
 }
 
@@ -93,8 +97,12 @@ OGRVectorDataIO
     this->CloseInternalDataSource();
     }
 
-  m_DataSource = ogr::version_proxy::Open(this->m_FileName.c_str(),true);
-
+  m_DataSource = (GDALDataset *)GDALOpenEx(
+      this->m_FileName.c_str(), 
+      GDAL_OF_READONLY | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
   if (m_DataSource == nullptr)
     {
     itkExceptionMacro(<< "Failed to open data file " << this->m_FileName);
@@ -184,7 +192,7 @@ OGRVectorDataIO
 void OGRVectorDataIO::CloseInternalDataSource()
 {
   assert(m_DataSource != NULL && "m_DataSource cannot be NULL");
-  ogr::version_proxy::Close(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = nullptr;
 }
 
@@ -215,8 +223,8 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
 
 
   //Find first the OGR driver
-  ogr::version_proxy::GDALDriverType * ogrDriver =
-    ogr::version_proxy::GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
+  GDALDriver * ogrDriver =
+    GetGDALDriverManager()->GetDriverByName(this->GetOGRDriverName(this->m_FileName).data());
 
   if (ogrDriver == nullptr)
     {
@@ -226,15 +234,34 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   // free an existing previous data source, if any
   if (m_DataSource != nullptr)
     {
-    ogr::version_proxy::Close(m_DataSource);
+    GDALClose(m_DataSource);
     }
 
   // Erase the dataSource if already exist
-  ogr::version_proxy::Delete(this->m_FileName.c_str());
+  GDALDataset * poDS = (GDALDataset *)GDALOpenEx(
+      this->m_FileName.c_str(), 
+       GDAL_OF_UPDATE | GDAL_OF_VECTOR,
+      NULL,
+      NULL,
+      NULL);
 
-  // m_DataSource = OGRSFDriverRegistrar::Open(this->m_FileName.c_str(), TRUE);
-  m_DataSource = ogr::version_proxy::Create(ogrDriver,this->m_FileName.c_str());
+  GDALDriver * poDriver = NULL;
+  if(poDS)
+    {
+    poDriver = poDS->GetDriver();
+    GDALClose(poDS);
+    }
+  if(poDriver)
+    {
+    poDriver->Delete(this->m_FileName.c_str());
+    }
 
+  m_DataSource = ogrDriver->Create( this->m_FileName.c_str(),
+                    0,
+                    0,
+                    0,
+                    GDT_Unknown,
+                    0);
   // check the created data source
   if (m_DataSource == nullptr)
     {
@@ -288,7 +315,7 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   otbMsgDevMacro( << "layerKept " << layerKept );
   (void)layerKept; // keep compiler happy
 
-  otb::ogr::version_proxy::Close(m_DataSource);
+  GDALClose(m_DataSource);
   m_DataSource = nullptr;
 
   if (oSRS != nullptr)

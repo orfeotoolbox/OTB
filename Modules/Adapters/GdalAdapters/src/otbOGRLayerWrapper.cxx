@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -69,8 +69,8 @@ otb::ogr::Layer::Layer(OGRLayer* layer, bool modifiable)
 {
 }
 
-otb::ogr::Layer::Layer(OGRLayer* layer, otb::ogr::version_proxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable)
-:   m_Layer(layer,  boost::bind(&otb::ogr::version_proxy::GDALDatasetType::ReleaseResultSet, boost::ref(sourceInChargeOfLifeTime), _1))
+otb::ogr::Layer::Layer(OGRLayer* layer, GDALDataset& sourceInChargeOfLifeTime, bool modifiable)
+:   m_Layer(layer, [&](auto const& x) { return sourceInChargeOfLifeTime.ReleaseResultSet(x); })
   , m_Modifiable(modifiable)
 {
   assert(layer && "A null OGRlayer cannot belong to an OGRDataSource" );
@@ -192,11 +192,7 @@ void otb::ogr::Layer::SetFeature(Feature feature)
 std::string otb::ogr::Layer::GetName() const
 {
   assert(m_Layer && "null layer");
-#if GDAL_VERSION_NUM >= 1800
   return m_Layer->GetName();
-#else
-  return GetLayerDefn().GetName();
-#endif
 }
 
 OGREnvelope otb::ogr::Layer::GetExtent(bool force/* = false */) const
@@ -339,17 +335,12 @@ void otb::ogr::Layer::DeleteField(int fieldIndex)
       <<GetName()<<">: layer is not modifiable");
     }
 
-#if GDAL_VERSION_NUM < 1900
-  itkGenericExceptionMacro("OGRLayer::DeleteField is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#else
   const OGRErr res = m_Layer->DeleteField(fieldIndex);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot delete the "<<fieldIndex << "th field in the layer <"
       <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
-#endif
 }
 
 void otb::ogr::Layer::AlterFieldDefn(
@@ -363,10 +354,6 @@ void otb::ogr::Layer::AlterFieldDefn(
       <<GetName()<<">: layer is not modifiable");
     }
 
-#if GDAL_VERSION_NUM < 1900
-  itkGenericExceptionMacro("OGRLayer::AlterFieldDefn is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#else
   const OGRErr res = m_Layer->AlterFieldDefn(
     int(fieldIndex),
     &newFieldDefn.ogr(),
@@ -376,7 +363,6 @@ void otb::ogr::Layer::AlterFieldDefn(
     itkGenericExceptionMacro(<< "Cannot alter the "<<fieldIndex << "th field in the layer <"
       <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
-#endif
 }
 
 void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
@@ -389,17 +375,12 @@ void otb::ogr::Layer::ReorderField(size_t oldPos, size_t newPos)
       <<GetName()<<">: layer is not modifiable");
     }
 
-#if GDAL_VERSION_NUM < 1900
-  itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#else
   const OGRErr res = m_Layer->ReorderField(int(oldPos), int(newPos));
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot move the "<<oldPos << "th field to the "
       << newPos << "th position in the layer <" <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
-#endif
 }
 
 void otb::ogr::Layer::ReorderFields(int * map)
@@ -412,42 +393,28 @@ void otb::ogr::Layer::ReorderFields(int * map)
       <<GetName()<<">: layer is not modifiable");
     }
 
-#if GDAL_VERSION_NUM < 1900
-  itkGenericExceptionMacro("OGRLayer::ReorderField is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#else
   const OGRErr res = m_Layer->ReorderFields(map);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot reorder the fields of the layer <"
       <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
-#endif
 }
 
 void otb::ogr::Layer::SetIgnoredFields(char const** fieldNames)
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION_NUM >= 1900
   const OGRErr res = m_Layer->SetIgnoredFields(fieldNames);
   if (res != OGRERR_NONE)
     {
     itkGenericExceptionMacro(<< "Cannot set fields to ignore on the layer <"
       <<GetName() <<">: " << CPLGetLastErrorMsg());
     }
-#else
-  itkGenericExceptionMacro("OGRLayer::SetIgnoredFields is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.")
-#endif
 }
 
 OGRwkbGeometryType otb::ogr::Layer::GetGeomType() const
 {
   assert(m_Layer && "OGRLayer not initialized");
-#if GDAL_VERSION_NUM < 1800
-  return GetLayerDefn().GetGeomType();
-#else
   return m_Layer->GetGeomType();
-#endif
 }
 

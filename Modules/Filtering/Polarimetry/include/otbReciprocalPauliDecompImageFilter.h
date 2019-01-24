@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,7 +76,7 @@ public:
  *
  * Set inputs with:
  * \code
- * SetVariadicInput<0>(inputPtr);
+ * SetInput<0>(inputPtr);
  * \endcode
  *
  * \ingroup OTBPolarimetry

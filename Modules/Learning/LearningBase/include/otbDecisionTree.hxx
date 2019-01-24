@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -98,7 +98,6 @@ DecisionTree<AttributeValueType, LabelType>
   otbMsgDevMacro( << "Trying to match attribute " << m_Attribute << " with value " << attrValue );
 
   bool found = false;
-  KeyType key;
   if( m_IsFinal )
     {
     typename LabelMapType::const_iterator lmIt = m_LabelMap.begin();

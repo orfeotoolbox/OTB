@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -228,8 +228,7 @@ LocalHoughFilter<TInputImage>
       // ---------------------------------------
       // Get the list of LineSpatialObject lines
       // ---------------------------------------
-
-      #if !defined(ITK_LEGACY_REMOVE)
+      #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 12)
       lines = houghFilter->GetLines(m_NumberOfLines);
       #else
       lines = houghFilter->GetLines();

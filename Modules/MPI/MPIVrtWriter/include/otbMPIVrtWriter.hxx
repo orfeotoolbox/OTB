@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -57,16 +57,6 @@ MPIVrtWriter<TImage>::GetInput()
     return 0;
     }
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
-}
-
-template <typename TImage>
-void
-MPIVrtWriter<TImage>::SetFileName(const char* extendedFileName)
-{
-  if (m_Filename.compare(extendedFileName) != 0 )
-    {
-    this->SetFileName(std::string(extendedFileName));
-    }
 }
 
 template <typename TImage>

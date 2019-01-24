@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -204,6 +204,13 @@ SampleAugmentationFilter
 
   auto featureCount = outputLayer.GetFeatureCount(false);
   auto templateFeature = this->SelectTemplateFeature(inputLayer, classField, label);
+
+  OGRErr err = outputLayer.ogr().StartTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outputLayer.ogr().GetName() << ".");
+    }
+
   for(const auto& sample : samples)
     {
     ogr::Feature dstFeature(outputLayer.GetLayerDefn());
@@ -219,6 +226,11 @@ SampleAugmentationFilter
         }
       }
     outputLayer.CreateFeature( dstFeature );
+    }
+  err = outputLayer.ogr().CommitTransaction();
+  if (err != OGRERR_NONE)
+    {
+    itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outputLayer.ogr().GetName() << ".");
     }
 }
 
@@ -247,7 +259,7 @@ SampleAugmentationFilter
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
   return (fieldType == OFTInteger 
-          || ogr::version_proxy::IsOFTInteger64( fieldType ) 
+          || fieldType == OFTInteger64
           || fieldType == OFTReal);
 }
 

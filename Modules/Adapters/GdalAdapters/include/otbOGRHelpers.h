@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,6 +27,7 @@
 #include <cassert>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#include "ogr_feature.h"
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
@@ -42,6 +43,8 @@
 #endif
 
 #include "OTBGdalAdaptersExport.h"
+
+class GDALDataset;
 
 namespace otb
 {
@@ -104,6 +107,35 @@ struct OTBGdalAdapters_EXPORT StringListConverter
 private:
   std::vector<char const*> m_raw;
 };
+
+/** 
+  * Return the list of available drivers.
+  *
+  * \return A vector of string containing the list of available drivers.
+*/  
+OTBGdalAdapters_EXPORT
+std::vector<std::string> GetAvailableDriversAsStringVector();
+
+/**
+  * Return the list of files composing the dataset.
+  * 
+  * \param dataset Pointer to the dataset to get the file list from. Will not be
+  * checked for null pointer.
+  * 
+  * \return A vector of string containing the list of files.
+*/
+   
+OTBGdalAdapters_EXPORT 
+std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset);
+
+/**
+  * Returns true if the field 'index' is set and not-null in the given feature
+  *
+  * Before gdal 2.2, it calls OGRFeature::IsFieldSet().
+  * After gdal 2.2, it calls OGRFeature::IsFieldSetAndNotNull()
+*/
+OTBGdalAdapters_EXPORT
+bool IsFieldSetAndNotNull(OGRFeature *feat, int index);
 
 } // ogr namespace
 } // end namespace otb

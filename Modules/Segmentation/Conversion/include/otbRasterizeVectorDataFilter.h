@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,7 +31,6 @@
 #include "gdal.h"
 #include "gdal_alg.h"
 #include "ogr_srs_api.h"
-#include "otbOGRVersionProxy.h"
 
 namespace otb {
 
@@ -148,7 +147,7 @@ protected:
   {
     if (m_OGRDataSourcePointer != nullptr)
       {
-      ogr::version_proxy::Close(m_OGRDataSourcePointer);
+      GDALClose(m_OGRDataSourcePointer);
       }
   }
 
@@ -160,7 +159,7 @@ private:
   RasterizeVectorDataFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset * m_OGRDataSourcePointer;
 
   // Vector Of LayersH
   std::vector< OGRLayerH >    m_SrcDataSetLayers;

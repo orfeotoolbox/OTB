@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -209,10 +209,10 @@ int main (int argc, char **argv)
       = options.workingInplace ? input
       : options.outputIsStdout ? nullptr
       : otb::ogr::DataSource::New( options.outputFile, otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
-    std::cout << "input: " << otb::ogr::version_proxy::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << options.inputFile << "\n";
+    std::cout << "input: " << otb::ogr::GetFileListAsStringVector(&input->ogr())[0] << " should be: " << options.inputFile << "\n";
     if (output)
       {
-      std::cout << "output: " << otb::ogr::version_proxy::GetFileListAsStringVector(&output->ogr())[0] << " should be: " << options.outputFile << "\n";
+      std::cout << "output: " << otb::ogr::GetFileListAsStringVector(&output->ogr())[0] << " should be: " << options.outputFile << "\n";
       }
     // std::cout << "\n";
 

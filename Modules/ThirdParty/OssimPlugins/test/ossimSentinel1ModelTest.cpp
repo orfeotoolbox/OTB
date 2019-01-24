@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -109,9 +109,10 @@ int main(int argc, char * argv[])
          ;
       
       std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
+      std::pair<unsigned long, unsigned long> deburstSamples;
 
       std::cout<<"Trying to deburst data ..."<<std::endl;
-      bool deburstOk = sensor->deburst(deburstLines);
+      bool deburstOk = sensor->deburst(deburstLines, deburstSamples);
       std::cout<<"Deburst succeed: "<<(deburstOk?"yes":"no")<<std::endl;
 
       if(deburstOk)
