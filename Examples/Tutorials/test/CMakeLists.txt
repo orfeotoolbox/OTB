@@ -78,7 +78,7 @@ otb_add_test(NAME  trTeTutorialsSmarterFilteringPipelineTest COMMAND ${OTB_TEST_
 )
 
 otb_add_test(NAME  trTeTutorialsOrthoFusionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/TutorialsOrthoFusionOutput.tif
     ${TEMP}/TutorialsOrthoFusionOutput.tif
   Execute $<TARGET_FILE:OrthoFusion>
