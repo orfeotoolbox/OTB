@@ -203,9 +203,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp
                              -out.proj user
                              -out.proj.user.map  lambert93
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
@@ -213,9 +213,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
                              -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
@@ -223,9 +223,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                              -out.proj image
                              -out.proj.image.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                      APP  VectorDataReprojection
@@ -235,9 +235,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                              -out.proj.user.map  utm
                              -out.proj.user.map.utm.northhem true
                  	           -out.proj.user.map.utm.zone 31
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #          ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
@@ -245,9 +245,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml
                              -out.proj user
                              -out.proj.user.map  wgs
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml)
 
 otb_test_application(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
@@ -283,16 +283,16 @@ otb_test_application(NAME  apTvPrRefineSensorModel
                              ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
                              ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom)
 
-                			  
+
 otb_test_application(NAME  apTvPrRefineSensorModel2
                      APP  RefineSensorModel
-                     OPTIONS -ingeom    ${INPUTDATA}/s1a-iw-grd-vh-20150210t060009-20150210t060034-004557-0059a3-002.geom 
+                     OPTIONS -ingeom    ${INPUTDATA}/s1a-iw-grd-vh-20150210t060009-20150210t060034-004557-0059a3-002.geom
                              -inpoints  ${INPUTDATA}/pts_idV5.txt
                  	         -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom
                      VALID   --compare-ascii 0.1
                              ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput2.geom
                              ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom)
-                             
+
 
 
 #----------- RigidTransformResample TESTS ----------------
@@ -307,7 +307,7 @@ otb_test_application(NAME apTvPrRigidTransformResample
                      VALID   --compare-image ${NOTOL}
                               ${BASELINE}/owTvRigidTransformResampleTest.tif
                 			  ${TEMP}/apTvPrRigidTransformResampleTest.tif)
-                			  
+
 
 
 
@@ -316,9 +316,9 @@ otb_test_application(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
                      OPTIONS -in ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
-                     VALID   --compare-ogr ${NOTOL}
-                        ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
-                        ${TEMP}/apTvPrImageEnvelopeTest.shp)
+                     # VALID   --compare-ogr ${NOTOL}
+                     #    ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
+                     #    ${TEMP}/apTvPrImageEnvelopeTest.shp)
 
 
 #----------- ConvertSensorToGeoPoint TESTS ----------------
