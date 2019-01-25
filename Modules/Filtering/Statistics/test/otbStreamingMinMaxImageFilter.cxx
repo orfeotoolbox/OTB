@@ -47,7 +47,7 @@ int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char * argv[])
 
   filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetInput(reader->GetOutput());
-  otb::StandardFilterWatcher watcher(filter, "Min Max Computation");
+  otb::StandardFilterWatcher watcher(filter->GetStreamer(), "Min Max Computation");
   filter->Update();
 
   std::ofstream file;
