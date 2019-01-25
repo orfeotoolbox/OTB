@@ -39,6 +39,7 @@
 #include "otbWrapperBoolParameter.h"
 
 #include "otbWrapperAddProcessToWatchEvent.h"
+#include "otbExtendedFilenameToWriterOptions.h"
 
 #include "otbCast.h"
 #include "otbMacro.h"
@@ -884,8 +885,10 @@ int Application::Execute()
           }
         else
           {
-          // set input string based on out image
-          SetParameterString(key, targetApp->GetParameterString(outKey));
+          // set input string based on out image (and strip any extended filename)
+          otb::ExtendedFilenameToWriterOptions::Pointer fnHelper = otb::ExtendedFilenameToWriterOptions::New();
+          fnHelper->SetExtendedFileName(targetApp->GetParameterString(outKey));
+          SetParameterString(key, fnHelper->GetSimpleFileName() );
           targetApp->EnableParameter(outKey);
           }
         }
@@ -911,8 +914,10 @@ int Application::Execute()
               }
             else
               {
-              // set input string based on out image
-              SetNthParameterStringList(key, i, targetApp->GetParameterString(outKey));
+              // set input string based on out image (and strip any extended filename)
+              otb::ExtendedFilenameToWriterOptions::Pointer fnHelper = otb::ExtendedFilenameToWriterOptions::New();
+              fnHelper->SetExtendedFileName(targetApp->GetParameterString(outKey));
+              SetNthParameterStringList(key, i, fnHelper->GetSimpleFileName());
               targetApp->EnableParameter(outKey);
               }
             }
