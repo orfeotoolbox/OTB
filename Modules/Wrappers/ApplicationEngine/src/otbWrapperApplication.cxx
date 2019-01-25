@@ -875,7 +875,7 @@ int Application::Execute()
       if(targetApp.IsNotNull())
         {
         std::string outKey = imgParam->GetConnection().key;
-        if(imgParam->GetConnection().isMem)
+        if(imgParam->GetConnection().isMem || !targetApp->HasValue(outKey))
           {
           // memory connection
           SetParameterInputImage(key,
@@ -901,7 +901,8 @@ int Application::Execute()
           if(targetApp.IsNotNull())
             {
             std::string outKey = imgListParam->GetNthElement(i)->GetConnection().key;
-            if(imgListParam->GetNthElement(i)->GetConnection().isMem)
+            if(imgListParam->GetNthElement(i)->GetConnection().isMem ||
+               !targetApp->HasValue(outKey))
               {
               // memory connection
               SetNthParameterInputImageList(key,i,
