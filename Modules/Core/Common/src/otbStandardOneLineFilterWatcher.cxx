@@ -24,6 +24,7 @@
 
 #include "otbStandardOneLineFilterWatcher.h"
 #include "otbStopwatch.h"
+#include "otbSystem.h"
 
 namespace otb
 {
@@ -31,7 +32,8 @@ namespace otb
 StandardOneLineFilterWatcher
 ::StandardOneLineFilterWatcher()
   : m_StarsCount(50),
-    m_CurrentNbStars(-1)
+    m_CurrentNbStars(-1),
+    m_CoutIsConsole( System::IsInteractive(1) )
 {
 }
 
@@ -40,7 +42,8 @@ StandardOneLineFilterWatcher
                         const char *comment)
   : FilterWatcherBase(process, comment),
     m_StarsCount(50),
-    m_CurrentNbStars(-1)
+    m_CurrentNbStars(-1),
+    m_CoutIsConsole( System::IsInteractive(1) )
 {
 }
 
@@ -49,7 +52,8 @@ StandardOneLineFilterWatcher
                         const std::string& comment)
   : FilterWatcherBase(process, comment.c_str()),
     m_StarsCount(50),
-    m_CurrentNbStars(-1)
+    m_CurrentNbStars(-1),
+    m_CoutIsConsole( System::IsInteractive(1) )
 {
 }
 
@@ -82,12 +86,22 @@ StandardOneLineFilterWatcher
       {
       std::string stars(nbStars, '*');
       std::string blanks(nbBlanks, ' ');
-
-      std::cout << "\r"
-                << m_Comment
-                << ": "
-                << progressPercent << "% [" << stars << blanks << "]"
-                << std::flush;
+      if (m_CoutIsConsole)
+        {
+        std::cout << "\r"
+                  << m_Comment
+                  << ": "
+                  << progressPercent << "% [" << stars << blanks << "]"
+                  << std::flush;
+        }
+      else
+        {
+        std::ostringstream oss;
+        oss << m_Comment
+            << ": "
+            << progressPercent << "% [" << stars << blanks << "]";
+        m_Buffer = oss.str();
+        }
       }
 
     m_CurrentNbStars = nbStars;
@@ -106,6 +120,12 @@ StandardOneLineFilterWatcher
 ::EndFilter()
 {
   m_Stopwatch.Stop();
+
+  if (m_Process && !m_CoutIsConsole)
+    {
+    std::cout << m_Buffer;
+    m_Buffer = std::string("");
+    }
 
   std::cout << " (";
   m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
