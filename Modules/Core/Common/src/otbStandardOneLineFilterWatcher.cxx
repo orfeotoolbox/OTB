@@ -86,20 +86,16 @@ StandardOneLineFilterWatcher
       {
       std::string stars(nbStars, '*');
       std::string blanks(nbBlanks, ' ');
+      std::ostringstream oss;
+      oss << m_Comment
+          << ": "
+          << progressPercent << "% [" << stars << blanks << "]";
       if (m_CoutIsConsole)
         {
-        std::cout << "\r"
-                  << m_Comment
-                  << ": "
-                  << progressPercent << "% [" << stars << blanks << "]"
-                  << std::flush;
+        std::cout << "\r" << oss.str() << std::flush;
         }
       else
         {
-        std::ostringstream oss;
-        oss << m_Comment
-            << ": "
-            << progressPercent << "% [" << stars << blanks << "]";
         m_Buffer = oss.str();
         }
       }
