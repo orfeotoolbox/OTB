@@ -101,7 +101,6 @@ StandardWriterWatcher
 {
   std::ostringstream oss;
   oss.str("");
-  oss << "\r";
 
   if (m_SourceProcess)
     {
