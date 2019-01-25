@@ -855,6 +855,8 @@ public:
   */
   void FreeRessources();
 
+  bool IsExecuteDone();
+
 protected:
   /** Constructor */
   Application();

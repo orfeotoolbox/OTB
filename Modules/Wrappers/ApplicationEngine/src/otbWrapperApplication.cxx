@@ -825,11 +825,6 @@ void Application::FreeRessources()
 
 int Application::Execute()
 {
-  if (m_ExecuteDone)
-    {
-    // avoid loops and diamonds
-    return 0;
-    }
   //----------- Recursive part -------------------------------------------------
   std::vector<std::string> paramList = GetParametersKeys(true);
   int status=0;
@@ -843,7 +838,7 @@ int Application::Execute()
     if(imgParam)
       {
       Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
-      if(targetApp.IsNotNull())
+      if(targetApp.IsNotNull() && !targetApp->IsExecuteDone())
         {
         targetApps.insert(targetApp);
         }
@@ -856,7 +851,7 @@ int Application::Execute()
         for (unsigned int i=0 ; i<imgListParam->Size(); i++)
           {
           Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
-          if(targetApp.IsNotNull())
+          if(targetApp.IsNotNull() && !targetApp->IsExecuteDone())
             {
             targetApps.insert(targetApp);
             }
@@ -2645,6 +2640,8 @@ Application::ConnectImage(std::string in, Application* app, std::string out)
 void
 Application::PropagateConnectMode(bool isMem)
 {
+  // reset ExecuteDone flag
+  m_ExecuteDone = false;
   std::vector<std::string> paramList = GetParametersKeys(true);
   std::unordered_set<Application*> targetApps;
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
@@ -2683,6 +2680,12 @@ Application::PropagateConnectMode(bool isMem)
     {
     app->PropagateConnectMode(isMem);
     }
+}
+
+bool
+Application::IsExecuteDone()
+{
+  return m_ExecuteDone;
 }
 
 }
