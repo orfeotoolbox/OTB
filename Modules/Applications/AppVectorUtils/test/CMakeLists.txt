@@ -28,7 +28,8 @@ otb_test_application(NAME apTvUtVectorDataTransform_Rotation
                              -transform.ro 15
                      # VALID   --compare-ogr ${NOTOL}
                      #         ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Rotation.shp
-                     #         ${TEMP}/apTvUtVectorDataTransform_rotation.shp)
+                     #         ${TEMP}/apTvUtVectorDataTransform_rotation.shp
+		     )
 
 otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                      APP VectorDataTransform
@@ -40,7 +41,8 @@ otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                              -transform.ty  6
                      # VALID   --compare-ogr ${NOTOL}
                      #         ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
-                     #         ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
+                     #         ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
+		     )
 
 
 #----------- VectorDataExtractROI TESTS ----------------
