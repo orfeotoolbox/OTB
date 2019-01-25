@@ -52,8 +52,9 @@ def test(otb, argv):
   #---------------------------------------------------------------------------
   # Second run with on-disk connections
   app1.OUT = argv[2]+"_tmp1.tif"
-  app2.OUT = argv[2]+"_tmp2.tif"
   app3.OUT = argv[2]+"_tmp3.tif"
+
+  # app2.OUT is left empty and should fallback to memory connection
 
   app4.PropagateConnectMode(False)
   app4.ExecuteAndWriteOutput()
