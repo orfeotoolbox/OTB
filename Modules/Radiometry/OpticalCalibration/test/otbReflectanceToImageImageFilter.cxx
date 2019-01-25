@@ -30,7 +30,7 @@
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-int otbReflectanceToImageImageFilter(int argc, char * argv[])
+int otbReflectanceToImageImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -38,15 +38,20 @@ int otbReflectanceToImageImageFilter(int argc, char * argv[])
   double       flux = 0.;
   int          day = 1;
   int          month = 1;
+  double       solarDistance = 1.0;
 
-  if (argc == 17)
+  if (atoi(argv[16]) == 0)
     {
-    flux = static_cast<double>(atof(argv[16]));
+    flux = static_cast<double>(atof(argv[17]));
+    }
+  else if (atoi(argv[16]) == 1)
+    {
+    solarDistance = static_cast<double>(atof(argv[17]));
     }
   else
     {
-    day = atoi(argv[16]);
-    month = atoi(argv[17]);
+    day = atoi(argv[17]);
+    month = atoi(argv[18]);
     }
 
   const unsigned int Dimension = 2;
@@ -88,9 +93,13 @@ int otbReflectanceToImageImageFilter(int argc, char * argv[])
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
 
-  if (argc == 17)
+  if (atoi(argv[16]) == 0)
     {
     filter->SetFluxNormalizationCoefficient(flux);
+    }
+  else if (atoi(argv[16]) == 1)
+    {
+    filter->SetSolarDistance(solarDistance);
     }
   else
     {
