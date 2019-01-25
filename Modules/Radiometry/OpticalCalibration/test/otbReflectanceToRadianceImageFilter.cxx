@@ -25,7 +25,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
+int otbReflectanceToRadianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -33,15 +33,20 @@ int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
   double       flux = 0.;
   int          day = 1;
   int          month = 1;
+  double       solarDistance = 1.;
 
-  if (argc == 9)
+  if (atoi(argv[8]) == 0)
     {
-    flux = static_cast<double>(atof(argv[8]));
+    flux = static_cast<double>(atof(argv[9]));
+    }
+  else if (atoi(argv[8]) == 1)
+    {
+    solarDistance = static_cast<double>(atof(argv[9]));
     }
   else
     {
-    day = atoi(argv[8]);
-    month = atoi(argv[9]);
+    day = atoi(argv[9]);
+    month = atoi(argv[10]);
     }
 
   const unsigned int Dimension = 2;
@@ -74,15 +79,18 @@ int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
   filter->SetUseClamp(false);
-  if (argc == 9)
+  if (atoi(argv[8]) == 0)
     {
     filter->SetFluxNormalizationCoefficient(flux);
+    }
+  else if (atoi(argv[8]) == 1)
+    {
+    filter->SetSolarDistance(solarDistance);
     }
   else
     {
     filter->SetDay(day);
     filter->SetMonth(month);
-    filter->SetSolarVariability(otb::VarSol::GetVarSol(day, month));
     }
 
   filter->SetInput(reader->GetOutput());
