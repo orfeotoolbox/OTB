@@ -34,10 +34,13 @@ def test(otb, argv):
   app4 = otb.Registry.CreateApplication("ConcatenateImages")
 
   app1.IN = argv[1]
+  app1.TYPE = "mean"
 
   app2.ConnectImage("in",app1, "out")
+  app2.TYPE = "anidif"
 
-  app3.IN = argv[1]
+  app3.ConnectImage("in",app1, "out")
+  app3.TYPE = "gaussian"
 
   app4.ConnectImage("il", app2, "out")
   app4.ConnectImage("il", app3, "out")
