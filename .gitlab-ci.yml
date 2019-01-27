@@ -17,3 +17,7 @@ build:ubuntu-18.04:release:
   image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gcc
   script:
     - CI/build.sh
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - build/Testing/*/Test.xml
