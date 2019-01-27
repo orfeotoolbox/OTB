@@ -2,7 +2,7 @@
 
 export TOP_DIR=$(pwd)
 
-git clone --depth 1 --branch ${CI_COMMIT_REF_NAME} --single-branch \
+git clone --depth 1 --branch release-6.6 --single-branch \
     git@gitlab.orfeo-toolbox.org:orfeotoolbox/otb-data.git
 
 mkdir build
