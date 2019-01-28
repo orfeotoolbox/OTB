@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
   // EPSG:2154 is the EPSG code for lambert 93
-  otb::SpatialReference lamb93SRS = otb::SpatialReference::FromDescription("EPSG:3154");
+  otb::SpatialReference lamb93SRS = otb::SpatialReference::FromDescription("EPSG:2154");
   MapProjectionType::Pointer lambertProjection = MapProjectionType::New();
   lambertProjection->SetWkt(lamb93SRS.ToWkt());
 
