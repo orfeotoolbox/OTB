@@ -2,7 +2,7 @@
 
 export TOP_DIR=$(pwd)
 
-curl -L -o otb-data-master.tar.gz \
+curl -s -S -L -o otb-data-master.tar.gz \
      https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/-/archive/master/otb-data-master.tar.gz
 tar xzf otb-data-master.tar.gz
 mv otb-data-master otb-data
