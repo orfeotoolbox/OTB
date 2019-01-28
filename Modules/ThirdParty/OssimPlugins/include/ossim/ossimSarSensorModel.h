@@ -351,7 +351,9 @@ public:
     * \param lines A Boolean to indicate only valids samples are required.
     */
    bool deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
-			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts);
+			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+			      unsigned int & linesOffset, unsigned int first_burstInd,
+			      bool inputWithInvalidPixels=false);
 
    /**
     * Returns pointer to a new instance, copy of this.
