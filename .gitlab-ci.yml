@@ -14,7 +14,7 @@ stages:
 build:ubuntu-18.04:release:
   extends: .retry_twice
   stage: build
-  image: registry.orfeo-toolbox.org/sdinot/spdlog:debian-stretch-cpp
+  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gcc
   script:
     - CI/build.sh
   artifacts:
