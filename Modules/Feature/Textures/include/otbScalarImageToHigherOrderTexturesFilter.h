@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class ScalarImageToHigherOrderTexturesFilter
- *  \brief This class compute 11 local higher order statistics textures coefficients
+ *  \brief This class compute 10 local higher order statistics textures coefficients
  *  based on the grey level run-length matrix
  *
  *  This filter computes the following Haralick textures over a sliding window with
@@ -96,20 +96,8 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  /** Co-occurence matrix and textures calculator */
-/*  typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
-    <InputImageType>                                           RunLengthMatrixGeneratorType;
-  typedef typename RunLengthMatrixGeneratorType::Pointer       RunLengthMatrixGeneratorPointerType;
-  typedef typename RunLengthMatrixGeneratorType::OffsetType    OffsetType;
-  typedef typename RunLengthMatrixGeneratorType::HistogramType HistogramType;
-  typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
-    <HistogramType>                                            TextureCoefficientsCalculatorType;
-  typedef typename TextureCoefficientsCalculatorType::Pointer  TextureCoefficientsCalculatorPointerType;
-  */
-
   typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter
     <InputImageType> ScalarImageToRunLengthFeaturesFilterType;
-  //typedef typename ImageType::PixelType                PixelType;
   typedef typename InputImageType::OffsetType          OffsetType;
   typedef itk::VectorContainer< unsigned char, OffsetType > OffsetVector;
   typedef typename OffsetVector::Pointer               OffsetVectorPointer;
@@ -174,9 +162,6 @@ public:
 
   /** Get the Run Length Nonuniformity output image */
   OutputImageType * GetRunLengthNonuniformityOutput();
-
-  /** Get the Run Percentage output image */
-  OutputImageType * GetRunPercentageOutput();
 
   /** Get the Low Grey-Level Run Emphasis output image */
   OutputImageType * GetLowGreyLevelRunEmphasisOutput();

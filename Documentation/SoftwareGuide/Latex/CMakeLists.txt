@@ -116,7 +116,6 @@ SET( Tex_SRCS
   ImageInterpolators.tex
   ImageAdaptors.tex
   Infrastructure.tex
-  Installation.tex
   Introduction.tex
   IO.tex
   Iterators.tex
@@ -137,7 +136,6 @@ SET( Tex_SRCS
   FeatureExtraction.tex
   ObjectBasedImageAnalysis.tex
   Hyperspectral.tex
-  Wrapping.tex
 )
 
 

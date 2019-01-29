@@ -69,7 +69,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     output = ""
 
     output += ".. code-block:: python\n\n"
-
     # Render example comment
     if len(app.GetExampleComment(idx)) > 0:
         output += "\t# {}\n".format(app.GetExampleComment(idx))
