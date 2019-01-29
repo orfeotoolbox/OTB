@@ -16,6 +16,7 @@ build:ubuntu-18.04:release:
   stage: build
   image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gcc
   script:
+    - CI/fetch-data.sh
     - CI/build.sh
   artifacts:
     expire_in: 1 week
