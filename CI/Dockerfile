@@ -15,6 +15,7 @@ RUN apt-get update -y \
         curl \
         make \
         cmake \
+        ninja-build \
         g++ \
         gcc \
         clang \
