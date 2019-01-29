@@ -261,7 +261,7 @@ otb_test_application(NAME     apTvSmallRegionsMerging
                               ${BASELINE}/apTvSmallMerged.tif
                               ${TEMP}/apTvSmallMerged.tif
                      )
-
+                     
 set_property(TEST apTvSmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
 
 #----------- LSMSVectorization TESTS ----------------
@@ -272,9 +272,9 @@ otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                               -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                               -tilesizex 100
                               -tilesizey 100
-                     # VALID    --compare-ogr ${NOTOL}
-                     #          ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
-                     #          ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_SmallMerged.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                      )
 
 set_property(TEST apTvLSMS4Vectorization_SmallMerged PROPERTY DEPENDS apTvLSMS3SmallRegionsMerging)
@@ -286,9 +286,9 @@ otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
                               -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
                               -tilesizex 100
                               -tilesizey 100
-                     # VALID    --compare-ogr ${NOTOL}
-                     #          ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
-                     #          ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvLSMS4_Segmentation_NoSmall.shp
+                              ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
                      )
 
 set_property(TEST apTvLSMS4Vectorization_NoSmall PROPERTY DEPENDS apTvLSMS2Segmentation_NoSmall)
@@ -318,7 +318,8 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               -tilesizey 100
                               -mode vector
                               -mode.vector.out ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
-                     # VALID    --compare-ogr ${NOTOL}
-                     #          ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
-                     #          ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
+                     VALID    --compare-ogr ${NOTOL}
+                              ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
+                              ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
+                     

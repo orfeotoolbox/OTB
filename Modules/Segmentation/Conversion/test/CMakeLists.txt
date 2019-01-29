@@ -69,9 +69,9 @@ otb_add_test(NAME bfTvOGRDataSourceToLabelImageFilterSHPForegroundMode COMMAND o
   )
 
 otb_add_test(NAME obTvLabelImageToVectorDataFilter COMMAND otbConversionTestDriver
-  # --compare-ogr ${NOTOL}
-  # ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
-  # ${TEMP}/obTuLabelImageToVectorDataFilter.shp
+  --compare-ogr ${NOTOL}
+  ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
+  ${TEMP}/obTuLabelImageToVectorDataFilter.shp
   otbLabelImageToVectorDataFilter
   ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/obTuLabelImageToVectorDataFilter.shp
@@ -209,3 +209,4 @@ otb_add_test(NAME obTvLabelMapToVectorDataFilter COMMAND otbConversionTestDriver
   otbLabelMapToVectorDataFilter
   ${INPUTDATA}/rcc8_mire1.png
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp)
+

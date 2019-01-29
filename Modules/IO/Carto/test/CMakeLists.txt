@@ -59,9 +59,9 @@ otb_add_test(NAME ioTvMapFileProductWriter COMMAND otbCartoTestDriver
 set_property(TEST ioTvMapFileProductWriter PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
-  # --compare-ogr ${EPSILON_9}
-  # ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp
-  # ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp
+  ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   otbOSMToVectorDataGeneratorByName
   -osm ${INPUTDATA}/qb_road.osm
   -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
@@ -69,9 +69,9 @@ otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
 set_property(TEST ioTvOSMToVectorDataGeneratorByName PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvOSMToVectorDataGeneratorTest COMMAND otbCartoTestDriver
-  # --compare-ogr ${EPSILON_9}
-  # ${BASELINE_FILES}/ioTvOSMToVectorDataFilterTest_highway.shp
-  # ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/ioTvOSMToVectorDataFilterTest_highway.shp
+  ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
   otbOSMToVectorDataGeneratorTest
   ${INPUTDATA}/qb_road.osm
   ${TEMP}/ioTvOSMToVectorDataFilterTest_highway.shp
@@ -96,3 +96,4 @@ otb_add_test(NAME coTvCoordinateToNameMultithreadTest COMMAND otbCartoTestDriver
   ${TEMP}/CoordinateToNameMultithreadTest.txt
   1
   )
+

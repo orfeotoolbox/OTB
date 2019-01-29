@@ -25,18 +25,17 @@ otb_test_application(NAME   apTvFeLineSegmentDetectionNoRescale
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
                              -out ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
                              -norescale true
-                     # VALID   --compare-ogr ${EPSILON_9}
-                     #         ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
-                     #         ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
+                     VALID   --compare-ogr ${EPSILON_9}
+                             ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
+                             ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
 
 otb_test_application(NAME   apTvFeLineSegmentDetection
                      APP  LineSegmentDetection
-#                     OPTIONS -in ${INPUTDATA}/ctest/ROI_QB_TOULOUSE_ortho_200x200.tif
                      OPTIONS -in LARGEINPUT{DEMPSTER-SHAFER/ROI_QB_TOULOUSE.TIF}
                              -out ${TEMP}/feTvLineSegmentDetection_LI.shp
-                     # VALID   --compare-ogr ${EPSILON_9}
-                     #         ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp
-                     #         ${TEMP}/feTvLineSegmentDetection_LI.shp)
+                     VALID   --compare-ogr ${EPSILON_9}
+                             ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp
+                             ${TEMP}/feTvLineSegmentDetection_LI.shp)
 
 
 #----------- EdgeExtraction TESTS ----------------
@@ -49,3 +48,4 @@ otb_test_application(NAME  apTvFEEdgeExtraction
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEEdgeExtraction.tif
                  		     ${TEMP}/apTvFEEdgeExtraction.tif)
+
