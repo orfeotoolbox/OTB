@@ -941,8 +941,7 @@ otb_test_application(NAME apTvClSampleSelection
   -sampler periodic
   # VALID   --compare-ogr ${NOTOL}
   # ${OTBAPP_BASELINE_FILES}/apTvClSampleSelectionOut.sqlite
-  # ${TEMP}/apTvClSampleSelectionOut.sqlite
-  )
+  # ${TEMP}/apTvClSampleSelectionOut.sqlite)
 
 #----------- SampleExtraction TESTS -----------------------
 otb_test_application(NAME apTvClSampleExtraction
@@ -953,8 +952,7 @@ otb_test_application(NAME apTvClSampleExtraction
   -out ${TEMP}/apTvClSampleExtractionOut.sqlite
   # VALID   --compare-ogr ${NOTOL}
   # ${OTBAPP_BASELINE_FILES}/apTvClSampleExtractionOut.sqlite
-  # ${TEMP}/apTvClSampleExtractionOut.sqlite
-  )
+  # ${TEMP}/apTvClSampleExtractionOut.sqlite)
 
 #----------- TrainVectorClassifier TESTS ----------------
 if(OTB_USE_OPENCV)

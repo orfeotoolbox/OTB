@@ -27,8 +27,7 @@ otb_test_application(NAME   apTvFeLineSegmentDetectionNoRescale
                              -norescale true
                      # VALID   --compare-ogr ${EPSILON_9}
                      #         ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
-                     #         ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
-		     )
+                     #         ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
 
 otb_test_application(NAME   apTvFeLineSegmentDetection
                      APP  LineSegmentDetection
@@ -37,8 +36,7 @@ otb_test_application(NAME   apTvFeLineSegmentDetection
                              -out ${TEMP}/feTvLineSegmentDetection_LI.shp
                      # VALID   --compare-ogr ${EPSILON_9}
                      #         ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp
-                     #         ${TEMP}/feTvLineSegmentDetection_LI.shp
-		     )
+                     #         ${TEMP}/feTvLineSegmentDetection_LI.shp)
 
 
 #----------- EdgeExtraction TESTS ----------------

@@ -59,8 +59,7 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM_InXML1
                        #-elev.dem ${INPUTDATA}/DEM/tif_directory/
                         #VALID   --compare-image ${EPSILON_4}
                               #${BASELINE}/owTvOrthorectifTest_UTM.tif
-                              #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif
-			      # )
+                        #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif)
 
 otb_test_application(NAME  apTvPrOrthorectification_WGS84
                      APP  OrthoRectification
@@ -116,8 +115,7 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
                        #-interpolator linear
                      #VALID   --compare-image ${EPSILON_4}
                               #${BASELINE}/owTvOrthorectifTest_UTM.tif
-                              #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.tif
-			      #)
+                        #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.tif)
 
 #otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM
                      #APP  OrthoRectification
@@ -135,8 +133,7 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
                        #-interpolator linear
                      #VALID   --compare-image ${EPSILON_4}
                               #${BASELINE}/owTvOrthorectifTest_UTM.tif
-                              #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM.tif
-			      #)
+                        #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM.tif)
 
 
 #----------- ConvertCartoToGeoPoint TESTS ----------------
@@ -208,8 +205,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                              -out.proj.user.map  lambert93
                      # VALID   --compare-ogr ${NOTOL}
                      #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
-                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp
-		     )
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
@@ -219,8 +215,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                      # VALID   --compare-ogr ${NOTOL}
                      #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
-                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
-		     )
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
@@ -230,8 +225,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                              -out.proj.image.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                      # VALID   --compare-ogr ${NOTOL}
                      #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
-                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
-		     )
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                      APP  VectorDataReprojection
@@ -243,8 +237,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                  	           -out.proj.user.map.utm.zone 31
                      # VALID   --compare-ogr ${NOTOL}
                      #          ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
-                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
-		     )
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
@@ -254,8 +247,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                              -out.proj.user.map  wgs
                      # VALID   --compare-ogr ${NOTOL}
                      #          ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml
-		     )
+                     # 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml)
 
 otb_test_application(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
@@ -326,8 +318,7 @@ otb_test_application(NAME apTvPrImageEnvelopeTest
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
                      # VALID   --compare-ogr ${NOTOL}
                      #    ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
-                     #    ${TEMP}/apTvPrImageEnvelopeTest.shp
-		     )
+                     #    ${TEMP}/apTvPrImageEnvelopeTest.shp)
 
 
 #----------- ConvertSensorToGeoPoint TESTS ----------------
