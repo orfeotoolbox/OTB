@@ -38,6 +38,7 @@ otb_module_target_label(otbUnmixingTestDriver)
 otb_add_test(NAME hyTvMDMDNMFImageFilterTest2 COMMAND otbUnmixingTestDriver
   otbMDMDNMFImageFilterTest2
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+  # ${INPUTDATA}/ctest/Hyperspectral/synthetic/hsi_cube_32x32.tif
   ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
   ${TEMP}/hyTvMDMDNMFImageFilterTest2.tif
   100)
@@ -79,4 +80,3 @@ otb_add_test(NAME hyTvUnConstrainedLeastSquareImageFilterTest COMMAND otbUnmixin
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
   ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
   ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif)
-
