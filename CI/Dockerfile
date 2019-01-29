@@ -17,6 +17,10 @@ RUN apt-get update -y \
         cmake \
         g++ \
         gcc \
+        clang \
+        clang-tidy \
+        clang-format \
+        ccache \
         git \
         libtool \
         swig \
@@ -67,3 +71,5 @@ RUN apt-get update -y \
         python3-numpy \
         python3-gdal \
  && rm -rf /var/lib/apt/lists/*
+
+ENV PATH /usr/lib/ccache:$PATH
