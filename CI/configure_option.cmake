@@ -7,9 +7,8 @@
 set (otb_build_project_option 
 "BUILD_COOKBOOK:BOOL=OFF
 BUILD_EXAMPLES:BOOL=OFF
-BUILD_SHARED_LIBS:BOOL=OFF
-BUILD_TESTING:BOOL=OFF")
-
+BUILD_SHARED_LIBS:BOOL=ON
+BUILD_TESTING:BOOL=ON")
 
 set (otb_use_option
 "OTB_USE_6S:BOOL=OFF
@@ -42,6 +41,12 @@ set (otb_data_option
 "OTB_DATA_ROOT:PATH=${OTB_DATA_ROOT}
 OTB_DATA_USE_LARGEINPUT:BOOL=OFF
 OTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_LARGEINPUT_ROOT}")
+
+set (cmake_configure_option
+"CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
+CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}
+CMAKE_C_FLAGS:STRING=-fPIC -Wall -Wextra
+CMAKE_CXX_FLAGS:STRING=-fPIC -Wall -Wextra -Wno-cpp")
 
 #Transform the previous string in list
 string (REPLACE "\n" ";" otb_build_project_option ${otb_build_project_option})
