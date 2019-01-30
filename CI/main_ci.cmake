@@ -2,15 +2,15 @@
 set (ENV{LANG} "C") # Only ascii output
 # Create build directory
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-file (MAKE_DIRECTORY ${OTB_SOURCE_DIR}/build/)
 
 #Ctest setting
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
 set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
+set (CMAKE_COMMAND "cmake")
+set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
-set (CTEST_CONFIGURE_COMMAND "cmake" )
-set (CTEST_BUILD_COMMAND "make")
+# set (CTEST_BUILD_COMMAND "make")
 
 set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set (CTEST_BUILD_NAME "CI_TEST")
@@ -43,9 +43,12 @@ OTB_USE_OPENMP:BOOL=OFF
 BUILD_TESTING:BOOL=OFF
 ")
 
-# ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
-#     OPTIONS "${CONFIGURE_OPTIONS}"  
-#     RETURN_VALUE _configure_rv)
+set(CONFIGURE_OPTIONS  "")
+
+ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
+    SOURCE "${OTB_SOURCE_DIR}"
+    OPTIONS "${CONFIGURE_OPTIONS}"
+    RETURN_VALUE _configure_rv)
 
 if ( _configure_rv EQUAL -1 )
   message("An error occurs during ctest_configure ${_configure_rv}")
