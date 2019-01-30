@@ -1,12 +1,13 @@
 # This script is a prototype for the futur CI
 set (ENV{LANG} "C") # Only ascii output
 # Create build directory
-file (MAKE_DIRECTORY /opt/otb/build/)
+get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
+file (MAKE_DIRECTORY ${OTB_SOURCE_DIR}/build/)
 
 #Ctest setting
 set (CTEST_BUILD_CONFIGURATION "Release")
-set (CTEST_SOURCE_DIRECTORY "/opt/otb/")
-set (CTEST_BINARY_DIRECTORY "/opt/otb/build/")
+set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
+set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
 
 set (CTEST_CONFIGURE_COMMAND "cmake" )
 set (CTEST_BUILD_COMMAND "make")
@@ -19,7 +20,7 @@ ctest_start("Nightly")
 
 # ctest_update() no need to update it is done by Gitlab-CI
 
-set (DATA_ROOT_DIR "/opt/otb/otb-data/") # todo
+set (DATA_ROOT_DIR "${OTB_SOURCE_DIR}/otb-data/") # todo
 set(otb_configure_option 
 "
 OTB_USE_OPENGL:BOOL=OFF
@@ -42,8 +43,9 @@ OTB_USE_OPENMP:BOOL=OFF
 BUILD_TESTING:BOOL=OFF
 ")
 
-ctest_configure(OPTIONS "${CONFIGURE_OPTIONS}"  
-    RETURN_VALUE _configure_rv)
+# ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
+#     OPTIONS "${CONFIGURE_OPTIONS}"  
+#     RETURN_VALUE _configure_rv)
 
 if ( _configure_rv EQUAL -1 )
   message("An error occurs during ctest_configure ${_configure_rv}")
