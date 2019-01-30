@@ -47,12 +47,13 @@ OTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_LARGEINPUT_ROOT}")
 string (REPLACE "\n" ";" otb_build_project_option ${otb_build_project_option})
 string (REPLACE "\n" ";" otb_use_option ${otb_use_option})
 string (REPLACE "\n" ";" otb_wrap_option ${otb_wrap_option})
+string (REPLACE "\n" ";" otb_data_option ${otb_data_option})
 
 set (otb_options "")
 list (APPEND otb_options ${otb_build_project_option})
 list (APPEND otb_options ${otb_use_option})
 list (APPEND otb_options ${otb_wrap_option})
-
+list (APPEND otb_options ${otb_data_option})
 
 foreach(option ${otb_options})
   set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-D${option};")
