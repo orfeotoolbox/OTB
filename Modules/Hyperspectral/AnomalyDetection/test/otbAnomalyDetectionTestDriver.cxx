@@ -22,6 +22,5 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(LocalRXDetectorROITest);
   REGISTER_TEST(LocalRXDetectorTest);
 }
