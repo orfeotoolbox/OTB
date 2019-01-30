@@ -1821,29 +1821,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("INFO: using driver", GDALGetDriverShortName(ref_poDriver), GDALGetDriverShortName(test_poDriver), nbdiff, m_ReportErrors);
 
-  // TODO: Improve this check as it will stop as soon as one of the
-  // list ends (i.e. it does not guarantee that all files are present)
-  std::vector<std::string> refFileList = otb::ogr::GetFileListAsStringVector(ref_poDS);
-  std::vector<std::string> testFileList = otb::ogr::GetFileListAsStringVector(test_poDS);
-
-  unsigned int fileId = 0;
-
-  while (fileId < refFileList.size() && fileId < testFileList.size())
-    {
-    std::string strRefName(refFileList[fileId]);
-    std::string strTestName(testFileList[fileId]);
-    if (strRefName != strTestName)
-      {
-      if (!m_ReportErrors)
-        {
-        otbPrintDiff("WARNING: INFO: Internal data source files were different",
-                     strRefName,
-                     strTestName);
-        }
-      }
-    ++fileId;
-    }
-
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
   /* -------------------------------------------------------------------- */
