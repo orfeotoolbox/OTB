@@ -73,4 +73,6 @@ RUN apt-get update -y \
         python3-gdal \
  && rm -rf /var/lib/apt/lists/*
 
+RUN /usr/sbin/update-ccache-symlinks && ls -l /usr/lib/ccache/
+
 ENV PATH /usr/lib/ccache:$PATH
