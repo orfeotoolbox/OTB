@@ -18,6 +18,7 @@ build:ubuntu-18.04:release:
   script:
     - CI/fetch-data.sh
     - CI/build.sh
+    - CI/test.sh
   artifacts:
     expire_in: 1 week
     paths:
