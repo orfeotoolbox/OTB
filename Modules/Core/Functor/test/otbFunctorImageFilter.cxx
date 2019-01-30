@@ -22,7 +22,6 @@
 #include "otbFunctorImageFilter.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
-#include "itkNeighborhood.h"
 #include "otbVariadicAddFunctor.h"
 #include "otbVariadicConcatenateFunctor.h"
 #include "otbVariadicNamedInputsImageFilter.h"
@@ -45,13 +44,14 @@ template <typename T> struct TypesCheck
   using RGBPixelType                  = itk::RGBPixel<ScalarType>;
   using RGBAPixelType                 = itk::RGBAPixel<ScalarType>;
   using VectorImageType               = otb::VectorImage<ScalarType>;
-  using NeighborhoodType              = itk::Neighborhood<ScalarType>;
-  using VectorNeighborhoodType        = itk::Neighborhood<VectorType>;
+  using NeighborhoodType              = itk::ConstNeighborhoodIterator<ImageType>;
+  using VectorNeighborhoodType        = itk::ConstNeighborhoodIterator<VectorImageType>;
 
   // Test IsNeighborhood struct
   template <typename U> struct CheckIsNeighborhood
   {
-    static constexpr bool value = !otb::IsNeighborhood<U>::value && otb::IsNeighborhood<itk::Neighborhood<U> >::value;
+    static constexpr bool value = !otb::IsNeighborhood<U>::value 
+      && otb::IsNeighborhood<const itk::ConstNeighborhoodIterator<Image<U>>& >::value;
   };
     
   static_assert(CheckIsNeighborhood<T>::value,"");
@@ -64,7 +64,7 @@ template <typename T> struct TypesCheck
   template<typename U> struct CheckPixelTypeDeduction
   {
     static constexpr bool value = std::is_same<typename PixelTypeDeduction<U>::PixelType,U>::value
-      && std::is_same<typename PixelTypeDeduction<itk::Neighborhood<U>>::PixelType,U>::value;
+      && std::is_same<typename PixelTypeDeduction<itk::ConstNeighborhoodIterator<Image<U>>>::PixelType,U>::value;
   };
 
   static_assert(CheckPixelTypeDeduction<T>::value,"");
@@ -259,13 +259,15 @@ template<typename TOut, typename TIn> struct BandExtraction
 // This Functor computes the mean in neighborhood
 template<typename TOut, typename TIn> struct Mean
 {  
-  auto operator()(const itk::Neighborhood<TIn> & in) const
+  auto operator()(const itk::ConstNeighborhoodIterator<otb::Image<TIn>> & in) const
   {
     TOut out(0);
 
-    for(auto it = in.Begin(); it!=in.End();++it)
-      out+=static_cast<TOut>(*it);
-
+    for (auto idx = 0u; idx < in.Size(); idx++)
+      {
+        out+=static_cast<TOut>(in.GetPixel(idx));
+      }
+    
     out/=in.Size();
     
     return out;
@@ -277,16 +279,16 @@ template<typename TOut, typename TIn> struct Mean
 // For each channel, returns the maximum value in neighborhood
 template<typename T> struct MaxInEachChannel
 {
-  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<T>> & in) const
+  auto operator()(const itk::ConstNeighborhoodIterator<otb::VectorImage<T>> & in) const
   {
-    auto out = in.GetCenterValue();
+    auto out = in.GetCenterPixel();
 
-    for(auto it = in.Begin(); it!=in.End(); ++it)
+    for (auto idx = 0u; idx < in.Size(); idx++)
       {
       for(auto band = 0u; band < out.Size();++band)
         {
-        if((*it)[band]>out[band])
-          out[band] = (*it)[band];
+        if(in.GetPixel(idx)[band] < out[band])
+          out[band] = in.GetPixel(idx)[band];
         }
       }
     return out;
@@ -297,6 +299,34 @@ template<typename T> struct MaxInEachChannel
     return nbBands[0];
   } 
 };
+
+
+// 1 Image with neighborhood of VariableLengthVector -> 1 image 
+// this is a dummy functor that returns the first element of the vector at the
+// center of the neighborhood
+template<typename T> struct NeighborhoodVecInScalOut
+{
+  auto operator()(const itk::ConstNeighborhoodIterator<otb::VectorImage<T>> & in) const
+  {
+    float out = in.GetCenterPixel()[0];
+
+    return out;
+  }
+
+};
+
+template<typename T> struct NeighborhoodArrayInScalOut
+{
+  auto operator()(const itk::ConstNeighborhoodIterator< otb::Image<itk::FixedArray<T,2>>> & in) const
+  {
+    float out = in.GetCenterPixel()[0];
+
+    return out;
+  }
+
+};
+
+
 
 
 template<typename T> struct VectorModulus
@@ -397,12 +427,11 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
    // test FunctorImageFilter with a lambda that returns a
    // VariableLengthVector
    // Converts a neighborhood to a VariableLengthVector
-   auto Lambda2 = [](const itk::Neighborhood<double>& in) {
+   auto Lambda2 = [](const itk::ConstNeighborhoodIterator<otb::Image<double>>& in) {
      itk::VariableLengthVector<double> out(in.Size());
-     std::size_t                       idx{0};
-     for (auto it = in.Begin(); it != in.End(); ++it, ++idx)
+     for (size_t idx = 0; idx < in.Size(); idx++)
      {
-       out[idx] = *it;
+       out[idx] = in.GetPixel(idx);
      }
      return out;
    };
@@ -444,6 +473,26 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
    auto maxInEachChannel      = NewFunctorFilter(MaxInEachChannelType{}, {{3, 3}});
    maxInEachChannel->SetInputs(vimage);
    maxInEachChannel->Update();
+
+
+   using NeighborhoodVecInScalOutType = NeighborhoodVecInScalOut<double>;
+   auto neighborhoodVecInScalOut      = NewFunctorFilter(NeighborhoodVecInScalOutType{}, {{3, 3}});
+   neighborhoodVecInScalOut->SetInputs(vimage);
+   neighborhoodVecInScalOut->Update();
+
+   using ArrayImageType       = Image<itk::FixedArray<double,2>>;
+   auto arrayImage  = ArrayImageType::New();
+
+   arrayImage->SetRegions(size);
+   arrayImage->Allocate();
+   itk::FixedArray<double,2> array;
+   array.Fill(0);
+   arrayImage->FillBuffer(array);
+  
+   using NeighborhoodArrayInScalOutType = NeighborhoodArrayInScalOut<double>;
+   auto neighborhoodArrayInScalOut      = NewFunctorFilter(NeighborhoodArrayInScalOutType{}, {{3, 3}});
+   neighborhoodArrayInScalOut->SetInputs(arrayImage);
+   neighborhoodArrayInScalOut->Update();
 
    // Test FunctorImageFilter with Module (complex=
    using ModulusType = VectorModulus<double>;

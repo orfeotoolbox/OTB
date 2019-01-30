@@ -29,6 +29,8 @@
 #include "itkFixedArray.h"
 #include "itkDefaultConvertPixelTraits.h"
 #include <type_traits>
+#include "itkConstNeighborhoodIterator.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -41,13 +43,19 @@ namespace otb
  * - value set to true or false
  */
 template <class T> struct IsNeighborhood : std::false_type {};
-
+/*
 /// Partial specialisation for itk::Neighborhood<T>
 template <class T> struct IsNeighborhood<itk::Neighborhood<T>> : std::true_type {};
-
-
+*/
+/*
 /// Partial specialisation for const itk::Neighborhood<T> &
 template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&> : std::true_type {};
+*/
+/// Partial specialisation for const ConstNeighborhoodIterator<Image::T> &
+template <class T> struct IsNeighborhood<const itk::ConstNeighborhoodIterator<Image<T>>&> : std::true_type {};
+
+/// Partial specialisation for const ConstNeighborhoodIterator<VectorImage::T> &
+template <class T> struct IsNeighborhood<const itk::ConstNeighborhoodIterator<VectorImage<T>>&> : std::true_type {};
 
 /**
  * \struct IsSuitableType
@@ -88,11 +96,19 @@ template <class T> struct PixelTypeDeduction
 };
 
 /// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
+template <class T> struct PixelTypeDeduction<itk::ConstNeighborhoodIterator<Image<T>>>
 {
   static_assert(IsSuitableType<T>::value,
                 "T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
+};
+
+/// Partial specialisation for itk::Neighborhood<T>
+template <class T> struct PixelTypeDeduction<itk::ConstNeighborhoodIterator<VectorImage<T>>>
+{
+  static_assert(IsSuitableType<T>::value,
+                "T can not be used as a template parameter for Image or VectorImage classes.");
+  using PixelType = itk::VariableLengthVector<T>;
 };
 
 /** 
