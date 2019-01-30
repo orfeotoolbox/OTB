@@ -11,7 +11,7 @@ set (CMAKE_COMMAND "cmake")
 set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 # number of thread used for compilation
 set (CTEST_BUILD_FLAGS "-j8")
-set (CTEST_BUILD_COMMAND "make")
+set (CTEST_BUILD_COMMAND "make ${CTEST_BUILD_FLAGS}")
 
 set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
 set (CTEST_BUILD_NAME "CI_TEST")
