@@ -372,7 +372,7 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
   // lambda to set specific filter parameter
   auto configureSiftFast = [](SiftFastFilterType* filter) { filter->SetScalesNumber(8); };
 
-  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 100, 0.59, 0.95) && status;
+  status = checkKeyPointsFilter<SiftFastFilterType>(reference, secondary, transform, configureSiftFast, 100, 0.40, 0.95) && status;
 #endif
 
   return status ? EXIT_SUCCESS : EXIT_FAILURE;

@@ -53,17 +53,6 @@ ImageSeriesFileReaderBase<TImage, TInternalImage>
 }
 
 template <class TImage, class TInternalImage>
-void
-ImageSeriesFileReaderBase<TImage, TInternalImage>
-::SetFileName(const char * file)
-{
-  if (file)
-  {
-    this->SetFileName(std::string(file));
-  }
-}
-
-template <class TImage, class TInternalImage>
 typename ImageSeriesFileReaderBase<TImage, TInternalImage>::OutputImageListType *
 ImageSeriesFileReaderBase<TImage, TInternalImage>
 ::GetOutput()

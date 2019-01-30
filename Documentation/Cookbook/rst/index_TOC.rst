@@ -6,6 +6,7 @@ Table of Contents
 
    index
    Installation
+   CompilingOTBFromSource
    OTB-Applications
    QGIS-interface
    Monteverdi

@@ -33,9 +33,6 @@
 #include "otbNeuralNetworkMachineLearningModelFactory.h"
 #include "otbNormalBayesMachineLearningModelFactory.h"
 #include "otbDecisionTreeMachineLearningModelFactory.h"
-#ifndef OTB_OPENCV_3
-#include "otbGradientBoostedTreeMachineLearningModelFactory.h"
-#endif
 #endif
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModelFactory.h"
@@ -121,9 +118,6 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
   RegisterFactory(NeuralNetworkMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(NormalBayesMachineLearningModelFactory<TInputValue,TOutputValue>::New());
   RegisterFactory(DecisionTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-#ifndef OTB_OPENCV_3
-  RegisterFactory(GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue>::New());
-#endif
   RegisterFactory(KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue>::New());
 #endif  
 }
@@ -229,16 +223,6 @@ MachineLearningModelFactory<TInputValue,TOutputValue>
       itk::ObjectFactoryBase::UnRegisterFactory(dtFactory);
       continue;
       }
-#ifndef OTB_OPENCV_3
-    // Gradient Boosted tree
-    GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *gbtFactory =
-      dynamic_cast<GradientBoostedTreeMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
-    if (gbtFactory)
-      {
-      itk::ObjectFactoryBase::UnRegisterFactory(gbtFactory);
-      continue;
-      }
-#endif
     // KNN
     KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *knnFactory =
       dynamic_cast<KNearestNeighborsMachineLearningModelFactory<TInputValue,TOutputValue> *>(*itFac);
