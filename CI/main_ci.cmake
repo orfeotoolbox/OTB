@@ -1,10 +1,10 @@
 # This script is a prototype for the futur CI
-set (ENV{LANG} "C") # Only ascii output
-# Create build directory
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
+set (ENV{LANG} "C") # Only ascii output
 
 # Build Configuration : Release, Debug..
 set (CTEST_BUILD_CONFIGURATION "Release")
+set (CTEST_SITE "Ubuntu18.04-Release-Experimental-GitLabCI")
 
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
@@ -18,7 +18,7 @@ set (CTEST_BUILD_FLAGS "-j8") # number of thread used for compilation
 set (CTEST_BUILD_COMMAND "make ${CTEST_BUILD_FLAGS}")
 
 set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set (CTEST_BUILD_NAME "CI_TEST")
+set (CTEST_BUILD_NAME "GitLab_ci_experimentation")
 
 
 # Data directory setting
@@ -33,7 +33,7 @@ include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 # End of configuration
 
 
-ctest_start ("Nightly")
+ctest_start (Experimental TRACK Experimental)
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"
@@ -56,4 +56,6 @@ if ( _configure_rv EQUAL -1 )
     ${_build_error}")
 endif()
 
-ctest_test()
+ctest_test(PARALLEL_LEVEL 8])
+
+ctest_submit()
