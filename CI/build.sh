@@ -8,7 +8,7 @@ tar xzf otb-data-master.tar.gz
 mv otb-data-master otb-data
 rm -f otb-data-master.tar.gz
 
-ctest -S main_ci.cmake
+ctest -S CI/main_ci.cmake
 
 # mkdir build
 # cd build
