@@ -42,4 +42,4 @@ cmake -DCMAKE_BUILD_TYPE=Release \
 
 make -j $(grep -c processor /proc/cpuinfo 2>/dev/null || echo 8)
 
-xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -T test
+xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -j 4 -T test
