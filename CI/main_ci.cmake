@@ -56,6 +56,6 @@ if ( _configure_rv EQUAL -1 )
     ${_build_error}")
 endif()
 
-ctest_test(PARALLEL_LEVEL 8])
+# ctest_test(PARALLEL_LEVEL 8])
 
-ctest_submit()
+# ctest_submit()
