@@ -22,7 +22,7 @@ otb_module_test()
 #----------- VectorDataTransform TESTS ----------------
 otb_test_application(NAME apTvUtVectorDataTransform_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
                              -transform.ro 15
@@ -32,7 +32,7 @@ otb_test_application(NAME apTvUtVectorDataTransform_Rotation
 
 otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
                              -transform.ro 15
