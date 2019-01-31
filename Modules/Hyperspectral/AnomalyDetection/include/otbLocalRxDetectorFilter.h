@@ -114,6 +114,118 @@ private:
 
 };
 
+/** \class LocalRxDetectionFunctor
+ * \brief This functor computes a local Rx score on an input neighborhood. Pixel of the neighborhood
+ * inside the internal radius are not considered during the computation of local statistics.
+ *
+ * \ingroup ImageFilters
+ *
+ * \ingroup OTBAnomalyDetection
+ */
+namespace Functor
+{
+template<typename TInput, typename TOutput =TInput> 
+class LocalRxDetectionFunctor
+{
+public:
+
+  /** typedef */
+  typedef typename itk::Neighborhood<itk::VariableLengthVector<TInput>>::OffsetType OffsetType;
+  typedef typename itk::VariableLengthVector<TInput>                         VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>            ListSampleType;
+  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType>       CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::MeasurementVectorRealType  MeasurementVectorRealType;
+  typedef typename CovarianceCalculatorType::MatrixType                 MatrixType;
+
+private:
+  // Internal radius along the X axis
+  unsigned int m_InternalRadiusX;
+
+  // Internal radius along the Y axis
+  unsigned int m_InternalRadiusY;
+
+public:
+  LocalRxDetectionFunctor() : m_InternalRadiusX(1), m_InternalRadiusY(1) {};
+
+  void SetInternalRadius(const unsigned int internalRadiusX, const unsigned int internalRadiusY)
+  {
+    m_InternalRadiusX = internalRadiusX;
+    m_InternalRadiusY = internalRadiusY;
+  };
+
+  int GetInternalRadiusX()
+  {
+    return m_InternalRadiusX;
+  };
+
+  int GetInternalRadiusY()
+  {
+    return m_InternalRadiusY;
+  };
+
+  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<TInput>> & in) const
+  {
+    // Create a list sample with the pixels of the neighborhood located between
+    // the two radius.
+    typename ListSampleType::Pointer listSample = ListSampleType::New();
+
+    // The pixel on whih we will compute the Rx score, we load it now to get the input vector size.
+    auto centerPixel = in.GetCenterValue();
+    listSample->SetMeasurementVectorSize(centerPixel.Size());
+
+    OffsetType off;
+
+    // Cache radiuses attributes for threading performances
+    const int internalRadiusX = m_InternalRadiusX;
+    const int internalRadiusY = m_InternalRadiusY;
+
+    auto externalRadius = in.GetRadius();
+    for (int y = -externalRadius[1]; y <= static_cast<int>(externalRadius[1]); y++)
+      {
+      off[1] = y;
+      for (int x = -externalRadius[0]; x <= static_cast<int>(externalRadius[0]); x++)
+        {
+        off[0] = x;
+        if ((abs(x) > internalRadiusX) || (abs(y) > internalRadiusY))
+          {
+            listSample->PushBack(in[off]);
+          }
+        }
+      }
+
+    // Compute mean & inverse covariance matrix
+    typename CovarianceCalculatorType::Pointer covarianceCalculator = CovarianceCalculatorType::New();
+    covarianceCalculator->SetInput(listSample);
+    covarianceCalculator->Update();
+
+    MeasurementVectorRealType meanVector = covarianceCalculator->GetMean();
+    
+    VectorMeasurementType meanVec(meanVector.GetNumberOfElements());
+    for(unsigned int i = 0; i < meanVector.GetNumberOfElements(); ++i)
+      {
+      meanVec.SetElement(i, meanVector.GetElement(i));
+      }
+
+    MatrixType covarianceMatrix = covarianceCalculator->GetCovarianceMatrix();
+    typename MatrixType::InternalMatrixType invCovMat = covarianceMatrix.GetInverse();
+
+    typename MatrixType::InternalMatrixType centeredTestPixMat(meanVector.GetNumberOfElements(), 1);
+    
+    for (unsigned int i = 0; i < centeredTestPixMat.rows(); ++i)
+      {
+      centeredTestPixMat.put(i, 0, (centerPixel.GetElement(i) - meanVector.GetElement(i)));
+      }
+
+    // Rx score computation
+    typename MatrixType::InternalMatrixType rxValue 
+      = centeredTestPixMat.transpose() * invCovMat * centeredTestPixMat;
+
+    return static_cast<TOutput> (rxValue.get(0, 0));
+  }
+
+};
+} // end namespace functor
+
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

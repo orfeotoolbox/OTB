@@ -29,6 +29,12 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           LocalRxDetection
+  SOURCES        otbLocalRxDetection.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           EndmemberNumberEstimation
   SOURCES        otbEndmemberNumberEstimation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
