@@ -63,3 +63,6 @@ list (APPEND otb_options ${otb_data_option})
 foreach(option ${otb_options})
   set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-D${option};")
 endforeach(option)
+
+# This should be removed as soon as possible
+set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-Dopencv_INCLUDE_DIR:PATH=/usr/include;")
