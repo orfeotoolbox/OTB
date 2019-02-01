@@ -48,6 +48,7 @@ RUN apt-get update -y \
         libgeotiff-dev \
         libglew-dev \
         libglfw3-dev \
+        libgsl-dev \
         libinsighttoolkit4-dev \
         libkml-dev \
         libmuparser-dev \
@@ -64,6 +65,7 @@ RUN apt-get update -y \
         libtinyxml-dev \
         qtbase5-dev \
         qttools5-dev \
+        default-jdk \
         python-dev \
         python-numpy \
         python-gdal \

@@ -4,7 +4,7 @@ set (ENV{LANG} "C") # Only ascii output
 
 # Build Configuration : Release, Debug..
 set (CTEST_BUILD_CONFIGURATION "Release")
-set (CTEST_SITE "Ubuntu18.04-Release-Experimental-GitLabCI")
+# set (CTEST_SITE "${BUILD_NAME}")
 
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
