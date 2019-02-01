@@ -23,7 +23,7 @@ include_directories ( ${CMAKE_CURRENT_SOURCE_DIR}/../python )
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Run swig
 set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
-if(NUMPY_PYTHON_FOUND)
+if(NUMPY_FOUND)
   include_directories(${NUMPY_PYTHON_INCLUDE_DIRS})
   list(APPEND CMAKE_SWIG_FLAGS  "-DOTB_SWIGNUMPY=1")
 endif()
