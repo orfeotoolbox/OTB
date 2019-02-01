@@ -2,12 +2,6 @@
 
 export TOP_DIR=$(pwd)
 
-curl -s -S -L -o otb-data-master.tar.gz \
-     https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/-/archive/master/otb-data-master.tar.gz
-tar xzf otb-data-master.tar.gz
-mv otb-data-master otb-data
-rm -f otb-data-master.tar.gz
-
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release \
@@ -42,4 +36,4 @@ cmake -DCMAKE_BUILD_TYPE=Release \
 
 make -j $(grep -c processor /proc/cpuinfo 2>/dev/null || echo 8)
 
-xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -j 10 -T test
+# TODO do not compile tests
