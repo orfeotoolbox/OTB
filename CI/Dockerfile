@@ -60,7 +60,6 @@ RUN apt-get update -y \
         libpng-dev \
         libqt5opengl5-dev \
         libqwt-qt5-dev \
-        libshark-dev \
         libsvm-dev \
         libtinyxml-dev \
         qtbase5-dev \
@@ -74,3 +73,4 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/*
 
 ENV PATH /usr/lib/ccache:$PATH
+ENV OTB_USE_SHARK OFF

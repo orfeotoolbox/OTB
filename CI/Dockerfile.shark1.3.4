@@ -121,3 +121,4 @@ COPY --from=shark-provider /usr/local/bin/SharkVersion /usr/bin/
 COPY --from=shark-provider /usr/local/lib/cmake/ /usr/lib/cmake/
 
 ENV PATH /usr/lib/ccache:$PATH
+ENV OTB_USE_SHARK ON
