@@ -42,7 +42,7 @@ std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere 
 
 bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
-  bool rawIsSame = sr1.m_SR->IsSame(sr2.m_SR.get());
+  bool rawIsSame ( sr1.m_SR->IsSame(sr2.m_SR.get()) );
 
   // By default, gdal does not compare datum (and IsSame with
   // papzOptions is not in public API

@@ -115,7 +115,7 @@ std::tuple<double,double,double> CoordinateTransformation::Transform(const std::
   double outX, outY, outZ;
   std::tie(outX, outY,outZ) = in;
   
-  bool success = m_Transform->Transform(1,&outX,&outY,&outZ);
+  bool success ( m_Transform->Transform(1,&outX,&outY,&outZ) );
 
   if(!success)
     {
@@ -133,7 +133,7 @@ std::tuple<double,double> CoordinateTransformation::Transform(const std::tuple<d
   double outX, outY;
   std::tie(outX, outY) = in;
   
-  bool success = m_Transform->Transform(1,&outX,&outY,nullptr);
+  bool success ( m_Transform->Transform(1,&outX,&outY,nullptr) );
 
   if(!success)
     {
