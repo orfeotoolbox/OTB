@@ -63,7 +63,7 @@ otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
 
 otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
+  ${BASELINE}/hyTvISRAUnmixingImageFilterTest.tif
   ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
   otbISRAUnmixingImageFilterTest
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
