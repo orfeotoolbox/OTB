@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -165,7 +165,6 @@ private:
   void InitBoostParams();
   void InitSVMParams();
   void InitDecisionTreeParams();
-  void InitGradientBoostedTreeParams();
   void InitNeuralNetworkParams();
   void InitNormalBayesParams();
   void InitRandomForestsParams();
@@ -180,9 +179,6 @@ private:
   void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
                          typename TargetListSampleType::Pointer trainingLabeledListSample,
                          std::string modelPath);
-  void TrainGradientBoostedTree(typename ListSampleType::Pointer trainingListSample,
-                                typename TargetListSampleType::Pointer trainingLabeledListSample,
-                                std::string modelPath);
   void TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample,
                           typename TargetListSampleType::Pointer trainingLabeledListSample,
                           std::string modelPath);
@@ -218,7 +214,6 @@ private:
 #ifdef OTB_USE_OPENCV
 #include "otbTrainBoost.hxx"
 #include "otbTrainDecisionTree.hxx"
-#include "otbTrainGradientBoostedTree.hxx"
 #include "otbTrainKNN.hxx"
 #include "otbTrainNeuralNetwork.hxx"
 #include "otbTrainNormalBayes.hxx"

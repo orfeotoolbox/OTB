@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -203,8 +203,8 @@ otb_add_test(NAME coTvExtractROITestMetaData_HDR COMMAND otbImageBaseTestDriver
   --ignore-lines-with 4 Origin: Source: Image ImportImageContainer
   otbExtractROITestMetaData
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/coTvExtractROITestMetaData1.tif
-  ${TEMP}/coTvExtractROITestMetaData2.tif
+  ${TEMP}/coTvExtractROITestMetaData1_hdr.tif
+  ${TEMP}/coTvExtractROITestMetaData2_hdr.tif
   ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
   ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
   )

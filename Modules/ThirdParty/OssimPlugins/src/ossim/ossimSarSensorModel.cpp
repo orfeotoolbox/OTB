@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -1728,7 +1728,9 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
 
 bool 
 ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
-					   std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+					   std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+					   unsigned int & linesOffset, unsigned int first_burstInd,
+					   bool inputWithInvalidPixels)
 {
    if(theBurstRecords.empty())
     return false;
@@ -1865,22 +1867,45 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    for(; itBursts!= theBurstRecords.end() ;++itBursts)
      {       
        unsigned long currentStart_L = halfLineOverlapBegin[counter];
+
+       if (inputWithInvalidPixels)
+	 {
+	   currentStart_L += itBursts->startLine - counter*theNumberOfLinesPerBurst;
+	 }
+
        unsigned long currentStop_L = itBursts->endLine - itBursts->startLine - halfLineOverlapEnd[counter];
+
+       if (inputWithInvalidPixels)
+	 {
+	   currentStop_L = itBursts->endLine - counter*theNumberOfLinesPerBurst - halfLineOverlapEnd[counter];
+	 }
+
        linesBursts.push_back(std::make_pair(currentStart_L, currentStop_L));
 
        unsigned long currentStart_S = 0;
        unsigned long currentStop_S = samples.second-samples.first;
 
-       if (itBursts->startSample < samples.first)
+       if (inputWithInvalidPixels)
 	 {
-	   currentStart_S = samples.first - itBursts->startSample;
+	   currentStart_S = samples.first;
 	 }
+       else
+	 {
+	   if (itBursts->startSample < samples.first)
+	     {
+	       currentStart_S = samples.first - itBursts->startSample;
+	     }
+	 }
+              
        currentStop_S += currentStart_S;
 
        samplesBursts.push_back(std::make_pair(currentStart_S, currentStop_S));
 
        ++counter;
      }
+
+   // Define linesOffset
+   linesOffset = (theBurstRecords[first_burstInd].azimuthStartTime - theBurstRecords[0].azimuthStartTime)/theAzimuthTimeInterval;
 
    // Clear the previous burst records
    theBurstRecords.clear();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,7 @@
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
+#include <Windows.h>
 #ifndef WIN32CE
 #  include <io.h>
 #else
@@ -37,6 +38,7 @@
 /*=====================================================================
                       POSIX (Unix) implementation
  *====================================================================*/
+#include <unistd.h>
 #include <sys/types.h>
 #include <dirent.h>
 #endif
@@ -200,6 +202,39 @@ bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& 
     }
   file = id.substr(0, pos);
   return true;
+}
+
+bool System::IsInteractive(int fd)
+{
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
+  // Windows implementation
+  HANDLE hcon;
+
+  /* get OS handle of the file descriptor */
+  hcon = (HANDLE) _get_osfhandle(fd);
+  if (hcon == INVALID_HANDLE_VALUE)
+    return false;
+
+  /* check if its a device (i.e. console, printer, serial port) */
+  if (GetFileType(hcon) != FILE_TYPE_CHAR)
+    return false;
+
+  /* check if its a handle to a console output screen buffer */
+  CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
+  DWORD mode;
+  if (!fd)
+    {
+    if (!GetConsoleMode(hcon, &mode))
+      return false;
+    }
+  else if (!GetConsoleScreenBufferInfo(hcon, &screenBufferInfo))
+    return false;
+
+  return true;
+#else
+  // Unix implementation
+  return isatty(fd);
+#endif
 }
 
 }

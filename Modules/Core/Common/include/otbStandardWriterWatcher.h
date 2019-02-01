@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -115,6 +115,10 @@ private:
 
   /** Stars coutning */
   unsigned int m_StarsCount;
+
+  bool m_CoutIsConsole;
+
+  std::string m_Buffer;
 };
 
 } // end namespace otb

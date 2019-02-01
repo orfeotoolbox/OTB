@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -92,7 +92,9 @@ public:
   
   /** Deburst metadata if possible and prepare the burst concatenation */	
   bool DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
-			     std::vector<std::pair<unsigned long,unsigned long> > & samplesBursts);
+			     std::vector<std::pair<unsigned long,unsigned long> > & samplesBursts,
+			     unsigned int & linesOffset, unsigned int first_burstInd,
+			     bool inputWithInvalidPixels=false);
 
 
   /** Transform world point (lat,lon,hgt) to input image point

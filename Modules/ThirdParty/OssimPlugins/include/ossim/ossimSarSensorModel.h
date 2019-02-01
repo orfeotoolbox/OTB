@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -351,7 +351,9 @@ public:
     * \param lines A Boolean to indicate only valids samples are required.
     */
    bool deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
-			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts);
+			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+			      unsigned int & linesOffset, unsigned int first_burstInd,
+			      bool inputWithInvalidPixels=false);
 
    /**
     * Returns pointer to a new instance, copy of this.

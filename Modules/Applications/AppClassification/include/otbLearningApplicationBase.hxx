@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -102,7 +102,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
     InitBoostParams();  // Regression not supported
     }
   InitDecisionTreeParams();
-  InitGradientBoostedTreeParams();
   InitNeuralNetworkParams();
   if (!m_RegressionFlag)
     {
@@ -224,14 +223,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
     {
 	#ifdef OTB_USE_OPENCV
     TrainDecisionTree(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
-    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
-  else if (modelName == "gbt")
-    {
-	#ifdef OTB_USE_OPENCV
-    TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample, modelPath);
     #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif

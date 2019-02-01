@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -130,7 +130,6 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbNormalBayesMachineLearningModel.h"
 #include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 
 
@@ -730,78 +729,6 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
     }
 }
 
-#ifndef OTB_OPENCV_3
-
-int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
-{
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, TargetValueType> GBTreeType;
-
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  GBTreeType::Pointer classifier = GBTreeType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new GBT
-  GBTreeType::Pointer classifierLoad = GBTreeType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
-}
-#endif // if not OpenCV 3
 #endif
 
 #ifdef OTB_USE_SHARK

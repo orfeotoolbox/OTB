@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,7 +34,6 @@ const double otb_epsilon_01 = 0.1;
 #include "otbSVMMachineLearningModel.h"
 #include "otbBoostMachineLearningModel.h"
 #include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 #include "otbRandomForestsMachineLearningModel.h"
 #endif
@@ -491,69 +490,6 @@ int otbDecisionTreeRegressionTests(int itkNotUsed(argc),
     }
   return status;
 }
-
-#ifndef OTB_OPENCV_3
-MachineLearningModelRegressionType::Pointer getGradientBoostedTreeRegressionModel()
-{
-  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueRegressionType,
-                                       TargetValueRegressionType>
-    GBTreeType;
-  GBTreeType::Pointer regression = GBTreeType::New();
-  regression->SetRegressionMode(true);
-  regression->SetShrinkage(0.1);
-  regression->SetSubSamplePortion(0.8);
-  regression->SetLossFunctionType(CvGBTrees::SQUARED_LOSS);
-  return regression.GetPointer();
-}
-
-int otbGradientBoostedTreeRegressionTests(int itkNotUsed(argc),
-                                      char * itkNotUsed(argv) [])
-{
-  int status = EXIT_SUCCESS;
-  int ret;
-  MachineLearningModelRegressionType::Pointer regression;
-
-  RegressionTestParam param;
-  param.vMin = -0.5;
-  param.vMax = 0.5;
-  param.count = 200;
-  param.eps = otb_epsilon_01;
-
-  std::cout << "Testing regression on a linear monovariate function" << std::endl;
-  LinearFunctionSampleGenerator<PrecisionType> lfsg(2.0, 1.0);
-  regression = getGradientBoostedTreeRegressionModel();
-  ret = testRegression(lfsg,regression,param);
-  if (ret == EXIT_FAILURE)
-    {
-    status = EXIT_FAILURE;
-    }
-  std::cout << "Testing regression on a bilinear function" << std::endl;
-  BilinearFunctionSampleGenerator<PrecisionType> bfsg(2.0,-1.0,1.0);
-  // increase number of training samples for bilinear function
-  param.count = 1000;
-  regression = getGradientBoostedTreeRegressionModel();
-  ret = testRegression(bfsg,regression,param);
-  if (ret == EXIT_FAILURE)
-    {
-    status = EXIT_FAILURE;
-    }
-  std::cout << "Testing regression on a polynomial function" << std::endl;
-  std::vector<PrecisionType> coeffs;
-  coeffs.push_back(0.0);
-  coeffs.push_back(-1.0);
-  coeffs.push_back(0.0);
-  coeffs.push_back(4.0);
-  PolynomialFunctionSampleGenerator<PrecisionType> pfsg(coeffs);
-  param.count = 200;
-  regression = getGradientBoostedTreeRegressionModel();
-  ret = testRegression(pfsg,regression,param);
-  if (ret == EXIT_FAILURE)
-    {
-    status = EXIT_FAILURE;
-    }
-  return status;
-}
-#endif
 
 
 MachineLearningModelRegressionType::Pointer getKNearestNeighborsRegressionModel()

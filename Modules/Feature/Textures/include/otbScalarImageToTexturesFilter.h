@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,13 +64,13 @@ namespace otb
  * (or column, due to symmetry) sums.
  *
  * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
- * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix symmetry), and
  *
  * \f$ \sigma =  \f$ (weighted pixel variance) \f$ = \sum_{i, j}(i - \mu)^2 \cdot g(i, j) =
- * \sum_{i, j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix summetry)
+ * \sum_{i, j}(j - \mu)^2 \cdot g(i, j)  \f$  (due to matrix symmetry)
  *
 
- * Print references:
+ * References:
  *
  * Haralick, R.M., K. Shanmugam and I. Dinstein. 1973.  Textural Features for
  * Image Classification. IEEE Transactions on Systems, Man and Cybernetics.

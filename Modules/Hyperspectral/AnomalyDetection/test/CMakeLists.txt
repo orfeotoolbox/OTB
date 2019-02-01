@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBAnomalyDetectionTests
 otbAnomalyDetectionTestDriver.cxx
-otbLocalRxDetectorRoiTest.cxx
 otbLocalRxDetectorTest.cxx
 )
 
@@ -32,3 +31,13 @@ otb_module_target_label(otbAnomalyDetectionTestDriver)
 
 # Tests Declaration
 
+otb_add_test(NAME hyTvLocalRxDetectorFilter COMMAND otbAnomalyDetectionTestDriver
+  --compare-image ${EPSILON_9}
+  ${BASELINE}/hyTvLocalRxDetectorFilter.tif
+  ${TEMP}/hyTvLocalRxDetectorFilter.tif
+  LocalRXDetectorTest
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/hyTvLocalRxDetectorFilter.tif
+  3
+  1 
+)

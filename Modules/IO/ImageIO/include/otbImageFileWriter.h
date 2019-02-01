@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -171,9 +171,6 @@ public:
   /** Override Update() from ProcessObject because this filter
    *  has no output. */
   void Update() override;
-
-  /** \deprecated const char* overload of SetFileName is deprecated, use std::string instead */
-  virtual void SetFileName(const char* extendedFileName);
 
   virtual void SetFileName(const std::string& extendedFileName);
 
