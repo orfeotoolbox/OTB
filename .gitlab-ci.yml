@@ -11,13 +11,16 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-build:ubuntu-18.04:release:
+natif-build:
   extends: .retry_twice
   stage: build
   image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gcc
   script:
     - ctest -S CI/main_ci.cmake
-  artifacts:
-    expire_in: 1 week
-    paths:
-      - build/Testing/*/Test.xml
+
+shark-build:
+  extends: .retry_twice
+  stage: build
+  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu18.04-shark3.1.4
+  script:
+    - ctest -VV -S CI/main_ci.cmake
