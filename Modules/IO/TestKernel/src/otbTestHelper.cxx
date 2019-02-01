@@ -92,6 +92,19 @@
 namespace otb
 {
 
+void TestHelper::CheckValueTolerance(const char *comment, double ref, double test, int &count, bool report, double epsilon) const
+{
+  double norm = (std::abs(ref) + std::abs(test))/2;
+  if (norm > m_EpsilonBoundaryChecking && (std::abs(ref-test) > epsilon * norm))
+    {
+    count++;
+    if (report)
+      {
+      otbPrintDiff(comment, ref, test);
+      }
+    }
+}
+
 int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage,
                                         const StringList& testFilenamesImage)
 {
@@ -1847,7 +1860,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
 
     //Check Layer inforamtion
-    ogrReportOnLayer(ref_poLayer, nullptr, nullptr, test_poLayer, nullptr, nullptr, nbdiff);
+    ogrReportOnLayer(ref_poLayer, nullptr, nullptr, test_poLayer, nullptr, nullptr, nbdiff, toleranceDiffValue);
 
     //If no difference, check the feature
     if (nbdiff == 0)
@@ -2534,7 +2547,8 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
                                   OGRLayer * test_poLayer,
                                   const char *test_pszWHERE,
                                   OGRGeometry *test_poSpatialFilter,
-                                  int& nbdiff) const
+                                  int& nbdiff,
+                                  double epsilon) const
 
 {
   OGRFeatureDefn *ref_poDefn = ref_poLayer->GetLayerDefn();
@@ -2573,10 +2587,10 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 
   if (ref_poLayer->GetExtent(&ref_oExt, TRUE) == OGRERR_NONE)
     {
-    otbCheckValue("Extent: MinX", ref_oExt.MinX, test_oExt.MinX, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MinY", ref_oExt.MinY, test_oExt.MinY, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MaxY", ref_oExt.MaxY, test_oExt.MaxY, nbdiff, m_ReportErrors);
+    CheckValueTolerance("Extent: MinX", ref_oExt.MinX, test_oExt.MinX, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MinY", ref_oExt.MinY, test_oExt.MinY, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MaxY", ref_oExt.MaxY, test_oExt.MaxY, nbdiff, m_ReportErrors, epsilon);
     }
 
   char *ref_pszWKT;
