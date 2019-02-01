@@ -424,7 +424,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProje
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   otbVectorDataProjectionFilterFromMapToSensor
   ${INPUTDATA}/ToulousePoints-examples.shp
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   )
 
@@ -446,7 +446,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToSensor COMMAND otbProje
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   otbGeometriesProjectionFilterFromMapToSensor
   ${INPUTDATA}/ToulousePoints-examples.shp
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   )
 
