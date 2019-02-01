@@ -15,8 +15,13 @@ RUN apt-get update -y \
         curl \
         make \
         cmake \
+        ninja-build \
         g++ \
         gcc \
+        clang \
+        clang-tidy \
+        clang-format \
+        ccache \
         git \
         libtool \
         swig \
@@ -67,3 +72,7 @@ RUN apt-get update -y \
         python3-numpy \
         python3-gdal \
  && rm -rf /var/lib/apt/lists/*
+
+RUN /usr/sbin/update-ccache-symlinks && ls -l /usr/lib/ccache/
+
+ENV PATH /usr/lib/ccache:$PATH
