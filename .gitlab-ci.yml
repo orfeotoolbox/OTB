@@ -14,7 +14,7 @@ stages:
 natif-build:
   extends: .retry_twice
   stage: build
-  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gcc
+  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gccV0.2
   script:
     - ctest -S CI/main_ci.cmake
 
