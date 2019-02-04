@@ -58,4 +58,4 @@ endif()
 
 # ctest_test(PARALLEL_LEVEL 8])
 
-# ctest_submit()
+ctest_submit()
