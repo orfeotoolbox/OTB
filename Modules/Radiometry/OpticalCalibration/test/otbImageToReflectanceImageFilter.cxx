@@ -35,12 +35,14 @@ int otbImageToReflectanceImageFilter(int itkNotUsed(argc), char * argv[])
   int          day = 1;
   int          month = 1;
   double solarDistance = 1.;
+  char fluxMode[] = "0";
+  char solarDistMode[] = "1";
 
-  if (atoi(argv[16]) == 0)
+  if (strcmp(argv[16], fluxMode) == 0)
     {
     flux = static_cast<double>(atof(argv[17]));
     }
-  else if (atoi(argv[16]) == 1)
+  else if (strcmp(argv[16], solarDistMode) == 0)
     {
     solarDistance = static_cast<double>(atof(argv[17]));
     }
@@ -90,11 +92,11 @@ int otbImageToReflectanceImageFilter(int itkNotUsed(argc), char * argv[])
   filter->SetSolarIllumination(solarIllumination);
   filter->SetUseClamp(false);
   
-  if (atoi(argv[16]) == 0)
+  if (strcmp(argv[16], fluxMode) == 0)
     {
     filter->SetFluxNormalizationCoefficient(flux);
     }
-  else if (atoi(argv[16]) == 1)
+  else if (strcmp(argv[16], solarDistMode) == 0)
     {
     filter->SetSolarDistance(solarDistance);
     }
