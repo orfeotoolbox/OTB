@@ -38,9 +38,9 @@ SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
 set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
 set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_NAME _otbApplication)
 if(MSVC)
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
 else()
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationTHON_wrap.cxx COMPILE_FLAGS "-w" )
+  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
 endif()
 
 # byte-compile the resulting python file
