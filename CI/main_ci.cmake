@@ -1,10 +1,32 @@
-# This script is a prototype for the futur CI
+#
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# This script is a prototype for the future CI, it may evolve rapidly in a near future
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 set (ENV{LANG} "C") # Only ascii output
 
 # Build Configuration : Release, Debug..
 set (CTEST_BUILD_CONFIGURATION "Release")
-# set (CTEST_SITE "${BUILD_NAME}")
+set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
+set (CTEST_BUILD_NAME "ENV{CI_MERGE_REQUEST_PROJECT_PATH}")
+set (CTEST_SITE "ENV{CI_REGISTRY_IMAGE}")
 
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
@@ -17,8 +39,6 @@ set (CMAKE_COMMAND "cmake")
 set (CTEST_BUILD_FLAGS "-j8") # number of thread used for compilation
 set (CTEST_BUILD_COMMAND "make ${CTEST_BUILD_FLAGS}")
 
-set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set (CTEST_BUILD_NAME "GitLab_ci_experimentation")
 
 
 # Data directory setting
@@ -46,10 +66,10 @@ if ( _configure_rv EQUAL -1 )
     ${_configure_error}")
 endif()
 
-ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            RETURN_VALUE _build_rv]
-            CAPTURE_CMAKE_ERROR _build_error]
-            )
+# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+#             RETURN_VALUE _build_rv]
+#             CAPTURE_CMAKE_ERROR _build_error]
+#             )
 
 if ( _configure_rv EQUAL -1 )
   message("An error occurs during ctest_build:
@@ -58,4 +78,4 @@ endif()
 
 # ctest_test(PARALLEL_LEVEL 8])
 
-ctest_submit()
+# ctest_submit()
