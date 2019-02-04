@@ -27,6 +27,7 @@ importance of contribution:
     Antonio Valentino
     Aurélien Bricier (CS)
     Caroline Ruffel (CS)
+    Cédric Traizet (CS)
     Charles Peyrega (CS)
     Christophe Lay
     Christophe Palmann (CS)
@@ -39,6 +40,7 @@ importance of contribution:
     Emmanuel Christophe (CNES, then CRISP, then Google)
     Emmanuelle Sarrazin (CNES)
     Etienne Bougoin (CS)
+    Gaëlle Usseglio (THALES SERVICES)
     Grégoire Mercier (Telecom Bretagne)
     Guillaume Borrut (CS)
     Guillaume Pasero (CNES Intern, then CS)
@@ -52,7 +54,7 @@ importance of contribution:
     Julien Michel (CS then CNES)
     Julien Osman
     Julien Radoux (UCL)
-    Laurentiu Nicola (CS ROMANIA)
+    Laurențiu Nicola (CS ROMANIA)
     Luc Hermitte (CS)
     Ludovic Hussonnois (CS)
     Manuel Grizonnet (CNES)
