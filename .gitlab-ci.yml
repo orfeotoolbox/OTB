@@ -13,6 +13,8 @@ stages:
       - stuck_or_timeout_failure
 
 natif-build:
+  variables:
+    CI_DEBUG_TRACE: "true"
   extends: .retry_twice
   stage: build
   image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gccV0.2

@@ -25,8 +25,9 @@ set (ENV{LANG} "C") # Only ascii output
 # Build Configuration : Release, Debug..
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
-set (CTEST_BUILD_NAME "ENV{CI_MERGE_REQUEST_PROJECT_PATH}")
-set (CTEST_SITE "ENV{CI_REGISTRY_IMAGE}")
+
+set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_PROJECT_PATH}")
+set (CTEST_SITE "$ENV{CI_REGISTRY_IMAGE}")
 
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
