@@ -26,7 +26,7 @@ set (ENV{LANG} "C") # Only ascii output
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
 
-set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_PROJECT_PATH}")
+set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}_to_$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable
@@ -67,10 +67,10 @@ if ( _configure_rv EQUAL -1 )
     ${_configure_error}")
 endif()
 
-# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-#             RETURN_VALUE _build_rv]
-#             CAPTURE_CMAKE_ERROR _build_error]
-#             )
+ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+            RETURN_VALUE _build_rv]
+            CAPTURE_CMAKE_ERROR _build_error]
+            )
 
 if ( _configure_rv EQUAL -1 )
   message("An error occurs during ctest_build:
@@ -79,4 +79,4 @@ endif()
 
 # ctest_test(PARALLEL_LEVEL 8])
 
-# ctest_submit()
+ctest_submit()
