@@ -107,7 +107,7 @@ with other libraries installed on your system. OTB will always try to grab
 supplied libraries in the standalone package.
 
 However, when using Python wrappings, there can be conflicts if you import
-*otbApplications* along with other software that share common dependencies with
+*otbApplication* along with other software that share common dependencies with
 OTB. For instance, if you want to use OTB Applications and Fiona in a Python
 script, they both rely on GDAL library. As the libraries loaded by Python must
 be unique, the first library *SomeLib* loaded will be used by any other binary
