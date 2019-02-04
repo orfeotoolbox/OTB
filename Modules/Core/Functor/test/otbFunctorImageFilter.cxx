@@ -301,34 +301,6 @@ template<typename T> struct MaxInEachChannel
 };
 
 
-// 1 Image with neighborhood of VariableLengthVector -> 1 image 
-// this is a dummy functor that returns the first element of the vector at the
-// center of the neighborhood
-template<typename T> struct NeighborhoodVecInScalOut
-{
-  auto operator()(const itk::ConstNeighborhoodIterator<otb::VectorImage<T>> & in) const
-  {
-    float out = in.GetCenterPixel()[0];
-
-    return out;
-  }
-
-};
-
-template<typename T> struct NeighborhoodArrayInScalOut
-{
-  auto operator()(const itk::ConstNeighborhoodIterator< otb::Image<itk::FixedArray<T,2>>> & in) const
-  {
-    float out = in.GetCenterPixel()[0];
-
-    return out;
-  }
-
-};
-
-
-
-
 template<typename T> struct VectorModulus
 {
   itk::VariableLengthVector<double> operator()(const itk::VariableLengthVector<std::complex<T>> & in) const
@@ -473,26 +445,6 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
    auto maxInEachChannel      = NewFunctorFilter(MaxInEachChannelType{}, {{3, 3}});
    maxInEachChannel->SetInputs(vimage);
    maxInEachChannel->Update();
-
-
-   using NeighborhoodVecInScalOutType = NeighborhoodVecInScalOut<double>;
-   auto neighborhoodVecInScalOut      = NewFunctorFilter(NeighborhoodVecInScalOutType{}, {{3, 3}});
-   neighborhoodVecInScalOut->SetInputs(vimage);
-   neighborhoodVecInScalOut->Update();
-
-   using ArrayImageType       = Image<itk::FixedArray<double,2>>;
-   auto arrayImage  = ArrayImageType::New();
-
-   arrayImage->SetRegions(size);
-   arrayImage->Allocate();
-   itk::FixedArray<double,2> array;
-   array.Fill(0);
-   arrayImage->FillBuffer(array);
-  
-   using NeighborhoodArrayInScalOutType = NeighborhoodArrayInScalOut<double>;
-   auto neighborhoodArrayInScalOut      = NewFunctorFilter(NeighborhoodArrayInScalOutType{}, {{3, 3}});
-   neighborhoodArrayInScalOut->SetInputs(arrayImage);
-   neighborhoodArrayInScalOut->Update();
 
    // Test FunctorImageFilter with Module (complex=
    using ModulusType = VectorModulus<double>;
