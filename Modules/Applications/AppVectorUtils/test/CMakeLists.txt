@@ -26,7 +26,7 @@ otb_test_application(NAME apTvUtVectorDataTransform_Rotation
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
                              -transform.ro 15
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_rotation.shp)
 
@@ -38,7 +38,7 @@ otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                              -transform.ro 15
                              -transform.tx  5
                              -transform.ty  6
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
 

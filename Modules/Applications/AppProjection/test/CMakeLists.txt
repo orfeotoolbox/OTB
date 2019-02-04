@@ -214,7 +214,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                              -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
                      VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
+                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToImage.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
@@ -224,7 +224,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                              -out.proj image
                              -out.proj.image.in ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
                      VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
@@ -316,7 +316,7 @@ otb_test_application(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
                      OPTIONS -in ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                         ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
                         ${TEMP}/apTvPrImageEnvelopeTest.shp)
 
