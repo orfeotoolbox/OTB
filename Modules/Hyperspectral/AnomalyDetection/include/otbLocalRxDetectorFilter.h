@@ -163,14 +163,14 @@ public:
     return m_InternalRadiusY;
   };
 
-  auto operator()(const itk::Neighborhood<itk::VariableLengthVector<TInput>> & in) const
+  auto operator()(const itk::ConstNeighborhoodIterator<otb::VectorImage<TInput>> & in) const
   {
     // Create a list sample with the pixels of the neighborhood located between
     // the two radius.
     typename ListSampleType::Pointer listSample = ListSampleType::New();
 
     // The pixel on whih we will compute the Rx score, we load it now to get the input vector size.
-    auto centerPixel = in.GetCenterValue();
+    auto centerPixel = in.GetCenterPixel();
     listSample->SetMeasurementVectorSize(centerPixel.Size());
 
     OffsetType off;
@@ -188,7 +188,7 @@ public:
         off[0] = x;
         if ((abs(x) > internalRadiusX) || (abs(y) > internalRadiusY))
           {
-            listSample->PushBack(in[off]);
+            listSample->PushBack(in.GetPixel(off));
           }
         }
       }

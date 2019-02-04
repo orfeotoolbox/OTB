@@ -112,7 +112,7 @@ private:
     // functor. However using functorImageFilter with neighborhood is buggy (see issue #1802). Still,
     // the functor has been implemented and localRxDetectionFilter will be deprecated when the
     // bug is corrected.
-    #if 1 // Using localRxDetectionFilter
+    #if 0 // Using localRxDetectionFilter
     auto localRxDetectionFilter = LocalRxDetectorFilterType::New();
 
     localRxDetectionFilter->SetInput(inputImage);
