@@ -25,5 +25,6 @@ shark-build:
   stage: build
   image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu18.04-shark3.1.4
   script:
+    - echo $CI_MERGE_REQUEST_PROJECT_PATH
     # - ctest -VV -S CI/main_ci.cmake \
     #   -DCTEST_SITE:string=${CI_MERGE_REQUEST_PROJECT_PATH}_ubuntu18.04-shark3.1.4
