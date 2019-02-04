@@ -17,13 +17,13 @@ stages:
 natif-build:
   extends: .general
   stage: build
-  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu-18.04-gccV0.2
+  image: registry.orfeo-toolbox.org/orfeotoolbox/otb:ubuntu-18.04-gcc
   script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gccV0.2
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
 shark-build:
   extends: .general
   stage: build
-  image: registry.orfeo-toolbox.org/sdinot/otb:ubuntu18.04-shark3.1.4
+  image: registry.orfeo-toolbox.org/orfeotoolbox/otb:ubuntu-18.04-gcc-shark-3.1.4
   script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu18.04-shark3.1.4
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc-shark-3.1.4
