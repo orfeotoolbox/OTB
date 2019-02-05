@@ -43,17 +43,17 @@ otb_module_target_label(otbDimensionalityReductionTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME bfTvFastICAImageFilter COMMAND otbDimensionalityReductionTestDriver
-  --compare-n-images ${EPSILON_7} 2
-  ${BASELINE}/hyTvFastICAImageFilter.tif
-  ${TEMP}/hyTvFastICAImageFilter.tif
-  ${BASELINE}/hyTvFastICAImageFilterInv.tif
-  ${TEMP}/hyTvFastICAImageFilterInv.tif
-  otbFastICAImageFilterTest
-  ${INPUTDATA}/cupriteSubHsi.tif
-  ${TEMP}/hyTvFastICAImageFilter.tif
-  ${TEMP}/hyTvFastICAImageFilterInv.tif
-)
+#otb_add_test(NAME bfTvFastICAImageFilter COMMAND otbDimensionalityReductionTestDriver
+#  --compare-n-images ${EPSILON_7} 2
+#  ${BASELINE}/hyTvFastICAImageFilter.tif
+#  ${TEMP}/hyTvFastICAImageFilter.tif
+#  ${BASELINE}/hyTvFastICAImageFilterInv.tif
+#  ${TEMP}/hyTvFastICAImageFilterInv.tif
+#  otbFastICAImageFilterTest
+#  ${INPUTDATA}/cupriteSubHsi.tif
+#  ${TEMP}/hyTvFastICAImageFilter.tif
+#  ${TEMP}/hyTvFastICAImageFilterInv.tif
+#)
 
 otb_add_test(NAME bfTvAngularProjectionBinaryImageFilter COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_12} 2
