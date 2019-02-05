@@ -2011,6 +2011,8 @@ bool ossimSarSensorModel::overlap(std::pair<unsigned long,unsigned long> & lines
 
    linesUp = std::make_pair(lastValidBurstUp - overlapLength, lastValidBurstUp);
    linesLow = std::make_pair(firstValidBurstLow, firstValidBurstLow + overlapLength);
+
+   return true;
 }
 
 
