@@ -29,6 +29,13 @@
 
 namespace otb
 {
+namespace internal
+{
+void OGRSpatialReferenceDeleter::operator()(OGRSpatialReference * del) const
+  {
+  OGRSpatialReference::DestroySpatialReference( del );  
+  }
+}
 
 OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i)
 {
@@ -75,10 +82,10 @@ SpatialReference::SpatialReference(const OGRSpatialReference * ref)
 {
   if(!ref)
     throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
-  m_SR = std::unique_ptr<OGRSpatialReference>(ref->Clone());
+  m_SR = OGRSpatialReferencePtr(ref->Clone());
 }
 
-SpatialReference::SpatialReference(std::unique_ptr<OGRSpatialReference> ref)
+SpatialReference::SpatialReference(OGRSpatialReferencePtr ref)
 {
   if(!ref)
     throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
@@ -86,9 +93,6 @@ SpatialReference::SpatialReference(std::unique_ptr<OGRSpatialReference> ref)
   // Move (will empty ref)
   m_SR = std::move(ref);
 }
-
-// Destructor
-SpatialReference::~SpatialReference() noexcept {}
 
 SpatialReference & SpatialReference::operator=(const SpatialReference& other) noexcept
 {
@@ -106,7 +110,7 @@ SpatialReference SpatialReference::FromWGS84()
 
 SpatialReference SpatialReference::FromDescription(const std::string & description)
 {
-  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
+  OGRSpatialReferencePtr tmpSR(new OGRSpatialReference());  
   OGRErr code1 = tmpSR->SetFromUserInput(description.c_str());
   
   if(code1!=OGRERR_NONE)
@@ -122,7 +126,7 @@ SpatialReference SpatialReference::FromDescription(const std::string & descripti
 SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
 {
   
-  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());  
+  OGRSpatialReferencePtr tmpSR(new OGRSpatialReference());  
   OGRErr code = tmpSR->importFromEPSGA(epsg);
 
   if(code!=OGRERR_NONE)
@@ -139,7 +143,7 @@ SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
 {
   assert(zone<=60&&"UTM zone should be in range [0,60]");
   
-  std::unique_ptr<OGRSpatialReference> tmpSR(new OGRSpatialReference());
+  OGRSpatialReferencePtr tmpSR(new OGRSpatialReference());
   
   // Build EPSG code from zone and hem
   // We prefer this upon the SetFromUTM() of the OGRSpatialReference
@@ -180,7 +184,7 @@ unsigned int SpatialReference::ToEPSG() const
 {
   unsigned int code = 0;
   
-  std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
+  OGRSpatialReferencePtr tmpSRS(m_SR->Clone());
 
   tmpSRS->Fixup();
   tmpSRS->AutoIdentifyEPSG();
@@ -213,7 +217,7 @@ unsigned int SpatialReference::ToEPSG() const
 
 bool SpatialReference::NormalizeESRI()
 {
-  std::unique_ptr<OGRSpatialReference> tmpSRS(m_SR->Clone());
+  OGRSpatialReferencePtr tmpSRS(m_SR->Clone());
 
   // Morph to ESRI
   OGRErr code = tmpSRS->morphToESRI();

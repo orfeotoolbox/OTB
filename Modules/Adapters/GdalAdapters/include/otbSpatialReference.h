@@ -29,6 +29,16 @@ class OGRSpatialReference;
 
 namespace otb
 {
+// Destructor of OGRSpatialReference
+namespace internal
+{  
+struct OTBGdalAdapters_EXPORT OGRSpatialReferenceDeleter
+  {
+  public:
+    void operator()(OGRSpatialReference * del) const;
+  };
+}
+
 /**
  * \class InvalidSRDescriptionException
  * \brief Exception for invalid spatial reference description
@@ -70,7 +80,6 @@ OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const Spatial
  * \ingroup OTBGdalAdapters
  */
 
-
 class OTBGdalAdapters_EXPORT SpatialReference
 {
 friend class CoordinateTransformation;
@@ -78,6 +87,8 @@ friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2
 friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
 
 public:
+  typedef std::unique_ptr< OGRSpatialReference , 
+          internal::OGRSpatialReferenceDeleter > OGRSpatialReferencePtr;
  /**
   * Build a SpatialRereference from a description string. The description string is
   * passed to OGRSpatialReference:SetFromUserInput()
@@ -121,9 +132,6 @@ public:
   enum class hemisphere {north, south};
   
   static SpatialReference FromUTM(unsigned int zone, hemisphere hem);
-  
-  /// Default destructor
-  ~SpatialReference() noexcept;
 
   /// Copy constructor
   SpatialReference(const SpatialReference& other) noexcept;
@@ -167,10 +175,10 @@ private:
 
   /// Constructor from unique_ptr to wrapped type. On success (no
   /// throw) the passed unique_ptr will be cleared, and ownership transferred
-  SpatialReference(std::unique_ptr<OGRSpatialReference> ref);
-  
+  SpatialReference(OGRSpatialReferencePtr ref);
+
   // unique ptr to the internal OGRSpatialReference
-  std::unique_ptr<OGRSpatialReference> m_SR;
+  OGRSpatialReferencePtr m_SR;
 };
 
 /// Stream operator for hemisphere

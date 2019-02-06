@@ -27,6 +27,13 @@
 
 namespace otb
 {
+namespace internal
+{
+void OGRCoordinateTransformationDeleter::operator()(OGRCoordinateTransformation * del) const
+  {
+  OGRCoordinateTransformation::DestroyCT( del );  
+  }
+}
 
 OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
 {
@@ -53,7 +60,7 @@ OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, cons
 // Constructor
 CoordinateTransformation::CoordinateTransformation(const SpatialReference & source, const SpatialReference & target)
 {
-  std::unique_ptr<OGRCoordinateTransformation> tmpTransform(OGRCreateCoordinateTransformation(source.m_SR.get(),target.m_SR.get()));
+  CoordinateTransformationPtr tmpTransform(OGRCreateCoordinateTransformation(source.m_SR.get(),target.m_SR.get()));
 
 // If construction failed, throw
   if(!tmpTransform)
@@ -67,14 +74,11 @@ CoordinateTransformation::CoordinateTransformation(const SpatialReference & sour
   m_Transform = std::move(tmpTransform);
 }
 
-// Destructor
-CoordinateTransformation::~CoordinateTransformation() noexcept {};
-
 // Copy constructor
 CoordinateTransformation::CoordinateTransformation(const CoordinateTransformation& other)
 {
   // Mimic a clone operator
-  std::unique_ptr<OGRCoordinateTransformation> newTransform (OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(),other.GetTargetSpatialReference().m_SR.get()));
+  CoordinateTransformationPtr newTransform (OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(),other.GetTargetSpatialReference().m_SR.get()));
 
   // Ensure that newTransform is valid
   if(!newTransform)
@@ -91,7 +95,7 @@ CoordinateTransformation::CoordinateTransformation(const CoordinateTransformatio
 CoordinateTransformation & CoordinateTransformation::operator=(const CoordinateTransformation& other) noexcept
 {
   // Mimic a clone operator
-  std::unique_ptr<OGRCoordinateTransformation> newTransform (OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(),other.GetTargetSpatialReference().m_SR.get()));
+  CoordinateTransformationPtr newTransform (OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(),other.GetTargetSpatialReference().m_SR.get()));
 
   // Only update transfrom if newTransform is valid
   if(newTransform)

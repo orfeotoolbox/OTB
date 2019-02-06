@@ -33,6 +33,15 @@ class OGRCoordinateTransformation;
 
 namespace otb
 {
+// Destructor of OGRCoordinateTransformation
+namespace internal
+{
+struct OTBGdalAdapters_EXPORT OGRCoordinateTransformationDeleter
+  {
+  public:
+    void operator()(OGRCoordinateTransformation * del) const;
+  };
+}
 
 /**
  * \class InvalidCoordinateTransfromationException
@@ -75,7 +84,6 @@ OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, cons
 /// different operator
 OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
-
 /**
  * \class CoordinateTransformation
  * \brief This class is a wrapper around OGRCoordinateTransformation
@@ -95,6 +103,8 @@ friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTran
 friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 public:
+  typedef std::unique_ptr<OGRCoordinateTransformation ,
+          internal::OGRCoordinateTransformationDeleter> CoordinateTransformationPtr;
   /** 
    * Builds a coordinate transformation out of source and target
    * spatial reference systems.
@@ -104,9 +114,6 @@ public:
    * \throws InvalidCoordinateTransfromationException in case of failure
    */
   CoordinateTransformation(const SpatialReference & source, const SpatialReference & destination);
-
-  /// Destructor
-  ~CoordinateTransformation() noexcept;
 
   /// Copy constructor
   CoordinateTransformation(const CoordinateTransformation& other);
@@ -139,7 +146,7 @@ public:
   
 private:
   // unique ptr to the internal OGRCoordinateTransformation
-  std::unique_ptr<OGRCoordinateTransformation> m_Transform;
+  CoordinateTransformationPtr m_Transform;
 };
 
 /// Stream operator for CoordinateTransformation
