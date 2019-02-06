@@ -35,14 +35,14 @@ void OGRCoordinateTransformationDeleter::operator()(OGRCoordinateTransformation 
   }
 }
 
-std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
 {
   o << "Source: " << i.GetSourceSpatialReference() << ", Target: " << i.GetTargetSpatialReference();
   return o;
 }
 
 // equal operator
-bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
+OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
 {
   auto thisSourceCS  = ct1.GetSourceSpatialReference();
   auto thisTargetCS  = ct1.GetTargetSpatialReference();
@@ -52,7 +52,7 @@ bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformat
   return thisSourceCS == otherSourceCS && thisTargetCS == otherTargetCS;
 }
 
-bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
+OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
 {
   return !(ct1==ct2);
 }
@@ -120,7 +120,7 @@ std::tuple<double,double,double> CoordinateTransformation::Transform(const std::
   double outX, outY, outZ;
   std::tie(outX, outY,outZ) = in;
   
-  bool success ( m_Transform->Transform(1,&outX,&outY,&outZ) );
+  bool success ( m_Transform->Transform(1,&outX,&outY,&outZ) != 0);
 
   if(!success)
     {
@@ -138,7 +138,7 @@ std::tuple<double,double> CoordinateTransformation::Transform(const std::tuple<d
   double outX, outY;
   std::tie(outX, outY) = in;
   
-  bool success ( m_Transform->Transform(1,&outX,&outY,nullptr) );
+  bool success ( m_Transform->Transform(1,&outX,&outY,nullptr) != 0 );
 
   if(!success)
     {

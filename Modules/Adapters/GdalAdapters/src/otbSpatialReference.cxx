@@ -37,20 +37,20 @@ void OGRSpatialReferenceDeleter::operator()(OGRSpatialReference * del) const
   }
 }
 
-std::ostream & operator << (std::ostream& o, const SpatialReference & i)
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i)
 {
   return o << i.ToWkt();
 }
 
-std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem)
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem)
 {
   return o << (hem == SpatialReference::hemisphere::north ? "N" : "S");
 }
 
 
-bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
+OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
-  bool rawIsSame ( sr1.m_SR->IsSame(sr2.m_SR.get()) );
+  bool rawIsSame ( sr1.m_SR->IsSame(sr2.m_SR.get()) != 0 );
 
   // By default, gdal does not compare datum (and IsSame with
   // papzOptions is not in public API
@@ -69,7 +69,7 @@ bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcep
   return false;
 }
 
-bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
+OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   return !(sr1==sr2);
 }
