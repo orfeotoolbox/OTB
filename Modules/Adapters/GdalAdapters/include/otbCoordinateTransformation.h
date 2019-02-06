@@ -28,6 +28,16 @@
 #include <stdexcept>
 #include <tuple>
 
+#if defined(_MSC_VER)
+#pragma warning ( disable: 4251 )
+// Disable following warning :
+// warning C4251: 'otb::CoordinateTransformation::m_Transform':
+// class 'std::unique_ptr<OGRCoordinateTransformation,std::default_delete<_Ty>>'
+// needs to have dll-interface to be used by clients of class
+// 'otb::CoordinateTransformation'
+// As long as otb::CoordinateTransformation::m_Transform is private no need to
+// export this type.
+#endif
 
 class OGRCoordinateTransformation;
 

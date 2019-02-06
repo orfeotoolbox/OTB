@@ -25,13 +25,21 @@
 #include <memory>
 #include <stdexcept>
 
+#if defined(_MSC_VER)
+#pragma warning ( disable: 4251 )
+// Disable following warning :
+// warning C4251: 'otb::SpatialReference::m_SR':
+// class 'std::unique_ptr<OGRSpatialReference,OGRSpatialReferenceDeleter>' needs
+// to have dll-interface to be used by clients of class 'otb::SpatialReference'
+// As long as otb::SpatialReference::m_SR is private no need to export this type.
+#endif
 class OGRSpatialReference;
 
 namespace otb
 {
 // Destructor of OGRSpatialReference
 namespace internal
-{  
+{
 struct OTBGdalAdapters_EXPORT OGRSpatialReferenceDeleter
   {
   public:
