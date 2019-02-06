@@ -14,3 +14,4 @@ Table of Contents
    Recipes
    Applications
    FAQ
+   Contributors

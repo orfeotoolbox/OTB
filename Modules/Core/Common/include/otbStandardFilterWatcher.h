@@ -97,6 +97,10 @@ private:
   int m_StarsCount;
 
   int m_CurrentNbStars;
+
+  bool m_CoutIsConsole;
+
+  std::string m_Buffer;
 };
 
 } // end namespace otb

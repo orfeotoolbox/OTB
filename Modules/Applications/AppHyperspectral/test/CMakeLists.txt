@@ -74,3 +74,15 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
                              ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
 )
+
+#----------- LocalRxDetection TESTS ------------------------
+otb_test_application(NAME  apTvHyLocalRxDetection
+                     APP  LocalRxDetection
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif?&bands=1:10
+                             -out ${TEMP}/apTvHyLocalRxDetection.tif double
+                             -ir 1
+                             -er 3
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyLocalRxDetection.tif
+                              ${TEMP}/apTvHyLocalRxDetection.tif
+)

@@ -32,7 +32,7 @@ Get started now with the :doc:`Installation` chapter.
 
 Get help, share your experience and contribute to the Orfeo-Toolbox project by
 joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
-`users mailing list <https://groups.google.com/forum/?hl=fr#!forum/otb-users/join>`_.
+`users forum <https://forum.orfeo-toolbox.org/>`_.
 
 For other documentation, be sure to read:
 
