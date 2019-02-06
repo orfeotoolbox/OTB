@@ -27,14 +27,15 @@
 
 namespace otb
 {
-std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
+
+OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
 {
   o << "Source: " << i.GetSourceSpatialReference() << ", Target: " << i.GetTargetSpatialReference();
   return o;
 }
 
 // equal operator
-bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
+OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
 {
   auto thisSourceCS  = ct1.GetSourceSpatialReference();
   auto thisTargetCS  = ct1.GetTargetSpatialReference();
@@ -44,7 +45,7 @@ bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformat
   return thisSourceCS == otherSourceCS && thisTargetCS == otherTargetCS;
 }
 
-bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
+OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
 {
   return !(ct1==ct2);
 }

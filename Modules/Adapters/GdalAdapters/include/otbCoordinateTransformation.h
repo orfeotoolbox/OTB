@@ -43,7 +43,7 @@ namespace otb
  * 
  * \ingroup OTBGdalAdapters
  */
-class OTBGdalAdapters_EXPORT InvalidCoordinateTransfromationException : public std::runtime_error
+class OTBGdalAdapters_HIDDEN InvalidCoordinateTransfromationException : public std::runtime_error
 {
 public:
   // Import parent constructor
@@ -59,7 +59,7 @@ public:
  * 
  * \ingroup OTBGdalAdapters
  */
-class OTBGdalAdapters_EXPORT TransformFailureException : public std::runtime_error
+class OTBGdalAdapters_HIDDEN TransformFailureException : public std::runtime_error
 {
 public:
   // Import parent constructor

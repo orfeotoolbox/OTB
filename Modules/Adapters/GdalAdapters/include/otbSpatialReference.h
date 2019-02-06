@@ -38,7 +38,7 @@ namespace otb
  * 
  * \ingroup OTBGdalAdapters
  */
-class OTBGdalAdapters_EXPORT InvalidSRDescriptionException : public std::runtime_error
+class OTBGdalAdapters_HIDDEN InvalidSRDescriptionException : public std::runtime_error
 {
 public:
   // Import parent constructor
