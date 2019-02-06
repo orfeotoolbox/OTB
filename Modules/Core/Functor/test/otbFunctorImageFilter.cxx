@@ -285,9 +285,10 @@ template<typename T> struct MaxInEachChannel
 
     for (auto idx = 0u; idx < in.Size(); idx++)
       {
+      auto pixel = in.GetPixel(idx);
       for(auto band = 0u; band < out.Size();++band)
         {
-        if(in.GetPixel(idx)[band] < out[band])
+        if(pixel[band] < out[band])
           out[band] = in.GetPixel(idx)[band];
         }
       }
