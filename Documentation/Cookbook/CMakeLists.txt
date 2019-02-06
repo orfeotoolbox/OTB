@@ -130,7 +130,15 @@ add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
-  COMMENT "Auto-generating Application Reference Documentation in RST"
+  COMMENT "Auto-generating Application Documentation in RST"
+  DEPENDS OTBSWIGWrapper-all
+  )
+
+add_custom_target(generate_examples_rst
+  COMMAND "python3" ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
+  ${RST_BINARY_DIR}
+  WORKING_DIRECTORY ${RST_BINARY_DIR}
+  COMMENT "Auto-generating Examples in RST"
   DEPENDS OTBSWIGWrapper-all
   )
 
@@ -152,6 +160,7 @@ add_custom_target(CookBookHTML
   -c ${SPHINX_CONF_DIR}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS generate_otbapps_rst
+  DEPENDS generate_examples_rst
   COMMENT "Building RST documentation in html")
 
 add_custom_target(CookBookArchive
