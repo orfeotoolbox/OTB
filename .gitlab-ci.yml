@@ -14,7 +14,7 @@ stages:
   # variables:
   #   CI_DEBUG_TRACE: "true"
 
-natif-build:
+native-build:
   extends: .general
   stage: build
   image: registry.orfeo-toolbox.org/orfeotoolbox/otb:ubuntu-18.04-gcc
