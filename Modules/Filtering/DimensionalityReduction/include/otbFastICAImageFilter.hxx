@@ -291,7 +291,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       for ( unsigned int bd = 0; bd < size; bd++ )
       {
         W(band, bd) -= m_Mu * ( estimator->GetMean()[bd]
-                              - optimizer->GetBeta() * W(band, bd) / optimizer->GetDen() );
+                                - optimizer->GetBeta() * W(band, bd) ) 
+                            / optimizer->GetDen();
         norm += std::pow( W(band, bd), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
