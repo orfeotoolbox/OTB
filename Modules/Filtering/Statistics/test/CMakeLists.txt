@@ -105,8 +105,8 @@ otb_add_test(NAME bfTvNormalizeVectorImageFilter COMMAND otbStatisticsTestDriver
   ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
   ${TEMP}/bfTvNormalizeVectorImageFilter.tif
   otbNormalizeVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
 otb_add_test(NAME bfTvVectorImageToMatrix COMMAND otbStatisticsTestDriver
   otbVectorImageToMatrixTest)

@@ -66,12 +66,12 @@ otb_add_test(NAME ioTvKmzProductWriterWithGCP COMMAND otbKMZWriterTestDriver
 
 otb_add_test(NAME ioTvKmzProductWriterWithGCP_Logo_Legend COMMAND otbKMZWriterTestDriver
   otbKmzProductWriterWithLogoAndLegend
-  -in ${INPUTDATA}/Haiti1.jpeg
-  -lo ${INPUTDATA}/cnes.png
-  -le ${INPUTDATA}/otb_big.png
-  -dem ${INPUTDATA}/DEM/srtm_directory
-  -kmz ${TEMP}/ioTuHaitiKmzProductWithLogoAndLegend.kmz
-  -gcp  1980.000000 1986.000000 -72.351257 18.555075 0.000000
+  ${INPUTDATA}/Haiti1.jpeg
+  ${INPUTDATA}/cnes.png
+  ${INPUTDATA}/otb_big.png
+  ${INPUTDATA}/DEM/srtm_directory
+  ${TEMP}/ioTuHaitiKmzProductWithLogoAndLegend.kmz
+  1980.000000 1986.000000 -72.351257 18.555075 0.000000
   1963.000000 1944.000000 -72.352051 18.556946 0.000000
   2078.000000 1566.000000 -72.346130 18.574358 0.000000
   2154.000000 1430.000000 -72.342377 18.580441 0.000000
