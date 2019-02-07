@@ -53,7 +53,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_PCAFilter = PCAFilterType::New();
   m_PCAFilter->SetUseNormalization(true);
-
+  m_PCAFilter->SetUseVarianceForNormalization(false);
+  
   m_TransformFilter = TransformFilterType::New();
 }
 
