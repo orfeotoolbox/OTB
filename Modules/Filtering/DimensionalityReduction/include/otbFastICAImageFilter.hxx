@@ -261,7 +261,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     InternalMatrixType W_old ( W );
 
-    typename InputImageType::Pointer img = const_cast<InputImageType*>( this->GetInput() );
+    typename InputImageType::Pointer img = const_cast<InputImageType*>( m_PCAFilter->GetOutput() );
     TransformFilterPointerType transformer = TransformFilterType::New();
     if ( !W.is_identity() )
     {
