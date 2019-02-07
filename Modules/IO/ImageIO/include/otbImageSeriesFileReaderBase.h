@@ -64,7 +64,7 @@ public:
  */
 
 template <class TImage, class TInternalImage = TImage>
-class ITK_EXPORT ImageSeriesFileReaderBase
+class ImageSeriesFileReaderBase
   : public ImageListSource<TImage>
 {
 public:
