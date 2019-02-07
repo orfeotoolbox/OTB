@@ -34,24 +34,25 @@ list_of_examples = [
 
 def generate_examples_index(rst_dir):
 
-    # Compute dictionary of (tag filename) -> (list of examples)
+    # Compute dictionary of tag -> (list of examples)
     tag_files = defaultdict(list)
     for filename in list_of_examples:
         tag = filename.split("/")[1]
         name, _ = os.path.splitext(filename.split("/")[2])
 
-        tag_files[join("Examples", tag + ".rst")].append(join(tag, name + ".rst"))
+        tag_files[tag].append(join(tag, name + ".rst"))
 
     # Render index file and tag index files
     os.mkdir(join(rst_dir, "Examples"))
     index_f = open(join(rst_dir, "Examples.rst"), "w")
     index_f.write(RstPageHeading("Examples", 3, ref="cpp-examples"))
 
-    for tag_filename, examples_filenames in tag_files.items():
+    for tag, examples_filenames in tag_files.items():
+        tag_filename = join("Examples", tag + ".rst")
         index_f.write("\t" + tag_filename + "\n")
 
         with open(join(rst_dir, tag_filename), "w") as tag_f:
-            tag_f.write(RstPageHeading("tag index file", 3))
+            tag_f.write(RstPageHeading(tag, 3))
 
             for examples_filename in examples_filenames:
                 tag_f.write("\t" + examples_filename + "\n")
