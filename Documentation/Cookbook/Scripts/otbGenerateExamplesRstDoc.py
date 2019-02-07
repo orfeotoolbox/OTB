@@ -57,31 +57,54 @@ def generate_examples_index(rst_dir):
             for examples_filename in examples_filenames:
                 tag_f.write("\t" + examples_filename + "\n")
 
+def indent(str):
+    return "\n".join(["    " + line for line in str.split("\n")])
+
+def example_extract_description(code):
+    return code, ""
+
+def render_example(filename, otb_root):
+    "Render a cxx example to rst"
+
+    # Read the source code of the cxx example
+    code = open(join(otb_root, filename)).read()
+
+    # Don't show the license header to make it nicer,
+    # and the cookbook is already under a CC license
+    examples_license_header = open("templates/examples_license_header.txt").read()
+    code = code.replace(examples_license_header, "")
+
+    # Extract the rst description
+    code, rst_description = example_extract_description(code)
+
+    # Render the template
+    template_example = open("templates/example.rst").read()
+    output_rst = template_example.format(
+        label="example-" + root,
+        heading=rst_section(name, "="),
+        description=rst_description,
+        code=indent(code),
+    )
+
+    return output_rst
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(usage="Export examples to rst")
     parser.add_argument("rst_dir", help="Directory where rst files are generated")
+    parser.add_argument("otb_root", help="OTB repository root")
     args = parser.parse_args()
 
     print("Generating rst for {} examples".format(len(list_of_examples)))
 
+    # Generate example index and tag indexes
     generate_examples_index(join(args.rst_dir, "C++"))
 
-    template_example = open("templates/example.rst").read()
-
+    # Generate examples rst
     for filename in list_of_examples:
-
         name = os.path.basename(filename)
         tag = filename.split("/")[1]
         root, ext = os.path.splitext(name)
 
-        output_rst = template_example.format(
-            label="example-" + root,
-            heading=rst_section(name, "="),
-            description="description goes here.",
-            code="    auto x = 5;"
-        )
-
         os.mkdir(join(args.rst_dir, "C++", "Examples", tag))
         with open(join(args.rst_dir, "C++", "Examples", tag, root + ".rst"), "w") as output_file:
-            output_file.write(output_rst)
+            output_file.write(render_example(filename, args.otb_root))

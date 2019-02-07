@@ -137,6 +137,7 @@ add_custom_target(generate_otbapps_rst
 add_custom_target(generate_examples_rst
   COMMAND "python3" ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
   ${RST_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
   COMMENT "Auto-generating Examples in RST"
   DEPENDS OTBSWIGWrapper-all
