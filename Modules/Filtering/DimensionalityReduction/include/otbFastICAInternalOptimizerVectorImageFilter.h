@@ -24,6 +24,7 @@
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbPersistentImageFilter.h"
 
 namespace otb
 {
@@ -42,7 +43,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  : public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -93,6 +94,10 @@ public:
   itkSetMacro(ContrastFunction, ContrastFunctionType);
   itkGetMacro(Beta, double);
   itkGetMacro(Den, double);
+
+  virtual void Reset() override;
+  
+  virtual void Synthetize() override;
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();

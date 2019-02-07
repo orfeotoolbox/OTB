@@ -60,6 +60,14 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
+::Reset()
+{
+  
+}
+
+template <class TInputImage, class TOutputImage>
+void
+FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 ::BeforeThreadedGenerateData ()
 {
   if ( m_W.empty() )
@@ -143,6 +151,14 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 
   m_Beta = beta / nbSample;
   m_Den = den / nbSample - m_Beta;
+}
+
+template <class TInputImage, class TOutputImage>
+void
+FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
+::Synthetize()
+{
+  
 }
 
 } // end of namespace otb

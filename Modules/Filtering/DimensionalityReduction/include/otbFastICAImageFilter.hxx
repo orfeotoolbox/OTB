@@ -285,7 +285,12 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
       MeanEstimatorFilterPointerType estimator = MeanEstimatorFilterType::New();
       estimator->SetInput( optimizer->GetOutput() );
+      
+      // Here we have a pipeline of two persistent filters, we have to manually 
+      // call Reset() and Synthetize () on the first one (optimizer).
+      optimizer->Reset();
       estimator->Update();
+      optimizer->Synthetize();
 
       double norm = 0.;
       for ( unsigned int bd = 0; bd < size; bd++ )
