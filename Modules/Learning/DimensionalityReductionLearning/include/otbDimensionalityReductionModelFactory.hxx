@@ -35,8 +35,10 @@
 namespace otb
 {
 
+#ifdef OTB_USE_SHARK
 template <class TInputValue, class TTargetValue>
 using LogAutoencoderModelFactory = AutoencoderModelFactory<TInputValue, TTargetValue, shark::LogisticNeuron>  ;
+#endif
 
 template <class TInputValue, class TTargetValue>
 using SOM2DModelFactory = SOMModelFactory<TInputValue, TTargetValue, 2>  ;

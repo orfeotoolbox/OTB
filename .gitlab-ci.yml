@@ -1,0 +1,29 @@
+variables:
+  DOCKER_DRIVER: overlay2
+
+stages:
+  - build
+
+.general:
+  only: [merge_requests]
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+  # variables:
+  #   CI_DEBUG_TRACE: "true"
+
+native-build:
+  extends: .general
+  stage: build
+  image: registry.orfeo-toolbox.org/orfeotoolbox/otb:ubuntu-18.04-gcc
+  script:
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
+
+shark-build:
+  extends: .general
+  stage: build
+  image: registry.orfeo-toolbox.org/orfeotoolbox/otb:ubuntu-18.04-gcc-shark-3.1.4
+  script:
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc-shark-3.1.4
