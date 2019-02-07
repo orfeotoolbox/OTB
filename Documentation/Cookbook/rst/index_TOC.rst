@@ -15,4 +15,4 @@ Table of Contents
    Applications
    FAQ
    Contributors
-   cpp/Examples.rst
+   C++

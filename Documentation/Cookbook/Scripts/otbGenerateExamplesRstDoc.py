@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     print("Generating rst for {} examples".format(len(list_of_examples)))
 
-    generate_examples_index(join(args.rst_dir, "cpp"))
+    generate_examples_index(join(args.rst_dir, "C++"))
 
     template_example = open("templates/example.rst").read()
 
@@ -81,6 +81,6 @@ if __name__ == "__main__":
             code="    auto x = 5;"
         )
 
-        os.mkdir(join(args.rst_dir, "cpp", "Examples", tag))
-        with open(join(args.rst_dir, "cpp", "Examples", tag, root + ".rst"), "w") as output_file:
+        os.mkdir(join(args.rst_dir, "C++", "Examples", tag))
+        with open(join(args.rst_dir, "C++", "Examples", tag, root + ".rst"), "w") as output_file:
             output_file.write(output_rst)
