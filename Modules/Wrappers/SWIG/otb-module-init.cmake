@@ -42,8 +42,15 @@ endmacro()
 
 if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
-  find_package ( PythonInterp 3 REQUIRED )
-  find_package ( PythonLibs 3 REQUIRED )
+  set (PythonVersion 3)
+  find_package ( PythonInterp ${PythonVersion} )
+  if( NOT PythonInterp_FOUND)
+    message (WARNING "Python3 not found. There is no longer support of python2 \
+      in OTB, but it can still be used.")
+    set (PythonVersion 2)
+    find_package ( PythonInterp ${PythonVersion} REQUIRED)
+  endif()
+  find_package ( PythonLibs ${PythonVersion} REQUIRED )
   find_package ( Numpy )
 endif()
 
