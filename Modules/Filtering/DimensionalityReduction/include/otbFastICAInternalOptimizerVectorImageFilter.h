@@ -104,9 +104,7 @@ protected:
   ~FastICAInternalOptimizerVectorImageFilter() override { }
 
   void GenerateOutputInformation() override;
-  void BeforeThreadedGenerateData () override;
   void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) override;
-  void AfterThreadedGenerateData() override;
 
   unsigned int m_CurrentBandForLoop;
 

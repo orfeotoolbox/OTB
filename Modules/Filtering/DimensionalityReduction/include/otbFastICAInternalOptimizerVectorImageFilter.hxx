@@ -61,24 +61,20 @@ template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 ::Reset()
-{
-  
-}
-
-template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::BeforeThreadedGenerateData ()
-{
+{ 
   if ( m_W.empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
       "Give the initial W matrix", ITK_LOCATION );
   }
-
+  
   m_BetaVector.resize( this->GetNumberOfThreads() );
   m_DenVector.resize( this->GetNumberOfThreads() );
   m_NbSamples.resize( this->GetNumberOfThreads() );
+  
+  std::fill(m_BetaVector.begin(), m_BetaVector.end(), 0.);
+  std::fill(m_DenVector.begin(), m_DenVector.end(), 0.);
+  std::fill(m_NbSamples.begin(), m_NbSamples.end(), 0.);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -128,15 +124,15 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
     ++outputIt;
   } // end while loop
 
-  m_BetaVector[threadId] = beta;
-  m_DenVector[threadId] = den;
-  m_NbSamples[threadId] = nbSample;
+  m_BetaVector[threadId] += beta;
+  m_DenVector[threadId] += den;
+  m_NbSamples[threadId] += nbSample;
 }
 
 template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::AfterThreadedGenerateData ()
+::Synthetize()
 {
   double beta = 0;
   double den = 0.;
@@ -151,14 +147,6 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 
   m_Beta = beta / nbSample;
   m_Den = den / nbSample - m_Beta;
-}
-
-template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::Synthetize()
-{
-  
 }
 
 } // end of namespace otb
