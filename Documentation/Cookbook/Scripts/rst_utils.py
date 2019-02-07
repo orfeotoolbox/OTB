@@ -10,3 +10,9 @@ def rst_section(text, delimiter, ref=None):
     output += text + "\n" + delimiter * len(text) + "\n\n"
     return output
 
+def RstPageHeading(text, maxdepth, ref=None):
+    output = rst_section(text, "=", ref=ref)
+    output += ".. toctree::\n"
+    output += "\t:maxdepth: {}\n\n\n".format(maxdepth)
+    return output
+

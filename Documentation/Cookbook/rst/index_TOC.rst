@@ -15,5 +15,4 @@ Table of Contents
    Applications
    FAQ
    Contributors
-   cpp/examples/examples.rst
->>>>>>> Stashed changes
+   cpp/Examples.rst

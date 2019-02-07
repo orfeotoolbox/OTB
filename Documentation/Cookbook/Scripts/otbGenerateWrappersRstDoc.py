@@ -29,7 +29,7 @@ from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_
 
 from otb_warnings import application_documentation_warnings
 
-from rst_utils import rst_section
+from rst_utils import rst_section, RstPageHeading
 
 linesep = os.linesep
 
@@ -390,13 +390,6 @@ def render_application(appname, allapps):
 def GetApplicationTags(appname):
      app = otbApplication.Registry.CreateApplication(appname)
      return app.GetDocTags()
-
-def RstPageHeading(text, maxdepth, ref=None):
-    output = rst_section(text, "=", ref=ref)
-    output += ".. toctree::" + linesep
-    output += "\t:maxdepth: " + maxdepth + linesep
-    output += linesep + linesep
-    return output
 
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
