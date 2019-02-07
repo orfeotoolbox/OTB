@@ -31,6 +31,13 @@ from rst_utils import rst_section, RstPageHeading
 list_of_examples = [
     "Examples/BasicFilters/BandMathFilterExample.cxx",
     "Examples/FeatureExtraction/LineSegmentDetectorExample.cxx",
+    "Examples/Tutorials/FilteringPipeline.cxx",
+    "Examples/Tutorials/HelloWorldOTB.cxx",
+    "Examples/Tutorials/Multispectral.cxx",
+    "Examples/Tutorials/OrthoFusion.cxx",
+    "Examples/Tutorials/Pipeline.cxx",
+    "Examples/Tutorials/ScalingPipeline.cxx",
+    "Examples/Tutorials/SmarterFilteringPipeline.cxx",
 ]
 
 def generate_examples_index(rst_dir):
@@ -44,7 +51,7 @@ def generate_examples_index(rst_dir):
         tag_files[tag].append(join(tag, name + ".rst"))
 
     # Render index file and tag index files
-    os.mkdir(join(rst_dir, "Examples"))
+    os.makedirs(join(rst_dir, "Examples"), exist_ok=True)
     index_f = open(join(rst_dir, "Examples.rst"), "w")
     index_f.write(RstPageHeading("Examples", 3, ref="cpp-examples"))
 
@@ -125,6 +132,6 @@ if __name__ == "__main__":
         tag = filename.split("/")[1]
         root, ext = os.path.splitext(name)
 
-        os.mkdir(join(args.rst_dir, "C++", "Examples", tag))
+        os.makedirs(join(args.rst_dir, "C++", "Examples", tag), exist_ok=True)
         with open(join(args.rst_dir, "C++", "Examples", tag, root + ".rst"), "w") as output_file:
             output_file.write(render_example(filename, args.otb_root))
