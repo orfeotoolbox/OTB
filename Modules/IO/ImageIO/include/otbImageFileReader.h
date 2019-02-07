@@ -37,34 +37,11 @@
 #include "otbDefaultConvertPixelTraits.h"
 #include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
+#include "otbImageFileReaderException.h"
 #include <string>
 
 namespace otb
 {
-
-/** \class ImageFileReaderException
- *
- * \brief Base exception class for IO conflicts.
- *
- * \ingroup OTBImageIO
- */
-class ImageFileReaderException : public itk::ExceptionObject
-{
-public:
-  /** Run-time information. */
-  itkTypeMacro( ImageFileReaderException, ExceptionObject );
-
-  /** Constructor. */
-  ImageFileReaderException(const char *file, unsigned int line,
-                           const std::string& desc = "",
-                           const std::string& filename = "") :
-    ExceptionObject(file, line, desc),
-    m_Filename(filename)
-  {
-  }
-
-  std::string m_Filename;
-};
 
 /** \class ImageFileReader
  * \brief  Reads image data.
