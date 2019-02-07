@@ -24,6 +24,7 @@ import os
 import os.path
 from os.path import join
 from collections import defaultdict
+import re
 
 from rst_utils import rst_section, RstPageHeading
 
@@ -60,8 +61,27 @@ def generate_examples_index(rst_dir):
 def indent(str):
     return "\n".join(["    " + line for line in str.split("\n")])
 
-def example_extract_description(code):
-    return code, ""
+def cpp_uncomment(code):
+    return "\n".join([line[3:] for line in code.split("\n")])
+
+def example_parse_code(code):
+    "Parse a cxx example, clean it up, and extract the rst description"
+
+    rx_description = r"\/\/ +Software Guide : BeginDescription\n(.*)\n\/\/ +Software Guide : EndDescription\n\n"
+    rx_cmdargs = r"\/\/ +Software Guide : BeginCommandLineArgs\n(.*)\n\/\/ +Software Guide : EndCommandLineArgs\n\n"
+
+    # Extract description
+    match = re.search(rx_description, code, flags = re.MULTILINE | re.DOTALL)
+    if match is None:
+        description = ""
+    else:
+        description = cpp_uncomment(match.group(1))
+
+    # Remove description and cmdargs from code
+    code = re.sub(rx_description, "", code, flags = re.MULTILINE | re.DOTALL)
+    code = re.sub(rx_cmdargs, "", code, flags = re.MULTILINE | re.DOTALL)
+
+    return code, description
 
 def render_example(filename, otb_root):
     "Render a cxx example to rst"
@@ -74,8 +94,8 @@ def render_example(filename, otb_root):
     examples_license_header = open("templates/examples_license_header.txt").read()
     code = code.replace(examples_license_header, "")
 
-    # Extract the rst description
-    code, rst_description = example_extract_description(code)
+    # Parse cxx code and extract the rst description
+    code, rst_description = example_parse_code(code)
 
     # Render the template
     template_example = open("templates/example.rst").read()
