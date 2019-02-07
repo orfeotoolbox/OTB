@@ -30,7 +30,10 @@ from rst_utils import rst_section, RstPageHeading
 
 list_of_examples = [
     "Examples/BasicFilters/BandMathFilterExample.cxx",
+
     "Examples/FeatureExtraction/LineSegmentDetectorExample.cxx",
+    "Examples/FeatureExtraction/TextureExample.cxx",
+
     "Examples/Tutorials/FilteringPipeline.cxx",
     "Examples/Tutorials/HelloWorldOTB.cxx",
     "Examples/Tutorials/Multispectral.cxx",
@@ -69,7 +72,8 @@ def indent(str):
     return "\n".join(["    " + line for line in str.split("\n")])
 
 def cpp_uncomment(code):
-    return "\n".join([line[3:] for line in code.split("\n")])
+    # Strip '//  '
+    return "\n".join([line[4:] for line in code.split("\n")])
 
 def example_parse_code(code):
     "Parse a cxx example, clean it up, and extract the rst description"
