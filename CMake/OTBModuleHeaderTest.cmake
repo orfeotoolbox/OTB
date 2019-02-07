@@ -26,7 +26,7 @@
 
 # This does not force the developer to install python to be able to build OTB.
 # The tests will simply not be run if python is unavailable.
-find_package(PythonInterp 3 REQUIRED)
+find_package(PythonInterp QUIET)
 
 # The maximum number of headers in a test.  This helps limit memory issues,
 # and the cppcheck tests.  However, if this is not unity, there is a slight
@@ -67,7 +67,6 @@ macro( otb_module_headertest _name )
   if( NOT ${_name}_THIRD_PARTY
       AND EXISTS ${${_name}_SOURCE_DIR}/include
       AND PYTHON_EXECUTABLE
-      AND NOT (PYTHON_VERSION_STRING VERSION_LESS 3.0)
       AND NOT (${_name} STREQUAL OTBTestKernel)
       AND NOT (CMAKE_GENERATOR MATCHES "^Visual Studio 10.*"))
 
