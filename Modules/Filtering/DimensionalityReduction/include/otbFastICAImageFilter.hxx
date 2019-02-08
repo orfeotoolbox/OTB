@@ -299,13 +299,13 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       double norm = 0.;
       for ( unsigned int bd = 0; bd < size; bd++ )
       {
-        W(band, bd) -= m_Mu * ( estimator->GetMean()[bd]
-                                - optimizer->GetBeta() * W(band, bd) ) 
+        W(bd, band) -= m_Mu * ( estimator->GetMean()[bd]
+                                - optimizer->GetBeta() * W(bd, band) ) 
                             / optimizer->GetDen();
-        norm += std::pow( W(band, bd), 2. );
+        norm += std::pow( W(bd, band), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
-        W(band, bd) /= std::sqrt( norm );
+        W(bd, band) /= std::sqrt( norm );
     }
 
     // Decorrelation of the W vectors
