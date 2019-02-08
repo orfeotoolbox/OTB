@@ -28,8 +28,6 @@
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
 #include "otbFastICAImageFilter.h"
 
-//#include "otbVirtualDimensionality.h"
-
 #include "otbStreamingMinMaxVectorImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
@@ -74,8 +72,6 @@ public:
   typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType> StreamingStatisticsVectorImageFilterType;
 
   typedef StreamingStatisticsVectorImageFilterType::MatrixObjectType::ComponentType                 MatrixType;
-  //typedef otb::VirtualDimensionality<double> VDFilterType;
-
 
   // output rescale
   typedef otb::StreamingMinMaxVectorImageFilter<FloatVectorImageType> MinMaxFilterType;
@@ -153,10 +149,6 @@ private:
     SetMaximumParameterFloatValue("method.ica.mu", 1.);
     SetDefaultParameterFloat("method.ica.mu", 1.);
     MandatoryOff("method.ica.mu");
-
-    //AddChoice("method.vd","virual Dimension");
-    //SetParameterDescription("method.vd","Virtual Dimension.");
-    //MandatoryOff("method");
 
     AddParameter(ParameterType_Int, "nbcomp", "Number of Components");
     SetParameterDescription("nbcomp", "Number of relevant components kept. By default all components are kept.");
@@ -371,12 +363,6 @@ private:
 
         break;
         }
-        /* case 4:
-         {
-         otbAppLogDEBUG( << "VD Algorithm");
-
-         break;
-         }*/
 
       default:
         {
@@ -389,7 +375,7 @@ private:
 
     if (invTransform)
       {
-      if (GetParameterInt("method") == 2) //MAF or VD
+      if (GetParameterInt("method") == 2) //MAF
         {
         this->DisableParameter("outinv");
         otbAppLogWARNING(<<"This application only provides the forward transform for the MAF method.");
@@ -400,7 +386,7 @@ private:
     //Write transformation matrix
     if (this->GetParameterString("outmatrix").size() != 0)
       {
-      if (GetParameterInt("method") == 2) //MAF or VD
+      if (GetParameterInt("method") == 2) //MAF
         {
         otbAppLogWARNING(<<"No transformation matrix available for MAF.");
         }
