@@ -21,22 +21,6 @@
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/DisparityMap)
 set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
 
-# ------- SimpleDisparityMapEstimationExampleTest ----------
-
-otb_add_test(NAME dmTeSimpleDisparityMapEstimationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 2
-    ${BASELINE}/deformationFieldOutput.png
-    ${TEMP}/deformationFieldOutput.png
-    ${BASELINE}/resampledMovingOutput.png
-    ${TEMP}/resampledMovingOutput.png
-  Execute $<TARGET_FILE:SimpleDisparityMapEstimationExample>
-    ${INPUTDATA}/StereoFixed.png
-    ${INPUTDATA}/StereoMoving.png
-    ${TEMP}/deformationFieldOutput.png
-    ${TEMP}/resampledMovingOutput.png
-    100 10 15 10 10 250 0.9
-)
-
 if(OTBMathParser_LOADED)
 #otb_add_test(NAME dmTeStereoReconstructionExampleTest COMMAND ${OTB_TEST_DRIVER}
   #--compare-image ${NOTOL}
