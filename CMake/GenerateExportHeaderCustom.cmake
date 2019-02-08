@@ -1,6 +1,9 @@
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
+# Copyright (C) 2019 Centre National d'Etudes Spatiales (CNES)
+# - Added support of XXX_EXPORT_TEMPLATE and XXX_EXPORT_EXPLICIT_TEMPLATE macros
+
 #.rst:
 # GenerateExportHeader
 # --------------------
@@ -65,7 +68,8 @@
 # The CMake fragment will generate a file in the
 # ``${CMAKE_CURRENT_BINARY_DIR}`` called ``somelib_export.h`` containing the
 # macros ``SOMELIB_EXPORT``, ``SOMELIB_NO_EXPORT``, ``SOMELIB_DEPRECATED``,
-# ``SOMELIB_DEPRECATED_EXPORT`` and ``SOMELIB_DEPRECATED_NO_EXPORT``.
+# ``SOMELIB_DEPRECATED_EXPORT``, ``SOMELIB_DEPRECATED_NO_EXPORT``,
+# ``SOMELIB_EXPORT_TEMPLATE`` and ``SOMELIB_EXPORT_EXPLICIT_TEMPLATE``.
 # They will be followed by content taken from the variable specified by
 # the ``CUSTOM_CONTENT_FROM_VARIABLE`` option, if any.
 # The resulting file should be installed with other headers in the library.
@@ -184,6 +188,10 @@
 # This function is deprecated.  Set the target properties
 # :prop_tgt:`CXX_VISIBILITY_PRESET <<LANG>_VISIBILITY_PRESET>` and
 # :prop_tgt:`VISIBILITY_INLINES_HIDDEN` instead.
+#
+# The macro ``SOMELIB_EXPORT_TEMPLATE`` should be used when declaring template
+# classes or functions. The macro ``SOMELIB_EXPORT_EXPLICIT_TEMPLATE`` should be
+# used when compiling explicit instanciations of template classes/functions.
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)
