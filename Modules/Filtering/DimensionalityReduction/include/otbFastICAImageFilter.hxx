@@ -48,7 +48,10 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_NumberOfIterations = 50;
   m_ConvergenceThreshold = 1E-4;
-  m_ContrastFunction = &std::tanh;
+
+  m_ContrastFunction = [](double x) {return std::tanh(x);};
+  m_ContrastFunctionDerivative = [](double x) {return 1-std::pow( std::tanh(x), 2. );};
+
   m_Mu = 1.;
 
   m_PCAFilter = PCAFilterType::New();
@@ -280,7 +283,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       optimizer->SetInput( 0, m_PCAFilter->GetOutput() );
       optimizer->SetInput( 1, img );
       optimizer->SetW( W );
-      optimizer->SetContrastFunction( this->GetContrastFunction() );
+      optimizer->SetContrastFunction( this->GetContrastFunction(),
+                                      this->GetContrastFunctionDerivative() );
       optimizer->SetCurrentBandForLoop( band );
 
       MeanEstimatorFilterPointerType estimator = MeanEstimatorFilterType::New();

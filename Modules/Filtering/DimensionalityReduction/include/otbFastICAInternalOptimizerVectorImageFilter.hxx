@@ -41,7 +41,8 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   m_Beta = 0.;
   m_Den = 0.;
 
-  m_ContrastFunction = &std::tanh;
+  m_ContrastFunction = [](double x) {return std::tanh(x);};
+  m_ContrastFunctionDerivative = [](double x) {return 1-std::pow( std::tanh(x), 2. );};
 
   m_TransformFilter = TransformFilterType::New();
 }
@@ -104,12 +105,12 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   while ( !input0It.IsAtEnd() && !input1It.IsAtEnd() && !outputIt.IsAtEnd() )
   {
     double x = static_cast<double>( input1It.Get()[GetCurrentBandForLoop()] );
-    double g_x = (*m_ContrastFunction)(x);
+    double g_x = m_ContrastFunction(x);
 
     double x_g_x = x * g_x;
     beta += x_g_x;
 
-    double gp = 1. - std::pow( g_x, 2. );
+    double gp = m_ContrastFunctionDerivative(x);
     den += gp;
 
     nbSample += 1.;

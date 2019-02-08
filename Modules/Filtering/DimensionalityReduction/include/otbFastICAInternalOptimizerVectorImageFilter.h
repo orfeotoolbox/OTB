@@ -83,7 +83,7 @@ public:
   typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
-  typedef double (*ContrastFunctionType) ( double );
+  typedef std::function<double(double)> ContrastFunctionType;
 
   itkSetMacro(CurrentBandForLoop, unsigned int);
   itkGetMacro(CurrentBandForLoop, unsigned int);
@@ -91,7 +91,14 @@ public:
   itkGetMacro(W, InternalMatrixType);
   itkSetMacro(W, InternalMatrixType);
 
-  itkSetMacro(ContrastFunction, ContrastFunctionType);
+  void SetContrastFunction(ContrastFunctionType contrastFunction,
+                            ContrastFunctionType contrastFunctionDerivative)
+  {
+    m_ContrastFunction = contrastFunction;
+    m_ContrastFunctionDerivative = contrastFunctionDerivative;
+    this->Modified();
+  }
+  
   itkGetMacro(Beta, double);
   itkGetMacro(Den, double);
 
@@ -117,6 +124,7 @@ protected:
 
   InternalMatrixType m_W;
   ContrastFunctionType m_ContrastFunction;
+  ContrastFunctionType m_ContrastFunctionDerivative;
   TransformFilterPointerType m_TransformFilter;
 private:
   FastICAInternalOptimizerVectorImageFilter( const Self & ); // not implemented

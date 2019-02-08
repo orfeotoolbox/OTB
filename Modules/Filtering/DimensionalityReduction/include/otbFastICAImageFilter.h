@@ -85,7 +85,7 @@ public:
   typedef StreamingStatisticsVectorImageFilter< InputImageType > MeanEstimatorFilterType;
   typedef typename MeanEstimatorFilterType::Pointer MeanEstimatorFilterPointerType;
 
-  typedef double (*ContrastFunctionType) ( double );
+  typedef std::function<double(double)> ContrastFunctionType;
 
   /**
    * Set/Get the number of required largest principal components.
@@ -142,7 +142,16 @@ public:
   itkGetMacro(ConvergenceThreshold, double);
   itkSetMacro(ConvergenceThreshold, double);
 
+  void SetContrastFunction(ContrastFunctionType contrastFunction,
+                            ContrastFunctionType contrastFunctionDerivative)
+  {
+    m_ContrastFunction = contrastFunction;
+    m_ContrastFunctionDerivative = contrastFunctionDerivative;
+    this->Modified();
+  }
+  
   itkGetMacro(ContrastFunction, ContrastFunctionType);
+  itkGetMacro(ContrastFunctionDerivative, ContrastFunctionType);
 
   itkGetMacro(Mu, double);
   itkSetMacro(Mu, double);
@@ -186,6 +195,7 @@ protected:
   unsigned int m_NumberOfIterations; // def is 50
   double m_ConvergenceThreshold; // def is 1e-4
   ContrastFunctionType m_ContrastFunction; // see g() function in the biblio. Def is tanh
+  ContrastFunctionType m_ContrastFunctionDerivative; 
   double m_Mu; // def is 1. in [0, 1]
 
   PCAFilterPointerType m_PCAFilter;
