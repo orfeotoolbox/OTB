@@ -71,8 +71,13 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
 
   // Default value is INFO
   itk::LoggerBase::PriorityLevelType level = itk::LoggerBase::INFO;
-  
-  if(itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue))
+  itksys::SystemTools::GetEnv("OTB_LOGGER_LEVEL",svalue);
+  // on windows a variable set with set EX="" will keep the "". We need
+  // to remove them.
+  svalue = svalue.substr( svalue.find_first_not_of("\"") , 
+                          svalue.find_last_not_of("\""));
+
+  if( !svalue.empty() )
     {
     if(svalue.compare("DEBUG") == 0)
       {
@@ -92,7 +97,9 @@ itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
       }
     else
       {
-      otbLogMacro(Error,<<"Unknown value for OTB_LOGGER_LEVEL_MACRO. Possible values are DEBUG, INFO, WARNING, CRITICAL.");
+      otbLogMacro(Warning,<<"Unknown value for OTB_LOGGER_LEVEL_MACRO ("
+        <<svalue<<"). Possible values are DEBUG, INFO, WARNING, CRITICAL. "
+        <<"Level set to INFO.");
       }
     }
   return level;
