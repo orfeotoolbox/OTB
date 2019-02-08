@@ -64,19 +64,6 @@ otb_add_test(NAME  trTeTutorialsMultispectralTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/MultispectralOutput2.tif
 )
 
-
-otb_add_test(NAME  trTeTutorialsSmarterFilteringPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
-    ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
-  Execute $<TARGET_FILE:SmarterFilteringPipeline>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
-    d=1.5
-    i=2
-    a=0.1
-)
-
 otb_add_test(NAME  trTeTutorialsOrthoFusionTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${NOTOL}
     ${BASELINE}/TutorialsOrthoFusionOutput.tif
