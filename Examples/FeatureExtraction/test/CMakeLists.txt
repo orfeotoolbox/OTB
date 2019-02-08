@@ -36,18 +36,6 @@ otb_add_test(NAME feTeCorrelationLineDetectorExampleTest COMMAND ${OTB_TEST_DRIV
     5 1
 )
 
-# ------- LocalHoughExampleTest----------
-
-otb_add_test(NAME feTeLocalHoughExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/detected_local_hough.png
-    ${TEMP}/detected_local_hough.png
-  Execute $<TARGET_FILE:LocalHoughExample>
-    ${INPUTDATA}/detected_lines.png
-    ${TEMP}/detected_local_hough.png
-    30 10 1 50
-)
-
 # ------- HarrisExampleTest----------
 
 otb_add_test(NAME feTeHarrisExampleTest COMMAND ${OTB_TEST_DRIVER}
@@ -75,18 +63,6 @@ otb_add_test(NAME feTeTouziEdgeDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     3
 )
 
-# ------- ExtractSegmentsByStepsExampleTest----------
-
-otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/amstSegmentExtractionBySteps.png
-    ${TEMP}/amstSegmentExtractionBySteps.png
-  Execute $<TARGET_FILE:ExtractSegmentsByStepsExample>
-    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
-    ${TEMP}/amstSegmentExtractionBySteps.png
-    10 3 10 0.5 10 10 3 10 0.5
-)
-
 # ------- AsymmetricFusionOfLineDetectorExampleTest----------
 
 otb_add_test(NAME feTeAsymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
@@ -97,18 +73,6 @@ otb_add_test(NAME feTeAsymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TE
     ${INPUTDATA}/amst.png
     ${TEMP}/amstLineFusion.png
     5 1
-)
-
-# ------- ExtractSegmentsExampleTest----------
-
-otb_add_test(NAME feTeExtractSegmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/amstSegmentExtraction.png
-    ${TEMP}/amstSegmentExtraction.png
-  Execute $<TARGET_FILE:ExtractSegmentsExample>
-    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
-    ${TEMP}/amstSegmentExtraction.png
-    10 3 10 0.5 10 10 3 10 0.5
 )
 
 # ------- RatioLineDetectorExampleTest----------
@@ -124,18 +88,6 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/amstLineRatios.png
     ${TEMP}/amstLineRatioDirections.png
     5 1
-)
-
-# ------- AlignmentsExampleTest----------
-if(OTBMathParser_LOADED)
-otb_add_test(NAME feTeAlignmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/QB_SuburbAlign.png
-    ${TEMP}/QB_SuburbAlign.png
-  Execute $<TARGET_FILE:AlignmentsExample>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/QB_SuburbAlign.png
-    5
 )
 
 # ------- RoadExtractionExamplesTest----------
