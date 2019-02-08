@@ -289,10 +289,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/NAPCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MNFExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/ICAExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalysisFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmentationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
