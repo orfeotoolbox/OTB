@@ -29,17 +29,11 @@ target_link_libraries(EstimateRPCSensorModelExample ${OTB_LIBRARIES})
 add_executable(GeometriesProjectionExample GeometriesProjectionExample.cxx)
 target_link_libraries(GeometriesProjectionExample ${OTB_LIBRARIES})
 
-add_executable(MapProjectionExample MapProjectionExample.cxx)
-target_link_libraries(MapProjectionExample ${OTB_LIBRARIES})
-
 add_executable(OrthoRectificationExample OrthoRectificationExample.cxx)
 target_link_libraries(OrthoRectificationExample ${OTB_LIBRARIES})
 
 add_executable(PlaceNameToLonLatExample PlaceNameToLonLatExample.cxx)
 target_link_libraries(PlaceNameToLonLatExample ${OTB_LIBRARIES})
-
-add_executable(SensorModelExample SensorModelExample.cxx)
-target_link_libraries(SensorModelExample ${OTB_LIBRARIES})
 
 add_executable(VectorDataExtractROIExample VectorDataExtractROIExample.cxx)
 target_link_libraries(VectorDataExtractROIExample ${OTB_LIBRARIES})

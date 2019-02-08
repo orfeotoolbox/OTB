@@ -246,8 +246,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathXImageFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Projections/SensorModelExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Projections/MapProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/OrthoRectificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/GeometriesProjectionExample.cxx
