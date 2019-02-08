@@ -44,18 +44,6 @@ target_link_libraries(RGBImage ${OTB_LIBRARIES})
 add_executable(VectorImage VectorImage.cxx )
 target_link_libraries(VectorImage ${OTB_LIBRARIES})
 
-add_executable(ImageAdaptor1 ImageAdaptor1.cxx )
-target_link_libraries(ImageAdaptor1 ${OTB_LIBRARIES})
-
-add_executable(ImageAdaptor2 ImageAdaptor2.cxx )
-target_link_libraries(ImageAdaptor2 ${OTB_LIBRARIES})
-
-add_executable(ImageAdaptor3 ImageAdaptor3.cxx )
-target_link_libraries(ImageAdaptor3 ${OTB_LIBRARIES})
-
-add_executable(ImageAdaptor4 ImageAdaptor4.cxx )
-target_link_libraries(ImageAdaptor4 ${OTB_LIBRARIES})
-
 add_executable(ImageListExample ImageListExample.cxx )
 target_link_libraries(ImageListExample ${OTB_LIBRARIES} )
 
