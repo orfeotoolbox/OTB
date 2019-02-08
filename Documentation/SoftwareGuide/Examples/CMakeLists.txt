@@ -263,8 +263,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AsymmetricFusionOfLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsByStepsExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ParallelLineDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx

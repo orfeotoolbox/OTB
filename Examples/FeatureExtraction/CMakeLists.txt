@@ -65,9 +65,6 @@ target_link_libraries(LineSegmentDetectorExample ${OTB_LIBRARIES})
 add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
 target_link_libraries(RightAngleDetectionExample ${OTB_LIBRARIES})
 
-add_executable(LocalHoughExample LocalHoughExample.cxx)
-target_link_libraries(LocalHoughExample ${OTB_LIBRARIES})
-
 add_executable(PanTexExample PanTexExample.cxx)
 target_link_libraries(PanTexExample ${OTB_LIBRARIES})
 

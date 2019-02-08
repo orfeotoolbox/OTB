@@ -117,8 +117,6 @@ otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
     337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 )
 
-endif()
-
 # ------- SeamCarvingExamplesTest----------
 
 otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
