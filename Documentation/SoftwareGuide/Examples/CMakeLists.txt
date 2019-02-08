@@ -310,13 +310,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerDistanceChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerProfileChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/MultivariateAlterationDetector.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/KdTreeBasedKMeansClustering.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/KMeansImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansModelEstimator.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansClassifier.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification3Example.cxx
@@ -324,7 +317,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SupervisedImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/MajorityVotingFusionOfClassificationMapsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/DempsterShaferFusionOfClassificationMapsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ClassificationMapRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
