@@ -12,59 +12,6 @@ properties of the input image to classify it. On the contrary, supervised method
 need a preliminary learning to be computed over training datasets having similar 
 properties than the image to classify, in order to build a classification model.
 
-%In statistical classification, each object is represented by $d$ features (a
-%measurement vector), and the goal of classification becomes finding compact and
-%disjoint regions (decision regions\cite{Duda2000}) for classes in a
-%$d$-dimensional feature space. Such decision regions are defined by decision
-%rules that are known or can be trained.  The simplest configuration of a
-%classification consists of a decision rule and multiple membership functions;
-%each membership function represents a class. Figure~\ref{fig:simple}
-%illustrates this general framework.
-
-%\begin{figure}[h]
-%  \centering
-%  \includegraphics[width=0.7\textwidth]{DudaClassifier.eps}
-%  \itkcaption[Simple conceptual classifier]{Simple conceptual classifier.}
-%  \label{fig:simple}
-%\end{figure}
-
-%This framework closely follows that of Duda and
-%Hart\cite{Duda2000}. The classification process can be described
-%as follows:
-
-%\begin{enumerate}
-%\item{A measurement vector is input to each membership function.}
-%\item{Membership functions feed the membership scores to the
-%    decision rule.}
-%\item{A decision rule compares the membership scores and returns a
-%    class label.}
-%\end{enumerate}
-
-%\begin{figure}
-%  \centering
-%  \includegraphics[width=0.7\textwidth]{StatisticalClassificationFramework.eps}
-%  \itkcaption[Statistical classification framework]{Statistical classification
-%framework.}
-%  \protect\label{fig:StatisticalClassificationFramework}
-%\end{figure}
-
-%This simple configuration can be used to formulated various classification
-%tasks by using different membership functions and incorporating task specific
-%requirements and prior knowledge into the decision rule. For example, instead
-%of using probability density functions as membership functions, through
-%distance functions and a minimum value decision rule (which assigns a class
-%from the distance function that returns the smallest value) users can achieve a
-%least squared error classifier. As another example, users can add a rejection
-%scheme to the decision rule so that even in a situation where the membership
-%scores suggest a ``winner'', a measurement vector can be flagged as ill
-%defined. Such a rejection scheme can avoid risks of assigning a class label
-%without a proper win margin.
-
-%Note that to use these concepts into your own programs, you might have to link
-%to other OTB libraries (edit the \code{TARGET\_LINK\_LIBRARIES} to add them),
-%for example OTBLearning, OTBMarkov.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Machine Learning Framework}
 
 \subsection{Machine learning models}
