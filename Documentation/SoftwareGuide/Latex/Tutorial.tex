@@ -332,61 +332,6 @@ TARGET_LINK_LIBRARIES(Multispectral ${OTB_LIBRARIES})
 Compile with \code{make} and execute as \code{./Multispectral qb\_RoadExtract.tif
  qb\_blue.tif qb\_shiftscale.tif}.
 
-\section{Parsing command line arguments}
-\label{sec:TutorialParsing}
-
-Well, if you play with some other filters in the previous example, you probably
-noticed that in many cases, you need to set some parameters to the filters.
-Ideally, you want to set some of these parameters from the command line.
-
-In OTB, there is a mechanism to help you parse the command line parameters. Let
-try it!
-
-Add the following lines in the \code{CMakeLists.txt} file:
-
-\begin{cmakecode}
-ADD_EXECUTABLE(SmarterFilteringPipeline SmarterFilteringPipeline.cxx )
-TARGET_LINK_LIBRARIES(SmarterFilteringPipeline ${OTB_LIBRARIES})
-\end{cmakecode}
-
-\input{SmarterFilteringPipeline}
-
-Compile with \code{make} as usual. The execution is a bit different now as we
-have an automatic parsing of the command line. First, try to execute as
-\code{SmarterFilteringPipeline} without any argument.
-
-The usage message (automatically generated) appears:
-
-\begin{small}
-\begin{verbatim}
-'--InputImage' option is obligatory !!!
-
- Usage : ./SmarterFilteringPipeline
-      [--help|-h]           :  Help
-      [--version|-v]        :  Version
-       --InputImage|-in     :  input image file name   (1 parameter)
-       --OutputImage|-out   :  output image file name   (1 parameter)
-      [--SigmaD|-d]         :  Set the sigmaD parameter of the Harris points of
-interest  algorithm. Default is 1.0.  (1 parameter)
-      [--SigmaI|-i]         :  Set the SigmaI parameter of the Harris points of
-interest  algorithm. Default is 1.0.  (1 parameter)
-      [--Alpha|-a]          :  Set the alpha parameter of the Harris points of
-interest  algorithm. Default is 1.0.  (1 parameter)
-\end{verbatim}
-\end{small}
-
-That looks a bit more professional: another user should be able to play with
-your program. As this is automatic, that's a good way not to forget to
-document your programs.
-
-So now you have a better idea of the command line options that are possible. Try
-\code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png} for a basic
-version with the default values.
-
-If you want a result that looks a bit better, you have to adjust the
-parameter with \code{SmarterFilteringPipeline -in QB\_Suburb.png -out output.png
--d 1.5 -i 2 -a 0.1} for example.
-
 
 
 \section{Going from raw satellite images to useful products}

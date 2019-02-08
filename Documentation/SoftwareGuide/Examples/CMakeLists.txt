@@ -401,7 +401,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Pipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/ScalingPipeline.cxx
-  ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx
