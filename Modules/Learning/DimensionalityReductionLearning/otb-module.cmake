@@ -23,11 +23,13 @@ otb_module(OTBDimensionalityReductionLearning
   DEPENDS
     OTBCommon
     OTBITK
-    OTBShark
     OTBBoost
     OTBSOM
     OTBLearningBase
 
+  OPTIONAL_DEPENDS
+    OTBShark
+    
   TEST_DEPENDS
     OTBTestKernel
 

@@ -18,50 +18,27 @@
  * limitations under the License.
  */
 
-#include "otbCommandLineArgumentParser.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
+#include <string>
 
 int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 {
-  // Set command line arguments
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddInputImage();
-  parser->AddOption("--DEMDirectory", "Path to the DEM directory ", "-dem", 1, false);
-  parser->AddOptionNParams("--GroudControlPoints",
-                           "Ground Control Points to estimate sensor model a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz",
-                           "-gcp", true);
-  parser->AddOption("--ErrorAllowed", "Error allowed to declare a point not good ", "-err", 1, false);
-
-  // Parse the command line
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine(argc, argv, parseResult);
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-    std::string descriptionException = err.GetDescription();
-    if (descriptionException.find("ParseCommandLine(): Help Parser") != std::string::npos)
+  // Look for tolerance value
+  std::string s_tol = argv[argc-1] ; // last argument
+  int tol = 0;
+  unsigned int nbPoints = argc-3;
+  if ( s_tol.find("err=") != std::string::npos)
     {
-    return EXIT_SUCCESS;
+      nbPoints--; // last argument in not a gcp pairs point
+      tol = stoi( s_tol.substr( s_tol.find("=") + 1 ) );
     }
-    if (descriptionException.find("ParseCommandLine(): Version Parser") != std::string::npos)
-      {
-      return EXIT_SUCCESS;
-      }
-    return EXIT_FAILURE;
-  }
-
   // Check if the number of gcp pairs point is consistent
-  unsigned int nbPoints = parseResult->GetNumberOfParameters("--GroudControlPoints");
+
+  
 
   if (nbPoints % 5 != 0)
     {
@@ -78,7 +55,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   typedef otb::GeographicalDistance<ImageType::PointType>          GeoDistanceType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
+  reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
@@ -90,13 +67,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point2DType sensorPoint;
-    sensorPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
-    sensorPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
+    sensorPoint[0] = std::stof(argv[ 3 + gcpId * 5]);
+    sensorPoint[1] = std::stof(argv[ 4 + gcpId * 5]);
 
     Point3DType geoPoint;
-    geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
-    geoPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 3 + gcpId * 5);
-    geoPoint[2] = parseResult->GetParameterFloat("--GroudControlPoints", 4 + gcpId * 5);
+    geoPoint[0] = std::stof(argv[ 5 + gcpId * 5]);
+    geoPoint[1] = std::stof(argv[ 6 + gcpId * 5]);
+    geoPoint[2] = std::stof(argv[ 7 + gcpId * 5]);
 
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 
@@ -117,15 +94,9 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   std::cout<<rpcEstimator->GetKeywordlist()<<std::endl;
   grsTrasnform->SetOutputProjectionRef("EPSG:4326");
 
-  // Set the DEM Directory if any
-  if(parseResult->IsOptionPresent("--DEMDirectory"))
-    {
-    otb::DEMHandler::Instance()->OpenDEMDirectory(parseResult->GetParameterString("--DEMDirectory"));
-    }
-  else
-    {
-    otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(0);
-    }
+  // Set the DEM Directory
+  if ( std::string(argv[2]).compare("no_output") != 0)
+    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[2]);
 
   grsTrasnform->InstantiateTransform();
 
@@ -136,9 +107,9 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
     Point3DType point;
-    point[0] = parseResult->GetParameterFloat("--GroudControlPoints",     gcpId * 5);
-    point[1] = parseResult->GetParameterFloat("--GroudControlPoints", 1 + gcpId * 5);
-    point[2] = parseResult->GetParameterFloat("--GroudControlPoints", 4 + gcpId * 5);
+    point[0] = std::stof(argv[ 3 + gcpId * 5]);
+    point[1] = std::stof(argv[ 4 + gcpId * 5]);
+    point[2] = std::stof(argv[ 7 + gcpId * 5]);
 
     Point3DType transformedPoint;
     transformedPoint = grsTrasnform->TransformPoint(point);
@@ -149,8 +120,8 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 
     // reference point
     Point2DType geoPoint;
-    geoPoint[0] = parseResult->GetParameterFloat("--GroudControlPoints", 2 + gcpId * 5);
-    geoPoint[1] = parseResult->GetParameterFloat("--GroudControlPoints", 3 + gcpId * 5);
+    geoPoint[0] = std::stof(argv[ 5 + gcpId * 5]);
+    geoPoint[1] = std::stof(argv[ 6 + gcpId * 5]);
 
     // Search for nans
     if ( vnl_math_isnan(transformedPoint2D[0]) || vnl_math_isnan(transformedPoint2D[1]) )
@@ -165,14 +136,14 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 
     // Search for wrong projection results
     double residual = geoDistance->Evaluate(geoPoint, transformedPoint2D);
-    if( residual > parseResult->GetParameterFloat("--ErrorAllowed"))
+    if( residual > tol )
       {
       std::cout << "Reference : "<< geoPoint
                 <<" --> Result of the reprojection using the estimated RpcModel "
                 << transformedPoint2D
                 << std::endl
                 << " Residual ["<< residual << "] is higher than the tolerance ["
-                << parseResult->GetParameterFloat("--ErrorAllowed")
+                << tol
                 <<"], there is a problem with the estimated RpcModel"
                 <<std::endl<<std::endl;
       isErrorDetected = true;

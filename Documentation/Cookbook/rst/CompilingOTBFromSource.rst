@@ -352,3 +352,25 @@ Known issues
 ------------
 
 Please check `our gitlab tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug>`_ for a list of open bugs.
+
+Tests
+-----
+
+There are more than 2500 tests for OTB. It can take from 20 minutes to 3
+hours to run them all, depending on compilation options
+(release mode does make a difference) and hardware.
+
+To run the tests, first make sure to set the option
+``BUILD_TESTING`` to ``ON`` before building the library.
+
+For some of the tests, you also need the test data and the baselines (~1GB):
+
+::
+
+    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git
+
+Once OTB is built with the tests, you just have to go to the binary
+directory where you built OTB and run ``ctest -N`` to have a list of all
+the tests. Just using ``ctest`` will run all the tests. To select a
+subset, you can do ``ctest -R Kml`` to run all tests related to kml
+files or ``ctest -I 1,10`` to run tests from 1 to 10.
