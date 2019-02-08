@@ -52,7 +52,7 @@ Logger::Pointer Logger::Instance()
 
 Logger::Logger()
 {
-  this->SetPriorityLevel(otb::ConfigurationManager::GetLoggerLevel());
+  this->SetPriorityLevel(itk::LoggerBase::INFO);
 
   this->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
 
