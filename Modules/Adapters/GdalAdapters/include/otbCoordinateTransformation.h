@@ -109,8 +109,8 @@ OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, cons
 
 class OTBGdalAdapters_EXPORT CoordinateTransformation
 {
-friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
-friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
+OTBGdalAdapters_EXPORT friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
+OTBGdalAdapters_EXPORT friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
 
 public:
   typedef std::unique_ptr<OGRCoordinateTransformation ,

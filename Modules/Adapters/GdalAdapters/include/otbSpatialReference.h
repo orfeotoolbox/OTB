@@ -91,8 +91,8 @@ OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const Spatial
 class OTBGdalAdapters_EXPORT SpatialReference
 {
 friend class CoordinateTransformation;
-friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
-friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+OTBGdalAdapters_EXPORT friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+OTBGdalAdapters_EXPORT friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
 
 public:
   typedef std::unique_ptr< OGRSpatialReference , 

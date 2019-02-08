@@ -37,18 +37,18 @@ void OGRSpatialReferenceDeleter::operator()(OGRSpatialReference * del) const
   }
 }
 
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i)
+std::ostream & operator << (std::ostream& o, const SpatialReference & i)
 {
   return o << i.ToWkt();
 }
 
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem)
+std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem)
 {
   return o << (hem == SpatialReference::hemisphere::north ? "N" : "S");
 }
 
 
-OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
+bool operator==(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   bool rawIsSame ( sr1.m_SR->IsSame(sr2.m_SR.get()) != 0 );
 
@@ -69,7 +69,7 @@ OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1,const Spatial
   return false;
 }
 
-OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
+bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept
 {
   return !(sr1==sr2);
 }

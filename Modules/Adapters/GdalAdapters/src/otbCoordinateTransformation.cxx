@@ -35,14 +35,14 @@ void OGRCoordinateTransformationDeleter::operator()(OGRCoordinateTransformation 
   }
 }
 
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
+std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i)
 {
   o << "Source: " << i.GetSourceSpatialReference() << ", Target: " << i.GetTargetSpatialReference();
   return o;
 }
 
 // equal operator
-OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
+bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept
 {
   auto thisSourceCS  = ct1.GetSourceSpatialReference();
   auto thisTargetCS  = ct1.GetTargetSpatialReference();
@@ -52,7 +52,7 @@ OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, cons
   return thisSourceCS == otherSourceCS && thisTargetCS == otherTargetCS;
 }
 
-OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
+bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept
 {
   return !(ct1==ct2);
 }
