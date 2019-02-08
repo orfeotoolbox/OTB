@@ -206,13 +206,7 @@ htmlhelp_basename = 'OTBCookBookdoc'
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-  'inputenc': '\\ifPDFTeX\n'
-              '  \\usepackage[latin10,utf8]{inputenc}\n'
-              '\\fi',
-  'utf8extra': '\\ifdefined\\DeclareUnicodeCharacter\n'
-               '  \\DeclareUnicodeCharacter{00A0}{\\nobreakspace}\n'
-               '  \\DeclareUnicodeCharacter{021B}{\\textcommabelow t}\n'
-               '\\fi'
+  'inputenc': '\\usepackage[latin10,utf8]{inputenc}',
 # The paper size ('letterpaper' or 'a4paper').
 #'papersize': 'letterpaper',
 
@@ -220,7 +214,7 @@ latex_elements = {
 #'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-#'preamble': '',
+  'preamble': '\\DeclareUnicodeCharacter{021B}{\\textcommabelow t}'
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
