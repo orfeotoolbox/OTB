@@ -349,8 +349,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SOMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
