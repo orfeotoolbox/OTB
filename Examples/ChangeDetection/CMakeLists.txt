@@ -20,9 +20,6 @@
 
 project(ChangeDetectionExamples)
 
-add_executable(ChangeDetectionFrameworkExample ChangeDetectionFrameworkExample.cxx)
-target_link_libraries(ChangeDetectionFrameworkExample ${OTB_LIBRARIES})
-
 add_executable(CorrelChDet CorrelChDet.cxx)
 target_link_libraries(CorrelChDet ${OTB_LIBRARIES})
 

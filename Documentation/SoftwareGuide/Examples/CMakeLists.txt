@@ -322,7 +322,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmentationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
