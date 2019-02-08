@@ -302,6 +302,7 @@ Application::Application()
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
+  m_Logger->SetPriorityLevel(otb::ConfigurationManager::GetLoggerLevel());
 }
 
 Application::~Application()
