@@ -138,7 +138,7 @@ private:
     AddChoice("method.maf", "MAF");
     SetParameterDescription("method.maf", "Maximum Autocorrelation Factor.");
     AddChoice("method.ica", "ICA");
-    SetParameterDescription("method.ica", "Independent Component Analysis.");
+    SetParameterDescription("method.ica", "Independent Component Analysis using a stabilized fixed point FastICA algorithm.");
     AddParameter(ParameterType_Int, "method.ica.iter", "number of iterations");
     SetMinimumParameterIntValue("method.ica.iter", 1);
     SetDefaultParameterInt("method.ica.iter", 20);
@@ -149,6 +149,15 @@ private:
     SetMaximumParameterFloatValue("method.ica.mu", 1.);
     SetDefaultParameterFloat("method.ica.mu", 1.);
     MandatoryOff("method.ica.mu");
+
+    AddParameter(ParameterType_Choice, "method.ica.g", "Nonlinearity");
+    SetParameterDescription("method.ica.g", "Nonlinearity used in the FastICA algorithm");
+    AddChoice("method.ica.g.tanh", "tanh");
+    SetParameterDescription("method.ica.g.tanh", "g(x) = tanh(x)");
+    AddChoice("method.ica.g.exp", "exp");
+    SetParameterDescription("method.ica.g.exp", "g(x) = -exp(-x^2/2)");
+    AddChoice("method.ica.g.u3", "u^3");
+    SetParameterDescription("method.ica.g.u3", "g(x) = u^3(x)");
 
     AddParameter(ParameterType_Int, "nbcomp", "Number of Components");
     SetParameterDescription("nbcomp", "Number of relevant components kept. By default all components are kept.");
@@ -343,7 +352,47 @@ private:
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
         filter->SetNumberOfIterations(nbIterations);
         filter->SetMu(mu);
-
+        
+        switch (GetParameterInt("method.ica.g"))
+          {
+          // tanh
+          case 0:
+            {
+            otbAppLogDEBUG( << "Using tanh nonlinearity");
+            auto nonLinearity = [](double x) {return std::tanh(x);};
+            auto nonLinearityDerivative = [](double x)
+              {return 1-std::pow( std::tanh(x), 2. );};
+            filter->SetNonLinearity(nonLinearity, nonLinearityDerivative);
+            break;
+            }
+          // exp
+          case 1:
+            {
+            otbAppLogDEBUG( << "Using u*exp(-u^2/2) nonlinearity");
+            auto nonLinearity = [](double x) 
+              {return x*std::exp( - 0.5* std::pow(x,2));};
+            auto nonLinearityDerivative = [](double x)
+              {return (1-std::pow(x,2))*std::exp( - 0.5* std::pow(x,2));};
+            filter->SetNonLinearity(nonLinearity, nonLinearityDerivative);
+            break;
+            }
+          // u^3
+          case 2:
+            {
+            otbAppLogDEBUG( << "Using u^3 nonlinearity");
+            auto nonLinearity = [](double x) {return std::pow(x,3);};
+            auto nonLinearityDerivative = [](double x) 
+              {return 3*std::pow(x,2);};
+            filter->SetNonLinearity(nonLinearity, nonLinearityDerivative);
+            break;
+            }
+          default:
+            {
+            otbAppLogFATAL(<<"non defined nonlinearity "<<GetParameterString("method.ica.g")<<std::endl);
+            break;
+            }
+          }
+        
         m_ForwardFilter->GetOutput()->UpdateOutputInformation();
         
         if (invTransform)
