@@ -308,7 +308,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmentationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
@@ -340,9 +339,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
-#   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/HooverMetricsEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
