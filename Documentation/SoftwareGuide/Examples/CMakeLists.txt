@@ -225,9 +225,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
   ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageListExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/StreamingImageReadWrite.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/ExplicitStreamingExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/RGBImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadCastWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ComplexImageReadWrite.cxx
@@ -237,7 +234,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   #${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
