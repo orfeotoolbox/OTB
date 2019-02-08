@@ -109,7 +109,6 @@ SET( Tex_SRCS
   DataRepresentation.tex
   Filtering.tex
   GUI.tex
-  ImageMetrics.tex
   ImageInterpolators.tex
   Infrastructure.tex
   IO.tex
@@ -123,7 +122,6 @@ SET( Tex_SRCS
   SpatialObjects.tex
   Statistics.tex
   SystemOverview.tex
-  Transforms.tex
   Visualization.tex
   Watersheds.tex
   Fusion.tex

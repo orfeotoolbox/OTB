@@ -246,10 +246,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathXImageFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration9.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/SensorModelExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/MapProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/OrthoRectificationExample.cxx
@@ -376,7 +372,6 @@ IF(OTB_USE_PATENTED)
 SET(OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDisparityMapEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTFastExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Patented/EstimateAffineTransformationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
    )
 ENDIF(OTB_USE_PATENTED)
