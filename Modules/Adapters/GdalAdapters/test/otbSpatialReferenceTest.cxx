@@ -101,7 +101,7 @@ int otbSpatialReferenceTest(int, char* [])
       }
 
     }
-  catch(InvalidSRDescriptionException & err)
+  catch(InvalidSRDescriptionException & )
     {
     std::cerr<<"Fail: Constructor should not throw with valid description EPSG:4326 and EPSG:32631"<<std::endl;
     success = false;
@@ -138,7 +138,7 @@ int otbSpatialReferenceTest(int, char* [])
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }
-  catch(InvalidSRDescriptionException & err)
+  catch(InvalidSRDescriptionException & )
     {}
 
   if(success)
