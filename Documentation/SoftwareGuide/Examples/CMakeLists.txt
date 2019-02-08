@@ -290,16 +290,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/NAPCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MNFExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/ICAExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/NeighborhoodConnectedImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConfidenceConnected.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/IsolatedConnectedImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/WatershedSegmentation.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalysisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
