@@ -353,9 +353,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
-#   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/HooverMetricsEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
