@@ -81,7 +81,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         m_NumberOfPrincipalComponentsRequired =
           this->GetInput()->GetNumberOfComponentsPerPixel();
       }
-
+      m_PCAFilter->SetNumberOfPrincipalComponentsRequired(
+        m_NumberOfPrincipalComponentsRequired);
       this->GetOutput()->SetNumberOfComponentsPerPixel(
         m_NumberOfPrincipalComponentsRequired );
       break;
@@ -254,7 +255,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   double convergence = itk::NumericTraits<double>::max();
   unsigned int iteration = 0;
 
-  const unsigned int size = this->GetInput()->GetNumberOfComponentsPerPixel();
+  const unsigned int size = this->GetNumberOfPrincipalComponentsRequired();
 
   // transformation matrix
   InternalMatrixType W ( size, size, vnl_matrix_identity );
@@ -327,14 +328,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     reporter.CompletedPixel();
   } // end of while loop
 
-  if ( size != this->GetNumberOfPrincipalComponentsRequired() )
-    {
-    this->m_TransformationMatrix = W.get_n_columns( 0, this->GetNumberOfPrincipalComponentsRequired() );
-    }
-  else
-    {
-    this->m_TransformationMatrix = W;
-    }
+  this->m_TransformationMatrix = W;
 
   otbMsgDebugMacro( << "Final convergence " << convergence
     << " after " << iteration << " iterations" );
