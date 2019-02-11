@@ -27,7 +27,6 @@ otb_module(OTBAppHyperspectral
     OTBEndmembersExtraction
     OTBUnmixing
     OTBAnomalyDetection
-    OTBFunctor
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine

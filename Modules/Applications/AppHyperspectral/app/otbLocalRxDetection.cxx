@@ -47,9 +47,6 @@ public:
   typedef DoubleVectorImageType                VectorImageType;
   typedef DoubleImageType                      ImageType;
 
-  /** Filter typedefs */
-  typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType; //TODO remove this
-
 private:
   void DoInit() override
   {
@@ -108,30 +105,19 @@ private:
     auto inputImage = GetParameterDoubleVectorImage("in");
     inputImage->UpdateOutputInformation();
     
-    // The localRxDetectionFilter can be replaced by a functorImageFilter using the appropriate 
-    // functor. However using functorImageFilter with neighborhood is buggy (see issue #1802). Still,
-    // the functor has been implemented and localRxDetectionFilter will be deprecated when the
-    // bug is corrected.
-    #if 1 // Using localRxDetectionFilter
-    auto localRxDetectionFilter = LocalRxDetectorFilterType::New();
-
-    localRxDetectionFilter->SetInput(inputImage);
+    Functor::LocalRxDetectionFunctor<double> detectorFunctor;
     
     unsigned int externalRadius = GetParameterInt("er");
     unsigned int internalRadius = GetParameterInt("ir");
 
-    localRxDetectionFilter->SetInternalRadius(internalRadius);
-    localRxDetectionFilter->SetExternalRadius(externalRadius);
+    detectorFunctor.SetInternalRadius(internalRadius, internalRadius);
 
-    #else // Using a functorImageFilter
-    Functor::LocalRxDetectionFunctor<double> detectorFunctor;
-    detectorFunctor.SetInternalRadius(GetParameterInt("ir"), GetParameterInt("ir"));
-
+    // Create a functorImageFilter with the localRx functor and the appropriate
+    // external radius.
     auto localRxDetectionFilter = otb::NewFunctorFilter
-        (detectorFunctor ,{{GetParameterInt("er"),GetParameterInt("er")}});
+        (detectorFunctor ,{{externalRadius,externalRadius}});
 
     localRxDetectionFilter->SetInputs(inputImage);
-    #endif
 
     SetParameterOutputImage("out", localRxDetectionFilter->GetOutput());
     RegisterPipeline();
