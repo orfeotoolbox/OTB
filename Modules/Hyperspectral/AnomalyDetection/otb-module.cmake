@@ -28,7 +28,7 @@ detection which have shown success for multispectral and hyperspectral images
 otb_module(OTBAnomalyDetection
   DEPENDS
     OTBITK
-
+    OTBFunctor
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO

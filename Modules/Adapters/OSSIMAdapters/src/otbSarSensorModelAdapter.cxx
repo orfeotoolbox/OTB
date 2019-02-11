@@ -128,6 +128,23 @@ SarSensorModelAdapter::DeburstAndConcatenate(std::vector<std::pair<unsigned long
   return false;
 }
 
+bool 
+SarSensorModelAdapter::Overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels)
+  {
+    if(m_SensorModel.get())
+    {
+      return m_SensorModel->overlap(linesUp, linesLow, samplesUp, samplesLow, burstIndUp,
+				    inputWithInvalidPixels);
+    }
+
+    return false;
+  }
+
 bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
   return ossimplugins::ossimSarSensorModel::imageLineToDeburstLine(lines,imageLine,deburstLine);

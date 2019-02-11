@@ -356,6 +356,27 @@ public:
 			      bool inputWithInvalidPixels=false);
 
    /**
+    * This method will estime the overlap area between two bursts and return the
+    * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low). 
+    * Note that this operation has no effect if theBurstRecords
+    * contains a single burst. 
+    * \return true if this operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param linesUp A container for the lines ranges to keep into the first Burst
+    * \param linesLow A container for the lines ranges to keep into the second Burst
+    * \param samplesUp A container for the samples ranges to keep into the first Burst.
+    * \param samplesDown A container for the samples ranges to keep into the second Burst.
+    * \param burstIndUp Index of the first Burst
+    * \param inputWithInvalidPixels A Boolean to indicate if invalids pixels are into inputs.
+    */
+   bool overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels=false);
+
+   /**
     * Returns pointer to a new instance, copy of this.
     */
    virtual ossimObject* dup() const override;
