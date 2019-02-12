@@ -93,15 +93,20 @@ public:
 
     OffsetType off;
 
+    auto externalRadius = in.GetRadius();
+    
     // Cache radiuses attributes for threading performances
     const int internalRadiusX = m_InternalRadiusX;
     const int internalRadiusY = m_InternalRadiusY;
+    
+    // Cache radiuses attributes for threading performances
+    const int externalRadiusX = static_cast<int>(externalRadius[0]);
+    const int externalRadiusY = static_cast<int>(externalRadius[0]);
 
-    auto externalRadius = in.GetRadius();
-    for (int y = -static_cast<int>(externalRadius[1]); y <= static_cast<int>(externalRadius[1]); y++)
+    for (int y = -externalRadiusY; y <= externalRadiusY; y++)
       {
       off[1] = y;
-      for (int x = -static_cast<int>(externalRadius[0]); x <= static_cast<int>(externalRadius[0]); x++)
+      for (int x = -externalRadiusX; x <= externalRadiusX; x++)
         {
         off[0] = x;
         if ((abs(x) > internalRadiusX) || (abs(y) > internalRadiusY))
