@@ -24,6 +24,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -39,7 +40,7 @@ namespace otb
  */
 
 template <class TBufferType, class TOutputPixelType=TBufferType>
-class ITK_EXPORT ScalarBufferToImageFileWriter : public itk::ProcessObject
+class OTBImageIO_EXPORT_TEMPLATE ScalarBufferToImageFileWriter : public itk::ProcessObject
 {
 public:
 

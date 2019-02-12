@@ -24,7 +24,7 @@
 #include "itkImageFunction.h"
 
 #include "otbVariableLengthVectorConverter.h"
-
+#include "OTBImageBaseExport.h"
 
 #include <complex>
 
@@ -46,7 +46,7 @@ namespace otb
  */
 
 template< class TInternalImageFunctionType, class TOutputPrecision = double >
-class ITK_EXPORT ImageFunctionAdaptor :
+class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor :
     public itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
                                itk::VariableLengthVector<TOutputPrecision>,
                                typename TInternalImageFunctionType::CoordRepType >

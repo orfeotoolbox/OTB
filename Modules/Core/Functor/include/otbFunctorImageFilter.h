@@ -29,6 +29,8 @@
 #include "itkFixedArray.h"
 #include "itkDefaultConvertPixelTraits.h"
 #include <type_traits>
+#include "itkConstNeighborhoodIterator.h"
+#include "otbImage.h"
 
 namespace otb
 {
@@ -42,12 +44,11 @@ namespace otb
  */
 template <class T> struct IsNeighborhood : std::false_type {};
 
-/// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct IsNeighborhood<itk::Neighborhood<T>> : std::true_type {};
+/// Partial specialisation for const ConstNeighborhoodIterator<Image::T> &
+template <class T> struct IsNeighborhood<const itk::ConstNeighborhoodIterator<Image<T>>&> : std::true_type {};
 
-
-/// Partial specialisation for const itk::Neighborhood<T> &
-template <class T> struct IsNeighborhood<const itk::Neighborhood<T>&> : std::true_type {};
+/// Partial specialisation for const ConstNeighborhoodIterator<VectorImage::T> &
+template <class T> struct IsNeighborhood<const itk::ConstNeighborhoodIterator<VectorImage<T>>&> : std::true_type {};
 
 /**
  * \struct IsSuitableType
@@ -76,9 +77,9 @@ template <class T> struct IsSuitableType<itk::RGBAPixel<T>> : IsSuitableType<T>:
  * \struct PixelTypeDeduction
  * \brief Helper struct to derive PixelType from template parameter.
  * 
- * T                           -> PixelType = T
- * itk::Neighborhood<T>        -> PixelType = T
- * const itk::Neighborhood<T>& -> PixelType = T
+ * T                                                -> PixelType = T
+ * const ConstNeighborhoodIterator<Image::T>&       -> PixelType = T
+ * const ConstNeighborhoodIterator<VectorImage::T>& -> PixelType = itk::VariableLengthVector<T>
 */
 template <class T> struct PixelTypeDeduction
 {
@@ -87,12 +88,20 @@ template <class T> struct PixelTypeDeduction
   using PixelType = T;
 };
 
-/// Partial specialisation for itk::Neighborhood<T>
-template <class T> struct PixelTypeDeduction<itk::Neighborhood<T>>
+/// Partial specialisation for itk::ConstNeighborhoodIterator<Image<T>>
+template <class T> struct PixelTypeDeduction<itk::ConstNeighborhoodIterator<Image<T>>>
 {
   static_assert(IsSuitableType<T>::value,
                 "T can not be used as a template parameter for Image or VectorImage classes.");
   using PixelType = T;
+};
+
+/// Partial specialisation for itk::ConstNeighborhoodIterator<VectorImage<T>>
+template <class T> struct PixelTypeDeduction<itk::ConstNeighborhoodIterator<VectorImage<T>>>
+{
+  static_assert(IsSuitableType<T>::value,
+                "T can not be used as a template parameter for Image or VectorImage classes.");
+  using PixelType = itk::VariableLengthVector<T>;
 };
 
 /** 
@@ -227,9 +236,9 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * 
  * \tparam Functor can be any operator() (const or non-const) that matches the following:
  * - Accepts any number of arguments of T,
- * (const) itk::VariableLengthVector<T> (&),(const)
- * itk::Neighborhood<T> (&), (const)
- * itk::Neighborhood<itk::VariableLengthVector<T>> (&) with T a scalar type
+ * (const) itk::VariableLengthVector<T> (&),const
+ * itk::ConstNeighborhoodIterator<VectorImage<T>> &, (const)
+ * itk::ConstNeighborhoodIterator<Image<T>> & with T a scalar type
  * - returns T or itk::VariableLengthVector<T>, with T a scalar type
  * or returns void and has first parameter as output (i.e. T& or itk::VariableLengthVector<T>&)
  *
@@ -239,7 +248,7 @@ template <typename C, typename R, typename... T, typename TNameMap> struct Funct
  * 
  * \param[in] the Functor to build the filter from
  * \param[in] radius The size of neighborhood to use, if there is any
- * itk::Neighborhood<T> in the operator() arguments.
+ * ConstNeighborhoodIterator<VectorImage<T>> in the operator() arguments.
  * \return A ready to use OTB filter, which accepts n input image of
  * type derived from the operator() arguments, and producing an image
  * correpsonding to the operator() return type.
@@ -256,9 +265,9 @@ template <typename Functor, typename TNameMap = void> auto NewFunctorFilter(Func
  * 
  * \tparam TFunction can be any operator() (const or non-const) that matches the following:
  * - Accepts any number of arguments of T,
- * (const) itk::VariableLengthVector<T> (&),(const)
- * itk::Neighborhood<T> (&), (const)
- * itk::Neighborhood<itk::VariableLengthVector<T>> (&) with T a scalar type
+ * (const) itk::VariableLengthVector<T> (&),const
+ * itk::ConstNeighborhoodIterator<Image<T>> &, const
+ * itk::ConstNeighborhoodIterator<VectorImage<T>> & with T a scalar type
  * - returns T or itk::VariableLengthVector<T>, with T a scalar type
  * or returns void and has first parameter as output (i.e. T& or itk::VariableLengthVector<T>&)
  *
@@ -422,7 +431,7 @@ private:
  * \param[in] numberOfOutputBands The number of output bands that
  * this filter will return
  * \param radius The size of neighborhood to use, if there is any
- * itk::Neighborhood<T> in the operator() arguments.
+ * ConstNeighborhoodIterator in the operator() arguments.
  * \return A ready to use OTB filter, which accepts n input image of
  * type derived from the operator() arguments, and producing an image
  * correpsonding to the operator() return type.
