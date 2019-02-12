@@ -25,25 +25,11 @@ import os.path
 from os.path import join
 from collections import defaultdict
 import re
+import glob
 
 from rst_utils import rst_section, RstPageHeading
 
-list_of_examples = [
-    "Examples/BasicFilters/BandMathFilterExample.cxx",
-
-    "Examples/FeatureExtraction/LineSegmentDetectorExample.cxx",
-    "Examples/FeatureExtraction/TextureExample.cxx",
-
-    "Examples/Tutorials/FilteringPipeline.cxx",
-    "Examples/Tutorials/HelloWorldOTB.cxx",
-    "Examples/Tutorials/Multispectral.cxx",
-    "Examples/Tutorials/OrthoFusion.cxx",
-    "Examples/Tutorials/Pipeline.cxx",
-    "Examples/Tutorials/ScalingPipeline.cxx",
-    "Examples/Tutorials/SmarterFilteringPipeline.cxx",
-]
-
-def generate_examples_index(rst_dir):
+def generate_examples_index(rst_dir, list_of_examples):
 
     # Compute dictionary of tag -> (list of examples)
     tag_files = defaultdict(list)
@@ -125,10 +111,14 @@ if __name__ == "__main__":
     parser.add_argument("otb_root", help="OTB repository root")
     args = parser.parse_args()
 
+    # TODO simplify this
+    # TODO fix longer nested examples
+    # Get list of cxx examples as relative paths from otb_root
+    list_of_examples = [os.path.relpath(p, start=args.otb_root) for p in glob.glob(join(args.otb_root, "Examples/*/*.cxx"))]
     print("Generating rst for {} examples".format(len(list_of_examples)))
 
     # Generate example index and tag indexes
-    generate_examples_index(join(args.rst_dir, "C++"))
+    generate_examples_index(join(args.rst_dir, "C++"), list_of_examples)
 
     # Generate examples rst
     for filename in list_of_examples:
