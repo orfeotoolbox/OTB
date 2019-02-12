@@ -19,15 +19,14 @@
  * limitations under the License.
  */
 
-
-
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}, {QB_Toulouse_Ortho_XS.tif}
-//    OUTPUTS: {QB_Toulouse_Ortho_PXS.tif}
-//    OUTPUTS: {pretty_QB_Toulouse_Ortho_PXS.png}
-//    OUTPUTS: {pretty_QB_Toulouse_Ortho_PAN.png}
-//    OUTPUTS: {pretty_QB_Toulouse_Ortho_XS.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./example Input/QB_Toulouse_Ortho_PAN.tif \
+          Input/QB_Toulouse_Ortho_XS.tif \
+          Output/QB_Toulouse_Ortho_PXS.tif \
+          Output/pretty_QB_Toulouse_Ortho_PXS.png \
+          Output/pretty_QB_Toulouse_Ortho_PAN.png \
+          Output/pretty_QB_Toulouse_Ortho_XS.png
+*/
 
 // Software Guide : BeginLatex
 //

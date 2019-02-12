@@ -76,7 +76,7 @@ def example_parse_code(code):
 
     # Remove description and cmdargs from code
     code = re.sub(rx_description, "", code, flags = re.MULTILINE | re.DOTALL)
-    code = re.sub(rx_cmdargs, "", code, flags = re.MULTILINE | re.DOTALL)
+    #code = re.sub(rx_cmdargs, "", code, flags = re.MULTILINE | re.DOTALL)
 
     return code, description
 
