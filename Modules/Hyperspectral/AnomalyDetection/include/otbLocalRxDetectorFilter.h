@@ -98,10 +98,10 @@ public:
     const int internalRadiusY = m_InternalRadiusY;
 
     auto externalRadius = in.GetRadius();
-    for (int y = -externalRadius[1]; y <= static_cast<int>(externalRadius[1]); y++)
+    for (int y = -static_cast<int>(externalRadius[1]); y <= static_cast<int>(externalRadius[1]); y++)
       {
       off[1] = y;
-      for (int x = -externalRadius[0]; x <= static_cast<int>(externalRadius[0]); x++)
+      for (int x = -static_cast<int>(externalRadius[0]); x <= static_cast<int>(externalRadius[0]); x++)
         {
         off[0] = x;
         if ((abs(x) > internalRadiusX) || (abs(y) > internalRadiusY))
