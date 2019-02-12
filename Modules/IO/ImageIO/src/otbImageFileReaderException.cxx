@@ -18,12 +18,19 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#include "otbImageFileReaderException.h"
 
-void RegisterTests()
+namespace otb {
+
+ImageFileReaderException::ImageFileReaderException(const char *file, unsigned int line,
+                                                   const std::string& desc,
+                                                   const std::string& filename) :
+    ExceptionObject(file, line, desc),
+    m_Filename(filename)
 {
-  REGISTER_TEST(otbTestCommandLineArgumentParser);
-  REGISTER_TEST(otbTestCommandLineArgumentParserHelp);
-  REGISTER_TEST(otbTestCommandLineArgumentParserList);
-  REGISTER_TEST(otbTestCommandLineArgumentParserWithError);
+}
+
+ImageFileReaderException::~ImageFileReaderException()
+{
+}
 }

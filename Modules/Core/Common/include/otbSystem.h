@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,6 +61,9 @@ public:
 
   /** Parse a filename with additional information */
   static bool ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum);
+
+  /** Returns true if the file descriptor fd is interactive (i.e. like isatty on unix) */
+  static bool IsInteractive(int fd);
 };
 
 } // namespace otb

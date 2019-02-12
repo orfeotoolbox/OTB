@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,7 +47,7 @@ int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char * argv[])
 
   filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
   filter->SetInput(reader->GetOutput());
-  otb::StandardFilterWatcher watcher(filter, "Min Max Computation");
+  otb::StandardFilterWatcher watcher(filter->GetStreamer(), "Min Max Computation");
   filter->Update();
 
   std::ofstream file;

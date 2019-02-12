@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,7 +38,8 @@ SarConcatenateBurstsImageFilter<TImage>
 template <class TImage>
 bool 
 SarConcatenateBurstsImageFilter<TImage>
-::getDeburstLinesAndSamples(LinesRecordVectorType & linesRecord, LinesRecordVectorType & samplesRecord)
+::getDeburstLinesAndSamples(LinesRecordVectorType & linesRecord, LinesRecordVectorType & samplesRecord,
+			    unsigned int first_burstInd, bool inputWithInvalidPixels)
 {
   // Try to create a SarSensorModelAdapter
   SarSensorModelAdapter::Pointer sarSensorModel = SarSensorModelAdapter::New();
@@ -47,9 +48,13 @@ SarConcatenateBurstsImageFilter<TImage>
 
   if(!loadOk || !sarSensorModel->IsValidSensorModel())
     itkExceptionMacro(<<"Input image does not contain a valid SAR sensor model.");
-  
+    
+  LinesRecordVectorType lines;
+
   // Try to call the deburstAndConcatenate function
-  bool deburstAndConcatenateOk = sarSensorModel->DeburstAndConcatenate(linesRecord, samplesRecord);
+  bool deburstAndConcatenateOk = sarSensorModel->DeburstAndConcatenate(linesRecord, samplesRecord, 
+								       m_Offset_OriginL, first_burstInd,
+								       inputWithInvalidPixels);
 
   if(!deburstAndConcatenateOk)
     itkExceptionMacro(<<"Could not deburst or concatenate from input bursts");
@@ -71,9 +76,16 @@ SarConcatenateBurstsImageFilter<TImage>
   // First, call superclass implementation
   Superclass::GenerateOutputInformation();
 
-  // Output KeywordList
   ImageType * outputPtr = this->GetOutput();
 
+  // Origin to (0.5, 0.5) : Metadata are already adjusted 
+  PointType origin;
+  origin[0] = 0.5;
+  origin[1] = 0.5 + m_Offset_OriginL;
+  
+  outputPtr->SetOrigin(origin);
+
+  // Output KeywordList
   m_DeburstSLCImageKWL.AddKey("support_data.number_samples", std::to_string(this->GetOutput()->
 									    GetLargestPossibleRegion().
 									    GetSize()[0]));

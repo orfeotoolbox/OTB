@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -36,11 +36,6 @@ otb_add_test(NAME leTvSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
 otb_add_test(NAME leTvDecisionTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbDecisionTreeRegressionTests
   )
-if(NOT OTB_OPENCV_3)
-otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
-  otbGradientBoostedTreeRegressionTests
-  )
-endif()
 
 otb_add_test(NAME leTvKNearestNeighborsMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbKNearestNeighborsRegressionTests
@@ -68,14 +63,6 @@ otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestD
   ${INPUTDATA}/letter_light.scale
   ${TEMP}/normalbayes_model.txt
   )
-
-if(NOT OTB_OPENCV_3)
-  otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModel COMMAND otbSupervisedTestDriver
-    otbGradientBoostedTreeMachineLearningModel
-    ${INPUTDATA}/letter_light.scale
-    ${TEMP}/gbt_model.txt
-    )
-endif()
 
 otb_add_test(NAME leTvRandomForestsMachineLearningModel COMMAND otbSupervisedTestDriver
   otbRandomForestsMachineLearningModel
@@ -116,14 +103,6 @@ otb_add_test(NAME leTvDecisionTreeMachineLearningModelCanRead COMMAND otbSupervi
   ${TEMP}/decisiontree_model.txt
   )
 set_property(TEST leTvDecisionTreeMachineLearningModelCanRead APPEND PROPERTY DEPENDS leTvDecisionTreeMachineLearningModel)
-
-if(NOT OTB_OPENCV_3)
-  otb_add_test(NAME leTvGradientBoostedTreeMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
-    otbGradientBoostedTreeMachineLearningModelCanRead
-    ${TEMP}/gbt_model.txt
-    )
-  set_property(TEST leTvGradientBoostedTreeMachineLearningModelCanRead PROPERTY DEPENDS leTvGradientBoostedTreeMachineLearningModel)
-endif()
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModelCanRead

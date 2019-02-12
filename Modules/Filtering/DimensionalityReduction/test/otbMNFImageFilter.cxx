@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,56 +23,30 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbMNFImageFilter.h"
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbMNFImageFilterTest ( int argc, char* argv[] )
+int otbMNFImageFilterTest ( int , char* argv[] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddInputImage();
-  parser->AddOption( "--NumComponents", "Number of components to keep for output", "-n", 1, false );
-  parser->AddOption( "--Inverse", "Performs also the inverse transformation (give the output name)", "-inv", 1, false );
-  parser->AddOption( "--Radius", "Set the radius of the sliding window (def.1)", "-r", 2, false );
-  parser->AddOption( "--Normalize", "center and reduce data before MNF", "-norm", 0, false );
-  parser->AddOutputImage();
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " applies MNF transformations\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  std::string inputImageName = parseResult->GetInputImage();
-  std::string outputImageName = parseResult->GetOutputImage();
-  const unsigned int nbComponents = parseResult->IsOptionPresent("--NumComponents") ?
-    parseResult->GetParameterUInt("--NumComponents") : 0;
+  /*
+  usage : otbMNFImageFilterTest input output inv norm nbcomponent=1
+  */
   unsigned int radiusX = 1;
   unsigned int radiusY = 1;
-  if ( parseResult->IsOptionPresent("--Radius") )
-  {
-    radiusX = parseResult->GetParameterUInt("--Radius", 0);
-    radiusY = parseResult->GetParameterUInt("--Radius", 1);
-  }
-  const bool normalization = parseResult->IsOptionPresent("--Normalize");
+
+  bool want_inv = true;
+  if ( std::string(argv[3]).compare("none") == 0)
+    {
+    want_inv = false;
+    }
+
+  bool normalization = false;
+  if ( std::string(argv[4]).compare("true") == 0)
+    normalization = true;
+
+  int nbComponents = std::stoi(argv[5]);
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -82,7 +56,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName(inputImageName);
+  reader->SetFileName(argv[1]);
 
   // Noise filtering
   typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
@@ -104,12 +78,12 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
   // Writing
   typedef otb::ImageFileWriter< ImageType > ImageWriterType;
   ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( outputImageName );
+  writer->SetFileName( argv[2] );
   writer->SetInput( filter->GetOutput() );
   writer->Update();
 
 
-  if ( parseResult->IsOptionPresent("--Inverse") )
+  if ( want_inv )
   {
     typedef otb::MNFImageFilter< ImageType, ImageType,
       NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
@@ -125,7 +99,7 @@ int otbMNFImageFilterTest ( int argc, char* argv[] )
     invFilter->AddObserver( itk::ProgressEvent(), invObserver );
 
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
-    invWriter->SetFileName( parseResult->GetParameterString("--Inverse") );
+    invWriter->SetFileName( argv[3] );
     invWriter->SetInput( invFilter->GetOutput() );
     invWriter->Update();
   }

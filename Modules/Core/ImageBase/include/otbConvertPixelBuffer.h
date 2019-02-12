@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 
 #include <complex>
 #include "itkObject.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -46,7 +47,7 @@ template <
   typename OutputPixelType,
   class OutputConvertTraits
   >
-class ConvertPixelBuffer
+class OTBImageBase_EXPORT_TEMPLATE ConvertPixelBuffer
 {
 public:
   /** Determine the output data type. */

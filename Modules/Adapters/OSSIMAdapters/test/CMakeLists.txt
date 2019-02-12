@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -479,4 +479,9 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
 otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
   otbSarSensorModelAdapterTest
   ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
+  )
+
+otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
   )

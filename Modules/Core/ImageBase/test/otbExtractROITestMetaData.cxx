@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -118,7 +118,7 @@ int otbExtractROITestMetaData(int itkNotUsed(argc), char * argv[])
   reader57->SetFileName(argv[3]);
   reader57->GenerateOutputInformation();
 
-  if( reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
+  if( reader57->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader57->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
     {
     std::cout<<"The read generated extract from index (x, y) must NOT contain a ProjectionReference."<<std::endl;
     std::cout<<"Found ProjectionReference: "<<reader57->GetOutput()->GetProjectionRef()<<std::endl;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -64,7 +64,7 @@ public:
  */
 
 template <class TImage, class TInternalImage = TImage>
-class ITK_EXPORT ImageSeriesFileReaderBase
+class ImageSeriesFileReaderBase
   : public ImageListSource<TImage>
 {
 public:
@@ -116,14 +116,6 @@ public:
    * selection
    */
   virtual void SetFileName(const std::string& file);
-
-  /**
-   * Set the file to be read. Once the Filename is set, ReadMeatFile is called in order to get
-   * the number of image files to be read, the images file names, the band and region
-   * selection
-   * \deprecated const char* overload of SetFileName is deprecated, use std::string instead
-   */
-  virtual void SetFileName(const char * file);
 
   /** get the Filenames */
   std::string GetFileName(unsigned int i) const

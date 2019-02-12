@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -68,8 +68,8 @@ otb_add_test(NAME bfTvHorizontalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
   ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
   otbHorizontalSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvAsymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAsymmetricFusion_amst_2_3.tif
@@ -148,8 +148,8 @@ otb_add_test(NAME bfTvSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvSobelVectorImageFilter.tif
   ${TEMP}/bfTvSobelVectorImageFilter.tif
   otbSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvHoughTransform2DLinesImage COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}
@@ -208,8 +208,8 @@ otb_add_test(NAME bfTvVerticalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
   ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
   otbVerticalSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvStreamingLineSegmentDetector10 COMMAND otbEdgeTestDriver
   --compare-ogr  ${EPSILON_8}

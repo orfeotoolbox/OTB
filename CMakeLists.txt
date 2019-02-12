@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -419,7 +419,7 @@ install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} )
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 #include "itkFunctionBase.h"
 #include "itkPoint.h"
 #include "itkVariableLengthVector.h"
+#include "OTBImageBaseExport.h"
 
 #include <vector>
 
@@ -44,7 +45,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TOutputPrecision = double, class TCoordRep = double>
-class ITK_EXPORT MetaImageFunction
+class OTBImageBase_EXPORT_TEMPLATE MetaImageFunction
 : public itk::FunctionBase<itk::Point<TCoordRep, 2>,
   itk::VariableLengthVector<TOutputPrecision> >
 {

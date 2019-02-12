@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,13 @@
 
 void RegisterTests()
 {
+  REGISTER_TEST(otbSOMModelCanRead);
+  REGISTER_TEST(otbSOMModeTrain);
+  
+#ifdef OTB_USE_SHARK
   REGISTER_TEST(otbAutoencoderModelCanRead);
   REGISTER_TEST(otbAutoencoderModeTrain);
   REGISTER_TEST(otbPCAModelCanRead);
   REGISTER_TEST(otbPCAModeTrain);
-  REGISTER_TEST(otbSOMModelCanRead);
-  REGISTER_TEST(otbSOMModeTrain);
+#endif
 }

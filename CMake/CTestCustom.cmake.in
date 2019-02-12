@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -118,6 +118,8 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*LaTeX Warning:.*"
   ".*Package tabulary Warning:.*"
   ".*Package rerunfilecheck Warning:.*"
-  # Silent warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas] from GCC 4.9
-  ".*warning: unknown option after \\‘\\#pragma GCC diagnostic\\’ kind \\[-Wpragmas\\]"
+  # Silent warning: unknown option after ‘#pragma GCC diagnostic’ kind [-Wpragmas] from GCC 5.2
+  ".*warning: unknown option after.*pragma GCC diagnostic.*kind.*-Wpragmas.*"
+  # Silent warning: unknown warning group '-Wexpansion-to-defined', ignored [-Wunknown-pragmas] on clang 3.8
+  "warning: unknown warning group.*-Wexpansion-to-defined.*ignored.*-Wunknown-pragmas.*"
   )

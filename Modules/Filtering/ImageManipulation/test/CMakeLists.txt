@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -448,8 +448,8 @@ otb_add_test(NAME bfTvLocalGradientVectorImageFilter COMMAND otbImageManipulatio
   ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
   ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
   otbLocalGradientVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
 
 otb_add_test(NAME bfTvBoundingRegionCalculator COMMAND otbImageManipulationTestDriver
   --compare-ascii ${NOTOL}

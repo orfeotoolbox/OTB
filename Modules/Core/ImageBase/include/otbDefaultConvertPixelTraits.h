@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,13 +22,14 @@
 #define otbDefaultConvertPixelTraits_h
 
 #include "itkDefaultConvertPixelTraits.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb 
 {
 
 
 template < typename PixelType>
-class DefaultConvertPixelTraits 
+class OTBImageBase_EXPORT_TEMPLATE DefaultConvertPixelTraits 
 : public itk::DefaultConvertPixelTraits < PixelType >
 {
 public:

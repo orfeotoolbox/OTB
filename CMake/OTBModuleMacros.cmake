@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -37,7 +37,7 @@ elseif(APPLE)
   set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
 endif()
 
-include(GenerateExportHeader)
+include(GenerateExportHeaderCustom)
 
 if(OTB_CPPCHECK_TEST)
   include(${_OTBModuleMacros_DIR}/OTBModuleCPPCheckTest.cmake)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -73,4 +73,16 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
                      VALID --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+)
+
+#----------- LocalRxDetection TESTS ------------------------
+otb_test_application(NAME  apTvHyLocalRxDetection
+                     APP  LocalRxDetection
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif?&bands=1:10
+                             -out ${TEMP}/apTvHyLocalRxDetection.tif double
+                             -ir 1
+                             -er 3
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyLocalRxDetection.tif
+                              ${TEMP}/apTvHyLocalRxDetection.tif
 )

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -105,8 +105,8 @@ otb_add_test(NAME bfTvNormalizeVectorImageFilter COMMAND otbStatisticsTestDriver
   ${BASELINE}/bfTvNormalizeVectorImageFilter.tif
   ${TEMP}/bfTvNormalizeVectorImageFilter.tif
   otbNormalizeVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvNormalizeVectorImageFilter.tif)
 
 otb_add_test(NAME bfTvVectorImageToMatrix COMMAND otbStatisticsTestDriver
   otbVectorImageToMatrixTest)

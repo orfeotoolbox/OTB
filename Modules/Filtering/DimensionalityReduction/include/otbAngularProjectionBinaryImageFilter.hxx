@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -85,7 +85,7 @@ AngularProjectionBinaryImageFilter< TInputImage, TOutputImage, TPrecision >
 {
   m_AngleSet = angle;
   this->SetNumberOfRequiredOutputs( angle.size() );
-  for ( unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i )
+  for ( unsigned int i = 0; i < this->GetNumberOfRequiredOutputs(); ++i )
   {
     this->SetNthOutput(i, OutputImageType::New());
   }

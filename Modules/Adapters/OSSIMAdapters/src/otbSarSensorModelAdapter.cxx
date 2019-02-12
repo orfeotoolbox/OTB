@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -115,15 +115,35 @@ bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index,
 
 bool 
 SarSensorModelAdapter::DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
-					     std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+					     std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+					     unsigned int & linesOffset, unsigned int first_burstInd,
+					     bool inputWithInvalidPixels)
 {
   if(m_SensorModel.get())
     {
-      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts);
+      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts, linesOffset, first_burstInd, 
+						  inputWithInvalidPixels);
     }
   
   return false;
 }
+
+bool 
+SarSensorModelAdapter::Overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels)
+  {
+    if(m_SensorModel.get())
+    {
+      return m_SensorModel->overlap(linesUp, linesLow, samplesUp, samplesLow, burstIndUp,
+				    inputWithInvalidPixels);
+    }
+
+    return false;
+  }
 
 bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {

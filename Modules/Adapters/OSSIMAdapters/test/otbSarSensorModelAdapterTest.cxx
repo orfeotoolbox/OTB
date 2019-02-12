@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -83,5 +83,25 @@ int otbSarSensorModelAdapterTest(int itkNotUsed(argc), char* argv[])
   unsigned int ind_Line = 2;
   sensorModel->LineToSatPositionAndVelocity(ind_Line, out6, out7);
   
+  // Test overlap function (for burst index = 0)
+  // If version of geom file >= 3 
+  kwl = otb::ReadGeometryFromGEOMFile(infname);
+  sensorModel->LoadState(kwl);
+  
+  if (std::stoi(kwl.GetMetadataByKey("header.version")) >= 3)
+    {
+      std::pair<unsigned long,unsigned long>  linesUp;
+      std::pair<unsigned long,unsigned long>  linesLow;
+      std::pair<unsigned long,unsigned long>  samplesUp;
+      std::pair<unsigned long,unsigned long>  samplesLow;
+
+      success = sensorModel->Overlap(linesUp, linesLow, samplesUp, samplesLow, 0);
+
+      if (!success)
+	{
+	  return EXIT_FAILURE;
+	}
+    }
+
   return EXIT_SUCCESS;
 }

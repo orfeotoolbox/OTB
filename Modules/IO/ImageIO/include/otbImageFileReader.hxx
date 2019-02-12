@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -666,17 +666,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     }
 
   return (fic_trouve);
-}
-
-template <class TOutputImage, class ConvertPixelTraits>
-void
-ImageFileReader<TOutputImage, ConvertPixelTraits>
-::SetFileName(const char* in)
-{
-  if (in)
-    {
-    this->SetFileName(std::string(in));
-    }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,51 +23,19 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
-
 #include "otbFastICAImageFilter.h"
 
 
-int otbFastICAImageFilterTest ( int argc, char* argv[] )
+int otbFastICAImageFilterTest ( int , char* argv[] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
 
-  parser->AddInputImage();
-  parser->AddOption( "--NumComponents", "Number of components to keep for output", "-n", 1, false );
-  parser->AddOption( "--Inverse", "Performs also the inverse transformation (give the output name)", "-inv", 1, false );
-  parser->AddOption( "--NumIterations", "number of iterations (def.20)", "-iter", 1, false );
-  parser->AddOption( "--Mu", "Give the increment weight of W in [0, 1] (def. 1)", "-mu", 1, false );
-  parser->AddOutputImage();
+  std::string inputImageName = argv[1];
+  std::string outputImageName = argv[2];
+  std::string outputInvImageName = argv[3];
 
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " applies FastICA transformations\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  std::string inputImageName = parseResult->GetInputImage();
-  std::string outputImageName = parseResult->GetOutputImage();
-  const unsigned int nbComponents = parseResult->IsOptionPresent("--NumComponents") ?
-    parseResult->GetParameterUInt("--NumComponents") : 0;
-  const unsigned int nbIterations = parseResult->IsOptionPresent("--NumIterations") ?
-    parseResult->GetParameterUInt("--NumIterations") : 20;
-  const double mu = parseResult->IsOptionPresent("--Mu" ) ?
-    parseResult->GetParameterDouble("--Mu") : 1.;
+  const unsigned int nbComponents =  0;
+  const unsigned int nbIterations =  20;
+  const double mu = 1.;
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -102,7 +70,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
 
   // std::cerr << filter << "\n";
 
-  if ( parseResult->IsOptionPresent("--Inverse") )
+  if ( true )
   {
     typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
@@ -119,7 +87,7 @@ int otbFastICAImageFilterTest ( int argc, char* argv[] )
     std::cerr << "Reconstruction\n";
 
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
-    invWriter->SetFileName( parseResult->GetParameterString("--Inverse") );
+    invWriter->SetFileName(outputInvImageName);
     invWriter->SetInput( invFilter->GetOutput() );
     invWriter->Update();
   }

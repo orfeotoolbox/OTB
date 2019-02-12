@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -56,7 +56,6 @@ namespace otb
  * \sa KNearestNeighborsMachineLearningModel
  * \sa DecisionTreeMachineLearningModel
  * \sa RandomForestsMachineLearningModel
- * \sa GradientBoostedTreeMachineLearningModel
  * \sa NormalBayesMachineLearningModel
  * \sa NeuralNetworkMachineLearningModel
  * \sa SharkRandomForestsMachineLearningModel

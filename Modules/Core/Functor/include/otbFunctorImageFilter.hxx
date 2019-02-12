@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -138,7 +138,7 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 {
   static decltype(auto) Get(const itk::ConstNeighborhoodIterator<T> & t)
 {
-  return t.GetNeighborhood();
+  return t;
 }
 };
 

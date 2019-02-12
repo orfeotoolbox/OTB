@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -49,11 +49,15 @@ mark_as_advanced(SPHINX_BUILD)
 find_program(PDFLATEX_COMMAND NAMES pdflatex )
 mark_as_advanced(PDFLATEX_COMMAND)
 
+find_program(MAKEINDEX_COMMAND NAMES makeindex )
+mark_as_advanced(MAKEINDEX_COMMAND)
+
 # Check that we found everything we need
 foreach(cmd
     LATEX_COMMAND
     TAR_COMMAND
     PDFLATEX_COMMAND
+    MAKEINDEX_COMMAND
     SPHINX_BUILD
     SH_INTERP)
   if(NOT ${cmd})
@@ -171,9 +175,16 @@ add_custom_target(CookBookArchive
    COMMENT "Generating Tex files from rst"
    VERBATIM)
 
+set(COOKBOOK_TEX CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
+
  add_custom_target(CookBookPDF
    ALL
-   COMMAND ${CMAKE_MAKE_PROGRAM} all-pdf
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${MAKEINDEX_COMMAND} -s python.ist "${COOKBOOK_TEX}.idx" || true
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
    WORKING_DIRECTORY ${LATEX_DIR}
    DEPENDS CookBookTexFromRST
    COMMENT "Building RST documentation in pdf")

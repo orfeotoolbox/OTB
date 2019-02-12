@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -2649,6 +2649,22 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 
   //Check the feature contains only if no differences found
 
+}
+
+TestHelper::TestHelper() :
+    m_ToleranceDiffValue(0),
+    m_Epsilon(0),
+    m_EpsilonBoundaryChecking(1.0e-30),
+    m_ReportErrors(false),
+    m_IgnoreLineOrder(false),
+    m_MaxArea(1024*1024)
+{
+  m_SpecialTokens.push_back(std::pair<std::string,std::string>(
+    std::string("Integer"),std::string("Integer64")));
+}
+
+TestHelper::~TestHelper()
+{
 }
 
 }

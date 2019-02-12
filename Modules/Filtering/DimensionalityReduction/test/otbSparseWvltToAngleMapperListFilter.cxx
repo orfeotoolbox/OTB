@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,51 +25,22 @@
 #include "otbWaveletTransform.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "itkListSample.h"
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
-int otbSparseWvltToAngleMapperListFilterTest ( int argc, char * argv[] )
+int otbSparseWvltToAngleMapperListFilterTest ( int , char * []  )
 {
   // number of images to consider
   const unsigned int Dimension = 2;
   const unsigned int nbInputImages = 2;
 
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddOption( "--InputImages", "Input Images", "-in", nbInputImages, true );
-  //parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
-  parser->AddOption( "--Threshold", "Lower threshold for accounting the waBinaryFunctorImageListToSampleListFiltervelet coeffs (def. 10)", "-th", 1, false );
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs otbSparseWvltToAngleMapperListFilterNewTest on " << nbInputImages << " images\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
+    inputImageName[i] = "";
   // Parameter (to be changed if necessary)
-  const double threshold = parseResult->IsOptionPresent("--Threshold") ?
-    parseResult->GetParameterDouble("--Threshold") : 10.;
+  const double threshold = 10.;
 
   // Main type definition
   typedef float  PixelType;

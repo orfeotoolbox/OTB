@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -247,7 +247,7 @@ ObjectList<TObject>
 ::Insert(ReverseIterator position, ObjectPointerType element)
 {
   ReverseIterator iter(
-    InternalContainerType::reverse_iterator(
+    (typename InternalContainerType::reverse_iterator)(
       m_InternalContainer.insert(position.GetIter().base(), element)
       )
     );

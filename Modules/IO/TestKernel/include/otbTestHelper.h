@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,7 @@
 #include "otbStringUtils.h"
 
 #include "otbMetaDataKey.h"
+#include "OTBTestKernelExport.h"
 
 class OGRFeature;
 class OGRGeometry;
@@ -43,7 +44,7 @@ namespace otb
  *
  * \ingroup OTBTestKernel
  */
-class ITK_ABI_EXPORT TestHelper : public itk::Object
+class OTBTestKernel_EXPORT TestHelper : public itk::Object
 {
 public:
 
@@ -59,19 +60,9 @@ public:
   typedef std::vector<std::string> StringList;
   typedef StringList::const_iterator StringListIt;
 
-  TestHelper() :
-    m_ToleranceDiffValue(0),
-    m_Epsilon(0),
-    m_EpsilonBoundaryChecking(1.0e-30),
-    m_ReportErrors(false),
-    m_IgnoreLineOrder(false),
-    m_MaxArea(1024*1024)
-  {
-    m_SpecialTokens.push_back(std::pair<std::string,std::string>(
-      std::string("Integer"),std::string("Integer64")));
-  }
+  TestHelper();
 
-  ~TestHelper() override{}
+  ~TestHelper() override;
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
                               const StringList& testFilenamesImage);

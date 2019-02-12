@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,7 @@
 #include "itkVectorImage.h"
 #endif
 #include "otbImageMetadataInterfaceBase.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -40,7 +41,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT VectorImage : public itk::VectorImage<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE VectorImage : public itk::VectorImage<TPixel, VImageDimension>
 {
 public:
 
@@ -214,5 +215,26 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorImage.hxx"
 #endif
+
+#include <complex>
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<float, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<double, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double> , 2>;
+
+}
 
 #endif
