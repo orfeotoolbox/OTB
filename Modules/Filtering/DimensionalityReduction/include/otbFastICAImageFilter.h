@@ -24,6 +24,7 @@
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
+#include <functional>
 
 namespace otb
 {

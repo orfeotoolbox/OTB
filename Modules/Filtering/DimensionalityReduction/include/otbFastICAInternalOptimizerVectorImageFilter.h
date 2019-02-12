@@ -25,6 +25,7 @@
 #include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbPersistentImageFilter.h"
+#include <functional>
 
 namespace otb
 {
