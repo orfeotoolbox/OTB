@@ -95,9 +95,9 @@ otb_add_test(NAME bfTvConcatenateVectorDataFilter COMMAND otbVectorDataManipulat
   ${BASELINE_FILES}/otbConcatenateVectorDataFilter_Output.shp
   ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
   otbConcatenateVectorDataFilter
-  -in  ${INPUTDATA}/france_coastline.shp
+  ${INPUTDATA}/france_coastline.shp
   ${INPUTDATA}/waterways.shp
-  -out ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
+  ${TEMP}/otbConcatenateVectorDataFilter_Output.shp
   )
 
 otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon COMMAND otbVectorDataManipulationTestDriver

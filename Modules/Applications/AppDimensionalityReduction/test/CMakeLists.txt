@@ -39,25 +39,29 @@ otb_test_application(NAME   apTvFEDimensionalityReductionPCA
                              ${TEMP}/apTvChDimensionalityReductionPCA.tif)
 
 #-------------------------------------------------------------------------------
-set(algos ae pca som)
-
-set(ae_params
--algorithm autoencoder
--algorithm.autoencoder.nbneuron 8
--algorithm.autoencoder.regularization 0.01
--algorithm.autoencoder.noise 0
--algorithm.autoencoder.rho 0
--algorithm.autoencoder.beta 0)
-
-set(pca_params
--algorithm pca
--algorithm.pca.dim 8)
+set(algos som)
 
 set(som_params
 -algorithm som
 -algorithm.som.s 10 10
 -algorithm.som.n 3 3
 -algorithm.som.ni 10)
+
+if(OTB_USE_SHARK)
+  list(APPEND classifierList ae pca)
+
+  set(ae_params
+  -algorithm autoencoder
+  -algorithm.autoencoder.nbneuron 8
+  -algorithm.autoencoder.regularization 0.01
+  -algorithm.autoencoder.noise 0
+  -algorithm.autoencoder.rho 0
+  -algorithm.autoencoder.beta 0)
+
+  set(pca_params
+  -algorithm pca
+  -algorithm.pca.dim 8)
+endif()
 
 foreach(algo ${algos})
   string(TOUPPER ${algo} ualgo)

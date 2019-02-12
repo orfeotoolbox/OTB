@@ -22,13 +22,14 @@
 #define otbDefaultConvertPixelTraits_h
 
 #include "itkDefaultConvertPixelTraits.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb 
 {
 
 
 template < typename PixelType>
-class DefaultConvertPixelTraits 
+class OTBImageBase_EXPORT_TEMPLATE DefaultConvertPixelTraits 
 : public itk::DefaultConvertPixelTraits < PixelType >
 {
 public:

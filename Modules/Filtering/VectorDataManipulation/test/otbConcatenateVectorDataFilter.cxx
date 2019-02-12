@@ -17,10 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-#include "otbCommandLineArgumentParser.h"
-
 // Images
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
@@ -36,29 +32,14 @@ typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
 
 int otbConcatenateVectorDataFilter (int argc, char * argv[])
 {
-  // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddOptionNParams("--InputVectorDatas","Input VectorDatas to concatenate ", "-in", true);
-  parser->AddOption("--OutputVectorData","Output concatenated VectorData","-out", true);
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-  parser->ParseCommandLine(argc, argv, parseResult);
-
-  // Get number of input vectorDatas
-  unsigned int nbInputs = parseResult->GetNumberOfParameters("--InputVectorDatas");
-
   // Instantiate a concatenate filter
-    // Concatenate the vector datas
+  // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
-
-  for (unsigned int idx = 0; idx < nbInputs; ++idx)
+  for (int idx = 1; idx < argc-1 ; ++idx)
     {
     // Reader object
     ReaderType::Pointer reader = ReaderType::New();
-    //std::cout << << std::endl;
-    reader->SetFileName(parseResult->GetParameterString("--InputVectorDatas", idx ));
+    reader->SetFileName(argv[idx]);
     reader->Update();
 
     concatenate->AddInput(reader->GetOutput());
@@ -66,7 +47,7 @@ int otbConcatenateVectorDataFilter (int argc, char * argv[])
 
   // Write the output
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
+  writer->SetFileName(argv[argc-1]);
   writer->SetInput(concatenate->GetOutput());
   writer->Update();
 

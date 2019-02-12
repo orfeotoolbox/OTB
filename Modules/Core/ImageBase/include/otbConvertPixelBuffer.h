@@ -24,6 +24,7 @@
 
 #include <complex>
 #include "itkObject.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -46,7 +47,7 @@ template <
   typename OutputPixelType,
   class OutputConvertTraits
   >
-class ConvertPixelBuffer
+class OTBImageBase_EXPORT_TEMPLATE ConvertPixelBuffer
 {
 public:
   /** Determine the output data type. */

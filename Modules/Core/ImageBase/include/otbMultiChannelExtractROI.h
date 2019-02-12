@@ -23,6 +23,7 @@
 
 #include "otbExtractROIBase.h"
 #include "otbVectorImage.h"
+#include "OTBImageBaseExport.h"
 
 #include "itkMacro.h"
 #include <vector>
@@ -43,7 +44,7 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
-class ITK_EXPORT MultiChannelExtractROI :
+class OTBImageBase_EXPORT_TEMPLATE MultiChannelExtractROI :
   public ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2> >
 {
 public:

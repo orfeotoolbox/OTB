@@ -37,7 +37,6 @@
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
-#include "otbCommandLineArgumentParser.h"
 
 // Software Guide : BeginCodeSnippet
 #include "otbNCCRegistrationFilter.h"
@@ -111,14 +110,14 @@ int main(int argc, char** argv)
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
-  fBlur->SetSigma(atof(argv[7]));
+  fBlur->SetSigma(std::stof(argv[7]));
 
   typedef itk::RecursiveGaussianImageFilter<MovingImageType,
       MovingImageType> MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
-  mBlur->SetSigma(atof(argv[7]));
+  mBlur->SetSigma(std::stof(argv[7]));
 // Software Guide : EndCodeSnippet
 
   // Software Guide : BeginLatex
@@ -153,8 +152,8 @@ int main(int argc, char** argv)
 
   RadiusType radius;
 
-  radius[0] = atoi(argv[6]);
-  radius[1] = atoi(argv[6]);
+  radius[0] = std::stoi(argv[6]);
+  radius[1] = std::stoi(argv[6]);
 
   registrator->SetNCCRadius(radius);
 // Software Guide : EndCodeSnippet
@@ -168,7 +167,7 @@ int main(int argc, char** argv)
   // Software Guide : EndLatex
 
   // Software Guide : BeginCodeSnippet
-  registrator->SetNumberOfIterations(atoi(argv[8]));
+  registrator->SetNumberOfIterations(std::stoi(argv[8]));
 // Software Guide : EndCodeSnippet
 // registrator->GetDisplacementField();
 

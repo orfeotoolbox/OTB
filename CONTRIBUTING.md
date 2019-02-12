@@ -17,7 +17,7 @@ use a self-hosted GitLab instance:
 
 [`https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb`](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 
-Remember to check out also our [developers mailing list](https://groups.google.com/forum/?hl=fr#!forum/otb-developers/join),
+Remember to check out also our [forum](https://forum.orfeo-toolbox.org/),
 where we discuss some features, improvements and high level project planning.
 You are welcome to ask questions there as a beginner or future OTB contributor!
 
