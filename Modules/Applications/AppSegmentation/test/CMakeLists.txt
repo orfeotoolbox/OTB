@@ -35,7 +35,7 @@ set(raster_output_option "uint16")
 set(vector_output_format ".sqlite")
 
 # Validation depending on mode
-set(vector_comparison --compare-ogr ${NOTOL})
+set(vector_comparison --compare-ogr ${EPSILON_9})
 set(raster_comparison --compare-image ${NOTOL})
 
 # Reference ffiles depending on modes

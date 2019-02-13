@@ -200,12 +200,12 @@ otb_test_application(NAME  apTuPrVectorDataReprojectionFromImageToMap
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
-                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp
+                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite
                              -out.proj user
                              -out.proj.user.map  lambert93
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                               ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToMap.sqlite
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.shp)
+                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
@@ -213,8 +213,8 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
                              -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
+                     VALID   --compare-ogr ${EPSILON_9}
+                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToImage.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
@@ -222,9 +222,9 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                              -out.proj image
-                             -out.proj.image.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
+                             -out.proj.image.in ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
+                     VALID   --compare-ogr ${EPSILON_9}
+                              ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
@@ -235,19 +235,19 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
                              -out.proj.user.map  utm
                              -out.proj.user.map.utm.northhem true
                  	           -out.proj.user.map.utm.zone 31
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                               ${BASELINE_FILES}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite
                  			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap2.sqlite)
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
                      OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
-                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml
+                 			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.shp
                              -out.proj user
                              -out.proj.user.map  wgs
-                     VALID   --compare-ogr ${NOTOL}
-                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.kml)
+                     VALID   --compare-ogr ${EPSILON_9}
+                              ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
+                 			  ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.shp)
 
 otb_test_application(NAME  apTuPrVectorDataReprojectionFromGeoToMap
                      APP  VectorDataReprojection
@@ -316,7 +316,7 @@ otb_test_application(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
                      OPTIONS -in ${EXAMPLEDATA}/sensor_stereo_left.tif
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                         ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
                         ${TEMP}/apTvPrImageEnvelopeTest.shp)
 
