@@ -22,7 +22,10 @@
 
 #include "ogr_spatialref.h"
 #include "cpl_conv.h"
-
+#ifdef __clang__
+#pragma clang diagnostic ignored "-Wunused-local-typedefs" 
+// For boost/lexical_cast.hpp
+#endif
 #include "boost/lexical_cast.hpp"
 
 #include <sstream>
