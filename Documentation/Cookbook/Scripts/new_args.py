@@ -39,15 +39,21 @@ if __name__ == "__main__":
                 else:
                     cmd_args.extend(line.replace("//", "").split())
 
+            cmd_line = "./{} {}".format(name, " ".join(cmd_args))
+
+            if len(cmd_line) > 160:
+                joiner = " \\\n" + " "*(3+len(name)) # backslash and indentation
+                cmd_line = "./{} {}".format(name, joiner.join(cmd_args))
+
             block = ("/* Example usage:\n"
-                     "./{} {}\n"
-                     "*/\n".format(name, " ".join(cmd_args)))
+                     "{}\n"
+                     "*/\n").format(cmd_line)
 
             print(block)
 
             newcontent = re.sub(rx_block, block, content, flags = re.MULTILINE | re.DOTALL)
 
-            #open(filename, "w").write(newcontent)
+            open(filename, "w").write(newcontent)
             #print(newcontent)
 
 

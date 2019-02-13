@@ -26,7 +26,7 @@ import os
 from os.path import join
 import re
 
-def run_example(otb_root, otb_data, name):
+def run_example(otb_root, otb_data, name, dry_run):
     # Find binary
     binary_names = glob.glob(join("bin", name))
     if len(binary_names) == 0:
@@ -54,22 +54,24 @@ def run_example(otb_root, otb_data, name):
 
     # Execute example with otb_data as working directory, because paths are given relative to otb_data
     print("$ " + binary + " " + " ".join(example_args))
-    subprocess.check_call([binary, *example_args], cwd=otb_data)
+    if not dry_run:
+        subprocess.check_call([binary, *example_args], cwd=otb_data)
 
 def main():
     parser = argparse.ArgumentParser(usage="Run one or all OTB cxx examples")
     parser.add_argument("otb_root", help="Path to otb repository")
     parser.add_argument("otb_data", help="Path to otb-data repository")
     parser.add_argument("--name", type=str, help="Example name (none for all examples)")
+    parser.add_argument("-n", "--dry-run", action='store_true', help="Dry run, only print commands")
     args = parser.parse_args()
 
     if args.name:
-        run_example(args.otb_root, args.otb_data, args.name)
+        run_example(args.otb_root, args.otb_data, args.name, dry_run=args.dry_run)
     else:
         list_of_examples =[os.path.splitext(os.path.basename(f))[0] for f in glob.glob(join(args.otb_root, "Examples/*/*.cxx"))]
         for name in list_of_examples:
             try:
-                run_example(args.otb_root, args.otb_data, name)
+                run_example(args.otb_root, args.otb_data, name, dry_run=args.dry_run)
             except RuntimeError as e:
                 print("Warning: ", e)
 
