@@ -270,9 +270,7 @@ efficiently.
 Consider using the \code{Value()} method instead of \code{Get()} or
 \code{Set()} when a call to \code{operator=} on a pixel is non-trivial, such as
 when working with vector pixels, and operations are done in-place in the
-image. The disadvantage of using \code{Value} is that it cannot support image
-adapters (see Section~\ref{sec:ImageAdaptors} on
-page~\pageref{sec:ImageAdaptors} for more information about image adaptors).
+image.
 
 \subsection{Iteration Loops}
 \label{sec:IterationExample}

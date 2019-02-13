@@ -105,17 +105,12 @@ ${SoftwareGuide_BINARY_DIR}/SoftwareGuideConfiguration.tex
 )
 
 SET( Tex_SRCS
-  Abstract.tex
   Applications.tex
-  AnisotropicDiffusionFiltering.tex
   DataRepresentation.tex
   Filtering.tex
   GUI.tex
-  ImageMetrics.tex
   ImageInterpolators.tex
-  ImageAdaptors.tex
   Infrastructure.tex
-  Introduction.tex
   IO.tex
   Iterators.tex
   Numerics.tex
@@ -127,7 +122,6 @@ SET( Tex_SRCS
   SpatialObjects.tex
   Statistics.tex
   SystemOverview.tex
-  Transforms.tex
   Visualization.tex
   Watersheds.tex
   Fusion.tex

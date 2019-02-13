@@ -20,9 +20,6 @@
 
 project(PatentedExamples)
 
-add_executable(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx)
-target_link_libraries(EstimateAffineTransformationExample ${OTB_LIBRARIES})
-
 if (OTBSiftFast_LOADED)
 add_executable(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx)
 target_link_libraries(SIFTDisparityMapEstimation ${OTB_LIBRARIES})

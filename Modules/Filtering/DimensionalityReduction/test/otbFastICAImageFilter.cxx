@@ -33,7 +33,7 @@ int otbFastICAImageFilterTest ( int , char* argv[] )
   std::string outputImageName = argv[2];
   std::string outputInvImageName = argv[3];
 
-  const unsigned int nbComponents =  0;
+  const unsigned int nbComponents =  3;
   const unsigned int nbIterations =  20;
   const double mu = 1.;
 

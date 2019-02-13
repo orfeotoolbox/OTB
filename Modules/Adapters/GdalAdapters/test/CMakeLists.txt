@@ -54,7 +54,7 @@ otb_add_test(NAME TvOGRExtendedFilename
          ${BASELINE}/TvOGRExtendedFilename.txt
          ${TEMP}/TvOGRExtendedFilenameTest.txt
          otbOGRExtendedFileName
-         test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
+         ${TEMP}/test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
          ${TEMP}/TvOGRExtendedFilenameTest.txt     )
 
 #Problem with error thrown by GDAL : unable to catch it with "CPLGetLastErrorMsg"
@@ -67,19 +67,19 @@ otb_add_test(NAME TvOGRExtendedFilename
 otb_add_test(NAME TvOGRExtendedFilenameGDALCreate
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALCreate
-         test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
+         ${TEMP}/test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayer
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayer
-         test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
+         ${TEMP}/test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayerOption
-         test_OGRExtendedFilenameGDALLayerOption.shp
+         ${TEMP}/test_OGRExtendedFilenameGDALLayerOption.shp
          )
        
 add_executable(otbGdalAdaptersTestDriver

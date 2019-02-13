@@ -599,7 +599,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     -expr  "(b1 == 0)"
     -field "NOBUIL"
     -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
-    VALID   --compare-ogr 0.0
+    VALID   --compare-ogr ${EPSILON_9}
     ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp
     ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_wr.shp)
 
@@ -638,7 +638,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     -expr  "(b1 == 0)"
     -field "NOBUIL"
     -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
-    VALID   --compare-ogr 0.0
+    VALID   --compare-ogr ${EPSILON_9}
     ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp
     ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_gt.shp)
 
@@ -651,7 +651,7 @@ if(OTB_DATA_USE_LARGEINPUT)
     -expr  "(b1 == 0)"
     -field "NOBUIL"
     -out ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
-    VALID   --compare-ogr 0.0
+    VALID   --compare-ogr ${EPSILON_9}
     ${OTBAPP_BASELINE_FILES}/cdbTvComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp
     ${TEMP}/apTvCdbComputePolylineFeatureFromImage_LI_NOBUIL_RoadExtractionApplication.shp)
 
