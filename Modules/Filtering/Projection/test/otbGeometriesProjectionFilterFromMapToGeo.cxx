@@ -26,7 +26,6 @@
 #include "otbGeometriesSet.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbGeoInformationConversion.h"
 
 /*===========================================================================*/
 /*==============================[ other stuff ]==============================*/
