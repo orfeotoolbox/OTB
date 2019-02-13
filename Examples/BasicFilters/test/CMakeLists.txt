@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME bfTeLeeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
