@@ -21,7 +21,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst.png}
+//    INPUTS: {amst2.png}
 //    OUTPUTS: {amstTouziEdges.png}, {amstTouziDirections.png}
 //    3
 //  Software Guide : EndCommandLineArgs

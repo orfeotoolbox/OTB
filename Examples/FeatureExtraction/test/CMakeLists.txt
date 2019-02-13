@@ -30,7 +30,7 @@ otb_add_test(NAME feTeCorrelationLineDetectorExampleTest COMMAND ${OTB_TEST_DRIV
     ${BASELINE}/amstLineCorrelationDirections.png
     ${TEMP}/amstLineCorrelationDirections.png
   Execute $<TARGET_FILE:CorrelationLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineCorrelations.png
     ${TEMP}/amstLineCorrelationDirections.png
     5 1
@@ -57,7 +57,7 @@ otb_add_test(NAME feTeTouziEdgeDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/amstTouziDirections.png
     ${TEMP}/amstTouziDirections.png
   Execute $<TARGET_FILE:TouziEdgeDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstTouziEdges.png
     ${TEMP}/amstTouziDirections.png
     3
@@ -70,7 +70,7 @@ otb_add_test(NAME feTeAsymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TE
     ${BASELINE}/amstLineFusion.png
     ${TEMP}/amstLineFusion.png
   Execute $<TARGET_FILE:AsymmetricFusionOfLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineFusion.png
     5 1
 )
@@ -84,7 +84,7 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/amstLineRatioDirections.png
     ${TEMP}/amstLineRatioDirections.png
   Execute $<TARGET_FILE:RatioLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineRatios.png
     ${TEMP}/amstLineRatioDirections.png
     5 1
