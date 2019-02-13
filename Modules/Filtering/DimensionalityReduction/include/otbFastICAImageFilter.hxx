@@ -48,12 +48,16 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_NumberOfIterations = 50;
   m_ConvergenceThreshold = 1E-4;
-  m_ContrastFunction = &std::tanh;
+
+  m_NonLinearity = [](double x) {return std::tanh(x);};
+  m_NonLinearityDerivative = [](double x) {return 1-std::pow( std::tanh(x), 2. );};
+
   m_Mu = 1.;
 
   m_PCAFilter = PCAFilterType::New();
   m_PCAFilter->SetUseNormalization(true);
-
+  m_PCAFilter->SetUseVarianceForNormalization(false);
+  
   m_TransformFilter = TransformFilterType::New();
 }
 
@@ -77,7 +81,8 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         m_NumberOfPrincipalComponentsRequired =
           this->GetInput()->GetNumberOfComponentsPerPixel();
       }
-
+      m_PCAFilter->SetNumberOfPrincipalComponentsRequired(
+        m_NumberOfPrincipalComponentsRequired);
       this->GetOutput()->SetNumberOfComponentsPerPixel(
         m_NumberOfPrincipalComponentsRequired );
       break;
@@ -250,7 +255,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   double convergence = itk::NumericTraits<double>::max();
   unsigned int iteration = 0;
 
-  const unsigned int size = this->GetInput()->GetNumberOfComponentsPerPixel();
+  const unsigned int size = this->GetNumberOfPrincipalComponentsRequired();
 
   // transformation matrix
   InternalMatrixType W ( size, size, vnl_matrix_identity );
@@ -260,7 +265,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   {
     InternalMatrixType W_old ( W );
 
-    typename InputImageType::Pointer img = const_cast<InputImageType*>( this->GetInput() );
+    typename InputImageType::Pointer img = const_cast<InputImageType*>( m_PCAFilter->GetOutput() );
     TransformFilterPointerType transformer = TransformFilterType::New();
     if ( !W.is_identity() )
     {
@@ -279,22 +284,29 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
       optimizer->SetInput( 0, m_PCAFilter->GetOutput() );
       optimizer->SetInput( 1, img );
       optimizer->SetW( W );
-      optimizer->SetContrastFunction( this->GetContrastFunction() );
+      optimizer->SetNonLinearity( this->GetNonLinearity(),
+                                      this->GetNonLinearityDerivative() );
       optimizer->SetCurrentBandForLoop( band );
 
       MeanEstimatorFilterPointerType estimator = MeanEstimatorFilterType::New();
       estimator->SetInput( optimizer->GetOutput() );
+      
+      // Here we have a pipeline of two persistent filters, we have to manually 
+      // call Reset() and Synthetize () on the first one (optimizer).
+      optimizer->Reset();
       estimator->Update();
+      optimizer->Synthetize();
 
       double norm = 0.;
       for ( unsigned int bd = 0; bd < size; bd++ )
       {
-        W(band, bd) -= m_Mu * ( estimator->GetMean()[bd]
-                              - optimizer->GetBeta() * W(band, bd) / optimizer->GetDen() );
-        norm += std::pow( W(band, bd), 2. );
+        W(bd, band) -= m_Mu * ( estimator->GetMean()[bd]
+                                - optimizer->GetBeta() * W(bd, band) ) 
+                            / optimizer->GetDen();
+        norm += std::pow( W(bd, band), 2. );
       }
       for ( unsigned int bd = 0; bd < size; bd++ )
-        W(band, bd) /= std::sqrt( norm );
+        W(bd, band) /= std::sqrt( norm );
     }
 
     // Decorrelation of the W vectors
@@ -316,14 +328,7 @@ FastICAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     reporter.CompletedPixel();
   } // end of while loop
 
-  if ( size != this->GetNumberOfPrincipalComponentsRequired() )
-    {
-    this->m_TransformationMatrix = W.get_n_columns( 0, this->GetNumberOfPrincipalComponentsRequired() );
-    }
-  else
-    {
-    this->m_TransformationMatrix = W;
-    }
+  this->m_TransformationMatrix = W;
 
   otbMsgDebugMacro( << "Final convergence " << convergence
     << " after " << iteration << " iterations" );
