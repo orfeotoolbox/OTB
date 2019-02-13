@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {SpotBefore.png}, {SpotAfter.png}
-//    OUTPUTS: {DiffChDet.tif}
-//    3
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DiffChDet Input/SpotBefore.png Input/SpotAfter.png Output/DiffChDet.tif 3
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

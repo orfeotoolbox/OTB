@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//     INPUTS: {ROI_QB_MUL_2.tif}
-//     OUTPUTS: {ImageRegionIteratorWithIndexOutput.jpg}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ImageRegionIteratorWithIndex Input/ROI_QB_MUL_2.tif Output/ImageRegionIteratorWithIndexOutput.jpg
+*/
+
 
 // Software Guide : BeginLatex
 //

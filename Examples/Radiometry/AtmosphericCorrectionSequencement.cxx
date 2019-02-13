@@ -20,11 +20,27 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {Romania_Extract.tif}
-//  OUTPUTS: {AtmosphericCorrectionSequencement.tif}
-//  ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_alpha_beta.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_solar_illumination.txt ${OTB_DATA_ROOT}/Examples/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt 27.3 4 12 152.7 2.5 -77.0 1013. 2.48134 0.34400 1 0.199854 2 0.020
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./AtmosphericCorrectionSequencement Input/Romania_Extract.tif \
+                                    Output/AtmosphericCorrectionSequencement.tif \
+                                    Input/atmosphericCorrectionSequencement_alpha_beta.txt \
+                                    Input/atmosphericCorrectionSequencement_solar_illumination.txt \
+                                    Input/atmosphericCorrectionSequencement_wavelength_spectral_bands_spot4_1.txt \
+                                    27.3 \
+                                    4 \
+                                    12 \
+                                    152.7 \
+                                    2.5 \
+                                    -77.0 \
+                                    1013. \
+                                    2.48134 \
+                                    0.34400 \
+                                    1 \
+                                    0.199854 \
+                                    2 \
+                                    0.020
+*/
+
 
 // Software Guide : BeginLatex
 //

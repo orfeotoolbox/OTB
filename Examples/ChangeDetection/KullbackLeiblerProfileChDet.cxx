@@ -19,11 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaAvant.png}, {GomaApres.png}
-//    OUTPUTS: {KLProfileChDet.png}
-//    5 51 1 12 24
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./KullbackLeiblerProfileChDet Input/GomaAvant.png Input/GomaApres.png Output/KLProfileChDet.png 5 51 1 12 24
+*/
+
 
 //  Software Guide : BeginLatex
 //

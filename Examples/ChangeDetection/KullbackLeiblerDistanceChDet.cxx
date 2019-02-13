@@ -19,11 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaAvant.png}, {GomaApres.png}
-//    OUTPUTS: {KLdistanceChDet.png}
-//    35
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./KullbackLeiblerDistanceChDet Input/GomaAvant.png Input/GomaApres.png Output/KLdistanceChDet.png 35
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

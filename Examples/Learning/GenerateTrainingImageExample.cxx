@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_4.tif}, {LearningROIs.txt}
-//    OUTPUTS: {ROI_QB_MUL_4_training.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./GenerateTrainingImageExample Input/ROI_QB_MUL_4.tif Input/LearningROIs.txt Output/ROI_QB_MUL_4_training.png
+*/
+
 
 // Software Guide : BeginLatex
 //

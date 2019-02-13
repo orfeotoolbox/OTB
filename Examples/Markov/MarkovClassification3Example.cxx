@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {MarkovRandomField3_gray_value.png}, {MarkovRandomField3_color_value.png}
-//    1.0 20 1.0 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MarkovClassification3Example Input/QB_Suburb.png Output/MarkovRandomField3_gray_value.png Output/MarkovRandomField3_color_value.png 1.0 20 1.0 1
+*/
+
 
 // Software Guide : BeginLatex
 //

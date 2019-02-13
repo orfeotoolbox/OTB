@@ -26,11 +26,27 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {suburb2.jpeg}
-//    OUTPUTS: {SFSLengthOutput.tif}, {SFSWidthOutput.tif}, {SFSMeanOutput.tif}, {SFSRatioOutput.tif}, {SFSSDOutput.tif}, {SFSPsiOutput.tif}, {SFSLengthPrettyOutput.tif}, {SFSWidthPrettyOutput.tif}, {SFSMeanPrettyOutput.tif}, {SFSRatioPrettyOutput.tif}, {SFSSDPrettyOutput.tif}, {SFSPsiPrettyOutput.tif}
-//    20 50 8 4 0.6
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SFSExample Input/suburb2.jpeg \
+             Output/SFSLengthOutput.tif \
+             Output/SFSWidthOutput.tif \
+             Output/SFSMeanOutput.tif \
+             Output/SFSRatioOutput.tif \
+             Output/SFSSDOutput.tif \
+             Output/SFSPsiOutput.tif \
+             Output/SFSLengthPrettyOutput.tif \
+             Output/SFSWidthPrettyOutput.tif \
+             Output/SFSMeanPrettyOutput.tif \
+             Output/SFSRatioPrettyOutput.tif \
+             Output/SFSSDPrettyOutput.tif \
+             Output/SFSPsiPrettyOutput.tif \
+             20 \
+             50 \
+             8 \
+             4 \
+             0.6
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}, {QB_Suburb.png}
-//    OUTPUTS: {MarkovRestoration.png}
-//    10.0 30 1.0 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MarkovRestorationExample Input/QB_Suburb.png Input/QB_Suburb.png Output/MarkovRestoration.png 10.0 30 1.0 1
+*/
+
 
 // Software Guide : BeginLatex
 //

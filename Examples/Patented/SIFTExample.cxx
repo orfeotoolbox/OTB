@@ -19,31 +19,26 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5SIFT0.png}
-//    "SIFT0.txt" 2 3 0 0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5SIFT1.png}
-//    "SIFT1.txt" 2 3 1 0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5SIFT2.png}
-//    "SIFT2.txt" 2 3 2 0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {QB_SuburbSIFT5.png}
-//    "SIFT2.txt" 2 3 5 0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_SuburbRotated10.png}
-//    OUTPUTS: {QB_SuburbSIFT5Rotated10.png}
-//    "SIFT2.txt" 2 3 5 0
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SIFTExample Input/ROISpot5.png Output/ROISpot5SIFT0.png "SIFT0.txt" 2 3 0 0
+*/
+
+/* Example usage:
+./SIFTExample Input/ROISpot5.png Output/ROISpot5SIFT1.png "SIFT1.txt" 2 3 1 0
+*/
+
+/* Example usage:
+./SIFTExample Input/ROISpot5.png Output/ROISpot5SIFT2.png "SIFT2.txt" 2 3 2 0
+*/
+
+/* Example usage:
+./SIFTExample Input/QB_Suburb.png Output/QB_SuburbSIFT5.png "SIFT2.txt" 2 3 5 0
+*/
+
+/* Example usage:
+./SIFTExample Input/QB_SuburbRotated10.png Output/QB_SuburbSIFT5Rotated10.png "SIFT2.txt" 2 3 5 0
+*/
+
 
 // Software Guide : BeginLatex
 //

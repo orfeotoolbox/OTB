@@ -27,11 +27,10 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {suburb2.jpeg}
-//    OUTPUTS: {SIFTDensityOutput.tif}, {PrettySIFTDensityOutput.png}
-//    3 3 7
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SIFTDensityExample Input/suburb2.jpeg Output/SIFTDensityOutput.tif Output/PrettySIFTDensityOutput.png 3 3 7
+*/
+
 
 // Software Guide : BeginLatex
 //

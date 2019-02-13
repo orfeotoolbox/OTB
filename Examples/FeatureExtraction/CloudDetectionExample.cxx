@@ -20,11 +20,20 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {CloudsOnReunion.tif}
-//  OUTPUTS: {CloudDetectionOutput.tif} , {pretty_CloudsOnReunion.png} , {pretty_CloudDetectionOutput.png}
-//  553 467 734 581 0.4 0.6 1.0
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./CloudDetectionExample Input/CloudsOnReunion.tif \
+                        Output/CloudDetectionOutput.tif \
+                        Output/pretty_CloudsOnReunion.png \
+                        Output/pretty_CloudDetectionOutput.png \
+                        553 \
+                        467 \
+                        734 \
+                        581 \
+                        0.4 \
+                        0.6 \
+                        1.0
+*/
+
 
 // Software Guide : BeginLatex
 //

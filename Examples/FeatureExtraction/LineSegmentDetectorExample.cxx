@@ -24,10 +24,10 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorDataFileWriter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Scene.png}
-//    OUTPUTS: {LSDOutput.shp}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./LineSegmentDetectorExample Input/Scene.png Output/LSDOutput.shp
+*/
+
 
 // Software Guide : BeginDescription
 //

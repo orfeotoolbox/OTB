@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst2.png}
-//    OUTPUTS: {amstTouziEdges.png}, {amstTouziDirections.png}
-//    3
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./TouziEdgeDetectorExample Input/amst2.png Output/amstTouziEdges.png Output/amstTouziDirections.png 3
+*/
+
 
 // Software Guide : BeginLatex
 //

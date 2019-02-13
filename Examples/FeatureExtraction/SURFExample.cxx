@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5SURF.png}
-//    3 3
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SURFExample Input/ROISpot5.png Output/ROISpot5SURF.png 3 3
+*/
+
 
 // Software Guide : BeginLatex
 //

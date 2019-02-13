@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GSSTF_NCEP.2b.2008.12.31.he5}
-//    OUTPUTS: {HDFReaderExample.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./HDFReaderExample Input/GSSTF_NCEP.2b.2008.12.31.he5 Output/HDFReaderExample.png
+*/
+
 
 // Software Guide : BeginLatex
 //

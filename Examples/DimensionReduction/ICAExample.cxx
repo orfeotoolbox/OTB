@@ -23,11 +23,18 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {FastICAOutput.tif}, {InverseFastICAOutput.tif}, {FastICA-input-pretty.png}, {FastICA-output-pretty.png}, {FastICA-invoutput-pretty.png}
-//    8 20 1.
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ICAExample Input/wv2_cannes_8bands.tif \
+             Output/FastICAOutput.tif \
+             Output/InverseFastICAOutput.tif \
+             Output/FastICA-input-pretty.png \
+             Output/FastICA-output-pretty.png \
+             Output/FastICA-invoutput-pretty.png \
+             8 \
+             20 \
+             1.
+*/
+
 
 // Software Guide : BeginLatex
 //

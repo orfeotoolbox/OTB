@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {MarkovRandomField2.png}
-//    1.0 5 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MarkovClassification2Example Input/QB_Suburb.png Output/MarkovRandomField2.png 1.0 5 1
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -28,10 +28,10 @@
 #include "itkImageRegionIterator.h"
 #include "itkListSample.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_1.png}, {ROI_QB_MUL_SOM.png}
-//    OUTPUTS: {ROI_QB_MUL_SOMCLASS.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SOMClassifierExample Input/ROI_QB_MUL_1.png Input/ROI_QB_MUL_SOM.png Output/ROI_QB_MUL_SOMCLASS.png
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the

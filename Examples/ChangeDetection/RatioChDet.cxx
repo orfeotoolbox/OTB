@@ -19,11 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaAvant.png}, {GomaApres.png}
-//    OUTPUTS: {RatioChDet.tif}
-//    3
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./RatioChDet Input/GomaAvant.png Input/GomaApres.png Output/RatioChDet.tif 3
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

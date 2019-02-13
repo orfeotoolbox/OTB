@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {RoadExtractBandMath.tif}, {qb_BandMath-pretty.jpg}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./BandMathFilterExample Input/qb_RoadExtract.tif Output/RoadExtractBandMath.tif Output/qb_BandMath-pretty.jpg
+*/
+
 
 //  Software Guide : BeginDescription
 //

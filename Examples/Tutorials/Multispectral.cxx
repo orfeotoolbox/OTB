@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {qb_blue.tif}, {qb_shiftscale.tif}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./Multispectral Input/qb_RoadExtract.tif Output/qb_blue.tif Output/qb_shiftscale.tif
+*/
+
 
 //  Software Guide : BeginLatex
 //

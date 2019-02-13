@@ -25,9 +25,10 @@
 
 #include "otbImageFileReader.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    1 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ComplexMomentPathExample 1 1
+*/
+
 
 // Software Guide : BeginLatex
 //

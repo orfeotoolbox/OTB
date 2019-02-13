@@ -20,17 +20,15 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {IMAGERY_SSECH.tif}
-//    OUTPUTS: {PrintableExampleOutput1.jpg}
-//    1 2 3
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./PrintableImageFilterExample Input/IMAGERY_SSECH.tif Output/PrintableExampleOutput1.jpg 1 2 3
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {IMAGERY_SSECH.tif}
-//    OUTPUTS: {PrintableExampleOutput2.jpg}
-//    1 4 2
-//  Software Guide : EndCommandLineArgs
+
+/* Example usage:
+./PrintableImageFilterExample Input/IMAGERY_SSECH.tif Output/PrintableExampleOutput2.jpg 1 4 2
+*/
+
 
 //  Software Guide : BeginLatex
 //

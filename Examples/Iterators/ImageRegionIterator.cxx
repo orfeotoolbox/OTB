@@ -19,11 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//     INPUTS: {QB_Suburb.png}
-//     OUTPUTS: {ImageRegionIteratorOutput.png}
-//     10 10 110 140
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ImageRegionIterator Input/QB_Suburb.png Output/ImageRegionIteratorOutput.png 10 10 110 140
+*/
+
 
 // Software Guide : BeginLatex
 //

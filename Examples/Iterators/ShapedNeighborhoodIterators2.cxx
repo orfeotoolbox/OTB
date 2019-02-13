@@ -19,11 +19,11 @@
  */
 
 
-// SoftwareGuide : BeginCommandLineArgs
-//  INPUTS: {BinaryImage.png}
-//  OUTPUTS: {ShapedNeighborhoodIterators1b.png}
-//  4
-// SoftwareGuide : EndCommandLineArgs
+/* Example usage:
+./ShapedNeighborhoodIterators2 Input/BinaryImage.png \
+                               Output/ShapedNeighborhoodIterators1b.png \
+                               4
+*/
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"

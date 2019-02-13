@@ -20,20 +20,20 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToRainbowImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DEMToRainbowExample Output/DEMToRainbowImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToHotImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm hot
-//  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToReliefImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm relief
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DEMToRainbowExample Output/DEMToHotImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm hot
+*/
+
+
+/* Example usage:
+./DEMToRainbowExample Output/DEMToReliefImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm relief
+*/
+
 
 // Software Guide : BeginLatex
 //

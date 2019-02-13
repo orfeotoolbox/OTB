@@ -19,12 +19,15 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//
-// INPUTS:  {verySmallFSATSW.tif}
-// OUTPUTS: {siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW.tif}, {verySmallFSATSW_visu.png}, {siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW_visu.png}
-// 1 4
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./LAIFromNDVIImageTransform Input/verySmallFSATSW.tif \
+                            Output/siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW.tif \
+                            Output/verySmallFSATSW_visu.png \
+                            Output/siTvLAIFromNDVIImageTransformExampleTest_verySmallFSATSW_visu.png \
+                            1 \
+                            4
+*/
+
 //
 // Software Guide : BeginLatex
 //

@@ -63,16 +63,14 @@
 #include "itkBinaryBallStructuringElement.h"
 #include "itkGrayscaleDilateImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {ExtractRoadByStepsExampleOutput.jpg}, {qb_ExtractRoad_pretty.jpg}
-//    337 557 432 859 0.00005 1.0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract2.tif}
-//    OUTPUTS: {ExtractRoadByStepsExampleOutput2.jpg}, {qb_ExtractRoad_pretty2.jpg}
-//    228 316 207 282 0.00005 1.0
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ExtractRoadByStepsExample Input/qb_RoadExtract.tif Output/ExtractRoadByStepsExampleOutput.jpg Output/qb_ExtractRoad_pretty.jpg 337 557 432 859 0.00005 1.0
+*/
+
+/* Example usage:
+./ExtractRoadByStepsExample Input/qb_RoadExtract2.tif Output/ExtractRoadByStepsExampleOutput2.jpg Output/qb_ExtractRoad_pretty2.jpg 228 316 207 282 0.00005 1.0
+*/
+
 
 int main(int itkNotUsed(argc), char * argv[])
 {

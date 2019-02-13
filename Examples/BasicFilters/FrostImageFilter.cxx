@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaSmall.png}
-//    OUTPUTS: {GomaSmallFrostFiltered.png}
-//    5 0.1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./FrostImageFilter Input/GomaSmall.png Output/GomaSmallFrostFiltered.png 5 0.1
+*/
+
 
 // Software Guide : BeginLatex
 //

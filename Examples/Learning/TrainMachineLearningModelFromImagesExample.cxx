@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_1_ortho.tif}, {VectorData_QB1.shp}
-//    OUTPUTS: {clLIBSVMModelQB1.libsvm}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./TrainMachineLearningModelFromImagesExample Input/QB_1_ortho.tif Input/VectorData_QB1.shp Output/clLIBSVMModelQB1.libsvm
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the

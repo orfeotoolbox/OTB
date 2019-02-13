@@ -29,20 +29,20 @@
 #include "itkFastMarchingImageFilter.h"
 #include "itkAddImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {NeighborhoodIterators6a.png}
-//    100 100
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NeighborhoodIterators6 Output/NeighborhoodIterators6a.png 100 100
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {NeighborhoodIterators6b.png}
-//    50 150
-//  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {NeighborhoodIterators6c.png}
-//    150 50
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NeighborhoodIterators6 Output/NeighborhoodIterators6b.png 50 150
+*/
+
+
+/* Example usage:
+./NeighborhoodIterators6 Output/NeighborhoodIterators6c.png 150 50
+*/
+
 
 // Software Guide : BeginLatex
 //

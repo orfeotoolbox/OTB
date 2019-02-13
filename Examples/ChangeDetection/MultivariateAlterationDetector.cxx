@@ -25,11 +25,15 @@
 #include "otbPrintableImageFilter.h"
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Spot5-Gloucester-before.tif}, {Spot5-Gloucester-after.tif}
-//    OUTPUTS: {MADOutput.tif}, {mad-input1.png}, {mad-input2.png}, {mad-output.png}
-//
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MultivariateAlterationDetector Input/Spot5-Gloucester-before.tif \
+                                 Input/Spot5-Gloucester-after.tif \
+                                 Output/MADOutput.tif \
+                                 Output/mad-input1.png \
+                                 Output/mad-input2.png \
+                                 Output/mad-output.png
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

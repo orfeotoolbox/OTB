@@ -20,11 +20,19 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {verySmallFSATSW.tif}
-//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_FSATSW.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
-//  3 2 4 660 560 830
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter Input/verySmallFSATSW.tif \
+                                                       Output/AVIMultiChannelRAndGAndNIRVegetationIndex.tif \
+                                                       Output/pretty_FSATSW.png \
+                                                       Output/pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png \
+                                                       3 \
+                                                       2 \
+                                                       4 \
+                                                       660 \
+                                                       560 \
+                                                       830
+*/
+
 
 // Software Guide : BeginLatex
 //

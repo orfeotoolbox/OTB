@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
-//    OUTPUTS: {MarkovRegularization.png}, {MarkovRegularization-scaled.png}
-//    0.2 20 0.0 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MarkovRegularizationExample Input/ROI_QB_MUL_1_SVN_CLASS_MULTI.png Output/MarkovRegularization.png Output/MarkovRegularization-scaled.png 0.2 20 0.0 1
+*/
+
 
 // Software Guide : BeginLatex
 //

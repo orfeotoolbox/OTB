@@ -24,11 +24,15 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Indian_pines_corrected.tif}
-//    OUTPUTS: {Indian_pines_Unmixing_Output.tif}, {UnmixingbandOutput1.png}, {UnmixingbandOutput2.png}, {UnmixingbandOutput3.png}
-//    16
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./HyperspectralUnmixingExample Input/Indian_pines_corrected.tif \
+                               Output/Indian_pines_Unmixing_Output.tif \
+                               Output/UnmixingbandOutput1.png \
+                               Output/UnmixingbandOutput2.png \
+                               Output/UnmixingbandOutput3.png \
+                               16
+*/
+
 
 // Software Guide : BeginLatex
 //

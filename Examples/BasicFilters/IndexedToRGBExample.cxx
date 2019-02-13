@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {buildingExtractionIndexed.tif}
-//    OUTPUTS: {buildingExtractionRGB.png}, {buildingExtractionIndexed_scaled.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./IndexedToRGBExample Input/buildingExtractionIndexed.tif Output/buildingExtractionRGB.png Output/buildingExtractionIndexed_scaled.png
+*/
+
 
 //  Software Guide : BeginLatex
 //

@@ -25,10 +25,10 @@
 
 #include "otbImageFileReader.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    2
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./FlusserMomentsImageFunctionExample Input/ROISpot5.png 2
+*/
+
 
 // Software Guide : BeginLatex
 //

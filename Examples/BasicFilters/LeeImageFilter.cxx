@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaSmall.png}
-//    OUTPUTS: {GomaSmallLeeFiltered.png}
-//    3 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./LeeImageFilter Input/GomaSmall.png Output/GomaSmallLeeFiltered.png 3 1
+*/
+
 
 // Software Guide : BeginLatex
 //

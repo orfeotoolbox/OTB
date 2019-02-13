@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_PAN_1.tif}
-//    OUTPUTS: {NeighborhoodIterators1a.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NeighborhoodIterators1 Input/ROI_QB_PAN_1.tif Output/NeighborhoodIterators1a.png
+*/
+
 
 // Software Guide : BeginLatex
 //

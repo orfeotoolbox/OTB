@@ -21,10 +21,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {maur_GT.tif}, {maur_labelled.tif}
-//  OUTPUTS: {maur_colored_GT.tif}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./HooverMetricsEstimation Input/maur_GT.tif Input/maur_labelled.tif Output/maur_colored_GT.tif
+*/
+
 
 // Software Guide : BeginLatex
 //

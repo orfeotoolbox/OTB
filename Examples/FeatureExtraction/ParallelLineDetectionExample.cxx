@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {Lines.png}, {ParallelLines.png}
-//    20 2 10
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ParallelLineDetectionExample Output/Lines.png Output/ParallelLines.png 20 2 10
+*/
+
 
 // Software Guide : BeginLatex
 //

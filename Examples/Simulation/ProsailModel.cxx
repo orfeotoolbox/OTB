@@ -20,11 +20,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS:
-//    30.0 10.0 0.0 0.015 0.009 1.2 2 50 1 70 0.2 30 0 0
-//    OUTPUTS: SailReflTest.txt
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ProsailModel 30.0 10.0 0.0 0.015 0.009 1.2 2 50 1 70 0.2 30 0 0
+*/
+
 //
 // Software Guide : BeginLatex
 //

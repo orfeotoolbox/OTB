@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {qb_BandMath-res1.tif}, {qb_BandMath-res2.tif}, {context.txt}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./BandMathXImageFilterExample Input/qb_RoadExtract.tif Output/qb_BandMath-res1.tif Output/qb_BandMath-res2.tif Output/context.txt
+*/
+
 
 //  Software Guide : BeginLatex
 //

@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {rcc8_mire1.png}
-//    OUTPUTS: {rcc8_mire2_vectorizer.shp}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./LabelMapToVectorData Input/rcc8_mire1.png Output/rcc8_mire2_vectorizer.shp
+*/
+
 
 // Software Guide : BeginLatex
 //

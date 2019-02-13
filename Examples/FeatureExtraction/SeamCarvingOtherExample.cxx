@@ -32,11 +32,10 @@
 //
 // Software Guide : EndLatex
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {SeamCarvingOtherExampleOutput.png}
-//    50
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SeamCarvingOtherExample Input/QB_Suburb.png Output/SeamCarvingOtherExampleOutput.png 50
+*/
+
 
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"

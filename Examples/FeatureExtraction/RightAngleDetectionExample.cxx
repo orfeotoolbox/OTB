@@ -24,11 +24,10 @@
 #include "otbLineSegmentDetector.h"
 #include "otbVectorDataFileWriter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {Scene.png}
-//    OUTPUTS: {rightAngleOutput.shp}
-//  0.1 20
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./RightAngleDetectionExample Input/Scene.png Output/rightAngleOutput.shp 0.1 20
+*/
+
 
 // Software Guide : BeginLatex
 //

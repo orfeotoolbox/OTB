@@ -20,11 +20,17 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {VegetationIndex.hd}
-//  OUTPUTS: {ARVIMultiChannelRAndBAndNIRVegetationIndex.tif} , {pretty_VegetationIndex.png} , {pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png}
-//  1 3 2 0.6
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter Input/VegetationIndex.hd \
+                                                        Output/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif \
+                                                        Output/pretty_VegetationIndex.png \
+                                                        Output/pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png \
+                                                        1 \
+                                                        3 \
+                                                        2 \
+                                                        0.6
+*/
+
 
 // Software Guide : BeginLatex
 //

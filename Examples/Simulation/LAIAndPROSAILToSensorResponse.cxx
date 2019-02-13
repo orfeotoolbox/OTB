@@ -20,12 +20,12 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//
-// INPUTS:  {LAIverySmallFSATSW.tif, Simu_label_LAI.png, Simu_mask_LAI_1.png, label-params-SO-2006-Level-2.txt, acqui-params.txt, rep6S.dat}
-// OUTPUTS: {siTvLAIAndPROSAILToSensorResponse.tif}
-// 5
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./LAIAndPROSAILToSensorResponse Input/LAIverySmallFSATSW.tif, Simu_label_LAI.png, Simu_mask_LAI_1.png, label-params-SO-2006-Level-2.txt, acqui-params.txt, rep6S.dat \
+                                Output/siTvLAIAndPROSAILToSensorResponse.tif \
+                                5
+*/
+
 //
 // Software Guide : BeginLatex
 //

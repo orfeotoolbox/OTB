@@ -21,17 +21,31 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
-//  OUTPUTS: {BayesianFusion_0.9999.tif} , {pretty_BayesianFusion_0.9999.png} , {pretty_multiSpect_0.9999.png} , {pretty_multiSpectInterp_0.9999.png} , {pretty_panchro_0.9999.png}
-//  0.9999
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./BayesianFusionImageFilter Input/multiSpect.tif \
+                            Input/multiSpectInterp.tif \
+                            Input/panchro.tif \
+                            Output/BayesianFusion_0.9999.tif \
+                            Output/pretty_BayesianFusion_0.9999.png \
+                            Output/pretty_multiSpect_0.9999.png \
+                            Output/pretty_multiSpectInterp_0.9999.png \
+                            Output/pretty_panchro_0.9999.png \
+                            0.9999
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {multiSpect.tif} , {multiSpectInterp.tif}, {panchro.tif}
-//  OUTPUTS: {BayesianFusion_0.5.tif} , {pretty_BayesianFusion_0.5.png} , {pretty_multiSpect_0.5.png} , {pretty_multiSpectInterp_0.5.png} , {pretty_panchro_0.5.png}
-//  0.5
-//  Software Guide : EndCommandLineArgs
+
+/* Example usage:
+./BayesianFusionImageFilter Input/multiSpect.tif \
+                            Input/multiSpectInterp.tif \
+                            Input/panchro.tif \
+                            Output/BayesianFusion_0.5.tif \
+                            Output/pretty_BayesianFusion_0.5.png \
+                            Output/pretty_multiSpect_0.5.png \
+                            Output/pretty_multiSpectInterp_0.5.png \
+                            Output/pretty_panchro_0.5.png \
+                            0.5
+*/
+
 
 // Software Guide : BeginLatex
 //

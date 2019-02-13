@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}, {ROISpot5Warped.png}
-//    OUTPUTS: {SIFTdeformationFieldOutput.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SIFTDisparityMapEstimation Input/ROISpot5.png Input/ROISpot5Warped.png Output/SIFTdeformationFieldOutput.png
+*/
+
 
 // Software Guide : BeginLatex
 //

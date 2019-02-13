@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {ApplicationExample.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ApplicationExample Input/QB_Suburb.png Output/ApplicationExample.png
+*/
+
 
 
 //  Software Guide : BeginLatex

@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {sensor_stereo_left.tif}, {sensor_stereo_right.tif}
-//    OUTPUTS: {elevationOutput.tif},{elevationOutputPrintable.png}
-//    140
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./StereoReconstructionExample Input/sensor_stereo_left.tif Input/sensor_stereo_right.tif Output/elevationOutput.tif Output/elevationOutputPrintable.png 140
+*/
+
 
 // Software Guide : BeginLatex
 //

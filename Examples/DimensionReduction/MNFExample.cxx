@@ -23,11 +23,18 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {MNFOutput.tif}, {InverseMNFOutput.tif}, {MNF-input-pretty.png}, {MNF-output-pretty.png}, {MNF-invoutput-pretty.png}
-//    8 1 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MNFExample Input/wv2_cannes_8bands.tif \
+             Output/MNFOutput.tif \
+             Output/InverseMNFOutput.tif \
+             Output/MNF-input-pretty.png \
+             Output/MNF-output-pretty.png \
+             Output/MNF-invoutput-pretty.png \
+             8 \
+             1 \
+             1
+*/
+
 
 // Software Guide : BeginLatex
 //

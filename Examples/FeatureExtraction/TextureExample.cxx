@@ -18,11 +18,10 @@
  * limitations under the License.
  */
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ADS40RoiSmall.png}
-//    OUTPUTS: {TextureOutput.tif}, {pretty_TextureOutput.png}
-//    2 1 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./TextureExample Input/ADS40RoiSmall.png Output/TextureOutput.tif Output/pretty_TextureOutput.png 2 1 1
+*/
+
 
 //  Software Guide : BeginDescription
 //  .. figure:: pretty_TextureOutput.png

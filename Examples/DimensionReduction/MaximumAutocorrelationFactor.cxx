@@ -23,11 +23,10 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {MAFOutput.tif}, {maf-input.png}, {maf-output.png}
-//
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./MaximumAutocorrelationFactor Input/wv2_cannes_8bands.tif Output/MAFOutput.tif Output/maf-input.png Output/maf-output.png
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

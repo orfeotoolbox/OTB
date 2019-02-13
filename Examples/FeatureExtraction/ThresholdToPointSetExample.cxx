@@ -21,10 +21,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    250 252
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ThresholdToPointSetExample Input/ROISpot5.png 250 252
+*/
+
 
 // Software Guide : BeginLatex
 //

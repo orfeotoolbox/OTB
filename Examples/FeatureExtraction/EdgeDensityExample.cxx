@@ -25,11 +25,10 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {suburb2.jpeg}
-//    OUTPUTS: {EdgeDensityOutput.tif}, {PrettyEdgeDensityOutput.png}
-//    7 50 10 1.0 0.01
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./EdgeDensityExample Input/suburb2.jpeg Output/EdgeDensityOutput.tif Output/PrettyEdgeDensityOutput.png 7 50 10 1.0 0.01
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -19,11 +19,19 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {OBIARadiometricAttribute1.png}, {qb_ExtractRoad_Radiometry_pretty.jpg}
-//    STATS::Band1::Mean 0 0.5 16 16 50 1.0
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./RadiometricAttributesLabelMapFilterExample Input/qb_RoadExtract.tif \
+                                             Output/OBIARadiometricAttribute1.png \
+                                             Output/qb_ExtractRoad_Radiometry_pretty.jpg \
+                                             STATS::Band1::Mean \
+                                             0 \
+                                             0.5 \
+                                             16 \
+                                             16 \
+                                             50 \
+                                             1.0
+*/
+
 
 //  Software Guide : BeginLatex
 //

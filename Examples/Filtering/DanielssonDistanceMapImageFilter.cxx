@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS:  {FivePoints.png}
-//    OUTPUTS: {DanielssonDistanceMapImageFilterOutput1.png}
-//    OUTPUTS: {DanielssonDistanceMapImageFilterOutput2.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DanielssonDistanceMapImageFilter Input/FivePoints.png Output/DanielssonDistanceMapImageFilterOutput1.png Output/DanielssonDistanceMapImageFilterOutput2.png
+*/
+
 
 // Software Guide : BeginLatex
 //

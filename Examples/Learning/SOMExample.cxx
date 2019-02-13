@@ -20,11 +20,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {ROI_QB_MUL_SOM.png}, {ROI_QB_MUL_SOMACT.png}
-//    4 4 4 4 20 1.0 0.1 128
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SOMExample Input/ROI_QB_MUL_1.png Output/ROI_QB_MUL_SOM.png Output/ROI_QB_MUL_SOMACT.png 4 4 4 4 20 1.0 0.1 128
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the use of the

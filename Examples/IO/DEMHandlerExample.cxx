@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  ${OTB_DATA_ROOT}/Input/srtm_directory ${OTB_DATA_ROOT}/Input/DEM/egm96.grd
-//  40 8.434583 44.647083 383.580313671 0.001
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DEMHandlerExample Input/srtm_directory Input/DEM/egm96.grd 40 8.434583 44.647083 383.580313671 0.001
+*/
+
 
 // Software Guide : BeginLatex
 //

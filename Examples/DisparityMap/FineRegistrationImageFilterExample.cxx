@@ -20,17 +20,34 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcDisplacementFieldOutput-horizontal.png}, {fcDisplacementFieldOutput-vertical.png}, {fcCorrelFieldOutput.png}, {fcDResampledOutput2.png}
-//    1.0 5 3 0.1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./FineRegistrationImageFilterExample Input/StereoFixed.png \
+                                     Input/StereoMoving.png \
+                                     Output/fcDisplacementFieldOutput-horizontal.png \
+                                     Output/fcDisplacementFieldOutput-vertical.png \
+                                     Output/fcCorrelFieldOutput.png \
+                                     Output/fcDResampledOutput2.png \
+                                     1.0 \
+                                     5 \
+                                     3 \
+                                     0.1
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcMRSDDisplacementFieldOutput-horizontal.png}, {fcMRSDDisplacementFieldOutput-vertical.png}, {fcMRSDCorrelFieldOutput.png}, {fcMRSDDResampledOutput2.png}
-//    1.0 5 3 0.1 mrsd
-//  Software Guide : EndCommandLineArgs
+
+/* Example usage:
+./FineRegistrationImageFilterExample Input/StereoFixed.png \
+                                     Input/StereoMoving.png \
+                                     Output/fcMRSDDisplacementFieldOutput-horizontal.png \
+                                     Output/fcMRSDDisplacementFieldOutput-vertical.png \
+                                     Output/fcMRSDCorrelFieldOutput.png \
+                                     Output/fcMRSDDResampledOutput2.png \
+                                     1.0 \
+                                     5 \
+                                     3 \
+                                     0.1 \
+                                     mrsd
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {1000}, {4}, {5}, {121212}
-//    OUTPUTS: {clSVMModelFromSamples.svm}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./TrainMachineLearningModelFromSamplesExample Input/1000 Input/4 Input/5 Input/121212 Output/clSVMModelFromSamples.svm
+*/
+
 
 //  Software Guide : BeginLatex
 //

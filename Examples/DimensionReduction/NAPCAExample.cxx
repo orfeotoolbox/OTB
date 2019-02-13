@@ -23,11 +23,18 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {NAPCAOutput.tif}, {InverseNAPCAOutput.tif}, {napca-input-pretty.png}, {napca-output-pretty.png}, {napca-invoutput-pretty.png}
-//    8 1 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NAPCAExample Input/wv2_cannes_8bands.tif \
+               Output/NAPCAOutput.tif \
+               Output/InverseNAPCAOutput.tif \
+               Output/napca-input-pretty.png \
+               Output/napca-output-pretty.png \
+               Output/napca-invoutput-pretty.png \
+               8 \
+               1 \
+               1
+*/
+
 
 // Software Guide : BeginLatex
 //

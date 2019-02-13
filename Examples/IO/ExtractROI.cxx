@@ -21,11 +21,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {IMAGERY_SSECH.tif}
-//    OUTPUTS: {ROI_IMAGERY_RGB.png}, {ROI_IMAGERY_MIR.png}
-//    0 0 100 100
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ExtractROI Input/IMAGERY_SSECH.tif Output/ROI_IMAGERY_RGB.png Output/ROI_IMAGERY_MIR.png 0 0 100 100
+*/
+
 
 //  Software Guide : BeginLatex
 //

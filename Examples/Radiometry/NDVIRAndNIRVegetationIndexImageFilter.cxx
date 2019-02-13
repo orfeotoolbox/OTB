@@ -20,10 +20,15 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {NDVI_2.hdr} , {NDVI_3.hdr}
-//  OUTPUTS: {NDVIRAndNIRVegetationIndex.tif} , {pretty_Red.png} , {pretty_NIR.png} , {pretty_NDVIRAndNIRVegetationIndex.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NDVIRAndNIRVegetationIndexImageFilter Input/NDVI_2.hdr \
+                                        Input/NDVI_3.hdr \
+                                        Output/NDVIRAndNIRVegetationIndex.tif \
+                                        Output/pretty_Red.png \
+                                        Output/pretty_NIR.png \
+                                        Output/pretty_NDVIRAndNIRVegetationIndex.png
+*/
+
 
 // Software Guide : BeginLatex
 //

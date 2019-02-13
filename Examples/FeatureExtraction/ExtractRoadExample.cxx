@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {qb_RoadExtract.tif}
-//    OUTPUTS: {ExtractRoadOutput.png}
-//    337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ExtractRoadExample Input/qb_RoadExtract.tif Output/ExtractRoadOutput.png 337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
+*/
+
 
 // Software Guide : BeginLatex
 //

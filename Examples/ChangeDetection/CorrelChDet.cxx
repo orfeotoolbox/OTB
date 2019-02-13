@@ -25,11 +25,10 @@
 #include "itkShiftScaleImageFilter.h"
 #include "otbCommandProgressUpdate.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ERSBefore.png}, {ERSAfter.png}
-//    OUTPUTS: {CorrChDet.tif}
-//    15
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./CorrelChDet Input/ERSBefore.png Input/ERSAfter.png Output/CorrChDet.tif 15
+*/
+
 
 //  Software Guide : BeginLatex
 // This example illustrates the class

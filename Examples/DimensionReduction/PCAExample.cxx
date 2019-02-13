@@ -23,11 +23,16 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {input-pretty.png}, {output-pretty.png}, {invoutput-pretty.png}
-//    8
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./PCAExample Input/wv2_cannes_8bands.tif \
+             Output/PCAOutput.tif \
+             Output/InversePCAOutput.tif \
+             Output/input-pretty.png \
+             Output/output-pretty.png \
+             Output/invoutput-pretty.png \
+             8
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -19,26 +19,22 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {NeighborhoodIterators4a.png}
-//    0
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {NeighborhoodIterators4b.png}
-//    1
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {NeighborhoodIterators4c.png}
-//    2
-//  Software Guide : EndCommandLineArgs
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {NeighborhoodIterators4d.png}
-//    5
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NeighborhoodIterators4 Input/QB_Suburb.png Output/NeighborhoodIterators4a.png 0
+*/
+
+/* Example usage:
+./NeighborhoodIterators4 Input/QB_Suburb.png Output/NeighborhoodIterators4b.png 1
+*/
+
+/* Example usage:
+./NeighborhoodIterators4 Input/QB_Suburb.png Output/NeighborhoodIterators4c.png 2
+*/
+
+/* Example usage:
+./NeighborhoodIterators4 Input/QB_Suburb.png Output/NeighborhoodIterators4d.png 5
+*/
+
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"

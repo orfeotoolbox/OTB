@@ -19,10 +19,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {TutorialsFilteringPipelineOutput.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./FilteringPipeline Input/QB_Suburb.png Output/TutorialsFilteringPipelineOutput.png
+*/
+
 
 //  Software Guide : BeginLatex
 //

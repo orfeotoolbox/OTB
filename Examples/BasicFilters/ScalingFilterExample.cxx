@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Toulouse_Ortho_PAN.tif}
-//    OUTPUTS: {QB_Toulouse_Ortho_PAN_rescaled.png}, {QB_Toulouse_Ortho_PAN_casted.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ScalingFilterExample Input/QB_Toulouse_Ortho_PAN.tif Output/QB_Toulouse_Ortho_PAN_rescaled.png Output/QB_Toulouse_Ortho_PAN_casted.png
+*/
+
 
 //  Software Guide : BeginLatex
 //

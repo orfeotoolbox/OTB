@@ -20,11 +20,17 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {deformationFieldOutput-horizontal.png}, {deformationFieldOutput-vertical.png}, {resampledOutput2.png}
-//    5 1.0 2
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./NCCRegistrationFilterExample Input/StereoFixed.png \
+                               Input/StereoMoving.png \
+                               Output/deformationFieldOutput-horizontal.png \
+                               Output/deformationFieldOutput-vertical.png \
+                               Output/resampledOutput2.png \
+                               5 \
+                               1.0 \
+                               2
+*/
+
 
 // Software Guide : BeginLatex
 //

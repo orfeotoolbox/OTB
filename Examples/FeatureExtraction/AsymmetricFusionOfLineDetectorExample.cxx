@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst2.png}
-//    OUTPUTS: {amstLineFusion.png}
-//    5 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./AsymmetricFusionOfLineDetectorExample Input/amst2.png Output/amstLineFusion.png 5 1
+*/
+
 
 // Software Guide : BeginLatex
 //

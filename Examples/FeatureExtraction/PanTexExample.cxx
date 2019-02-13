@@ -20,10 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_1.png}
-//    OUTPUTS: {PanTexOutput.tif}, {pretty_PanTexInput.png}, {pretty_PanTexOutput.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./PanTexExample Input/ROI_QB_MUL_1.png Output/PanTexOutput.tif Output/pretty_PanTexInput.png Output/pretty_PanTexOutput.png
+*/
+
 
 #include "itkMacro.h"
 #include "otbImage.h"

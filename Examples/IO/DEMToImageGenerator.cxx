@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//  OUTPUTS: {DEMToImageGenerator.tif}
-//  OUTPUTS: {pretty_DEMToImageGenerator.png}
-//  6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+*/
+
 
 // Software Guide : BeginLatex
 //

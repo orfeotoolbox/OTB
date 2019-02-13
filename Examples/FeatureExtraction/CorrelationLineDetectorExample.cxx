@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst2.png}
-//    OUTPUTS: {amstLineCorrelations.png}, {amstLineCorrelationDirections.png}
-//    5 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./CorrelationLineDetectorExample Input/amst2.png Output/amstLineCorrelations.png Output/amstLineCorrelationDirections.png 5 1
+*/
+
 
 // Software Guide : BeginLatex
 //

@@ -26,11 +26,10 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5Harris.png}
-//    1.5 2 0.1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./HarrisExample Input/ROISpot5.png Output/ROISpot5Harris.png 1.5 2 0.1
+*/
+
 
 // Software Guide : BeginLatex
 //

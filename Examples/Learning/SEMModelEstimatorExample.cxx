@@ -20,11 +20,10 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_4.tif}
-//    OUTPUTS: {SEMClassif.png}
-//    4 40 5
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SEMModelEstimatorExample Input/ROI_QB_MUL_4.tif Output/SEMClassif.png 4 40 5
+*/
+
 //
 //  Software Guide : BeginLatex
 //

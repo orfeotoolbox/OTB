@@ -20,11 +20,10 @@
 
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst2.png}
-//    OUTPUTS: {amstLineRatios.png}, {amstLineRatioDirections.png}
-//    5 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./RatioLineDetectorExample Input/amst2.png Output/amstLineRatios.png Output/amstLineRatioDirections.png 5 1
+*/
+
 
 // Software Guide : BeginLatex
 //
