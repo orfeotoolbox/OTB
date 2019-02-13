@@ -75,7 +75,7 @@ def main():
             try:
                 run_example(args.otb_root, args.otb_data, name, dry_run=args.dry_run)
             except RuntimeError as e:
-                print("Warning: ", e)
+                print("Warning:", e)
 
 if __name__ == "__main__":
     main()
