@@ -17,12 +17,10 @@ if __name__ == "__main__":
 
     for filename in list_of_examples:
         content = open(filename).read()
-
-        match = re.search(rx_block, content, re.MULTILINE | re.DOTALL)
-
+        newcontent = content
         name = os.path.splitext(os.path.basename(filename))[0]
 
-        if match:
+        for match in re.finditer(rx_block, content, re.MULTILINE | re.DOTALL):
             print(match.group(0))
             print()
 
@@ -51,9 +49,8 @@ if __name__ == "__main__":
 
             print(block)
 
-            newcontent = re.sub(rx_block, block, content, flags = re.MULTILINE | re.DOTALL)
+            newcontent = re.sub(rx_block, block, newcontent, flags = re.MULTILINE | re.DOTALL, count=1)
 
-            open(filename, "w").write(newcontent)
-            #print(newcontent)
+        open(filename, "w").write(newcontent)
 
 
