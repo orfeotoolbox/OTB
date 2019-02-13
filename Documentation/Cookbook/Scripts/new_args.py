@@ -25,20 +25,23 @@ if __name__ == "__main__":
         if match:
             print(match.group(0))
             print()
-            str = match.group(1)
-            str = str.replace("//    ", "")
-            str = str.replace("//\n", "")
-            str = str.replace("INPUTS: ", "")
-            str = str.replace("OUTPUTS: ", "")
-            str = str.replace("{", "")
-            str = str.replace("}", "")
-            str = str.replace(",", "")
-            str = str.replace("\n", " ")
-            str = str.strip()
+
+            cmd_args = []
+            for line in match.group(1).split("\n"):
+                if "INPUT" in line:
+                    for match in re.finditer("{(.*?)}", line):
+                        cmd_args.append("Input/" + match.group(1))
+                elif "OUTPUT" in line:
+                    for match in re.finditer("{(.*?)}", line):
+                        cmd_args.append("Output/" + match.group(1))
+                elif re.match("// *\n", line):
+                    pass
+                else:
+                    cmd_args.extend(line.replace("//", "").split())
 
             block = ("/* Example usage:\n"
                      "./{} {}\n"
-                     "*/\n".format(name, str))
+                     "*/\n".format(name, " ".join(cmd_args)))
 
             print(block)
 
