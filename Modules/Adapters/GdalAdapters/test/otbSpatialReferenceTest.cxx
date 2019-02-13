@@ -21,6 +21,7 @@
 #include "otbSpatialReference.h"
 
 #include <iostream>
+#include <stdexcept>
 
 using namespace otb;
 
@@ -101,7 +102,7 @@ int otbSpatialReferenceTest(int, char* [])
       }
 
     }
-  catch(InvalidSRDescriptionException & )
+  catch(std::runtime_error & )
     {
     std::cerr<<"Fail: Constructor should not throw with valid description EPSG:4326 and EPSG:32631"<<std::endl;
     success = false;
@@ -138,7 +139,7 @@ int otbSpatialReferenceTest(int, char* [])
     std::cerr<<"Fail: Calling constructor with wrong description should throw"<<std::endl;
     success = false;
     }
-  catch(InvalidSRDescriptionException & )
+  catch(std::runtime_error & )
     {}
 
   if(success)

@@ -29,6 +29,7 @@
 #include "boost/lexical_cast.hpp"
 
 #include <sstream>
+#include <stdexcept>
 
 namespace otb
 {
@@ -84,14 +85,21 @@ SpatialReference::SpatialReference(const SpatialReference & other) noexcept
 SpatialReference::SpatialReference(const OGRSpatialReference * ref)
 {
   if(!ref)
-    throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
+    {
+    throw std::runtime_error("(InvalidSRDescriptionException) "
+      "Can not construct SpatialReference from null pointer");
+    }
+
   m_SR = OGRSpatialReferencePtr(ref->Clone());
 }
 
 SpatialReference::SpatialReference(OGRSpatialReferencePtr ref)
 {
   if(!ref)
-    throw InvalidSRDescriptionException("Can not construct SpatialReference from null pointer");
+    {
+    throw std::runtime_error("(InvalidSRDescriptionException) "
+      "Can not construct SpatialReference from null pointer");
+    }
 
   // Move (will empty ref)
   m_SR = std::move(ref);
@@ -119,8 +127,9 @@ SpatialReference SpatialReference::FromDescription(const std::string & descripti
   if(code1!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss<<"FromDescription("<<description<<")";
-    throw InvalidSRDescriptionException(description);
+    oss <<"(InvalidSRDescriptionException) "
+        <<"FromDescription("<<description<<")";
+    throw std::runtime_error(description);
     }
 
   return SpatialReference(std::move(tmpSR));
@@ -135,8 +144,9 @@ SpatialReference SpatialReference::FromEPSG(unsigned int epsg)
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "FromEPSG("<< epsg<<")";
-    throw InvalidSRDescriptionException(oss.str());
+    oss <<"(InvalidSRDescriptionException) "
+        << "FromEPSG("<< epsg<<")";
+    throw std::runtime_error(oss.str());
     }
 
   return SpatialReference(std::move(tmpSR));
@@ -165,8 +175,9 @@ SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
   if(code!=OGRERR_NONE)
     {
     std::ostringstream oss;
-    oss << "FromUTM(" << zone <<", "<<hem<<"), could not use generated EPSG code "<<epsg;
-    throw InvalidSRDescriptionException(oss.str());
+    oss <<"(InvalidSRDescriptionException) "
+        << "FromUTM(" << zone <<", "<<hem<<"), could not use generated EPSG code "<<epsg;
+    throw std::runtime_error(oss.str());
     }
 
   return SpatialReference(std::move(tmpSR));

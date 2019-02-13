@@ -23,7 +23,6 @@
 #include "OTBGdalAdaptersExport.h"
 
 #include <memory>
-#include <stdexcept>
 
 #if defined(_MSC_VER)
 #pragma warning ( disable: 4251 )
@@ -46,22 +45,6 @@ struct OTBGdalAdapters_EXPORT OGRSpatialReferenceDeleter
     void operator()(OGRSpatialReference * del) const;
   };
 }
-
-/**
- * \class InvalidSRDescriptionException
- * \brief Exception for invalid spatial reference description
- *
- * This class describes an exception that might be thrown by
- * SpatialReference constructors
- * 
- * \ingroup OTBGdalAdapters
- */
-class OTBGdalAdapters_HIDDEN InvalidSRDescriptionException : public std::runtime_error
-{
-public:
-  // Import parent constructor
-  using std::runtime_error::runtime_error;
-};
 
 // Forward declaration needed for the operators declared bellow.
 class SpatialReference;
