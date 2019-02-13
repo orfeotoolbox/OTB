@@ -2642,4 +2642,20 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 
 }
 
+TestHelper::TestHelper() :
+    m_ToleranceDiffValue(0),
+    m_Epsilon(0),
+    m_EpsilonBoundaryChecking(1.0e-30),
+    m_ReportErrors(false),
+    m_IgnoreLineOrder(false),
+    m_MaxArea(1024*1024)
+{
+  m_SpecialTokens.push_back(std::pair<std::string,std::string>(
+    std::string("Integer"),std::string("Integer64")));
+}
+
+TestHelper::~TestHelper()
+{
+}
+
 }
