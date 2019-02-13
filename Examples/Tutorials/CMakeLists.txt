@@ -38,10 +38,6 @@ target_link_libraries(Pipeline ${OTB_LIBRARIES})
 add_executable(ScalingPipeline ScalingPipeline.cxx)
 target_link_libraries(ScalingPipeline ${OTB_LIBRARIES})
 
-add_executable(SmarterFilteringPipeline SmarterFilteringPipeline.cxx)
-target_link_libraries(SmarterFilteringPipeline ${OTB_LIBRARIES})
-
-
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()

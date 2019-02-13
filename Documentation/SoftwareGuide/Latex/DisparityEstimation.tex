@@ -1001,38 +1001,3 @@ sharp peak, in order to have a good precision for the shift estimate.\\
 \input{FineRegistrationImageFilterExample.tex}
 %% \fi
 
-\section{Irregular grid disparity map estimation}
-\label{sec:SimpleDisparityMapEstimationSparse}
-
-Taking figure \ref{zones} as a starting point, we can generalize the
-approach by letting the user choose:
-\begin{itemize}
-  \item the similarity measure;
-  \item the geometric transform to be estimated (see definition
-  \ref{defin-T});
-\end{itemize}
-
-In order to do this, we will use the ITK registration framework
-locally on a set of nodes. Once the disparity is estimated on a set of
-nodes, we will use it to generate a deformation field: the dense,
-regular vector field which gives the translation to be applied to
-a pixel of the secondary image to be positioned on its homologous
-point of the master image.
-
-
-%% \ifitkFullVersion
-\input{SimpleDisparityMapEstimationExample.tex}
-%% \fi
-
-% These examples are commented since they do not show valuable results
-%\section{Probability Density Estimation (PDE) based disparity map estimation}
-%\label{sec:PDEEstimation}
-%\input{NCCRegistrationFilterExample.tex}
-
-%\section{Landmark-based Disparity Map Estimation}
-%\label{sec:Landmark-basedDisparityMapEstimation}
-%\input{SIFTDisparityMapEstimation.tex}
-
-
-
-  
