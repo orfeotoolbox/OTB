@@ -34,15 +34,17 @@ if __name__ == "__main__":
             str = str.replace("}", "")
             str = str.replace(",", "")
             str = str.replace("\n", " ")
+            str = str.strip()
 
-            print("$ ./example " + str)
             block = ("/* Example usage:\n"
                      "./{} {}\n"
                      "*/\n".format(name, str))
 
+            print(block)
+
             newcontent = re.sub(rx_block, block, content, flags = re.MULTILINE | re.DOTALL)
 
-            open(filename, "w").write(newcontent)
+            #open(filename, "w").write(newcontent)
             #print(newcontent)
 
 
