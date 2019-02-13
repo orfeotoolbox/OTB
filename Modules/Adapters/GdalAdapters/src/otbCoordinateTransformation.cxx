@@ -23,6 +23,7 @@
 #include "ogr_spatialref.h"
 
 #include <sstream>
+#include <stdexcept>
 
 
 namespace otb
@@ -66,8 +67,9 @@ CoordinateTransformation::CoordinateTransformation(const SpatialReference & sour
   if(!tmpTransform)
     {
     std::ostringstream oss;
-    oss << "Source: " << source << ", target: " << target;
-    throw InvalidCoordinateTransfromationException(oss.str());
+    oss << "(InvalidCoordinateTransfromationException) "
+        <<"Source: " << source << ", target: " << target;
+    throw std::runtime_error(oss.str());
     }
   
   // Swap safely
@@ -84,8 +86,10 @@ CoordinateTransformation::CoordinateTransformation(const CoordinateTransformatio
   if(!newTransform)
     {
     std::ostringstream oss;
-    oss << "Source: " << other.GetSourceSpatialReference() << ", target: " << other.GetTargetSpatialReference();
-    throw InvalidCoordinateTransfromationException(oss.str());
+    oss << "(InvalidCoordinateTransfromationException) "
+        << "Source: " << other.GetSourceSpatialReference() 
+        << ", target: " << other.GetTargetSpatialReference();
+    throw std::runtime_error(oss.str());
     }
 
   m_Transform = std::move(newTransform);
@@ -125,8 +129,10 @@ std::tuple<double,double,double> CoordinateTransformation::Transform(const std::
   if(!success)
     {
     std::ostringstream oss;
-    oss<<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)<<", "<<std::get<1>(in)<<", "<<std::get<2>(in);
-    throw new TransformFailureException(oss.str());
+    oss << "(TransformFailureException) "
+        <<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)<<", "
+        <<std::get<1>(in)<<", "<<std::get<2>(in);
+    throw std::runtime_error(oss.str());
     }
 
   return std::make_tuple(outX,outY,outZ);
@@ -143,8 +149,10 @@ std::tuple<double,double> CoordinateTransformation::Transform(const std::tuple<d
   if(!success)
     {
     std::ostringstream oss;
-    oss<<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)<<", "<<std::get<1>(in);
-    throw new TransformFailureException(oss.str());
+    oss << "(TransformFailureException) "
+        <<"Transform: "<<this<<", Parameters: "<<std::get<0>(in)
+        <<", "<<std::get<1>(in);
+    throw std::runtime_error(oss.str());
     }
 
   return std::make_tuple(outX,outY);

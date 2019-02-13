@@ -25,7 +25,6 @@
 #include "OTBGdalAdaptersExport.h"
 
 #include <memory>
-#include <stdexcept>
 #include <tuple>
 
 #if defined(_MSC_VER)
@@ -52,38 +51,6 @@ struct OTBGdalAdapters_EXPORT OGRCoordinateTransformationDeleter
     void operator()(OGRCoordinateTransformation * del) const;
   };
 }
-
-/**
- * \class InvalidCoordinateTransfromationException
- * \brief Exception for invalid coordinate transform
- *
- * This class describes an exception that might be thrown by
- * CoordinateTransformation constructors
- * 
- * \ingroup OTBGdalAdapters
- */
-class OTBGdalAdapters_HIDDEN InvalidCoordinateTransfromationException : public std::runtime_error
-{
-public:
-  // Import parent constructor
-  using std::runtime_error::runtime_error;
-};
-
-/**
- * \class TransformFailureException
- * \brief Exception for failure of coordinate transform
- *
- * This class describes an exception that might be thrown by
- * CoordinateTransformation::Transform()
- * 
- * \ingroup OTBGdalAdapters
- */
-class OTBGdalAdapters_HIDDEN TransformFailureException : public std::runtime_error
-{
-public:
-  // Import parent constructor
-  using std::runtime_error::runtime_error;
-};
 
 // Forward declaration needed for the operators declared bellow.
 class CoordinateTransformation;
