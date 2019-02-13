@@ -21,7 +21,7 @@
 
 
 /* Example usage:
-./DEMHandlerExample Input/srtm_directory Input/DEM/egm96.grd 40 8.434583 44.647083 383.580313671 0.001
+./DEMHandlerExample Input/DEM/srtm_directory Input/DEM/egm96.grd 40 8.434583 44.647083 383.580313671 0.001
 */
 
 
