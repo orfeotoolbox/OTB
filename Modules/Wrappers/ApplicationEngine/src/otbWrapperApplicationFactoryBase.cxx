@@ -42,5 +42,11 @@ ApplicationFactoryBase::CreateApplication(const char* name)
   return appli;
 }
 
+ApplicationFactoryBase::ApplicationFactoryBase()
+{}
+
+ApplicationFactoryBase::~ApplicationFactoryBase()
+{}
+
 }
 }

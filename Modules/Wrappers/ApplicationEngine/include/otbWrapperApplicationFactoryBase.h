@@ -46,9 +46,9 @@ public:
   Application::Pointer CreateApplication(const char* name);
 
 protected:
-  ApplicationFactoryBase(){}
+  ApplicationFactoryBase();
 
-  ~ApplicationFactoryBase() override{}
+  ~ApplicationFactoryBase() override;
 
 private:
   ApplicationFactoryBase(const Self &) = delete;
