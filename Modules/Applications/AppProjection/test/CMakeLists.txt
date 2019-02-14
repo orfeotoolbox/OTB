@@ -169,7 +169,7 @@ otb_test_application(NAME  apTvPrGenerateRPCSensorModel
 
 otb_test_application(NAME apTuDmGridBasedImageResamplingLeftTest
                      APP  GridBasedImageResampling
-                     OPTIONS -io.in ${EXAMPLEDATA}/sensor_stereo_left.tif
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
                              -grid.in ${INPUTDATA}/sensor_stereo_rectif_left.tif
                              -out.sizex 158
@@ -179,7 +179,7 @@ otb_test_application(NAME apTuDmGridBasedImageResamplingLeftTest
 
 otb_test_application(NAME apTuDmGridBasedImageResamplingRightTest
                      APP  GridBasedImageResampling
-                     OPTIONS -io.in ${EXAMPLEDATA}/sensor_stereo_right.tif
+                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
                              -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
                              -grid.in ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              -out.sizex 158
@@ -314,7 +314,7 @@ otb_test_application(NAME apTvPrRigidTransformResample
 #----------- ImageEnvelope TESTS ----------------
 otb_test_application(NAME apTvPrImageEnvelopeTest
                      APP ImageEnvelope
-                     OPTIONS -in ${EXAMPLEDATA}/sensor_stereo_left.tif
+                     OPTIONS -in ${INPUTDATA}/sensor_stereo_left.tif
                              -out ${TEMP}/apTvPrImageEnvelopeTest.shp
                      VALID   --compare-ogr ${NOTOL}
                         ${BASELINE_FILES}/apTvPrImageEnvelopeTest.shp
