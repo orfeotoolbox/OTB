@@ -47,7 +47,7 @@ public:
   {
     if(curlCode != CURLE_OK)
        {
-       itkGenericExceptionMacro(<<" Curl Error : "<< curl_easy_strerror(curlCode))
+       itkGenericExceptionMacro(<<" Curl Error : "<< curl_easy_strerror(curlCode));
        }
   }
 
