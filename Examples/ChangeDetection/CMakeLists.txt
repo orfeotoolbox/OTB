@@ -26,9 +26,6 @@ target_link_libraries(CorrelChDet ${OTB_LIBRARIES})
 add_executable(DiffChDet DiffChDet.cxx)
 target_link_libraries(DiffChDet ${OTB_LIBRARIES})
 
-add_executable(JHMIChDet JHMIChDet.cxx)
-target_link_libraries(JHMIChDet ${OTB_LIBRARIES})
-
 add_executable(KullbackLeiblerDistanceChDet KullbackLeiblerDistanceChDet.cxx)
 target_link_libraries(KullbackLeiblerDistanceChDet ${OTB_LIBRARIES})
 
