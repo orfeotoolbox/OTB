@@ -73,7 +73,7 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             CAPTURE_CMAKE_ERROR _build_error
             )
 
-if ( _build_rv EQUAL -1 )
+if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build:
     ${_build_error}")
 endif()
