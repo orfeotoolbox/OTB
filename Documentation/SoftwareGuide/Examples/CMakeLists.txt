@@ -213,13 +213,13 @@ ADD_CUSTOM_TARGET(SoftwareGuideExamples  ALL echo)
 SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Application/ApplicationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Installation/HelloWorld.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageListExample.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image3.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image4.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/VectorImage.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image5.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/ImageListExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadCastWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
