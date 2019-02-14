@@ -23,6 +23,7 @@
 #include "OTBGdalAdaptersExport.h"
 
 #include <memory>
+#include <string>
 
 #if defined(_MSC_VER)
 #pragma warning ( disable: 4251 )
