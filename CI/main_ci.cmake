@@ -60,7 +60,8 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"
     OPTIONS "${CONFIGURE_OPTIONS}"
     RETURN_VALUE _configure_rv
-    CAPTURE_CMAKE_ERROR _configure_error)
+    CAPTURE_CMAKE_ERROR _configure_error
+    )
 
 if ( _configure_rv EQUAL -1 )
   message("An error occurs during ctest_configure:
@@ -68,8 +69,8 @@ if ( _configure_rv EQUAL -1 )
 endif()
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            RETURN_VALUE _build_rv]
-            CAPTURE_CMAKE_ERROR _build_error]
+            RETURN_VALUE _build_rv
+            CAPTURE_CMAKE_ERROR _build_error
             )
 
 if ( _build_rv EQUAL -1 )
