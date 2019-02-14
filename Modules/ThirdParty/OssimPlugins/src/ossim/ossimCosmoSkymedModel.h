@@ -23,86 +23,104 @@
  */
 
 
-#ifndef ossimCosmoSkymedModel_H
-#define ossimCosmoSkymedModel_H
+#ifndef ossimCosmoSkymedModel_HEADER
+#define ossimCosmoSkymedModel_HEADER
 
-#include <ossimGeometricSarSensorModel.h>
-#include <ossim/projection/ossimMapProjection.h>
-#include <ossim/base/ossimIpt.h>
+#include <iosfwd>
+#include <string>
+#include <boost/config.hpp>
+
+#include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimFilename.h>
-#include <ossim/base/ossimGpt.h>
-#include <ossim/base/ossimDpt.h>
+#include <ossim/base/ossimKeywordNames.h>
+#include <ossim/base/ossimNotify.h>
+#include <ossim/base/ossimRefPtr.h>
 
-#include <otb/CivilDateTime.h>
+#include "ossim/ossimSarSensorModel.h"
+#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
-#include <list>
+#include <ossim/support_data/ossimSupportFilesList.h>
+
+//#include "ossimGeometricSarSensorModel.h"
+
+class OSSIMDLLEXPORT ossimXmlNode;
+class OSSIMDLLEXPORT ossimString;
 
 namespace ossimplugins
 {
 
-class PlatformPosition;
-class SensorParams;
-class RefPoint;
-/**
- * @brief This class allows for direct localisation and indirect localisation
- * using the CosmoSkymed sensor model
- */
-class ossimCosmoSkymedModel : public ossimGeometricSarSensorModel
-{
-public:
-  /**
-   * @brief Constructor
-   */
-  ossimCosmoSkymedModel();
+   class OSSIM_PLUGINS_DLL ossimCosmoSkymedModel : public ossimSarSensorModel
+   {
+   public:
 
-  /**
-   * @brief Destructor
-   */
-  ~ossimCosmoSkymedModel();
+      /**
+       * CONSTRUCTORS.
+       * @{
+       */
+      /** @brief Default constructor */
+      ossimCosmoSkymedModel();
 
-  /**
-   * @brief This function associates an image column number to a slant range when the image is georeferenced (ground projected)
-   * @param col Column coordinate of the image point
-   */
-  virtual double getSlantRangeFromGeoreferenced(double col) const;
+#if ! (defined(BOOST_NO_DEFAULTED_FUNCTIONS) || defined(BOOST_NO_CXX1_DEFAULTED_FUNCTIONS))
+      /** @brief Copy constructor */
+      ossimCosmoSkymedModel(ossimCosmoSkymedModel const& rhs) = default;
 
-protected:
+      /** @brief Move constructor */
+      ossimCosmoSkymedModel(ossimCosmoSkymedModel && rhs) = default;
 
-  /**
-   * @brief Number of columns
-   */
-  double _nbCol;
-  /**
-  * @brief Slant Range for each Ground Range Projection reference point
-  */
-  double _SrGr_R0 ;
-  /**
-  * @brief Slant Range for each Ground Range Projection coefficients
-  */
-  std::vector<double> _SrGr_coeffs ;
-  /**
-   * @brief Scene Center range time
-   */
-  double _sceneCenterRangeTime;
-  /**
-   * @brief Pixel spacing
-   */
-  double _pixel_spacing ;
-
-private:
-  virtual bool InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitSensorParams(const ossimKeywordlist &kwl, const char *prefix);
-  virtual bool InitRefPoint(const ossimKeywordlist &kwl, const char *prefix);
-  /**
-   * @brief Initializes the Slant Range to Ground Range data sets :
-   *        _SrToGr_R0,_SrToGr_coeffs_number,_SrToGr_exponent,_SrToGr_coeffs,_nbCol
-   */
-  virtual bool InitSRGR(const ossimKeywordlist &kwl, const char *prefix);
-
-  bool UtcDateTimeStringToCivilDate(const std::string &utcString, CivilDateTime &outputDate);
-
-  TYPE_DATA
-};
-}
-
+      /** @brief Destructor */
+      virtual ~ossimCosmoSkymedModel() = default;
 #endif
+      //@}
+
+      bool open(const ossimFilename& file);
+
+      /*!
+       * Returns pointer to a new instance, copy of this.
+       */
+      virtual ossimObject* dup() const override;
+
+      /*!
+       * Extends base-class implementation. Dumps contents of object to ostream.
+       */
+      virtual std::ostream& print(std::ostream& out) const override;
+
+      /*!
+       * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+       * KWL files. Returns true if successful.
+       */
+      virtual bool saveState(ossimKeywordlist& kwl,
+            const char* prefix=NULL) const override;
+
+      virtual bool loadState(ossimKeywordlist const& kwl,
+            const char* prefix=NULL) override;
+
+      bool initImageSize(ossimIpt& imageSize) const;
+
+      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const override;
+
+      bool isSLC() const { return  theSLC; }
+
+      void clearFields();
+     
+   protected:
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+      TYPE_DATA
+#pragma clang diagnostic pop
+#else
+      TYPE_DATA
+#endif
+
+   private:
+      bool readSBI(std::string fileSBI);
+
+      ossimKeywordlist   theProductKwl;
+      bool               theSLC;
+      bool               theTOPSAR;
+   }; //end class ossimCosmoSkymedModel
+
+}  //end namespace ossimplugins
+
+
+#endif /* #ifndef ossimCosmoSkymedModel_HEADER */
