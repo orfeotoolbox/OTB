@@ -1,0 +1,13 @@
+Input region: ImageRegion (0x7fff94d37840)
+  Dimension: 2
+  Index: [45, 45]
+  Size: [1000, 1500]
+
+Input NumberOfSplits: 10
+Output GetNumberOfSplits: 10
+Output GetSplit(2,10, input region): 
+    ImageRegion (0x7fff94d37810)
+  Dimension: 2
+  Index: [45, 345]
+  Size: [1000, 150]
+

@@ -1,0 +1,54 @@
++Root (Root)
++Document (Paths)
++Line () 2 points
+  -> Metadata:    VectorData Keyword list:    - Size: 5
+      Name (String): Tessellated
+      description (String): If the <tessellate> tag has a value of 1, the line will contour to the underlying terrain
+      tessellate (Integer): 1
+      extrude (Integer): -1
+      visibility (Integer): 0
+
++Line () 2 points
+  -> Metadata:    VectorData Keyword list:    - Size: 5
+      Name (String): Untessellated
+      description (String): If the <tessellate> tag has a value of 0, the line follow a simple straight-line path from point to point
+      tessellate (Integer): 0
+      extrude (Integer): -1
+      visibility (Integer): 0
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 6
+      Name (String): Absolute
+      description (String): Transparent purple line
+      altitudeMode (String): absolute
+      tessellate (Integer): 1
+      extrude (Integer): -1
+      visibility (Integer): 0
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 6
+      Name (String): Absolute Extruded
+      description (String): Transparent green wall with yellow outlines
+      altitudeMode (String): absolute
+      tessellate (Integer): 1
+      extrude (Integer): 1
+      visibility (Integer): 0
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 6
+      Name (String): Relative
+      description (String): Black line (10 pixels wide), height tracks terrain
+      altitudeMode (String): relativeToGround
+      tessellate (Integer): 1
+      extrude (Integer): -1
+      visibility (Integer): 0
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 6
+      Name (String): Relative Extruded
+      description (String): Opaque blue walls with red outline, height tracks terrain
+      altitudeMode (String): relativeToGround
+      tessellate (Integer): 1
+      extrude (Integer): 1
+      visibility (Integer): 0
+

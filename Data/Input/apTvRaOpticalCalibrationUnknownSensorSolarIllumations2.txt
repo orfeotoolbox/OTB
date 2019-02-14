@@ -1,0 +1,3 @@
+# Solar illumination for each channel (separated by ':')
+1057.56 : 1570.23 : 1842.94 : 232.820
+

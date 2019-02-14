@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<OTB>
+    <version>3.18</version>
+    <build>18-05-2013</build>
+    <platform>Linux</platform>
+    <application>
+        <name>Rescale</name>
+        <descr>Rescale the image between two given values.</descr>
+        <doc>
+            <name>Rescale Image</name>
+            <longdescr>This application scales the given image pixel intensity between two given values. By default min (resp. max) value is set to 0 (resp. 255).</longdescr>
+            <authors>OTB-Team</authors>
+            <limitations>None</limitations>
+            <seealso> </seealso>
+            <tags>
+                <tag>Image Manipulation</tag>
+            </tags>
+        </doc>
+        <parameter mandatory="true">
+            <key>in</key>
+            <type>InputImage</type>
+            <name>Input Image</name>
+            <value>/home/rashad/repos/orfeo/OTB-Data/Input/poupees.tif</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>out</key>
+            <type>OutputImage</type>
+            <name>Output Image</name>
+            <pixtype>float</pixtype>
+            <value>/home/rashad/repos/orfeo/build/OTB_/test-build/Testing/Temporary/jaTvRescaleOutXMLTest.tif</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>outmin</key>
+            <type>Float</type>
+            <name>Output min value</name>
+            <value>20</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>outmax</key>
+            <type>Float</type>
+            <name>Output max value</name>
+            <value>150</value>
+        </parameter>
+    </application>
+</OTB>

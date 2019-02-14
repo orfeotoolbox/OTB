@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<GeneralStatistics>
+    <Statistic name="count">
+        <StatisticMap key="-1" value="259605" />
+        <StatisticMap key="1" value="291" />
+        <StatisticMap key="2" value="437" />
+        <StatisticMap key="3" value="279" />
+        <StatisticMap key="4" value="1130" />
+        <StatisticMap key="5" value="294" />
+        <StatisticMap key="6" value="72" />
+        <StatisticMap key="7" value="36" />
+    </Statistic>
+    <Statistic name="max">
+        <StatisticMap key="-1" value="[1964.89, 1992.82, 1964.4, 2016.54]" />
+        <StatisticMap key="1" value="[320.344, 479.258, 345.806, 376.843]" />
+        <StatisticMap key="2" value="[235.363, 338.685, 204.72, 714.941]" />
+        <StatisticMap key="3" value="[364.439, 665.941, 675.66, 828.339]" />
+        <StatisticMap key="4" value="[249.304, 343.468, 190.722, 182.278]" />
+        <StatisticMap key="5" value="[233.763, 332.775, 202.521, 779.461]" />
+        <StatisticMap key="6" value="[326.68, 577.571, 711.504, 747.671]" />
+        <StatisticMap key="7" value="[272.35, 376.291, 250.321, 285.492]" />
+    </Statistic>
+    <Statistic name="mean">
+        <StatisticMap key="-1" value="[239.525, 332.727, 210.813, 388.65]" />
+        <StatisticMap key="1" value="[272.881, 380.299, 250.479, 275.445]" />
+        <StatisticMap key="2" value="[223.946, 316.619, 182.13, 627.659]" />
+        <StatisticMap key="3" value="[275.808, 450.889, 444.263, 590.388]" />
+        <StatisticMap key="4" value="[229.191, 303.739, 155.793, 132.083]" />
+        <StatisticMap key="5" value="[215.784, 301.817, 168.193, 716.186]" />
+        <StatisticMap key="6" value="[283.494, 494.342, 599.241, 634.382]" />
+        <StatisticMap key="7" value="[262.727, 363.672, 241.68, 266.273]" />
+    </Statistic>
+    <Statistic name="min">
+        <StatisticMap key="-1" value="[185.401, 224.62, 107.775, 99.3083]" />
+        <StatisticMap key="1" value="[250.53, 340.693, 217.168, 228.72]" />
+        <StatisticMap key="2" value="[203.552, 270.087, 148.866, 419.294]" />
+        <StatisticMap key="3" value="[240.748, 350.397, 260.529, 389.649]" />
+        <StatisticMap key="4" value="[216.875, 285.694, 141.158, 114.218]" />
+        <StatisticMap key="5" value="[205.717, 287.114, 152.876, 585.278]" />
+        <StatisticMap key="6" value="[227.457, 372.338, 422.645, 444.8]" />
+        <StatisticMap key="7" value="[249.51, 344.93, 231.226, 251.867]" />
+    </Statistic>
+    <Statistic name="std">
+        <StatisticMap key="-1" value="[39.3065, 70.0572, 72.7701, 157.411]" />
+        <StatisticMap key="1" value="[12.4085, 24.1052, 21.1855, 25.9382]" />
+        <StatisticMap key="2" value="[4.50501, 8.55019, 10.3799, 49.2972]" />
+        <StatisticMap key="3" value="[29.7984, 74.5599, 103.248, 107.72]" />
+        <StatisticMap key="4" value="[6.14059, 11.1147, 9.32937, 11.9264]" />
+        <StatisticMap key="5" value="[4.56266, 7.99486, 8.38748, 29.9639]" />
+        <StatisticMap key="6" value="[32.5792, 78.2231, 111.261, 121.669]" />
+        <StatisticMap key="7" value="[5.99903, 7.89624, 5.67232, 7.74476]" />
+    </Statistic>
+</GeneralStatistics>

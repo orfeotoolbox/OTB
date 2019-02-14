@@ -1,0 +1,22 @@
+input points retrieval : 
+Adding point [0, 0].
+Adding point [0, 10].
+Adding point [45, 0].
+Adding point [3.14, 3.14].
+Adding point [18, 1].
+Transform calculation ... :
+Rho: 0, Theta: 0
+Original Point: [0, 0], Reference point: [1, 0], Transformed point: [1, 0]
+
+Rho: 10, Theta: 0
+Original Point: [0, 10], Reference point: [22026.5, 0], Transformed point: [22026.5, 0]
+
+Rho: 0, Theta: 0.785398
+Original Point: [45, 0], Reference point: [0.707107, 0.707107], Transformed point: [0.707107, 0.707107]
+
+Rho: 3.14, Theta: 0.0548033
+Original Point: [3.14, 3.14], Reference point: [23.0692, 1.26554], Transformed point: [23.0692, 1.26554]
+
+Rho: 1, Theta: 0.314159
+Original Point: [18, 1], Reference point: [2.58524, 0.839995], Transformed point: [2.58524, 0.839995]
+

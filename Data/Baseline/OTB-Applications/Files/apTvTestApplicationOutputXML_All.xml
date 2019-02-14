@@ -1,0 +1,109 @@
+<?xml version="1.0" ?>
+<OTB>
+    <version>5.11.0</version>
+    <application>
+        <name>TestApplication</name>
+        <descr>This application helps developers to test parameters types</descr>
+        <doc>
+            <name>Test</name>
+            <longdescr>The purpose of this application is to test parameters types.</longdescr>
+            <authors>OTB-Team</authors>
+            <limitations>None</limitations>
+            <seealso> </seealso>
+            <tags>
+                <tag>Test</tag>
+            </tags>
+        </doc>
+        <parameter mandatory="true">
+            <key>boolean</key>
+            <type>Bool</type>
+            <name>Boolean</name>
+            <value>true</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>int</key>
+            <type>Int</type>
+            <name>Integer</name>
+            <value>2</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>float</key>
+            <type>Float</type>
+            <name>Float</name>
+            <value>-0.7</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>string</key>
+            <type>String</type>
+            <name>String</name>
+            <value>foo</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>filename</key>
+            <type>InputFilename</type>
+            <name>File name</name>
+            <value>/home/michelj/dev/src/otb-data/Input/letter.scale</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outfilename</key>
+            <type>OutputFilename</type>
+            <name>Output Filename</name>
+            <value>/home/michelj/dev/build/otb/Testing/Temporary/foo.txt</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>directory</key>
+            <type>Directory</type>
+            <name>Directory name</name>
+            <value>/home/michelj/dev/src/otb-data/Input/world_boundaries</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>choice.choice1.floatchoice1</key>
+            <type>Float</type>
+            <name>Float of choice1</name>
+            <value>640000</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>ingroup.integer</key>
+            <type>Float</type>
+            <name>Integer of Group</name>
+            <value>4</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outgroup.outputimage</key>
+            <type>OutputImage</type>
+            <name>Output Image</name>
+            <pixtype>double</pixtype>
+            <value>/home/michelj/dev/build/otb/Testing/Temporary/foo.tif</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>il</key>
+            <type>InputImageList</type>
+            <name>Input image list</name>
+            <values>
+                <value>/home/michelj/dev/src/otb-data/Input/anaglyphInput1.tif</value>
+                <value>/home/michelj/dev/src/otb-data/Input/anaglyphInput2.tif</value>
+            </values>
+        </parameter>
+        <parameter mandatory="false">
+            <key>cl</key>
+            <type>ListView</type>
+            <name>Output Image channels</name>
+            <values>
+                <value>Choice2</value>
+            </values>
+        </parameter>
+        <parameter mandatory="true">
+            <key>cin</key>
+            <type>ComplexInputImage</type>
+            <name>Input Complex Image</name>
+            <value>/home/michelj/dev/src/otb-data/Input/RADARSAT2_ALTONA_300_300_VV.tif</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>cout</key>
+            <type>ComplexOutputImage</type>
+            <name>Output Complex Image</name>
+            <pixtype />
+            <value />
+        </parameter>
+    </application>
+</OTB>

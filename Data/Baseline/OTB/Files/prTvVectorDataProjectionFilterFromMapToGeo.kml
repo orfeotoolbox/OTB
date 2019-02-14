@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><Folder><name>ToulousePoints_examples</name>
+<Schema name="ToulousePoints_examples" id="ToulousePoints_examples">
+	<SimpleField name="Name" type="string"></SimpleField>
+	<SimpleField name="Description" type="string"></SimpleField>
+	<SimpleField name="num" type="int"></SimpleField>
+</Schema>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.443345741298515,43.604346497540064</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.443568335516438,43.604040939405841</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">3</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.443292495509931,43.60400597710332</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">4</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.441366791968459,43.604669725057981</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.443223868345734,43.603706854704463</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">6</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.441491618423232,43.602792151468407</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#ToulousePoints_examples">
+		<SimpleData name="num">7</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>1.441931883733273,43.602926444038545</coordinates></Point>
+  </Placemark>
+</Folder></Document></kml>
