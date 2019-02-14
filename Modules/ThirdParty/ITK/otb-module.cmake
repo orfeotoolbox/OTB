@@ -21,6 +21,7 @@
 set(DOCUMENTATION "This module imports ITK to the build system")
 
 otb_module(OTBITK
+  ENABLE_SHARED
   DEPENDS
     
   TEST_DEPENDS

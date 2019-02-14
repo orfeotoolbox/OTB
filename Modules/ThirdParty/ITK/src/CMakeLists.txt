@@ -18,11 +18,10 @@
 # limitations under the License.
 #
 
-project(OTBITK)
 
-set(OTBITK_SYSTEM_INCLUDE_DIRS ${ITK_INCLUDE_DIRS})
-set(OTBITK_LIBRARIES "${ITK_LIBRARIES};OTBITK")
-set(OTBITK_EXPORT_CODE_BUILD "find_package(ITK REQUIRED COMPONENTS ${OTBITK_ITK_REQUIRED_MODULE_LIST} HINTS ${ITK_DIR})")
-set(OTBITK_EXPORT_CODE_INSTALL ${OTBITK_EXPORT_CODE_BUILD})
+add_library(OTBITK itkTemplateExports.cxx)
+target_link_libraries(OTBITK 
+  ${ITK_LIBRARIES}
+  )
 
-otb_module_impl()
+otb_module_target(OTBITK)
