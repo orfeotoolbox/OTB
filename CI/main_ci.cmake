@@ -63,9 +63,9 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     CAPTURE_CMAKE_ERROR _configure_error
     )
 
-if ( _configure_rv EQUAL -1 )
-  message("An error occurs during ctest_configure:
-    ${_configure_error}")
+if ( NOT _configure_rv EQUAL 0 )
+  ctest_submit()
+  message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
@@ -74,10 +74,10 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             )
 
 if ( NOT _build_rv EQUAL 0 )
-  message( SEND_ERROR "An error occurs during ctest_build:
-    ${_build_error}")
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-# ctest_test(PARALLEL_LEVEL 8])
+# ctest_test(PARALLEL_LEVEL 8)
 
 ctest_submit()
