@@ -31,6 +31,10 @@ set(OTBCommon_SRC
   otbStringToHTML.cxx
   otbExtendedFilenameHelper.cxx
   otbLogger.cxx
+  otbImageRegionAdaptativeSplitter.cxx
+  otbImageRegionSquareTileSplitter.cxx
+  otbImageRegionTileMapSplitter.cxx
+#  itkTemplateExports.cxx
   )
 
 add_library(OTBCommon ${OTBCommon_SRC})

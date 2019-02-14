@@ -27,6 +27,7 @@
 #include "itkIndex.h"
 #include "itkSize.h"
 #include "itkFastMutexLock.h"
+#include "OTBCommonExport.h"
 
 namespace otb
 {
@@ -62,7 +63,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionAdaptativeSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class OTBCommon_EXPORT_TEMPLATE ImageRegionAdaptativeSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -184,5 +185,11 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 # include "otbImageRegionAdaptativeSplitter.hxx"
 #endif
+
+namespace otb {
+
+extern template class OTBCommon_EXPORT_TEMPLATE ImageRegionAdaptativeSplitter<2>;
+
+}
 
 #endif
