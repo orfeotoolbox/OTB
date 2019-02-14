@@ -30,13 +30,3 @@ otb_add_test(NAME diTeImage5Test COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:Image5>
     ${TEMP}/Image5.png
 )
-
-# ------- Image6Test----------
-
-otb_add_test(NAME diTeImage6Test COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/Image6.tif
-    ${TEMP}/Image6.tif
-  Execute $<TARGET_FILE:Image6>
-    ${TEMP}/Image6.tif
-)
