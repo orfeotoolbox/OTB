@@ -28,6 +28,7 @@
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 #include <string>
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -391,6 +392,7 @@ TransformPhysicalRegionToIndexRegion(const RemoteSensingRegionType& region, cons
   return outputRegion;
 }
 
+extern template class OTBImageBase_EXPORT_TEMPLATE RemoteSensingRegion<double>;
 
 } // end namespace otb
 
