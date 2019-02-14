@@ -42,34 +42,40 @@ python_version_check() {
   python_minor_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[1])")
   python_patch_version=$($OTB_PYTHON_EXE -c "import sys;print(sys.version_info[2])")
   python_version="$python_major_version.$python_minor_version.$python_patch_version"
+  echo "python_version $python_version"
 }
 
 python_check_failed() {
     printf %s\\n "*****Error occurred during installation******"
-    printf %s\\n "OTB python bindings require python3 but current detected python version is $python_version"
-    printf %s\\n "If you have python3 installed in your system "
+    printf %s\\n "OTB python bindings require python 3.5 but current detected python version is $python_version"
+    printf %s\\n "If you have python 3.5 installed in your system "
     printf %s\\n "You should set OTB_PYTHON_EXE and re-run this installation script."
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python3 ./OTB-X.Y-Linux64.run"
     exit 1
 }
-# Do we need the exact version of python?
-if [ "$python_major_version" -lt 3 ]; then
+
+# retrieve version
+
+python_version_check
+
+if [ "$python_major_version" -lt 3 ] ; then
   OTB_PYTHON_EXE=$(which python3)
-  if [! -f "$OTB_PYTHON_EXE"] ; then
+  if [ ! -f "$OTB_PYTHON_EXE" ] ; then
     python_check_failed
   else
-    python_version_check()
-    if [ "$python_major_version" -lt 3 ]; then
+    python_version_check
+    if [ "$python_major_version" -lt 3 ] ; then
       python_check_failed
     fi
   fi
 fi
 
 # test for 3.5 only ! and warn user if not!
-if [ "$python_major_version" -eq 5 ]; then
+if [ ! "$python_minor_version" -eq 5 ] ; then
   printf %s\\n "*****Warning******"
-  printf %s\\n "OTB python bindings require python3.5 but current detected python version is $python_version"
-  printf %s\\n "This case is undefined!"
+  printf %s\\n "OTB python bindings require python3.5 (unless custum build)."
+  printf %s\\n "Current detected python version is $python_version."
+  printf %s\\n "This case is undefined (unless custom build)."
 fi
 
 python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
