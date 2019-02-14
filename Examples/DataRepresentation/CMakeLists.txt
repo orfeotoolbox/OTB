@@ -18,6 +18,5 @@
 # limitations under the License.
 #
 
-add_subdirectory(Containers)
 add_subdirectory(Image)
 
