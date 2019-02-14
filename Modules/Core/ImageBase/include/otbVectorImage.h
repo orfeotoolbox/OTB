@@ -25,9 +25,11 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "itkVectorImage.h"
+#include "itkTemplateExports.h"
 #pragma GCC diagnostic pop
 #else
 #include "itkVectorImage.h"
+#include "itkTemplateExports.h"
 #endif
 #include "otbImageMetadataInterfaceBase.h"
 #include "OTBImageBaseExport.h"
