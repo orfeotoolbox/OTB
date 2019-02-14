@@ -20,11 +20,12 @@
 
 #include "itkMacro.h"
 
+#include "otbVarSol.h"
 #include "otbReflectanceToRadianceImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
+int otbReflectanceToRadianceImageFilter(int itkNotUsed(argc), char * argv[])
 {
   const char * inputFileName  = argv[1];
   const char * outputFileName = argv[2];
@@ -32,15 +33,22 @@ int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
   double       flux = 0.;
   int          day = 1;
   int          month = 1;
+  double       solarDistance = 1.;
+  char fluxMode[] = "0";
+  char solarDistMode[] = "1";
 
-  if (argc == 9)
+  if (strcmp(argv[8], fluxMode) == 0)
     {
-    flux = static_cast<double>(atof(argv[8]));
+    flux = static_cast<double>(atof(argv[9]));
+    }
+  else if (strcmp(argv[8], solarDistMode) == 0)
+    {
+    solarDistance = static_cast<double>(atof(argv[9]));
     }
   else
     {
-    day = atoi(argv[8]);
-    month = atoi(argv[9]);
+    day = atoi(argv[9]);
+    month = atoi(argv[10]);
     }
 
   const unsigned int Dimension = 2;
@@ -73,9 +81,13 @@ int otbReflectanceToRadianceImageFilter(int argc, char * argv[])
   filter->SetZenithalSolarAngle(angle);
   filter->SetSolarIllumination(solarIllumination);
   filter->SetUseClamp(false);
-  if (argc == 9)
+  if (strcmp(argv[8], fluxMode) == 0)
     {
     filter->SetFluxNormalizationCoefficient(flux);
+    }
+  else if (strcmp(argv[8], solarDistMode) == 0)
+    {
+    filter->SetSolarDistance(solarDistance);
     }
   else
     {
