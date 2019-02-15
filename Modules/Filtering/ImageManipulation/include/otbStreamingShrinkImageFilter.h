@@ -27,11 +27,12 @@
 
 #include "otbStreamingManager.h"
 #include "otbMacro.h"
+#include "OTBImageManipulationExport.h"
 
 namespace otb
 {
 
-class ITK_EXPORT StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
+class OTBImageManipulation_EXPORT StreamingShrinkImageRegionSplitter : public itk::ImageRegionSplitter<2>
 {
 public:
   /** Standard class typedefs. */
@@ -88,8 +89,8 @@ public:
   itkGetMacro(ShrinkFactor, unsigned int);
 
 protected:
-  StreamingShrinkImageRegionSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(0), m_ShrinkFactor(10) {}
-  ~StreamingShrinkImageRegionSplitter() override {}
+  StreamingShrinkImageRegionSplitter();
+  ~StreamingShrinkImageRegionSplitter() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
@@ -104,7 +105,7 @@ private:
 
 
 template <class TInputImage>
-class ITK_EXPORT StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
+class StreamingShrinkStreamingManager : public StreamingManager<TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -165,7 +166,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT PersistentShrinkImageFilter :
+class PersistentShrinkImageFilter :
   public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -262,7 +263,7 @@ private:
  * \ingroup OTBImageManipulation
  */
 template<class TInputImage, class TOutputImage = TInputImage>
-class ITK_EXPORT StreamingShrinkImageFilter :
+class OTBImageManipulation_EXPORT_TEMPLATE StreamingShrinkImageFilter :
   public PersistentFilterStreamingDecorator< PersistentShrinkImageFilter<TInputImage, TOutputImage> >
 {
 public:

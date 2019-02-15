@@ -108,4 +108,16 @@ StreamingShrinkImageRegionSplitter
   os << indent << "TileSizeAlignment  : " << m_TileSizeAlignment << std::endl;
 }
 
+StreamingShrinkImageRegionSplitter
+::StreamingShrinkImageRegionSplitter()
+  : m_SplitsPerDimension(0U)
+  , m_TileDimension(0)
+  , m_TileSizeAlignment(0)
+  , m_ShrinkFactor(10)
+{}
+
+StreamingShrinkImageRegionSplitter
+::~StreamingShrinkImageRegionSplitter()
+{}
+
 } // End namespace otb
