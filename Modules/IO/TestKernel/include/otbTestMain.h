@@ -314,21 +314,21 @@ int main(int ac, char* av[])
         itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (not from regression, failure inside the test)");
         }
       }
-    catch (otb::ImageFileReaderException& e)
+    catch (const otb::ImageFileReaderException& e)
     {
       std::cerr << "otbTestMain '" << testToRun << "': ImageFileReaderException:" << std::endl;
       std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
       std::cerr << std::string("Cannot open image ") + e.m_Filename + std::string(". ") + e.GetDescription() << std::endl;
       result = EXIT_FAILURE;
     }
-    catch (itk::ExceptionObject& e)
+    catch (const itk::ExceptionObject& e)
       {
       std::cerr << "otbTestMain '" << testToRun << "': ITK Exception thrown:" << std::endl;
       std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
       std::cerr << e.GetDescription() << std::endl;
       result = EXIT_FAILURE;
       }
-    catch (std::bad_alloc& err)
+    catch (const std::bad_alloc& err)
       {
       std::cerr << "otbTestMain '" << testToRun << "': Exception bad_alloc thrown: " << std::endl;
       std::cerr << (char*) err.what() << std::endl;
