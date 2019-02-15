@@ -32,6 +32,7 @@
 
 #include "otbOGRDriversInit.h"
 #include "otbTestHelper.h"
+#include "otbImageFileReaderException.h"
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
@@ -313,6 +314,13 @@ int main(int ac, char* av[])
         itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (not from regression, failure inside the test)");
         }
       }
+    catch (otb::ImageFileReaderException& e)
+    {
+      std::cerr << "otbTestMain '" << testToRun << "': ImageFileReaderException:" << std::endl;
+      std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
+      std::cerr << std::string("Cannot open image ") + e.m_Filename + std::string(". ") + e.GetDescription() << std::endl;
+      result = EXIT_FAILURE;
+    }
     catch (itk::ExceptionObject& e)
       {
       std::cerr << "otbTestMain '" << testToRun << "': ITK Exception thrown:" << std::endl;
