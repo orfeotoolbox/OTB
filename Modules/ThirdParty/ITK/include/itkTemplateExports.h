@@ -29,6 +29,9 @@
 #include "itkSmartPointer.h"
 #include "itkIndex.h"
 #include "itkSize.h"
+#include "itkPoint.h"
+#include "itkVector.h"
+#include "itkMatrix.h"
 #include "itkFixedArray.h"
 #include "itkLightObject.h"
 #include "OTBITKExport.h"
@@ -45,6 +48,9 @@ extern template class OTBITK_EXPORT_TEMPLATE SmartPointer<ImageBase<2> >;
 extern template class OTBITK_EXPORT_TEMPLATE Index<2>;
 extern template class OTBITK_EXPORT_TEMPLATE Size<2>;
 extern template class OTBITK_EXPORT_TEMPLATE FixedArray<double,2>;
+extern template class OTBITK_EXPORT_TEMPLATE Point<double,2>;
+extern template class OTBITK_EXPORT_TEMPLATE Vector<double,2>;
+extern template class OTBITK_EXPORT_TEMPLATE Matrix<double,2,2>;
 
 }
 
