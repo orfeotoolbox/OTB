@@ -104,7 +104,7 @@ otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTest
   )
 
 otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Line COMMAND otbIndicesTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   otbNDVIDataNodeFeatureFunction
