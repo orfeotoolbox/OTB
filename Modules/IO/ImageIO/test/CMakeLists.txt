@@ -572,7 +572,7 @@ otb_add_test(NAME ioTvVectorImageComplexIntoRealDoubleTest COMMAND otbImageIOTes
 
 otb_add_test(NAME ioTvVectorImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexFloatTest COMMAND otbImageIOTestDriver
