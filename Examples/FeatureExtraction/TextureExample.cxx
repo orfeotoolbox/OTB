@@ -24,7 +24,7 @@
 
 
 //  Software Guide : BeginDescription
-//  .. figure:: pretty_TextureOutput.png
+//  .. figure:: /Output/pretty_TextureOutput.png
 
 //      Result of applying the ScalarImageToTexturesFilter to an image (contrast).
 //  Software Guide : EndDescription

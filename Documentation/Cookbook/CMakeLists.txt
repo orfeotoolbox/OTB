@@ -117,10 +117,13 @@ file(COPY ${RST_SOURCE_DIR}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Art DESTINATION  ${RST_BINARY_DIR})
 
+# Create symlink to otb-data/Output in the rst build directory
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Output" "${RST_BINARY_DIR}/Output")
+
 set(SPHINX_CONF_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
-set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES. The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA).")
 
 configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 
