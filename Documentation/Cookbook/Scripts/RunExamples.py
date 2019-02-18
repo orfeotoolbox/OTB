@@ -52,6 +52,9 @@ def run_example(otb_root, otb_data, name, dry_run):
 
     example_args = match.group(1).replace("\\\n", "").split()
 
+    # Make sure Output dir exists
+    os.makedirs(join(otb_data, "Output"), exist_ok=True)
+
     # Execute example with otb_data as working directory, because paths are given relative to otb_data
     print("$ " + binary + " " + " ".join(example_args))
     if not dry_run:
