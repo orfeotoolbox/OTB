@@ -39,7 +39,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_SolarDistance
                              -out ${TEMP}/apTvRaOpticalCalibration_SolarDistance.tif
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoQuickbirdXS.tif
-                             ${TEMP}/apTvRaOpticalCalibration_QuickbirdXS.tif )
+                             ${TEMP}/apTvRaOpticalCalibration_SolarDistance.tif )
 
 otb_test_application(NAME apTvRaOpticalCalibration_WV2PAN
                      APP  OpticalCalibration
@@ -89,7 +89,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_Spot5
 otb_test_application(NAME apTvRaOpticalCalibration_UnknownSensor
                      APP  OpticalCalibration
                      OPTIONS 
-           -in ${EXAMPLEDATA}/Romania_Extract.tif
+           -in ${INPUTDATA}/Romania_Extract.tif
            -out ${TEMP}/apTvRaOpticalCalibration_Spot4_UnknownSensor_test.tif
            -level toc
            -acqui.gainbias ${INPUTDATA}/apTvRaOpticalCalibrationUnknownSensorGainsBiases2.txt

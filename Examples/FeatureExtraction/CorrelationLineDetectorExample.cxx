@@ -21,7 +21,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst.png}
+//    INPUTS: {amst2.png}
 //    OUTPUTS: {amstLineCorrelations.png}, {amstLineCorrelationDirections.png}
 //    5 1
 //  Software Guide : EndCommandLineArgs

@@ -54,12 +54,11 @@ public:
    *
    * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
    */
-  static Pointer Instance();
+  static Logger * Instance();
 
-  itkNewMacro(Self);
-  
-  // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
+  static Pointer New();
+  itkCreateAnotherMacro( Logger )
+  itkCloneMacro( Logger )
 
   /** Output logs about the RAM, caching and multi-threading settings */
   void LogSetupInformation();
@@ -72,13 +71,14 @@ public:
 
 protected:
   Logger();
-  virtual ~Logger() override;
+  virtual ~Logger() override = default;
 
 private:
   Logger(const Self &) = delete;
   void operator =(const Self&) = delete;
 
-  static Pointer CreateInstance();
+  static Logger * CreateInstance();
+
 
   bool m_LogSetupInfoDone;
 
