@@ -32,7 +32,6 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
-// The first step required to use the filter is to include the header file.
 #include "otbScalarImageToTexturesFilter.h"
 
 int main(int argc, char* argv[])
@@ -62,11 +61,9 @@ int main(int argc, char* argv[])
   // After defining the types for the pixels and the images used in the
   // example, we define the types for the textures filter. It is
   // templated by the input and output image types.
-
   typedef otb::ScalarImageToTexturesFilter<ImageType, ImageType> TexturesFilterType;
-
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ImageFileReader<ImageType>                        ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                        WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -115,14 +112,11 @@ int main(int argc, char* argv[])
   // the SetNumberOfBinsPerAxis() method.
 
   // We can now plug the pipeline.
-
   texturesFilter->SetInput(reader->GetOutput());
-
   writer->SetInput(texturesFilter->GetInertiaOutput());
   writer->Update();
 
   // Pretty image creation for printing
-
   typedef otb::VectorImage<double, 2>                 VectorImageType;
   typedef otb::VectorImage<unsigned char, 2>          PrettyVectorImageType;
   typedef otb::ImageFileWriter<PrettyVectorImageType> WriterPrettyOutputType;
@@ -147,5 +141,4 @@ int main(int argc, char* argv[])
   prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
   prettyOutputWriter->Update();
-  return EXIT_SUCCESS;
 }
