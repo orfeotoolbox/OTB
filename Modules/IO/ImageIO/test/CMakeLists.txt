@@ -252,10 +252,10 @@ otb_add_test(NAME ioTvImageReaderWriterRgbJPEG2PNG COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2TIFF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
 otb_add_test(NAME ioTvImageReaderWriterRgbPNG2JPEG COMMAND otbImageIOTestDriver
