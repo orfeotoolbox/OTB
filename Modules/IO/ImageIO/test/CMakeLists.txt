@@ -158,10 +158,10 @@ otb_add_test(NAME ioTvImageMetadataWriterTest_TIF COMMAND otbImageIOTestDriver
   )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2PNG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG COMMAND otbImageIOTestDriver
