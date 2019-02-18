@@ -592,7 +592,7 @@ otb_add_test(NAME ioTvImageComplexFloatTest COMMAND otbImageIOTestDriver
 
 otb_add_test(NAME ioTvImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageFileReaderShortLUM2LUM COMMAND otbImageIOTestDriver
