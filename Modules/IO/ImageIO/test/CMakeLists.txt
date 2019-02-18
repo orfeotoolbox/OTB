@@ -567,7 +567,7 @@ otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexDoubleTest COMMAND otbImageIOTestDriver
