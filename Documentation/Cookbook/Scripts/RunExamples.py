@@ -57,8 +57,11 @@ def run_example(otb_root, otb_data, name, dry_run):
 
     # Execute example with otb_data as working directory, because paths are given relative to otb_data
     print("$ " + binary + " " + " ".join(example_args))
-    if not dry_run:
-        subprocess.check_call([binary, *example_args], cwd=otb_data)
+
+    if dry_run:
+        return
+
+    subprocess.check_call([binary, *example_args], cwd=otb_data)
 
 # TODO handle examples with multiple usage (Examples/BasicFilters/DEMToRainbowExample.cxx)
 
@@ -66,8 +69,9 @@ def main():
     parser = argparse.ArgumentParser(usage="Run one or all OTB cxx examples")
     parser.add_argument("otb_root", help="Path to otb repository")
     parser.add_argument("otb_data", help="Path to otb-data repository")
-    parser.add_argument("--name", type=str, help="Example name (none for all examples)")
+    parser.add_argument("--name", type=str, help="Run only one example with then given name")
     parser.add_argument("-n", "--dry-run", action='store_true', help="Dry run, only print commands")
+    parser.add_argument("-k", "--keep-going", action='store_true', help="Keep going after failing examples")
     args = parser.parse_args()
 
     if args.name:
@@ -77,8 +81,11 @@ def main():
         for name in list_of_examples:
             try:
                 run_example(args.otb_root, args.otb_data, name, dry_run=args.dry_run)
-            except RuntimeError as e:
-                print("Warning:", e)
+            except Exception as e:
+                if args.keep_going:
+                    print("Warning:", e)
+                else:
+                    raise
 
 if __name__ == "__main__":
     main()
