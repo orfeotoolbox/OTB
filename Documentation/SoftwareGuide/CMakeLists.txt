@@ -60,7 +60,7 @@ set(OTB_VERSION_STRING_FULL "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VER
 FIND_PATH(OTB_DATA_ROOT README-OTB-Data PATHS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data)
 
 # OTB_DATA_PATHS is searched recursively.. you need not enter sub-directories
-SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Examples::${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon separated list.")
+SET(OTB_DATA_PATHS "${OTB_DATA_ROOT}/Input" CACHE STRING "Where the OTB data is. Enter a double colon separated list.")
 
 #
 # Rebuild the Software Guide figures or not ?
