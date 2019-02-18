@@ -24,7 +24,7 @@ set (ENV{LANG} "C") # Only ascii output
 
 # Build Configuration : Release, Debug..
 set (CTEST_BUILD_CONFIGURATION "Release")
-set (CTEST_CMAKE_GENERATOR "Unix Makefiles")
+set (CTEST_CMAKE_GENERATOR "Ninja")
 
 set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}_to_$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
 set (CTEST_SITE "${IMAGE_NAME}")
@@ -37,10 +37,6 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
 set (CMAKE_COMMAND "cmake")
-set (CTEST_BUILD_FLAGS "-j8") # number of thread used for compilation
-set (CTEST_BUILD_COMMAND "make ${CTEST_BUILD_FLAGS}")
-
-
 
 # Data directory setting
 set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
