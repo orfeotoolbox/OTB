@@ -106,6 +106,10 @@ elseif(MSVC)
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -mp")
 endif()
 
+if(LINUX AND USE_LOW_KERNEL_VERSION)
+  set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-feature-getentropy -no-feature-renameat2")
+endif()
+
 if(WIN32)
   set(QT5_BIN_EXT ".exe")
   file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.bat QT5_CONFIGURE_SCRIPT)
