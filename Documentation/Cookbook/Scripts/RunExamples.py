@@ -27,7 +27,12 @@ from os.path import join
 import re
 
 def run_example(otb_root, otb_data, name, dry_run):
-    # Find binary
+    """
+    Run an example by name
+    Assumes the current working directory is an OTB build
+    """
+
+    # Find binary in bin/
     binary_names = glob.glob(join("bin", name))
     if len(binary_names) == 0:
         raise RuntimeError("Can't find binary for {}".format(name))
@@ -35,7 +40,7 @@ def run_example(otb_root, otb_data, name, dry_run):
         raise RuntimeError("Found {} binaries for {}".format(len(binary_names), name))
     binary = os.path.abspath(binary_names[0])
 
-    # Find source file
+    # Find source file in otb_root/Examples/<tag>/name
     sources_files = glob.glob(join(otb_root, "Examples/*/" + name + ".cxx"))
     if len(sources_files) == 0:
         raise RuntimeError("Can't find source file for {}".format(name))
@@ -55,12 +60,13 @@ def run_example(otb_root, otb_data, name, dry_run):
     # Make sure Output dir exists
     os.makedirs(join(otb_data, "Output"), exist_ok=True)
 
-    # Execute example with otb_data as working directory, because paths are given relative to otb_data
     print("$ " + binary + " " + " ".join(example_args))
 
     if dry_run:
         return
 
+    # Execute the example with otb_data as working directory,
+    # because paths are given relative to otb_data in the example usage
     subprocess.check_call([binary, *example_args], cwd=otb_data)
 
 # TODO handle examples with multiple usage (Examples/BasicFilters/DEMToRainbowExample.cxx)
