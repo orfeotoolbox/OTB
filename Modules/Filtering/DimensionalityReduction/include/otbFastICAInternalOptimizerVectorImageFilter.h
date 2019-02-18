@@ -24,6 +24,8 @@
 #include "otbMacro.h"
 #include "otbMatrixImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbPersistentImageFilter.h"
+#include <functional>
 
 namespace otb
 {
@@ -42,7 +44,7 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+  : public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -82,7 +84,7 @@ public:
   typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
-  typedef double (*ContrastFunctionType) ( double );
+  typedef std::function<double(double)> NonLinearityType;
 
   itkSetMacro(CurrentBandForLoop, unsigned int);
   itkGetMacro(CurrentBandForLoop, unsigned int);
@@ -90,18 +92,27 @@ public:
   itkGetMacro(W, InternalMatrixType);
   itkSetMacro(W, InternalMatrixType);
 
-  itkSetMacro(ContrastFunction, ContrastFunctionType);
+  void SetNonLinearity(NonLinearityType NonLinearity,
+                            NonLinearityType NonLinearityDerivative)
+  {
+    m_NonLinearity = NonLinearity;
+    m_NonLinearityDerivative = NonLinearityDerivative;
+    this->Modified();
+  }
+  
   itkGetMacro(Beta, double);
   itkGetMacro(Den, double);
+
+  virtual void Reset() override;
+  
+  virtual void Synthetize() override;
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();
   ~FastICAInternalOptimizerVectorImageFilter() override { }
 
   void GenerateOutputInformation() override;
-  void BeforeThreadedGenerateData () override;
   void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) override;
-  void AfterThreadedGenerateData() override;
 
   unsigned int m_CurrentBandForLoop;
 
@@ -113,7 +124,8 @@ protected:
   double m_Den;
 
   InternalMatrixType m_W;
-  ContrastFunctionType m_ContrastFunction;
+  NonLinearityType m_NonLinearity;
+  NonLinearityType m_NonLinearityDerivative;
   TransformFilterPointerType m_TransformFilter;
 private:
   FastICAInternalOptimizerVectorImageFilter( const Self & ); // not implemented

@@ -57,7 +57,7 @@ otb_add_test(NAME odTvDescriptorsListSampleGeneratorStreaming COMMAND otbObjectD
   ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
   otbDescriptorsListSampleGenerator
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01Samples.shp
   ${TEMP}/TvDescriptorsListSampleGeneratorStreamingOutput.txt
   50 # streaming
   5 # neighborhood radius
@@ -69,7 +69,7 @@ otb_add_test(NAME odTvDescriptorsListSampleGeneratorStreaming COMMAND otbObjectD
   #${TEMP}/TvDescriptorsSVMModelCreation.svm
   #otbDescriptorsSVMModelCreation
   #${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  #${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
+  #${INPUTDATA}/ObjectReco/Boats/maur_B010202_01Samples.shp
   #${INPUTDATA}/ObjectReco/Boats/FeatureStats_RadiometricMoments_amplitude.xml
   #${TEMP}/TvDescriptorsSVMModelCreation.svm
   #0 # streaming
@@ -82,7 +82,7 @@ otb_add_test(NAME odTvDescriptorsListSampleGeneratorNoStreaming COMMAND otbObjec
   ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
   otbDescriptorsListSampleGenerator
   ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01_amplitude.tif
-  ${BASELINE_FILES}/TvLabeledSampleLocalizationGeneratorOutput.shp
+  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01Samples.shp
   ${TEMP}/TvDescriptorsListSampleGeneratorNoStreamingOutput.txt
   0 # streaming
   5 # neighborhood radius

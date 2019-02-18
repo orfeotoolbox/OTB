@@ -41,7 +41,6 @@
                                     0.020
 */
 
-
 // Software Guide : BeginLatex
 //
 // \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}

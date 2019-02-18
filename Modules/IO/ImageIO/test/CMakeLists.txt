@@ -624,7 +624,7 @@ otb_add_test(NAME ioTvImageSeriesFileReader COMMAND otbImageIOTestDriver
   ${BASELINE}/ioTvImageSeries-1.png
   ${TEMP}/ioTvImageSeries-1.png
   otbImageSeriesFileReader
-  ${EXAMPLEDATA}/GomaAvantApres
+  ${INPUTDATA}/GomaAvantApres
   ${TEMP}/ioTvImageSeries.png
   )
 

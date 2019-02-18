@@ -123,7 +123,7 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterQBPAN COMMAND otbSmoothingTes
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterQBRoad COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilter
-  ${INPUTDATA}/qb_RoadExtract.img
+  ${INPUTDATA}/ctest/qb_RoadExtract_200x200.img
   ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_QBRoad.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_QBRoad.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_QBRoad.tif
@@ -149,6 +149,3 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSm
   ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
   4 10 0
   )
-
-
-
