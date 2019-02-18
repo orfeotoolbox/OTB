@@ -195,10 +195,10 @@ otb_add_test(NAME ioTvImageReaderWriterRgbPNG2PNGBox COMMAND otbImageIOTestDrive
   )
 
 otb_add_test(NAME ioTvImageReaderWriterRgbENVI2PNG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw
   ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees
+  ${INPUTDATA}/poupees.raw
   ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_Cai_SPOT5TIF2PNG COMMAND otbImageIOTestDriver
