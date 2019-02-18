@@ -22,13 +22,6 @@
 ./TextureExample Input/ADS40RoiSmall.png Output/TextureOutput.tif Output/pretty_TextureOutput.png 2 1 1
 */
 
-
-//  Software Guide : BeginDescription
-//  .. figure:: /Output/pretty_TextureOutput.png
-
-//      Result of applying the ScalarImageToTexturesFilter to an image (contrast).
-//  Software Guide : EndDescription
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"

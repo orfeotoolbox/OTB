@@ -49,7 +49,7 @@ def run_example(otb_root, otb_data, name, dry_run):
     filename = os.path.abspath(sources_files[0])
 
     # Extract example usage command arguments
-    usage_rx = "\/\* Example usage:\n\.\/[a-zA-Z]+ (.*?)\*\/"
+    usage_rx = r"\/\* Example usage:\n\.\/[a-zA-Z]+ (.*?)\*\/"
     match = re.search(usage_rx, open(filename).read(), flags = re.MULTILINE | re.DOTALL)
 
     if not match:
