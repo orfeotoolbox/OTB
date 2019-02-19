@@ -72,6 +72,24 @@ def render_example(filename, otb_root):
     examples_license_header = open("templates/examples_license_header.txt").read()
     code = code.replace(examples_license_header, "")
 
+    # Extract usage
+    # TODO handle multiple usage
+    rx_usage = r"\/\* Example usage:\n(\.\/[a-zA-Z]+ (.*?))\*\/"
+    usage_match = re.search(rx_usage, code, flags = re.MULTILINE | re.DOTALL)
+    if usage_match is None:
+        print("Warning: no usage found for example " + filename)
+        example_usage = ""
+    else:
+        example_usage = open("templates/example_usage.rst").read().format(indent(usage_match.group(1).strip()))
+
+    # Don't show usage in example source
+    code = re.sub(rx_usage, "", code, flags = re.MULTILINE | re.DOTALL)
+
+    # Make the link to the source code
+    link_name = os.path.basename(filename)
+    link_href = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/develop/" + filename + "?inline=false"
+
+    # Read the description from the example .rst file if it exists
     example_rst_file = join(otb_root, filename.replace(".cxx", ".rst"))
     if os.path.isfile(example_rst_file):
         rst_description = open(example_rst_file).read()
@@ -84,7 +102,10 @@ def render_example(filename, otb_root):
         label="example-" + root,
         heading=rst_section(name, "="),
         description=rst_description,
-        code=indent(code),
+        usage=example_usage,
+        code=indent(code.strip()),
+        link_name=link_name,
+        link_href=link_href
     )
 
     return output_rst
