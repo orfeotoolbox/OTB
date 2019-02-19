@@ -22,6 +22,7 @@
 #define otbRandomSampler_h
 
 #include "otbSamplerBase.h"
+#include "OTBStatisticsExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT RandomSampler : public SamplerBase
+class OTBStatistics_EXPORT RandomSampler : public SamplerBase
 {
 public:
   typedef RandomSampler  Self;

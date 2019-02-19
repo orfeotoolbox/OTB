@@ -23,6 +23,7 @@ set(OTBStatistics_SRC
   otbPeriodicSampler.cxx
   otbPatternSampler.cxx
   otbRandomSampler.cxx
+  otbStreamingStatisticsVectorImageFilter.cxx
   )
 
 add_library(OTBStatistics ${OTBStatistics_SRC})

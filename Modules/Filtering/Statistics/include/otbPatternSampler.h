@@ -23,6 +23,7 @@
 
 #include "otbSamplerBase.h"
 #include <string>
+#include "OTBStatisticsExport.h"
 
 namespace otb
 {
@@ -36,7 +37,7 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-class ITK_EXPORT PatternSampler : public SamplerBase
+class OTBStatistics_EXPORT PatternSampler : public SamplerBase
 {
 public:
   typedef PatternSampler  Self;

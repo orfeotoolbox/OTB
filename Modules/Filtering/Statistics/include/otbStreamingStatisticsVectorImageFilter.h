@@ -28,6 +28,7 @@
 #include "itkImageRegionSplitter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
+#include "OTBStatisticsExport.h"
 
 namespace otb
 {
@@ -283,7 +284,7 @@ private:
  */
 
 template<class TInputImage, class TPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
-class ITK_EXPORT StreamingStatisticsVectorImageFilter :
+class OTBStatistics_EXPORT_TEMPLATE StreamingStatisticsVectorImageFilter :
   public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsVectorImageFilter<TInputImage, TPrecision> >
 {
 public:
@@ -506,5 +507,12 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingStatisticsVectorImageFilter.hxx"
 #endif
+
+#include "otbVectorImage.h"
+
+namespace otb
+{
+extern template class OTBStatistics_EXPORT_TEMPLATE StreamingStatisticsVectorImageFilter<VectorImage<double, 2>, double>;
+}
 
 #endif
