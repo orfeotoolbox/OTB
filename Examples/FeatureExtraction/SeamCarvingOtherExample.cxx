@@ -20,8 +20,6 @@
 
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{AddCarvingPathFilter},
 // the opposite of the \doxygen{otb}{RemoveCarvingPathFilter}.
 //
@@ -29,8 +27,6 @@
 // output the image with the removed seam in white.
 //
 // Most of the code is similar to the previous example.
-//
-// Software Guide : EndLatex
 
 /* Example usage:
 ./SeamCarvingOtherExample Input/QB_Suburb.png Output/SeamCarvingOtherExampleOutput.png 50
@@ -64,17 +60,11 @@ int main(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
-  // Software Guide : BeginLatex
-  //
   // We need to define a list to keep the path in memory until the end of
   // the seam carving process. This is done using an \doxygen{otb}{ObjectList}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ObjectList<PathType> PathListType;
   PathListType::Pointer pathList = PathListType::New();
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<ImageType>
   ReaderType;
@@ -95,13 +85,8 @@ int main(int itkNotUsed(argc), char * argv[])
 
   int iteration = atoi(argv[3]);
 
-  // Software Guide : BeginLatex
-  //
   // We instantiate the different filters of the pipeline as before.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> GradientType;
   GradientType::Pointer gradient = GradientType::New();
 
@@ -127,18 +112,12 @@ int main(int itkNotUsed(argc), char * argv[])
   reader->Update();
   duplicator->SetInputImage(reader->GetOutput());
   duplicator->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The loop to shorten the image is similar to the previous one. Here we
   // decide to remove alternatively one vertical and one horizontal seam. At
   // each iteration, we save the seam on the list using the \code{PushBack()}
   // method.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   for (int i = 0; i < iteration; ++i)
     {
 
@@ -159,17 +138,11 @@ int main(int itkNotUsed(argc), char * argv[])
     duplicator->Update();
 
     }
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The next loop will put back the seam using the
   // \doxygen{otb}{AddCarvingPathFilter} and drawing it with the
   // \doxygen{otb}{DrawPathFilter}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   for (int i = iteration - 1; i >= 0; i--)
     {
 
@@ -185,22 +158,13 @@ int main(int itkNotUsed(argc), char * argv[])
     duplicator->SetInputImage(drawPathFilter->GetOutput());
     duplicator->Update();
     }
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // Finally, the resulting image is saved on an image file as usual
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   rescaler->SetInput(duplicator->GetOutput());
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:SEAMCARVING2_FILTER} shows the result of applying
   // the seam carving filter to a satellite image.
   // \begin{figure}
@@ -213,8 +177,6 @@ int main(int itkNotUsed(argc), char * argv[])
   // seams and the 25 horizontal seams.}
   // \label{fig:SEAMCARVING2_FILTER}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

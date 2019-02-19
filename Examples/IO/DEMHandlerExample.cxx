@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // OTB relies on OSSIM for elevation handling. Since release 3.16, there is a
 // single configuration class \doxygen{otb}{DEMHandler} to manage elevation (in
 // image projections or localization functions for example).  This configuration
@@ -35,8 +33,6 @@
 // filters or functionalities. Ossim internal accesses to elevation are also
 // configured by this class and this will ensure consistency throughout the
 // library.
-//
-// Software Guide : EndLatex
 
 #include "otbDEMHandler.h"
 
@@ -56,29 +52,18 @@ if(argc!=8)
   double target        = atof(argv[6]);
   double tolerance     = atof(argv[7]);
 
-// Software Guide : BeginLatex
-//
 // This class is a singleton, the New() method is deprecated and will be removed
 // in future release. We need to use the \code{Instance()} method instead.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  // Software Guide : EndCodeSnippet
 
   bool fail = false;
 
-// Software Guide : BeginLatex
-//
 // It allows configuring a directory containing DEM tiles (DTED or SRTM
 // supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
 // allows inputting a geoid file as well. Last, a default height above ellipsoid
 // can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
 
   if(!demHandler->IsValidDEMDirectory(demdir.c_str()))
@@ -89,10 +74,7 @@ if(argc!=8)
 
   demHandler->OpenDEMDirectory(demdir);
   demHandler->OpenGeoidFile(geoid);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We can now retrieve height above ellipsoid or height above Mean Sea Level
   // (MSL) using the methods \code{GetHeightAboveEllipsoid()} and
   // \code{GetHeightAboveMSL()}.  Outputs of these methods depend on the
@@ -116,10 +98,7 @@ if(argc!=8)
   // \item DEM available, but no geoid: srtm\_value
   // \item No DEM and no geoid available: $0$
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   otb::DEMHandler::PointType point;
   point[0] = longitude;
   point[1] = latitude;
@@ -133,9 +112,6 @@ if(argc!=8)
   height = demHandler->GetHeightAboveEllipsoid(point);
   std::cout<<"height above ellipsoid ("<<longitude
            <<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
-  // Software Guide : EndCodeSnippet
-  //
-  // Software Guide : BeginLatex
   //
   // Note that OSSIM internal calls for sensor
   // modelling use the height above ellipsoid, and follow the same logic as the

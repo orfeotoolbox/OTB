@@ -24,14 +24,10 @@
 */
 
 
-//  Software Guide : BeginLatex
 // This example illustrates the use of the
 // \doxygen{otb}{MachineLearningModel} class. This class allows the
 // estimation of a classification model (supervised learning) from images. In this example, we will train an SVM
 // with 4 classes. We start by including the appropriate header files.
-//
-//  Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
 // List sample generator
 #include "otbListSampleGenerator.h"
 
@@ -40,7 +36,6 @@
 
 // SVM model Estimator
 #include "otbSVMMachineLearningModel.h"
-// Software Guide : EndCodeSnippet
 
 
 // Image
@@ -68,8 +63,6 @@ int main(int itkNotUsed(argc), char* argv[])
   typedef otb::ImageFileReader<InputImageType>         InputReaderType;
   typedef otb::VectorDataFileReader<VectorDataType>    VectorDataReaderType;
 
-// Software Guide : BeginLatex
-//
 // In this framework, we must transform the input samples store in a vector
 // data into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
 // compatible with the machine learning classes. On the one hand, we are using feature vectors
@@ -79,10 +72,7 @@ int main(int itkNotUsed(argc), char* argv[])
 // input samples store in a vector data into a
 // \subdoxygen{itk}{Statistics}{ListSample}, we use the
 // \doxygen{otb}{ListSampleGenerator} class.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   // VectorData projection filter
   typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType>
                                                         VectorDataReprojectionType;
@@ -119,7 +109,6 @@ int main(int itkNotUsed(argc), char* argv[])
   sampleGenerator->SetClassKey("Class");
 
   sampleGenerator->Update();
-  // Software Guide : EndCodeSnippet
 
 
   //std::cout << "Number of classes: " << sampleGenerator->GetNumberOfClasses() << std::endl;
@@ -135,8 +124,6 @@ int main(int itkNotUsed(argc), char* argv[])
   // trainingShiftScaleFilter->Update();
 
 
-// Software Guide : BeginLatex
-//
 // Now, we need to declare the machine learning model which will be used by the
 // classifier. In this example, we train an SVM model. The
 // \doxygen{otb}{SVMMachineLearningModel} class inherits from the pure virtual
@@ -146,10 +133,7 @@ int main(int itkNotUsed(argc), char* argv[])
 // interface in OTB is based on the OpenCV library \cite{opencv_library}. Specific methods
 // can be used to set classifier parameters. In the case of SVM, we set here the type
 // of the kernel. Other parameters are let with their default values.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::SVMMachineLearningModel
                                  <InputImageType::InternalPixelType,
                                   ListSampleGeneratorType::ClassLabelType> SVMType;
@@ -160,22 +144,14 @@ int main(int itkNotUsed(argc), char* argv[])
   SVMClassifier->SetTargetListSample(sampleGenerator->GetTrainingListLabel());
 
   SVMClassifier->SetKernelType(CvSVM::LINEAR);
-  // Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The machine learning interface is generic and gives access to other classifiers. We now train the
 // SVM model using the \code{Train} and save the model to a text file using the
 // \code{Save} method.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   SVMClassifier->Train();
   SVMClassifier->Save(outputModelFileName);
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 
 // You can now use the \code{Predict} method which takes a
 // \subdoxygen{itk}{Statistics}{ListSample} as input and estimates the label of each
@@ -183,7 +159,5 @@ int main(int itkNotUsed(argc), char* argv[])
 // \doxygen{otb}{ImageClassificationModel} inherits from the
 // \doxygen{itk}{ImageToImageFilter} and allows classifying pixels in the
 // input image by predicting their labels using a model.
-//
-// Software Guide : EndLatex
 
 }

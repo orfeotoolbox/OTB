@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example demonstrates the use of the stereo reconstruction chain
 // from an image pair. The images are assumed to come from the same sensor
 // but with different positions. The approach presented here has the
@@ -40,10 +38,7 @@
 // a pose estimate for each image.
 
 
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbStereorectificationDisplacementFieldSource.h"
 #include "otbStreamingWarpImageFilter.h"
 #include "otbBandMathImageFilter.h"
@@ -60,7 +55,6 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbDEMHandler.h"
-// Software Guide : EndCodeSnippet
 
 
 int main(int argc, char* argv[])
@@ -90,7 +84,6 @@ int main(int argc, char* argv[])
 
   typedef otb::ImageFileWriter
     <OutputImageType>                         OutputWriterType;
-// Software Guide : BeginLatex
 // This example demonstrates the use of the following filters :
 // \begin{itemize}
 // \item \doxygen{otb}{StereorectificationDisplacementFieldSource}
@@ -100,9 +93,7 @@ int main(int argc, char* argv[])
 // \item \doxygen{otb}{otbDisparityMapMedianFilter}
 // \item \doxygen{otb}{DisparityMapToDEMFilter}
 // \end{itemize}
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::StereorectificationDisplacementFieldSource
     <FloatImageType,FloatVectorImageType>     DisplacementFieldSourceType;
 
@@ -152,7 +143,6 @@ int main(int argc, char* argv[])
      FloatImageType,
      FloatVectorImageType,
      FloatImageType>                          DisparityToElevationFilterType;
-// Software Guide : EndCodeSnippet
 
   double avgElevation = atof(argv[5]);
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElevation);
@@ -163,7 +153,6 @@ int main(int argc, char* argv[])
   leftReader->SetFileName(argv[1]);
   rightReader->SetFileName(argv[2]);
 
-// Software Guide : BeginLatex
 // The image pair is supposed to be in sensor geometry. From two images covering
 // nearly the same area, one can estimate a common epipolar geometry. In this geometry,
 // an altitude variation corresponds to an horizontal shift between the two images.
@@ -176,9 +165,7 @@ int main(int argc, char* argv[])
 // direction. They can be computed at a lower resolution than sensor
 // resolution. The application \code{StereoRectificationGridGenerator} also
 // provides a simple tool to generate the epipolar grids for your image pair.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   DisplacementFieldSourceType::Pointer m_DisplacementFieldSource = DisplacementFieldSourceType::New();
   m_DisplacementFieldSource->SetLeftImage(leftReader->GetOutput());
   m_DisplacementFieldSource->SetRightImage(rightReader->GetOutput());
@@ -187,9 +174,7 @@ int main(int argc, char* argv[])
   //m_DisplacementFieldSource->SetAverageElevation(avgElevation);
 
   m_DisplacementFieldSource->Update();
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // Then, the sensor images can be resampled in epipolar geometry, using the
 // \doxygen{otb}{StreamingWarpImageFilter}. The application
 // \code{GridBasedImageResampling} also gives an easy access to this filter. The user
@@ -198,9 +183,7 @@ int main(int argc, char* argv[])
 //
 // Note that the epipolar image size can be retrieved from the stereo rectification grid
 // filter.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   FloatImageType::SpacingType epipolarSpacing;
   epipolarSpacing[0] = 1.0;
   epipolarSpacing[1] = 1.0;
@@ -213,14 +196,10 @@ int main(int argc, char* argv[])
   epipolarOrigin[1] = 0.0;
 
   FloatImageType::PixelType defaultValue = 0;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // The deformation grids are casted into deformation fields, then the left
 // and right sensor images are resampled.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   DisplacementFieldCastFilterType::Pointer m_LeftDisplacementFieldCaster = DisplacementFieldCastFilterType::New();
   m_LeftDisplacementFieldCaster->SetInput(m_DisplacementFieldSource->GetLeftDisplacementFieldOutput());
   m_LeftDisplacementFieldCaster->GetOutput()->UpdateOutputInformation();
@@ -252,15 +231,11 @@ int main(int argc, char* argv[])
   m_RightWarpImageFilter->SetOutputSpacing(epipolarSpacing);
   m_RightWarpImageFilter->SetOutputOrigin(epipolarOrigin);
   m_RightWarpImageFilter->SetEdgePaddingValue(defaultValue);
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // Since the resampling produces black regions around the image, it is useless
 // to estimate disparities on these \textit{no-data} regions. We use a \doxygen{otb}{BandMathImageFilter}
 // to produce a mask on left and right epipolar images.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   BandMathFilterType::Pointer m_LBandMathFilter = BandMathFilterType::New();
   m_LBandMathFilter->SetNthInput(0,m_LeftWarpImageFilter->GetOutput(),"inleft");
   #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
@@ -281,9 +256,7 @@ int main(int argc, char* argv[])
   #endif
 
   m_RBandMathFilter->SetExpression(rightExpr);
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // Once the two sensor images have been resampled in epipolar geometry, the
 // disparity map can be computed. The approach presented here is a 2D matching
 // based on a pixel-wise metric optimization. This approach doesn't give the best
@@ -303,9 +276,7 @@ int main(int argc, char* argv[])
 // \item Possibility to use input disparity estimate (as a uniform value or a full map) and an
 // exploration radius around these values to reduce the size of the exploration area (optional).
 // \end{itemize}
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   NCCBlockMatchingFilterType::Pointer m_NCCBlockMatcher = NCCBlockMatchingFilterType::New();
   m_NCCBlockMatcher->SetLeftInput(m_LeftWarpImageFilter->GetOutput());
   m_NCCBlockMatcher->SetRightInput(m_RightWarpImageFilter->GetOutput());
@@ -317,22 +288,16 @@ int main(int argc, char* argv[])
   m_NCCBlockMatcher->MinimizeOff();
   m_NCCBlockMatcher->SetLeftMaskInput(m_LBandMathFilter->GetOutput());
   m_NCCBlockMatcher->SetRightMaskInput(m_RBandMathFilter->GetOutput());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // Some other filters have been added to enhance these \textit{pixel-to-pixel} disparities. The filter
 // \doxygen{otb}{SubPixelDisparityImageFilter} can estimate the disparities with sub-pixel
 // precision. Several interpolation methods can be used : parabolic fit, triangular fit, and
 // dichotomy search.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   NCCSubPixelDisparityFilterType::Pointer m_NCCSubPixFilter = NCCSubPixelDisparityFilterType::New();
   m_NCCSubPixFilter->SetInputsFromBlockMatchingFilter(m_NCCBlockMatcher);
   m_NCCSubPixFilter->SetRefineMethod(NCCSubPixelDisparityFilterType::DICHOTOMY);
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // The filter \doxygen{otb}{DisparityMapMedianFilter} can be used to remove outliers. It has two
 // parameters:
 // \begin{itemize}
@@ -340,9 +305,7 @@ int main(int argc, char* argv[])
 // \item An incoherence threshold to reject disparities whose distance from the local median
 // is superior to the threshold.
 // \end{itemize}
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   MedianFilterType::Pointer m_HMedianFilter = MedianFilterType::New();
   m_HMedianFilter->SetInput(m_NCCSubPixFilter->GetHorizontalDisparityOutput());
   m_HMedianFilter->SetRadius(2);
@@ -354,9 +317,7 @@ int main(int argc, char* argv[])
   m_VMedianFilter->SetRadius(2);
   m_VMedianFilter->SetIncoherenceThreshold(2.0);
   m_VMedianFilter->SetMaskInput(m_LBandMathFilter->GetOutput());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // The application \code{PixelWiseBlockMatching} contains all these filters and
 // provides a single interface to compute your disparity maps.
 //
@@ -378,9 +339,7 @@ int main(int argc, char* argv[])
 // noisy disparities.
 //
 // The application \code{DisparityMapToElevationMap} also gives an example of use.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   DisparityToElevationFilterType::Pointer m_DispToElev = DisparityToElevationFilterType::New();
   m_DispToElev->SetHorizontalDisparityMapInput(m_HMedianFilter->GetOutput());
   m_DispToElev->SetVerticalDisparityMapInput(m_VMedianFilter->GetOutput());
@@ -408,10 +367,7 @@ int main(int argc, char* argv[])
   fieldWriter->SetInput(fieldRescaler->GetOutput());
   fieldWriter->SetFileName(argv[4]);
   fieldWriter->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:STEREORECONSTRUCTIONOUTPUT} shows the result of applying
   // terrain reconstruction based using pixel-wise block matching, sub-pixel
   // interpolation and DEM estimation using a pair of Pleiades images over the
@@ -422,8 +378,6 @@ int main(int argc, char* argv[])
   // \itkcaption[From stereo pair to elevation]{DEM image estimated from the disparity.}
   // \label{fig:STEREORECONSTRUCTIONOUTPUT}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

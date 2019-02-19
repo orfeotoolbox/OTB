@@ -29,7 +29,6 @@
 */
 
 
-//  Software Guide : BeginLatex
 // This example illustrates the OTB's multi-class SVM
 // capabilities. The theory behind this kind of classification is out
 // of the scope of this guide. In OTB, the multi-class SVM
@@ -47,18 +46,15 @@
 
 // The following header files are needed for the program:
 
-//  Software Guide : EndLatex
 
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include <iostream>
 
-//  Software Guide : BeginCodeSnippet
 #include "otbLibSVMMachineLearningModel.h"
 #include "itkImageToListSampleFilter.h"
 #include "otbImageClassificationFilter.h"
-//  Software Guide : EndCodeSnippet
 
 #include "otbImageFileWriter.h"
 
@@ -77,75 +73,46 @@ int main(int itkNotUsed(argc), char *argv[])
   const char* outputRescaledImageFileName = argv[4];
 //  const char* outputModelFileName = argv[4];
 
-//  Software Guide : BeginLatex
-//
 //  We define the types for the input and training images. Even if the
 //  input image will be an RGB image, we can read it as a 3 component
 //  vector image. This simplifies the interfacing with OTB's SVM
 //  framework.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   typedef unsigned short InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
 
   typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  The \doxygen{otb}{LibSVMMachineLearningModel} class is templated over
 //  the input (features) and the training (labels) values.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   typedef otb::LibSVMMachineLearningModel<InputPixelType,
       InputPixelType>   ModelType;
 
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  As usual, we define the readers for the images.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<InputImageType>    InputReaderType;
   typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
   InputReaderType::Pointer    inputReader = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  We read the images. It is worth to note that, in order to ensure
 //  the pipeline coherence, the output of the objects which precede the
 //  model estimator in the pipeline, must be up to date, so we call
 //  the corresponding \code{Update} methods.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   inputReader->SetFileName(inputImageFileName);
   trainingReader->SetFileName(trainingImageFileName);
 
   //~ inputReader->Update();
   //~ trainingReader->Update();
 
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  The input data is contained in images. Only label values greater than 0
 //  shall be used, so we create two iterators to fill the input and target
 //  ListSamples.
-//
-// Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 
   typedef itk::BinaryThresholdImageFilter<TrainingImageType,TrainingImageType> ThresholdFilterType;
   ThresholdFilterType::Pointer thresholder = ThresholdFilterType::New();
@@ -169,105 +136,56 @@ int main(int itkNotUsed(argc), char *argv[])
   imToTargetList->SetMaskValue(1);
   imToTargetList->Update();
 
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  We can now instantiate the model and set its parameters.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   ModelType::Pointer svmModel = ModelType::New();
   svmModel->SetInputListSample(const_cast<ModelType::InputListSampleType*>(imToList->GetOutput()));
   svmModel->SetTargetListSample(const_cast<ModelType::TargetListSampleType*>(imToTargetList->GetOutput()));
 
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  The model training procedure is triggered by calling the
 //  model's \code{Train} method.
-//
-// Software Guide : EndLatex
-//  Software Guide : BeginCodeSnippet
   svmModel->Train();
 
-//  Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We have now all the elements to create a classifier. The classifier
 // is templated over the sample type (the type of the data to be
 // classified) and the label type (the type of the output of the classifier).
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::ImageClassificationFilter<InputImageType, TrainingImageType> ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We set the classifier parameters : number of classes, SVM model,
 // the sample data. And we trigger the classification process by
 // calling the \code{Update} method.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   classifier->SetModel(svmModel);
   classifier->SetInput(inputReader->GetOutput());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // After the classification step, we usually want to get the
 // results. The classifier gives an output under the form of a sample
 // list. This list supports the classical STL iterators. Therefore, we
 // will create an output image and fill it up with the results of the
 // classification. The pixel type of the output image is the same as
 // the one used for the labels.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We allocate the memory for the output image using the information
 // from the input image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We can now declare the iterators on the list that we get at the
 // output of the classifier as well as the iterator to fill the output image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We will iterate through the list, get the labels and assign pixel
 // values to the output image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 
-// Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileWriter<TrainingImageType> WriterType;
 
@@ -278,8 +196,6 @@ int main(int itkNotUsed(argc), char *argv[])
 
   writer->Update();
 
-// Software Guide : BeginLatex
-//
 // Only for visualization purposes, we choose a color mapping to the image of
 // classes before saving it to a file. The
 // \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
@@ -287,10 +203,7 @@ int main(int itkNotUsed(argc), char *argv[])
 // \doxygen{itk}{RGBPixel}. Plugging this functor into the
 // \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
 // converts scalar images to RGB images.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
   typedef otb::Image<RGBPixelType, 2>  RGBImageType;
   typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
@@ -301,15 +214,9 @@ int main(int itkNotUsed(argc), char *argv[])
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(classifier->GetOutput());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We can now create an image file writer and save the image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
@@ -318,9 +225,7 @@ int main(int itkNotUsed(argc), char *argv[])
   writerRescaled->SetInput(colormapper->GetOutput());
 
   writerRescaled->Update();
-// Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
 // Figure \ref{fig:SVMCLASSMULTI} shows the result of the SVM classification.
 // \begin{figure}
 // \center
@@ -330,7 +235,6 @@ int main(int itkNotUsed(argc), char *argv[])
 // classification . Left: RGB image. Right: image of classes.}
 // \label{fig:SVMCLASSMULTI}
 // \end{figure}
-//  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

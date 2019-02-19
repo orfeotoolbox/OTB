@@ -25,8 +25,6 @@
 */
 
 //
-//  Software Guide : BeginLatex
-//
 // In this example, we present OTB's implementation of SEM, through the class
 // \doxygen{otb}{SEMClassifier}. This class performs a stochastic version
 // of the EM algorithm, but instead of inheriting from
@@ -36,8 +34,6 @@
 //
 // The program begins with \doxygen{otb}{VectorImage} and outputs
 // \doxygen{otb}{Image}. Then appropriate header files have to be included:
-//
-// Software Guide : EndLatex
 
 #include <iostream>
 
@@ -46,27 +42,19 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-//  Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // \doxygen{otb}{SEMClassifier} performs estimation of mixture to fit the
 // initial histogram. Actually, mixture of Gaussian pdf can be performed.
 // Those generic pdf are treated in
 // \subdoxygen{otb}{Statistics}{ModelComponentBase}. The Gaussian model
 // is taken in charge with the class
 // \subdoxygen{otb}{Statistics}{GaussianModelComponent}.
-//
-// Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 #include "otbSEMClassifier.h"
-//  Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
 {
@@ -81,16 +69,11 @@ int main(int argc, char * argv[])
       return EXIT_FAILURE;
       }
 
-// Software Guide : BeginLatex
-//
 // Input/Output images type are define in a classical way.
 // In fact, a \doxygen{itk}{VariableLengthVector} is to be
 // considered for the templated \code{MeasurementVectorType}, which
 // will be used in the \code{ListSample} interface.
-//
-// Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     typedef double PixelType;
 
     typedef otb::VectorImage<PixelType, 2>  ImageType;
@@ -98,7 +81,6 @@ int main(int argc, char * argv[])
 
     typedef otb::Image<unsigned char, 2>          OutputImageType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
-//  Software Guide : EndCodeSnippet
 
     char * fileNameIn = argv[1];
     char * fileNameImgInit = nullptr;
@@ -112,41 +94,25 @@ int main(int argc, char * argv[])
     reader->SetFileName(fileNameIn);
     reader->Update();
 
-//  Software Guide : BeginLatex
-//
 // Once the input image is opened, the classifier may be initialised by
 // \code{SmartPointer}.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     typedef otb::SEMClassifier<ImageType, OutputImageType> ClassifType;
     ClassifType::Pointer classifier = ClassifType::New();
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  Then, it follows, classical initializations of the pipeline.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     classifier->SetNumberOfClasses(numberOfClasses);
     classifier->SetMaximumIteration(numberOfIteration);
     classifier->SetNeighborhood(neighborhood);
     classifier->SetTerminationThreshold(terminationThreshold);
     classifier->SetSample(reader->GetOutput());
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 // When an initial segmentation is available, the classifier may use it
 // as image (of type \code{OutputImageType}) or as a
 // \doxygen{itk}{SampleClassifier} result (of type
 // \subdoxygen{itk}{Statistics}{MembershipSample}).
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     if (fileNameImgInit != nullptr)
       {
       typedef otb::ImageFileReader<OutputImageType> ImgInitReaderType;
@@ -155,21 +121,16 @@ int main(int argc, char * argv[])
       segReader->Update();
       classifier->SetClassLabels(segReader->GetOutput());
       }
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  By default, \doxygen{otb}{SEMClassifier} performs initialization of
 // \code{ModelComponentBase} by as many instantiation of
 // \subdoxygen{otb}{Statistics}{GaussianModelComponent} as the number of
 // classes to estimate in the mixture. Nevertheless, the user may add specific
 // distribution into the mixture estimation. It is permitted by the use of
 // \code{AddComponent} for the given class number and the specific distribution.
-//  Software Guide : EndLatex
 
     std::cerr << "Explicit component initialization\n";
 
-//  Software Guide : BeginCodeSnippet
     typedef ClassifType::ClassSampleType ClassSampleType;
     typedef otb::Statistics::GaussianModelComponent<ClassSampleType>
     GaussianType;
@@ -179,20 +140,14 @@ int main(int argc, char * argv[])
       GaussianType::Pointer model = GaussianType::New();
       classifier->AddComponent(i, model);
       }
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  Once the pipeline is instantiated. The segmentation by itself may be
 // launched by using the \code{Update} function.
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     try
       {
       classifier->Update();
       }
-//  Software Guide : EndCodeSnippet
 
     catch (itk::ExceptionObject& err)
       {
@@ -201,8 +156,6 @@ int main(int argc, char * argv[])
       return -1;
       }
 
-//  Software Guide : BeginLatex
-//
 //  The segmentation may outputs a result of type
 // \subdoxygen{itk}{Statistics}{MembershipSample} as it is the
 // case for the \doxygen{otb}{SVMClassifier}. But when using
@@ -211,10 +164,7 @@ int main(int argc, char * argv[])
 // Only for visualization purposes, we choose to rescale the image of
 // classes before saving it to a file. We will use the
 // \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
-//
-// Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     typedef itk::RescaleIntensityImageFilter<OutputImageType,
         OutputImageType> RescalerType;
     RescalerType::Pointer rescaler = RescalerType::New();
@@ -228,10 +178,7 @@ int main(int argc, char * argv[])
     writer->SetFileName(fileNameOut);
     writer->SetInput(rescaler->GetOutput());
     writer->Update();
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 // Figure \ref{fig:RESSEMCLASSIF} shows the result of the SEM segmentation
 // with 4 different classes and a contextual neighborhood of 3 pixels.
 // \begin{figure}
@@ -244,28 +191,18 @@ int main(int argc, char * argv[])
 // As soon as the segmentation is performed by an iterative stochastic
 // process, it is worth verifying the output status: does the segmentation
 // ends when it has converged or just at the limit of the iteration numbers.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     std::cerr << "Program terminated with a ";
     if (classifier->GetTerminationCode() ==
         ClassifType::CONVERGED) std::cerr << "converged ";
     else std::cerr << "not-converged ";
     std::cerr << "code...\n";
-//  Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  The text output gives for each class the parameters of the pdf (e.g. mean
 // of each component of the class and there covariance matrix, in the case of a
 // Gaussian mixture model).
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
     classifier->Print(std::cerr);
-//  Software Guide : EndCodeSnippet
     }
   catch (itk::ExceptionObject& err)
     {

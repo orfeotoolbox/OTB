@@ -28,8 +28,6 @@
           Output/pretty_QB_Toulouse_Ortho_XS.png
 */
 
-// Software Guide : BeginLatex
-//
 // Here we are illustrating the use of the
 // \doxygen{otb}{SimpleRcsPanSharpeningFusionImageFilter} for PAN-sharpening.
 // This example takes a PAN and the corresponding XS images as input. These
@@ -40,11 +38,7 @@
 // \begin{equation}
 // \frac{XS}{\mathrm{Filtered}(PAN)} PAN
 // \end{equation}
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginLatex
-//
 // Figure~\ref{fig:PANSHARP_FILTER} shows the result of applying
 // this PAN sharpening filter to a Quickbird image.
 // \begin{figure}
@@ -59,29 +53,19 @@
 // result of the PAN sharpening}
 // \label{fig:PANSHARP_FILTER}
 // \end{figure}
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginLatex
-//
 // We start by including the required header and declaring the main function:
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbPrintableImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
-// Software Guide : BeginCodeSnippet
 int main(int argc, char* argv[])
 {
-// Software Guide : EndCodeSnippet
 
   if (argc < 7)
     {
@@ -93,16 +77,11 @@ int main(int argc, char* argv[])
     return 1;
     }
 
-  // Software Guide : BeginLatex
-  //
   // We declare the different image type used here as well as the image reader.
   // Note that, the reader for the PAN image is templated by an
   // \doxygen{otb}{Image} while the XS reader uses an
   // \doxygen{otb}{VectorImage}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::Image<double, 2>                   ImageType;
   typedef otb::VectorImage<double, 2>             VectorImageType;
   typedef otb::ImageFileReader<ImageType>         ReaderType;
@@ -111,47 +90,28 @@ int main(int argc, char* argv[])
 
   ReaderVectorType::Pointer readerXS = ReaderVectorType::New();
   ReaderType::Pointer       readerPAN = ReaderType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We pass the filenames to the readers
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   readerPAN->SetFileName(argv[1]);
   readerXS->SetFileName(argv[2]);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We declare the fusion filter an set its inputs using the readers:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter
   <ImageType, VectorImageType, VectorIntImageType> FusionFilterType;
   FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(readerPAN->GetOutput());
   fusion->SetXsInput(readerXS->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // And finally, we declare the writer and call its \code{Update()} method to
   // trigger the full pipeline execution.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter<VectorIntImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(fusion->GetOutput());
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
   typedef otb::PrintableImageFilter<VectorIntImageType> PrintableImageType;
   PrintableImageType::Pointer printable = PrintableImageType::New();

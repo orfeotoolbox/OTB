@@ -20,18 +20,13 @@
 
 
 
-//  Software Guide : BeginLatex
-//
 //  This example illustrates how to compute second derivatives of
 //  an image using the \doxygen{itk}{RecursiveGaussianImageFilter}.
 //
 //  In this example, all the second derivatives are computed independently in
 //  the same way as if they were intended to be used for building the Hessian
 //  matrix of the image.
-//
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "itkRecursiveGaussianImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -204,7 +199,6 @@ int main(int argc, char * argv[])
   outputFileName = outputPrefix + "-Ixy.hdr";
   writer->SetFileName(outputFileName);
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }

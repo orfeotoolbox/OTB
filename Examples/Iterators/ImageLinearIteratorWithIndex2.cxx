@@ -20,8 +20,6 @@
 
 
 
-// Software Guide : BeginLatex
-//
 // This example shows how to use the \doxygen{itk}{ImageLinearIteratorWithIndex} for
 // computing the mean across time of a 4D image where the first three
 // dimensions correspond to spatial coordinates and the fourth dimension
@@ -30,13 +28,9 @@
 //
 // \index{Iterators!and 4D images}
 // \index{ImageLinearIteratorWithIndex!4D images}
-//
-// Software Guide : EndLatex
 
 #include "otbImage.h"
-// Software Guide : BeginCodeSnippet
 #include "itkImageLinearConstIteratorWithIndex.h"
-// Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -53,13 +47,8 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-// Software Guide : BeginLatex
-//
 // First we declare the types of the images
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef unsigned char            PixelType;
   typedef otb::Image<PixelType, 3> Image3DType;
   typedef otb::Image<PixelType, 4> Image4DType;
@@ -156,10 +145,7 @@ int main(int argc, char *argv[])
     image3D->SetPixel(index3D, static_cast<PixelType>(mean));
     it.NextLine();
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // As you can see, we avoid to use a 3D iterator to walk
 // over the mean image. The reason is that there is no
 // guarantee that the 3D iterator will walk in the same
@@ -173,8 +159,6 @@ int main(int argc, char *argv[])
 // the first three components of the 4D iterator index,
 // and use them to place the resulting mean value in the
 // output 3D image.
-//
-// Software Guide : EndLatex
 
   Writer3DType::Pointer writer3D = Writer3DType::New();
   writer3D->SetFileName(argv[2]);

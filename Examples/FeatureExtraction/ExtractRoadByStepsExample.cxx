@@ -20,14 +20,10 @@
 
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the details of the \doxygen{otb}{RoadExtractionFilter}.
 // This filter, described in the previous section,  is a composite filter that includes
 // all the steps below. Individual filters can be replaced to design a road detector
 // targeted at SAR images for example.
-//
-// Software Guide : EndLatex
 
 #include "otbPolyLineParametricPathWithValue.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
@@ -141,8 +137,6 @@ int main(int itkNotUsed(argc), char * argv[])
   double resolution = 0.6; //to get directly from metadata
   double alpha = atof(argv[9]);
 
-  //  Software Guide : BeginLatex
-  //
   //  The spectral angle is used to compute a grayscale image from the
   //  multispectral original image using
   //  \doxygen{otb}{SpectralAngleDistanceImageFilter}. The spectral
@@ -160,40 +154,25 @@ int main(int itkNotUsed(argc), char * argv[])
   // \end{figure}
   //
   //
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::SpectralAngleDistanceImageFilter<MultiSpectralImageType,
       InternalImageType> SAFilterType;
   SAFilterType::Pointer saFilter = SAFilterType::New();
   saFilter->SetReferencePixel(pixelRef);
   saFilter->SetInput(multispectralReader->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  A square root is applied to the spectral angle image in order to enhance contrast between
   //  darker pixels (which are pixels of interest) with \doxygen{itk}{SqrtImageFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::SqrtImageFilter<InternalImageType,
       InternalImageType> SqrtFilterType;
   SqrtFilterType::Pointer sqrtFilter = SqrtFilterType::New();
   sqrtFilter->SetInput(saFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Use the Gaussian gradient filter compute the gradient in x and y direction
   // respectively
   // (\doxygen{itk}{GradientRecursiveGaussianImageFilter}).
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   double sigma = alpha * (1.2 / resolution + 1);
   typedef itk::GradientRecursiveGaussianImageFilter<InternalImageType,
       VectorImageType>
@@ -201,18 +180,12 @@ int main(int itkNotUsed(argc), char * argv[])
   GradientFilterType::Pointer gradientFilter = GradientFilterType::New();
   gradientFilter->SetSigma(sigma);
   gradientFilter->SetInput(sqrtFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Compute the scalar product of the neighboring pixels and keep the
   //  minimum value and the direction with \doxygen{otb}{NeighborhoodScalarProductFilter}.
   // This is the line detector described
   //  in \cite{Lacroix1998}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::NeighborhoodScalarProductFilter<VectorImageType,
       InternalImageType,
       InternalImageType>
@@ -220,17 +193,11 @@ int main(int itkNotUsed(argc), char * argv[])
   NeighborhoodScalarProductType::Pointer scalarFilter
     = NeighborhoodScalarProductType::New();
   scalarFilter->SetInput(gradientFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The resulting image is passed to the \doxygen{otb}{RemoveIsolatedByDirectionFilter}
   // filter to remove pixels
   //  with no neighbor having the same direction.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::RemoveIsolatedByDirectionFilter<InternalImageType,
       InternalImageType,
       InternalImageType>
@@ -240,17 +207,11 @@ int main(int itkNotUsed(argc), char * argv[])
   removeIsolatedByDirectionFilter->SetInput(scalarFilter->GetOutput());
   removeIsolatedByDirectionFilter
   ->SetInputDirection(scalarFilter->GetOutputDirection());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We remove pixels having a direction corresponding to bright lines
   //  as we know that after the spectral angle, roads are in darker color
   //  with the \doxygen{otb}{RemoveWrongDirectionFilter} filter.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::RemoveWrongDirectionFilter<InternalImageType,
       InternalImageType,
       InternalImageType>
@@ -261,16 +222,10 @@ int main(int itkNotUsed(argc), char * argv[])
     removeIsolatedByDirectionFilter->GetOutput());
   removeWrongDirectionFilter->SetInputDirection(
     scalarFilter->GetOutputDirection());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We remove pixels which are not maximum on the direction
   //  perpendicular to the road direction with the \doxygen{otb}{NonMaxRemovalByDirectionFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::NonMaxRemovalByDirectionFilter<InternalImageType,
       InternalImageType,
       InternalImageType>
@@ -281,15 +236,9 @@ int main(int itkNotUsed(argc), char * argv[])
     removeWrongDirectionFilter->GetOutput());
   nonMaxRemovalByDirectionFilter
   ->SetInputDirection(scalarFilter->GetOutputDirection());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Extracted road are vectorized into polylines with \doxygen{otb}{VectorizationPathListFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::VectorizationPathListFilter<InternalImageType,
       InternalImageType,
       PathType> VectorizationFilterType;
@@ -298,20 +247,14 @@ int main(int itkNotUsed(argc), char * argv[])
   vectorizationFilter->SetInput(nonMaxRemovalByDirectionFilter->GetOutput());
   vectorizationFilter->SetInputDirection(scalarFilter->GetOutputDirection());
   vectorizationFilter->SetAmplitudeThreshold(atof(argv[8]));
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  However, this vectorization is too simple and need to be refined
   //  to be usable. First, we remove all aligned points to make one segment with
   // \doxygen{otb}{SimplifyPathListFilter}.
   //  Then we break the polylines which have sharp angles as they are probably
   //  not road with \doxygen{otb}{BreakAngularPathListFilter}.
   // Finally we remove path which are too short with \doxygen{otb}{RemoveTortuousPathListFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::SimplifyPathListFilter<PathType> SimplifyPathType;
   SimplifyPathType::Pointer simplifyPathListFilter = SimplifyPathType::New();
   simplifyPathListFilter->GetFunctor().SetTolerance(1.0);
@@ -328,18 +271,12 @@ int main(int itkNotUsed(argc), char * argv[])
     = RemoveTortuousPathType::New();
   removeTortuousPathListFilter->GetFunctor().SetThreshold(1.0);
   removeTortuousPathListFilter->SetInput(breakAngularPathListFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Polylines within a certain range are linked (\doxygen{otb}{LinkPathListFilter}) to
   //  try to fill gaps due to occultations by vehicules, trees, etc. before simplifying
   //  polylines (\doxygen{otb}{SimplifyPathListFilter}) and
   //  removing the shortest ones with \doxygen{otb}{RemoveTortuousPathListFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::LinkPathListFilter<PathType> LinkPathType;
   LinkPathType::Pointer linkPathListFilter = LinkPathType::New();
   linkPathListFilter->SetDistanceThreshold(25.0 / resolution);
@@ -354,17 +291,11 @@ int main(int itkNotUsed(argc), char * argv[])
     = RemoveTortuousPathType::New();
   removeTortuousPathListFilter2->GetFunctor().SetThreshold(10.0);
   removeTortuousPathListFilter2->SetInput(simplifyPathListFilter2->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  A value can be associated with each polyline according to pixel values
   // under the polyline with \doxygen{otb}{LikelihoodPathListFilter}. A higher value
   // will mean a higher Likelihood to be a road.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::LikelihoodPathListFilter<PathType,
       InternalImageType>
   PathListToPathListWithValueType;
@@ -372,48 +303,30 @@ int main(int itkNotUsed(argc), char * argv[])
     = PathListToPathListWithValueType::New();
   pathListConverter->SetInput(removeTortuousPathListFilter2->GetOutput());
   pathListConverter->SetInputImage(nonMaxRemovalByDirectionFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // A black background image is built to draw the path on.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   InternalImageType::Pointer output = InternalImageType::New();
   output->CopyInformation(multispectralReader->GetOutput());
   output->SetRegions(output->GetLargestPossibleRegion());
   output->Allocate();
   output->FillBuffer(0.0);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Polylines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}.
   // The \code{SetUseIternalValues()} tell the drawing filter to draw the path with its Likelihood
   // value.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::DrawPathListFilter<InternalImageType, PathType,
       InternalImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
   drawPathListFilter->SetInput(output);
   drawPathListFilter->SetInputPath(pathListConverter->GetOutput());
   drawPathListFilter->SetUseInternalPathValue(true);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The output from the drawing filter contains very small values (Likelihood values). Therefore
   // the image has to be rescaled to be viewed. The whole pipeline is executed by invoking
   // the \code{Update()} method on this last filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InternalImageType,
       InternalImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
@@ -421,7 +334,6 @@ int main(int itkNotUsed(argc), char * argv[])
   rescaler->SetOutputMinimum(0);
   rescaler->SetInput(drawPathListFilter->GetOutput());
   rescaler->Update();
-  // Software Guide : EndCodeSnippet
 
   // this small piece of code aims at producing a pretty RGB png result image.
   typedef otb::MultiToMonoChannelExtractROI<OutputPixelType,
@@ -528,8 +440,6 @@ int main(int itkNotUsed(argc), char * argv[])
   writer->SetFileName(argv[2]);
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figures~\ref{fig:ROADEXTRACTIONBYSTEPS} and \ref{fig:ROADEXTRACTIONBYSTEPS2}
   // show the result of applying
   // the road extraction by steps to a fusionned Quickbird image. The result image
@@ -557,7 +467,6 @@ int main(int itkNotUsed(argc), char * argv[])
   // Likelihood values.}
   // \label{fig:ROADEXTRACTIONBYSTEPS2}
   // \end{figure}
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

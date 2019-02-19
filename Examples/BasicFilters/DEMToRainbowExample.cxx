@@ -35,8 +35,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // In some situation, it is desirable to represent a gray scale image in color for easier
 // interpretation. This is particularly the case if pixel values in the image are used
 // to represent some data such as elevation, deformation map,
@@ -48,8 +46,6 @@
 // combined with the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}. You can refer to the
 // source code or to section \ref{sec:ReadDEM} for the DEM conversion to image,
 // we will focus on the color conversion part here.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -110,15 +106,10 @@ int main(int argc, char * argv[])
 
   demToImage->SetOutputSpacing(spacing);
 
-  // Software Guide : BeginLatex
-  //
   // As in the previous example, the \doxygen{itk}{ScalarToRGBColormapImageFilter} is
   // the filter in charge of calling the functor we specify to do the work for
   // each pixel. Here it is the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::ScalarToRGBColormapImageFilter<ImageType,
       RGBImageType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
@@ -134,7 +125,6 @@ int main(int argc, char * argv[])
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
     }
-  // Software Guide : EndCodeSnippet
 
   else
     {
@@ -159,16 +149,10 @@ int main(int argc, char * argv[])
       colormapper->SetColormap(colormap);
       }
     }
-  // Software Guide : BeginLatex
-  //
   // And we connect the color mapper filter with the filter producing
   // the image of the DEM:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   colormapper->SetInput(demToImage->GetOutput());
-  // Software Guide : EndCodeSnippet
 
   writer->SetInput(colormapper->GetOutput());
 
@@ -187,8 +171,6 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:RAINBOW_FILTER} shows the effect of applying the filter to
   // a gray scale image.
   //
@@ -202,7 +184,6 @@ int main(int argc, char * argv[])
 // data (top-left) and the same area represented in color.}
 // \label{fig:RAINBOW_FILTER}
 // \end{figure}
-//  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

@@ -28,7 +28,6 @@
 */
 
 
-//  Software Guide : BeginLatex
 // This example illustrates the class
 // \doxygen{otb}{MaximumAutocorrelationFactorImageFilter}, which
 // performs a Maximum Autocorrelation Factor transform \cite{nielsen2011kernel}. Like
@@ -42,12 +41,8 @@
 // Please note that the inverse transform is not implemented yet.
 //
 // We start by including the corresponding header file.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 #include "otbMaximumAutocorrelationFactorImageFilter.h"
-//  Software Guide : EndCodeSnippet
 
 int main(int itkNotUsed(argc), char* argv[])
 {
@@ -56,88 +51,50 @@ int main(int itkNotUsed(argc), char* argv[])
   char * inpretty  = argv[3];
   char * outpretty = argv[4];
 
-  //  Software Guide : BeginLatex
   //  We then define the types for the input image and the
   //  output image.
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   typedef otb::VectorImage<unsigned short, 2> InputImageType;
   typedef otb::VectorImage<double, 2>         OutputImageType;
-  //  Software Guide : EndCodeSnippet
 
 
-  //  Software Guide : BeginLatex
-  //
   //  We can now declare the types for the reader. Since the images
   //  can be very large, we will force the pipeline to use
   //  streaming. For this purpose, the file writer will be
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<InputImageType>    ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  //  Software Guide : EndCodeSnippet
 
   // SoftwareGuide : BeginLatex
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change
   //  image.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   typedef otb::MaximumAutocorrelationFactorImageFilter<InputImageType,
                                           OutputImageType> FilterType;
-  //  Software Guide : EndCodeSnippet
 
 
-  //  Software Guide : BeginLatex
-  //
   //  The different elements of the pipeline can now be instantiated.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   FilterType::Pointer filter = FilterType::New();
-  //  Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We set the parameters of the different elements of the pipeline.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
-  //  Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We build the pipeline by plugging all the elements together.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
-  //  Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  And then we can trigger the pipeline update, as usual.
-  //
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   writer->Update();
-  //  Software Guide : EndCodeSnippet
 
   // This is for rendering in software guide
   typedef otb::PrintableImageFilter<InputImageType,InputImageType>   InputPrintFilterType;
@@ -168,7 +125,6 @@ int main(int itkNotUsed(argc), char* argv[])
   inputVisuWriter->Update();
   outputVisuWriter->Update();
 
-  //  Software Guide : BeginLatex
   // Figure \ref{fig:MAFFIG} shows the
   // results of Maximum Autocorrelation Factor applied to an 8 bands
   // Worldview2 image.
@@ -179,7 +135,6 @@ int main(int itkNotUsed(argc), char* argv[])
   // Maximum Autocorrelation Factor algorithm applied to a 8 bands
   // Worldview2 image (3 first components).}  \label{fig:MAFFIG}
   // \end{figure}
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

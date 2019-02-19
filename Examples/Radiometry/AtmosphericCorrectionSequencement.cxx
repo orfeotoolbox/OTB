@@ -41,8 +41,6 @@
                                     0.020
 */
 
-// Software Guide : BeginLatex
-//
 // \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}
 // \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter!header}
 // \index{otb::VegetationIndex}
@@ -80,16 +78,12 @@
 // refletance image, and reflectance to atmospheric correction image
 // corrections and the neighborhood correction, four header files are
 // required.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageToRadianceImageFilter.h"
 #include "otbRadianceToReflectanceImageFilter.h"
 #include "otbReflectanceToSurfaceReflectanceImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // In version 4.2, the class \code{SurfaceAdjacencyEffect6SCorrectionSchemeFilter}
 // has been renamed into \doxygen{otb}{SurfaceAdjacencyEffectCorrectionSchemeFilter},
 // but it still does the same thing.
@@ -116,10 +110,7 @@
 // contains a single static method that calls the 6S library. The header
 // also includes the classes to manipulate correction parameters and radiative
 // terms.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
-// Software Guide : EndCodeSnippet
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -139,37 +130,26 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  //  Software Guide : BeginLatex
-  //
   // Image types are now defined using pixel types and
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output image is a \doxygen{otb}{VectorImage}. To simplify, input and
   // output image types are the same one.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef double                                 PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
   ReaderType::Pointer reader  = ReaderType::New();
 
-  // Software Guide : BeginLatex
-  //
   // The \code{GenerateOutputInformation()} reader method is called
   // to know the number of component per pixel of the image.  It is
   // recommended to
   // place \code{GenerateOutputInformation} calls in a \code{try/catch} block in case
   // errors occur and exceptions are thrown.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   reader->SetFileName(argv[1]);
   try
     {
@@ -180,7 +160,6 @@ int main(int argc, char *argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
   catch (...)
     {
     std::cout << "Unknown exception !" << std::endl;
@@ -191,8 +170,6 @@ int main(int argc, char *argv[])
     reader->GetOutput()->GetNumberOfComponentsPerPixel();
 
   //-------------------------------
-  // Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{ImageToRadianceImageFilter}
   // type is defined and instancied. This class uses a functor applied
   // to each component of each pixel ($\mathbf{X^{k}}$) whose formula is:
@@ -209,16 +186,12 @@ int main(int argc, char *argv[])
   // \item $\alpha_{k}$ is the absolute calibration gain for the channel k;
   // \item $\beta_{k}$ is the absolute calibration bias for the channel k.
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageToRadianceImageFilter<ImageType, ImageType>
   ImageToRadianceImageFilterType;
 
   ImageToRadianceImageFilterType::Pointer filterImageToRadiance
     = ImageToRadianceImageFilterType::New();
-// Software Guide : EndCodeSnippet
   typedef ImageToRadianceImageFilterType::VectorType VectorType;
   VectorType alpha(nbOfComponent);
   VectorType beta(nbOfComponent);
@@ -236,19 +209,13 @@ int main(int argc, char *argv[])
     }
   fin.close();
 
-  // Software Guide : BeginLatex
   // Here, $\alpha$ and $\beta$ are read from an ASCII file given in input,
   // stored in a vector and passed to the class.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filterImageToRadiance->SetAlpha(alpha);
   filterImageToRadiance->SetBeta(beta);
-  // Software Guide : EndCodeSnippet
 
   //-------------------------------
-  // Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{RadianceToReflectanceImageFilter}
   // type is defined and instancied.
   // This class used a functor applied to each component of each pixel
@@ -270,15 +237,11 @@ int main(int argc, char *argv[])
   // In the last case (that is the one of this example), the user has to precise
   // the month and the day of the acquisition.
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::RadianceToReflectanceImageFilter<ImageType, ImageType>
   RadianceToReflectanceImageFilterType;
   RadianceToReflectanceImageFilterType::Pointer filterRadianceToReflectance
     = RadianceToReflectanceImageFilterType::New();
-// Software Guide : EndCodeSnippet
 
   typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
 
@@ -294,24 +257,18 @@ int main(int argc, char *argv[])
     }
   fin.close();
 
-  // Software Guide : BeginLatex
   // The solar illumination is read from a ASCII file given in input,
   // stored in a vector
   // and given to the class.
   // Day, month and zenital solar angle are inputs and can be directly given to the class.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filterRadianceToReflectance->SetZenithalSolarAngle(
     static_cast<double>(atof(argv[6])));
   filterRadianceToReflectance->SetDay(atoi(argv[7]));
   filterRadianceToReflectance->SetMonth(atoi(argv[8]));
   filterRadianceToReflectance->SetSolarIllumination(solarIllumination);
-  // Software Guide : EndCodeSnippet
 
 //-------------------------------
-// Software Guide : BeginLatex
-//
 // At this step of the chain, radiative information are nedeed to compute
 // the contribution of the atmosphere (such as atmosphere transmittance
 // and reflectance). Those information will be computed from different
@@ -328,10 +285,7 @@ int main(int argc, char *argv[])
 // \doxygen{otb}{ImageMetadataCorrectionParameters} and
 // \doxygen{otb}{AtmosphericRadiativeTerms}
 // types are defined and instancied.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms
   RadiometryCorrectionParametersToRadiativeTermsType;
 
@@ -343,7 +297,6 @@ int main(int argc, char *argv[])
 
   typedef otb::AtmosphericRadiativeTerms
   AtmosphericRadiativeTermsType;
-  // Software Guide : EndCodeSnippet
   typedef AtmosphericCorrectionParametersType::AerosolModelType
   AerosolModelType;
   typedef otb::FilterFunctionValues
@@ -398,8 +351,6 @@ int main(int argc, char *argv[])
 
   fin.close();
 
-  // Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{ImageMetadataCorrectionParameters} class stores
   // several parameters that are generally present in the image metadata :
   // \begin{itemize}
@@ -417,11 +368,8 @@ int main(int argc, char *argv[])
   // When this container is not set in the ReflectanceToSurfaceReflectance
   // filter, it is automatically filled using the image metadata. The
   // following lines show that it is also possible to set the values manually.
-  //
-  // Software Guide : EndLatex
 
   // Set parameters
-  // Software Guide : BeginCodeSnippet
   dataAcquisitionCorrectionParameters->SetSolarZenithalAngle(
     static_cast<double>(atof(argv[6])));
 
@@ -437,10 +385,7 @@ int main(int argc, char *argv[])
   dataAcquisitionCorrectionParameters->SetMonth(atoi(argv[8]));
 
   dataAcquisitionCorrectionParameters->SetDay(atoi(argv[7]));
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{AtmosphericCorrectionParameters} class stores
   // physical parameters of the atmosphere that are not impacted
   // by the viewing angles of the image :
@@ -454,10 +399,7 @@ int main(int argc, char *argv[])
   // \item The aerosol optical thickness at 550 nm that is the is the Radiative impact
   //  of aerosol for the reference wavelength 550 nm;
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   dataAtmosphericCorrectionParameters->SetAtmosphericPressure(
     static_cast<double>(atof(argv[12])));
 
@@ -474,28 +416,19 @@ int main(int argc, char *argv[])
 
   dataAtmosphericCorrectionParameters->SetAerosolOptical(
     static_cast<double>(atof(argv[16])));
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Once those parameters are loaded, they are used by the 6S library
   // to compute the needed radiometric information. The
   // RadiometryCorrectionParametersToAtmosphericRadiativeTerms class
   // provides a static function to perform this step\footnote{Before version
   // 4.2, it was done with the filter
   // AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms}.
-  //
-  // Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   AtmosphericRadiativeTermsType::Pointer atmosphericRadiativeTerms =
     RadiometryCorrectionParametersToRadiativeTermsType::Compute(
       dataAtmosphericCorrectionParameters,
       dataAcquisitionCorrectionParameters);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The output is stored inside an instance of the
   // \doxygen{otb}{AtmosphericRadiativeTerms} class.
   // This class contains (for each channel of the image)
@@ -507,16 +440,11 @@ int main(int argc, char *argv[])
   // \item The total transmittance of the atmosphere from sun to ground (downward transmittance)
   // and from ground to space sensor (upward transmittance).
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
 
 //-------------------------------
-// Software Guide : BeginLatex
 // Atmospheric corrections can now start.
 // First, an instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType,
       ImageType>
   ReflectanceToSurfaceReflectanceImageFilterType;
@@ -524,9 +452,7 @@ int main(int argc, char *argv[])
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer
     filterReflectanceToSurfaceReflectanceImageFilter
     = ReflectanceToSurfaceReflectanceImageFilterType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
   // The aim of the atmospheric correction is to invert the surface reflectance
   // (for each pixel of the input image) from the TOA reflectance and from simulations
   // of the atmospheric radiative functions corresponding to the geometrical conditions
@@ -554,15 +480,11 @@ int main(int argc, char *argv[])
   // \end{itemize}
   // All those parameters are contained in the AtmosphericRadiativeTerms
   // container.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filterReflectanceToSurfaceReflectanceImageFilter->
     SetAtmosphericRadiativeTerms(atmosphericRadiativeTerms);
-  // Software Guide : EndCodeSnippet
 
 //-------------------------------
-// Software Guide : BeginLatex
 // Next (and last step) is the neighborhood correction.
 // For this, the SurfaceAdjacencyEffectCorrectionSchemeFilter class is used.
 // The previous surface reflectance inversion is performed under the assumption of a
@@ -605,20 +527,14 @@ int main(int argc, char *argv[])
 // and "acquisition" parameters), then the filter will compute the radiative
 // terms internally. If the "acquisition" correction parameters are not
 // present, the filter will try to get them from the image metadata.
-//
-// Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<ImageType,
       ImageType>
   SurfaceAdjacencyEffectCorrectionSchemeFilterType;
   SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer
     filterSurfaceAdjacencyEffectCorrectionSchemeFilter
     = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
-  //  Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Four inputs are needed to compute the neighborhood contribution:
   // \begin{itemize}
   // \item The radiative terms (stored in the AtmosphericRadiativeTerms container);
@@ -626,8 +542,6 @@ int main(int argc, char *argv[])
   // \item The neighborhood window radius;
   // \item The pixel spacing in kilometers.
   // \end{itemize}
-  //
-  // Software Guide : EndLatex
   filterSurfaceAdjacencyEffectCorrectionSchemeFilter->
     SetAtmosphericRadiativeTerms(atmosphericRadiativeTerms);
   filterSurfaceAdjacencyEffectCorrectionSchemeFilter->SetZenithalViewingAngle(
@@ -639,15 +553,10 @@ int main(int argc, char *argv[])
 
 //-------------------------------
   WriterType::Pointer writer = WriterType::New();
-//  Software Guide : BeginLatex
-//
 // At this step, each filter of the chain is instancied and every one has its
 // input parameters set. A name can be given to the output image, each filter
 //  can be linked to the next one and create the final processing chain.
-//
-//  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   writer->SetFileName(argv[2]);
 
   filterImageToRadiance->SetInput(reader->GetOutput());
@@ -659,16 +568,10 @@ int main(int argc, char *argv[])
 
   writer->SetInput(
     filterSurfaceAdjacencyEffectCorrectionSchemeFilter->GetOutput());
-// Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  The invocation of the \code{Update()} method on the writer triggers the
 //  execution of the pipeline.  It is recommended to place this call in a
 //  \code{try/catch} block in case errors occur and exceptions are thrown.
-//
-//  Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   try
     {
     writer->Update();
@@ -678,7 +581,6 @@ int main(int argc, char *argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
   catch (...)
     {
     std::cout << "Unknown exception !" << std::endl;

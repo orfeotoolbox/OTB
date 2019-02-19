@@ -40,8 +40,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{ImageToSIFTKeyPointSetFilter}.
 // The Scale-Invariant Feature Transform (or SIFT) is an algorithm in
 // computer vision to detect and describe local features in
@@ -54,12 +52,8 @@
 // occlusion and minor changes in viewpoint.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageToSIFTKeyPointSetFilter.h"
-// Software Guide : EndCodeSnippet
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -93,12 +87,9 @@ int main(int argc, char * argv[])
   typedef float RealType;
   const unsigned int Dimension = 2;
 
-// Software Guide : BeginLatex
 // The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
 // its input image type and the output point set type. Therefore, we
 // start by defining the needed types.
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   typedef otb::Image<RealType, Dimension>     ImageType;
   typedef itk::VariableLengthVector<RealType> RealVectorType;
   typedef otb::ImageFileReader<ImageType>     ReaderType;
@@ -108,22 +99,14 @@ int main(int argc, char * argv[])
   typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,
       PointSetType>
   ImageToSIFTKeyPointSetFilterType;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // Since the SIFT detector produces a point set, we will need
 // iterators for the coordinates of the points and the data associated
 // with them.
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   typedef PointSetType::PointsContainer    PointsContainerType;
   typedef PointsContainerType::Iterator    PointsIteratorType;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // We can now instantiate the reader and the SIFT filter and plug the pipeline.
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   ReaderType::Pointer                       reader = ReaderType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter =
     ImageToSIFTKeyPointSetFilterType::New();
@@ -131,9 +114,7 @@ int main(int argc, char * argv[])
   reader->SetFileName(infname);
 
   filter->SetInput(reader->GetOutput());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
 // The SIFT filter needs the following parameters:
 // \begin{itemize}
 // \item the number of octaves, that is, the number of levels of undersampling,
@@ -142,18 +123,14 @@ int main(int argc, char * argv[])
 // on the difference of Gaussians image,
 // \item the threshold on the responses to consider a point as an edge.
 // \end{itemize}
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
 
   filter->SetDoGThreshold(threshold);
   filter->SetEdgeThreshold(ratio);
-// Software Guide : EndCodeSnippet
 
   filter->Update();
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:SIFT} shows the result of applying the SIFT
   // point detector to a small patch extracted from a Spot 5 image
   // using different threshold values.
@@ -183,7 +160,6 @@ int main(int argc, char * argv[])
   // and a rotated image respectively.}
   // \label{fig:SIFT2}
   // \end{figure}
-  //  Software Guide : EndLatex
 
   //
   //Building the output image for visualization

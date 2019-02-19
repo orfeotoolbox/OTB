@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // Visualization of digital elevation models (DEM) is often more intuitive by simulating a
 // lighting source and generating the corresponding shadows. This principle is called
 // hill shading.
@@ -38,8 +36,6 @@
 // \doxygen{otb}{ReliefColormapFunctor} you can easily generate the classic elevation maps.
 //
 // This example will focus on the shading itself.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -128,21 +124,15 @@ int main(int argc, char * argv[])
                         std::cos(lat1) * std::cos(lat2) * std::cos(lon2 - lon1)) * R;
     res = d / std::sqrt(2.0);
     }
-  // Software Guide : BeginLatex
-  //
   // After generating the DEM image as in the DEMToImageGenerator example, you can declare
   // the hill shading mechanism. The hill shading is implemented as a functor doing some
   // operations in its neighborhood. A convenient filter called \doxygen{otb}{HillShadingFilter}
   // is defined around this mechanism.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::HillShadingFilter<ImageType, ImageType> HillShadingFilterType;
   HillShadingFilterType::Pointer hillShading = HillShadingFilterType::New();
   hillShading->SetRadius(1);
   hillShading->SetInput(demToImage->GetOutput());
-  // Software Guide : EndCodeSnippet
 
   hillShading->GetFunctor().SetXRes(res);
   hillShading->GetFunctor().SetYRes(res);
@@ -208,8 +198,6 @@ int main(int argc, char * argv[])
   worldFile->SetImageFilename(argv[2]);
   worldFile->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:HILL_SHADING} shows the hill shading result from SRTM data.
   //
   // \begin{figure}
@@ -220,7 +208,6 @@ int main(int argc, char * argv[])
   // the color representation (right)}
   // \label{fig:HILL_SHADING}
   // \end{figure}
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

@@ -132,8 +132,6 @@ int main(int argc, char* argv[])
   // you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be
   // \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}, which would return the same result.
 
-  //  Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:BandMathImageFilter} shows the result of the threshold applied to the NDVI index
   // of a Quickbird image.
   // \begin{figure}
@@ -144,8 +142,6 @@ int main(int argc, char* argv[])
   // Original image, thresholded NDVI index.}
   // \label{fig:BandMathImageFilter}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   typedef otb::Image<unsigned char, 2>                                 OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>                  PrettyImageFileWriterType;

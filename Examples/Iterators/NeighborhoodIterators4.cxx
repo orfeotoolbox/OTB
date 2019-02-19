@@ -46,8 +46,6 @@
 #include "itkNeighborhoodAlgorithm.h"
 #include "itkNeighborhoodInnerProduct.h"
 
-// Software Guide : BeginLatex
-//
 // We now introduce a variation on convolution filtering that is useful when a
 // convolution kernel is separable.  In this example, we create a different
 // neighborhood iterator for each axial direction of the image and then take
@@ -58,11 +56,8 @@
 // in calculations becomes large.
 //
 // The only new class necessary for this example is the Gaussian operator.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "itkGaussianOperator.h"
-// Software Guide : EndCodeSnippet
 
 int main(int argc, char *argv[])
 {
@@ -112,19 +107,13 @@ int main(int argc, char *argv[])
   IteratorType             out;
   NeighborhoodIteratorType it;
 
-// Software Guide : BeginLatex
 // The Gaussian operator, like the Sobel operator, is instantiated with a pixel
 // type and a dimensionality.  Additionally, we set the variance of the
 // Gaussian, which has been read from the command line as standard deviation.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   itk::GaussianOperator<PixelType, 2> gaussianOperator;
   gaussianOperator.SetVariance(::atof(argv[3]) * ::atof(argv[3]));
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The only further changes from the previous example are in the main loop.
 // Once again we use the results from face calculator to construct a loop that
 // processes boundary and non-boundary image regions separately.  Separable
@@ -137,10 +126,7 @@ int main(int argc, char *argv[])
 // Input and output buffers are swapped at each iteration so that the output of
 // the previous iteration becomes the input for the current iteration. The swap
 // is not performed on the last iteration.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ImageType::Pointer input = reader->GetOutput();
   for (unsigned int i = 0; i < ImageType::ImageDimension; ++i)
     {
@@ -171,10 +157,7 @@ int main(int argc, char *argv[])
       output = tmp;
       }
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The output is rescaled and written as in the previous examples.
 // Figure~\ref{fig:NeighborhoodExample4} shows the results of Gaussian blurring
 // the image \code{Examples/Data/QB\_Suburb.png} using increasing
@@ -194,8 +177,6 @@ int main(int argc, char *argv[])
 // brighter when rescaled.}
 // \protect\label{fig:NeighborhoodExample4}
 // \end{figure}
-//
-// Software Guide : EndLatex
 
   typedef unsigned char                        WritePixelType;
   typedef otb::Image<WritePixelType, 2>        WriteImageType;

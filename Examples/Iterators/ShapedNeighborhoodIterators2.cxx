@@ -115,15 +115,10 @@ int main(int argc, char *argv[])
         }
       }
 
-// Software Guide : BeginLatex
-//
 // The logic of the inner loop can be rewritten to perform
 // dilation.  Dilation of the set $I$ by $E$ is the set of all $x$ such that
 // $E$ positioned at $x$ contains at least one element in $I$.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
     // Implements dilation
     for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
       {
@@ -148,10 +143,7 @@ int main(int argc, char *argv[])
         }
       }
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The output image is written and visualized directly as a binary image of
 // \code{unsigned chars}.  Figure~\ref{fig:ShapedNeighborhoodExample2}
 // illustrates the results of  dilation on the image
@@ -169,8 +161,6 @@ int main(int argc, char *argv[])
 // Left: original image. Right: dilation.}
 // \protect\label{fig:ShapedNeighborhoodExample2}
 // \end{figure}
-//
-// Software Guide : EndLatex
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
 

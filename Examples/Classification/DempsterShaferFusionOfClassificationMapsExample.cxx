@@ -20,8 +20,6 @@
 
 
 
-// Software Guide : BeginLatex
-//
 // The fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter} is based on the Dempster
 // Shafer (DS) fusion framework. For each pixel, it chooses the class label \emph{Ai} for which the
 // belief function \emph{bel(Ai)} is maximal after the DS combination of all the available masses of
@@ -31,41 +29,31 @@
 // \emph{nodataLabel} value are ignored by the fusion process. In case of not unique class labels
 // with the maximal belief function, the output pixels are set to the \emph{undecidedLabel} value.
 // We start by including the appropriate header files.
-//
-// Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageListToVectorImageFilter.h"
 #include "otbConfusionMatrixToMassOfBelief.h"
 #include "otbDSFusionOfClassifiersImageFilter.h"
 
 #include <fstream>
-// Software Guide : EndCodeSnippet
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 
-// Software Guide : BeginLatex
-//
 // We will assume unsigned short type input labeled images. We define a type for
 // confusion matrices as \doxygen{itk}{VariableSizeMatrix} which will be used to estimate the masses of belief of all the
 // class labels for each input classification map. For this purpose, the
 // \doxygen{otb}{ConfusionMatrixToMassOfBelief} will be used to convert each input confusion matrix
 // into masses of belief for each class label.
-//
-// Software Guide : EndLatex
 
 
-// Software Guide : BeginCodeSnippet
   typedef unsigned short LabelPixelType;
   typedef unsigned long ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
   typedef otb::ConfusionMatrixToMassOfBelief
            <ConfusionMatrixType, LabelPixelType> ConfusionMatrixToMassOfBeliefType;
   typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType MapOfClassesType;
-// Software Guide : EndCodeSnippet
 
 
 int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
@@ -176,16 +164,10 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &m
 
 int main(int argc, char * argv[])
 {
-// Software Guide : BeginLatex
-//
 // The input labeled images to be fused are expected to be scalar images.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   const unsigned int     Dimension = 2;
   typedef otb::Image<LabelPixelType, Dimension> LabelImageType;
   typedef otb::VectorImage<LabelPixelType, Dimension> VectorImageType;
-// Software Guide : EndCodeSnippet
 
   LabelPixelType nodataLabel = atoi(argv[argc - 3]);
   LabelPixelType undecidedLabel = atoi(argv[argc - 2]);
@@ -194,56 +176,33 @@ int main(int argc, char * argv[])
   unsigned int nbParameters = 3;
   unsigned int nbClassificationMaps = (argc - 1 - nbParameters) / 2;
 
-  // Software Guide : BeginLatex
-  //
   // We declare an \doxygen{otb}{ImageListToVectorImageFilter} which will stack all the
   // input classification maps to be fused as a single VectorImage for which each
   // band is a classification map. This VectorImage will then be the input of the
   // Dempster Shafer fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter}.
-  //
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageList<LabelImageType> LabelImageListType;
   typedef otb::ImageListToVectorImageFilter
             <LabelImageListType, VectorImageType> ImageListToVectorImageFilterType;
-  // Software Guide : EndCodeSnippet
 
   typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
 
 
-// Software Guide : BeginLatex
-//
 // The Dempster Shafer fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter} is declared.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   // Dempster Shafer
   typedef otb::DSFusionOfClassifiersImageFilter
         <VectorImageType, LabelImageType> DSFusionOfClassifiersImageFilterType;
-// Software Guide : EndCodeSnippet
 
   typedef DSFusionOfClassifiersImageFilterType::VectorOfMapOfMassesOfBeliefType VectorOfMapOfMassesOfBeliefType;
 
-// Software Guide : BeginLatex
-//
 // Both reader and writer are defined. Since the images
 // to classify can be very big, we will use a streamed writer which
 // will trigger the streaming ability of the fusion filter.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<LabelImageType> ReaderType;
   typedef otb::ImageFileWriter<LabelImageType> WriterType;
-// Software Guide : EndCodeSnippet
 
 
-// Software Guide : BeginLatex
-//
 // The image list of input classification maps is filled. Moreover, the input
 // confusion matrix files are converted into masses of belief.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader;
   LabelImageListType::Pointer imageList = LabelImageListType::New();
   ConfusionMatrixToMassOfBeliefType::Pointer confusionMatrixToMassOfBeliefFilter;
@@ -286,16 +245,10 @@ int main(int argc, char * argv[])
     vectorOfMapOfMassesOfBelief.push_back(
         confusionMatrixToMassOfBeliefFilter->GetMapMassOfBelief());
     }
-// Software Guide : EndCodeSnippet
 
 
-// Software Guide : BeginLatex
-//
 // The image list of input classification maps is converted into a VectorImage to
 // be used as input of the \doxygen{otb}{DSFusionOfClassifiersImageFilter}.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   // Image List To VectorImage
   ImageListToVectorImageFilterType::Pointer imageListToVectorImageFilter;
   imageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
@@ -309,21 +262,14 @@ int main(int argc, char * argv[])
   dsFusionFilter->SetInputMapsOfMassesOfBelief(&vectorOfMapOfMassesOfBelief);
   dsFusionFilter->SetLabelForNoDataPixels(nodataLabel);
   dsFusionFilter->SetLabelForUndecidedPixels(undecidedLabel);
-// Software Guide : EndCodeSnippet
 
 
-// Software Guide : BeginLatex
-//
 // Once it is plugged the pipeline triggers its execution by updating
 // the output of the writer.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(dsFusionFilter->GetOutput());
   writer->SetFileName(outfname);
   writer->Update();
-// Software Guide : EndCodeSnippet
   return EXIT_SUCCESS;
 }

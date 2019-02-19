@@ -36,8 +36,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the
 // \doxygen{otb}{MNFImageFilter}.  This filter computes a Maximum
 // Noise Fraction transform \cite{green1988transformation} using an
@@ -56,22 +54,14 @@
 // In this implementation, noise is estimated from a local window.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbMNFImageFilter.h"
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We also need to include the header of the noise filter.
 //
 // SoftwareGuide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbLocalActivityVectorImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 
 int main(int itkNotUsed(argc), char* argv[])
@@ -88,33 +78,19 @@ int main(int itkNotUsed(argc), char* argv[])
   unsigned int vradius = atoi(argv[8]);
   bool normalization = atoi(argv[9]);
 
-  // Software Guide : BeginLatex
-  //
   // We start by defining the types for the images, the reader, and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileWriter<ImageType>        WriterType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We instantiate now the image reader and we set the image file name.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // In contrast with standard Principal Component Analysis, MNF
   // needs an estimation of the noise correlation matrix
   // in the dataset prior to transformation.
@@ -127,99 +103,56 @@ int main(int itkNotUsed(argc), char* argv[])
   //
   // In this implementation, noise is estimated from a local window.
   // We define the type of the noise filter.
-  //
-  // Software Guide : EndLatex
 
   // SoftwareGuide : BeginCodeSnippet
   typedef otb::LocalActivityVectorImageFilter<ImageType,ImageType> NoiseFilterType;
   // SoftwareGuide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // We define the type for the filter. It is templated over the input
   // and the output image types and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MNFImageFilter<ImageType, ImageType,
                                 NoiseFilterType,
                                 otb::Transform::FORWARD> MNFFilterType;
   MNFFilterType::Pointer MNFfilter     = MNFFilterType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We then set the number of principal
   // components required as output. We can choose to get less PCs than
   // the number of input bands.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MNFfilter->SetNumberOfPrincipalComponentsRequired(
     numberOfPrincipalComponentsRequired);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We set the radius of the sliding window for noise estimation.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   NoiseFilterType::RadiusType radius = {{ vradius, vradius }};
   MNFfilter->GetNoiseImageFilter()->SetRadius(radius);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Last, we can activate normalisation.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MNFfilter->SetUseNormalization( normalization );
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We now instantiate the writer and set the file name for the
   // output image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer     = WriterType::New();
   writer->SetFileName(outputFilename);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We finally plug the pipeline and trigger the MNF computation with
   // the method \code{Update()} of the writer.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MNFfilter->SetInput(reader->GetOutput());
   writer->SetInput(MNFfilter->GetOutput());
 
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // \doxygen{otb}{MNFImageFilter} allows also to compute inverse
   // transformation from MNF coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MNFImageFilter< ImageType, ImageType,
                                  NoiseFilterType,
                                  otb::Transform::INVERSE > InvMNFFilterType;
@@ -236,9 +169,7 @@ int main(int itkNotUsed(argc), char* argv[])
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:MNF_FILTER} shows the result of applying forward
   // and reverse MNF transformation to a 8 bands Worldview2 image.
   // \begin{figure}
@@ -254,8 +185,6 @@ int main(int itkNotUsed(argc), char* argv[])
   // inverse mode (the input RGB image).}
   // \label{fig:MNF_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   // This is for rendering in software guide
   typedef otb::PrintableImageFilter<ImageType,ImageType> PrintFilterType;

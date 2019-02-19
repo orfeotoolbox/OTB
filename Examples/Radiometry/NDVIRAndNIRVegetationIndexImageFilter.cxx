@@ -30,8 +30,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // \index{otb::RAndNIRIndexImageFilter}
 // \index{otb::VegetationIndicesFunctor}
 // \index{otb::VegetationIndicesFunctor!header}
@@ -66,11 +64,8 @@
 // Let's look at the minimal code required to use this algorithm. First, the following header
 // defining the \doxygen{otb}{RAndNIRIndexImageFilter}
 // class must be included.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbRAndNIRIndexImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "itkMacro.h"
 #include "otbImage.h"
@@ -91,56 +86,38 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  //  Software Guide : BeginLatex
-  //
   // The image types are now defined using pixel types the
   // dimension. Input and output images are defined as \doxygen{otb}{Image}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef double                                 InputPixelType;
   typedef float                                  OutputPixelType;
   typedef otb::Image<InputPixelType, Dimension>  InputRImageType;
   typedef otb::Image<InputPixelType, Dimension>  InputNIRImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
   typedef otb::ImageFileReader<InputRImageType>   RReaderType;
   typedef otb::ImageFileReader<InputNIRImageType> NIRReaderType;
   typedef otb::ImageFileWriter<OutputImageType>   WriterType;
 
-  //  Software Guide : BeginLatex
-  //
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using
   // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
   // parameter to an \doxygen{otb}{RAndNIRIndexImageFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::Functor::NDVI<InputPixelType,
       InputPixelType,
       OutputPixelType>   FunctorType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{RAndNIRIndexImageFilter} type is instantiated using the images
   // types and the NDVI functor as template parameters.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::RAndNIRIndexImageFilter<InputRImageType,
       InputNIRImageType,
       OutputImageType,
       FunctorType>
   RAndNIRIndexImageFilterType;
-  // Software Guide : EndCodeSnippet
 
   // Instantiating object
   RAndNIRIndexImageFilterType::Pointer filter    =
@@ -149,42 +126,25 @@ int main(int argc, char *argv[])
   NIRReaderType::Pointer readerNIR = NIRReaderType::New();
   WriterType::Pointer    writer    = WriterType::New();
 
-  //  Software Guide : BeginLatex
-  //
   //  Now the input images are set and a name is given to the output image.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   readerR->SetFileName(argv[1]);
   readerNIR->SetFileName(argv[2]);
   writer->SetFileName(argv[3]);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We set the processing pipeline: filter inputs are linked to
   // the reader output and the filter output is linked to the writer
   // input.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInputR(readerR->GetOutput());
   filter->SetInputNIR(readerNIR->GetOutput());
 
   writer->SetInput(filter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Invocation of the \code{Update()} method on the writer triggers the
   // execution of the pipeline.  It is recommended to place \code{update()} calls in a
   // \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   try
     {
     writer->Update();
@@ -194,7 +154,6 @@ int main(int argc, char *argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
   catch (...)
     {
     std::cout << "Unknown exception !" << std::endl;
@@ -256,8 +215,6 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
     }
 
-  // Software Guide : BeginLatex
-  //
   // Let's now run this example using as input the images
   // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by SISA and CNES)
   // provided in the directory \code{Examples/Data}.
@@ -270,8 +227,6 @@ int main(int argc, char *argv[])
   // \itkcaption[ARVI Example]{NDVI input images on the left (Red channel and NIR channel), on the right the result of the algorithm.}
   // \label{fig:NDVIRAndNIRIndex}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

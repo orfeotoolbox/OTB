@@ -33,8 +33,6 @@
 */
 
 
-//  Software Guide : BeginLatex
-//
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftSegmentationFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
@@ -46,8 +44,6 @@
 //  STATS, the band number and the statistical attribute separated by colons. In this example
 //  the mean of the first band (which contains the NDVI) is access over all the regions
 //  with the attribute: 'STATS::Band1::Mean'.
-//
-//  Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -140,14 +136,9 @@ int main(int argc, char * argv[])
   VectorReaderType::Pointer vreader = VectorReaderType::New();
   vreader->SetFileName(reffname);
   vreader->Update();
-  //  Software Guide : BeginLatex
-  //
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
   // explanations).
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MeanShiftSegmentationFilter
   <VectorImageType, LabeledImageType, VectorImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
@@ -156,31 +147,19 @@ int main(int argc, char * argv[])
   filter->SetMinRegionSize(minRegionSize);
   filter->SetThreshold(0.1);
   filter->SetMaxIterationNumber(100);
-  // Software Guide : EndCodeSnippet
 
   // For non regression tests, set the number of threads to 1
   // because MeanShift results depends on the number of threads
   filter->SetNumberOfThreads(1);
 
-  //  Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{MeanShiftSegmentationFilter} type is instantiated using the image
   // types.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInput(vreader->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The \doxygen{itk}{LabelImageToLabelMapFilter} type is instantiated using the output
   // of the \doxygen{otb}{MeanShiftSegmentationFilter}. This filter produces a labeled image
   // where each segmented region has a unique label.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
   labelMapFilter->SetInput(filter->GetLabelOutput());
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
@@ -188,19 +167,10 @@ int main(int argc, char * argv[])
   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter =
     ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
-  //  Software Guide : BeginLatex
-  //
   // Instantiate the  \doxygen{otb}{RadiometricLabelMapFilterType} to
   // compute statistics of the feature image on each label object.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter
     = RadiometricLabelMapFilterType::New();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   //  Feature image could be one of the following image:
   //  \begin{itemize}
   //  \item GEMI
@@ -214,9 +184,6 @@ int main(int argc, char * argv[])
   //
   //  Input image must be convert to the desired coefficient.
   //  In our case, statistics are computed on the NDVI coefficient on each label object.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   NDVIImageFilterType:: Pointer ndviImageFilter = NDVIImageFilterType::New();
 
   ndviImageFilter->SetRedIndex(3);
@@ -230,48 +197,29 @@ int main(int argc, char * argv[])
 
   radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
   radiometricLabelMapFilter->SetFeatureImage(ndviVectorImageFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
-  //  Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{AttributesMapOpeningLabelMapFilter} will perform the selection.
   // There are three parameters. \code{AttributeName} specifies the radiometric attribute, \code{Lambda}
   // controls the thresholding of the input and \code{ReverseOrdering} make this filter to remove the
   // object with an attribute value greater than \code{Lambda} instead.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   OpeningLabelMapFilterType::Pointer opening = OpeningLabelMapFilterType::New();
   opening->SetInput(radiometricLabelMapFilter->GetOutput());
   opening->SetAttributeName(attr);
   opening->SetLambda(thresh);
   opening->SetReverseOrdering(lowerThan);
   opening->Update();
-  // Software Guide : EndCodeSnippet
-  //  Software Guide : BeginLatex
-  //
   //  Then, Label objects selected are transform in a Label Image using the
   //  \doxygen{itk}{LabelMapToLabelImageFilter}.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage
     = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // And finally, we declare the writer and call its \code{Update()} method to
   // trigger the full pipeline execution.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(outfname);
   writer->SetInput(labelMap2LabeledImage->GetOutput());
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
   OutputVectorImageType::PixelType minimum, maximum;
   minimum.SetSize(vreader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -300,8 +248,6 @@ int main(int argc, char * argv[])
   return EXIT_SUCCESS;
 }
 
-// Software Guide : BeginLatex
-//
 // Figure~\ref{fig:RADIOMETRIC_LABEL_MAP_FILTER} shows the result of applying
 // the object selection based on radiometric attributes.
 // \begin{figure} [htbp]
@@ -311,5 +257,3 @@ int main(int argc, char * argv[])
 // \itkcaption[Object based extraction based on ]{Vegetation mask resulting from processing.}
 // \label{fig:RADIOMETRIC_LABEL_MAP_FILTER}
 // \end{figure}
-//
-// Software Guide : EndLatex

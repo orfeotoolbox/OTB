@@ -32,23 +32,17 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example demonstrates the use of the \doxygen{otb}{NCCRegistrationFilter}. This filter performs deformation estimation
 // by optimising a PDE based on the normalized correlation coefficient. It uses the finite difference solver hierarchy.
 //
 // The first step toward the use of these filters is to include the proper header files.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-// Software Guide : BeginCodeSnippet
 #include "otbNCCRegistrationFilter.h"
 #include "itkRecursiveGaussianImageFilter.h"
 #include "itkWarpImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
 #include "itkUnaryFunctorImageFilter.h"
@@ -78,20 +72,14 @@ int main(int argc, char** argv)
   typedef unsigned char                               OutputPixelType;
   typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
 
-  // Software Guide : BeginLatex
-  //
   // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
   // the image we want to register (moving) and the deformation field.
-  //
-  // Software Guide : EndLatex
 
   //Allocate Images
-  // Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, ImageDimension> MovingImageType;
   typedef otb::Image<PixelType, ImageDimension> FixedImageType;
   typedef otb::Image<DisplacementPixelType,
       ImageDimension>         DisplacementFieldType;
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
   FixedReaderType::Pointer fReader = FixedReaderType::New();
@@ -101,16 +89,11 @@ int main(int argc, char** argv)
   MovingReaderType::Pointer mReader = MovingReaderType::New();
   mReader->SetFileName(argv[2]);
 
-  // Software Guide : BeginLatex
-  //
   // To make the correlation estimation more robust, the first
   // required step is to blur the input images. This is done using the
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
-  //
-  // Software Guide : EndLatex
 
   //Blur input images
-  // Software Guide : BeginCodeSnippet
   typedef itk::RecursiveGaussianImageFilter<FixedImageType,
       FixedImageType> FixedBlurType;
 
@@ -124,16 +107,10 @@ int main(int argc, char** argv)
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
   mBlur->SetSigma(std::stof(argv[7]));
-// Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Now, we need to instantiate the NCCRegistrationFilter which is going to perform the registration:
-  //
-  // Software Guide : EndLatex
 
   //Create the filter
-  // Software Guide : BeginCodeSnippet
   typedef otb::NCCRegistrationFilter<FixedImageType,
       MovingImageType,
       DisplacementFieldType>
@@ -143,17 +120,11 @@ int main(int argc, char** argv)
 
   registrator->SetMovingImage(mBlur->GetOutput());
   registrator->SetFixedImage(fBlur->GetOutput());
-// Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Some parameters need to be specified to the NCCRegistrationFilter:
   // \begin{itemize}
   // \item The area where the search is performed. This area is defined by its radius:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef RegistrationFilterType::RadiusType RadiusType;
 
   RadiusType radius;
@@ -162,31 +133,20 @@ int main(int argc, char** argv)
   radius[1] = std::stoi(argv[6]);
 
   registrator->SetNCCRadius(radius);
-// Software Guide : EndCodeSnippet
 
   std::cout << "NCC radius " << registrator->GetNCCRadius() << std::endl;
 
-  // Software Guide : BeginLatex
-  //
   // \item The number of iterations for the PDE resolution:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   registrator->SetNumberOfIterations(std::stoi(argv[8]));
-// Software Guide : EndCodeSnippet
 // registrator->GetDisplacementField();
 
-  // Software Guide : BeginLatex
-  //
   // \end{itemize}
   // The execution of the NCCRegistrationFilter will be triggered by
   // the \code{Update()} call on the writer at the end of the
   // pipeline. Make sure to use a
   // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
-  //
-  // Software Guide : EndLatex
 
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
       MovingImageType>
@@ -237,8 +197,6 @@ int main(int argc, char** argv)
   writer->SetInput(caster->GetOutput());
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:NCCRegistrationFilterOUTPUT} shows the result of
   // applying the disparity map estimation.
   //
@@ -253,8 +211,6 @@ int main(int argc, char** argv)
   // estimated deformation field in the horizontal direction, estimated deformation field in the vertical direction.}
   // \label{fig:NCCRegistrationFilterOUTPUT}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

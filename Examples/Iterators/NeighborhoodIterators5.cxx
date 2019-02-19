@@ -30,8 +30,6 @@
 #include "itkGaussianOperator.h"
 #include "itkNeighborhoodInnerProduct.h"
 
-// Software Guide : BeginLatex
-//
 // This example introduces slice-based neighborhood processing.  A slice, in
 // this context, is a 1D path through an ND neighborhood. Slices are defined
 // for generic arrays by the \code{std::slice} class as a start index, a step
@@ -58,8 +56,6 @@
 // Good examples of slice-based neighborhood processing can be found in any of
 // the ND anisotropic diffusion function objects, such as
 // \doxygen{itk}{CurvatureNDAnisotropicDiffusionFunction}.
-//
-// Software Guide : EndLatex
 
 int main(int argc, char * argv[])
 {
@@ -117,28 +113,19 @@ int main(int argc, char * argv[])
 //
 // Software Guide: EndLatex
 
-// Software Guide : BeginCodeSnippet
   itk::GaussianOperator<PixelType, 2> gaussianOperator;
   gaussianOperator.SetDirection(0);
   gaussianOperator.SetVariance(::atof(argv[3]) * ::atof(argv[3]));
   gaussianOperator.CreateDirectional();
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // Next we need to define a radius for the iterator.  The radius in all
 // directions matches that of the single extent of the Gaussian operator,
 // defining a square neighborhood.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   NeighborhoodIteratorType::RadiusType radius;
   radius.Fill(gaussianOperator.GetRadius()[0]);
 // Software Guide EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The inner product and face calculator are defined for the main processing
 // loop as before, but now the iterator is reinitialized each iteration with
 // the square \code{radius} instead of the radius of the operator.  The
@@ -147,10 +134,7 @@ int main(int argc, char * argv[])
 // proper slice from the iterator itself.  \code{GetSlice()} can only be used
 // to return the slice along the complete extent of the axial direction of a
 // neighborhood.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ImageType::Pointer input = reader->GetOutput();
   faceList = faceCalculator(input, output->GetRequestedRegion(), radius);
 
@@ -174,10 +158,7 @@ int main(int argc, char * argv[])
       output = tmp;
       }
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // This technique produces exactly the same results as the previous example.  A
 // little experimentation, however, will reveal that it is less efficient since
 // the neighborhood iterator is keeping track of extra, unused pixel locations
@@ -185,8 +166,6 @@ int main(int argc, char * argv[])
 // that it needs.  In cases, however, where an algorithm takes multiple
 // derivatives or convolution products over the same neighborhood, slice-based
 // processing can increase efficiency and simplify the implementation.
-//
-// Software Guide : EndLatex
 
   typedef unsigned char                        WritePixelType;
   typedef otb::Image<WritePixelType, 2>        WriteImageType;

@@ -23,35 +23,21 @@
 
 #include "otbImage.h"
 
-//  Software Guide : BeginLatex
-//
 //  The first thing required to read an image from a file is to include
 //  the header file of the \doxygen{otb}{ImageFileReader} class.
-//
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
-// Software Guide : EndCodeSnippet
 
 int main(int, char * argv[])
 {
-  // Software Guide : BeginLatex
-  //
   // Then, the image type should be defined by specifying the
   // type used to represent pixels and the dimensions of the image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef unsigned char PixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Using the image type, it is now possible to instantiate the image reader
   // class. The image type is used as a template parameter to define how the
   // data will be represented once it is loaded into memory. This type does
@@ -65,15 +51,9 @@ int main(int, char * argv[])
   //
   // \index{otb::ImageFileReader!Instantiation}
   // \index{otb::Image!read}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The reader type can now be used to create one reader object.  A
   // \doxygen{itk}{SmartPointer} (defined by the \code{::Pointer}
   // notation) is used to receive the reference to the newly created
@@ -82,15 +62,9 @@ int main(int, char * argv[])
   //
   // \index{otb::ImageFileReader!New()}
   // \index{otb::ImageFileReader!Pointer}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader = ReaderType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The minimum information required by the reader is the filename
   // of the image to be loaded in memory. This is provided through
   // the \code{SetFileName()} method. The file format here is inferred
@@ -100,16 +74,10 @@ int main(int, char * argv[])
   // information):
   //
   // \index{otb::ImageFileReader!SetFileName()}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const char * filename = argv[1];
   reader->SetFileName(filename);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Reader objects are referred to as pipeline source objects; they
   // respond to pipeline update requests and initiate the data flow in the
   // pipeline. The pipeline update mechanism ensures that the reader only
@@ -122,15 +90,9 @@ int main(int, char * argv[])
   // explicit update is invoked on the reader.
   //
   // \index{otb::ImageFileReader!Update()}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   reader->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Access to the newly read image can be gained by calling the
   // \code{GetOutput()} method on the reader. This method can also be called
   // before the update request is sent to the reader.  The reference to the
@@ -138,20 +100,12 @@ int main(int, char * argv[])
   // actually executes.
   //
   // \index{otb::ImageFileReader!GetOutput()}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ImageType::Pointer image = reader->GetOutput();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Any attempt to access image data before the reader executes will yield
   // an image with no pixel data. It is likely that a program crash will
   // result since the image will not have been properly initialized.
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

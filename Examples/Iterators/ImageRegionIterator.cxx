@@ -24,8 +24,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // \index{Iterators!speed}
 // The \doxygen{itk}{ImageRegionIterator} is optimized for
 // iteration speed and is the first choice for iterative, pixel-wise operations
@@ -43,12 +41,9 @@
 // \index{Iterators!and image regions}
 // \index{itk::ImageRegionIterator!example of using|(}
 // We begin by including the appropriate header files.
-// Software Guide : EndLatex
 
 #include "otbImage.h"
-// Software Guide : BeginCodeSnippet
 #include "itkImageRegionIterator.h"
-// Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -65,14 +60,9 @@ int main(int argc, char *argv[])
     return -1;
     }
 
-// Software Guide : BeginLatex
-//
 // Next we define a pixel type and corresponding image type. ITK iterator
 // classes expect the image type as their template parameter.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
   typedef unsigned char                    PixelType;
@@ -80,20 +70,14 @@ int main(int argc, char *argv[])
 
   typedef itk::ImageRegionConstIterator<ImageType> ConstIteratorType;
   typedef itk::ImageRegionIterator<ImageType>      IteratorType;
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-// Software Guide : BeginLatex
-//
 // Information about the subregion to copy is read from the command line. The
 // subregion is defined by an \doxygen{itk}{ImageRegion} object, with a starting
 // grid index and a size (Section~\ref{sec:ImageSection}).
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ImageType::RegionType inputRegion;
 
   ImageType::RegionType::IndexType inputStart;
@@ -107,17 +91,11 @@ int main(int argc, char *argv[])
 
   inputRegion.SetSize(size);
   inputRegion.SetIndex(inputStart);
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The destination region in the output image is defined using the input region
 // size, but a different start index.  The starting index for the destination
 // region is the corner of the newly generated image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ImageType::RegionType outputRegion;
 
   ImageType::RegionType::IndexType outputStart;
@@ -127,7 +105,6 @@ int main(int argc, char *argv[])
 
   outputRegion.SetSize(size);
   outputRegion.SetIndex(outputStart);
-// Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -152,8 +129,6 @@ int main(int argc, char *argv[])
     return -1;
     }
 
-// Software Guide : BeginLatex
-//
 // After reading the input image and checking that the desired subregion is,
 // in fact, contained in the input, we allocate an output image.  It is
 // fundamental to set valid values to some of the basic image information
@@ -163,10 +138,7 @@ int main(int argc, char *argv[])
 // origin are computed as a shift from the origin of the input image. This is
 // quite important since it will allow us to later
 // register the extracted region against the original image.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ImageType::Pointer outputImage = ImageType::New();
   outputImage->SetRegions(outputRegion);
   const ImageType::SpacingType& spacing = reader->GetOutput()->GetSignedSpacing();
@@ -181,10 +153,7 @@ int main(int argc, char *argv[])
   outputImage->SetSignedSpacing(spacing);
   outputImage->SetOrigin(outputOrigin);
   outputImage->Allocate();
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // \index{Iterators!construction of} \index{Iterators!and image regions}
 // The necessary images and region definitions are now in place.  All that is
 // left to do is to create the iterators and perform the copy.  Note that image
@@ -192,10 +161,7 @@ int main(int argc, char *argv[])
 // objects that are instantiated on the stack.  Also notice how the input and
 // output iterators are defined over the \emph{same corresponding region}.  Though the
 // images are different sizes, they both contain the same target subregion.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ConstIteratorType inputIt(reader->GetOutput(), inputRegion);
   IteratorType      outputIt(outputImage,         outputRegion);
 
@@ -204,18 +170,13 @@ int main(int argc, char *argv[])
     {
     outputIt.Set(inputIt.Get());
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // \index{Iterators!image dimensionality}
 //  The \code{for} loop above is a common
 // construct in ITK/OTB.  The beauty of these four lines of code is that they are
 // equally valid for one, two, three, or even ten dimensional data, and no
 // knowledge of the size of the image is necessary.  Consider the ugly
 // alternative of ten nested \code{for} loops for traversing an image.
-//
-// Software Guide : EndLatex
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
@@ -232,8 +193,6 @@ int main(int argc, char *argv[])
     return -1;
     }
 
-// Software Guide : BeginLatex
-//
 // Let's run this example on the image \code{QB\_Suburb.png} found
 // in \code{Examples/Data}.  The command line arguments specify the
 // input and output file names, then the $x$, $y$ origin and the $x$, $y$ size
@@ -259,8 +218,6 @@ int main(int argc, char *argv[])
 // \end{figure}
 //
 // \index{itk::ImageRegionIterator!example of using|)}
-//
-// Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

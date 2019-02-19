@@ -25,16 +25,12 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // Using a similar structure as the previous program and the same energy
 // function, we are now going to slightly alter the program to use a
 // different sampler and optimizer. The proposed sample is proposed
 // randomly according to the MAP probability and the optimizer is the
 // ICM which accept the proposed sample if it enable a reduction of
 // the energy.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -43,19 +39,13 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-// Software Guide : BeginLatex
-//
 // First, we need to include header specific to these class:
-//
-// Software Guide : EndLatex
 
 #include "otbMRFEnergyPotts.h"
 #include "otbMRFEnergyGaussianClassification.h"
 
-// Software Guide : BeginCodeSnippet
 #include "otbMRFSamplerRandomMAP.h"
 #include "otbMRFOptimizerICM.h"
-// Software Guide : EndCodeSnippet
 
 int main(int argc, char* argv[])
 {
@@ -91,21 +81,13 @@ int main(int argc, char* argv[])
   typedef otb::MarkovRandomFieldFilter
   <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
-  //  Software Guide : BeginLatex
-  //
   //  And to declare these new type:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MRFSamplerRandomMAP<InputImageType,
       LabelledImageType> SamplerType;
 //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-// Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MRFOptimizerICM OptimizerType;
-  // Software Guide : EndCodeSnippet
 
   typedef otb::MRFEnergyPotts
   <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
@@ -141,12 +123,8 @@ int main(int argc, char* argv[])
   parameters[7] = 10.0; //Class 3 stde
   energyFidelity->SetParameters(parameters);
 
-  // Software Guide : BeginLatex
-  //
   // As the \doxygen{otb}{MRFOptimizerICM} does not have any parameters,
   // the call to \code{optimizer->SetParameters()} must be removed
-  //
-  // Software Guide : EndLatex
 
   markovFilter->SetNumberOfClasses(nClass);
   markovFilter->SetMaximumNumberOfIterations(atoi(argv[4]));
@@ -173,14 +151,8 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Apart from these, no further modification is required.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:MRF_CLASSIFICATION2} shows the output of the Markov Random
   // Field classification after 5 iterations with a
   // MAP random sampler and an ICM optimizer.
@@ -196,8 +168,6 @@ int main(int argc, char* argv[])
   // classification.}
   // \label{fig:MRF_CLASSIFICATION2}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

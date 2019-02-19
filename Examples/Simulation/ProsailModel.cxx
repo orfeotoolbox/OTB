@@ -25,21 +25,15 @@
 */
 
 //
-// Software Guide : BeginLatex
-//
 // This example presents how to use PROSAIL (Prospect + Sail) model to generate
 // viewing reflectance from leaf parameters, vegetation, and viewing parameters.
 // Output can be used to simulate image for example.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
-// Software Guide : EndCodeSnippet
 
 
 #include "otbImageFileReader.h"
@@ -54,31 +48,17 @@ int main(int argc, char *argv[])
     }
 
   char * OutputName = argv[15];
-  //  Software Guide : BeginLatex
-  //
   //  We now define leaf parameters, which characterize vegetation composition.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::LeafParameters LeafParametersType;
-  // Software Guide : EndCodeSnippet
 
 
-  //  Software Guide : BeginLatex
-  //
   //  Next the parameters variable is created by invoking the \code{New()}~method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   LeafParametersType::Pointer leafParams = LeafParametersType::New();
-  // Software Guide : EndCodeSnippet
 
 
-  //  Software Guide : BeginLatex
-  //
   //  Leaf characteristics is then set.
   //  Input parameters are :
   //  \begin{itemize}
@@ -89,10 +69,7 @@ int main(int argc, char *argv[])
   //  \item Dry matter content LMA (Cm) in $g/cm^2$.
   //  \item Leaf structure parameter (N).
   //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   double Cab = static_cast<double> (atof(argv[1]));
   double Car = static_cast<double> (atof(argv[2]));
   double CBrown = static_cast<double> (atof(argv[3]));
@@ -106,32 +83,19 @@ int main(int argc, char *argv[])
   leafParams->SetCw(Cw);
   leafParams->SetCm(Cm);
   leafParams->SetN(N);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Leaf parameters are used as prospect input
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ProspectModel ProspectType;
   ProspectType::Pointer prospect = ProspectType::New();
 
   prospect->SetInput(leafParams);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Now we use SAIL model to generate transmitance and reflectance spectrum. SAIL model is created by invoking
   //  the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
-  //
-  //  Software Guide : EndLatex
 
 
-  //  Software Guide : BeginLatex
-  //
   //  sail input parameters are :
   //  \begin{itemize}
   //  \item leaf area index (LAI).
@@ -143,11 +107,8 @@ int main(int argc, char *argv[])
   //  \item observer zenith angle (TTO) in $\deg$.
   //  \item azimuth (PSI) in $\deg$.
   //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
 
 
-  // Software Guide : BeginCodeSnippet
   double LAI = static_cast<double> (atof(argv[7]));
   double Angle = static_cast<double> (atof(argv[8]));
   double PSoil = static_cast<double> (atof(argv[9]));
@@ -169,36 +130,23 @@ int main(int argc, char *argv[])
   sail->SetTTS(TTS);
   sail->SetTTO(TTO);
   sail->SetPSI(PSI);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
   //  Reflectance and Transmittance  are set with prospect output.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   sail->SetReflectance(prospect->GetReflectance());
   sail->SetTransmittance(prospect->GetTransmittance());
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   sail->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  \emph{GetViewingReflectance} method provides viewing reflectance vector (size $Nx2$, where $N$ is the number of sampled wavelength values, columns corresponds respectively to wavelength and viewing reflectance) by calling \emph{GetResponse}.
   //  \emph{GetHemisphericalReflectance} method provides hemispherical reflectance vector (size $Nx2$, where $N$ is the number ofsampled wavelength values, columns corresponds to wavelength and hemispherical reflectance) by calling \emph{GetResponse}.
   //
   // Note that PROSAIL simulation are done for 2100 samples starting from 400nm up to 2500nm
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
     {
     std::cout << "wavelength  : ";
@@ -209,7 +157,6 @@ int main(int argc, char *argv[])
     std::cout << sail->GetHemisphericalReflectance()->GetResponse()[i].second;
     std::cout << std::endl;
     }
-  // Software Guide : EndCodeSnippet
 
   std::ofstream outputFile(OutputName, std::ios::out);
   for (unsigned int i = 0; i < sail->GetHemisphericalReflectance()->Size(); ++i)
@@ -218,8 +165,6 @@ int main(int argc, char *argv[])
     outputFile << sail->GetHemisphericalReflectance()->GetResponse()[i].second<< std::endl;
     }
 
-  //  Software Guide : BeginLatex
-  //
   //  here you can found example parameters :
   //  \begin{itemize}
   //  \item Cab 30.0
@@ -239,7 +184,6 @@ int main(int argc, char *argv[])
   //  \end{itemize}
   //
   //  More information and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud} \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

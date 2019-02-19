@@ -30,17 +30,11 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{FlusserMomentsImageFunction}.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbFlusserMomentsImageFunction.h"
-// Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
 {
@@ -65,29 +59,19 @@ int main(int argc, char * argv[])
 
   reader->SetFileName(inputFilename);
 
-  //  Software Guide : BeginLatex
-  //
   //  The \doxygen{otb}{FlusserMomentsImageFunction} is templated over the
   //  input image type and the output (real) type value, so we start by
   //  defining:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::FlusserMomentsImageFunction<InputImageType>  FlusserType;
   typedef FlusserType::OutputType                           MomentType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // We can choose the region and the pixel of the image which will
   // used as coordinate origin
   // for the moment computation
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   InputImageType::RegionType region;
   InputImageType::SizeType   size;
   InputImageType::IndexType  start;
@@ -109,27 +93,16 @@ int main(int argc, char * argv[])
   InputImageType::IndexType center;
   center[0] = start[0] + size[0] / 2;
   center[1] = start[1] + size[1] / 2;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // Next, we plug the input image into the complex moment function
   // and we set its parameters.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   fmFunction->SetInputImage(image);
   fmFunction->SetNeighborhoodRadius(radius);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // In order to get the value of the moment, we call the
   // \code{EvaluateAtIndex} method.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MomentType Result = fmFunction->EvaluateAtIndex(center);
 
   for (unsigned int j=0; j<11; ++j)
@@ -137,16 +110,11 @@ int main(int argc, char * argv[])
     std::cout << "The moment of order " << j+1 <<
       " is equal to " << Result[j] << std::endl;
     }
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  \relatedClasses
   //  \begin{itemize}
   //  \item \doxygen{otb}{FlusserPathFunction}
   //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

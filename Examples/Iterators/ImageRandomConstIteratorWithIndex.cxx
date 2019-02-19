@@ -20,8 +20,6 @@
 
 
 
-// Software Guide : BeginLatex
-//
 // \doxygen{itk}{ImageRandomConstIteratorWithIndex} was developed to randomly
 // sample pixel values.  When incremented or decremented, it jumps to a random
 // location in its image region.
@@ -44,13 +42,9 @@
 // example calculates an estimate of the arithmetic mean of pixel values.
 //
 // First, include the appropriate header and declare pixel and image types.
-//
-// Software Guide : EndLatex
 
 #include "otbImage.h"
-// Software Guide : BeginCodeSnippet
 #include "itkImageRandomConstIteratorWithIndex.h"
-// Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -67,13 +61,11 @@ int main(int argc, char *argv[])
     return -1;
     }
 
-// Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
 
   typedef unsigned short                                    PixelType;
   typedef otb::Image<PixelType, Dimension>                  ImageType;
   typedef itk::ImageRandomConstIteratorWithIndex<ImageType> ConstIteratorType;
-// Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
@@ -92,8 +84,6 @@ int main(int argc, char *argv[])
     return -1;
     }
 
-// Software Guide : BeginLatex
-//
 // The input image has been read as \code{inputImage}.  We now create an
 // iterator with a number of samples set by command line argument. The call to
 // \code{ReinitializeSeed} seeds the random number generator.  The iterator is
@@ -101,33 +91,24 @@ int main(int argc, char *argv[])
 //
 //  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!SetNumberOfSamples()}
 //  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!ReinitializeSeed()}
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   ConstIteratorType inputIt(inputImage,  inputImage->GetRequestedRegion());
   inputIt.SetNumberOfSamples(::atoi(argv[2]));
   inputIt.ReinitializeSeed();
-// Software Guide : EndCodeSnippet
 
 // Software Guide: BeginLatex
 //
 // Now take the specified number of samples and calculate their average value.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   float mean = 0.0f;
   for (inputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt)
     {
     mean += static_cast<float>(inputIt.Get());
     }
   mean = mean / ::atof(argv[2]);
-// Software Guide : EndCodeSnippet
   std::cout << "Mean estimate with " << argv[2] << " samples is " << mean <<
   std::endl;
 
-// Software Guide : BeginLatex
-//
 // Table~\ref{fig:ImageRandomConstIteratorWithIndexExample} shows the results
 // of running this example on several of the data files from
 // \code{Examples/Data} with a range of sample sizes.
@@ -149,7 +130,6 @@ int main(int argc, char *argv[])
 // \end{table}
 //
 // \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!example of using|)}
-// Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

@@ -48,8 +48,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the
 // \doxygen{otb}{SFSTexturesImageFilter}.
 // This filter computes the Structural Feature Set as described in
@@ -58,12 +56,8 @@
 // of the image.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbSFSTexturesImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 int main(int itkNotUsed(argc), char * argv[])
 {
@@ -89,37 +83,20 @@ int main(int itkNotUsed(argc), char * argv[])
   unsigned int maxConsideration = atoi(argv[17]);
   double       alpha                  = atof(argv[18]);
 
-// Software Guide : BeginLatex
-//
 // As with every OTB program, we start by defining the types for the
 // images, the readers and the writers.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType>  WriterType;
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // The we can instantiate the type for the SFS filter, which is
 // templated over the input and output pixel types.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> SFSFilterType;
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // After that, we can instantiate the filter. We will also instantiate
 // the reader and one writer for each output image, since the SFS
 // filter generates 6 different features.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   SFSFilterType::Pointer filter    = SFSFilterType::New();
   ReaderType::Pointer    reader       = ReaderType::New();
   WriterType::Pointer    writerLength = WriterType::New();
@@ -128,12 +105,9 @@ int main(int itkNotUsed(argc), char * argv[])
   WriterType::Pointer    writerRatio  = WriterType::New();
   WriterType::Pointer    writerSD     = WriterType::New();
   WriterType::Pointer    writerPsi    = WriterType::New();
-// Software Guide : EndCodeSnippet
 
   reader->SetFileName(inName);
 
-// Software Guide : BeginLatex
-//
 // The SFS filter has several parameters which have to be
 // selected. They are:
 // \begin{enumerate}
@@ -147,36 +121,21 @@ int main(int itkNotUsed(argc), char * argv[])
 // \item the $\alpha$ parameter fort the $\omega-mean$ feature;
 // \item the RatioMax parameter fort the $\omega-mean$ feature.
 // \end{enumerate}
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // In order to disable the computation of a feature, the
 // \code{SetFeatureStatus} parameter can be used. The $true$ value
 // enables the feature (default behavior) and the $false$ value
 // disables the computation. Therefore, the following line is useless,
 // but is given here as an example.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // Now, we plug the pipeline using all the writers.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
 
   writerLength->SetFileName(outNameLength);
@@ -202,8 +161,6 @@ int main(int itkNotUsed(argc), char * argv[])
   writerPsi->SetFileName(outNamePsi);
   writerPsi->SetInput(filter->GetPSIOutput());
   writerPsi->Update();
-  // Software Guide : EndCodeSnippet
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:SFS_FILTER} shows the result of applying
   // the SFS computation to an image
   // \begin{figure}
@@ -222,8 +179,6 @@ int main(int itkNotUsed(argc), char * argv[])
   // original image, .}
   // \label{fig:SFS_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   /************** pretty images for printing *********/
   typedef otb::Image<unsigned char,

@@ -24,8 +24,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // \index{otb::LabelMapToVectorDataFilter}
 //
 //
@@ -38,7 +36,6 @@
 // follows a finite state machine described in \cite{Francis2000}.
 //
 //  Only polygon conversion is available yet.
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
@@ -50,15 +47,9 @@
 
 #include "otbImage.h"
 
-// Software Guide : BeginLatex
-//
 // These are the main header files which need to be included:
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
 #include "otbLabelMapToVectorDataFilter.h"
 #include "otbAttributesMapLabelObject.h"
-// Software Guide : EndCodeSnippet
 #include "itkLabelImageToLabelMapFilter.h"
 
 int main(int argc, char * argv[])
@@ -73,34 +64,24 @@ int main(int argc, char * argv[])
   const char * infname = argv[1];
   const char * outfname = argv[2];
 
-  //  Software Guide : BeginLatex
-  //
   // The image types are defined using pixel types and
   // dimension. The input image is defined as an \doxygen{itk}{Image},
   // the output is a \doxygen{otb}{VectorData}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension               = 2;
   typedef unsigned short                   LabelType;
   typedef otb::Image<LabelType, Dimension> LabeledImageType;
   typedef otb::VectorData<double, 2>       VectorDataType;
-  // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
   typedef otb::ImageFileReader<LabeledImageType>    LabeledReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
   // Label map typedef
-  //  Software Guide : BeginLatex
-  //
   // The Attribute Label Map is
   // instantiated using the image pixel types as template parameters.
   // The LabelObjectToPolygonFunctor is instantiated with LabelObjectType and PolygonType.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::AttributesMapLabelObject<LabelType, Dimension,
       double>
   LabelObjectType;
@@ -109,42 +90,27 @@ int main(int argc, char * argv[])
   typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
       LabelMapType>
   LabelMapFilterType;
- // Software Guide : EndCodeSnippet
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   WriterType::Pointer        writer = WriterType::New();
 
-  //  Software Guide : BeginLatex
   //  Now the reader and writer are instantiated and
   //  the input image is set and a name is given to the output image.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   lreader->SetFileName(infname);
   writer->SetFileName(outfname);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Then, the input image is converted to a map of label objects.
   //  Here each white region connected regions are converted. So the background is define all zero pixels.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
   labelMapFilter->SetInput(lreader->GetOutput());
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
   labelMapFilter->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. This is
   // the main filter which performs the vectorization.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::LabelMapToVectorDataFilter<LabelMapType,
       VectorDataType>
   LabelMapToVectorDataFilterType;
@@ -156,26 +122,14 @@ int main(int argc, char * argv[])
   MyFilter->Update();
   MyFilter->GetOutput()->SetProjectionRef(
     lreader->GetOutput()->GetProjectionRef());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The output can be passed to a writer.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   writer->SetInput(MyFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  As usual, it is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   try
     {
     writer->Update();
@@ -186,7 +140,6 @@ int main(int argc, char * argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
   catch (...)
     {
     std::cout << "Unknown exception !" << std::endl;

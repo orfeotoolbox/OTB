@@ -34,8 +34,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the
 // \doxygen{otb}{PCAImageFilter}.
 // This filter computes a Principal Component Analysis using an
@@ -43,12 +41,8 @@
 // covariance matrix.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbPCAImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 int main(int itkNotUsed(argc), char* argv[])
 {
@@ -63,94 +57,53 @@ int main(int itkNotUsed(argc), char* argv[])
   const char *       invoutpretty = argv[6];
 
 
-  // Software Guide : BeginLatex
-  //
   // We start by defining the types for the images and the reader and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileWriter<ImageType>        WriterType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We instantiate now the image reader and we set the image file name.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We define the type for the filter. It is templated over the input
   // and the output image types and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::PCAImageFilter<ImageType, ImageType,
                               otb::Transform::FORWARD> PCAFilterType;
   PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // The only parameter needed for the PCA is the number of principal
   // components required as output. Principal components are linear combination of input components
   // (here the input image  bands),
   // which are selected using Singular Value Decomposition eigen vectors sorted by eigen value.
   // We can choose to get less Principal Components than
   // the number of input bands.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   pcafilter->SetNumberOfPrincipalComponentsRequired(
     numberOfPrincipalComponentsRequired);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We now instantiate the writer and set the file name for the
   // output image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer     = WriterType::New();
   writer->SetFileName(outputFilename);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We finally plug the pipeline and trigger the PCA computation with
   // the method \code{Update()} of the writer.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
 
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
   // transformation from PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::PCAImageFilter< ImageType, ImageType,
                                otb::Transform::INVERSE > InvPCAFilterType;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
@@ -163,9 +116,7 @@ int main(int itkNotUsed(argc), char* argv[])
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
   // and reverse PCA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
@@ -181,8 +132,6 @@ int main(int itkNotUsed(argc), char* argv[])
   // inverse mode (the input RGB image).}
   // \label{fig:PCA_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   // This is for rendering in software guide
   typedef otb::PrintableImageFilter<ImageType,ImageType> PrintFilterType;

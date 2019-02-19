@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{MarkovRandomFieldFilter}.
 // to regularize a classification obtained previously by another classifier. Here
 // we will apply the regularization to the output of an SVM classifier presented
@@ -40,8 +38,6 @@
 // program structure to use the MRF framework, we are not going to repeat the entire
 // example. However, remember you can find the full source code for this example
 // in your OTB source directory.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -116,15 +112,10 @@ int main(int argc, char* argv[])
     markovFilter->InitializeSeed(2);
     }
 
-  // Software Guide : BeginLatex
-  //
   // To find the number of classes available in the original image we use the
   // \doxygen{itk}{LabelStatisticsImageFilter} and more particularly the method
   // \code{GetNumberOfLabels()}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::LabelStatisticsImageFilter
   <LabelledImageType, LabelledImageType> LabelledStatType;
   LabelledStatType::Pointer labelledStat = LabelledStatType::New();
@@ -133,7 +124,6 @@ int main(int argc, char* argv[])
   labelledStat->Update();
 
   unsigned int nClass = labelledStat->GetNumberOfLabels();
-  // Software Guide : EndCodeSnippet
 
   optimizer->SetSingleParameter(0.0);
   markovFilter->SetNumberOfClasses(nClass);
@@ -168,8 +158,6 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:MRF_REGULARIZATION} shows the output of the Markov Random
   // Field regularization on the classification output of another method.
   //
@@ -183,8 +171,6 @@ int main(int argc, char* argv[])
   // classification}
   // \label{fig:MRF_REGULARIZATION}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

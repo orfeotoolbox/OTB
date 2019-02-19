@@ -36,8 +36,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the
 // \doxygen{otb}{FastICAImageFilter}.
 // This filter computes a Fast Independent Components Analysis transform.
@@ -53,12 +51,8 @@
 // of the components, and the maximization is done in an iterative way.
 
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbFastICAImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 
 int main(int itkNotUsed(argc), char* argv[])
@@ -75,114 +69,61 @@ int main(int itkNotUsed(argc), char* argv[])
   unsigned int numIterations = atoi(argv[8]);
   double mu = atof(argv[9]);
 
-  // Software Guide : BeginLatex
-  //
   // We start by defining the types for the images, the reader, and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the independent
   // components) from a multi-channel input image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
   typedef otb::ImageFileWriter<ImageType>        WriterType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We instantiate now the image reader and we set the image file name.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer reader     = ReaderType::New();
   reader->SetFileName(inputFileName);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We define the type for the filter. It is templated over the input
   // and the output image types and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::FastICAImageFilter<ImageType, ImageType,
                                 otb::Transform::FORWARD> FastICAFilterType;
   FastICAFilterType::Pointer FastICAfilter     = FastICAFilterType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We then set the number of independent
   // components required as output. We can choose to get less ICs than
   // the number of input bands.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   FastICAfilter->SetNumberOfPrincipalComponentsRequired(
     numberOfPrincipalComponentsRequired);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We set the number of iterations of the ICA algorithm.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   FastICAfilter->SetNumberOfIterations(numIterations);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We also set the $\mu$ parameter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   FastICAfilter->SetMu( mu );
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We now instantiate the writer and set the file name for the
   // output image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   WriterType::Pointer writer     = WriterType::New();
   writer->SetFileName(outputFilename);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We finally plug the pipeline and trigger the ICA computation with
   // the method \code{Update()} of the writer.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   FastICAfilter->SetInput(reader->GetOutput());
   writer->SetInput(FastICAfilter->GetOutput());
 
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // \doxygen{otb}{FastICAImageFilter} allows also to compute inverse
   // transformation from ICA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::FastICAImageFilter< ImageType, ImageType,
                                  otb::Transform::INVERSE > InvFastICAFilterType;
   InvFastICAFilterType::Pointer invFilter = InvFastICAFilterType::New();
@@ -199,9 +140,7 @@ int main(int itkNotUsed(argc), char* argv[])
   invWriter->SetInput(invFilter->GetOutput() );
 
   invWriter->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:FastICA_FILTER} shows the result of applying forward
   // and reverse FastICA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
@@ -217,8 +156,6 @@ int main(int itkNotUsed(argc), char* argv[])
   // inverse mode (the input RGB image).}
   // \label{fig:FastICA_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   // This is for rendering in software guide
   typedef otb::PrintableImageFilter<ImageType,ImageType> PrintFilterType;

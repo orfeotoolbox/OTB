@@ -25,15 +25,11 @@
 */
 
 
-//  Software Guide : BeginLatex
-//
 // On one hand, satellite images are commonly coded on more than 8 bits to provide
 // the dynamic range required from shadows to clouds. On the other hand, image formats
 // in use for printing and display are usually limited to 8 bits. We need to convert the value
 // to enable a proper display. This is usually done using linear scaling. Of course, you have
 // to be aware that some information is lost in the process.
-//
-//  Software Guide : EndLatex
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -62,18 +58,12 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  //  Software Guide : BeginLatex
-  //
   //  The \doxygen{itk}{RescaleIntensityImageFilter} is used to rescale the value:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::RescaleIntensityImageFilter<InputImageType,
       OutputImageType> RescalerType;
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   WriterType::Pointer writer = WriterType::New();
@@ -89,7 +79,6 @@ int main(int argc, char * argv[])
   writer->SetInput(caster->GetOutput());
   writer->Update();
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:SCALING_FILTER} illustrates the difference between a proper scaling and
   // a simple truncation of the value and demonstrates why it is
   // important to keep this in mind.
@@ -103,8 +92,6 @@ int main(int argc, char * argv[])
   // a proper rescaling}
   // \label{fig:SCALING_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

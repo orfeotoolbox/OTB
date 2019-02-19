@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 //  This example illustrates the details of the MarkovRandomFieldFilter by using the Fisher distribution
 //  to model the likelihood energy.
 //  This filter is an application of the Markov Random Fields for classification.
@@ -39,8 +37,6 @@
 //  The parameter of the Fisher distribution was determined for each class in a supervised step.
 //  ( See the File OtbParameterEstimatioOfFisherDistribution )
 //  This example is a contribution from Jan Wegner.
-//
-// Software Guide : EndLatex
 
 
 #include "otbImageFileReader.h"
@@ -70,39 +66,27 @@ int main(int argc, char* argv[] )
         "optimizerTemperature useRandomValue " << std::endl;
     return 1;
     }
-  // Software Guide : BeginLatex
-  //
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
   //  The labeled image is of type unsigned char which allows up to 256 different
   //  classes.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef double        InternalPixelType;
   typedef unsigned char LabelledPixelType;
 
   typedef otb::Image<InternalPixelType, Dimension>    InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension>    LabelledImageType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   //  We define a reader for the image to be classified, an initialization for the
   //  classification (which could be random) and a writer for the final
   //  classification.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader< InputImageType >              ReaderType;
   typedef otb::ImageFileWriter< LabelledImageType >  WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  // Software Guide : EndCodeSnippet
 
   const char * inputFilename  = argv[1];
   const char * outputFilename = argv[2];
@@ -111,49 +95,29 @@ int main(int argc, char* argv[] )
   reader->SetFileName( inputFilename );
   writer->SetFileName( outputFilename );
 
-  // Software Guide : BeginLatex
-  //
   //  Finally, we define the different classes necessary for the Markov classification.
   //  A MarkovRandomFieldFilter is instantiated, this is the
   // main class which connect the other to do the Markov classification.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MarkovRandomFieldFilter
       <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   //  An MRFSamplerRandomMAP, which derives from the
   //  MRFSampler, is instantiated. The sampler is in charge of
   // proposing a modification for a given site. The
   // MRFSamplerRandomMAP, randomly pick one possible value
   // according to the MAP probability.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   //  An MRFOptimizerMetropolis, which derives from the
   // MRFOptimizer, is instantiated. The optimizer is in charge
   // of accepting or rejecting the value proposed by the sampler. The
   // MRFSamplerRandomMAP, accept the proposal according to the
   // variation of energy it causes and a temperature parameter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MRFOptimizerMetropolis OptimizerType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Two energy, deriving from the MRFEnergy class need to be instantiated. One energy
   // is required for the regularization, taking into account the relationship between neighboring pixels
   // in the classified image. Here it is done with the MRFEnergyPotts, which implements
@@ -161,37 +125,23 @@ int main(int argc, char* argv[] )
   //
   // The second energy is used for the fidelity to the original data. Here it is done with a
   // MRFEnergyFisherClassification class, which defines a Fisher distribution to model the data.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MRFEnergyPotts
       <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
   typedef otb::MRFEnergyFisherClassification
       <InputImageType, LabelledImageType>     EnergyFidelityType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The different filters composing our pipeline are created by invoking their
   // New() methods, assigning the results to smart pointers.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
   EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
   OptimizerType::Pointer optimizer = OptimizerType::New();
   SamplerType::Pointer sampler = SamplerType::New();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Parameter for the MRFEnergyFisherClassification class are created. The shape parameters M, L
   // and the weighting parameter mu are computed in a supervised step
-  //
-  // Software Guide : EndLatex
 
 
   if ((bool)(atoi(argv[6])) == true)
@@ -202,7 +152,6 @@ int main(int argc, char* argv[] )
     markovFilter->InitializeSeed(1);
     }
 
-  // Software Guide : BeginCodeSnippet
   unsigned int nClass =4;
   energyFidelity->SetNumberOfParameters(3*nClass);
   EnergyFidelityType::ParametersType parameters;
@@ -225,16 +174,10 @@ int main(int argc, char* argv[] )
   parameters[11] =      50.950001;      //Class 3 M
 
   energyFidelity->SetParameters(parameters);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Parameters are given to the different classes and the sampler, optimizer and
   // energies are connected with the Markov filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   OptimizerType::ParametersType param(1);
   param.Fill(atof(argv[6]));
   optimizer->SetParameters(param);
@@ -248,16 +191,10 @@ int main(int argc, char* argv[] )
   markovFilter->SetEnergyFidelity(energyFidelity);
   markovFilter->SetOptimizer(optimizer);
   markovFilter->SetSampler(sampler);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The pipeline is connected. An itkRescaleIntensityImageFilter
   // rescales the classified image before saving it.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   markovFilter->SetInput(reader->GetOutput());
 
   typedef itk::RescaleIntensityImageFilter
@@ -270,7 +207,6 @@ int main(int argc, char* argv[] )
 
   writer->SetInput( rescaleFilter->GetOutput() );
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
   //convert output image to color
   typedef itk::RGBPixel<unsigned char>                          RGBPixelType;
@@ -281,13 +217,8 @@ int main(int argc, char* argv[] )
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput( rescaleFilter->GetOutput() );
-  // Software Guide : BeginLatex
-  //
   // We can now create an image file writer and save the image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
@@ -296,10 +227,7 @@ int main(int argc, char* argv[] )
   writerRescaled->SetInput( colormapper->GetOutput() );
 
   writerRescaled->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:MRF_CLASSIFICATION3} shows the output of the Markov Random
   // Field classification into four classes using the
   // Fisher-distribution as likelihood term.
@@ -315,8 +243,6 @@ int main(int argc, char* argv[] )
   // classification.}
   // \label{fig:MRF_CLASSIFICATION3}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

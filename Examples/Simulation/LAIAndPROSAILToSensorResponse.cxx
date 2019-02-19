@@ -27,8 +27,6 @@
 */
 
 //
-// Software Guide : BeginLatex
-//
 // The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetation classes are handled using PROSAIL model, non-vegetation classes
 // are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image.
 //
@@ -36,8 +34,6 @@
 //
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
@@ -47,7 +43,6 @@
 #include "otbMultiChannelExtractROI.h"
 #include "itkOrImageFilter.h"
 
-// Software Guide : BeginCodeSnippet
 #include "otbLeafParameters.h"
 #include "otbReduceSpectralResponse.h"
 #include "otbImageSimulationMethod.h"
@@ -56,18 +51,13 @@
 #include "itkTernaryFunctorImageFilter.h"
 #include "otbRAndNIRIndexImageFilter.h"
 #include "otbVectorDataToLabelMapWithAttributesFilter.h"
-// Software Guide : EndCodeSnippet
 
 namespace otb
 {
 
-// Software Guide : BeginLatex
-//
 // \code{ImageUniqueValuesCalculator} class is defined here. Method \code{GetUniqueValues()} returns an array with all values contained in an image.
 // This class is implemented and used to test if all labels in labeled image are present in label parameter file.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 template < class TImage >
 class ITK_EXPORT ImageUniqueValuesCalculator : public itk::Object
 {
@@ -157,31 +147,20 @@ private:
 namespace Functor
 {
 
-// Software Guide : BeginLatex
-//
 // \code{ProsailSimulatorFunctor} functor is defined here.
 //
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 template<class TLAI, class TLabel, class TMask, class TOutput,
   class TLabelSpectra, class TLabelParameter,
     class TAcquistionParameter, class TSatRSR>
 class ProsailSimulatorFunctor
-// Software Guide : EndCodeSnippet
 {
 public:
   /** Standard class typedefs */
 
-  // Software Guide : BeginLatex
-  //
   // \code{ProsailSimulatorFunctor} functor is defined here.
   //
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef TLAI LAIPixelType;
   typedef TLabel LabelPixelType;
   typedef TMask MaskPixelType;
@@ -203,18 +182,11 @@ public:
       <ResponseType, SatRSRType> ReduceResponseType;
   typedef typename ReduceResponseType::Pointer
       ReduceResponseTypePointerType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // In this example spectra are generated form $400$ to $2400nm$. the number of simulated band is set by \code{SimNbBands} value.
   //
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   static const unsigned int SimNbBands = 2000;
-  // Software Guide : EndCodeSnippet
   /** Constructor */
   ProsailSimulatorFunctor()
   {
@@ -237,13 +209,8 @@ public:
   inline OutputPixelType operator ()(const LAIPixelType &lai, const LabelPixelType& label, const MaskPixelType& mask)
   {
 
-    // Software Guide : BeginLatex
-    //
     // mask value is read to know if the pixel have to be calculated, it is set to 0 otherwise.
-    //
-    // Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
     OutputPixelType pix;
     pix.SetSize(m_SatRSR->GetNbBands());
     if ((!mask && !m_InvertedMask) || (mask && m_InvertedMask))
@@ -252,16 +219,10 @@ public:
         pix[i] = static_cast<typename OutputPixelType::ValueType> (0);
       return pix;
       }
-    // Software Guide : EndCodeSnippet
 
 
-    // Software Guide : BeginLatex
-    //
     // Object reflectance \code{hxSpectrum} is calculated. If object label correspond to vegetation label then Prosail code is used, aster database is used otherwise.
-    //
-    // Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
     VectorPairType hxSpectrum;
 
     for (unsigned int i = 0; i < SimNbBands; i++)
@@ -314,27 +275,15 @@ public:
           hxSpectrum[i].second =
               static_cast<typename OutputPixelType::ValueType> (0);
         }
-    // Software Guide : EndCodeSnippet
-    // Software Guide : BeginLatex
-    //
     // Spectral response \code{aResponse} is set using \code{hxSpectrum}.
-    //
-    // Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
     ResponseType::Pointer aResponse = ResponseType::New();
     aResponse->SetResponse(hxSpectrum);
-    // Software Guide : EndCodeSnippet
 
-    // Software Guide : BeginLatex
-    //
     // Satellite RSR is initialized and set with \code{aResponse}. Reflectance
     // mode is used in this case to take into account solar irradiance into
     // spectral response reduction.
-    //
-    // Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
     ReduceResponseTypePointerType reduceResponse = ReduceResponseType::New();
     reduceResponse->SetInputSatRSR(m_SatRSR);
     reduceResponse->SetInputSpectralResponse(aResponse);
@@ -344,22 +293,15 @@ public:
     reduceResponse->CalculateResponse();
     VectorPairType reducedResponse =
         reduceResponse->GetReduceResponse()->GetResponse();
-    // Software Guide : EndCodeSnippet
 
 
-    // Software Guide : BeginLatex
-    //
     // \code{pix} value is returned for desired Satellite bands
-    //
-    // Software Guide : EndLatex
 
-    // Software Guide : BeginCodeSnippet
     for (unsigned int i = 0; i < m_SatRSR->GetNbBands(); i++)
       pix[i] =
           static_cast<typename OutputPixelType::ValueType>
             (reducedResponse[i].second);
     return pix;
-    // Software Guide : EndCodeSnippet
 
   }
 
@@ -419,14 +361,10 @@ protected:
 
 } // namespace Functor
 
-// Software Guide : BeginLatex
-//
 // \code{TernaryFunctorImageFilterWithNBands} class is defined here.
 // This class inherits form \doxygen{itk}{TernaryFunctorImageFilter} with additional nuber of band parameters.
 // It's implementation is done to process Label, LAI, and mask image with Simulation functor.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 template <class TInputImage1, class TInputImage2, class TInputImage3,
     class TOutputImage, class TFunctor>
 class ITK_EXPORT TernaryFunctorImageFilterWithNBands :
@@ -500,15 +438,10 @@ int main(int argc, char *argv[])
   // label 0 /path/to/spectra/file    --> for other classes
 
 
-  // Software Guide : BeginLatex
-  //
   // input images typedef are presented below. This example uses \code{double} LAI image, \code{binary} mask and
   //  cloud mask, and \code{integer} label image
   //
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef double LAIPixelType;
   typedef unsigned short LabelType;
   typedef unsigned short MaskPixelType;
@@ -518,62 +451,35 @@ int main(int argc, char *argv[])
   typedef otb::Image<LabelType, 2> LabelImageType;
   typedef otb::Image<MaskPixelType, 2> MaskImageType;
   typedef otb::VectorImage<OutputPixelType, 2> SimulatedImageType;
-  // Software Guide : EndCodeSnippet
 
   // reader typedef
   typedef otb::ImageFileReader<LAIImageType> LAIReaderType;
   typedef otb::ImageFileReader<LabelImageType> LabelReaderType;
   typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
 
-  // Software Guide : BeginCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // Leaf parameters typedef is defined.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::LeafParameters LeafParametersType;
   typedef LeafParametersType::Pointer LeafParametersPointerType;
   typedef std::map<LabelType, LeafParametersPointerType> LabelParameterMapType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Sensor spectral response typedef is defined
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef double PrecisionType;
   typedef std::vector<PrecisionType> SpectraType;
   typedef std::map<LabelType, SpectraType> SpectraParameterType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Acquisition response typedef is defined
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef std::map<std::string, double> AcquistionParsType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Satellite typedef is defined
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::SatelliteRSR<PrecisionType, PrecisionType> SatRSRType;
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // Filter type is the specific \code{TernaryFunctorImageFilterWithNBands} defined below with specific functor.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::Functor::ProsailSimulatorFunctor
       <LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType,
       SpectraParameterType, LabelParameterMapType, AcquistionParsType, SatRSRType>
@@ -581,7 +487,6 @@ int main(int argc, char *argv[])
   typedef otb::TernaryFunctorImageFilterWithNBands
       <LAIImageType, LabelImageType, MaskImageType, SimulatedImageType,
         SimuFunctorType> SimulatorType;
-  // Software Guide : EndCodeSnippet
 
   // Read the acquisition parameter file which is like
   // Angl val
@@ -592,14 +497,9 @@ int main(int argc, char *argv[])
   // TTO val
   // PSI val
 
-  // Software Guide : BeginLatex
-  //
   // Acquisition parameters are loaded using text file. A detailed definition of acquisition parameters can
   // be found in class \doxygen{otb}{SailModel}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   AcquistionParsType acquistionPars;
   acquistionPars[std::string("Angl")] = 0.0;
   acquistionPars[std::string("PSoil")] = 0.0;
@@ -639,16 +539,12 @@ int main(int argc, char *argv[])
   //Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // Label parameters are loaded using text file.
   // Two type of object characteristic can be found. If label corresponds to vegetation class,
   // then leaf parameters are loaded.
   // A detailed definition of leaf parameters can be found in class \doxygen{otb}{LeafParameters} class.
   // Otherwise object reflectance is generated from $400$ to $2400nm$ using \href{http://speclib.jpl.nasa.gov/}{Aster database}.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   LabelParameterMapType labelParameters;
   std::ifstream labelParsFile;
 
@@ -727,25 +623,16 @@ int main(int argc, char *argv[])
   //Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // LAI image is read.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   LAIReaderType::Pointer laiReader = LAIReaderType::New();
   laiReader->SetFileName(laiifname);
   laiReader->Update();
   LAIImageType::Pointer laiImage = laiReader->GetOutput();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Label image is then read. Label image is processed using \code{ImageUniqueValuesCalculator} in order to check if all the labels are present in the labelParameters file.
-  // Software Guide : EndLatex
 
 
-  // Software Guide : BeginCodeSnippet
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
   labelReader->SetFileName(lifname);
   labelReader->Update();
@@ -792,16 +679,11 @@ int main(int argc, char *argv[])
       }
     ++uvIt;
     }
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // Mask image is read. If cloud mask is filename is given, a new mask image is generated with masks concatenation.
-  // Software Guide : EndLatex
 
 
-  // Software Guide : BeginCodeSnippet
   MaskReaderType::Pointer miReader = MaskReaderType::New();
   miReader->SetFileName(mifname);
   miReader->UpdateOutputInformation();
@@ -825,15 +707,10 @@ int main(int argc, char *argv[])
     maskImage = orfilter->GetOutput();
 
     }
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // A test is done. All images must have the same size.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   if (laiImage->GetLargestPossibleRegion().GetSize()[0] !=
       labelImage->GetLargestPossibleRegion().GetSize()[0] ||
       laiImage->GetLargestPossibleRegion().GetSize()[1] !=
@@ -847,15 +724,10 @@ int main(int argc, char *argv[])
         << std::endl;
     return EXIT_FAILURE;
     }
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // Satellite RSR (Reduced Spectral Response) is defined using filename and band number given by command line arguments.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   SatRSRType::Pointer satRSR = SatRSRType::New();
   satRSR->SetNbBands(nbBands);
   satRSR->SetSortBands(false);
@@ -864,45 +736,29 @@ int main(int argc, char *argv[])
   for (unsigned int i = 0; i < nbBands; ++i)
     std::cout << i << " " << (satRSR->GetRSR())[i]->GetInterval().first << " "
         << (satRSR->GetRSR())[i]->GetInterval().second << std::endl;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // At this step all initialization have been done. The next step is to implement and initialize simulation functor \code{ProsailSimulatorFunctor}.
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   SimuFunctorType simuFunctor;
   simuFunctor.SetLabelParameters(labelParameters);
   simuFunctor.SetLabelSpectra(spectraParameters);
   simuFunctor.SetAcquisitionParameters(acquistionPars);
   simuFunctor.SetRSR(satRSR);
   simuFunctor.SetInvertedMask(true);
-  // Software Guide : EndCodeSnippet
 
 
-  // Software Guide : BeginLatex
-  //
   // Inputs and Functor are plugged to simulator filter.
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   SimulatorType::Pointer simulator = SimulatorType::New();
   simulator->SetInput1(laiImage);
   simulator->SetInput2(labelImage);
   simulator->SetInput3(maskImage);
   simulator->SetFunctor(simuFunctor);
   simulator->SetNumberOfOutputBands(nbBands);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   simulator->Update();
-  // Software Guide : EndCodeSnippet
 
 
   // Write output image to disk

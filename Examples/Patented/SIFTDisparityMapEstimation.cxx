@@ -25,8 +25,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example demonstrates the use of the
 // \doxygen{otb}{KeyPointSetsMatchingFilter} for disparity map
 // estimation. The idea here is to match SIFTs extracted from both the
@@ -40,14 +38,10 @@
 //
 // The first step toward the use of these filters is to include the
 // appropriate header files.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbKeyPointSetsMatchingFilter.h"
 #include "otbSiftFastImageFilter.h"
 #include "itkLandmarkDisplacementFieldSource.h"
-// Software Guide : EndCodeSnippet
 
 
 #include "otbImageFileReader.h"
@@ -68,87 +62,46 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  // Software Guide : BeginLatex
-  //
   // Then we must decide what pixel type to use for the image. We choose to do
   // all the computations in floating point precision and rescale the results
   // between 0 and 255 in order to export PNG images.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef double        RealType;
   typedef unsigned char OutputPixelType;
 
   typedef otb::Image<RealType, Dimension>        ImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // The SIFTs obtained for the matching will be stored in vector
 // form inside a point set. So we need the following types:
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::VariableLengthVector<RealType>      RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // The filter for computing the SIFTs has a type defined as follows:
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::SiftFastImageFilter<ImageType, PointSetType>
   ImageToSIFTKeyPointSetFilterType;
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // Although many choices for evaluating the distances during the
 // matching procedure exist, we choose here to use a simple
 // Euclidean distance. We can then define the type for the matching filter.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
   typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
   EuclideanDistanceMetricMatchingFilterType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // The following types are needed for dealing with the matched points.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef PointSetType::PointType         PointType;
   typedef std::pair<PointType, PointType> MatchType;
   typedef std::vector<MatchType>          MatchVectorType;
   typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
   LandmarkListType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // We define the type for the image reader.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Two readers are instantiated : one for the fixed image, and one
   // for the moving image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ReaderType::Pointer fixedReader = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
@@ -156,29 +109,17 @@ int main(int argc, char* argv[])
   movingReader->SetFileName(argv[2]);
   fixedReader->UpdateOutputInformation();
   movingReader->UpdateOutputInformation();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We will now instantiate the 2 SIFT filters and the filter used
   // for the matching of the points.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
     ImageToSIFTKeyPointSetFilterType::New();
   ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
     ImageToSIFTKeyPointSetFilterType::New();
   EuclideanDistanceMetricMatchingFilterType::Pointer euclideanMatcher =
     EuclideanDistanceMetricMatchingFilterType::New();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We plug the pipeline and set the parameters.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   double secondOrderThreshold = 0.5;
   bool   useBackMatching = 0;
 
@@ -195,17 +136,10 @@ int main(int argc, char* argv[])
   euclideanMatcher->SetDistanceThreshold(secondOrderThreshold);
   euclideanMatcher->SetUseBackMatching(useBackMatching);
   euclideanMatcher->Update();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // The matched points will be stored into a landmark list.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   LandmarkListType::Pointer landmarkList;
   landmarkList = euclideanMatcher->GetOutput();
-  // Software Guide : EndCodeSnippet
   MatchVectorType trueSecondOrder;
 
   for (LandmarkListType::Iterator it = landmarkList->Begin();
@@ -279,42 +213,25 @@ int main(int argc, char* argv[])
     ++outIt2;
     }
 
-  // Software Guide : BeginLatex
-  //
   // The landmarks are used for building a deformation field. The
   // deformation field is an image of vectors created by the
   // \doxygen{itk}{DisplacementFieldSource} class.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef   itk::Vector<RealType, Dimension>   VectorType;
   typedef   otb::Image<VectorType,  Dimension> DisplacementFieldType;
 
   typedef itk::LandmarkDisplacementFieldSource<DisplacementFieldType>  DisplacementSourceType;
 
   DisplacementSourceType::Pointer deformer = DisplacementSourceType::New();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // The deformation field needs information about the extent and
   // spacing of the images on which it is defined.
-  //
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   ImageType::ConstPointer fixedImage = fixedReader->GetOutput();
 
   deformer->SetOutputSpacing(fixedImage->GetSignedSpacing());
   deformer->SetOutputOrigin(fixedImage->GetOrigin());
   deformer->SetOutputRegion(fixedImage->GetLargestPossibleRegion());
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We will need some intermediate variables in order to pass the
   // matched SIFTs to the deformation field source.
-  //
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   typedef DisplacementSourceType::LandmarkContainer
   LandmarkContainerType;
   typedef DisplacementSourceType::LandmarkPointType LandmarkPointType;
@@ -326,15 +243,9 @@ int main(int argc, char* argv[])
 
   LandmarkPointType sourcePoint;
   LandmarkPointType targetPoint;
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // We can now iterate through the list of matched points and store
 // them in the intermediate landmark sets.
-//
-// Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   unsigned int pointId = 0;
 
   for (LandmarkListType::Iterator it = landmarkList->Begin();
@@ -354,13 +265,7 @@ int main(int argc, char* argv[])
 
     ++pointId;
     }
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
 // We pass the landmarks to the deformer and we run it.
-//
-// Software Guide : EndLatex
-// Software Guide : BeginCodeSnippet
   deformer->SetSourceLandmarks(sourceLandmarks.GetPointer());
   deformer->SetTargetLandmarks(targetLandmarks.GetPointer());
 
@@ -370,7 +275,6 @@ int main(int argc, char* argv[])
     deformer->GetOutput();
 
   deformer->Update();
-  // Software Guide : EndCodeSnippet
 
   ImageType::Pointer outdf = ImageType::New();
   outdf->SetRegions(fixedReader->GetOutput()->GetLargestPossibleRegion());
@@ -409,8 +313,6 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[3]);
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:SIFTDME} shows the result of applying the SIFT
   // disparity map estimation. Only the horizontal component of the
   // deformation is shown.
@@ -425,8 +327,6 @@ int main(int argc, char* argv[])
   // estimated deformation field in the horizontal direction.}
   // \label{fig:SIFTDME}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

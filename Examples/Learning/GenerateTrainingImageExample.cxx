@@ -25,12 +25,8 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates how to generate a training image for an
 // image supervised classification.
-//
-// Software Guide : EndLatex
 
 #include "itkNumericTraits.h"
 #include "otbImage.h"

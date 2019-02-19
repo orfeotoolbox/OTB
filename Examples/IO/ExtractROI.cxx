@@ -26,8 +26,6 @@
 */
 
 
-//  Software Guide : BeginLatex
-//
 //  This example shows the use of the
 //  \doxygen{otb}{MultiChannelExtractROI} and
 //  \doxygen{otb}{MultiToMonoChannelExtractROI} which allow the
@@ -41,15 +39,11 @@
 
 //  We start by including the needed header files.
 //  \index{otb::ExtractROI!header}
-//
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbMultiToMonoChannelExtractROI.h"
-// Software Guide : EndCodeSnippet
 
 
 int main(int argc, char * argv[])
@@ -65,14 +59,9 @@ int main(int argc, char * argv[])
     return EXIT_FAILURE;
     }
 
-//  Software Guide : BeginLatex
-//
 //  The program arguments define the image file names as well as the
 //  rectangular area to be extracted.
-//
-//  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const char * inputFilename  = argv[1];
   const char * outputFilenameRGB = argv[2];
   const char * outputFilenameMIR = argv[3];
@@ -81,117 +70,66 @@ int main(int argc, char * argv[])
   unsigned int startY((unsigned int) ::atoi(argv[5]));
   unsigned int sizeX((unsigned int) ::atoi(argv[6]));
   unsigned int sizeY((unsigned int) ::atoi(argv[7]));
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  As usual, we define the input and output pixel types.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef   unsigned char InputPixelType;
   typedef   unsigned char OutputPixelType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  First of all, we extract the multiband part by using the
   //  \doxygen{otb}{MultiChannelExtractROI} class, which is templated
   //  over the input and output pixel types. This class in not
   //  templated over the images types in order to force these images
   //  to be of \doxygen{otb}{VectorImage} type.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelExtractROI<InputPixelType,
       OutputPixelType>  ExtractROIFilterType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We create the extractor filter by using the \code{New} method of
   //  the class and we set its parameters.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
   extractROIFilter->SetStartX(startX);
   extractROIFilter->SetStartY(startY);
   extractROIFilter->SetSizeX(sizeX);
   extractROIFilter->SetSizeY(sizeY);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We must tell the filter which are the channels to be used. When
   //  selecting contiguous bands, we can use the
   //  \code{SetFirstChannel} and the \code{SetLastChannel}. Otherwise,
   //  we select individual channels by using the \code{SetChannel} method.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   extractROIFilter->SetFirstChannel(1);
   extractROIFilter->SetLastChannel(3);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We will use the OTB readers and writers for file access.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::ImageFileReader<ExtractROIFilterType::InputImageType> ReaderType;
   typedef otb::ImageFileWriter<ExtractROIFilterType::InputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  Since the number of bands of the input image is dynamically set
   //  at runtime, the \code{UpdateOutputInformation} method of the reader must be
   //  called before using the extractor filter.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
   writer->SetFileName(outputFilenameRGB);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  We can then build the pipeline as usual.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   extractROIFilter->SetInput(reader->GetOutput());
 
   writer->SetInput(extractROIFilter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  And execute the pipeline by calling the \code{Update} method of
   //  the writer.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The usage of the \doxygen{otb}{MultiToMonoChannelExtractROI} is
   //  similar to the one of the \doxygen{otb}{MultiChannelExtractROI}
   //  described above.
@@ -206,14 +144,10 @@ int main(int argc, char * argv[])
   //  \doxygen{otb}{VectorImage}. This is useful from a computing and
   //  memory usage point of view.
   //  This class is also templated over the pixel types.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MultiToMonoChannelExtractROI<InputPixelType,
       OutputPixelType>
   ExtractROIMonoFilterType;
-  // Software Guide : EndCodeSnippet
 
   ExtractROIMonoFilterType::Pointer extractROIMonoFilter =
     ExtractROIMonoFilterType::New();
@@ -223,15 +157,9 @@ int main(int argc, char * argv[])
   extractROIMonoFilter->SetSizeX(sizeX);
   extractROIMonoFilter->SetSizeY(sizeY);
 
-  //  Software Guide : BeginLatex
-  //
   // For this filter, only one output channel has to be selected.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   extractROIMonoFilter->SetChannel(4);
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>
   monoReaderType;
@@ -248,8 +176,6 @@ int main(int argc, char * argv[])
   monoWriter->SetInput(extractROIMonoFilter->GetOutput());
   monoWriter->Update();
 
-  //  Software Guide : BeginLatex
-  //
   // \begin{figure}
   // \center
   // \includegraphics[width=0.44\textwidth]{IMAGERY_SSECH.eps}
@@ -270,8 +196,6 @@ int main(int argc, char * argv[])
   //  Figure \ref{fig:ROI_IMAGERY} illustrates the result of the
   //  application of both extraction filters on the image presented in
   //  figure \ref{fig:IMAGERY_SSECH}.
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 

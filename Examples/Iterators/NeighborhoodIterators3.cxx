@@ -27,8 +27,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 
-// Software Guide : BeginLatex
-//
 // This example illustrates a technique for improving the efficiency of
 // neighborhood calculations by eliminating unnecessary bounds checking. As
 // described in Section~\ref{sec:NeighborhoodIterators}, the neighborhood
@@ -53,15 +51,11 @@
 //
 // The face calculator object is defined in \code{itkNeighborhoodAlgorithm.h}.
 // We include this file in addition to those from the previous two examples.
-//
-// Software Guide : EndLatex
 
 #include "itkSobelOperator.h"
 #include "itkNeighborhoodInnerProduct.h"
 
-// Software Guide : BeginCodeSnippet
 #include "itkNeighborhoodAlgorithm.h"
-// Software Guide : EndCodeSnippet
 
 int main(int argc, char * argv[])
 {
@@ -105,26 +99,18 @@ int main(int argc, char * argv[])
 
   itk::NeighborhoodInnerProduct<ImageType> innerProduct;
 
-// Software Guide : BeginLatex
-//
 // First we load the input image and create the output image and inner product
 // function as in the previous examples.  The image iterators will be created
 // in a later step.  Next we create a face calculator object.  An empty list is
 // created to hold the regions that will later on be returned by the face
 // calculator.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef itk::NeighborhoodAlgorithm
   ::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
 
   FaceCalculatorType               faceCalculator;
   FaceCalculatorType::FaceListType faceList;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The face calculator function is invoked by passing it an image pointer, an
 // image region, and a neighborhood radius.  The image pointer is the same
 // image used to initialize the neighborhood iterator, and the image region is
@@ -139,39 +125,24 @@ int main(int argc, char * argv[])
 // filters, for example, operate on data from the input image but only generate
 // results in the \code{RequestedRegion} of the output image, which may be
 // smaller than the full extent of the input.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   faceList = faceCalculator(reader->GetOutput(), output->GetRequestedRegion(),
                             sobelOperator.GetRadius());
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The face calculator has returned a list of $2N+1$ regions. The first element
 // in the list is always the inner region, which may or may not be important
 // depending on the application.  For our purposes it does not matter because
 // all regions are processed the same way.  We use an iterator to traverse the
 // list of faces.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   FaceCalculatorType::FaceListType::iterator fit;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // We now rewrite the main loop of the previous example so that each region in the
 // list is processed by a separate iterator.  The iterators \code{it} and
 // \code{out} are reinitialized over each region in turn.  Bounds checking is
 // automatically enabled for those regions that require it, and disabled for
 // the region that does not.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   IteratorType             out;
   NeighborhoodIteratorType it;
 
@@ -186,10 +157,7 @@ int main(int argc, char * argv[])
       out.Set(innerProduct(it, sobelOperator));
       }
     }
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
 // The output is written as before.  Results for this example are the same as
 // the previous example.  You may not notice the speedup except on larger
 // images.  When moving to 3D and higher dimensions, the effects are greater
@@ -197,8 +165,6 @@ int main(int argc, char * argv[])
 // words, as the number of interior pixels increases relative to the number of
 // face pixels, there is a corresponding increase in efficiency from disabling
 // bounds checking on interior pixels.
-//
-// Software Guide : EndLatex
 
   typedef unsigned char                        WritePixelType;
   typedef otb::Image<WritePixelType, 2>        WriteImageType;

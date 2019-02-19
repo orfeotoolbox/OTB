@@ -25,12 +25,8 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the details of the \doxygen{otb}{ParallelLinePathListFilter}.
 //
-//
-// Software Guide : EndLatex
 
 #include "itkPolyLineParametricPath.h"
 #include "otbDrawPathListFilter.h"

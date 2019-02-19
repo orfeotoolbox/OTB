@@ -30,8 +30,6 @@
 */
 
 
-//  Software Guide : BeginLatex
-//
 //  Most of the time, satellite images have more than three spectral bands. As we
 // are only able to see three colors (red, green and blue), we have to find a way to
 // represent these images using only three bands. This is called creating a color
@@ -55,8 +53,6 @@
 // have to be careful to reverse the order if you want a natural display. It could also be reverse
 // to facilitate direct viewing, as for SPOT5 (1: NIR, 2: Red, 3: Green, 4: SWIR) but in this situations
 // you have to be careful when you process the image.
-//
-//  Software Guide : EndLatex
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -90,14 +86,9 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
 
-  //  Software Guide : BeginLatex
-  //
   //  To easily convert the image to a {\em printable} format, i.e. 3 bands
   // \code{unsigned char} value, you can use the \doxygen{otb}{PrintableImageFilter}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::PrintableImageFilter<InputImageType> PrintableFilterType;
   PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
@@ -105,19 +96,12 @@ int main(int argc, char * argv[])
   printableImageFilter->SetChannel(redChannelNumber);
   printableImageFilter->SetChannel(greenChannelNumber);
   printableImageFilter->SetChannel(blueChannelNumber);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  When you create the writer to plug at the output of the \code{printableImageFilter}
   // you may want to use the direct type definition as it is a good way to avoid mismatch:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef PrintableFilterType::OutputImageType           OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  // Software Guide : EndCodeSnippet
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
@@ -125,7 +109,6 @@ int main(int argc, char * argv[])
 
   writer->Update();
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:PRINTABLE_FILTER} illustrates different color compositions for a SPOT 5 image.
   // \begin{figure}
   // \center
@@ -136,8 +119,6 @@ int main(int argc, char * argv[])
   // right another composition: XS3 in red, XS4 in green and XS2 in blue.}
   // \label{fig:PRINTABLE_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

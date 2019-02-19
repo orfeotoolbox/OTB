@@ -34,8 +34,6 @@
 */
 
 
-// Software Guide : BeginLatex
-//
 // \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}
 // \index{otb::MultiChannelRAndGAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndex}
@@ -73,11 +71,8 @@
 // algorithm. First, the following header defining the
 // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
 // class must be included.
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -99,119 +94,72 @@ int main(int argc, char *argv[])
     return 1;
     }
 
-  //  Software Guide : BeginLatex
-  //
   // The image types are now defined using pixel types and
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
   typedef double                                      InputPixelType;
   typedef float                                       OutputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
   typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
-  // Software Guide : EndCodeSnippet
 
   // We instantiate reader and writer types
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  //  Software Guide : BeginLatex
-  //
   // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef  otb::Functor::AVI<InputPixelType, InputPixelType,
       InputPixelType,  OutputPixelType> FunctorType;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The
   // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::MultiChannelRAndGAndNIRIndexImageFilter
   <InputImageType, OutputImageType, FunctorType>
   MultiChannelRAndGAndNIRIndexImageFilterType;
 
   MultiChannelRAndGAndNIRIndexImageFilterType::Pointer
     filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
-  // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  //  Software Guide : BeginLatex
-  //
   //  Now the input image is set and a name is given to the output image.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The three used index bands (red, green and NIR) are declared.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetRedIndex(::atoi(argv[5]));
   filter->SetGreenIndex(::atoi(argv[6]));
   filter->SetNIRIndex(::atoi(argv[7]));
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The $\lambda$ R, G and NIR parameters are set. The
   // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // class sets the default values of $\lambda$ to $660$, $560$ and
   // $830$.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->GetFunctor().SetLambdaR(::atof(argv[8]));
   filter->GetFunctor().SetLambdaG(::atof(argv[9]));
   filter->GetFunctor().SetLambdaNir(::atof(argv[10]));
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
 
   writer->SetInput(filter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   try
     {
     writer->Update();
@@ -221,7 +169,6 @@ int main(int argc, char *argv[])
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
     }
-  // Software Guide : EndCodeSnippet
   catch (...)
     {
     std::cout << "Unknown exception !" << std::endl;
@@ -308,8 +255,6 @@ int main(int argc, char *argv[])
 
   return EXIT_SUCCESS;
 
-  // Software Guide : BeginLatex
-  //
   // Let's now run this example using as input the image
   // \code{verySmallFSATSW.tif} provided in the
   // directory \code{Examples/Data}.
@@ -321,7 +266,5 @@ int main(int argc, char *argv[])
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRIndexImageFilter}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
 }

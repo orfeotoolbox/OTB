@@ -19,15 +19,10 @@
  */
 
 
-//  Software Guide : BeginLatex
-//
 //  The following code is an implementation of a small OTB
 //  program. It tests including header files and linking with OTB
 //  libraries.
-//
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImage.h"
 #include <iostream>
 
@@ -41,15 +36,10 @@ int main(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   return EXIT_SUCCESS;
 }
-// Software Guide : EndCodeSnippet
 
-//  Software Guide : BeginLatex
-//
 //  This code instantiates an image whose pixels are represented with
 //  type \code{unsigned short}. The image is then created and assigned to a
 //  \doxygen{itk}{SmartPointer}. Later in the text we will discuss
 //  \code{SmartPointer}s in detail, for now think of it as a handle on an
 //  instance of an object (see section \ref{sec:SmartPointers} for more
 //  information).
-//
-//  Software Guide : EndLatex

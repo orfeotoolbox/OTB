@@ -29,19 +29,13 @@
 */
 
 //
-// Software Guide : BeginLatex
-//
 // This example presents a way to generate LAI (Leaf Area Index) image using formula dedicated to Formosat2.
 // LAI Image is used as an input in Image Simulation process.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
@@ -69,35 +63,23 @@ int main(int argc, char *argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ImageFileWriter<ImageVisuType> VisuWriterType;
   typedef otb::ImageFileWriter<InputImageType> InWriterType;
-  // Software Guide : BeginLatex
-  //
   // Filter type is a generic \doxygen{otb}{MultiChannelRAndNIRIndexImageFilter} using Formosat2 specific LAI
   //  \doxygen{otb}{LAIFromNDVIFormosat2Functor}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::Functor::LAIFromNDVIFormosat2Functor
       <InputImageType::InternalPixelType,
       InputImageType::InternalPixelType, OutputImageType::PixelType> FunctorType;
   typedef otb::MultiChannelRAndNIRIndexImageFilter
       <InputImageType, OutputImageType, FunctorType>
       MultiChannelRAndNIRIndexImageFilterType;
-  // Software Guide : EndCodeSnippet
 
   // Instantiating object
 
-  //  Software Guide : BeginLatex
-  //
   //  Next the filter is created by invoking the \code{New()}~method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   MultiChannelRAndNIRIndexImageFilterType::Pointer filter
   = MultiChannelRAndNIRIndexImageFilterType::New();
-  // Software Guide : EndCodeSnippet
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -111,38 +93,22 @@ int main(int argc, char *argv[])
   reader->SetFileName(InputName);
 
 
-  //  Software Guide : BeginLatex
-  //
   // filter input is set with input image
   //
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // then red and nir channels index are set using \code{SetRedIndex()} and  \code{SetNIRIndex()}
   //
-  //
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   unsigned int redChannel = static_cast<unsigned int> (atoi(argv[5]));
   unsigned int nirChannel = static_cast<unsigned int> (atoi(argv[6]));
   filter->SetRedIndex(redChannel);
   filter->SetNIRIndex(nirChannel);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->Update();
-  // Software Guide : EndCodeSnippet
 
 
   writer->SetFileName(OutputName1);
@@ -176,7 +142,6 @@ int main(int argc, char *argv[])
   visuWriter->SetInput(rescaler->GetOutput());
   visuWriter->Update();
 
-   //  Software Guide : BeginLatex
    // \begin{figure}
    // \center
    // \includegraphics[width=0.44\textwidth]{verySmallFSATSW_visu.eps}
@@ -187,8 +152,6 @@ int main(int argc, char *argv[])
    //
    //  Figure \ref{fig:LAIFromNDVIImageTransform} illustrates the LAI generation using Formosat 2 data.
    //
-   //
-   //  Software Guide : EndLatex
 
 
   return EXIT_SUCCESS;
