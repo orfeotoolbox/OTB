@@ -24,6 +24,7 @@ vector data.")
 otb_module(OTBIOKML
   DEPENDS
     OTBVectorDataBase
+    OTBVectorDataManipulation
     OTBProjection
     OTBlibkml
     OTBGDAL

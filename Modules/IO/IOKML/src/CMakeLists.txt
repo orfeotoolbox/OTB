@@ -26,6 +26,7 @@ set(OTBIOKML_SRC
 add_library(OTBIOKML ${OTBIOKML_SRC})
 target_link_libraries(OTBIOKML 
   ${OTBVectorDataBase_LIBRARIES}
+  ${OTBVectorDataManipulation_LIBRARIES}
   ${OTBProjection_LIBRARIES}
   ${OTBlibkml_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
