@@ -23,6 +23,7 @@ writing of vector data (see also VectorDataBase and VectorDataManipulation
 modules).")
 
 otb_module(OTBVectorDataIO
+  ENABLE_SHARED
   DEPENDS
     OTBVectorDataBase
     OTBIOGDAL

@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "otbVectorDataIOBase.h"
+#include "OTBVectorDataIOExport.h"
 
 namespace otb
 {
@@ -31,7 +32,7 @@ namespace otb
  *
  * \ingroup OTBVectorDataIO
  */
-class ITK_EXPORT VectorDataIOFactory : public itk::Object
+class OTBVectorDataIO_EXPORT VectorDataIOFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */

@@ -19,6 +19,7 @@
 #
 
 set(OTBVectorDataIO_SRC
+  otbVectorDataFileWriterException.cxx
   otbVectorDataIOFactory.cxx
   )
 
