@@ -296,6 +296,9 @@ extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<short> , 2
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<float> , 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double> , 2>;
 
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<itk::Vector<double, 2> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<itk::RGBPixel<unsigned char> , 2>;
+
 }
 
 #include "itkMacro.h"

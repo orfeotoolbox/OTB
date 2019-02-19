@@ -34,6 +34,7 @@
 #include "itkMatrix.h"
 #include "itkFixedArray.h"
 #include "itkLightObject.h"
+#include "itkRGBPixel.h"
 #include "OTBITKExport.h"
 
 namespace itk
@@ -51,6 +52,7 @@ extern template class OTBITK_EXPORT_TEMPLATE FixedArray<double,2>;
 extern template class OTBITK_EXPORT_TEMPLATE Point<double,2>;
 extern template class OTBITK_EXPORT_TEMPLATE Vector<double,2>;
 extern template class OTBITK_EXPORT_TEMPLATE Matrix<double,2,2>;
+extern template class OTBITK_EXPORT_TEMPLATE RGBPixel<unsigned char>;
 
 }
 

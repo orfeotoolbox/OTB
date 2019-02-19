@@ -35,4 +35,6 @@ template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<std::complex<int>, 2>
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<std::complex<short>, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<std::complex<float>, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<std::complex<double>, 2>;
+template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<itk::Vector<double, 2> , 2>;
+template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE Image<itk::RGBPixel<unsigned char> , 2>;
 }

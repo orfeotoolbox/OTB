@@ -35,5 +35,6 @@ template class OTBITK_EXPORT_EXPLICIT_TEMPLATE FixedArray<double,2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Point<double,2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Vector<double,2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Matrix<double,2,2>;
+template class OTBITK_EXPORT_EXPLICIT_TEMPLATE RGBPixel<unsigned char>;
 
 }
