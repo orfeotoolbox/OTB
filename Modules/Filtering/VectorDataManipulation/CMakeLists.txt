@@ -19,4 +19,6 @@
 #
 
 project(OTBVectorDataManipulation)
+
+set(OTBVectorDataManipulation_LIBRARIES OTBVectorDataManipulation)
 otb_module_impl()

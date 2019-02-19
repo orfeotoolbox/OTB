@@ -22,6 +22,7 @@
 #define otbVectorDataToVectorDataFilter_h
 
 #include "otbVectorDataSource.h"
+#include "OTBVectorDataManipulationExport.h"
 
 namespace otb
 {
@@ -40,7 +41,7 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>
+class OTBVectorDataManipulation_EXPORT_TEMPLATE VectorDataToVectorDataFilter : public VectorDataSource<TOutputVectorData>
 {
 public:
   /** Standard class typedefs. */
@@ -133,5 +134,14 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataToVectorDataFilter.hxx"
 #endif
+
+#include "otbVectorData.h"
+
+namespace otb
+{
+extern template class OTBVectorDataManipulation_EXPORT_TEMPLATE VectorDataToVectorDataFilter<
+  VectorData<double, 2, double>,
+  VectorData<double, 2, double> >;
+}
 
 #endif

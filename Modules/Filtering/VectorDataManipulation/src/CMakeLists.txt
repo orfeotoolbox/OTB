@@ -18,28 +18,22 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes related to the handling of
-vector data (see also VectorDataBase and VectorDataManipulation modules).")
+set(OTBVectorDataManipulation_SRC
+  otbVectorDataAdapter.cxx
+  otbVectorDataToVectorDataFilter.cxx
+  )
 
-otb_module(OTBVectorDataManipulation
-  ENABLE_SHARED
-  DEPENDS
-    OTBCommon
-    OTBITK
-    OTBImageBase
-    OTBImageManipulation
-    OTBOSSIMAdapters
-    OTBObjectList
-    OTBPath
-    OTBTransform
-    OTBVectorDataBase
+add_library(OTBVectorDataManipulation ${OTBVectorDataManipulation_SRC})
+target_link_libraries(OTBVectorDataManipulation
+  ${OTBCommon_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  ${OTBImageBase_LIBRARIES}
+  ${OTBImageManipulation_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBObjectList_LIBRARIES}
+  ${OTBPath_LIBRARIES}
+  ${OTBTransform_LIBRARIES}
+  ${OTBVectorDataBase_LIBRARIES}
+  )
 
-  TEST_DEPENDS
-    OTBImageIO
-    OTBProjection
-    OTBTestKernel
-    OTBVectorDataIO
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+otb_module_target(OTBVectorDataManipulation)
