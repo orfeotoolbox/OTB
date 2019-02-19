@@ -20,5 +20,5 @@
 
 project(OTBImageBase)
 
-set(OTBImageBase_LIBRARIES OTBImageBase)
+set(OTBImageBase_LIBRARIES OTBImageBase OTBDynamicCastInDebugMode)
 otb_module_impl()

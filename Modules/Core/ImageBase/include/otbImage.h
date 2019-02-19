@@ -298,4 +298,27 @@ extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double> , 
 
 }
 
+#include "itkMacro.h"
+extern template otb::Image<unsigned char, 2u>* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned char, 2u>*, itk::DataObject*>(itk::DataObject*);
+extern template otb::Image<unsigned int, 2u>* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned int, 2u>*, itk::DataObject*>(itk::DataObject*);
+extern template otb::Image<unsigned short, 2u>* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned short, 2u>*, itk::DataObject*>(itk::DataObject*);
+extern template otb::Image<float, 2u>* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<float, 2u>*, itk::DataObject*>(itk::DataObject*);
+extern template otb::Image<double, 2u>* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<double, 2u>*, itk::DataObject*>(itk::DataObject*);
+
+extern template otb::Image<unsigned char, 2u> const* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned char, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<unsigned int, 2u> const* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<unsigned short, 2u> const* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<unsigned short, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<float, 2u> const* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<float, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<double, 2u> const* OTBImageBase_EXPORT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::Image<double, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+
 #endif

@@ -34,3 +34,13 @@ target_link_libraries(OTBImageBase
   )
 
 otb_module_target(OTBImageBase)
+
+add_library(OTBDynamicCastInDebugMode otbDynamicCastInDebugMode.cxx)
+target_link_libraries(OTBDynamicCastInDebugMode 
+  ${OTBCommon_LIBRARIES}
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBMetadata_LIBRARIES}
+  OTBImageBase
+  )
+
+otb_module_target(OTBDynamicCastInDebugMode)
