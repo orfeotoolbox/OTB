@@ -22,6 +22,7 @@
 #define otbPersistentImageFilter_h
 
 #include "itkImageToImageFilter.h"
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
@@ -44,7 +45,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PersistentImageFilter
+class OTBStreaming_EXPORT_TEMPLATE PersistentImageFilter
   : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
@@ -85,5 +86,17 @@ private:
   void operator =(const Self&) = delete;
 };
 } // End namespace otb
+
+#include "otbVectorImage.h"
+
+namespace otb
+{
+extern template class OTBStreaming_EXPORT_TEMPLATE PersistentImageFilter<
+  VectorImage<double, 2>,
+  VectorImage<double, 2>>;
+extern template class OTBStreaming_EXPORT_TEMPLATE PersistentImageFilter<
+  VectorImage<float, 2>,
+  VectorImage<float, 2>>;
+}
 
 #endif

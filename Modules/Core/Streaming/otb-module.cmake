@@ -24,7 +24,7 @@ useful when big images must be processed: processing is done piecewise, which pr
 the system from running out of memory.")
 
 otb_module(OTBStreaming
-ENABLE_SHARED
+  ENABLE_SHARED
   DEPENDS
     OTBCommon
     OTBITK

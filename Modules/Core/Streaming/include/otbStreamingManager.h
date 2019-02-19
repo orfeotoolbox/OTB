@@ -26,6 +26,7 @@
 #include "itkDataObject.h"
 #include "itkImageRegionSplitterBase.h"
 #include "otbPipelineMemoryPrintCalculator.h"
+#include "OTBStreamingExport.h"
 
 namespace otb
 {
@@ -50,7 +51,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template<class TImage>
-class ITK_EXPORT StreamingManager : public itk::Object
+class OTBStreaming_EXPORT_TEMPLATE StreamingManager : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -130,6 +131,18 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbStreamingManager.hxx"
 #endif
+
+#include "otbVectorImage.h"
+#include "otbImage.h"
+
+namespace otb
+{
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager< Image<float, 2> >;
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager< Image<double, 2> >;
+
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager< VectorImage<double, 2> >;
+extern template class OTBStreaming_EXPORT_TEMPLATE StreamingManager< VectorImage<float, 2> >;
+}
 
 #endif
 
