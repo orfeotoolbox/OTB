@@ -32,9 +32,6 @@ target_link_libraries(DEMToImageGenerator ${OTB_LIBRARIES})
 add_executable(ExtractROI ExtractROI.cxx)
 target_link_libraries(ExtractROI ${OTB_LIBRARIES})
 
-add_executable(HDFReaderExample HDFReaderExample.cxx)
-target_link_libraries(HDFReaderExample ${OTB_LIBRARIES})
-
 add_executable(ImageReadCastWrite ImageReadCastWrite.cxx)
 target_link_libraries(ImageReadCastWrite ${OTB_LIBRARIES})
 
@@ -46,11 +43,6 @@ target_link_libraries(ImageReadWrite ${OTB_LIBRARIES})
 
 add_executable(ImageSeriesIOExample ImageSeriesIOExample.cxx)
 target_link_libraries(ImageSeriesIOExample ${OTB_LIBRARIES})
-
-if(OTBlibkml_LOADED)
-add_executable(ImageToKmzAndMapFileProductExample ImageToKmzAndMapFileProductExample.cxx)
-target_link_libraries(ImageToKmzAndMapFileProductExample ${OTB_LIBRARIES})
-endif()
 
 add_executable(MetadataExample MetadataExample.cxx)
 target_link_libraries(MetadataExample ${OTB_LIBRARIES})
