@@ -25,6 +25,7 @@
 #include "otbSensorModelBase.h"
 #include "itkMacro.h"
 #include "itkObject.h"
+#include "OTBTransformExport.h"
 
 namespace otb
 {
@@ -47,7 +48,7 @@ namespace otb
 template <class TScalarType,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,
+class OTBTransform_EXPORT_TEMPLATE ForwardSensorModel : public SensorModelBase<TScalarType,
       NInputDimensions,
       NOutputDimensions>
 {
@@ -95,5 +96,11 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbForwardSensorModel.hxx"
 #endif
+
+namespace otb
+{
+extern template class OTBTransform_EXPORT_TEMPLATE ForwardSensorModel<double, 2, 2>;
+extern template class OTBTransform_EXPORT_TEMPLATE ForwardSensorModel<double, 3, 3>;
+}
 
 #endif

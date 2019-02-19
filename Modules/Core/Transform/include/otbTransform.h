@@ -24,6 +24,7 @@
 #include "itkTransform.h"
 #include "vnl/vnl_vector_fixed.h"
 
+#include "OTBTransformExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace otb
 template< class TScalarType,
           unsigned int NInputDimensions = 3,
           unsigned int NOutputDimensions = 3 >
-class ITK_EXPORT Transform : public itk::Transform<TScalarType,          // Data type for scalars
+class OTBTransform_EXPORT_TEMPLATE Transform : public itk::Transform<TScalarType,          // Data type for scalars
       NInputDimensions,                                                       // Number of dimensions in the input space
       NOutputDimensions>                                                       // Number of dimensions in the output space
 {
@@ -230,5 +231,11 @@ private:
   void operator=(const Self &) = delete;
 };
 } // end namespace otb
+
+namespace otb
+{
+extern template class OTBTransform_EXPORT_TEMPLATE Transform<double, 2, 2>;
+extern template class OTBTransform_EXPORT_TEMPLATE Transform<double, 3, 3>;
+}
 
 #endif

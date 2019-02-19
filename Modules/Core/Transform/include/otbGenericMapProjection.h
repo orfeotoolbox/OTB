@@ -26,6 +26,7 @@
 #include "otbTransform.h"
 #include "itkMacro.h"
 #include "otbMapProjectionAdapter.h"
+#include "OTBTransformExport.h"
 #include <string>
 
 namespace otb
@@ -59,7 +60,7 @@ template <TransformDirection::TransformationDirection TDirectionOfMapping,
     class TScalarType = double,
     unsigned int NInputDimensions = 2,
     unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericMapProjection : public Transform<TScalarType,       // Data type for scalars
+class OTBTransform_EXPORT_TEMPLATE GenericMapProjection : public Transform<TScalarType,       // Data type for scalars
       NInputDimensions,                                                         // Number of dimensions in the input space
       NOutputDimensions>                                                         // Number of dimensions in the output space
 {
@@ -128,5 +129,14 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbGenericMapProjection.hxx"
 #endif
+
+namespace otb
+{
+extern template class OTBTransform_EXPORT_TEMPLATE GenericMapProjection<TransformDirection::TransformationDirection::FORWARD, double, 2, 2>;
+extern template class OTBTransform_EXPORT_TEMPLATE GenericMapProjection<TransformDirection::TransformationDirection::FORWARD, double, 3, 3>;
+
+extern template class OTBTransform_EXPORT_TEMPLATE GenericMapProjection<TransformDirection::TransformationDirection::INVERSE, double, 2, 2>;
+extern template class OTBTransform_EXPORT_TEMPLATE GenericMapProjection<TransformDirection::TransformationDirection::INVERSE, double, 3, 3>;
+}
 
 #endif
