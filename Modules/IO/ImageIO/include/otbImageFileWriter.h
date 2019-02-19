@@ -311,6 +311,7 @@ extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::comp
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<short>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<float>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<double>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<itk::RGBPixel<unsigned char>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<unsigned int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<unsigned char, 2>>;
