@@ -117,8 +117,9 @@ file(COPY ${RST_SOURCE_DIR}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Art DESTINATION  ${RST_BINARY_DIR})
 
-# Create symlink to otb-data/Output in the rst build directory
+# Create symlinks to otb-data/Output and otb-data/Input in the rst build directory
 execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Output" "${RST_BINARY_DIR}/Output")
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Input" "${RST_BINARY_DIR}/Input")
 
 set(SPHINX_CONF_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
