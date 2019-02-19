@@ -61,7 +61,7 @@
 #include "otbImage.h"
 #include "itkPoint.h"
 
-int main(int, char *[])
+int main(int, char* [])
 {
   typedef otb::Image<unsigned short, 2> ImageType;
 
@@ -70,11 +70,11 @@ int main(int, char *[])
   ImageType::IndexType start;
   ImageType::SizeType  size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
-  start[0] =   0;  // first index on X
-  start[1] =   0;  // first index on Y
+  start[0] = 0; // first index on X
+  start[1] = 0; // first index on Y
 
   ImageType::RegionType region;
   region.SetSize(size);
@@ -137,8 +137,8 @@ int main(int, char *[])
 
   ImageType::PointType origin;
 
-  origin[0] = 0.0;  // coordinates of the
-  origin[1] = 0.0;  // first pixel in 2-D
+  origin[0] = 0.0; // coordinates of the
+  origin[1] = 0.0; // first pixel in 2-D
 
   image->SetOrigin(origin);
 
@@ -179,8 +179,8 @@ int main(int, char *[])
 
   PointType point;
 
-  point[0] = 1.45;    // x coordinate
-  point[1] = 7.21;    // y coordinate
+  point[0] = 1.45; // x coordinate
+  point[1] = 7.21; // y coordinate
 
   // The image will map the point to an index using the values of the
   // current spacing and origin. An index object must be provided to
@@ -206,13 +206,13 @@ int main(int, char *[])
   bool isInside = image->TransformPhysicalPointToIndex(point, pixelIndex);
 
   if (isInside)
-    {
+  {
     ImageType::PixelType pixelValue = image->GetPixel(pixelIndex);
 
     pixelValue += 5;
 
     image->SetPixel(pixelIndex, pixelValue);
-    }
+  }
 
   // Remember that \code{GetPixel()} and \code{SetPixel()} are very
   // inefficient methods for accessing pixel data. Image iterators should be

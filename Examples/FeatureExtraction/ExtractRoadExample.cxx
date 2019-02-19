@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./ExtractRoadExample Input/qb_RoadExtract.tif Output/ExtractRoadOutput.png 337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 */
@@ -50,21 +49,18 @@
 #include "itkGrayscaleDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 14)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputFileName outputFileName firstPixelComponent secondPixelComponent ";
-    std::cerr <<
-    "thirdPixelComponent fourthPixelComponent alpha amplitudeThrehsold tolerance ";
-    std::cerr <<
-    "angularThreshold-maxAngle firstMeanDistanceThreshold secondMeanDistanceThreshold ";
+    std::cerr << " inputFileName outputFileName firstPixelComponent secondPixelComponent ";
+    std::cerr << "thirdPixelComponent fourthPixelComponent alpha amplitudeThrehsold tolerance ";
+    std::cerr << "angularThreshold-maxAngle firstMeanDistanceThreshold secondMeanDistanceThreshold ";
     std::cerr << "distanceThreshold" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int Dimension = 2;
   // Then we must decide what pixel type to use for the image. We choose to do
@@ -87,27 +83,23 @@ int main(int argc, char * argv[])
   // a likehood value along with each polyline. The filter is able to produce
   // \doxygen{itk}{PolyLineParametricPath} as well.
 
-  typedef otb::PolyLineParametricPathWithValue<InputPixelType,
-      Dimension> PathType;
+  typedef otb::PolyLineParametricPathWithValue<InputPixelType, Dimension> PathType;
 
   // Now we can define the \doxygen{otb}{RoadExtractionFilter} that takes a multi-spectral
   // image as input and produces a list of polylines.
 
-  typedef otb::RoadExtractionFilter<InputVectorImageType,
-      PathType> RoadExtractionFilterType;
+  typedef otb::RoadExtractionFilter<InputVectorImageType, PathType> RoadExtractionFilterType;
 
   // We also define an \doxygen{otb}{DrawPathListFilter} to draw the output
   // polylines on an image, taking their likehood values into account.
 
-  typedef otb::DrawPathListFilter<InputImageType, PathType,
-      InputImageType> DrawPathFilterType;
+  typedef otb::DrawPathListFilter<InputImageType, PathType, InputImageType> DrawPathFilterType;
 
   // The intensity rescaling of the results will be carried out by the
   // \doxygen{itk}{RescaleIntensityImageFilter} which is templated by the
   // input and output image types.
 
-  typedef itk::RescaleIntensityImageFilter<InputImageType,
-      OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
 
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file. Then, an \doxygen{otb}{ImageFileWriter}
@@ -119,12 +111,11 @@ int main(int argc, char * argv[])
   // The different filters composing our pipeline are created by invoking their
   // \code{New()} methods, assigning the results to smart pointers.
 
-  ReaderType::Pointer               reader = ReaderType::New();
-  RoadExtractionFilterType::Pointer roadExtractionFilter
-    = RoadExtractionFilterType::New();
-  DrawPathFilterType::Pointer drawingFilter = DrawPathFilterType::New();
-  RescalerType::Pointer       rescaleFilter = RescalerType::New();
-  WriterType::Pointer         writer = WriterType::New();
+  ReaderType::Pointer               reader               = ReaderType::New();
+  RoadExtractionFilterType::Pointer roadExtractionFilter = RoadExtractionFilterType::New();
+  DrawPathFilterType::Pointer       drawingFilter        = DrawPathFilterType::New();
+  RescalerType::Pointer             rescaleFilter        = RescalerType::New();
+  WriterType::Pointer               writer               = WriterType::New();
 
   reader->SetFileName(argv[1]);
 
@@ -224,15 +215,9 @@ int main(int argc, char * argv[])
   rescaleFilter->Update();
 
   // output image enhancement
-  typedef itk::BinaryBallStructuringElement<OutputPixelType,
-      Dimension>
-  StructuringElementType;
-  typedef itk::GrayscaleDilateImageFilter<OutputImageType, OutputImageType,
-      StructuringElementType>
-  DilateFilterType;
-  typedef itk::InvertIntensityImageFilter<OutputImageType,
-      OutputImageType>
-  InvertFilterType;
+  typedef itk::BinaryBallStructuringElement<OutputPixelType, Dimension>                             StructuringElementType;
+  typedef itk::GrayscaleDilateImageFilter<OutputImageType, OutputImageType, StructuringElementType> DilateFilterType;
+  typedef itk::InvertIntensityImageFilter<OutputImageType, OutputImageType>                         InvertFilterType;
 
   StructuringElementType se;
   se.SetRadius(1);

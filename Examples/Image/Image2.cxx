@@ -20,7 +20,6 @@
  */
 
 
-
 #include "otbImage.h"
 
 //  The first thing required to read an image from a file is to include
@@ -28,13 +27,13 @@
 
 #include "otbImageFileReader.h"
 
-int main(int, char * argv[])
+int main(int, char* argv[])
 {
   // Then, the image type should be defined by specifying the
   // type used to represent pixels and the dimensions of the image.
 
   typedef unsigned char PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
 
@@ -75,7 +74,7 @@ int main(int, char * argv[])
   //
   // \index{otb::ImageFileReader!SetFileName()}
 
-  const char * filename = argv[1];
+  const char* filename = argv[1];
   reader->SetFileName(filename);
 
   // Reader objects are referred to as pipeline source objects; they

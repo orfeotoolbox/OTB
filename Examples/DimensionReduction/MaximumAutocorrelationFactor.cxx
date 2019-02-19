@@ -46,10 +46,10 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  char * infname   = argv[1];
-  char * outfname  = argv[2];
-  char * inpretty  = argv[3];
-  char * outpretty = argv[4];
+  char* infname   = argv[1];
+  char* outfname  = argv[2];
+  char* inpretty  = argv[3];
+  char* outpretty = argv[4];
 
   //  We then define the types for the input image and the
   //  output image.
@@ -64,7 +64,7 @@ int main(int itkNotUsed(argc), char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType>    ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   // SoftwareGuide : BeginLatex
@@ -72,8 +72,7 @@ int main(int itkNotUsed(argc), char* argv[])
   //  the type of the input images and the type of the generated change
   //  image.
 
-  typedef otb::MaximumAutocorrelationFactorImageFilter<InputImageType,
-                                          OutputImageType> FilterType;
+  typedef otb::MaximumAutocorrelationFactorImageFilter<InputImageType, OutputImageType> FilterType;
 
 
   //  The different elements of the pipeline can now be instantiated.
@@ -97,15 +96,15 @@ int main(int itkNotUsed(argc), char* argv[])
   writer->Update();
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<InputImageType,InputImageType>   InputPrintFilterType;
-  typedef otb::PrintableImageFilter<OutputImageType,OutputImageType> OutputPrintFilterType;
-  typedef InputPrintFilterType::OutputImageType                      VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>               VisuWriterType;
+  typedef otb::PrintableImageFilter<InputImageType, InputImageType>   InputPrintFilterType;
+  typedef otb::PrintableImageFilter<OutputImageType, OutputImageType> OutputPrintFilterType;
+  typedef InputPrintFilterType::OutputImageType                       VisuImageType;
+  typedef otb::ImageFileWriter<VisuImageType>                         VisuWriterType;
 
-  InputPrintFilterType::Pointer inputPrintFilter = InputPrintFilterType::New();
+  InputPrintFilterType::Pointer  inputPrintFilter  = InputPrintFilterType::New();
   OutputPrintFilterType::Pointer outputPrintFilter = OutputPrintFilterType::New();
-  VisuWriterType::Pointer inputVisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer outputVisuWriter = VisuWriterType::New();
+  VisuWriterType::Pointer        inputVisuWriter   = VisuWriterType::New();
+  VisuWriterType::Pointer        outputVisuWriter  = VisuWriterType::New();
 
   inputPrintFilter->SetInput(reader->GetOutput());
   inputPrintFilter->SetChannel(5);

@@ -19,7 +19,6 @@
  */
 
 
-
 // This example illustrates the details of the seam carving operation.
 // References to this method can be found in \cite{Avidan07}. This example
 // details the use of \doxygen{otb}{ImageToCarvingPathFilter} and
@@ -47,32 +46,29 @@
 
 #include "itkImageDuplicator.h"
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension>  ImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
-  typedef otb::ImageFileReader<ImageType>
-  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>
-  WriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescalerType;
+  typedef otb::ImageFileReader<ImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                        WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
 
-  ReaderType::Pointer   reader = ReaderType::New();
-  WriterType::Pointer   writer = WriterType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  WriterType::Pointer   writer   = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  const char * filenamereader = argv[1];
+  const char* filenamereader = argv[1];
   reader->SetFileName(filenamereader);
 
-  const char * filenamewriter = argv[2];
+  const char* filenamewriter = argv[2];
   writer->SetFileName(filenamewriter);
 
   int iteration = atoi(argv[3]);
@@ -81,30 +77,28 @@ int main(int itkNotUsed(argc), char * argv[])
   // \doxygen{itk}{GradientMagnitudeImageFilter} is instantiated
 
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> GradientType;
-  GradientType::Pointer gradient = GradientType::New();
+  GradientType::Pointer                                           gradient = GradientType::New();
 
   // The \doxygen{otb}{ImageToCarvingPathFilter} compute the seam of minimum
   // energy according to lines or columns of the image. Later, as we will
   //  choose the best option between the two, we need two of these filters.
 
   typedef otb::ImageToCarvingPathFilter<ImageType, PathType> CarvingFilterType;
-  CarvingFilterType::Pointer carvingFilterVert = CarvingFilterType::New();
-  CarvingFilterType::Pointer carvingFilterHor = CarvingFilterType::New();
+  CarvingFilterType::Pointer                                 carvingFilterVert = CarvingFilterType::New();
+  CarvingFilterType::Pointer                                 carvingFilterHor  = CarvingFilterType::New();
 
   // The \doxygen{otb}{RemoveCarvingPathFilter} will really resize the image
   // deleting the path.
 
-  typedef otb::RemoveCarvingPathFilter
-  <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
-  RemoveCarvingPathFilterType::Pointer removeCarvingPath =
-    RemoveCarvingPathFilterType::New();
+  typedef otb::RemoveCarvingPathFilter<ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
+  RemoveCarvingPathFilterType::Pointer                                 removeCarvingPath = RemoveCarvingPathFilterType::New();
 
   // As we are going to iterate through the filters, we need to disconnect the
   // pipeline at one point and store the image somewhere. For that purpose, we
   // use an \doxygen{itk}{ImageDuplicator}
 
   typedef itk::ImageDuplicator<ImageType> duplicatorType;
-  duplicatorType::Pointer duplicator = duplicatorType::New();
+  duplicatorType::Pointer                 duplicator = duplicatorType::New();
 
   // Now that all elements have been instantiated, we start to plug the pipeline
   // and to define the loop.
@@ -116,7 +110,7 @@ int main(int itkNotUsed(argc), char * argv[])
   double energyVert, energyHor;
 
   for (int i = 0; i < iteration; ++i)
-    {
+  {
 
     gradient->SetInput(duplicator->GetOutput());
 
@@ -138,26 +132,25 @@ int main(int itkNotUsed(argc), char * argv[])
     // The vertical or the horizontal seam with the minimal energy is chosen.
 
     if (energyVert < energyHor)
-      {
+    {
       removeCarvingPath->SetInput(duplicator->GetOutput());
       removeCarvingPath->SetInputPath(carvingFilterVert->GetOutput());
       removeCarvingPath->SetDirection(0);
       removeCarvingPath->UpdateLargestPossibleRegion();
-      }
+    }
     else
-      {
+    {
       removeCarvingPath->SetInput(duplicator->GetOutput());
       removeCarvingPath->SetInputPath(carvingFilterHor->GetOutput());
       removeCarvingPath->SetDirection(1);
       removeCarvingPath->UpdateLargestPossibleRegion();
-      }
+    }
 
     // The duplicator filter keep the results for the next loop
 
     duplicator->SetInputImage(removeCarvingPath->GetOutput());
     duplicator->Update();
-
-    }
+  }
 
   // Finally, the resulting image is saved on an image file as usual
 

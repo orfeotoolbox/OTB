@@ -19,7 +19,6 @@
  */
 
 
-
 // There is some vector data sets widely available on the internet. These data
 // sets can be huge, covering an entire country, with hundreds of thousands
 // objects.
@@ -47,18 +46,15 @@
 int main(int argc, char* argv[])
 {
   if (argc < 4)
-    {
-    std::cout << argv[0] <<
-    " <input vector filename> <input image name> <output vector filename>  "
-              <<
-    std::endl;
+  {
+    std::cout << argv[0] << " <input vector filename> <input image name> <output vector filename>  " << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inVectorName = argv[1];
-  const char * inImageName = argv[2];
-  const char * outVectorName = argv[3];
+  const char* inVectorName  = argv[1];
+  const char* inImageName   = argv[2];
+  const char* outVectorName = argv[3];
 
   typedef double            Type;
   typedef otb::VectorData<> VectorDataType;
@@ -66,11 +62,11 @@ int main(int argc, char* argv[])
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
 
-  typedef   otb::RemoteSensingRegion<Type> TypedRegion;
+  typedef otb::RemoteSensingRegion<Type> TypedRegion;
 
   typedef otb::Image<unsigned char, 2>    ImageType;
   typedef otb::ImageFileReader<ImageType> ImageReaderType;
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  ImageReaderType::Pointer                imageReader = ImageReaderType::New();
   imageReader->SetFileName(inImageName);
   imageReader->UpdateOutputInformation();
 
@@ -78,7 +74,7 @@ int main(int argc, char* argv[])
   // we can declare the \doxygen{otb}{VectorDataExtractROI}:
 
   typedef otb::VectorDataExtractROI<VectorDataType> FilterType;
-  FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer                               filter = FilterType::New();
 
   // Then, we need to specify the region to extract. This region is a bit special as
   // it contains also information related to its reference system (cartographic projection
@@ -89,22 +85,16 @@ int main(int argc, char* argv[])
   TypedRegion::SizeType  size;
   TypedRegion::IndexType index;
 
-  size[0]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0]
-             * imageReader->GetOutput()->GetSignedSpacing()[0];
-  size[1]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1]
-             * imageReader->GetOutput()->GetSignedSpacing()[1];
-  index[0] = imageReader->GetOutput()->GetOrigin()[0]
-             - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[0];
-  index[1] = imageReader->GetOutput()->GetOrigin()[1]
-             - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[1];
+  size[0]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[0] * imageReader->GetOutput()->GetSignedSpacing()[0];
+  size[1]  = imageReader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] * imageReader->GetOutput()->GetSignedSpacing()[1];
+  index[0] = imageReader->GetOutput()->GetOrigin()[0] - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[0];
+  index[1] = imageReader->GetOutput()->GetOrigin()[1] - 0.5 * imageReader->GetOutput()->GetSignedSpacing()[1];
   region.SetSize(size);
   region.SetOrigin(index);
 
-  otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface
-    = otb::ImageMetadataInterfaceFactory::CreateIMI(
-    imageReader->GetOutput()->GetMetaDataDictionary());
-  region.SetRegionProjection(
-    imageMetadataInterface->GetProjectionRef());
+  otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface =
+      otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
+  region.SetRegionProjection(imageMetadataInterface->GetProjectionRef());
 
   region.SetKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
 

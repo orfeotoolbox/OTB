@@ -39,15 +39,12 @@
 #include "itkCannyEdgeDetectionImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 3)
-    {
-    std::cerr << "Usage: "
-        << argv[0]
-        << " <input_filename> <output_filename>"
-        << std::endl;
-    }
+  {
+    std::cerr << "Usage: " << argv[0] << " <input_filename> <output_filename>" << std::endl;
+  }
 
   //  We need to declare two different image types, one for the internal
   // processing and one to output the results:
@@ -67,10 +64,10 @@ int main(int argc, char * argv[])
   // the result on one byte images (like png for example).
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                           writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -78,9 +75,8 @@ int main(int argc, char * argv[])
   // Now we are declaring the edge detection filter which is going to work with
   // double input and output.
 
-  typedef itk::CannyEdgeDetectionImageFilter
-  <ImageType, ImageType> FilterType;
-  FilterType::Pointer filter = FilterType::New();
+  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> FilterType;
+  FilterType::Pointer                                              filter = FilterType::New();
 
   // Here comes the interesting part: we declare the
   // \doxygen{itk}{RescaleIntensityImageFilter}. The input
@@ -95,9 +91,8 @@ int main(int argc, char * argv[])
   // This filter will actually rescale all the pixels of
   // the image but also cast the type of these pixels.
 
-  typedef itk::RescaleIntensityImageFilter
-  <ImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer rescaler = RescalerType::New();
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  RescalerType::Pointer                                                rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);

@@ -50,10 +50,10 @@ int main(int argc, char* argv[])
   */
 
   if (argc != 2)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " outputModelFileName" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // The input parameters of the sample generator and of the SVM classifier are initialized.
 
@@ -64,12 +64,12 @@ int main(int argc, char* argv[])
   unsigned int inputSeed = atoi(argv[4]);
   */
 
-  int nbSamples = 1000;
+  int nbSamples          = 1000;
   int nbSampleComponents = 7;
-  int nbClasses = 4;
+  int nbClasses          = 4;
 
-//  unsigned int inputSeed = 121212;
-  const char* outputModelFileName = argv[1]; //argv[5];
+  //  unsigned int inputSeed = 121212;
+  const char* outputModelFileName = argv[1]; // argv[5];
 
 
   // Two lists are generated into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
@@ -80,16 +80,16 @@ int main(int argc, char* argv[])
 
 
   // Input related typedefs
-  typedef float InputValueType;
-  typedef itk::VariableLengthVector<InputValueType> InputSampleType;
+  typedef float                                        InputValueType;
+  typedef itk::VariableLengthVector<InputValueType>    InputSampleType;
   typedef itk::Statistics::ListSample<InputSampleType> InputListSampleType;
 
   // Target related typedefs
-  typedef int TargetValueType;
-  typedef itk::FixedArray<TargetValueType, 1> TargetSampleType;
+  typedef int                                           TargetValueType;
+  typedef itk::FixedArray<TargetValueType, 1>           TargetSampleType;
   typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
 
-  InputListSampleType::Pointer InputListSample = InputListSampleType::New();
+  InputListSampleType::Pointer  InputListSample  = InputListSampleType::New();
   TargetListSampleType::Pointer TargetListSample = TargetListSampleType::New();
 
   InputListSample->SetMeasurementVectorSize(nbSampleComponents);
@@ -106,35 +106,35 @@ int main(int argc, char* argv[])
 
   // Filling the two input training lists
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     InputSampleType sample;
     TargetValueType label = (i % nbClasses) + 1;
 
     // Multi-component sample randomly filled from a normal law for each component
     sample.SetSize(nbSampleComponents);
     for (int itComp = 0; itComp < nbSampleComponents; ++itComp)
-      {
+    {
       sample[itComp] = randGen->GetNormalVariate(100 * label, 10);
-      }
+    }
 
     InputListSample->PushBack(sample);
     TargetListSample->PushBack(label);
-    }
+  }
 
   // Displays the corresponding values (not into the Software Guide)
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     std::cout << i + 1 << "-label = " << TargetListSample->GetMeasurementVector(i) << std::endl;
     std::cout << "sample = " << InputListSample->GetMeasurementVector(i) << std::endl << std::endl;
-    }
+  }
 
-  //Once both sample and label lists are generated, the second step consists in
-  //declaring the machine learning classifier. In our case we use an SVM model
-  //with the help of the \doxygen{otb}{SVMMachineLearningModel} class which is
-  //derived from the \doxygen{otb}{MachineLearningModel} class.
-  //This pure virtual class is based on the machine learning framework of the
-  //OpenCV library (\cite{opencv_library}) which handles other classifiers than
-  //the SVM.
+  // Once both sample and label lists are generated, the second step consists in
+  // declaring the machine learning classifier. In our case we use an SVM model
+  // with the help of the \doxygen{otb}{SVMMachineLearningModel} class which is
+  // derived from the \doxygen{otb}{MachineLearningModel} class.
+  // This pure virtual class is based on the machine learning framework of the
+  // OpenCV library (\cite{opencv_library}) which handles other classifiers than
+  // the SVM.
 
   typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
 
@@ -154,5 +154,4 @@ int main(int argc, char* argv[])
 
   SVMClassifier->Train();
   SVMClassifier->Save(outputModelFileName);
-
 }

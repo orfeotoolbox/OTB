@@ -68,14 +68,12 @@ int main(int argc, char* argv[])
 {
 
   if (argc < 7)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputPanchromatiqueImage inputMultiSpectralImage outputImage outputImagePrinted panchroPrinted msPrinted"
-              << std::endl;
+    std::cerr << " inputPanchromatiqueImage inputMultiSpectralImage outputImage outputImagePrinted panchroPrinted msPrinted" << std::endl;
     return 1;
-    }
+  }
 
   // We declare the different image type used here as well as the image reader.
   // Note that, the reader for the PAN image is templated by an
@@ -88,7 +86,7 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<VectorImageType>   ReaderVectorType;
   typedef otb::VectorImage<unsigned short int, 2> VectorIntImageType;
 
-  ReaderVectorType::Pointer readerXS = ReaderVectorType::New();
+  ReaderVectorType::Pointer readerXS  = ReaderVectorType::New();
   ReaderType::Pointer       readerPAN = ReaderType::New();
 
   // We pass the filenames to the readers
@@ -98,9 +96,8 @@ int main(int argc, char* argv[])
 
   // We declare the fusion filter an set its inputs using the readers:
 
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <ImageType, VectorImageType, VectorIntImageType> FusionFilterType;
-  FusionFilterType::Pointer fusion = FusionFilterType::New();
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter<ImageType, VectorImageType, VectorIntImageType> FusionFilterType;
+  FusionFilterType::Pointer                                                                            fusion = FusionFilterType::New();
   fusion->SetPanInput(readerPAN->GetOutput());
   fusion->SetXsInput(readerXS->GetOutput());
 
@@ -108,19 +105,17 @@ int main(int argc, char* argv[])
   // trigger the full pipeline execution.
 
   typedef otb::ImageFileWriter<VectorIntImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                              writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(fusion->GetOutput());
   writer->Update();
 
   typedef otb::PrintableImageFilter<VectorIntImageType> PrintableImageType;
-  PrintableImageType::Pointer printable = PrintableImageType::New();
+  PrintableImageType::Pointer                           printable = PrintableImageType::New();
 
-  typedef otb::VectorImage<unsigned char,
-      2>
-  VectorCharImageType;
+  typedef otb::VectorImage<unsigned char, 2>        VectorCharImageType;
   typedef otb::ImageFileWriter<VectorCharImageType> PNGWriterType;
-  PNGWriterType::Pointer pngwriter = PNGWriterType::New();
+  PNGWriterType::Pointer                            pngwriter = PNGWriterType::New();
 
   printable->SetInput(fusion->GetOutput());
   printable->SetChannel(3);
@@ -131,7 +126,7 @@ int main(int argc, char* argv[])
   pngwriter->Update();
 
   typedef otb::PrintableImageFilter<VectorImageType> PrintableImageType2;
-  PrintableImageType2::Pointer printable2 = PrintableImageType2::New();
+  PrintableImageType2::Pointer                       printable2 = PrintableImageType2::New();
   printable2->SetInput(readerXS->GetOutput());
   printable2->SetChannel(3);
   printable2->SetChannel(2);
@@ -142,8 +137,8 @@ int main(int argc, char* argv[])
 
   typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorCastFilterType;
 
-  VectorCastFilterType::Pointer vectorCastFilter         = VectorCastFilterType::New();
-  PNGWriterType::Pointer        pngwriterPan = PNGWriterType::New();
+  VectorCastFilterType::Pointer vectorCastFilter = VectorCastFilterType::New();
+  PNGWriterType::Pointer        pngwriterPan     = PNGWriterType::New();
 
   vectorCastFilter->SetInput(readerPAN->GetOutput());
   PrintableImageType2::Pointer printable3 = PrintableImageType2::New();

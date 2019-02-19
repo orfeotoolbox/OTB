@@ -40,70 +40,70 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * inputFilename = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-// As usual, we start by defining the types for the pixel and image
-// types, as well as those for the readers and writers.
+  // As usual, we start by defining the types for the pixel and image
+  // types, as well as those for the readers and writers.
 
-  const unsigned int Dimension = 2;
+  const unsigned int                            Dimension = 2;
   typedef unsigned char                         InputPixelType;
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<InputImageType>  WriterType;
 
-// We can now define the type for the image list. The
-// \doxygen{otb}{ImageList} class is templated over the type of image
-// contained in it. This means that all images in a list must have the
-// same type.
+  // We can now define the type for the image list. The
+  // \doxygen{otb}{ImageList} class is templated over the type of image
+  // contained in it. This means that all images in a list must have the
+  // same type.
 
   typedef otb::ImageList<InputImageType> ImageListType;
 
-// Let us assume now that we want to read an image from a file and
-// store it in a list. The first thing to do is to instantiate the
-// reader and set the image file name. We effectively read the image
-// by calling the \code{Update()}.
+  // Let us assume now that we want to read an image from a file and
+  // store it in a list. The first thing to do is to instantiate the
+  // reader and set the image file name. We effectively read the image
+  // by calling the \code{Update()}.
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
   reader->Update();
 
-// We create an image list by using the \code{New()} method.
+  // We create an image list by using the \code{New()} method.
 
   ImageListType::Pointer imageList = ImageListType::New();
 
-// In order to store the image in the list, the \code{PushBack()}
-// method is used.
+  // In order to store the image in the list, the \code{PushBack()}
+  // method is used.
 
   imageList->PushBack(reader->GetOutput());
 
-// We could repeat this operation for other readers or the outputs of
-// filters. We will now write an image of the list to a file. We
-// therefore instantiate a writer, set the image file name and set the
-// input image for it. This is done by calling the \code{Back()}
-// method of the list, which allows us to get the last element.
+  // We could repeat this operation for other readers or the outputs of
+  // filters. We will now write an image of the list to a file. We
+  // therefore instantiate a writer, set the image file name and set the
+  // input image for it. This is done by calling the \code{Back()}
+  // method of the list, which allows us to get the last element.
 
-// Getting the image from the list and writing it to file
+  // Getting the image from the list and writing it to file
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(imageList->Back());
   writer->Update();
 
-// Other useful methods are:
-// \begin{itemize}
-// \item \code{SetNthElement()} and \code{GetNthElement()} allow
-// randomly accessing any element of the list.
-// \item \code{Front()} to access to the first element of the list.
-// \item \code{Erase()} to remove an element.
-// \end{itemize}
-//
-// Also, iterator classes are defined in order to have an efficient
-// mean of moving through the list. Finally, the
-// \doxygen{otb}{ImageListToImageListFilter} is provided in order
-// to implement filter which operate on image lists and produce image lists.
+  // Other useful methods are:
+  // \begin{itemize}
+  // \item \code{SetNthElement()} and \code{GetNthElement()} allow
+  // randomly accessing any element of the list.
+  // \item \code{Front()} to access to the first element of the list.
+  // \item \code{Erase()} to remove an element.
+  // \end{itemize}
+  //
+  // Also, iterator classes are defined in order to have an efficient
+  // mean of moving through the list. Finally, the
+  // \doxygen{otb}{ImageListToImageListFilter} is provided in order
+  // to implement filter which operate on image lists and produce image lists.
 
   return EXIT_SUCCESS;
 }

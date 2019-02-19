@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
 */
@@ -46,21 +45,22 @@
 #include "itkMacro.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 10)
-    {
-    std::cout << argv[0] <<
-    " output filename , pretty output filename , Longitude Output Origin point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing, DEM folder path"
+  {
+    std::cout << argv[0]
+              << " output filename , pretty output filename , Longitude Output Origin point , Latitude Output Origin point , X Output Size, Y Output size , X "
+                 "Spacing , Y Spacing, DEM folder path"
               << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   // The image type is now defined using pixel type and
   // dimension. The output image is defined as an \doxygen{otb}{Image}.
 
-  char * folderPath = argv[9];
-  char * outputName = argv[1];
-  const unsigned int Dimension = 2;
+  char*                                 folderPath = argv[9];
+  char*                                 outputName = argv[1];
+  const unsigned int                    Dimension  = 2;
   typedef otb::Image<double, Dimension> ImageType;
 
   // The writer is defined
@@ -75,9 +75,9 @@ int main(int argc, char * argv[])
 
   // Input parameter types are defined to set the value in the \doxygen{otb}{DEMToImageGenerator}.
 
-  typedef DEMToImageGeneratorType::SizeType       SizeType;
-  typedef DEMToImageGeneratorType::SpacingType    SpacingType;
-  typedef DEMToImageGeneratorType::PointType      PointType;
+  typedef DEMToImageGeneratorType::SizeType    SizeType;
+  typedef DEMToImageGeneratorType::SpacingType SpacingType;
+  typedef DEMToImageGeneratorType::PointType   PointType;
 
   // Instantiating writer
   WriterType::Pointer writer = WriterType::New();
@@ -119,32 +119,27 @@ int main(int argc, char * argv[])
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
 
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception thrown !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputPrettyImageType> RescalerType;
-  typedef itk::ThresholdImageFilter<ImageType>
-  ThresholderType;
+  typedef otb::Image<unsigned char, Dimension>                               OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                        WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType> RescalerType;
+  typedef itk::ThresholdImageFilter<ImageType>                               ThresholderType;
 
   ThresholderType::Pointer  thresholder  = ThresholderType::New();
   RescalerType::Pointer     rescaler     = RescalerType::New();
@@ -162,19 +157,19 @@ int main(int argc, char * argv[])
 
   prettyWriter->SetInput(rescaler->GetOutput());
   try
-    {
+  {
     prettyWriter->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 
@@ -189,5 +184,4 @@ int main(int argc, char * argv[])
   // \itkcaption[DEM To Image generator Example]{DEMToImageGenerator image.}
   // \label{fig:DEMToImageGenerator}
   // \end{figure}
-
 }

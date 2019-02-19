@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./MarkovRestorationExample Input/QB_Suburb.png Input/QB_Suburb.png Output/MarkovRestoration.png 10.0 30 1.0 1
 */
@@ -64,17 +63,15 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 8)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage inputInitialization output lambda iterations optimizerTemperature"
-              << std::endl;
+    std::cerr << " inputImage inputInitialization output lambda iterations optimizerTemperature" << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-    }
+  }
 
-//  We declare the usual types:
+  //  We declare the usual types:
 
   const unsigned int Dimension = 2;
 
@@ -90,13 +87,13 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<LabelledImageType> ReaderLabelledType;
   typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
-  ReaderType::Pointer         reader = ReaderType::New();
+  ReaderType::Pointer         reader  = ReaderType::New();
   ReaderLabelledType::Pointer reader2 = ReaderLabelledType::New();
-  WriterType::Pointer         writer = WriterType::New();
+  WriterType::Pointer         writer  = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * labelledFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename    = argv[1];
+  const char* labelledFilename = argv[2];
+  const char* outputFilename   = argv[3];
 
   reader->SetFileName(inputFilename);
   reader2->SetFileName(labelledFilename);
@@ -104,8 +101,7 @@ int main(int argc, char* argv[])
 
   // We declare all the necessary types for the MRF:
 
-  typedef otb::MarkovRandomFieldFilter
-  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
   typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType> SamplerType;
 
@@ -113,28 +109,24 @@ int main(int argc, char* argv[])
 
   // The regularization and the fidelity energy are declared and instantiated:
 
-  typedef otb::MRFEnergyEdgeFidelity
-  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussian
-  <InputImageType, LabelledImageType>  EnergyFidelityType;
+  typedef otb::MRFEnergyEdgeFidelity<LabelledImageType, LabelledImageType> EnergyRegularizationType;
+  typedef otb::MRFEnergyGaussian<InputImageType, LabelledImageType>        EnergyFidelityType;
 
-  MarkovRandomFieldFilterType::Pointer markovFilter =
-    MarkovRandomFieldFilterType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter = MarkovRandomFieldFilterType::New();
 
-  EnergyRegularizationType::Pointer energyRegularization =
-    EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
+  EnergyRegularizationType::Pointer energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer       energyFidelity       = EnergyFidelityType::New();
 
   OptimizerType::Pointer optimizer = OptimizerType::New();
-  SamplerType::Pointer   sampler = SamplerType::New();
+  SamplerType::Pointer   sampler   = SamplerType::New();
 
-  if ((bool) (atoi(argv[7])) == true)
-    {
+  if ((bool)(atoi(argv[7])) == true)
+  {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-    }
+  }
 
   // The number of possible states for each pixel is 256 as the image is assumed
   // to be coded on one byte and we pass the parameters to the markovFilter.
@@ -162,9 +154,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer rescaleFilter = RescaleType::New();
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
+  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
@@ -173,15 +164,15 @@ int main(int argc, char* argv[])
   writer->SetInput(rescaleFilter->GetOutput());
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-    }
+  }
 
   // Figure~\ref{fig:MRF_RESTORATION} shows the output of the Markov Random
   // Field restoration.
@@ -198,5 +189,4 @@ int main(int argc, char* argv[])
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

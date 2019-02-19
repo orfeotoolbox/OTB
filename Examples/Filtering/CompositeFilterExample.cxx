@@ -19,7 +19,6 @@
  */
 
 
-
 //  The composite filter we will build combines three filters: a gradient
 //  magnitude operator, which will calculate the first-order derivative of
 //  the image; a thresholding step to select edges over a given strength;
@@ -52,13 +51,11 @@ namespace otb
 {
 
 template <class TImageType>
-class ITK_EXPORT CompositeExampleImageFilter :
-  public itk::ImageToImageFilter<TImageType, TImageType>
+class ITK_EXPORT CompositeExampleImageFilter : public itk::ImageToImageFilter<TImageType, TImageType>
 {
 public:
-
-//  Next we have the standard declarations, used for object creation with
-//  the object factory:
+  //  Next we have the standard declarations, used for object creation with
+  //  the object factory:
 
   typedef CompositeExampleImageFilter                     Self;
   typedef itk::ImageToImageFilter<TImageType, TImageType> Superclass;
@@ -74,9 +71,9 @@ public:
   /** Display */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-//  Here we declare an alias (to save typing) for the image's pixel type,
-//  which determines the type of the threshold value.  We then use the
-//  convenience macros to define the Get and Set methods for this parameter.
+  //  Here we declare an alias (to save typing) for the image's pixel type,
+  //  which determines the type of the threshold value.  We then use the
+  //  convenience macros to define the Get and Set methods for this parameter.
 
   typedef typename TImageType::PixelType PixelType;
 
@@ -85,33 +82,28 @@ public:
 
 
 protected:
-
   CompositeExampleImageFilter();
 
-//  Now we can declare the component filter types, templated over the
-//  enclosing image type:
+  //  Now we can declare the component filter types, templated over the
+  //  enclosing image type:
 
 protected:
-
-  typedef itk::ThresholdImageFilter<TImageType> ThresholdType;
-  typedef itk::GradientMagnitudeImageFilter<TImageType, TImageType>
-  GradientType;
-  typedef itk::RescaleIntensityImageFilter<TImageType, TImageType>
-  RescalerType;
+  typedef itk::ThresholdImageFilter<TImageType>                     ThresholdType;
+  typedef itk::GradientMagnitudeImageFilter<TImageType, TImageType> GradientType;
+  typedef itk::RescaleIntensityImageFilter<TImageType, TImageType>  RescalerType;
 
   void GenerateData() override;
 
 private:
+  CompositeExampleImageFilter(Self&); // intentionally not implemented
+  void operator=(const Self&);        // intentionally not implemented
 
-  CompositeExampleImageFilter(Self &);   // intentionally not implemented
-  void operator =(const Self&);          // intentionally not implemented
+  //  The component filters are declared as data members, all using the smart
+  //  pointer types.
 
-//  The component filters are declared as data members, all using the smart
-//  pointer types.
-
-  typename GradientType::Pointer m_GradientFilter;
+  typename GradientType::Pointer  m_GradientFilter;
   typename ThresholdType::Pointer m_ThresholdFilter;
-  typename RescalerType::Pointer m_RescaleFilter;
+  typename RescalerType::Pointer  m_RescaleFilter;
 
   PixelType m_Threshold;
 };
@@ -125,20 +117,18 @@ namespace otb
 {
 
 template <class TImageType>
-CompositeExampleImageFilter<TImageType>
-::CompositeExampleImageFilter()
+CompositeExampleImageFilter<TImageType>::CompositeExampleImageFilter()
 {
-  m_GradientFilter = GradientType::New();
+  m_GradientFilter  = GradientType::New();
   m_ThresholdFilter = ThresholdType::New();
-  m_RescaleFilter = RescalerType::New();
+  m_RescaleFilter   = RescalerType::New();
 
   m_ThresholdFilter->SetInput(m_GradientFilter->GetOutput());
   m_RescaleFilter->SetInput(m_ThresholdFilter->GetOutput());
 
   m_Threshold = 1;
 
-  m_RescaleFilter->SetOutputMinimum(
-    itk::NumericTraits<PixelType>::NonpositiveMin());
+  m_RescaleFilter->SetOutputMinimum(itk::NumericTraits<PixelType>::NonpositiveMin());
   m_RescaleFilter->SetOutputMaximum(itk::NumericTraits<PixelType>::max());
 }
 
@@ -152,9 +142,7 @@ CompositeExampleImageFilter<TImageType>
 //  it has the result available to the downstream filter.
 
 template <class TImageType>
-void
-CompositeExampleImageFilter<TImageType>::
-GenerateData()
+void CompositeExampleImageFilter<TImageType>::GenerateData()
 {
   m_GradientFilter->SetInput(this->GetInput());
 
@@ -170,15 +158,11 @@ GenerateData()
 //  print itself first, and also how the indentation prefixes each line.
 //
 template <class TImageType>
-void
-CompositeExampleImageFilter<TImageType>::
-PrintSelf(std::ostream& os, itk::Indent indent) const
+void CompositeExampleImageFilter<TImageType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os
-  << indent << "Threshold:" << this->m_Threshold
-  << std::endl;
+  os << indent << "Threshold:" << this->m_Threshold << std::endl;
 }
 
 } /* end namespace otb */
@@ -197,11 +181,11 @@ PrintSelf(std::ostream& os, itk::Indent indent) const
 int main(int argc, char* argv[])
 {
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  inputImageFile  outputImageFile" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef otb::Image<short, 2>            ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -220,13 +204,13 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   try
-    {
+  {
     writer->Update();
-    }
-  catch ( itk::ExceptionObject & e )
-    {
+  }
+  catch (itk::ExceptionObject& e)
+  {
     std::cerr << "Error: " << e << std::endl;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

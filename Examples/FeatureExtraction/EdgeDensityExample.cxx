@@ -53,22 +53,22 @@
 int main(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * infname       = argv[1];
-  const char * outfname      = argv[2];
-  const char * prettyfilename      = argv[3];
+  const char* infname        = argv[1];
+  const char* outfname       = argv[2];
+  const char* prettyfilename = argv[3];
 
-  const unsigned int radius       = atoi(argv[4]);
+  const unsigned int radius = atoi(argv[4]);
 
   /*--*/
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
   /** Variables for the canny detector*/
-  const PixelType upperThreshold   = static_cast<PixelType>(atof(argv[5]));
-  const PixelType lowerThreshold   = static_cast<PixelType>(atof(argv[6]));
-  const double    variance         = atof(argv[7]);
-  const double    maximumError     = atof(argv[8]);
+  const PixelType upperThreshold = static_cast<PixelType>(atof(argv[5]));
+  const PixelType lowerThreshold = static_cast<PixelType>(atof(argv[6]));
+  const double    variance       = atof(argv[7]);
+  const double    maximumError   = atof(argv[8]);
 
   // As usual, we start by defining the types for the images, the reader
   // and the writer.
@@ -86,21 +86,19 @@ int main(int itkNotUsed(argc), char* argv[])
   // detector. We use here the classical Canny edge detector, which is
   // templated over the input and output image types.
 
-  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>
-  CannyDetectorType;
+  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> CannyDetectorType;
   // Finally, we can define the type for the edge density filter which
   // takes as template the input and output image types, the edge
   // detector type, and the count function type..
 
-  typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType,
-      CountFunctionType> EdgeDensityFilterType;
+  typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType, CountFunctionType> EdgeDensityFilterType;
   // We can now instantiate the different processing objects of the
   // pipeline using the \code{New()} method.
 
-  ReaderType::Pointer            reader = ReaderType::New();
-  EdgeDensityFilterType::Pointer filter = EdgeDensityFilterType::New();
+  ReaderType::Pointer            reader      = ReaderType::New();
+  EdgeDensityFilterType::Pointer filter      = EdgeDensityFilterType::New();
   CannyDetectorType::Pointer     cannyFilter = CannyDetectorType::New();
-  WriterType::Pointer            writer = WriterType::New();
+  WriterType::Pointer            writer      = WriterType::New();
   // The edge detection filter needs to be instantiated because we
   // need to set its parameters. This is what we do here for the Canny
   // filter.
@@ -141,8 +139,7 @@ int main(int itkNotUsed(argc), char* argv[])
 
   typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
-  RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
@@ -152,7 +149,7 @@ int main(int itkNotUsed(argc), char* argv[])
   rescaler->SetInput(filter->GetOutput());
 
   typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
-  OutputWriterType::Pointer outwriter = OutputWriterType::New();
+  OutputWriterType::Pointer                     outwriter = OutputWriterType::New();
 
   outwriter->SetFileName(prettyfilename);
   outwriter->SetInput(rescaler->GetOutput());

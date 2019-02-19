@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbImageFileReader.h"
 #include "otbLineSegmentDetector.h"
 #include "otbVectorDataFileWriter.h"
@@ -41,7 +40,7 @@
 
 #include "otbVectorDataToRightAngleVectorDataFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 5)
   {
@@ -54,7 +53,7 @@ int main(int argc, char * argv[])
   double      angleThreshold           = atof(argv[3]);
   double      distanceThreshold        = atof(argv[4]);
 
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
   typedef unsigned char PixelType;
   typedef double        PrecisionType;
 
@@ -71,7 +70,7 @@ int main(int argc, char * argv[])
   // to store the detected lines which will be provided by the line
   // segment detector.
 
-  typedef otb::VectorData<PrecisionType>  VectorDataType;
+  typedef otb::VectorData<PrecisionType> VectorDataType;
   // The right angle detector's output is a vector data where each point
   // gives the coordinate of the detected angle.
   //
@@ -84,8 +83,7 @@ int main(int argc, char * argv[])
   // filter. This filter is templated over the input vector data type
   // provided by the line segment detector.
 
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
-    RightAngleFilterType;
+  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType> RightAngleFilterType;
 
   // We instantiate the line segment detector and the right angle detector.
 

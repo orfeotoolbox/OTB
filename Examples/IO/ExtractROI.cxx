@@ -20,7 +20,6 @@
  */
 
 
-
 /* Example usage:
 ./ExtractROI Input/IMAGERY_SSECH.tif Output/ROI_IMAGERY_RGB.png Output/ROI_IMAGERY_MIR.png 0 0 100 100
 */
@@ -46,35 +45,33 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   // R\'ecuperation de arguments
   if (argc < 7)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] <<
-    "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY"
-              << std::endl;
+    std::cerr << argv[0] << "  inputImageFile outputImageFileRGB outputImageFileLastBand startX startY sizeX sizeY" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-//  The program arguments define the image file names as well as the
-//  rectangular area to be extracted.
+  //  The program arguments define the image file names as well as the
+  //  rectangular area to be extracted.
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilenameRGB = argv[2];
-  const char * outputFilenameMIR = argv[3];
+  const char* inputFilename     = argv[1];
+  const char* outputFilenameRGB = argv[2];
+  const char* outputFilenameMIR = argv[3];
 
-  unsigned int startX((unsigned int) ::atoi(argv[4]));
-  unsigned int startY((unsigned int) ::atoi(argv[5]));
-  unsigned int sizeX((unsigned int) ::atoi(argv[6]));
-  unsigned int sizeY((unsigned int) ::atoi(argv[7]));
+  unsigned int startX((unsigned int)::atoi(argv[4]));
+  unsigned int startY((unsigned int)::atoi(argv[5]));
+  unsigned int sizeX((unsigned int)::atoi(argv[6]));
+  unsigned int sizeY((unsigned int)::atoi(argv[7]));
 
   //  As usual, we define the input and output pixel types.
 
-  typedef   unsigned char InputPixelType;
-  typedef   unsigned char OutputPixelType;
+  typedef unsigned char InputPixelType;
+  typedef unsigned char OutputPixelType;
 
   //  First of all, we extract the multiband part by using the
   //  \doxygen{otb}{MultiChannelExtractROI} class, which is templated
@@ -82,8 +79,7 @@ int main(int argc, char * argv[])
   //  templated over the images types in order to force these images
   //  to be of \doxygen{otb}{VectorImage} type.
 
-  typedef otb::MultiChannelExtractROI<InputPixelType,
-      OutputPixelType>  ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<InputPixelType, OutputPixelType> ExtractROIFilterType;
 
   //  We create the extractor filter by using the \code{New} method of
   //  the class and we set its parameters.
@@ -145,12 +141,9 @@ int main(int argc, char * argv[])
   //  memory usage point of view.
   //  This class is also templated over the pixel types.
 
-  typedef otb::MultiToMonoChannelExtractROI<InputPixelType,
-      OutputPixelType>
-  ExtractROIMonoFilterType;
+  typedef otb::MultiToMonoChannelExtractROI<InputPixelType, OutputPixelType> ExtractROIMonoFilterType;
 
-  ExtractROIMonoFilterType::Pointer extractROIMonoFilter =
-    ExtractROIMonoFilterType::New();
+  ExtractROIMonoFilterType::Pointer extractROIMonoFilter = ExtractROIMonoFilterType::New();
 
   extractROIMonoFilter->SetStartX(startX);
   extractROIMonoFilter->SetStartY(startY);
@@ -161,12 +154,10 @@ int main(int argc, char * argv[])
 
   extractROIMonoFilter->SetChannel(4);
 
-  typedef otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>
-  monoReaderType;
-  typedef otb::ImageFileWriter<ExtractROIMonoFilterType::OutputImageType>
-  monoWriterType;
-  monoReaderType::Pointer monoReader = monoReaderType::New();
-  monoWriterType::Pointer monoWriter = monoWriterType::New();
+  typedef otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>  monoReaderType;
+  typedef otb::ImageFileWriter<ExtractROIMonoFilterType::OutputImageType> monoWriterType;
+  monoReaderType::Pointer                                                 monoReader = monoReaderType::New();
+  monoWriterType::Pointer                                                 monoWriter = monoWriterType::New();
 
   monoReader->SetFileName(inputFilename);
   monoReader->Update(); // Needed to know the number of channels in the image
@@ -198,5 +189,4 @@ int main(int argc, char * argv[])
   //  figure \ref{fig:IMAGERY_SSECH}.
 
   return EXIT_SUCCESS;
-
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 // Let's assume that you have a KML file (hence in geographical coordinates)
 // that you would like to superpose to some image with a specific map projection.
 // Of course, you could use the handy ogr2ogr tool to do that, but it won't
@@ -44,12 +43,10 @@
 int main(int argc, char* argv[])
 {
   if (argc < 4)
-    {
-    std::cout << argv[0] <<
-    " <input vector filename> <input image name> <output vector filename> "  <<
-    std::endl;
+  {
+    std::cout << argv[0] << " <input vector filename> <input image name> <output vector filename> " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Declare the vector data type that you would like to use in your
   // application.
@@ -61,9 +58,8 @@ int main(int argc, char* argv[])
   // \doxygen{otb}{VectorDataFileReader}. The call to the
   // \code{UpdateOutputInformation()} method fill up the header information.
 
-  typedef otb::VectorDataFileReader<InputVectorDataType>
-  VectorDataFileReaderType;
-  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+  typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
+  VectorDataFileReaderType::Pointer                      reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
@@ -75,7 +71,7 @@ int main(int argc, char* argv[])
 
   typedef otb::Image<unsigned short int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  ImageReaderType::Pointer                  imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
@@ -84,11 +80,8 @@ int main(int argc, char* argv[])
   // to use it when you design applications reading or saving vector
   // data.
 
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType,
-      OutputVectorDataType>
-  VectorDataFilterType;
-  VectorDataFilterType::Pointer vectorDataProjection =
-    VectorDataFilterType::New();
+  typedef otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
+  VectorDataFilterType::Pointer                                                      vectorDataProjection = VectorDataFilterType::New();
 
   // Information concerning the original projection of the vector data
   // will be automatically retrieved from the metadata. Nothing else
@@ -99,20 +92,15 @@ int main(int argc, char* argv[])
   // Information about the target projection is retrieved directly from
   // the image:
 
-  vectorDataProjection->SetOutputKeywordList(
-    imageReader->GetOutput()->GetImageKeywordlist());
-  vectorDataProjection->SetOutputOrigin(
-    imageReader->GetOutput()->GetOrigin());
-  vectorDataProjection->SetOutputSpacing(
-    imageReader->GetOutput()->GetSignedSpacing());
-  vectorDataProjection->SetOutputProjectionRef(
-    imageReader->GetOutput()->GetProjectionRef());
+  vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
+  vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
+  vectorDataProjection->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());
 
   // Finally, the result is saved into a new vector file.
 
-  typedef otb::VectorDataFileWriter<OutputVectorDataType>
-  VectorDataFileWriterType;
-  VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
+  typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
+  VectorDataFileWriterType::Pointer                       writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();
@@ -122,5 +110,4 @@ int main(int argc, char* argv[])
   // the correct driver will be automatically instantiated.
 
   return EXIT_SUCCESS;
-
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./FrostImageFilter Input/GomaSmall.png Output/GomaSmallFrostFiltered.png 5 0.1
 */
@@ -58,20 +57,20 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile radius deramp" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  typedef  unsigned char PixelType;
+  typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType,  2> InputImageType;
-  typedef otb::Image<PixelType,  2> OutputImageType;
+  typedef otb::Image<PixelType, 2> InputImageType;
+  typedef otb::Image<PixelType, 2> OutputImageType;
 
   //  The filter can be instantiated using the image types defined previously.
 

@@ -61,12 +61,11 @@ int main(int argc, char* argv[])
 {
 
   if (argc < 5)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] <<
-    " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
+    std::cerr << argv[0] << " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -87,8 +86,8 @@ int main(int argc, char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType1>          ReaderType1;
-  typedef otb::ImageFileReader<InputImageType2>          ReaderType2;
+  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
+  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
 
@@ -97,31 +96,27 @@ int main(int argc, char* argv[])
   //  rescale the results of the change detection in order to use all
   //  the output pixel type range of values.
 
-  typedef itk::ShiftScaleImageFilter<ChangeImageType,
-      OutputImageType> RescalerType;
+  typedef itk::ShiftScaleImageFilter<ChangeImageType, OutputImageType> RescalerType;
 
 
   //  The \doxygen{otb}{MeanRatioImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
 
-  typedef otb::MeanRatioImageFilter<
-      InputImageType1,
-      InputImageType2,
-      ChangeImageType>       FilterType;
+  typedef otb::MeanRatioImageFilter<InputImageType1, InputImageType2, ChangeImageType> FilterType;
 
 
   //  The different elements of the pipeline can now be instantiated.
 
-  ReaderType1::Pointer  reader1 = ReaderType1::New();
-  ReaderType2::Pointer  reader2 = ReaderType2::New();
-  WriterType::Pointer   writer = WriterType::New();
-  FilterType::Pointer   filter = FilterType::New();
+  ReaderType1::Pointer  reader1  = ReaderType1::New();
+  ReaderType2::Pointer  reader2  = ReaderType2::New();
+  WriterType::Pointer   writer   = WriterType::New();
+  FilterType::Pointer   filter   = FilterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[3];
   //  We set the parameters of the different elements of the pipeline.
 
   reader1->SetFileName(inputFilename1);
@@ -149,26 +144,25 @@ int main(int argc, char* argv[])
   filter->AddObserver(itk::ProgressEvent(), observer);
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// Figure \ref{fig:RESRATCHDET} shows the result of the change
-// detection by ratio of local means.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.35\textwidth]{RatioChDet.eps}
-// \itkcaption[Ratio Change Detection Results]{Result of the
-// ratio of means change detector}
-// \label{fig:RESRATCHDET}
-// \end{figure}
+  // Figure \ref{fig:RESRATCHDET} shows the result of the change
+  // detection by ratio of local means.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.35\textwidth]{RatioChDet.eps}
+  // \itkcaption[Ratio Change Detection Results]{Result of the
+  // ratio of means change detector}
+  // \label{fig:RESRATCHDET}
+  // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./AsymmetricFusionOfLineDetectorExample Input/amst2.png Output/amstLineFusion.png 5 1
 */
@@ -37,33 +36,31 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputEdgesImageFile length width" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with floating point precision
   //  and rescale the results between 0 and 255 in order to export PNG images.
 
-  typedef  float         InternalPixelType;
-  typedef  unsigned char OutputPixelType;
+  typedef float         InternalPixelType;
+  typedef unsigned char OutputPixelType;
 
   //  The images are defined using the pixel type and the dimension.
 
-  typedef otb::Image<InternalPixelType,  2> InternalImageType;
-  typedef otb::Image<OutputPixelType,  2>   OutputImageType;
+  typedef otb::Image<InternalPixelType, 2> InternalImageType;
+  typedef otb::Image<OutputPixelType, 2>   OutputImageType;
 
   //  The filter can be instantiated using the image types defined above.
 
-  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InternalImageType,
-      InternalImageType>
-  FilterType;
+  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InternalImageType, InternalImageType> FilterType;
 
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file.
@@ -79,8 +76,7 @@ int main(int argc, char * argv[])
   // \code{itk::RescaleIntensityImageFilter} which is templated by the
   // input and output image types.
 
-  typedef itk::RescaleIntensityImageFilter<InternalImageType,
-      OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InternalImageType, OutputImageType> RescalerType;
 
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.
@@ -91,7 +87,7 @@ int main(int argc, char * argv[])
   //  The same is done for the rescaler and the writer.
 
   RescalerType::Pointer rescaler = RescalerType::New();
-  WriterType::Pointer   writer = WriterType::New();
+  WriterType::Pointer   writer   = WriterType::New();
 
   reader->SetFileName(argv[1]);
 
@@ -129,15 +125,15 @@ int main(int argc, char * argv[])
   //  filter.
 
   try
-    {
+  {
     filter->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return -1;
-    }
+  }
 
   writer->SetFileName(argv[2]);
   writer->Update();

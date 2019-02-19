@@ -19,7 +19,6 @@
  */
 
 
-
 // \index{Iterators!and image slices}
 //
 // The \doxygen{itk}{ImageSliceIteratorWithIndex} class is an extension of
@@ -103,28 +102,26 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   //   Verify the number of parameters on the command line.
   if (argc < 4)
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0]
-              << " inputImageFile outputImageFile projectionDirection"
-              << std::endl;
+    std::cerr << argv[0] << " inputImageFile outputImageFile projectionDirection" << std::endl;
     return -1;
-    }
+  }
 
-// The pixel type is defined as \code{unsigned short}.  For this application,
-// we need two image types, a 3D image for the input, and a 2D image for the
-// intensity projection.
+  // The pixel type is defined as \code{unsigned short}.  For this application,
+  // we need two image types, a 3D image for the input, and a 2D image for the
+  // intensity projection.
 
   typedef unsigned short           PixelType;
   typedef otb::Image<PixelType, 2> ImageType2D;
   typedef otb::Image<PixelType, 3> ImageType3D;
 
-//  A slice iterator type is defined to walk the input image.
+  //  A slice iterator type is defined to walk the input image.
 
   typedef itk::ImageLinearIteratorWithIndex<ImageType2D>     LinearIteratorType;
   typedef itk::ImageSliceConstIteratorWithIndex<ImageType3D> SliceIteratorType;
@@ -136,42 +133,41 @@ int main(int argc, char *argv[])
   ReaderType::Pointer       reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// The projection direction is read from the command line. The projection image
-// will be the size of the 2D plane orthogonal to the projection direction.
-// Its spanning vectors are the two remaining coordinate axes in the volume.
-// These axes are recorded in the \code{direction} array.
+  // The projection direction is read from the command line. The projection image
+  // will be the size of the 2D plane orthogonal to the projection direction.
+  // Its spanning vectors are the two remaining coordinate axes in the volume.
+  // These axes are recorded in the \code{direction} array.
 
-  unsigned int projectionDirection =
-    static_cast<unsigned int>(::atoi(argv[3]));
+  unsigned int projectionDirection = static_cast<unsigned int>(::atoi(argv[3]));
 
   unsigned int i, j;
   unsigned int direction[2];
   for (i = 0, j = 0; i < 3; ++i)
-    {
+  {
     if (i != projectionDirection)
-      {
+    {
       direction[j] = i;
       ++j;
-      }
     }
+  }
 
-// The \code{direction} array is now used to define the projection image size
-// based on the input image size.  The output image is created so that its
-// common dimension(s) with the input image are the same size.  For example,
-// if we project along the $x$ axis of the input, the size and origin of the
-// $y$ axes of the input and output will match.  This makes the code slightly
-// more complicated, but prevents a counter-intuitive rotation of the output.
+  // The \code{direction} array is now used to define the projection image size
+  // based on the input image size.  The output image is created so that its
+  // common dimension(s) with the input image are the same size.  For example,
+  // if we project along the $x$ axis of the input, the size and origin of the
+  // $y$ axes of the input and output will match.  This makes the code slightly
+  // more complicated, but prevents a counter-intuitive rotation of the output.
 
   ImageType2D::RegionType            region;
   ImageType2D::RegionType::SizeType  size;
@@ -179,9 +175,9 @@ int main(int argc, char *argv[])
 
   ImageType3D::RegionType requestedRegion = inputImage->GetRequestedRegion();
 
-  index[direction[0]]    = requestedRegion.GetIndex()[direction[0]];
+  index[direction[0]]     = requestedRegion.GetIndex()[direction[0]];
   index[1 - direction[0]] = requestedRegion.GetIndex()[direction[1]];
-  size[direction[0]]     = requestedRegion.GetSize()[direction[0]];
+  size[direction[0]]      = requestedRegion.GetSize()[direction[0]];
   size[1 - direction[0]]  = requestedRegion.GetSize()[direction[1]];
 
   region.SetSize(size);
@@ -192,13 +188,13 @@ int main(int argc, char *argv[])
   outputImage->SetRegions(region);
   outputImage->Allocate();
 
-// Next we create the necessary iterators.  The const slice iterator walks
-// the 3D input image, and the non-const linear iterator walks the 2D output
-// image. The iterators are initialized to walk the same linear path through
-// a slice.  Remember that the \emph{second} direction of the slice iterator
-// defines the direction that linear iteration walks within a slice.
+  // Next we create the necessary iterators.  The const slice iterator walks
+  // the 3D input image, and the non-const linear iterator walks the 2D output
+  // image. The iterators are initialized to walk the same linear path through
+  // a slice.  Remember that the \emph{second} direction of the slice iterator
+  // defines the direction that linear iteration walks within a slice.
 
-  SliceIteratorType  inputIt(inputImage,  inputImage->GetRequestedRegion());
+  SliceIteratorType  inputIt(inputImage, inputImage->GetRequestedRegion());
   LinearIteratorType outputIt(outputImage, outputImage->GetRequestedRegion());
 
   inputIt.SetFirstDirection(direction[1]);
@@ -206,77 +202,76 @@ int main(int argc, char *argv[])
 
   outputIt.SetDirection(1 - direction[0]);
 
-// Software Guide: BeginLatex
-//
-// Now we are ready to compute the projection.  The first step is to initialize
-// all of the projection values to their nonpositive minimum value.  The
-// projection values are then updated row by row from the first slice of the
-// input.  At the end of the first slice, the input iterator steps to the first
-// row in the next slice, while the output iterator, whose underlying image
-// consists of only one slice, rewinds to its first row.  The process repeats
-// until the last slice of the input is processed.
+  // Software Guide: BeginLatex
+  //
+  // Now we are ready to compute the projection.  The first step is to initialize
+  // all of the projection values to their nonpositive minimum value.  The
+  // projection values are then updated row by row from the first slice of the
+  // input.  At the end of the first slice, the input iterator steps to the first
+  // row in the next slice, while the output iterator, whose underlying image
+  // consists of only one slice, rewinds to its first row.  The process repeats
+  // until the last slice of the input is processed.
 
   outputIt.GoToBegin();
   while (!outputIt.IsAtEnd())
-    {
+  {
     while (!outputIt.IsAtEndOfLine())
-      {
+    {
       outputIt.Set(itk::NumericTraits<unsigned short>::NonpositiveMin());
       ++outputIt;
-      }
-    outputIt.NextLine();
     }
+    outputIt.NextLine();
+  }
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd())
-    {
+  {
     while (!inputIt.IsAtEndOfSlice())
-      {
+    {
       while (!inputIt.IsAtEndOfLine())
-        {
+      {
         outputIt.Set(vnl_math_max(outputIt.Get(), inputIt.Get()));
         ++inputIt;
         ++outputIt;
-        }
+      }
       outputIt.NextLine();
       inputIt.NextLine();
-
-      }
+    }
     outputIt.GoToBegin();
     inputIt.NextSlice();
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(outputImage);
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// Running this example code on the 3D image
-// \code{Examples/Data/BrainProtonDensity3Slices.mha} using the $z$-axis as
-// the axis of projection gives the image shown in
-// Figure~\ref{fig:ImageSliceIteratorWithIndexOutput}.
-//
-// \begin{figure}
-// \centering
-// \includegraphics[width=0.4\textwidth]{ImageSliceIteratorWithIndexOutput.eps}
-// \itkcaption[Maximum intensity projection using ImageSliceIteratorWithIndex]{The
-// maximum intensity projection through three slices of a volume.}
-// \protect\label{fig:ImageSliceIteratorWithIndexOutput}
-// \end{figure}
-//
-//
-// \index{itk::Image\-Slice\-Iterator\-With\-Index!example of using|)}
+  // Running this example code on the 3D image
+  // \code{Examples/Data/BrainProtonDensity3Slices.mha} using the $z$-axis as
+  // the axis of projection gives the image shown in
+  // Figure~\ref{fig:ImageSliceIteratorWithIndexOutput}.
+  //
+  // \begin{figure}
+  // \centering
+  // \includegraphics[width=0.4\textwidth]{ImageSliceIteratorWithIndexOutput.eps}
+  // \itkcaption[Maximum intensity projection using ImageSliceIteratorWithIndex]{The
+  // maximum intensity projection through three slices of a volume.}
+  // \protect\label{fig:ImageSliceIteratorWithIndexOutput}
+  // \end{figure}
+  //
+  //
+  // \index{itk::Image\-Slice\-Iterator\-With\-Index!example of using|)}
 
   return EXIT_SUCCESS;
 }

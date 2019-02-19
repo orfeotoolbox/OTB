@@ -20,7 +20,6 @@
  */
 
 
-
 /* Example usage:
 ./ThresholdToPointSetExample Input/ROISpot5.png 250 252
 */
@@ -42,21 +41,21 @@
 
 #include "otbThresholdImageToPointSetFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " lowerThreshold upperThreshold" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  The next step is to decide which pixel types to use for the input image
   //  and the Point Set as well as their dimension.
 
   typedef unsigned char PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension>    ImageType;
   typedef itk::PointSet<PixelType, Dimension> PointSetType;
@@ -64,9 +63,9 @@ int main(int argc, char * argv[])
   // A reader is instantiated to read the input image
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
 
-  const char * filenamereader = argv[1];
+  const char* filenamereader = argv[1];
   reader->SetFileName(filenamereader);
 
   // We get the parameters from the command line for the threshold filter. The
@@ -81,9 +80,8 @@ int main(int argc, char * argv[])
   //  Then we create the ThresholdImageToPointSetFilter and we pass the
   // parameters.
 
-  typedef otb::ThresholdImageToPointSetFilter
-  <ImageType, PointSetType> FilterThresholdType;
-  FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
+  typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType> FilterThresholdType;
+  FilterThresholdType::Pointer                                         filterThreshold = FilterThresholdType::New();
   filterThreshold->SetLowerThreshold(lowerThreshold);
   filterThreshold->SetUpperThreshold(upperThreshold);
   filterThreshold->SetInput(0, reader->GetOutput());
@@ -94,8 +92,8 @@ int main(int argc, char * argv[])
   //
   // After this step, the \code{pointSet} variable contains the point set.
 
-  PointSetType::Pointer pointSet     = PointSetType::New();
-  pointSet = filterThreshold->GetOutput();
+  PointSetType::Pointer pointSet = PointSetType::New();
+  pointSet                       = filterThreshold->GetOutput();
 
   filterThreshold->Update();
 
@@ -103,18 +101,18 @@ int main(int argc, char * argv[])
   // which is accessible through the method \code{GetPoints()} of the PointSet.
 
   typedef PointSetType::PointsContainer ContainerType;
-  ContainerType* pointsContainer = pointSet->GetPoints();
-  typedef ContainerType::Iterator IteratorType;
-  IteratorType itList = pointsContainer->Begin();
+  ContainerType*                        pointsContainer = pointSet->GetPoints();
+  typedef ContainerType::Iterator       IteratorType;
+  IteratorType                          itList = pointsContainer->Begin();
 
   // A while loop enable us to through the list a display the coordinate of
   // each point.
 
   while (itList != pointsContainer->End())
-    {
+  {
     std::cout << itList.Value() << std::endl;
     ++itList;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

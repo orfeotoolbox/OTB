@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./FineRegistrationImageFilterExample Input/StereoFixed.png \
                                      Input/StereoMoving.png \
@@ -73,14 +72,13 @@ int main(int argc, char** argv)
 {
 
   if (argc < 11)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldMetric warped ";
+    std::cerr << " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldMetric warped ";
     std::cerr << "smoothingSigma metricRadius explorationRadius subpixelPrecision";
 
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int ImageDimension = 2;
 
@@ -93,14 +91,13 @@ int main(int argc, char** argv)
   // Several type of \doxygen{otb}{Image} are required to represent the input image, the metric field,
   // and the deformation field.
 
-  //Allocate Images
-  typedef otb::Image<PixelType, ImageDimension> InputImageType;
-  typedef otb::Image<PixelType, ImageDimension> MetricImageType;
-  typedef otb::Image<DisplacementPixelType,
-      ImageDimension>                           DisplacementFieldType;
+  // Allocate Images
+  typedef otb::Image<PixelType, ImageDimension>             InputImageType;
+  typedef otb::Image<PixelType, ImageDimension>             MetricImageType;
+  typedef otb::Image<DisplacementPixelType, ImageDimension> DisplacementFieldType;
 
   typedef otb::ImageFileReader<InputImageType> InputReaderType;
-  InputReaderType::Pointer fReader = InputReaderType::New();
+  InputReaderType::Pointer                     fReader = InputReaderType::New();
   fReader->SetFileName(argv[1]);
 
   InputReaderType::Pointer mReader = InputReaderType::New();
@@ -110,9 +107,8 @@ int main(int argc, char** argv)
   // required step is to blur the input images. This is done using the
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
 
-  //Blur input images
-  typedef itk::RecursiveGaussianImageFilter<InputImageType,
-      InputImageType> InputBlurType;
+  // Blur input images
+  typedef itk::RecursiveGaussianImageFilter<InputImageType, InputImageType> InputBlurType;
 
   InputBlurType::Pointer fBlur = InputBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
@@ -124,11 +120,8 @@ int main(int argc, char** argv)
 
   // Now, we declare and instantiate the \doxygen{otb}{FineRegistrationImageFilter} which is going to perform the registration:
 
-  //Create the filter
-  typedef otb::FineRegistrationImageFilter<InputImageType,
-      MetricImageType,
-      DisplacementFieldType>
-  RegistrationFilterType;
+  // Create the filter
+  typedef otb::FineRegistrationImageFilter<InputImageType, MetricImageType, DisplacementFieldType> RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
@@ -167,18 +160,17 @@ int main(int argc, char** argv)
   // However, we may also use any other image-to-image metric provided by ITK. For instance, here is how we
   // would use the \doxygen{itk}{MutualInformationImageToImageMetric} (do not forget to include the proper header).
 
-  if(argc > 11)
-      {
-      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric
-        <InputImageType, InputImageType> MRSDMetricType;
-      MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
-      registrator->SetMetric(mrsdMetric);
+  if (argc > 11)
+  {
+    typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric<InputImageType, InputImageType> MRSDMetricType;
+    MRSDMetricType::Pointer                                                                       mrsdMetric = MRSDMetricType::New();
+    registrator->SetMetric(mrsdMetric);
 
-      // The \doxygen{itk}{MutualInformationImageToImageMetric} produces low value for poor matches, therefore, the filter has
-      // to maximize the metric :
+    // The \doxygen{itk}{MutualInformationImageToImageMetric} produces low value for poor matches, therefore, the filter has
+    // to maximize the metric :
 
-      registrator->MinimizeOff();
-      }
+    registrator->MinimizeOff();
+  }
 
 
   // \end{itemize}
@@ -188,18 +180,14 @@ int main(int argc, char** argv)
   // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
-      InputImageType>
-  ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer channelExtractor =
-    ChannelExtractionFilterType::New();
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType, InputImageType> ChannelExtractionFilterType;
+  ChannelExtractionFilterType::Pointer                                                      channelExtractor = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(registrator->GetOutputDisplacementField());
   channelExtractor->SetChannel(1);
 
-  typedef itk::RescaleIntensityImageFilter<InputImageType,
-      OutputImageType> RescalerType;
-  RescalerType::Pointer fieldRescaler = RescalerType::New();
+  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
+  RescalerType::Pointer                                                     fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
@@ -216,9 +204,8 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<InputImageType, InputImageType,
-      DisplacementFieldType> WarperType;
-  WarperType::Pointer warper = WarperType::New();
+  typedef itk::WarpImageFilter<InputImageType, InputImageType, DisplacementFieldType> WarperType;
+  WarperType::Pointer                                                                 warper = WarperType::New();
 
   InputImageType::PixelType padValue = 4.0;
 
@@ -226,8 +213,7 @@ int main(int argc, char** argv)
   warper->SetDisplacementField(registrator->GetOutputDisplacementField());
   warper->SetEdgePaddingValue(padValue);
 
-  typedef itk::RescaleIntensityImageFilter<MetricImageType,
-        OutputImageType> MetricRescalerType;
+  typedef itk::RescaleIntensityImageFilter<MetricImageType, OutputImageType> MetricRescalerType;
 
   MetricRescalerType::Pointer metricRescaler = MetricRescalerType::New();
   metricRescaler->SetInput(registrator->GetOutput());
@@ -242,7 +228,7 @@ int main(int argc, char** argv)
   writer1->Update();
 
   typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType;
-  CastFilterType::Pointer caster =  CastFilterType::New();
+  CastFilterType::Pointer                                       caster = CastFilterType::New();
   caster->SetInput(warper->GetOutput());
 
 
@@ -275,5 +261,4 @@ int main(int argc, char** argv)
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

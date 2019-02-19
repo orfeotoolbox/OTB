@@ -19,7 +19,6 @@
  */
 
 
-
 // This example will show how to retrieve the longitude and latitude from
 // a place using the name of the city or the address. For that, we will
 // use the \doxygen{otb}{PlaceNameToLonLat} class.
@@ -30,12 +29,11 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 2)
-    {
-    std::cout << argv[0] << " <place name> "
-              << std::endl;
+  {
+    std::cout << argv[0] << " <place name> " << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
   // You instantiate the class and pass the name you want to look for as a
   // std::string to the SetPlaceName method.
@@ -64,5 +62,4 @@ int main(int argc, char* argv[])
   // \end{verbatim}
 
   return EXIT_SUCCESS;
-
 }

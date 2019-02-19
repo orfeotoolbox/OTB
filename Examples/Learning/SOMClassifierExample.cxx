@@ -19,7 +19,6 @@
  */
 
 
-
 #include <fstream>
 #include "otbImage.h"
 #include "otbSOMMap.h"
@@ -51,57 +50,55 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 4)
-    {
-    std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-              << std::endl;
+  {
+    std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * imageFilename  = argv[1];
-  const char * mapFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* imageFilename  = argv[1];
+  const char* mapFilename    = argv[2];
+  const char* outputFilename = argv[3];
 
   typedef double        InputPixelType;
   typedef unsigned char LabelPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef itk::VariableLengthVector<InputPixelType> PixelType;
 
-// As for the SOM learning step, we must define the types for the
-// \code{otb::SOMMap}, and therefore, also for the distance to be
-// used. We will also define the type for the SOM reader, which is
-// actually an \doxygen{otb}{ImageFileReader} which the appropriate
-// image type.
+  // As for the SOM learning step, we must define the types for the
+  // \code{otb::SOMMap}, and therefore, also for the distance to be
+  // used. We will also define the type for the SOM reader, which is
+  // actually an \doxygen{otb}{ImageFileReader} which the appropriate
+  // image type.
 
-  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
-  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
-  typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension>     SOMMapType;
+  typedef otb::ImageFileReader<SOMMapType>                    SOMReaderType;
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType>        ReaderType;
 
-//  The classification will be performed by the
-//  \doxygen{otb}{SOMClassifier}, which, as most of the
-//  classifiers, works on
-//  \subdoxygen{itk}{Statistics}{ListSample}s. In order to be able
-//  to perform an image classification, we will need to use the
-//  \subdoxygen{itk}{Statistics}{ImageToListAdaptor} which is
-//  templated over the type of image to be adapted. The
-//  \code{SOMClassifier} is templated over the sample type, the SOMMap
-//  type and the pixel type for the labels.
+  //  The classification will be performed by the
+  //  \doxygen{otb}{SOMClassifier}, which, as most of the
+  //  classifiers, works on
+  //  \subdoxygen{itk}{Statistics}{ListSample}s. In order to be able
+  //  to perform an image classification, we will need to use the
+  //  \subdoxygen{itk}{Statistics}{ImageToListAdaptor} which is
+  //  templated over the type of image to be adapted. The
+  //  \code{SOMClassifier} is templated over the sample type, the SOMMap
+  //  type and the pixel type for the labels.
 
-  typedef itk::Statistics::ListSample<PixelType> SampleType;
-  typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType>
-  ClassifierType;
-//
-//  The result of the classification will be stored on an image and
-//  saved to a file. Therefore, we define the types needed for this step.
+  typedef itk::Statistics::ListSample<PixelType>                     SampleType;
+  typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType> ClassifierType;
+  //
+  //  The result of the classification will be stored on an image and
+  //  saved to a file. Therefore, we define the types needed for this step.
 
   typedef otb::Image<LabelPixelType, Dimension> OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-//
-//  We can now start reading the input image and the SOM given as
-//  inputs to the program. We instantiate the readers as usual.
+  //
+  //  We can now start reading the input image and the SOM given as
+  //  inputs to the program. We instantiate the readers as usual.
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(imageFilename);
@@ -110,88 +107,86 @@ int main(int argc, char* argv[])
   SOMReaderType::Pointer somreader = SOMReaderType::New();
   somreader->SetFileName(mapFilename);
   somreader->Update();
-//
-//  The conversion of the input data from image to list sample is
-//  easily done using the adaptor.
+  //
+  //  The conversion of the input data from image to list sample is
+  //  easily done using the adaptor.
 
   SampleType::Pointer sample = SampleType::New();
 
-  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(),
-                                              reader->GetOutput()->
-                                              GetLargestPossibleRegion());
+  itk::ImageRegionIterator<InputImageType> it(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
 
   sample->SetMeasurementVectorSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     sample->PushBack(it.Get());
     ++it;
-    }
-//
-//  The classifier can now be instantiated. The input data is set by
-//  using the \code{SetSample()} method and the SOM si set using the
-//  \code{SetMap()} method. The classification is triggered by using
-//  the \code{Update()} method.
+  }
+  //
+  //  The classifier can now be instantiated. The input data is set by
+  //  using the \code{SetSample()} method and the SOM si set using the
+  //  \code{SetMap()} method. The classification is triggered by using
+  //  the \code{Update()} method.
 
   ClassifierType::Pointer classifier = ClassifierType::New();
   classifier->SetSample(sample.GetPointer());
   classifier->SetMap(somreader->GetOutput());
   classifier->Update();
-//
-//  Once the classification has been performed, the sample list
-//  obtained at the output of the classifier must be converted into an
-//  image. We create the image as follows :
+  //
+  //  Once the classification has been performed, the sample list
+  //  obtained at the output of the classifier must be converted into an
+  //  image. We create the image as follows :
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
-//
-//  We can  now get a pointer to the classification result.
+  //
+  //  We can  now get a pointer to the classification result.
 
   ClassifierType::OutputType* membershipSample = classifier->GetOutput();
-//
-//  And we can declare the iterators pointing to the front and the
-//  back of the sample list.
+  //
+  //  And we can declare the iterators pointing to the front and the
+  //  back of the sample list.
 
-  ClassifierType::OutputType::ConstIterator m_iter =  membershipSample->Begin();
-  ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
-//
-//  We also declare an \doxygen{itk}{ImageRegionIterator} in order
-//  to fill the output image with the class labels.
+  ClassifierType::OutputType::ConstIterator m_iter = membershipSample->Begin();
+  ClassifierType::OutputType::ConstIterator m_last = membershipSample->End();
+  //
+  //  We also declare an \doxygen{itk}{ImageRegionIterator} in order
+  //  to fill the output image with the class labels.
 
   typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
 
   OutputIteratorType outIt(outputImage, outputImage->GetLargestPossibleRegion());
-//
-//  We iterate through the sample list and the output image and assign
-//  the label values to the image pixels.
+  //
+  //  We iterate through the sample list and the output image and assign
+  //  the label values to the image pixels.
 
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
-    {
+  {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter;
     ++outIt;
-    }
-//
-//  Finally, we write the classified image to a file.
+  }
+  //
+  //  Finally, we write the classified image to a file.
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   writer->SetInput(outputImage);
   writer->Update();
-// Figure \ref{fig:SOMMAPCLASS} shows the result of the SOM classification.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.2\textwidth]{ROI_QB_MUL_SOM.eps}
-// \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_SOMCLASS.eps}
-// \itkcaption[SOM Image Classification]{Result of the SOM
-// learning. Left: RGB image. Center: SOM. Right: Classified Image}
-// \label{fig:SOMMAPCLASS}
-// \end{figure}
+  // Figure \ref{fig:SOMMAPCLASS} shows the result of the SOM classification.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_1.eps}
+  // \includegraphics[width=0.2\textwidth]{ROI_QB_MUL_SOM.eps}
+  // \includegraphics[width=0.35\textwidth]{ROI_QB_MUL_SOMCLASS.eps}
+  // \itkcaption[SOM Image Classification]{Result of the SOM
+  // learning. Left: RGB image. Center: SOM. Right: Classified Image}
+  // \label{fig:SOMMAPCLASS}
+  // \end{figure}
 
   return EXIT_SUCCESS;
 }

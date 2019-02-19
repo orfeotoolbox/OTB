@@ -19,7 +19,6 @@
  */
 
 
-
 //  The \doxygen{otb}{Image} class with a vector pixel type could be
 //  used for representing multispectral images, with one band per
 //  vector component, however, this is not a practical way, since the
@@ -47,15 +46,15 @@
 #include "otbImage.h"
 #include "otbVectorImage.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Then, as usual, a decision must be made about the type of pixel used to
   //  represent the image processed by the pipeline. The pixel type
@@ -64,8 +63,8 @@ int main(int argc, char * argv[])
   //  do:
   //
 
-  typedef unsigned short PixelType;
-  const unsigned int Dimension = 2;
+  typedef unsigned short                         PixelType;
+  const unsigned int                             Dimension = 2;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   //  We can now instantiate the types of the reader and writer. These two
@@ -90,8 +89,8 @@ int main(int argc, char * argv[])
 
   // Here we recover the file names from the command line arguments
   //
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   //  The name of the file to be read or written is passed with the
   //  SetFileName() method.
@@ -112,15 +111,15 @@ int main(int argc, char * argv[])
   writer->SetInput(reader->GetOutput());
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

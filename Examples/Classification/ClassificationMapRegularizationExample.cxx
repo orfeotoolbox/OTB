@@ -41,59 +41,58 @@
 #include "otbImageFileWriter.h"
 
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
-// Since the input image is a classification map, we will assume a
-// single band input image for which each pixel value is a label coded
-// on 8 bits as an integer between 0 and 255.
+  // Since the input image is a classification map, we will assume a
+  // single band input image for which each pixel value is a label coded
+  // on 8 bits as an integer between 0 and 255.
 
   typedef unsigned char IOLabelPixelType; // 8 bits
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-// Thus, both input and output images are single band labeled images,
-// which are composed of the same type of pixels in this example
-// (unsigned char).
+  // Thus, both input and output images are single band labeled images,
+  // which are composed of the same type of pixels in this example
+  // (unsigned char).
 
   typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
 
 
-// We can now define the type for the neighborhood majority voting filter,
-// which is templated over its input and output images types as well as its
-// structuring element type. Choosing only the input image type in the template
-// of this filter induces that, both input and output images types are the same
-// and that the structuring element is a ball
-// (\doxygen{itk}{BinaryBallStructuringElement}).
+  // We can now define the type for the neighborhood majority voting filter,
+  // which is templated over its input and output images types as well as its
+  // structuring element type. Choosing only the input image type in the template
+  // of this filter induces that, both input and output images types are the same
+  // and that the structuring element is a ball
+  // (\doxygen{itk}{BinaryBallStructuringElement}).
 
   // Neighborhood majority voting filter type
-  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType>
-   NeighborhoodMajorityVotingFilterType;
+  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
 
 
-// Since the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} is a
-// neighborhood based image filter, it is necessary to set the structuring
-// element which will be used for the majority voting process. By default, the
-// structuring element is a ball
-// (\doxygen{itk}{BinaryBallStructuringElement}) with a radius defined by two sizes
-// (respectively along X and Y). Thus, it is possible to handle anisotropic
-// structuring elements such as ovals.
+  // Since the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} is a
+  // neighborhood based image filter, it is necessary to set the structuring
+  // element which will be used for the majority voting process. By default, the
+  // structuring element is a ball
+  // (\doxygen{itk}{BinaryBallStructuringElement}) with a radius defined by two sizes
+  // (respectively along X and Y). Thus, it is possible to handle anisotropic
+  // structuring elements such as ovals.
 
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
-  typedef StructuringType::RadiusType RadiusType;
+  typedef StructuringType::RadiusType                      RadiusType;
 
 
-// Finally, we define the reader and the writer.
+  // Finally, we define the reader and the writer.
 
   typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
   typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
 
 
-  const char * inputFileName = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
 
-// We instantiate the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} and the
-// reader objects.
+  // We instantiate the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} and the
+  // reader objects.
 
   // Neighborhood majority voting filter
   NeighborhoodMajorityVotingFilterType::Pointer NeighMajVotingFilter;
@@ -103,18 +102,18 @@ int main(int itkNotUsed(argc), char * argv[])
   reader->SetFileName(inputFileName);
 
 
-  std::string KeepOriginalLabelBoolStr = argv[3];
-  unsigned int radiusX = atoi(argv[4]);
-  unsigned int radiusY = atoi(argv[5]);
-  IOLabelPixelType noDataValue = atoi(argv[6]);
-  IOLabelPixelType undecidedValue = atoi(argv[7]);
+  std::string      KeepOriginalLabelBoolStr = argv[3];
+  unsigned int     radiusX                  = atoi(argv[4]);
+  unsigned int     radiusY                  = atoi(argv[5]);
+  IOLabelPixelType noDataValue              = atoi(argv[6]);
+  IOLabelPixelType undecidedValue           = atoi(argv[7]);
 
 
-// The ball shaped structuring element seBall is instantiated and its
-// two radii along X and Y are initialized.
+  // The ball shaped structuring element seBall is instantiated and its
+  // two radii along X and Y are initialized.
 
   StructuringType seBall;
-  RadiusType rad;
+  RadiusType      rad;
 
   rad[0] = radiusX;
   rad[1] = radiusY;
@@ -123,23 +122,23 @@ int main(int itkNotUsed(argc), char * argv[])
   seBall.CreateStructuringElement();
 
 
-// Then, this ball shaped neighborhood is used as the kernel structuring element
-// for the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter}.
+  // Then, this ball shaped neighborhood is used as the kernel structuring element
+  // for the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter}.
 
   NeighMajVotingFilter->SetKernel(seBall);
 
-// Not classified input pixels are assumed to have the noDataValue label
-// and will keep this label in the output image.
+  // Not classified input pixels are assumed to have the noDataValue label
+  // and will keep this label in the output image.
 
   NeighMajVotingFilter->SetLabelForNoDataPixels(noDataValue);
 
 
-// Furthermore, since the majority voting regularization may lead to different 
-// majority labels in the neighborhood, in this case, it would be important to define
-// the filter's behaviour. For this purpose, a Boolean parameter is used
-// in the filter to choose whether pixels with more than one majority class are set
-// to undecidedValue (true), or to their Original labels (false = default value)
-// in the output image.
+  // Furthermore, since the majority voting regularization may lead to different
+  // majority labels in the neighborhood, in this case, it would be important to define
+  // the filter's behaviour. For this purpose, a Boolean parameter is used
+  // in the filter to choose whether pixels with more than one majority class are set
+  // to undecidedValue (true), or to their Original labels (false = default value)
+  // in the output image.
 
 
   NeighMajVotingFilter->SetLabelForUndecidedPixels(undecidedValue);
@@ -154,8 +153,8 @@ int main(int itkNotUsed(argc), char * argv[])
   }
 
 
-// We plug the pipeline and
-// trigger its execution by updating the output of the writer.
+  // We plug the pipeline and
+  // trigger its execution by updating the output of the writer.
 
 
   NeighMajVotingFilter->SetInput(reader->GetOutput());

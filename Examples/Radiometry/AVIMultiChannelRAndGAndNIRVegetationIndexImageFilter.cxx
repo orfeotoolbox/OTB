@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter Input/verySmallFSATSW.tif \
                                                        Output/AVIMultiChannelRAndGAndNIRVegetationIndex.tif \
@@ -82,23 +81,22 @@
 #include "otbMultiChannelExtractROI.h"
 #include "itkThresholdImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 11)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
     std::cerr << " lambdaR, lambdaG, lambdaNIR " << std::endl;
     return 1;
-    }
+  }
 
   // The image types are now defined using pixel types and
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
 
-  const unsigned int Dimension = 2;
+  const unsigned int                                  Dimension = 2;
   typedef double                                      InputPixelType;
   typedef float                                       OutputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
@@ -111,20 +109,16 @@ int main(int argc, char *argv[])
   // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
 
-  typedef  otb::Functor::AVI<InputPixelType, InputPixelType,
-      InputPixelType,  OutputPixelType> FunctorType;
+  typedef otb::Functor::AVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
   // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter
-  <InputImageType, OutputImageType, FunctorType>
-  MultiChannelRAndGAndNIRIndexImageFilterType;
+  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndGAndNIRIndexImageFilterType;
 
-  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer
-    filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
+  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -161,47 +155,32 @@ int main(int argc, char *argv[])
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char,
-      Dimension>
-  OutputVectorPrettyImageType;
-  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>
-  WriterVectorPrettyType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType,
-      OutputPrettyImageType>
-  RescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<InputImageType,
-      OutputVectorPrettyImageType>
-  VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char,
-      unsigned char>
-  ChannelExtractorType;
+  typedef otb::Image<unsigned char, Dimension>                                                OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char, Dimension>                                          OutputVectorPrettyImageType;
+  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>                                   WriterVectorPrettyType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                         WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>            RescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputVectorPrettyImageType> VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char, unsigned char>                           ChannelExtractorType;
 
-  VectorRescalerType::Pointer vectRescaler         =
-    VectorRescalerType::New();
-  ChannelExtractorType::Pointer selecter           =
-    ChannelExtractorType::New();
-  WriterVectorPrettyType::Pointer vectPrettyWriter =
-    WriterVectorPrettyType::New();
+  VectorRescalerType::Pointer     vectRescaler     = VectorRescalerType::New();
+  ChannelExtractorType::Pointer   selecter         = ChannelExtractorType::New();
+  WriterVectorPrettyType::Pointer vectPrettyWriter = WriterVectorPrettyType::New();
 
   OutputVectorPrettyImageType::PixelType minimum, maximum;
   minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -210,7 +189,7 @@ int main(int argc, char *argv[])
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-//  vectRescaler->SetClampThreshold(1);
+  //  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput(reader->GetOutput());
 
   selecter->SetInput(vectRescaler->GetOutput());
@@ -238,20 +217,20 @@ int main(int argc, char *argv[])
   prettyWriter->SetInput(rescaler->GetOutput());
 
   try
-    {
+  {
     prettyWriter->Update();
     vectPrettyWriter->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 
@@ -266,5 +245,4 @@ int main(int argc, char *argv[])
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRIndexImageFilter}
   // \end{figure}
-
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./CloudDetectionExample Input/CloudsOnReunion.tif \
                         Output/CloudDetectionOutput.tif \
@@ -59,20 +58,18 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 12)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    "inputFileName outputFileName printableInputFileName printableOutputFileName";
-    std::cerr <<
-    "firstPixelComponent secondPixelComponent thirdPixelComponent fourthPixelComponent ";
+    std::cerr << "inputFileName outputFileName printableInputFileName printableOutputFileName";
+    std::cerr << "firstPixelComponent secondPixelComponent thirdPixelComponent fourthPixelComponent ";
     std::cerr << "variance ";
     std::cerr << "minThreshold maxThreshold " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int Dimension = 2;
   // Then we must decide what pixel type to use for the images. We choose to do
@@ -94,15 +91,13 @@ int main(int argc, char * argv[])
   // We define the functor type that the filter will use. We use the
   // \doxygen{otb}{CloudDetectionFunctor}.
 
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType,
-      OutputPixelType>   FunctorType;
+  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType, OutputPixelType> FunctorType;
 
   // Now we can define the \doxygen{otb}{CloudDetectionFilter} that
   // takes a multi-spectral image as input and produces a binary
   // image.
 
-  typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType,
-      FunctorType> CloudDetectionFilterType;
+  typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType, FunctorType> CloudDetectionFilterType;
 
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in
   //  order to read image data from a file. Then, an
@@ -115,10 +110,9 @@ int main(int argc, char * argv[])
   // The different filters composing our pipeline are created by invoking their
   // \code{New()} methods, assigning the results to smart pointers.
 
-  ReaderType::Pointer               reader = ReaderType::New();
-  CloudDetectionFilterType::Pointer cloudDetection =
-    CloudDetectionFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
+  ReaderType::Pointer               reader         = ReaderType::New();
+  CloudDetectionFilterType::Pointer cloudDetection = CloudDetectionFilterType::New();
+  WriterType::Pointer               writer         = WriterType::New();
 
   reader->SetFileName(argv[1]);
   cloudDetection->SetInput(reader->GetOutput());
@@ -163,27 +157,15 @@ int main(int argc, char * argv[])
   // \end{figure}
 
   // Pretty image creation for printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char,
-      Dimension>
-  InputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyOutputType;
-  typedef otb::ImageFileWriter<InputPrettyImageType>
-  WriterPrettyInputType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType,
-      OutputPrettyImageType>
-  RescalerOutputType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
-      InputPrettyImageType>
-  RescalerInputType;
-  typedef otb::MultiChannelExtractROI<InputPixelType,
-      InputPixelType>
-  ChannelExtractorType;
+  typedef otb::Image<unsigned char, Dimension>                                          OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char, Dimension>                                    InputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                   WriterPrettyOutputType;
+  typedef otb::ImageFileWriter<InputPrettyImageType>                                    WriterPrettyInputType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>      RescalerOutputType;
+  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, InputPrettyImageType> RescalerInputType;
+  typedef otb::MultiChannelExtractROI<InputPixelType, InputPixelType>                   ChannelExtractorType;
 
-  ChannelExtractorType::Pointer  selecter           = ChannelExtractorType::New();
+  ChannelExtractorType::Pointer  selecter          = ChannelExtractorType::New();
   RescalerInputType::Pointer     inputRescaler     = RescalerInputType::New();
   WriterPrettyInputType::Pointer prettyInputWriter = WriterPrettyInputType::New();
   selecter->SetInput(reader->GetOutput());
@@ -202,8 +184,7 @@ int main(int argc, char * argv[])
   prettyInputWriter->SetInput(inputRescaler->GetOutput());
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter =
-    WriterPrettyOutputType::New();
+  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
   outputRescaler->SetInput(cloudDetection->GetOutput());
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);

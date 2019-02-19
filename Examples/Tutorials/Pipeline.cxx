@@ -31,15 +31,12 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 3)
-    {
-    std::cerr << "Usage: "
-        << argv[0]
-        << " <input_filename> <output_filename>"
-        << std::endl;
-    }
+  {
+    std::cerr << "Usage: " << argv[0] << " <input_filename> <output_filename>" << std::endl;
+  }
 
   //  Declare the image as an \doxygen{otb}{Image}, the pixel type
   // is declared as an unsigned char (one byte) and the image is specified as
@@ -51,13 +48,13 @@ int main(int argc, char * argv[])
   // which is templated with the image type.
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
 
   // Then, we need an \doxygen{otb}{ImageFileWriter}
   // also templated with the image type.
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                     writer = WriterType::New();
 
   // The filenames are passed as arguments to the program. We keep it
   // simple for now and we don't check their validity.

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./NDVIRAndNIRVegetationIndexImageFilter Input/NDVI_2.hdr \
                                         Input/NDVI_3.hdr \
@@ -74,22 +73,20 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 6)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput"
-              << std::endl;
+    std::cerr << " inputImage1 , inputImage2 , outputImage , prettyinputImage1 , prettyinputImage2 , prettyOutput" << std::endl;
     return 1;
-    }
+  }
 
   // The image types are now defined using pixel types the
   // dimension. Input and output images are defined as \doxygen{otb}{Image}.
 
-  const unsigned int Dimension = 2;
+  const unsigned int                             Dimension = 2;
   typedef double                                 InputPixelType;
   typedef float                                  OutputPixelType;
   typedef otb::Image<InputPixelType, Dimension>  InputRImageType;
@@ -106,25 +103,18 @@ int main(int argc, char *argv[])
   // implemented as a functor class which will be passed as a
   // parameter to an \doxygen{otb}{RAndNIRIndexImageFilter}.
 
-  typedef otb::Functor::NDVI<InputPixelType,
-      InputPixelType,
-      OutputPixelType>   FunctorType;
+  typedef otb::Functor::NDVI<InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The \doxygen{otb}{RAndNIRIndexImageFilter} type is instantiated using the images
   // types and the NDVI functor as template parameters.
 
-  typedef otb::RAndNIRIndexImageFilter<InputRImageType,
-      InputNIRImageType,
-      OutputImageType,
-      FunctorType>
-  RAndNIRIndexImageFilterType;
+  typedef otb::RAndNIRIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType, FunctorType> RAndNIRIndexImageFilterType;
 
   // Instantiating object
-  RAndNIRIndexImageFilterType::Pointer filter    =
-    RAndNIRIndexImageFilterType::New();
-  RReaderType::Pointer   readerR   = RReaderType::New();
-  NIRReaderType::Pointer readerNIR = NIRReaderType::New();
-  WriterType::Pointer    writer    = WriterType::New();
+  RAndNIRIndexImageFilterType::Pointer filter    = RAndNIRIndexImageFilterType::New();
+  RReaderType::Pointer                 readerR   = RReaderType::New();
+  NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
+  WriterType::Pointer                  writer    = WriterType::New();
 
   //  Now the input images are set and a name is given to the output image.
 
@@ -146,33 +136,26 @@ int main(int argc, char *argv[])
   // \code{try/catch} block in case errors occur and exceptions are thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType,
-      OutputPrettyImageType> RescalerType;
-  typedef itk::RescaleIntensityImageFilter<InputRImageType,
-      OutputPrettyImageType> RescalerRType;
-  typedef itk::RescaleIntensityImageFilter<InputNIRImageType,
-      OutputPrettyImageType>
-  RescalerNIRType;
+  typedef otb::Image<unsigned char, Dimension>                                       OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>   RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InputRImageType, OutputPrettyImageType>   RescalerRType;
+  typedef itk::RescaleIntensityImageFilter<InputNIRImageType, OutputPrettyImageType> RescalerNIRType;
 
   RescalerType::Pointer     rescaler     = RescalerType::New();
   WriterPrettyType::Pointer prettyWriter = WriterPrettyType::New();
@@ -182,8 +165,8 @@ int main(int argc, char *argv[])
   prettyWriter->SetFileName(argv[6]);
   prettyWriter->SetInput(rescaler->GetOutput());
 
-  RescalerRType::Pointer    rescalerR      = RescalerRType::New();
-  RescalerNIRType::Pointer  rescalerNIR  = RescalerNIRType::New();
+  RescalerRType::Pointer    rescalerR       = RescalerRType::New();
+  RescalerNIRType::Pointer  rescalerNIR     = RescalerNIRType::New();
   WriterPrettyType::Pointer prettyWriterR   = WriterPrettyType::New();
   WriterPrettyType::Pointer prettyWriterNIR = WriterPrettyType::New();
   rescalerR->SetInput(readerR->GetOutput());
@@ -199,21 +182,21 @@ int main(int argc, char *argv[])
   prettyWriterNIR->SetInput(rescalerNIR->GetOutput());
 
   try
-    {
+  {
     prettyWriter->Update();
     prettyWriterNIR->Update();
     prettyWriterR->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Let's now run this example using as input the images
   // \code{NDVI\_3.hdr} and  \code{NDVI\_4.hdr} (images kindly and free of charge given by SISA and CNES)

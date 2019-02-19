@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./PrintableImageFilterExample Input/IMAGERY_SSECH.tif Output/PrintableExampleOutput1.jpg 1 2 3
 */
@@ -59,24 +58,23 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 6)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
-    std::cerr << " <outputImageFile> <RedBand> <GreenBand> <BlueBand>" <<
-    std::endl;
+    std::cerr << " <outputImageFile> <RedBand> <GreenBand> <BlueBand>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  int          redChannelNumber = atoi(argv[3]);
-  int          greenChannelNumber = atoi(argv[4]);
-  int          blueChannelNumber = atoi(argv[5]);
+  const char* inputFilename      = argv[1];
+  const char* outputFilename     = argv[2];
+  int         redChannelNumber   = atoi(argv[3]);
+  int         greenChannelNumber = atoi(argv[4]);
+  int         blueChannelNumber  = atoi(argv[5]);
 
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
@@ -90,7 +88,7 @@ int main(int argc, char * argv[])
   // \code{unsigned char} value, you can use the \doxygen{otb}{PrintableImageFilter}.
 
   typedef otb::PrintableImageFilter<InputImageType> PrintableFilterType;
-  PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
+  PrintableFilterType::Pointer                      printableImageFilter = PrintableFilterType::New();
 
   printableImageFilter->SetInput(reader->GetOutput());
   printableImageFilter->SetChannel(redChannelNumber);
@@ -100,7 +98,7 @@ int main(int argc, char * argv[])
   //  When you create the writer to plug at the output of the \code{printableImageFilter}
   // you may want to use the direct type definition as it is a good way to avoid mismatch:
 
-  typedef PrintableFilterType::OutputImageType           OutputImageType;
+  typedef PrintableFilterType::OutputImageType  OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./MarkovClassification1Example Input/QB_Suburb.png Output/MarkovRandomField1.png 1.0 20 1.0 1
 */
@@ -55,14 +54,13 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 7)
-    {
+  {
     std::cerr << "Missing Parameters " << argc << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage output lambda iterations optimizerTemperature" <<
-    std::endl;
+    std::cerr << " inputImage output lambda iterations optimizerTemperature" << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-    }
+  }
 
   //  Then we must decide what pixel type to use for the image. We
   //  choose to make all computations with double precision.
@@ -86,8 +84,8 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
@@ -96,8 +94,7 @@ int main(int argc, char* argv[])
   //  A \doxygen{otb}{MarkovRandomFieldFilter} is instantiated, this is the
   // main class which connect the other to do the Markov classification.
 
-  typedef otb::MarkovRandomFieldFilter
-  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
   //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the
   // \doxygen{otb}{MRFSampler}, is instantiated. The sampler is in charge of
@@ -123,45 +120,41 @@ int main(int argc, char* argv[])
   // The second energy is for the fidelity to the original data. Here it is done with an
   // \doxygen{otb}{MRFEnergyGaussianClassification} class, which defines a gaussian model for the data.
 
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussianClassification
-  <InputImageType, LabelledImageType>  EnergyFidelityType;
+  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
+  typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
 
   // The different filters composing our pipeline are created by invoking their
   // \code{New()} methods, assigning the results to smart pointers.
 
-  MarkovRandomFieldFilterType::Pointer markovFilter =
-    MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization =
-    EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer      optimizer = OptimizerType::New();
-  SamplerType::Pointer        sampler = SamplerType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
+  OptimizerType::Pointer               optimizer            = OptimizerType::New();
+  SamplerType::Pointer                 sampler              = SamplerType::New();
 
   // Parameter for the \doxygen{otb}{MRFEnergyGaussianClassification} class, meand
   // and standard deviation are created.
 
-  if ((bool) (atoi(argv[6])) == true)
-    {
+  if ((bool)(atoi(argv[6])) == true)
+  {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-    }
+  }
 
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2 * nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
-  parameters[0] = 10.0; //Class 0 mean
-  parameters[1] = 10.0; //Class 0 stdev
-  parameters[2] = 80.0; //Class 1 mean
-  parameters[3] = 10.0; //Class 1 stdev
-  parameters[4] = 150.0; //Class 2 mean
-  parameters[5] = 10.0; //Class 2 stdev
-  parameters[6] = 220.0; //Class 3 mean
-  parameters[7] = 10.0; //Class 3 stde
+  parameters[0] = 10.0;  // Class 0 mean
+  parameters[1] = 10.0;  // Class 0 stdev
+  parameters[2] = 80.0;  // Class 1 mean
+  parameters[3] = 10.0;  // Class 1 stdev
+  parameters[4] = 150.0; // Class 2 mean
+  parameters[5] = 10.0;  // Class 2 stdev
+  parameters[6] = 220.0; // Class 3 mean
+  parameters[7] = 10.0;  // Class 3 stde
   energyFidelity->SetParameters(parameters);
 
   // Parameters are given to the different class an the sampler, optimizer and
@@ -186,9 +179,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer rescaleFilter = RescaleType::New();
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
+  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
@@ -217,5 +209,4 @@ int main(int argc, char* argv[])
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

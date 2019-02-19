@@ -20,7 +20,6 @@
  */
 
 
-
 //  Given that \href{http://www.itk.org}{ITK} and OTB are based on the Generic
 //  Programming paradigm, most of the types are defined at compilation
 //  time. It is sometimes important to anticipate conversion between different
@@ -44,15 +43,15 @@
 
 #include "otbImage.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Then, as usual, a decision should be made about the pixel type that
   //  should be used to represent the images. Note that when reading an
@@ -62,9 +61,9 @@ int main(int argc, char * argv[])
 
   typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   //  We can now instantiate the types of the reader and writer. These two
@@ -79,9 +78,7 @@ int main(int argc, char * argv[])
   //  Below we instantiate the RescaleIntensityImageFilter class that will
   //  linearly scale the image intensities.
 
-  typedef itk::RescaleIntensityImageFilter<
-      InputImageType,
-      OutputImageType>    FilterType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> FilterType;
 
   //  A filter object is constructed and the minimum and maximum values of
   //  the output are selected using the SetOutputMinimum() and
@@ -110,8 +107,8 @@ int main(int argc, char * argv[])
   //
   // Here we recover the file names from the command line arguments
   //
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   //  The name of the files to be read and written are passed with the
   //  SetFileName() method.
@@ -129,15 +126,15 @@ int main(int argc, char * argv[])
   //  version of the input image.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

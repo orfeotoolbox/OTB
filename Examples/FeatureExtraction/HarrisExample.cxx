@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include "otbImage.h"
 
@@ -38,27 +37,27 @@
 #include "otbHarrisImageToPointSetFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 6)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputHarrisImageFile sigmaD sigmaI alpha" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  double SigmaD((double) ::atof(argv[3]));
-  double SigmaI((double) ::atof(argv[4]));
-  double Alpha((double) ::atof(argv[5]));
+  double SigmaD((double)::atof(argv[3]));
+  double SigmaI((double)::atof(argv[4]));
+  double Alpha((double)::atof(argv[5]));
 
-  typedef float InputPixelType;
-  const unsigned int Dimension = 2;
+  typedef float         InputPixelType;
+  const unsigned int    Dimension = 2;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
@@ -67,16 +66,14 @@ int main(int argc, char *argv[])
   //  input and output image types, so we start by
   //  defining:
 
-  typedef otb::HarrisImageFilter<InputImageType,
-      InputImageType>   HarrisFilterType;
-  typedef itk::RescaleIntensityImageFilter
-  <InputImageType, OutputImageType> RescalerType;
+  typedef otb::HarrisImageFilter<InputImageType, InputImageType>            HarrisFilterType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer       reader   = ReaderType::New();
   WriterType::Pointer       writer   = WriterType::New();
-  HarrisFilterType::Pointer harris = HarrisFilterType::New();
+  HarrisFilterType::Pointer harris   = HarrisFilterType::New();
   RescalerType::Pointer     rescaler = RescalerType::New();
 
   reader->SetFileName(inputFilename);
@@ -135,8 +132,8 @@ int main(int argc, char *argv[])
   //  We declare now the filter and a pointer to the output point set.
   typedef FunctionType::OutputPointSetType OutputPointSetType;
 
-  FunctionType::Pointer       harrisPoints    = FunctionType::New();
-  OutputPointSetType::Pointer pointSet = OutputPointSetType::New();
+  FunctionType::Pointer       harrisPoints = FunctionType::New();
+  OutputPointSetType::Pointer pointSet     = OutputPointSetType::New();
 
   //  The \doxygen{otb}{HarrisImageToPointSetFilter} takes the same
   // parameters as the \doxygen{otb}{HarrisImageFilter} and an
@@ -159,19 +156,19 @@ int main(int argc, char *argv[])
   //  an iterator to it.
 
   typedef OutputPointSetType::PointsContainer ContainerType;
-  ContainerType* pointsContainer = pointSet->GetPoints();
-  typedef ContainerType::Iterator IteratorType;
-  IteratorType itList = pointsContainer->Begin();
+  ContainerType*                              pointsContainer = pointSet->GetPoints();
+  typedef ContainerType::Iterator             IteratorType;
+  IteratorType                                itList = pointsContainer->Begin();
 
   //  And we get the points coordinates
 
   while (itList != pointsContainer->End())
-    {
+  {
     typedef OutputPointSetType::PointType OutputPointType;
-    OutputPointType pCoordinate = (itList.Value());
+    OutputPointType                       pCoordinate = (itList.Value());
     std::cout << pCoordinate << std::endl;
     ++itList;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

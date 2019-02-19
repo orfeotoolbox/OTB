@@ -19,7 +19,6 @@
  */
 
 
-
 //  This example illustrates how to compute second derivatives of
 //  an image using the \doxygen{itk}{RecursiveGaussianImageFilter}.
 //
@@ -34,22 +33,22 @@
 #include "otbImage.h"
 #include <string>
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImage outputPrefix  [sigma] " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef float PixelType;
   typedef float OutputPixelType;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType,       Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<ImageType>       ReaderType;
@@ -57,14 +56,12 @@ int main(int argc, char * argv[])
 
   typedef itk::ImageDuplicator<OutputImageType> DuplicatorType;
 
-  typedef itk::RecursiveGaussianImageFilter<
-      ImageType,
-      ImageType>  FilterType;
+  typedef itk::RecursiveGaussianImageFilter<ImageType, ImageType> FilterType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
-  WriterType::Pointer writer  = WriterType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
 
-  DuplicatorType::Pointer duplicator  = DuplicatorType::New();
+  DuplicatorType::Pointer duplicator = DuplicatorType::New();
 
   reader->SetFileName(argv[1]);
 
@@ -72,15 +69,15 @@ int main(int argc, char * argv[])
   std::string outputFileName;
 
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch (itk::ExceptionObject& excp)
-    {
+  {
     std::cerr << "Problem reading the input file" << std::endl;
     std::cerr << excp << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   FilterType::Pointer ga = FilterType::New();
   FilterType::Pointer gb = FilterType::New();
@@ -91,12 +88,12 @@ int main(int argc, char * argv[])
   gc->SetDirection(2);
 
   if (argc > 3)
-    {
+  {
     const float sigma = atof(argv[3]);
     ga->SetSigma(sigma);
     gb->SetSigma(sigma);
     gc->SetSigma(sigma);
-    }
+  }
 
   ga->SetZeroOrder();
   gb->SetZeroOrder();
@@ -120,8 +117,8 @@ int main(int argc, char * argv[])
   writer->SetFileName(outputFileName);
   writer->Update();
 
-  gc->SetDirection(1);    // gc now works along Y
-  gb->SetDirection(2);    // gb now works along Z
+  gc->SetDirection(1); // gc now works along Y
+  gb->SetDirection(2); // gb now works along Z
 
   gc->Update();
   duplicator->Update();
@@ -133,8 +130,8 @@ int main(int argc, char * argv[])
   writer->SetFileName(outputFileName);
   writer->Update();
 
-  gc->SetDirection(0);    // gc now works along X
-  ga->SetDirection(1);    // ga now works along Y
+  gc->SetDirection(0); // gc now works along X
+  ga->SetDirection(1); // ga now works along Y
 
   gc->Update();
   duplicator->Update();

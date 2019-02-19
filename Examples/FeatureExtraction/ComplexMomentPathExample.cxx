@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include "otbImage.h"
 
@@ -42,17 +41,17 @@
 #include "otbComplexMomentPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " p q" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  unsigned int P((unsigned char) ::atoi(argv[1]));
-  unsigned int Q((unsigned char) ::atoi(argv[2]));
+  unsigned int P((unsigned char)::atoi(argv[1]));
+  unsigned int Q((unsigned char)::atoi(argv[2]));
 
   //  The \doxygen{otb}{ComplexMomentPathFunction} is templated over the
   //  input path type and the output complex type value, so we start by
@@ -108,8 +107,7 @@ int main(int argc, char * argv[])
 
   ComplexType Result = cmFunction->Evaluate();
 
-  std::cout << "The moment of order (" << P << "," << Q <<
-  ") is equal to " << Result << std::endl;
+  std::cout << "The moment of order (" << P << "," << Q << ") is equal to " << Result << std::endl;
 
   return EXIT_SUCCESS;
 }

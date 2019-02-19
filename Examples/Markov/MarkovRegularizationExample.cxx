@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./MarkovRegularizationExample Input/ROI_QB_MUL_1_SVN_CLASS_MULTI.png Output/MarkovRegularization.png Output/MarkovRegularization-scaled.png 0.2 20 0.0 1
 */
@@ -55,15 +54,13 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 8)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature "
-              << std::endl;
+    std::cerr << " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature " << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-    }
+  }
 
   const unsigned int Dimension = 2;
 
@@ -76,49 +73,42 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  const char * outputScaledFilename = argv[3];
+  const char* inputFilename        = argv[1];
+  const char* outputFilename       = argv[2];
+  const char* outputScaledFilename = argv[3];
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter
-  <LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  typedef otb::MarkovRandomFieldFilter<LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
-  typedef otb::MRFSamplerRandom<LabelledImageType,
-      LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandom<LabelledImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerMetropolis OptimizerType;
 
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyFidelityType;
+  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType> EnergyRegularizationType;
+  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType> EnergyFidelityType;
 
-  MarkovRandomFieldFilterType::Pointer markovFilter
-    = MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization
-    = EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer      optimizer = OptimizerType::New();
-  SamplerType::Pointer        sampler = SamplerType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
+  OptimizerType::Pointer               optimizer            = OptimizerType::New();
+  SamplerType::Pointer                 sampler              = SamplerType::New();
 
-  if ((bool) (atoi(argv[7])) == true)
-    {
+  if ((bool)(atoi(argv[7])) == true)
+  {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-    }
+  }
 
   // To find the number of classes available in the original image we use the
   // \doxygen{itk}{LabelStatisticsImageFilter} and more particularly the method
   // \code{GetNumberOfLabels()}.
 
-  typedef itk::LabelStatisticsImageFilter
-  <LabelledImageType, LabelledImageType> LabelledStatType;
-  LabelledStatType::Pointer labelledStat = LabelledStatType::New();
+  typedef itk::LabelStatisticsImageFilter<LabelledImageType, LabelledImageType> LabelledStatType;
+  LabelledStatType::Pointer                                                     labelledStat = LabelledStatType::New();
   labelledStat->SetInput(reader->GetOutput());
   labelledStat->SetLabelInput(reader->GetOutput());
   labelledStat->Update();
@@ -144,9 +134,8 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer rescaleFilter = RescaleType::New();
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
+  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
@@ -173,5 +162,4 @@ int main(int argc, char* argv[])
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

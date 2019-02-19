@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./DEMToRainbowExample Output/DEMToRainbowImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
 */
@@ -55,24 +54,22 @@
 #include "otbDEMToImageGenerator.h"
 #include "otbReliefColormapFunctor.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc < 9)
-    {
-    std::cout << argv[0] <<
-    " <output_filename> <Longitude Output Origin point>";
-    std::cout <<
-    " <Latitude Output Origin point> <X Output Size> <Y Output size>";
-    std::cout << " <X Spacing> <Y Spacing> <DEM folder path>"  << std::endl;
+  {
+    std::cout << argv[0] << " <output_filename> <Longitude Output Origin point>";
+    std::cout << " <Latitude Output Origin point> <X Output Size> <Y Output size>";
+    std::cout << " <X Spacing> <Y Spacing> <DEM folder path>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  typedef double                                      PixelType;
-  typedef unsigned char                               UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType>               RGBPixelType;
-  typedef otb::Image<PixelType, 2>                    ImageType;
-  typedef otb::Image<RGBPixelType, 2>                 RGBImageType;
+  typedef double                             PixelType;
+  typedef unsigned char                      UCharPixelType;
+  typedef itk::RGBPixel<UCharPixelType>      RGBPixelType;
+  typedef otb::Image<PixelType, 2>           ImageType;
+  typedef otb::Image<RGBPixelType, 2>        RGBImageType;
   typedef otb::ImageFileWriter<RGBImageType> WriterType;
 
   WriterType::Pointer writer = WriterType::New();
@@ -82,9 +79,9 @@ int main(int argc, char * argv[])
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType       SizeType;
-  typedef DEMToImageGeneratorType::SpacingType    SpacingType;
-  typedef DEMToImageGeneratorType::PointType      PointType;
+  typedef DEMToImageGeneratorType::SizeType    SizeType;
+  typedef DEMToImageGeneratorType::SpacingType SpacingType;
+  typedef DEMToImageGeneratorType::PointType   PointType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[8]);
 
@@ -110,45 +107,38 @@ int main(int argc, char * argv[])
   // the filter in charge of calling the functor we specify to do the work for
   // each pixel. Here it is the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}.
 
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType,
-      RGBImageType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  typedef itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType> ColorMapFilterType;
+  ColorMapFilterType::Pointer                                          colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   if (argc == 9)
-    {
-    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType,
-        RGBPixelType>
-    ColorMapFunctorType;
-    ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+  {
+    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+    ColorMapFunctorType::Pointer                                                  colormap = ColorMapFunctorType::New();
     colormap->SetMinimumInputValue(0);
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
-    }
+  }
 
   else
-    {
+  {
     if (strcmp(argv[9], "hot") == 0)
-      {
-      typedef itk::Function::HotColormapFunction<PixelType,
-          RGBPixelType>
-      ColorMapFunctorType;
-      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
+    {
+      typedef itk::Function::HotColormapFunction<PixelType, RGBPixelType> ColorMapFunctorType;
+      ColorMapFunctorType::Pointer                                        colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
-      }
-    else
-      {
-      typedef otb::Functor::ReliefColormapFunctor<PixelType,
-          RGBPixelType>
-      ColorMapFunctorType;
-      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
-      colormap->SetMinimumInputValue(0);
-      colormap->SetMaximumInputValue(4000);
-      colormapper->SetColormap(colormap);
-      }
     }
+    else
+    {
+      typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
+      ColorMapFunctorType::Pointer                                         colormap = ColorMapFunctorType::New();
+      colormap->SetMinimumInputValue(0);
+      colormap->SetMaximumInputValue(4000);
+      colormapper->SetColormap(colormap);
+    }
+  }
   // And we connect the color mapper filter with the filter producing
   // the image of the DEM:
 
@@ -157,33 +147,33 @@ int main(int argc, char * argv[])
   writer->SetInput(colormapper->GetOutput());
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Figure~\ref{fig:RAINBOW_FILTER} shows the effect of applying the filter to
   // a gray scale image.
   //
-// \begin{figure}
-// \center
-// \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
-// \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
-// \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
-// \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
-// \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
-// data (top-left) and the same area represented in color.}
-// \label{fig:RAINBOW_FILTER}
-// \end{figure}
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
+  // \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
+  // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
+  // data (top-left) and the same area represented in color.}
+  // \label{fig:RAINBOW_FILTER}
+  // \end{figure}
 
   return EXIT_SUCCESS;
 }

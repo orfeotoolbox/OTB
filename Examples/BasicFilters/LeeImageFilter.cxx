@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./LeeImageFilter Input/GomaSmall.png Output/GomaSmallLeeFiltered.png 3 1
 */

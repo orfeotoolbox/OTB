@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./PanTexExample Input/ROI_QB_MUL_1.png Output/PanTexOutput.tif Output/pretty_PanTexInput.png Output/pretty_PanTexOutput.png
 */
@@ -46,42 +45,41 @@
 
 #include "otbScalarImageToPanTexTextureFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Parse command line parameters
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
     std::cerr << " <outputImage> <inputRescaled> <outputRescaled> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char* infname   = argv[1];
-  const char* outfname  = argv[2];
+  const char* infname        = argv[1];
+  const char* outfname       = argv[2];
   const char* inprettyfname  = argv[3];
-  const char* outprettyfname  = argv[4];
+  const char* outprettyfname = argv[4];
 
-  typedef double PixelType;
-  const int Dimension = 2;
+  typedef double                           PixelType;
+  const int                                Dimension = 2;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-// After defining the types for the pixels and the images used in the
-// example, we define the type for the PanTex filter. It is
-// templated by the input and output image types.
+  // After defining the types for the pixels and the images used in the
+  // example, we define the type for the PanTex filter. It is
+  // templated by the input and output image types.
 
-  typedef otb::ScalarImageToPanTexTextureFilter
-  <ImageType, ImageType> PanTexTextureFilterType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
+  typedef otb::ImageFileReader<ImageType>                             ReaderType;
+  typedef otb::ImageFileWriter<ImageType>                             WriterType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-// We can now instatiate the filter.
+  // We can now instatiate the filter.
 
   PanTexTextureFilterType::Pointer textureFilter = PanTexTextureFilterType::New();
 
@@ -121,18 +119,12 @@ int main(int argc, char * argv[])
 
   // Pretty image creation for printing
 
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyOutputType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputPrettyImageType>
-  RescalerOutputType;
+  typedef otb::Image<unsigned char, Dimension>                               OutputPrettyImageType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                        WriterPrettyOutputType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType> RescalerOutputType;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter =
-    WriterPrettyOutputType::New();
+  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
   outputRescaler->SetInput(textureFilter->GetOutput());
   outputRescaler->SetOutputMinimum(0);
   outputRescaler->SetOutputMaximum(255);

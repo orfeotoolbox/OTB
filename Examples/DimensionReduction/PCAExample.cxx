@@ -46,15 +46,15 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double PixelType;
-  const unsigned int Dimension = 2;
-  const char *       inputFileName = argv[1];
-  const char *       outputFilename = argv[2];
-  const char *       outputInverseFilename = argv[3];
+  typedef double     PixelType;
+  const unsigned int Dimension             = 2;
+  const char*        inputFileName         = argv[1];
+  const char*        outputFilename        = argv[2];
+  const char*        outputInverseFilename = argv[3];
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[7]));
-  const char *       inpretty = argv[4];
-  const char *       outpretty = argv[5];
-  const char *       invoutpretty = argv[6];
+  const char*        inpretty     = argv[4];
+  const char*        outpretty    = argv[5];
+  const char*        invoutpretty = argv[6];
 
 
   // We start by defining the types for the images and the reader and
@@ -67,16 +67,15 @@ int main(int itkNotUsed(argc), char* argv[])
   typedef otb::ImageFileWriter<ImageType>        WriterType;
   // We instantiate now the image reader and we set the image file name.
 
-  ReaderType::Pointer reader     = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
   // We define the type for the filter. It is templated over the input
   // and the output image types and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
 
-  typedef otb::PCAImageFilter<ImageType, ImageType,
-                              otb::Transform::FORWARD> PCAFilterType;
-  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
+  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> PCAFilterType;
+  PCAFilterType::Pointer                                                     pcafilter = PCAFilterType::New();
   // The only parameter needed for the PCA is the number of principal
   // components required as output. Principal components are linear combination of input components
   // (here the input image  bands),
@@ -84,12 +83,11 @@ int main(int itkNotUsed(argc), char* argv[])
   // We can choose to get less Principal Components than
   // the number of input bands.
 
-  pcafilter->SetNumberOfPrincipalComponentsRequired(
-    numberOfPrincipalComponentsRequired);
+  pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
   // We now instantiate the writer and set the file name for the
   // output image.
 
-  WriterType::Pointer writer     = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
   // We finally plug the pipeline and trigger the PCA computation with
   // the method \code{Update()} of the writer.
@@ -104,16 +102,15 @@ int main(int itkNotUsed(argc), char* argv[])
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
 
-  typedef otb::PCAImageFilter< ImageType, ImageType,
-                               otb::Transform::INVERSE > InvPCAFilterType;
-  InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
+  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::INVERSE> InvPCAFilterType;
+  InvPCAFilterType::Pointer                                                  invFilter = InvPCAFilterType::New();
 
   invFilter->SetInput(pcafilter->GetOutput());
   invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
 
   WriterType::Pointer invWriter = WriterType::New();
-  invWriter->SetFileName(outputInverseFilename );
-  invWriter->SetInput(invFilter->GetOutput() );
+  invWriter->SetFileName(outputInverseFilename);
+  invWriter->SetInput(invFilter->GetOutput());
 
   invWriter->Update();
 
@@ -134,16 +131,16 @@ int main(int itkNotUsed(argc), char* argv[])
   // \end{figure}
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<ImageType,ImageType> PrintFilterType;
-  typedef PrintFilterType::OutputImageType               VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>            VisuWriterType;
+  typedef otb::PrintableImageFilter<ImageType, ImageType> PrintFilterType;
+  typedef PrintFilterType::OutputImageType                VisuImageType;
+  typedef otb::ImageFileWriter<VisuImageType>             VisuWriterType;
 
-  PrintFilterType::Pointer inputPrintFilter = PrintFilterType::New();
-  PrintFilterType::Pointer outputPrintFilter = PrintFilterType::New();
+  PrintFilterType::Pointer inputPrintFilter        = PrintFilterType::New();
+  PrintFilterType::Pointer outputPrintFilter       = PrintFilterType::New();
   PrintFilterType::Pointer invertOutputPrintFilter = PrintFilterType::New();
-  VisuWriterType::Pointer inputVisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer outputVisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer invertOutputVisuWriter = VisuWriterType::New();
+  VisuWriterType::Pointer  inputVisuWriter         = VisuWriterType::New();
+  VisuWriterType::Pointer  outputVisuWriter        = VisuWriterType::New();
+  VisuWriterType::Pointer  invertOutputVisuWriter  = VisuWriterType::New();
 
   inputPrintFilter->SetInput(reader->GetOutput());
   inputPrintFilter->SetChannel(5);

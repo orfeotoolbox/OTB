@@ -20,7 +20,6 @@
  */
 
 
-
 // Many image processing tasks require images of non-scalar pixel type. A
 // typical example is a multispectral image.  The following code illustrates
 // how to instantiate and use an image whose pixels are of vector type.
@@ -47,7 +46,7 @@
 
 #include "otbVectorImage.h"
 
-int main(int, char *[])
+int main(int, char* [])
 {
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In
@@ -66,11 +65,11 @@ int main(int, char *[])
   ImageType::IndexType start;
   ImageType::SizeType  size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
-  start[0] =   0;  // first index on X
-  start[1] =   0;  // first index on Y
+  start[0] = 0; // first index on X
+  start[1] = 0; // first index on Y
 
   ImageType::RegionType region;
   region.SetSize(size);
@@ -87,8 +86,8 @@ int main(int, char *[])
 
   ImageType::IndexType pixelIndex;
 
-  pixelIndex[0] = 27;   // x position
-  pixelIndex[1] = 29;   // y position
+  pixelIndex[0] = 27; // x position
+  pixelIndex[1] = 29; // y position
 
   // The VariableLengthVector class overloads the operator
   // \code{[]}. This makes it possible to access the
@@ -99,15 +98,15 @@ int main(int, char *[])
   ImageType::PixelType pixelValue;
   pixelValue.Reserve(4);
 
-  pixelValue[0] =  1;   // Blue component
-  pixelValue[1] =  6;   // Green component
-  pixelValue[2] =  100; // Red component
-  pixelValue[3] =  100; // NIR component
+  pixelValue[0] = 1;   // Blue component
+  pixelValue[1] = 6;   // Green component
+  pixelValue[2] = 100; // Red component
+  pixelValue[3] = 100; // NIR component
 
   // We can now store this vector in one of the image pixels by defining an
   // index and invoking the \code{SetPixel()} method.
 
-  image->SetPixel(pixelIndex,   pixelValue);
+  image->SetPixel(pixelIndex, pixelValue);
 
 
   // The GetPixel method can also be used to read Vectors

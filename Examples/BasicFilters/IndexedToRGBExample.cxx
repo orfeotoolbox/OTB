@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./IndexedToRGBExample Input/buildingExtractionIndexed.tif Output/buildingExtractionRGB.png Output/buildingExtractionIndexed_scaled.png
 */
@@ -46,23 +45,23 @@
 
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <inputImageFile> ";
     std::cerr << " <outputRGBImageFile> <outputScaledImageFile>" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char * inputFilename  = argv[1];
-  const char * outputRGBFilename = argv[2];
-  const char * outputScaledFilename = argv[3];
+  }
+  const char* inputFilename        = argv[1];
+  const char* outputRGBFilename    = argv[2];
+  const char* outputScaledFilename = argv[3];
 
   typedef otb::Image<unsigned long, 2>                ImageType;
   typedef otb::Image<itk::RGBPixel<unsigned char>, 2> RGBImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
 
@@ -70,30 +69,27 @@ int main(int argc, char * argv[])
   // calling the functor we specify to do the work for each pixel. Here it is the
   // \doxygen{itk}{ScalarToRGBPixelFunctor}.
 
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
-  ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType,
-      ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                       ColorMapFunctorType;
+  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  ColorMapFilterType::Pointer                                                        colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(reader->GetOutput());
 
   typedef otb::ImageFileWriter<RGBImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                        writer = WriterType::New();
   writer->SetFileName(outputRGBFilename);
   writer->SetInput(colormapper->GetOutput());
 
   writer->Update();
 
-  //The following is just to produce the input image for the software guide
-  typedef otb::Image<unsigned char, 2> OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescalerType;
-  RescalerType::Pointer rescaler = RescalerType::New();
+  // The following is just to produce the input image for the software guide
+  typedef otb::Image<unsigned char, 2>                                 OutputImageType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  RescalerType::Pointer                                                rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 
   typedef otb::ImageFileWriter<OutputImageType> UCharWriterType;
-  UCharWriterType::Pointer writer2 = UCharWriterType::New();
+  UCharWriterType::Pointer                      writer2 = UCharWriterType::New();
   writer2->SetFileName(outputScaledFilename);
   writer2->SetInput(rescaler->GetOutput());
   writer2->Update();

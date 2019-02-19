@@ -20,7 +20,6 @@
  */
 
 
-
 /* Example usage:
 ./BayesianFusionImageFilter Input/multiSpect.tif \
                             Input/multiSpectInterp.tif \
@@ -88,25 +87,24 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 10)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputMultiSpectralImage inputMultiSpectralInterpolatedImage "
               << "inputPanchromatiqueImage outputImage outputImagePrinted "
-              << "msPrinted msiPrinted panchroPrinted lambda"
-              << std::endl;
+              << "msPrinted msiPrinted panchroPrinted lambda" << std::endl;
     return 1;
-    }
+  }
 
   //  The image types are now defined using pixel types and particular
   //  dimension. The panchromatic image is defined as an \doxygen{otb}{Image}
   //  and the multispectral one as \doxygen{otb}{VectorImage}.
 
-  typedef double InternalPixelType;
-  const unsigned int Dimension = 2;
+  typedef double                                         InternalPixelType;
+  const unsigned int                                     Dimension = 2;
   typedef otb::Image<InternalPixelType, Dimension>       PanchroImageType;
   typedef otb::VectorImage<InternalPixelType, Dimension> MultiSpecImageType;
 
@@ -115,14 +113,14 @@ int main(int argc, char *argv[])
 
   // We instantiate reader and writer types
   //
-  typedef  otb::ImageFileReader<MultiSpecImageType> ReaderVectorType;
-  typedef  otb::ImageFileReader<PanchroImageType>   ReaderType;
-  typedef  otb::ImageFileWriter<OutputImageType>    WriterType;
+  typedef otb::ImageFileReader<MultiSpecImageType> ReaderVectorType;
+  typedef otb::ImageFileReader<PanchroImageType>   ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>    WriterType;
 
   ReaderVectorType::Pointer multiSpectReader       = ReaderVectorType::New();
   ReaderVectorType::Pointer multiSpectInterpReader = ReaderVectorType::New();
-  ReaderType::Pointer       panchroReader                = ReaderType::New();
-  WriterType::Pointer       writer                       = WriterType::New();
+  ReaderType::Pointer       panchroReader          = ReaderType::New();
+  WriterType::Pointer       writer                 = WriterType::New();
 
   multiSpectReader->SetFileName(argv[1]);
   multiSpectInterpReader->SetFileName(argv[2]);
@@ -132,17 +130,12 @@ int main(int argc, char *argv[])
   //  The Bayesian data fusion filter type is instantiated using the images types as
   //  a template parameters.
 
-  typedef otb::BayesianFusionFilter<MultiSpecImageType,
-      MultiSpecImageType,
-      PanchroImageType,
-      OutputImageType>
-  BayesianFusionFilterType;
+  typedef otb::BayesianFusionFilter<MultiSpecImageType, MultiSpecImageType, PanchroImageType, OutputImageType> BayesianFusionFilterType;
 
   //  Next the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
 
-  BayesianFusionFilterType::Pointer bayesianFilter =
-    BayesianFusionFilterType::New();
+  BayesianFusionFilterType::Pointer bayesianFilter = BayesianFusionFilterType::New();
 
   //  Now the multi spectral image, the interpolated multi spectral image and
   //  the panchromatic image are given as inputs to the filter.
@@ -165,30 +158,23 @@ int main(int argc, char *argv[])
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
 
   // Create an 3 band images for the software guide
-  typedef unsigned char                                 OutputPixelType2;
-  typedef otb::VectorImage<OutputPixelType2, Dimension> OutputVectorImageType;
-  typedef otb::ImageFileWriter<OutputVectorImageType>   VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType,
-      OutputVectorImageType>
-  VectorRescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<OutputImageType,
-      OutputVectorImageType>
-  VectorRescalerBayesianType;
-  typedef otb::ImageToVectorImageCastFilter<PanchroImageType,
-      MultiSpecImageType> CasterType;
-  typedef otb::MultiChannelExtractROI<OutputPixelType2,
-      OutputPixelType2>
-  ChannelExtractorType;
+  typedef unsigned char                                                                     OutputPixelType2;
+  typedef otb::VectorImage<OutputPixelType2, Dimension>                                     OutputVectorImageType;
+  typedef otb::ImageFileWriter<OutputVectorImageType>                                       VectorWriterType;
+  typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType, OutputVectorImageType> VectorRescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<OutputImageType, OutputVectorImageType>    VectorRescalerBayesianType;
+  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>           CasterType;
+  typedef otb::MultiChannelExtractROI<OutputPixelType2, OutputPixelType2>                   ChannelExtractorType;
 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();
@@ -231,24 +217,24 @@ int main(int argc, char *argv[])
   rp->SetOutputMaximum(maximum);
   rp->SetClampThreshold(0.01);
 
-  ChannelExtractorType::Pointer selecterms = ChannelExtractorType::New();
+  ChannelExtractorType::Pointer selecterms  = ChannelExtractorType::New();
   ChannelExtractorType::Pointer selectermsi = ChannelExtractorType::New();
-  ChannelExtractorType::Pointer selecterf = ChannelExtractorType::New();
+  ChannelExtractorType::Pointer selecterf   = ChannelExtractorType::New();
 
   selecterms->SetInput(vrms->GetOutput());
-// selecterms->SetExtractionRegion(multiSpectReader->GetOutput()->GetLargestPossibleRegion());
+  // selecterms->SetExtractionRegion(multiSpectReader->GetOutput()->GetLargestPossibleRegion());
   selecterms->SetChannel(2);
   selecterms->SetChannel(3);
   selecterms->SetChannel(4);
 
   selectermsi->SetInput(vrmsi->GetOutput());
-// selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
+  // selectermsi->SetExtractionRegion(multiSpectInterpReader->GetOutput()->GetLargestPossibleRegion());
   selectermsi->SetChannel(2);
   selectermsi->SetChannel(3);
   selectermsi->SetChannel(4);
 
   selecterf->SetInput(vrb->GetOutput());
-  //selecterf->SetExtractionRegion(bayesianFilter->GetOutput()->GetLargestPossibleRegion());
+  // selecterf->SetExtractionRegion(bayesianFilter->GetOutput()->GetLargestPossibleRegion());
   selecterf->SetChannel(2);
   selecterf->SetChannel(3);
   selecterf->SetChannel(4);
@@ -268,22 +254,22 @@ int main(int argc, char *argv[])
   vectWriterp->SetInput(rp->GetOutput());
 
   try
-    {
+  {
     vectWriterms->Update();
     vectWritermsi->Update();
     vectWriterf->Update();
     vectWriterp->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Let's now run this example using as input the images
   //  \code{multiSpect.tif} , \code{multiSpectInterp.tif} and \code{panchro.tif}

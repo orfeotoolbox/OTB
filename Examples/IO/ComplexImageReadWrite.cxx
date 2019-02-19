@@ -20,7 +20,6 @@
  */
 
 
-
 //  This example illustrates how to read and write an image of pixel type
 //  \code{std::complex}. The complex type is defined as an integral part of the
 //  C++ language.
@@ -39,28 +38,28 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   // Verify the number of parameters in the command line
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-// The image dimension and pixel type must be declared. In this case we use the
-// \code{std::complex<>} as the pixel type. Using the dimension and pixel type
-// we proceed to instantiate the image type.
+  // The image dimension and pixel type must be declared. In this case we use the
+  // \code{std::complex<>} as the pixel type. Using the dimension and pixel type
+  // we proceed to instantiate the image type.
 
   const unsigned int Dimension = 2;
 
   typedef std::complex<float>              PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-// The image file reader and writer types are instantiated using the image
-// type. We can then create objects for both of them.
+  // The image file reader and writer types are instantiated using the image
+  // type. We can then create objects for both of them.
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
@@ -68,36 +67,36 @@ int main(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-// Filenames should be provided for both the reader and the writer. In this
-// particular example we take those filenames from the command line arguments.
+  // Filenames should be provided for both the reader and the writer. In this
+  // particular example we take those filenames from the command line arguments.
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-// Here we simply connect the output of the reader as input to the writer.
-// This simple program could be used for converting complex images from one
-// fileformat to another.
+  // Here we simply connect the output of the reader as input to the writer.
+  // This simple program could be used for converting complex images from one
+  // fileformat to another.
 
   writer->SetInput(reader->GetOutput());
 
-// The execution of this short pipeline is triggered by invoking the Update()
-// method of the writer. This invocation must be placed inside a try/catch
-// block since its execution may result in exceptions being thrown.
+  // The execution of this short pipeline is triggered by invoking the Update()
+  // method of the writer. This invocation must be placed inside a try/catch
+  // block since its execution may result in exceptions being thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-// For a more interesting use of this code, you may want to add a filter in
-// between the reader and the writer and perform any complex image to complex
-// image operation.
+  // For a more interesting use of this code, you may want to add a filter in
+  // between the reader and the writer and perform any complex image to complex
+  // image operation.
 
   return EXIT_SUCCESS;
 }

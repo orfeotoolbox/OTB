@@ -44,20 +44,18 @@
 int main(int argc, char* argv[])
 {
   if (argc < 3)
-    {
-    std::cerr << "Usage: " << argv[0] <<
-    " infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz" <<
-    std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << " infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   else if ((argc - 3) % 5 != 0)
-    {
+  {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * infname       = argv[1];
-  const char * outfname      = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   //  We declare the image type based on a particular pixel type and
   //  dimension. In this case the \code{float} type is used for the pixels.
@@ -65,8 +63,7 @@ int main(int argc, char* argv[])
   typedef otb::Image<float, 2>            ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType>
-  GCPsToSensorModelFilterType;
+  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
 
   typedef GCPsToSensorModelFilterType::Point2DType Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType Point3DType;
@@ -77,8 +74,7 @@ int main(int argc, char* argv[])
 
   //  The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} is instantiated.
 
-  GCPsToSensorModelFilterType::Pointer rpcEstimator =
-    GCPsToSensorModelFilterType::New();
+  GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
 
   // We retrieve the command line parameters and put them in the
@@ -98,7 +94,7 @@ int main(int argc, char* argv[])
   std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
-    {
+  {
     Point2DType sensorPoint;
     sensorPoint[0] = atof(argv[3 + gcpId * 5]);
     sensorPoint[1] = atof(argv[4 + gcpId * 5]);
@@ -108,11 +104,10 @@ int main(int argc, char* argv[])
     geoPoint[1] = atof(argv[6 + 5 * gcpId]);
     geoPoint[2] = atof(argv[7 + 5 * gcpId]);
 
-    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " <<
-    geoPoint << std::endl;
+    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
-    }
+  }
 
   // Note that the \doxygen{otb}{GCPsToRPCSensorModelImageFilter} needs
   // at least 20 GCPs to estimate a proper RPC sensor model,
@@ -134,9 +129,8 @@ int main(int argc, char* argv[])
   ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
-  ofs << (ImageType::Pointer) rpcEstimator->GetOutput() << std::endl;
-  ofs << "Residual ground error: " << rpcEstimator->GetRMSGroundError() <<
-  std::endl;
+  ofs << (ImageType::Pointer)rpcEstimator->GetOutput() << std::endl;
+  ofs << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
   ofs.close();
 
   // The output image can be now given to the \doxygen{otb}{orthorectificationFilter}.

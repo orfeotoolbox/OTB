@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./MeanShiftSegmentationFilterExample Input/ROI_QB_MUL_1.png \
                                      Output/MSLabeledOutput.tif \
@@ -56,25 +55,25 @@
 //  We start by including the needed header file.
 
 #include "otbMeanShiftSegmentationFilter.h"
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 11)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname labeledfname clusteredfname labeledpretty clusteredpretty "
-        << "spatialRadius rangeRadius minRegionSize maxiter thres" << std::endl;
+              << "spatialRadius rangeRadius minRegionSize maxiter thres" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * infname             = argv[1];
-  const char * labeledfname        = argv[2];
-  const char * clusteredfname      = argv[3];
-  const char * labeledpretty       = argv[4];
-  const char * clusteredpretty     = argv[5];
-  const unsigned int spatialRadius = atoi(argv[6]);
-  const double rangeRadius         = atof(argv[7]);
-  const unsigned int minRegionSize = atoi(argv[8]);
-  const unsigned int maxiter       = atoi(argv[9]);
-  const double thres               = atof(argv[10]);
+  const char*        infname         = argv[1];
+  const char*        labeledfname    = argv[2];
+  const char*        clusteredfname  = argv[3];
+  const char*        labeledpretty   = argv[4];
+  const char*        clusteredpretty = argv[5];
+  const unsigned int spatialRadius   = atoi(argv[6]);
+  const double       rangeRadius     = atof(argv[7]);
+  const unsigned int minRegionSize   = atoi(argv[8]);
+  const unsigned int maxiter         = atoi(argv[9]);
+  const double       thres           = atof(argv[10]);
 
   //  We start by the classical \code{typedef}s needed for reading and
   //  writing the images.
@@ -89,7 +88,7 @@ int main(int argc, char * argv[])
   typedef otb::Image<LabelPixelType, Dimension>  LabelImageType;
   typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
 
-  typedef otb::ImageFileReader<ImageType>               ReaderType;
+  typedef otb::ImageFileReader<ImageType>      ReaderType;
   typedef otb::ImageFileWriter<ImageType>      WriterType;
   typedef otb::ImageFileWriter<LabelImageType> LabelWriterType;
 
@@ -98,9 +97,9 @@ int main(int argc, char * argv[])
   //  We instantiate the filter, the reader, and 2 writers (for the
   //  labeled and clustered images).
 
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer1 = WriterType::New();
+  FilterType::Pointer      filter  = FilterType::New();
+  ReaderType::Pointer      reader  = ReaderType::New();
+  WriterType::Pointer      writer1 = WriterType::New();
   LabelWriterType::Pointer writer2 = LabelWriterType::New();
 
   //  We set the file names for the reader and the writers:
@@ -119,7 +118,8 @@ int main(int argc, char * argv[])
   filter->SetMinRegionSize(minRegionSize);
   // Two another parameters can be set  : the maximum iteration number, which defines maximum number of iteration until convergence.
   //  Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.
-  //  Threshold parameter defines mean-shift vector convergence value. Algorithm iterative scheme will stop if mean-shift vector is below this threshold or if iteration number reached maximum number of iterations.
+  //  Threshold parameter defines mean-shift vector convergence value. Algorithm iterative scheme will stop if mean-shift vector is below this threshold or if
+  //  iteration number reached maximum number of iterations.
 
   filter->SetMaxIterationNumber(maxiter);
   filter->SetThreshold(thres);
@@ -146,13 +146,13 @@ int main(int argc, char * argv[])
   // \end{figure}
 
   typedef otb::PrintableImageFilter<ImageType> PrintableFilterType;
-  PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
+  PrintableFilterType::Pointer                 printableImageFilter = PrintableFilterType::New();
 
   printableImageFilter->SetChannel(1);
   printableImageFilter->SetChannel(2);
   printableImageFilter->SetChannel(3);
 
-  typedef PrintableFilterType::OutputImageType OutputImageType;
+  typedef PrintableFilterType::OutputImageType  OutputImageType;
   typedef otb::ImageFileWriter<OutputImageType> PrettyWriterType;
 
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
@@ -167,9 +167,9 @@ int main(int argc, char * argv[])
   LabelRGBWriterType::Pointer labelRGBWriter = LabelRGBWriterType::New();
 
   // Label to RGB image
-  typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType> FunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>                   FunctorType;
   typedef itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, FunctorType> ColorLabelFilterType;
-  ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
+  ColorLabelFilterType::Pointer                                                   labelToRGB = ColorLabelFilterType::New();
 
   labelToRGB->SetInput(filter->GetLabelOutput());
 

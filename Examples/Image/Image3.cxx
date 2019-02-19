@@ -20,7 +20,6 @@
  */
 
 
-
 // This example illustrates the use of the \code{SetPixel()} and
 // \code{GetPixel()} methods.  These two methods provide direct access to the
 // pixel data contained in the image. Note that these two methods are
@@ -33,7 +32,7 @@
 
 #include "otbImage.h"
 
-int main(int, char *[])
+int main(int, char* [])
 {
   // First the image type should be declared
   typedef otb::Image<unsigned short, 2> ImageType;
@@ -45,11 +44,11 @@ int main(int, char *[])
   ImageType::IndexType start;
   ImageType::SizeType  size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
-  start[0] =   0;  // first index on X
-  start[1] =   0;  // first index on Y
+  start[0] = 0; // first index on X
+  start[1] = 0; // first index on Y
 
   ImageType::RegionType region;
   region.SetSize(size);
@@ -83,8 +82,8 @@ int main(int, char *[])
 
   ImageType::IndexType pixelIndex;
 
-  pixelIndex[0] = 27;   // x position
-  pixelIndex[1] = 29;   // y position
+  pixelIndex[0] = 27; // x position
+  pixelIndex[1] = 29; // y position
 
   // Having defined a pixel position with an index, it is then possible to
   // access the content of the pixel in the image.  The \code{GetPixel()}
@@ -98,7 +97,7 @@ int main(int, char *[])
   //
   // \index{otb::Image!SetPixel()}
 
-  image->SetPixel(pixelIndex,   pixelValue + 1);
+  image->SetPixel(pixelIndex, pixelValue + 1);
 
   // Please note that \code{GetPixel()} returns the pixel value using copy
   // and not reference semantics. Hence, the method cannot be used to
@@ -109,5 +108,4 @@ int main(int, char *[])
   // querying pixel values by clicking with the mouse.
 
   return EXIT_SUCCESS;
-
 }

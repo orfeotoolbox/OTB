@@ -65,64 +65,58 @@
 #include <iostream>
 #include <fstream>
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 8)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " InputImage OutputImage OutputSIFTFile octaves scales threshold ratio" <<
-    std::endl;
+    std::cerr << " InputImage OutputImage OutputSIFTFile octaves scales threshold ratio" << std::endl;
     return 1;
-    }
-  const char * infname = argv[1];
-  const char * outfname = argv[3];
-  const char * outputImageFilename = argv[2];
+  }
+  const char* infname             = argv[1];
+  const char* outfname            = argv[3];
+  const char* outputImageFilename = argv[2];
 
-  const unsigned int octaves = atoi(argv[4]);
-  const unsigned int scales = atoi(argv[5]);
+  const unsigned int octaves   = atoi(argv[4]);
+  const unsigned int scales    = atoi(argv[5]);
   float              threshold = atof(argv[6]);
-  float              ratio = atof(argv[7]);
+  float              ratio     = atof(argv[7]);
 
-  typedef float RealType;
+  typedef float      RealType;
   const unsigned int Dimension = 2;
 
-// The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
-// its input image type and the output point set type. Therefore, we
-// start by defining the needed types.
-  typedef otb::Image<RealType, Dimension>     ImageType;
-  typedef itk::VariableLengthVector<RealType> RealVectorType;
-  typedef otb::ImageFileReader<ImageType>     ReaderType;
-  typedef itk::PointSet<RealVectorType,
-      Dimension>            PointSetType;
+  // The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
+  // its input image type and the output point set type. Therefore, we
+  // start by defining the needed types.
+  typedef otb::Image<RealType, Dimension>          ImageType;
+  typedef itk::VariableLengthVector<RealType>      RealVectorType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
+  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
 
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType,
-      PointSetType>
-  ImageToSIFTKeyPointSetFilterType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
 
-// Since the SIFT detector produces a point set, we will need
-// iterators for the coordinates of the points and the data associated
-// with them.
-  typedef PointSetType::PointsContainer    PointsContainerType;
-  typedef PointsContainerType::Iterator    PointsIteratorType;
+  // Since the SIFT detector produces a point set, we will need
+  // iterators for the coordinates of the points and the data associated
+  // with them.
+  typedef PointSetType::PointsContainer PointsContainerType;
+  typedef PointsContainerType::Iterator PointsIteratorType;
 
-// We can now instantiate the reader and the SIFT filter and plug the pipeline.
+  // We can now instantiate the reader and the SIFT filter and plug the pipeline.
   ReaderType::Pointer                       reader = ReaderType::New();
-  ImageToSIFTKeyPointSetFilterType::Pointer filter =
-    ImageToSIFTKeyPointSetFilterType::New();
+  ImageToSIFTKeyPointSetFilterType::Pointer filter = ImageToSIFTKeyPointSetFilterType::New();
 
   reader->SetFileName(infname);
 
   filter->SetInput(reader->GetOutput());
 
-// The SIFT filter needs the following parameters:
-// \begin{itemize}
-// \item the number of octaves, that is, the number of levels of undersampling,
-// \item the number of scales (blurring) per octave,
-// \item the low contrast threshold to be applied to each point for the detection
-// on the difference of Gaussians image,
-// \item the threshold on the responses to consider a point as an edge.
-// \end{itemize}
+  // The SIFT filter needs the following parameters:
+  // \begin{itemize}
+  // \item the number of octaves, that is, the number of levels of undersampling,
+  // \item the number of scales (blurring) per octave,
+  // \item the low contrast threshold to be applied to each point for the detection
+  // on the difference of Gaussians image,
+  // \item the threshold on the responses to consider a point as an edge.
+  // \end{itemize}
   filter->SetOctavesNumber(octaves);
   filter->SetScalesNumber(scales);
 
@@ -162,10 +156,10 @@ int main(int argc, char * argv[])
   // \end{figure}
 
   //
-  //Building the output image for visualization
-  ImageType::OffsetType t = {{ 0, 1}};
-  ImageType::OffsetType b = {{ 0, -1}};
-  ImageType::OffsetType r = {{ 1, 0}};
+  // Building the output image for visualization
+  ImageType::OffsetType t = {{0, 1}};
+  ImageType::OffsetType b = {{0, -1}};
+  ImageType::OffsetType r = {{1, 0}};
   ImageType::OffsetType l = {{-1, 0}};
 
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
@@ -188,13 +182,11 @@ int main(int argc, char * argv[])
   outputImage->SetRegions(region);
   outputImage->Allocate();
 
-  itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage,
-                                                       reader->GetOutput()->
-                                                       GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType> iterOutput(outputImage, reader->GetOutput()->GetLargestPossibleRegion());
 
   for (iterOutput.GoToBegin(); !iterOutput.IsAtEnd(); ++iterOutput)
-    {
-    ImageType::IndexType       index = iterOutput.GetIndex();
+  {
+    ImageType::IndexType       index   = iterOutput.GetIndex();
     ImageType::PixelType       grayPix = reader->GetOutput()->GetPixel(index);
     OutputImageType::PixelType rgbPixel;
     rgbPixel.SetRed(static_cast<unsigned char>(grayPix));
@@ -202,57 +194,44 @@ int main(int argc, char * argv[])
     rgbPixel.SetBlue(static_cast<unsigned char>(grayPix));
 
     iterOutput.Set(rgbPixel);
-    }
+  }
 
-  PointsIteratorType        pIt = filter->GetOutput()->GetPoints()->Begin();
+  PointsIteratorType        pIt     = filter->GetOutput()->GetPoints()->Begin();
   ImageType::SpacingType    spacing = reader->GetOutput()->GetSignedSpacing();
-  ImageType::PointType      origin = reader->GetOutput()->GetOrigin();
-  OutputImageType::SizeType size =
-    outputImage->GetLargestPossibleRegion().GetSize();
+  ImageType::PointType      origin  = reader->GetOutput()->GetOrigin();
+  OutputImageType::SizeType size    = outputImage->GetLargestPossibleRegion().GetSize();
 
   while (pIt != filter->GetOutput()->GetPoints()->End())
-    {
+  {
     ImageType::IndexType index;
 
-    index[0] = (unsigned int)
-               (std::floor
-                  ((double) ((pIt.Value()[0] - origin[0]) / spacing[0] + 0.5)));
+    index[0] = (unsigned int)(std::floor((double)((pIt.Value()[0] - origin[0]) / spacing[0] + 0.5)));
 
-    index[1] = (unsigned int)
-               (std::floor
-                  ((double) ((pIt.Value()[1] - origin[1]) / spacing[1] + 0.5)));
+    index[1] = (unsigned int)(std::floor((double)((pIt.Value()[1] - origin[1]) / spacing[1] + 0.5)));
 
     OutputImageType::PixelType keyPixel;
     keyPixel.SetRed(0);
     keyPixel.SetGreen(255);
     keyPixel.SetBlue(0);
 
-    if (
-      static_cast<unsigned int>(index[1]) <
-      static_cast<unsigned int>(size[1])
-      && static_cast<unsigned int>(index[0]) <
-      static_cast<unsigned int>(size[0]))
-      {
+    if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1]) && static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0]))
+    {
       outputImage->SetPixel(index, keyPixel);
 
-      if (static_cast<unsigned int>(index[1]) <
-          static_cast<unsigned int>(size[1] - 1))
-        outputImage->SetPixel(
-          index + t,
-          keyPixel);
+      if (static_cast<unsigned int>(index[1]) < static_cast<unsigned int>(size[1] - 1))
+        outputImage->SetPixel(index + t, keyPixel);
 
-      if (index[1] > 0) outputImage->SetPixel(index + b, keyPixel);
+      if (index[1] > 0)
+        outputImage->SetPixel(index + b, keyPixel);
 
-      if (static_cast<unsigned int>(index[0]) <
-          static_cast<unsigned int>(size[0] - 1))
-        outputImage->SetPixel(
-          index + r,
-          keyPixel);
+      if (static_cast<unsigned int>(index[0]) < static_cast<unsigned int>(size[0] - 1))
+        outputImage->SetPixel(index + r, keyPixel);
 
-      if (index[0] > 0) outputImage->SetPixel(index + l, keyPixel);
-      }
-    ++pIt;
+      if (index[0] > 0)
+        outputImage->SetPixel(index + l, keyPixel);
     }
+    ++pIt;
+  }
 
   std::ofstream outfile(outfname);
   outfile << filter;

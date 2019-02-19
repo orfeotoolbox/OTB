@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./SIFTDisparityMapEstimation Input/ROISpot5.png Input/ROISpot5Warped.png Output/SIFTdeformationFieldOutput.png
 */
@@ -54,11 +53,11 @@
 int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << "fixedFileName movingFileName fieldOutName" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int Dimension = 2;
 
@@ -71,29 +70,26 @@ int main(int argc, char* argv[])
 
   typedef otb::Image<RealType, Dimension>        ImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-// The SIFTs obtained for the matching will be stored in vector
-// form inside a point set. So we need the following types:
+  // The SIFTs obtained for the matching will be stored in vector
+  // form inside a point set. So we need the following types:
 
   typedef itk::VariableLengthVector<RealType>      RealVectorType;
   typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
-// The filter for computing the SIFTs has a type defined as follows:
+  // The filter for computing the SIFTs has a type defined as follows:
 
-  typedef otb::SiftFastImageFilter<ImageType, PointSetType>
-  ImageToSIFTKeyPointSetFilterType;
-// Although many choices for evaluating the distances during the
-// matching procedure exist, we choose here to use a simple
-// Euclidean distance. We can then define the type for the matching filter.
+  typedef otb::SiftFastImageFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
+  // Although many choices for evaluating the distances during the
+  // matching procedure exist, we choose here to use a simple
+  // Euclidean distance. We can then define the type for the matching filter.
 
-  typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType> DistanceType;
-  typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType>
-  EuclideanDistanceMetricMatchingFilterType;
+  typedef itk::Statistics::EuclideanDistanceMetric<RealVectorType>    DistanceType;
+  typedef otb::KeyPointSetsMatchingFilter<PointSetType, DistanceType> EuclideanDistanceMetricMatchingFilterType;
   // The following types are needed for dealing with the matched points.
 
-  typedef PointSetType::PointType         PointType;
-  typedef std::pair<PointType, PointType> MatchType;
-  typedef std::vector<MatchType>          MatchVectorType;
-  typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType
-  LandmarkListType;
+  typedef PointSetType::PointType                                     PointType;
+  typedef std::pair<PointType, PointType>                             MatchType;
+  typedef std::vector<MatchType>                                      MatchVectorType;
+  typedef EuclideanDistanceMetricMatchingFilterType::LandmarkListType LandmarkListType;
 
   // We define the type for the image reader.
 
@@ -102,7 +98,7 @@ int main(int argc, char* argv[])
   // Two readers are instantiated : one for the fixed image, and one
   // for the moving image.
 
-  ReaderType::Pointer fixedReader = ReaderType::New();
+  ReaderType::Pointer fixedReader  = ReaderType::New();
   ReaderType::Pointer movingReader = ReaderType::New();
 
   fixedReader->SetFileName(argv[1]);
@@ -112,16 +108,13 @@ int main(int argc, char* argv[])
   // We will now instantiate the 2 SIFT filters and the filter used
   // for the matching of the points.
 
-  ImageToSIFTKeyPointSetFilterType::Pointer filter1 =
-    ImageToSIFTKeyPointSetFilterType::New();
-  ImageToSIFTKeyPointSetFilterType::Pointer filter2 =
-    ImageToSIFTKeyPointSetFilterType::New();
-  EuclideanDistanceMetricMatchingFilterType::Pointer euclideanMatcher =
-    EuclideanDistanceMetricMatchingFilterType::New();
+  ImageToSIFTKeyPointSetFilterType::Pointer          filter1          = ImageToSIFTKeyPointSetFilterType::New();
+  ImageToSIFTKeyPointSetFilterType::Pointer          filter2          = ImageToSIFTKeyPointSetFilterType::New();
+  EuclideanDistanceMetricMatchingFilterType::Pointer euclideanMatcher = EuclideanDistanceMetricMatchingFilterType::New();
   // We plug the pipeline and set the parameters.
 
   double secondOrderThreshold = 0.5;
-  bool   useBackMatching = 0;
+  bool   useBackMatching      = 0;
 
   filter1->SetInput(0, fixedReader->GetOutput());
   filter1->SetScalesNumber(3);
@@ -142,18 +135,16 @@ int main(int argc, char* argv[])
   landmarkList = euclideanMatcher->GetOutput();
   MatchVectorType trueSecondOrder;
 
-  for (LandmarkListType::Iterator it = landmarkList->Begin();
-       it != landmarkList->End(); ++it)
-    {
+  for (LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End(); ++it)
+  {
     PointType point1 = it.Get()->GetPoint1();
     PointType point2 = it.Get()->GetPoint2();
 
     trueSecondOrder.push_back(MatchType(point1, point2));
-    }
+  }
 
   // Displaying the matches
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
-  PrintableFilterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> PrintableFilterType;
 
   PrintableFilterType::Pointer printable1 = PrintableFilterType::New();
   PrintableFilterType::Pointer printable2 = PrintableFilterType::New();
@@ -173,16 +164,12 @@ int main(int argc, char* argv[])
   RGBImageType::Pointer rgbimage1 = RGBImageType::New();
   rgbimage1->SetRegions(printable1->GetOutput()->GetLargestPossibleRegion());
   rgbimage1->Allocate();
-  itk::ImageRegionIterator<RGBImageType> outIt1(
-    rgbimage1,
-    rgbimage1->
-    GetLargestPossibleRegion());
-  itk::ImageRegionIterator<OutputImageType> inIt1(
-    printable1->GetOutput(), printable1->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<RGBImageType>    outIt1(rgbimage1, rgbimage1->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType> inIt1(printable1->GetOutput(), printable1->GetOutput()->GetLargestPossibleRegion());
   outIt1.GoToBegin();
   inIt1.GoToBegin();
   while (!inIt1.IsAtEnd() && !outIt1.IsAtEnd())
-    {
+  {
     itk::RGBPixel<unsigned char> pixel;
     pixel.SetRed(inIt1.Get());
     pixel.SetGreen(inIt1.Get());
@@ -190,20 +177,17 @@ int main(int argc, char* argv[])
     outIt1.Set(pixel);
     ++inIt1;
     ++outIt1;
-    }
+  }
 
   RGBImageType::Pointer rgbimage2 = RGBImageType::New();
   rgbimage2->SetRegions(printable2->GetOutput()->GetLargestPossibleRegion());
   rgbimage2->Allocate();
-  itk::ImageRegionIterator<RGBImageType>
-  outIt2(rgbimage2, rgbimage2->GetLargestPossibleRegion());
-  itk::ImageRegionIterator<OutputImageType>
-  inIt2(printable2->GetOutput(),
-        printable2->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<RGBImageType>    outIt2(rgbimage2, rgbimage2->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType> inIt2(printable2->GetOutput(), printable2->GetOutput()->GetLargestPossibleRegion());
   outIt2.GoToBegin();
   inIt2.GoToBegin();
   while (!inIt2.IsAtEnd() && !outIt2.IsAtEnd())
-    {
+  {
     itk::RGBPixel<unsigned char> pixel;
     pixel.SetRed(inIt2.Get());
     pixel.SetGreen(inIt2.Get());
@@ -211,16 +195,16 @@ int main(int argc, char* argv[])
     outIt2.Set(pixel);
     ++inIt2;
     ++outIt2;
-    }
+  }
 
   // The landmarks are used for building a deformation field. The
   // deformation field is an image of vectors created by the
   // \doxygen{itk}{DisplacementFieldSource} class.
 
-  typedef   itk::Vector<RealType, Dimension>   VectorType;
-  typedef   otb::Image<VectorType,  Dimension> DisplacementFieldType;
+  typedef itk::Vector<RealType, Dimension>  VectorType;
+  typedef otb::Image<VectorType, Dimension> DisplacementFieldType;
 
-  typedef itk::LandmarkDisplacementFieldSource<DisplacementFieldType>  DisplacementSourceType;
+  typedef itk::LandmarkDisplacementFieldSource<DisplacementFieldType> DisplacementSourceType;
 
   DisplacementSourceType::Pointer deformer = DisplacementSourceType::New();
   // The deformation field needs information about the extent and
@@ -232,25 +216,21 @@ int main(int argc, char* argv[])
   deformer->SetOutputRegion(fixedImage->GetLargestPossibleRegion());
   // We will need some intermediate variables in order to pass the
   // matched SIFTs to the deformation field source.
-  typedef DisplacementSourceType::LandmarkContainer
-  LandmarkContainerType;
+  typedef DisplacementSourceType::LandmarkContainer LandmarkContainerType;
   typedef DisplacementSourceType::LandmarkPointType LandmarkPointType;
 
-  LandmarkContainerType::Pointer sourceLandmarks =
-    LandmarkContainerType::New();
-  LandmarkContainerType::Pointer targetLandmarks =
-    LandmarkContainerType::New();
+  LandmarkContainerType::Pointer sourceLandmarks = LandmarkContainerType::New();
+  LandmarkContainerType::Pointer targetLandmarks = LandmarkContainerType::New();
 
   LandmarkPointType sourcePoint;
   LandmarkPointType targetPoint;
-// We can now iterate through the list of matched points and store
-// them in the intermediate landmark sets.
+  // We can now iterate through the list of matched points and store
+  // them in the intermediate landmark sets.
 
   unsigned int pointId = 0;
 
-  for (LandmarkListType::Iterator it = landmarkList->Begin();
-       it != landmarkList->End(); ++it)
-    {
+  for (LandmarkListType::Iterator it = landmarkList->Begin(); it != landmarkList->End(); ++it)
+  {
     PointType point1 = it.Get()->GetPoint1();
     PointType point2 = it.Get()->GetPoint2();
 
@@ -264,15 +244,14 @@ int main(int argc, char* argv[])
     targetLandmarks->InsertElement(pointId, targetPoint);
 
     ++pointId;
-    }
-// We pass the landmarks to the deformer and we run it.
+  }
+  // We pass the landmarks to the deformer and we run it.
   deformer->SetSourceLandmarks(sourceLandmarks.GetPointer());
   deformer->SetTargetLandmarks(targetLandmarks.GetPointer());
 
   deformer->UpdateLargestPossibleRegion();
 
-  DisplacementFieldType::ConstPointer deformationField =
-    deformer->GetOutput();
+  DisplacementFieldType::ConstPointer deformationField = deformer->GetOutput();
 
   deformer->Update();
 
@@ -280,26 +259,23 @@ int main(int argc, char* argv[])
   outdf->SetRegions(fixedReader->GetOutput()->GetLargestPossibleRegion());
   outdf->Allocate();
 
-  itk::ImageRegionIterator<ImageType> outIt(outdf,
-                                            outdf->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<ImageType> outIt(outdf, outdf->GetLargestPossibleRegion());
 
-  itk::ImageRegionIterator<DisplacementFieldType> inIt(
-    deformer->GetOutput(), deformer->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<DisplacementFieldType> inIt(deformer->GetOutput(), deformer->GetOutput()->GetLargestPossibleRegion());
   outIt.GoToBegin();
   inIt.GoToBegin();
 
   while (!inIt.IsAtEnd() && !outIt.IsAtEnd())
-    {
-    //std::cout << inIt.Get() << std::endl;
+  {
+    // std::cout << inIt.Get() << std::endl;
 
     outIt.Set(inIt.Get()[1]);
 
     ++inIt;
     ++outIt;
-    }
+  }
 
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescaleType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescaleType;
 
   RescaleType::Pointer rescaler = RescaleType::New();
   rescaler->SetInput(outdf);
@@ -307,7 +283,7 @@ int main(int argc, char* argv[])
   rescaler->SetOutputMaximum(255);
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                           writer = WriterType::New();
 
   writer->SetInput(rescaler->GetOutput());
   writer->SetFileName(argv[3]);

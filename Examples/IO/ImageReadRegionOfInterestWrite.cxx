@@ -20,7 +20,6 @@
  */
 
 
-
 //  This example should arguably be placed in the filtering
 //  chapter. However its usefulness for typical IO operations makes it
 //  interesting to mention here. The purpose of this example is to read and
@@ -41,23 +40,23 @@
 #include "otbExtractROI.h"
 
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   if (argc < 7)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     std::cerr << " startX startY sizeX sizeY" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Image types are defined below.
 
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef unsigned char                          InputPixelType;
+  typedef unsigned char                          OutputPixelType;
+  const unsigned int                             Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   //  The types for the \doxygen{otb}{ImageFileReader} and \doxygen{otb}{ImageFileWriter}
@@ -75,8 +74,7 @@ int main(int argc, char * argv[])
   //  \doxygen{otb}{VectorImage}s. A filter object is created with the
   //  New() method and assigned to a \doxygen{itk}{SmartPointer}.
 
-  typedef otb::ExtractROI<InputImageType::PixelType,
-      OutputImageType::PixelType> FilterType;
+  typedef otb::ExtractROI<InputImageType::PixelType, OutputImageType::PixelType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
@@ -105,8 +103,8 @@ int main(int argc, char * argv[])
   //
   // Here we recover the file names from the command line arguments
   //
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   //  The name of the file to be read or written is passed with the
   //  SetFileName() method.
@@ -130,15 +128,15 @@ int main(int argc, char * argv[])
   //  thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

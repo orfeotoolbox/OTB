@@ -20,7 +20,6 @@
  */
 
 
-
 //  The classes responsible for reading and writing images are located at the
 //  beginning and end of the data processing pipeline. These classes are
 //  known as data sources (readers) and data sinks (writers).
@@ -50,15 +49,15 @@
 
 #include "otbImage.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile  outputImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Then, as usual, a decision must be made about the type of pixel used to
   //  represent the image processed by the pipeline. Note that when reading
@@ -79,8 +78,8 @@ int main(int argc, char * argv[])
   //  A typical selection for remote sensing images is illustrated in
   //  the following lines.
 
-  typedef unsigned short PixelType;
-  const unsigned int Dimension = 2;
+  typedef unsigned short                   PixelType;
+  const unsigned int                       Dimension = 2;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
   //  Note that the dimension of the image in memory should match the one of
@@ -111,8 +110,8 @@ int main(int argc, char * argv[])
 
   // Here we recover the file names from the command line arguments
   //
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   //  The name of the file to be read or written is passed with the
   //  SetFileName() method.
@@ -140,15 +139,15 @@ int main(int argc, char * argv[])
   //  in case exceptions are thrown during the execution of the pipeline.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Note that exceptions should only be caught by pieces of code that know
   //  what to do with them. In a typical application this \code{catch} block

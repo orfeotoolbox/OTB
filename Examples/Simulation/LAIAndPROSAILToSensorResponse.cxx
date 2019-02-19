@@ -19,18 +19,20 @@
  */
 
 
-
 /* Example usage:
-./LAIAndPROSAILToSensorResponse Input/LAIverySmallFSATSW.tif, Simu_label_LAI.png, Simu_mask_LAI_1.png, label-params-SO-2006-Level-2.txt, acqui-params.txt, rep6S.dat \
+./LAIAndPROSAILToSensorResponse Input/LAIverySmallFSATSW.tif, Simu_label_LAI.png, Simu_mask_LAI_1.png, label-params-SO-2006-Level-2.txt, acqui-params.txt,
+rep6S.dat \
                                 Output/siTvLAIAndPROSAILToSensorResponse.tif \
                                 5
 */
 
 //
-// The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetation classes are handled using PROSAIL model, non-vegetation classes
-// are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image.
+// The following code is an example of Sensor spectral response image generated using image of labeled objects image, objects properties (vegetation classes are
+// handled using PROSAIL model, non-vegetation classes are characterized using \href{http://speclib.jpl.nasa.gov/}{Aster database} characteristics provided by a
+// text file), acquisition parameters, sensor characteristics, and LAI (Leaf Area Index) image.
 //
-// Sensor RSR is modeled by 6S (Second Simulation of a Satellite Signal in the Solar Spectrum) model \cite{Vermote1997}. Detailed information about 6S can be found \href{http://6s.ltdri.org/6S_code2_thiner_stuff/6S_Manual_Part_1.pdf}{here}.
+// Sensor RSR is modeled by 6S (Second Simulation of a Satellite Signal in the Solar Spectrum) model \cite{Vermote1997}. Detailed information about 6S can be
+// found \href{http://6s.ltdri.org/6S_code2_thiner_stuff/6S_Manual_Part_1.pdf}{here}.
 //
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
@@ -58,63 +60,60 @@ namespace otb
 // \code{ImageUniqueValuesCalculator} class is defined here. Method \code{GetUniqueValues()} returns an array with all values contained in an image.
 // This class is implemented and used to test if all labels in labeled image are present in label parameter file.
 
-template < class TImage >
+template <class TImage>
 class ITK_EXPORT ImageUniqueValuesCalculator : public itk::Object
 {
 public:
-  typedef ImageUniqueValuesCalculator<TImage>   Self;
-  typedef itk::Object                           Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef ImageUniqueValuesCalculator<TImage> Self;
+  typedef itk::Object                         Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   itkNewMacro(Self);
 
   itkTypeMacro(ImageUniqueValuesCalculator, itk::Object);
 
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   typedef typename TImage::PixelType PixelType;
 
   typedef TImage ImageType;
 
-  typedef std::vector<PixelType>           ArrayType;
+  typedef std::vector<PixelType> ArrayType;
 
   typedef typename ImageType::Pointer      ImagePointer;
   typedef typename ImageType::ConstPointer ImageConstPointer;
 
-  virtual void SetImage( const ImageType * image )
+  virtual void SetImage(const ImageType* image)
+  {
+    if (m_Image != image)
     {
-    if ( m_Image != image )
-      {
       m_Image = image;
       this->Modified();
-      }
     }
+  }
 
 
   ArrayType GetUniqueValues() const
   {
     ArrayType uniqueValues;
-    if( !m_Image )
-      {
+    if (!m_Image)
+    {
       return uniqueValues;
-      }
+    }
 
-    itk::ImageRegionConstIterator< ImageType > it( m_Image,
-                                              m_Image->GetRequestedRegion() );
+    itk::ImageRegionConstIterator<ImageType> it(m_Image, m_Image->GetRequestedRegion());
 
     uniqueValues.push_back(it.Get());
     ++it;
-    while( !it.IsAtEnd() )
+    while (!it.IsAtEnd())
+    {
+      if (std::find(uniqueValues.begin(), uniqueValues.end(), it.Get()) == uniqueValues.end())
       {
-      if( std::find(uniqueValues.begin(),
-                    uniqueValues.end(), it.Get()) == uniqueValues.end())
-        {
         uniqueValues.push_back(it.Get());
-        }
-      ++it;
       }
+      ++it;
+    }
 
     return uniqueValues;
   }
@@ -122,9 +121,9 @@ public:
 
 protected:
   ImageUniqueValuesCalculator()
-    {
+  {
     m_Image = nullptr;
-    }
+  }
   ~ImageUniqueValuesCalculator() override
   {
   }
@@ -138,9 +137,9 @@ private:
   ImageUniqueValuesCalculator(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ImageConstPointer         m_Image;
+  ImageConstPointer m_Image;
 
-};  // class ImageUniqueValuesCalculator
+}; // class ImageUniqueValuesCalculator
 // EndCodeSnippet
 
 
@@ -150,9 +149,7 @@ namespace Functor
 // \code{ProsailSimulatorFunctor} functor is defined here.
 //
 
-template<class TLAI, class TLabel, class TMask, class TOutput,
-  class TLabelSpectra, class TLabelParameter,
-    class TAcquistionParameter, class TSatRSR>
+template <class TLAI, class TLabel, class TMask, class TOutput, class TLabelSpectra, class TLabelParameter, class TAcquistionParameter, class TSatRSR>
 class ProsailSimulatorFunctor
 {
 public:
@@ -161,27 +158,25 @@ public:
   // \code{ProsailSimulatorFunctor} functor is defined here.
   //
 
-  typedef TLAI LAIPixelType;
-  typedef TLabel LabelPixelType;
-  typedef TMask MaskPixelType;
-  typedef TOutput OutputPixelType;
-  typedef TLabelSpectra LabelSpectraType;
-  typedef TLabelParameter LabelParameterType;
-  typedef TAcquistionParameter AcquistionParameterType;
-  typedef TSatRSR SatRSRType;
+  typedef TLAI                         LAIPixelType;
+  typedef TLabel                       LabelPixelType;
+  typedef TMask                        MaskPixelType;
+  typedef TOutput                      OutputPixelType;
+  typedef TLabelSpectra                LabelSpectraType;
+  typedef TLabelParameter              LabelParameterType;
+  typedef TAcquistionParameter         AcquistionParameterType;
+  typedef TSatRSR                      SatRSRType;
   typedef typename SatRSRType::Pointer SatRSRPointerType;
-  typedef typename otb::ProspectModel ProspectType;
-  typedef typename otb::SailModel SailType;
+  typedef typename otb::ProspectModel  ProspectType;
+  typedef typename otb::SailModel      SailType;
 
-  typedef double PrecisionType;
-  typedef std::pair<PrecisionType, PrecisionType> PairType;
-  typedef typename std::vector<PairType> VectorPairType;
-  typedef otb::SpectralResponse<PrecisionType, PrecisionType> ResponseType;
-  typedef ResponseType::Pointer ResponsePointerType;
-  typedef otb::ReduceSpectralResponse
-      <ResponseType, SatRSRType> ReduceResponseType;
-  typedef typename ReduceResponseType::Pointer
-      ReduceResponseTypePointerType;
+  typedef double                                                PrecisionType;
+  typedef std::pair<PrecisionType, PrecisionType>               PairType;
+  typedef typename std::vector<PairType>                        VectorPairType;
+  typedef otb::SpectralResponse<PrecisionType, PrecisionType>   ResponseType;
+  typedef ResponseType::Pointer                                 ResponsePointerType;
+  typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
+  typedef typename ReduceResponseType::Pointer                  ReduceResponseTypePointerType;
 
   // In this example spectra are generated form $400$ to $2400nm$. the number of simulated band is set by \code{SimNbBands} value.
   //
@@ -190,15 +185,12 @@ public:
   /** Constructor */
   ProsailSimulatorFunctor()
   {
-    m_SatRSR = SatRSRType::New();
+    m_SatRSR       = SatRSRType::New();
     m_InvertedMask = false;
   }
 
   /** Destructor */
-  ~ProsailSimulatorFunctor()
-  {
-  }
-;
+  ~ProsailSimulatorFunctor(){};
 
   void SetInvertedMask(bool ivm)
   {
@@ -206,7 +198,7 @@ public:
   }
 
   /** Implementation of the () operator*/
-  inline OutputPixelType operator ()(const LAIPixelType &lai, const LabelPixelType& label, const MaskPixelType& mask)
+  inline OutputPixelType operator()(const LAIPixelType& lai, const LabelPixelType& label, const MaskPixelType& mask)
   {
 
     // mask value is read to know if the pixel have to be calculated, it is set to 0 otherwise.
@@ -214,27 +206,28 @@ public:
     OutputPixelType pix;
     pix.SetSize(m_SatRSR->GetNbBands());
     if ((!mask && !m_InvertedMask) || (mask && m_InvertedMask))
-      {
+    {
       for (unsigned int i = 0; i < m_SatRSR->GetNbBands(); i++)
-        pix[i] = static_cast<typename OutputPixelType::ValueType> (0);
+        pix[i] = static_cast<typename OutputPixelType::ValueType>(0);
       return pix;
-      }
+    }
 
 
-    // Object reflectance \code{hxSpectrum} is calculated. If object label correspond to vegetation label then Prosail code is used, aster database is used otherwise.
+    // Object reflectance \code{hxSpectrum} is calculated. If object label correspond to vegetation label then Prosail code is used, aster database is used
+    // otherwise.
 
     VectorPairType hxSpectrum;
 
     for (unsigned int i = 0; i < SimNbBands; i++)
-      {
+    {
       PairType resp;
-      resp.first = static_cast<PrecisionType> ((400.0 + i) / 1000);
+      resp.first = static_cast<PrecisionType>((400.0 + i) / 1000);
       hxSpectrum.push_back(resp);
-      }
+    }
 
     // either the spectrum has to be simulated by Prospect+Sail
     if (m_LabelParameters.find(label) != m_LabelParameters.end())
-      {
+    {
       ProspectType::Pointer prospect = ProspectType::New();
       prospect->SetInput(m_LabelParameters[label]);
 
@@ -253,28 +246,22 @@ public:
       sail->Update();
 
       for (unsigned int i = 0; i < SimNbBands; i++)
-        {
-        hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>
-          (sail->GetHemisphericalReflectance()->GetResponse()[i].second);
-        }
-
+      {
+        hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>(sail->GetHemisphericalReflectance()->GetResponse()[i].second);
       }
+    }
     // or the spectra has been set from outside the functor (ex. bare soil, etc.)
+    else if (m_LabelSpectra.find(label) != m_LabelSpectra.end())
+    {
+      for (unsigned int i = 0; i < SimNbBands; i++)
+        hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>(m_LabelSpectra[label][i]);
+    }
+    // or the class does not exist
     else
-      if (m_LabelSpectra.find(label) != m_LabelSpectra.end())
-        {
-        for (unsigned int i = 0; i < SimNbBands; i++)
-          hxSpectrum[i].second =
-              static_cast<typename OutputPixelType::ValueType>
-                (m_LabelSpectra[label][i]);
-        }
-      // or the class does not exist
-      else
-        {
-        for (unsigned int i = 0; i < SimNbBands; i++)
-          hxSpectrum[i].second =
-              static_cast<typename OutputPixelType::ValueType> (0);
-        }
+    {
+      for (unsigned int i = 0; i < SimNbBands; i++)
+        hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>(0);
+    }
     // Spectral response \code{aResponse} is set using \code{hxSpectrum}.
 
     ResponseType::Pointer aResponse = ResponseType::New();
@@ -291,26 +278,22 @@ public:
     reduceResponse->SetReflectanceMode(true);
 
     reduceResponse->CalculateResponse();
-    VectorPairType reducedResponse =
-        reduceResponse->GetReduceResponse()->GetResponse();
+    VectorPairType reducedResponse = reduceResponse->GetReduceResponse()->GetResponse();
 
 
     // \code{pix} value is returned for desired Satellite bands
 
     for (unsigned int i = 0; i < m_SatRSR->GetNbBands(); i++)
-      pix[i] =
-          static_cast<typename OutputPixelType::ValueType>
-            (reducedResponse[i].second);
+      pix[i] = static_cast<typename OutputPixelType::ValueType>(reducedResponse[i].second);
     return pix;
-
   }
 
-  bool operator !=(const ProsailSimulatorFunctor& other) const
+  bool operator!=(const ProsailSimulatorFunctor& other) const
   {
     return (m_AcquisitionParameters != other.m_AcquisitionParameters || m_LabelParameters != other.m_LabelParameters);
   }
 
-  bool operator ==(const ProsailSimulatorFunctor& other) const
+  bool operator==(const ProsailSimulatorFunctor& other) const
   {
     return (m_AcquisitionParameters == other.m_AcquisitionParameters && m_LabelParameters == other.m_LabelParameters);
   }
@@ -344,7 +327,6 @@ public:
   }
 
 protected:
-
   /** Spectra associated to labels*/
   LabelSpectraType m_LabelSpectra;
   /** Prospect+sail parameters to labels*/
@@ -356,7 +338,6 @@ protected:
 
   /** Simulate pixels with mask != 0 ==> m_InvertedMask = false; */
   bool m_InvertedMask;
-
 };
 
 } // namespace Functor
@@ -365,18 +346,14 @@ protected:
 // This class inherits form \doxygen{itk}{TernaryFunctorImageFilter} with additional nuber of band parameters.
 // It's implementation is done to process Label, LAI, and mask image with Simulation functor.
 
-template <class TInputImage1, class TInputImage2, class TInputImage3,
-    class TOutputImage, class TFunctor>
-class ITK_EXPORT TernaryFunctorImageFilterWithNBands :
-  public itk::TernaryFunctorImageFilter< TInputImage1, TInputImage2,
-  TInputImage3, TOutputImage, TFunctor >
+template <class TInputImage1, class TInputImage2, class TInputImage3, class TOutputImage, class TFunctor>
+class ITK_EXPORT TernaryFunctorImageFilterWithNBands : public itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor>
 {
 public:
-  typedef TernaryFunctorImageFilterWithNBands Self;
-  typedef itk::TernaryFunctorImageFilter< TInputImage1, TInputImage2,
-      TInputImage3, TOutputImage, TFunctor > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef TernaryFunctorImageFilterWithNBands                                                              Self;
+  typedef itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor> Superclass;
+  typedef itk::SmartPointer<Self>                                                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                                                    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -389,49 +366,52 @@ public:
   itkGetConstMacro(NumberOfOutputBands, unsigned int);
 
 protected:
-  TernaryFunctorImageFilterWithNBands() {}
-  ~TernaryFunctorImageFilterWithNBands() override {}
+  TernaryFunctorImageFilterWithNBands()
+  {
+  }
+  ~TernaryFunctorImageFilterWithNBands() override
+  {
+  }
 
   void GenerateOutputInformation() override
   {
     Superclass::GenerateOutputInformation();
-    this->GetOutput()->SetNumberOfComponentsPerPixel( m_NumberOfOutputBands );
+    this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfOutputBands);
   }
+
 private:
-  TernaryFunctorImageFilterWithNBands(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  TernaryFunctorImageFilterWithNBands(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NumberOfOutputBands;
-
-
 };
 // EndCodeSnippet
-}
+} // namespace otb
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-  char *cmifname = nullptr;
+  char* cmifname = nullptr;
   if (argc != 10)
-    {
+  {
     if (argc == 11) // cloud mask filename optional parameter
-      {
+    {
       cmifname = argv[10];
-      }
+    }
     else
-      {
+    {
       std::cerr << "Wrong Parameters " << std::endl;
       return EXIT_FAILURE;
-      }
     }
-  char * laiifname = argv[1];
-  char * outfname = argv[2];
-  char * lifname = argv[3];
-  char * mifname = argv[4];
-  char * lpfname = argv[5];
-  char * apfname = argv[6];
-  char * rsfname = argv[7];
-  unsigned int nbBands = static_cast<unsigned int> (atoi(argv[8]));
-  char * rootPath = argv[9];
+  }
+  char*        laiifname = argv[1];
+  char*        outfname  = argv[2];
+  char*        lifname   = argv[3];
+  char*        mifname   = argv[4];
+  char*        lpfname   = argv[5];
+  char*        apfname   = argv[6];
+  char*        rsfname   = argv[7];
+  unsigned int nbBands   = static_cast<unsigned int>(atoi(argv[8]));
+  char*        rootPath  = argv[9];
 
   // Read the label parameter file. It is assumed to have the form
   // label 1 Cab Car CBrown Cw Cm N   --> for vegetation classes
@@ -442,31 +422,31 @@ int main(int argc, char *argv[])
   //  cloud mask, and \code{integer} label image
   //
 
-  typedef double LAIPixelType;
+  typedef double         LAIPixelType;
   typedef unsigned short LabelType;
   typedef unsigned short MaskPixelType;
-  typedef float OutputPixelType;
+  typedef float          OutputPixelType;
   // Image typedef
-  typedef otb::Image<LAIPixelType, 2> LAIImageType;
-  typedef otb::Image<LabelType, 2> LabelImageType;
-  typedef otb::Image<MaskPixelType, 2> MaskImageType;
+  typedef otb::Image<LAIPixelType, 2>          LAIImageType;
+  typedef otb::Image<LabelType, 2>             LabelImageType;
+  typedef otb::Image<MaskPixelType, 2>         MaskImageType;
   typedef otb::VectorImage<OutputPixelType, 2> SimulatedImageType;
 
   // reader typedef
-  typedef otb::ImageFileReader<LAIImageType> LAIReaderType;
+  typedef otb::ImageFileReader<LAIImageType>   LAIReaderType;
   typedef otb::ImageFileReader<LabelImageType> LabelReaderType;
-  typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
+  typedef otb::ImageFileReader<MaskImageType>  MaskReaderType;
 
   // Leaf parameters typedef is defined.
 
-  typedef otb::LeafParameters LeafParametersType;
-  typedef LeafParametersType::Pointer LeafParametersPointerType;
+  typedef otb::LeafParameters                            LeafParametersType;
+  typedef LeafParametersType::Pointer                    LeafParametersPointerType;
   typedef std::map<LabelType, LeafParametersPointerType> LabelParameterMapType;
 
   // Sensor spectral response typedef is defined
 
-  typedef double PrecisionType;
-  typedef std::vector<PrecisionType> SpectraType;
+  typedef double                           PrecisionType;
+  typedef std::vector<PrecisionType>       SpectraType;
   typedef std::map<LabelType, SpectraType> SpectraParameterType;
 
   // Acquisition response typedef is defined
@@ -480,13 +460,10 @@ int main(int argc, char *argv[])
 
   // Filter type is the specific \code{TernaryFunctorImageFilterWithNBands} defined below with specific functor.
 
-  typedef otb::Functor::ProsailSimulatorFunctor
-      <LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType,
-      SpectraParameterType, LabelParameterMapType, AcquistionParsType, SatRSRType>
-        SimuFunctorType;
-  typedef otb::TernaryFunctorImageFilterWithNBands
-      <LAIImageType, LabelImageType, MaskImageType, SimulatedImageType,
-        SimuFunctorType> SimulatorType;
+  typedef otb::Functor::ProsailSimulatorFunctor<LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType, SpectraParameterType,
+                                                LabelParameterMapType, AcquistionParsType, SatRSRType>
+                                                                                                                                     SimuFunctorType;
+  typedef otb::TernaryFunctorImageFilterWithNBands<LAIImageType, LabelImageType, MaskImageType, SimulatedImageType, SimuFunctorType> SimulatorType;
 
   // Read the acquisition parameter file which is like
   // Angl val
@@ -501,42 +478,41 @@ int main(int argc, char *argv[])
   // be found in class \doxygen{otb}{SailModel}.
 
   AcquistionParsType acquistionPars;
-  acquistionPars[std::string("Angl")] = 0.0;
+  acquistionPars[std::string("Angl")]  = 0.0;
   acquistionPars[std::string("PSoil")] = 0.0;
-  acquistionPars[std::string("Skyl")] = 0.0;
+  acquistionPars[std::string("Skyl")]  = 0.0;
   acquistionPars[std::string("HSpot")] = 0.0;
-  acquistionPars[std::string("TTS")] = 0.0;
-  acquistionPars[std::string("TTO")] = 0.0;
-  acquistionPars[std::string("PSI")] = 0.0;
+  acquistionPars[std::string("TTS")]   = 0.0;
+  acquistionPars[std::string("TTO")]   = 0.0;
+  acquistionPars[std::string("PSI")]   = 0.0;
 
   std::ifstream acquistionParsFile;
 
   try
-    {
+  {
     acquistionParsFile.open(apfname);
-    }
+  }
   catch (...)
-    {
+  {
     std::cerr << "Could not open file " << apfname << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  //unsigned int acPar = 0;
+  // unsigned int acPar = 0;
   while (acquistionParsFile.good())
-    {
+  {
     std::string line;
     std::getline(acquistionParsFile, line);
     std::stringstream ss(line);
-    std::string parName;
+    std::string       parName;
     ss >> parName;
     double parValue;
     ss >> parValue;
     acquistionPars[parName] = parValue;
-
-    }
+  }
 
   acquistionParsFile.close();
-  //Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
 
   // Label parameters are loaded using text file.
@@ -546,33 +522,33 @@ int main(int argc, char *argv[])
   // Otherwise object reflectance is generated from $400$ to $2400nm$ using \href{http://speclib.jpl.nasa.gov/}{Aster database}.
 
   LabelParameterMapType labelParameters;
-  std::ifstream labelParsFile;
+  std::ifstream         labelParsFile;
 
   SpectraParameterType spectraParameters;
   try
-    {
+  {
     labelParsFile.open(lpfname, std::ifstream::in);
-    }
+  }
   catch (...)
-    {
+  {
     std::cerr << "Could not open file " << lpfname << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   while (labelParsFile.good())
-    {
+  {
     char fileLine[256];
     labelParsFile.getline(fileLine, 256);
 
     if (fileLine[0] != '#')
-      {
+    {
       std::stringstream ss(fileLine);
-      unsigned short label;
+      unsigned short    label;
       ss >> label;
       unsigned short paramsOrSpectra;
       ss >> paramsOrSpectra;
       if (paramsOrSpectra == 1)
-        {
+      {
         double Cab;
         ss >> Cab;
         double Car;
@@ -596,31 +572,30 @@ int main(int argc, char *argv[])
         leafParams->SetN(N);
 
         labelParameters[label] = leafParams;
-        }
+      }
       else
-        {
+      {
         std::string spectraFilename = rootPath;
         ss >> spectraFilename;
         spectraFilename = rootPath + spectraFilename;
         typedef otb::SpectralResponse<PrecisionType, PrecisionType> ResponseType;
-        ResponseType::Pointer resp = ResponseType::New();
+        ResponseType::Pointer                                       resp = ResponseType::New();
 
         // Coefficient 100 since Aster database is given in % reflectance
         resp->Load(spectraFilename, 100.0);
 
         SpectraType spec;
         for (unsigned int i = 0; i < SimuFunctorType::SimNbBands; i++)
-          //Prosail starts at 400 and lambda in Aster DB is in micrometers
-          spec.push_back
-            (static_cast<PrecisionType> ((*resp)((i + 400.0) / 1000.0)));
+          // Prosail starts at 400 and lambda in Aster DB is in micrometers
+          spec.push_back(static_cast<PrecisionType>((*resp)((i + 400.0) / 1000.0)));
 
         spectraParameters[label] = spec;
-        }
       }
     }
+  }
 
   labelParsFile.close();
-  //Software Guide : EndCodeSnippet
+  // Software Guide : EndCodeSnippet
 
 
   // LAI image is read.
@@ -630,7 +605,8 @@ int main(int argc, char *argv[])
   laiReader->Update();
   LAIImageType::Pointer laiImage = laiReader->GetOutput();
 
-  // Label image is then read. Label image is processed using \code{ImageUniqueValuesCalculator} in order to check if all the labels are present in the labelParameters file.
+  // Label image is then read. Label image is processed using \code{ImageUniqueValuesCalculator} in order to check if all the labels are present in the
+  // labelParameters file.
 
 
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
@@ -645,40 +621,35 @@ int main(int argc, char *argv[])
 
   uniqueCalculator->SetImage(labelImage);
 
-  UniqueCalculatorType::ArrayType uniqueVals =
-      uniqueCalculator->GetUniqueValues();
+  UniqueCalculatorType::ArrayType uniqueVals = uniqueCalculator->GetUniqueValues();
   if (uniqueVals.empty())
-    {
-    std::cerr << "No label value found!"<< std::endl;
+  {
+    std::cerr << "No label value found!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   std::cout << "Labels are " << std::endl;
   UniqueCalculatorType::ArrayType::const_iterator uvIt = uniqueVals.begin();
 
   while (uvIt != uniqueVals.end())
-    {
+  {
     std::cout << (*uvIt) << ", ";
     ++uvIt;
-    }
+  }
 
   std::cout << std::endl;
 
   uvIt = uniqueVals.begin();
 
   while (uvIt != uniqueVals.end())
+  {
+    if (labelParameters.find(static_cast<LabelType>(*uvIt)) == labelParameters.end() &&
+        spectraParameters.find(static_cast<LabelType>(*uvIt)) == spectraParameters.end() && static_cast<LabelType>(*uvIt) != 0)
     {
-    if (labelParameters.find(static_cast<LabelType>
-        (*uvIt)) == labelParameters.end() &&
-        spectraParameters.find(static_cast<LabelType> (*uvIt)) ==
-            spectraParameters.end() &&
-        static_cast<LabelType> (*uvIt) != 0)
-      {
-      std::cout << "label " << (*uvIt) << " not found in " <<
-          lpfname << std::endl;
+      std::cout << "label " << (*uvIt) << " not found in " << lpfname << std::endl;
       return EXIT_FAILURE;
-      }
-    ++uvIt;
     }
+    ++uvIt;
+  }
 
 
   // Mask image is read. If cloud mask is filename is given, a new mask image is generated with masks concatenation.
@@ -690,40 +661,33 @@ int main(int argc, char *argv[])
   MaskImageType::Pointer maskImage = miReader->GetOutput();
 
   if (cmifname != nullptr)
-    {
+  {
 
     MaskReaderType::Pointer cmiReader = MaskReaderType::New();
     cmiReader->SetFileName(cmifname);
     cmiReader->UpdateOutputInformation();
 
-    typedef itk::OrImageFilter
-        <MaskImageType, MaskImageType, MaskImageType> OrType;
-    OrType::Pointer orfilter = OrType::New();
+    typedef itk::OrImageFilter<MaskImageType, MaskImageType, MaskImageType> OrType;
+    OrType::Pointer                                                         orfilter = OrType::New();
 
     orfilter->SetInput1(miReader->GetOutput());
     orfilter->SetInput2(cmiReader->GetOutput());
 
     orfilter->Update();
     maskImage = orfilter->GetOutput();
-
-    }
+  }
 
 
   // A test is done. All images must have the same size.
 
-  if (laiImage->GetLargestPossibleRegion().GetSize()[0] !=
-      labelImage->GetLargestPossibleRegion().GetSize()[0] ||
-      laiImage->GetLargestPossibleRegion().GetSize()[1] !=
-          labelImage->GetLargestPossibleRegion().GetSize()[1] ||
-      laiImage->GetLargestPossibleRegion().GetSize()[0] !=
-          maskImage->GetLargestPossibleRegion().GetSize()[0] ||
-      laiImage->GetLargestPossibleRegion().GetSize()[1] !=
-          maskImage->GetLargestPossibleRegion().GetSize()[1])
-    {
-    std::cerr << "Image of labels, mask and LAI image must have the same size"
-        << std::endl;
+  if (laiImage->GetLargestPossibleRegion().GetSize()[0] != labelImage->GetLargestPossibleRegion().GetSize()[0] ||
+      laiImage->GetLargestPossibleRegion().GetSize()[1] != labelImage->GetLargestPossibleRegion().GetSize()[1] ||
+      laiImage->GetLargestPossibleRegion().GetSize()[0] != maskImage->GetLargestPossibleRegion().GetSize()[0] ||
+      laiImage->GetLargestPossibleRegion().GetSize()[1] != maskImage->GetLargestPossibleRegion().GetSize()[1])
+  {
+    std::cerr << "Image of labels, mask and LAI image must have the same size" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   // Satellite RSR (Reduced Spectral Response) is defined using filename and band number given by command line arguments.
@@ -734,8 +698,7 @@ int main(int argc, char *argv[])
   satRSR->Load(rsfname);
 
   for (unsigned int i = 0; i < nbBands; ++i)
-    std::cout << i << " " << (satRSR->GetRSR())[i]->GetInterval().first << " "
-        << (satRSR->GetRSR())[i]->GetInterval().second << std::endl;
+    std::cout << i << " " << (satRSR->GetRSR())[i]->GetInterval().first << " " << (satRSR->GetRSR())[i]->GetInterval().second << std::endl;
 
   // At this step all initialization have been done. The next step is to implement and initialize simulation functor \code{ProsailSimulatorFunctor}.
 
@@ -764,7 +727,7 @@ int main(int argc, char *argv[])
   // Write output image to disk
 
   typedef otb::ImageFileWriter<SimulatedImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                              writer = WriterType::New();
 
   writer->SetFileName(outfname);
   writer->SetInput(simulator->GetOutput());
@@ -775,5 +738,4 @@ int main(int argc, char *argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

@@ -34,42 +34,39 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * somfname = argv[2];
-  const char * outfname = argv[3];
+  const char* infname  = argv[1];
+  const char* somfname = argv[2];
+  const char* outfname = argv[3];
 
-// We will assume double precision input images and will also define
-// the type for the labeled pixels.
+  // We will assume double precision input images and will also define
+  // the type for the labeled pixels.
 
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
   typedef double         PixelType;
   typedef unsigned short LabeledPixelType;
-// Our classifier will be generic enough to be able to process images
-// with any number of bands. We read the images as
-// \doxygen{otb}{VectorImage}s. The labeled image will be a scalar image.
+  // Our classifier will be generic enough to be able to process images
+  // with any number of bands. We read the images as
+  // \doxygen{otb}{VectorImage}s. The labeled image will be a scalar image.
 
   typedef otb::VectorImage<PixelType, Dimension>  ImageType;
   typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
-// We can now define the type for the classifier filter, which is
-// templated over its input and output image types and the SOM type.
+  // We can now define the type for the classifier filter, which is
+  // templated over its input and output image types and the SOM type.
 
-  typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
-  typedef otb::SOMImageClassificationFilter<ImageType,
-      LabeledImageType,
-      SOMMapType>
-  ClassificationFilterType;
-// And finally, we define the readers (for the input image and theSOM)
-// and the writer. Since the images,
-// to classify can be very big, we will use a streamed writer which
-// will trigger the streaming ability of the classifier.
+  typedef otb::SOMMap<ImageType::PixelType>                                          SOMMapType;
+  typedef otb::SOMImageClassificationFilter<ImageType, LabeledImageType, SOMMapType> ClassificationFilterType;
+  // And finally, we define the readers (for the input image and theSOM)
+  // and the writer. Since the images,
+  // to classify can be very big, we will use a streamed writer which
+  // will trigger the streaming ability of the classifier.
 
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::ImageFileReader<SOMMapType>                SOMReaderType;
+  typedef otb::ImageFileReader<ImageType>        ReaderType;
+  typedef otb::ImageFileReader<SOMMapType>       SOMReaderType;
   typedef otb::ImageFileWriter<LabeledImageType> WriterType;
-// We instantiate the classifier and the reader objects and we set
-// the existing SOM obtained in a previous training step.
+  // We instantiate the classifier and the reader objects and we set
+  // the existing SOM obtained in a previous training step.
 
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
 
@@ -81,8 +78,8 @@ int main(int itkNotUsed(argc), char * argv[])
   somreader->Update();
 
   filter->SetMap(somreader->GetOutput());
-// We plug the pipeline and
-// trigger its execution by updating the output of the writer.
+  // We plug the pipeline and
+  // trigger its execution by updating the output of the writer.
 
   filter->SetInput(reader->GetOutput());
 

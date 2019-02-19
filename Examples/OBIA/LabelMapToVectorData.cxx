@@ -52,23 +52,23 @@
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   /** Use the labelObjecttopolygon functor (not thread safe) only polygon conversion is available yet*/
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputVectorfile(shp)" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  }
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   // The image types are defined using pixel types and
   // dimension. The input image is defined as an \doxygen{itk}{Image},
   // the output is a \doxygen{otb}{VectorData}.
 
-  const unsigned int Dimension               = 2;
+  const unsigned int                       Dimension = 2;
   typedef unsigned short                   LabelType;
   typedef otb::Image<LabelType, Dimension> LabeledImageType;
   typedef otb::VectorData<double, 2>       VectorDataType;
@@ -82,17 +82,12 @@ int main(int argc, char * argv[])
   // instantiated using the image pixel types as template parameters.
   // The LabelObjectToPolygonFunctor is instantiated with LabelObjectType and PolygonType.
 
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension,
-      double>
-  LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>
-  LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
-      LabelMapType>
-  LabelMapFilterType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>     LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                  LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
-  WriterType::Pointer        writer = WriterType::New();
+  WriterType::Pointer        writer  = WriterType::New();
 
   //  Now the reader and writer are instantiated and
   //  the input image is set and a name is given to the output image.
@@ -111,17 +106,13 @@ int main(int argc, char * argv[])
   //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. This is
   // the main filter which performs the vectorization.
 
-  typedef otb::LabelMapToVectorDataFilter<LabelMapType,
-      VectorDataType>
-  LabelMapToVectorDataFilterType;
+  typedef otb::LabelMapToVectorDataFilter<LabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
-  LabelMapToVectorDataFilterType::Pointer MyFilter =
-    LabelMapToVectorDataFilterType::New();
+  LabelMapToVectorDataFilterType::Pointer MyFilter = LabelMapToVectorDataFilterType::New();
 
   MyFilter->SetInput(labelMapFilter->GetOutput());
   MyFilter->Update();
-  MyFilter->GetOutput()->SetProjectionRef(
-    lreader->GetOutput()->GetProjectionRef());
+  MyFilter->GetOutput()->SetProjectionRef(lreader->GetOutput()->GetProjectionRef());
 
   //  The output can be passed to a writer.
 
@@ -131,21 +122,20 @@ int main(int argc, char * argv[])
   //  execution of the pipeline.  As usual, it is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
   try
-    {
+  {
     writer->Update();
     return EXIT_SUCCESS;
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
-
 }

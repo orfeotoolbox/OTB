@@ -19,7 +19,6 @@
  */
 
 
-
 // This example illustrates the use of the \doxygen{otb}{AddCarvingPathFilter},
 // the opposite of the \doxygen{otb}{RemoveCarvingPathFilter}.
 //
@@ -49,12 +48,12 @@
 #include "itkImageDuplicator.h"
 #include "otbObjectList.h"
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
   typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension>  ImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
@@ -64,23 +63,20 @@ int main(int itkNotUsed(argc), char * argv[])
   // the seam carving process. This is done using an \doxygen{otb}{ObjectList}
 
   typedef otb::ObjectList<PathType> PathListType;
-  PathListType::Pointer pathList = PathListType::New();
+  PathListType::Pointer             pathList = PathListType::New();
 
-  typedef otb::ImageFileReader<ImageType>
-  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>
-  WriterType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescalerType;
+  typedef otb::ImageFileReader<ImageType>                              ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>                        WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
 
-  ReaderType::Pointer   reader = ReaderType::New();
-  WriterType::Pointer   writer = WriterType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  WriterType::Pointer   writer   = WriterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  const char * filenamereader = argv[1];
+  const char* filenamereader = argv[1];
   reader->SetFileName(filenamereader);
 
-  const char * filenamewriter = argv[2];
+  const char* filenamewriter = argv[2];
   writer->SetFileName(filenamewriter);
 
   int iteration = atoi(argv[3]);
@@ -88,27 +84,22 @@ int main(int itkNotUsed(argc), char * argv[])
   // We instantiate the different filters of the pipeline as before.
 
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> GradientType;
-  GradientType::Pointer gradient = GradientType::New();
+  GradientType::Pointer                                           gradient = GradientType::New();
 
   typedef otb::ImageToCarvingPathFilter<ImageType, PathType> CarvingFilterType;
-  CarvingFilterType::Pointer carvingFilter = CarvingFilterType::New();
+  CarvingFilterType::Pointer                                 carvingFilter = CarvingFilterType::New();
 
-  typedef otb::DrawPathFilter
-  <ImageType, PathType, ImageType> DrawPathFilterType;
-  DrawPathFilterType::Pointer drawPathFilter = DrawPathFilterType::New();
+  typedef otb::DrawPathFilter<ImageType, PathType, ImageType> DrawPathFilterType;
+  DrawPathFilterType::Pointer                                 drawPathFilter = DrawPathFilterType::New();
 
-  typedef otb::RemoveCarvingPathFilter
-  <ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
-  RemoveCarvingPathFilterType::Pointer removeCarvingPath =
-    RemoveCarvingPathFilterType::New();
+  typedef otb::RemoveCarvingPathFilter<ImageType, PathType, ImageType> RemoveCarvingPathFilterType;
+  RemoveCarvingPathFilterType::Pointer                                 removeCarvingPath = RemoveCarvingPathFilterType::New();
 
-  typedef otb::AddCarvingPathFilter
-  <ImageType, PathType, ImageType> AddCarvingPathFilterType;
-  AddCarvingPathFilterType::Pointer addCarvingPath =
-    AddCarvingPathFilterType::New();
+  typedef otb::AddCarvingPathFilter<ImageType, PathType, ImageType> AddCarvingPathFilterType;
+  AddCarvingPathFilterType::Pointer                                 addCarvingPath = AddCarvingPathFilterType::New();
 
   typedef itk::ImageDuplicator<ImageType> duplicatorType;
-  duplicatorType::Pointer duplicator = duplicatorType::New();
+  duplicatorType::Pointer                 duplicator = duplicatorType::New();
   reader->Update();
   duplicator->SetInputImage(reader->GetOutput());
   duplicator->Update();
@@ -119,7 +110,7 @@ int main(int itkNotUsed(argc), char * argv[])
   // method.
 
   for (int i = 0; i < iteration; ++i)
-    {
+  {
 
     gradient->SetInput(duplicator->GetOutput());
 
@@ -136,15 +127,14 @@ int main(int itkNotUsed(argc), char * argv[])
 
     duplicator->SetInputImage(removeCarvingPath->GetOutput());
     duplicator->Update();
-
-    }
+  }
 
   // The next loop will put back the seam using the
   // \doxygen{otb}{AddCarvingPathFilter} and drawing it with the
   // \doxygen{otb}{DrawPathFilter}.
 
   for (int i = iteration - 1; i >= 0; i--)
-    {
+  {
 
     addCarvingPath->SetInput(duplicator->GetOutput());
     addCarvingPath->SetInputPath(pathList->GetNthElement(i));
@@ -157,7 +147,7 @@ int main(int itkNotUsed(argc), char * argv[])
 
     duplicator->SetInputImage(drawPathFilter->GetOutput());
     duplicator->Update();
-    }
+  }
 
   // Finally, the resulting image is saved on an image file as usual
 

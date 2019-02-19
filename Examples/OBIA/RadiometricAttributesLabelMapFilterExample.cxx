@@ -59,73 +59,55 @@
 #include "otbMultiChannelRAndNIRIndexImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 11)
-    {
-    std::cerr << "Usage: " << argv[0] <<
-    " reffname outfname outprettyfname attribute_name ";
-    std::cerr <<
-    "lowerThan tresh spatialRadius rangeRadius minregionsize scale" <<
-    std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << " reffname outfname outprettyfname attribute_name ";
+    std::cerr << "lowerThan tresh spatialRadius rangeRadius minregionsize scale" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * reffname = argv[1];
-  const char * outfname = argv[2];
-  const char * outprettyfname = argv[3];
-  const char * attr     = argv[4];
-  bool       lowerThan      = atoi(argv[5]);
-  double       thresh         = atof(argv[6]);
+  const char* reffname       = argv[1];
+  const char* outfname       = argv[2];
+  const char* outprettyfname = argv[3];
+  const char* attr           = argv[4];
+  bool        lowerThan      = atoi(argv[5]);
+  double      thresh         = atof(argv[6]);
 
-  const unsigned int spatialRadius          = atoi(argv[7]);
-  const double       rangeRadius            = atof(argv[8]);
-  const unsigned int minRegionSize          = atoi(argv[9]);
+  const unsigned int spatialRadius = atoi(argv[7]);
+  const double       rangeRadius   = atof(argv[8]);
+  const unsigned int minRegionSize = atoi(argv[9]);
   /* const double       scale                  = atoi(argv[10]); */
 
   const unsigned int Dimension = 2;
 
   // Labeled image type
-  typedef unsigned int                                LabelType;
-  typedef unsigned char                              MaskPixelType;
-  typedef double                                      PixelType;
-  typedef otb::Image<LabelType, Dimension>            LabeledImageType;
-  typedef otb::Image<MaskPixelType, Dimension>        MaskImageType;
-  typedef otb::Image<PixelType, Dimension>            ImageType;
-  typedef otb::VectorImage<PixelType, Dimension>      VectorImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>  OutputVectorImageType;
-  typedef otb::ImageFileReader<LabeledImageType>      LabeledReaderType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
-  typedef otb::ImageFileReader<VectorImageType>       VectorReaderType;
-  typedef otb::ImageFileWriter<MaskImageType>         WriterType;
-  typedef otb::ImageFileWriter<OutputVectorImageType> VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter
-  <VectorImageType, OutputVectorImageType> VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char,
-      unsigned char> ChannelExtractorType;
+  typedef unsigned int                                                                   LabelType;
+  typedef unsigned char                                                                  MaskPixelType;
+  typedef double                                                                         PixelType;
+  typedef otb::Image<LabelType, Dimension>                                               LabeledImageType;
+  typedef otb::Image<MaskPixelType, Dimension>                                           MaskImageType;
+  typedef otb::Image<PixelType, Dimension>                                               ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>                                         VectorImageType;
+  typedef otb::VectorImage<unsigned char, Dimension>                                     OutputVectorImageType;
+  typedef otb::ImageFileReader<LabeledImageType>                                         LabeledReaderType;
+  typedef otb::ImageFileReader<ImageType>                                                ReaderType;
+  typedef otb::ImageFileReader<VectorImageType>                                          VectorReaderType;
+  typedef otb::ImageFileWriter<MaskImageType>                                            WriterType;
+  typedef otb::ImageFileWriter<OutputVectorImageType>                                    VectorWriterType;
+  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, OutputVectorImageType> VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char, unsigned char>                      ChannelExtractorType;
   // Label map typedef
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension,
-      double>
-  LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>
-  LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType,
-      LabelMapType>
-  LabelMapFilterType;
-  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>
-  ShapeLabelMapFilterType;
-  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType,
-      VectorImageType>
-  RadiometricLabelMapFilterType;
-  typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>
-  OpeningLabelMapFilterType;
-  typedef itk::LabelMapToBinaryImageFilter<LabelMapType,
-      MaskImageType>
-  LabelMapToBinaryImageFilterType;
-  typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType,
-      ImageType> NDVIImageFilterType;
-  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>
-  ImageToVectorImageCastFilterType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                 LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>                                              LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
+  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeLabelMapFilterType;
+  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
+  typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>                       OpeningLabelMapFilterType;
+  typedef itk::LabelMapToBinaryImageFilter<LabelMapType, MaskImageType>               LabelMapToBinaryImageFilterType;
+  typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType, ImageType>        NDVIImageFilterType;
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>               ImageToVectorImageCastFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
@@ -139,9 +121,8 @@ int main(int argc, char * argv[])
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
   // explanations).
 
-  typedef otb::MeanShiftSegmentationFilter
-  <VectorImageType, LabeledImageType, VectorImageType> FilterType;
-  FilterType::Pointer filter = FilterType::New();
+  typedef otb::MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType> FilterType;
+  FilterType::Pointer                                                                          filter = FilterType::New();
   filter->SetSpatialBandwidth(spatialRadius);
   filter->SetRangeBandwidth(rangeRadius);
   filter->SetMinRegionSize(minRegionSize);
@@ -164,13 +145,11 @@ int main(int argc, char * argv[])
   labelMapFilter->SetInput(filter->GetLabelOutput());
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::min());
 
-  ShapeLabelMapFilterType::Pointer shapeLabelMapFilter =
-    ShapeLabelMapFilterType::New();
+  ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
   // Instantiate the  \doxygen{otb}{RadiometricLabelMapFilterType} to
   // compute statistics of the feature image on each label object.
-  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter
-    = RadiometricLabelMapFilterType::New();
+  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
   //  Feature image could be one of the following image:
   //  \begin{itemize}
   //  \item GEMI
@@ -184,14 +163,13 @@ int main(int argc, char * argv[])
   //
   //  Input image must be convert to the desired coefficient.
   //  In our case, statistics are computed on the NDVI coefficient on each label object.
-  NDVIImageFilterType:: Pointer ndviImageFilter = NDVIImageFilterType::New();
+  NDVIImageFilterType::Pointer ndviImageFilter = NDVIImageFilterType::New();
 
   ndviImageFilter->SetRedIndex(3);
   ndviImageFilter->SetNIRIndex(4);
   ndviImageFilter->SetInput(vreader->GetOutput());
 
-  ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter =
-      ImageToVectorImageCastFilterType::New();
+  ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter = ImageToVectorImageCastFilterType::New();
 
   ndviVectorImageFilter->SetInput(ndviImageFilter->GetOutput());
 
@@ -209,8 +187,7 @@ int main(int argc, char * argv[])
   opening->Update();
   //  Then, Label objects selected are transform in a Label Image using the
   //  \doxygen{itk}{LabelMapToLabelImageFilter}.
-  LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage
-    = LabelMapToBinaryImageFilterType::New();
+  LabelMapToBinaryImageFilterType::Pointer labelMap2LabeledImage = LabelMapToBinaryImageFilterType::New();
   labelMap2LabeledImage->SetInput(opening->GetOutput());
   // And finally, we declare the writer and call its \code{Update()} method to
   // trigger the full pipeline execution.

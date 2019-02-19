@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include "otbImage.h"
 
@@ -36,22 +35,22 @@
 
 #include "otbFlusserMomentsImageFunction.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " neighborhood_radius" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const unsigned int radius   = atoi(argv[2]);
+  const char*        inputFilename = argv[1];
+  const unsigned int radius        = atoi(argv[2]);
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
@@ -63,8 +62,8 @@ int main(int argc, char * argv[])
   //  input image type and the output (real) type value, so we start by
   //  defining:
 
-  typedef otb::FlusserMomentsImageFunction<InputImageType>  FlusserType;
-  typedef FlusserType::OutputType                           MomentType;
+  typedef otb::FlusserMomentsImageFunction<InputImageType> FlusserType;
+  typedef FlusserType::OutputType                          MomentType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
 
@@ -78,8 +77,8 @@ int main(int argc, char * argv[])
 
   start[0] = 0;
   start[1] = 0;
-  size[0] = 50;
-  size[1] = 50;
+  size[0]  = 50;
+  size[1]  = 50;
 
   reader->Update();
   InputImageType::Pointer image = reader->GetOutput();
@@ -105,11 +104,10 @@ int main(int argc, char * argv[])
 
   MomentType Result = fmFunction->EvaluateAtIndex(center);
 
-  for (unsigned int j=0; j<11; ++j)
-    {
-    std::cout << "The moment of order " << j+1 <<
-      " is equal to " << Result[j] << std::endl;
-    }
+  for (unsigned int j = 0; j < 11; ++j)
+  {
+    std::cout << "The moment of order " << j + 1 << " is equal to " << Result[j] << std::endl;
+  }
 
   //  \relatedClasses
   //  \begin{itemize}

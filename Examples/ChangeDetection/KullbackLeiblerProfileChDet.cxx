@@ -48,29 +48,27 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   try
-    {
+  {
     if (argc != 9)
-      {
-      std::cerr <<
-      "Change detection based on Kullback-Leibler distance betweenlocal pdf through an Edgeworth approximation\n";
-      std::cerr << argv[0] <<
-      " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
+    {
+      std::cerr << "Change detection based on Kullback-Leibler distance betweenlocal pdf through an Edgeworth approximation\n";
+      std::cerr << argv[0] << " imgAv imgAp imgResu winSizeMin winSizeMax outRedIndex outGreenIndex outBlueIndex\n";
       return 1;
-      }
+    }
 
-    char *       fileName1 = argv[1];
-    char *       fileName2 = argv[2];
-    char *       fileNameOut = argv[3];
-    int          winSizeMin = atoi(argv[4]);
-    int          winSizeMax = atoi(argv[5]);
-    unsigned int ri = atoi(argv[6]);
-    unsigned int gi = atoi(argv[7]);
-    unsigned int bi = atoi(argv[8]);
+    char*        fileName1   = argv[1];
+    char*        fileName2   = argv[2];
+    char*        fileNameOut = argv[3];
+    int          winSizeMin  = atoi(argv[4]);
+    int          winSizeMax  = atoi(argv[5]);
+    unsigned int ri          = atoi(argv[6]);
+    unsigned int gi          = atoi(argv[7]);
+    unsigned int bi          = atoi(argv[8]);
 
-    const unsigned int Dimension = 2;
+    const unsigned int    Dimension = 2;
     typedef double        PixelType;
     typedef unsigned char OutPixelType;
 
@@ -79,25 +77,15 @@ int main(int argc, char * argv[])
     //  image (which is now of multi-components), in a similar way as the
     //  \doxygen{otb}{KullbackLeiblerDistanceImageFilter}.
 
-    typedef otb::Image<PixelType, Dimension>       ImageType;
-    typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-    typedef otb::KullbackLeiblerProfileImageFilter<ImageType,
-        ImageType,
-        VectorImageType> FilterType;
+    typedef otb::Image<PixelType, Dimension>                                              ImageType;
+    typedef otb::VectorImage<PixelType, Dimension>                                        VectorImageType;
+    typedef otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType> FilterType;
 
-    typedef otb::VectorImage<OutPixelType,
-        Dimension>
-    OutVectorImageType;
-    typedef otb::ImageFileReader<ImageType>
-    ReaderType;
-    typedef otb::ImageFileWriter<OutVectorImageType>
-    WriterType;
-    typedef otb::MultiChannelExtractROI<PixelType,
-        PixelType>
-    ChannelSelecterType;
-    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType,
-        OutVectorImageType>
-    RescalerType;
+    typedef otb::VectorImage<OutPixelType, Dimension>                                   OutVectorImageType;
+    typedef otb::ImageFileReader<ImageType>                                             ReaderType;
+    typedef otb::ImageFileWriter<OutVectorImageType>                                    WriterType;
+    typedef otb::MultiChannelExtractROI<PixelType, PixelType>                           ChannelSelecterType;
+    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, OutVectorImageType> RescalerType;
 
     ReaderType::Pointer reader1 = ReaderType::New();
     reader1->SetFileName(fileName1);
@@ -152,19 +140,19 @@ int main(int argc, char * argv[])
     // channel of the generated output.}
     // \label{fig:RESKLPCHDET}
     // \end{figure}
-    }
+  }
 
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   catch (...)
-    {
+  {
     std::cout << "Unknown exception thrown !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   return EXIT_SUCCESS;
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./SVMImageEstimatorClassificationMultiExample Input/ROI_QB_MUL_1.png \
                                               Input/ROI_mask_multi.png \
@@ -64,44 +63,43 @@
 
 #include "otbImageFileReader.h"
 
-int main(int itkNotUsed(argc), char *argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
 
-  const char* inputImageFileName = argv[1];
-  const char* trainingImageFileName = argv[2];
-  const char* outputImageFileName = argv[3];
+  const char* inputImageFileName          = argv[1];
+  const char* trainingImageFileName       = argv[2];
+  const char* outputImageFileName         = argv[3];
   const char* outputRescaledImageFileName = argv[4];
-//  const char* outputModelFileName = argv[4];
+  //  const char* outputModelFileName = argv[4];
 
-//  We define the types for the input and training images. Even if the
-//  input image will be an RGB image, we can read it as a 3 component
-//  vector image. This simplifies the interfacing with OTB's SVM
-//  framework.
+  //  We define the types for the input and training images. Even if the
+  //  input image will be an RGB image, we can read it as a 3 component
+  //  vector image. This simplifies the interfacing with OTB's SVM
+  //  framework.
   typedef unsigned short InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
 
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
 
-  typedef otb::Image<InputPixelType,  Dimension> TrainingImageType;
+  typedef otb::Image<InputPixelType, Dimension> TrainingImageType;
 
-//  The \doxygen{otb}{LibSVMMachineLearningModel} class is templated over
-//  the input (features) and the training (labels) values.
-  typedef otb::LibSVMMachineLearningModel<InputPixelType,
-      InputPixelType>   ModelType;
+  //  The \doxygen{otb}{LibSVMMachineLearningModel} class is templated over
+  //  the input (features) and the training (labels) values.
+  typedef otb::LibSVMMachineLearningModel<InputPixelType, InputPixelType> ModelType;
 
 
-//  As usual, we define the readers for the images.
+  //  As usual, we define the readers for the images.
   typedef otb::ImageFileReader<InputImageType>    InputReaderType;
   typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
 
-  InputReaderType::Pointer    inputReader = InputReaderType::New();
+  InputReaderType::Pointer    inputReader    = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
 
 
-//  We read the images. It is worth to note that, in order to ensure
-//  the pipeline coherence, the output of the objects which precede the
-//  model estimator in the pipeline, must be up to date, so we call
-//  the corresponding \code{Update} methods.
+  //  We read the images. It is worth to note that, in order to ensure
+  //  the pipeline coherence, the output of the objects which precede the
+  //  model estimator in the pipeline, must be up to date, so we call
+  //  the corresponding \code{Update} methods.
   inputReader->SetFileName(inputImageFileName);
   trainingReader->SetFileName(trainingImageFileName);
 
@@ -109,20 +107,20 @@ int main(int itkNotUsed(argc), char *argv[])
   //~ trainingReader->Update();
 
 
-//  The input data is contained in images. Only label values greater than 0
-//  shall be used, so we create two iterators to fill the input and target
-//  ListSamples.
+  //  The input data is contained in images. Only label values greater than 0
+  //  shall be used, so we create two iterators to fill the input and target
+  //  ListSamples.
 
 
-  typedef itk::BinaryThresholdImageFilter<TrainingImageType,TrainingImageType> ThresholdFilterType;
-  ThresholdFilterType::Pointer thresholder = ThresholdFilterType::New();
+  typedef itk::BinaryThresholdImageFilter<TrainingImageType, TrainingImageType> ThresholdFilterType;
+  ThresholdFilterType::Pointer                                                  thresholder = ThresholdFilterType::New();
   thresholder->SetInput(trainingReader->GetOutput());
   thresholder->SetLowerThreshold(1);
   thresholder->SetOutsideValue(0);
   thresholder->SetInsideValue(1);
 
-  typedef itk::Statistics::ImageToListSampleFilter<InputImageType,TrainingImageType> ImageToListSample;
-  typedef itk::Statistics::ImageToListSampleFilter<TrainingImageType,TrainingImageType> ImageToTargetListSample;
+  typedef itk::Statistics::ImageToListSampleFilter<InputImageType, TrainingImageType>    ImageToListSample;
+  typedef itk::Statistics::ImageToListSampleFilter<TrainingImageType, TrainingImageType> ImageToTargetListSample;
 
   ImageToListSample::Pointer imToList = ImageToListSample::New();
   imToList->SetInput(inputReader->GetOutput());
@@ -137,54 +135,50 @@ int main(int itkNotUsed(argc), char *argv[])
   imToTargetList->Update();
 
 
-//  We can now instantiate the model and set its parameters.
+  //  We can now instantiate the model and set its parameters.
   ModelType::Pointer svmModel = ModelType::New();
   svmModel->SetInputListSample(const_cast<ModelType::InputListSampleType*>(imToList->GetOutput()));
   svmModel->SetTargetListSample(const_cast<ModelType::TargetListSampleType*>(imToTargetList->GetOutput()));
 
 
-//  The model training procedure is triggered by calling the
-//  model's \code{Train} method.
+  //  The model training procedure is triggered by calling the
+  //  model's \code{Train} method.
   svmModel->Train();
 
 
-// We have now all the elements to create a classifier. The classifier
-// is templated over the sample type (the type of the data to be
-// classified) and the label type (the type of the output of the classifier).
+  // We have now all the elements to create a classifier. The classifier
+  // is templated over the sample type (the type of the data to be
+  // classified) and the label type (the type of the output of the classifier).
 
   typedef otb::ImageClassificationFilter<InputImageType, TrainingImageType> ClassifierType;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
 
-// We set the classifier parameters : number of classes, SVM model,
-// the sample data. And we trigger the classification process by
-// calling the \code{Update} method.
+  // We set the classifier parameters : number of classes, SVM model,
+  // the sample data. And we trigger the classification process by
+  // calling the \code{Update} method.
 
   classifier->SetModel(svmModel);
   classifier->SetInput(inputReader->GetOutput());
 
-// After the classification step, we usually want to get the
-// results. The classifier gives an output under the form of a sample
-// list. This list supports the classical STL iterators. Therefore, we
-// will create an output image and fill it up with the results of the
-// classification. The pixel type of the output image is the same as
-// the one used for the labels.
+  // After the classification step, we usually want to get the
+  // results. The classifier gives an output under the form of a sample
+  // list. This list supports the classical STL iterators. Therefore, we
+  // will create an output image and fill it up with the results of the
+  // classification. The pixel type of the output image is the same as
+  // the one used for the labels.
 
 
-
-// We allocate the memory for the output image using the information
-// from the input image.
-
+  // We allocate the memory for the output image using the information
+  // from the input image.
 
 
-// We can now declare the iterators on the list that we get at the
-// output of the classifier as well as the iterator to fill the output image.
+  // We can now declare the iterators on the list that we get at the
+  // output of the classifier as well as the iterator to fill the output image.
 
 
-
-// We will iterate through the list, get the labels and assign pixel
-// values to the output image.
-
+  // We will iterate through the list, get the labels and assign pixel
+  // values to the output image.
 
 
   typedef otb::ImageFileWriter<TrainingImageType> WriterType;
@@ -196,26 +190,23 @@ int main(int itkNotUsed(argc), char *argv[])
 
   writer->Update();
 
-// Only for visualization purposes, we choose a color mapping to the image of
-// classes before saving it to a file. The
-// \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
-// function object designed to hash a scalar value into an
-// \doxygen{itk}{RGBPixel}. Plugging this functor into the
-// \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
-// converts scalar images to RGB images.
+  // Only for visualization purposes, we choose a color mapping to the image of
+  // classes before saving it to a file. The
+  // \subdoxygen{itk}{Functor}{ScalarToRGBPixelFunctor} class is a special
+  // function object designed to hash a scalar value into an
+  // \doxygen{itk}{RGBPixel}. Plugging this functor into the
+  // \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
+  // converts scalar images to RGB images.
 
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>
-  ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<TrainingImageType,
-      RGBImageType,
-      ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  typedef itk::RGBPixel<unsigned char>                                                       RGBPixelType;
+  typedef otb::Image<RGBPixelType, 2>                                                        RGBImageType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                               ColorMapFunctorType;
+  typedef itk::UnaryFunctorImageFilter<TrainingImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  ColorMapFilterType::Pointer                                                                colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(classifier->GetOutput());
 
-// We can now create an image file writer and save the image.
+  // We can now create an image file writer and save the image.
 
   typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
 
@@ -226,15 +217,15 @@ int main(int itkNotUsed(argc), char *argv[])
 
   writerRescaled->Update();
 
-// Figure \ref{fig:SVMCLASSMULTI} shows the result of the SVM classification.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
-// \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.eps}
-// \itkcaption[SVM Image Classification]{Result of the SVM
-// classification . Left: RGB image. Right: image of classes.}
-// \label{fig:SVMCLASSMULTI}
-// \end{figure}
+  // Figure \ref{fig:SVMCLASSMULTI} shows the result of the SVM classification.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1.eps}
+  // \includegraphics[width=0.45\textwidth]{ROI_QB_MUL_1_SVN_CLASS_MULTI_Rescaled.eps}
+  // \itkcaption[SVM Image Classification]{Result of the SVM
+  // classification . Left: RGB image. Right: image of classes.}
+  // \label{fig:SVMCLASSMULTI}
+  // \end{figure}
 
   return EXIT_SUCCESS;
 }

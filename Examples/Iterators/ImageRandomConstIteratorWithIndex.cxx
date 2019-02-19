@@ -19,7 +19,6 @@
  */
 
 
-
 // \doxygen{itk}{ImageRandomConstIteratorWithIndex} was developed to randomly
 // sample pixel values.  When incremented or decremented, it jumps to a random
 // location in its image region.
@@ -48,18 +47,16 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters on the command line.
   if (argc < 3)
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0]
-              << " inputImageFile numberOfSamples"
-              << std::endl;
+    std::cerr << argv[0] << " inputImageFile numberOfSamples" << std::endl;
     return -1;
-    }
+  }
 
   const unsigned int Dimension = 2;
 
@@ -73,63 +70,62 @@ int main(int argc, char *argv[])
   ReaderType::Pointer     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// The input image has been read as \code{inputImage}.  We now create an
-// iterator with a number of samples set by command line argument. The call to
-// \code{ReinitializeSeed} seeds the random number generator.  The iterator is
-// initialized over the entire valid image region.
-//
-//  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!SetNumberOfSamples()}
-//  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!ReinitializeSeed()}
+  // The input image has been read as \code{inputImage}.  We now create an
+  // iterator with a number of samples set by command line argument. The call to
+  // \code{ReinitializeSeed} seeds the random number generator.  The iterator is
+  // initialized over the entire valid image region.
+  //
+  //  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!SetNumberOfSamples()}
+  //  \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!ReinitializeSeed()}
 
-  ConstIteratorType inputIt(inputImage,  inputImage->GetRequestedRegion());
+  ConstIteratorType inputIt(inputImage, inputImage->GetRequestedRegion());
   inputIt.SetNumberOfSamples(::atoi(argv[2]));
   inputIt.ReinitializeSeed();
 
-// Software Guide: BeginLatex
-//
-// Now take the specified number of samples and calculate their average value.
+  // Software Guide: BeginLatex
+  //
+  // Now take the specified number of samples and calculate their average value.
 
   float mean = 0.0f;
   for (inputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt)
-    {
+  {
     mean += static_cast<float>(inputIt.Get());
-    }
+  }
   mean = mean / ::atof(argv[2]);
-  std::cout << "Mean estimate with " << argv[2] << " samples is " << mean <<
-  std::endl;
+  std::cout << "Mean estimate with " << argv[2] << " samples is " << mean << std::endl;
 
-// Table~\ref{fig:ImageRandomConstIteratorWithIndexExample} shows the results
-// of running this example on several of the data files from
-// \code{Examples/Data} with a range of sample sizes.
-//
-// \begin{table}
-// \begin{center}
-// \begin{tabular}[]{rc|c|c|c}
-// & \multicolumn{4}{c}{\emph{Sample Size}} \\  & \code{\textbf{10}} & \code{\textbf{100}}
-// & \code{\textbf{1000}}
-// & \code{\textbf{10000}} \\ \cline{2-5}
-// \code{RatLungSlice1.mha} & 50.5 & 52.4 & 53.0 & 52.4 \\ \code{RatLungSlice2.mha}
-// & 46.7 & 47.5 & 47.4 & 47.6  \\ \code{BrainT1Slice.png}
-// & 47.2 & 64.1 & 68.0 & 67.8  \\ \end{tabular}
-// \protect\label{fig:ImageRandomConstIteratorWithIndexExample}
-// \itkcaption[ImageRandomConstIteratorWithIndex usage]{Estimates of mean image pixel
-// value using the ImageRandomConstIteratorWithIndex at different sample
-// sizes.}
-// \end{center}
-// \end{table}
-//
-// \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!example of using|)}
+  // Table~\ref{fig:ImageRandomConstIteratorWithIndexExample} shows the results
+  // of running this example on several of the data files from
+  // \code{Examples/Data} with a range of sample sizes.
+  //
+  // \begin{table}
+  // \begin{center}
+  // \begin{tabular}[]{rc|c|c|c}
+  // & \multicolumn{4}{c}{\emph{Sample Size}} \\  & \code{\textbf{10}} & \code{\textbf{100}}
+  // & \code{\textbf{1000}}
+  // & \code{\textbf{10000}} \\ \cline{2-5}
+  // \code{RatLungSlice1.mha} & 50.5 & 52.4 & 53.0 & 52.4 \\ \code{RatLungSlice2.mha}
+  // & 46.7 & 47.5 & 47.4 & 47.6  \\ \code{BrainT1Slice.png}
+  // & 47.2 & 64.1 & 68.0 & 67.8  \\ \end{tabular}
+  // \protect\label{fig:ImageRandomConstIteratorWithIndexExample}
+  // \itkcaption[ImageRandomConstIteratorWithIndex usage]{Estimates of mean image pixel
+  // value using the ImageRandomConstIteratorWithIndex at different sample
+  // sizes.}
+  // \end{center}
+  // \end{table}
+  //
+  // \index{itk::Image\-Random\-Const\-Iterator\-With\-Index!example of using|)}
 
   return EXIT_SUCCESS;
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./DEMHandlerExample Input/DEM/srtm_directory Input/DEM/egm96.grd 40 8.434583 44.647083 383.580313671 0.001
 */
@@ -36,41 +35,41 @@
 
 #include "otbDEMHandler.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
-if(argc!=8)
-    {
-    std::cerr<<"Usage: "<<argv[0]<<" demdir[path|no] geoid[path|no] defaultHeight longitude latitude targetValue tolerance"<<std::endl;
+  if (argc != 8)
+  {
+    std::cerr << "Usage: " << argv[0] << " demdir[path|no] geoid[path|no] defaultHeight longitude latitude targetValue tolerance" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  std::string demdir   = argv[1];
-  std::string geoid    = argv[2];
-  double defaultHeight = atof(argv[3]);
-  double longitude      = atof(argv[4]);
-  double latitude     = atof(argv[5]);
-  double target        = atof(argv[6]);
-  double tolerance     = atof(argv[7]);
+  std::string demdir        = argv[1];
+  std::string geoid         = argv[2];
+  double      defaultHeight = atof(argv[3]);
+  double      longitude     = atof(argv[4]);
+  double      latitude      = atof(argv[5]);
+  double      target        = atof(argv[6]);
+  double      tolerance     = atof(argv[7]);
 
-// This class is a singleton, the New() method is deprecated and will be removed
-// in future release. We need to use the \code{Instance()} method instead.
+  // This class is a singleton, the New() method is deprecated and will be removed
+  // in future release. We need to use the \code{Instance()} method instead.
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
 
   bool fail = false;
 
-// It allows configuring a directory containing DEM tiles (DTED or SRTM
-// supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
-// allows inputting a geoid file as well. Last, a default height above ellipsoid
-// can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
+  // It allows configuring a directory containing DEM tiles (DTED or SRTM
+  // supported) using the \code{OpenDEMDirectory()} method. The \code{OpenGeoidFile()} method
+  // allows inputting a geoid file as well. Last, a default height above ellipsoid
+  // can be set using the \code{SetDefaultHeightAboveEllipsoid()} method.
 
   demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
 
-  if(!demHandler->IsValidDEMDirectory(demdir.c_str()))
-    {
-    std::cerr<<"IsValidDEMDirectory("<<demdir<<") = false"<<std::endl;
+  if (!demHandler->IsValidDEMDirectory(demdir.c_str()))
+  {
+    std::cerr << "IsValidDEMDirectory(" << demdir << ") = false" << std::endl;
     fail = true;
-    }
+  }
 
   demHandler->OpenDEMDirectory(demdir);
   demHandler->OpenGeoidFile(geoid);
@@ -106,38 +105,37 @@ if(argc!=8)
   double height = -32768;
 
   height = demHandler->GetHeightAboveMSL(point);
-  std::cout<<"height above MSL ("<<longitude<<","
-           <<latitude<<") = "<<height<<" meters"<<std::endl;
+  std::cout << "height above MSL (" << longitude << "," << latitude << ") = " << height << " meters" << std::endl;
 
   height = demHandler->GetHeightAboveEllipsoid(point);
-  std::cout<<"height above ellipsoid ("<<longitude
-           <<", "<<latitude<<") = "<<height<<" meters"<<std::endl;
+  std::cout << "height above ellipsoid (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
   //
   // Note that OSSIM internal calls for sensor
   // modelling use the height above ellipsoid, and follow the same logic as the
   // \code{GetHeightAboveEllipsoid()} method.
   //
-  //Software Guide : EndLatex
+  // Software Guide : EndLatex
 
   // Check for Nan
-  if(vnl_math_isnan(height))
-    {
-    std::cerr<<"Computed value is NaN"<<std::endl;
+  if (vnl_math_isnan(height))
+  {
+    std::cerr << "Computed value is NaN" << std::endl;
     fail = true;
-    }
+  }
 
-  double error = std::abs(height-target);
+  double error = std::abs(height - target);
 
-  if(error>tolerance)
-    {
-    std::cerr<<"Target value is "<<target<<" meters, computed value is "<<height<<" meters. error ("<<error<<" meters) > tolerance ("<<tolerance<<" meters)"<<std::endl;
+  if (error > tolerance)
+  {
+    std::cerr << "Target value is " << target << " meters, computed value is " << height << " meters. error (" << error << " meters) > tolerance (" << tolerance
+              << " meters)" << std::endl;
     fail = true;
-    }
+  }
 
-  if(fail)
-    {
+  if (fail)
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

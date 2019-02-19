@@ -20,7 +20,6 @@
  */
 
 
-
 // This example illustrates how to manually construct an \doxygen{otb}{Image}
 // class.  The following is the minimal code needed to instantiate, declare
 // and create the image class.
@@ -32,7 +31,7 @@
 
 #include "otbImage.h"
 
-int main(int, char *[])
+int main(int, char* [])
 {
   // Then we must decide with what type to represent the pixels
   // and what the dimension of the image will be. With these two
@@ -86,8 +85,8 @@ int main(int, char *[])
   //
   ImageType::IndexType start;
 
-  start[0] =   0;  // first index on X
-  start[1] =   0;  // first index on Y
+  start[0] = 0; // first index on X
+  start[1] = 0; // first index on Y
 
   // The region size is represented by an array of the same dimension of the
   // image (using the Size class). The components of the array are
@@ -99,8 +98,8 @@ int main(int, char *[])
   //
   ImageType::SizeType size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
   // Having defined the starting index and the image size, these two
   // parameters are used to create an ImageRegion object which basically

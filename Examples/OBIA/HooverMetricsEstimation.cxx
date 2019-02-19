@@ -20,7 +20,6 @@
  */
 
 
-
 /* Example usage:
 ./HooverMetricsEstimation Input/maur_GT.tif Input/maur_labelled.tif Output/maur_colored_GT.tif
 */
@@ -63,12 +62,12 @@
 
 int main(int argc, char* argv[])
 {
-  if(argc != 4)
-    {
+  if (argc != 4)
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " segmentationGT segmentationMS outputAttributeImage" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // The filters \doxygen{otb}{HooverMatrixFilter} and \doxygen{otb}{HooverInstanceFilter}
   // are designed to handle \doxygen{itk}{LabelMap} images, made with \doxygen{otb}{AttributesMapLabelObject}.
@@ -76,19 +75,17 @@ int main(int argc, char* argv[])
   // a set of attributes: in this case, Hoover instances and metrics will be stored.
 
   typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>            LabelMapType;
-  typedef otb::HooverMatrixFilter<LabelMapType>     HooverMatrixFilterType;
-  typedef otb::HooverInstanceFilter<LabelMapType>   InstanceFilterType;
+  typedef itk::LabelMap<LabelObjectType>                        LabelMapType;
+  typedef otb::HooverMatrixFilter<LabelMapType>                 HooverMatrixFilterType;
+  typedef otb::HooverInstanceFilter<LabelMapType>               InstanceFilterType;
 
-  typedef otb::Image<unsigned int, 2>               ImageType;
-  typedef itk::LabelImageToLabelMapFilter
-    <ImageType, LabelMapType>                       ImageToLabelMapFilterType;
+  typedef otb::Image<unsigned int, 2>                              ImageType;
+  typedef itk::LabelImageToLabelMapFilter<ImageType, LabelMapType> ImageToLabelMapFilterType;
 
-  typedef otb::VectorImage<float, 2>                VectorImageType;
-  typedef otb::LabelMapToAttributeImageFilter
-      <LabelMapType, VectorImageType>               AttributeImageFilterType;
-  typedef otb::ImageFileReader<ImageType>           ImageReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>     WriterType;
+  typedef otb::VectorImage<float, 2>                                         VectorImageType;
+  typedef otb::LabelMapToAttributeImageFilter<LabelMapType, VectorImageType> AttributeImageFilterType;
+  typedef otb::ImageFileReader<ImageType>                                    ImageReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>                              WriterType;
 
   ImageReaderType::Pointer gt_reader = ImageReaderType::New();
   gt_reader->SetFileName(argv[1]);
@@ -152,11 +149,11 @@ int main(int argc, char* argv[])
   // its over-segmentation score ("RF", band 2), its under-segmentation score ("RA", band 3)
   // and its missed detection score ("RM", band 4).
 
-  std::cout << "Mean RC ="<< instances->GetMeanRC() << std::endl;
-  std::cout << "Mean RF ="<< instances->GetMeanRF() << std::endl;
-  std::cout << "Mean RA ="<< instances->GetMeanRA() << std::endl;
-  std::cout << "Mean RM ="<< instances->GetMeanRM() << std::endl;
-  std::cout << "Mean RN ="<< instances->GetMeanRN() << std::endl;
+  std::cout << "Mean RC =" << instances->GetMeanRC() << std::endl;
+  std::cout << "Mean RF =" << instances->GetMeanRF() << std::endl;
+  std::cout << "Mean RA =" << instances->GetMeanRA() << std::endl;
+  std::cout << "Mean RM =" << instances->GetMeanRM() << std::endl;
+  std::cout << "Mean RN =" << instances->GetMeanRN() << std::endl;
 
   // The Hoover scores are also computed for the whole segmentations. Here is some explanation about the score names :
   // C = correct, F = fragmentation, A = aggregation, M = missed, N = noise.

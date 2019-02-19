@@ -26,7 +26,7 @@
 #include "otbImage.h"
 #include <iostream>
 
-int main(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int main(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::Image<unsigned short, 2> ImageType;
 

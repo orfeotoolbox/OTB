@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./DiffChDet Input/SpotBefore.png Input/SpotAfter.png Output/DiffChDet.tif 3
 */
@@ -59,12 +58,11 @@ int main(int argc, char* argv[])
 {
 
   if (argc < 5)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0] <<
-    " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
+    std::cerr << argv[0] << " inputImageFile1 inputImageFile2  outputImageFile radius" << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -94,33 +92,28 @@ int main(int argc, char* argv[])
   //  rescale the results of the change detection in order to use the full range
   //  of values of the output pixel type.
 
-  typedef itk::AbsImageFilter<ChangeImageType,
-      ChangeImageType> AbsType;
-  typedef itk::RescaleIntensityImageFilter<ChangeImageType,
-      OutputImageType> RescalerType;
+  typedef itk::AbsImageFilter<ChangeImageType, ChangeImageType>              AbsType;
+  typedef itk::RescaleIntensityImageFilter<ChangeImageType, OutputImageType> RescalerType;
 
 
   //  The \doxygen{otb}{MeanDifferenceImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
 
-  typedef otb::MeanDifferenceImageFilter<
-      InputImageType1,
-      InputImageType2,
-      ChangeImageType>       FilterType;
+  typedef otb::MeanDifferenceImageFilter<InputImageType1, InputImageType2, ChangeImageType> FilterType;
 
   //  The different elements of the pipeline can now be instantiated.
 
-  ReaderType1::Pointer  reader1 = ReaderType1::New();
-  ReaderType2::Pointer  reader2 = ReaderType2::New();
-  WriterType::Pointer   writer = WriterType::New();
-  FilterType::Pointer   filter = FilterType::New();
+  ReaderType1::Pointer  reader1   = ReaderType1::New();
+  ReaderType2::Pointer  reader2   = ReaderType2::New();
+  WriterType::Pointer   writer    = WriterType::New();
+  FilterType::Pointer   filter    = FilterType::New();
   AbsType::Pointer      absFilter = AbsType::New();
-  RescalerType::Pointer rescaler = RescalerType::New();
+  RescalerType::Pointer rescaler  = RescalerType::New();
 
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[3];
 
   //  We set the parameters of the different elements of the pipeline.
 
@@ -155,25 +148,24 @@ int main(int argc, char* argv[])
   filter->AddObserver(itk::ProgressEvent(), observer);
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
-// Figure \ref{fig:RESDIFFCHDET} shows the result of the change
-// detection by difference of local means.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.35\textwidth]{DiffChDet.eps}
-// \itkcaption[Difference Change Detection Results]{Result of the mean
-// difference change detector}
-// \label{fig:RESDIFFCHDET}
-// \end{figure}
+  }
+  // Figure \ref{fig:RESDIFFCHDET} shows the result of the change
+  // detection by difference of local means.
+  // \begin{figure}
+  // \center
+  // \includegraphics[width=0.35\textwidth]{DiffChDet.eps}
+  // \itkcaption[Difference Change Detection Results]{Result of the mean
+  // difference change detector}
+  // \label{fig:RESDIFFCHDET}
+  // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

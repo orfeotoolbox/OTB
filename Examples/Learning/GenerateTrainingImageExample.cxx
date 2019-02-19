@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./GenerateTrainingImageExample Input/ROI_QB_MUL_4.tif Input/LearningROIs.txt Output/ROI_QB_MUL_4_training.png
 */
@@ -38,27 +37,25 @@
 #include <iostream>
 #include <fstream>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
 
-    std::cout << "Usage : " << argv[0] <<
-    " inputImage roiFile outputTrainingImage" << std::endl;
+    std::cout << "Usage : " << argv[0] << " inputImage roiFile outputTrainingImage" << std::endl;
     return EXIT_FAILURE;
+  }
 
-    }
-
-  const char * imageFilename  = argv[1];
-  const char * roiFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* imageFilename  = argv[1];
+  const char* roiFilename    = argv[2];
+  const char* outputFilename = argv[3];
 
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
@@ -119,7 +116,7 @@ int main(int argc, char *argv[])
   std::cout << "Nb of ROIS " << int(nbRois) << std::endl;
 
   while (!roisFile.fail() && (nbRois > 0))
-    {
+  {
 
     --nbRois;
     OutputPixelType label = 0;
@@ -142,31 +139,29 @@ int main(int argc, char *argv[])
     start[0] = xUL;
     start[1] = yUL;
 
-    size[0]  = xBR - xUL;
-    size[1]  = yBR - yUL;
+    size[0] = xBR - xUL;
+    size[1] = yBR - yUL;
 
     region.SetSize(size);
     region.SetIndex(start);
 
     // Iterator creation
     typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
-    IteratorType it(trainingImage, region);
+    IteratorType                                      it(trainingImage, region);
 
     it.GoToBegin();
 
     // Iteration and pixel value assignment
     while (!it.IsAtEnd())
-      {
+    {
 
       it.Set(static_cast<OutputPixelType>(label));
 
-      //std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
-      //std::cout << (int)it.Get() << std::endl;
+      // std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
+      // std::cout << (int)it.Get() << std::endl;
       ++it;
-
-      }
-
     }
+  }
 
   writer->SetInput(trainingImage);
 

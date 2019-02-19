@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./NCCRegistrationFilterExample Input/StereoFixed.png \
                                Input/StereoMoving.png \
@@ -55,14 +54,13 @@ int main(int argc, char** argv)
 {
 
   if (argc != 9)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
+    std::cerr << " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical imageOutName ";
     std::cerr << "explorationSize bluringSigma nbIterations ";
 
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int ImageDimension = 2;
 
@@ -75,34 +73,31 @@ int main(int argc, char** argv)
   // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
   // the image we want to register (moving) and the deformation field.
 
-  //Allocate Images
-  typedef otb::Image<PixelType, ImageDimension> MovingImageType;
-  typedef otb::Image<PixelType, ImageDimension> FixedImageType;
-  typedef otb::Image<DisplacementPixelType,
-      ImageDimension>         DisplacementFieldType;
+  // Allocate Images
+  typedef otb::Image<PixelType, ImageDimension>             MovingImageType;
+  typedef otb::Image<PixelType, ImageDimension>             FixedImageType;
+  typedef otb::Image<DisplacementPixelType, ImageDimension> DisplacementFieldType;
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
-  FixedReaderType::Pointer fReader = FixedReaderType::New();
+  FixedReaderType::Pointer                     fReader = FixedReaderType::New();
   fReader->SetFileName(argv[1]);
 
   typedef otb::ImageFileReader<MovingImageType> MovingReaderType;
-  MovingReaderType::Pointer mReader = MovingReaderType::New();
+  MovingReaderType::Pointer                     mReader = MovingReaderType::New();
   mReader->SetFileName(argv[2]);
 
   // To make the correlation estimation more robust, the first
   // required step is to blur the input images. This is done using the
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
 
-  //Blur input images
-  typedef itk::RecursiveGaussianImageFilter<FixedImageType,
-      FixedImageType> FixedBlurType;
+  // Blur input images
+  typedef itk::RecursiveGaussianImageFilter<FixedImageType, FixedImageType> FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
   fBlur->SetSigma(std::stof(argv[7]));
 
-  typedef itk::RecursiveGaussianImageFilter<MovingImageType,
-      MovingImageType> MovingBlurType;
+  typedef itk::RecursiveGaussianImageFilter<MovingImageType, MovingImageType> MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
@@ -110,11 +105,8 @@ int main(int argc, char** argv)
 
   // Now, we need to instantiate the NCCRegistrationFilter which is going to perform the registration:
 
-  //Create the filter
-  typedef otb::NCCRegistrationFilter<FixedImageType,
-      MovingImageType,
-      DisplacementFieldType>
-  RegistrationFilterType;
+  // Create the filter
+  typedef otb::NCCRegistrationFilter<FixedImageType, MovingImageType, DisplacementFieldType> RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
@@ -139,7 +131,7 @@ int main(int argc, char** argv)
   // \item The number of iterations for the PDE resolution:
 
   registrator->SetNumberOfIterations(std::stoi(argv[8]));
-// registrator->GetDisplacementField();
+  // registrator->GetDisplacementField();
 
   // \end{itemize}
   // The execution of the NCCRegistrationFilter will be triggered by
@@ -148,18 +140,14 @@ int main(int argc, char** argv)
   // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
-      MovingImageType>
-  ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer channelExtractor =
-    ChannelExtractionFilterType::New();
+  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType, MovingImageType> ChannelExtractionFilterType;
+  ChannelExtractionFilterType::Pointer                                                       channelExtractor = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(registrator->GetOutput());
   channelExtractor->SetChannel(1);
 
-  typedef itk::RescaleIntensityImageFilter<MovingImageType,
-      OutputImageType> RescalerType;
-  RescalerType::Pointer fieldRescaler = RescalerType::New();
+  typedef itk::RescaleIntensityImageFilter<MovingImageType, OutputImageType> RescalerType;
+  RescalerType::Pointer                                                      fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
@@ -176,9 +164,8 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<MovingImageType, MovingImageType,
-      DisplacementFieldType> WarperType;
-  WarperType::Pointer warper = WarperType::New();
+  typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DisplacementFieldType> WarperType;
+  WarperType::Pointer                                                                   warper = WarperType::New();
 
   MovingImageType::PixelType padValue = 4.0;
 
@@ -187,7 +174,7 @@ int main(int argc, char** argv)
   warper->SetEdgePaddingValue(padValue);
 
   typedef itk::CastImageFilter<MovingImageType, OutputImageType> CastFilterType;
-  CastFilterType::Pointer caster =  CastFilterType::New();
+  CastFilterType::Pointer                                        caster = CastFilterType::New();
   caster->SetInput(warper->GetOutput());
 
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -213,5 +200,4 @@ int main(int argc, char** argv)
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

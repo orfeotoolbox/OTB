@@ -39,15 +39,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 16)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  char * OutputName = argv[15];
+  char* OutputName = argv[15];
   //  We now define leaf parameters, which characterize vegetation composition.
 
   typedef otb::LeafParameters LeafParametersType;
@@ -70,12 +70,12 @@ int main(int argc, char *argv[])
   //  \item Leaf structure parameter (N).
   //  \end{itemize}
 
-  double Cab = static_cast<double> (atof(argv[1]));
-  double Car = static_cast<double> (atof(argv[2]));
-  double CBrown = static_cast<double> (atof(argv[3]));
-  double Cw = static_cast<double> (atof(argv[4]));
-  double Cm = static_cast<double> (atof(argv[5]));
-  double N = static_cast<double> (atof(argv[6]));
+  double Cab    = static_cast<double>(atof(argv[1]));
+  double Car    = static_cast<double>(atof(argv[2]));
+  double CBrown = static_cast<double>(atof(argv[3]));
+  double Cw     = static_cast<double>(atof(argv[4]));
+  double Cm     = static_cast<double>(atof(argv[5]));
+  double N      = static_cast<double>(atof(argv[6]));
 
   leafParams->SetCab(Cab);
   leafParams->SetCar(Car);
@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
   //  Leaf parameters are used as prospect input
 
   typedef otb::ProspectModel ProspectType;
-  ProspectType::Pointer prospect = ProspectType::New();
+  ProspectType::Pointer      prospect = ProspectType::New();
 
   prospect->SetInput(leafParams);
 
@@ -109,14 +109,14 @@ int main(int argc, char *argv[])
   //  \end{itemize}
 
 
-  double LAI = static_cast<double> (atof(argv[7]));
-  double Angle = static_cast<double> (atof(argv[8]));
-  double PSoil = static_cast<double> (atof(argv[9]));
-  double Skyl = static_cast<double> (atof(argv[10]));
-  double HSpot = static_cast<double> (atof(argv[11]));
-  double TTS = static_cast<double> (atof(argv[12]));
-  double TTO = static_cast<double> (atof(argv[13]));
-  double PSI = static_cast<double> (atof(argv[14]));
+  double LAI   = static_cast<double>(atof(argv[7]));
+  double Angle = static_cast<double>(atof(argv[8]));
+  double PSoil = static_cast<double>(atof(argv[9]));
+  double Skyl  = static_cast<double>(atof(argv[10]));
+  double HSpot = static_cast<double>(atof(argv[11]));
+  double TTS   = static_cast<double>(atof(argv[12]));
+  double TTO   = static_cast<double>(atof(argv[13]));
+  double PSI   = static_cast<double>(atof(argv[14]));
 
   typedef otb::SailModel SailType;
 
@@ -142,13 +142,15 @@ int main(int argc, char *argv[])
 
   sail->Update();
 
-  //  \emph{GetViewingReflectance} method provides viewing reflectance vector (size $Nx2$, where $N$ is the number of sampled wavelength values, columns corresponds respectively to wavelength and viewing reflectance) by calling \emph{GetResponse}.
-  //  \emph{GetHemisphericalReflectance} method provides hemispherical reflectance vector (size $Nx2$, where $N$ is the number ofsampled wavelength values, columns corresponds to wavelength and hemispherical reflectance) by calling \emph{GetResponse}.
+  //  \emph{GetViewingReflectance} method provides viewing reflectance vector (size $Nx2$, where $N$ is the number of sampled wavelength values, columns
+  //  corresponds respectively to wavelength and viewing reflectance) by calling \emph{GetResponse}. \emph{GetHemisphericalReflectance} method provides
+  //  hemispherical reflectance vector (size $Nx2$, where $N$ is the number ofsampled wavelength values, columns corresponds to wavelength and hemispherical
+  //  reflectance) by calling \emph{GetResponse}.
   //
   // Note that PROSAIL simulation are done for 2100 samples starting from 400nm up to 2500nm
 
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
-    {
+  {
     std::cout << "wavelength  : ";
     std::cout << sail->GetViewingReflectance()->GetResponse()[i].first;
     std::cout << ". Viewing reflectance ";
@@ -156,14 +158,14 @@ int main(int argc, char *argv[])
     std::cout << ". Hemispherical reflectance ";
     std::cout << sail->GetHemisphericalReflectance()->GetResponse()[i].second;
     std::cout << std::endl;
-    }
+  }
 
   std::ofstream outputFile(OutputName, std::ios::out);
   for (unsigned int i = 0; i < sail->GetHemisphericalReflectance()->Size(); ++i)
-    {
+  {
     outputFile << sail->GetViewingReflectance()->GetResponse()[i].second << " ";
-    outputFile << sail->GetHemisphericalReflectance()->GetResponse()[i].second<< std::endl;
-    }
+    outputFile << sail->GetHemisphericalReflectance()->GetResponse()[i].second << std::endl;
+  }
 
   //  here you can found example parameters :
   //  \begin{itemize}
@@ -183,7 +185,8 @@ int main(int argc, char *argv[])
   //  \item PSI 0
   //  \end{itemize}
   //
-  //  More information and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud} \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
+  //  More information and data about leaf properties can be found at \emph{St\'{e}phane Jacquemoud}
+  //  \href{http://teledetection.ipgp.jussieu.fr/opticleaf/}{OPTICLEAF} website.
 
   return EXIT_SUCCESS;
 }

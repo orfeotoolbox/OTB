@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./DanielssonDistanceMapImageFilter Input/FivePoints.png Output/DanielssonDistanceMapImageFilterOutput1.png Output/DanielssonDistanceMapImageFilterOutput2.png
 */
@@ -49,16 +48,16 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 4)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputDistanceMapImageFile ";
     std::cerr << " outputVoronoiMapImageFilter ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   //  Then we must decide what pixel types to use for the input and output
   //  images. Since the output will contain distances measured in pixels, the
@@ -67,9 +66,9 @@ int main(int argc, char * argv[])
   //  The input and output image types are now defined using their respective
   //  pixel type and dimension.
 
-  typedef  unsigned char                 InputPixelType;
-  typedef  unsigned short                OutputPixelType;
-  typedef otb::Image<InputPixelType,  2> InputImageType;
+  typedef unsigned char                  InputPixelType;
+  typedef unsigned short                 OutputPixelType;
+  typedef otb::Image<InputPixelType, 2>  InputImageType;
   typedef otb::Image<OutputPixelType, 2> OutputImageType;
 
   //  The filter type can be instantiated using the input and output image
@@ -80,17 +79,14 @@ int main(int argc, char * argv[])
   //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!New()}
   //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!Pointer}
 
-  typedef itk::ConnectedComponentImageFilter<
-    InputImageType, InputImageType> ConnectedType;
-  ConnectedType::Pointer connectedComponents = ConnectedType::New();
+  typedef itk::ConnectedComponentImageFilter<InputImageType, InputImageType> ConnectedType;
+  ConnectedType::Pointer                                                     connectedComponents = ConnectedType::New();
 
-  typedef itk::DanielssonDistanceMapImageFilter<
-    InputImageType, OutputImageType, OutputImageType> FilterType;
-  FilterType::Pointer filter = FilterType::New();
+  typedef itk::DanielssonDistanceMapImageFilter<InputImageType, OutputImageType, OutputImageType> FilterType;
+  FilterType::Pointer                                                                             filter = FilterType::New();
 
-  typedef itk::RescaleIntensityImageFilter<
-      OutputImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer scaler = RescalerType::New();
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType> RescalerType;
+  RescalerType::Pointer                                                      scaler = RescalerType::New();
 
   //
   // Reader and Writer types are instantiated.
@@ -147,7 +143,7 @@ int main(int argc, char * argv[])
   //  \index{Voronoi partitions!itk::Danielsson\-Distance\-Map\-Image\-Filter}
 
   writer->Update();
-  const char * voronoiMapFileName = argv[3];
+  const char* voronoiMapFileName = argv[3];
 
   //  The Voronoi map is obtained with the \code{GetVoronoiMap()} method. In
   //  the lines below we connect this output to the intensity rescaler and

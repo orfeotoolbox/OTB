@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter Input/VegetationIndex.hd \
                                                         Output/ARVIMultiChannelRAndBAndNIRVegetationIndex.tif \
@@ -95,23 +94,21 @@
 #include "otbMultiChannelExtractROI.h"
 #include "itkThresholdImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 8)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama"
-              << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
     return 1;
-    }
+  }
 
   // The image types are now defined using pixel types and
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
 
-  const unsigned int Dimension = 2;
+  const unsigned int                                  Dimension = 2;
   typedef double                                      InputPixelType;
   typedef float                                       OutputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
@@ -126,24 +123,16 @@ int main(int argc, char *argv[])
   // Note that we also can use other functors which operate with the
   // Red, Blue and Nir channels such as EVI, ARVI and TSARVI.
 
-  typedef  otb::Functor::ARVI<InputPixelType,
-      InputPixelType,
-      InputPixelType,
-      OutputPixelType>        FunctorType;
+  typedef otb::Functor::ARVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
   // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
   // type is defined using the image types and the ARVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter
-  <InputImageType,
-      OutputImageType,
-      FunctorType>
-  MultiChannelRAndBAndNIRIndexImageFilterType;
+  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndBAndNIRIndexImageFilterType;
 
-  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer
-    filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
+  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -173,52 +162,37 @@ int main(int argc, char *argv[])
 
   writer->SetInput(filter->GetOutput());
 
-//  The invocation of the \code{Update()} method on the writer triggers the
-//  execution of the pipeline.  It is recommended to place update calls in a
-//  \code{try/catch} block in case errors occur and exceptions are thrown.
+  //  The invocation of the \code{Update()} method on the writer triggers the
+  //  execution of the pipeline.  It is recommended to place update calls in a
+  //  \code{try/catch} block in case errors occur and exceptions are thrown.
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char,
-      Dimension>
-  OutputVectorPrettyImageType;
-  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>
-  WriterVectorPrettyType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType,
-      OutputPrettyImageType>
-  RescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<InputImageType,
-      OutputVectorPrettyImageType>
-  VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char,
-      unsigned char>
-  ChannelExtractorType;
+  typedef otb::Image<unsigned char, Dimension>                                                OutputPrettyImageType;
+  typedef otb::VectorImage<unsigned char, Dimension>                                          OutputVectorPrettyImageType;
+  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>                                   WriterVectorPrettyType;
+  typedef otb::ImageFileWriter<OutputPrettyImageType>                                         WriterPrettyType;
+  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>            RescalerType;
+  typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputVectorPrettyImageType> VectorRescalerType;
+  typedef otb::MultiChannelExtractROI<unsigned char, unsigned char>                           ChannelExtractorType;
 
-  VectorRescalerType::Pointer vectRescaler         =
-    VectorRescalerType::New();
-  ChannelExtractorType::Pointer selecter           =
-    ChannelExtractorType::New();
-  WriterVectorPrettyType::Pointer vectPrettyWriter =
-    WriterVectorPrettyType::New();
+  VectorRescalerType::Pointer     vectRescaler     = VectorRescalerType::New();
+  ChannelExtractorType::Pointer   selecter         = ChannelExtractorType::New();
+  WriterVectorPrettyType::Pointer vectPrettyWriter = WriterVectorPrettyType::New();
 
   OutputVectorPrettyImageType::PixelType minimum, maximum;
   minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -255,20 +229,20 @@ int main(int argc, char *argv[])
   prettyWriter->SetInput(rescaler->GetOutput());
 
   try
-    {
+  {
     prettyWriter->Update();
     vectPrettyWriter->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 
@@ -284,5 +258,4 @@ int main(int argc, char *argv[])
   // \itkcaption[ARVI Example]{ARVI result on the right with the left image in input.}
   // \label{fig:ARVIMultiChannelRAndBAndNIRIndexImageFilter}
   // \end{figure}
-
 }

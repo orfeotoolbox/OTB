@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include "otbImage.h"
 
@@ -36,23 +35,23 @@
 
 #include "otbComplexMomentsImageFunction.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " p q" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
+  const char* inputFilename = argv[1];
 
-  unsigned int P((unsigned char) ::atoi(argv[2]));
-  unsigned int Q((unsigned char) ::atoi(argv[3]));
+  unsigned int P((unsigned char)::atoi(argv[2]));
+  unsigned int Q((unsigned char)::atoi(argv[3]));
 
-  typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef unsigned char                         InputPixelType;
+  const unsigned int                            Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
@@ -65,7 +64,7 @@ int main(int argc, char * argv[])
   //  defining:
 
   typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
-  typedef CMType::OutputType OutputType;
+  typedef CMType::OutputType                               OutputType;
 
   CMType::Pointer cmFunction = CMType::New();
 
@@ -94,8 +93,7 @@ int main(int argc, char * argv[])
 
   OutputType Result = cmFunction->EvaluateAtIndex(center);
 
-  std::cout << "The moment of order (" << P << "," << Q <<
-  ") is equal to " << Result.at(P).at(Q) << std::endl;
+  std::cout << "The moment of order (" << P << "," << Q << ") is equal to " << Result.at(P).at(Q) << std::endl;
 
   return EXIT_SUCCESS;
 }

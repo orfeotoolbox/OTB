@@ -19,11 +19,9 @@
  */
 
 
-
 /* Example usage:
 ./ApplicationExample Input/QB_Suburb.png Output/ApplicationExample.png
 */
-
 
 
 // This example illustrates the creation of an application.
@@ -50,9 +48,9 @@ public:
   // Class declaration is followed by \code{ITK} public types for the class, the superclass and
   // smart pointers.
 
-  typedef ApplicationExample Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ApplicationExample            Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   //  Following macros are necessary to respect ITK object factory mechanisms. Please report
@@ -84,16 +82,18 @@ private:
     // \end{description}
 
     SetName("Example");
-    SetDescription("This application opens an image and save it. "
-      "Pay attention, it includes Latex snippets in order to generate "
-      "software guide documentation");
+    SetDescription(
+        "This application opens an image and save it. "
+        "Pay attention, it includes Latex snippets in order to generate "
+        "software guide documentation");
 
     SetDocName("Example");
-    SetDocLongDescription("The purpose of this application is "
-      "to present parameters types,"
-      " and Application class framework. "
-      "It is used to generate Software guide documentation"
-      " for Application chapter example.");
+    SetDocLongDescription(
+        "The purpose of this application is "
+        "to present parameters types,"
+        " and Application class framework. "
+        "It is used to generate Software guide documentation"
+        " for Application chapter example.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -142,13 +142,11 @@ private:
     AddChoice("inchoice.choice1", "Choice 1");
     AddChoice("inchoice.choice2", "Choice 2");
     AddChoice("inchoice.choice3", "Choice 3");
-      
-    AddParameter(ParameterType_Float, "inchoice.choice1.floatchoice1"
-                 , "Example of float parameter for choice1");
+
+    AddParameter(ParameterType_Float, "inchoice.choice1.floatchoice1", "Example of float parameter for choice1");
     SetDefaultParameterFloat("inchoice.choice1.floatchoice1", 0.125);
 
-    AddParameter(ParameterType_Float, "inchoice.choice3.floatchoice3"
-                 , "Example of float parameter for choice3");
+    AddParameter(ParameterType_Float, "inchoice.choice3.floatchoice3", "Example of float parameter for choice3");
     SetDefaultParameterFloat("inchoice.choice3.floatchoice3", 5.0);
 
     AddParameter(ParameterType_Group, "ingroup", "Input group");
@@ -156,14 +154,12 @@ private:
     AddParameter(ParameterType_Int, "ingroup.valint", "Example of integer parameter for group");
     MandatoryOff("ingroup.valint");
     AddParameter(ParameterType_Group, "ingroup.images", "Input Images group");
-    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage"
-                 , "Input Image");
+    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
     MandatoryOff("ingroup.images.inputimage");
 
     AddParameter(ParameterType_Group, "outgroup", "Output group");
     MandatoryOff("outgroup");
-    AddParameter(ParameterType_OutputImage, "outgroup.outputimage"
-                 , "Output Image");
+    AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
     MandatoryOff("outgroup.outputimage");
     AddParameter(ParameterType_InputImageList, "il", "Input image list");
     MandatoryOff("il");
@@ -205,22 +201,18 @@ private:
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     int paramInt = GetParameterInt("param2");
-    otbAppLogDEBUG( << paramInt << std::endl );
+    otbAppLogDEBUG(<< paramInt << std::endl);
     int paramFloat = GetParameterFloat("param3");
-    otbAppLogINFO( << paramFloat );
+    otbAppLogINFO(<< paramFloat);
 
     SetParameterOutputImage("out", inImage);
   }
   //  Software Guide :EndCodeSnippet
-
-
 };
-}
-}
+} // namespace Wrapper
+} // namespace otb
 
 // Finally \code{OTB\_APPLICATION\_EXPORT} is called:
 //  Software Guide :BeginCodeSnippet
 OTB_APPLICATION_EXPORT(otb::Wrapper::ApplicationExample)
 //  Software Guide :EndCodeSnippet
-
-

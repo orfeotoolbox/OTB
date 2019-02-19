@@ -20,7 +20,6 @@
  */
 
 
-
 // This example illustrates how to import data into the \doxygen{otb}{Image}
 // class. This is particularly useful for interfacing with other software
 // systems. Many systems use a contiguous block of memory as a buffer
@@ -46,21 +45,21 @@
 #include "otbImageFileWriter.h"
 #include "itkRGBPixel.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 2)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << "  outputImageFile" << std::endl;
     return 1;
-    }
+  }
 
   // Next, we select the data type to use to represent the image pixels.  We
   // assume that the external block of memory uses the same data type to
   // represent the pixels.
   //
-  typedef unsigned char PixelType;
-  const unsigned int Dimension = 2;
+  typedef unsigned char                    PixelType;
+  const unsigned int                       Dimension = 2;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
   // The type of the ImportImageFilter is instantiated in the
@@ -89,8 +88,8 @@ int main(int argc, char * argv[])
   //
   ImportFilterType::SizeType size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
   ImportFilterType::IndexType start;
   start.Fill(0);
@@ -105,16 +104,16 @@ int main(int argc, char * argv[])
   //  method.
 
   double origin[Dimension];
-  origin[0] = 0.0;    // X coordinate
-  origin[1] = 0.0;    // Y coordinate
+  origin[0] = 0.0; // X coordinate
+  origin[1] = 0.0; // Y coordinate
 
   importFilter->SetOrigin(origin);
 
   //  The spacing of the image is passed with the \code{SetSpacing()} method.
 
   double spacing[Dimension];
-  spacing[0] = 1.0;    // along X direction
-  spacing[1] = 1.0;    // along Y direction
+  spacing[0] = 1.0; // along X direction
+  spacing[1] = 1.0; // along Y direction
 
   importFilter->SetSpacing(spacing);
 
@@ -125,8 +124,8 @@ int main(int argc, char * argv[])
   //  using a different data structure to represent the images.
 
   // MODIFIED
-  const unsigned int numberOfPixels =  size[0] * size[1];
-  PixelType *        localBuffer = new PixelType[numberOfPixels];
+  const unsigned int numberOfPixels = size[0] * size[1];
+  PixelType*         localBuffer    = new PixelType[numberOfPixels];
 
   const double radius = 80.0;
 
@@ -139,20 +138,18 @@ int main(int argc, char * argv[])
   //  n-dimensional images.
 
   const double radius2 = radius * radius;
-  PixelType *  it = localBuffer;
+  PixelType*   it      = localBuffer;
 
   for (unsigned int y = 0; y < size[1]; y++)
-    {
-    const double dy = static_cast<double>(y) - static_cast<double>(size[1]) /
-                      2.0;
+  {
+    const double dy = static_cast<double>(y) - static_cast<double>(size[1]) / 2.0;
     for (unsigned int x = 0; x < size[0]; x++)
-      {
-      const double dx = static_cast<double>(x) - static_cast<double>(size[0]) /
-                        2.0;
+    {
+      const double dx = static_cast<double>(x) - static_cast<double>(size[0]) / 2.0;
       const double d2 = dx * dx + dy * dy;
-      *it++ = (d2 < radius2) ? 255 : 0;
-      }
+      *it++           = (d2 < radius2) ? 255 : 0;
     }
+  }
 
   //  The buffer is passed to the ImportImageFilter with the
   //  \code{SetImportPointer()}. Note that the last argument of this method
@@ -172,29 +169,28 @@ int main(int argc, char * argv[])
   //  permission to delete the C++ \code{new} operator-allocated memory.
 
   const bool importImageFilterWillOwnTheBuffer = true;
-  importFilter->SetImportPointer(localBuffer, numberOfPixels,
-                                 importImageFilterWillOwnTheBuffer);
+  importFilter->SetImportPointer(localBuffer, numberOfPixels, importImageFilterWillOwnTheBuffer);
 
   //  Finally, we can connect the output of this filter to a pipeline.
   //  For simplicity we just use a writer here, but it could be any other filter.
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                     writer = WriterType::New();
 
   writer->SetFileName(argv[1]);
 
   writer->SetInput(dynamic_cast<ImageType*>(importFilter->GetOutput()));
 
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& exp)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << exp << std::endl;
     return -1;
-    }
+  }
 
   //  Note that we do not call \code{delete} on the buffer since we pass
   //  \code{true} as the last argument of \code{SetImportPointer()}. Now the

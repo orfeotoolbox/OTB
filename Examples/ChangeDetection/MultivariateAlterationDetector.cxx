@@ -67,12 +67,12 @@ int main(int argc, char* argv[])
 {
 
   if (argc < 6)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2 outIn1Pretty outIn2Pretty outPretty"
               << "outputImageFile" << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
@@ -91,36 +91,35 @@ int main(int argc, char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType>           ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<InputImageType,InputImageType>   InputPrintFilterType;
-  typedef otb::PrintableImageFilter<OutputImageType,OutputImageType> OutputPrintFilterType;
-  typedef InputPrintFilterType::OutputImageType                      VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>               VisuWriterType;
+  typedef otb::PrintableImageFilter<InputImageType, InputImageType>   InputPrintFilterType;
+  typedef otb::PrintableImageFilter<OutputImageType, OutputImageType> OutputPrintFilterType;
+  typedef InputPrintFilterType::OutputImageType                       VisuImageType;
+  typedef otb::ImageFileWriter<VisuImageType>                         VisuWriterType;
 
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change
   //  image.
 
-  typedef otb::MultivariateAlterationDetectorImageFilter<
-      InputImageType,OutputImageType>                   MADFilterType;
+  typedef otb::MultivariateAlterationDetectorImageFilter<InputImageType, OutputImageType> MADFilterType;
 
   //  The different elements of the pipeline can now be instantiated.
 
-  ReaderType::Pointer    reader1 = ReaderType::New();
-  ReaderType::Pointer    reader2 = ReaderType::New();
-  WriterType::Pointer    writer = WriterType::New();
+  ReaderType::Pointer    reader1   = ReaderType::New();
+  ReaderType::Pointer    reader2   = ReaderType::New();
+  WriterType::Pointer    writer    = WriterType::New();
   MADFilterType::Pointer madFilter = MADFilterType::New();
 
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename  = argv[3];
-  const char * in1pretty       = argv[4];
-  const char * in2pretty       = argv[5];
-  const char * outpretty       = argv[6];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[3];
+  const char* in1pretty      = argv[4];
+  const char* in2pretty      = argv[5];
+  const char* outpretty      = argv[6];
   //  We set the parameters of the different elements of the pipeline.
 
   reader1->SetFileName(inputFilename1);
@@ -134,26 +133,25 @@ int main(int argc, char* argv[])
   writer->SetInput(madFilter->GetOutput());
 
   try
-    {
+  {
     //  And then we can trigger the pipeline update, as usual.
 
     writer->Update();
-
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   // Here we generate the figures
-  InputPrintFilterType::Pointer input1PrintFilter = InputPrintFilterType::New();
-  InputPrintFilterType::Pointer input2PrintFilter = InputPrintFilterType::New();
+  InputPrintFilterType::Pointer  input1PrintFilter = InputPrintFilterType::New();
+  InputPrintFilterType::Pointer  input2PrintFilter = InputPrintFilterType::New();
   OutputPrintFilterType::Pointer outputPrintFilter = OutputPrintFilterType::New();
-  VisuWriterType::Pointer input1VisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer input2VisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer outputVisuWriter = VisuWriterType::New();
+  VisuWriterType::Pointer        input1VisuWriter  = VisuWriterType::New();
+  VisuWriterType::Pointer        input2VisuWriter  = VisuWriterType::New();
+  VisuWriterType::Pointer        outputVisuWriter  = VisuWriterType::New();
 
   input1PrintFilter->SetInput(reader1->GetOutput());
   input1PrintFilter->SetChannel(3);
@@ -180,18 +178,17 @@ int main(int argc, char* argv[])
   input2VisuWriter->Update();
   outputVisuWriter->Update();
 
-// Figure \ref{fig:MADCHDET} shows the
-// results of Multivariate Alteration Detector applied to a pair of
-// SPOT5 images before and after a flooding event.
-// \begin{figure}
-// \center \includegraphics[width=0.32\textwidth]{mad-input1.eps}
-// \includegraphics[width=0.32\textwidth]{mad-input2.eps}
-// \includegraphics[width=0.32\textwidth]{mad-output.eps}
-// \itkcaption[Multivariate Alteration Detection
-// Results]{Result of the Multivariate Alteration Detector results on
-// SPOT5 data before and after flooding.}  \label{fig:MADCHDET}
-// \end{figure}
+  // Figure \ref{fig:MADCHDET} shows the
+  // results of Multivariate Alteration Detector applied to a pair of
+  // SPOT5 images before and after a flooding event.
+  // \begin{figure}
+  // \center \includegraphics[width=0.32\textwidth]{mad-input1.eps}
+  // \includegraphics[width=0.32\textwidth]{mad-input2.eps}
+  // \includegraphics[width=0.32\textwidth]{mad-output.eps}
+  // \itkcaption[Multivariate Alteration Detection
+  // Results]{Result of the Multivariate Alteration Detector results on
+  // SPOT5 data before and after flooding.}  \label{fig:MADCHDET}
+  // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

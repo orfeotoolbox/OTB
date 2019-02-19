@@ -35,11 +35,10 @@
 int main(int argc, char* argv[])
 {
   if (argc < 4)
-    {
-    std::cerr << argv[0] <<
-    " <input vector filename> <input image name> <output vector filename>\n";
+  {
+    std::cerr << argv[0] << " <input vector filename> <input image name> <output vector filename>\n";
     return EXIT_FAILURE;
-    }
+  }
 
   // Declare the geometries type that you would like to use in your
   // application. Unlike \doxygen{otb}{VectorData}, \doxygen{otb}{GeometriesSet}
@@ -53,9 +52,8 @@ int main(int argc, char* argv[])
   // \subdoxygen{otb}{ogr}{DataSource}. Then, encapsulate this data source into
   // a \doxygen{otb}{GeometriesSet}.
 
-  otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-    argv[1], otb::ogr::DataSource::Modes::Read);
-  InputGeometriesType::Pointer in_set = InputGeometriesType::New(input);
+  otb::ogr::DataSource::Pointer input  = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::Read);
+  InputGeometriesType::Pointer  in_set = InputGeometriesType::New(input);
 
   // We need the image only to retrieve its projection information,
   // i.e. map projection or sensor model parameters. Hence, the image
@@ -64,7 +62,7 @@ int main(int argc, char* argv[])
 
   typedef otb::Image<unsigned short int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  ImageReaderType::Pointer                  imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
@@ -74,7 +72,7 @@ int main(int argc, char* argv[])
   // data.
 
   typedef otb::GeometriesProjectionFilter GeometriesFilterType;
-  GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
+  GeometriesFilterType::Pointer           filter = GeometriesFilterType::New();
 
   // Information concerning the original projection of the vector data
   // will be automatically retrieved from the metadata. Nothing else
@@ -92,7 +90,7 @@ int main(int argc, char* argv[])
   // necessary for sensors
   filter->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
   // ~ wkt
-  filter->SetOutputProjectionRef( imageReader->GetOutput()->GetProjectionRef());
+  filter->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());
 
   // Finally, the result is saved into a new vector file.
   // Unlike other OTB filters, \doxygen{otb}{GeometriesProjectionFilter} expects
@@ -105,8 +103,7 @@ int main(int argc, char* argv[])
   // geometries set object goes out of scope, or when \code{SyncToDisk} is
   // called.
 
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-    argv[3], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
+  otb::ogr::DataSource::Pointer output  = otb::ogr::DataSource::New(argv[3], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   filter->SetOutput(out_set);
@@ -117,5 +114,4 @@ int main(int argc, char* argv[])
   // correct driver will be automatically instantiated.
 
   return EXIT_SUCCESS;
-
 }

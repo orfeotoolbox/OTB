@@ -38,15 +38,12 @@
 #include "itkShiftScaleImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
-    std::cerr << "Usage: "
-        << argv[0]
-        << " <input_filename> <output_extract> <output_shifted_scaled>"
-        << std::endl;
-    }
+  {
+    std::cerr << "Usage: " << argv[0] << " <input_filename> <output_extract> <output_shifted_scaled>" << std::endl;
+  }
 
   // We want to read a multispectral image so we declare the image type and the
   // reader. As we have done in the previous example we get the filename from
@@ -56,7 +53,7 @@ int main(int argc, char * argv[])
   typedef otb::VectorImage<PixelType, 2> VectorImageType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                           reader = ReaderType::New();
 
   reader->SetFileName(argv[1]);
 
@@ -64,9 +61,8 @@ int main(int argc, char * argv[])
   // only one of the spectral band we use the
   // \doxygen{otb}{MultiToMonoChannelExtractROI}. The declaration is as usual:
 
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
-  ExtractChannelType;
-  ExtractChannelType::Pointer extractChannel = ExtractChannelType::New();
+  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractChannelType;
+  ExtractChannelType::Pointer                                     extractChannel = ExtractChannelType::New();
   //  We need to pass the parameters to the filter for the extraction. This
   // filter also allow extracting only a spatial subset of the image. However,
   // we will extract the whole channel in this case.
@@ -81,8 +77,7 @@ int main(int argc, char * argv[])
   // the memory usage.
 
   reader->UpdateOutputInformation();
-  extractChannel->SetExtractionRegion(
-    reader->GetOutput()->GetLargestPossibleRegion());
+  extractChannel->SetExtractionRegion(reader->GetOutput()->GetLargestPossibleRegion());
 
   //  We chose the channel number to extract (starting from 1) and we plug the
   // pipeline.
@@ -94,9 +89,9 @@ int main(int argc, char * argv[])
   // \doxygen{otb}{MultiToMonoChannelExtractROI} is a \doxygen{otb}{Image}, we
   // need to template the writer with this type.
 
-  typedef otb::Image<PixelType, 2>                 ImageType;
+  typedef otb::Image<PixelType, 2>        ImageType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                     writer = WriterType::New();
 
   writer->SetFileName(argv[2]);
   writer->SetInput(extractChannel->GetOutput());
@@ -128,7 +123,7 @@ int main(int argc, char * argv[])
   // don't need to specify any input for this filter.
 
   typedef itk::ShiftScaleImageFilter<ImageType, ImageType> ShiftScaleType;
-  ShiftScaleType::Pointer shiftScale = ShiftScaleType::New();
+  ShiftScaleType::Pointer                                  shiftScale = ShiftScaleType::New();
   shiftScale->SetScale(0.5);
   shiftScale->SetShift(10);
 
@@ -139,9 +134,8 @@ int main(int argc, char * argv[])
   // The filter is selected using the \code{SetFilter()} method and the input
   // by the usual \code{SetInput()} method.
 
-  typedef otb::PerBandVectorImageFilter
-  <VectorImageType, VectorImageType, ShiftScaleType> VectorFilterType;
-  VectorFilterType::Pointer vectorFilter = VectorFilterType::New();
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, ShiftScaleType> VectorFilterType;
+  VectorFilterType::Pointer                                                               vectorFilter = VectorFilterType::New();
   vectorFilter->SetFilter(shiftScale);
 
   vectorFilter->SetInput(reader->GetOutput());
@@ -150,7 +144,7 @@ int main(int argc, char * argv[])
   // \doxygen{otb}{VectorImage}:
 
   typedef otb::ImageFileWriter<VectorImageType> VectorWriterType;
-  VectorWriterType::Pointer writerVector = VectorWriterType::New();
+  VectorWriterType::Pointer                     writerVector = VectorWriterType::New();
 
   writerVector->SetFileName(argv[3]);
   writerVector->SetInput(vectorFilter->GetOutput());

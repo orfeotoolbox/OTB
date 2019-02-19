@@ -19,7 +19,6 @@
  */
 
 
-
 /* Example usage:
 ./MarkovClassification2Example Input/QB_Suburb.png Output/MarkovRandomField2.png 1.0 5 1
 */
@@ -51,13 +50,13 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 6)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImage output lambda iterations" << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-    }
+  }
 
   const unsigned int Dimension = 2;
 
@@ -72,55 +71,49 @@ int main(int argc, char* argv[])
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter
-  <InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
 
   //  And to declare these new type:
 
-  typedef otb::MRFSamplerRandomMAP<InputImageType,
-      LabelledImageType> SamplerType;
-//   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
+  typedef otb::MRFSamplerRandomMAP<InputImageType, LabelledImageType> SamplerType;
+  //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
 
   typedef otb::MRFOptimizerICM OptimizerType;
 
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussianClassification
-  <InputImageType, LabelledImageType>  EnergyFidelityType;
+  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
+  typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
 
-  MarkovRandomFieldFilterType::Pointer markovFilter =
-    MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization =
-    EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer      optimizer = OptimizerType::New();
-  SamplerType::Pointer        sampler = SamplerType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
+  OptimizerType::Pointer               optimizer            = OptimizerType::New();
+  SamplerType::Pointer                 sampler              = SamplerType::New();
 
-  if ((bool) (atoi(argv[5])) == true)
-    {
+  if ((bool)(atoi(argv[5])) == true)
+  {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     markovFilter->InitializeSeed(1);
-    }
+  }
 
   unsigned int nClass = 4;
   energyFidelity->SetNumberOfParameters(2 * nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
-  parameters[0] = 10.0; //Class 0 mean
-  parameters[1] = 10.0; //Class 0 stdev
-  parameters[2] = 80.0; //Class 1 mean
-  parameters[3] = 10.0; //Class 1 stdev
-  parameters[4] = 150.0; //Class 2 mean
-  parameters[5] = 10.0; //Class 2 stdev
-  parameters[6] = 220.0; //Class 3 mean
-  parameters[7] = 10.0; //Class 3 stde
+  parameters[0] = 10.0;  // Class 0 mean
+  parameters[1] = 10.0;  // Class 0 stdev
+  parameters[2] = 80.0;  // Class 1 mean
+  parameters[3] = 10.0;  // Class 1 stdev
+  parameters[4] = 150.0; // Class 2 mean
+  parameters[5] = 10.0;  // Class 2 stdev
+  parameters[6] = 220.0; // Class 3 mean
+  parameters[7] = 10.0;  // Class 3 stde
   energyFidelity->SetParameters(parameters);
 
   // As the \doxygen{otb}{MRFOptimizerICM} does not have any parameters,
@@ -139,9 +132,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer rescaleFilter = RescaleType::New();
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
+  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
@@ -170,5 +162,4 @@ int main(int argc, char* argv[])
   // \end{figure}
 
   return EXIT_SUCCESS;
-
 }

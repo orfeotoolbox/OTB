@@ -47,15 +47,15 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  const char *       infname = argv[1];
-  const char *       outfname = argv[2];
-  const char *       prettyfname = argv[3];
-  const unsigned int scales = atoi(argv[4]);
-  const unsigned int octaves = atoi(argv[5]);
-  const unsigned int radius = atoi(argv[6]);
+  const char*        infname     = argv[1];
+  const char*        outfname    = argv[2];
+  const char*        prettyfname = argv[3];
+  const unsigned int scales      = atoi(argv[4]);
+  const unsigned int octaves     = atoi(argv[5]);
+  const unsigned int radius      = atoi(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
   // As usual, we start by defining the types for the images, the reader
   // and the writer.
@@ -68,23 +68,21 @@ int main(int itkNotUsed(argc), char* argv[])
   // into a point set. The filter for detecting the SIFT is templated
   // over the input image type and the output pointset type.
 
-  typedef itk::VariableLengthVector<PixelType>     RealVectorType;
-  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType>
-  DetectorType;
+  typedef itk::VariableLengthVector<PixelType>                       RealVectorType;
+  typedef itk::PointSet<RealVectorType, Dimension>                   PointSetType;
+  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> DetectorType;
   // We can now define the filter which will compute the SIFT
   // density. It will be templated over the input and output image
   // types and the SIFT detector.
 
-  typedef otb::KeyPointDensityImageFilter<ImageType, ImageType, DetectorType>
-  FilterType;
+  typedef otb::KeyPointDensityImageFilter<ImageType, ImageType, DetectorType> FilterType;
   // We can instantiate the reader and the writer as wella s the
   // filter and the detector. The detector needs to be instantiated in
   // order to set its parameters.
 
-  ReaderType::Pointer   reader = ReaderType::New();
-  WriterType::Pointer   writer = WriterType::New();
-  FilterType::Pointer   filter =     FilterType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  WriterType::Pointer   writer   = WriterType::New();
+  FilterType::Pointer   filter   = FilterType::New();
   DetectorType::Pointer detector = DetectorType::New();
   // We set the file names for the input and the output images.
 
@@ -133,8 +131,7 @@ int main(int itkNotUsed(argc), char* argv[])
 
   typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType>
-  RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
@@ -144,7 +141,7 @@ int main(int itkNotUsed(argc), char* argv[])
   rescaler->SetInput(filter->GetOutput());
 
   typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
-  OutputWriterType::Pointer outwriter = OutputWriterType::New();
+  OutputWriterType::Pointer                     outwriter = OutputWriterType::New();
 
   outwriter->SetFileName(prettyfname);
   outwriter->SetInput(rescaler->GetOutput());
