@@ -23,4 +23,6 @@
 namespace otb
 {
 template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE Polygon<double>;
+
+template class OTBVectorDataBase_EXPORT_EXPLICIT_TEMPLATE ObjectList<Polygon<double> >;
 }

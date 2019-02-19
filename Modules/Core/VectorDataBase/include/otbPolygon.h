@@ -22,6 +22,7 @@
 #define otbPolygon_h
 
 #include "otbPolyLineParametricPathWithValue.h"
+#include "otbObjectList.h"
 
 #include "OTBVectorDataBaseExport.h"
 
@@ -169,6 +170,8 @@ namespace otb
 {
 
 extern template class OTBVectorDataBase_EXPORT_TEMPLATE Polygon<double>;
+
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE ObjectList<Polygon<double> >;
 
 }
 
