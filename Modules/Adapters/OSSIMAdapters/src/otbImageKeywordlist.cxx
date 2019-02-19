@@ -71,6 +71,34 @@ ImageKeywordlist
 {
 }
 
+const ImageKeywordlist::KeywordlistMap&
+ImageKeywordlist
+::GetKeywordlist() const
+{
+  return m_Keywordlist;
+}
+
+void
+ImageKeywordlist
+::Clear(void)
+{
+  m_Keywordlist.clear();
+}
+
+ImageKeywordlist::KeywordlistMapSizeType
+ImageKeywordlist
+::Empty() const
+{
+  return m_Keywordlist.empty();
+}
+
+ImageKeywordlist::KeywordlistMapSizeType
+ImageKeywordlist
+::GetSize(void) const
+{
+  return m_Keywordlist.size();
+}
+
 void
 ImageKeywordlist::
 operator =(const Self& p)

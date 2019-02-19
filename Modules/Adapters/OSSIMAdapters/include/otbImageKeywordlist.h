@@ -88,27 +88,15 @@ public:
   typedef KeywordlistMap::size_type KeywordlistMapSizeType;
 
   /** Get the internal map container */
-  const KeywordlistMap& GetKeywordlist() const
-  {
-    return m_Keywordlist;
-  }
+  const KeywordlistMap& GetKeywordlist() const;
 
   void SetKeywordlist(const ossimKeywordlist& kwl);
 
-  void Clear(void)
-  {
-    m_Keywordlist.clear();
-  }
+  void Clear(void);
 
-  KeywordlistMapSizeType Empty() const
-  {
-    return m_Keywordlist.empty();
-  }
+  KeywordlistMapSizeType Empty() const;
 
-  KeywordlistMapSizeType GetSize(void) const
-  {
-    return m_Keywordlist.size();
-  }
+  KeywordlistMapSizeType GetSize(void) const;
 
   /** Get the Data object descriptor corresponding to the given key */
   const std::string& GetMetadataByKey(const std::string& key) const;
