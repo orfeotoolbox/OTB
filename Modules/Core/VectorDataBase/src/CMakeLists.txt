@@ -19,8 +19,13 @@
 #
 
 set(OTBVectorDataBase_SRC
+  otbDataNode.cxx
+  otbPolygon.cxx
+  otbPolyLineParametricPathWithValue.cxx
+  otbVectorData.cxx
   otbVectorDataIOBase.cxx
   otbVectorDataKeywordlist.cxx
+  otbVectorDataSource.cxx
   )
 
 add_library(OTBVectorDataBase ${OTBVectorDataBase_SRC})

@@ -24,6 +24,7 @@
 #include "itkTreeContainer.h"
 #include "itkDataObject.h"
 #include "otbDataNode.h"
+#include "OTBVectorDataBaseExport.h"
 
 namespace otb
 {
@@ -55,7 +56,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
-class VectorData
+class OTBVectorDataBase_EXPORT_TEMPLATE VectorData
   : public itk::DataObject
 {
 public:
@@ -154,5 +155,10 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorData.hxx"
 #endif
+
+namespace otb
+{
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE VectorData<double,2,double>;
+}
 
 #endif

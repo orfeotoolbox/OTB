@@ -34,6 +34,7 @@
 #include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"
 #include <string>
+#include "OTBVectorDataBaseExport.h"
 
 namespace otb
 {
@@ -47,7 +48,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TValue, unsigned int VDimension = 2>
-class ITK_EXPORT PolyLineParametricPathWithValue
+class OTBVectorDataBase_EXPORT_TEMPLATE PolyLineParametricPathWithValue
   : public itk::PolyLineParametricPath<VDimension>
 {
 public:
@@ -141,5 +142,10 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPolyLineParametricPathWithValue.hxx"
 #endif
+
+namespace otb
+{
+extern template class OTBVectorDataBase_EXPORT_TEMPLATE PolyLineParametricPathWithValue<double, 2>;
+}
 
 #endif
