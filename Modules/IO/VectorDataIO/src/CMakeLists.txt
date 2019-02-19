@@ -19,6 +19,9 @@
 #
 
 set(OTBVectorDataIO_SRC
+  otbVectorDataFileReader.cxx
+  otbVectorDataFileReaderException.cxx
+  otbVectorDataFileWriter.cxx
   otbVectorDataFileWriterException.cxx
   otbVectorDataIOFactory.cxx
   )

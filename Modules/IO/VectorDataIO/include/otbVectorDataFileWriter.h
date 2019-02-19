@@ -25,6 +25,7 @@
 #include "itkMacro.h"
 #include "otbVectorDataIOBase.h"
 #include "otbVectorDataFileWriterException.h"
+#include "OTBVectorDataIOExport.h"
 #include <string>
 
 namespace otb
@@ -38,7 +39,7 @@ namespace otb
  * \ingroup OTBVectorDataIO
  */
 template <class TInputVectorData>
-class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
+class OTBVectorDataIO_EXPORT_TEMPLATE VectorDataFileWriter : public itk::ProcessObject
 {
 public:
 
@@ -99,5 +100,12 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataFileWriter.hxx"
 #endif
+
+#include "otbVectorData.h"
+
+namespace otb
+{
+extern template class OTBVectorDataIO_EXPORT_TEMPLATE VectorDataFileWriter< VectorData<double, 2, double> >;
+}
 
 #endif // otbVectorDataFileWriter_h

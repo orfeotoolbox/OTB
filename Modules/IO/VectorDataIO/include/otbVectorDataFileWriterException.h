@@ -50,6 +50,7 @@ public:
     const char* message = "Error in IO",
     const char* loc = "Unknown");
 
+  ~VectorDataFileWriterException() override;
 };
 
 } // end of otb namespace

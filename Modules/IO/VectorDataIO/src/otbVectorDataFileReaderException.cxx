@@ -18,28 +18,36 @@
  * limitations under the License.
  */
 
-#include "otbVectorDataFileWriterException.h"
+#include "otbVectorDataFileReaderException.h"
 
 namespace otb
 {
 
-VectorDataFileWriterException::VectorDataFileWriterException(
+VectorDataFileReaderException::VectorDataFileReaderException(
   const char *file, unsigned int line,
   const char* message,
   const char* loc)
-    : ExceptionObject(file, line, message, loc)
+    : itk::ExceptionObject(file, line, message, loc)
 {
 }
 
-VectorDataFileWriterException::VectorDataFileWriterException(
+VectorDataFileReaderException::VectorDataFileReaderException(
   const std::string& file, unsigned int line,
   const char* message,
   const char* loc)
-    : ExceptionObject(file, line, message, loc)
+    : itk::ExceptionObject(file, line, message, loc)
 {
 }
 
-VectorDataFileWriterException::~VectorDataFileWriterException()
+VectorDataFileReaderException::VectorDataFileReaderException(
+  const std::string& file, unsigned int line,
+  const std::string& message,
+  const char* loc)
+    : itk::ExceptionObject(file, line, message, loc)
+{
+}
+
+VectorDataFileReaderException::~VectorDataFileReaderException()
 {
 }
 

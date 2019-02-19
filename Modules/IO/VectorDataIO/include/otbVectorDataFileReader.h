@@ -23,45 +23,12 @@
 
 #include "otbVectorDataSource.h"
 #include "otbVectorDataIOBase.h"
+#include "otbVectorDataFileReaderException.h"
+#include "OTBVectorDataIOExport.h"
 #include <string>
 
 namespace otb
 {
-/** \class VectorDataFileReaderException
- *
- * \brief Base exception class for IO conflicts.
- *
- * \ingroup OTBVectorDataIO
- */
-class VectorDataFileReaderException : public itk::ExceptionObject
-{
-public:
-  /** Run-time information. */
-  itkTypeMacro(VectorDataFileReaderException, itk::ExceptionObject);
-
-  /** Constructor. */
-  VectorDataFileReaderException(const char *file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
-  {
-  }
-
-  /** Constructor. */
-  VectorDataFileReaderException(const std::string& file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
-  {
-  }
-
-  VectorDataFileReaderException(const std::string& file, unsigned int line,
-                                const std::string& message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
-  {
-  }
-};
 
 /** \brief Data source that reads vector data from a single file.
  *
@@ -88,9 +55,8 @@ public:
  * \sa VectorDataIOBase
  *
  */
-
 template <class TOutputVectorData>
-class ITK_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorData>
+class OTBVectorDataIO_EXPORT_TEMPLATE VectorDataFileReader : public VectorDataSource<TOutputVectorData>
 {
 public:
 
@@ -161,5 +127,12 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataFileReader.hxx"
 #endif
+
+#include "otbVectorData.h"
+
+namespace otb
+{
+extern template class OTBVectorDataIO_EXPORT_TEMPLATE VectorDataFileReader< VectorData<double, 2, double> >;
+}
 
 #endif // otbVectorDataFileReader_h
