@@ -116,8 +116,6 @@ if __name__ == "__main__":
     parser.add_argument("otb_root", help="OTB repository root")
     args = parser.parse_args()
 
-    # TODO simplify this
-    # TODO fix longer nested examples
     # Get list of cxx examples as relative paths from otb_root
     list_of_examples = [os.path.relpath(p, start=args.otb_root) for p in glob.glob(join(args.otb_root, "Examples/*/*.cxx"))]
     print("Generating rst for {} examples".format(len(list_of_examples)))
