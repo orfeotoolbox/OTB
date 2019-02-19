@@ -69,6 +69,10 @@ ExceptionObject(file, line, message, loc)
 {
 }
 
+ApplicationException::~ApplicationException()
+{
+}
+
 namespace Wrapper
 {
 
@@ -609,6 +613,9 @@ void Application::UpdateParameters()
 }
 
 void Application::AfterExecuteAndWriteOutputs()
+{}
+
+void Application::DoFreeRessources()
 {}
 
 void

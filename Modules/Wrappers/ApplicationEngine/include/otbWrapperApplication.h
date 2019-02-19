@@ -68,6 +68,8 @@ public:
   ApplicationException(const std::string& file, unsigned int line,
                        const std::string& message = "Application error.",
                        const std::string& loc = "Unknown");
+
+  ~ApplicationException() override;
 };
 
 namespace Wrapper
@@ -979,7 +981,7 @@ private:
    * implementation does nothing */
   virtual void AfterExecuteAndWriteOutputs();
 
-  virtual void DoFreeRessources(){};
+  virtual void DoFreeRessources();
 
   Application(const Application &) = delete;
   void operator =(const Application&) = delete;
