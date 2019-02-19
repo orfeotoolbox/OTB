@@ -27,6 +27,7 @@ ENABLE_SHARED
     OTBCommon
     OTBITK
     OTBMetadata
+    OTBObjectList
     OTBOSSIMAdapters
 
   TEST_DEPENDS

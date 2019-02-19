@@ -278,6 +278,7 @@ private:
 #endif
 
 #include <complex>
+#include "otbImageList.h"
 
 namespace otb {
 
@@ -298,6 +299,12 @@ extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double> , 
 
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<itk::Vector<double, 2> , 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<itk::RGBPixel<unsigned char> , 2>;
+
+extern template class OTBImageBase_EXPORT_TEMPLATE ObjectList<Image<float, 2> >;
+extern template class OTBImageBase_EXPORT_TEMPLATE ObjectList<Image<double, 2> >;
+
+extern template class OTBImageBase_EXPORT_TEMPLATE ImageList<Image<float, 2> >;
+extern template class OTBImageBase_EXPORT_TEMPLATE ImageList<Image<double, 2> >;
 
 }
 
