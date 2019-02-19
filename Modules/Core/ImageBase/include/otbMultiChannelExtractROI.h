@@ -161,4 +161,10 @@ private:
 #include "otbMultiChannelExtractROI.hxx"
 #endif
 
+namespace otb
+{
+extern template class OTBImageBase_EXPORT_TEMPLATE MultiChannelExtractROI<float, float>;
+extern template class OTBImageBase_EXPORT_TEMPLATE MultiChannelExtractROI<double, double>;
+}
+
 #endif

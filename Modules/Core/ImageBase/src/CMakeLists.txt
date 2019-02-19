@@ -35,7 +35,13 @@ target_link_libraries(OTBImageBase
 
 otb_module_target(OTBImageBase)
 
-add_library(OTBDynamicCastInDebugMode otbDynamicCastInDebugMode.cxx)
+set(OTBDynamicCastInDebugMode_SRC
+  otbDynamicCastInDebugMode.cxx
+  otbMultiChannelExtractROI.cxx
+  otbMultiToMonoChannelExtractROI.cxx
+  )
+
+add_library(OTBDynamicCastInDebugMode ${OTBDynamicCastInDebugMode_SRC})
 target_link_libraries(OTBDynamicCastInDebugMode 
   ${OTBCommon_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}

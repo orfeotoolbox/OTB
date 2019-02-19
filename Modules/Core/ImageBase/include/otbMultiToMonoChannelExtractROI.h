@@ -127,4 +127,9 @@ private:
 #include "otbMultiToMonoChannelExtractROI.hxx"
 #endif
 
+namespace otb
+{
+extern template class OTBImageBase_EXPORT_TEMPLATE MultiToMonoChannelExtractROI<float, float>;
+}
+
 #endif
