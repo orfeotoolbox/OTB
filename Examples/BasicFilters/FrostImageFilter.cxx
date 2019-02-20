@@ -19,15 +19,11 @@
  */
 
 
+/* Example usage:
+./FrostImageFilter Input/GomaSmall.png Output/GomaSmallFrostFiltered.png 5 0.1
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaSmall.png}
-//    OUTPUTS: {GomaSmallFrostFiltered.png}
-//    5 0.1
-//  Software Guide : EndCommandLineArgs
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{FrostImageFilter}.
 // This filter belongs to the family of the edge-preserving smoothing
 // filters which are usually used for speckle reduction in radar
@@ -54,41 +50,31 @@
 // will be highlighted.
 //
 // First, we need to include the header:
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbFrostImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputImageFile radius deramp" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  typedef  unsigned char PixelType;
+  typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType,  2> InputImageType;
-  typedef otb::Image<PixelType,  2> OutputImageType;
+  typedef otb::Image<PixelType, 2> InputImageType;
+  typedef otb::Image<PixelType, 2> OutputImageType;
 
-  //  Software Guide : BeginLatex
-  //
   //  The filter can be instantiated using the image types defined previously.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   typedef otb::FrostImageFilter<InputImageType, OutputImageType> FilterType;
-  // Software Guide : EndCodeSnippet
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
@@ -101,22 +87,14 @@ int main(int argc, char * argv[])
   writer->SetInput(filter->GetOutput());
   reader->SetFileName(argv[1]);
 
-  //  Software Guide : BeginLatex
-  //
   //  The image obtained with the reader is passed as input to the
   //  \doxygen{otb}{FrostImageFilter}.
   //
   //  \index{otb::FrostImageFilter!SetInput()}
   //  \index{otb::FileImageReader!GetOutput()}
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The method \code{SetRadius()} defines the size of the window to
   //  be used for the computation of the local statistics. The method
   //  \code{SetDeramp()} sets the $K$ coefficient.
@@ -124,22 +102,17 @@ int main(int argc, char * argv[])
   //  \index{otb::FrostImageFilter!SetRadius()}
   //  \index{otb::FrostImageFilter!SetDeramp()}
   //  \index{SetDeramp()!otb::FrostImageFilter}
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   FilterType::SizeType Radius;
   Radius[0] = atoi(argv[3]);
   Radius[1] = atoi(argv[3]);
 
   filter->SetRadius(Radius);
   filter->SetDeramp(atof(argv[4]));
-  // Software Guide : EndCodeSnippet
 
   writer->SetFileName(argv[2]);
   writer->Update();
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:FROST_FILTER} shows the result of applying the Frost
   // filter to a SAR image.
   // \begin{figure}
@@ -155,8 +128,6 @@ int main(int argc, char * argv[])
   //  \begin{itemize}
   //  \item \doxygen{otb}{LeeImageFilter}
   //  \end{itemize}
-  //
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }

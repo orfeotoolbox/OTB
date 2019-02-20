@@ -19,88 +19,57 @@
  */
 
 
-
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {QB_Suburb.png}
-//    OUTPUTS: {ApplicationExample.png}
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./ApplicationExample Input/QB_Suburb.png Output/ApplicationExample.png
+*/
 
 
-//  Software Guide : BeginLatex
 // This example illustrates the creation of an application.
 // A new application is a class, which derives from \subdoxygen{otb}{Wrapper}{Application} class.
 // We start by including the needed header files.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-//  Software Guide : EndCodeSnippet
 
 namespace otb
 {
 
-//  Software Guide : BeginLatex
 //  Application class is defined in Wrapper namespace.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 namespace Wrapper
 {
-//  Software Guide : EndCodeSnippet
 
 
-//  Software Guide : BeginLatex
-//
 //  ExampleApplication class is derived from Application class.
-//
-//  Software Guide : EndLatex
 
-//  Software Guide : BeginCodeSnippet
 class ApplicationExample : public Application
-//  Software Guide : EndCodeSnippet
 {
 public:
-  //  Software Guide : BeginLatex
   // Class declaration is followed by \code{ITK} public types for the class, the superclass and
   // smart pointers.
-  // Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
-  typedef ApplicationExample Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ApplicationExample            Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   //  Following macros are necessary to respect ITK object factory mechanisms. Please report
   //  to \ref{sec:FilterConventions} for additional information.
-  //  Software Guide : EndLatex
 
-  //  Software Guide : BeginCodeSnippet
   itkNewMacro(Self);
   itkTypeMacro(ExampleApplication, otb::Application);
-  //  Software Guide : EndCodeSnippet
 
 
 private:
-  //  Software Guide : BeginLatex
   //  \doxygen{otb}{Application} relies on three main private methods: \code{DoInit()}, \code{DoUpdate()}, and \code{DoExecute()}.
   //  Section \ref{sec:appArchitecture} gives a description a these methods.
-  //  Software Guide : EndLatex
 
 
-  //  Software Guide : BeginLatex
   //  \code{DoInit()} method contains class information and description, parameter set up, and example values.
-  //  Software Guide : EndLatex
 
   void DoInit() override
   {
 
-    // Software Guide : BeginLatex
     // Application name and description are set using following methods :
     // \begin{description}
     // \item[\code{SetName()}] Name of the application.
@@ -111,44 +80,36 @@ private:
     // \item[\code{SetDocAuthors()}] Set the application Authors. Author List. Format : "John Doe, Winnie the Pooh" \dots
     // \item[\code{SetDocSeeAlso()}] If the application is related to one another, it can be mentioned.
     // \end{description}
-    // Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     SetName("Example");
-    SetDescription("This application opens an image and save it. "
-      "Pay attention, it includes Latex snippets in order to generate "
-      "software guide documentation");
+    SetDescription(
+        "This application opens an image and save it. "
+        "Pay attention, it includes Latex snippets in order to generate "
+        "software guide documentation");
 
     SetDocName("Example");
-    SetDocLongDescription("The purpose of this application is "
-      "to present parameters types,"
-      " and Application class framework. "
-      "It is used to generate Software guide documentation"
-      " for Application chapter example.");
+    SetDocLongDescription(
+        "The purpose of this application is "
+        "to present parameters types,"
+        " and Application class framework. "
+        "It is used to generate Software guide documentation"
+        " for Application chapter example.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
-    //  Software Guide : EndCodeSnippet
 
 
-    // Software Guide : BeginLatex
     // \code{AddDocTag()} method categorize the application using relevant tags.
     // The header file \code{otbWrapperTags.h} in OTB sources contains some predefined tags defined in \code{Tags} namespace.
-    // Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     AddDocTag(Tags::Analysis);
     AddDocTag("Test");
-    //  Software Guide : EndCodeSnippet
 
-    // Software Guide : BeginLatex
     // Application parameters declaration is done using \code{AddParameter()} method.
     // \code{AddParameter()} requires the input parameter type
     // (ParameterType\_InputImage, ParameterType\_Int, ParameterType\_Float), its name and description.
     // \subdoxygen{otb}{Wrapper}{Application} class contains methods to set parameters characteristics.
-    // Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
@@ -181,13 +142,11 @@ private:
     AddChoice("inchoice.choice1", "Choice 1");
     AddChoice("inchoice.choice2", "Choice 2");
     AddChoice("inchoice.choice3", "Choice 3");
-      
-    AddParameter(ParameterType_Float, "inchoice.choice1.floatchoice1"
-                 , "Example of float parameter for choice1");
+
+    AddParameter(ParameterType_Float, "inchoice.choice1.floatchoice1", "Example of float parameter for choice1");
     SetDefaultParameterFloat("inchoice.choice1.floatchoice1", 0.125);
 
-    AddParameter(ParameterType_Float, "inchoice.choice3.floatchoice3"
-                 , "Example of float parameter for choice3");
+    AddParameter(ParameterType_Float, "inchoice.choice3.floatchoice3", "Example of float parameter for choice3");
     SetDefaultParameterFloat("inchoice.choice3.floatchoice3", 5.0);
 
     AddParameter(ParameterType_Group, "ingroup", "Input group");
@@ -195,14 +154,12 @@ private:
     AddParameter(ParameterType_Int, "ingroup.valint", "Example of integer parameter for group");
     MandatoryOff("ingroup.valint");
     AddParameter(ParameterType_Group, "ingroup.images", "Input Images group");
-    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage"
-                 , "Input Image");
+    AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
     MandatoryOff("ingroup.images.inputimage");
 
     AddParameter(ParameterType_Group, "outgroup", "Output group");
     MandatoryOff("outgroup");
-    AddParameter(ParameterType_OutputImage, "outgroup.outputimage"
-                 , "Output Image");
+    AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
     MandatoryOff("outgroup.outputimage");
     AddParameter(ParameterType_InputImageList, "il", "Input image list");
     MandatoryOff("il");
@@ -220,58 +177,42 @@ private:
     AddParameter(ParameterType_ComplexOutputImage, "cout", "Output complex image");
     MandatoryOff("cin");
     MandatoryOff("cout");
-    //  Software Guide : EndCodeSnippet
 
-    // Software Guide : BeginLatex
     // An example of command-line is automatically generated. Method \code{SetDocExampleParameterValue()} is
     // used to set parameters. Dataset should be located in  \code{OTB-Data/Examples} directory.
-    // Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     SetDocExampleParameterValue("boolean", "true");
     SetDocExampleParameterValue("in", "QB_Suburb.png");
     SetDocExampleParameterValue("out", "Application_Example.png");
-    //  Software Guide : EndCodeSnippet
   }
 
-  // Software Guide : BeginLatex
   // \code{DoUpdateParameters()} is called as soon as a parameter value change. Section \ref{sec:appDoUpdateParameters}
   // gives a complete description of this method.
-  // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
   void DoUpdateParameters() override
   {
   }
-  //  Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
   // \code{DoExecute()} contains the application core. Section \ref{sec:appDoExecute}
   // gives a complete description of this method.
-  // Software Guide : EndLatex
   //  Software Guide :BeginCodeSnippet
   void DoExecute() override
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
     int paramInt = GetParameterInt("param2");
-    otbAppLogDEBUG( << paramInt << std::endl );
+    otbAppLogDEBUG(<< paramInt << std::endl);
     int paramFloat = GetParameterFloat("param3");
-    otbAppLogINFO( << paramFloat );
+    otbAppLogINFO(<< paramFloat);
 
     SetParameterOutputImage("out", inImage);
   }
   //  Software Guide :EndCodeSnippet
-
-
 };
-}
-}
+} // namespace Wrapper
+} // namespace otb
 
-// Software Guide : BeginLatex
 // Finally \code{OTB\_APPLICATION\_EXPORT} is called:
-// Software Guide : EndLatex
 //  Software Guide :BeginCodeSnippet
 OTB_APPLICATION_EXPORT(otb::Wrapper::ApplicationExample)
 //  Software Guide :EndCodeSnippet
-
-
