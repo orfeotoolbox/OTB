@@ -101,7 +101,7 @@ reset_qt_i18n_sources()
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 if ( OTB_WRAP_PYTHON )
-  find_python( "REQUIERED" )
+  find_python( "REQUIRED" )
   if ( NOT NUMPY_FOUND )
     message( WARNING "OTB wrapper will be done without support for numpy")
   endif()
