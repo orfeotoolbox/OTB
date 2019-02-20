@@ -124,7 +124,7 @@ otb_add_test(NAME ioTvImageFileReaderShortRGB_BSQ2HDR COMMAND otbImageIOTestDriv
 
 otb_add_test(NAME ioTvImageFileReaderShortHDR2BSQ COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.hd
-  ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd
+  ${TEMP}/ioImageFileReaderI2_HDR2BSQ.raw.hd
   otbShortRGBImageIOTest
   ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
   ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd )
@@ -582,7 +582,7 @@ otb_add_test(NAME ioTvVectorImageComplexFloatTest COMMAND otbImageIOTestDriver
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealFloatTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageComplexFloatTest COMMAND otbImageIOTestDriver

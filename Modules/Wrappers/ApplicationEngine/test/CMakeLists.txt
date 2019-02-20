@@ -87,7 +87,7 @@ otb_add_test(NAME owTvParameterKey COMMAND otbApplicationEngineTestDriver
 
 otb_add_test(NAME owTvInputImageListParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputImageListParameterTest1
-  ${INPUTDATA}/poupees_c1.hdr
+  ${INPUTDATA}/poupees_c1.raw.hdr
   ${INPUTDATA}/poupees.tif
   "mykey"
   "my description"
