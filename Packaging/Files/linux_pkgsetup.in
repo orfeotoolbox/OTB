@@ -41,7 +41,7 @@ OUT_DIR=$(pwd)
 
 #do not move below block. it must be before "unset LD_LIBRARY_PATH" code
 #check if we have any python bindings
-if [ -f "$OUT_DIR/lib/python/otbApplication.so" ] ; then
+if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
     chmod +x "$OUT_DIR/setup_python.sh"
     ./setup_python.sh || setup_python_ret=$?
 fi

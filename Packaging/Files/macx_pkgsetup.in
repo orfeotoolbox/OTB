@@ -40,7 +40,7 @@ cd  "$DIRNAME_0" || exit 1
 OUT_DIR=$(pwd)
 
 #do not move below 3 lines. it must be before "unset LD_LIBRARY_PATH" code
-if [ -f "$OUT_DIR/lib/python/otbApplication.so" ] ; then
+if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
   chmod +x "$OUT_DIR/setup_python.sh"
   ./setup_python.sh || setup_python_ret=$?
 fi
