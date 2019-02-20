@@ -43,6 +43,7 @@ endmacro()
 # thi macro should be removed
 if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
+  find_package(Numpy)
 endif()
 
 #
