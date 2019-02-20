@@ -109,9 +109,10 @@ if(UNIX)
 
   # For now gdal is built if Superbuild has find python... And only on UNIX 
   # That might be a problem
-  if ( PYTHON_EXECUTABLE )
+  if ( OTB_WRAP_PYTHON )
     list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
   endif()
+
 
 else(MSVC)
   configure_file(
