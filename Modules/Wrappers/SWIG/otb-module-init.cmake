@@ -44,6 +44,10 @@ endmacro()
 if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
   find_package(Numpy)
+  if ( NOT NUMPY_FOUND )
+    message( WARNING 
+      "OTB wrappers will be done without support for NumPy (not found).")
+  endif()
 endif()
 
 #
