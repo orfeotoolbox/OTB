@@ -1047,7 +1047,7 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
 otb_test_application(NAME apTvClZonalStatisticsVec
   APP  ZonalStatistics
   OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
-  VALID   --compare-ogr ${NOTOL}
+  VALID   --compare-ogr ${EPSILON_9}
   ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.sqlite
   ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite)
 

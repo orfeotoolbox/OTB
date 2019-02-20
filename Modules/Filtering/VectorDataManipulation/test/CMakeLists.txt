@@ -101,7 +101,7 @@ otb_add_test(NAME bfTvConcatenateVectorDataFilter COMMAND otbVectorDataManipulat
   )
 
 otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Polygon COMMAND otbVectorDataManipulationTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
   otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction
@@ -111,7 +111,7 @@ otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctio
   ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Polygon.shp
   0 )
 otb_add_test(NAME bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction_Line COMMAND otbVectorDataManipulationTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunctionOutput_Line.shp
   otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction

@@ -49,7 +49,7 @@ otb_add_test(NAME bfTvMaskMuParserFilterTest COMMAND otbMathParserTestDriver
   )
 
 otb_add_test(NAME bfTvParserConditionDataNodeFeatureFunction_Line_NDVI COMMAND otbMathParserTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Line_NDVI.shp
   otbParserConditionDataNodeFeatureFunction
