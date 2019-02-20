@@ -66,6 +66,7 @@ macro( otb_module_headertest _name )
   if( NOT ${_name}_THIRD_PARTY
       AND EXISTS ${${_name}_SOURCE_DIR}/include
       AND PYTHON_EXECUTABLE
+      AND NOT (PYTHON_VERSION_STRING VERSION_LESS 2.6)
       AND NOT (${_name} STREQUAL OTBTestKernel)
       AND NOT (CMAKE_GENERATOR MATCHES "^Visual Studio 10.*"))
 
