@@ -90,7 +90,7 @@ Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
-You must have Python numpy bindings installed in your system. They can be installed locally
+You must have Python NumPy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
