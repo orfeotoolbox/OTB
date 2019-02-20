@@ -24,7 +24,6 @@
 
 #include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
-#include "otbMath.h"
 #include "otbMacro.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 #include <iomanip>
@@ -207,11 +206,24 @@ public:
   }
   /** Give the flux normalization coefficient. */
   itkGetConstReferenceMacro(FluxNormalizationCoefficient, double);
-
   /** Set the IsSetFluxNormalizationCoefficient boolean. */
   itkSetMacro(IsSetFluxNormalizationCoefficient, bool);
   /** Give the IsSetFluxNormalizationCoefficient boolean. */
   itkGetConstReferenceMacro(IsSetFluxNormalizationCoefficient, bool);
+
+  /** Set the solar distance. */
+  void SetSolarDistance(double value)
+  {
+    m_SolarDistance = value;
+    m_IsSetSolarDistance = true;
+    this->Modified();
+  }
+  /** Give the solar distance. */
+  itkGetConstReferenceMacro(SolarDistance, double);
+  /** Set the IsSetSolarDistance boolean. */
+  itkSetMacro(IsSetSolarDistance, bool);
+  /** Give the IsSetSolarDistance boolean. */
+  itkGetConstReferenceMacro(IsSetSolarDistance, bool);
 
   /** Set the UseClamp boolean. */
   itkSetMacro(UseClamp, bool);
@@ -225,7 +237,9 @@ protected:
     m_FluxNormalizationCoefficient(1.),
     m_Day(0),
     m_Month(0),
-    m_IsSetFluxNormalizationCoefficient(false)
+    m_SolarDistance(1.0),
+    m_IsSetFluxNormalizationCoefficient(false),
+    m_IsSetSolarDistance(false)
     {
     m_SolarIllumination.SetSize(0);
     };
@@ -238,12 +252,12 @@ protected:
   {
     OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
       this->GetInput()->GetMetaDataDictionary());
-    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
+    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
       {
       m_Day = imageMetadataInterface->GetDay();
       }
 
-    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
+    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
       {
       m_Month = imageMetadataInterface->GetMonth();
       }
@@ -259,11 +273,11 @@ protected:
       m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation();
       }
 
-    std::cout << "Using correction parameters: " << std::endl;
-    std::cout<< "Day:               " << m_Day << std::endl;
-    std::cout<< "Month:             " << m_Month << std::endl;
-    std::cout<< "Solar irradiance:  " << m_SolarIllumination << std::endl;
-    std::cout<< "Zenithal angle:    " << m_ZenithalSolarAngle << std::endl;
+    otbMsgDevMacro(<< "Using correction parameters: ");
+    otbMsgDevMacro(<< "Day:               " << m_Day);
+    otbMsgDevMacro(<< "Month:             " << m_Month);
+    otbMsgDevMacro(<< "Solar irradiance:  " << m_SolarIllumination);
+    otbMsgDevMacro(<< "Zenithal angle:    " << m_ZenithalSolarAngle);
 
     if ((m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
       {
@@ -276,23 +290,22 @@ protected:
       {
       FunctorType functor;
       double      coefTemp = 0.;
-      if (!m_IsSetFluxNormalizationCoefficient)
-        {
-        if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
-          {
-          coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day,m_Month);
-          }
-        else
-          {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
-          }
-        }
-      else
-        {
+
+      if(m_IsSetFluxNormalizationCoefficient){
         coefTemp =
           std::cos(m_ZenithalSolarAngle *
                   CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
-        }
+      }
+      else if(m_IsSetSolarDistance){
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) / (m_SolarDistance * m_SolarDistance);
+      }
+      else if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13){
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day, m_Month);
+      }
+      else{
+        itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
+      }
+
       functor.SetIlluminationCorrectionCoefficient(coefTemp);
       functor.SetSolarIllumination(static_cast<double>(m_SolarIllumination[i]));
 
@@ -310,11 +323,16 @@ private:
   int m_Day;
   /** Acquisition month. */
   int m_Month;
+  /** Solar distance. */
+  double m_SolarDistance;
   /** Solar illumination value. */
   VectorType m_SolarIllumination;
   /** Used to know if the user has set a value for the FluxNormalizationCoefficient parameter
    * or if the class has to compute it */
   bool m_IsSetFluxNormalizationCoefficient;
+  /** Used to know if the user has set a value for the SolarDistance parameter
+   * or if the class has to compute it */
+  bool m_IsSetSolarDistance;
   /** Clamp values to [0,1] */
   bool m_UseClamp;
 

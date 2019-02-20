@@ -18,11 +18,7 @@
 # limitations under the License.
 #
 
-project(ContainersExamples)
+# Configuration options for ubuntu-18.04-gcc
 
-add_executable(TreeContainer TreeContainer.cxx )
-target_link_libraries(TreeContainer ${ITK_LIBRARIES})
-
-if(BUILD_TESTING)
-  add_subdirectory(test)
-endif()
+set(site_option
+"opencv_INCLUDE_DIR:PATH=/usr/include")

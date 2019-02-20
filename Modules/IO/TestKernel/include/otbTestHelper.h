@@ -152,7 +152,7 @@ private:
   void
   ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
                    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
-                   int& nbdiff) const;
+                   int& nbdiff, double epsilon) const;
 
   static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
   static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = nullptr);
@@ -165,6 +165,8 @@ private:
   const unsigned int m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+
+  void CheckValueTolerance(const char *Comment, double ref, double test, int &count, bool report, double epsilon) const;
 
   std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
 };

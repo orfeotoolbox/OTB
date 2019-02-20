@@ -58,7 +58,7 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_vd
                      APP  EndmemberNumberEstimation
                      OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                              -algo vd
-                             -algo.vd.far 0.001
+                             -algo.vd.far 0.2
                      TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
                      VALID --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
