@@ -40,19 +40,19 @@
 namespace itk
 {
 
-extern template class OTBITK_EXPORT_TEMPLATE ImageBase<2>;
-extern template class OTBITK_EXPORT_TEMPLATE ImageRegion<2>;
-extern template class OTBITK_EXPORT_TEMPLATE SmartPointer<LightObject>;
-extern template class OTBITK_EXPORT_TEMPLATE SmartPointer<Object>;
-extern template class OTBITK_EXPORT_TEMPLATE SmartPointer<DataObject>;
-extern template class OTBITK_EXPORT_TEMPLATE SmartPointer<ImageBase<2> >;
-extern template class OTBITK_EXPORT_TEMPLATE Index<2>;
-extern template class OTBITK_EXPORT_TEMPLATE Size<2>;
-extern template class OTBITK_EXPORT_TEMPLATE FixedArray<double,2>;
-extern template class OTBITK_EXPORT_TEMPLATE Point<double,2>;
-extern template class OTBITK_EXPORT_TEMPLATE Vector<double,2>;
-extern template class OTBITK_EXPORT_TEMPLATE Matrix<double,2,2>;
-extern template class OTBITK_EXPORT_TEMPLATE RGBPixel<unsigned char>;
+extern template class ImageBase<2>;
+extern template class ImageRegion<2>;
+extern template class SmartPointer<LightObject>;
+extern template class SmartPointer<Object>;
+extern template class SmartPointer<DataObject>;
+extern template class SmartPointer<ImageBase<2> >;
+extern template class Index<2>;
+extern template class Size<2>;
+extern template class FixedArray<double,2>;
+extern template class Point<double,2>;
+extern template class Vector<double,2>;
+extern template class Matrix<double,2,2>;
+extern template class RGBPixel<unsigned char>;
 
 }
 
