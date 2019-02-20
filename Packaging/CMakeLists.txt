@@ -51,10 +51,6 @@ if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(LINUX TRUE)
 endif()
 
-# if(OTB_WRAP_PYTHON AND NOT PYTHON_EXECUTABLE)
-#   find_package(PythonInterp 3 REQUIRED)
-# endif()
-
 find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
 find_program(ZIP_EXECUTABLE NAMES 7z 7za)
