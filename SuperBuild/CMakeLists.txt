@@ -368,6 +368,33 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "|----------------------------------------------------------")
 endforeach()
 
+# Python
+# This should set the following variables (and more):
+#   -PYTHON_EXECUTABLE
+#   -PYTHON_INCLUDE_DIR
+#   -PYTHON_LIBRARY
+#   -NUMPY_INCLUDE_DIR
+
+set( otb_python_major_version 3 )
+find_package( PythonInterp ${otb_python_major_version} QUIET )
+if( NOT PythonInterp_FOUND)
+  if( OTB_WRAP_PYTHON )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+  endif()
+  set (otb_python_major_version 2)
+  if ( OTB_WRAP_PYTHON )
+    find_package ( PythonInterp ${otb_python_major_version} REQUIRED )
+  else()
+    find_package ( PythonInterp ${otb_python_major_version} QUIET )
+  endif()
+endif()
+if ( OTB_WRAP_PYTHON )
+  find_package ( PythonLibs ${otb_python_major_version} REQUIRED )
+else()
+  find_package ( PythonLibs ${otb_python_major_version} QUIET )
+endif()
+
 include(External_otb)
 
 if(FROM_SYSTEM_LIST)

@@ -106,8 +106,12 @@ if(UNIX)
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
-  #set(GDAL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
-  #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
+
+  # For now gdal is built if Superbuild has find python... And only on UNIX 
+  # That might be a problem
+  if ( PYTHON_EXECUTABLE )
+    list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
+  endif()
 
 else(MSVC)
   configure_file(
