@@ -106,7 +106,7 @@ elseif(MSVC)
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -mp")
 endif()
 
-if(LINUX AND USE_LOW_KERNEL_VERSION)
+if(UNIX AND USE_LOW_KERNEL_VERSION)
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-feature-getentropy -no-feature-renameat2")
 endif()
 

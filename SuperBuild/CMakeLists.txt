@@ -118,8 +118,8 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
 # Special setting for low kernel versions
-if(LINUX)
-  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" OFF)
+if(UNIX)
+  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
 endif()
 
 
