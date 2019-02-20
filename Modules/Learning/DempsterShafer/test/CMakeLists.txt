@@ -86,7 +86,7 @@ otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestRecall COMMAND otbDempste
   RECALL)
 
 otb_add_test(NAME fzTvVectorDataToDSValidatedVectorDataFilter COMMAND otbDempsterShaferTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
   ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
   otbVectorDataToDSValidatedVectorDataFilter
