@@ -117,6 +117,13 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
+# Special setting for low kernel versions
+if(UNIX)
+  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
+endif()
+
+
+# Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
   set (CMAKE_INSTALL_PREFIX
