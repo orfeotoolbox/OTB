@@ -235,7 +235,7 @@ otb_add_test(NAME bfTvStreamingStatisticsImageFilter COMMAND otbStatisticsTestDr
   otbStreamingStatisticsImageFilter
   ${INPUTDATA}/small_poupees_1canal.hd
   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
-  
+
 foreach(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE")
   foreach(sizeType "LARGE" "SMALL")
     string(TOLOWER ${sizeType} lsizeType)

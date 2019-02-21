@@ -124,7 +124,7 @@ otb_add_test(NAME ioTvImageFileReaderShortRGB_BSQ2HDR COMMAND otbImageIOTestDriv
 
 otb_add_test(NAME ioTvImageFileReaderShortHDR2BSQ COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.hd
-  ${TEMP}/ioImageFileReaderI2_HDR2BSQ.raw.hd
+  ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd
   otbShortRGBImageIOTest
   ${TEMP}/ioImageFileReaderI2_BSQ2HDR.hdr
   ${TEMP}/ioImageFileReaderI2_HDR2BSQ.hd )
