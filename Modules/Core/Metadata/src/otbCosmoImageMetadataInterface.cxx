@@ -34,10 +34,6 @@
 namespace otb
 {
 
-CosmoImageMetadataInterface
-::CosmoImageMetadataInterface()
-{
-}
 
 bool
 CosmoImageMetadataInterface::CanRead() const
@@ -49,9 +45,9 @@ CosmoImageMetadataInterface::CanRead() const
 
 void
 CosmoImageMetadataInterface
-::ParseDateTime(const char* key, std::vector<int>& dateFields) const
+::ParseDateTime(std::string key, std::vector<int>& dateFields) const
 {
-  if(dateFields.size() < 1 )
+  if(dateFields.empty())
     {
     //parse from keyword list
     if (!this->CanRead())
@@ -74,7 +70,11 @@ int
 CosmoImageMetadataInterface::GetYear() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if (m_AcquisitionDateFields.empty())
+    {
+      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+    }
+      
   if(m_AcquisitionDateFields.size() > 0 )
     {
     value = Utils::LexicalCast<int>( m_AcquisitionDateFields[0], "support_data.image_date:year(int)" );
@@ -90,7 +90,11 @@ int
 CosmoImageMetadataInterface::GetMonth() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if (m_AcquisitionDateFields.empty())
+    {
+      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+    }
+
   if(m_AcquisitionDateFields.size() > 1 )
     {
     value = Utils::LexicalCast<int>( m_AcquisitionDateFields[1], "support_data.image_date:month(int)" );
@@ -106,7 +110,11 @@ int
 CosmoImageMetadataInterface::GetDay() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if (m_AcquisitionDateFields.empty())
+    {
+      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+    }
+
   if(m_AcquisitionDateFields.size() > 2 )
     {
     value = Utils::LexicalCast<int>( m_AcquisitionDateFields[2], "support_data.image_date:day(int)");
@@ -122,7 +130,11 @@ int
 CosmoImageMetadataInterface::GetHour() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if (m_AcquisitionDateFields.empty())
+    {
+      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+    }
+
   if(m_AcquisitionDateFields.size() > 3 )
     {
     value = Utils::LexicalCast<int>( m_AcquisitionDateFields[3], "support_data.image_date:hour(int)");
@@ -138,7 +150,11 @@ int
 CosmoImageMetadataInterface::GetMinute() const
 {
   int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  if (m_AcquisitionDateFields.empty())
+    {
+      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+    }
+  
   if(m_AcquisitionDateFields.size() > 4 )
     {
     value = Utils::LexicalCast<int>( m_AcquisitionDateFields[4], "support_data.image_date:minute(int)");

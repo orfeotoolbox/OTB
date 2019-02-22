@@ -94,10 +94,10 @@ public:
 protected:
 
   /* class ctor */
-  CosmoImageMetadataInterface();
+  CosmoImageMetadataInterface() = default;
 
   /* class dtor */
-  ~CosmoImageMetadataInterface() override {}
+  ~CosmoImageMetadataInterface() = default;
 
 private:
 
@@ -110,7 +110,7 @@ private:
  * fills argument dateFields of type std::vector<std::string> which is mutable!
  * TODO: move this method into base class
  */
-  void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
+  void ParseDateTime(std::string key, std::vector<int>& dateFields) const;
 
   mutable std::vector<int> m_ProductionDateFields;
   mutable std::vector<int> m_AcquisitionDateFields;

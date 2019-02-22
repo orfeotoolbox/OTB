@@ -59,7 +59,7 @@ public:
 
 protected:
   CosmoImageMetadataInterfaceFactory();
-  ~CosmoImageMetadataInterfaceFactory() override;
+  ~CosmoImageMetadataInterfaceFactory() = default;
 
 private:
   CosmoImageMetadataInterfaceFactory(const Self &) = delete;

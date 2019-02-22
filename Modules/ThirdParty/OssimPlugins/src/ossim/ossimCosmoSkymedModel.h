@@ -77,12 +77,12 @@ namespace ossimplugins
       /*!
        * Returns pointer to a new instance, copy of this.
        */
-      virtual ossimObject* dup() const override;
+      ossimObject* dup() const override;
 
       /*!
        * Extends base-class implementation. Dumps contents of object to ostream.
        */
-      virtual std::ostream& print(std::ostream& out) const override;
+      std::ostream& print(std::ostream& out) const override;
 
       /*!
        * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry

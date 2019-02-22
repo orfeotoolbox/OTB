@@ -41,11 +41,6 @@ CosmoImageMetadataInterfaceFactory
                          itk::CreateObjectFunction<CosmoImageMetadataInterface>::New());
 }
 
-CosmoImageMetadataInterfaceFactory
-::~CosmoImageMetadataInterfaceFactory()
-{
-}
-
 const char*
 CosmoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
