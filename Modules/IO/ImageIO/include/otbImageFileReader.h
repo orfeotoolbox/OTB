@@ -191,7 +191,13 @@ private:
 #endif
 
 #include "otbImage.h"
+#include "otbImageExportSmartPointer.h"
+#include "otbImageExportDynamicCastInDebugMode.h"
+#include "otbImageExportImageSource.h"
 #include "otbVectorImage.h"
+#include "otbVectorImageExportSmartPointer.h"
+#include "otbVectorImageExportDynamicCastInDebugMode.h"
+#include "otbVectorImageExportImageSource.h"
 #include <complex>
 
 namespace otb {

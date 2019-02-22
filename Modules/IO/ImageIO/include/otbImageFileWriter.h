@@ -292,7 +292,9 @@ private:
 #endif
 
 #include "otbImage.h"
+#include "otbImageExportSmartPointer.h"
 #include "otbVectorImage.h"
+#include "otbVectorImageExportSmartPointer.h"
 #include <complex>
 
 namespace otb {

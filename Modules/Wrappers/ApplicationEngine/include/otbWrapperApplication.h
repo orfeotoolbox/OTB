@@ -39,6 +39,9 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "OTBApplicationEngineExport.h"
 
+#include "otbImageExportAll.h"
+#include "otbVectorImageExportAll.h"
+
 namespace otb
 {
 
