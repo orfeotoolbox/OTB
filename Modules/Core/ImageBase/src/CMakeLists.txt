@@ -23,6 +23,8 @@ set(OTBImageBase_SRC
   otbImage.cxx
   otbVectorImage.cxx
   otbRemoteSensingRegion.cxx
+  otbMultiChannelExtractROI.cxx
+  otbMultiToMonoChannelExtractROI.cxx
   )
 
 add_library(OTBImageBase ${OTBImageBase_SRC})
@@ -34,19 +36,3 @@ target_link_libraries(OTBImageBase
   )
 
 otb_module_target(OTBImageBase)
-
-set(OTBDynamicCastInDebugMode_SRC
-  otbDynamicCastInDebugMode.cxx
-  otbMultiChannelExtractROI.cxx
-  otbMultiToMonoChannelExtractROI.cxx
-  )
-
-add_library(OTBDynamicCastInDebugMode ${OTBDynamicCastInDebugMode_SRC})
-target_link_libraries(OTBDynamicCastInDebugMode 
-  ${OTBCommon_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
-  ${OTBMetadata_LIBRARIES}
-  OTBImageBase
-  )
-
-otb_module_target(OTBDynamicCastInDebugMode)
