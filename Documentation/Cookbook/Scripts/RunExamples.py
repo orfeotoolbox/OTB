@@ -28,9 +28,10 @@ import re
 
 from rst_utils import examples_usage_regex
 
-# blacklist ApplicationExample for now because it does not produce a binary
-# we can run (we could patch this script to support applications in the future)
-blacklist = ["ApplicationExample"]
+blacklist = [
+        "ApplicationExample", # does not produce a binary (uses the application engine)
+        "LAIAndPROSAILToSensorResponse" # does not run, wrong arguments
+    ]
 
 def run_example(otb_root, otb_data, name, dry_run):
     """
