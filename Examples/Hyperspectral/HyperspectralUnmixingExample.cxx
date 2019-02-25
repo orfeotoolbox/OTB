@@ -25,7 +25,7 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbMultiToMonoChannelExtractROI.h"
 /* Example usage:
-./HyperspectralUnmixingExample Input/Indian_pines_corrected.tif \
+./HyperspectralUnmixingExample Input/AVIRIS/Indian_pines_corrected.tif \
                                Output/Indian_pines_Unmixing_Output.tif \
                                Output/UnmixingbandOutput1.png \
                                Output/UnmixingbandOutput2.png \
