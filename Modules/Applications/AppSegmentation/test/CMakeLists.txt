@@ -35,7 +35,7 @@ set(raster_output_option "uint16")
 set(vector_output_format ".sqlite")
 
 # Validation depending on mode
-set(vector_comparison --compare-ogr ${NOTOL})
+set(vector_comparison --compare-ogr ${EPSILON_9})
 set(raster_comparison --compare-image ${NOTOL})
 
 # Reference ffiles depending on modes
@@ -174,7 +174,7 @@ otb_test_application(NAME  apTvCcConnectedComponentSegmentatioNoMask
 #----------- MeanShiftSmoothing TESTS ----------------
 otb_test_application(NAME     apTvLSMS1MeanShiftSmoothingNoModeSearch
                      APP      MeanShiftSmoothing
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -fout ${TEMP}/apTvLSMS1_filtered_range.tif
                               -foutpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
                               -ranger 30
@@ -267,7 +267,7 @@ set_property(TEST apTvSmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation
 #----------- LSMSVectorization TESTS ----------------
 otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -inseg  ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                               -tilesizex 100
@@ -281,7 +281,7 @@ set_property(TEST apTvLSMS4Vectorization_SmallMerged PROPERTY DEPENDS apTvLSMS3S
 
 otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
                      APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
                               -tilesizex 100
@@ -310,7 +310,7 @@ otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
 #----------- LargeScaleMeanShift TESTS ----------------
 otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                      APP      LargeScaleMeanShift
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -spatialr 3
                               -ranger 80
                               -minsize 16

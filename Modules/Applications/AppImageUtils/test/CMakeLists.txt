@@ -165,15 +165,15 @@ otb_test_application(NAME  apTvUtRescaleTest
 #----------- TileFusion TESTS ----------------
 otb_test_application(NAME apTvUtTileFusion
                      APP TileFusion
-                     OPTIONS -il ${EXAMPLEDATA}/Scene_R1C1.png
-                                 ${EXAMPLEDATA}/Scene_R1C2.png
-                                 ${EXAMPLEDATA}/Scene_R2C1.png
-                                 ${EXAMPLEDATA}/Scene_R2C2.png
+                     OPTIONS -il ${INPUTDATA}/Scene_R1C1.png
+                                 ${INPUTDATA}/Scene_R1C2.png
+                                 ${INPUTDATA}/Scene_R2C1.png
+                                 ${INPUTDATA}/Scene_R2C2.png
                              -cols 2
                              -rows 2
                              -out ${TEMP}/apTvUtTileFusion.png uint8
                      VALID   --compare-image ${NOTOL}
-                             ${EXAMPLEDATA}/Scene.png
+                             ${INPUTDATA}/Scene.png
                            ${TEMP}/apTvUtTileFusion.png)
 
 
@@ -334,7 +334,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorCustomLUTQB
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method custom
                              -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
                              -out ${TEMP}/apTvUtColorMappingLabelToColorCustomLUTQB.tif uint8
@@ -355,7 +355,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelOptimalLUT
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorOptimalLUTQB
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method optimal
                              -out ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif uint8
                      VALID   --compare-image ${NOTOL}
@@ -371,7 +371,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelCustomLUTQB
                              -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
                              -out ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif uint8
                      VALID   --compare-image ${NOTOL}
-                	         ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                	         ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                 	         ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif)
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
@@ -388,9 +388,9 @@ otb_test_application(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorSupportImage
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method image
-                             -method.image.in ${EXAMPLEDATA}/ROI_QB_MUL_1.tif
+                             -method.image.in ${INPUTDATA}/ROI_QB_MUL_1.tif
                              -out ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif uint8
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtColorMappingLabelToColorSupportImage.tif

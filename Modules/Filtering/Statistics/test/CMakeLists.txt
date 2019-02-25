@@ -332,8 +332,8 @@ otb_add_test(NAME leTvListSampleGenerator4 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation4.txt
   ${TEMP}/leTvListSampleGeneratorValidation4.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator4.txt
   ${TEMP}/leTvListSampleGeneratorValidation4.txt
   -1
@@ -349,8 +349,8 @@ otb_add_test(NAME leTvListSampleGenerator5 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation5.txt
   ${TEMP}/leTvListSampleGeneratorValidation5.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator5.txt
   ${TEMP}/leTvListSampleGeneratorValidation5.txt
   8000
@@ -366,8 +366,8 @@ otb_add_test(NAME leTvListSampleGenerator6 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation6.txt
   ${TEMP}/leTvListSampleGeneratorValidation6.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator6.txt
   ${TEMP}/leTvListSampleGeneratorValidation6.txt
   15000
@@ -383,8 +383,8 @@ otb_add_test(NAME leTvListSampleGenerator1 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation1.txt
   ${TEMP}/leTvListSampleGeneratorValidation1.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator1.txt
   ${TEMP}/leTvListSampleGeneratorValidation1.txt
   -1
@@ -400,8 +400,8 @@ otb_add_test(NAME leTvListSampleGenerator2 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation2.txt
   ${TEMP}/leTvListSampleGeneratorValidation2.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator2.txt
   ${TEMP}/leTvListSampleGeneratorValidation2.txt
   -1
@@ -417,8 +417,8 @@ otb_add_test(NAME leTvListSampleGenerator3 COMMAND otbStatisticsTestDriver
   ${BASELINE_FILES}/leTvListSampleGeneratorValidation3.txt
   ${TEMP}/leTvListSampleGeneratorValidation3.txt
   otbListSampleGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  ${EXAMPLEDATA}/qb_RoadExtract_classification.shp
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract_classification.shp
   ${TEMP}/leTvListSampleGenerator3.txt
   ${TEMP}/leTvListSampleGeneratorValidation3.txt
   100

@@ -65,25 +65,25 @@ OTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_LARGEINPUT_ROOT}")
 
 set (cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
-CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}
-CMAKE_C_FLAGS:STRING=-fPIC -Wall -Wextra
-CMAKE_CXX_FLAGS:STRING=-fPIC -Wall -Wextra -Wno-cpp")
+CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
+
+if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
+  # will set its output in 'site_option'
+  include("${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
+endif()
+
+set(concat_options
+"${otb_build_project_option}
+${otb_use_option}
+${otb_wrap_option}
+${otb_data_option}
+${cmake_configure_option}
+${site_option}
+")
 
 #Transform the previous string in list
-string (REPLACE "\n" ";" otb_build_project_option ${otb_build_project_option})
-string (REPLACE "\n" ";" otb_use_option ${otb_use_option})
-string (REPLACE "\n" ";" otb_wrap_option ${otb_wrap_option})
-string (REPLACE "\n" ";" otb_data_option ${otb_data_option})
+string (REPLACE "\n" ";" otb_options ${concat_options})
 
-set (otb_options "")
-list (APPEND otb_options ${otb_build_project_option})
-list (APPEND otb_options ${otb_use_option})
-list (APPEND otb_options ${otb_wrap_option})
-list (APPEND otb_options ${otb_data_option})
-
-foreach(option ${otb_options})
-  set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-D${option};")
-endforeach(option)
-
-# This should be removed as soon as possible
-set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-Dopencv_INCLUDE_DIR:PATH=/usr/include;")
+foreach(item ${otb_options})
+  set( CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS}-D${item};")
+endforeach(item)

@@ -41,7 +41,7 @@ otb_add_test(NAME ioTvImageToOSMVectorDataGenerator COMMAND otbCartoTestDriver
   ${BASELINE_FILES}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   otbImageToOSMVectorDataGenerator
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract.tif
   ${INPUTDATA}/qb_road.osm
   ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   highvay,motorway

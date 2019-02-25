@@ -53,7 +53,7 @@ otb_add_test(NAME hyTvMDMDNMFImageFilterTest COMMAND otbUnmixingTestDriver
 
 otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE_FILES}/hyTvNCLSImageFilterTest.tif
+  ${BASELINE}/hyTvNCLSImageFilterTest.tif
   ${TEMP}/hyTvNCLSImageFilterTest.tif
   otbNCLSUnmixingImageFilterTest
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
@@ -63,7 +63,7 @@ otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
 
 otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE_FILES}/hyTvISRAUnmixingImageFilterTest.tif
+  ${BASELINE}/hyTvISRAUnmixingImageFilterTest.tif
   ${TEMP}/hyTvISRAUnmixingImageFilterTest.tif
   otbISRAUnmixingImageFilterTest
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
@@ -73,10 +73,9 @@ otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
 
 otb_add_test(NAME hyTvUnConstrainedLeastSquareImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE_FILES}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
+  ${BASELINE}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
   ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif
   otbUnConstrainedLeastSquareImageFilterTest
   ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
   ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
   ${TEMP}/hyTvUnConstrainedLeastSquareImageFilterTest.tif)
-
