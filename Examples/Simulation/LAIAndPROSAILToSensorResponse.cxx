@@ -24,7 +24,7 @@
                                 Input/Simu_mask_LAI_1.png \
                                 Input/label-params-SO-2006-Level-2.txt \
                                 Input/acqui-params.txt \
-                                Input/rep6S.dat \
+                                Input/Radiometry/Test/rep6S.dat \
                                 Output/siTvLAIAndPROSAILToSensorResponse.tif \
                                 5
 */
