@@ -50,16 +50,10 @@ public:
 
   /** Store the state of the check box relative to this parameter
     */
-  virtual bool IsChecked() const
-  {
-    return m_IsChecked;
-  }
+  virtual bool IsChecked() const;
 
   /** Modify the state of the checkbox relative to this parameter */
-  virtual void SetChecked(const bool value)
-  {
-    m_IsChecked = value;
-  }
+  virtual void SetChecked(const bool value);
 
 public slots:
   void UpdateGUI();

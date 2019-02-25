@@ -38,6 +38,16 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 {
 }
 
+bool QtWidgetParameterBase::IsChecked() const
+{
+  return m_IsChecked;
+}
+
+void QtWidgetParameterBase::SetChecked(const bool value)
+{
+  m_IsChecked = value;
+}
+
 
 void QtWidgetParameterBase::CreateWidget()
 {
