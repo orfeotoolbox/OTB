@@ -25,6 +25,7 @@
 #include "otbGenericRSTransform.h"
 #include "otbImageKeywordlist.h"
 #include <string>
+#include "OTBProjectionExport.h"
 
 namespace otb
 {
@@ -65,7 +66,7 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataProjectionFilter :
+class OTBProjection_EXPORT_TEMPLATE VectorDataProjectionFilter :
   public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 
@@ -210,5 +211,14 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataProjectionFilter.hxx"
 #endif
+
+#include "otbVectorData.h"
+
+namespace otb
+{
+extern template class OTBProjection_EXPORT_TEMPLATE VectorDataProjectionFilter<
+  VectorData<double, 2, double>,
+  VectorData<double, 2, double> >;
+}
 
 #endif

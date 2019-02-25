@@ -21,6 +21,7 @@
 set(OTBProjection_SRC
   otbGeometriesProjectionFilter.cxx
   otbPleiadesPToXSAffineTransformCalculator.cxx
+  otbVectorDataProjectionFilter.cxx
   )
 
 add_library(OTBProjection ${OTBProjection_SRC})
@@ -35,7 +36,7 @@ target_link_libraries(OTBProjection
   ${OTBBoost_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBCommon_LIBRARIES}
-
+  ${OTBVectorDataManipulation_LIBRARIES}
   )
 
 otb_module_target(OTBProjection)
