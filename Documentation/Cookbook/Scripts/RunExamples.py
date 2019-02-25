@@ -26,6 +26,8 @@ import os
 from os.path import join
 import re
 
+from rst_utils import examples_usage_regex
+
 def run_example(otb_root, otb_data, name, dry_run):
     """
     Run an example by name
@@ -49,27 +51,24 @@ def run_example(otb_root, otb_data, name, dry_run):
     filename = os.path.abspath(sources_files[0])
 
     # Extract example usage command arguments
-    usage_rx = r"\/\* Example usage:\n\.\/[a-zA-Z]+ (.*?)\*\/"
-    match = re.search(usage_rx, open(filename).read(), flags = re.MULTILINE | re.DOTALL)
+    matches = list(re.finditer(examples_usage_regex, open(filename).read(), flags = re.MULTILINE | re.DOTALL))
 
-    if not match:
-        raise RuntimeError("Can't find example usage in {}".format(filename))
-
-    example_args = match.group(1).replace("\\\n", "").split()
-
-    # Make sure Output dir exists
-    os.makedirs(join(otb_data, "Output"), exist_ok=True)
-
-    print("$ " + binary + " " + " ".join(example_args))
-
-    if dry_run:
+    if len(matches) == 0:
+        print("Warning: no usage for example: {}".format(sources_files[0]))
         return
 
-    # Execute the example with otb_data as working directory,
-    # because paths are given relative to otb_data in the example usage
-    subprocess.check_call([binary, *example_args], cwd=otb_data)
+    for match in matches:
+        # Get command line call and print it
+        example_args = match.group(2).replace("\\\n", "").split()
+        print("$ " + binary + " " + " ".join(example_args))
 
-# TODO handle examples with multiple usage (Examples/BasicFilters/DEMToRainbowExample.cxx)
+        if not dry_run:
+            # Make sure Output dir exists
+            os.makedirs(join(otb_data, "Output"), exist_ok=True)
+
+            # Execute the example with otb_data as working directory,
+            # because paths are given relative to otb_data in the example usage
+            subprocess.check_call([binary, *example_args], cwd=otb_data)
 
 def main():
     parser = argparse.ArgumentParser(usage="Run one or all OTB cxx examples")

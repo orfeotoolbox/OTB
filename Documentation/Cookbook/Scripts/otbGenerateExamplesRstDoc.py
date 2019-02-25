@@ -27,7 +27,7 @@ from collections import defaultdict
 import re
 import glob
 
-from rst_utils import rst_section, RstPageHeading
+from rst_utils import rst_section, RstPageHeading, examples_usage_regex
 
 def generate_examples_index(rst_dir, list_of_examples):
 
@@ -72,18 +72,16 @@ def render_example(filename, otb_root):
     examples_license_header = open("templates/examples_license_header.txt").read()
     code = code.replace(examples_license_header, "")
 
-    # Extract usage
-    # TODO handle multiple usage
-    rx_usage = r"\/\* Example usage:\n(\.\/[a-zA-Z]+ (.*?))\*\/"
-    usage_match = re.search(rx_usage, code, flags = re.MULTILINE | re.DOTALL)
-    if usage_match is None:
-        print("Warning: no usage found for example " + filename)
-        example_usage = ""
-    else:
-        example_usage = open("templates/example_usage.rst").read().format(indent(usage_match.group(1).strip()))
+    # Extract usages
+    example_usage = ""
+    usage_matches = list(re.finditer(examples_usage_regex, code, flags = re.MULTILINE | re.DOTALL))
+
+    examples_usage_template = open("templates/example_usage.rst").read()
+    for match in usage_matches:
+        example_usage += examples_usage_template.format(indent(match.group(1).strip()))
 
     # Don't show usage in example source
-    code = re.sub(rx_usage, "", code, flags = re.MULTILINE | re.DOTALL)
+    code = re.sub(examples_usage_regex, "", code, flags = re.MULTILINE | re.DOTALL)
 
     # Make the link to the source code
     link_name = os.path.basename(filename)

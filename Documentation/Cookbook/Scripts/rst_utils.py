@@ -1,4 +1,7 @@
 
+# Regex used to find examples usage
+examples_usage_regex = r"\/\* Example usage:\n(\.\/\w+ (.*?))\*\/"
+
 def rst_section(text, delimiter, ref=None):
     "Make a rst section title"
 
