@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./TrainMachineLearningModelFromSamplesExample Input/1000 Input/4 Input/5 Input/121212 Output/clSVMModelFromSamples.svm
+./TrainMachineLearningModelFromSamplesExample Output/clSVMModelFromSamples.svm
 */
 
 
@@ -41,14 +41,6 @@
 int main(int argc, char* argv[])
 {
 
-  /*
-  if (argc != 6)
-    {
-    std::cerr << "Usage: " << argv[0] << " nbSamples nbSampleComponents nbClasses inputSeed outputModelFileName" << std::endl;
-    return EXIT_FAILURE;
-    }
-  */
-
   if (argc != 2)
   {
     std::cerr << "Usage: " << argv[0] << " outputModelFileName" << std::endl;
@@ -56,21 +48,11 @@ int main(int argc, char* argv[])
   }
 
   // The input parameters of the sample generator and of the SVM classifier are initialized.
-
-  /*
-  int nbSamples = atoi(argv[1]);
-  int nbSampleComponents = atoi(argv[2]);
-  int nbClasses = atoi(argv[3]);
-  unsigned int inputSeed = atoi(argv[4]);
-  */
-
   int nbSamples          = 1000;
   int nbSampleComponents = 7;
   int nbClasses          = 4;
 
-  //  unsigned int inputSeed = 121212;
-  const char* outputModelFileName = argv[1]; // argv[5];
-
+  const char* outputModelFileName = argv[1];
 
   // Two lists are generated into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
   // used to handle both lists of samples and of labels for the machine learning classes derived from
