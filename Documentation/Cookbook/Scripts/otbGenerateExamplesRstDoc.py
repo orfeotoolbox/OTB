@@ -115,7 +115,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Get list of cxx examples as relative paths from otb_root
-    list_of_examples = [os.path.relpath(p, start=args.otb_root) for p in glob.glob(join(args.otb_root, "Examples/*/*.cxx"))]
+    list_of_examples = [os.path.relpath(p, start=args.otb_root) for p in sorted(glob.glob(join(args.otb_root, "Examples/*/*.cxx")))]
     print("Generating rst for {} examples".format(len(list_of_examples)))
 
     # Generate example index and tag indexes

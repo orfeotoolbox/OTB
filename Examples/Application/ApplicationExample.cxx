@@ -18,12 +18,6 @@
  * limitations under the License.
  */
 
-
-/* Example usage:
-./ApplicationExample Input/QB_Suburb.png Output/ApplicationExample.png
-*/
-
-
 // This example illustrates the creation of an application.
 // A new application is a class, which derives from \subdoxygen{otb}{Wrapper}{Application} class.
 // We start by including the needed header files.
@@ -213,6 +207,4 @@ private:
 } // namespace otb
 
 // Finally \code{OTB\_APPLICATION\_EXPORT} is called:
-//  Software Guide :BeginCodeSnippet
 OTB_APPLICATION_EXPORT(otb::Wrapper::ApplicationExample)
-//  Software Guide :EndCodeSnippet
