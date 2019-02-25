@@ -40,11 +40,22 @@ extern template otb::Image<unsigned char, 2u> const*
   itkDynamicCastInDebugMode<otb::Image<unsigned char, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 extern template otb::Image<unsigned int, 2u> const*
   itkDynamicCastInDebugMode<otb::Image<unsigned int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<int, 2u> const*
+  itkDynamicCastInDebugMode<otb::Image<int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 extern template otb::Image<unsigned short, 2u> const*
   itkDynamicCastInDebugMode<otb::Image<unsigned short, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 extern template otb::Image<float, 2u> const*
   itkDynamicCastInDebugMode<otb::Image<float, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 extern template otb::Image<double, 2u> const*
   itkDynamicCastInDebugMode<otb::Image<double, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+
+extern template otb::Image<std::complex<short>, 2u> const*
+  itkDynamicCastInDebugMode<otb::Image<std::complex<short>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<std::complex<int>, 2u> const*
+  itkDynamicCastInDebugMode<otb::Image<std::complex<int>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<std::complex<float>, 2u> const*
+  itkDynamicCastInDebugMode<otb::Image<std::complex<float>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+extern template otb::Image<std::complex<double>, 2u> const*
+  itkDynamicCastInDebugMode<otb::Image<std::complex<double>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 
 #endif

@@ -29,7 +29,20 @@ template otb::VectorImage<double, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
 
 template otb::VectorImage<unsigned char, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
   itkDynamicCastInDebugMode<otb::VectorImage<unsigned char, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::VectorImage<unsigned short, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<unsigned short, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::VectorImage<unsigned int, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<unsigned int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 template otb::VectorImage<float, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
   itkDynamicCastInDebugMode<otb::VectorImage<float, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 template otb::VectorImage<double, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
   itkDynamicCastInDebugMode<otb::VectorImage<double, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+
+template otb::VectorImage<std::complex<short>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<std::complex<short>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::VectorImage<std::complex<int>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<std::complex<int>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::VectorImage<std::complex<float>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<std::complex<float>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::VectorImage<std::complex<double>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
+  itkDynamicCastInDebugMode<otb::VectorImage<std::complex<double>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
