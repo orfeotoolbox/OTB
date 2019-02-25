@@ -102,7 +102,7 @@ otb_add_test(NAME feTvRoadExtractionFilter COMMAND otbRoadExtractionTestDriver
   ${BASELINE}/feTvOutputRoadDetection.tif
   ${TEMP}/feTvOutputRoadDetection.tif
   otbRoadExtractionFilter
-  ${INPUTDATA}/qb_RoadExtract.img.raw.hdr
+  ${INPUTDATA}/qb_RoadExtract.img.hdr
   ${TEMP}/feTvOutputRoadDetection.tif
   337 557 432 859  # ReferencePixel
   1.0              # Alpha

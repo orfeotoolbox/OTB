@@ -101,7 +101,7 @@ otb_add_test(NAME bfTvComplexToVectorImageCastFilterTest COMMAND otbImageBaseTes
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
-  ${INPUTDATA}/monobandComplexDouble
+  ${INPUTDATA}/monobandComplexDouble.raw.hdr
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   )
