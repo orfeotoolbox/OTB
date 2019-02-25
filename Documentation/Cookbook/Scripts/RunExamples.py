@@ -28,11 +28,18 @@ import re
 
 from rst_utils import examples_usage_regex
 
+# blacklist ApplicationExample for now because it does not produce a binary
+# we can run (we could patch this script to support applications in the future)
+blacklist = ["ApplicationExample"]
+
 def run_example(otb_root, otb_data, name, dry_run):
     """
     Run an example by name
     Assumes the current working directory is an OTB build
     """
+
+    if name in blacklist:
+        return
 
     # Find binary in bin/
     binary_names = glob.glob(join("bin", name))
