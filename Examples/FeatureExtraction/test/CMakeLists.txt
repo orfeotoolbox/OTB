@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/FeatureExtraction)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 # ------- CorrelationLineDetectorExampleTest----------
 
@@ -30,22 +30,10 @@ otb_add_test(NAME feTeCorrelationLineDetectorExampleTest COMMAND ${OTB_TEST_DRIV
     ${BASELINE}/amstLineCorrelationDirections.png
     ${TEMP}/amstLineCorrelationDirections.png
   Execute $<TARGET_FILE:CorrelationLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineCorrelations.png
     ${TEMP}/amstLineCorrelationDirections.png
     5 1
-)
-
-# ------- LocalHoughExampleTest----------
-
-otb_add_test(NAME feTeLocalHoughExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/detected_local_hough.png
-    ${TEMP}/detected_local_hough.png
-  Execute $<TARGET_FILE:LocalHoughExample>
-    ${INPUTDATA}/detected_lines.png
-    ${TEMP}/detected_local_hough.png
-    30 10 1 50
 )
 
 # ------- HarrisExampleTest----------
@@ -69,22 +57,10 @@ otb_add_test(NAME feTeTouziEdgeDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/amstTouziDirections.png
     ${TEMP}/amstTouziDirections.png
   Execute $<TARGET_FILE:TouziEdgeDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstTouziEdges.png
     ${TEMP}/amstTouziDirections.png
     3
-)
-
-# ------- ExtractSegmentsByStepsExampleTest----------
-
-otb_add_test(NAME feTeExtractSegmentsByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/amstSegmentExtractionBySteps.png
-    ${TEMP}/amstSegmentExtractionBySteps.png
-  Execute $<TARGET_FILE:ExtractSegmentsByStepsExample>
-    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
-    ${TEMP}/amstSegmentExtractionBySteps.png
-    10 3 10 0.5 10 10 3 10 0.5
 )
 
 # ------- AsymmetricFusionOfLineDetectorExampleTest----------
@@ -94,21 +70,9 @@ otb_add_test(NAME feTeAsymmetricFusionOfLineDetectorExampleTest COMMAND ${OTB_TE
     ${BASELINE}/amstLineFusion.png
     ${TEMP}/amstLineFusion.png
   Execute $<TARGET_FILE:AsymmetricFusionOfLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineFusion.png
     5 1
-)
-
-# ------- ExtractSegmentsExampleTest----------
-
-otb_add_test(NAME feTeExtractSegmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/amstSegmentExtraction.png
-    ${TEMP}/amstSegmentExtraction.png
-  Execute $<TARGET_FILE:ExtractSegmentsExample>
-    ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
-    ${TEMP}/amstSegmentExtraction.png
-    10 3 10 0.5 10 10 3 10 0.5
 )
 
 # ------- RatioLineDetectorExampleTest----------
@@ -120,22 +84,10 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/amstLineRatioDirections.png
     ${TEMP}/amstLineRatioDirections.png
   Execute $<TARGET_FILE:RatioLineDetectorExample>
-    ${INPUTDATA}/amst.png
+    ${INPUTDATA}/amst2.png
     ${TEMP}/amstLineRatios.png
     ${TEMP}/amstLineRatioDirections.png
     5 1
-)
-
-# ------- AlignmentsExampleTest----------
-if(OTBMathParser_LOADED)
-otb_add_test(NAME feTeAlignmentsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 1
-    ${BASELINE}/QB_SuburbAlign.png
-    ${TEMP}/QB_SuburbAlign.png
-  Execute $<TARGET_FILE:AlignmentsExample>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/QB_SuburbAlign.png
-    5
 )
 
 # ------- RoadExtractionExamplesTest----------
@@ -164,8 +116,6 @@ otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/ExtractRoadExampleOutput.png
     337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
 )
-
-endif()
 
 # ------- SeamCarvingExamplesTest----------
 

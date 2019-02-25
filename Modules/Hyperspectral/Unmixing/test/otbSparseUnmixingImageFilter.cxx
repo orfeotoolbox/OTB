@@ -23,48 +23,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbSparseUnmixingImageFilter.h"
 
-int otbSparseUnmixingImageFilterTest ( int argc, char * argv[] )
+int otbSparseUnmixingImageFilterTest ( int , char * [] )
 {
   // number of images to consider
   const unsigned int nbInputImages = 2;
-
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddOption( "--InputImages", "Input Images", "-in", nbInputImages, true );
-  parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
-  parser->AddOption( "--Threshold", "Lower threshold for accounting the waBinaryFunctorImageListToSampleListFiltervelet coeffs (def. 10)", "-th", 1, false );
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs Wvlt unmixing on " << nbInputImages << " images\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
   std::string inputImageName [ nbInputImages ];
   for ( unsigned int i = 0; i < nbInputImages; i++ )
-    inputImageName[i] = parseResult->GetParameterString("--InputImages", i);
-  std::string outputImageName = parseResult->GetParameterString("--OutputImages");
-  const double threshold = parseResult->IsOptionPresent("--Threshold") ?
-    parseResult->GetParameterDouble("--Threshold") : 10.;
+    inputImageName[i] = "";
+  std::string outputImageName = "";
+  const double threshold = 10.;
 
   // Main type definition
   const unsigned int Dimension = 2;

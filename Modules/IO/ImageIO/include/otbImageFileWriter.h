@@ -27,6 +27,7 @@
 #include "otbExtendedFilenameToWriterOptions.h"
 #include "itkFastMutexLock.h"
 #include <string>
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -61,7 +62,7 @@ namespace otb
  * \ingroup OTBImageIO
  */
 template <class TInputImage>
-class ITK_EXPORT ImageFileWriter : public itk::ProcessObject
+class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
@@ -289,5 +290,40 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileWriter.hxx"
 #endif
+
+#include "otbImage.h"
+#include "otbVectorImage.h"
+#include <complex>
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<float, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<double, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<int>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<short>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<float>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<std::complex<double>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<unsigned int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<int, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<unsigned char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<char, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<unsigned short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<short, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<float, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<double, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<int>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<short>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<float>, 2>>;
+extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<double>, 2>>;
+
+}
 
 #endif

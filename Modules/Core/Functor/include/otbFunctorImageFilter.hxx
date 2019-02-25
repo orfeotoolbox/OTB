@@ -138,7 +138,7 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 {
   static decltype(auto) Get(const itk::ConstNeighborhoodIterator<T> & t)
 {
-  return t.GetNeighborhood();
+  return t;
 }
 };
 

@@ -213,30 +213,14 @@ ADD_CUSTOM_TARGET(SoftwareGuideExamples  ALL echo)
 SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Application/ApplicationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Installation/HelloWorld.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image4.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageAdaptor4.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/RGBImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/VectorImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/Image5.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Image/ImageListExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSet3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh1.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh2.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/Mesh3.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Mesh/PointSetWithVectors.cxx
-  ${OTB_SOURCE_DIR}/Examples/DataRepresentation/Path/PolyLineParametricPath1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image1.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image2.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image3.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image4.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/VectorImage.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/Image5.cxx
+  ${OTB_SOURCE_DIR}/Examples/Image/ImageListExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadWrite.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/StreamingImageReadWrite.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/ExplicitStreamingExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/RGBImageReadWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadCastWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ImageReadRegionOfInterestWrite.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/ComplexImageReadWrite.cxx
@@ -246,26 +230,11 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/IO/MetadataExample.cxx
   #${OTB_SOURCE_DIR}/Examples/IO/DXFReaderExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/VectorDataIOExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/IO/OGRWrappersExample.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMToImageGenerator.cxx
   ${OTB_SOURCE_DIR}/Examples/IO/DEMHandlerExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/BinaryThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/ThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/CannyEdgeDetectionImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/CompositeFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/GradientMagnitudeImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/GradientMagnitudeRecursiveGaussianImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/DerivativeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/SecondDerivativeRecursiveGaussianImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/LaplacianRecursiveGaussianImageFilter1.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/LaplacianRecursiveGaussianImageFilter2.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/MeanImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/MedianImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/DiscreteGaussianImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/GradientAnisotropicDiffusionImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/Filtering/DanielssonDistanceMapImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyBinaryFilters.cxx
-  ${OTB_SOURCE_DIR}/Examples/Filtering/MathematicalMorphologyGrayscaleFilters.cxx
   #${OTB_SOURCE_DIR}/Examples/Filtering/RasterizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/LeeImageFilter.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/FrostImageFilter.cxx
@@ -277,34 +246,23 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/HillShadingExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/BasicFilters/BandMathXImageFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration1.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration2.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration5.cxx
-  ${OTB_SOURCE_DIR}/Examples/Registration/ImageRegistration9.cxx
-  ${OTB_SOURCE_DIR}/Examples/Projections/SensorModelExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Projections/MapProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/OrthoRectificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/GeometriesProjectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/VectorDataExtractROIExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/PlaceNameToLonLatExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Projections/EstimateRPCSensorModelExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/DisparityMap/SimpleDisparityMapEstimationExample.cxx
   #${OTB_SOURCE_DIR}/Examples/DisparityMap/NCCRegistrationFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/FineRegistrationImageFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DisparityMap/StereoReconstructionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TextureExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/PanTexExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/SFSExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AlignmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RatioLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/CorrelationLineDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/AsymmetricFusionOfLineDetectorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LocalHoughExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/LineSegmentDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/RightAngleDetectionExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsByStepsExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ExtractSegmentsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/ParallelLineDetectionExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/TouziEdgeDetectorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/FeatureExtraction/HarrisExample.cxx
@@ -325,34 +283,12 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/NAPCAExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/MNFExample.cxx
   ${OTB_SOURCE_DIR}/Examples/DimensionReduction/ICAExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConnectedThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/OtsuMultipleThresholdImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/NeighborhoodConnectedImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/ConfidenceConnected.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/IsolatedConnectedImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/WatershedSegmentation.cxx
-  ${OTB_SOURCE_DIR}/Examples/Segmentation/FastMarchingImageFilter.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/HybridSegmentationFuzzyVoronoi.cxx
-  #${OTB_SOURCE_DIR}/Examples/Patented/FuzzyConnectednessImageFilter.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidAnalysisFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSynthesisFilterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmenterExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/MultiScale/MorphologicalPyramidSegmentationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/ChangeDetection/ChangeDetectionFrameworkExample.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/DiffChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/RatioChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/CorrelChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerDistanceChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/KullbackLeiblerProfileChDet.cxx
   ${OTB_SOURCE_DIR}/Examples/ChangeDetection/MultivariateAlterationDetector.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/KdTreeBasedKMeansClustering.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/KMeansImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansModelEstimator.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageKmeansClassifier.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/BayesianPluginClassifier.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ExpectationMaximizationMixtureModelEstimator.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/ScalarImageMarkovRandomField1.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification1Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification2Example.cxx
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovClassification3Example.cxx
@@ -360,20 +296,14 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Markov/MarkovRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SVMImageEstimatorClassificationMultiExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SupervisedImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Classification/MajorityVotingFusionOfClassificationMapsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/DempsterShaferFusionOfClassificationMapsExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/ClassificationMapRegularizationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SOMClassifierExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Classification/SOMImageClassificationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/SEMModelEstimatorExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageClassificationExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Learning/SVMGenericKernelImageModelEstimatorExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromSamplesExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Learning/TrainMachineLearningModelFromImagesExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ImageToLabelToImage.cxx
-  ${OTB_SOURCE_DIR}/Examples/OBIA/ShapeAttributeComputation.cxx
-#   ${OTB_SOURCE_DIR}/Examples/OBIA/KeepNObjects.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/RadiometricAttributesLabelMapFilterExample.cxx
   ${OTB_SOURCE_DIR}/Examples/OBIA/HooverMetricsEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Iterators/ImageLinearIteratorWithIndex.cxx
@@ -401,7 +331,6 @@ SET( OTB_EXAMPLES_SRCS
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Pipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/FilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/ScalingPipeline.cxx
-  ${OTB_SOURCE_DIR}/Examples/Tutorials/SmarterFilteringPipeline.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/OrthoFusion.cxx
   ${OTB_SOURCE_DIR}/Examples/Tutorials/Multispectral.cxx
   ${OTB_SOURCE_DIR}/Examples/Simulation/ProsailModel.cxx
@@ -414,7 +343,6 @@ IF(OTB_USE_PATENTED)
 SET(OTB_EXAMPLES_SRCS ${OTB_EXAMPLES_SRCS}
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDisparityMapEstimation.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTFastExample.cxx
-  ${OTB_SOURCE_DIR}/Examples/Patented/EstimateAffineTransformationExample.cxx
   ${OTB_SOURCE_DIR}/Examples/Patented/SIFTDensityExample.cxx
    )
 ENDIF(OTB_USE_PATENTED)

@@ -305,7 +305,6 @@ set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
 set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
-set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 

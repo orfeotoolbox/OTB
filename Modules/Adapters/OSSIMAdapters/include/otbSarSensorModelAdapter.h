@@ -96,6 +96,13 @@ public:
 			     unsigned int & linesOffset, unsigned int first_burstInd,
 			     bool inputWithInvalidPixels=false);
 
+  /** Specify overlap area between two bursts */	
+  bool Overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels=false);
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */

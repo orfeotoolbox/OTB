@@ -21,7 +21,7 @@
 
 
 //  Software Guide : BeginCommandLineArgs
-//    INPUTS: {amst.png}
+//    INPUTS: {amst2.png}
 //    OUTPUTS: {amstLineRatios.png}, {amstLineRatioDirections.png}
 //    5 1
 //  Software Guide : EndCommandLineArgs

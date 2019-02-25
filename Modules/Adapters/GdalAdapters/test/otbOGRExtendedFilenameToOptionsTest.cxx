@@ -19,6 +19,7 @@
  */
 
 #include "otbOGRExtendedFilenameToOptions.h"
+#include "itksys/SystemTools.hxx"
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -44,7 +45,7 @@ int otbOGRExtendedFileName(int , char* argv[])
   file.open(outputFilename);
 
   file << helper->SimpleFileNameIsSet() << std::endl;
-  file << helper->GetSimpleFileName() << std::endl;
+  file << itksys::SystemTools::GetFilenameName(helper->GetSimpleFileName()) << std::endl;
 
   file << "Open option :"<<std::endl;
   FilenameHelperType::GDALOptionType open = helper->GetGDALOpenOptions();

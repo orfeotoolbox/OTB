@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Tutorials)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME  trTeTutorialsHelloWorld COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:HelloWorldOTB>
@@ -62,19 +62,6 @@ otb_add_test(NAME  trTeTutorialsMultispectralTest COMMAND ${OTB_TEST_DRIVER}
     ${INPUTDATA}/qb_RoadExtract.tif
     ${TEMP}/MultispectralOutput1.tif
     ${TEMP}/MultispectralOutput2.tif
-)
-
-
-otb_add_test(NAME  trTeTutorialsSmarterFilteringPipelineTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/TutorialsSmarterFilteringPipelineOutput.png
-    ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
-  Execute $<TARGET_FILE:SmarterFilteringPipeline>
-    -in ${INPUTDATA}/QB_Suburb.png
-    -out ${TEMP}/TutorialsSmarterFilteringPipelineOutput.png
-    -d 1.5
-    -i 2
-    -a 0.1
 )
 
 otb_add_test(NAME  trTeTutorialsOrthoFusionTest COMMAND ${OTB_TEST_DRIVER}

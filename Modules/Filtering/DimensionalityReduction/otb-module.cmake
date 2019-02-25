@@ -35,7 +35,6 @@ otb_module(OTBDimensionalityReduction
     OTBStatistics
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
     OTBWavelet

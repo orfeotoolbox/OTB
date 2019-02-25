@@ -19,28 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/OBIA)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
-
-otb_add_test(NAME  trTeOBIAImageToLabelToImageTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/OBIAI2L2IOutput.tif
-    ${TEMP}/OBIAI2L2IOutput.tif
-  Execute $<TARGET_FILE:ImageToLabelToImage>
-    ${INPUTDATA}/MSLabeledOutput.tif
-    ${TEMP}/OBIAI2L2IOutput.tif
-    ${TEMP}/OBIAI2L2IInPretty.png
-    ${TEMP}/OBIAI2L2IOutPretty.png
-    1 1108 0
-)
-
-otb_add_test(NAME trTeOBIAShapeAttributeComputationTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ascii ${EPSILON_3}
-    ${BASELINE}/OBIAShapeAttribute.txt
-    ${TEMP}/OBIAShapeAttribute.txt
-  Execute $<TARGET_FILE:ShapeAttributeComputation>
-    ${INPUTDATA}/MSLabeledOutput.tif
-    ${TEMP}/OBIAShapeAttribute.txt
-)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 #if(OTBMathParser_LOADED)
 #otb_add_test(NAME trTeOBIARadiometricAttributesLabelMapFilterTest COMMAND ${OTB_TEST_DRIVER}

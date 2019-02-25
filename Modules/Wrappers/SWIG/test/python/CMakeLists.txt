@@ -102,7 +102,7 @@ add_test( NAME pyTvNumpyIO
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonNumpyTest
-  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+  ${OTB_DATA_ROOT}/Input/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
   ${TEMP}/pyTvNumpyIO_SmoothingOut.png )
 
 add_test( NAME pyTvNewStyleParameters
@@ -143,5 +143,5 @@ add_test( NAME pyTvImageInterface
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonImageInterface
-  ${OTB_DATA_ROOT}/Examples/QB_Toulouse_Ortho_XS.tif
+  ${OTB_DATA_ROOT}/Input/QB_Toulouse_Ortho_XS.tif
   )

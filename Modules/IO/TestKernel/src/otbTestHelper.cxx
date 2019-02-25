@@ -92,6 +92,19 @@
 namespace otb
 {
 
+void TestHelper::CheckValueTolerance(const char *comment, double ref, double test, int &count, bool report, double epsilon) const
+{
+  double norm = (std::abs(ref) + std::abs(test))/2;
+  if (norm > m_EpsilonBoundaryChecking && (std::abs(ref-test) > epsilon * norm))
+    {
+    count++;
+    if (report)
+      {
+      otbPrintDiff(comment, ref, test);
+      }
+    }
+}
+
 int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage,
                                         const StringList& testFilenamesImage)
 {
@@ -635,7 +648,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
                                         const double epsilon, StringList ignoredLines) const
 {
   typedef std::vector<boost::iterator_range<std::string::const_iterator> > TokenListType;
-  
+
   std::ifstream fluxfiletest(testAsciiFileName);
   std::ifstream fluxfileref(baselineAsciiFileName);
 
@@ -1104,7 +1117,7 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
       }
     nbdiff++;
     }
-  
+
   if (m_ReportErrors)
     {
     fluxfilediff.close();
@@ -1122,13 +1135,13 @@ int TestHelper::RegressionTestDiffFile(const char * testAsciiFileName, const cha
     std::cout << "Tolerance value     : " << epsilon << std::endl;
     std::cout << "Tolerance max check : " << m_EpsilonBoundaryChecking << std::endl;
     std::cout << "Nb lines different : " << nbdiff << std::endl;
-    
+
     for (unsigned int i=0 ; i<listStrDiffLineFile.size() ; i++)
       {
       std::cout << listStrDiffLineFile[i] << std::endl;
       }
     }
-  
+
   return (nbdiff != 0) ? 1 : 0;
 }
 
@@ -1735,7 +1748,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   //OGRGeometry *  test_poSpatialFilter = NULL;
 
   ref_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      ref_pszDataSource,
        GDAL_OF_UPDATE | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1744,7 +1757,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (ref_poDS == nullptr && !bReadOnly)
     {
     ref_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      ref_pszDataSource,
        GDAL_OF_READONLY | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1756,7 +1769,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
     }
   test_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      test_pszDataSource,
       (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1764,7 +1777,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   if (test_poDS == nullptr && !bReadOnly)
     {
     test_poDS = (GDALDataset *)GDALOpenEx(
-      ref_pszDataSource, 
+      test_pszDataSource,
       (bReadOnly? GDAL_OF_READONLY : GDAL_OF_UPDATE) | GDAL_OF_VECTOR,
       NULL,
       NULL,
@@ -1821,29 +1834,6 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
   /* -------------------------------------------------------------------- */
   otbCheckStringValue("INFO: using driver", GDALGetDriverShortName(ref_poDriver), GDALGetDriverShortName(test_poDriver), nbdiff, m_ReportErrors);
 
-  // TODO: Improve this check as it will stop as soon as one of the
-  // list ends (i.e. it does not guarantee that all files are present)
-  std::vector<std::string> refFileList = otb::ogr::GetFileListAsStringVector(ref_poDS);
-  std::vector<std::string> testFileList = otb::ogr::GetFileListAsStringVector(test_poDS);
-
-  unsigned int fileId = 0;
-
-  while (fileId < refFileList.size() && fileId < testFileList.size())
-    {
-    std::string strRefName(refFileList[fileId]);
-    std::string strTestName(testFileList[fileId]);
-    if (strRefName != strTestName)
-      {
-      if (!m_ReportErrors)
-        {
-        otbPrintDiff("WARNING: INFO: Internal data source files were different",
-                     strRefName,
-                     strTestName);
-        }
-      }
-    ++fileId;
-    }
-
   /* -------------------------------------------------------------------- */
   /*      Process each data source layer.                                 */
   /* -------------------------------------------------------------------- */
@@ -1870,7 +1860,7 @@ int TestHelper::RegressionTestOgrFile(const char *testOgrFilename, const char *b
       }
 
     //Check Layer inforamtion
-    ogrReportOnLayer(ref_poLayer, nullptr, nullptr, test_poLayer, nullptr, nullptr, nbdiff);
+    ogrReportOnLayer(ref_poLayer, nullptr, nullptr, test_poLayer, nullptr, nullptr, nbdiff, toleranceDiffValue);
 
     //If no difference, check the feature
     if (nbdiff == 0)
@@ -2557,7 +2547,8 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
                                   OGRLayer * test_poLayer,
                                   const char *test_pszWHERE,
                                   OGRGeometry *test_poSpatialFilter,
-                                  int& nbdiff) const
+                                  int& nbdiff,
+                                  double epsilon) const
 
 {
   OGRFeatureDefn *ref_poDefn = ref_poLayer->GetLayerDefn();
@@ -2596,10 +2587,10 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 
   if (ref_poLayer->GetExtent(&ref_oExt, TRUE) == OGRERR_NONE)
     {
-    otbCheckValue("Extent: MinX", ref_oExt.MinX, test_oExt.MinX, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MinY", ref_oExt.MinY, test_oExt.MinY, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors);
-    otbCheckValue("Extent: MaxY", ref_oExt.MaxY, test_oExt.MaxY, nbdiff, m_ReportErrors);
+    CheckValueTolerance("Extent: MinX", ref_oExt.MinX, test_oExt.MinX, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MinY", ref_oExt.MinY, test_oExt.MinY, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors, epsilon);
+    CheckValueTolerance("Extent: MaxY", ref_oExt.MaxY, test_oExt.MaxY, nbdiff, m_ReportErrors, epsilon);
     }
 
   char *ref_pszWKT;
@@ -2649,6 +2640,22 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 
   //Check the feature contains only if no differences found
 
+}
+
+TestHelper::TestHelper() :
+    m_ToleranceDiffValue(0),
+    m_Epsilon(0),
+    m_EpsilonBoundaryChecking(1.0e-30),
+    m_ReportErrors(false),
+    m_IgnoreLineOrder(false),
+    m_MaxArea(1024*1024)
+{
+  m_SpecialTokens.push_back(std::pair<std::string,std::string>(
+    std::string("Integer"),std::string("Integer64")));
+}
+
+TestHelper::~TestHelper()
+{
 }
 
 }

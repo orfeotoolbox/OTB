@@ -1936,6 +1936,86 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
 }
 
 
+bool ossimSarSensorModel::overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels)
+{
+  if(theBurstRecords.empty())
+    return false;
+  
+   // Check the single burst record case or < to burstIndUp + 1
+   if(theBurstRecords.size() == 1 || theBurstRecords.size() <= ( burstIndUp + 1))
+     {       
+       return false;
+     }
+
+   BurstRecordType burstUp = theBurstRecords[burstIndUp];
+   BurstRecordType burstLow = theBurstRecords[burstIndUp+1];
+   
+   // Overlap for samples (valid samples)
+   std::pair<unsigned long,unsigned long> samples;
+   samples = std::make_pair(burstUp.startSample, burstUp.endSample);
+
+   if (burstLow.startSample > samples.first)
+     {
+       samples.first = burstLow.startSample;
+     }
+   if (burstLow.endSample < samples.second)
+     {
+       samples.second = burstLow.endSample;
+     }
+   
+   unsigned long currentStartUp_S = 0;
+   unsigned long currentStartLow_S = 0;
+   unsigned long currentStopUp_S = samples.second-samples.first;
+   unsigned long currentStopLow_S = samples.second-samples.first;
+
+   if (inputWithInvalidPixels)
+     {
+       currentStartUp_S = samples.first;
+       currentStartLow_S = samples.first;
+     }
+   else
+     {
+       if (burstUp.startSample < samples.first)
+	 {
+	   currentStartUp_S = samples.first - burstUp.startSample;
+	 }
+       if (burstLow.startSample < samples.first)
+	 {
+	   currentStartLow_S = samples.first - burstLow.startSample;
+	 }
+     }
+
+   currentStopUp_S += currentStartUp_S;
+   currentStopLow_S += currentStartLow_S;
+
+   samplesUp = std::make_pair(currentStartUp_S, currentStopUp_S);
+   samplesLow = std::make_pair(currentStartLow_S, currentStopLow_S);
+
+   // Overlap for lines (valid + overlap IW)
+   DurationType timeOverlapEnd = (burstUp.azimuthStopTime - burstLow.azimuthStartTime);
+   unsigned long overlapLength = timeOverlapEnd/theAzimuthTimeInterval;
+
+   unsigned long lastValidBurstUp = burstUp.endLine - burstUp.startLine;
+   unsigned long firstValidBurstLow = 0;
+   
+   if (inputWithInvalidPixels)
+     {
+       lastValidBurstUp = burstUp.endLine - burstIndUp*theNumberOfLinesPerBurst;
+       firstValidBurstLow = burstLow.startLine - (burstIndUp+1)*theNumberOfLinesPerBurst;
+     }
+
+   linesUp = std::make_pair(lastValidBurstUp - overlapLength, lastValidBurstUp);
+   linesLow = std::make_pair(firstValidBurstLow, firstValidBurstLow + overlapLength);
+
+   return true;
+}
+
+
 bool ossimSarSensorModel::imageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
   std::vector<std::pair<unsigned long,unsigned long> >::const_iterator vit = lines.begin();
