@@ -272,8 +272,8 @@ otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelMaskInput.png
-  ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput.raw.hdr
-  ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput.raw.hdr
+  ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput.raw
+  ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput.raw
   4 0.25
   ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
   ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png
