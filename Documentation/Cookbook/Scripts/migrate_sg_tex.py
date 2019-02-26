@@ -43,6 +43,14 @@ if __name__ == "__main__":
             r"\\input (\w+)\n",
             r"See example \1\n")
 
+    content = sed(content,
+            r"\\begin\{figure\}",
+            r"\\begin{verbatim}\\begin{figure}")
+
+    content = sed(content,
+            r"\\end\{figure\}",
+            r"\\end{figure}\\end{verbatim}")
+
     open(output, "w").write(content)
 
     subprocess.check_call("pandoc -f latex -t rst -o {} {}".format(output, output), shell=True)
