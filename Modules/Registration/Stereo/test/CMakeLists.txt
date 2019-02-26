@@ -268,7 +268,7 @@ otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   ${BASELINE}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
   ${TEMP}/dmTuAdhesionCorrectionMethod_RiskEdges.tif
   otbAdhesionCorrectionFilter
-  ${INPUTDATA}/AdhesionCorrectionFilter_MedianInput.raw.hdr
+  ${INPUTDATA}/AdhesionCorrectionFilter_MedianInput.raw
   ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelMaskInput.png
