@@ -27,6 +27,7 @@
 #include "itkHistogram.h"
 #include "itkListSample.h"
 #include "otbObjectList.h"
+#include "otbObjectListExportListSample.h"
 #include "otbMacro.h"
 #include "itkImageRegionConstIterator.h"
 
