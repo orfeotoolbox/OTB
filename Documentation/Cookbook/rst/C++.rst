@@ -7,4 +7,5 @@ C++ API
     :maxdepth: 2
 
     C++/SystemOverview.rst
+    C++/Iterators.rst
     C++/Examples.rst
