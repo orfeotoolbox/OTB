@@ -25,6 +25,7 @@
 #include "itkDataObject.h"
 #include "otbDataObjectListInterface.h"
 #include "itkObjectFactory.h"
+#include "OTBObjectListExport.h"
 
 namespace otb
 {
@@ -37,7 +38,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TObject>
-class ITK_EXPORT ObjectList : public itk::DataObject , public DataObjectListInterface
+class OTBObjectList_EXPORT_TEMPLATE ObjectList : public itk::DataObject , public DataObjectListInterface
 {
 public:
   /** Standard typedefs */

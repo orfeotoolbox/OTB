@@ -19,4 +19,6 @@
 #
 
 project(OTBObjectList)
+
+set(OTBObjectList_LIBRARIES OTBObjectList)
 otb_module_impl()

@@ -23,11 +23,12 @@
 
 #include "itkDataObject.h"
 #include <boost/noncopyable.hpp>
+#include "OTBObjectListExport.h"
 
 namespace otb
 {
 
-class DataObjectListInterface : private boost::noncopyable
+class OTBObjectList_EXPORT DataObjectListInterface : private boost::noncopyable
 {
 /** \class DataObjectListInterface
  *  \brief This non template class is an interface that wrapp ObjectList
@@ -46,8 +47,8 @@ public:
   virtual std::size_t Size(void) const = 0;
 
 protected:
-  DataObjectListInterface() = default ;
-  virtual ~DataObjectListInterface() = default ;
+  DataObjectListInterface();
+  virtual ~DataObjectListInterface();
 };
 
 } // end of otb namespace
