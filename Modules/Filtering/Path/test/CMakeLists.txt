@@ -170,8 +170,8 @@ otb_add_test(NAME feTvVectorizationPathListFilterImageOutput COMMAND otbPathTest
   ${BASELINE}/feTvVectorizationPathListOutput.png
   ${TEMP}/feTvVectorizationPathListOutput.png
   otbVectorizationPathListFilter
-  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.raw.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
   ${TEMP}/feTvVectorizationPathListOutputIgnored.txt
   ${TEMP}/feTvVectorizationPathListOutput.png
   0.0001
@@ -182,8 +182,8 @@ otb_add_test(NAME feTvVectorizationPathListFilterAsciiOutput COMMAND otbPathTest
   ${BASELINE_FILES}/feTvVectorizationPathListOutput.txt
   ${TEMP}/feTvVectorizationPathListOutput.txt
   otbVectorizationPathListFilter
-  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.raw.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
   ${TEMP}/feTvVectorizationPathListOutput.txt
   ${TEMP}/feTvVectorizationPathListOutputIgnored.png
   0.0005

@@ -158,10 +158,10 @@ otb_add_test(NAME ioTvImageMetadataWriterTest_TIF COMMAND otbImageIOTestDriver
   )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2PNG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG COMMAND otbImageIOTestDriver
@@ -252,10 +252,10 @@ otb_add_test(NAME ioTvImageReaderWriterRgbJPEG2PNG COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2TIFF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
 otb_add_test(NAME ioTvImageReaderWriterRgbPNG2JPEG COMMAND otbImageIOTestDriver
@@ -567,32 +567,32 @@ otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexFloatTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealFloatTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageComplexFloatTest COMMAND otbImageIOTestDriver
   otbImageComplexFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageFileReaderShortLUM2LUM COMMAND otbImageIOTestDriver

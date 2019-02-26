@@ -246,7 +246,7 @@ otb_add_test(NAME feTvLineRatioLinearAmsters1 COMMAND otbEdgeTestDriver
   ${BASELINE}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   ${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   otbLineRatioDetectorLinear
-  ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
+  ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.raw.hdr
   ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.tif
   ${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   1 2)

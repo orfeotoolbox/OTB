@@ -250,15 +250,6 @@ otb_add_test(NAME dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream COM
   4
   )
 
-
-
-
-
-
-
-
-
-
 otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   --compare-n-images ${EPSILON_4} 3
   ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
@@ -272,8 +263,8 @@ otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   ${INPUTDATA}/AdhesionCorrectionFilter_MedianMaskInput.png
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelDisparityInput
   ${INPUTDATA}/AdhesionCorrectionFilter_SubpixelMaskInput.png
-  ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput
-  ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput
+  ${INPUTDATA}/AdhesionCorrectionFilter_CannyRefInput.raw
+  ${INPUTDATA}/AdhesionCorrectionFilter_CannyMedianInput.raw
   4 0.25
   ${TEMP}/dmTuAdhesionCorrectionMethod_Corrected.tif
   ${TEMP}/dmTuAdhesionCorrectionMethod_CorrectedMask.png

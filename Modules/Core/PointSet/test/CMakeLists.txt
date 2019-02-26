@@ -60,7 +60,7 @@ otb_add_test(NAME feTvThresholdImageToPointSet1 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To255.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
   otbThresholdImageToPointSetTest
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To255.txt
   0 255 )
 
@@ -68,7 +68,7 @@ otb_add_test(NAME feTvThresholdImageToPointSet2 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_0To0.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
   otbThresholdImageToPointSetTest
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feThresholdImageToPointSet_Threshold_0To0.txt
   0 0 )
 
@@ -76,7 +76,7 @@ otb_add_test(NAME feTvThresholdImageToPointSet3 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_255To255.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
   otbThresholdImageToPointSetTest
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feThresholdImageToPointSet_Threshold_255To255.txt
   255 255 )
 
@@ -84,7 +84,7 @@ otb_add_test(NAME feTvThresholdImageToPointSet4 COMMAND otbPointSetTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/feThresholdImageToPointSet_Threshold_1To200.txt
   ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
   otbThresholdImageToPointSetTest
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
   1 200 )
 
