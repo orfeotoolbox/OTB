@@ -80,7 +80,7 @@ otb_add_test(NAME feTvHarrisPoupee COMMAND otbCornerTestDriver
 
 otb_add_test(NAME feTvHarrisProduceImageToValidHarrisToPointSet COMMAND otbCornerTestDriver
   otbHarrisImage
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/small_points_harris.tif
   1.0 1.0 1.0)
 
@@ -96,7 +96,7 @@ otb_add_test(NAME feTvHarrisToPointSet2 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_20To90.txt
   ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
   1.0 1.0 1.0 20 90)
 
@@ -104,7 +104,7 @@ otb_add_test(NAME feTvHarrisToPointSet3 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_100To160.txt
   ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
   1.0 1.0 1.0 100 160)
 
@@ -112,7 +112,7 @@ otb_add_test(NAME feTvHarrisToPointSet1 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_2To255.txt
   ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
   1.0 1.0 1.0 2.0 255.0)
 
