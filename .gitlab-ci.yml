@@ -12,8 +12,6 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
-  # variables:
-  #   CI_DEBUG_TRACE: "true"
 
 native-build:
   extends: .general

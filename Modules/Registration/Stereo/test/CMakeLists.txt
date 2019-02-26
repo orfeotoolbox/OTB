@@ -250,15 +250,6 @@ otb_add_test(NAME dmTvMulti3DMapToDEMFilterStadiumMeanMultiThreadMultiStream COM
   4
   )
 
-
-
-
-
-
-
-
-
-
 otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   --compare-n-images ${EPSILON_4} 3
   ${BASELINE}/dmTuAdhesionCorrectionMethod_Corrected.tif
