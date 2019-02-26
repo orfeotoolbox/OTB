@@ -28,6 +28,7 @@
 #include "itkImageRegion.h"
 #include "itkSmartPointer.h"
 #include "itkIndex.h"
+#include "itkOffset.h"
 #include "itkSize.h"
 #include "itkPoint.h"
 #include "itkVector.h"
@@ -48,6 +49,7 @@ extern template class SmartPointer<DataObject>;
 extern template class SmartPointer<ImageBase<2> >;
 extern template class Index<2>;
 extern template class Size<2>;
+extern template class Offset<2>;
 extern template class FixedArray<double,2>;
 extern template class Point<double,2>;
 extern template class Vector<double,2>;

@@ -31,6 +31,7 @@ template class OTBITK_EXPORT_EXPLICIT_TEMPLATE SmartPointer<DataObject>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE SmartPointer<ImageBase<2> >;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Index<2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Size<2>;
+template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Offset<2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE FixedArray<double,2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Point<double,2>;
 template class OTBITK_EXPORT_EXPLICIT_TEMPLATE Vector<double,2>;
