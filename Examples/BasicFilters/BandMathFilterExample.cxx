@@ -125,7 +125,7 @@ int main(int argc, char* argv[])
   filter->SetExpression("if((b4-b3)/(b4+b3) > 0.4, 255, 0)");
 #endif
 
-  // We can now plug the pipeline and run it.
+  // We can now run the pipeline
   writer->Update();
 
   // The muParser library also provides the possibility to extend existing built-in functions. For example,
