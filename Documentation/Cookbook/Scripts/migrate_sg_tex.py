@@ -31,6 +31,18 @@ if __name__ == "__main__":
             r"\\code\{(.*?)\}",
             r"\\texttt{\1}")
 
+    content = sed(content,
+            r"cmakecode",
+            r"verbatim")
+
+    content = sed(content,
+            r"\\input\{(.*?)\}",
+            r"See example \1")
+
+    content = sed(content,
+            r"\\input (\w+)\n",
+            r"See example \1\n")
+
     open(output, "w").write(content)
 
     subprocess.check_call("pandoc -f latex -t rst -o {} {}".format(output, output), shell=True)
