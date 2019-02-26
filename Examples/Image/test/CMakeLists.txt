@@ -18,3 +18,15 @@
 # limitations under the License.
 #
 
+set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Image)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
+
+# ------- Image5Test----------
+
+otb_add_test(NAME diTeImage5Test COMMAND ${OTB_TEST_DRIVER}
+  --compare-n-images ${NOTOL} 1
+    ${BASELINE}/Image5.png
+    ${TEMP}/Image5.png
+  Execute $<TARGET_FILE:Image5>
+    ${TEMP}/Image5.png
+)

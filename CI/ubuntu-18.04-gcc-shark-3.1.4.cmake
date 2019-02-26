@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
-add_subdirectory(Containers)
-add_subdirectory(Image)
+# Configuration options for ubuntu-18.04-gcc-shark-3.1.4
 
+set(site_option
+"opencv_INCLUDE_DIR:PATH=/usr/include")

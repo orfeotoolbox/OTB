@@ -20,9 +20,6 @@
 
 project(ProjectionsExamples)
 
-add_executable(CoordinateToNameExample CoordinateToNameExample.cxx)
-target_link_libraries(CoordinateToNameExample ${OTB_LIBRARIES})
-
 add_executable(EstimateRPCSensorModelExample EstimateRPCSensorModelExample.cxx)
 target_link_libraries(EstimateRPCSensorModelExample ${OTB_LIBRARIES})
 
