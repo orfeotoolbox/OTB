@@ -285,8 +285,8 @@ otb_add_test(NAME dmTvAdhesionCorrectionFilter COMMAND otbStereoTestDriver
   #${BASELINE}/feTvStereoSensorModelToElevationFilterOutput.tif
   #${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
   #otbStereoSensorModelToElevationMapFilter
-  #${EXAMPLEDATA}/sensor_stereo_left.tif
-  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${INPUTDATA}/sensor_stereo_left.tif
+  #${INPUTDATA}/sensor_stereo_right.tif
   #${TEMP}/feTvStereoSensorModelToElevationFilterOutput.tif
   #${INPUTDATA}/DEM/srtm_directory/
   #${INPUTDATA}/DEM/egm96.grd
@@ -303,8 +303,8 @@ otb_add_test(NAME dmTvStereorectificationDisplacementFieldSource COMMAND otbSter
   ${BASELINE}/feTvStereorectificationDeformationFieldSourceOutput2.tif
   ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
   otbStereorectificationDisplacementFieldSource
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
-  ${EXAMPLEDATA}/sensor_stereo_right.tif
+  ${INPUTDATA}/sensor_stereo_left.tif
+  ${INPUTDATA}/sensor_stereo_right.tif
   ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput1.tif
   ${TEMP}/feTvStereorectificationDisplacementFieldSourceOutput2.tif
   300

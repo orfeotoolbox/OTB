@@ -115,7 +115,7 @@ private:
  *  \brief Convert a raw value into a reflectance value
  *
  *  Transform a classical image into the reflectance image. For this it uses the functor ImageToReflectanceFunctor calling for each component of each pixel.
- *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can
+ *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set as well as the solar distance or the user can
  *  give the day and the month of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
  *  To note that in the case, 6S gives the square of the distances ratio.
  *
@@ -226,13 +226,27 @@ public:
     this->Modified();
   }
 
+  /** Set the solar distance. */
+  void SetSolarDistance(double value)
+  {
+    m_SolarDistance = value;
+    m_IsSetSolarDistance = true;
+    this->Modified();
+  }
+  /** Give the solar distance. */
+  itkGetConstReferenceMacro(SolarDistance, double);
+  /** Set the IsSetSolarDistance boolean. */
+  itkSetMacro(IsSetSolarDistance, bool);
+  /** Give the IsSetSolarDistance boolean. */
+  itkGetConstReferenceMacro(IsSetSolarDistance, bool);
+
   /** Set the acquisition day. */
   itkSetClampMacro(Day, int, 1, 31);
   /** Get the acquisition day. */
   itkGetConstReferenceMacro(Day, int);
   /** Set the acquisition month. */
   itkSetClampMacro(Month, int, 1, 12);
-  /** Set the  acquisition month. */
+  /** Get the  acquisition month. */
   itkGetConstReferenceMacro(Month, int);
 
 protected:
@@ -243,7 +257,9 @@ protected:
     m_UseClamp(true),
     m_IsSetFluxNormalizationCoefficient(false),
     m_Day(0),
-    m_Month(0)
+    m_Month(0),
+    m_SolarDistance(1.0),
+    m_IsSetSolarDistance(false)
     {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
@@ -268,13 +284,13 @@ protected:
       {
       m_Beta = imageMetadataInterface->GetPhysicalBias();
       }
-
-    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
+      
+    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
       {
       m_Day = imageMetadataInterface->GetDay();
       }
 
-    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
+    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
       {
       m_Month = imageMetadataInterface->GetMonth();
       }
@@ -311,24 +327,22 @@ protected:
       {
       FunctorType functor;
       double      coefTemp = 0.;
-      if (!m_IsSetFluxNormalizationCoefficient)
-        {
-        if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
-          {
-          double dsol = VarSol::GetVarSol(m_Day, m_Month);
-          coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * dsol;
-          }
-        else
-          {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
-          }
-        }
-      else
-        {
+
+      if(m_IsSetFluxNormalizationCoefficient){
         coefTemp =
           std::cos(m_ZenithalSolarAngle *
                   CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
-        }
+      }
+      else if(m_IsSetSolarDistance){
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) / (m_SolarDistance * m_SolarDistance);
+      }
+      else if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13){
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day, m_Month);
+      }
+      else{
+        itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
+      }
+
       functor.SetIlluminationCorrectionCoefficient(1. / coefTemp);
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
@@ -357,6 +371,11 @@ private:
   int m_Day;
   /** Acquisition Month*/
   int m_Month;
+  /** Solar distance. */
+  double m_SolarDistance;
+  /** Used to know if the user has set a value for the SolarDistance parameter
+   * or if the class has to compute it */
+  bool m_IsSetSolarDistance;
 };
 
 } // end namespace otb

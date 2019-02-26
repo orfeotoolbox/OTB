@@ -35,9 +35,6 @@ target_link_libraries(Image4 ${OTB_LIBRARIES})
 add_executable(Image5 Image5.cxx )
 target_link_libraries(Image5 ${OTB_LIBRARIES})
 
-add_executable(Image6 Image6.cxx )
-target_link_libraries(Image6 ${OTB_LIBRARIES} )
-
 add_executable(VectorImage VectorImage.cxx )
 target_link_libraries(VectorImage ${OTB_LIBRARIES})
 

@@ -360,15 +360,6 @@ OGRLayerStreamStitchingFilter<TInputImage>
         }
    } //end for y
 
-   if(m_OGRLayer.ogr().TestCapability("Transactions"))
-     {
-     const OGRErr errCommitY = m_OGRLayer.ogr().CommitTransaction();
-
-     if (errCommitY != OGRERR_NONE)
-       {
-       itkWarningMacro(<< "Unable to commit transaction for OGR layer " << m_OGRLayer.ogr().GetName() << ". Gdal error code " << errCommitY << "." << std::endl);
-       }
-     }
 }
 template<class TImage>
 void
