@@ -92,7 +92,7 @@ otb_add_test(NAME raTvAVI_MultiChannelRAndGAndNIRVegetationIndexImageFilter COMM
   )
 
 otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   otbNDVIDataNodeFeatureFunction

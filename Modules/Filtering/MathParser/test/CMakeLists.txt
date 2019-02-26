@@ -62,7 +62,7 @@ otb_add_test(NAME bfTvParserConditionDataNodeFeatureFunction_Line_NDVI COMMAND o
   )
 
 otb_add_test(NAME bfTvParserConditionDataNodeFeatureFunction_Polygon_NDVI COMMAND otbMathParserTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvParserConditionDataNodeFeatureFunction_Polygon_NDVI.shp
   otbParserConditionDataNodeFeatureFunction
