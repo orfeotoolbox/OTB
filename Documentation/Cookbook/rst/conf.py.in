@@ -284,6 +284,6 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 extlinks = {
-    'doxygen-otb': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
+    'doxygen': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
     'doxygen-itk': ("http://www.itk.org/Doxygen/html/classitk_1_1%s.html", "itk::")
 }

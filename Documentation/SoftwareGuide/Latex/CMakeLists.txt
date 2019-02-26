@@ -121,7 +121,6 @@ SET( Tex_SRCS
   SoftwareProcess.tex
   SpatialObjects.tex
   Statistics.tex
-  SystemOverview.tex
   Visualization.tex
   Watersheds.tex
   Fusion.tex
