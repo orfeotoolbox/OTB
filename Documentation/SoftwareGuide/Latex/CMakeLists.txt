@@ -127,7 +127,6 @@ SET( Tex_SRCS
   Radiometry.tex
   FeatureExtraction.tex
   ObjectBasedImageAnalysis.tex
-  Hyperspectral.tex
 )
 
 
