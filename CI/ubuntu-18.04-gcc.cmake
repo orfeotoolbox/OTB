@@ -21,4 +21,5 @@
 # Configuration options for ubuntu-18.04-gcc
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include")
+"opencv_INCLUDE_DIR:PATH=/usr/include
+OTB_USE_SHARK:BOOL=OFF")
