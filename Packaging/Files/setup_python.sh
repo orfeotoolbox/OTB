@@ -60,18 +60,21 @@ fi
 python_version_check
 
 if [ ! $CUSTOM_PYTHON ]
+  then
   if [ ! "$python_major_version" -eq 3 ] && [ ! "$python_minor_version" -eq 5 ]
     then
     python_check_failed
   fi
 else # case wher user provides an OTB_PYTHON_EXE
   if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 5 ]
+    then
     printf %s\\n "*****Warning******"
     printf %s\\n "OTB python bindings normally require python3.5."
     printf %s\\n "The version of OTB_PYTHON_EXE ($OTB_PYTHON_EXE) is \
                   $python_version."
     printf %s\\n "This case is undefined unless you are sure the packages were \
                   build with this version of python."
+  fi
 fi
 
 python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
