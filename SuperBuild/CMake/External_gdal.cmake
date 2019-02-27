@@ -109,7 +109,8 @@ if(UNIX)
 
   # For now gdal is built if Superbuild has find python... And only on UNIX 
   # That might be a problem
-  if ( OTB_WRAP_PYTHON )
+  # User will not be able to override this...
+  if ( OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
     list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
   endif()
 

@@ -100,10 +100,21 @@ reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
+# Find python stuff
+# Version 3 is prefered before 2
+set (Python_ADDITIONAL_VERSIONS "3;2")
 if ( OTB_WRAP_PYTHON )
-  find_python( "REQUIRED" )
-else()
-  find_python( "QUIET" )
+  find_package( PythonInterp REQUIRED )
+  if (  ${PYTHON_VERSION_MAJOR} EQUAL 2 )
+      message (WARNING "Python3 not found. There is no longer support of \
+      wrapping in python2 in OTB, but it can still be used.")
+  endif()
+  find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} REQUIRED )
+else() 
+  # If NOT OTB_WRAP_PYTHON we still need python for testing but it is okay if 
+  # the find package fail
+  find_package ( PythonInterp QUIET )
+  find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} QUIET )
 endif()
 
 #-----------------------------------------------------------------------------
