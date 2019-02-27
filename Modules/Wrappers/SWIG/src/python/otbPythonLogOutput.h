@@ -41,7 +41,7 @@ public:
   itkNewMacro(PythonLogOutput);
 
   /** Set the callback method */
-  void SetCallback(CallbackType const & callback)
+  void SetCallback(CallbackType * callback)
     {
     m_Callback = callback;
     this->Modified();
@@ -69,7 +69,7 @@ protected:
   virtual void PrintSelf(std::ostream & os, itk::Indent indent) const override;
 
 private:
-  CallbackType m_Callback; 
+  CallbackType * m_Callback; 
 };
 
 } // namespace otb

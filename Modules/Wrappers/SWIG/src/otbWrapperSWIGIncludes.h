@@ -26,6 +26,9 @@
 #include "otbWrapperDocExampleStructure.h"
 #include "otbWrapperMetaDataHelper.h"
 
+#include "otbPythonLogOutput.h"
+#include "otbLogger.h"
+
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 typedef otb::Wrapper::ApplicationRegistry                Registry;
@@ -38,5 +41,10 @@ typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParam
 typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
+
+typedef otb::Logger                                      Logger;
+typedef otb::LogOutputCallback                           LogOutputCallback;
+typedef otb::PythonLogOutput                             PythonLogOutput;
+typedef otb::PythonLogOutput::Pointer                    PythonLogOutput_Pointer;
 
 #endif

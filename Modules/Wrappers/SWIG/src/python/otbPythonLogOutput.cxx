@@ -24,12 +24,12 @@ namespace otb
 {
 void PythonLogOutput::Flush()
 {
-  m_Callback.Flush();
+  m_Callback->Flush();
 }
 
 void PythonLogOutput::Write(std::string const & content)
 {
-  m_Callback.Call(content);
+  m_Callback->Call(content);
 }
 
 void PythonLogOutput::PrintSelf(std::ostream & os, itk::Indent indent) const

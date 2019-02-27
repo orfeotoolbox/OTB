@@ -30,6 +30,13 @@
 
 %include "otbLogOutputCallback.h"
 
+class itkLogOutput : public itkObject
+{
+protected:
+  itkLogOutput();
+  ~itkLogOutput();
+};
+
 %pythoncode
   {
   class PythonLogOutputCallback(LogOutputCallback):
@@ -40,4 +47,20 @@
       def Flush(self):
           sys.stdout.flush()
   }
+
+class PythonLogOutput : public itkLogOutput
+{
+public:
+  static PythonLogOutput_Pointer New();
+  virtual void Delete();
+  void SetCallback(otb::LogOutputCallback* callback);
+  virtual void Write(std::string const & content);
+
+protected:
+  PythonLogOutput();
+  //~PythonLogOutput();
+};
+DECLARE_REF_COUNT_CLASS( PythonLogOutput )
+
+
 #endif

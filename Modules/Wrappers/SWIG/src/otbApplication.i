@@ -208,6 +208,15 @@ public:
 %include "otbPythonLogOutput.i"
 #endif
 
+class Logger
+{
+public:
+  virtual void AddLogOutput(itkLogOutput *output);
+protected:
+  Logger();
+  virtual ~Logger();
+};
+
 class Application: public itkObject
 {
 public:
@@ -221,6 +230,8 @@ public:
   void UpdateParameters();
   int Execute();
   int ExecuteAndWriteOutput();
+
+  Logger* GetLogger();
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
