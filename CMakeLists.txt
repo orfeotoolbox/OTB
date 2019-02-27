@@ -106,7 +106,6 @@ find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
   HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/Data
   )
-message("OTB_DATA_ROOT=${OTB_DATA_ROOT}")
 #mark_as_advanced(OTB_DATA_ROOT)
 
 if(OTB_DATA_ROOT)
