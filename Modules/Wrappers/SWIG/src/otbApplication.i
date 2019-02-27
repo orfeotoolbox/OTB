@@ -203,6 +203,11 @@ public:
 
 } // end of namespace otb
 
+#if SWIGPYTHON
+
+%include "otbPythonLogOutput.i"
+#endif
+
 class Application: public itkObject
 {
 public:
