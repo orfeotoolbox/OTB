@@ -9,4 +9,5 @@ C++ API
     C++/SystemOverview.rst
     C++/Iterators.rst
     C++/Filters.rst
+    C++/StreamingAndThreading.rst
     C++/Examples.rst
