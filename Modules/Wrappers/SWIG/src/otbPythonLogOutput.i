@@ -60,7 +60,16 @@ protected:
   PythonLogOutput();
   //~PythonLogOutput();
 };
+
 DECLARE_REF_COUNT_CLASS( PythonLogOutput )
 
+class Logger
+{
+public:
+  virtual void AddLogOutput(itkLogOutput *output);
+protected:
+  Logger();
+  virtual ~Logger();
+};
 
 #endif

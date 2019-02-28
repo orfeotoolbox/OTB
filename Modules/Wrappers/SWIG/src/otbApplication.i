@@ -208,14 +208,6 @@ public:
 %include "otbPythonLogOutput.i"
 #endif
 
-class Logger
-{
-public:
-  virtual void AddLogOutput(itkLogOutput *output);
-protected:
-  Logger();
-  virtual ~Logger();
-};
 
 class Application: public itkObject
 {
