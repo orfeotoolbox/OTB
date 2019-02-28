@@ -109,7 +109,15 @@ if ( OTB_WRAP_PYTHON )
       message (WARNING "Python3 not found. There is no longer support of \
       wrapping in python2 in OTB, but it can still be used.")
   endif()
-  find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} REQUIRED )
+  # Windows lib has two libs since python 3
+  # one is python3.lib the other is python35.lib 
+  # we want python35.lib so we need to force it.
+  if ( (NOT UNIX) AND ${PYTHON_VERSION_MAJOR} EQUAL 3 )
+    unset( Python_ADDITIONAL_VERSIONS )
+    find_package ( PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} REQUIRED )
+  else()
+    find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} REQUIRED )
+  endif()
 else() 
   # If NOT OTB_WRAP_PYTHON we still need python for testing but it is okay if 
   # the find package fail
