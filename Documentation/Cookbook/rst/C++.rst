@@ -12,4 +12,5 @@ C++ API
     C++/StreamingAndThreading.rst
     C++/PersistentFilters.rst
     C++/WriteAnApplication.rst
+    C++/AddingNewModules.rst
     C++/Examples.rst
