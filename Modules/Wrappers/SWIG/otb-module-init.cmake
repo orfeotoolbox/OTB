@@ -39,8 +39,11 @@ macro(check_PIC_flag Language)
     endif()
   endif()
 endmacro()
+# this macro should be removed
 
-# thi macro should be removed
+#
+# Python SWIG configuration
+#
 if ( OTB_WRAP_PYTHON )
   check_PIC_flag ( Python )
   find_package(Numpy)
