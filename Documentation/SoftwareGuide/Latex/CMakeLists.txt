@@ -105,7 +105,6 @@ ${SoftwareGuide_BINARY_DIR}/SoftwareGuideConfiguration.tex
 )
 
 SET( Tex_SRCS
-  Applications.tex
   DataRepresentation.tex
   Filtering.tex
   GUI.tex

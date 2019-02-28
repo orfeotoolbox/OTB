@@ -11,4 +11,5 @@ C++ API
     C++/Filters.rst
     C++/StreamingAndThreading.rst
     C++/PersistentFilters.rst
+    C++/WriteAnApplication.rst
     C++/Examples.rst
