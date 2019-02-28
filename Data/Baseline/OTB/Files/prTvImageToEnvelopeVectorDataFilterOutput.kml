@@ -4,7 +4,7 @@
 <Folder><name></name>
   <Placemark>
 	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
-      <Polygon><outerBoundaryIs><LinearRing><coordinates>1.354034056000595,43.653848716102992 1.572993159147734,43.654145483495881 1.572781270368807,43.478416083108193 1.355853217070687,43.478151523254667 1.354034056000595,43.653848716102992</coordinates></LinearRing></outerBoundaryIs></Polygon>
+      <Polygon><outerBoundaryIs><LinearRing><coordinates>1.38626074707108,43.6385736017817 1.38943051711762,43.6385805957877 1.38944519541932,43.6361498001676 1.38627585945403,43.636142817532 1.38626074707108,43.6385736017817</coordinates></LinearRing></outerBoundaryIs></Polygon>
   </Placemark>
 </Folder>
 </Document></kml>
