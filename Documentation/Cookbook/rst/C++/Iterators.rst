@@ -59,7 +59,6 @@ called the *iteration region*, is a rectilinear area in which iteration
 is constrained. The iteration region must be wholly contained within the
 image. More specifically, a valid iteration region is any subregion of
 the image within the current ``BufferedRegion``.
-Section [sec:ImageSection] for more information on image regions.
 
 There is a const and a non-const version of most ITK image iterators. A
 non-const iterator cannot be instantiated on a non-const image pointer.
@@ -132,13 +131,13 @@ random access operators may not be optimized for speed and require some
 knowledge of the dimensionality of the image and the extent of the
 iteration region to use properly.
 
--  ``operator+=( OffsetType )`` Moves the iterator to the pixel
+-  ``operator+=(OffsetType)`` Moves the iterator to the pixel
    position at the current index plus specified :doxygen-itk:`Offset`.
 
--  ``operator-=( OffsetType )`` Moves the iterator to the pixel
+-  ``operator-=(OffsetType)`` Moves the iterator to the pixel
    position at the current index minus specified Offset.
 
--  ``SetPosition( IndexType )`` Moves the iterator to the given
+-  ``SetPosition(IndexType)`` Moves the iterator to the given
    :doxygen-itk:`Index` position.
 
 The ``SetPosition()`` method may be extremely slow for more complicated
@@ -182,7 +181,7 @@ pixel values.
 -  ``PixelType Get()`` Returns the value of the pixel at the
    iterator position.
 
--  ``void Set( PixelType )`` Sets the value of the pixel at the
+-  ``void Set(PixelType)`` Sets the value of the pixel at the
    iterator position. Not defined for const versions of iterators.
 
 The ``Get()`` and ``Set()`` methods are inlined and optimized for speed
@@ -190,11 +189,11 @@ so that their use is equivalent to dereferencing the image buffer
 directly. There are a few common cases, however, where using ``Get()``
 and ``Set()`` do incur a penalty. Consider the following code, which
 fetches, modifies, and then writes a value back to the same pixel
-location.
+location:
 
-::
+.. code-block:: cpp
 
-      it.Set( it.Get() + 1 );
+      it.Set(it.Get() + 1);
 
 As written, this code requires one more memory dereference than is
 necessary. Some iterators define a third data access method that avoids
@@ -205,9 +204,9 @@ this penalty.
 
 The ``Value()`` method can be used as either an lval or an rval in an
 expression. It has all the properties of ``operator*``. The ``Value()``
-method makes it possible to rewrite our example code more efficiently.
+method makes it possible to rewrite our example code more efficiently:
 
-::
+.. code-block:: cpp
 
       it.Value()++;
 
@@ -224,15 +223,15 @@ simple example to do pixel-wise operations on an image. The following
 code calculates the squares of all values in an input image and writes
 them to an output image.
 
-::
+.. code-block:: cpp
 
-      ConstIteratorType in( inputImage,   inputImage->GetRequestedRegion() );
-      IteratorType out( outputImage, inputImage->GetRequestedRegion() );
+    ConstIteratorType in(inputImage, inputImage->GetRequestedRegion());
+    IteratorType      out(outputImage, inputImage->GetRequestedRegion());
 
-      for ( in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out )
-        {
-        out.Set( in.Get() * in.Get() );
-        }
+    for (in.GoToBegin(), out.GoToBegin(); !in.IsAtEnd(); ++in, ++out)
+    {
+      out.Set(in.Get() * in.Get());
+    }
 
 Notice that both the input and output iterators are initialized over the
 same region, the ``RequestedRegion`` of ``inputImage``. This is good
@@ -248,16 +247,16 @@ iteration region is not a valid position and we can only test whether
 the iterator is strictly *equal* to its beginning position. It is often
 more convenient to write reverse iteration in a ``while`` loop.
 
-::
+.. code-block:: cpp
 
-      in.GoToEnd();
-      out.GoToEnd();
-      while ( ! in.IsAtBegin() )
-        {
-        --in;
-        --out;
-        out.Set( in.Get() * in.Get() );
-        }
+    in.GoToEnd();
+    out.GoToEnd();
+    while (!in.IsAtBegin())
+    {
+      --in;
+      --out;
+      out.Set(in.Get() * in.Get());
+    }
 
 Image Iterators
 ---------------
@@ -270,20 +269,11 @@ this section are specializations of ImageRegionIterator that are
 designed make common image processing tasks more efficient or easier to
 implement.
 
-ImageRegionIterator
-~~~~~~~~~~~~~~~~~~~
+* ImageRegionIterator: See example :ref:`ImageRegionIterator.cxx`
 
-See example ImageRegionIterator.tex
+* ImageRegionIteratorWithIndex: See example :ref:`ImageRegionIteratorWithIndex.cxx`
 
-ImageRegionIteratorWithIndex
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See example ImageRegionIteratorWithIndex.tex
-
-ImageLinearIteratorWithIndex
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-See example ImageLinearIteratorWithIndex.tex
+* ImageLinearIteratorWithIndex: See example :ref:`ImageLinearIteratorWithIndex.cxx`
 
 Neighborhood Iterators
 ----------------------
@@ -351,6 +341,7 @@ useful information about the iterator and its underlying image.
 
 .. figure:: /Art/C++/NeighborhoodIteratorFig2.png
     :align: center
+    :figwidth: 75%
 
     Several possible 2D neighborhood iterator shapes are shown along with their
     radii and sizes. A neighborhood pixel can be dereferenced by its integer
@@ -556,30 +547,15 @@ version, :doxygen-itk:`ConstNeighborhoodIterator`, it implements the
 complete API described above. This section provides several examples to
 illustrate the use of NeighborhoodIterator.
 
-Basic neighborhood techniques: edge detection
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Basic neighborhood techniques: edge detection. See example :ref:`NeighborhoodIterators1.cxx`
 
-See example NeighborhoodIterators1.tex
+* Convolution filtering: Sobel operator. See example :ref:`NeighborhoodIterators2.cxx`
 
-Convolution filtering: Sobel operator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Optimizing iteration speed. See example :ref:`NeighborhoodIterators3.cxx`
 
-See example NeighborhoodIterators2.tex
+* Separable convolution: Gaussian filtering. See example :ref:`NeighborhoodIterators4.cxx`
 
-Optimizing iteration speed
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See example NeighborhoodIterators3.tex
-
-Separable convolution: Gaussian filtering
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See example NeighborhoodIterators4.tex
-
-Random access iteration
-^^^^^^^^^^^^^^^^^^^^^^^
-
-See example NeighborhoodIterators6.tex
+* Random access iteration: See example :ref:`NeighborhoodIterators6.cxx`
 
 ShapedNeighborhoodIterator
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -644,8 +620,5 @@ best described by example. We will use the ShapedNeighborhoodIterator to
 implement some binary image morphology algorithms.
 The examples that follow implement erosion and dilation.
 
-Shaped neighborhoods: morphological operations
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-See example ShapedNeighborhoodIterators1.tex See example
-ShapedNeighborhoodIterators2.tex
+For shaped neighborhoods morphological operations, see also examples
+:ref:`ShapedNeighborhoodIterators1.cxx` and :ref:`ShapedNeighborhoodIterators2.cxx`.

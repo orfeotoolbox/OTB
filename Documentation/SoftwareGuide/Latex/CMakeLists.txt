@@ -112,7 +112,6 @@ SET( Tex_SRCS
   ImageInterpolators.tex
   Infrastructure.tex
   IO.tex
-  Iterators.tex
   Numerics.tex
   Registration.tex
   StereoReconstruction.tex
