@@ -20,35 +20,50 @@
 
 #include "otbImageExportDynamicCastInDebugMode.h"
 
-template otb::Image<unsigned char, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned char, 2u>*, itk::DataObject*>(itk::DataObject*);
-template otb::Image<unsigned int, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned int, 2u>*, itk::DataObject*>(itk::DataObject*);
-template otb::Image<unsigned short, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned short, 2u>*, itk::DataObject*>(itk::DataObject*);
-template otb::Image<float, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<float, 2u>*, itk::DataObject*>(itk::DataObject*);
-template otb::Image<double, 2u>* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<double, 2u>*, itk::DataObject*>(itk::DataObject*);
+template otb::Image<unsigned char, 2u>*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned char, 2u>*, itk::DataObject*>(itk::DataObject*);
+template otb::Image<unsigned int, 2u>*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned int, 2u>*, itk::DataObject*>(itk::DataObject*);
+template otb::Image<unsigned short, 2u>*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned short, 2u>*, itk::DataObject*>(itk::DataObject*);
+template otb::Image<float, 2u>*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<float, 2u>*, itk::DataObject*>(itk::DataObject*);
+template otb::Image<double, 2u>*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<double, 2u>*, itk::DataObject*>(itk::DataObject*);
 
-template otb::Image<unsigned char, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned char, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<unsigned int, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<int, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<unsigned short, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<unsigned short, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<float, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<float, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<double, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<double, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<unsigned char, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned char, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<unsigned int, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<int, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<int, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<unsigned short, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<unsigned short, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<float, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<float, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<double, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<double, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
 
-template otb::Image<std::complex<short>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<std::complex<short>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<std::complex<int>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<std::complex<int>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<std::complex<float>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<std::complex<float>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
-template otb::Image<std::complex<double>, 2u> const* OTBImageExport_EXPORT_EXPLICIT_TEMPLATE
-  itkDynamicCastInDebugMode<otb::Image<std::complex<double>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<std::complex<short>, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<std::complex<short>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<std::complex<int>, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<std::complex<int>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<std::complex<float>, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<std::complex<float>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
+template otb::Image<std::complex<double>, 2u> const*
+  OTBImageExport_EXPORT_EXPLICIT_TEMPLATE itkDynamicCastInDebugMode<
+    otb::Image<std::complex<double>, 2u> const*, itk::DataObject const*>(itk::DataObject const*);
