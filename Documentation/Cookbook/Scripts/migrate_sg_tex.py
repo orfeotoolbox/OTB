@@ -36,6 +36,10 @@ if __name__ == "__main__":
             r"verbatim")
 
     content = sed(content,
+            r"cppcode",
+            r"verbatim")
+
+    content = sed(content,
             r"\\input\{(.*?)\}",
             r"See example :ref:`\1`")
 

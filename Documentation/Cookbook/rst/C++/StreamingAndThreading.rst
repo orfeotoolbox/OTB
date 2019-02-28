@@ -1,3 +1,5 @@
+.. _StreamingAndThreading:
+
 Streaming and Threading
 =======================
 

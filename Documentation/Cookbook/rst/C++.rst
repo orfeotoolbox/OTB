@@ -10,4 +10,5 @@ C++ API
     C++/Iterators.rst
     C++/Filters.rst
     C++/StreamingAndThreading.rst
+    C++/PersistentFilters.rst
     C++/Examples.rst
