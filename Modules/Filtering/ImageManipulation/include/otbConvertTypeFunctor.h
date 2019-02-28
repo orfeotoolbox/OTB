@@ -38,30 +38,30 @@ namespace Functor
 
 // Fill-in section
 template <class PixelType , class InternalPixelType = PixelType,
-          std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 0 >
+          std::enable_if_t < std::is_arithmetic < InternalPixelType > ::value  , int > = 0 >
 void OTBImageManipulation_EXPORT_TEMPLATE FillIn( unsigned int i ,
              PixelType const & pix ,
              std::vector < double > & vPix )
 {
-  vPix.push_back( DefaultConvertPixelTraits < InternalPixelType > ::
+  vPix.push_back( DefaultConvertPixelTraits < PixelType > ::
                   GetNthComponent( i , pix ) );
 }
 
 template <class PixelType, class InternalPixelType = PixelType,
-          std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 0 >
+          std::enable_if_t < boost::is_complex < InternalPixelType > :: value , int > = 0 >
 void OTBImageManipulation_EXPORT_TEMPLATE FillIn( unsigned int i ,
              PixelType const & pix ,
              std::vector < double > & vPix )
 {
-  PixelType comp = DefaultConvertPixelTraits < InternalPixelType > ::
+  InternalPixelType comp = DefaultConvertPixelTraits < PixelType > ::
     GetNthComponent( i , pix );
   vPix.push_back( static_cast < double > ( real( comp ) ) );
   vPix.push_back( static_cast < double > ( imag( comp ) ) );
 }
 
 template <class PixelType , class InternalPixelType = PixelType,
-          std::enable_if_t <  !( boost::is_complex < PixelType > :: value 
-                                 || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
+          std::enable_if_t <  !( boost::is_complex < InternalPixelType > :: value 
+                                 || std::is_arithmetic < InternalPixelType > ::value ) , int > = 0 > 
 void OTBImageManipulation_EXPORT_TEMPLATE FillIn( unsigned int i ,
              PixelType const & pix ,
              std::vector < double > & vPix )
@@ -94,29 +94,29 @@ extern template void OTBImageManipulation_EXPORT_TEMPLATE FillIn<std::complex<do
 
 // Fill-out section
 template <class PixelType , class InternalPixelType = PixelType,
-          std::enable_if_t < std::is_arithmetic < PixelType > ::value  , int > = 0 >
+          std::enable_if_t < std::is_arithmetic < InternalPixelType > ::value  , int > = 0 >
 void OTBImageManipulation_EXPORT_TEMPLATE FillOut( unsigned int i ,
               PixelType & pix ,
               std::vector < double > & vPix )
 {
-  DefaultConvertPixelTraits < InternalPixelType > ::
+  DefaultConvertPixelTraits < PixelType > ::
     SetNthComponent( i , pix , vPix[i] );
 }
 
 template <class PixelType , class InternalPixelType = PixelType,
-          std::enable_if_t < boost::is_complex < PixelType > :: value , int > = 0 >
+          std::enable_if_t < boost::is_complex < InternalPixelType > :: value , int > = 0 >
 void OTBImageManipulation_EXPORT_TEMPLATE FillOut( unsigned int i ,
               PixelType & pix ,
               std::vector < double > & vPix )
 {
-  DefaultConvertPixelTraits < InternalPixelType > ::
+  DefaultConvertPixelTraits < PixelType > ::
     SetNthComponent( i , pix , 
-                     PixelType ( vPix[ 2 * i] , vPix[ 2 * i + 1] ) );
+                     InternalPixelType ( vPix[ 2 * i] , vPix[ 2 * i + 1] ) );
 }
 
 template <class PixelType , class InternalPixelType = PixelType,
-          std::enable_if_t <  !( boost::is_complex < PixelType > :: value 
-                                 || std::is_arithmetic < PixelType > ::value ) , int > = 0 > 
+          std::enable_if_t <  !( boost::is_complex < InternalPixelType > :: value 
+                                 || std::is_arithmetic < InternalPixelType > ::value ) , int > = 0 > 
 void OTBImageManipulation_EXPORT_TEMPLATE FillOut( unsigned int i ,
               PixelType & pix ,
               std::vector < double > & vPix )
