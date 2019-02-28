@@ -8,4 +8,5 @@ C++ API
 
     C++/SystemOverview.rst
     C++/Iterators.rst
+    C++/Filters.rst
     C++/Examples.rst

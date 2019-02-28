@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
     content = sed(content,
             r"\\input\{(.*?)\}",
-            r"See example \1")
+            r"See example :ref:`\1`")
 
     content = sed(content,
             r"\\input (\w+)\n",
