@@ -115,4 +115,3 @@ otb_add_test(NAME feTvHarrisToPointSet1 COMMAND otbCornerTestDriver
   ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
   1.0 1.0 1.0 2.0 255.0)
-

@@ -87,4 +87,3 @@ otb_add_test(NAME feTvThresholdImageToPointSet4 COMMAND otbPointSetTestDriver
   ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feThresholdImageToPointSet_Threshold_1To200.txt
   1 200 )
-

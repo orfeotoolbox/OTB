@@ -207,4 +207,3 @@ otb_add_test(NAME coTvPolyLineImageIterator COMMAND otbPathTestDriver
   512 512 20
   ${TEMP}/coTvPolyLineImageIterator.png
   )
-
