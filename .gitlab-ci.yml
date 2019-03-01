@@ -2,6 +2,7 @@ variables:
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   GIT_CHECKOUT: "false"
+  GIT_STRATEGY: "clone"
 
 # Git checkout is disabled to let us handle efficiently the Git-LFS
 before_script:
