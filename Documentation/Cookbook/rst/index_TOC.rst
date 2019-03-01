@@ -13,5 +13,6 @@ Table of Contents
    AdvancedUse
    Recipes
    Applications
+   C++
    FAQ
    Contributors

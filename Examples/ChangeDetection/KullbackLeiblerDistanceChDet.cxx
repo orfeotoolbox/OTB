@@ -19,13 +19,11 @@
  */
 
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {GomaAvant.png}, {GomaApres.png}
-//    OUTPUTS: {KLdistanceChDet.png}
-//    35
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./KullbackLeiblerDistanceChDet Input/GomaAvant.png Input/GomaApres.png Output/KLdistanceChDet.png 35
+*/
 
-//  Software Guide : BeginLatex
+
 // This example illustrates the class
 // \doxygen{otb}{KullbackLeiblerDistanceImageFilter} for detecting changes
 // between pairs of images. This filter computes the Kullback-Leibler
@@ -74,8 +72,6 @@
 // implemented in \doxygen{otb}{MeanRatioImageFilter},
 // in section~\ref{sec:RatioOfMeans}. Nevertheless
 // the corresponding header file has to be used instead.
-//
-// Software Guide : EndLatex
 
 #include "itkMacro.h"
 #include "otbImage.h"
@@ -84,59 +80,43 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCodeSnippet
 #include "otbKullbackLeiblerDistanceImageFilter.h"
-//  Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   try
-    {
+  {
     if (argc != 5)
-      {
-      std::cerr <<
-      "Change detection through a Kullback-Leibler measure (which is a distance between local distributions)\n";
-      std::cerr <<
-      "Kullback-Leibler measure is optimized by a Edgeworth series expansion\n";
+    {
+      std::cerr << "Change detection through a Kullback-Leibler measure (which is a distance between local distributions)\n";
+      std::cerr << "Kullback-Leibler measure is optimized by a Edgeworth series expansion\n";
       std::cerr << argv[0] << " imgAv imgAp imgResu winSize\n";
       return 1;
-      }
+    }
 
-    char * fileName1 = argv[1];
-    char * fileName2 = argv[2];
-    char * fileNameOut = argv[3];
-    int    winSize = atoi(argv[4]);
+    char* fileName1   = argv[1];
+    char* fileName2   = argv[2];
+    char* fileNameOut = argv[3];
+    int   winSize     = atoi(argv[4]);
 
-    const unsigned int Dimension = 2;
+    const unsigned int    Dimension = 2;
     typedef double        PixelType;
     typedef unsigned char OutputPixelType;
 
     typedef otb::Image<PixelType, Dimension>       ImageType;
     typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-    //  Software Guide : BeginLatex
-    //
     //  The \doxygen{otb}{KullbackLeiblerDistanceImageFilter} is templated over
     //  the types of the two input images and the type of the generated change
     //  image, in a similar way as the \doxygen{otb}{MeanRatioImageFilter}. It is
     //  the only line to be changed from the ratio of means change detection
     //  example to perform a change detection through a distance between
     //  distributions...
-    //
-    //  Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
-    typedef otb::KullbackLeiblerDistanceImageFilter<ImageType,
-        ImageType,
-        ImageType> FilterType;
-    //  Software Guide : EndCodeSnippet
+    typedef otb::KullbackLeiblerDistanceImageFilter<ImageType, ImageType, ImageType> FilterType;
 
-    //  Software Guide : BeginLatex
-    //
     //  The different elements of the pipeline can now be instantiated. Follow the
     //  ratio of means change detector example.
-    //
-    //  Software Guide : EndLatex
 
     typedef otb::ImageFileReader<ImageType>       ReaderType;
     typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -147,32 +127,19 @@ int main(int argc, char * argv[])
     ReaderType::Pointer reader2 = ReaderType::New();
     reader2->SetFileName(fileName2);
 
-    //  Software Guide : BeginLatex
-    //
     //  The only parameter for this change detector is the radius of
     //  the window used for computing the cumulants.
-    //
-    //  Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     FilterType::Pointer filter = FilterType::New();
     filter->SetRadius((winSize - 1) / 2);
-    //  Software Guide : EndCodeSnippet
 
-    //  Software Guide : BeginLatex
-    //
     //  The pipeline is built by plugging all the elements together.
-    //
-    //  Software Guide : EndLatex
 
-    //  Software Guide : BeginCodeSnippet
     filter->SetInput1(reader1->GetOutput());
     filter->SetInput2(reader2->GetOutput());
-    //  Software Guide : EndCodeSnippet
 
-    typedef itk::RescaleIntensityImageFilter<ImageType,
-        OutputImageType> RescaleFilterType;
-    RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
+    typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescaleFilterType;
+    RescaleFilterType::Pointer                                           rescaler = RescaleFilterType::New();
 
     rescaler->SetInput(filter->GetOutput());
     rescaler->SetOutputMinimum(0);
@@ -182,23 +149,21 @@ int main(int argc, char * argv[])
     writer->SetFileName(fileNameOut);
     writer->SetInput(rescaler->GetOutput());
     writer->Update();
-
-    }
+  }
 
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "Exception itk::ExceptionObject thrown !" << std::endl;
     std::cout << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   catch (...)
-    {
+  {
     std::cout << "Unknown exception thrown !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  //  Software Guide : BeginLatex
   // Figure \ref{fig:RESKLDCHDET} shows the result of the change
   // detection by computing the Kullback-Leibler distance between
   // local pdf through an Edgeworth approximation.
@@ -209,7 +174,6 @@ int main(int argc, char * argv[])
   // Kullback-Leibler change detector}
   // \label{fig:RESKLDCHDET}
   // \end{figure}
-  //  Software Guide : EndLatex
 
   return EXIT_SUCCESS;
 }
