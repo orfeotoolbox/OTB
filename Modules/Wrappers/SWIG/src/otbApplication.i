@@ -225,6 +225,23 @@ public:
 
   Logger* GetLogger();
 
+#if SWIGPYTHON
+  %extend 
+    {
+    %pythoncode
+      {
+      _loggerIsSet = False;
+      logOutput = PythonLogOutput.New()
+      callback = PythonLogOutputCallback()
+      def SetupLogger(self):
+          if not self._loggerIsSet:
+              self.logOutput.SetCallback(self.callback)
+              logger = self.GetLogger()
+              logger.AddLogOutput(self.logOutput.GetPointer())
+      }
+    }
+#endif // SWIGPYTHON
+
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
   std::string GetParameterName(std::string);
