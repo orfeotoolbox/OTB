@@ -67,9 +67,20 @@ class Logger
 {
 public:
   virtual void AddLogOutput(itkLogOutput *output);
+  static Logger * Instance();
+  void ResetOutputs();
 protected:
   Logger();
   virtual ~Logger();
+
 };
+
+%pythoncode {
+  libraryLogOutput = PythonLogOutput_New()
+  libraryLogCallback = PythonLogOutputCallback()
+  Logger.Instance().ResetOutputs()
+  libraryLogOutput.SetCallback(libraryLogCallback)
+  Logger.Instance().AddLogOutput(libraryLogOutput.GetPointer())
+}
 
 #endif
