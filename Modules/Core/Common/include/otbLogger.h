@@ -54,7 +54,9 @@ public:
    *
    * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
    */
-  static Logger * Instance(bool initializeLogOutput = true);
+  static Logger * Instance();
+
+  void ResetOutputs();
 
   static Pointer New();
   itkCreateAnotherMacro( Logger )
@@ -77,7 +79,7 @@ private:
   Logger(const Self &) = delete;
   void operator =(const Self&) = delete;
 
-  static Logger * CreateInstance(bool initializeLogOutput = true);
+  static Logger * CreateInstance();
 
 
   bool m_LogSetupInfoDone;

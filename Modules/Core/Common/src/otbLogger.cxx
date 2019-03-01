@@ -42,28 +42,22 @@ Logger::Logger() :
   m_HumanReadableFormat = "%Y-%m-%d %H:%M:%S";
 }
 
-Logger * Logger::CreateInstance(bool initializeLogOutput)
+Logger * Logger::CreateInstance()
 {
   Logger * logger = new Logger;
 
-  // By default (true), redirect logs to std::cout, else left the singleton unconnected
-  if (initializeLogOutput)
-    {
-    
-    itk::StdStreamLogOutput::Pointer defaultOutput = 
+  // By default redirect logs to std::cout
+  itk::StdStreamLogOutput::Pointer defaultOutput = 
       itk::StdStreamLogOutput::New();
-    defaultOutput->SetStream(std::cout);
-    
-    logger->AddLogOutput(defaultOutput);
-    }
+  defaultOutput->SetStream(std::cout);
+  logger->AddLogOutput(defaultOutput);
 
   return logger;
 }
 
-
-Logger * Logger::Instance(bool initializeLogOutput)
+Logger * Logger::Instance()
 {
-  static Logger * logger_singleton = CreateInstance(initializeLogOutput);
+  static Logger * logger_singleton = CreateInstance();
   if ( !is_logger_singleton_level_set )
   {
     is_logger_singleton_level_set = true;
@@ -110,6 +104,11 @@ void Logger::LogSetupInformation()
     LogSetupInformationDone();
     Instance()->LogSetupInformationDone();
     }
+}
+
+void Logger::ResetOutputs()
+{
+  m_Output = itk::MultipleLogOutput::New();
 }
 
 bool Logger::IsLogSetupInformationDone()
