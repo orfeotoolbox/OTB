@@ -20,9 +20,6 @@
  */
 
 
-
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \code{SetPixel()} and
 // \code{GetPixel()} methods.  These two methods provide direct access to the
 // pixel data contained in the image. Note that these two methods are
@@ -32,12 +29,10 @@
 // %Chapter~\ref{sec:ImageIteratorsChapter} on page
 // %\pageref{sec:ImageIteratorsChapter} for information about image
 // %iterators.)
-//
-// Software Guide : EndLatex
 
 #include "otbImage.h"
 
-int main(int, char *[])
+int main(int, char* [])
 {
   // First the image type should be declared
   typedef otb::Image<unsigned short, 2> ImageType;
@@ -49,11 +44,11 @@ int main(int, char *[])
   ImageType::IndexType start;
   ImageType::SizeType  size;
 
-  size[0]  = 200;  // size along X
-  size[1]  = 200;  // size along Y
+  size[0] = 200; // size along X
+  size[1] = 200; // size along Y
 
-  start[0] =   0;  // first index on X
-  start[1] =   0;  // first index on Y
+  start[0] = 0; // first index on X
+  start[1] = 0; // first index on Y
 
   ImageType::RegionType region;
   region.SetSize(size);
@@ -67,8 +62,6 @@ int main(int, char *[])
   ImageType::PixelType initialValue = 0;
   image->FillBuffer(initialValue);
 
-  // Software Guide : BeginLatex
-  //
   // The individual position of a pixel inside the image is identified by a
   // unique index. An index is an array of integers that defines the position
   // of the pixel along each coordinate dimension of the image. The IndexType
@@ -86,44 +79,26 @@ int main(int, char *[])
   //
   // The following lines declare an instance of the index type and initialize
   // its content in order to associate it with a pixel position in the image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ImageType::IndexType pixelIndex;
 
-  pixelIndex[0] = 27;   // x position
-  pixelIndex[1] = 29;   // y position
-  // Software Guide : EndCodeSnippet
+  pixelIndex[0] = 27; // x position
+  pixelIndex[1] = 29; // y position
 
-  // Software Guide : BeginLatex
-  //
   // Having defined a pixel position with an index, it is then possible to
   // access the content of the pixel in the image.  The \code{GetPixel()}
   // method allows us to get the value of the pixels.
   //
   // \index{otb::Image!GetPixel()}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ImageType::PixelType pixelValue = image->GetPixel(pixelIndex);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The \code{SetPixel()} method allows us to set the value of the pixel.
   //
   // \index{otb::Image!SetPixel()}
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  image->SetPixel(pixelIndex,   pixelValue + 1);
-  // Software Guide : EndCodeSnippet
+  image->SetPixel(pixelIndex, pixelValue + 1);
 
-  // Software Guide : BeginLatex
-  //
   // Please note that \code{GetPixel()} returns the pixel value using copy
   // and not reference semantics. Hence, the method cannot be used to
   // modify image data values.
@@ -131,9 +106,6 @@ int main(int, char *[])
   // Remember that both \code{SetPixel()} and \code{GetPixel()} are inefficient
   // and should only be used for debugging or for supporting interactions like
   // querying pixel values by clicking with the mouse.
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
-
 }
