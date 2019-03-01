@@ -43,7 +43,7 @@ protected:
       def __init__(self):
           super(PythonLogOutputCallback, self).__init__()
       def Call(self, content):
-          print(content)
+          sys.stdout.write(content)
       def Flush(self):
           sys.stdout.flush()
   }
