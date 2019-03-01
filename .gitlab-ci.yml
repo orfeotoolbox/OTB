@@ -1,3 +1,5 @@
+# Comment
+
 variables:
   DOCKER_DRIVER: overlay2
 
