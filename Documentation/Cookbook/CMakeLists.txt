@@ -117,10 +117,15 @@ file(COPY ${RST_SOURCE_DIR}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Art DESTINATION  ${RST_BINARY_DIR})
 
+# Create symlinks to otb-data/Output and otb-data/Input in the rst build directory
+# Used for including figures and images in the CookBook
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Output" "${RST_BINARY_DIR}/Output")
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Input" "${RST_BINARY_DIR}/Input")
+
 set(SPHINX_CONF_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
-set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES. The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA).")
 
 configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 
@@ -130,14 +135,22 @@ add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
-  COMMENT "Auto-generating Application Reference Documentation in RST"
+  COMMENT "Auto-generating Application Documentation in RST"
+  DEPENDS OTBSWIGWrapper-all
+  )
+
+add_custom_target(generate_examples_rst
+  COMMAND "python3" ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
+  ${RST_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${RST_BINARY_DIR}
+  COMMENT "Auto-generating Examples in RST"
   DEPENDS OTBSWIGWrapper-all
   )
 
 # Add all applications as dependencies to rst generation
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
-list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
 foreach(app_name ${app_names})
   add_dependencies(generate_otbapps_rst otbapp_${app_name})
@@ -152,6 +165,7 @@ add_custom_target(CookBookHTML
   -c ${SPHINX_CONF_DIR}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS generate_otbapps_rst
+  DEPENDS generate_examples_rst
   COMMENT "Building RST documentation in html")
 
 add_custom_target(CookBookArchive
