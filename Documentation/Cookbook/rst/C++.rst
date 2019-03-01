@@ -7,6 +7,7 @@ C++ API
     :maxdepth: 2
 
     C++/SystemOverview.rst
+    C++/Tutorial.rst
     C++/Iterators.rst
     C++/Filters.rst
     C++/StreamingAndThreading.rst
