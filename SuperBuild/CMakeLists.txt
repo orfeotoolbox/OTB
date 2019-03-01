@@ -380,24 +380,16 @@ endforeach()
 #   -PYTHON_EXECUTABLE
 #   -PYTHON_INCLUDE_DIR
 #   -PYTHON_LIBRARY
-#   -NUMPY_INCLUDE_DIR
-set (Python_ADDITIONAL_VERSIONS "3;2")
-if ( OTB_WRAP_PYTHON )
-  find_package( PythonInterp REQUIRED )
-  if ( ${PYTHON_VERSION_MAJOR} EQUAL 2 )
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
-  endif()
-  if ( (NOT UNIX) AND ${PYTHON_VERSION_MAJOR} EQUAL 3 )
-    unset( Python_ADDITIONAL_VERSIONS )
-    find_package ( PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} REQUIRED )
-  else()
-    find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} REQUIRED )
-  endif()
-else()
-  find_package( PythonInterp QUIET )
-  find_package ( PythonLibs ${PYTHON_VERSION_MAJOR} QUIET )
 endif()
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
 
 include(External_otb)
 
