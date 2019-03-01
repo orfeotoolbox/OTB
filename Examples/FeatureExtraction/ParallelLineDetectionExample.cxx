@@ -19,18 +19,13 @@
  */
 
 
+/* Example usage:
+./ParallelLineDetectionExample Output/Lines.png Output/ParallelLines.png 20 2 10
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    OUTPUTS: {Lines.png}, {ParallelLines.png}
-//    20 2 10
-//  Software Guide : EndCommandLineArgs
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the details of the \doxygen{otb}{ParallelLinePathListFilter}.
 //
-//
-// Software Guide : EndLatex
 
 #include "itkPolyLineParametricPath.h"
 #include "otbDrawPathListFilter.h"
@@ -40,25 +35,23 @@
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 6)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " outputImage ";
     std::cerr << " outputParallelLineImage ";
-    std::cerr <<
-    " distThreshParallel angThreshParallel commonDistThreshParallel" <<
-    std::endl;
+    std::cerr << " distThreshParallel angThreshParallel commonDistThreshParallel" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  double distThreshParallel = atof(argv[3]);
-  double angThreshParallel = atof(argv[4]);
+  double distThreshParallel       = atof(argv[3]);
+  double angThreshParallel        = atof(argv[4]);
   double commonDistThreshParallel = atof(argv[5]);
 
-  //We start by creating an empty image
-  const unsigned int Dimension = 2;
+  // We start by creating an empty image
+  const unsigned int    Dimension = 2;
   typedef unsigned char PixelType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
@@ -67,12 +60,12 @@ int main(int argc, char * argv[])
 
   ImageType::IndexType start;
 
-  start[0] =   0;
-  start[1] =   0;
+  start[0] = 0;
+  start[1] = 0;
 
   ImageType::SizeType size;
-  size[0]  = 600;
-  size[1]  = 300;
+  size[0] = 600;
+  size[1] = 300;
 
   ImageType::RegionType region;
 
@@ -89,7 +82,7 @@ int main(int argc, char * argv[])
   PathListType::Pointer lineList = PathListType::New();
 
   typedef PathType::ContinuousIndexType ContinuousIndexType;
-  ContinuousIndexType cindex;
+  ContinuousIndexType                   cindex;
 
   /*-----*/
   PathType::Pointer aLine = PathType::New();
@@ -197,13 +190,13 @@ int main(int argc, char * argv[])
 
   // Polylines are drawn on a black
   typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathType;
-  DrawPathType::Pointer drawPathListFilter = DrawPathType::New();
+  DrawPathType::Pointer                                           drawPathListFilter = DrawPathType::New();
   drawPathListFilter->SetInput(image);
   drawPathListFilter->SetInputPath(lineList);
   drawPathListFilter->SetPathValue(itk::NumericTraits<PixelType>::max());
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                     writer = WriterType::New();
   writer->SetInput(drawPathListFilter->GetOutput());
   writer->SetFileName(argv[1]);
   writer->Update();
@@ -212,12 +205,10 @@ int main(int argc, char * argv[])
   // threshold and a maximum distance threshold have to specified.
   // The input is a pathList of the previously extracted line segments.
   typedef otb::ParallelLinePathListFilter<PathType> ParallelLinePathType;
-  ParallelLinePathType::Pointer parallelLinePathListFilter =
-    ParallelLinePathType::New();
+  ParallelLinePathType::Pointer                     parallelLinePathListFilter = ParallelLinePathType::New();
   parallelLinePathListFilter->SetDistanceThreshold(distThreshParallel);
   parallelLinePathListFilter->SetAngularThreshold(angThreshParallel);
-  parallelLinePathListFilter->SetCommonDistanceThreshold(
-    commonDistThreshParallel);
+  parallelLinePathListFilter->SetCommonDistanceThreshold(commonDistThreshParallel);
   parallelLinePathListFilter->SetInput(lineList);
   parallelLinePathListFilter->Update();
 
@@ -230,11 +221,10 @@ int main(int argc, char * argv[])
   // Parallel lines are drawn on a black background image with \doxygen{otb}{DrawPathListFilter}.
   // The \code{SetUseIternalValues()} tells the drawing filter to draw the path with its likelihood
   // value.
-  //typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathType;
+  // typedef otb::DrawPathListFilter<ImageType, PathType, ImageType> DrawPathType;
   DrawPathType::Pointer drawPathListFilterParallel = DrawPathType::New();
   drawPathListFilterParallel->SetInput(outputParallel);
-  drawPathListFilterParallel->SetInputPath(
-    parallelLinePathListFilter->GetOutput());
+  drawPathListFilterParallel->SetInputPath(parallelLinePathListFilter->GetOutput());
   drawPathListFilter->SetPathValue(itk::NumericTraits<PixelType>::max());
   drawPathListFilterParallel->SetUseInternalPathValue(false);
 

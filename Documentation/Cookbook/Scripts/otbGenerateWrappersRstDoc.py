@@ -29,6 +29,8 @@ from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_
 
 from otb_warnings import application_documentation_warnings
 
+from rst_utils import rst_section, RstPageHeading
+
 linesep = os.linesep
 
 def EncloseString(s):
@@ -178,17 +180,6 @@ def render_choice(app, key):
         description=app.GetParameterDescription(key),
         choices=choice_entries,
     )
-
-def rst_section(text, delimiter, ref=None):
-    "Make a rst section title"
-
-    output = ""
-
-    if ref is not None:
-        output += ".. _" + ref + ":\n\n"
-
-    output += text + "\n" + delimiter * len(text) + "\n\n"
-    return output
 
 def rst_parameter_value(app, key):
     "Render a parameter value to rst"
@@ -399,13 +390,6 @@ def render_application(appname, allapps):
 def GetApplicationTags(appname):
      app = otbApplication.Registry.CreateApplication(appname)
      return app.GetDocTags()
-
-def RstPageHeading(text, maxdepth, ref=None):
-    output = rst_section(text, "=", ref=ref)
-    output += ".. toctree::" + linesep
-    output += "\t:maxdepth: " + maxdepth + linesep
-    output += linesep + linesep
-    return output
 
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
