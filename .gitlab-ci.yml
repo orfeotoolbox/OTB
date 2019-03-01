@@ -1,12 +1,25 @@
+# WARNING!
+# OTB uses Git-LFS to store the (large) tests data.
+# Git-LFS is mostly transparent for the user and recent versions
+# are able to use Git-LFS quite efficiently.
+# But Git fails to manage efficiently numerous LFS data.
+# We have to use directly git-lfs wrappring commands to have an
+# efficient cloning step.
+# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of 
+# GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
+
 variables:
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
+  # Disable automatic checkout to let us fetch LFS before
   GIT_CHECKOUT: "false"
+  # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
 
-# Git checkout is disabled to let us handle efficiently the Git-LFS
 before_script:
+  # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_REF_NAME
+  # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
 stages:
