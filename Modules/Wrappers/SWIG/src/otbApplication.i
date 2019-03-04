@@ -225,6 +225,9 @@ public:
 
   Logger* GetLogger();
 
+  unsigned long itk::Object::AddObserver(const EventObject & event, 
+                                          Command * command);
+
 
 #if SWIGPYTHON
   %extend 
