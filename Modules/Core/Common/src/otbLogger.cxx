@@ -26,6 +26,9 @@
 #include "gdal.h"
 #include "itkMultiThreader.h"
 
+#include <type_traits>
+#include <cassert>
+
 namespace otb
 {
 
@@ -116,5 +119,33 @@ void Logger::LogSetupInformationDone()
 {
   m_LogSetupInfoDone = true;
 }
+
+std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const& content)
+{
+  static const std::string levelString[] = {"(MUSTFLUSH)", "(FATAL)", "(CRITICAL)", "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)"};
+
+  assert(level <= std::extent<decltype(levelString)>::value);
+
+  std::ostringstream s;
+
+  switch (this->m_TimeStampFormat)
+  {
+  case REALVALUE:
+  {
+    s.precision(30);
+    s << m_Clock->GetTimeInSeconds();
+    break;
+  }
+  case HUMANREADABLE:
+  {
+    s << itksys::SystemTools::GetCurrentDateTime(this->m_HumanReadableFormat.c_str());
+    break;
+  }
+  }
+  s << " " << levelString[level] << ": " << content;
+
+  return s.str();
+}
+
 
 } // namespace otb
