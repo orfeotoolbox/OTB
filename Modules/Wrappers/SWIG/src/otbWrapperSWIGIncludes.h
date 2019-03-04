@@ -28,6 +28,7 @@
 
 #include "otbPythonLogOutput.h"
 #include "otbLogger.h"
+#include "otbProgressReporterManager.h"
 
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer               Application_Pointer;
@@ -47,5 +48,7 @@ typedef otb::Logger::Pointer                             Logger_Pointer;
 typedef otb::LogOutputCallback                           LogOutputCallback;
 typedef otb::PythonLogOutput                             PythonLogOutput;
 typedef otb::PythonLogOutput::Pointer                    PythonLogOutput_Pointer;
+typedef otb::ProgressReporterManager                     ProgressReporterManager;
+typedef otb::ProgressReporterManager::Pointer            ProgressReporterManager_Pointer;
 
 #endif

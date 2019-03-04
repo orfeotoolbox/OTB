@@ -35,12 +35,14 @@ set(SWIG_MODULE_otbApplication_EXTRA_DEPS
      otbLogOutputCallback.h
      otbPythonLogOutput.h
      otbCallbackProgressReporter.h
+     otbProgressReporterManager.h
      OTBApplicationEngine)
 SWIG_add_module( otbApplicationPy3 python ../otbApplication.i 
                                     otbApplicationPYTHON_wrap.cxx 
                                     ../python/itkPyCommand.cxx 
                                     ../python/otbPythonLogOutput.cxx
-                                    ../python/otbCallbackProgressReporter.cxx)
+                                    ../python/otbCallbackProgressReporter.cxx
+                                    ../python/otbProgressReporterManager.cxx)
 SWIG_link_libraries( otbApplicationPy3 ${PYTHON3_LIBRARIES} OTBApplicationEngine )
 set_target_properties(_otbApplicationPy3 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
 set_target_properties(_otbApplicationPy3 PROPERTIES LIBRARY_OUTPUT_NAME _otbApplication)

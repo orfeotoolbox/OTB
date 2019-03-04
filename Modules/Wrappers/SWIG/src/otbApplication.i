@@ -205,6 +205,7 @@ public:
 
 #if SWIGPYTHON
 
+
 %include "otbPythonLogOutput.i"
 #endif
 
@@ -894,6 +895,22 @@ class ApplicationProxy(object):
 }
 
 #endif /* OTB_SWIGNUMPY */
+
+class ProgressReporterManager: public itkObject
+{
+public:
+  /** Default constructor */
+  
+  static ProgressReporterManager_Pointer New();
+  virtual void Delete();
+  void SetLogOutputCallback(otb::LogOutputCallback* callback);
+  itkCommand* GetAddProcessCommand();
+  
+protected:
+  PythonLogOutput();
+};
+
+DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 
 class Registry : public itkObject
 {

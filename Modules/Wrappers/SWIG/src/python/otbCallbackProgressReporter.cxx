@@ -19,29 +19,59 @@
  */
 
 #include "otbCallbackProgressReporter.h"
+#include "otbStopwatch.h"
 
 namespace otb
 {
+
+CallbackProgressReporter
+::CallbackProgressReporter()
+{
+}
+
+CallbackProgressReporter
+::CallbackProgressReporter(itk::ProcessObject* process,
+                        const char *comment)
+  : FilterWatcherBase(process, comment)
+{
+}
+
+CallbackProgressReporter
+::CallbackProgressReporter(itk::ProcessObject* process,
+                        const std::string& comment)
+  : FilterWatcherBase(process, comment.c_str())
+{
+}
 
 void
 CallbackProgressReporter
 ::ShowProgress()
 {
-  m_Callback->Call("ShowProgress");
+  if (m_Process)
+    {
+    int progressPercent = static_cast<int>(m_Process->GetProgress() * 100);
+    
+    if (progressPercent > 100)
+      {
+      progressPercent = 100;
+      }
+    m_Callback->Call("\r"+std::to_string(progressPercent)+"%");
+    m_Callback->Flush();
+    }
 }
 
 void
 CallbackProgressReporter
 ::StartFilter()
 {
-  m_Callback->Call("StartFilter");
+  m_Stopwatch.Start();
 }
 
 void
 CallbackProgressReporter
 ::EndFilter()
 {
-  m_Callback->Call("EndFilter");
+  m_Stopwatch.Stop();
 }
 
 }

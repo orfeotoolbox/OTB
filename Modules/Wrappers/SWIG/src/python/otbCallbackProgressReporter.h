@@ -29,9 +29,17 @@ namespace otb
 
 class CallbackProgressReporter : public FilterWatcherBase
 {
+public:
+  /** Constructor. Takes a ProcessObject to monitor and an optional
+   * comment string that is prepended to each event message. */
+  CallbackProgressReporter(itk::ProcessObject* process,
+                        const char *comment = "");
+
+  CallbackProgressReporter(itk::ProcessObject* process,
+                        const std::string& comment = "");
 
   /** Default constructor */
-  CallbackProgressReporter() = default;
+  CallbackProgressReporter();
 
   /** Destructor. */
   virtual ~CallbackProgressReporter() = default;
