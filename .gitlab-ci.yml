@@ -1,4 +1,5 @@
 variables:
+  BUILD_REGISTRY: $CI_REGISTRY/gbonnefille
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
 
@@ -16,13 +17,13 @@ stages:
 native-build:
   extends: .general
   stage: build
-  image: $CI_REGISTRY/gbonnefille/otb-build-env/otb-ubuntu-native:18.04
+  image: $BUILD_REGISTRY/otb-build-env/otb-ubuntu-native:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
 shark-build:
   extends: .general
   stage: build
-  image: $CI_REGISTRY/gbonnefille/otb-build-env/otb-ubuntu-shark:18.04
+  image: $BUILD_REGISTRY/otb-build-env/otb-ubuntu-shark:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc-shark-3.1.4
