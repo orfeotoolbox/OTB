@@ -18,8 +18,12 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-gcc
+# Configuration options for ubuntu-18.04-llvm-shark-3.1.4
 
 set(site_option
 "opencv_INCLUDE_DIR:PATH=/usr/include
-OTB_USE_SHARK:BOOL=OFF")
+CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld")
