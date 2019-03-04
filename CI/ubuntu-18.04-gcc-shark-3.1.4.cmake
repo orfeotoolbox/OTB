@@ -21,4 +21,7 @@
 # Configuration options for ubuntu-18.04-gcc-shark-3.1.4
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include")
+"opencv_INCLUDE_DIR:PATH=/usr/include
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld")
