@@ -138,7 +138,6 @@ int main(int argc, char* argv[])
   #endif
 
   const std::vector<std::string> appKeyList = appli->GetParametersKeys(true);
-  const unsigned int nbOfParam = appKeyList.size();
 
   std::string output_file = module + ".txt";
   std::string  algs_txt = "algs.txt";
