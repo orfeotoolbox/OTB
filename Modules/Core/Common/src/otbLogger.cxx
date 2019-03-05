@@ -126,25 +126,7 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
 
   assert(level <= std::extent<decltype(levelString)>::value);
 
-  std::ostringstream s;
-
-  switch (this->m_TimeStampFormat)
-  {
-  case REALVALUE:
-  {
-    s.precision(30);
-    s << m_Clock->GetTimeInSeconds();
-    break;
-  }
-  case HUMANREADABLE:
-  {
-    s << itksys::SystemTools::GetCurrentDateTime(this->m_HumanReadableFormat.c_str());
-    break;
-  }
-  }
-  s << " " << levelString[level] << ": " << content;
-
-  return s.str();
+  return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + ": " + content;
 }
 
 
