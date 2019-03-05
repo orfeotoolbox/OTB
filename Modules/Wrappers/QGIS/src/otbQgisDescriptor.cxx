@@ -30,7 +30,7 @@
 
 namespace
 {
-  std::string GetOptionalSatus(otb::Wrapper::Parameter::Pointer param ,
+  std::string GetOptionalSatus(std::string const & param_key_string ,
                                otb::Wrapper::Application::Pointer app )
   {
     // A parameter is mandatory if :
@@ -39,19 +39,21 @@ namespace
     using namespace otb::Wrapper;
     auto OPTIONAL = "True";
     auto MANDATORY = "False";
-    // Does param has default value?
-    if ( param->HasValue() )
+    // Does param has default value? Or is it a StringList?
+
+    if ( (app->GetParameterByKey( param_key_string ))->HasValue() || 
+         app->GetParameterType( param_key_string ) == ParameterType_StringList )
     {
       return OPTIONAL;
     }
 
-    ParameterKey param_key( param->GetKey() ); 
     // Does param has a parent?
+    ParameterKey param_key( param_key_string); 
     std::string root = param_key.GetRoot();
-    // std::cout<<"Param key is "<<param_key.GetKey()<<std::endl;
-    // std::cout<<"Param root is "<<root<<std::endl;
+    std::cout<<"Param key is "<<param_key_string<<std::endl;
+    std::cout<<"Param root is "<<root<<std::endl;
     // if ( root.empty() ) That would be too easy...
-    if ( root == param_key.GetKey() ) // that means that root is empty
+    if ( root == param_key_string ) // that means that root is empty
     {
       return MANDATORY;
     }
@@ -63,11 +65,13 @@ namespace
       // Plus they have default value.
       return OPTIONAL;
     }
+    // ChoiceParameter::HasValue() return true unless there is no choice. Is 
+    // it possible to have a choice parameter with no choice in an application?
     else
     {
       // If it is not a choice it is a group. 
       // We need to have the optional status of this group
-      return GetOptionalSatus( app->GetParameterByKey(root) , app );
+      return GetOptionalSatus( root , app );
     }
   }
 }
@@ -149,18 +153,18 @@ int main(int argc, char* argv[])
   std::string output_parameter_name;
   bool hasRasterOutput = false;
   {
-  for (unsigned int i = 0; i < nbOfParam; i++)
-    {
-    Parameter::Pointer param = appli->GetParameterByKey(appKeyList[i]);
+  for (auto const & paramkey : appKeyList )
+  {
+    Parameter::Pointer param = appli->GetParameterByKey(paramkey);
     if (param->GetMandatory())
+    {
+      if (appli->GetParameterType(paramkey) == ParameterType_OutputImage)  
       {
-	if (appli->GetParameterType(appKeyList[i]) == ParameterType_OutputImage)
-	  {
-	    output_parameter_name = appKeyList[i];
+	    output_parameter_name = paramkey;
 	    hasRasterOutput = true;
-	  }
       }
     }
+  }
   }
 
   if(output_parameter_name.empty())
@@ -171,11 +175,10 @@ int main(int argc, char* argv[])
   dFile << appli->GetDescription() << std::endl;
   dFile << group << std::endl;
   
-  for (unsigned int i = 0; i < nbOfParam; i++)
+  for (auto const & paramKey : appKeyList )
     {
-    const std::string name = appKeyList[i];
-    const Parameter::Pointer param = appli->GetParameterByKey(name);
-    const ParameterType type = appli->GetParameterType(name);
+    const Parameter::Pointer param = appli->GetParameterByKey(paramKey);
+    const ParameterType type = appli->GetParameterType(paramKey);
     const std::string description = param->GetName();
     if (  type == ParameterType_Group  ||
           type == ParameterType_OutputProcessXML  ||
@@ -193,7 +196,8 @@ int main(int argc, char* argv[])
     assert(  it != parameterTypeToString.end() );
     if( it == parameterTypeToString.end() )
       {
-      std::cerr << "No mapping found for parameter '" <<name <<"' type=" << type << std::endl;
+      std::cerr << "No mapping found for parameter '" << paramKey 
+                <<"' type=" << type << std::endl;
       return EXIT_FAILURE;
       }
     std::string qgis_type = it->second;
@@ -220,43 +224,46 @@ int main(int argc, char* argv[])
     bool isEpsgCode = false;
 
     // use QgsProcessingParameterCrs if required.
-    // TODO: do a regex on name to match ==epsg || *\.epsg.\*
-    if ( name == "epsg"
-	      || name == "map.epsg.code"
-	      || name == "mapproj.epsg.code"
-	      || name == "mode.epsg.code")
+    // TODO: do a regex on paramKey to match ==epsg || *\.epsg.\*
+    if ( paramKey == "epsg"
+	      || paramKey == "map.epsg.code"
+	      || paramKey == "mapproj.epsg.code"
+	      || paramKey == "mode.epsg.code")
         {
         qgis_type = "QgsProcessingParameterCrs";
         isEpsgCode = true;
         }
 
-    dFile << qgis_type << "|" << name << "|" << description;
+    dFile << qgis_type << "|" << paramKey << "|" << description;
 
       std::string default_value = "None";
     if (type == ParameterType_Int)
       {
       if (isEpsgCode)
         {
-          if (param->HasValue() && appli->GetParameterInt(name) < 1)
-    	default_value =  "EPSG: " + appli->GetParameterAsString(name);
+          if (param->HasValue() && appli->GetParameterInt(paramKey) < 1)
+    	default_value =  "EPSG: " + appli->GetParameterAsString(paramKey);
           else
     	default_value =  "ProjectCrs";
         }
       else
         {
         dFile << "|QgsProcessingParameterNumber.Integer";
-        default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
+        default_value = param->HasValue() ?
+                        appli->GetParameterAsString(paramKey): "0";
         }
       }
     else if (type == ParameterType_Float)
       {	
       dFile << "|QgsProcessingParameterNumber.Double";
-      default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
+      default_value = param->HasValue() ?
+                      appli->GetParameterAsString(paramKey): "0";
       }
     else if (type == ParameterType_Radius)
       {	
       dFile << "|QgsProcessingParameterNumber.Integer";
-      default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
+      default_value = param->HasValue() ?
+                      appli->GetParameterAsString(paramKey): "0";
       }
     else if(type == ParameterType_InputFilename)
       {
@@ -314,11 +321,11 @@ int main(int argc, char* argv[])
       }
     else if(type == ParameterType_Bool)
       {
-      default_value = appli->GetParameterAsString(name);
+      default_value = appli->GetParameterAsString(paramKey);
       }
     else if(type == ParameterType_Choice)
       {
-      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
+      std::vector<std::string>  key_list  = appli->GetChoiceKeys(paramKey);
       std::string values = "";
       for( auto k : key_list)
         values += k + ";";
@@ -340,7 +347,7 @@ int main(int argc, char* argv[])
       }
     else
       {
-      std::cout << "ERROR: default_value is empty for '" << name << "' type='" << qgis_type << "'" << std::endl;
+      std::cout << "ERROR: default_value is empty for '" << paramKey << "' type='" << qgis_type << "'" << std::endl;
       return EXIT_FAILURE;	  
       }
 
@@ -355,8 +362,8 @@ int main(int argc, char* argv[])
         // It is accepted in OTB that, string list could be generated dynamically
         // qgis has no such option to handle dynamic values yet..
         // So mandatory parameters whose type is StringList is considered optional
-        optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
-        optional = GetOptionalSatus( param , appli );
+        // optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
+        optional = GetOptionalSatus( paramKey , appli );
         }
       else
         {
