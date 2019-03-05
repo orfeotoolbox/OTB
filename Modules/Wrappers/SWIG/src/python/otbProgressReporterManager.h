@@ -30,6 +30,13 @@
 namespace otb
 {
 
+/** \class ProgressReporterManager
+ *  \brief Class to manage progress reporting with callback printing.
+ *
+ *  This class stores the command used to create CallbackProgressReporter
+ *  using an Observer. The created CallbackProgressReporter are also stored
+ *  in this class.
+ */
 class ProgressReporterManager : public itk::Object
 {
 public:
@@ -57,6 +64,7 @@ public:
     this->Modified();
   }
   
+  /** Getter to AddProcessCommand */
   AddProcessCommandType* GetAddProcessCommand()
   {
     return m_AddProcessCommand.GetPointer();
@@ -74,10 +82,13 @@ protected:
   void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
 
 private:
+  /** The LogOutputCallback used for printing */
   CallbackType * m_Callback; 
   
+  /** Command associated to the LinkWatchers command */
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   
+  /** container storing all the watchers (CallbackProgressReporter) */
   WatcherListType                   m_WatcherList;
 };
 

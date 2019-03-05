@@ -37,6 +37,8 @@ protected:
   ~itkLogOutput();
 };
 
+/** This Callback class can be called from C++ to print, flush and to determine
+ * if stdout is redirected */
 %pythoncode
   {
   class PythonLogOutputCallback(LogOutputCallback):
@@ -92,6 +94,8 @@ protected:
 
 DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 
+/** Create the required objects for logging. Logger.Instance() is reset in 
+ * order to replace the itkStdStreamLogOutput by a PythonLogOutput */
 %pythoncode {
   _libraryLogOutput = PythonLogOutput_New()
   _libraryLogCallback = PythonLogOutputCallback()

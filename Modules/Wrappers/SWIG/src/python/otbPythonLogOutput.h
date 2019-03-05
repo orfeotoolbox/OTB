@@ -27,6 +27,11 @@
 namespace otb
 {
 
+/** \class LogOutputCallback
+ *  \brief A itk::LogOutput using a LogOutputCallback
+ *
+ *  This class delegates the Write and Flush methods to a LogOutputCallback
+ */
 class PythonLogOutput : public itk::LogOutput
 {
 public:
@@ -50,7 +55,7 @@ public:
   /** flush a buffer */
   virtual void Flush() override;
 
-  /** Write to multiple outputs */
+  /** Write to a buffer */
   virtual void Write(double timestamp) override;
 
   /** Write to a buffer */

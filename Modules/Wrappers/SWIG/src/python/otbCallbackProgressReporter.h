@@ -27,6 +27,14 @@
 namespace otb
 {
 
+/** \class CallbackProgressReporter
+ *  \brief A Filter Watcher using a LogOutputCallback
+ *
+ *  this class creates the progress message as string and print it
+ *  the LogOutputCallback. The LogOutputCallback is also used to determine
+ *  if the output is interactive.
+ */
+ 
 class CallbackProgressReporter : public FilterWatcherBase
 {
 public:
@@ -70,8 +78,8 @@ private:
   /** Current number of stars in the progress bar */
   int m_CurrentNbStars;
   
+  /** The Callback used for printing */
   CallbackType * m_Callback; 
-  
   
   /** buffer used when sys.stdout.isatty() == false */
   std::string m_Buffer;

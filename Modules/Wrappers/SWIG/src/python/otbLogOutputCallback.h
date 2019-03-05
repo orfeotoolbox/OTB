@@ -24,6 +24,16 @@
 namespace otb
 {
 
+/** \class LogOutputCallback
+ *  \brief Interface for a printing callback method
+ *
+ *  This class defines the Call method, used to write a string, the Flush
+ *  method, used to flush a bugger, and the Isatty method used to determine
+ *  if the output is interactive. This class is the base class of the Python
+ *  class PythonLogOutputCallback, that uses Swig directors to override these
+ *  methods.
+ */
+ 
 class LogOutputCallback
 {
 public:
@@ -33,9 +43,13 @@ public:
   /** Destructor */
   virtual ~LogOutputCallback() = default;
 
+  /** Write a string to a buffer */
   virtual void Call(std::string const &) {};
+  
+  /** Flush the buffer */
   virtual void Flush() {};
   
+  /** Determine if the bufer is interactive */
   virtual bool Isatty() {return false;};
 };
 
