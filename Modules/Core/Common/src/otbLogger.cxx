@@ -126,7 +126,14 @@ std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, st
 
   assert(level <= std::extent<decltype(levelString)>::value);
 
-  return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + ": " + content;
+  if (strcmp(this->GetName(), "") == 0)
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + ": " + content;
+  }
+  else
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + " " + this->GetName() + ": " + content;
+  }
 }
 
 
