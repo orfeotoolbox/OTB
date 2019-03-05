@@ -386,6 +386,18 @@ private:
     return false;
   }
 
+FloatVectorImageType::IndexType GetOffset( 
+  FloatVectorImageType::IndexType const & uli )
+{
+  FloatVectorImageType::IndexType offset;
+  offset.Fill(0);
+  if ( uli[0] < 0 )
+    offset[0] = uli[0];
+  if ( uli[1] < 0 )
+    offset[1] = uli[1];
+  return offset;
+}
+
   void
   ComputeIndexFromExtent()
   {
@@ -430,8 +442,11 @@ private:
     m_IsExtentInverted = ( lri[0] < uli[0] || lri[1] < uli[1] );
     SetParameterInt( "startx", uli[0]);
     SetParameterInt( "starty", uli[1]);
-    SetParameterInt( "sizex", lri[0] - uli[0] + 1);
-    SetParameterInt( "sizey", lri[1] - uli[1] + 1);
+    // In the case of a negative index the size will be wrong without the
+    // offset
+    FloatVectorImageType::IndexType offset= GetOffset( uli );
+    SetParameterInt( "sizex", lri[0] - uli[0] + 1 + offset[0] );
+    SetParameterInt( "sizey", lri[1] - uli[1] + 1 + offset[1] );
   }
 
   void
@@ -721,9 +736,12 @@ private:
                            std::max( lli_out[1] , lri_out[1] ) );
 
         SetParameterInt( "startx", uli[0]);
-        SetParameterInt( "starty", uli[1]);   
-        SetParameterInt( "sizex", lri[0] - uli[0]);
-        SetParameterInt( "sizey", lri[1] - uli[1]);
+        SetParameterInt( "starty", uli[1]);
+        // In the case of a negative index the size will be wrong without the
+        // offset
+        FloatVectorImageType::IndexType offset = GetOffset( uli );
+        SetParameterInt( "sizex", lri[0] - uli[0] + offset[0] );
+        SetParameterInt( "sizey", lri[1] - uli[1] + offset[1] );
         }
       }
     else if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
@@ -783,12 +801,14 @@ private:
                          std::max( lli_out[0] , lri_out[0] ) );
       lri[1] = std::max( std::max( uli_out[1] , uri_out[1] ) ,
                          std::max( lli_out[1] , lri_out[1] ) );
-
+      
       SetParameterInt("startx",uli[0]);
       SetParameterInt("starty",uli[1]);
-      SetParameterInt("sizex",lri[0]-uli[0]);
-      SetParameterInt("sizey",lri[1]-uli[1]);
-
+      // In the case of a negative index the size will be wrong without the
+      // offset
+      FloatVectorImageType::IndexType offset = GetOffset( uli );
+      SetParameterInt("sizex",lri[0] - uli[0] + offset[0] );
+      SetParameterInt("sizey",lri[1] - uli[1] + offset[1] );
       }
     else if( GetParameterString( "mode" ) == "extent" )
       {
