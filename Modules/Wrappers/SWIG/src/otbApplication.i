@@ -239,10 +239,10 @@ public:
       {
       def SetupLogger(self):
           logger = self.GetLogger()
-          logger.AddLogOutput(libraryLogOutput.GetPointer())
+          logger.AddLogOutput(_libraryLogOutput.GetPointer())
           
           self.AddObserver(AddProcessToWatchEvent(),
-                           libraryProgressReportManager.GetAddProcessCommand()
+                           _libraryProgressReportManager.GetAddProcessCommand()
                           )
       }
     }

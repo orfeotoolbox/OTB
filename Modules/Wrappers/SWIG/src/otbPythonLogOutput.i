@@ -91,15 +91,15 @@ protected:
 DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 
 %pythoncode {
-  libraryLogOutput = PythonLogOutput_New()
-  libraryLogCallback = PythonLogOutputCallback()
-  libraryProgressReportManager = ProgressReporterManager_New()
+  _libraryLogOutput = PythonLogOutput_New()
+  _libraryLogCallback = PythonLogOutputCallback()
+  _libraryProgressReportManager = ProgressReporterManager_New()
   
   Logger.Instance().ResetOutputs()
-  libraryLogOutput.SetCallback(libraryLogCallback)
-  Logger.Instance().AddLogOutput(libraryLogOutput.GetPointer())
+  _libraryLogOutput.SetCallback(_libraryLogCallback)
+  Logger.Instance().AddLogOutput(_libraryLogOutput.GetPointer())
   
-  libraryProgressReportManager.SetLogOutputCallback(libraryLogCallback)
+  _libraryProgressReportManager.SetLogOutputCallback(_libraryLogCallback)
 
 }
 
