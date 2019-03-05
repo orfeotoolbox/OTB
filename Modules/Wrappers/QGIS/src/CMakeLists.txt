@@ -32,14 +32,22 @@ file(RELATIVE_PATH app_location ${OTB_BINARY_DIR}
 
 # This finds all otbapp_*.so file in the right location
 file(GLOB app_list "${OTB_BINARY_DIR}/${app_location}/otbapp_*")
-set(app_names)
+set( app_names )
 foreach(app_lib_path ${app_list})
   # This retrieve the name without directory and without extension
   get_filename_component( app_lib_name ${app_lib_path} NAME_WE)
-  string(REPLACE "_" ";" split_name ${app_lib_name})
-  list(GET split_name 1 app_name)
+  string( REPLACE "_" ";" split_name ${app_lib_name})
+  list( GET split_name 1 app_name)
   list( APPEND app_names ${app_name})
 endforeach()
+
+set( descriptor_from_scratch FALSE )
+list( LENGTH app_names count)
+if ( count EQUAL 0 )
+  #This means we are building QGISDescriptor from scratch
+  set( descriptor_from_scratch TRUE )
+  set(app_names ${OTB_APPLICATIONS_NAME_LIST})
+endif()
 
 list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
@@ -53,7 +61,9 @@ if(CMAKE_SKIP_RPATH AND "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(generate_descriptor_cmd "env;LD_LIBRARY_PATH=${OTB_BINARY_DIR}/lib;$<TARGET_FILE:otbQgisDescriptor>")
 endif()
 foreach(app_name ${app_names})
-  # add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  if ( descriptor_from_scratch )
+    add_dependencies(otbQgisDescriptor otbapp_${app_name})
+  endif()
   set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/${app_name}.txt")
   add_custom_command(OUTPUT "${dfile}"
     COMMAND ${generate_descriptor_cmd}
