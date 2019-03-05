@@ -21,11 +21,56 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperParameterKey.h"
 #include "otbWrapperApplicationRegistry.h"
 
 #include <iostream>
 #include <cassert>
 #include <fstream>
+
+namespace
+{
+  std::string GetOptionalSatus(otb::Wrapper::Parameter::Pointer param ,
+                               otb::Wrapper::Application::Pointer app )
+  {
+    // A parameter is mandatory if :
+    // - it has no default value
+    // - is not part of a choice
+    using namespace otb::Wrapper;
+    auto OPTIONAL = "True";
+    auto MANDATORY = "False";
+    // Does param has default value?
+    if ( param->HasValue() )
+    {
+      return OPTIONAL;
+    }
+
+    ParameterKey param_key( param->GetKey() ); 
+    // Does param has a parent?
+    std::string root = param_key.GetRoot();
+    // std::cout<<"Param key is "<<param_key.GetKey()<<std::endl;
+    // std::cout<<"Param root is "<<root<<std::endl;
+    // if ( root.empty() ) That would be too easy...
+    if ( root == param_key.GetKey() ) // that means that root is empty
+    {
+      return MANDATORY;
+    }
+    // A parent is either a choice or a groupe
+    // Is the parent a choice?
+    if ( app->GetParameterType(root) == ParameterType_Choice )
+    {
+      // Choices are dynamic, so there are not mandatory for QGIS
+      // Plus they have default value.
+      return OPTIONAL;
+    }
+    else
+    {
+      // If it is not a choice it is a group. 
+      // We need to have the optional status of this group
+      return GetOptionalSatus( app->GetParameterByKey(root) , app );
+    }
+  }
+}
 
 int main(int argc, char* argv[])
 {
@@ -311,6 +356,7 @@ int main(int argc, char* argv[])
         // qgis has no such option to handle dynamic values yet..
         // So mandatory parameters whose type is StringList is considered optional
         optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
+        optional = GetOptionalSatus( param , appli );
         }
       else
         {
