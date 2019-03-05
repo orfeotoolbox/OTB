@@ -63,6 +63,13 @@ protected:
   virtual void EndFilter() override;
 
 private:
+
+  /** Total number of stars in the progress bar */
+  int m_StarsCount;
+
+  /** Current number of stars in the progress bar */
+  int m_CurrentNbStars;
+  
   CallbackType * m_Callback; 
   
 };

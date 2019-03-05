@@ -32,14 +32,18 @@ CallbackProgressReporter
 CallbackProgressReporter
 ::CallbackProgressReporter(itk::ProcessObject* process,
                         const char *comment)
-  : FilterWatcherBase(process, comment)
+  : FilterWatcherBase(process, comment),
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
 }
 
 CallbackProgressReporter
 ::CallbackProgressReporter(itk::ProcessObject* process,
                         const std::string& comment)
-  : FilterWatcherBase(process, comment.c_str())
+  : FilterWatcherBase(process, comment.c_str()),
+    m_StarsCount(50),
+    m_CurrentNbStars(-1)
 {
 }
 
@@ -50,13 +54,42 @@ CallbackProgressReporter
   if (m_Process)
     {
     int progressPercent = static_cast<int>(m_Process->GetProgress() * 100);
-    
+    int nbStars = static_cast<int>(m_Process->GetProgress() * m_StarsCount);
+    int nbBlanks = m_StarsCount - nbStars;
+
+    if (nbBlanks < 0)
+      {
+      nbBlanks = 0;
+      }
+      
+    if (nbStars > m_StarsCount)
+      {
+      nbStars = m_StarsCount;
+      }
+
     if (progressPercent > 100)
       {
       progressPercent = 100;
       }
-    m_Callback->Call("\r"+std::to_string(progressPercent)+"%");
-    m_Callback->Flush();
+      
+    if (nbStars > m_CurrentNbStars)
+      {
+      std::string stars(nbStars, '*');
+      std::string blanks(nbBlanks, ' ');
+      
+      m_Callback->Call("\r"
+                        +m_Comment
+                        +": "
+                        +std::to_string(progressPercent)
+                        +"% ["
+                        +stars
+                        +blanks
+                        +"]");
+      
+      m_Callback->Flush();
+      }
+
+    m_CurrentNbStars = nbStars;
     }
 }
 
