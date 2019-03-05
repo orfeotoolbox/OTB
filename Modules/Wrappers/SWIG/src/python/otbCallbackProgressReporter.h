@@ -72,6 +72,9 @@ private:
   
   CallbackType * m_Callback; 
   
+  
+  /** buffer used when sys.stdout.isatty() == false */
+  std::string m_Buffer;
 };
 }
 

@@ -46,6 +46,8 @@ protected:
           sys.stdout.write(content)
       def Flush(self):
           sys.stdout.flush()
+      def Isatty(self):
+          return sys.stdout.isatty()
   }
 
 class PythonLogOutput : public itkLogOutput

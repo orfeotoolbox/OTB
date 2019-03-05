@@ -77,16 +77,23 @@ CallbackProgressReporter
       std::string stars(nbStars, '*');
       std::string blanks(nbBlanks, ' ');
       
-      m_Callback->Call("\r"
-                        +m_Comment
-                        +": "
-                        +std::to_string(progressPercent)
-                        +"% ["
-                        +stars
-                        +blanks
-                        +"]");
-      
-      m_Callback->Flush();
+      if (m_Callback->Isatty())
+        {
+        m_Callback->Call("\r"
+                          +m_Comment
+                          +": "
+                          +std::to_string(progressPercent)
+                          +"% ["
+                          +stars
+                          +blanks
+                          +"]");
+        m_Callback->Flush();
+        }
+      else
+        {
+        m_Buffer= "\r"+m_Comment+": "+std::to_string(progressPercent)
+                      +"% ["+stars+blanks+"]";
+        }
       }
 
     m_CurrentNbStars = nbStars;
@@ -105,6 +112,13 @@ CallbackProgressReporter
 ::EndFilter()
 {
   m_Stopwatch.Stop();
+  
+  if (m_Process && !(m_Callback->Isatty()))
+    {
+    m_Callback->Call(m_Buffer);
+    m_Buffer = std::string("");
+    }
+
   m_Callback->Call(" ("
                     +m_Stopwatch.GetElapsedHumanReadableTime()
                     +")\n");

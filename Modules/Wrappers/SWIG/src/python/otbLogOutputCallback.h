@@ -35,6 +35,8 @@ public:
 
   virtual void Call(std::string const &) {};
   virtual void Flush() {};
+  
+  virtual bool Isatty() {return false;};
 };
 
 } // namespace otb
