@@ -908,9 +908,20 @@ class Registry : public itkObject
 public:
 
   static std::vector<std::string> GetAvailableApplications();
-  
+  #if SWIGPYTHON
+  %rename("CreateApplicationWithoutLogger") CreateApplication;
   static Application_Pointer CreateApplication(const std::string& name);
-  
+  %pythoncode
+  {
+    def CreateApplication(name):
+        application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
+        if application is not None:
+            application.SetupLogger()
+        return application
+  }
+  #else
+  static Application_Pointer CreateApplication(const std::string& name);
+  #endif
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
   static void CleanRegistry();
