@@ -50,8 +50,8 @@ namespace
     // Does param has a parent?
     ParameterKey param_key( param_key_string); 
     std::string root = param_key.GetRoot();
-    std::cout<<"Param key is "<<param_key_string<<std::endl;
-    std::cout<<"Param root is "<<root<<std::endl;
+    // std::cout<<"Param key is "<<param_key_string<<std::endl;
+    // std::cout<<"Param root is "<<root<<std::endl;
     // if ( root.empty() ) That would be too easy...
     if ( root == param_key_string ) // that means that root is empty
     {
