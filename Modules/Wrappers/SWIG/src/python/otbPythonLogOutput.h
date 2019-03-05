@@ -51,13 +51,13 @@ public:
   virtual void Flush() override;
 
   /** Write to multiple outputs */
-  virtual void Write(double timestamp) override {};
+  virtual void Write(double timestamp) override;
 
   /** Write to a buffer */
   virtual void Write(std::string const & content) override;
 
   /** Write to a buffer */
-  virtual void Write(std::string const & content, double timestamp) override {};
+  virtual void Write(std::string const & content, double timestamp) override;
 
 protected:
   /** Constructor */
