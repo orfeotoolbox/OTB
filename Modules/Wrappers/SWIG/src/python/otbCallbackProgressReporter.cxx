@@ -105,6 +105,9 @@ CallbackProgressReporter
 ::EndFilter()
 {
   m_Stopwatch.Stop();
+  m_Callback->Call(" ("
+                    +m_Stopwatch.GetElapsedHumanReadableTime()
+                    +")\n");
 }
 
 }
