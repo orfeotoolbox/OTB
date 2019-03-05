@@ -233,14 +233,21 @@ public:
 #if SWIGPYTHON
   %extend 
     {
+    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+     * reporting for the application */
     %pythoncode
       {
       def SetupLogger(self):
           logger = self.GetLogger()
           logger.AddLogOutput(libraryLogOutput.GetPointer())
+          
+          self.AddObserver(AddProcessToWatchEvent(),
+                           libraryProgressReportManager.GetAddProcessCommand()
+                          )
       }
     }
 #endif // SWIGPYTHON
+
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
   std::string GetParameterName(std::string);
@@ -895,22 +902,6 @@ class ApplicationProxy(object):
 }
 
 #endif /* OTB_SWIGNUMPY */
-
-class ProgressReporterManager: public itkObject
-{
-public:
-  /** Default constructor */
-  
-  static ProgressReporterManager_Pointer New();
-  virtual void Delete();
-  void SetLogOutputCallback(otb::LogOutputCallback* callback);
-  itkCommand* GetAddProcessCommand();
-  
-protected:
-  PythonLogOutput();
-};
-
-DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 
 class Registry : public itkObject
 {

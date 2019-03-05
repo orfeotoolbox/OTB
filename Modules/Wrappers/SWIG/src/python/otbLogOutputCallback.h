@@ -33,7 +33,7 @@ public:
   /** Destructor */
   virtual ~LogOutputCallback() = default;
 
-  virtual void Call(std::string const & content) {};
+  virtual void Call(std::string const &) {};
   virtual void Flush() {};
 };
 

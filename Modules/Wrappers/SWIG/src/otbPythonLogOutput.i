@@ -58,7 +58,6 @@ public:
 
 protected:
   PythonLogOutput();
-  //~PythonLogOutput();
 };
 
 DECLARE_REF_COUNT_CLASS( PythonLogOutput )
@@ -75,12 +74,33 @@ protected:
 
 };
 
+class ProgressReporterManager: public itkObject
+{
+public:
+  /** Default constructor */
+  
+  static ProgressReporterManager_Pointer New();
+  virtual void Delete();
+  void SetLogOutputCallback(otb::LogOutputCallback* callback);
+  itkCommand* GetAddProcessCommand();
+  
+protected:
+  ProgressReporterManager();
+};
+
+DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
+
 %pythoncode {
   libraryLogOutput = PythonLogOutput_New()
   libraryLogCallback = PythonLogOutputCallback()
+  libraryProgressReportManager = ProgressReporterManager_New()
+  
   Logger.Instance().ResetOutputs()
   libraryLogOutput.SetCallback(libraryLogCallback)
   Logger.Instance().AddLogOutput(libraryLogOutput.GetPointer())
+  
+  libraryProgressReportManager.SetLogOutputCallback(libraryLogCallback)
+
 }
 
 #endif
