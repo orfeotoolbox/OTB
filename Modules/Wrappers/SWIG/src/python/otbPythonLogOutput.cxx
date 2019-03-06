@@ -32,17 +32,17 @@ void PythonLogOutput::Write(double timestamp)
   m_Callback->Call(std::to_string(timestamp));
 }
 
-void PythonLogOutput::Write(std::string const & content)
+void PythonLogOutput::Write(std::string const& content)
 {
   m_Callback->Call(content);
 }
 
-void PythonLogOutput::Write(std::string const & content, double timestamp)
+void PythonLogOutput::Write(std::string const& content, double timestamp)
 {
   m_Callback->Call(std::to_string(timestamp) + " : " + content);
 }
 
-void PythonLogOutput::PrintSelf(std::ostream & os, itk::Indent indent) const
+void PythonLogOutput::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

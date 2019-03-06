@@ -35,10 +35,10 @@ namespace otb
 class PythonLogOutput : public itk::LogOutput
 {
 public:
-  typedef PythonLogOutput         Self;
-  typedef itk::LogOutput                  Superclass;
-  typedef itk::SmartPointer< Self >       Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef PythonLogOutput               Self;
+  typedef itk::LogOutput                Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef LogOutputCallback CallbackType;
   itkTypeMacro(PythonLogOutput, itk::LogOutput);
@@ -46,12 +46,12 @@ public:
   itkNewMacro(PythonLogOutput);
 
   /** Set the callback method */
-  void SetCallback(CallbackType * callback)
-    {
+  void SetCallback(CallbackType* callback)
+  {
     m_Callback = callback;
     this->Modified();
-    }
-  
+  }
+
   /** flush a buffer */
   virtual void Flush() override;
 
@@ -59,10 +59,10 @@ public:
   virtual void Write(double timestamp) override;
 
   /** Write to a buffer */
-  virtual void Write(std::string const & content) override;
+  virtual void Write(std::string const& content) override;
 
   /** Write to a buffer */
-  virtual void Write(std::string const & content, double timestamp) override;
+  virtual void Write(std::string const& content, double timestamp) override;
 
 protected:
   /** Constructor */
@@ -71,10 +71,10 @@ protected:
   /** Destructor */
   virtual ~PythonLogOutput() override = default;
 
-  virtual void PrintSelf(std::ostream & os, itk::Indent indent) const override;
+  virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CallbackType * m_Callback; 
+  CallbackType* m_Callback;
 };
 
 } // namespace otb

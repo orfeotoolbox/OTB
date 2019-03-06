@@ -23,27 +23,23 @@
 
 namespace otb
 {
-  
-ProgressReporterManager
-::ProgressReporterManager()
+
+ProgressReporterManager::ProgressReporterManager()
 {
   // Add the callback to be added when a AddProcessToWatch event is invoked
   m_AddProcessCommand = AddProcessCommandType::New();
   m_AddProcessCommand->SetCallbackFunction(this, &ProgressReporterManager::LinkWatchers);
 }
 
-void ProgressReporterManager::LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event)
+void ProgressReporterManager::LinkWatchers(itk::Object* itkNotUsed(caller), const itk::EventObject& event)
 {
-  if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid( event ))
-    {
-    const Wrapper::AddProcessToWatchEvent* eventToWatch = dynamic_cast<const Wrapper::AddProcessToWatchEvent*> (&event);
+  if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid(event))
+  {
+    const Wrapper::AddProcessToWatchEvent* eventToWatch = dynamic_cast<const Wrapper::AddProcessToWatchEvent*>(&event);
 
-    CallbackProgressReporter * watch = new CallbackProgressReporter(eventToWatch->GetProcess(),
-                                                                              eventToWatch->GetProcessDescription());
+    CallbackProgressReporter* watch = new CallbackProgressReporter(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
     watch->SetCallback(m_Callback);
     m_WatcherList.push_back(watch);
-    }
+  }
 }
-
-
 }

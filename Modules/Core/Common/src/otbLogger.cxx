@@ -47,8 +47,7 @@ Logger * Logger::CreateInstance()
   Logger * logger = new Logger;
 
   // By default redirect logs to std::cout
-  itk::StdStreamLogOutput::Pointer defaultOutput = 
-      itk::StdStreamLogOutput::New();
+  itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
   defaultOutput->SetStream(std::cout);
   logger->AddLogOutput(defaultOutput);
 

@@ -33,27 +33,29 @@ namespace otb
  *  class PythonLogOutputCallback, that uses Swig directors to override these
  *  methods.
  */
- 
+
 class LogOutputCallback
 {
 public:
   /** Constructor */
   LogOutputCallback() = default;
-  
+
   /** Destructor */
   virtual ~LogOutputCallback() = default;
 
   /** Write a string to a buffer */
-  virtual void Call(std::string const &) {};
-  
+  virtual void Call(std::string const&){};
+
   /** Flush the buffer */
-  virtual void Flush() {};
-  
+  virtual void Flush(){};
+
   /** Determine if the bufer is interactive */
-  virtual bool Isatty() {return false;};
+  virtual bool Isatty()
+  {
+    return false;
+  };
 };
 
 } // namespace otb
 
 #endif // otbPythonLogOutputCallback_h
-

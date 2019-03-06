@@ -41,37 +41,36 @@ class ProgressReporterManager : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef ProgressReporterManager Self;
-  typedef itk::Object Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ProgressReporterManager       Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   itkTypeMacro(ProgressReporterManager, itk::Object);
 
   itkNewMacro(ProgressReporterManager);
 
   typedef LogOutputCallback CallbackType;
   /** Command Member */
-  typedef itk::MemberCommand< Self >        AddProcessCommandType;
+  typedef itk::MemberCommand<Self> AddProcessCommandType;
 
   /** Filter watcher list type */
-  typedef std::vector<CallbackProgressReporter *> WatcherListType;
-  
+  typedef std::vector<CallbackProgressReporter*> WatcherListType;
+
   /** Set the logger callback function */
-  void SetLogOutputCallback(CallbackType * callback)
+  void SetLogOutputCallback(CallbackType* callback)
   {
     m_Callback = callback;
     this->Modified();
   }
-  
+
   /** Getter to AddProcessCommand */
   AddProcessCommandType* GetAddProcessCommand()
   {
     return m_AddProcessCommand.GetPointer();
   }
-  
-protected:
 
+protected:
   /** Default constructor */
   ProgressReporterManager();
 
@@ -79,19 +78,18 @@ protected:
   virtual ~ProgressReporterManager() = default;
 
   /** Load the watchers for internal progress and writing progress report. */
-  void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
+  void LinkWatchers(itk::Object* caller, const itk::EventObject& event);
 
 private:
   /** The LogOutputCallback used for printing */
-  CallbackType * m_Callback; 
-  
-  /** Command associated to the LinkWatchers command */
-  AddProcessCommandType::Pointer    m_AddProcessCommand;
-  
-  /** container storing all the watchers (CallbackProgressReporter) */
-  WatcherListType                   m_WatcherList;
-};
+  CallbackType* m_Callback;
 
+  /** Command associated to the LinkWatchers command */
+  AddProcessCommandType::Pointer m_AddProcessCommand;
+
+  /** container storing all the watchers (CallbackProgressReporter) */
+  WatcherListType m_WatcherList;
+};
 }
 
-#endif //otbProgressReporterManager_h
+#endif // otbProgressReporterManager_h

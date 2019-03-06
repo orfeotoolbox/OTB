@@ -34,17 +34,15 @@ namespace otb
  *  the LogOutputCallback. The LogOutputCallback is also used to determine
  *  if the output is interactive.
  */
- 
+
 class CallbackProgressReporter : public FilterWatcherBase
 {
 public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  CallbackProgressReporter(itk::ProcessObject* process,
-                        const char *comment = "");
+  CallbackProgressReporter(itk::ProcessObject* process, const char* comment = "");
 
-  CallbackProgressReporter(itk::ProcessObject* process,
-                        const std::string& comment = "");
+  CallbackProgressReporter(itk::ProcessObject* process, const std::string& comment = "");
 
   /** Default constructor */
   CallbackProgressReporter();
@@ -53,13 +51,13 @@ public:
   virtual ~CallbackProgressReporter() = default;
 
   typedef LogOutputCallback CallbackType;
-  
+
   /** Set the callback method */
-  void SetCallback(CallbackType * callback)
-    {
+  void SetCallback(CallbackType* callback)
+  {
     m_Callback = callback;
-    }
-  
+  }
+
 protected:
   /** Callback method to show the ProgressEvent */
   virtual void ShowProgress() override;
@@ -71,19 +69,18 @@ protected:
   virtual void EndFilter() override;
 
 private:
-
   /** Total number of stars in the progress bar */
   int m_StarsCount;
 
   /** Current number of stars in the progress bar */
   int m_CurrentNbStars;
-  
+
   /** The Callback used for printing */
-  CallbackType * m_Callback; 
-  
+  CallbackType* m_Callback;
+
   /** buffer used when sys.stdout.isatty() == false */
   std::string m_Buffer;
 };
 }
 
-#endif //otbCallbackProgressReporter_h
+#endif // otbCallbackProgressReporter_h
