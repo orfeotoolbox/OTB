@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
     const std::string name = appKeyList[i];
     const Parameter::Pointer param = appli->GetParameterByKey(name);
     const ParameterType type = appli->GetParameterType(name);
-    const std::string description = param->GetName();
+    const std::string description = appli->GetParameterName(name);
     if (  type == ParameterType_Group  ||
           type == ParameterType_OutputProcessXML  ||
           type == ParameterType_InputProcessXML  ||
