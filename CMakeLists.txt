@@ -104,7 +104,7 @@ repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/Data
+  HINTS ${OTB_SOURCE_DIR}/Data $ENV{OTB_DATA_ROOT}
   )
 #mark_as_advanced(OTB_DATA_ROOT)
 
