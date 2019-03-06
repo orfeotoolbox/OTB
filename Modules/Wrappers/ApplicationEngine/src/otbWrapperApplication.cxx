@@ -353,7 +353,9 @@ void Application::SetParameterInt(std::string parameter, int value, bool hasUser
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  this->NotifyUpdate();
 }
+
 void Application::SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag)
 {
   Parameter* param = GetParameterByKey(parameter);
@@ -365,6 +367,7 @@ void Application::SetParameterFloat(std::string parameter, float value, bool has
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag)
@@ -477,6 +480,7 @@ void Application::SetParameterString(std::string parameter, std::string value, b
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag)
@@ -510,6 +514,7 @@ void Application::SetParameterStringList(std::string parameter, std::vector<std:
     }
 
   this->SetParameterUserValue(parameter, hasUserValueFlag);
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterUserValue(std::string paramKey, bool value)
@@ -548,7 +553,13 @@ void Application::Init()
   AddOutXMLParameter();
 }
 
+/*
 void Application::UpdateParameters()
+{
+}
+*/
+
+void Application::NotifyUpdate()
 {
   m_IsInPrivateDo = true;
   this->DoUpdateParameters();
@@ -767,8 +778,7 @@ void Application::FreeRessources()
 
 int Application::Execute()
 {
-
-  this->UpdateParameters();
+  this->NotifyUpdate();
 
   // before execute we set the seed of mersenne twister
   std::vector<std::string> paramList = GetParametersKeys(true);
@@ -1380,6 +1390,7 @@ void Application::SetParameterOutputImage(std::string parameter, FloatVectorImag
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     paramDown->SetValue(value);
     }
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterComplexOutputImage(std::string parameter, ComplexFloatVectorImageType* value)
@@ -1391,6 +1402,7 @@ void Application::SetParameterComplexOutputImage(std::string parameter, ComplexF
     ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
     paramDown->SetValue(value);
     }
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType)
@@ -1402,6 +1414,7 @@ void Application::SetParameterOutputImagePixelType(std::string parameter, ImageP
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     paramDown->SetPixelType(pixelType);
     }
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterComplexOutputImagePixelType(std::string parameter,
@@ -1414,6 +1427,7 @@ void Application::SetParameterComplexOutputImagePixelType(std::string parameter,
     ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
     paramDown->SetComplexPixelType(cpixelType);
     }
+  this->NotifyUpdate();
 }
 
 void Application::SetParameterOutputVectorData(std::string parameter, VectorDataType* value)
@@ -1425,6 +1439,7 @@ void Application::SetParameterOutputVectorData(std::string parameter, VectorData
     OutputVectorDataParameter* paramDown = dynamic_cast<OutputVectorDataParameter*>(param);
     paramDown->SetValue(value);
     }
+  this->NotifyUpdate();
 }
 
 std::string Application::GetParameterName(std::string parameter)
@@ -1675,6 +1690,7 @@ void Application::SetParameterInputImage(std::string parameter, ImageBaseType * 
     {
     itkExceptionMacro(<<parameter << " parameter can't be casted to InputImageParameter");
     }
+  this->NotifyUpdate();
 }
 
 ImageBaseType * Application::GetParameterOutputImage(std::string parameter)
@@ -1708,6 +1724,7 @@ void Application::SetParameterComplexInputImage(std::string parameter, ImageBase
     {
     itkExceptionMacro(<<parameter << " parameter can't be casted to ComplexInputImageParameter");
     }
+  this->NotifyUpdate();
 }
 
 ImageBaseType * Application::GetParameterComplexOutputImage(std::string parameter)
@@ -2330,6 +2347,7 @@ Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, 
     {
     itkExceptionMacro("Wrong parameter type, expect InputImageParameter, InputImageListParameter or ComplexInputImageParameter");
     }
+  this->NotifyUpdate();
 }
 
 ImagePixelType

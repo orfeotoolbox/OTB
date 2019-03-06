@@ -229,7 +229,6 @@ private :
   {
     std::vector<std::string> vectorFileList = GetParameterStringList( "io.vd" );
     GetInternalApplication( "polystat" )->SetParameterString( "vec", vectorFileList[0]);
-    UpdateInternalParameters( "polystat" );
   }
 
 };

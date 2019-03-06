@@ -213,7 +213,6 @@ public:
   itkGetStringMacro(Description);
 
   void Init();
-  void UpdateParameters();
   int Execute();
   int ExecuteAndWriteOutput();
 

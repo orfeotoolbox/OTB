@@ -67,7 +67,7 @@ QtWidgetModel
   // Update the parameters
   try
   {
-    m_Application->UpdateParameters();
+    m_Application->NotifyUpdate();
   }
   catch(otb::ApplicationException& err)
   {

@@ -87,7 +87,6 @@ private:
 
   void DoUpdateParameters() override
   {
-    UpdateInternalParameters("superimpose");
   }
 
   void DoExecute() override

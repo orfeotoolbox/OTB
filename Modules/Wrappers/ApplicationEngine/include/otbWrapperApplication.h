@@ -105,7 +105,8 @@ public:
   bool IsInitialized() const;
 
   /** Update the value of parameters for which no user value has been provided */
-  void UpdateParameters();
+  //void UpdateParameters(); // todo add deprecated empty implementation for backwards compat
+  void NotifyUpdate();
 
   /** Run the application.
    *

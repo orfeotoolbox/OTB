@@ -29,10 +29,8 @@ if __name__ == '__main__':
 
     ext1.SetParameterString('in',inimage)
     ext1.Execute()
-    ext1.UpdateParameters()
     
     ext2.SetParameterInputImage('in',ext2.GetParameterOutputImage('out'))
-    ext2.UpdateParameters()
     ext2.SetParameterStringList('cl',['Channel1'])
     ext2.SetParameterString("out",outimage)
     ext2.ExecuteAndWriteOutput()

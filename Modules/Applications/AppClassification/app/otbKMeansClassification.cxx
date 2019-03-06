@@ -200,7 +200,6 @@ protected:
     /* SampleSelection */
     GetInternalApplication("select")->SetParameterString("out", sampleFileName);
 
-    UpdateInternalParameters("select");
     GetInternalApplication("select")->SetParameterString("instats", statisticsFileName);
     GetInternalApplication("select")->SetParameterString("field", fieldName);
 
@@ -214,8 +213,6 @@ protected:
     ExecuteInternal("select");
 
     /* SampleExtraction */
-    UpdateInternalParameters("extraction");
-
     GetInternalApplication("extraction")->SetParameterString("outfield", "prefix");
     GetInternalApplication("extraction")->SetParameterString("outfield.prefix.name", "value_");
 
@@ -229,7 +226,6 @@ protected:
   {
     std::vector<std::string> extractOutputList = {sampleTrainFileName};
     GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList);
-    UpdateInternalParameters("training");
 
     // set field names
     std::string selectPrefix = GetInternalApplication("extraction")->GetParameterString("outfield.prefix.name");
@@ -509,7 +505,6 @@ private:
   void UpdateKMPolygonClassStatisticsParameters(const std::string &vectorFileName)
   {
     GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName);
-    UpdateInternalParameters( "polystats" );
   }
 
 };

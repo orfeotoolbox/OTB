@@ -254,7 +254,6 @@ TrainImagesBase::TrainModel(FloatVectorImageListType *imageList, const std::vect
   if( !sampleValidationFileNames.empty() )
     GetInternalApplication( "training" )->SetParameterStringList( "valid.vd", sampleValidationFileNames);
 
-  UpdateInternalParameters( "training" );
   // set field names
   FloatVectorImageType::Pointer image = imageList->GetNthElement( 0 );
   unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
@@ -301,7 +300,6 @@ void TrainImagesBase::SelectAndExtractSamples(FloatVectorImageType *image, std::
   ExecuteInternal( "select" );
 
   GetInternalApplication( "extraction" )->SetParameterString( "vec", sampleFileName);
-  UpdateInternalParameters( "extraction" );
   if( !selectedField.empty() )
     GetInternalApplication( "extraction" )->SetParameterString( "field", selectedField);
 

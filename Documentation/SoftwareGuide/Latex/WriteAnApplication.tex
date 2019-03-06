@@ -238,11 +238,6 @@ At the moment, the in-memory connexion of vector data parameters is not supporte
 
 \subsection{Orchestration}
 
-In the \code{DoUpdateParameters()} of your composite application, you can call
-the same function on an internal application with the function \code{UpdateInternalParameters()}.
-This is needed only if your internal applications have a specific behaviour during
-parameter update.
-
 In the \code{DoExecute()} of your composite application, you have to call \code{ExecuteInternal()}
 in order to launch each internal application. The order should be compatible with
 image parameter connexions. If you want to do "in-memory" connexions, you can do it between

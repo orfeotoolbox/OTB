@@ -32,7 +32,6 @@ class RescaleInXMLTest {
     Application app = Registry.CreateApplication("Rescale");
 
     app.SetParameterString("inxml", argv[0]);
-    app.UpdateParameters();
 
     app.SetParameterString("in",     argv[1]);
     app.SetParameterString("out",    argv[2]);

@@ -35,7 +35,6 @@ def test(otb, argv):
 	app.SetParameterString("out", out, True)
 	app.SetParameterString("exp", exp, True)
 	app.SetParameterString("outxml", outxml, True)
-	app.UpdateParameters()
 #for paramKey in app.GetParametersKeys():
   #app.GetParameterValue(paramKey)
   #print app.HasUserValue(paramKey)

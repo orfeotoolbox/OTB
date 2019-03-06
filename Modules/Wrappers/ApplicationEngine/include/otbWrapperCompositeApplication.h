@@ -139,11 +139,6 @@ protected:
    */
   void ExecuteInternal(std::string key);
 
-  /**
-   * Utility function to call UpdateParameters() on an internal app
-   */
-  void UpdateInternalParameters(std::string key);
-
 private:
   CompositeApplication(const CompositeApplication &) = delete;
   void operator =(const CompositeApplication&) = delete;

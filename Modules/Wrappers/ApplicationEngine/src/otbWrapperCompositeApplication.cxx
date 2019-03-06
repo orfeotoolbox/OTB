@@ -179,12 +179,5 @@ CompositeApplication
   GetInternalApplication(key)->Execute();
 }
 
-void
-CompositeApplication
-::UpdateInternalParameters(std::string key)
-{
-  GetInternalApplication(key)->UpdateParameters();
-}
-
 } // end namespace Wrapper
 } // end namespace otb

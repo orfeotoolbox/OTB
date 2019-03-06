@@ -497,7 +497,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
             }
           }
         // Call the DoUpdateParameter to update dependent params
-        m_Application->UpdateParameters();
+        m_Application->NotifyUpdate();
+
         }
       }
     }
