@@ -96,28 +96,6 @@ const char* Application::GetDescription() const
   return m_Description.c_str();
 }
 
-void Application::SetHaveInXML(bool haveInXML)
-{
-  m_HaveInXML = haveInXML;
-  this->Modified();
-}
-
-bool Application::GetHaveInXML() const
-{
-  return m_HaveInXML;
-}
-
-void Application::SetHaveOutXML(bool haveOutXML)
-{
-  m_HaveOutXML = haveOutXML;
-  this->Modified();
-}
-
-bool Application::GetHaveOutXML() const
-{
-  return m_HaveOutXML;
-}
-
 void Application::SetDocName(const std::string& value)
 {
   m_DocName = value;
@@ -258,11 +236,6 @@ std::string Application::GetHtmlExample()
   return GetDocExample()->GenerateHtmlExample();
 }
 
-void Application::ForceInXMLParseFlag()
-{
-  m_IsInXMLParsed = false;
-}
-
 void Application::SetDocLink(const std::string & link)
 {
   if (m_Doclink.compare(link) != 0)
@@ -295,9 +268,6 @@ Application::Application()
     m_DocSeeAlso(""),
     m_DocTags(),
     m_Doclink(""),
-    m_HaveInXML(true),
-    m_HaveOutXML(true),
-    m_IsInXMLParsed(false),
     m_IsInPrivateDo(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -491,7 +461,10 @@ void Application::SetParameterString(std::string parameter, std::string value, b
     {
     InputProcessXMLParameter* paramDown = dynamic_cast<InputProcessXMLParameter*>(param);
     if ( !paramDown->SetFileName(value) )
-    otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
+    {
+        otbAppLogCRITICAL( <<"Invalid XML parameter filename " << value <<".");
+    }
+    paramDown->ReadParametersXML(this);
     }
   else if (dynamic_cast<BoolParameter*>(param))
     {
@@ -567,42 +540,16 @@ void Application::Init()
 {
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
-  //reset inXML parse checker in case if reinit-ing
-  m_IsInXMLParsed = false;
   m_IsInPrivateDo = true;
   this->DoInit();
   m_IsInPrivateDo = false;
 
-  //rashad: global parameters. now used only for inxml and outxml
-  if(this->GetHaveInXML())
-    {
-    AddInXMLParameter();
-    }
-  if(this->GetHaveOutXML())
-    {
-    AddOutXMLParameter();
-    }
+  AddInXMLParameter();
+  AddOutXMLParameter();
 }
 
 void Application::UpdateParameters()
 {
-  //read application from xml only once m_IsInXMLParsed is in charge of it.
-  std::string inXMLKey = "inxml";
-  if (m_HaveInXML && !m_IsInXMLParsed)
-    {
-    if ( GetParameterType(inXMLKey) == ParameterType_InputProcessXML  &&
-         IsParameterEnabled(inXMLKey) && HasValue(inXMLKey) )
-      {
-      Parameter* param = GetParameterByKey(inXMLKey);
-      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      if(inXMLParam!=nullptr)
-        {
-        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
-        m_IsInXMLParsed = true;
-        inXMLParam->Read(this);
-        }
-      }
-    }
   m_IsInPrivateDo = true;
   this->DoUpdateParameters();
   m_IsInPrivateDo = false;
@@ -967,7 +914,7 @@ int Application::ExecuteAndWriteOutput()
             }
           }
         //xml writer parameter
-        else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
+        else if (GetParameterType(key) == ParameterType_OutputProcessXML
                  && IsParameterEnabled(key) && HasValue(key) )
           {
           Parameter* param = GetParameterByKey(key);

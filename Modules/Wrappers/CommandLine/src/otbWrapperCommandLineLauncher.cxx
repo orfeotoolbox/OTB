@@ -369,8 +369,9 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     {
     std::vector<std::string> inXMLValues;
     inXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
+
+    // Load and init all parameters from xml
     m_Application->SetParameterString(inXMLKey, inXMLValues[0]);
-    m_Application->UpdateParameters();
     }
 
   // Check for the progress report parameter

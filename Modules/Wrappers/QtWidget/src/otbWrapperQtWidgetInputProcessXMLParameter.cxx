@@ -120,15 +120,8 @@ QtWidgetInputProcessXMLParameter
 
 void QtWidgetInputProcessXMLParameter::SetFileName(const QString& value)
 {
-  // load xml file name
-  if( m_XMLParam->SetFileName(
-	QFile::encodeName( value ).constData() ) )
-    {
-    // notify of value change
-    QString key( m_XMLParam->GetKey() );
-    emit ParameterChanged(key);
-    GetModel()->GetApplication()->ForceInXMLParseFlag();
-    }
+  // Load and init all parameters from xml
+  GetModel()->GetApplication()->SetParameterString(m_XMLParam->GetKey(), QFile::encodeName(value).toStdString());
 }
 
 }

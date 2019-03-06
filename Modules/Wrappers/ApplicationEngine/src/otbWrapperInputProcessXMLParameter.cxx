@@ -62,20 +62,15 @@ InputProcessXMLParameter::~InputProcessXMLParameter()
 bool
 InputProcessXMLParameter::SetFileName(std::string value)
 {
-  // Check if the filename is not empty
-  if(!value.empty())
-    {
-    // Check that the right extension is given : expected .xml
-    if (itksys::SystemTools::GetFilenameLastExtension(value) == ".xml")
-      {
-      if (itksys::SystemTools::FileExists(value,true))
-        {
-        this->SetValue(value);
-        return true;
-        }
-      }
-    }
-  return false;
+  if (value.empty() ||
+      itksys::SystemTools::GetFilenameLastExtension(value) != ".xml" ||
+      !itksys::SystemTools::FileExists(value, true))
+  {
+      return false;
+  }
+
+  this->SetValue(value);
+  return true;
 }
 
 void
@@ -178,7 +173,7 @@ InputProcessXMLParameter::GetChildNodeTextOf(TiXmlElement *parentElement, std::s
 }
 
 int
-InputProcessXMLParameter::Read(Application::Pointer this_)
+InputProcessXMLParameter::ReadParametersXML(Application::Pointer this_)
 {
   // Open the xml file
   TiXmlDocument doc;

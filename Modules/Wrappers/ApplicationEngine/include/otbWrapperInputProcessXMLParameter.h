@@ -75,7 +75,7 @@ public:
 
   const std::string GetChildNodeTextOf(TiXmlElement *parentElement, std::string key);
 
-  int Read(Application::Pointer application);
+  int ReadParametersXML(Application::Pointer application);
 
   void otbAppLogInfo(Application::Pointer app, std::string info);
 

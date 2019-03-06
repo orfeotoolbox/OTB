@@ -104,12 +104,6 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  virtual void SetHaveInXML(bool);
-  virtual bool GetHaveInXML() const;
-
-  virtual void SetHaveOutXML(bool);
-  virtual bool GetHaveOutXML() const;
-
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
 
@@ -745,9 +739,6 @@ public:
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
 
-   /** If need to force readxml more than once in application */
-  void ForceInXMLParseFlag();
-
   double GetLastExecutionTiming() const;
 
   virtual void SetDocLink(const std::string & link);
@@ -1013,11 +1004,6 @@ private:
 
   /** Chrono to measure execution time */
   otb::Stopwatch m_Chrono;
-
-  //rashad:: controls adding of -xml parameter. set to true by default
-  bool                              m_HaveInXML;
-  bool                              m_HaveOutXML;
-  bool                              m_IsInXMLParsed;
 
   /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
   bool m_IsInPrivateDo;
