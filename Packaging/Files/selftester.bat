@@ -180,7 +180,7 @@ goto :eof
 :check_python_wrapping
 setlocal
 type NUL > tmp.log
-python -c "import otbApplication" > tmp.log 2>&1
+python3 -c "import otbApplication" > tmp.log 2>&1
 call :nb_tmp_lines
 if %nb_tmp_lines_out% gtr 0 (
   echo ERROR : failed to run python wrapping
