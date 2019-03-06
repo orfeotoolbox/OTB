@@ -43,24 +43,20 @@ start Visual Studio.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Starting from OTB 5.8.0, OTB bindings for Python 2.7 are distributed as a binary
-package. With OTB 6.4.0, additional bindings for Python 3.5 are also included.
+Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
+package.
 Please note that using a different Python version may not be compatible with
-OTB wrappings. If no compatible Python 2.x version is found a
-notification is generated during the installation process.  If the installation completes
+OTB wrappings. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
 
 You must have Python numpy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
-By default, bindings for Python 2.7 will be enabled with the ``otbenv`` script.
-If you want to use bindings for Python 3.5, you can copy this script and modify:
+By default, bindings for Python 3.5 will be enabled with the ``otbenv`` script.
 
-- ``lib/python`` into ``lib/python3``, for variable PYTHONPATH
-
-Notes
-~~~~~
+Notes:
+~~~~~~
 
 - You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
   It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
