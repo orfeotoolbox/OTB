@@ -831,9 +831,9 @@ class ApplicationProxy(object):
       array = self.NumpyExporterMap[pixT](self,paramKey)
       if array.shape[2] > 1:
         raise ValueError("array.shape[2] > 1\n"
-                         "Output image from application has more than 1 band\n"
-                         "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
-                         "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
+                         "Output image from application has more than 1 band.\n"
+                         "GetImageAsNumpyArray only returns the first band, which will result in a loss of data.\n"
+                         "In this case you must use GetVectorImageAsNumpyArray which can return a 3 dimension image.\n")
       array = array[:,:,0]
       return array
 
