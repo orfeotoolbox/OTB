@@ -224,8 +224,9 @@ public:
   int Execute();
   int ExecuteAndWriteOutput();
 
+#if SWIGPYTHON
   Logger* GetLogger();
-
+#endif
   unsigned long itk::Object::AddObserver(const EventObject & event, 
                                           Command * command);
 

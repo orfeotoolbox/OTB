@@ -26,10 +26,6 @@
 #include "otbWrapperDocExampleStructure.h"
 #include "otbWrapperMetaDataHelper.h"
 
-#include "otbPythonLogOutput.h"
-#include "otbLogger.h"
-#include "otbProgressReporterManager.h"
-
 typedef otb::Wrapper::Application                        Application;
 typedef otb::Wrapper::Application::Pointer               Application_Pointer;
 typedef otb::Wrapper::ApplicationRegistry                Registry;
@@ -43,6 +39,11 @@ typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParame
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
 
+#if defined(SWIGPYTHON)
+#include "otbPythonLogOutput.h"
+#include "otbLogger.h"
+#include "otbProgressReporterManager.h"
+
 typedef otb::Logger                           Logger;
 typedef otb::Logger::Pointer                  Logger_Pointer;
 typedef otb::LogOutputCallback                LogOutputCallback;
@@ -50,5 +51,6 @@ typedef otb::PythonLogOutput                  PythonLogOutput;
 typedef otb::PythonLogOutput::Pointer         PythonLogOutput_Pointer;
 typedef otb::ProgressReporterManager          ProgressReporterManager;
 typedef otb::ProgressReporterManager::Pointer ProgressReporterManager_Pointer;
+#endif
 
 #endif
