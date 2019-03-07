@@ -99,11 +99,11 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 {
   Superclass::GenerateOutputInformation();
   if (this->GetInput(0)->GetNumberOfComponentsPerPixel() != this->GetInput(1)->GetNumberOfComponentsPerPixel())
-    {
+  {
     itkExceptionMacro(<< "Image 1 has " << this->GetInput(
                         0)->GetNumberOfComponentsPerPixel() << " bands, whereas image 2 has " << this->GetInput(
                         1)->GetNumberOfComponentsPerPixel());
-    }
+  }
   this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput(0)->GetNumberOfComponentsPerPixel());
 }
 //----------------------------------------------------------------------------
@@ -132,9 +132,9 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Initialize the temporaries
   for (int i = 0; i < numberOfThreads; ++i)
-    {
+  {
     m_ThreadDifferenceSum.push_back(m_TotalDifference);
-    }
+  }
   m_ThreadNumberOfPixels.Fill(0);
 }
 
@@ -163,14 +163,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Create a radius of pixels.
   RadiusType radius;
-  if (m_ToleranceRadius > 0)
-    {
-    radius.Fill(m_ToleranceRadius);
-    }
-  else
-    {
-    radius.Fill(0);
-    }
+  radius.Fill(std::min(0, m_ToleranceRadius));
 
   // Find the data-set boundary faces.
   FacesCalculator boundaryCalculator;
@@ -181,41 +174,52 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Process the internal face and each of the boundary faces.
   for (FaceListIterator face = faceList.begin(); face != faceList.end(); ++face)
-    {
+  {
     SmartIterator test(radius, testImage, *face); // Iterate over test image.
     InputIterator valid(validImage, *face);       // Iterate over valid image.
     OutputIterator out(outputPtr, *face);         // Iterate over output image.
     test.OverrideBoundaryCondition(&nbc);
 
+    // Extract a typical pixel in order to know the exact size of the
+    // pixel, the typical 0, and the typical max
+    valid.GoToBegin();
+    InputPixelType t = valid.Get();
+
+    const auto pixel_size = itk::NumericTraits<InputPixelType>::GetLength(t);
+    const auto out_max    = itk::NumericTraits<OutputPixelType>::max(t);
+    const auto zero       = itk::NumericTraits<OutputPixelType>::ZeroValue(t);
+
+    OutputPixelType minimumDifference = out_max;
+
     for (valid.GoToBegin(), test.GoToBegin(), out.GoToBegin();
          !valid.IsAtEnd();
          ++valid, ++test, ++out)
-      {
+    {
       // Get the current valid pixel.
-      InputPixelType t = valid.Get();
+      t = valid.Get();
 
       // Find the closest-valued pixel in the neighborhood of the test
       // image.
-      OutputPixelType minimumDifference = itk::NumericTraits<OutputPixelType>::max(t);
+      minimumDifference = out_max; // reset by assignment, avoid allocation in VLV case
       unsigned int    neighborhoodSize = test.Size();
       for (unsigned int i = 0; i < neighborhoodSize; ++i)
-        {
-        // Use the RealType for the difference to make sure we get the
-        // sign.
-        RealType difference = static_cast<RealType>(t) - static_cast<RealType>(test.GetPixel(i));
+      {
 
-        for (unsigned int j = 0; j < itk::NumericTraits<RealType>::GetLength(difference) ; ++j)
-          {
+        for (unsigned int j = 0; j < pixel_size ; ++j)
+        {
+          // Use the RealType for the difference to make sure we get
+          // the sign.
+          // Work on component independently in order to avoid
+          // allocation of VLV pixels
           ScalarRealType d = static_cast<ScalarRealType>(
-            itk::DefaultConvertPixelTraits<RealType>::GetNthComponent(j,difference));
-          if (d < 0)
-            {
-            d *= -1;
-            }
+            itk::DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(j,t)
+            - itk::DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(j,test.GetPixel(i))
+            );
+          d = std::abs(d);
           ScalarRealType m = static_cast<ScalarRealType>(
             itk::DefaultConvertPixelTraits<OutputPixelType>::GetNthComponent(j,minimumDifference));
           if (d < m)
-            {
+          {
             itk::DefaultConvertPixelTraits<OutputPixelType>::SetNthComponent(
               j,
               minimumDifference,
@@ -224,55 +228,56 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 //             std::cout << std::setprecision(16) << t << std::endl;
 //             std::cout << std::setprecision(16) << test.GetPixel(i) << std::endl;
 //             std::cout << "----------------------" << std::endl;
-            }
           }
         }
+      }
 
       //for complex and vector type. FIXME: module might be better
 //        ScalarRealType tMax=std::abs(t[0]);
       ScalarRealType tMax = 0.01; //Avoiding the 0 case for neighborhood computing
       // NB: still more restrictive than before for small values.
-      for (unsigned int j = 0; j < itk::NumericTraits<InputPixelType>::GetLength(t); ++j)
-        {
+      for (unsigned int j = 0; j < pixel_size ; ++j)
+      {
         ScalarRealType tc = static_cast<ScalarRealType>(
           itk::DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(j,t));
-        if (std::abs(tc) > tMax) tMax = std::abs(tc);
-        }
+        tMax = std::max(std::abs(tc), tMax);
+      }
 
       // Check if difference is above threshold
       // the threshold is interpreted as relative to the value
       bool isDifferent = false;
 
-      for (unsigned int j = 0; j < itk::NumericTraits<OutputPixelType>::GetLength(minimumDifference); ++j)
-        {
+      for (unsigned int j = 0; j < pixel_size ; ++j)
+      {
         ScalarRealType m = static_cast<ScalarRealType>(
           itk::DefaultConvertPixelTraits<OutputPixelType>::GetNthComponent(j,minimumDifference));
         if (m > m_DifferenceThreshold * tMax)
-          {
+        {
 //           std::cout << std::setprecision(16) << minimumDifference[j] << std::endl;
           isDifferent = true;
-          }
+          break;
         }
+      }
 
       if (isDifferent)
-        {
+      {
         // Store the minimum difference value in the output image.
         out.Set(minimumDifference);
 
         // Update difference image statistics.
         m_ThreadDifferenceSum[threadId] += minimumDifference;
         m_ThreadNumberOfPixels[threadId]++;
-        }
+      }
       else
-        {
+      {
         // Difference is below threshold.
-        out.Set(itk::NumericTraits<OutputPixelType>::ZeroValue(minimumDifference));
-        }
+        out.Set(zero);
+      }
 
       // Update progress.
       progress.CompletedPixel();
-      }
     }
+  }
 }
 //----------------------------------------------------------------------------
 template <class TInputImage, class TOutputImage>
@@ -283,10 +288,10 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   // Set statistics about difference image.
   int numberOfThreads = this->GetNumberOfThreads();
   for (int i = 0; i < numberOfThreads; ++i)
-    {
+  {
     m_TotalDifference += m_ThreadDifferenceSum[i];
     m_NumberOfPixelsWithDifferences += m_ThreadNumberOfPixels[i];
-    }
+  }
 
   // Get the total number of pixels processed in the region.
   // This is different from the m_TotalNumberOfPixels which
@@ -296,7 +301,6 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   unsigned int          numberOfPixels = region.GetNumberOfPixels();
 
   // Calculate the mean difference.
-
   m_MeanDifference = m_TotalDifference / numberOfPixels;
 }
 
