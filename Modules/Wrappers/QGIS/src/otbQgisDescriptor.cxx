@@ -356,7 +356,7 @@ int main(int argc, char* argv[])
       // No need for default_value, optional and extra fields in dFile.
       // If parameter is a destination type. qgis_type|name|description is enough.
       // So we simply set isDestination to true and skip to end to append a new line.
-      isDestination =  true;
+      // isDestination =  true;
       }
     else
       {
