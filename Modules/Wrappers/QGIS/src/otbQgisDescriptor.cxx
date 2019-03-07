@@ -30,19 +30,33 @@
 
 namespace
 {
-  std::string GetOptionalSatus(std::string const & param_key_string ,
+  bool IsOptional(std::string const & param_key_string ,
                                otb::Wrapper::Application::Pointer app )
   {
     // A parameter is mandatory if :
     // - it has no default value
     // - is not part of a choice
     using namespace otb::Wrapper;
-    auto OPTIONAL = "True";
-    auto MANDATORY = "False";
-    // Does param has default value? Or is it a StringList?
+    auto OPTIONAL = true ;
+    auto MANDATORY = false;
 
+    if ( app->GetParameterType(param_key_string) == ParameterType_Group )
+    {
+      ParameterKey param_key( param_key_string ); 
+      std::string root = param_key.GetRoot();
+      if ( root == param_key_string ) // that means that root is empty
+      {
+        return MANDATORY;
+      }
+      else
+      {
+        return IsOptional( root , app );
+      }
+    }
+
+    // Does param has default value? Or is it a StringList?
     if ( (app->GetParameterByKey( param_key_string ))->HasValue() || 
-         app->GetParameterType( param_key_string ) == ParameterType_StringList )
+        app->GetParameterType( param_key_string ) == ParameterType_StringList )
     {
       return OPTIONAL;
     }
@@ -71,7 +85,7 @@ namespace
     {
       // If it is not a choice it is a group. 
       // We need to have the optional status of this group
-      return GetOptionalSatus( root , app );
+      return IsOptional( root , app );
     }
   }
 }
@@ -362,7 +376,7 @@ int main(int argc, char* argv[])
         // qgis has no such option to handle dynamic values yet..
         // So mandatory parameters whose type is StringList is considered optional
         // optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
-        optional = GetOptionalSatus( paramKey , appli );
+        optional = IsOptional( paramKey , appli ) ? "True" : "False" ;
         }
       else
         {
