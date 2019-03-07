@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
   // instantiate the map projection, set the {\em zone} and {\em hemisphere}
   // parameters and pass this projection to the orthorectification filter.
 
-  utmMapProjectionType::Pointer utmMapProjection = utmMapProjectionType::New();  
+  MapProjectionType::Pointer utmMapProjection = MapProjectionType::New();  
   utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[3]),*argv[4]=='N'? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
   std::cout<<utmMapProjection->GetWkt()<<std::endl;
   orthoRectifFilter->SetMapProjection(utmMapProjection);
