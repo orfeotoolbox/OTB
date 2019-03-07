@@ -179,7 +179,7 @@ bool CommandLineLauncher::ExecuteAndWriteOutput()
       {
       m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application execution:\n");
       m_Application->GetLogger()->Debug(string(err.what()) + "\n");
-      m_Application->GetLogger()->Fatal(string("Cannot open image ") + err.m_Filename + string(". ") + err.GetDescription() + string("\n"));
+      m_Application->GetLogger()->Fatal(err.GetDescription() + string("\n"));
       return false;
       }
     catch(itk::ExceptionObject& err)
