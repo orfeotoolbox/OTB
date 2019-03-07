@@ -25,6 +25,7 @@
 #ifndef ossimTerraSarTiffReader_HEADER
 #define ossimTerraSarTiffReader_HEADER 1
 
+#include <ossimPluginConstants.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimFilename.h>
 
