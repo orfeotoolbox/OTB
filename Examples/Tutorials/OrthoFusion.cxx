@@ -19,18 +19,12 @@
  */
 
 
-
-//  Software Guide : BeginLatex
-//
 //  Start by including some necessary headers and with the
 //  usual \code{main} declaration. Apart from the classical header related to
 // image input and output. We need the headers related to the fusion and the
 // orthorectification. One header is also required to be able to process
 // vector images (the XS one) with the orthorectification.
-//
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -42,10 +36,7 @@
 
 int main(int argc, char* argv[])
 {
-// Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // We initialize ossim which is required for the orthorectification and we
   // check that all parameters are provided. Basically, we need:
   // \begin{itemize}
@@ -59,74 +50,55 @@ int main(int argc, char* argv[])
   // \end{itemize}
   //
   // We check that all those parameters are provided.
-  //
-//  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   if (argc != 12)
-    {
+  {
     std::cout << argv[0] << " <input_pan_filename> <input_xs_filename> ";
     std::cout << "<output_filename> <utm zone> <hemisphere N/S>  ";
     std::cout << "<x_ground_upper_left_corner> <y_ground_upper_left_corner> ";
     std::cout << "<x_Size> <y_Size> ";
     std::cout << "<x_groundSamplingDistance> ";
     std::cout << "<y_groundSamplingDistance "
-              << "(negative since origin is upper left)>"
-              << std::endl;
+              << "(negative since origin is upper left)>" << std::endl;
 
     return EXIT_FAILURE;
-    }
-// Software Guide : EndCodeSnippet
+  }
 
-  //  Software Guide : BeginLatex
-  //
   // We declare the different images, readers and writer:
-  //
-  //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::Image<unsigned int, 2>                    ImageType;
-  typedef otb::VectorImage<unsigned int, 2>              VectorImageType;
-  typedef otb::Image<double, 2>                          DoubleImageType;
-  typedef otb::VectorImage<double, 2>                    DoubleVectorImageType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::ImageFileReader<VectorImageType>          VectorReaderType;
+  typedef otb::Image<unsigned int, 2>           ImageType;
+  typedef otb::VectorImage<unsigned int, 2>     VectorImageType;
+  typedef otb::Image<double, 2>                 DoubleImageType;
+  typedef otb::VectorImage<double, 2>           DoubleVectorImageType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileReader<VectorImageType> VectorReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   ReaderType::Pointer       readerPAN = ReaderType::New();
-  VectorReaderType::Pointer readerXS = VectorReaderType::New();
-  WriterType::Pointer       writer = WriterType::New();
+  VectorReaderType::Pointer readerXS  = VectorReaderType::New();
+  WriterType::Pointer       writer    = WriterType::New();
 
   readerPAN->SetFileName(argv[1]);
   readerXS->SetFileName(argv[2]);
   writer->SetFileName(argv[3]);
-// Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // We declare the projection (here we chose the UTM projection, other choices
   // are possible) and retrieve the parameters from the command line:
   // \begin{itemize}
   // \item the UTM zone
   // \item the hemisphere
   // \end{itemize}
-  //
-  //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
   typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
   InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
-  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
-  // Software Guide : EndCodeSnippet
+  utmMapProjection->SetWkt(
+    otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? 
+      otb::SpatialReference::hemisphere::north : 
+      otb::SpatialReference::hemisphere::south).ToWkt());
 
-  //  Software Guide : BeginLatex
-  //
   //  We will need to pass several parameters to the orthorectification
   // concerning the desired output region:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   ImageType::IndexType start;
   start[0] = 0;
   start[1] = 0;
@@ -142,22 +114,13 @@ int main(int argc, char* argv[])
   ImageType::PointType origin;
   origin[0] = strtod(argv[6], nullptr);
   origin[1] = strtod(argv[7], nullptr);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // We declare the orthorectification filter. And provide the different
   // parameters:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType,
-      InverseProjectionType>
-  OrthoRectifFilterType;
+  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType, InverseProjectionType> OrthoRectifFilterType;
 
-  OrthoRectifFilterType::Pointer orthoRectifPAN =
-    OrthoRectifFilterType::New();
+  OrthoRectifFilterType::Pointer orthoRectifPAN = OrthoRectifFilterType::New();
   orthoRectifPAN->SetMapProjection(utmMapProjection);
 
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
@@ -166,22 +129,14 @@ int main(int argc, char* argv[])
   orthoRectifPAN->SetOutputSize(size);
   orthoRectifPAN->SetOutputSpacing(spacing);
   orthoRectifPAN->SetOutputOrigin(origin);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // Now we are able to have the orthorectified area from the PAN image. We just
   // have to follow a similar process for the XS image.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::OrthoRectificationFilter<VectorImageType,
-      DoubleVectorImageType, InverseProjectionType>
-  VectorOrthoRectifFilterType;
+  typedef otb::OrthoRectificationFilter<VectorImageType, DoubleVectorImageType, InverseProjectionType> VectorOrthoRectifFilterType;
 
 
-  VectorOrthoRectifFilterType::Pointer orthoRectifXS =
-    VectorOrthoRectifFilterType::New();
+  VectorOrthoRectifFilterType::Pointer orthoRectifXS = VectorOrthoRectifFilterType::New();
 
   orthoRectifXS->SetMapProjection(utmMapProjection);
 
@@ -191,31 +146,18 @@ int main(int argc, char* argv[])
   orthoRectifXS->SetOutputSize(size);
   orthoRectifXS->SetOutputSpacing(spacing);
   orthoRectifXS->SetOutputOrigin(origin);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  It's time to declare the fusion filter and set its inputs:
-  //
-  //  Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-  <DoubleImageType, DoubleVectorImageType, VectorImageType> FusionFilterType;
-  FusionFilterType::Pointer fusion = FusionFilterType::New();
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter<DoubleImageType, DoubleVectorImageType, VectorImageType> FusionFilterType;
+  FusionFilterType::Pointer                                                                                     fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXS->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  And we can plug it to the writer. To be able to process the images by
   // tiles, we use the \code{SetAutomaticTiledStreaming()} method of the writer.
   // We trigger the pipeline execution with the \code{Update()} method.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   writer->SetInput(fusion->GetOutput());
 
   writer->SetAutomaticTiledStreaming();
@@ -225,6 +167,4 @@ int main(int argc, char* argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }
-// Software Guide : EndCodeSnippet

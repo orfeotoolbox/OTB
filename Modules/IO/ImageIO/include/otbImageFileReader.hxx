@@ -601,11 +601,11 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
     // Test if the file exists.
     if (!itksys::SystemTools::FileExists(fileToCheck))
     {
-      throw otb::ImageFileReaderException (__FILE__, __LINE__, "The file does not exist.", fileToCheck);
+      throw otb::ImageFileReaderException (__FILE__, __LINE__, std::string("Cannot open image ") + fileToCheck + std::string(". The file does not exist."), fileToCheck);
     }
     else
     {
-      throw otb::ImageFileReaderException(__FILE__, __LINE__, "Probably unsupported format or incorrect filename extension.", this->m_FileName);
+      throw otb::ImageFileReaderException(__FILE__, __LINE__, std::string("Cannot open image ") + this->m_FileName + std::string(". Probably unsupported format or incorrect filename extension."), this->m_FileName);
     }
   }
 }

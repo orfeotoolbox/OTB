@@ -19,10 +19,6 @@
 #
 macro(check_cmake_variables)
   set(required_vars)
-  if(OTB_WRAP_PYTHON)
-    list(APPEND required_vars PYTHON_EXECUTABLE)
-  endif()
-  
   if(LINUX)
     list(APPEND required_vars FILE_COMMAND)
     list(APPEND required_vars READLINK)

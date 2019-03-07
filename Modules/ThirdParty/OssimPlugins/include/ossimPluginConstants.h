@@ -50,4 +50,8 @@
 #  define OSSIM_PLUGINS_DLL
 #endif /* #if defined(_MSC_VER) */
 
+/** Export nullptr_t from std namespace as ossimRefPtr needs it */
+#include <cstddef>
+using std::nullptr_t;
+
 #endif /* #ifndef ossimPluginConstants_HEADER */
