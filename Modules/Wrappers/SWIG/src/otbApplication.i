@@ -914,6 +914,7 @@ public:
   static Application_Pointer CreateApplication(const std::string& name);
   %pythoncode
   {
+    @staticmethod
     def CreateApplication(name):
         application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
         if application is not None:
