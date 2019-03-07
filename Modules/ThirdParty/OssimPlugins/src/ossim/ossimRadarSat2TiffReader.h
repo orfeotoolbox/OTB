@@ -25,6 +25,7 @@
 #ifndef ossimRadarSat2TiffReader_HEADER
 #define ossimRadarSat2TiffReader_HEADER 1
 
+#include <ossimPluginConstants.h>
 #include <ossim/imaging/ossimTiffTileSource.h>
 #include <ossim/base/ossimFilename.h>
 
