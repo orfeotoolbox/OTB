@@ -172,6 +172,12 @@ DifferenceImageFilter<TInputImage, TOutputImage>
   // Support progress methods/callbacks.
   itk::ProgressReporter progress(this, threadId, threadRegion.GetNumberOfPixels());
 
+  AccumulateType threadDifferenceSum;
+  itk::NumericTraits<AccumulateType>::SetLength(
+    threadDifferenceSum,
+    this->GetInput(0)->GetNumberOfComponentsPerPixel()); // @post: threadDifferenceSum=={0...}
+  unsigned long threadNumberOfPixels = 0;
+
   // Process the internal face and each of the boundary faces.
   for (FaceListIterator face = faceList.begin(); face != faceList.end(); ++face)
   {
@@ -264,9 +270,9 @@ DifferenceImageFilter<TInputImage, TOutputImage>
         // Store the minimum difference value in the output image.
         out.Set(minimumDifference);
 
-        // Update difference image statistics.
-        m_ThreadDifferenceSum[threadId] += minimumDifference;
-        m_ThreadNumberOfPixels[threadId]++;
+        // Update local difference image statistics.
+        threadDifferenceSum += minimumDifference;
+        threadNumberOfPixels++;
       }
       else
       {
@@ -278,6 +284,11 @@ DifferenceImageFilter<TInputImage, TOutputImage>
       progress.CompletedPixel();
     }
   }
+
+  // Update global difference image statistics.
+  m_ThreadDifferenceSum[threadId]  = threadDifferenceSum;
+  m_ThreadNumberOfPixels[threadId] = threadNumberOfPixels;
+
 }
 //----------------------------------------------------------------------------
 template <class TInputImage, class TOutputImage>
