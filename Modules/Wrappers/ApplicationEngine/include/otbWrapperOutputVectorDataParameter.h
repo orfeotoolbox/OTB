@@ -77,7 +77,7 @@ public:
   itk::ProcessObject* GetWriter();
   void InitializeWriters();
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_OutputVectorData;
   }

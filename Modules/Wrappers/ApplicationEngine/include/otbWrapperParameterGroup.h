@@ -105,7 +105,7 @@ public:
    *  a non-proxy parameter. It will detect cycles and report an error */
   static Parameter* ResolveParameter(Parameter *param);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Group;
   }

@@ -84,7 +84,7 @@ public:
   using StringListInterface::GetFilenameFilter;
   const std::string & GetFilenameFilter() const override;
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_InputImageList;
   }

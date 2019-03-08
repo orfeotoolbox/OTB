@@ -74,7 +74,7 @@ public:
     m_StringParam->ClearValue();
   }
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_OutputFilename;
   }

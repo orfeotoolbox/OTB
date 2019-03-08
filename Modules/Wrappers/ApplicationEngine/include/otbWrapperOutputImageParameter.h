@@ -105,7 +105,7 @@ public:
 
   std::string CheckFileName(bool fixMissingExtension = false);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_OutputImage;
   }

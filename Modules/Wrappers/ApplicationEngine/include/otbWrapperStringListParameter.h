@@ -80,7 +80,7 @@ public:
   /** */
   bool IsFilename() const override;
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_StringList;
   }

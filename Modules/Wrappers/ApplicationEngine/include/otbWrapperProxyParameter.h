@@ -75,7 +75,7 @@ public:
     return m_Target.first.IsNotNull();
     }
 
-    virtual ParameterType GetType() const override
+    ParameterType GetType() const override
     {
       return m_Target.first->GetType();
     }
