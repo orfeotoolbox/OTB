@@ -163,7 +163,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>
 
   // Create a radius of pixels.
   RadiusType radius;
-  radius.Fill(std::min(0, m_ToleranceRadius));
+  radius.Fill(std::max(0, m_ToleranceRadius));
 
   // Find the data-set boundary faces.
   FacesCalculator boundaryCalculator;
