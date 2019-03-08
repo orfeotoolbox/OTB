@@ -25,6 +25,7 @@
 #include <iosfwd>
 
 #include "otbFilterWatcherBase.h"
+#include "otbStandardOutputPrintCallback.h"
 
 namespace otb
 {
@@ -51,10 +52,10 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
+template <class PrintCallbackType = StandardOutputPrintCallback>
 class OTBCommon_EXPORT StandardOneLineFilterWatcher : public FilterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
   StandardOneLineFilterWatcher(itk::ProcessObject* process,
@@ -65,6 +66,9 @@ public:
 
   /** Default constructor */
   StandardOneLineFilterWatcher();
+
+  /** Destrucotr */
+  virtual ~StandardOneLineFilterWatcher();
 
   /** Get/Set number of stars */
   void SetStars(int count)
@@ -97,8 +101,16 @@ private:
   bool m_CoutIsConsole;
 
   std::string m_Buffer;
+  
+  PrintCallbackType * m_Callback;
+  
+  PrintCallbackType * m_DefaultCallback;
 };
 
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbStandardOneLineFilterWatcher.hxx"
+#endif
 
 #endif
