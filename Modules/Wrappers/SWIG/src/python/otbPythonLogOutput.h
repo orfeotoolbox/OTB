@@ -22,7 +22,7 @@
 #define otbPythonLogOutput_h
 
 #include "itkLogOutput.h"
-#include "otbLogOutputCallback.h"
+#include "otbSwigPrintCallback.h"
 
 namespace otb
 {
@@ -40,7 +40,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef LogOutputCallback CallbackType;
+  typedef SwigPrintCallback CallbackType;
   itkTypeMacro(PythonLogOutput, itk::LogOutput);
 
   itkNewMacro(PythonLogOutput);

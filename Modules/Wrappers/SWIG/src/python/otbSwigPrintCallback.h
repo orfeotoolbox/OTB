@@ -18,13 +18,13 @@
  * limitations under the License.
  */
 
-#ifndef otbPythonLogOutputCallback_h
-#define otbPythonLogOutputCallback_h
+#ifndef otbSwigPrintCallbackCallback_h
+#define otbSwigPrintCallbackCallback_h
 
 namespace otb
 {
 
-/** \class LogOutputCallback
+/** \class SwigPrintCallback
  *  \brief Interface for a printing callback method
  *
  *  This class defines the Call method, used to write a string, the Flush
@@ -34,23 +34,23 @@ namespace otb
  *  methods.
  */
 
-class LogOutputCallback
+class SwigPrintCallback
 {
 public:
   /** Constructor */
-  LogOutputCallback() = default;
+  SwigPrintCallback() = default;
 
   /** Destructor */
-  virtual ~LogOutputCallback() = default;
+  virtual ~SwigPrintCallback() = default;
 
   /** Write a string to a buffer */
-  virtual void Call(std::string const&)=0;
+  virtual void Call(std::string const&) {};
 
   /** Flush the buffer */
-  virtual void Flush()=0;
+  virtual void Flush() {};
 
   /** Determine if the bufer is interactive */
-  virtual bool Isatty()=0;
+  virtual bool IsInteractive() {return false;};
 };
 
 } // namespace otb

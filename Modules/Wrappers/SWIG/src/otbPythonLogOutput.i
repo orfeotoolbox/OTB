@@ -23,12 +23,12 @@
 %module(directors="1") cb
 %{
    #include "otbPythonLogOutput.h"
-   #include "otbLogOutputCallback.h"
+   #include "otbSwigPrintCallback.h"
 %}
 
-%feature("director") LogOutputCallback;
+%feature("director") SwigPrintCallback;
 
-%include "otbLogOutputCallback.h"
+%include "otbSwigPrintCallback.h"
 
 class itkLogOutput : public itkObject
 {
@@ -41,14 +41,14 @@ protected:
  * if stdout is redirected */
 %pythoncode
   {
-  class PythonLogOutputCallback(LogOutputCallback):
+  class PythonPrintCallback(SwigPrintCallback):
       def __init__(self):
-          super(PythonLogOutputCallback, self).__init__()
+          super(PythonPrintCallback, self).__init__()
       def Call(self, content):
           sys.stdout.write(content)
       def Flush(self):
           sys.stdout.flush()
-      def Isatty(self):
+      def IsInteractive(self):
           return sys.stdout.isatty()
   }
 
@@ -57,7 +57,7 @@ class PythonLogOutput : public itkLogOutput
 public:
   static PythonLogOutput_Pointer New();
   virtual void Delete();
-  void SetCallback(otb::LogOutputCallback* callback);
+  void SetCallback(otb::SwigPrintCallback* callback);
   virtual void Write(std::string const & content);
 
 protected:
@@ -86,7 +86,7 @@ public:
   static ProgressReporterManager_Pointer New();
   virtual void Delete();
   void DeleteWatcherList();
-  void SetLogOutputCallback(otb::LogOutputCallback* callback);
+  void SetLogOutputCallback(otb::SwigPrintCallback* callback);
   itkCommand* GetAddProcessCommand();
   
 protected:
@@ -99,7 +99,7 @@ DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
  * order to replace the itkStdStreamLogOutput by a PythonLogOutput */
 %pythoncode {
   _libraryLogOutput = PythonLogOutput_New()
-  _libraryLogCallback = PythonLogOutputCallback()
+  _libraryLogCallback = PythonPrintCallback()
   _libraryProgressReportManager = ProgressReporterManager_New()
   
   Logger.Instance().ResetOutputs()

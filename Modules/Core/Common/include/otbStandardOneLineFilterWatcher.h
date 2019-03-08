@@ -81,7 +81,7 @@ public:
   }
 
   /** Set the callback class */
-  void SetCallback(PrintCallbackType callback)
+  void SetCallback(PrintCallbackType * callback)
   {
     m_Callback = callback;
   }

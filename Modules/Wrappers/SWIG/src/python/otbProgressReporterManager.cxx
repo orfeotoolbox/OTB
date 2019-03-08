@@ -52,7 +52,7 @@ void ProgressReporterManager::LinkWatchers(itk::Object* itkNotUsed(caller), cons
   {
     const Wrapper::AddProcessToWatchEvent* eventToWatch = dynamic_cast<const Wrapper::AddProcessToWatchEvent*>(&event);
 
-    CallbackProgressReporter* watch = new CallbackProgressReporter(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
+    auto watch = new WatcherType(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
     watch->SetCallback(m_Callback);
     m_WatcherList.push_back(watch);
   }

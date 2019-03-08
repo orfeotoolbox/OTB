@@ -22,10 +22,10 @@
 #define otbProgressReporterManager_h
 
 #include "itkCommand.h"
-#include "otbCallbackProgressReporter.h"
 #include "otbWrapperApplication.h"
 
-#include "otbLogOutputCallback.h"
+#include "otbSwigPrintCallback.h"
+#include "otbStandardOneLineFilterWatcher.h"
 
 namespace otb
 {
@@ -50,12 +50,14 @@ public:
 
   itkNewMacro(ProgressReporterManager);
 
-  typedef LogOutputCallback CallbackType;
+  typedef SwigPrintCallback CallbackType;
+  typedef StandardOneLineFilterWatcher<CallbackType> WatcherType;
+  
+  /** Filter watcher list type */
+  typedef std::vector<WatcherType *> WatcherListType;
+
   /** Command Member */
   typedef itk::MemberCommand<Self> AddProcessCommandType;
-
-  /** Filter watcher list type */
-  typedef std::vector<CallbackProgressReporter*> WatcherListType;
 
   /** Set the logger callback function */
   void SetLogOutputCallback(CallbackType* callback)

@@ -46,7 +46,7 @@ typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
 
 typedef otb::Logger                           Logger;
 typedef otb::Logger::Pointer                  Logger_Pointer;
-typedef otb::LogOutputCallback                LogOutputCallback;
+typedef otb::SwigPrintCallback                SwigPrintCallback;
 typedef otb::PythonLogOutput                  PythonLogOutput;
 typedef otb::PythonLogOutput::Pointer         PythonLogOutput_Pointer;
 typedef otb::ProgressReporterManager          ProgressReporterManager;
