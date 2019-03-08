@@ -110,8 +110,8 @@ public:
   void ClearValue() override;
 
   ParameterType GetType() const override;
-  std::string ToString() const override;
-  void FromString(const std::string& value) override;
+  std::string   ToString() const override;
+  void          FromString(const std::string& value) override;
 
 protected:
   /** Constructor */

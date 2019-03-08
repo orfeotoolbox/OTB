@@ -65,11 +65,12 @@ public:
 
   ParameterType GetType() const override;
 
-  int ToInt() const override;
+  int         ToInt() const override;
   std::string ToString() const override;
 
   void FromString(const std::string& value) override;
-  void FromInt(int value) override;;
+  void FromInt(int value) override;
+  ;
 
 protected:
   /** Constructor */
