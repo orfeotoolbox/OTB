@@ -44,16 +44,13 @@ public:
   virtual ~LogOutputCallback() = default;
 
   /** Write a string to a buffer */
-  virtual void Call(std::string const&){};
+  virtual void Call(std::string const&)=0;
 
   /** Flush the buffer */
-  virtual void Flush(){};
+  virtual void Flush()=0;
 
   /** Determine if the bufer is interactive */
-  virtual bool Isatty()
-  {
-    return false;
-  };
+  virtual bool Isatty()=0;
 };
 
 } // namespace otb
