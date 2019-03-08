@@ -31,6 +31,21 @@ ProgressReporterManager::ProgressReporterManager()
   m_AddProcessCommand->SetCallbackFunction(this, &ProgressReporterManager::LinkWatchers);
 }
 
+ProgressReporterManager::~ProgressReporterManager()
+{
+  this->DeleteWatcherList();
+}
+
+void ProgressReporterManager::DeleteWatcherList()
+{
+  //Delete all stored progress reporter
+  for (auto watcher: m_WatcherList)
+  {
+    delete watcher;
+  }
+  m_WatcherList.clear();
+}
+
 void ProgressReporterManager::LinkWatchers(itk::Object* itkNotUsed(caller), const itk::EventObject& event)
 {
   if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid(event))

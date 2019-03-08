@@ -70,12 +70,15 @@ public:
     return m_AddProcessCommand.GetPointer();
   }
 
+  /** Delete all watchers */
+  void DeleteWatcherList();
+
 protected:
   /** Default constructor */
   ProgressReporterManager();
 
   /** Destructor. */
-  virtual ~ProgressReporterManager() = default;
+  virtual ~ProgressReporterManager();
 
   /** Load the watchers for internal progress and writing progress report. */
   void LinkWatchers(itk::Object* caller, const itk::EventObject& event);

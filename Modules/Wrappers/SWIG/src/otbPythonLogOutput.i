@@ -85,6 +85,7 @@ public:
   
   static ProgressReporterManager_Pointer New();
   virtual void Delete();
+  void DeleteWatcherList();
   void SetLogOutputCallback(otb::LogOutputCallback* callback);
   itkCommand* GetAddProcessCommand();
   
