@@ -80,6 +80,12 @@ public:
     return m_StarsCount;
   }
 
+  /** Set the callback class */
+  void SetCallback(PrintCallbackType callback)
+  {
+    m_Callback = callback;
+  }
+
 protected:
 
   /** Callback method to show the ProgressEvent */
@@ -102,8 +108,13 @@ private:
 
   std::string m_Buffer;
   
+  /** The point to the callback used for printing. It is set to the default
+   * callback on construction and can be changed later using the setter.
+   * Delete will not be called on this pointer. */
   PrintCallbackType * m_Callback;
   
+  /** A default callback created in the constructor and deleted in the 
+   * destructor. */ 
   PrintCallbackType * m_DefaultCallback;
 };
 
