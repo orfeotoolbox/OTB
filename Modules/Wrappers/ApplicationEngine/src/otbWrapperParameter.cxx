@@ -217,8 +217,47 @@ std::vector<Parameter::Pointer > Parameter::GetChildrenList()
   return m_ChildrenList;
 }
 
+// Base implementation of To*/From* indicate that the parameter cannot be converted
+// Derived classes override them if they can provide the conversion
 
+int Parameter::ToInt() const
+{
+  itkExceptionMacro("Cannot convert parameter " << m_Key << " to int.");
+}
 
+float Parameter::ToFloat() const
+{
+  itkExceptionMacro("Cannot convert parameter " << m_Key << " to float.");
+}
 
+std::string Parameter::ToString() const
+{
+  itkExceptionMacro("Cannot convert parameter " << m_Key << " to std::string.");
+}
+
+std::vector<std::string> Parameter::ToStringList() const
+{
+  itkExceptionMacro("Cannot convert parameter " << m_Key << " to std::vector<std::string>.");
+}
+
+void Parameter::FromInt(int)
+{
+  itkExceptionMacro("Cannot set parameter " << m_Key << " from int.");
+}
+
+void Parameter::FromFloat(float)
+{
+  itkExceptionMacro("Cannot set parameter " << m_Key << " from float.");
+}
+
+void Parameter::FromString(const std::string&)
+{
+  itkExceptionMacro("Cannot set parameter " << m_Key << " from std:string.");
+}
+
+void Parameter::FromStringList(const std::vector<std::string>&)
+{
+  itkExceptionMacro("Cannot set parameter " << m_Key << " from std:vector<std:string>.");
+}
 }
 }

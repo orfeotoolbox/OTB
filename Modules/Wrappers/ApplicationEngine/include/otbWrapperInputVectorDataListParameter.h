@@ -81,6 +81,10 @@ public:
   using StringListInterface::GetFilenameFilter;
   const std::string & GetFilenameFilter() const override;
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_InputVectorDataList;
+  }
 
 protected:
   /** Constructor */
@@ -88,15 +92,6 @@ protected:
 
   /** Destructor */
   ~InputVectorDataListParameter() override;
-
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
 
 private:
   InputVectorDataListParameter( const Parameter & ) = delete;

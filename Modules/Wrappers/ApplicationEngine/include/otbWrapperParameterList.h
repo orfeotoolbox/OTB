@@ -53,7 +53,6 @@ public:
   typedef itk::SmartPointer< const Self > ConstPointer;
 
   /** Custom types */
-  typedef T ParameterType;
   typedef std::vector< typename T::Pointer > ParameterVector;
 
 //
@@ -99,8 +98,8 @@ public:
   /** Get the stored image filename list */
   StringVector GetFileNameList() const override;
 
- /** Get one specific stored image filename. */
-  const std::string & GetNthFileName( std::size_t ) const override;
+  /** Get one specific stored image filename. */
+  std::string GetNthFileName(std::size_t) const override;
 
   /** */
   const std::string & GetToolTip( std::size_t ) const override;
@@ -118,8 +117,32 @@ public:
   /** */
   void Swap( std::size_t, std::size_t ) override;
 
-//
-// Protected methods.
+  std::vector<std::string> ToStringList() const override
+  {
+    return GetFileNameList();
+  }
+
+  void FromStringList(const std::vector<std::string>& value)
+  {
+    SetStrings(value);
+  }
+
+  std::string ToString() const override
+  {
+    std::ostringstream oss;
+    oss << std::setprecision(10);
+    auto strList = GetFileNameList();
+    for (size_t i = 0; i < strList.size(); i++)
+    {
+      if (i != 0)
+      {
+        oss << " ";
+      }
+      oss << strList[i];
+    }
+    return oss.str();
+  }
+
 protected:
   /** Constructor */
   ParameterList();
@@ -127,13 +150,6 @@ protected:
   /** Destructor */
   ~ParameterList() override;
 
-//
-// Private methods.
-private:
-  // ParameterList( const Parameter & ) = delete;
-  // void operator = ( const Parameter & ) = delete;
-
-//
 // Protected methods.
 protected:
   /** Utility method to factorize some code */
@@ -169,22 +185,6 @@ protected:
 	      D *,
 	      Set,
 	      const std::string & description = std::string() );
-
-  /** ParameterType::ValueType -> std::string protocol */
-  virtual
-    const std::string &
-    ToString( const typename ParameterType::Pointer & ) const = 0;
-
-  /** std::string -> ParameterType::ValueType protocol */
-  virtual
-    const typename ParameterType::Pointer &
-    FromString( const typename ParameterType::Pointer &,
-		const std::string & ) const = 0;
-
-  /** Utility method to use std::string -> conversion in lambdas. */
-  virtual
-    typename ParameterType::Pointer
-    FromString( const std::string & ) const;
 
 //
 // Protected attributes.

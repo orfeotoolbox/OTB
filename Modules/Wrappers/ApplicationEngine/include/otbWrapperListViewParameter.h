@@ -62,7 +62,7 @@ public:
   void AddChoice( std::string choicekey, std::string choiceName );
 
   /** Get the key of a specific choice value */
-  std::string GetChoiceKey( int i );
+  std::string GetChoiceKey(int i) const;
 
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceKeys();
@@ -83,7 +83,7 @@ public:
   virtual void SetValue(std::string choiceKey);
 
   /** Return any value */
-  virtual unsigned int GetValue();
+  virtual unsigned int GetValue() const;
 
   bool HasValue() const override
   {
@@ -105,9 +105,9 @@ public:
 
   void SetSelectedNames(std::vector<std::string> selectedNames);
 
-  std::vector<std::string> GetSelectedNames()
-    {
-      return m_SelectedNames;
+  std::vector<std::string> GetSelectedNames() const
+  {
+    return m_SelectedNames;
     }
 
 
@@ -149,6 +149,38 @@ public:
       m_SelectedNames.push_back(names[m_SelectedItems[i]]);
       m_SelectedKeys.push_back(keys[m_SelectedItems[i]]);
       }
+  }
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_ListView;
+  }
+
+  std::string ToString() const override
+  {
+    std::string choiceKey    = GetChoiceKey(GetValue());
+    size_t      lastPointPos = choiceKey.find_last_of('.');
+
+    if (lastPointPos != std::string::npos)
+    {
+      return choiceKey.substr(lastPointPos);
+    }
+    return choiceKey;
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
+  std::vector<std::string> ToStringList() const override
+  {
+    return GetSelectedNames();
+  }
+
+  void FromStringList(const std::vector<std::string>& values) override
+  {
+    SetSelectedNames(values);
   }
 
 protected:

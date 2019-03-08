@@ -61,6 +61,39 @@ typedef enum
   ParameterType_Bool
 } ParameterType;
 
+namespace
+{
+const std::vector<std::pair<ParameterType, std::string>> parameterTypesStrings = {
+  {ParameterType_Int, "Int"},
+  {ParameterType_Float, "Float"},
+  {ParameterType_String, "String"},
+  {ParameterType_StringList, "StringList"},
+  {ParameterType_InputFilename, "InputFilename"},
+  {ParameterType_InputFilenameList, "InputFilenameList"},
+  {ParameterType_OutputFilename, "OutputFilename"},
+  {ParameterType_Directory, "Directory"},
+  {ParameterType_Choice, "Choice"},
+  {ParameterType_InputImage, "InputImage"},
+  {ParameterType_InputImageList, "InputImageList"},
+  {ParameterType_InputVectorData, "InputVectorData"},
+  {ParameterType_InputVectorDataList, "InputVectorDataList"},
+  {ParameterType_OutputImage, "OutputImage"},
+  {ParameterType_OutputVectorData, "OutputVectorData"},
+  {ParameterType_Radius, "Radius"},
+  {ParameterType_Group, "Group"},
+  {ParameterType_ListView, "ListView"},
+  {ParameterType_ComplexInputImage, "ComplexInputImage"},
+  {ParameterType_ComplexOutputImage, "ComplexOutputImage"},
+  {ParameterType_RAM, "RAM"},
+  {ParameterType_OutputProcessXML, "OutputProcessXML"},
+  {ParameterType_InputProcessXML, "InputProcessXML"},
+  {ParameterType_Bool, "Bool"}};
+}
+
+// Free functions to convert from and to std::string
+std::string   ParameterTypeToString(ParameterType type);
+ParameterType ParameterStringToType(const std::string& str);
+
 typedef enum
 {
   UserLevel_Basic,

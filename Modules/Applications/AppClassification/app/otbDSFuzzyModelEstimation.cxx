@@ -160,7 +160,6 @@ private:
     AddParameter(ParameterType_StringList, "desclist","Descriptor list");
     SetParameterDescription("desclist","List of the descriptors to be used in the model (must be specified to perform an automatic initialization)");
     MandatoryOff("desclist");
-    SetParameterString("desclist","");
 
     AddParameter(ParameterType_Int,"maxnbit","Maximum number of iterations");
     MandatoryOff("maxnbit");

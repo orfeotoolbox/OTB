@@ -190,30 +190,6 @@ InputVectorDataListParameter
   return VECTOR_DATA_FILTER;
 }
 
-/*****************************************************************************/
-const std::string &
-InputVectorDataListParameter
-::ToString( const ParameterType::Pointer & p ) const
-{
-  assert( !p.IsNull() );
-
-  return p->GetFileName();
-}
-
-/*****************************************************************************/
-const InputVectorDataListParameter::ParameterType::Pointer &
-InputVectorDataListParameter
-::FromString( const ParameterType::Pointer & p,
-	      const std::string & s ) const
-{
-  assert( !p.IsNull() );
-
-  p->SetFromFileName( s );
-
-  return p;
-}
-
-
 }
 
 }

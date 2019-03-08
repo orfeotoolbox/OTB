@@ -68,7 +68,7 @@ public:
   StringListInterface::StringVector GetValue() const;
 
   /** Get the value */
-  const std::string & GetNthElement( std::size_t ) const;
+  std::string GetNthElement(std::size_t) const;
 
   /** Get the value */
   void SetNthElement( std::size_t, const std::string & );
@@ -80,23 +80,19 @@ public:
   /** */
   bool IsFilename() const override;
 
-//
-// Protected methods.
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_StringList;
+  }
+
+  //
+  // Protected methods.
 protected:
   /** Constructor */
   StringListParameter();
 
   /** Destructor */
   ~StringListParameter() override;
-
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
 
 //
 // Private methods.

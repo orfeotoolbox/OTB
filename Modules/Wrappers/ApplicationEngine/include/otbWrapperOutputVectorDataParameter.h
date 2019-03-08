@@ -77,6 +77,21 @@ public:
   itk::ProcessObject* GetWriter();
   void InitializeWriters();
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_OutputVectorData;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFileName(value);
+  }
+
 protected:
   /** Constructor */
   OutputVectorDataParameter();

@@ -132,6 +132,38 @@ public:
     */
   virtual std::vector<Parameter::Pointer > GetChildrenList();
 
+  virtual ParameterType GetType() const = 0;
+
+  virtual int                      ToInt() const;
+  virtual float                    ToFloat() const;
+  virtual std::string              ToString() const;
+  virtual std::vector<std::string> ToStringList() const;
+
+  /*
+  virtual std::vector<std::string> ToStringList() const;
+  virtual ImageBaseType* OutputImage() const;
+  virtual ImageBaseType* ToComplexOutputImage() const;
+  virtual FloatVectorImageType* ToImage() const;
+  virtual FloatVectorImageListType* ToImageList() const;
+  virtual ComplexFloatVectorImageType* ToComplexImage() const;
+  virtual VectorDataType* ToVectorData() const;
+  virtual VectorDataListType* ToVectorDataList() const;
+  */
+
+  virtual void FromInt(int);
+  virtual void FromFloat(float);
+  virtual void FromString(const std::string&);
+  virtual void FromStringList(const std::vector<std::string>&);
+
+  /*
+  virtual void FromStringList(const std::vector<std::string>&);
+  virtual void FromOutputImage(const FloatVectorImageType*);
+  virtual void FromComplexOutputImage(const ComplexFloatVectorImageType*);
+  virtual void FromOutputVectorData(const VectorDataType*);
+  virtual void FromInputImage(const ImageBaseType*);
+  virtual void FromComplexInputImage(const ImageBaseType*);
+  */
+
 protected:
   /** Constructor */
   Parameter();

@@ -57,7 +57,7 @@ public:
   void AddChoice( std::string choicekey, std::string choiceName );
 
   /** Get the key of a specific choice value */
-  std::string GetChoiceKey( int i );
+  std::string GetChoiceKey(int i) const;
 
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceKeys();
@@ -87,19 +87,18 @@ public:
   virtual void SetValue(std::string choiceKey);
 
   /** Return any value */
-  virtual unsigned int GetValue();
+  virtual unsigned int GetValue() const;
 
-  bool HasValue() const override
-  {
-    return !m_ChoiceList.empty();
-  }
+  bool HasValue() const override;
+  void ClearValue() override;
 
-  void ClearValue() override
-  {
-    // Same as constructor init value
-    // Note that this may be invalid if HasValue() == false
-    m_CurrentChoice = 0;
-  }
+  ParameterType GetType() const override;
+
+  int ToInt() const override;
+  void FromInt(int value) override;
+
+  std::string ToString() const override;
+  void FromString(const std::string& value) override;
 
 protected:
   /** Constructor */

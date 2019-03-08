@@ -67,6 +67,21 @@ public:
 
   void ClearValue() override;
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_InputVectorData;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFromFileName(value);
+  }
+
 protected:
   /** Constructor */
   InputVectorDataParameter();

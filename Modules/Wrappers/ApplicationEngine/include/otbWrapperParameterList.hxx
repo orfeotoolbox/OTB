@@ -138,7 +138,7 @@ ParameterList< T >
 
   typename T::Pointer p( T::New() );
 
-  FromString( p, filename );
+  p->FromString(filename);
 
   m_Parameters.push_back( p );
 
@@ -157,7 +157,7 @@ ParameterList< T >
 {
   typename T::Pointer p( T::New() );
 
-  FromString( p, filename );
+  p->FromString(filename);
 
   m_Parameters.insert( m_Parameters.begin() + index, p );
 
@@ -178,8 +178,7 @@ ParameterList< T >
   assert( i<m_Parameters.size() );
   assert( !m_Parameters[ i ].IsNull() );
 
-  // Should throw exception when failed.
-  FromString( m_Parameters[ i ], filename );
+  m_Parameters[i]->FromString(filename);
 
   SetActive( true );
 
@@ -203,7 +202,9 @@ ParameterList< T >
       std::back_inserter( m_Parameters ),
       [ this ]( auto s ) -> auto
       {
-        return this->FromString( s );
+        typename T::Pointer parameter(T::New());
+        parameter->FromString(s);
+        return parameter;
       }
     );
 
@@ -225,7 +226,7 @@ ParameterList< T >
     std::back_inserter( strings ),
     [ this ]( auto p ) -> auto
     {
-      return this->ToString( p );
+      return p->ToString();
     }
   );
 
@@ -247,13 +248,13 @@ ParameterList< T >
 
 /*****************************************************************************/
 template< typename T >
-const std::string &
+std::string
 ParameterList< T >
 ::GetNthFileName( std::size_t i ) const
 {
   assert( i<m_Parameters.size() );
 
-  return ToString( m_Parameters[ i ] );
+  return m_Parameters[i]->ToString();
 }
 
 /*****************************************************************************/
@@ -465,17 +466,6 @@ ParameterList< T >
   parameter->SetDescription( description );
 
   return parameter;
-}
-
-/*****************************************************************************/
-template< typename T >
-typename T::Pointer
-ParameterList< T >
-::FromString( const std::string & s ) const
-{
-  typename T::Pointer parameter( T::New() );
-
-  return FromString( parameter, s );
 }
 
 } // End namespace Wrapper

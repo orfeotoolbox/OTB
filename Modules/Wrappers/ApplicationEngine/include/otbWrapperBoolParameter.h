@@ -58,12 +58,18 @@ public:
   }
 
   bool GetValue() const;
-
   std::string GetValueAsString() const;
 
   void SetValue(bool state);
-
   void SetValue(const std::string & str);
+
+  ParameterType GetType() const override;
+
+  int ToInt() const override;
+  std::string ToString() const override;
+
+  void FromString(const std::string& value) override;
+  void FromInt(int value) override;;
 
 protected:
   /** Constructor */
