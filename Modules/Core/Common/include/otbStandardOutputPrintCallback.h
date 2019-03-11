@@ -32,6 +32,10 @@ namespace otb
  *  This class defines the Call method, used to write a string the standard 
  *  output, the Flush method, used to flush it, and the IsInteractive 
  *  method used to determine if the output is the console.
+ *  
+ *  \see otb::StandardOneLineFilterWatcher
+ *
+ * \ingroup OTBCommon
  */
 
 class StandardOutputPrintCallback

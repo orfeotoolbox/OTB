@@ -47,6 +47,7 @@ namespace otb
  *  StandardOneLineFilterWatcher watcher(thresholdFilter, "Threshold");
  *  \endcode
  *
+ *  \see otb::StandardOutputPrintCallback
  *  \see itk::SimpleFilterWatcher
  *  \see otb::fltkFilterWatcher
  *
