@@ -42,6 +42,7 @@ set (CMAKE_COMMAND "cmake")
 set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
 set (OTB_LARGEINPUT_ROOT "") # todo
 
+message(STATUS "CI profile : $ENV{OTB_CI_PROFILE}")
 
 #The following file set the CONFIGURE_OPTIONS variable
 set (CONFIGURE_OPTIONS  "")
