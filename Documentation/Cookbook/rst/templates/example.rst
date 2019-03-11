@@ -6,7 +6,7 @@
 
 {usage}
 
-Example source code (`{link_name} <{link_href}>`_):
+Example source code (`{link_name} <{link_href}>`__):
 
 .. code-block:: cpp
 
