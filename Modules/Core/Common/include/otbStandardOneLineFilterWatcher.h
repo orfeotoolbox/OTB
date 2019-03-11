@@ -68,7 +68,7 @@ public:
   StandardOneLineFilterWatcher();
 
   /** Destrucotr */
-  virtual ~StandardOneLineFilterWatcher();
+  virtual ~StandardOneLineFilterWatcher() =default;
 
   /** Get/Set number of stars */
   void SetStars(int count)
@@ -115,7 +115,7 @@ private:
   
   /** A default callback created in the constructor and deleted in the 
    * destructor. */ 
-  PrintCallbackType * m_DefaultCallback;
+  std::shared_ptr<PrintCallbackType> m_DefaultCallback;
 };
 
 } // end namespace otb

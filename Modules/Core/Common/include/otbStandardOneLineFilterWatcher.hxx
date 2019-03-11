@@ -38,8 +38,8 @@ StandardOneLineFilterWatcher<PrintCallbackType>
     m_CurrentNbStars(-1),
     m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_DefaultCallback = new PrintCallbackType;
-  m_Callback = m_DefaultCallback;
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
 template<class PrintCallbackType>
@@ -51,8 +51,8 @@ StandardOneLineFilterWatcher<PrintCallbackType>
     m_CurrentNbStars(-1),
     m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_DefaultCallback = new PrintCallbackType;
-  m_Callback = m_DefaultCallback;
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
 template<class PrintCallbackType>
@@ -64,15 +64,8 @@ StandardOneLineFilterWatcher<PrintCallbackType>
     m_CurrentNbStars(-1),
     m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_DefaultCallback = new PrintCallbackType;
-  m_Callback = m_DefaultCallback;
-}
-
-template<class PrintCallbackType>
-StandardOneLineFilterWatcher<PrintCallbackType>
-::~StandardOneLineFilterWatcher()
-{
-  delete m_DefaultCallback;
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
 template<class PrintCallbackType>
