@@ -38,7 +38,7 @@ namespace otb
  * \ingroup OTBCommon
  */
 
-class StandardOutputPrintCallback
+class OTBCommon_EXPORT StandardOutputPrintCallback
 {
 public:
   /** Constructor */
