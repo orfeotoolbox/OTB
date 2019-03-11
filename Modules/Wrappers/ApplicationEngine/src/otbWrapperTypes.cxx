@@ -29,9 +29,9 @@ std::string ParameterTypeToString(ParameterType type)
 {
   for (auto p : parameterTypesStrings)
   {
-    if (p.first == type)
+    if (type == p.first)
     {
-      return p.second;
+      return std::string(p.second);
     }
   }
   itkGenericExceptionMacro("Cannot convert parameter type to string.");
@@ -41,7 +41,7 @@ ParameterType ParameterStringToType(const std::string& str)
 {
   for (auto p : parameterTypesStrings)
   {
-    if (p.second == str)
+    if (str == p.second)
     {
       return p.first;
     }

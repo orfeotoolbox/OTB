@@ -22,6 +22,7 @@
 #define otbWrapperTypes_h
 
 #include <complex>
+#include <array>
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
@@ -63,7 +64,7 @@ typedef enum
 
 namespace
 {
-const std::vector<std::pair<ParameterType, std::string>> parameterTypesStrings = {
+constexpr std::array<std::pair<ParameterType, const char*>, 24> parameterTypesStrings = {{
   {ParameterType_Int, "Int"},
   {ParameterType_Float, "Float"},
   {ParameterType_String, "String"},
@@ -87,7 +88,8 @@ const std::vector<std::pair<ParameterType, std::string>> parameterTypesStrings =
   {ParameterType_RAM, "RAM"},
   {ParameterType_OutputProcessXML, "OutputProcessXML"},
   {ParameterType_InputProcessXML, "InputProcessXML"},
-  {ParameterType_Bool, "Bool"}};
+  {ParameterType_Bool, "Bool"},
+}};
 }
 
 // Free functions to convert from and to std::string
