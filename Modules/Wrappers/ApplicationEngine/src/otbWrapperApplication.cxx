@@ -422,8 +422,7 @@ T* downcast_check(Parameter* param)
   T* down = dynamic_cast<T*>(param);
   if (down == nullptr)
   {
-    itkGenericExceptionMacro(<< "Cannot convert parameter '" << param->GetKey() << "'"
-                             << " of type " << ParameterTypeToString(param->GetType()) << " to type " << ParameterTypeToString(T::New()->GetType()));
+    param->TypeError(ParameterTypeToString(T::New()->GetType()));
   }
   return down;
 }

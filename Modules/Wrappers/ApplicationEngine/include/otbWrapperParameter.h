@@ -135,6 +135,9 @@ public:
   /** Get the dynamic type as declared in WrapperTypes.h */
   virtual ParameterType GetType() const = 0;
 
+  /** Error raising function to indicate a type conversion error */
+  void TypeError(const std::string& target_type) const;
+
   /** Parameter conversion functions. They are used by WrapperApplication
    * to provide functions like SetParameterInt, GetParameterString, etc.
    */
