@@ -99,13 +99,17 @@ protected:
 
 private:
 
-  /** Stars coutning */
+  /** Stars counting */
   int m_StarsCount;
 
+  /** Current number of stars, we keep track of this to avoid reprinting the
+   * progress if it hasn't changed */
   int m_CurrentNbStars;
 
   bool m_CoutIsConsole;
 
+  /** If the output is not interactive (e.g. it is redirected to a file), it
+   * is buffered and only written at the end of the processing */
   std::string m_Buffer;
   
   /** The point to the callback used for printing. It is set to the default
