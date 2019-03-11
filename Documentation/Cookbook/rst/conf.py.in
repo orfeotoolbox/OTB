@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
+    'sphinx.ext.extlinks',
 ]
 
 imgmath_latex='@LATEX_COMMAND@'
@@ -281,3 +282,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+extlinks = {
+    'doxygen': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
+    'doxygen-itk': ("http://www.itk.org/Doxygen/html/classitk_1_1%s.html", "itk::")
+}
