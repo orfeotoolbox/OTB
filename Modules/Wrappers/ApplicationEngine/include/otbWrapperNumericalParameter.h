@@ -78,7 +78,7 @@ public:
     {
       itkGenericExceptionMacro(<< "Parameter " << this->GetKey() << " has no value yet.");
     }
-    return static_cast<ScalarType>(m_Value.value());
+    return static_cast<ScalarType>(*m_Value);
   }
 
   bool HasValue() const override
@@ -116,7 +116,7 @@ public:
     {
       itkExceptionMacro("Cannot convert parameter " << GetKey() << " to int (no value).");
     }
-    return static_cast<int>(m_Value.value());
+    return static_cast<int>(*m_Value);
   }
 
   float ToFloat() const override
@@ -125,7 +125,7 @@ public:
     {
       itkExceptionMacro("Cannot convert parameter " << GetKey() << " to float (no value).");
     }
-    return static_cast<float>(m_Value.value());
+    return static_cast<float>(*m_Value);
   }
 
   void FromInt(int value) override
