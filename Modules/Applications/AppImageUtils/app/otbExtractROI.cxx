@@ -353,7 +353,8 @@ private:
       EnableParameter("sizey");
     }
 
-    if ( GetParameterString( "mode" ) == "fit" && HasValue( "mode.fit.im" ) )
+    if ( GetParameterString( "mode" ) == "fit" && 
+              HasValue( "mode.fit.im" ) )
     {
       MandatoryOff( "mode.fit.vect" );
       MandatoryOn( "mode.fit.im" );
@@ -366,9 +367,22 @@ private:
     }
   } 
 
+// This method is called in DoExecute() once
   bool CropRegionOfInterest()
   {
     FloatVectorImageType::RegionType region;
+    if ( !HasUserValue("sizex") )
+      SetParameterInt( "sizex" , 
+        GetDefaultParameterInt( "sizex" ) );
+    if ( !HasUserValue("sizey") )
+      SetParameterInt( "sizey" , 
+        GetDefaultParameterInt( "sizey" ) );
+    if ( !HasUserValue("startx") )
+      SetParameterInt( "startx" , 
+        GetDefaultParameterInt( "startx" ) );
+    if ( !HasUserValue("starty") )
+      SetParameterInt( "starty" , 
+        GetDefaultParameterInt( "starty" ) );
     region.SetSize(0,  GetParameterInt("sizex"));
     region.SetSize(1,  GetParameterInt("sizey"));
     region.SetIndex(0, GetParameterInt("startx"));
@@ -410,6 +424,7 @@ private:
       uli[1] = std::round( GetParameterFloat( "mode.extent.uly" ) );
       lri[0] = std::round( GetParameterFloat( "mode.extent.lrx" ) );
       lri[1] = std::round( GetParameterFloat( "mode.extent.lry" ) );
+      m_IsExtentInverted = ( lri[0] < uli[0] || lri[1] < uli[1] );
     }
     else if( GetParameterString( "mode.extent.unit" ) == "phy" )
     {
@@ -418,6 +433,7 @@ private:
       ulp[ 1 ] = GetParameterFloat( "mode.extent.uly" );
       lrp[ 0 ] = GetParameterFloat( "mode.extent.lrx" );
       lrp[ 1 ] = GetParameterFloat( "mode.extent.lry" );
+      m_IsExtentInverted = ( lrp[0] < ulp[0] || lrp[1] < ulp[1] );
       ImageType * inImage = GetParameterImage("in");
       inImage->TransformPhysicalPointToIndex(ulp,uli);
       inImage->TransformPhysicalPointToIndex(lrp,lri);    
@@ -439,7 +455,7 @@ private:
       inImage->TransformPhysicalPointToIndex(ulp_out,uli);
       inImage->TransformPhysicalPointToIndex(lrp_out,lri);
     }
-    m_IsExtentInverted = ( lri[0] < uli[0] || lri[1] < uli[1] );
+    
     SetParameterInt( "startx", uli[0]);
     SetParameterInt( "starty", uli[1]);
     // In the case of a negative index the size will be wrong without the
@@ -493,6 +509,7 @@ private:
       SetDefaultParameterFloat( "mode.extent.lrx" , lrp_out[ 0 ]);
       SetDefaultParameterFloat( "mode.extent.lry" , lrp_out[ 1 ]);
     }
+    // We should not do this
     if ( !HasUserValue( "mode.extent.ulx" ) )
       SetParameterFloat( "mode.extent.ulx" , 
         GetDefaultParameterFloat( "mode.extent.ulx" ) );
@@ -511,6 +528,97 @@ private:
   ComputeIndexFromRadius()
   {
     assert( GetParameterString( "mode" ) == "radius" );
+    // In radius mode we can only compute the extent if we have a center
+    // and a radius
+    if ( !( HasValue( "mode.radius.r" ) && HasValue( "mode.radius.cx" ) 
+        && HasValue( "mode.radius.cy" ) ) )
+    {
+      return;
+    }
+    if ( GetParameterString( "mode.radius.unitr" ) == "pxl" )
+    {
+      // reference is pixel
+      FloatVectorImageType::IndexType centeri , radiusi;
+      radiusi[0] = GetParameterFloat( "mode.radius.r" );
+      radiusi[1] = GetParameterFloat( "mode.radius.r" );
+      if ( GetParameterString( "mode.radius.unitc" ) == "pxl" )
+      {
+        centeri[0] = GetParameterFloat( "mode.radius.cx" );
+        centeri[1] = GetParameterFloat( "mode.radius.cy" );
+      }
+      else if ( GetParameterString( "mode.radius.unitc" ) == "phy" )
+      {
+        // transform the center in index
+        itk::Point<float, 2> centerp;
+        centerp[0] = GetParameterFloat( "mode.radius.cx" ) ;
+        centerp[1] = GetParameterFloat( "mode.radius.cy" ) ;
+        ImageType * inImage = GetParameterImage("in");
+        inImage->TransformPhysicalPointToIndex( centerp , centeri );
+      }
+      else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
+      {
+        // TODO
+      }
+      // Corner case like negative index or too high index are taking care 
+      // of thanks to the DoUpdate() which set min and max
+      SetParameterInt( "startx", centeri[0] - radiusi[0] );
+      SetParameterInt( "starty", centeri[1] - radiusi[1]);
+      // Don't forget to compute the offset
+      // FIXME
+      FloatVectorImageType::IndexType toto;
+      toto[0] = centeri[0]-radiusi[0];
+      toto[1] = centeri[1]-radiusi[1];
+      auto offset = GetOffset(toto);
+      SetParameterInt( "sizex", 2 * radiusi[0] + 1 + offset[0] );
+      SetParameterInt( "sizey", 2 * radiusi[1] + 1 + offset[1] );
+    }
+    else //if ( GetParameterString( "mode.radius.unitr" ) == "phy" )
+    {
+      // reference is physical space
+      ImageType * inImage = GetParameterImage("in");
+      itk::Point<float, 2>  centerp , radiusp ;
+      radiusp.Fill( GetParameterFloat( "mode.radius.r" ) );
+      if ( GetParameterString( "mode.radius.unitc" ) == "pxl" )
+      {
+        FloatVectorImageType::IndexType centeri;
+        centeri[0] = GetParameterInt( "mode.radius.cx");
+        centeri[1] = GetParameterInt( "mode.radius.cy");
+        inImage->TransformIndexToPhysicalPoint( centeri , centerp );
+      }
+      else if ( GetParameterString( "mode.radius.unitc" ) == "phy" )
+      {
+        centerp[0] = GetParameterInt( "mode.radius.cx");
+        centerp[1] = GetParameterInt( "mode.radius.cy");
+      }
+      else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
+      {
+        // TODO
+      }
+      // Here we have physical point. We are going to construct a physical 
+      // extent and transform it in index
+      itk::Point<float, 2> ulp , lrp ;
+      FloatVectorImageType::IndexType raw_uli , uli , raw_lri , lri ;
+      ulp[0] = centerp[0] - radiusp[0];
+      ulp[1] = centerp[1] - radiusp[1];
+      lrp[0] = centerp[0] + radiusp[0];
+      lrp[1] = centerp[1] + radiusp[1];
+      inImage->TransformPhysicalPointToIndex( ulp , raw_uli );
+      inImage->TransformPhysicalPointToIndex( lrp , raw_lri );
+      // Here the extend might be inverted in the case of a negative spacing
+      uli[0] = std::min( raw_uli[0] , raw_lri[0] );
+      uli[1] = std::min( raw_uli[1] , raw_lri[1] );
+      lri[0] = std::max( raw_uli[0] , raw_lri[0] );
+      lri[1] = std::max( raw_uli[1] , raw_lri[1] );
+      SetParameterInt( "startx", uli[0]);
+      SetParameterInt( "starty", uli[1]);
+      // In the case of a negative index the size will be wrong without the
+      // offset
+      auto offset= GetOffset( uli );
+      SetParameterInt( "sizex", lri[0] - uli[0] + 1 + offset[0] );
+      SetParameterInt( "sizey", lri[1] - uli[1] + 1 + offset[1] );
+    }
+
+#if 0
     FloatVectorImageType::SizeType radiusi ;
     radiusi.Fill(0);
     if ( HasValue( "mode.radius.r" ) )
@@ -586,6 +694,7 @@ private:
     {
       // log
     }
+#endif
   }
 
   void
