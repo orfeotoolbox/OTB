@@ -29,6 +29,7 @@ shark-build:
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
   artifacts:
+    name: "QGISdescriptor6.7"
     paths:
       - install/share/otb/description/
-      expire_in: 1 week
+    expire_in: 1 week
