@@ -49,6 +49,7 @@ set (OTB_LARGEINPUT_ROOT "") # todo
 
 message(STATUS "CI profile : $ENV{OTB_CI_PROFILE}")
 message(STATUS "CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}")
+message(STATUS "CTEST_BUILD_NAME : ${CTEST_BUILD_NAME}")
 
 #The following file set the CONFIGURE_OPTIONS variable
 set (CONFIGURE_OPTIONS  "")
