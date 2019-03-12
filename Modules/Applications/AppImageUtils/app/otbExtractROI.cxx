@@ -417,14 +417,15 @@ private:
   {
     assert( GetParameterString( "mode" ) == "extent" );
     // Compute standard parameter depending on the unit chosen by the user
-    FloatVectorImageType::IndexType uli , lri;
+    // Reference is index
+    FloatVectorImageType::IndexType raw_uli , raw_lri;
     if (GetParameterString( "mode.extent.unit" ) == "pxl" )
     {
-      uli[0] = std::round( GetParameterFloat( "mode.extent.ulx" ) );
-      uli[1] = std::round( GetParameterFloat( "mode.extent.uly" ) );
-      lri[0] = std::round( GetParameterFloat( "mode.extent.lrx" ) );
-      lri[1] = std::round( GetParameterFloat( "mode.extent.lry" ) );
-      m_IsExtentInverted = ( lri[0] < uli[0] || lri[1] < uli[1] );
+      raw_uli[0] = std::round( GetParameterFloat( "mode.extent.ulx" ) );
+      raw_uli[1] = std::round( GetParameterFloat( "mode.extent.uly" ) );
+      raw_lri[0] = std::round( GetParameterFloat( "mode.extent.lrx" ) );
+      raw_lri[1] = std::round( GetParameterFloat( "mode.extent.lry" ) );
+      m_IsExtentInverted = ( raw_lri[0] < raw_uli[0] || raw_lri[1] < raw_uli[1] );
     }
     else if( GetParameterString( "mode.extent.unit" ) == "phy" )
     {
@@ -435,8 +436,9 @@ private:
       lrp[ 1 ] = GetParameterFloat( "mode.extent.lry" );
       m_IsExtentInverted = ( lrp[0] < ulp[0] || lrp[1] < ulp[1] );
       ImageType * inImage = GetParameterImage("in");
-      inImage->TransformPhysicalPointToIndex(ulp,uli);
-      inImage->TransformPhysicalPointToIndex(lrp,lri);    
+      FloatVectorImageType::IndexType raw_uli , raw_lri;
+      inImage->TransformPhysicalPointToIndex( ulp , raw_uli );
+      inImage->TransformPhysicalPointToIndex( lrp , raw_lri );
     }
     else // if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
     {
@@ -450,12 +452,20 @@ private:
       ulp_in[ 1 ] = GetParameterFloat( "mode.extent.uly" );
       lrp_in[ 0 ] = GetParameterFloat( "mode.extent.lrx" );
       lrp_in[ 1 ] = GetParameterFloat( "mode.extent.lry" );
+      // Is this working?
+      m_IsExtentInverted = ( lrp_in[0] < ulp_in[0] || lrp_in[1] < ulp_in[1] );
       ulp_out = rsTransform->TransformPoint(ulp_in);
       lrp_out = rsTransform->TransformPoint(lrp_in);
-      inImage->TransformPhysicalPointToIndex(ulp_out,uli);
-      inImage->TransformPhysicalPointToIndex(lrp_out,lri);
+      inImage->TransformPhysicalPointToIndex( ulp_out , raw_uli );
+      inImage->TransformPhysicalPointToIndex( lrp_out , raw_lri );
     }
-    
+    // Here we have an extent but we need to make sure we have the two corners
+    // we are interested in uli and lri!
+    FloatVectorImageType::IndexType uli , lri;
+    uli[0] = std::min( raw_uli[0] , raw_lri[0] );
+    uli[1] = std::min( raw_uli[1] , raw_lri[1] );
+    lri[0] = std::max( raw_uli[0] , raw_lri[0] );
+    lri[1] = std::max( raw_uli[1] , raw_lri[1] );
     SetParameterInt( "startx", uli[0]);
     SetParameterInt( "starty", uli[1]);
     // In the case of a negative index the size will be wrong without the
