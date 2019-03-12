@@ -572,18 +572,27 @@ private:
       }
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
-        // TODO
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        ImageType* inImage = GetParameterImage("in");
+        rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+        rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+        rsTransform->InstantiateTransform();
+        itk::Point<float, 2> centerp_in , centerp_out ;
+        centerp_in[ 0 ] = GetParameterFloat( "mode.radius.cx" );
+        centerp_in[ 1 ] = GetParameterFloat( "mode.radius.cy" );
+        centerp_out = rsTransform->TransformPoint(centerp_in);
+        inImage->TransformPhysicalPointToIndex( centerp_out , centeri );
       }
       // Corner case like negative index or too high index are taking care 
       // of thanks to the DoUpdate() which set min and max
       SetParameterInt( "startx", centeri[0] - radiusi[0] );
-      SetParameterInt( "starty", centeri[1] - radiusi[1]);
+      SetParameterInt( "starty", centeri[1] - radiusi[1] );
       // Don't forget to compute the offset
       // FIXME
-      FloatVectorImageType::IndexType toto;
-      toto[0] = centeri[0]-radiusi[0];
-      toto[1] = centeri[1]-radiusi[1];
-      auto offset = GetOffset(toto);
+      FloatVectorImageType::IndexType offset_helper;
+      offset_helper[0] = centeri[0]-radiusi[0];
+      offset_helper[1] = centeri[1]-radiusi[1];
+      auto offset = GetOffset( offset_helper );
       SetParameterInt( "sizex", 2 * radiusi[0] + 1 + offset[0] );
       SetParameterInt( "sizey", 2 * radiusi[1] + 1 + offset[1] );
     }
@@ -607,7 +616,14 @@ private:
       }
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
-        // TODO
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
+        rsTransform->SetOutputProjectionRef( inImage->GetProjectionRef() );
+        rsTransform->InstantiateTransform();
+        itk::Point<float, 2> centerp_in;
+        centerp_in[ 0 ] = GetParameterFloat( "mode.radius.cx" );
+        centerp_in[ 1 ] = GetParameterFloat( "mode.radius.cy" );
+        centerp = rsTransform->TransformPoint(centerp_in);
       }
       // Here we have physical point. We are going to construct a physical 
       // extent and transform it in index
