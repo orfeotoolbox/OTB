@@ -30,5 +30,5 @@ shark-build:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
   artifacts:
     paths:
-      -install/share/otb/description/
+      - install/share/otb/description/
       expire_in: 1 week
