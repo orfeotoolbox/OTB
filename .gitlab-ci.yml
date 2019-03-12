@@ -31,5 +31,5 @@ shark-build:
   artifacts:
     name: "QGISdescriptor6.7"
     paths:
-      - install/share/otb/description/
+      - build/share/otb/description/
     expire_in: 1 week
