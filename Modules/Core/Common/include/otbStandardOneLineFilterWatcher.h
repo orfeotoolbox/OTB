@@ -54,7 +54,7 @@ namespace otb
  * \ingroup OTBCommon
  */
 template <class PrintCallbackType = StandardOutputPrintCallback>
-class OTBCommon_EXPORT StandardOneLineFilterWatcher : public FilterWatcherBase
+class OTBCommon_EXPORT_TEMPLATE StandardOneLineFilterWatcher : public FilterWatcherBase
 {
 public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
