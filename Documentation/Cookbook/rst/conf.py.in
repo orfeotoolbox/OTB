@@ -223,7 +223,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index_TOC', 'CookBook-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@.@OTB_VERSION_PATCH@.tex', u'OTB CookBook Documentation',
+  ('index', 'CookBook-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@.@OTB_VERSION_PATCH@.tex', u'OTB CookBook Documentation',
    u'OTB Team', 'manual'),
 ]
 
