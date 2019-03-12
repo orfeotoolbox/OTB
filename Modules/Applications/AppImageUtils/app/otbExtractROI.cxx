@@ -719,44 +719,51 @@ private:
     ImageType* inImage = GetParameterImage("in");
     inImage->UpdateOutputInformation();
 
-    if ( HasValue( "mode.fit.vect" ) && GetParameterString("mode") == "fit")
+    if (GetParameterString("mode") == "fit")
     {
-      otb::ogr::DataSource::Pointer ogrDS;
-      ogrDS = otb::ogr::DataSource::New(GetParameterString("mode.fit.vect") ,
-                                        otb::ogr::DataSource::Modes::Read);
-      double ulx, uly, lrx, lry;
-      bool extentAvailable = true;
-      std::string inputProjectionRef = "";
-      // First try to get the extent in the metadata
-      try
+      // In fit mode we compute the extend in the physical space of the input
+      // from a vector or an other image
+      FloatVectorImageType::PointType ulp_out, urp_out, llp_out,lrp_out;
+      if ( HasValue( "mode.fit.vect" ) )
       {
-        inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
-      }
-      catch(const itk::ExceptionObject&)
-      {
-        extentAvailable = false;
-      }
-      // If no extent available force the computation of the extent
-      if (!extentAvailable)
-      {
+        otb::ogr::DataSource::Pointer ogrDS;
+        ogrDS = otb::ogr::DataSource::New(GetParameterString("mode.fit.vect") ,
+                                          otb::ogr::DataSource::Modes::Read);
+        double ulx, uly, lrx, lry;
+        bool extentAvailable = true;
+        std::string inputProjectionRef = "";
+        // First try to get the extent in the metadata
         try
         {
-          inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
-          extentAvailable = true;
+          inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry);
         }
-        catch(itk::ExceptionObject & err)
+        catch(const itk::ExceptionObject&)
         {
           extentAvailable = false;
-
-          otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset "
-                           "in force mode. The spatial extent is mandatory when "
-                           "orx, ory, spx and spy parameters are not set, consider "
-                           "setting them. Error from library: "<<err.GetDescription());
         }
-      }
+        // If no extent available force the computation of the extent
+        if (!extentAvailable)
+        {
+          try
+          {
+            inputProjectionRef = ogrDS->GetGlobalExtent(ulx,uly,lrx,lry,true);
+          }
+          catch(itk::ExceptionObject & err)
+          {
 
-      if (extentAvailable)
-      {
+            otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset "
+                  "in force mode. The spatial extent is mandatory when "
+                  "using mod.fit . Error from library: "<<err.GetDescription());
+          }
+          catch ( ... )
+          {
+            otbAppLogFATAL(<<"Failed to retrieve the spatial extent of the dataset "
+                  "in force mode. The spatial extent is mandatory when "
+                  "using mod.fit");
+          }
+
+        }
+
         RSTransformType::Pointer rsTransform = RSTransformType::New();
         rsTransform->SetInputProjectionRef( inputProjectionRef );
         rsTransform->SetOutputKeywordList( inImage->GetImageKeywordlist() );
@@ -776,99 +783,68 @@ private:
         urp_out = rsTransform->TransformPoint(urp_in);
         llp_out = rsTransform->TransformPoint(llp_in);
         lrp_out = rsTransform->TransformPoint(lrp_in);
-        FloatVectorImageType::IndexType uli_out , uri_out , lli_out , lri_out;
-
-        inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
-        inImage->TransformPhysicalPointToIndex(urp_out,uri_out);
-        inImage->TransformPhysicalPointToIndex(llp_out,lli_out);
-        inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-        
-        FloatVectorImageType::IndexType uli, lri;
-
-        uli[0] = std::min( std::min( uli_out[0] , uri_out[0] ) , 
-                           std::min( lli_out[0] , lri_out[0] ) );
-        uli[1] = std::min( std::min( uli_out[1] , uri_out[1] ) ,
-                           std::min( lli_out[1] , lri_out[1] ) );
-
-        lri[0] = std::max( std::max( uli_out[0] , uri_out[0] ) ,
-                           std::max( lli_out[0] , lri_out[0] ) );
-        lri[1] = std::max( std::max( uli_out[1] , uri_out[1] ) ,
-                           std::max( lli_out[1] , lri_out[1] ) );
-
-        SetParameterInt( "startx", uli[0]);
-        SetParameterInt( "starty", uli[1]);
-        // In the case of a negative index the size will be wrong without the
-        // offset
-        FloatVectorImageType::IndexType offset = GetOffset( uli );
-        SetParameterInt( "sizex", lri[0] - uli[0] + offset[0] );
-        SetParameterInt( "sizey", lri[1] - uli[1] + offset[1] );
       }
-    }
-    else if( HasValue( "mode.fit.im" ) && GetParameterString( "mode" ) == "fit" )
-    {
-      // Setup the DEM Handler
-      otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+      else // if( HasValue( "mode.fit.im" ) )
+      {
+        // Setup the DEM Handler
+        otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
 
-      FloatVectorImageType::Pointer referencePtr = GetParameterImage("mode.fit.im");
-      referencePtr->UpdateOutputInformation();
+        FloatVectorImageType::Pointer referencePtr = GetParameterImage("mode.fit.im");
+        referencePtr->UpdateOutputInformation();
 
-      RSTransformType::Pointer rsTransform = RSTransformType::New();
-      rsTransform->SetInputKeywordList(referencePtr->GetImageKeywordlist());
-      rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
-      rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
-      rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
-      rsTransform->InstantiateTransform();
+        FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
 
-      FloatVectorImageType::IndexType uli_ref,uri_ref,lli_ref,lri_ref;
+        uli_ref = referencePtr->GetLargestPossibleRegion().GetIndex();
+        uri_ref = uli_ref;
+        uri_ref[0]+=referencePtr->GetLargestPossibleRegion().GetSize()[0];
+        lli_ref = uli_ref;
+        lli_ref[1]+=referencePtr->GetLargestPossibleRegion().GetSize()[1];
+        lri_ref = lli_ref;
+        lri_ref[0]+=referencePtr->GetLargestPossibleRegion().GetSize()[0];
 
-      uli_ref = referencePtr->GetLargestPossibleRegion().GetIndex();
-      uri_ref = uli_ref;
-      uri_ref[0]+=referencePtr->GetLargestPossibleRegion().GetSize()[0];
-      lli_ref = uli_ref;
-      lli_ref[1]+=referencePtr->GetLargestPossibleRegion().GetSize()[1];
-      lri_ref = lli_ref;
-      lri_ref[0]+=referencePtr->GetLargestPossibleRegion().GetSize()[0];
+        FloatVectorImageType::PointType ulp_ref,urp_ref,llp_ref,lrp_ref;
 
-      FloatVectorImageType::PointType ulp_ref,urp_ref,llp_ref,lrp_ref;
+        referencePtr->TransformIndexToPhysicalPoint(uli_ref,ulp_ref);
+        referencePtr->TransformIndexToPhysicalPoint(uri_ref,urp_ref);
+        referencePtr->TransformIndexToPhysicalPoint(lli_ref,llp_ref);
+        referencePtr->TransformIndexToPhysicalPoint(lri_ref,lrp_ref);
 
-      referencePtr->TransformIndexToPhysicalPoint(uli_ref,ulp_ref);
-      referencePtr->TransformIndexToPhysicalPoint(uri_ref,urp_ref);
-      referencePtr->TransformIndexToPhysicalPoint(lli_ref,llp_ref);
-      referencePtr->TransformIndexToPhysicalPoint(lri_ref,lrp_ref);
 
-      FloatVectorImageType::PointType ulp_out, urp_out, llp_out,lrp_out;
+        RSTransformType::Pointer rsTransform = RSTransformType::New();
+        rsTransform->SetInputKeywordList(referencePtr->GetImageKeywordlist());
+        rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
+        rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
+        rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
+        rsTransform->InstantiateTransform();
 
-      ulp_out = rsTransform->TransformPoint(ulp_ref);
-      urp_out = rsTransform->TransformPoint(urp_ref);
-      llp_out = rsTransform->TransformPoint(llp_ref);
-      lrp_out = rsTransform->TransformPoint(lrp_ref);
+        ulp_out = rsTransform->TransformPoint(ulp_ref);
+        urp_out = rsTransform->TransformPoint(urp_ref);
+        llp_out = rsTransform->TransformPoint(llp_ref);
+        lrp_out = rsTransform->TransformPoint(lrp_ref);
 
-      FloatVectorImageType::IndexType uli_out, uri_out, lli_out, lri_out;
+      }
+      FloatVectorImageType::IndexType uli_out , uri_out , lli_out , lri_out;
 
       inImage->TransformPhysicalPointToIndex(ulp_out,uli_out);
       inImage->TransformPhysicalPointToIndex(urp_out,uri_out);
       inImage->TransformPhysicalPointToIndex(llp_out,lli_out);
       inImage->TransformPhysicalPointToIndex(lrp_out,lri_out);
-
+        
       FloatVectorImageType::IndexType uli, lri;
 
-      uli[0] = std::min( std::min( uli_out[0] , uri_out[0] ) , 
-                         std::min( lli_out[0] , lri_out[0] ) );
-      uli[1] = std::min( std::min( uli_out[1] , uri_out[1] ) ,
-                         std::min( lli_out[1] , lri_out[1] ) );
+      uli[0] = std::min( { uli_out[0] , uri_out[0] , lli_out[0] , lri_out[0] } );
+      uli[1] = std::min( { uli_out[1] , uri_out[1] , lli_out[1] , lri_out[1] } );
 
-      lri[0] = std::max( std::max( uli_out[0] , uri_out[0] ) ,
-                         std::max( lli_out[0] , lri_out[0] ) );
-      lri[1] = std::max( std::max( uli_out[1] , uri_out[1] ) ,
-                         std::max( lli_out[1] , lri_out[1] ) );
-      
-      SetParameterInt("startx",uli[0]);
-      SetParameterInt("starty",uli[1]);
+      lri[0] = std::max( { uli_out[0] , uri_out[0] , lli_out[0] , lri_out[0] } );
+      lri[1] = std::max( { uli_out[1] , uri_out[1] , lli_out[1] , lri_out[1] } );
+
+      SetParameterInt( "startx", uli[0]);
+      SetParameterInt( "starty", uli[1]);
       // In the case of a negative index the size will be wrong without the
       // offset
       FloatVectorImageType::IndexType offset = GetOffset( uli );
-      SetParameterInt("sizex",lri[0] - uli[0] + offset[0] );
-      SetParameterInt("sizey",lri[1] - uli[1] + offset[1] );
+      SetParameterInt( "sizex", lri[0] - uli[0] + offset[0] );
+      SetParameterInt( "sizey", lri[1] - uli[1] + offset[1] );
     }
     else if( GetParameterString( "mode" ) == "extent" )
     {
