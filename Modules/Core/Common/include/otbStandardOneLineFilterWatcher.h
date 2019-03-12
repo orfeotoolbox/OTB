@@ -107,8 +107,6 @@ private:
    * progress if it hasn't changed */
   int m_CurrentNbStars;
 
-  bool m_CoutIsConsole;
-
   /** If the output is not interactive (e.g. it is redirected to a file), it
    * is buffered and only written at the end of the processing */
   std::string m_Buffer;
