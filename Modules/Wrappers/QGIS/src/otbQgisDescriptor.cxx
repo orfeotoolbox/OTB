@@ -299,23 +299,21 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;	  
       }
 
-    if (!isDestination)
+    std::string optional;
+    if (param->GetMandatory())
       {
-      std::string optional;
-      if (param->GetMandatory())
-        {
-        // TODO: avoid workaround for stringlist types (fix appengine)
-        // type == ParameterType_StringList check is needed because:
-        // If parameter is mandatory it can have no value
-        // It is accepted in OTB that, string list could be generated dynamically
-        // qgis has no such option to handle dynamic values yet..
-        // So mandatory parameters whose type is StringList is considered optional
-        optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
-        }
-      else
-        {
-        optional = "True";
-        }
+      // TODO: avoid workaround for stringlist types (fix appengine)
+      // type == ParameterType_StringList check is needed because:
+      // If parameter is mandatory it can have no value
+      // It is accepted in OTB that, string list could be generated dynamically
+      // qgis has no such option to handle dynamic values yet..
+      // So mandatory parameters whose type is StringList is considered optional
+      optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
+      }
+    else
+      {
+      optional = "True";
+      }
               #if 0
     	  std::cerr << name;
     	  std::cerr << " mandatory=" << param->GetMandatory();
@@ -323,8 +321,7 @@ int main(int argc, char* argv[])
     	  std::cerr << " qgis_type=" << qgis_type;
     	  std::cerr << " optional=" << optional << std::endl;
               #endif
-    	dFile << "|" << default_value << "|" << optional;
-      }
+    dFile << "|" << default_value << "|" << optional;
     dFile << std::endl;
     }
 
