@@ -117,31 +117,9 @@ public:
   /** */
   void Swap( std::size_t, std::size_t ) override;
 
-  std::vector<std::string> ToStringList() const override
-  {
-    return GetFileNameList();
-  }
-
-  void FromStringList(const std::vector<std::string>& value)
-  {
-    SetStrings(value);
-  }
-
-  std::string ToString() const override
-  {
-    std::ostringstream oss;
-    oss << std::setprecision(10);
-    auto strList = GetFileNameList();
-    for (size_t i = 0; i < strList.size(); i++)
-    {
-      if (i != 0)
-      {
-        oss << " ";
-      }
-      oss << strList[i];
-    }
-    return oss.str();
-  }
+  std::vector<std::string> ToStringList() const override;
+  void FromStringList(const std::vector<std::string>& value) override;
+  std::string ToString() const override;
 
 protected:
   /** Constructor */

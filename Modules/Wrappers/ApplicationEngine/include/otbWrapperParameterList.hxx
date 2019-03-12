@@ -468,6 +468,35 @@ ParameterList< T >
   return parameter;
 }
 
+template <typename T>
+std::vector<std::string> ParameterList<T>::ToStringList() const
+{
+  return GetFileNameList();
+}
+
+template <typename T>
+void ParameterList<T>::FromStringList(const std::vector<std::string>& value)
+{
+  SetStrings(value);
+}
+
+template <typename T>
+std::string ParameterList<T>::ToString() const
+{
+  std::ostringstream oss;
+  oss << std::setprecision(10);
+  auto strList = GetFileNameList();
+  for (size_t i = 0; i < strList.size(); i++)
+  {
+    if (i != 0)
+    {
+      oss << " ";
+    }
+    oss << strList[i];
+  }
+  return oss.str();
+}
+
 } // End namespace Wrapper
 
 
