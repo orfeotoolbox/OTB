@@ -69,7 +69,7 @@ public:
   StandardOneLineFilterWatcher();
 
   /** Destrucotr */
-  virtual ~StandardOneLineFilterWatcher() =default;
+  ~StandardOneLineFilterWatcher() override = default;
 
   /** Get/Set number of stars */
   void SetStars(int count)

@@ -80,7 +80,7 @@ protected:
   ProgressReporterManager();
 
   /** Destructor. */
-  virtual ~ProgressReporterManager();
+  ~ProgressReporterManager() override;
 
   /** Load the watchers for internal progress and writing progress report. */
   void LinkWatchers(itk::Object* caller, const itk::EventObject& event);

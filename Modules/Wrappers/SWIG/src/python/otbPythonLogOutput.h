@@ -69,7 +69,7 @@ protected:
   PythonLogOutput() = default;
 
   /** Destructor */
-  virtual ~PythonLogOutput() override = default;
+  ~PythonLogOutput() override = default;
 
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
