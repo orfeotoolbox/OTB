@@ -26,8 +26,21 @@ native-build:
   extends: .general
   stage: build
   image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-shark:18.04
+  before_script:
+    # ccache configuration
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+    - echo "max_size = 3G" > ccache/ccache.conf
+    - echo "run_second_cpp = true" >> ccache/ccache.conf
+    - echo "compiler_check = content" >> ccache/ccache.conf
+    - echo "sloppiness = time_macros" >> ccache/ccache.conf
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
+  cache:
+    key: "ubuntu-18.04-llvm-shark"
+    paths:
+      - ccache/
 
 build-wip:
   extends: .build-common
@@ -37,6 +50,8 @@ build-wip:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+  cache:
+    policy: pull
 
 build-mr:
   extends: .build-common
@@ -44,6 +59,8 @@ build-mr:
     OTB_CI_PROFILE: 'mr'
   only:
     - merge_requests
+  cache:
+    policy: pull
 
 build-develop:
   extends: .build-common
@@ -51,6 +68,8 @@ build-develop:
     OTB_CI_PROFILE: 'develop'
   only:
     - develop
+  cache:
+    policy: pull-push
 
 build-release:
   extends: .build-common
@@ -58,3 +77,5 @@ build-release:
     OTB_CI_PROFILE: 'release'
   only:
     - /^release-[0-9]+\.[0-9]+$/
+  cache:
+    policy: pull
