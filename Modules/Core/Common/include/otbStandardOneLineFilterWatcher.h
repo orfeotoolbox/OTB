@@ -23,6 +23,7 @@
 #define otbStandardOneLineFilterWatcher_h
 
 #include <iosfwd>
+#include <memory>
 
 #include "otbFilterWatcherBase.h"
 #include "otbStandardOutputPrintCallback.h"
