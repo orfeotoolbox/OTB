@@ -200,7 +200,7 @@ ParameterList< T >
       strings.begin(),
       strings.end(),
       std::back_inserter( m_Parameters ),
-      [ this ]( auto s ) -> auto
+      []( auto s ) -> auto
       {
         typename T::Pointer parameter(T::New());
         parameter->FromString(s);
@@ -224,7 +224,7 @@ ParameterList< T >
     begin(),
     end(),
     std::back_inserter( strings ),
-    [ this ]( auto p ) -> auto
+    []( auto p ) -> auto
     {
       return p->ToString();
     }
