@@ -1,3 +1,5 @@
+.. _compilingfromsource:
+
 Compiling OTB from source
 =========================
 
