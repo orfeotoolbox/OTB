@@ -32,8 +32,15 @@ set(SWIG_MODULE_otbApplication_EXTRA_DEPS
      ${CMAKE_CURRENT_SOURCE_DIR}/../Python.i
      ${CMAKE_CURRENT_SOURCE_DIR}/../PyCommand.i
      itkPyCommand.h
+     otbSwigPrintCallback.h
+     otbPythonLogOutput.h
+     otbProgressReporterManager.h
      OTBApplicationEngine)
-SWIG_add_module( otbApplication python ../otbApplication.i otbApplicationPYTHON_wrap.cxx itkPyCommand.cxx )
+SWIG_add_module( otbApplication python ../otbApplication.i 
+                                        otbApplicationPYTHON_wrap.cxx 
+                                        itkPyCommand.cxx
+                                        ../python/otbPythonLogOutput.cxx
+                                        ../python/otbProgressReporterManager.cxx)
 SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
 set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
 

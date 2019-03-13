@@ -596,7 +596,7 @@ void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const i
       {
       const AddProcessToWatchEvent* eventToWatch = dynamic_cast<const AddProcessToWatchEvent*> (&event);
 
-      StandardOneLineFilterWatcher * watch = new StandardOneLineFilterWatcher(eventToWatch->GetProcess(),
+      auto watch = new StandardOneLineFilterWatcher<>(eventToWatch->GetProcess(),
                                                                               eventToWatch->GetProcessDescription());
       m_WatcherList.push_back(watch);
       }

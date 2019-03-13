@@ -19,6 +19,9 @@
  * limitations under the License.
  */
 
+#ifndef otbStandardOneLineFilterWatcher_hxx
+#define otbStandardOneLineFilterWatcher_hxx
+
 #include <iostream>
 #include <sstream>
 
@@ -28,37 +31,43 @@
 
 namespace otb
 {
-
-StandardOneLineFilterWatcher
+template<class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::StandardOneLineFilterWatcher()
   : m_StarsCount(50),
-    m_CurrentNbStars(-1),
-    m_CoutIsConsole( System::IsInteractive(1) )
+    m_CurrentNbStars(-1)
 {
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
-StandardOneLineFilterWatcher
+template<class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::StandardOneLineFilterWatcher(itk::ProcessObject* process,
                         const char *comment)
   : FilterWatcherBase(process, comment),
     m_StarsCount(50),
-    m_CurrentNbStars(-1),
-    m_CoutIsConsole( System::IsInteractive(1) )
+    m_CurrentNbStars(-1)
 {
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
-StandardOneLineFilterWatcher
+template<class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::StandardOneLineFilterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
   : FilterWatcherBase(process, comment.c_str()),
     m_StarsCount(50),
-    m_CurrentNbStars(-1),
-    m_CoutIsConsole( System::IsInteractive(1) )
+    m_CurrentNbStars(-1)
 {
+  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
+  m_Callback = m_DefaultCallback.get();
 }
 
+template<class PrintCallbackType>
 void
-StandardOneLineFilterWatcher
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::ShowProgress()
 {
   if (m_Process)
@@ -90,9 +99,10 @@ StandardOneLineFilterWatcher
       oss << m_Comment
           << ": "
           << progressPercent << "% [" << stars << blanks << "]";
-      if (m_CoutIsConsole)
+      if (m_Callback->IsInteractive())
         {
-        std::cout << "\r" << oss.str() << std::flush;
+        m_Callback->Call("\r" + oss.str());
+        m_Callback->Flush();
         }
       else
         {
@@ -104,29 +114,31 @@ StandardOneLineFilterWatcher
     }
 }
 
+template<class PrintCallbackType>
 void
-StandardOneLineFilterWatcher
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::StartFilter()
 {
   m_Stopwatch.Start();
 }
 
+template<class PrintCallbackType>
 void
-StandardOneLineFilterWatcher
+StandardOneLineFilterWatcher<PrintCallbackType>
 ::EndFilter()
 {
   m_Stopwatch.Stop();
 
-  if (m_Process && !m_CoutIsConsole)
+  if (m_Process && !m_Callback->IsInteractive())
     {
-    std::cout << m_Buffer;
+    m_Callback->Call(m_Buffer);
     m_Buffer = std::string("");
     }
 
-  std::cout << " (";
-  m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
-  std::cout << ")"
-            << std::endl;
+  m_Callback->Call(" (" + m_Stopwatch.GetElapsedHumanReadableTime() + ")\n");
+
 }
 
 } // end namespace otb
+
+#endif

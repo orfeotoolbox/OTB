@@ -260,7 +260,7 @@ VectorImageModel
 
   try
     {
-    otb::StandardOneLineFilterWatcher watcher(
+    otb::StandardOneLineFilterWatcher<> watcher(
       filter,
       ToStdString( tr( "Overviews creation: " ) )
     );
