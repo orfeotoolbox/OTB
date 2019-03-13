@@ -1,8 +1,3 @@
-.. OTB documentation master file, created by
-   sphinx-quickstart on Thu Jul  9 11:22:08 2015
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Orfeo ToolBox!
 =========================
 
@@ -44,3 +39,34 @@ For other documentation, be sure to read:
 - `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
+Table of Contents
+=================
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Get Started
+
+    Installation
+    Monteverdi
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Applications
+
+    CliInterface
+    GraphicalInterface
+    PythonAPI
+    QGISInterface
+    Recipes
+    Applications
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Advanced use
+
+    EnvironmentVariables
+    ExtendedFilenames
+    CompilingOTBFromSource
+    C++
+    FAQ
+    Contributors
