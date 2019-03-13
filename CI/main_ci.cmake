@@ -26,7 +26,17 @@ set (ENV{LANG} "C") # Only ascii output
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_CMAKE_GENERATOR "Ninja")
 
-set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}_to_$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+# Find the build name
+set(ci_mr_source "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}")
+set(ci_mr_target "$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
+set (CTEST_BUILD_NAME "$ENV{CI_COMMIT_SHORT_SHA}")
+if(ci_mr_source AND ci_mr_target)
+  set (CTEST_BUILD_NAME "${CTEST_BUILD_NAME} (${ci_mr_source} to ${ci_mr_target})")
+elseif(ci_ref_name)
+  set (CTEST_BUILD_NAME "${CTEST_BUILD_NAME} (${ci_ref_name})")
+endif()
+
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable
@@ -42,6 +52,7 @@ set (CMAKE_COMMAND "cmake")
 set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
 set (OTB_LARGEINPUT_ROOT "") # todo
 
+message(STATUS "CI profile : $ENV{OTB_CI_PROFILE}")
 
 #The following file set the CONFIGURE_OPTIONS variable
 set (CONFIGURE_OPTIONS  "")
