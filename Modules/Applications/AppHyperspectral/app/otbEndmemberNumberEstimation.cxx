@@ -44,9 +44,9 @@ public:
 
   itkTypeMacro(EndmemberNumberEstimation, otb::Application);
 
-  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> StreamingStatisticsVectorImageFilterType;
-  typedef otb::VirtualDimensionality<float>                                      VirtualDimensionalityType;
-  typedef otb::EigenvalueLikelihoodMaximisation<float>                           EigenvalueLikelihoodMaximisationType;
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, double> StreamingStatisticsVectorImageFilterType;
+  typedef otb::VirtualDimensionality<double>                                      VirtualDimensionalityType;
+  typedef otb::EigenvalueLikelihoodMaximisation<double>                           EigenvalueLikelihoodMaximisationType;
 
 private:
   void DoInit() override
