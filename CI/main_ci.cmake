@@ -39,7 +39,7 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 set (CMAKE_COMMAND "cmake")
 
 # Data directory setting
-# set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
+set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
 set (OTB_LARGEINPUT_ROOT "") # todo
 
 
@@ -74,6 +74,6 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-ctest_test(PARALLEL_LEVEL 8)
+# ctest_test(PARALLEL_LEVEL 8)
 
 ctest_submit()
