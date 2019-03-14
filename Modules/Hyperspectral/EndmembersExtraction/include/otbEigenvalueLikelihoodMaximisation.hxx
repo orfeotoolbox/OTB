@@ -72,12 +72,13 @@ EigenvalueLikelihoodMaximisation<TInputImage>
 
       sigma[j] = coef * (r * r + k * k);
       //std::cout << "sigma[" << j << "]=" << sigma[j] << std::endl;
-      t[j] = (r - k) * (r - k) / (2*sigma[j]);
+      t[j] = (r - k) * (r - k) / sigma[j];
       //std::cout << "t[" << j <<"]=" << t[j] << std::endl;
-      sigma[j] = std::log(std::sqrt(sigma[j]));
+      sigma[j] = std::log(sigma[j]);
       }
-    m_Likelihood(i) = -t.sum() - sigma.sum();
+    m_Likelihood(i) = -0.5*t.sum() - 0.5*sigma.sum();
     }
+
   // Extract first local maximum
   //double max = m_Likelihood[0];
   unsigned int iMax = 0;
