@@ -300,56 +300,36 @@ int main(int ac, char* av[])
         return -1;
       }
   else
-    {
+  {
     otb::Logger::Instance()->LogSetupInformation();
     MainFuncPointer f = j->second;
     int             result;
     try
-      {
+    {
       // Invoke the test's "main" function.
       result = (*f)(ac - 1, av + 1);
-      if (result != EXIT_SUCCESS )
-        {
+      if (result != EXIT_SUCCESS)
+      {
         std::cout << "-> Test EXIT FAILURE (" << result << ")." << std::endl;
         itkGenericExceptionMacro(<< "Function returns EXIT_FAILURE (not from regression, failure inside the test)");
-        }
       }
-    catch (const otb::ImageFileReaderException& e)
+    }
+    catch (const std::exception& e)
     {
-      std::cerr << "otbTestMain '" << testToRun << "': ImageFileReaderException:" << std::endl;
-      std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
-      std::cerr << std::string("Cannot open image ") + e.m_Filename + std::string(". ") + e.GetDescription() << std::endl;
+      std::cerr << "otbTestMain '" << testToRun << "': exception caught:" << std::endl;
+      std::cerr << e.what() << std::endl;
       result = EXIT_FAILURE;
     }
-    catch (const itk::ExceptionObject& e)
-      {
-      std::cerr << "otbTestMain '" << testToRun << "': ITK Exception thrown:" << std::endl;
-      std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
-      std::cerr << e.GetDescription() << std::endl;
-      result = EXIT_FAILURE;
-      }
-    catch (const std::bad_alloc& err)
-      {
-      std::cerr << "otbTestMain '" << testToRun << "': Exception bad_alloc thrown: " << std::endl;
-      std::cerr << (char*) err.what() << std::endl;
-      result = EXIT_FAILURE;
-      }
-    catch (const std::exception& e)
-      {
-      std::cerr << "otbTestMain '" << testToRun << "': std::exception  thrown:" << std::endl;
-      std::cerr << e.what() <<  std::endl;
-      result = EXIT_FAILURE;
-      }
     catch (...)
-      {
-      std::cerr << "otbTestMain '" << testToRun << "': Unknown exception thrown !" << std::endl;
+    {
+      std::cerr << "otbTestMain '" << testToRun << "': unknown exception caught!" << std::endl;
       result = EXIT_FAILURE;
-      }
+    }
 
-    if (result != EXIT_SUCCESS )
-      {
-        return -1;
-      }
+    if (result != EXIT_SUCCESS)
+    {
+      return -1;
+    }
 
 
     result = EXIT_SUCCESS;

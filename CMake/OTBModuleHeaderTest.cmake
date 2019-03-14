@@ -26,7 +26,6 @@
 
 # This does not force the developer to install python to be able to build OTB.
 # The tests will simply not be run if python is unavailable.
-find_package(PythonInterp)
 
 # The maximum number of headers in a test.  This helps limit memory issues,
 # and the cppcheck tests.  However, if this is not unity, there is a slight

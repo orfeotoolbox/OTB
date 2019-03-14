@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
+    'sphinx.ext.extlinks',
 ]
 
 imgmath_latex='@LATEX_COMMAND@'
@@ -52,10 +53,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'index_TOC'
+master_doc = 'index'
 
 # General information about the project.
-project = u'OTB CookBook'
+project = u'Orfeo ToolBox'
 copyright = u'@OTB_COPYRIGHT_TEXT@'
 #copyright = u'2014, OTB Team'
 # The version info for the project you're documenting, acts as replacement for
@@ -118,8 +119,9 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
-
+html_theme_options = {
+    'logo_only': True
+}
 
 
 # The name for this set of Sphinx documents.  If None, it defaults to
@@ -131,7 +133,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-html_logo = "rst/Art/logo.png"
+html_logo = "rst/Art/logo-with-text.png"
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
@@ -221,7 +223,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index_TOC', 'CookBook-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@.@OTB_VERSION_PATCH@.tex', u'OTB CookBook Documentation',
+  ('index', 'CookBook-@OTB_VERSION_MAJOR@.@OTB_VERSION_MINOR@.@OTB_VERSION_PATCH@.tex', u'OTB CookBook Documentation',
    u'OTB Team', 'manual'),
 ]
 
@@ -281,3 +283,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+extlinks = {
+    'doxygen': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
+    'doxygen-itk': ("http://www.itk.org/Doxygen/html/classitk_1_1%s.html", "itk::")
+}

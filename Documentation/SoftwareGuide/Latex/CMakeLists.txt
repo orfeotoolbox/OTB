@@ -105,14 +105,12 @@ ${SoftwareGuide_BINARY_DIR}/SoftwareGuideConfiguration.tex
 )
 
 SET( Tex_SRCS
-  Applications.tex
   DataRepresentation.tex
   Filtering.tex
   GUI.tex
   ImageInterpolators.tex
   Infrastructure.tex
   IO.tex
-  Iterators.tex
   Numerics.tex
   Registration.tex
   StereoReconstruction.tex
@@ -121,14 +119,12 @@ SET( Tex_SRCS
   SoftwareProcess.tex
   SpatialObjects.tex
   Statistics.tex
-  SystemOverview.tex
   Visualization.tex
   Watersheds.tex
   Fusion.tex
   Radiometry.tex
   FeatureExtraction.tex
   ObjectBasedImageAnalysis.tex
-  Hyperspectral.tex
 )
 
 

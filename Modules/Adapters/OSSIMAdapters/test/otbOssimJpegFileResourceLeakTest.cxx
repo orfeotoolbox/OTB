@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include "otb_ossim.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push

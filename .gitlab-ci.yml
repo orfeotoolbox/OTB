@@ -6,7 +6,6 @@ stages:
   - build
 
 .general:
-  only: [merge_requests]
   retry:
     max: 2
     when:
@@ -15,14 +14,66 @@ stages:
 
 native-build:
   extends: .general
+  only: [merge_requests]
   stage: build
   image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-native:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-shark-build:
+.build-common:
   extends: .general
   stage: build
   image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-shark:18.04
+  before_script:
+    # ccache configuration
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+    - echo "max_size = 3G" > ccache/ccache.conf
+    - echo "run_second_cpp = true" >> ccache/ccache.conf
+    - echo "compiler_check = content" >> ccache/ccache.conf
+    - echo "sloppiness = time_macros" >> ccache/ccache.conf
   script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc-shark-3.1.4
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
+  cache:
+    key: "ubuntu-18.04-llvm-shark"
+    paths:
+      - ccache/
+
+build-wip:
+  extends: .build-common
+  variables:
+    OTB_CI_PROFILE: 'wip'
+  except:
+    - merge_requests
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
+  cache:
+    policy: pull
+
+build-mr:
+  extends: .build-common
+  variables:
+    OTB_CI_PROFILE: 'mr'
+  only:
+    - merge_requests
+  cache:
+    policy: pull
+
+build-develop:
+  extends: .build-common
+  variables:
+    OTB_CI_PROFILE: 'develop'
+  only:
+    - develop
+  cache:
+    policy: pull-push
+
+build-release:
+  extends: .build-common
+  variables:
+    OTB_CI_PROFILE: 'release'
+  only:
+    - /^release-[0-9]+\.[0-9]+$/
+  cache:
+    policy: pull

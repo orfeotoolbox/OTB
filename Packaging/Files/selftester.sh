@@ -159,7 +159,7 @@ for app in $OTB_APPS; do
 done
 
 # test python wrapping
-PY_OUTPUT=$(python -c 'import otbApplication' 2>&1)
+PY_OUTPUT=$(python3 -c 'import otbApplication' 2>&1)
 if [ -n "$PY_OUTPUT" ]; then
   echo_and_report "ERROR: python wrapping test failed :"
   echo_and_report "$PY_OUTPUT"
