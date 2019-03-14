@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
@@ -79,6 +80,13 @@ target_link_libraries(OTBApplicationEngine
   ${OTBMPIConfig_LIBRARIES}
   ${OTBMPITiffWriter_LIBRARIES}
   ${OTBMPIVrtWriter_LIBRARIES}
+  )
+
+target_compile_options(
+  OTBApplicationEngine
+  # PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Q>
+  PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-ftime-report>
+  # PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-E>
   )
 
 otb_module_target(OTBApplicationEngine)
