@@ -34,6 +34,9 @@
 
 #endif
 
+
+#define DISABLE_CAST_IMAGE 0
+
 namespace otb
 {
 namespace Wrapper
@@ -235,10 +238,12 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-template <typename TInput, typename TOutput> 
-std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> 
+#if !DISABLE_CAST_IMAGE
+
+template <typename TInput, typename TOutput>
+std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer>
 ClampAndWriteVectorImage( TInput * in ,
-                    const std::string & filename , 
+                    const std::string & filename ,
                     const unsigned int & ramValue )
 {
   std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> ret;
@@ -247,7 +252,7 @@ ClampAndWriteVectorImage( TInput * in ,
 
   clampFilter->SetInput( in);
   ret.first = clampFilter.GetPointer();
-  
+
   bool useStandardWriter = true;
 
   #ifdef OTB_USE_MPI
@@ -284,17 +289,17 @@ ClampAndWriteVectorImage( TInput * in ,
       sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
       ret.second = sptWriter.GetPointer();
       }
-    
+
     #endif
     else
       {
       itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
       }
-  
+
     }
-  
+
   #endif
-  
+
   if(useStandardWriter)
     {
     typename otb::ImageFileWriter<TOutput>::Pointer writer =
@@ -308,9 +313,23 @@ ClampAndWriteVectorImage( TInput * in ,
   return ret;
 }
 
+#endif // DISABLE_CAST_IMAGE
+
+
+#if DISABLE_CAST_IMAGE
+
 template <class TInput>
 int
-OutputImageParameter::SwitchInput(TInput *img)
+OutputImageParameter::SwitchInput(TInput * )
+{
+  return 0;
+}
+
+#else // DISABLE_CAST_IMAGE
+
+template <class TInput>
+int
+OutputImageParameter::SwitchInput(TInput * img)
 {
   if (! img) return 0;
 
@@ -378,7 +397,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexInt16VectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue ); 
+      m_RAMValue );
     break;
     }
     case ImagePixelType_cint32:
@@ -386,7 +405,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexInt32VectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue ); 
+      m_RAMValue );
     break;
     }
     case ImagePixelType_cfloat:
@@ -394,7 +413,7 @@ OutputImageParameter::SwitchInput(TInput *img)
     ret = ClampAndWriteVectorImage < TInput , ComplexFloatVectorImageType > (
       img ,
       m_FileName ,
-      m_RAMValue ); 
+      m_RAMValue );
     break;
     }
     case ImagePixelType_cdouble:
@@ -413,6 +432,9 @@ OutputImageParameter::SwitchInput(TInput *img)
   m_Writer = ret.second;
   return 1;
 }
+
+#endif // DISABLE_CAST_IMAGE
+
 
 void
 OutputImageParameter::Write()
@@ -493,9 +515,20 @@ OutputImageParameter::CheckFileName(bool fixMissingExtension)
 }
 
 // Specialization for UInt8RGBAImageType
+#if DISABLE_CAST_IMAGE
+
 template <>
 int
-OutputImageParameter::SwitchInput(UInt8RGBAImageType *img)
+OutputImageParameter::SwitchInput(UInt8RGBAImageType * )
+{
+  return 0;
+}
+
+#else // DISABLE_CAST_IMAGE
+
+template <>
+int
+OutputImageParameter::SwitchInput(UInt8RGBAImageType * img )
 {
   if (! img) return 0;
   if( m_PixelType == ImagePixelType_uint8 )
@@ -511,6 +544,8 @@ OutputImageParameter::SwitchInput(UInt8RGBAImageType *img)
      itkExceptionMacro("Unknown PixelType for RGBA Image. Only uint8 is supported.");
   return 1;
 }
+
+#endif // DISABLE_CAST_IMAGE
 
 // Specialization for UInt8RGBImageType
 template <>
