@@ -84,6 +84,14 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-ctest_test(PARALLEL_LEVEL 8)
+ctest_test(PARALLEL_LEVEL 8
+           RETURN_VALUE _test_rv
+           CAPTURE_CMAKE_ERROR _test_error
+           )
+
+if ( NOT _test_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_test.")
+endif()
 
 ctest_submit()
