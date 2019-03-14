@@ -36,9 +36,7 @@ native-build:
     - echo "compiler_check = content" >> ccache/ccache.conf
     - echo "sloppiness = time_macros" >> ccache/ccache.conf
   script:
-    - ccache -s
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
-    - ccache -s
   cache:
     key: "ubuntu-18.04-llvm-shark"
     paths:
