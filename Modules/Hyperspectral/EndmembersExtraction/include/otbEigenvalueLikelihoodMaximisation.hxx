@@ -91,7 +91,7 @@ EigenvalueLikelihoodMaximisation<TInputImage>
       break;
       }
     }
-  m_NumberOfEndmembers = iMax-1;
+  m_NumberOfEndmembers = iMax;
 }
 
 template <class TImage>
