@@ -39,6 +39,10 @@ native-build:
     - ccache -s
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
     - ccache -s
+  cache:
+    key: "ubuntu-18.04-llvm-shark"
+    paths:
+      - ccache/
 
 build-wip:
   extends: .build-common
@@ -49,9 +53,7 @@ build-wip:
     - develop
     - /^release-[0-9]+\.[0-9]+$/
   cache:
-    key: "ubuntu-18.04-llvm-shark"
-    paths:
-      - ccache/
+    policy: pull
 
 build-mr:
   extends: .build-common
@@ -60,9 +62,6 @@ build-mr:
   only:
     - merge_requests
   cache:
-    key: "ubuntu-18.04-llvm-shark"
-    paths:
-      - ccache/
     policy: pull
 
 build-develop:
@@ -72,9 +71,7 @@ build-develop:
   only:
     - develop
   cache:
-    key: "ubuntu-18.04-llvm-shark"
-    paths:
-      - ccache/
+    policy: pull-push
 
 build-release:
   extends: .build-common
@@ -83,7 +80,4 @@ build-release:
   only:
     - /^release-[0-9]+\.[0-9]+$/
   cache:
-    key: "ubuntu-18.04-llvm-shark"
-    paths:
-      - ccache/
     policy: pull
