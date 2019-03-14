@@ -27,23 +27,16 @@ namespace Wrapper
 
 std::string ParameterTypeToString(ParameterType type)
 {
-  for (auto p : parameterTypesStrings)
-  {
-    if (type == p.first)
-    {
-      return std::string(p.second);
-    }
-  }
-  itkGenericExceptionMacro("Cannot convert parameter type to string.");
+  return parameterTypesStrings[type];
 }
 
 ParameterType ParameterStringToType(const std::string& str)
 {
-  for (auto p : parameterTypesStrings)
+  for (auto i = 0; i < parameterTypesStrings.size(); i++)
   {
-    if (str == p.second)
+    if (str == parameterTypesStrings[i])
     {
-      return p.first;
+      return ParameterType(i);
     }
   }
   itkGenericExceptionMacro("Cannot convert string '" << str << "' to parameter type.");
