@@ -203,6 +203,13 @@ public:
 
 } // end of namespace otb
 
+#if SWIGPYTHON
+
+
+%include "otbPythonLogOutput.i"
+#endif
+
+
 class Application: public itkObject
 {
 public:
@@ -216,6 +223,31 @@ public:
   void UpdateParameters();
   int Execute();
   int ExecuteAndWriteOutput();
+
+#if SWIGPYTHON
+  Logger* GetLogger();
+#endif
+  unsigned long itk::Object::AddObserver(const EventObject & event, 
+                                          Command * command);
+
+
+#if SWIGPYTHON
+  %extend 
+    {
+    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+     * reporting for the application */
+    %pythoncode
+      {
+      def SetupLogger(self):
+          logger = self.GetLogger()
+          logger.AddLogOutput(_libraryLogOutput.GetPointer())
+          
+          self.AddObserver(AddProcessToWatchEvent(),
+                           _libraryProgressReportManager.GetAddProcessCommand()
+                          )
+      }
+    }
+#endif // SWIGPYTHON
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
@@ -831,9 +863,9 @@ class ApplicationProxy(object):
       array = self.NumpyExporterMap[pixT](self,paramKey)
       if array.shape[2] > 1:
         raise ValueError("array.shape[2] > 1\n"
-                         "Output image from application has more than 1 band\n"
-                         "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
-                         "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
+                         "Output image from application has more than 1 band.\n"
+                         "GetImageAsNumpyArray only returns the first band, which will result in a loss of data.\n"
+                         "In this case you must use GetVectorImageAsNumpyArray which can return a 3 dimension image.\n")
       array = array[:,:,0]
       return array
 
@@ -877,7 +909,21 @@ class Registry : public itkObject
 public:
 
   static std::vector<std::string> GetAvailableApplications();
+  #if SWIGPYTHON
+  %rename("CreateApplicationWithoutLogger") CreateApplication;
   static Application_Pointer CreateApplication(const std::string& name);
+  %pythoncode
+  {
+    @staticmethod
+    def CreateApplication(name):
+        application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
+        if application is not None:
+            application.SetupLogger()
+        return application
+  }
+  #else
+  static Application_Pointer CreateApplication(const std::string& name);
+  #endif
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
   static void CleanRegistry();

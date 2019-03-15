@@ -56,6 +56,8 @@ public:
    */
   static Logger * Instance();
 
+  void ResetOutputs();
+
   static Pointer New();
   itkCreateAnotherMacro( Logger )
   itkCloneMacro( Logger )

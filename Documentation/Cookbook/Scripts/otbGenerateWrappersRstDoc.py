@@ -360,7 +360,7 @@ def multireplace(string, replacements):
 def make_links(text, allapps):
     "Replace name of applications by internal rst links"
 
-    rep = {appname: ":ref:`{}`".format("app-" + appname) for appname in allapps}
+    rep = {appname: ":ref:`{}`".format(appname) for appname in allapps}
     return multireplace(text, rep)
 
 def render_application(appname, allapps):
@@ -374,7 +374,7 @@ def render_application(appname, allapps):
     application_documentation_warnings(app)
 
     output = template_application.format(
-        label="app-" + appname,
+        label=appname,
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
@@ -404,7 +404,7 @@ def GenerateRstForApplications(rst_dir):
     appNames = [app for app in allApps if app not in blackList]
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
+    appIndexFile.write(RstPageHeading("All Applications", "2", ref="apprefdoc"))
 
     print("Generating rst for {} applications".format(len(appNames)))
 
