@@ -57,38 +57,38 @@ public:
 
 
   /** Get the input image as FloatVectorImageType. */
-  FloatVectorImageType* GetImage();
+  FloatVectorImageType  * GetImage();
 
   /** Get the input image as XXXImageType */
-  UInt8ImageType* GetUInt8Image();
-  UInt16ImageType* GetUInt16Image();
-  Int16ImageType* GetInt16Image();
-  UInt32ImageType* GetUInt32Image();
-  Int32ImageType* GetInt32Image();
-  FloatImageType* GetFloatImage();
-  DoubleImageType* GetDoubleImage();
+  UInt8ImageType * GetUInt8Image();
+  UInt16ImageType * GetUInt16Image();
+  Int16ImageType * GetInt16Image();
+  UInt32ImageType * GetUInt32Image();
+  Int32ImageType * GetInt32Image();
+  FloatImageType * GetFloatImage();
+  DoubleImageType * GetDoubleImage();
 
-  UInt8VectorImageType* GetUInt8VectorImage();
-  UInt16VectorImageType* GetUInt16VectorImage();
-  Int16VectorImageType* GetInt16VectorImage();
-  UInt32VectorImageType* GetUInt32VectorImage();
-  Int32VectorImageType* GetInt32VectorImage();
-  FloatVectorImageType* GetFloatVectorImage();
-  DoubleVectorImageType* GetDoubleVectorImage();
+  UInt8VectorImageType * GetUInt8VectorImage();
+  UInt16VectorImageType * GetUInt16VectorImage();
+  Int16VectorImageType * GetInt16VectorImage();
+  UInt32VectorImageType * GetUInt32VectorImage();
+  Int32VectorImageType * GetInt32VectorImage();
+  FloatVectorImageType * GetFloatVectorImage();
+  DoubleVectorImageType * GetDoubleVectorImage();
 
-  UInt8RGBImageType* GetUInt8RGBImage();
-  UInt8RGBAImageType* GetUInt8RGBAImage();
+  UInt8RGBImageType * GetUInt8RGBImage();
+  UInt8RGBAImageType * GetUInt8RGBAImage();
 
   // Complex image
-  ComplexInt16ImageType*  GetComplexInt16Image();
-  ComplexInt32ImageType*  GetComplexInt32Image();
-  ComplexFloatImageType*  GetComplexFloatImage();
-  ComplexDoubleImageType* GetComplexDoubleImage();
+  ComplexInt16ImageType *  GetComplexInt16Image();
+  ComplexInt32ImageType *  GetComplexInt32Image();
+  ComplexFloatImageType *  GetComplexFloatImage();
+  ComplexDoubleImageType * GetComplexDoubleImage();
 
-  ComplexInt16VectorImageType*  GetComplexInt16VectorImage();
-  ComplexInt32VectorImageType*  GetComplexInt32VectorImage();
-  ComplexFloatVectorImageType*  GetComplexFloatVectorImage();
-  ComplexDoubleVectorImageType* GetComplexDoubleVectorImage();
+  ComplexInt16VectorImageType *  GetComplexInt16VectorImage();
+  ComplexInt32VectorImageType *  GetComplexInt32VectorImage();
+  ComplexFloatVectorImageType *  GetComplexFloatVectorImage();
+  ComplexDoubleVectorImageType * GetComplexDoubleVectorImage();
 
   /** Get the input image as templated image type. */
   template <class TImageType>
@@ -117,6 +117,7 @@ protected:
   /** Destructor */
   ~InputImageParameter() override;
 
+private:
   ImageBaseType::Pointer m_Image;
   std::string m_FileName;
 
