@@ -31,8 +31,6 @@
 
 // Language specific extension
 %include "Python.i"
-%include "Java.i"
-%include "Ruby.i"
 %include "Lua.i"
 %include "itkMacro.i"
 %include "itkBase.i"
