@@ -33,9 +33,10 @@ namespace Functor {
 
 /** \class ISRAUnmixingFunctor
  *
- * \brief TODO
+ * \brief Perform fully constrained least squares on a pixel
  *
- *
+ * \sa ISRAUnmixingImageFilter
+ * 
  * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
