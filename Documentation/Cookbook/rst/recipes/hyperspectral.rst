@@ -55,7 +55,7 @@ dimensionality algorithm is used.
                                       -algo.vd.far 1e-5
 
 This algorithm uses a Neyman-Pearson statistical test on the difference between
-the eigenvalues of the covariance matrix and those of the correlation matricex to estimate the 
+the eigenvalues of the covariance matrix and those of the correlation matrice to estimate the 
 number of endmembers. If the difference between the eigenvalues for one component is null, this 
 means that no endmember is contributing to the correlation eigenvalue in addition to noise
 for that particular component, since the noise energy is represented by the
@@ -81,9 +81,9 @@ representing an endmember.
 This algorithm is based on the research of the endmembers among the data.
 This means that a minimum of one pure pixel must be associated with each endmembers.
 The rationale behind this idea is that the hyperspectral mixed data is contained
-in a simplex of dimension `k`, where the endmembers are the edges of the simplex.
+in a simplex of dimension `k`, where the endmembers are the vertices of the simplex.
 This algorithm is widely used in hyperspectral unmixing because of its low algorithmic
-complexity and the fact that the endmember estimation is unbiased in absence of noise.
+complexity and the fact that the endmembers estimation is unbiased in absence of noise.
 However if the pure pixel hypothesis is not respected, there will be an estimation 
 error on the endmembers.
 
@@ -98,7 +98,7 @@ optimization algorithm.
                                   -ua ucls
 
 Here an unconstrained least square algorithm has been used. The resulting abundance
-image is shown belove:
+image is shown below:
 
 .. figure:: ../Art/HyperspectralImages/hyperspectralUnmixing_rgb.png
    :width: 70%
