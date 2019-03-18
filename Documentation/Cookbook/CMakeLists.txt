@@ -30,21 +30,21 @@ endif()
 message(STATUS "")
 message(STATUS "Configuring Cookbook...")
 
-# here we could add
-# find_package (Python3 COMPONENTS Interpreter)
-# but it requires cmake 3.12+
-
 find_program(SH_INTERP sh)
 mark_as_advanced(SH_INTERP)
+
+# Note: we do not use either:
+# - find_program(SPHINX_BUILD NAMES sphinx-build)
+# - find_packages(PythonInterp)
+# because they don't work with python virtualenv (in CMake < 3.13.0),
+# so in calls to add_custom_target() below, we call them directly.
+# See CMake bug: https://gitlab.kitware.com/cmake/cmake/issues/18302
 
 find_program(LATEX_COMMAND NAMES latex)
 mark_as_advanced(LATEX_COMMAND)
 
 find_program(TAR_COMMAND NAMES tar)
 mark_as_advanced(TAR_COMMAND)
-
-find_program(SPHINX_BUILD NAMES sphinx-build)
-mark_as_advanced(SPHINX_BUILD)
 
 find_program(PDFLATEX_COMMAND NAMES pdflatex )
 mark_as_advanced(PDFLATEX_COMMAND)
@@ -58,7 +58,6 @@ foreach(cmd
     TAR_COMMAND
     PDFLATEX_COMMAND
     MAKEINDEX_COMMAND
-    SPHINX_BUILD
     SH_INTERP)
   if(NOT ${cmd})
     message(FATAL_ERROR "Error while configuring Cookbook, ${cmd} not set. Cannot continue")
@@ -140,7 +139,7 @@ add_custom_target(generate_otbapps_rst
   )
 
 add_custom_target(generate_examples_rst
-  COMMAND "python3" ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
   ${RST_BINARY_DIR}
   ${CMAKE_SOURCE_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
@@ -157,7 +156,7 @@ foreach(app_name ${app_names})
 endforeach()
 
 add_custom_target(CookBookHTML
-  COMMAND ${SPHINX_BUILD}
+  COMMAND sphinx-build
   -b html
   ${RST_BINARY_DIR}
   ${HTML_DIR}
@@ -178,7 +177,7 @@ add_custom_target(CookBookArchive
   COMMENT "Creating archive for html CookBook")
 
  add_custom_target(CookBookTexFromRST
-   COMMAND ${SPHINX_BUILD}
+   COMMAND sphinx-build
    -b latex
    ${RST_BINARY_DIR}
    ${LATEX_DIR}
