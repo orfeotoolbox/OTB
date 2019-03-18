@@ -212,7 +212,7 @@ private:
           ISRAUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
-      unmixer->SetEndmembersMatrix(endMembersMatrix);
+      unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMembersMatrix);
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
 
