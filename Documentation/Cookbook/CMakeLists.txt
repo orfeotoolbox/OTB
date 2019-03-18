@@ -30,6 +30,11 @@ endif()
 message(STATUS "")
 message(STATUS "Configuring Cookbook...")
 
+# Check we have python bindings with python 3+
+if (NOT OTB_WRAP_PYTHON OR ${PYTHONLIBS_VERSION_STRING} STRLESS "3.0.0")
+    message(FATAL_ERROR "CookBook build requires Python 3 wrappers. Try setting OTB_WRAP_PYTHON=ON in the CMake configuration, or disable the CookBook with BUILD_COOKBOOK=OFF.")
+endif()
+
 find_program(SH_INTERP sh)
 mark_as_advanced(SH_INTERP)
 
@@ -64,19 +69,6 @@ foreach(cmd
   endif()
 endforeach()
 
-# We need to set PYTHONPATH for the script otbGenerateWrappersRstDoc.py, depending on how the Python3 module was built
-if (OTB_WRAP_PYTHON)
-    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
-else()
-    # Cookbook only supports Python3
-    # But OTB_WRAP_PYTHON can wrap both python2 and python3
-    if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
-        set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
-    else()
-        message(FATAL_ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
-    endif()
-endif()
-
 set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
 set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
@@ -87,7 +79,6 @@ message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
 message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
 message(STATUS "LATEX_DIR = ${LATEX_DIR}")
 message(STATUS "HTML_DIR = ${HTML_DIR}")
-message(STATUS "PYTHONPATH_COOKBOOK = ${PYTHONPATH_COOKBOOK}")
 
 # Clean any existing build
 macro(remove_and_make_directories)
