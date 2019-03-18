@@ -23,7 +23,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbDotProductImageFilter.h"
 #include "otbProjectiveProjectionImageFilter.h"
 #include "otbMatrixImageFilter.h"
 #include "otbVectorImageToMatrixImageFilter.h"
@@ -38,7 +37,6 @@ typedef otb::Image<PixelType, Dimension> ImageType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
-typedef otb::DotProductImageFilter<VectorImageType, ImageType> DotProductImageFilterType;
 typedef otb::MatrixImageFilter<VectorImageType, VectorImageType> MatrixImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;

@@ -266,7 +266,7 @@ void VCAImageFilter<TImage>::GenerateData()
     dotfY->SetInput(Y);
 
     typename VectorImageType::PixelType fV(f.data_block(), f.size());
-    dotfY->SetVector(typename VectorImageType::PixelType(fV));
+    dotfY->GetModifiableFunctor().SetVector(typename VectorImageType::PixelType(fV));
     typename ImageType::Pointer v = dotfY->GetOutput();
 
     // abs(v)
