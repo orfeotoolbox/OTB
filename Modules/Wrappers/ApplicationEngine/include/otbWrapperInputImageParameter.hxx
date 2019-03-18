@@ -31,8 +31,6 @@ namespace Wrapper
 {
 
 
-#define INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION 0
-
 template <class TImageType>
 TImageType*
 InputImageParameter::GetImage()
@@ -68,10 +66,6 @@ InputImageParameter::GetImage()
       }
     else
       {
-#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
-      return dynamic_cast< TImageType* >( m_Image.GetPointer() );
-
-#else // INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
       // In this case, the reader and the image should already be there
       if (m_Image.IsNull())
         {
@@ -89,7 +83,6 @@ InputImageParameter::GetImage()
           itkExceptionMacro("Cannot ask a different image type");
           }
         }
-#endif // INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
       }
     }
 
@@ -98,11 +91,7 @@ InputImageParameter::GetImage()
     //////////////////////// Image case:
     if (m_Image.IsNull())
       {
-#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
-      itkExceptionMacro("No input image or filename detected...");
-#else
       return nullptr;
-#endif
       }
     else
       {
@@ -204,11 +193,7 @@ InputImageParameter::GetImage()
         }
       else
         {
-#if INPUT_IMAGE_PARAMETER_GET_IMAGE_EXCEPTION
-        itkExceptionMacro("Unknown image type");
-#else
 	return nullptr;
-#endif
         }
       }
     }
@@ -243,7 +228,7 @@ InputImageParameter::CastImage()
     m_Caster = caster;
 
     return caster->GetOutput();
-    } 
+    }
   // itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
 
