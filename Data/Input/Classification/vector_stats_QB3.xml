@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<GeneralStatistics>
+    <Statistic name="samplesPerClass">
+        <StatisticMap key="1" value="2471" />
+        <StatisticMap key="2" value="1047" />
+        <StatisticMap key="3" value="450" />
+        <StatisticMap key="4" value="171" />
+    </Statistic>
+    <Statistic name="samplesPerVector">
+        <StatisticMap key="0" value="2471" />
+        <StatisticMap key="1" value="1047" />
+        <StatisticMap key="2" value="171" />
+        <StatisticMap key="3" value="450" />
+    </Statistic>
+</GeneralStatistics>

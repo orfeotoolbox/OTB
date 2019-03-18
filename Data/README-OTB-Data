@@ -1,0 +1,5 @@
+
+These data are used to run the OTB test suite and to reproduce the examples illustrating the software guide.
+
+(this file is also used for the automatic location of OTB-Data by cmake)
+

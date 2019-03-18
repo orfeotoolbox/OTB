@@ -1,0 +1,29 @@
+Name: 
+Type: 
+Class: 
+Subclass: 
+Particle Size: 
+Sample No.: 
+Owner: 
+Wavelength range: All
+Origin: Saipan, via Smithsonian (Cat. Number. NMNH 108982-135)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0.4230  100.0
+0.4220	100.0
+

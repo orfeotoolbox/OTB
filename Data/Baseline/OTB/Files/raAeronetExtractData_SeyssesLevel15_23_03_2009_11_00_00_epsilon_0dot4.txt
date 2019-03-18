@@ -1,0 +1,20 @@
+Aeronet data extracted:
+Input file name: 090101_091231_Seysses.lev15
+Inputs user parameters:
+    Day:                       23
+    Month:                     3
+    Year:                      2009
+    Hour:                      10
+    Minute:                    0
+Outputs results:
+
+    AerosolOpticalThickness:   0.287002902173913
+    AngstromCoefficient:       1.456974
+    Water:                     0.77439825
+    CloudEstimation:           0
+    SolarZenithAngle:          49.76320925
+ Statisctics:
+    Date:                      (hh/mm/yyyy hh:mm:ss) 23/3/2009 10:0:00
+    Epsilon date:              0.4
+    Number Of date used:       4
+    StdDev Aero. Optical Thic.:4.99011028561869e-05
