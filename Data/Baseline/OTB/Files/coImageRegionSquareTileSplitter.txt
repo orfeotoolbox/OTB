@@ -1,0 +1,525 @@
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1024, 1024]
+
+PixelSize : 1
+MaxTileSize  : 128
+Requested Number of splits  : 8192
+Actual Number of splits  : 4096
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [16, 16]
+(256 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [16, 0]
+  Size: [16, 16]
+(256 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [1008, 1008]
+  Size: [16, 16]
+(256 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1024, 1024]
+
+PixelSize : 1
+MaxTileSize  : 262144
+Requested Number of splits  : 4
+Actual Number of splits  : 4
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [512, 512]
+(262144 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [512, 0]
+  Size: [512, 512]
+(262144 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [512, 512]
+  Size: [512, 512]
+(262144 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1024, 1024]
+
+PixelSize : 2
+MaxTileSize  : 262144
+Requested Number of splits  : 8
+Actual Number of splits  : 9
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [368, 368]
+(270848 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [368, 0]
+  Size: [368, 368]
+(270848 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [736, 736]
+  Size: [288, 288]
+(165888 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1024, 1024]
+
+PixelSize : 4
+MaxTileSize  : 262144
+Requested Number of splits  : 16
+Actual Number of splits  : 16
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [256, 256]
+(262144 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [256, 0]
+  Size: [256, 256]
+(262144 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [768, 768]
+  Size: [256, 256]
+(262144 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1024, 1024]
+
+PixelSize : 8
+MaxTileSize  : 262144
+Requested Number of splits  : 32
+Actual Number of splits  : 36
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [192, 192]
+(294912 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [192, 0]
+  Size: [192, 192]
+(294912 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [960, 960]
+  Size: [64, 64]
+(32768 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1000, 1000]
+
+PixelSize : 1
+MaxTileSize  : 128
+Requested Number of splits  : 7812
+Actual Number of splits  : 3969
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [16, 16]
+(256 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [58, 42]
+  Size: [16, 16]
+(256 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [1034, 1034]
+  Size: [8, 8]
+(64 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1000, 1000]
+
+PixelSize : 1
+MaxTileSize  : 262144
+Requested Number of splits  : 3
+Actual Number of splits  : 4
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [592, 592]
+(350464 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [634, 42]
+  Size: [408, 592]
+(241536 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [634, 634]
+  Size: [408, 408]
+(166464 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1000, 1000]
+
+PixelSize : 2
+MaxTileSize  : 262144
+Requested Number of splits  : 7
+Actual Number of splits  : 9
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [384, 384]
+(294912 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [426, 42]
+  Size: [384, 384]
+(294912 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [810, 810]
+  Size: [232, 232]
+(107648 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1000, 1000]
+
+PixelSize : 4
+MaxTileSize  : 262144
+Requested Number of splits  : 15
+Actual Number of splits  : 16
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [272, 272]
+(295936 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [314, 42]
+  Size: [272, 272]
+(295936 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [858, 858]
+  Size: [184, 184]
+(135424 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1000, 1000]
+
+PixelSize : 8
+MaxTileSize  : 262144
+Requested Number of splits  : 30
+Actual Number of splits  : 36
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [192, 192]
+(294912 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [234, 42]
+  Size: [192, 192]
+(294912 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [1002, 1002]
+  Size: [40, 40]
+(12800 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [1000, 1000]
+
+PixelSize : 1
+MaxTileSize  : 128
+Requested Number of splits  : 7812
+Actual Number of splits  : 3969
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [16, 16]
+(256 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-26, -42]
+  Size: [16, 16]
+(256 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [950, 950]
+  Size: [8, 8]
+(64 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [1000, 1000]
+
+PixelSize : 1
+MaxTileSize  : 262144
+Requested Number of splits  : 3
+Actual Number of splits  : 4
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [592, 592]
+(350464 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [550, -42]
+  Size: [408, 592]
+(241536 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [550, 550]
+  Size: [408, 408]
+(166464 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [1000, 1000]
+
+PixelSize : 2
+MaxTileSize  : 262144
+Requested Number of splits  : 7
+Actual Number of splits  : 9
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [384, 384]
+(294912 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [342, -42]
+  Size: [384, 384]
+(294912 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [726, 726]
+  Size: [232, 232]
+(107648 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [1000, 1000]
+
+PixelSize : 4
+MaxTileSize  : 262144
+Requested Number of splits  : 15
+Actual Number of splits  : 16
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [272, 272]
+(295936 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [230, -42]
+  Size: [272, 272]
+(295936 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [774, 774]
+  Size: [184, 184]
+(135424 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [1000, 1000]
+
+PixelSize : 8
+MaxTileSize  : 262144
+Requested Number of splits  : 30
+Actual Number of splits  : 36
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [-42, -42]
+  Size: [192, 192]
+(294912 bytes)
+Second Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [150, -42]
+  Size: [192, 192]
+(294912 bytes)
+Last Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [918, 918]
+  Size: [40, 40]
+(12800 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+
+PixelSize : 1
+MaxTileSize  : 128
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+(1 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+
+PixelSize : 1
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+(1 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+
+PixelSize : 2
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+(2 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+
+PixelSize : 4
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+(4 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+
+PixelSize : 8
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [1, 1]
+(8 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+
+PixelSize : 1
+MaxTileSize  : 128
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+(1 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+
+PixelSize : 1
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+(1 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+
+PixelSize : 2
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+(2 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+
+PixelSize : 4
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+(4 bytes)
+----------------------------------
+Region    : ImageRegion (0x7fff48d627a0)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+
+PixelSize : 8
+MaxTileSize  : 262144
+Requested Number of splits  : 1
+Actual Number of splits  : 1
+First Split : ImageRegion (0x7fff48d62720)
+  Dimension: 2
+  Index: [42, 42]
+  Size: [1, 1]
+(8 bytes)

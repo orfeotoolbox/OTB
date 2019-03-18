@@ -56,7 +56,6 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 set (CMAKE_COMMAND "cmake")
 
 # Data directory setting
-set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
 set (OTB_LARGEINPUT_ROOT "") # todo
 
 message(STATUS "CI profile : ${ci_profile}")
@@ -92,6 +91,15 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-# ctest_test(PARALLEL_LEVEL 8)
+# Uncomment when ready for test
+# ctest_test(PARALLEL_LEVEL 8
+#            RETURN_VALUE _test_rv
+#            CAPTURE_CMAKE_ERROR _test_error
+#            )
+
+# if ( NOT _test_rv EQUAL 0 )
+#   ctest_submit()
+#   message( SEND_ERROR "An error occurs during ctest_test.")
+# endif()
 
 ctest_submit()

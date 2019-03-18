@@ -1,0 +1,155 @@
+ImageRegionAdaptativeSplitter (0xc92c30)
+  RTTI typeinfo:   otb::ImageRegionAdaptativeSplitter<2u>
+  Reference Count: 2
+  Modified Time: 6
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  IsUpToDate: true
+  ImageRegion: ImageRegion (0xc92ca0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [8000, 8003]
+
+  Tile hint: [8000, 1000]
+  Requested number of splits: 20
+  Actual number of splits: 34
+
+Split map: 
+Split 0: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [4000, 500]
+Split 1: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 0]
+  Size: [4000, 500]
+Split 2: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 500]
+  Size: [4000, 500]
+Split 3: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 500]
+  Size: [4000, 500]
+Split 4: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 1000]
+  Size: [4000, 500]
+Split 5: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 1000]
+  Size: [4000, 500]
+Split 6: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 1500]
+  Size: [4000, 500]
+Split 7: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 1500]
+  Size: [4000, 500]
+Split 8: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 2000]
+  Size: [4000, 500]
+Split 9: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 2000]
+  Size: [4000, 500]
+Split 10: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 2500]
+  Size: [4000, 500]
+Split 11: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 2500]
+  Size: [4000, 500]
+Split 12: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 3000]
+  Size: [4000, 500]
+Split 13: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 3000]
+  Size: [4000, 500]
+Split 14: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 3500]
+  Size: [4000, 500]
+Split 15: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 3500]
+  Size: [4000, 500]
+Split 16: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 4000]
+  Size: [4000, 500]
+Split 17: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 4000]
+  Size: [4000, 500]
+Split 18: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 4500]
+  Size: [4000, 500]
+Split 19: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 4500]
+  Size: [4000, 500]
+Split 20: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 5000]
+  Size: [4000, 500]
+Split 21: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 5000]
+  Size: [4000, 500]
+Split 22: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 5500]
+  Size: [4000, 500]
+Split 23: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 5500]
+  Size: [4000, 500]
+Split 24: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 6000]
+  Size: [4000, 500]
+Split 25: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 6000]
+  Size: [4000, 500]
+Split 26: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 6500]
+  Size: [4000, 500]
+Split 27: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 6500]
+  Size: [4000, 500]
+Split 28: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 7000]
+  Size: [4000, 500]
+Split 29: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 7000]
+  Size: [4000, 500]
+Split 30: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 7500]
+  Size: [4000, 500]
+Split 31: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 7500]
+  Size: [4000, 500]
+Split 32: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [0, 8000]
+  Size: [4000, 3]
+Split 33: ImageRegion (0x7fffb1ebe1f0)
+  Dimension: 2
+  Index: [4000, 8000]
+  Size: [4000, 3]

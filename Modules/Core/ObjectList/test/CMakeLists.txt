@@ -54,27 +54,27 @@ otb_add_test(NAME bfTvImageListToImageListApplyFilter COMMAND otbObjectListTestD
   ${BASELINE}/bfTvImageListToImageListApplyFilterBand3.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
   otbImageListToImageListApplyFilter
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
+  ${INPUTDATA}/poupees_c1.raw.hdr
+  ${INPUTDATA}/poupees_c2.raw.hdr
+  ${INPUTDATA}/poupees_c3.raw.hdr
   ${TEMP}/bfTvImageListToImageListApplyFilterBand1.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand2.png
   ${TEMP}/bfTvImageListToImageListApplyFilterBand3.png
   )
 otb_add_test(NAME coTvImageListToVectorImageFilter2 COMMAND otbObjectListTestDriver
   otbImageListToVectorImageFilter2
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
+  ${INPUTDATA}/poupees_c1.raw.hdr
+  ${INPUTDATA}/poupees_c2.raw.hdr
+  ${INPUTDATA}/poupees_c3.raw.hdr
   )
 otb_add_test(NAME coTvImageListToVectorImageFilter COMMAND otbObjectListTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvImageListToVectorImageFilter.png
   ${TEMP}/coTvImageListToVectorImageFilter.png
   otbImageListToVectorImageFilter
-  ${INPUTDATA}/poupees_c1.hdr
-  ${INPUTDATA}/poupees_c2.hdr
-  ${INPUTDATA}/poupees_c3.hdr
+  ${INPUTDATA}/poupees_c1.raw.hdr
+  ${INPUTDATA}/poupees_c2.raw.hdr
+  ${INPUTDATA}/poupees_c3.raw.hdr
   ${TEMP}/coTvImageListToVectorImageFilter.png
   )
 otb_add_test(NAME coTvObjectListTestNotValid COMMAND otbObjectListTestDriver
