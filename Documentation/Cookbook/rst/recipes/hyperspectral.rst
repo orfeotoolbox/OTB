@@ -15,7 +15,7 @@ Unmixing
 
 Because of the low spatial resolution of hyperspectral sensors, microscopic
 material mixing and multiple scattering, measured spectra are a mixture
-of spectra of the materials actually in the scene. Thus, pixels are assumed 
+of the spectra of the materials actually in the scene. Thus, pixels are assumed 
 to be mixtures of a few materials, called endmembers. In this section the mixing
 is assumed to be linear, i.e.
 
@@ -23,17 +23,17 @@ is assumed to be linear, i.e.
    R = A.S + N
 
 where, if `l` is the number of bands of the hyperspectral image, `n` the number of pixels
-and `k` the number of endmember :
+and `k` the number of endmember:
 
 - :math:`R` is the matrix of observed pixel, of size `l.n`
 - :math:`A` is the endmember matrix, of size `l.k`
 - :math:`S` is the abundance matrix, of size `k.n`
 - :math:`N` is the noise matrix, of size `l.n`
 
-The unmixing problem is to estimate matrices :math:`A` and :math:`S` from :math:`R`.
+The unmixing problem is to estimate matrices `A` and `S` from `R`.
 The following presents an example of hyperspectral unmixing on a scene composed
 of several geological materials. The scene is an extract from the Cuprite dataset
-acquired by the AVIRIS sensor. The extract is available here_, the whole dataset 
+acquired by the AVIRIS sensor. The extract is available here_ and the whole dataset 
 can be retrieved from  AVIRIS_ NASA site.
 
 
@@ -45,7 +45,8 @@ can be retrieved from  AVIRIS_ NASA site.
 
 
 As the number of endmembers of the input image is unknown, the first step
-of the hyperspectral unmixing is to estimate this number.
+of the hyperspectral unmixing is to estimate this number. Here a HFC virtual
+dimensionality algorithm is used.
 
 ::
 
@@ -53,7 +54,12 @@ of the hyperspectral unmixing is to estimate this number.
                                       -algo vd 
                                       -algo.vd.far 1e-5
 
-Using a HFC virtual dimensionality algorithm, the output is:
+This algorithm uses a Neyman-Pearson statistical test on the difference between
+the eigenvalues of the covariance matrix and those of the correlation matricex to estimate the 
+number of endmembers. If the difference between the eigenvalues for one component is null, this 
+means that no endmember is contributing to the correlation eigenvalue in addition to noise
+for that particular component, since the noise energy is represented by the
+covariance eigenvalue. The output of the algorithm is:
 
 ::
 
@@ -130,7 +136,7 @@ anomalies, here a Principal Component Analysis algorithm is used.
                                     -nbcomp 10
 
 
-As the local Rx needs to compute correlation matrices, applying dimensionality reduction
+As the local Rx needs to compute and invert a correlation matrix on each pixel, applying dimensionality reduction
 as a preprocessing step will significantly reduce the computational cost of the algorithm.
 
 The local Rx detection use a sliding window to compute an anomaly score on each pixel. 
@@ -146,7 +152,8 @@ center pixel with the pixel belonging to the annulus.
                              -er 5
 
 Here anomalies are supposed to be small, hence a small internal radius should be chosen e.g. 
-`ir=1`. Also as the environment is urban, the statistic of the background varies rapidly with the distance, 
+`ir=1`. Also as the environment is urban, and because the sensor has a low spatial resolution, 
+the statistic of the background varies rapidly with the distance, 
 so the external radius should not be too big, here `er=5` has been chosen.
 These parameters really depend on the input image and on the objects of interest.
 
