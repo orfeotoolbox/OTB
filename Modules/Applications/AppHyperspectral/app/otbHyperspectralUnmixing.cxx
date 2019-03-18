@@ -196,7 +196,7 @@ private:
           UCLSUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
-      unmixer->SetMatrix(endMembersMatrix);
+      unmixer->GetModifiableFunctor().SetMatrix(endMembersMatrix);
       unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
 
       abundanceMap = unmixer->GetOutput();
