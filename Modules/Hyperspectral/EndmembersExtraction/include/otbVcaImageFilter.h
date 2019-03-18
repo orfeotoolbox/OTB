@@ -23,7 +23,6 @@
 #define otbVCAImageFilter_h
 
 #include "otbImage.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkAbsImageFilter.h"
 #include "otbDotProductImageFilter.h"
 #include "otbProjectiveProjectionImageFilter.h"
