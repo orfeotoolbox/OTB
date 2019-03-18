@@ -26,7 +26,7 @@
 #include "otbLabelMapToAttributeImageFilter.h"
 
 #include "itkLabelImageToLabelMapFilter.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
 {
@@ -43,10 +43,11 @@ public:
 
   typedef std::vector<TOutput> ColorListType;
 
-  unsigned int GetOutputSize()
+  size_t OutputSize(const std::array<size_t,1> & itkNotUsed(nbBands)) const
   {
     return 3;
   }
+  
   void AddColor(const TOutput& color)
   {
     m_ScoreColors.push_back(color);
@@ -123,10 +124,8 @@ public:
   typedef otb::HooverInstanceFilter<LabelMapType>   InstanceFilterType;
   typedef otb::LabelMapToAttributeImageFilter
       <LabelMapType, FloatVectorImageType>          AttributeImageFilterType;
-  typedef otb::UnaryFunctorImageFilter
-      <FloatVectorImageType,
-       Int16VectorImageType,
-       Functor::HooverColorMapping
+  typedef otb::FunctorImageFilter
+      <Functor::HooverColorMapping
         <FloatPixelType, Int16PixelType> >          HooverColorFilterType;
 
 private:
@@ -259,31 +258,31 @@ private:
     colorPixel[0] = 255;
     colorPixel[1] = 255;
     colorPixel[2] = 255;
-    m_GTColorFilter->GetFunctor().SetBackground(colorPixel);
-    m_MSColorFilter->GetFunctor().SetBackground(colorPixel);
+    m_GTColorFilter->GetModifiableFunctor().SetBackground(colorPixel);
+    m_MSColorFilter->GetModifiableFunctor().SetBackground(colorPixel);
     // Correct detection : green
     colorPixel[0] = 0;
     colorPixel[1] = 255;
     colorPixel[2] = 0;
-    m_GTColorFilter->GetFunctor().AddColor(colorPixel);
-    m_MSColorFilter->GetFunctor().AddColor(colorPixel);
+    m_GTColorFilter->GetModifiableFunctor().AddColor(colorPixel);
+    m_MSColorFilter->GetModifiableFunctor().AddColor(colorPixel);
     // Over-segmentation : magenta
     colorPixel[0] = 255;
     colorPixel[1] = 0;
     colorPixel[2] = 255;
-    m_GTColorFilter->GetFunctor().AddColor(colorPixel);
-    m_MSColorFilter->GetFunctor().AddColor(colorPixel);
+    m_GTColorFilter->GetModifiableFunctor().AddColor(colorPixel);
+    m_MSColorFilter->GetModifiableFunctor().AddColor(colorPixel);
     // Under-segmentation : cyan
     colorPixel[0] = 0;
     colorPixel[1] = 255;
     colorPixel[2] = 255;
-    m_GTColorFilter->GetFunctor().AddColor(colorPixel);
-    m_MSColorFilter->GetFunctor().AddColor(colorPixel);
+    m_GTColorFilter->GetModifiableFunctor().AddColor(colorPixel);
+    m_MSColorFilter->GetModifiableFunctor().AddColor(colorPixel);
     // Missed detection (only for GT) : red
     colorPixel[0] = 255;
     colorPixel[1] = 0;
     colorPixel[2] = 0;
-    m_GTColorFilter->GetFunctor().AddColor(colorPixel);
+    m_GTColorFilter->GetModifiableFunctor().AddColor(colorPixel);
 
     if (HasValue("outgt"))
       {
