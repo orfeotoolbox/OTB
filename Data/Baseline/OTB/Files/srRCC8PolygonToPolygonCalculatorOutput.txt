@@ -1,0 +1,5 @@
+Test results from otbPolygonToPolygonRCC8calculator test.
+7	1	0	0	
+1	7	4	6	
+0	3	7	2	
+0	5	2	7	

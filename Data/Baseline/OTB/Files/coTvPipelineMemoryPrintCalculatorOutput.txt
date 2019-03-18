@@ -1,0 +1,4 @@
+Memory print of whole pipeline:     38.147 Mb
+Available memory:                   0.1 Mb
+Optimal number of stream divisions: 382
+Bias correction factor applied:     1

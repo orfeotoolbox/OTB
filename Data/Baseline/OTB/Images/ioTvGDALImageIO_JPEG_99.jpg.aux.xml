@@ -1,0 +1,35 @@
+<PAMDataset>
+  <SRS>GEOGCS[&quot;GCS_WGS_1984&quot;,
+    DATUM[&quot;D_WGS_1984&quot;,
+        SPHEROID[&quot;WGS_1984&quot;,6378137,298.257223563]],
+    PRIMEM[&quot;Greenwich&quot;,0],
+    UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>
+  <GeoTransform>  4.4900000000000000e+02,  1.0000000000000000e+00,  0.0000000000000000e+00,  1.0580000000000000e+03,  0.0000000000000000e+00,  1.0000000000000000e+00</GeoTransform>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="COMPRESSION">JPEG</MDI>
+    <MDI key="INTERLEAVE">PIXEL</MDI>
+    <MDI key="SOURCE_COLOR_SPACE">YCbCr</MDI>
+  </Metadata>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+    <MDI key="TIFFTAG_RESOLUTIONUNIT">1 (unitless)</MDI>
+    <MDI key="TIFFTAG_SOFTWARE">ERDAS IMAGINE</MDI>
+    <MDI key="TIFFTAG_XRESOLUTION">1</MDI>
+    <MDI key="TIFFTAG_YRESOLUTION">1</MDI>
+  </Metadata>
+  <PAMRasterBand band="1">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <Metadata domain="IMAGE_STRUCTURE">
+      <MDI key="COMPRESSION">JPEG</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>
