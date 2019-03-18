@@ -39,33 +39,11 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 }
 
 template <class TInput, class TOutput, class TPrecision>
+size_t
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::~NCLSUnmixingFunctor()
-{
-}
-
-template <class TInput, class TOutput, class TPrecision>
-unsigned int
-NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::GetOutputSize() const
+::OutputSize(const std::array<size_t,1> & itkNotUsed(nbBands)) const
 {
   return m_OutputSize;
-}
-
-template <class TInput, class TOutput, class TPrecision>
-bool
-NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator != (const Self& itkNotUsed(other)) const
-{
-  return true;
-}
-
-template <class TInput, class TOutput, class TPrecision>
-bool
-NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator == (const Self& itkNotUsed(other)) const
-{
-  return false;
 }
 
 template <class TInput, class TOutput, class TPrecision>
@@ -128,45 +106,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
   return out;
 }
 
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::NCLSUnmixingImageFilter()
-{
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::~NCLSUnmixingImageFilter()
-{
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::SetEndmembersMatrix(const MatrixType& m)
-{
-  this->GetFunctor().SetEndmembersMatrix(m);
-  this->Modified();
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-const typename NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>::MatrixType&
-NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::GetEndmembersMatrix() const
-{
-  return this->GetFunctor().GetEndmembersMatrix();
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-NCLSUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-
-} // end namespace
+} // end namespace Functor
+} // end namespace otb
 
 #endif

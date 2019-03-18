@@ -23,7 +23,7 @@
 
 #include "itkMacro.h"
 #include "itkNumericTraits.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
 #include <boost/shared_ptr.hpp>
 
@@ -34,8 +34,9 @@ namespace Functor {
 
 /** \class NCLSUnmixingFunctor
  *
- * \brief TODO
+ * \brief Performs fully constrained least squares on a pixel
  *
+ * \sa NCLSUnmixingImageFilter
  *
  * \ingroup OTBUnmixing
  */
@@ -53,13 +54,9 @@ public:
   typedef vnl_matrix<PrecisionType> MatrixType;
 
   NCLSUnmixingFunctor();
-  virtual ~NCLSUnmixingFunctor();
+  virtual ~NCLSUnmixingFunctor() = default;
 
-  unsigned int GetOutputSize() const;
-
-  bool operator !=(const NCLSUnmixingFunctor& other) const;
-
-  bool operator ==(const NCLSUnmixingFunctor& other) const;
+  size_t OutputSize(const std::array<size_t,1> & nbBands) const;
 
   void SetEndmembersMatrix(const MatrixType& U);
   const MatrixType& GetEndmembersMatrix(void) const;
@@ -121,68 +118,10 @@ private:
  *
  * \ingroup OTBUnmixing
  */
-template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT NCLSUnmixingImageFilter :
-  public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::NCLSUnmixingFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >
-{
-public:
-  /** Standard class typedefs. */
-  typedef NCLSUnmixingImageFilter Self;
-  typedef otb::UnaryFunctorImageFilter
-     <TInputImage,
-      TOutputImage,
-      Functor::NCLSUnmixingFunctor<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType,
-          TPrecision>
-     >                                 Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef Functor::NCLSUnmixingFunctor<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType,
-      TPrecision> FunctorType;
-  typedef typename FunctorType::MatrixType MatrixType;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(NCLSUnmixingImageFilter, otb::UnaryFunctorImageFilter);
-
-  /** Pixel types. */
-  typedef typename TInputImage::PixelType  InputPixelType;
-  typedef typename TOutputImage::PixelType OutputPixelType;
-
-  void SetEndmembersMatrix(const MatrixType& m);
-  const MatrixType& GetEndmembersMatrix() const;
-
-  void SetMaxIteration( unsigned int val )
-  {
-    this->GetFunctor().SetMaxIteration(val);
-    this->Modified();
-  }
-
-  unsigned int GetMaxIteration() const
-  {
-    return this->GetFunctor().GetMaxIteration();
-  }
-
-protected:
-  NCLSUnmixingImageFilter();
-
-  ~NCLSUnmixingImageFilter() override;
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-
-private:
-  NCLSUnmixingImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-};
+template <typename TInputImage, typename TOutputImage, typename TPrecision>
+using NCLSUnmixingImageFilter = FunctorImageFilter<
+        Functor::NCLSUnmixingFunctor<typename TInputImage::PixelType,
+          typename TOutputImage::PixelType, TPrecision> >;
 
 } // end namespace otb
 
