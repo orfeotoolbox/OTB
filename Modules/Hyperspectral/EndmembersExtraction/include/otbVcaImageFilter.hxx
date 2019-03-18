@@ -173,7 +173,7 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacro( "Compute projective projection" )
     typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
     proj->SetInput(Xd);
-    proj->SetProjectionDirection(Xdmean);
+    proj->GetModifiableFunctor().SetProjectionDirection(Xdmean);
     refHolder.push_back(proj.GetPointer());
 
     Xd = proj->GetOutput();

@@ -95,7 +95,7 @@ int otbProjectiveProjectionTestHighSNR(int itkNotUsed(argc), char * argv[])
   std::cout << "Compute projective projection" << std::endl;
   ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
   proj->SetInput(Xd);
-  proj->SetProjectionDirection(Xdmean);
+  proj->GetModifiableFunctor().SetProjectionDirection(Xdmean);
 
   std::cout << "Write output" << std::endl;
   WriterType::Pointer writer = WriterType::New();
