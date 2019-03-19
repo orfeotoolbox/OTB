@@ -134,6 +134,7 @@ private:
                                 { ".SQLITE", "SQLite"},
                                 {".KML", "KML"},
                                 { ".GMT", "OGR_GMT"},
+                                { ".GPKG", "GPKG"},
                                 { ".JSON", "GeoJSON"},
                                 { ".GEOJSON", "GeoJSON"}
   };
