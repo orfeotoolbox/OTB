@@ -512,9 +512,6 @@ public:
 
 protected:
   Application();
-#if SWIGJAVA
-  virtual ~Application();
-#endif
 private:
   Application(const Application &);
   void operator =(const Application&);
