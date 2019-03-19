@@ -22,6 +22,6 @@
 
 set(site_option
 "opencv_INCLUDE_DIR:PATH=/usr/include
- OTB_USE_MPI:BOOL=OFF
- OTB_USE_SHARK:BOOL=OFF
- ")
+OTB_USE_MPI:BOOL=OFF
+OTB_USE_SHARK:BOOL=OFF
+")
