@@ -107,8 +107,11 @@ public:
   TOutputImage*  CastImage();
 
   bool HasValue() const override;
-
   void ClearValue() override;
+
+  ParameterType GetType() const override;
+  std::string   ToString() const override;
+  void          FromString(const std::string& value) override;
 
 protected:
   /** Constructor */

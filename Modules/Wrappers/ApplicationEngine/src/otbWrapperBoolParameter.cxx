@@ -77,5 +77,30 @@ BoolParameter::SetValue(const std::string & str)
     }
 }
 
+ParameterType BoolParameter::GetType() const
+{
+  return ParameterType_Bool;
+}
+
+int BoolParameter::ToInt() const
+{
+  return static_cast<int>(this->GetValue());
+}
+
+std::string BoolParameter::ToString() const
+{
+  return GetValueAsString();
+}
+
+void BoolParameter::FromString(const std::string& value)
+{
+  SetValue(value);
+}
+
+void BoolParameter::FromInt(int value)
+{
+  SetValue(static_cast<bool>(value));
+}
+
 } // end of namespace Wrapper
 } // end of namespace otb

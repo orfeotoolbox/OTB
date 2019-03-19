@@ -61,6 +61,21 @@ public:
       return true;
   }
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_InputProcessXML;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFileName(value);
+  }
+
   // Get Value
   //TODO otbGetObjectMemberMacro(StringParam, Value , std::string);
 

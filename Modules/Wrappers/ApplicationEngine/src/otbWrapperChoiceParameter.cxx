@@ -58,8 +58,7 @@ ChoiceParameter::AddChoice( std::string choicekey, std::string choiceName )
   this->AddChild(choice.m_AssociatedParameter.GetPointer());
 }
 
-std::string
-ChoiceParameter::GetChoiceKey( int i )
+std::string ChoiceParameter::GetChoiceKey(int i) const
 {
   return m_ChoiceList[i].m_Key;
 }
@@ -182,8 +181,7 @@ ChoiceParameter::SetValue(std::string choiceKey)
 					<<  this->GetKey() << "'");
 }
 
-unsigned int
-ChoiceParameter::GetValue()
+unsigned int ChoiceParameter::GetValue() const
 {
   return m_CurrentChoice;
 }
@@ -211,5 +209,57 @@ ChoiceParameter::GetParametersKeys()
   return parameters;
 }
 
+bool ChoiceParameter::HasValue() const
+{
+  return !m_ChoiceList.empty();
+}
+
+void ChoiceParameter::ClearValue()
+{
+  // Same as constructor init value
+  // Note that this may be invalid if HasValue() == false
+  m_CurrentChoice = 0;
+}
+
+ParameterType ChoiceParameter::GetType() const
+{
+  return ParameterType_Choice;
+}
+
+int ChoiceParameter::ToInt() const
+{
+  return this->GetValue();
+}
+
+void ChoiceParameter::FromInt(int value)
+{
+  SetValue(value);
+}
+
+std::string ChoiceParameter::ToString() const
+{
+  if (HasValue())
+  {
+    std::string  choiceKey    = GetChoiceKey(GetValue());
+    const size_t lastPointPos = choiceKey.find_last_of('.');
+    if (lastPointPos != std::string::npos)
+    {
+      return choiceKey.substr(lastPointPos);
+    }
+    else
+    {
+      return choiceKey;
+    }
+  }
+  else
+  {
+    return "";
+  }
+}
+
+void ChoiceParameter::FromString(const std::string& value)
+{
+  SetValue(value);
+}
 }
 }

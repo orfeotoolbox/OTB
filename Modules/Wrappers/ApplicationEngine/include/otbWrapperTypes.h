@@ -22,6 +22,7 @@
 #define otbWrapperTypes_h
 
 #include <complex>
+#include <array>
 #include "itkRGBPixel.h"
 #include "itkRGBAPixel.h"
 #include "otbImage.h"
@@ -60,6 +61,40 @@ typedef enum
   ParameterType_InputProcessXML,
   ParameterType_Bool
 } ParameterType;
+
+namespace
+{
+constexpr std::array<const char*, 24> parameterTypesStrings = {
+  "Int",
+  "Float",
+  "String",
+  "StringList",
+  "InputFilename",
+  "InputFilenameList",
+  "OutputFilename",
+  "Directory",
+  "Choice",
+  "InputImage",
+  "InputImageList",
+  "InputVectorData",
+  "InputVectorDataList",
+  "OutputImage",
+  "OutputVectorData",
+  "Radius",
+  "Group",
+  "ListView",
+  "ComplexInputImage",
+  "ComplexOutputImage",
+  "RAM",
+  "OutputProcessXML",
+  "InputProcessXML",
+  "Bool"
+};
+}
+
+// Free functions to convert from and to std::string
+std::string   ParameterTypeToString(ParameterType type);
+ParameterType ParameterStringToType(const std::string& str);
 
 typedef enum
 {
