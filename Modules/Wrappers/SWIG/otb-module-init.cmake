@@ -19,9 +19,8 @@
 #
 
 option ( OTB_WRAP_PYTHON "Wrap Python" OFF )
-option ( OTB_WRAP_JAVA   "Wrap Java"   OFF )
 
-if ( OTB_WRAP_PYTHON OR OTB_WRAP_JAVA )
+if ( OTB_WRAP_PYTHON )
   find_package ( SWIG REQUIRED )
   mark_as_advanced(SWIG_DIR)
   mark_as_advanced(SWIG_EXECUTABLE)
@@ -51,14 +50,4 @@ if ( OTB_WRAP_PYTHON )
     message( WARNING 
       "OTB wrappers will be done without support for NumPy (not found).")
   endif()
-endif()
-
-#
-# JAVA SWIG configuration
-#
-if ( OTB_WRAP_JAVA )
-  check_PIC_flag ( Java )
-  find_package ( Java REQUIRED )
-  find_package ( JNI REQUIRED )
-  mark_as_advanced( JAVA_HOME )
 endif()

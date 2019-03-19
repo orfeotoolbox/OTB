@@ -31,9 +31,6 @@
 
 // Language specific extension
 %include "Python.i"
-%include "Java.i"
-%include "Ruby.i"
-%include "Lua.i"
 %include "itkMacro.i"
 %include "itkBase.i"
 
@@ -515,9 +512,6 @@ public:
 
 protected:
   Application();
-#if SWIGJAVA
-  virtual ~Application();
-#endif
 private:
   Application(const Application &);
   void operator =(const Application&);
