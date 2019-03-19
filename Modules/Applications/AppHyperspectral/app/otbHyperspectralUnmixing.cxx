@@ -179,7 +179,7 @@ private:
     endMember2Matrix->Update();
 
     MatrixType endMembersMatrix = endMember2Matrix->GetMatrix();
-    otbAppLogINFO("Endmembers matrix : " << endMembersMatrix);
+    otbAppLogDEBUG("Endmembers matrix : " << endMembersMatrix);
 
     /*
      * Unmix
