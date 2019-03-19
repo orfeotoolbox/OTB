@@ -20,6 +20,13 @@ native-build:
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
+debian-build:
+  extends: .general
+  stage: build
+  image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-debian-native:unstable
+  script:
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+
 build:ubuntu-llvm:
   extends: .general
   stage: build
