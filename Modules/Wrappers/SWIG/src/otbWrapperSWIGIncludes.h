@@ -39,4 +39,18 @@ typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParame
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
 
+#if defined(SWIGPYTHON)
+#include "otbPythonLogOutput.h"
+#include "otbLogger.h"
+#include "otbProgressReporterManager.h"
+
+typedef otb::Logger                           Logger;
+typedef otb::Logger::Pointer                  Logger_Pointer;
+typedef otb::SwigPrintCallback                SwigPrintCallback;
+typedef otb::PythonLogOutput                  PythonLogOutput;
+typedef otb::PythonLogOutput::Pointer         PythonLogOutput_Pointer;
+typedef otb::ProgressReporterManager          ProgressReporterManager;
+typedef otb::ProgressReporterManager::Pointer ProgressReporterManager_Pointer;
+#endif
+
 #endif

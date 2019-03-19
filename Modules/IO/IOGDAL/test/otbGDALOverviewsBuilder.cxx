@@ -42,7 +42,7 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   filter->SetResamplingMethod(resamp);
 
   {
-    StandardOneLineFilterWatcher watcher(filter,"Overviews creation");
+    StandardOneLineFilterWatcher<> watcher(filter,"Overviews creation");
     filter->Update();
   }
 

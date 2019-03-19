@@ -7,7 +7,6 @@ stages:
   - build
 
 .general:
-  only: [merge_requests]
   retry:
     max: 2
     when:
@@ -16,14 +15,15 @@ stages:
 
 native-build:
   extends: .general
+  only: [merge_requests]
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-shark-build:
+build:ubuntu-llvm:
   extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc-shark-3.1.4
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
