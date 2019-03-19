@@ -56,7 +56,7 @@ public:
   NCLSUnmixingFunctor();
   virtual ~NCLSUnmixingFunctor() = default;
 
-  size_t OutputSize(const std::array<size_t,1> & nbBands) const;
+  size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
   void SetEndmembersMatrix(const MatrixType& U);
   const MatrixType& GetEndmembersMatrix(void) const;
@@ -119,9 +119,7 @@ private:
  * \ingroup OTBUnmixing
  */
 template <typename TInputImage, typename TOutputImage, typename TPrecision>
-using NCLSUnmixingImageFilter = FunctorImageFilter<
-        Functor::NCLSUnmixingFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >;
+using NCLSUnmixingImageFilter = FunctorImageFilter<Functor::NCLSUnmixingFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TPrecision>>;
 
 } // end namespace otb
 

@@ -79,7 +79,7 @@ public:
   typedef itk::BinaryThresholdImageFilter<LabelImageType,
                                           LabelImageType>                   ThresholdFilterType;
 
-  template<class TInput, class TOutput>
+  template <class TInput, class TOutput>
   struct EncoderFunctorType
   {
     StatsFilterType::LabelPopulationMapType* m_CountMap;
@@ -93,17 +93,17 @@ public:
     static constexpr size_t m_NbStatsPerBand{4};
     static constexpr size_t m_NbGlobalStats{1};
 
-    size_t OutputSize(const std::array<size_t,1> & ) const
+    size_t OutputSize(const std::array<size_t, 1>&) const
     {
       return m_NbInputComponents*m_NbStatsPerBand+m_NbGlobalStats;
     }
 
     size_t OutputSize() const
     {
-      return m_NbInputComponents*m_NbStatsPerBand+m_NbGlobalStats;
+      return m_NbInputComponents * m_NbStatsPerBand + m_NbGlobalStats;
     }
 
-    TOutput operator()(TInput const &pix)
+    TOutput operator()(TInput const& pix)
     {
       TOutput outPix(OutputSize());
       outPix.Fill(m_OutBvValue);
@@ -135,11 +135,8 @@ public:
       else return false;
     }
   };
-  typedef otb::FunctorImageFilter<EncoderFunctorType<
-                                          LabelValueType,
-                                          FloatVectorImageType::PixelType 
-                                            >> EncoderFilterType;
-  
+  typedef otb::FunctorImageFilter<EncoderFunctorType<LabelValueType, FloatVectorImageType::PixelType>> EncoderFilterType;
+
   /** Standard macro */
   itkNewMacro(Self);
   itkTypeMacro(ZonalStatistics, Application);
@@ -414,19 +411,18 @@ public:
       m_EncoderFilter->SetInput(m_RasterizeFilter->GetOutput());
       }
 
-    m_EncoderFilter->GetModifiableFunctor().m_CountMap = &m_CountMap;
-    m_EncoderFilter->GetModifiableFunctor().m_MeanMap = &m_MeanMap;
-    m_EncoderFilter->GetModifiableFunctor().m_StdMap = &m_StdMap;
-    m_EncoderFilter->GetModifiableFunctor().m_MinMap = &m_MinMap;
-    m_EncoderFilter->GetModifiableFunctor().m_MaxMap = &m_MaxMap;
-    m_EncoderFilter->GetModifiableFunctor().m_NbInputComponents = m_InputImage->GetNumberOfComponentsPerPixel();
-    m_EncoderFilter->GetModifiableFunctor().m_InNoData = m_IntNoData;
-    m_EncoderFilter->GetModifiableFunctor().m_OutBvValue = m_OutBvValue;
-    
-    otbAppLogINFO("Output raster image will have " << 
-                  (m_EncoderFilter->GetFunctor()).OutputSize() << " bands\n");
-    AddProcess(m_EncoderFilter, "Encode output raster image");
-    SetParameterOutputImage("out.raster.filename", m_EncoderFilter->GetOutput());
+      m_EncoderFilter->GetModifiableFunctor().m_CountMap          = &m_CountMap;
+      m_EncoderFilter->GetModifiableFunctor().m_MeanMap           = &m_MeanMap;
+      m_EncoderFilter->GetModifiableFunctor().m_StdMap            = &m_StdMap;
+      m_EncoderFilter->GetModifiableFunctor().m_MinMap            = &m_MinMap;
+      m_EncoderFilter->GetModifiableFunctor().m_MaxMap            = &m_MaxMap;
+      m_EncoderFilter->GetModifiableFunctor().m_NbInputComponents = m_InputImage->GetNumberOfComponentsPerPixel();
+      m_EncoderFilter->GetModifiableFunctor().m_InNoData          = m_IntNoData;
+      m_EncoderFilter->GetModifiableFunctor().m_OutBvValue        = m_OutBvValue;
+
+      otbAppLogINFO("Output raster image will have " << (m_EncoderFilter->GetFunctor()).OutputSize() << " bands\n");
+      AddProcess(m_EncoderFilter, "Encode output raster image");
+      SetParameterOutputImage("out.raster.filename", m_EncoderFilter->GetOutput());
   }
 
   void WriteXMLStatsFile()

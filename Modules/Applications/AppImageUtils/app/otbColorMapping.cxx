@@ -92,8 +92,8 @@ public:
   {
     m_OutputSize = nb;
   }
-  
-  size_t OutputSize(const std::array<size_t,1> & ) const
+
+  size_t OutputSize(const std::array<size_t, 1>&) const
   {
     return m_OutputSize;
   }
@@ -224,9 +224,7 @@ public:
     StreamingStatisticsMapFromLabelImageFilterType;
 
   // Inverse mapper for color->label operation
-  typedef otb::FunctorImageFilter
-    <Functor::VectorMapping
-      <RGBPixelType, LabelVectorType> >               ColorToLabelFilterType;
+  typedef otb::FunctorImageFilter<Functor::VectorMapping<RGBPixelType, LabelVectorType>> ColorToLabelFilterType;
 
   // Streaming the input image for color->label operation
   typedef RGBImageType::RegionType                    RegionType;

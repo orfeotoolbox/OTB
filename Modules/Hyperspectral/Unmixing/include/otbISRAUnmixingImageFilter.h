@@ -36,7 +36,7 @@ namespace Functor {
  * \brief Perform fully constrained least squares on a pixel
  *
  * \sa ISRAUnmixingImageFilter
- * 
+ *
  * \ingroup OTBUnmixing
  */
 template<class TInput, class TOutput, class TPrecision>
@@ -53,9 +53,9 @@ public:
   typedef vnl_matrix<PrecisionType> MatrixType;
 
   ISRAUnmixingFunctor();
-  virtual ~ISRAUnmixingFunctor() =default;
+  virtual ~ISRAUnmixingFunctor() = default;
 
-  size_t OutputSize(const std::array<size_t,1> & nbBands) const;
+  size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
   void SetEndmembersMatrix(const MatrixType& U);
   const MatrixType& GetEndmembersMatrix(void) const;
@@ -116,9 +116,7 @@ private:
  * \ingroup OTBUnmixing
  */
 template <typename TInputImage, typename TOutputImage, typename TPrecision>
-using ISRAUnmixingImageFilter = FunctorImageFilter<
-        Functor::ISRAUnmixingFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >;
+using ISRAUnmixingImageFilter = FunctorImageFilter<Functor::ISRAUnmixingFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TPrecision>>;
 
 } // end namespace otb
 

@@ -27,7 +27,8 @@
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class DotProductFunctor
  *
@@ -35,14 +36,14 @@ namespace Functor {
  *
  * \ingroup OTBCommon
  */
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class DotProductFunctor
 {
 public:
-  typedef TInput     InputType;
-  typedef TOutput    OutputType;
+  typedef TInput  InputType;
+  typedef TOutput OutputType;
 
-  DotProductFunctor() = default;
+  DotProductFunctor()          = default;
   virtual ~DotProductFunctor() = default;
 
   const InputType& GetVector()
@@ -55,14 +56,14 @@ public:
     m_Vector = m;
   }
 
-  OutputType operator ()(const InputType& in)
+  OutputType operator()(const InputType& in)
   {
     assert(in.Size() == m.Size());
     OutputType result = 0;
-    for(unsigned int i = 0; i < in.Size(); ++i)
-      {
+    for (unsigned int i = 0; i < in.Size(); ++i)
+    {
       result += in[i] * m_Vector[i];
-      }
+    }
     return result;
   }
 
@@ -79,15 +80,14 @@ private:
  * with respect to the specified vector
  *
  * \sa otb::Functor::DotProductFunctor
- * 
+ *
  * \ingroup Streamed
  * \ingroup Threaded
  *
  * \ingroup OTBFunctor
  */
 template <typename TInputImage, typename TOutputImage>
-using DotProductImageFilter = FunctorImageFilter<
-    Functor::DotProductFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType> >;
+using DotProductImageFilter = FunctorImageFilter<Functor::DotProductFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // namespace otb
 #endif

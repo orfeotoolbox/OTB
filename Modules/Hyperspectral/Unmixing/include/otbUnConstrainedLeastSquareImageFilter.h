@@ -50,14 +50,14 @@ public:
   typedef vnl_vector<PrecisionType> VectorType;
   typedef vnl_matrix<PrecisionType> MatrixType;
 
-  UnConstrainedLeastSquareFunctor() : m_OutputSize(0) {};
+  UnConstrainedLeastSquareFunctor() : m_OutputSize(0){};
   virtual ~UnConstrainedLeastSquareFunctor() = default;
 
-  size_t OutputSize(const std::array<size_t,1> & nbBands) const;
+  size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
   void SetMatrix(const MatrixType& m);
 
-  OutputType operator ()(const InputType& in) const;
+  OutputType operator()(const InputType& in) const;
 
 private:
 
@@ -92,9 +92,8 @@ private:
  * \ingroup OTBUnmixing
  */
 template <typename TInputImage, typename TOutputImage, typename TPrecision>
-using UnConstrainedLeastSquareImageFilter = FunctorImageFilter<
-        Functor::UnConstrainedLeastSquareFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >;
+using UnConstrainedLeastSquareImageFilter =
+    FunctorImageFilter<Functor::UnConstrainedLeastSquareFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TPrecision>>;
 
 } // end namespace otb
 

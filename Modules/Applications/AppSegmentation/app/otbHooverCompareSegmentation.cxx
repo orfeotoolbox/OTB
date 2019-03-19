@@ -43,11 +43,11 @@ public:
 
   typedef std::vector<TOutput> ColorListType;
 
-  size_t OutputSize(const std::array<size_t,1> &) const
+  size_t OutputSize(const std::array<size_t, 1>&) const
   {
     return 3;
   }
-  
+
   void AddColor(const TOutput& color)
   {
     m_ScoreColors.push_back(color);
@@ -124,9 +124,7 @@ public:
   typedef otb::HooverInstanceFilter<LabelMapType>   InstanceFilterType;
   typedef otb::LabelMapToAttributeImageFilter
       <LabelMapType, FloatVectorImageType>          AttributeImageFilterType;
-  typedef otb::FunctorImageFilter
-      <Functor::HooverColorMapping
-        <FloatPixelType, Int16PixelType> >          HooverColorFilterType;
+  typedef otb::FunctorImageFilter<Functor::HooverColorMapping<FloatPixelType, Int16PixelType>> HooverColorFilterType;
 
 private:
   void DoInit() override

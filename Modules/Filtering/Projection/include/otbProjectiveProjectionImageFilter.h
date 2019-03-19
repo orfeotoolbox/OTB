@@ -48,13 +48,13 @@ public:
   ProjectiveProjectionFunctor() : m_OutputSize(0) {}
   virtual ~ProjectiveProjectionFunctor() {}
 
-  size_t OutputSize(const std::array<size_t,1> & nbBands) const;
+  size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
   const InputType& GetProjectionDirection();
 
   void SetProjectionDirection(const InputType& p);
 
-  OutputType operator ()(const InputType& in);
+  OutputType operator()(const InputType& in);
 
 private:
   unsigned int   m_OutputSize;
@@ -72,9 +72,8 @@ private:
  * \ingroup OTBProjection
  */
 template <typename TInputImage, typename TOutputImage, typename TPrecision>
-using ProjectiveProjectionImageFilter = FunctorImageFilter<
-        Functor::ProjectiveProjectionFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >;
+using ProjectiveProjectionImageFilter =
+    FunctorImageFilter<Functor::ProjectiveProjectionFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TPrecision>>;
 
 } // end namespace otb
 
