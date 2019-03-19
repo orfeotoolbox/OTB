@@ -93,7 +93,7 @@ public:
     m_OutputSize = nb;
   }
   
-  size_t OutputSize(const std::array<size_t,1> & itkNotUsed(nbBands)) const
+  size_t OutputSize(const std::array<size_t,1> & ) const
   {
     return m_OutputSize;
   }

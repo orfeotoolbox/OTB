@@ -93,7 +93,7 @@ public:
     static constexpr size_t m_NbStatsPerBand{4};
     static constexpr size_t m_NbGlobalStats{1};
 
-    size_t OutputSize(const std::array<size_t,1> & itkNotUsed(nbBands)) const
+    size_t OutputSize(const std::array<size_t,1> & ) const
     {
       return m_NbInputComponents*m_NbStatsPerBand+m_NbGlobalStats;
     }

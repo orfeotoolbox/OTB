@@ -41,7 +41,7 @@ NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
 template <class TInput, class TOutput, class TPrecision>
 size_t
 NCLSUnmixingFunctor<TInput, TOutput, TPrecision>
-::OutputSize(const std::array<size_t,1> & itkNotUsed(nbBands)) const
+::OutputSize(const std::array<size_t,1> &) const
 {
   return m_OutputSize;
 }
