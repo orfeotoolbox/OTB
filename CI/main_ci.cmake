@@ -82,7 +82,6 @@ if ( NOT _configure_rv EQUAL 0 )
 endif()
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            TARGET OTBImageIO-all
             RETURN_VALUE _build_rv
             CAPTURE_CMAKE_ERROR _build_error
             )
@@ -93,7 +92,6 @@ if ( NOT _build_rv EQUAL 0 )
 endif()
 
 ctest_test(PARALLEL_LEVEL 8
-           INCLUDE_LABEL OTBImageIO
            RETURN_VALUE _test_rv
            CAPTURE_CMAKE_ERROR _test_error
            )

@@ -18,6 +18,7 @@ variables:
   GIT_STRATEGY: "clone"
 
 before_script:
+  # make sure LFS hooks are installed
   - git lfs install
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_REF_NAME
@@ -47,5 +48,4 @@ build:ubuntu-llvm:
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
-    - ls -l Data/Input/cthead1.png
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
