@@ -55,7 +55,7 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 
   pathFilter->Update();
 
-  std::cout << " pathFilter = " << pathFilter << std::endl;
+  otbLogMacro(Debug, << " pathFilter = " << pathFilter);
 
   PathType * outputPath = pathFilter->GetOutput();
 
@@ -68,7 +68,7 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 
   VertexListTypePointer ptrVertexList =  outputPath->GetVertexList();
 
-  std::cout << "Size : " << ptrVertexList->Size() << std::endl;
+  otbLogMacro(Info, << "Size : " << ptrVertexList->Size());
 
   // Initialize Output Image
   ImageType::Pointer outputImage = ImageType::New();

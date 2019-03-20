@@ -84,7 +84,7 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
     {
     if (histogram->GetFrequency(bin, 0) != NbOfPointsPerHistogram)
       {
-      otbLogMacro(Warning, "Error in histogram value !");
+      otbLogMacro(Warning, << "Error in histogram value !");
       return EXIT_FAILURE;
       }
     otbLogMacro(Debug, << "bin = " << bin << " frequency = " << histogram->GetFrequency(bin, 0));
