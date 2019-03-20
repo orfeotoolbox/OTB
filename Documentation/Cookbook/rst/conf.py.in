@@ -22,9 +22,11 @@ import sphinx_rtd_theme
 #sys.path.insert(0, os.path.abspath('.'))
 
 # Customize read the docs theme a bit with a custom css
+# and a custom version selection widget
 # taken from https://stackoverflow.com/a/43186995/5815110
 def setup(app):
     app.add_stylesheet("css/otb_theme.css")
+    app.add_javascript("js/versions.js")
 
 # -- General configuration ------------------------------------------------
 
