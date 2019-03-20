@@ -32,10 +32,6 @@ joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
 For other documentation, be sure to read:
 
 - OTB's website: `www.orfeo-toolbox.org <https://www.orfeo-toolbox.org/>`_
-- `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_ for advanced users and developers.
-  The software guide contains documented code examples,
-  descriptions of the ITK pipeline model, multithreading and
-  streaming functionalities, and an introduction to the C++ API.
 - `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
