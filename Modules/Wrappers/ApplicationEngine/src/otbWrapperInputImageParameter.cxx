@@ -24,6 +24,7 @@
 #include "otbWrapperInputImageParameterMacros.h"
 #include "otb_boost_string_header.h"
 
+
 namespace otb
 {
 
@@ -92,10 +93,7 @@ InputImageParameter::SetImage(FloatVectorImageType* image)
 bool
 InputImageParameter::HasValue() const
 {
-  if( m_FileName.empty() && m_Image.IsNull() )
-    return false;
-  else
-    return true;
+  return m_FileName.empty() && m_Image.IsNull();
 }
 
 void
@@ -104,7 +102,8 @@ InputImageParameter
 {
   m_Image  = nullptr;
   m_Reader = nullptr;
-  m_Caster = nullptr;
+  m_InputCaster = nullptr;
+  m_OutputCaster = nullptr;
   m_FileName = "";
   m_PreviousFileName="";
   m_UseFilename = true;

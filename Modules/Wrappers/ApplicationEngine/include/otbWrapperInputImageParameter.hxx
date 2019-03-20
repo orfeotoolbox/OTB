@@ -31,6 +31,83 @@ namespace Wrapper
 {
 
 
+#define CLAMP_IMAGE_IF( Out, In, image_base )	\
+  {							\
+    In * in_image = dynamic_cast< In * >( image_base );	\
+							\
+    if( in_image )						\
+      return Cast< Out, In >( in_image );			\
+  }
+
+#define CLAMP_IMAGE_BASE( T, image_base )				\
+  {									\
+    CLAMP_IMAGE_IF( T, UInt8VectorImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, Int16VectorImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, UInt16VectorImageType, image_base );	\
+    CLAMP_IMAGE_IF( T, Int32VectorImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, UInt32VectorImageType, image_base );	\
+									\
+    CLAMP_IMAGE_IF( T, FloatVectorImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, DoubleVectorImageType, image_base );	\
+									\
+    CLAMP_IMAGE_IF( T, ComplexInt16VectorImageType, image_base );	\
+    CLAMP_IMAGE_IF( T, ComplexInt32VectorImageType, image_base );	\
+									\
+    CLAMP_IMAGE_IF( T, ComplexFloatVectorImageType, image_base );	\
+    CLAMP_IMAGE_IF( T, ComplexDoubleVectorImageType, image_base );	\
+    									\
+    CLAMP_IMAGE_IF( T, UInt8RGBImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, UInt8RGBAImageType, image_base );		\
+									\
+    CLAMP_IMAGE_IF( T, UInt8ImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, Int16ImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, UInt16ImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, Int32ImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, UInt32ImageType, image_base );		\
+									\
+    CLAMP_IMAGE_IF( T, FloatImageType, image_base );		\
+    CLAMP_IMAGE_IF( T, DoubleImageType, image_base );		\
+									\
+    CLAMP_IMAGE_IF( T, ComplexInt16ImageType, image_base );	\
+    CLAMP_IMAGE_IF( T, ComplexInt32ImageType, image_base );	\
+									\
+    CLAMP_IMAGE_IF( T, ComplexFloatImageType, image_base );	\
+    CLAMP_IMAGE_IF( T, ComplexDoubleImageType, image_base );	\
+									\
+    return nullptr;							\
+  }
+
+
+template< typename TOutputImage,
+	  typename TInputImage >
+TOutputImage *
+InputImageParameter
+::Cast( TInputImage * image )
+{
+  // Optimize pipeline if input-image can be directly cast into
+  // output-image.
+  CLAMP_IMAGE_IF( TOutputImage, TInputImage, image );
+
+  // Allocate and link pipeline in local scope before overwriting
+  // member attributes in order to ensure exception safety.
+
+  auto icif = InputClampImageFilter< TInputImage >::New();
+
+  auto ocif = OutputClampImageFilter< TOutputImage >::New();
+
+  icif->SetInput( image );
+
+  ocif->SetInput( icif->GetOutput() );
+
+  ocif->UpdateOutputInformation();
+
+  m_InputCaster = icif;
+  m_OutputCaster = ocif;
+
+  return ocif->GetOutput();
+}
+
+
 template <class TImageType>
 TImageType*
 InputImageParameter::GetImage()
@@ -94,7 +171,10 @@ InputImageParameter::GetImage()
       return nullptr;
       }
     else
-      {
+      CLAMP_IMAGE_BASE( TImageType, m_Image.GetPointer() );
+
+#if 0
+    {
       if (dynamic_cast<UInt8ImageType*> (m_Image.GetPointer()))
         {
         return CastImage<UInt8ImageType, TImageType> ();
@@ -196,6 +276,7 @@ InputImageParameter::GetImage()
 	return nullptr;
         }
       }
+#endif
     }
 }
 
@@ -205,6 +286,8 @@ OTBApplicationEngine_EXPORT
 ImageBaseType*
 InputImageParameter::GetImage<ImageBaseType>();
 
+
+#if 0
 
 template <class TInputImage, class TOutputImage>
 TOutputImage*
@@ -231,6 +314,9 @@ InputImageParameter::CastImage()
     }
   // itkExceptionMacro("Cast from "<<typeid(TInputImage).name()<<" to "<<typeid(TOutputImage).name()<<" not authorized.");
 }
+
+#endif
+
 
 template <class TInputImage>
 void
