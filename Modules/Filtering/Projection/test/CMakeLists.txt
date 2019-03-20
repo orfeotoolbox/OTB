@@ -114,7 +114,6 @@ foreach( file ${GEOMGCP} )
     1 # imgTol
     ${current_geotol} # geoTol
     0 # create baseline (argv[7])
-    1 # mode verbose
     1 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
@@ -159,7 +158,6 @@ foreach( file ${GEOMGCP} )
     1 # imgTol
     1 # geoTol
     0 # create baseline (argv[7])
-    1 # mode verbose
     0 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()

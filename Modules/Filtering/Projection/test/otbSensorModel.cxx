@@ -34,6 +34,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
+#include "otbMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -65,7 +66,7 @@ int produceGCP(char * outputgcpfilename, const otb::ImageKeywordlist& kwlist, bo
    forwardSensorModel->SetImageGeometry(kwlist);
    if( forwardSensorModel->IsValidSensorModel() == false )
    {
-     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
+     otbLogMacro(Warning, <<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!");
      return EXIT_FAILURE;
    } 
    
@@ -159,7 +160,7 @@ int otbSensorModel(int argc, char* argv[])
     {
     std::cout << argv[0] 
               << " <input geom filename> <input gcp filename> <output gcp filename> "
-              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <modeVerbose> <only check needed keywords>" << std::endl;
+              <<" <needed keywords> <imgTol> <geoTol> <writeBaseline> <only check needed keywords>" << std::endl;
 
     return EXIT_FAILURE;
     }
@@ -171,8 +172,7 @@ int otbSensorModel(int argc, char* argv[])
   double imgTol = atof(argv[5]);
   double geoTol = atof(argv[6]);
   int writeBaseline = atoi(argv[7]);
-  int modeVerbose = atoi(argv[8]);
-  bool checkNeededKw = atoi(argv[9]);
+  bool checkNeededKw = atoi(argv[8]);
 
   // -------------------
   // Some instantiations  
@@ -370,21 +370,18 @@ int otbSensorModel(int argc, char* argv[])
       geoPointOSSIM[1] = ossimGPoint.lat;
 
 	  // Just for debug purpose
-	  if (modeVerbose)
-	  {
-		  std::cout << ">>>>>>>>>>>>>> ---------------------" << std::endl;
-		  std::cout << ">>>>>>>>>>>>>>" << geomfilename << std::endl;
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint << "\n";
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint << "\n";
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS << "\n";
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-		  std::cout << ">>>>>>>>>>>>>>" << std::setprecision(15) 
-					<<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM << "\n";
-	  }
+    otbLogMacro(Debug, << "------------------------------------------------");
+    otbLogMacro(Debug, << geomfilename);
+    otbLogMacro(Debug, << std::setprecision(15) 
+        <<  "Image to geo (Inverse/Forward SensorModel): " << imagePoint << " -> " << geoPoint);
+    otbLogMacro(Debug, << std::setprecision(15) 
+        <<  "Geo to image (Inverse/Forward SensorModel): " << geoPoint << " -> " << reversedImagePoint);
+    otbLogMacro(Debug, << std::setprecision(15) 
+        <<  "Image to geo (GenericRSTransform): " << imagePoint << " -> " << geoPointGRS);
+    otbLogMacro(Debug, << std::setprecision(15) 
+        <<  "Geo to image (GenericRSTransform): " << geoPointGRS << " -> " << reversedImagePointGRS);
+    otbLogMacro(Debug, << std::setprecision(15) 
+        <<  "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM);
 
 	  	  
 	  // 3. Results should be plausible (no NaN and no clearly out of bound results)
@@ -477,12 +474,9 @@ int otbSensorModel(int argc, char* argv[])
 	  double dist6 = geoDistance->Evaluate(geoPointGRS, geoPointGCP);
 	  double dist7 = geoDistance->Evaluate(geoPointOSSIM, geoPointGCP);
 	  
-	  if (modeVerbose)
-	  {
-		  std::cout << ">>>>>>>>>>>>>>" << "Forward SensorModel VS GCP : " <<  dist5 << std::endl;
-		  std::cout << ">>>>>>>>>>>>>>" << "GenericRSTransform VS GCP : " <<  dist6 << std::endl;
-		  std::cout << ">>>>>>>>>>>>>>" << "OSSIM VS GCP : " <<  dist7 << std::endl;
-	  }
+    otbLogMacro(Debug, << "Forward SensorModel VS GCP : " <<  dist5);
+    otbLogMacro(Debug, << "GenericRSTransform VS GCP : " <<  dist6);
+    otbLogMacro(Debug, << "OSSIM VS GCP : " <<  dist7);
 	  
 	  if (dist5>geoTol)
 	  {
