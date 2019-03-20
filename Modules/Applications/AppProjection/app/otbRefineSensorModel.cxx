@@ -156,7 +156,7 @@ private:
 
       z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
-      otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
+      otbAppLogDEBUG("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
 
       sm->AddTiePoint(x,y,z,lon,lat);
 
