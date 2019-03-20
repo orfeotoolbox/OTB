@@ -35,7 +35,6 @@
 #endif
 
 
-#define DISABLE_CAST_IMAGE 0
 
 namespace otb
 {
@@ -45,12 +44,10 @@ namespace Wrapper
 OutputImageParameter::OutputImageParameter()
   : m_PixelType(ImagePixelType_float),
     m_DefaultPixelType(ImagePixelType_float),
-    m_RAMValue(0),
-    m_Caster(nullptr),
-    m_Writer(nullptr)
+    m_RAMValue(0)
 {
-  this->SetName("Output Image");
-  this->SetKey("out");
+  SetName("Output Image");
+  SetKey("out");
 }
 
 
@@ -238,8 +235,6 @@ void OutputImageParameter::InitializeWriters()
 }
 
 
-#if !DISABLE_CAST_IMAGE
-
 template <typename TInput, typename TOutput>
 std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer>
 ClampAndWriteVectorImage( TInput * in ,
@@ -313,19 +308,6 @@ ClampAndWriteVectorImage( TInput * in ,
   return ret;
 }
 
-#endif // DISABLE_CAST_IMAGE
-
-
-#if DISABLE_CAST_IMAGE
-
-template <class TInput>
-int
-OutputImageParameter::SwitchInput(TInput * )
-{
-  return 0;
-}
-
-#else // DISABLE_CAST_IMAGE
 
 template <class TInput>
 int
@@ -433,8 +415,6 @@ OutputImageParameter::SwitchInput(TInput * img)
   return 1;
 }
 
-#endif // DISABLE_CAST_IMAGE
-
 
 void
 OutputImageParameter::Write()
@@ -515,16 +495,6 @@ OutputImageParameter::CheckFileName(bool fixMissingExtension)
 }
 
 // Specialization for UInt8RGBAImageType
-#if DISABLE_CAST_IMAGE
-
-template <>
-int
-OutputImageParameter::SwitchInput(UInt8RGBAImageType * )
-{
-  return 0;
-}
-
-#else // DISABLE_CAST_IMAGE
 
 template <>
 int
@@ -544,8 +514,6 @@ OutputImageParameter::SwitchInput(UInt8RGBAImageType * img )
      itkExceptionMacro("Unknown PixelType for RGBA Image. Only uint8 is supported.");
   return 1;
 }
-
-#endif // DISABLE_CAST_IMAGE
 
 // Specialization for UInt8RGBImageType
 template <>

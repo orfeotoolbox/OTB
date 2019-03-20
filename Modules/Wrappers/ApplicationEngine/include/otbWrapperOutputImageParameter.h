@@ -27,6 +27,8 @@
 #include "otbImageFileWriter.h"
 #include <string>
 
+
+
 namespace otb
 {
 namespace Wrapper
@@ -111,24 +113,26 @@ protected:
   /** Destructor */
   ~OutputImageParameter() override;
 
+private:
+  OutputImageParameter(const Parameter &) = delete;
+  void operator =(const Parameter&) = delete;
+
   template <class TInput>
     int SwitchInput(TInput *img);
 
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
-  std::string            m_FileName;
-  ImagePixelType         m_PixelType;
-  ImagePixelType         m_DefaultPixelType;
-
-private:
-  OutputImageParameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
-
-  unsigned int                  m_RAMValue;
 
   itk::ProcessObject::Pointer m_Caster;
 
   itk::ProcessObject::Pointer m_Writer;
+
+  std::string m_FileName;
+
+  ImagePixelType m_PixelType;
+  ImagePixelType m_DefaultPixelType;
+
+  unsigned int m_RAMValue;
 
 }; // End class OutputImage Parameter
 
