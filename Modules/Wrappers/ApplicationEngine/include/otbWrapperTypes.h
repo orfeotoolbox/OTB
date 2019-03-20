@@ -64,7 +64,7 @@ typedef enum
 
 namespace
 {
-constexpr std::array<const char*, 24> parameterTypesStrings = {
+constexpr std::array<const char*, 24> parameterTypesStrings = {{
   "Int",
   "Float",
   "String",
@@ -89,7 +89,7 @@ constexpr std::array<const char*, 24> parameterTypesStrings = {
   "OutputProcessXML",
   "InputProcessXML",
   "Bool"
-};
+}};
 }
 
 // Free functions to convert from and to std::string
