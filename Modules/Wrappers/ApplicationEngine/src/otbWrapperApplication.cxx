@@ -623,7 +623,7 @@ Application::RegisterPipeline()
     if ( GetParameterType(key) == ParameterType_OutputImage )
       {
       Parameter* param = GetParameterByKey(key);
-      OutputImageParameter * outP = 
+      OutputImageParameter * outP =
         dynamic_cast< OutputImageParameter * >( param );
       itk::ImageBase< 2 > * outData = outP->GetValue();
       if ( outData )
@@ -632,7 +632,7 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_OutputVectorData )
       {
       Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter * outP = 
+      OutputVectorDataParameter * outP =
         dynamic_cast< OutputVectorDataParameter * >( param );
       VectorDataType * outData = outP->GetValue();
       if ( outData )
@@ -641,7 +641,7 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_InputImage )
       {
       Parameter* param = GetParameterByKey(key);
-      InputImageParameter * inP = 
+      InputImageParameter * inP =
         dynamic_cast< InputImageParameter * >( param );
       if ( !inP->HasValue() )
         continue;
@@ -652,12 +652,12 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_InputImageList )
       {
       Parameter * param = GetParameterByKey(key);
-      InputImageListParameter * inP = 
+      InputImageListParameter * inP =
         dynamic_cast< InputImageListParameter * > ( param );
       if ( !inP->HasValue() )
         continue;
       const FloatVectorImageListType * list = inP->GetImageList();
-      for ( auto it = list->Begin() ; it != list->End() ; ++it ) 
+      for ( auto it = list->Begin() ; it != list->End() ; ++it )
         {
         FloatVectorImageType * inData = it.Get().GetPointer();
         if ( inData && !inputData.count(inData) )
@@ -703,7 +703,7 @@ Application::RegisterPipeline()
     // if current is a list push every of its members in datastack
     if ( dynamic_cast< DataObjectListInterface *> (current) )
       {
-      DataObjectListInterface * list = 
+      DataObjectListInterface * list =
         dynamic_cast< DataObjectListInterface *> (current);
       int length = list->Size();
       for ( int i = 0 ; i < length ; i++ )
@@ -784,7 +784,7 @@ void Application::FreeRessources()
       // If input is a list
       if ( dynamic_cast< DataObjectListInterface *> (data.GetPointer()) )
         {
-        DataObjectListInterface * list = 
+        DataObjectListInterface * list =
           dynamic_cast< DataObjectListInterface *> (data.GetPointer());
         int length = list->Size();
         for ( int i = 0 ; i < length ; i++ )
@@ -850,7 +850,7 @@ int Application::Execute()
   m_IsInPrivateDo = true;
   this->DoExecute();
   m_IsInPrivateDo = false;
-  
+
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
     {
@@ -982,7 +982,7 @@ int Application::ExecuteAndWriteOutput()
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
-  
+
   FreeRessources();
   m_Filters.clear();
   return status;
@@ -2360,7 +2360,7 @@ Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, 
   if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    paramDown->SetImage<ImageBaseType>(img);
+    paramDown->SetImage( img );
     }
   else if (dynamic_cast<InputImageListParameter*>(param))
     {

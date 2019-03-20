@@ -318,14 +318,6 @@ InputImageParameter::CastImage()
 #endif
 
 
-template <class TInputImage>
-void
-InputImageParameter::SetImage(TInputImage* image)
-{
-  m_UseFilename = false;
-  m_Image = image;
-}
-
 
 } // End namespace Wrapper
 } // End namespace otb

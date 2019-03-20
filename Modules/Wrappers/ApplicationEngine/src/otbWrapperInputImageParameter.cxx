@@ -82,11 +82,13 @@ InputImageParameter::GetImage<ImageBaseType>()
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
+
 void
-InputImageParameter::SetImage(FloatVectorImageType* image)
+InputImageParameter
+::SetImage( ImageBaseType * image )
 {
   m_UseFilename = false;
-  this->SetImage<FloatVectorImageType>( image );
+  m_Image = image;
 }
 
 

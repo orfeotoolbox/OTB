@@ -98,12 +98,8 @@ public:
   template <class TImageType>
     TImageType* GetImage();
 
-  /** Set a FloatVectorImageType image.*/
-  void SetImage(FloatVectorImageType* image);
-
   /** Set a templated image.*/
-  template <class TImageType>
-    void SetImage(TImageType* image);
+  void SetImage( ImageBaseType * image );
 
 
   /** Generic cast method that will be specified for each image type. */
