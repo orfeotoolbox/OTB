@@ -18,6 +18,7 @@ variables:
   GIT_STRATEGY: "clone"
 
 before_script:
+  - git lfs install
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_REF_NAME
   # Checkout the expected branch
