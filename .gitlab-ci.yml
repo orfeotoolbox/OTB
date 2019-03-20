@@ -46,4 +46,5 @@ build:ubuntu-llvm:
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
+    - ls -l Data/Input/cthead1.png
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
