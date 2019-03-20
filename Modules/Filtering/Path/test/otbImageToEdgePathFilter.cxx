@@ -25,6 +25,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbMacro.h"
 
 int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 {
@@ -80,7 +81,7 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 
   for (unsigned int cpt = 0; cpt <  ptrVertexList->Size(); ++cpt)
     {
-    std::cout << " Point " << cpt << " : " << ptrVertexList->GetElement(cpt) << std::endl;
+    otbLogMacro(Debug, << " Point " << cpt << " : " << ptrVertexList->GetElement(cpt));
     IndexType pos;
     pos[0] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[0]);
     pos[1] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[1]);

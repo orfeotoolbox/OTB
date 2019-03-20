@@ -21,7 +21,7 @@
 
 
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "itkPolyLineParametricPath.h"
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
@@ -78,17 +78,16 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
   const HistogramType * histogram = histogramGenerator->GetOutput();
 
   const unsigned int histogramSize = histogram->Size();
-  std::cout << "Histogram size " << histogramSize << std::endl;
+  otbLogMacro(Info, << "Histogram size " << histogramSize);
 
   for (unsigned int bin = 0; bin < histogramSize; bin++)
     {
     if (histogram->GetFrequency(bin, 0) != NbOfPointsPerHistogram)
       {
-      std::cout << "Error in histogram value !" << std::endl;
+      otbLogMacro(Warning, "Error in histogram value !");
       return EXIT_FAILURE;
       }
-    std::cout << "bin = " << bin << " frequency = ";
-    std::cout << histogram->GetFrequency(bin, 0) << std::endl;
+    otbLogMacro(Debug, << "bin = " << bin << " frequency = " << histogram->GetFrequency(bin, 0));
     }
 
   return EXIT_SUCCESS;
