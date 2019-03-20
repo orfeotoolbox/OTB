@@ -61,7 +61,7 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_vd
                              -algo.vd.far 0.2
                      TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
                      VALID --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_vd.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
 )
 
@@ -71,7 +71,7 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
                              -algo elm
                      TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
                      VALID --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_elm.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
 )
 
