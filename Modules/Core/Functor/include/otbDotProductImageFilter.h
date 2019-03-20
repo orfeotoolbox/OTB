@@ -34,7 +34,7 @@ namespace Functor
  *
  * \brief Computes the dot product against a specific vector
  *
- * \ingroup OTBCommon
+ * \ingroup OTBFunctor
  */
 template <class TInput, class TOutput>
 class DotProductFunctor
