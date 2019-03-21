@@ -225,9 +225,15 @@ OutputImageParameter
   assert( !m_FileName.empty() );
 
 
-  auto clampFilter = ClampImageFilter< TInputImage , TOutputImage >::New();
+  auto icif =
+    ClampImageFilter< TInputImage, DoubleVectorImageType >::New();
 
-  clampFilter->SetInput( in );
+  auto clampFilter =
+    ClampImageFilter< DoubleVectorImageType , TOutputImage >::New();
+
+  icif->SetInput( in );
+
+  clampFilter->SetInput( icif->GetOutput() );
 
 
 #ifdef OTB_USE_MPI
