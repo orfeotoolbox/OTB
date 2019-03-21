@@ -228,7 +228,6 @@ gives the coordinates :math:`(u,v)` of its HP in the master image:
    x\\
    y\\
    \end{array}\right)
-   \label{Tgeom}
 
 Finally we introduce a definition for the image registration problem:
 
