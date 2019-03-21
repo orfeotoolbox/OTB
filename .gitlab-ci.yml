@@ -22,6 +22,7 @@ native-build:
 
 debian-build:
   extends: .general
+  only: [merge_requests]
   stage: build
   image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-debian-native:unstable
   script:

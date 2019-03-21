@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-gcc-shark-3.1.4
+# Configuration options for debian-unstable-gcc
 
 set(site_option
 "opencv_INCLUDE_DIR:PATH=/usr/include
