@@ -243,7 +243,7 @@ OutputImageParameter
   if( mpiConfig->GetNbProcs() > 1 )
     {
     std::string extension =
-      itksys::SystemTools::GetFilenameExtension( m_Filename );
+      itksys::SystemTools::GetFilenameExtension( m_FileName );
 
     if(extension == ".vrt")
       {
