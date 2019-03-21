@@ -60,15 +60,17 @@ VirtualDimensionality<TInputImage>
 
   m_NumberOfEndmembers = 0;
   for(unsigned int i = 0; i < nbBands; ++i)
+  {
+    if (eigenCovariance[i] > 0 && eigenCorrelation[i]>0)
     {
-    double sigma = std::sqrt( 2.0 / m_NumberOfPixels
-                              * (eigenCovariance[i] + eigenCorrelation[i]
-                                 + eigenCovariance[i] * eigenCorrelation[i]) );
-    boost::math::normal normalDist(0, sigma);
-    double tau = -boost::math::quantile(normalDist, m_FAR);
-    if (eigenCorrelation[i] - eigenCovariance[i] > tau )
-      m_NumberOfEndmembers++;
+      double sigma = std::sqrt( 2.0 / m_NumberOfPixels * 
+            (eigenCovariance[i]*eigenCovariance[i] + eigenCorrelation[i]*eigenCorrelation[i]));
+      boost::math::normal normalDist(0, sigma);
+      double tau = -boost::math::quantile(normalDist, m_FAR);
+      if (eigenCorrelation[i] - eigenCovariance[i] > tau )
+        m_NumberOfEndmembers++;
     }
+  }
 }
 
 template <class TImage>
