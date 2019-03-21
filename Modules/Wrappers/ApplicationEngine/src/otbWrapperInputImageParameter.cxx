@@ -63,11 +63,21 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 }
 
 
-FloatVectorImageType*
-InputImageParameter::GetImage()
+ImageBaseType *
+InputImageParameter
+::GetImage()
 {
-  return this->GetImage<FloatVectorImageType>();
+  return m_Image.GetPointer();
 }
+
+
+ImageBaseType const *
+InputImageParameter
+::GetImage() const
+{
+  return m_Image.GetPointer();
+}
+
 
 template <>
 ImageBaseType*

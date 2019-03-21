@@ -60,8 +60,9 @@ public:
   itkGetConstReferenceMacro( FileName, std::string );
 
 
-  /** Get the input image as FloatVectorImageType. */
-  FloatVectorImageType  * GetImage();
+  /** Get input-image as ImageBaseType. */
+  ImageBaseType const * GetImage() const;
+  ImageBaseType * GetImage();
 
   /** Get the input image as XXXImageType */
   UInt8ImageType * GetUInt8Image();
