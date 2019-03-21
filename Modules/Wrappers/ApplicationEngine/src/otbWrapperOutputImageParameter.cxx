@@ -242,8 +242,6 @@ OutputImageParameter
 
   if( mpiConfig->GetNbProcs() > 1 )
     {
-    useStandardWriter = false;
-
     std::string extension =
       itksys::SystemTools::GetFilenameExtension( m_Filename );
 
