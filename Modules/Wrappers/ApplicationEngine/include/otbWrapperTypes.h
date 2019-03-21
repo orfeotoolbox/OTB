@@ -59,12 +59,13 @@ typedef enum
   ParameterType_RAM,
   ParameterType_OutputProcessXML,
   ParameterType_InputProcessXML,
-  ParameterType_Bool
+  ParameterType_Bool,
+  ParameterType_MAX__
 } ParameterType;
 
 namespace
 {
-constexpr std::array<const char*, 24> parameterTypesStrings = {{
+constexpr char const* parameterTypesStrings [] = {
   "Int",
   "Float",
   "String",
@@ -89,7 +90,8 @@ constexpr std::array<const char*, 24> parameterTypesStrings = {{
   "OutputProcessXML",
   "InputProcessXML",
   "Bool"
-}};
+};
+static_assert(std::extent<decltype(parameterTypesStrings)>::value == ParameterType_MAX__);
 }
 
 // Free functions to convert from and to std::string
