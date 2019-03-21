@@ -53,8 +53,22 @@ Table of Contents
     GraphicalInterface
     PythonAPI
     QGISInterface
-    Recipes
     Applications
+
+.. toctree::
+    :maxdepth: 2
+    :caption: Recipes
+
+    recipes/optpreproc.rst
+    recipes/sarprocessing.rst
+    recipes/residual_registration.rst
+    recipes/improc.rst
+    recipes/bandmathx.rst
+    recipes/contrast_enhancement.rst
+    recipes/pbclassif.rst
+    recipes/featextract.rst
+    recipes/stereo.rst
+    recipes/hyperspectral.rst
 
 .. toctree::
     :maxdepth: 2
