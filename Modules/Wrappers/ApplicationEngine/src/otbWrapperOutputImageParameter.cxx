@@ -261,7 +261,9 @@ OutputImageParameter
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_Caster = clampFilter;
+      m_InputCaster = icif;
+      m_OutputCaster = clampFilter;
+
       m_Writer = vrtWriter;
 
       return;
@@ -283,7 +285,9 @@ OutputImageParameter
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_Caster = clampFilter;
+      m_InputCaster = icif;
+      m_OutputCaster = clampFilter;
+
       m_Writer = sptWriter;
 
       return;
