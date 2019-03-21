@@ -79,12 +79,7 @@ Table of Contents
     C++/BandMathX.rst
     C++/Examples.rst
 
-    C++/Iterators.rst
-    C++/Filters.rst
-    C++/StreamingAndThreading.rst
-    C++/PersistentFilters.rst
-    C++/WriteAnApplication.rst
-    C++/AddingNewModules.rst
+    C++/DeveloperGuide.rst
 
 .. toctree::
     :maxdepth: 1
