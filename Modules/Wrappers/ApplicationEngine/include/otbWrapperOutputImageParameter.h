@@ -129,7 +129,8 @@ private:
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
 
-  itk::ProcessObject::Pointer m_Caster;
+  itk::ProcessObject::Pointer m_InputCaster;
+  itk::ProcessObject::Pointer m_OutputCaster;
 
   itk::ProcessObject::Pointer m_Writer;
 

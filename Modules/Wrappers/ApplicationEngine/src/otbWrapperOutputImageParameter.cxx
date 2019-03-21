@@ -316,7 +316,9 @@ OutputImageParameter
   // Change internal state only when everything has been setup
   // without raising exception.
 
-  m_Caster = clampFilter;
+  m_InputCaster = icif;
+  m_OutputCaster = clampFilter;
+
   m_Writer = writer;
 }
 
@@ -388,7 +390,9 @@ OutputImageParameter::Write()
   m_Writer->Update();
 
   // Clean internal filters
-  m_Caster = nullptr;
+  m_InputCaster = nullptr;
+  m_OutputCaster = nullptr;
+
   m_Writer = nullptr;
 }
 
