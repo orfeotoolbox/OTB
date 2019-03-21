@@ -119,39 +119,6 @@ protected:
   ~InputImageParameter() override;
 
 private:
-  /** Readers typedefs */
-
-  // typedef otb::ImageFileReader<UInt8ImageType> UInt8ReaderType;
-  // typedef otb::ImageFileReader<Int16ImageType> Int16ReaderType;
-  // typedef otb::ImageFileReader<UInt16ImageType> UInt16ReaderType;
-  // typedef otb::ImageFileReader<Int32ImageType> Int32ReaderType;
-  // typedef otb::ImageFileReader<UInt32ImageType> UInt32ReaderType;
-  // typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
-  // typedef otb::ImageFileReader<DoubleImageType> DoubleReaderType;
-
-  // typedef otb::ImageFileReader<UInt8VectorImageType> UInt8VectorReaderType;
-  // typedef otb::ImageFileReader<Int16VectorImageType> Int16VectorReaderType;
-  // typedef otb::ImageFileReader<UInt16VectorImageType> UInt16VectorReaderType;
-  // typedef otb::ImageFileReader<Int32VectorImageType> Int32VectorReaderType;
-  // typedef otb::ImageFileReader<UInt32VectorImageType> UInt32VectorReaderType;
-  // typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorReaderType;
-  // typedef otb::ImageFileReader<DoubleVectorImageType> DoubleVectorReaderType;
-
-
-  // typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
-  // typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
-
-  // Complex
-  // typedef otb::ImageFileReader<ComplexInt16ImageType> ComplexInt16ReaderType;
-  // typedef otb::ImageFileReader<ComplexInt32ImageType> ComplexInt32ReaderType;
-  // typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
-  // typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
-
-  // typedef otb::ImageFileReader<ComplexInt16VectorImageType> ComplexInt16VectorReaderType;
-  // typedef otb::ImageFileReader<ComplexInt32VectorImageType> ComplexInt32VectorReaderType;
-  // typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
-  // typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
-
   InputImageParameter(const Parameter &) = delete;
   void operator =(const Parameter&) = delete;
 
