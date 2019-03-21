@@ -57,10 +57,25 @@ Table of Contents
     Applications
 
 .. toctree::
+    :maxdepth: 2
+    :caption: C++ API
+
+    C++/SystemOverview.rst
+    C++/Tutorial.rst
+    C++/UserGuide.rst
+    C++/Examples.rst
+
+    C++/Iterators.rst
+    C++/Filters.rst
+    C++/StreamingAndThreading.rst
+    C++/PersistentFilters.rst
+    C++/WriteAnApplication.rst
+    C++/AddingNewModules.rst
+
+.. toctree::
     :maxdepth: 1
     :caption: Advanced use
 
-    C++
     EnvironmentVariables
     ExtendedFilenames
     CompilingOTBFromSource
