@@ -39,14 +39,14 @@ Table of Contents
 =================
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Get Started
 
     Installation
     Monteverdi
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Applications
 
     CliInterface
@@ -56,7 +56,7 @@ Table of Contents
     Applications
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Recipes
 
     recipes/optpreproc.rst
@@ -70,7 +70,7 @@ Table of Contents
     recipes/hyperspectral.rst
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: C++ API
 
     C++/SystemOverview.rst
