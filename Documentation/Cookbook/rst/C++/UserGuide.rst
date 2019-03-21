@@ -1,5 +1,5 @@
-User's Guide
-============
+User Guide
+==========
 
 Image Data Representation
 -------------------------

@@ -60,9 +60,9 @@ Table of Contents
     :maxdepth: 1
     :caption: Advanced use
 
+    C++
     EnvironmentVariables
     ExtendedFilenames
     CompilingOTBFromSource
-    C++
     FAQ
     Contributors
