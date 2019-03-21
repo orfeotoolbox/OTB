@@ -255,7 +255,7 @@ OutputImageParameter
 	otb::MPIVrtWriter< TOutputImage >::New();
 
       vrtWriter->SetInput( clampFilter->GetOutput() );
-      vrtWriter->SetFileName( m_Filename );
+      vrtWriter->SetFileName( m_FileName );
       vrtWriter->SetAvailableRAM( m_RAMValue);
 
       // Change internal state only when everything has been setup
@@ -278,7 +278,7 @@ OutputImageParameter
       auto sptWriter =
 	otb::SimpleParallelTiffWriter< TOutputImage >::New();
 
-      sptWriter->SetFileName( m_Filename );
+      sptWriter->SetFileName( m_FileName );
       sptWriter->SetInput( clampFilter->GetOutput() );
       sptWriter->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
 
