@@ -1,9 +1,9 @@
 .. highlight:: c++
 
-BandMathImageFilterX
-====================
+About BandMathX
+===============
 
-This section describes how to use the BandMathImageFilterX.
+This section describes how to use the :doxygen:`BandMathXImageFilter`.
 
 Fundamentals: headers, declaration and instantiation
 ----------------------------------------------------
@@ -407,7 +407,9 @@ have different dimensions) into one unique output is possible. For that
 purpose, semi-colons (“;”) are used as separating characters. For
 instance:
 
-.. math:: filter->SetExpression("im1 + im2 ; im1b1*im2b1");
+::
+
+    filter->SetExpression("im1 + im2 ; im1b1*im2b1");
 
 will produce a unique output (one expression) of many bands (actually,
 number of bands of im1 + 1).
