@@ -97,7 +97,7 @@ public:
   void SetFileName (const char* filename);
   void SetFileName (const std::string& filename);
 
-  itkGetStringMacro(FileName);
+  itkGetStringMacro( FileName );
 
   void Write();
 
@@ -117,8 +117,14 @@ private:
   OutputImageParameter(const Parameter &) = delete;
   void operator =(const Parameter&) = delete;
 
-  template <class TInput>
-    int SwitchInput(TInput *img);
+  /** Switch TInputImage according to expected output type. */
+  template< typename TInputImage >
+    void SwitchInput( TInputImage * );
+
+  /** */
+  template< typename TOutputImage,
+	    typename TInputImage >
+    void ClampAndWriteVectorImage( TInputImage * );
 
   //FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
@@ -136,15 +142,19 @@ private:
 
 }; // End class OutputImage Parameter
 
+#if 0
+
 // Declare specialisation for UInt8RGBAImageType
 template <>
-int
+void
 OutputImageParameter::SwitchInput(UInt8RGBAImageType *img);
 
 // Declare specialisation for UInt8RGBImageType
 template <>
-int
+void
 OutputImageParameter::SwitchInput(UInt8RGBImageType *img);
+
+#endif
 
 } // End namespace Wrapper
 } // End namespace otb

@@ -35,11 +35,30 @@
 #endif
 
 
+#define CAST_IMAGE_BASE( T, image_base )		\
+  {							\
+    T * img = dynamic_cast< T * >( image_base );	\
+							\
+    if( img )						\
+      SwitchInput< T >( img );				\
+    							\
+    return;						\
+  }
+
 
 namespace otb
 {
 namespace Wrapper
 {
+
+// Declare specialisation for UInt8RGBAImageType
+template<>
+void OutputImageParameter::SwitchInput(UInt8RGBAImageType * );
+
+// Declare specialisation for UInt8RGBImageType
+template <>
+void OutputImageParameter::SwitchInput( UInt8RGBImageType * );
+
 
 OutputImageParameter::OutputImageParameter()
   : m_PixelType(ImagePixelType_float),
@@ -57,6 +76,9 @@ OutputImageParameter::~OutputImageParameter()
 
 std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
 {
+  // TODO: Could be replaced by constant static string array e.g.:
+  // return PIXEL_TYPE_NAME[ type ];
+
   std::string ret;
   switch(type)
     {
@@ -122,6 +144,9 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
 bool
 OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePixelType &type)
 {
+  // TODO: Could be replaced std::find_if() in constant static string
+  // array (see ::ConvertPixelTypeToString().
+
   if (value == "uint8")
     type = ImagePixelType_uint8;
   else if (value == "int16")
@@ -149,270 +174,203 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
   return true;
 }
 
-void OutputImageParameter::InitializeWriters()
+
+void
+OutputImageParameter
+::InitializeWriters()
 {
-  ImageBaseType* imgBase = m_Image.GetPointer();
-  // Guess the image type
-  std::string className(m_Image->GetNameOfClass());
-  if (className == "VectorImage")
-    {
-    UInt8VectorImageType* imgUInt8 = dynamic_cast<UInt8VectorImageType*>(imgBase);
-    if (imgUInt8 && SwitchInput(imgUInt8)) return;
+  ImageBaseType * image = m_Image.GetPointer();
 
-    Int16VectorImageType* imgInt16 = dynamic_cast<Int16VectorImageType*>(imgBase);
-    if (imgInt16 && SwitchInput(imgInt16)) return;
+  CAST_IMAGE_BASE( UInt8VectorImageType, image );
+  CAST_IMAGE_BASE( Int16VectorImageType, image );
+  CAST_IMAGE_BASE( UInt16VectorImageType, image );
+  CAST_IMAGE_BASE( Int32VectorImageType, image );
+  CAST_IMAGE_BASE( UInt32VectorImageType, image );
 
-    UInt16VectorImageType* imgUInt16 = dynamic_cast<UInt16VectorImageType*>(imgBase);
-    if (imgUInt16 && SwitchInput(imgUInt16)) return;
+  CAST_IMAGE_BASE( FloatVectorImageType, image );
+  CAST_IMAGE_BASE( DoubleVectorImageType, image );
 
-    Int32VectorImageType* imgInt32 = dynamic_cast<Int32VectorImageType*>(imgBase);
-    if (imgInt32 && SwitchInput(imgInt32)) return;
+  CAST_IMAGE_BASE( ComplexInt16VectorImageType, image );
+  CAST_IMAGE_BASE( ComplexInt32VectorImageType, image );
+  CAST_IMAGE_BASE( ComplexFloatVectorImageType, image );
+  CAST_IMAGE_BASE( ComplexDoubleVectorImageType, image );
 
-    UInt32VectorImageType* imgUInt32 = dynamic_cast<UInt32VectorImageType*>(imgBase);
-    if (imgUInt32 && SwitchInput(imgUInt32)) return;
+  CAST_IMAGE_BASE( UInt8ImageType, image );
+  CAST_IMAGE_BASE( Int16ImageType, image );
+  CAST_IMAGE_BASE( UInt16ImageType, image );
+  CAST_IMAGE_BASE( Int32ImageType, image );
+  CAST_IMAGE_BASE( UInt32ImageType, image );
 
-    FloatVectorImageType* imgFloat = dynamic_cast<FloatVectorImageType*>(imgBase);
-    if (imgFloat && SwitchInput(imgFloat)) return;
+  CAST_IMAGE_BASE( FloatImageType, image );
+  CAST_IMAGE_BASE( DoubleImageType, image );
 
-    DoubleVectorImageType* imgDouble = dynamic_cast<DoubleVectorImageType*>(imgBase);
-    if (imgDouble && SwitchInput(imgDouble)) return;
+  CAST_IMAGE_BASE( ComplexInt16ImageType, image );
+  CAST_IMAGE_BASE( ComplexInt32ImageType, image );
+  CAST_IMAGE_BASE( ComplexFloatImageType, image );
+  CAST_IMAGE_BASE( ComplexDoubleImageType, image );
 
-    ComplexInt16VectorImageType* imgCInt16 = dynamic_cast<ComplexInt16VectorImageType*>(imgBase);
-    if (imgCInt16 && SwitchInput(imgCInt16)) return;
+  CAST_IMAGE_BASE( UInt8RGBImageType, image );
+  CAST_IMAGE_BASE( UInt8RGBAImageType, image );
 
-    ComplexInt32VectorImageType* imgCInt32 = dynamic_cast<ComplexInt32VectorImageType*>(imgBase);
-    if (imgCInt32 && SwitchInput(imgCInt32)) return;
-
-    ComplexFloatVectorImageType* imgCFloat = dynamic_cast<ComplexFloatVectorImageType*>(imgBase);
-    if (imgCFloat && SwitchInput(imgCFloat)) return;
-
-    ComplexDoubleVectorImageType* imgCDouble = dynamic_cast<ComplexDoubleVectorImageType*>(imgBase);
-    if (imgCDouble && SwitchInput(imgCDouble)) return;
-    }
-  else
-    {
-    UInt8ImageType* imgUInt8 = dynamic_cast<UInt8ImageType*>(imgBase);
-    if (imgUInt8 && SwitchInput(imgUInt8)) return;
-
-    Int16ImageType* imgInt16 = dynamic_cast<Int16ImageType*>(imgBase);
-    if (imgInt16 && SwitchInput(imgInt16)) return;
-
-    UInt16ImageType* imgUInt16 = dynamic_cast<UInt16ImageType*>(imgBase);
-    if (imgUInt16 && SwitchInput(imgUInt16)) return;
-
-    Int32ImageType* imgInt32 = dynamic_cast<Int32ImageType*>(imgBase);
-    if (imgInt32 && SwitchInput(imgInt32)) return;
-
-    UInt32ImageType* imgUInt32 = dynamic_cast<UInt32ImageType*>(imgBase);
-    if (imgUInt32 && SwitchInput(imgUInt32)) return;
-
-    FloatImageType* imgFloat = dynamic_cast<FloatImageType*>(imgBase);
-    if (imgFloat && SwitchInput(imgFloat)) return;
-
-    DoubleImageType* imgDouble = dynamic_cast<DoubleImageType*>(imgBase);
-    if (imgDouble && SwitchInput(imgDouble)) return;
-
-    ComplexInt16ImageType* imgCInt16 = dynamic_cast<ComplexInt16ImageType*>(imgBase);
-    if (imgCInt16 && SwitchInput(imgCInt16)) return;
-
-    ComplexInt32ImageType* imgCInt32 = dynamic_cast<ComplexInt32ImageType*>(imgBase);
-    if (imgCInt32 && SwitchInput(imgCInt32)) return;
-
-    ComplexFloatImageType* imgCFloat = dynamic_cast<ComplexFloatImageType*>(imgBase);
-    if (imgCFloat && SwitchInput(imgCFloat)) return;
-
-    ComplexDoubleImageType* imgCDouble = dynamic_cast<ComplexDoubleImageType*>(imgBase);
-    if (imgCDouble && SwitchInput(imgCDouble)) return;
-
-    UInt8RGBImageType* imgRGB = dynamic_cast<UInt8RGBImageType*>(imgBase);
-    if (imgRGB && SwitchInput(imgRGB)) return;
-
-    UInt8RGBAImageType* imgRGBA = dynamic_cast<UInt8RGBAImageType*>(imgBase);
-    if (imgRGBA && SwitchInput(imgRGBA)) return;
-    }
-
-  itkExceptionMacro("Unknown image type");
+  itkExceptionMacro( "Unknown image-base type." );
 }
 
 
-template <typename TInput, typename TOutput>
-std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer>
-ClampAndWriteVectorImage( TInput * in ,
-                    const std::string & filename ,
-                    const unsigned int & ramValue )
+template< typename TOutputImage,
+	  typename TInputImage >
+void
+OutputImageParameter
+::ClampAndWriteVectorImage( TInputImage * in )
 {
-  std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> ret;
-  typedef ClampImageFilter < TInput , TOutput > ClampFilterType;
-  typename ClampFilterType::Pointer clampFilter ( ClampFilterType::New() );
+  assert( !m_FileName.empty() );
 
-  clampFilter->SetInput( in);
-  ret.first = clampFilter.GetPointer();
+
+  auto clampFilter = ClampImageFilter< TInputImage , TOutputImage >::New();
+
+  clampFilter->SetInput( in );
+
 
   bool useStandardWriter = true;
 
-  #ifdef OTB_USE_MPI
+
+#ifdef OTB_USE_MPI
 
   otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
-  if (mpiConfig->GetNbProcs() > 1)
+  if( mpiConfig->GetNbProcs() > 1 )
     {
     useStandardWriter = false;
 
-    // Get file extension
-    std::string extension = itksys::SystemTools::GetFilenameExtension(filename);
+    std::string extension =
+      itksys::SystemTools::GetFilenameExtension( m_Filename );
 
     if(extension == ".vrt")
       {
       // Use the MPIVrtWriter
-      typedef otb::MPIVrtWriter<TOutput> VRTWriterType;
 
-      typename VRTWriterType::Pointer vrtWriter = VRTWriterType::New();
-      vrtWriter->SetInput(clampFilter->GetOutput());
-      vrtWriter->SetFileName(filename);
-      vrtWriter->SetAvailableRAM(ramValue);
-      ret.second = vrtWriter.GetPointer();
+      auto vrtWriter =
+	otb::MPIVrtWriter< TOutputImage >::New();
+
+      vrtWriter->SetInput( clampFilter->GetOutput() );
+      vrtWriter->SetFileName( m_Filename );
+      vrtWriter->SetAvailableRAM( m_RAMValue);
+
+      // Change internal state only when everything has been setup
+      // without raising exception.
+
+      m_Caster = clampFilter;
+      m_Writer = vrtWriter;
       }
-    #ifdef OTB_USE_SPTW
+
+#ifdef OTB_USE_SPTW
     else if (extension == ".tif")
       {
       // Use simple parallel tiff writer
-      typedef otb::SimpleParallelTiffWriter<TOutput> SPTWriterType;
 
-      typename SPTWriterType::Pointer sptWriter = SPTWriterType::New();
-      sptWriter->SetFileName(filename);
-      sptWriter->SetInput(clampFilter->GetOutput());
-      sptWriter->GetStreamingManager()->SetDefaultRAM(ramValue);
-      ret.second = sptWriter.GetPointer();
+      auto sptWriter =
+	otb::SimpleParallelTiffWriter< TOutputImage >::New();
+
+      sptWriter->SetFileName( m_Filename );
+      sptWriter->SetInput( clampFilter->GetOutput() );
+      sptWriter->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
+
+      // Change internal state only when everything has been setup
+      // without raising exception.
+
+      m_Caster = clampFilter;
+      m_Writer = sptWriter;
       }
 
-    #endif
+#endif // OTB_USE_SPTW
+
     else
       {
-      itkGenericExceptionMacro("File format "<<extension<<" not supported for parallel writing with MPI. Supported formats are .vrt and .tif. Extended filenames are not supported.");
+      itkGenericExceptionMacro(
+	"File format "
+	<< extension
+	<< " not supported for parallel writing with MPI. Supported formats are "
+	   ".vrt and .tif. Extended filenames are not supported."
+      );
       }
-
     }
 
-  #endif
+#endif // OTB_USE_MPI
 
-  if(useStandardWriter)
+  if( useStandardWriter )
     {
-    typename otb::ImageFileWriter<TOutput>::Pointer writer =
-      otb::ImageFileWriter<TOutput>::New();
-    writer->SetFileName( filename );
-    writer->SetInput(clampFilter->GetOutput());
-    writer->GetStreamingManager()->SetDefaultRAM(ramValue);
-    ret.second = writer.GetPointer();
-    }
+    auto writer = otb::ImageFileWriter< TOutputImage >::New();
 
-  return ret;
+    writer->SetFileName( m_FileName );
+    writer->SetInput( clampFilter->GetOutput() );
+    writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
+
+    // Change internal state only when everything has been setup
+    // without raising exception.
+
+    m_Caster = clampFilter;
+    m_Writer = writer;
+    }
 }
 
 
-template <class TInput>
-int
-OutputImageParameter::SwitchInput(TInput * img)
+template< typename TInputImage >
+void
+OutputImageParameter
+::SwitchInput( TInputImage * image )
 {
-  if (! img) return 0;
+  assert( image );
 
-  std::pair<itk::ProcessObject::Pointer,itk::ProcessObject::Pointer> ret;
-  switch(m_PixelType )
+  switch( m_PixelType )
     {
     case ImagePixelType_uint8:
-    {
-    ret = ClampAndWriteVectorImage< TInput , UInt8VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< UInt8VectorImageType >( image );
+      break;
+
     case ImagePixelType_int16:
-    {
-    ret = ClampAndWriteVectorImage< TInput , Int16VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< Int16VectorImageType >( image );
+      break;
+
     case ImagePixelType_uint16:
-    {
-    ret = ClampAndWriteVectorImage< TInput , UInt16VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< UInt16VectorImageType >( image );
+      break;
+
     case ImagePixelType_int32:
-    {
-    ret = ClampAndWriteVectorImage< TInput , Int32VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+
+      ClampAndWriteVectorImage< Int32VectorImageType >( image );
+      break;
+
     case ImagePixelType_uint32:
-    {
-    ret = ClampAndWriteVectorImage< TInput , UInt32VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< UInt32VectorImageType >( image );
+      break;
+
     case ImagePixelType_float:
-    {
-    ret = ClampAndWriteVectorImage< TInput , FloatVectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< FloatVectorImageType >( image );
+      break;
+
     case ImagePixelType_double:
-    {
-    ret = ClampAndWriteVectorImage< TInput , DoubleVectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage< DoubleVectorImageType >( image );
+      break;
+
     case ImagePixelType_cint16:
-    {
-    ret = ClampAndWriteVectorImage < TInput , ComplexInt16VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage < ComplexInt16VectorImageType >( image );
+      break;
+
     case ImagePixelType_cint32:
-    {
-    ret = ClampAndWriteVectorImage < TInput , ComplexInt32VectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
-    break;
-    }
+      ClampAndWriteVectorImage < ComplexInt32VectorImageType >( image );
+      break;
+
     case ImagePixelType_cfloat:
-    {
-    ret = ClampAndWriteVectorImage < TInput , ComplexFloatVectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
+      ClampAndWriteVectorImage< ComplexFloatVectorImageType >( image );
     break;
-    }
+
     case ImagePixelType_cdouble:
-    {
-    ret = ClampAndWriteVectorImage < TInput , ComplexDoubleVectorImageType > (
-      img ,
-      m_FileName ,
-      m_RAMValue );
+      ClampAndWriteVectorImage < ComplexDoubleVectorImageType >( image );
     break;
-    }
+
     default:
+      assert( false && "Unexpected image-type." );
       break;
     }
-  // Save the caster and writer
-  m_Caster = ret.first;
-  m_Writer = ret.second;
-  return 1;
 }
 
 
@@ -447,10 +405,10 @@ OutputImageParameter::SetValue(ImageBaseType* image)
 }
 
 bool
-OutputImageParameter::HasValue() const
+OutputImageParameter
+::HasValue() const
 {
-  std::string filename(this->GetFileName());
-  return !filename.empty();
+  return !m_FileName.empty();
 }
 
 std::string
@@ -496,43 +454,42 @@ OutputImageParameter::CheckFileName(bool fixMissingExtension)
 
 // Specialization for UInt8RGBAImageType
 
-template <>
-int
-OutputImageParameter::SwitchInput(UInt8RGBAImageType * img )
+template<>
+void
+OutputImageParameter
+::SwitchInput( UInt8RGBAImageType * img )
 {
-  if (! img) return 0;
-  if( m_PixelType == ImagePixelType_uint8 )
-    {
-    typename otb::ImageFileWriter<UInt8RGBAImageType>::Pointer writer =
-      otb::ImageFileWriter<UInt8RGBAImageType>::New();
-    writer->SetFileName( this->GetFileName() );
-    writer->SetInput(img);
-    writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-    m_Writer = writer.GetPointer();
-    }
-   else
+  assert( img );
+
+  if( m_PixelType != ImagePixelType_uint8 )
      itkExceptionMacro("Unknown PixelType for RGBA Image. Only uint8 is supported.");
-  return 1;
+
+  auto writer =
+    otb::ImageFileWriter< UInt8RGBAImageType >::New();
+
+  writer->SetFileName( GetFileName() );
+  writer->SetInput( img );
+  writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
+
+  m_Writer = writer;
 }
 
 // Specialization for UInt8RGBImageType
-template <>
-int
-OutputImageParameter::SwitchInput(UInt8RGBImageType *img)
+template<>
+void
+OutputImageParameter
+::SwitchInput( UInt8RGBImageType * img )
 {
-  if (! img) return 0;
-  if( m_PixelType == ImagePixelType_uint8 )
-    {
-    typename otb::ImageFileWriter<UInt8RGBImageType>::Pointer writer =
-      otb::ImageFileWriter<UInt8RGBImageType>::New();
-    writer->SetFileName( this->GetFileName() );
-    writer->SetInput(img);
-    writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-    m_Writer = writer.GetPointer();
-    }
-   else
-     itkExceptionMacro("Unknown PixelType for RGB Image. Only uint8 is supported.");
-  return 1;
+  if( m_PixelType != ImagePixelType_uint8 )
+    itkExceptionMacro("Unknown PixelType for RGB Image. Only uint8 is supported.");
+
+  auto writer = otb::ImageFileWriter< UInt8RGBImageType >::New();
+
+  writer->SetFileName( GetFileName() );
+  writer->SetInput( img );
+  writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
+
+  m_Writer = writer;
 }
 
 void OutputImageParameter::SetFileName (const char* filename)
