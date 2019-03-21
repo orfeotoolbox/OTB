@@ -63,7 +63,6 @@ Table of Contents
     recipes/sarprocessing.rst
     recipes/residual_registration.rst
     recipes/improc.rst
-    recipes/bandmathx.rst
     recipes/contrast_enhancement.rst
     recipes/pbclassif.rst
     recipes/featextract.rst
@@ -77,6 +76,7 @@ Table of Contents
     C++/SystemOverview.rst
     C++/Tutorial.rst
     C++/UserGuide.rst
+    C++/BandMathX.rst
     C++/Examples.rst
 
     C++/Iterators.rst

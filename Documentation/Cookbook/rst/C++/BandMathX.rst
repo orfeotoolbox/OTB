@@ -1,7 +1,7 @@
 .. highlight:: c++
 
-BandMathImageFilterX (based on muParserX)
-=========================================
+BandMathImageFilterX
+====================
 
 This section describes how to use the BandMathImageFilterX.
 
