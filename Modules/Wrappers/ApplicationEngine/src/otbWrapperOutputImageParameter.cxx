@@ -230,9 +230,6 @@ OutputImageParameter
   clampFilter->SetInput( in );
 
 
-  bool useStandardWriter = true;
-
-
 #ifdef OTB_USE_MPI
 
   otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
@@ -260,9 +257,12 @@ OutputImageParameter
 
       m_Caster = clampFilter;
       m_Writer = vrtWriter;
+
+      return;
       }
 
 #ifdef OTB_USE_SPTW
+
     else if (extension == ".tif")
       {
       // Use simple parallel tiff writer
@@ -279,6 +279,8 @@ OutputImageParameter
 
       m_Caster = clampFilter;
       m_Writer = sptWriter;
+
+      return;
       }
 
 #endif // OTB_USE_SPTW
@@ -296,20 +298,20 @@ OutputImageParameter
 
 #endif // OTB_USE_MPI
 
-  if( useStandardWriter )
-    {
-    auto writer = otb::ImageFileWriter< TOutputImage >::New();
+  //
+  // Use default OTB writer.
 
-    writer->SetFileName( m_FileName );
-    writer->SetInput( clampFilter->GetOutput() );
-    writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
+  auto writer = otb::ImageFileWriter< TOutputImage >::New();
 
-    // Change internal state only when everything has been setup
-    // without raising exception.
+  writer->SetFileName( m_FileName );
+  writer->SetInput( clampFilter->GetOutput() );
+  writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
 
-    m_Caster = clampFilter;
-    m_Writer = writer;
-    }
+  // Change internal state only when everything has been setup
+  // without raising exception.
+
+  m_Caster = clampFilter;
+  m_Writer = writer;
 }
 
 
