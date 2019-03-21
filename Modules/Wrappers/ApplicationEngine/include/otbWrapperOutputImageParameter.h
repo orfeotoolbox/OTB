@@ -142,20 +142,6 @@ private:
 
 }; // End class OutputImage Parameter
 
-#if 0
-
-// Declare specialisation for UInt8RGBAImageType
-template <>
-void
-OutputImageParameter::SwitchInput(UInt8RGBAImageType *img);
-
-// Declare specialisation for UInt8RGBImageType
-template <>
-void
-OutputImageParameter::SwitchInput(UInt8RGBImageType *img);
-
-#endif
-
 } // End namespace Wrapper
 } // End namespace otb
 
