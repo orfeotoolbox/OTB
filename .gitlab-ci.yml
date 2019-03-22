@@ -28,8 +28,3 @@ shark-build:
   image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-shark:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
-  artifacts:
-    name: "QGISdescriptor6.7"
-    paths:
-      - build/share/otb/description/
-    expire_in: 1 week
