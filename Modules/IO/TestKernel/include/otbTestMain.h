@@ -292,18 +292,18 @@ int main(int ac, char* av[])
   otb::ConfigurationManager::InitOpenMPThreads();
 
   std::map<std::string, MainFuncPointer>::iterator j = StringToTestFunctionMap.find(testToRun);
+  int result = EXIT_SUCCESS;
   // If the test doesn't exists
   if ( j == StringToTestFunctionMap.end() )
       {
         PrintAvailableTests();
         std::cerr << "Failure: " << testToRun << ": no test identified " << testToRun << "\n";
-        return -1;
+        result = -1;
       }
   else
   {
     otb::Logger::Instance()->LogSetupInformation();
     MainFuncPointer f = j->second;
-    int             result;
     try
     {
       // Invoke the test's "main" function.
@@ -326,24 +326,29 @@ int main(int ac, char* av[])
       result = EXIT_FAILURE;
     }
 
+    bool checkBaseline = true;
     if (result != EXIT_SUCCESS)
     {
-      return -1;
+      checkBaseline = false;
+      result = -1;
     }
 
-
-    result = EXIT_SUCCESS;
 #ifdef OTB_USE_MPI
-    otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
-    if (mpiConfig->GetMyRank() == 0)
-    {
+    if (otb::MPIConfig::Instance()->GetMyRank() != 0)
+      {
+      checkBaseline = false;
+      }
 #endif
+
+    if (checkBaseline)
+    {
     std::cout << " -> Test EXIT SUCCESS." << std::endl;
     if (lFlagRegression == false)
       {
       std::cout << "-------------  No control baseline tests    -------------" << std::endl;
-      return result;
       }
+    else
+    {
 
     try
       {
@@ -389,40 +394,42 @@ int main(int ac, char* av[])
         {
         result += testHelper->RegressionTestAllOgr(baselineFilenamesOgr, testFilenamesOgr);
         }
-
+      std::cout << "-------------  End control baseline tests    -------------" << std::endl;
       }
     catch (itk::ExceptionObject& e)
       {
       std::cerr << "otbTestMain 'control baseline test': ITK Exception thrown:" << std::endl;
       std::cerr << e.GetFile() << ":" << e.GetLine() << ":" << std::endl;
       std::cerr << e.GetDescription() << std::endl;
-      return -1;
+      result = -1;
       }
     catch (std::bad_alloc& err)
       {
       std::cerr << "otbTestMain 'control baseline test': Exception bad_alloc thrown: " << std::endl;
       std::cerr << (char*) err.what() << std::endl;
-      return -1;
+      result = -1;
       }
     catch (const std::exception& e)
       {
       std::cerr << "otbTestMain 'control baseline test': std::exception  thrown:" << std::endl;
       std::cerr << e.what() <<  std::endl;
-      return -1;
+      result = -1;
       }
     catch (...)
       {
       std::cerr << "otbTestMain 'control baseline test': Unknown exception thrown !" << std::endl;
-      return -1;
+      result = -1;
       }
-    std::cout << "-------------  End control baseline tests    -------------" << std::endl;
+
+    } // if there is a baseline control
+
+    } // if checkBaseline
+  } // if test function exists
 
 #ifdef OTB_USE_MPI
-      otb::MPIConfig::Instance()->terminate();
-    }
+  otb::MPIConfig::Instance()->terminate();
 #endif
-    return result;
-    }
+  return result;
 }
 
 #endif
