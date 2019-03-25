@@ -58,7 +58,7 @@ public:
 
   OutputType operator()(const InputType& in)
   {
-    assert(in.Size() == m.Size());
+    assert(in.Size() == m_Vector.Size());
     OutputType result = 0;
     for (unsigned int i = 0; i < in.Size(); ++i)
     {
