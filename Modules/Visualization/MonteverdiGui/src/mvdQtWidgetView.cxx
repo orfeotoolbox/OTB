@@ -29,7 +29,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperApplicationHtmlDocGenerator.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"

@@ -108,8 +108,6 @@ private:
 
   QWidget* CreateFooter();
 
-  QWidget* CreateDoc();
-
 // Private attributes.
 private:
 
