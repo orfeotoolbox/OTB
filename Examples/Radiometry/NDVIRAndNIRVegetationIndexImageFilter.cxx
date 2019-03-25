@@ -64,13 +64,12 @@
 // defining the \doxygen{otb}{RAndNIRIndexImageFilter}
 // class must be included.
 
-#include "otbRAndNIRIndexImageFilter.h"
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkUnaryFunctorImageFilter.h"
+#include "itkBinaryFunctorImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 int main(int argc, char* argv[])
@@ -105,13 +104,13 @@ int main(int argc, char* argv[])
 
   typedef otb::Functor::NDVI<InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
-  // The \doxygen{otb}{RAndNIRIndexImageFilter} type is instantiated using the images
+  // The \doxygen{itk}{BinaryFunctorImageFilter} type is instantiated using the images
   // types and the NDVI functor as template parameters.
 
-  typedef otb::RAndNIRIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType, FunctorType> RAndNIRIndexImageFilterType;
+  typedef itk::BinaryFunctorImageFilter<InputRImageType, InputNIRImageType, OutputImageType, FunctorType> NDVIImageFilterType;
 
   // Instantiating object
-  RAndNIRIndexImageFilterType::Pointer filter    = RAndNIRIndexImageFilterType::New();
+  NDVIImageFilterType::Pointer filter            = NDVIImageFilterType::New();
   RReaderType::Pointer                 readerR   = RReaderType::New();
   NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
   WriterType::Pointer                  writer    = WriterType::New();
@@ -126,8 +125,8 @@ int main(int argc, char* argv[])
   // the reader output and the filter output is linked to the writer
   // input.
 
-  filter->SetInputR(readerR->GetOutput());
-  filter->SetInputNIR(readerNIR->GetOutput());
+  filter->SetInput1(readerR->GetOutput());
+  filter->SetInput2(readerNIR->GetOutput());
 
   writer->SetInput(filter->GetOutput());
 

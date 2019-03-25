@@ -33,8 +33,6 @@
 */
 
 
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //
@@ -71,7 +69,8 @@
 // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
 // class must be included.
 
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -112,13 +111,13 @@ int main(int argc, char* argv[])
   typedef otb::Functor::AVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
+  // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndGAndNIRIndexImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> AVIImageFilterTypeType;
 
-  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
+  AVIImageFilterTypeType::Pointer filter = AVIImageFilterTypeType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -130,12 +129,12 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, green and NIR) are declared.
 
-  filter->SetRedIndex(::atoi(argv[5]));
-  filter->SetGreenIndex(::atoi(argv[6]));
-  filter->SetNIRIndex(::atoi(argv[7]));
+  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
+  filter->GetFunctor().SetGreenIndex(::atoi(argv[6]));
+  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
 
   // The $\lambda$ R, G and NIR parameters are set. The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
+  // \doxygen{otb::Functor}{AVI}
   // class sets the default values of $\lambda$ to $660$, $560$ and
   // $830$.
 
