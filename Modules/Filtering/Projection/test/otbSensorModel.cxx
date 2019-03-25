@@ -156,7 +156,7 @@ bool provideGCP(char * gcpfilename, pointsContainerType& imgPt, geo3dPointsConta
 
 int otbSensorModel(int argc, char* argv[])
 {
-  if (argc != 10)
+  if (argc != 9)
     {
     std::cout << argv[0] 
               << " <input geom filename> <input gcp filename> <output gcp filename> "
