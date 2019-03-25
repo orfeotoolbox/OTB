@@ -170,7 +170,7 @@ private:
                      " This may lead to unexpected segmentation results and crashes.");
 
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("MeanShiftSegmentation");
+    SetDocSeeAlso("LargeScaleMeanShift");
 
     AddDocTag(Tags::Segmentation);
 
