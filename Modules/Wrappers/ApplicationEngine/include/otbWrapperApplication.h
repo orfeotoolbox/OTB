@@ -908,21 +908,7 @@ protected:
    * \li ParameterType_InputImage
    */
   template <class TImageType>
-    TImageType* GetParameterImage(std::string parameter)
-  {
-    typename TImageType::Pointer ret;
-    Parameter* param = GetParameterByKey(parameter);
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if (paramDown)
-    {
-      return paramDown->GetImage<TImageType>();
-    }
-    else
-    {
-      itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
-      return nullptr;
-    }
-  }
+    TImageType* GetParameterImage(std::string parameter);
 
   /** Declare a parameter as having an automatic value */
   void AutomaticValueOn(std::string paramKey);
@@ -936,33 +922,15 @@ protected:
    * \li ParameterType_OutputImage
    */
   template <class TImageType>
-    void SetParameterOutputImage(std::string parameter, TImageType* value)
-  {
-    Parameter* param = GetParameterByKey(parameter);
+    void SetParameterOutputImage(std::string parameter, TImageType* value);
 
-    if (dynamic_cast<OutputImageParameter*>(param))
-      {
-      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-      paramDown->SetValue(value);
-      }
-  }
-
-    /* Set a complex output image value
+  /* Set a complex output image value
    *
    * Can be called for types :
    * \li ParameterType_ComplexOutputImage
    */
   template <class TImageType>
-    void SetParameterComplexOutputImage(std::string parameter, TImageType* value)
-  {
-    Parameter* param = GetParameterByKey(parameter);
-
-    if (dynamic_cast<ComplexOutputImageParameter*>(param))
-      {
-      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-      paramDown->SetValue(value);
-      }
-  }
+    void SetParameterComplexOutputImage(std::string parameter, TImageType* value);
 
 private:
   /* Implement this method to add parameters */
@@ -1038,9 +1006,9 @@ private:
 } //end namespace otb
 
 
-//#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperApplication.hxx"
-//#endif
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperApplication.hxx"
+#endif
 
 
 namespace otb { namespace Wrapper {
