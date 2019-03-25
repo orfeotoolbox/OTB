@@ -46,7 +46,8 @@ QtMainWindow::QtMainWindow(Application::Pointer app)
   helpAction      = new QAction(tr("&Documentation"), this);
   helpAction->setShortcuts(QKeySequence::HelpContents);
   helpMenu->addAction(helpAction);
-  QObject::connect(helpAction, &QAction::triggered, this, [] { QDesktopServices::openUrl(QUrl("https://www.orfeo-toolbox.org/CookBook/")); });
+  const std::string url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
+  QObject::connect(helpAction, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
 }
 
 void QtMainWindow::UnhandledException(QString message)
