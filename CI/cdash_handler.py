@@ -21,7 +21,6 @@
 import os.path
 import requests
 import glob
-import sys
 import re
 import unittest
 
@@ -70,8 +69,11 @@ class Handler:
 
   def GetName (self , build_dir = ""):
     """
-    This function is looking for the name information in the build tree
+    This function is looking for the name information in the build tree: 
+    which is BuildName
     """
+    if ( build_dir == ""):
+      build_dir = self.build_dir
     if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
       print ("Error in GetName function, could not find Configure.xml")
       return False
@@ -94,6 +96,8 @@ class Handler:
     """
     This function is looking for the stamp information in the build tree
     """
+    if ( build_dir == ""):
+      build_dir = self.build_dir
     if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
       print ("Error in GetStamp function, could not find Configure.xml")
       return False
@@ -149,32 +153,35 @@ class Handler:
       print("Error in recovering buildid")
       return False
 
-  def GetBuildUrl (self):
+  def GetBuildUrl (self , buildid ="" ):
     """
     This function is returning the build url. It can be called only when
     everything is set
     """
+    if ( buildid == "" ):
+      buildid = self.buildid
+    if ( buildid == "" ):
+      print( "Not enougth argument given to build url")
+      # TODO
+      return
     build_url = self.url
     build_url +="/buildSummary.php?"
     build_url += "buildid=" + self.buildid
     return build_url
 
 #TODO
-class TestHandler(unittest.TestCase):
+# class TestHandler(unittest.TestCase):
 
-  def test_GetConfigureFile (self):
+#   def test_GetConfigureFile (self):
   
-  def test_GetName (self):
+#   def test_GetName (self):
 
-  def test_GetStamp (self):
+#   def test_GetStamp (self):
 
-  def test_GetBuildId (self):
+#   def test_GetBuildId (self):
 
-  def test_GetBuildUrl (self):
+#   def test_GetBuildUrl (self):
 
-
-
-if __name__ == "__main__":
 """
 TODO :
  documentation, header, test if it is possible.
