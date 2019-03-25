@@ -433,7 +433,6 @@ inside the windows are represented by :math:`(x,y)`:
 
    \rho(I,J) = \frac{1}{N}\frac{\sum_{x,y}(I(x,y)-m_I)(J(x,y)-m_J)}{\sigma_I
    \sigma_J}.
-   \label{coeffcorr}
 
 In order to qualitatively characterize the different similarity
 measures we propose the following experiment. We take two images which
@@ -734,7 +733,6 @@ The complex geometric moments are defined as:
 .. math::
 
    c_{pq} = \int\limits_{-\infty}^{+\infty}\int\limits_{-\infty}^{+\infty}(x + iy)^p(x- iy)^qf(x,y)dxdy,
-   \label{2.2}
 
 where :math:`x` and :math:`y` are the coordinates of the image
 :math:`f(x,y)`, :math:`i` is the imaginary unit and :math:`p+q` is the
@@ -1120,7 +1118,6 @@ SOM learning:
          .. math::
 
             \underline{m}_i(t+1)=\underline{m}_i(t)+\beta(t)\left[\underline{x}_k(t)-\underline{m}_i(t)\right]
-            \label{khoupdate}
 
       #. :math:`k=k+1`
 
@@ -1305,7 +1302,6 @@ based on the cumulants of the RVs:
 
 .. math::
 
-   \label{eqEdgeworthExpansion}
    f_X(x) = \left( 1 + \frac{\kappa_{X;3}}{6} H_3(x) 
                        + \frac{\kappa_{X;4}}{24} H_4(x)
                        + \frac{\kappa_{X;5}}{120} H_5(x)
