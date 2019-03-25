@@ -105,7 +105,7 @@ InputImageParameter
 bool
 InputImageParameter::HasValue() const
 {
-  return m_FileName.empty() && m_Image.IsNull();
+  return !m_FileName.empty() || !m_Image.IsNull();
 }
 
 void
