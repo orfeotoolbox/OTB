@@ -166,7 +166,8 @@ private:
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
                      " \nMeanShift filter results depends on the number of threads used. \nWatershed and multiscale geodesic morphology segmentation will be performed on the amplitude "
-                     " of the input image.");
+                     " of the input image. \nThis application does not handle no data values. No data pixels will be treated as regular pixels,"
+                     " This may lead to unexpected segmentation results and crashes.");
 
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("MeanShiftSegmentation");
