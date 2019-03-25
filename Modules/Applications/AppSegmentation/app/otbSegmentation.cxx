@@ -377,7 +377,7 @@ private:
     if (segModeType == "vector" && HasValue("mode.vector.inmask"))
       {
       streamingVectorizedFilter->SetInputMask(m_ClampFilter->GetOutput());
-      otbAppLogINFO(<<"Use a mask as input." << std::endl);
+      otbAppLogINFO("Use a mask as input.");
       }
     streamingVectorizedFilter->SetOGRLayer(layer);
 
@@ -392,13 +392,13 @@ private:
 
     if (use8connected)
       {
-      otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
+      otbAppLogINFO("Use 8 connected neighborhood.");
       }
     streamingVectorizedFilter->SetUse8Connected(use8connected);
 
     if (minSize > 1)
       {
-      otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+      otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed.");
       streamingVectorizedFilter->SetFilterSmallObject(true);
       streamingVectorizedFilter->SetMinimumObjectSize(minSize);
       }
@@ -415,7 +415,7 @@ private:
       {
       streamingVectorizedFilter->SetSimplify(true);
       streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("mode.vector.simplify"));
-      otbAppLogINFO(<<"Simplify the geometry." << std::endl);
+      otbAppLogINFO("Simplify the geometry.");
       }
     else
       {
@@ -424,7 +424,7 @@ private:
 
     if (segModeType == "vector")
       {
-      otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
+      otbAppLogINFO("Large scale segmentation mode which output vector data");
 
       DisableParameter("mode.raster.out");
       EnableParameter("mode.vector.out");
@@ -438,7 +438,7 @@ private:
       }
     else if (segModeType == "raster")
       {
-      otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+      otbAppLogINFO("Segmentation mode which output label image.");
 
       DisableParameter("mode.vector.out");
       EnableParameter("mode.raster.out");
@@ -575,7 +575,7 @@ private:
 
     if (segType == "cc")
       {
-      otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
+      otbAppLogINFO("Use connected component segmentation.");
       ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
         ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
@@ -594,7 +594,7 @@ private:
       }
     else if (segType == "meanshift")
       {
-      otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
+      otbAppLogINFO("Use threaded Mean-shift segmentation.");
 
       MeanShiftVectorizedSegmentationOGRType::Pointer
           meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
@@ -624,7 +624,7 @@ private:
       }
     else if (segType == "watershed")
       {
-      otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
+      otbAppLogINFO("Using watershed segmentation.");
 
       AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
 
@@ -648,7 +648,7 @@ private:
       }
     else if (segType == "mprofiles")
       {
-      otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
+      otbAppLogINFO("Using multiscale geodesic morphology segmentation.");
 
       unsigned int profileSize = GetParameterInt("filter.mprofiles.size");
       unsigned int initialValue = GetParameterInt("filter.mprofiles.start");
@@ -674,7 +674,7 @@ private:
       }
     else
       {
-      otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
+      otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter"));
       }
 
     if (segModeType == "vector")
@@ -705,7 +705,7 @@ private:
         std::string driverName(ogrDS->ogr().GetDriverName());
         if ( driverName.find("ESRI Shapefile") != std::string::npos)
           {
-          otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);
+          otbAppLogINFO("REPACK the Shapefile ...");
           //In Shapefile format, the name of the DaaSource is also the name of the Layer.
           std::string shpLayerName = itksys::SystemTools::GetFilenameWithoutExtension(GetParameterString("mode.vector.out"));
           std::string repack("REPACK ");
