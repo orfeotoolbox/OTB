@@ -31,6 +31,7 @@ otb_module(OTBEndmembersExtraction
     OTBProjection
     OTBBoostAdapters
     OTBCommon
+    OTBFunctor
 
   TEST_DEPENDS
     OTBTestKernel

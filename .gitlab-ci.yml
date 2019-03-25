@@ -18,8 +18,10 @@ variables:
   GIT_STRATEGY: "clone"
 
 before_script:
+  # make sure LFS hooks are installed
+  - git lfs install
   # Provision efficiently the local LFS cache before checkout
-  - git lfs fetch origin $CI_COMMIT_REF_NAME
+  - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
@@ -41,9 +43,26 @@ native-build:
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-build:ubuntu-llvm:
+debian-build:
+  extends: .general
+  only: [merge_requests]
+  stage: build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+
+.common-build:
   extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
+
+build:ubuntu-llvm:
+  only: [merge_requests]
+  extends: .common-build
+
+build:ubuntu-llvm-wip:
+  except: [merge_requests]
+  extends: .common-build
+

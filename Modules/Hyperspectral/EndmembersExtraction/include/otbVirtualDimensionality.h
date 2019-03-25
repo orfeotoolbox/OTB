@@ -33,9 +33,9 @@ namespace otb
 
 /** \class VirtualDimensionality
  * \brief Estimates the number of endmembers in a hyperspectral image
- *  with the Virtual Dimensionality method
+ *  with the Virtual Dimensionality (HFC) method
  *
- * This filter applies the VD (Virtual Dimensionality) algorithm to an
+ * This filter applies the HFC-VD (Virtual Dimensionality) algorithm to an
  * hyperspectral image and outputs the number of endmembers.
  * It takes as input the covariance and correlation matrices of the input data,
  * the number of observed pixel for thoses matrices estimations,

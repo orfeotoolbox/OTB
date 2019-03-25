@@ -44,9 +44,9 @@ public:
 
   itkTypeMacro(EndmemberNumberEstimation, otb::Application);
 
-  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, float> StreamingStatisticsVectorImageFilterType;
-  typedef otb::VirtualDimensionality<float>                                      VirtualDimensionalityType;
-  typedef otb::EigenvalueLikelihoodMaximisation<float>                           EigenvalueLikelihoodMaximisationType;
+  typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, double> StreamingStatisticsVectorImageFilterType;
+  typedef otb::VirtualDimensionality<double>                                      VirtualDimensionalityType;
+  typedef otb::EigenvalueLikelihoodMaximisation<double>                           EigenvalueLikelihoodMaximisationType;
 
 private:
   void DoInit() override
@@ -61,7 +61,7 @@ private:
     "apply an endmember number estimation algorithm using these statistics. Two "
     "algorithms are available:\n\n"
 
-    "1. Virtual Dimensionality (VD) [1][2]\n"
+    "1. Virtual Dimensionality (HFC-VD) [1][2]\n"
     "2. Eigenvalue Likelihood Maximization (ELM) [3][4]\n\n"
 
     "The application then returns the estimated number of endmembers.\n\n"
@@ -99,9 +99,9 @@ private:
     AddParameter(ParameterType_Choice, "algo", "Unmixing algorithm");
     SetParameterDescription("algo", "The algorithm to use for the estimation");
     AddChoice("algo.elm", "Eigenvalue Likelihood Maximization");
-    SetParameterDescription("algo.elm", "");
+    SetParameterDescription("algo.elm", "Eigenvalue Likelihood Maximization algorithm");
     AddChoice("algo.vd", "Virtual Dimensionality");
-    SetParameterDescription("algo.vd", "");
+    SetParameterDescription("algo.vd", "HFC Virtual Dimensionality algorithm");
 
     AddParameter( ParameterType_Float , "algo.vd.far" , "False alarm rate");
     SetMinimumParameterFloatValue("algo.vd.far", 0);
@@ -155,7 +155,7 @@ private:
       }
     else if (algorithm=="vd")
       {
-      otbAppLogINFO("Estimation algorithm: Virtual Dimensionality.");
+      otbAppLogINFO("Estimation algorithm: HFC Virtual Dimensionality.");
       auto vd = VirtualDimensionalityType::New();
       vd->SetCovariance(covarianceMatrix);
       vd->SetCorrelation(correlationMatrix);
