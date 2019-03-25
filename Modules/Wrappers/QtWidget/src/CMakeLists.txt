@@ -23,6 +23,7 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetModel.cxx
   otbWrapperQtWidgetParameterLabel.cxx
   otbWrapperQtWidgetView.cxx
+  otbWrapperQtWidgetMainWindow.cxx
   otbWrapperQtWidgetInputProcessXMLParameter.cxx
   otbWrapperQtWidgetIntParameter.cxx
   otbWrapperQtWidgetInputVectorDataListParameter.cxx
@@ -81,6 +82,7 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetParameterBase.h
   ../include/otbWrapperQtWidgetModel.h
   ../include/otbWrapperQtWidgetView.h
+  ../include/otbWrapperQtWidgetMainWindow.h
   ../include/otbWrapperQtWidgetProgressReport.h
   ../include/otbWrapperQtWidgetListViewParameter.h
   ../include/otbQtFileSelectionWidget.h

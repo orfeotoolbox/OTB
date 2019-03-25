@@ -68,8 +68,6 @@ public:
 
   bool IsClosable() const;
 
-public slots:
-
   void UnhandledException(QString message);
 
 signals:

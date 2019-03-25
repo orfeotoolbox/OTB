@@ -113,7 +113,7 @@ void QtWidgetView::CreateGui()
   progressReport->SetApplication(m_Model->GetApplication());
 
   QWidget* footer = CreateFooter();
-   
+
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
   footLayout->addWidget(footer);
@@ -179,10 +179,6 @@ QWidget* QtWidgetView::CreateFooter()
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox(this);
   QHBoxLayout *footerLayout = new QHBoxLayout;
- 
-  footerGroup->setFixedHeight(40);
-  footerGroup->setContentsMargins(0, 0, 0, 0);
-  footerLayout->setContentsMargins(5, 5, 5, 5);
 
   m_ExecButton = new QPushButton(footerGroup);
   m_ExecButton->setDefault(true);
