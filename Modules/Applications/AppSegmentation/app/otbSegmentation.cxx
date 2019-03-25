@@ -43,6 +43,7 @@
 
 //Utils
 #include "itksys/SystemTools.hxx"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -466,6 +467,17 @@ private:
     otb::ogr::Layer layer(nullptr, false);
 
     std::string projRef = GetParameterFloatVectorImage("in")->GetProjectionRef();
+
+    std::vector<bool> noDataFlags;
+    std::vector<double> noDataValues;
+    itk::MetaDataDictionary &dict = GetParameterFloatVectorImage("in")->GetMetaDataDictionary();
+    bool ret = otb::ReadNoDataFlags(dict,noDataFlags,noDataValues);
+    
+    if (ret)
+    {
+      otbAppLogWARNING("The input image has no data values but this application does not handle no-data. No-data pixels"
+        " will be treated as regular pixels.");
+    }
 
     OGRSpatialReference oSRS(projRef.c_str());
 
