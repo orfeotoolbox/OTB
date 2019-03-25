@@ -44,6 +44,8 @@ elseif(ci_ref_name)
   endif()
 endif()
 
+#Warning, this variable is used in cdash_status.py. If change from 
+# ${IMAGE_NAME} to something else do not forget to change it.
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable
@@ -81,10 +83,10 @@ if ( NOT _configure_rv EQUAL 0 )
   message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
 
-ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            RETURN_VALUE _build_rv
-            CAPTURE_CMAKE_ERROR _build_error
-            )
+# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+#             RETURN_VALUE _build_rv
+#             CAPTURE_CMAKE_ERROR _build_error
+#             )
 
 if ( NOT _build_rv EQUAL 0 )
   ctest_submit()
