@@ -91,7 +91,8 @@ constexpr char const* parameterTypesStrings [] = {
   "InputProcessXML",
   "Bool"
 };
-static_assert(std::extent<decltype(parameterTypesStrings)>::value == ParameterType_MAX__);
+static_assert(std::extent<decltype(parameterTypesStrings)>::value == ParameterType_MAX__,
+    "Wrong number of parameters in parameterTypesStrings");
 }
 
 // Free functions to convert from and to std::string
