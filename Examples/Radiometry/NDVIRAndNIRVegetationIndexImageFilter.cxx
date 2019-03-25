@@ -29,12 +29,11 @@
 */
 
 
-// \index{otb::RAndNIRIndexImageFilter}
 // \index{otb::VegetationIndicesFunctor}
 // \index{otb::VegetationIndicesFunctor!header}
 //
 // The following example illustrates the use of the
-// \doxygen{otb}{RAndNIRIndexImageFilter} with the use of the Normalized
+// \doxygen{itk}{BinaryFunctorImageFilter} with the use of the Normalized
 // Difference Vegatation Index (NDVI).
 // NDVI computes the difference between the NIR channel, noted $L_{NIR}$, and the red channel,
 // noted $L_{r}$ radiances reflected from the surface and transmitted through the atmosphere:
@@ -55,14 +54,8 @@
 //  \item \subdoxygen{otb}{Functor}{IPVI}
 //  \item \subdoxygen{otb}{Functor}{TNDVI}
 //  \end{itemize}
-
-// With the \doxygen{otb}{RAndNIRIndexImageFilter} class the filter
-// inputs are one channel images: one inmage represents the NIR channel, the
-// the other the NIR channel.
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{RAndNIRIndexImageFilter}
-// class must be included.
+// Let's look at the minimal code required to use this algorithm.
 
 #include "itkMacro.h"
 #include "otbImage.h"
@@ -100,7 +93,7 @@ int main(int argc, char* argv[])
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using
   // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
-  // parameter to an \doxygen{otb}{RAndNIRIndexImageFilter}.
+  // parameter to an \doxygen{itk}{BinaryFunctorImageFilter}.
 
   typedef otb::Functor::NDVI<InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 

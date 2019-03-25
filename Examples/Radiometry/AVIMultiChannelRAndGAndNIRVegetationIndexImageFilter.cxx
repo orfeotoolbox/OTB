@@ -38,7 +38,7 @@
 //
 //
 // The following example illustrates the use of the
-// otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
+// itk::UnaryFunctorImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red
 // and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
@@ -59,15 +59,9 @@
 //
 // For more details, refer to Plummer work \cite{AVI}.
 //
-// With the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class the input has to be a multi channel image and the user has to
-// specify the channel index of the red, green and NIR channel.
 //
 // Let's look at the minimal code required to use this
-// algorithm. First, the following header defining the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class must be included.
+// algorithm.
 
 #include "otbVegetationIndicesFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"

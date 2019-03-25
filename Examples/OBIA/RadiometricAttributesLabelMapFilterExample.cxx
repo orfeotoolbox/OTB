@@ -36,7 +36,7 @@
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftSegmentationFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
-//  Afterwards the \doxygen{otb}{otbMultiChannelRAndNIRIndexImageFilter} computes
+//  Afterwards the \doxygen{itk}{UnaryFunctorImageFilter} computes
 //  radiometric attributes for each object. In this example the NDVI is computed.
 //  The computed feature is passed to the \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter}
 //  which computes statistics over the resulting band.

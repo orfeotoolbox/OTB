@@ -36,7 +36,7 @@
 //
 //
 // The following example illustrates the use of the
-//  \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} with the
+//  \doxygen{itk}{UnaryFunctorImageFilter} with the
 // use of the Atmospherically Resistant Vegetation Index (ARVI) \subdoxygen{otb}{Functor}{ARVI}.  ARVI
 // is an improved version of the NDVI that is more robust to the
 // atmospheric effect.  In addition to the red and NIR channels (used
@@ -73,14 +73,6 @@
 //  \item \subdoxygen{otb}{Functor}{TSARVI}
 //  \item \subdoxygen{otb}{Functor}{EVI}
 //  \end{itemize}
-
-// With the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} class the
-// input has to be a multi channel image and the user has to specify index channel
-// of the red, blue and NIR channel.
-//
-// Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
-// class must be included.
 
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbVegetationIndicesFunctor.h"
@@ -125,7 +117,7 @@ int main(int argc, char* argv[])
   typedef otb::Functor::ARVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
+  // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the ARVI functor as
   // template parameters. We then instantiate the filter itself.
 
@@ -148,7 +140,7 @@ int main(int argc, char* argv[])
   filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
 
   // The $\gamma$ parameter is set. The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
+  // \doxygen{otb::Functor}{ARVI}
   // class sets the default value of $\gamma$ to $0.5$.  This parameter
   // is used to reduce the atmospheric effect on a global scale.
 

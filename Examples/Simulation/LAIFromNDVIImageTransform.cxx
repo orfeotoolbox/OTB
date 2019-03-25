@@ -66,14 +66,14 @@ int main(int argc, char* argv[])
 
   typedef otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, InputImageType::InternalPixelType, OutputImageType::PixelType>
                                                                                                  FunctorType;
-  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndNIRIndexImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> LAIFRomNDVIImageFilterType;
 
   // Instantiating object
 
   //  Next the filter is created by invoking the \code{New()}~method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
 
-  MultiChannelRAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndNIRIndexImageFilterType::New();
+  LAIFRomNDVIImageFilterType::Pointer filter = LAIFRomNDVIImageFilterType::New();
 
   ReaderType::Pointer     reader     = ReaderType::New();
   WriterType::Pointer     writer     = WriterType::New();
