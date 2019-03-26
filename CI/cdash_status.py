@@ -20,6 +20,7 @@
 
 import cdash_handler
 import requests
+import os.path
 import sys
 
 if __name__ == "__main__":
@@ -27,8 +28,9 @@ if __name__ == "__main__":
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
   print (sys.argv)
   handler = cdash_handler.Handler()
-  handler.build_dir = sys.argv[3]
-  handler.build_dir += "build/"
+  build_dir = os.path.join( sys.argv[3] , "build/")
+  print("build_dir is ", build_dir)
+  handler.build_dir = build_dir
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
