@@ -76,7 +76,7 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    site_regex = re.compile( "\\bName\\b=\"([0-9,\-,_,A-Z,a-z]+)")
+    site_regex = re.compile( "\\bName\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)")
     site = site_regex.search( content )
     if trace:
       print (site_regex)
@@ -103,7 +103,7 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
+    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)\"")
     name = name_regex.search( content )
     if trace:
       print (name_regex)
@@ -127,7 +127,7 @@ class Handler:
       return False
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
-    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
+    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)\"")
     stamp = stamp_regex.search( content )
     if trace:
       print( stamp_regex )
