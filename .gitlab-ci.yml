@@ -27,7 +27,8 @@ before_script:
 
 # Fix me, only xork for a given sitename...
 after_script:
-  - python CI/cdash_status.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR
+  - python CI/cdash_status.py $CI_COMMIT_SHA $CI_PROJECT_ID \
+  $CI_PROJECT_DIR $CI_DEPLOY_PASSWORD
 
 stages:
   - build

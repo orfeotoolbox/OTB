@@ -24,7 +24,7 @@ import sys
 
 if __name__ == "__main__":
   if ( len(sys.argv) < 5 ):
-    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory")
+    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
   handler = cdash_handler.Handler()
   handler.build_dir = sys.argv[3]
   handler.GetSite()
@@ -38,7 +38,7 @@ if __name__ == "__main__":
   params = {'name':'cdash:' + handler.name , 'state': 'success' ,\
    'target_url' : cdash_url}
   print (handler.name)
-  headers = {'PRIVATE-TOKEN' : 'torototo'}
+  headers = {'PRIVATE-TOKEN' : sys.argv[4] }
   gitlab_request=requests.post(gitlab_url, headers = headers, params = params)
   print (gitlab_request.url)
   print (gitlab_request.text)
