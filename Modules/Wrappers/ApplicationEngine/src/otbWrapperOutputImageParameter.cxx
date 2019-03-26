@@ -40,9 +40,11 @@
     T * img = dynamic_cast< T * >( image_base );	\
 							\
     if( img )						\
+      {							\
       SwitchInput< T >( img );				\
-    							\
-    return;						\
+							\
+      return;						\
+      }							\
   }
 
 
