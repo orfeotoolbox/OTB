@@ -396,6 +396,8 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
        newParam = BoolParameter::New();
         }
         break;
+      default:
+        break;
       }
 
     if (newParam.IsNull())

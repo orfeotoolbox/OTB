@@ -57,7 +57,7 @@ int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv
       UnConstrainedLeastSquareSolverType::New();
 
   unmixer->SetInput(readerImage->GetOutput());
-  unmixer->SetMatrix(endMember2Matrix->GetMatrix());
+  unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);

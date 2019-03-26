@@ -29,6 +29,7 @@ otb_module(OTBAppFiltering
     OTBContrast
     OTBStatistics
     OTBStreaming
+    OTBFunctor
 
   TEST_DEPENDS
     OTBTestKernel
