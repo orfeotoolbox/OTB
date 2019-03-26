@@ -59,6 +59,10 @@ class Handler:
     if os.path.exists( configure_xml ):
       if trace:
         print ( configure_xml )
+        configure_file = open( configure_xml, "r" )
+        content = configure_file.read()
+        configure_file.close()
+        print( content )
       self.configure_path = configure_xml
       return True
     print("Could not find the Configure.xml produced by ctest")
