@@ -53,18 +53,36 @@ class Handler:
       configure_xml = os.path.join( test_path , folder , "Configure.xml" )
       if os.path.exists( configure_xml ):
         break
-    # print ( configure_xml )
     if os.path.exists( configure_xml ):
+      print ( configure_xml )
       self.configure_path = configure_xml
       return True
     print("Could not find the Configure.xml produced by ctest")
     return False
 
-  def GetSite (self , build_dir ):
+  def GetSite (self , build_dir="" ):
     """
-    Site is corresponding to the Name field in the xml. As there are other 
-    "Name" in it, it might be hard to find the right one.
+    Site is corresponding to the Name field in the xml.
     """
+    if ( build_dir == ""):
+      build_dir = self.build_dir
+    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
+      print ("Error in GetSite function, could not find Configure.xml")
+      return False
+    configure_file = open( self.configure_path, "r" )
+    content = configure_file.read()
+    configure_file.close()
+    # site_regex = re.compile( "\\bName\\b=\"([0-9,-,_,A-Z,a-z]+)\"")
+    site_regex = re.compile( "\\bName\\b=\"([0-9,\-,_,A-Z,a-z]+)")
+    # print (site_regex)
+    site = site_regex.search( content )
+    # print(site)
+    if site:
+      # print("site value \n" , site.group(1))
+      self.site = site.group(1)
+      return True
+    print("Could not retreive site value")
+    return False
     return 
 
   def GetName (self , build_dir = ""):
@@ -80,7 +98,7 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    name_regex = re.compile( "<Site.*BuildName=\"([0-9,-,_,A-Z,a-z]+)\".*<Configure>" , re.S )
+    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
     # print (name_regex)
     # print(content)
     name = name_regex.search( content )
@@ -103,8 +121,7 @@ class Handler:
       return False
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
-    configure_file.close()
-    stamp_regex = re.compile( "<Site.*BuildStamp=\"([0-9,-]+[A-Z,a-z,0-9]+)\".*<Configure>" , re.S )
+    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
     # print (stamp_regex)
     # print(content)
     stamp = stamp_regex.search( content )
@@ -189,3 +206,12 @@ TODO :
 
 """
 # The script needs the site name and the project name.
+# if __name__ == "__main__":
+  # handler = Handler()
+  # handler.build_dir = ""
+  # handler.GetStamp()
+  # print (handler.stamp)
+  # handler.GetSite()
+  # print (handler.site)
+  # handler.GetName()
+  # print (handler.name)
