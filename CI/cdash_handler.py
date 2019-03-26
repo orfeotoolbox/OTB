@@ -24,6 +24,8 @@ import glob
 import re
 import unittest
 
+trace = True
+
 class Handler:
 # project
 # site
@@ -45,7 +47,8 @@ class Handler:
     build_dir = os.path.normpath(build_dir)
     test_path = os.path.join( build_dir , "Testing/")
     list_folder = os.listdir(test_path)
-    # print(list_folder)
+    if trace:
+      print(list_folder)
     configure_xml = ""
     for folder in list_folder:
       if folder == "Temporary" or folder == "TAG":
@@ -54,7 +57,8 @@ class Handler:
       if os.path.exists( configure_xml ):
         break
     if os.path.exists( configure_xml ):
-      print ( configure_xml )
+      if trace:
+        print ( configure_xml )
       self.configure_path = configure_xml
       return True
     print("Could not find the Configure.xml produced by ctest")
@@ -72,13 +76,14 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    # site_regex = re.compile( "\\bName\\b=\"([0-9,-,_,A-Z,a-z]+)\"")
     site_regex = re.compile( "\\bName\\b=\"([0-9,\-,_,A-Z,a-z]+)")
-    # print (site_regex)
     site = site_regex.search( content )
-    # print(site)
+    if trace:
+      print (site_regex)
+      print(site)
     if site:
-      # print("site value \n" , site.group(1))
+      if trace:
+        print("site value \n" , site.group(1))
       self.site = site.group(1)
       return True
     print("Could not retreive site value")
@@ -99,12 +104,13 @@ class Handler:
     content = configure_file.read()
     configure_file.close()
     name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
-    # print (name_regex)
-    # print(content)
     name = name_regex.search( content )
-    # print( name)
+    if trace:
+      print (name_regex)
+      print( name)
     if name:
-      # print("name value \n" , name.group(1))
+      if trace:
+        print("name value \n" , name.group(1))
       self.name = name.group(1)
       return True
     print("Could not retreive name value")
@@ -122,12 +128,13 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\-,_,A-Z,a-z]+)\"")
-    # print (stamp_regex)
-    # print(content)
     stamp = stamp_regex.search( content )
-    # print( stamp)
+    if trace:
+      print( stamp_regex )
+      print( stamp )
     if stamp:
-      # print("Stamp value \n" , stamp.group(1))
+      if trace:
+        print("Stamp value \n" , stamp.group(1))
       self.stamp = stamp.group(1)
       return True
     print("Could not retreive stamp value")
@@ -205,13 +212,13 @@ TODO :
  the script aims only at recovering the build url
 
 """
-# The script needs the site name and the project name.
-# if __name__ == "__main__":
-  # handler = Handler()
-  # handler.build_dir = ""
-  # handler.GetStamp()
-  # print (handler.stamp)
-  # handler.GetSite()
-  # print (handler.site)
-  # handler.GetName()
-  # print (handler.name)
+# The script needs the project name.
+if __name__ == "__main__":
+  handler = Handler()
+  handler.build_dir = ""
+  handler.GetStamp()
+  print (handler.stamp)
+  handler.GetSite()
+  print (handler.site)
+  handler.GetName()
+  print (handler.name)
