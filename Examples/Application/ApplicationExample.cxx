@@ -167,11 +167,6 @@ private:
     SetDefaultParameterInt("ram", 256);
     MandatoryOff("ram");
 
-    AddParameter(ParameterType_ComplexInputImage, "cin", "Input complex image");
-    AddParameter(ParameterType_ComplexOutputImage, "cout", "Output complex image");
-    MandatoryOff("cin");
-    MandatoryOff("cout");
-
     // An example of command-line is automatically generated. Method \code{SetDocExampleParameterValue()} is
     // used to set parameters. Dataset should be located in  \code{OTB-Data/Examples} directory.
 

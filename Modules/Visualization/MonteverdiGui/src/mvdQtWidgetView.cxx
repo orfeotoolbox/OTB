@@ -282,13 +282,6 @@ QtWidgetView
         ->GetFileName();
       break;
     //
-    // COMPLEX IMAGE.
-    case otb::Wrapper::ParameterType_ComplexOutputImage:
-      filename =
-        otb::DynamicCast< otb::Wrapper::ComplexOutputImageParameter >( param )
-        ->GetFileName();
-      break;
-    //
     // NONE.
     default:
       break;
