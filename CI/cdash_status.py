@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
   print (sys.argv)
   handler = cdash_handler.Handler()
-  build_dir = os.path.join( sys.argv[3] , "")
+  build_dir = os.path.join( sys.argv[3] , "build/")
   print("build_dir is ", build_dir)
   handler.build_dir = build_dir
   handler.GetSite()
