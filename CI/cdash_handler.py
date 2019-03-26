@@ -80,7 +80,7 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    site_regex = re.compile( "\\bName\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)")
+    site_regex = re.compile( "\\bName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)")
     site = site_regex.search( content )
     if trace:
       print (site_regex)
@@ -107,7 +107,7 @@ class Handler:
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)\"")
+    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
     name = name_regex.search( content )
     if trace:
       print (name_regex)
@@ -131,7 +131,7 @@ class Handler:
       return False
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
-    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\-,\.,_,A-Z,a-z]+)\"")
+    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
     stamp = stamp_regex.search( content )
     if trace:
       print( stamp_regex )
@@ -152,7 +152,7 @@ class Handler:
     site = self.site
     stamp = self.stamp
     name = self.name
-    site = self.site
+    project = self.project
     for key , value in kwargs.items():
       if key == "site":
         site = value
@@ -160,22 +160,24 @@ class Handler:
         stamp == value
       if key == "name":
         name = value
-      if key == "site":
-        site = value
-    if ( site == "" or stamp == "" or name == "" or site == ""):
+      if key == "project":
+        project = value
+    if ( site == "" or stamp == "" or name == "" or project == ""):
       print( "Not enougth argument given for buildid request ")
       # TODO
       return
     buildid_url = self.url + "/api/v1/getbuildid.php?"
-    buildid_url += "project=" + self.project + "&"
-    buildid_url += "site=" + self.site + "&"
-    buildid_url += "stamp=" + self.stamp + "&"
-    buildid_url += "name=" + self.name
+    buildid_url += "project=" + project + "&"
+    buildid_url += "site=" + site + "&"
+    buildid_url += "stamp=" + stamp + "&"
+    buildid_url += "name=" + name
     build_id_page = requests.get(buildid_url)
+    print ( build_id_page.text )
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     buildid = build_id_regex.search( build_id_page.text )
     if buildid:
       self.buildid = buildid.group(1)
+      print ( "build id is ", self.buildid)
       return True
     else:
       print("Error in recovering buildid")
