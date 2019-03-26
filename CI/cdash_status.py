@@ -39,7 +39,7 @@ if __name__ == "__main__":
   print ( cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
-  params = {'name':'cdash:' + handler.name , 'state': 'success' ,\
+  params = {'name':'cdash:' + handler.site , 'state': 'success' ,\
    'target_url' : cdash_url}
   print (handler.name)
   headers = {'PRIVATE-TOKEN' : sys.argv[4] }
