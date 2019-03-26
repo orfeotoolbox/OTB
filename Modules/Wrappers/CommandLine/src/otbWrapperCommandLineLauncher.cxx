@@ -29,9 +29,8 @@
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperListViewParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 

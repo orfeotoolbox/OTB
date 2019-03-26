@@ -99,30 +99,10 @@ InputFilenameListParameter
   return FILENAME_FILTER;
 }
 
-
-/*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::ToString( const ParameterType::Pointer & p ) const
+ParameterType InputFilenameListParameter::GetType() const
 {
-  assert( !p.IsNull() );
-
-  return p->GetValue();
+  return ParameterType_InputFilenameList;
 }
-
-/*****************************************************************************/
-const InputFilenameListParameter::ParameterType::Pointer &
-InputFilenameListParameter
-::FromString( const ParameterType::Pointer & p,
-	      const std::string & s ) const
-{
-  assert( !p.IsNull() );
-
-  p->SetValue( s );
-
-  return p;
-}
-
 }
 
 }

@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#include "otbWrapperTypes.h"
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperDirectoryParameter.h"
@@ -31,13 +32,12 @@
 #include "otbWrapperOutputImageParameter.h"
 #include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperParameterKey.h"
-#include "otbWrapperRAMParameter.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperBoolParameter.h"
 
@@ -234,244 +234,15 @@ ParameterGroup::GetSelectedItems(std::string paramKey)
 }
 
 /* Get the parameter type from its string version of ParameterType enum */
- ParameterType ParameterGroup::GetParameterTypeFromString(std::string type)
- {
-   if (type == "Choice")
-     {
-     return ParameterType_Choice;
-     }
-   else if (type == "ListView")
-     {
-     return ParameterType_ListView;
-     }
-   else if (type == "Radius")
-     {
-     return ParameterType_Radius;
-     }
-   else if (type == "Int")
-     {
-     return ParameterType_Int;
-     }
-   else if (type == "Float")
-     {
-     return ParameterType_Float;
-     }
-   else if (type == "InputFilename")
-     {
-     return ParameterType_InputFilename;
-     }
-   else if (type == "InputFilenameList")
-     {
-     return ParameterType_InputFilenameList;
-     }
-   else if (type == "OutputFilename")
-     {
-     return ParameterType_OutputFilename;
-     }
-   else if (type == "Directory")
-     {
-     return ParameterType_Directory;
-     }
-   else if (type == "InputImage")
-     {
-     return ParameterType_InputImage;
-     }
-   else if (type == "InputImageList")
-     {
-     return ParameterType_InputImageList;
-     }
-   else if (type == "ComplexInputImage")
-     {
-     return ParameterType_ComplexInputImage;
-     }
-   else if (type == "InputVectorData")
-     {
-     return ParameterType_InputVectorData;
-     }
-   else if (type == "InputVectorDataList")
-     {
-     return ParameterType_InputVectorDataList;
-     }
-   else if (type == "OutputImage")
-     {
-     return ParameterType_OutputImage;
-     }
-   else if (type == "ComplexOutputImage")
-     {
-     return ParameterType_ComplexOutputImage;
-     }
-   else if (type == "OutputVectorData")
-     {
-     return ParameterType_OutputVectorData;
-     }
-   else if (type == "String")
-     {
-     return ParameterType_String;
-     }
-   else if (type == "StringList")
-     {
-     return ParameterType_StringList;
-     }
-   else if (type == "RAM")
-     {
-     return ParameterType_RAM;
-     }
-   else if (type == "Group")
-     {
-     return ParameterType_Group;
-     }
-   else if (type == "OutputProcessXML")
-     {
-     return ParameterType_OutputProcessXML;
-     }
-   else if (type == "InputProcessXML")
-     {
-     return ParameterType_InputProcessXML;
-     }
-   else if (type == "Bool")
-     {
-     return ParameterType_Bool;
-     }
-   else
-     {
-         otbLogMacro(Error, << "Cannot find parameter type code for type: " << type);
-         throw std::invalid_argument("Cannot find parameter type code for type: " + type);
-     }
+ParameterType ParameterGroup::GetParameterTypeFromString(const std::string& str)
+{
+  return ParameterStringToType(str);
 }
 
 /* Get the parameter type as string from its ParameterType enum */
 std::string ParameterGroup::GetParameterTypeAsString(ParameterType type)
 {
-  std::string paramType;
-
-  switch (type)
-    {
-    case ParameterType_Int:
-    {
-    paramType = "Int";
-    }
-    break;
-    case ParameterType_Float:
-    {
-    paramType = "Float";
-    }
-    break;
-    case ParameterType_String:
-    {
-    paramType = "String";
-    }
-    break;
-    case ParameterType_InputFilename:
-    {
-    paramType = "InputFilename";
-    }
-    break;
-    case ParameterType_OutputFilename:
-    {
-    paramType = "OutputFilename";
-    }
-    break;
-    case ParameterType_Directory:
-    {
-    paramType = "Directory";
-    }
-    break;
-    case ParameterType_InputImage:
-    {
-    paramType = "InputImage";
-    }
-    break;
-    case ParameterType_InputVectorData:
-    {
-    paramType = "InputVectorData";
-    }
-    break;
-    case ParameterType_OutputImage:
-    {
-    paramType = "OutputImage";
-    }
-    break;
-    case ParameterType_OutputVectorData:
-    {
-    paramType = "OutputVectorData";
-    }
-    break;
-    case ParameterType_Radius:
-    {
-    paramType = "Radius";
-    }
-    break;
-    case ParameterType_Choice:
-    {
-    paramType = "Choice";
-    }
-    break;
-    case ParameterType_Group:
-    {
-    paramType = "Group";
-    }
-    break;
-    case ParameterType_StringList:
-    {
-    paramType = "StringList";
-    }
-    break;
-    case ParameterType_InputFilenameList:
-    {
-    paramType = "InputFilenameList";
-    }
-    break;
-    case ParameterType_InputImageList:
-    {
-    paramType = "InputImageList";
-    }
-    break;
-    case ParameterType_InputVectorDataList:
-    {
-    paramType = "InputVectorDataList";
-    }
-    break;
-    case ParameterType_ListView:
-    {
-    paramType = "ListView";
-    }
-    break;
-    case ParameterType_ComplexInputImage:
-    {
-    paramType = "ComplexInputImage";
-    }
-    break;
-    case ParameterType_ComplexOutputImage:
-    {
-    paramType = "ComplexOutputImage";
-    }
-    break;
-    case ParameterType_RAM:
-    {
-    paramType = "RAM";
-    }
-    break;
-    case ParameterType_OutputProcessXML:
-    {
-    paramType = "OutputProcessXML";
-    }
-    break;
-    case ParameterType_InputProcessXML:
-    {
-    paramType = "InputProcessXML";
-    }
-    break;
-    case ParameterType_Bool:
-    {
-    paramType = "Bool";
-    }
-    break;
-    default:
-    {
-    std::cerr << "Cannot find string version of parameter type" << std::endl;
-    }
-    }
-  return paramType;
+  return ParameterTypeToString(type);
 }
 
 /** Add a new parameter to the parameter group */
@@ -624,6 +395,8 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         {
        newParam = BoolParameter::New();
         }
+        break;
+      default:
         break;
       }
 

@@ -18,30 +18,28 @@
  * limitations under the License.
  */
 
-/*
- * Example on the use of the Smoothing 
- */
- 
-import org.otb.application.*;
+#include "otbWrapperTypes.h"
 
+namespace otb
+{
+namespace Wrapper
+{
 
-class SmoothingTest {
-
-  public static void main( String argv[] ) {
-
-    String[] appAvailable = Registry.GetAvailableApplications();
-    System.out.println( "Available applications :" );
-    
-    for (int i = 0; i < appAvailable.length; i++)
-    {
-      System.out.println( appAvailable[i] );
-    }
-
-    System.out.println( "Creating application " + "Smoothing");
-    Application app = Registry.CreateApplication("Smoothing");
-    
-    System.out.println( Registry.CreateApplication("Smoothing").GetDescription() );
-    
-  }
-
+std::string ParameterTypeToString(ParameterType type)
+{
+  return parameterTypesStrings[type];
 }
+
+ParameterType ParameterStringToType(const std::string& str)
+{
+  for (std::size_t i = 0; i < ParameterType_MAX__; i++)
+  {
+    if (str == parameterTypesStrings[i])
+    {
+      return ParameterType(i);
+    }
+  }
+  itkGenericExceptionMacro("Cannot convert string '" << str << "' to parameter type.");
+}
+} // namespace Wrapper
+} // namespace otb

@@ -2,7 +2,7 @@
 
 #cmake builds with rpath in the binary dir, so we don't need to set LD_LIBRARY_PATH here
 #export LD_LIBRARY_PATH=@CMAKE_BINARY_DIR@/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=@PYTHONPATH_COOKBOOK@:$PYTHONPATH
+export PYTHONPATH=@CMAKE_BINARY_DIR@/lib/otb/python:$PYTHONPATH
 export OTB_APPLICATION_PATH=@CMAKE_BINARY_DIR@/lib/otb/applications
 
 python3 @CMAKE_CURRENT_SOURCE_DIR@/Scripts/otbGenerateWrappersRstDoc.py "$1"

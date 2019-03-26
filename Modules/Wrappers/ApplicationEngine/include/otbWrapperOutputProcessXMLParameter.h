@@ -80,6 +80,21 @@ public:
     m_FileName = "";
   }
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_OutputProcessXML;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
   TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value="");
 
   std::string pixelTypeToString(ImagePixelType pixType);

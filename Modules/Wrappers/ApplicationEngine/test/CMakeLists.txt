@@ -28,7 +28,6 @@ otbWrapperStringParameterTest.cxx
 otbWrapperChoiceParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperStringListParameterTest.cxx
-otbWrapperRAMParameterTest.cxx
 otbWrapperDocExampleStructureTest.cxx
 otbWrapperParameterKeyTest.cxx
 otbWrapperParameterListTest.cxx
@@ -54,11 +53,16 @@ otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
   "my description"
   )
 
-otb_add_test(NAME owTvNumericalParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperNumericalParameterTest1
-  42.42
-  "mykey"
-  "my description"
+otb_add_test(NAME owTvFloatParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperFloatParameterTest
+  )
+
+otb_add_test(NAME owTvIntParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperIntParameterTest
+  )
+
+otb_add_test(NAME owTvRAMParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperRAMParameterTest
   )
 
 otb_add_test(NAME owTvStringParameter COMMAND otbApplicationEngineTestDriver

@@ -132,6 +132,25 @@ public:
     */
   virtual std::vector<Parameter::Pointer > GetChildrenList();
 
+  /** Get the dynamic type as declared in WrapperTypes.h */
+  virtual ParameterType GetType() const = 0;
+
+  /** Error raising function to indicate a type conversion error */
+  [[noreturn]] void TypeError(const std::string& target_type) const;
+
+  /** Parameter conversion functions. They are used by WrapperApplication
+   * to provide functions like SetParameterInt, GetParameterString, etc.
+   */
+  virtual int                      ToInt() const;
+  virtual float                    ToFloat() const;
+  virtual std::string              ToString() const;
+  virtual std::vector<std::string> ToStringList() const;
+
+  virtual void FromInt(int);
+  virtual void FromFloat(float);
+  virtual void FromString(const std::string&);
+  virtual void FromStringList(const std::vector<std::string>&);
+
 protected:
   /** Constructor */
   Parameter();
