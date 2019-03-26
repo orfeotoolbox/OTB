@@ -25,6 +25,10 @@ before_script:
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
+# Fix me, only xork for a given sitename...
+after_script:
+  - python CI/cdash_status.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR
+
 stages:
   - build
 
