@@ -28,6 +28,7 @@ if __name__ == "__main__":
   print (sys.argv)
   handler = cdash_handler.Handler()
   handler.build_dir = sys.argv[3]
+  handler.build_dir += build/
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
