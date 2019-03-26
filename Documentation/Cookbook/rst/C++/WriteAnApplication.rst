@@ -101,9 +101,6 @@ Similar methods exist for binding a data object to an output parameter:
 -  ``SetParameterOutputImage(key,data)`` : link the image object to the
    given output parameter
 
--  ``SetParameterComplexOutputImage(key,data)`` : link the complex image
-   object to the given output parameter
-
 -  ``SetParameterOutputVectorData(key,data)`` : link the vector data
    object to the given output parameter
 
@@ -155,9 +152,6 @@ parameters:
 -  ``ParameterType_InputImageList`` : parameter storing a list of input
    image.
 
--  ``ParameterType_ComplexInputImage`` : parameter storing a complex
-   input image.
-
 -  ``ParameterType_InputVectorData`` : parameter storing input vector
    data.
 
@@ -171,9 +165,6 @@ parameters:
    name.
 
 -  ``ParameterType_OutputImage`` : parameter storing an output image.
-
--  ``ParameterType_ComplexOutputImage`` : parameter storing a complex
-   output image.
 
 -  ``ParameterType_OutputVectorData`` : parameter storing an output
    vector data.
@@ -205,11 +196,11 @@ you can use a numeric parameter and change its role by calling
 ``SetParameterRole(key,Role_Output)``.
 
 The input types ``InputImage``, ``InputImageList``,
-``ComplexInputImage``, ``InputVectorData`` and ``InputVectorDataList``
+ ``InputVectorData`` and ``InputVectorDataList``
 store the name of the files to load, but they also encapsulate the
 readers needed to produce the input data.
 
-The output types ``OutputImage``, ``ComplexOutputImage`` and
+The output types ``OutputImage`` and
 ``OutputVectorData`` store the name of the files to write, but they also
 encapsulate the corresponding writers.
 
