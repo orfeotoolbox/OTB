@@ -25,6 +25,7 @@ import sys
 if __name__ == "__main__":
   if ( len(sys.argv) < 5 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
+  print (sys.argv)
   handler = cdash_handler.Handler()
   handler.build_dir = sys.argv[3]
   handler.GetSite()
