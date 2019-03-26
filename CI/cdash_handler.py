@@ -162,7 +162,7 @@ class Handler:
       print( "Not enougth argument given for buildid request ")
       # TODO
       return
-    buildid_url = handler.url + "/api/v1/getbuildid.php?"
+    buildid_url = self.url + "/api/v1/getbuildid.php?"
     buildid_url += "project=" + self.project + "&"
     buildid_url += "site=" + self.site + "&"
     buildid_url += "stamp=" + self.stamp + "&"

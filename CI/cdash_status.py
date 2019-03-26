@@ -19,14 +19,15 @@
 #
 
 import cdash_handler
+import requests
 import sys
 
 if __name__ == "__main__":
   if ( len(sys.argv) < 5 ):
-    print("Usage : "+sys.argv[0]+" commit_sha1 project_id site_name build_directory")
+    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory")
   handler = cdash_handler.Handler()
-  handler.site = sys.argv[3]
-  handler.build_dir = sys.argv[4]
+  handler.build_dir = sys.argv[3]
+  handler.GetSite()
   handler.GetName()
   handler.GetStamp()
   handler.GetBuildId()
@@ -34,7 +35,11 @@ if __name__ == "__main__":
   print ( cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
-  gitlab_url += "?name=cdash:" + handler.name +"&state=success&target_url="
-  gitlab_url += cdash_url
+  params = {'name':'cdash:' + handler.name , 'state': 'success' ,\
+   'target_url' : cdash_url}
   print (handler.name)
+  headers = {'PRIVATE-TOKEN' : 'torototo'}
+  gitlab_request=requests.post(gitlab_url, headers = headers, params = params)
+  print (gitlab_request.url)
+  print (gitlab_request.text)
   
