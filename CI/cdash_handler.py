@@ -19,10 +19,12 @@
 #
 
 import os.path
-import requests
+import urllib.request
+import urllib.parse
 import glob
 import re
 import unittest
+import sys
 
 
 trace = False
@@ -132,6 +134,7 @@ class Handler:
       return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
+    configure_file.close()
     stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
     stamp = stamp_regex.search( content )
     if trace:
@@ -150,12 +153,10 @@ class Handler:
     This function is returning the buildid. Dict can be passed with the 
     different informations
     """
-    trace = True
     site = self.site
     stamp = self.stamp
     name = self.name
     project = self.project
-    print( kwargs.items() )
     for key , value in kwargs.items():
       if key == "site":
         site = value
@@ -168,18 +169,17 @@ class Handler:
     if ( site == "" or stamp == "" or name == "" or project == ""):
       print( "Not enougth argument given for buildid request \
 site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-      # TODO
       return
-    buildid_url = self.url + "/api/v1/getbuildid.php?"
-    buildid_url += "project=" + project + "&"
-    buildid_url += "site=" + site + "&"
-    buildid_url += "stamp=" + stamp + "&"
-    buildid_url += "name=" + name
-    build_id_page = requests.get(buildid_url)
+    buildid_api = "/api/v1/getbuildid.php?"
+    buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
+    full_url = self.url + buildid_api + buildid_params
     if trace:
-      print ( build_id_page.text )
+      print("full_url: "+full_url)
+    response = urllib.request.urlopen(full_url).read().decode()
+    if trace:
+      print ( "response: " + response )
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
-    buildid = build_id_regex.search( build_id_page.text )
+    buildid = build_id_regex.search( response )
     if buildid:
       self.buildid = buildid.group(1)
       if trace:
@@ -187,9 +187,9 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       return buildid.group(1)
     else:
       print("Error in recovering buildid")
-      return False
+      return
 
-  def GetBuildUrl (self , buildid ="" ):
+  def GetBuildUrl (self , buildid = "" ):
     """
     This function is returning the build url. It can be called only when
     everything is set
@@ -213,26 +213,30 @@ TODO :
 if __name__ == "__main__":
   if ( len(sys.argv) < 5 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
+    sys.exit()
   if trace:
     print (sys.argv)
-  handler = cdash_handler.Handler()
-  build_dir = os.path.join( sys.argv[3] , "build/")
+  handler = Handler()
+  # build_dir = os.path.join( sys.argv[3] , "build/")
+  build_dir = sys.argv[3]
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
-  handler.GetBuildId()
+  # handler.GetBuildId()
+  handler.buildid="1"
   cdash_url = handler.GetBuildUrl()
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
-  params = {'name':'cdash:' + handler.site , 'state': 'success' ,\
-   'target_url' : cdash_url}
-  headers = {'PRIVATE-TOKEN' : sys.argv[4] }
-  gitlab_request=requests.post(gitlab_url, headers = headers, params = params)
+  params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': 'success' ,\
+   'target_url' : cdash_url})
+  gitlab_request = urllib.request.Request(gitlab_url)
+  gitlab_request.add_header('PRIVATE-TOKEN' , sys.argv[4] )
+  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
   if trace:
-    print ("gitlab_request.url: " + gitlab_request.url)
-    print ("gitlab_request.text: " + gitlab_request.text)
+    print ("gitlab_request.url: " + gitlab_request.full_url)
+    print ("gitlab_request.text: " + res.read().decode())
