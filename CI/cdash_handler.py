@@ -24,7 +24,8 @@ import glob
 import re
 import unittest
 
-trace = True
+
+trace = False
 
 class Handler:
 # project
@@ -64,9 +65,9 @@ class Handler:
         configure_file.close()
         print( content )
       self.configure_path = configure_xml
-      return True
+      return self.configure_path
     print("Could not find the Configure.xml produced by ctest")
-    return False
+    return
 
   def GetSite (self , build_dir="" ):
     """
@@ -76,7 +77,7 @@ class Handler:
       build_dir = self.build_dir
     if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
       print ("Error in GetSite function, could not find Configure.xml")
-      return False
+      return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
@@ -89,9 +90,9 @@ class Handler:
       if trace:
         print("site value \n" , site.group(1))
       self.site = site.group(1)
-      return True
+      return self.site
     print("Could not retreive site value")
-    return False
+    return
     return 
 
   def GetName (self , build_dir = ""):
@@ -103,7 +104,7 @@ class Handler:
       build_dir = self.build_dir
     if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
       print ("Error in GetName function, could not find Configure.xml")
-      return False
+      return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
@@ -116,9 +117,9 @@ class Handler:
       if trace:
         print("name value \n" , name.group(1))
       self.name = name.group(1)
-      return True
+      return self.name
     print("Could not retreive name value")
-    return False
+    return
 
   def GetStamp (self , build_dir = "" ):
     """
@@ -128,7 +129,7 @@ class Handler:
       build_dir = self.build_dir
     if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
       print ("Error in GetStamp function, could not find Configure.xml")
-      return False
+      return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
@@ -140,30 +141,33 @@ class Handler:
       if trace:
         print("Stamp value \n" , stamp.group(1))
       self.stamp = stamp.group(1)
-      return True
+      return self.stamp
     print("Could not retreive stamp value")
-    return False
+    return
 
   def GetBuildId (self, **kwargs):
     """
     This function is returning the buildid. Dict can be passed with the 
     different informations
     """
+    trace = True
     site = self.site
     stamp = self.stamp
     name = self.name
     project = self.project
+    print( kwargs.items() )
     for key , value in kwargs.items():
       if key == "site":
         site = value
       if key == "stamp":
-        stamp == value
+        stamp = value
       if key == "name":
         name = value
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Not enougth argument given for buildid request ")
+      print( "Not enougth argument given for buildid request \
+site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       # TODO
       return
     buildid_url = self.url + "/api/v1/getbuildid.php?"
@@ -172,13 +176,15 @@ class Handler:
     buildid_url += "stamp=" + stamp + "&"
     buildid_url += "name=" + name
     build_id_page = requests.get(buildid_url)
-    print ( build_id_page.text )
+    if trace:
+      print ( build_id_page.text )
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     buildid = build_id_regex.search( build_id_page.text )
     if buildid:
       self.buildid = buildid.group(1)
-      print ( "build id is ", self.buildid)
-      return True
+      if trace:
+        print ( "build id is ", self.buildid)
+      return buildid.group(1)
     else:
       print("Error in recovering buildid")
       return False
@@ -192,25 +198,11 @@ class Handler:
       buildid = self.buildid
     if ( buildid == "" ):
       print( "Not enougth argument given to build url")
-      # TODO
       return
     build_url = self.url
     build_url +="/buildSummary.php?"
-    build_url += "buildid=" + self.buildid
+    build_url += "buildid=" + buildid
     return build_url
-
-#TODO
-# class TestHandler(unittest.TestCase):
-
-#   def test_GetConfigureFile (self):
-  
-#   def test_GetName (self):
-
-#   def test_GetStamp (self):
-
-#   def test_GetBuildId (self):
-
-#   def test_GetBuildUrl (self):
 
 """
 TODO :
@@ -218,13 +210,29 @@ TODO :
  the script aims only at recovering the build url
 
 """
-# The script needs the project name.
 if __name__ == "__main__":
-  handler = Handler()
-  handler.build_dir = ""
-  handler.GetStamp()
-  print (handler.stamp)
+  if ( len(sys.argv) < 5 ):
+    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
+  if trace:
+    print (sys.argv)
+  handler = cdash_handler.Handler()
+  build_dir = os.path.join( sys.argv[3] , "build/")
+  if trace:
+    print("build_dir is: " + build_dir)
+  handler.build_dir = build_dir
   handler.GetSite()
-  print (handler.site)
   handler.GetName()
-  print (handler.name)
+  handler.GetStamp()
+  handler.GetBuildId()
+  cdash_url = handler.GetBuildUrl()
+  if trace:
+    print ( "cdash_url is: " + cdash_url )
+  gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
+  gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
+  params = {'name':'cdash:' + handler.site , 'state': 'success' ,\
+   'target_url' : cdash_url}
+  headers = {'PRIVATE-TOKEN' : sys.argv[4] }
+  gitlab_request=requests.post(gitlab_url, headers = headers, params = params)
+  if trace:
+    print ("gitlab_request.url: " + gitlab_request.url)
+    print ("gitlab_request.text: " + gitlab_request.text)
