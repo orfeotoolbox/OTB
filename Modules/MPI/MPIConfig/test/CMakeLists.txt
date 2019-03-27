@@ -35,4 +35,5 @@ otb_module_target_label(otbMPIConfigTestDriver)
 # MPI Hello test
 otb_add_test_mpi(NAME otbMPIConfigTest
    NBPROCS 2
+   EXTRA_OPT --allow-run-as-root
    COMMAND otbMPIConfigTestDriver otbMPIConfigTest )

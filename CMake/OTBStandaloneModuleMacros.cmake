@@ -101,7 +101,7 @@ endmacro()
 function(otb_add_test_mpi)
    set( _OPTIONS_ARGS )
    set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
-   set( _MULTI_VALUE_ARGS )
+   set( _MULTI_VALUE_ARGS EXTRA_OPT)
    cmake_parse_arguments( TEST_MPI "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
 
    # Test nb procs
@@ -112,7 +112,7 @@ function(otb_add_test_mpi)
    foreach(arg IN LISTS TEST_MPI_UNPARSED_ARGUMENTS)
      list(APPEND ARGS ${arg})
    endforeach()
-   set (test_parameters -np ${TEST_MPI_NBPROCS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
+   set (test_parameters -np ${TEST_MPI_NBPROCS} ${TEST_MPI_EXTRA_OPT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
    otb_add_test(NAME ${TEST_MPI_NAME} COMMAND ${MPIEXEC} ${test_parameters})
 endfunction()
 
