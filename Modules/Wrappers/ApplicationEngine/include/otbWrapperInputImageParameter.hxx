@@ -86,7 +86,12 @@ InputImageParameter
 {
   // Optimize pipeline if input-image can be directly cast into
   // output-image.
-  CLAMP_IMAGE_IF( TOutputImage, TInputImage, image );
+  {
+    auto img = dynamic_cast< TOutputImage * >( image );
+
+    if( img )
+      return img;
+  }
 
   // Allocate and link pipeline in local scope before overwriting
   // member attributes in order to ensure exception safety.
