@@ -217,16 +217,16 @@ if __name__ == "__main__":
   if trace:
     print (sys.argv)
   handler = Handler()
-  # build_dir = os.path.join( sys.argv[3] , "build/")
-  build_dir = sys.argv[3]
+  build_dir = os.path.join( sys.argv[3] , "build/")
+  # build_dir = sys.argv[3]
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
-  # handler.GetBuildId()
-  handler.buildid="1"
+  handler.GetBuildId()
+  # handler.buildid="1"
   cdash_url = handler.GetBuildUrl()
   if trace:
     print ( "cdash_url is: " + cdash_url )
