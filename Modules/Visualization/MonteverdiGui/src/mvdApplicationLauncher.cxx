@@ -191,7 +191,6 @@ ApplicationLauncher
 
   // Create main application widget
   auto gui = new ::mvd::Wrapper::QtWidgetView(otbApp);
-  gui->CreateGui();
 
   // Make the application window
   auto window = new ::otb::Wrapper::QtMainWindow(otbApp, gui, parent, flags | Qt::Window);

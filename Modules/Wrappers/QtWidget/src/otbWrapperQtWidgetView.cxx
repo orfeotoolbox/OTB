@@ -84,16 +84,7 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
     m_Model, &QtWidgetModel::ExceptionRaised,
     this, &QtWidgetView::OnExceptionRaised
   );
-}
 
-QtWidgetView::~QtWidgetView()
-{
-  delete m_Model;
-  m_Model = NULL;
-}
-
-void QtWidgetView::CreateGui()
-{
   // Create a VBoxLayout with the header, the input widgets, and the footer
   QVBoxLayout *mainLayout = new QVBoxLayout;
   m_TabWidget = new QTabWidget(this);
@@ -129,6 +120,12 @@ void QtWidgetView::CreateGui()
 
   // Make the final layout to the widget
   this->setLayout(finalLayout);
+}
+
+QtWidgetView::~QtWidgetView()
+{
+  delete m_Model;
+  m_Model = NULL;
 }
 
 void QtWidgetView::UpdateMessageAfterExecution(int status)

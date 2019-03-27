@@ -60,9 +60,6 @@ public:
   /** \brief Destructor. */
   ~QtWidgetView() override;
 
-  /** \brief Gui Creation. */
-  void CreateGui();
-
   /** \brief Model Accessor */
   QtWidgetModel* GetModel() const;
 

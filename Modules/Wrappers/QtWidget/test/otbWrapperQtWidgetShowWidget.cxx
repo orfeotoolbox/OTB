@@ -96,15 +96,7 @@ otbWrapperQtWidgetShowWidget( int argc, char* argv[] )
         QVBoxLayout * layout = new QVBoxLayout( widget );
 	{
 	  // Create OTB-Application widget.
-	  //
-	  // SAT: QWidget should be created without parent when adding
-	  // into QLayout (because QLayout will take ownership of the
-	  // reference-counted pointer) but OTB API doesn't defined default nullptr
-	  // value such as in Qt.
-	  QtWidgetView * qwv = new QtWidgetView( otb_application, widget );
-
-	  // SAT: Should be automatically done in QtWidgetView().
-	  qwv->CreateGui();
+	  QtWidgetView * qwv = new QtWidgetView( otb_application );
 
 	  // Connect the view to main-window.
 	  QObject::connect(

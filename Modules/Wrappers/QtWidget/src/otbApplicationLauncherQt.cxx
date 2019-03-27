@@ -91,7 +91,6 @@ int main(int argc, char* argv[])
 
   // Create main application widget
   auto gui = new ::otb::Wrapper::QtWidgetView(app);
-  gui->CreateGui();
 
   // Make the application window
   auto mainWindow = new ::otb::Wrapper::QtMainWindow(app, gui);
