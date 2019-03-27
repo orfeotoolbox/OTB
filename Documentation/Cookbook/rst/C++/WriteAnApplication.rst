@@ -196,8 +196,8 @@ you can use a numeric parameter and change its role by calling
 ``SetParameterRole(key,Role_Output)``.
 
 The input types ``InputImage``, ``InputImageList``,
- ``InputVectorData`` and ``InputVectorDataList``
-store the name of the files to load, but they also encapsulate the
+``InputVectorData`` and ``InputVectorDataList`` store
+the name of the files to load, but they also encapsulate the
 readers needed to produce the input data.
 
 The output types ``OutputImage`` and
