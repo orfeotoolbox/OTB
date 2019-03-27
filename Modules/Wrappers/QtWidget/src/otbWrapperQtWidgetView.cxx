@@ -189,17 +189,9 @@ QWidget* QtWidgetView::CreateFooter()
   connect( this, &QtWidgetView::ExecuteAndWriteOutput, m_Model, &QtWidgetModel::ExecuteAndWriteOutputSlot );
   connect( this, &QtWidgetView::Stop, m_Model, &QtWidgetModel::Stop );
 
-  m_QuitButton = new QPushButton(footerGroup);
-  m_QuitButton->setText(QObject::tr("Quit"));
-  connect(m_QuitButton, &QPushButton::clicked, this, &QtWidgetView::close );
-
-  // Add Ctrl-Q shortcut to quit
-  connect( m_QuitShortcut, &QShortcut::activated, this, &QtWidgetView::close );
-
   // Put the buttons on the right
   footerLayout->addStretch();
   footerLayout->addWidget(m_ExecButton);
-  footerLayout->addWidget(m_QuitButton);
 
   footerGroup->setLayout(footerLayout);
 
