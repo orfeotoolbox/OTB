@@ -501,7 +501,7 @@ otb_add_test(NAME prTuGeometriesProjectionFilterFromGeoToMap COMMAND otbProjecti
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToImage COMMAND otbProjectionTestDriver
-  --compare-ogr ${EPSILON_9}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
   otbVectorDataProjectionFilterFromMapToImage
@@ -586,7 +586,7 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   )
 
 otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Polygon COMMAND otbProjectionTestDriver
-  --compare-ogr ${EPSILON_9}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
   otbSpectralAngleDataNodeFeatureFunction
@@ -1078,7 +1078,7 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProje
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToImage COMMAND otbProjectionTestDriver
-  --compare-ogr ${EPSILON_9}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
   otbGeometriesProjectionFilterFromMapToImage
@@ -1124,7 +1124,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterLines COMMAND otbProjectionTestD
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterPolygons COMMAND otbProjectionTestDriver
-  --compare-ogr  ${EPSILON_9}
+  --compare-ogr  ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
   ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
   otbVectorDataProjectionFilter
