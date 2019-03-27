@@ -27,10 +27,7 @@ before_script:
 
 # Fix me, only xork for a given sitename...
 after_script:
-  - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-  - python3 get-pip.py
-  - pip3 install requests
-  - python3 CI/cdash_status.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_token_test
+  - python3 CI/cdash_status.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
   - build
