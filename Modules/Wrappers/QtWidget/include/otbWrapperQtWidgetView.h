@@ -113,7 +113,6 @@ private:
 
   QPushButton* m_ExecButton;
   QPushButton* m_QuitButton;
-  QShortcut* m_QuitShortcut;
   QLabel* m_Message;
   QTextEdit *m_LogText;
   QTabWidget *m_TabWidget;

@@ -105,6 +105,7 @@ set(OTBQtWidget_MOC_HDR
 
 set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
+  appmainwindow.ui
   )
 
 set( OTBQtWidget_RESOURCES

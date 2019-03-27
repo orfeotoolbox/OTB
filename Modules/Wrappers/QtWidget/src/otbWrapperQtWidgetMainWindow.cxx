@@ -23,32 +23,36 @@
 #include <QtWidgets>
 #include "otbWrapperQtWidgetView.h"
 
+#include "ui_appmainwindow.h"
+
 namespace otb
 {
 namespace Wrapper
 {
 
-QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent, Qt::WindowFlags flags) :
-    QMainWindow(parent, flags),
+QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent) :
+    QMainWindow(parent),
+    ui(new Ui::AppMainWindow),
     gui(gui)
 {
+  ui->setupUi(this);
   this->setWindowIcon(QIcon(":/otb_small.png"));
   this->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
 
   // Set the given application view widget
   gui->setParent(this);
-  this->setCentralWidget(gui);
+  ui->scrollArea->setWidget(gui);
 
-  // Connect the View "Quit" signal, to the mainWindow close slot
-  connect(gui, &QtWidgetView::QuitSignal, this, &QMainWindow::close);
+  // Connect menu buttons
+  connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
 
-  // Setup the help menu
-  QMenu* helpMenu = this->menuBar()->addMenu(tr("&Help"));
-  helpAction      = new QAction(tr("&Documentation"), this);
-  helpAction->setShortcuts(QKeySequence::HelpContents);
-  helpMenu->addAction(helpAction);
-  const std::string url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
-  QObject::connect(helpAction, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
+  const auto url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
+  connect(ui->actionDocumentation, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
+}
+
+QtMainWindow::~QtMainWindow()
+{
+  delete ui;
 }
 
 void QtMainWindow::UnhandledException(QString message)

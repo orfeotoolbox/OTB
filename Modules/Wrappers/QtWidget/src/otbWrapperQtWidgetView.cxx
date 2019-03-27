@@ -68,7 +68,6 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
   setObjectName( QtWidgetView::OBJECT_NAME );
 
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
-  m_QuitShortcut = new QShortcut(QKeySequence("Ctrl+Q"), this);
 
   QObject::connect(
     m_Model, &QtWidgetModel::SetProgressReportBegin,
@@ -112,14 +111,23 @@ void QtWidgetView::CreateGui()
   otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
   progressReport->SetApplication(m_Model->GetApplication());
 
-  QWidget* footer = CreateFooter();
+  // Execute / Cancel button
+  m_ExecButton = new QPushButton(this);
+  m_ExecButton->setDefault(true);
+  m_ExecButton->setEnabled(false);
+  m_ExecButton->setText(QObject::tr("Execute"));
+  connect( m_Model, &QtWidgetModel::SetApplicationReady, m_ExecButton, &QPushButton::setEnabled );
+  connect( m_ExecButton, &QPushButton::clicked, this, &QtWidgetView::OnExecButtonClicked );
+  connect( this, &QtWidgetView::ExecuteAndWriteOutput, m_Model, &QtWidgetModel::ExecuteAndWriteOutputSlot );
+  connect( this, &QtWidgetView::Stop, m_Model, &QtWidgetModel::Stop );
 
+  // Footer: progress bar and exec button
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
-  footLayout->addWidget(footer);
+  footLayout->addWidget(m_ExecButton);
   mainLayout->addLayout(footLayout);
-
-  footLayout->setAlignment(footer, Qt::AlignBottom);
+  footLayout->setAlignment(progressReport, Qt::AlignBottom);
+  footLayout->setAlignment(m_ExecButton, Qt::AlignBottom);
 
   QGroupBox *mainGroup = new QGroupBox(this);
   mainGroup->setLayout(mainLayout);
@@ -173,30 +181,6 @@ QWidget* QtWidgetView::CreateInputWidgets()
   return scrollArea;
 }
 
-
-QWidget* QtWidgetView::CreateFooter()
-{
-  // an HLayout with two buttons : Execute and Quit
-  QGroupBox *footerGroup = new QGroupBox(this);
-  QHBoxLayout *footerLayout = new QHBoxLayout;
-
-  m_ExecButton = new QPushButton(footerGroup);
-  m_ExecButton->setDefault(true);
-  m_ExecButton->setEnabled(false);
-  m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_Model, &QtWidgetModel::SetApplicationReady, m_ExecButton, &QPushButton::setEnabled );
-  connect( m_ExecButton, &QPushButton::clicked, this, &QtWidgetView::OnExecButtonClicked );
-  connect( this, &QtWidgetView::ExecuteAndWriteOutput, m_Model, &QtWidgetModel::ExecuteAndWriteOutputSlot );
-  connect( this, &QtWidgetView::Stop, m_Model, &QtWidgetModel::Stop );
-
-  // Put the buttons on the right
-  footerLayout->addStretch();
-  footerLayout->addWidget(m_ExecButton);
-
-  footerGroup->setLayout(footerLayout);
-
-  return footerGroup;
-}
 
 void QtWidgetView::closeEvent( QCloseEvent * e )
 {

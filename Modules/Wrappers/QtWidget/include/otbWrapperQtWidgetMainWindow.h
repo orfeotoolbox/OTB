@@ -26,6 +26,10 @@
 
 #include "otbWrapperApplication.h"
 
+namespace Ui {
+    class AppMainWindow;
+}
+
 class QAction;
 class QMenu;
 
@@ -41,15 +45,14 @@ class OTBQtWidget_EXPORT QtMainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr);
+  ~QtMainWindow();
 
 public slots:
   void UnhandledException(QString message);
 
 private:
-  QMenu*   helpMenu;
-  QAction* helpAction;
-
+  Ui::AppMainWindow* ui;
   QtWidgetView* gui;
 };
 
