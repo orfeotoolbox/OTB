@@ -43,9 +43,26 @@ native-build:
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-build:ubuntu-llvm:
+debian-build:
+  extends: .general
+  only: [merge_requests]
+  stage: build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+
+.common-build:
   extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
+
+build:ubuntu-llvm:
+  only: [merge_requests]
+  extends: .common-build
+
+build:ubuntu-llvm-wip:
+  except: [merge_requests]
+  extends: .common-build
+

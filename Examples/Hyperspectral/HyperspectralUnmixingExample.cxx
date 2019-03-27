@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
   UCLSUnmixingFilterType::Pointer                                                unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
-  unmixer->SetMatrix(endMember2Matrix->GetMatrix());
+  unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
 
   unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
 
