@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <OTB>
-    <version>5.11.0</version>
+    <version>6.7.0</version>
     <application>
         <name>TestApplication</name>
         <descr>This application helps developers to test parameters types</descr>
@@ -42,19 +42,19 @@
             <key>filename</key>
             <type>InputFilename</type>
             <name>File name</name>
-            <value>/home/michelj/dev/src/otb-data/Input/letter.scale</value>
+            <value>/home/cedric/Documents/OTBData/otb-data/Input/letter.scale</value>
         </parameter>
         <parameter mandatory="true">
             <key>outfilename</key>
             <type>OutputFilename</type>
             <name>Output Filename</name>
-            <value>/home/michelj/dev/build/otb/Testing/Temporary/foo.txt</value>
+            <value>/home/cedric/OTB/build2/Testing/Temporary/foo.txt</value>
         </parameter>
         <parameter mandatory="true">
             <key>directory</key>
             <type>Directory</type>
             <name>Directory name</name>
-            <value>/home/michelj/dev/src/otb-data/Input/world_boundaries</value>
+            <value>/home/cedric/Documents/OTBData/otb-data/Input/world_boundaries</value>
         </parameter>
         <parameter mandatory="true">
             <key>choice.choice1.floatchoice1</key>
@@ -73,15 +73,15 @@
             <type>OutputImage</type>
             <name>Output Image</name>
             <pixtype>double</pixtype>
-            <value>/home/michelj/dev/build/otb/Testing/Temporary/foo.tif</value>
+            <value>/home/cedric/OTB/build2/Testing/Temporary/foo.tif</value>
         </parameter>
         <parameter mandatory="false">
             <key>il</key>
             <type>InputImageList</type>
             <name>Input image list</name>
             <values>
-                <value>/home/michelj/dev/src/otb-data/Input/anaglyphInput1.tif</value>
-                <value>/home/michelj/dev/src/otb-data/Input/anaglyphInput2.tif</value>
+                <value>/home/cedric/Documents/OTBData/otb-data/Input/anaglyphInput1.tif</value>
+                <value>/home/cedric/Documents/OTBData/otb-data/Input/anaglyphInput2.tif</value>
             </values>
         </parameter>
         <parameter mandatory="false">
@@ -91,19 +91,6 @@
             <values>
                 <value>Choice2</value>
             </values>
-        </parameter>
-        <parameter mandatory="true">
-            <key>cin</key>
-            <type>ComplexInputImage</type>
-            <name>Input Complex Image</name>
-            <value>/home/michelj/dev/src/otb-data/Input/RADARSAT2_ALTONA_300_300_VV.tif</value>
-        </parameter>
-        <parameter mandatory="true">
-            <key>cout</key>
-            <type>ComplexOutputImage</type>
-            <name>Output Complex Image</name>
-            <pixtype />
-            <value />
         </parameter>
     </application>
 </OTB>
