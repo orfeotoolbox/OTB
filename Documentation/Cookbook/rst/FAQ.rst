@@ -461,7 +461,7 @@ Hence:
 
 And you will be able to see the result at
 
-http://dash.orfeo-toolbox.org/Dashboard/index.php?project=OTB.
+http://cdash.orfeo-toolbox.org/Dashboard/index.php?project=OTB.
 
 If you are interested in setting up a nightly test (automatically
 launched every night), please contact us and we will give you the

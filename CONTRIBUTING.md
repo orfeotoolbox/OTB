@@ -58,7 +58,7 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
-Feature branches are tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://dash.orfeo-toolbox.org/)). They appear in the FeatureBranches section. 
+Feature branches are tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://cdash.orfeo-toolbox.org/)). They appear in the FeatureBranches section. 
 
 Caveat: even if the Dashboard build on develop branch is broken, it is not
 allowed to push fixes directly on develop. The developer trying to fix the
@@ -124,7 +124,7 @@ Again, the second branch name is optional.
 
 For users without push access to [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git), the modification can be asked through a merge requests to this repository.
 
-Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://dash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nightly basis).
+Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://cdash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nightly basis).
 
 Do not forget to remove the feature branch for testing once it has been merged.
 
