@@ -27,6 +27,7 @@
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
 #include "otbQtApplication.h"
 #include "otbWrapperQtWidgetMainWindow.h"
+#include "otbWrapperQtWidgetView.h"
 #include "itksys/SystemTools.hxx"
 
 using otb::Wrapper::Application;
@@ -75,11 +76,9 @@ int main(int argc, char* argv[])
   // Create module
   Application::Pointer app = ApplicationRegistry::CreateApplication(moduleName);
   if (app.IsNull())
-
   {
     std::cerr << "Could not find application " << moduleName << std::endl;
-    std::string modulePath = ApplicationRegistry::GetApplicationPath();
-    std::cout << "Module search path : " << modulePath << std::endl;
+    std::cout << "Module search path: " << ApplicationRegistry::GetApplicationPath() << std::endl;
     std::vector<std::string> list = ApplicationRegistry::GetAvailableApplications();
 
     std::cout << "Available applications : " << (list.empty() ? "None" : "") << std::endl;
@@ -90,7 +89,12 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  QtMainWindow* mainWindow = new otb::Wrapper::QtMainWindow(app);
+  // Create main application widget
+  auto gui = new ::otb::Wrapper::QtWidgetView(app);
+  gui->CreateGui();
+
+  // Make the application window
+  auto mainWindow = new ::otb::Wrapper::QtMainWindow(app, gui);
 
   QObject::connect(&qtApp, &QtApplication::UnhandledException, mainWindow, &QtMainWindow::UnhandledException);
 

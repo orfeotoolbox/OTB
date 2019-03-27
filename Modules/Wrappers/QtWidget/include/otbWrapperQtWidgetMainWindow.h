@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtMainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  QtMainWindow(Application::Pointer);
+  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
 
 public slots:
   void UnhandledException(QString message);

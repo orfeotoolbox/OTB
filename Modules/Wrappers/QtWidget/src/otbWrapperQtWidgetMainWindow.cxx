@@ -28,14 +28,15 @@ namespace otb
 namespace Wrapper
 {
 
-QtMainWindow::QtMainWindow(Application::Pointer app)
+QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent, Qt::WindowFlags flags) :
+    QMainWindow(parent, flags),
+    gui(gui)
 {
   this->setWindowIcon(QIcon(":/otb_small.png"));
   this->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
 
-  // Create main application widget
-  gui = new QtWidgetView(app, this);
-  gui->CreateGui();
+  // Set the given application view widget
+  gui->setParent(this);
   this->setCentralWidget(gui);
 
   // Connect the View "Quit" signal, to the mainWindow close slot
