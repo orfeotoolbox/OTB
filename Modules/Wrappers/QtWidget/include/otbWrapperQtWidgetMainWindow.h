@@ -48,12 +48,20 @@ public:
   QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr);
   ~QtMainWindow();
 
+signals:
+  void ExecuteAndWriteOutput();
+  void Stop();
+
 public slots:
   void UnhandledException(QString message);
+  void UpdateMessageAfterApplicationReady(bool val);
+  void UpdateMessageAfterExecution(int status);
+  void on_executeButton_clicked();
 
 private:
   Ui::AppMainWindow* ui;
   QtWidgetView* gui;
+  bool m_IsRunning;
 };
 
 } // namespace Wrapper

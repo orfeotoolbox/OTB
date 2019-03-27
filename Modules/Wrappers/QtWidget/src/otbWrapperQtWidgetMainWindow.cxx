@@ -33,7 +33,8 @@ namespace Wrapper
 QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent) :
     QMainWindow(parent),
     ui(new Ui::AppMainWindow),
-    gui(gui)
+    gui(gui),
+    m_IsRunning(false)
 {
   ui->setupUi(this);
   this->setWindowIcon(QIcon(":/otb_small.png"));
@@ -45,9 +46,69 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
 
   // Connect menu buttons
   connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
-
   const auto url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
   connect(ui->actionDocumentation, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
+
+  // Setup execute / cancel button
+  ui->executeButton->setDefault(true);
+  ui->executeButton->setEnabled(false);
+  ui->executeButton->setText(QObject::tr("Execute"));
+
+  connect(gui->GetModel(), &QtWidgetModel::SetApplicationReady, ui->executeButton, &QPushButton::setEnabled);
+  connect(this, &QtMainWindow::ExecuteAndWriteOutput, gui->GetModel(), &QtWidgetModel::ExecuteAndWriteOutputSlot);
+  connect(this, &QtMainWindow::Stop, gui->GetModel(), &QtWidgetModel::Stop);
+
+  connect( gui->GetModel(), &QtWidgetModel::SetApplicationReady, this, &QtMainWindow::UpdateMessageAfterApplicationReady );
+  connect( gui->GetModel(), &QtWidgetModel::SetProgressReportDone, this, &QtMainWindow::UpdateMessageAfterExecution );
+
+  // Status bar and message default text
+  ui->statusBar->showMessage(tr("Select parameters"));
+  ui->message->setText("");
+}
+
+void QtMainWindow::UpdateMessageAfterApplicationReady( bool val )
+{
+  if (!m_IsRunning)
+  {
+    if (val == true)
+    {
+      ui->statusBar->showMessage(tr("Ready to run"));
+    }
+    else
+    {
+      ui->statusBar->showMessage(tr("Select parameters"));
+    }
+  }
+}
+
+void QtMainWindow::UpdateMessageAfterExecution(int status)
+{
+  if (status >= 0)
+  {
+    ui->statusBar->showMessage(tr("Done"));
+  }
+  else
+  {
+    ui->statusBar->showMessage(tr("Failed!"));
+  }
+  ui->executeButton->setText(tr("Execute"));
+  m_IsRunning = false;
+}
+
+void QtMainWindow::on_executeButton_clicked()
+{
+  if (m_IsRunning)
+  {
+    ui->statusBar->showMessage(tr("Cancelling..."));
+    emit Stop();
+  }
+  else
+  {
+    m_IsRunning = true;
+    ui->statusBar->showMessage(tr("Running..."));
+    ui->executeButton->setText(tr("Cancel"));
+    emit ExecuteAndWriteOutput();
+  }
 }
 
 QtMainWindow::~QtMainWindow()

@@ -72,8 +72,6 @@ public:
 
 signals:
   void QuitSignal();
-  void ExecuteAndWriteOutput();
-  void Stop();
 
 protected:
 
@@ -94,8 +92,6 @@ protected:
 
 protected slots:
 
-  void OnExecButtonClicked();
-
   void OnExceptionRaised( QString what );
 
 // Private methods.
@@ -111,9 +107,6 @@ private:
 
   otb::Wrapper::QtWidgetModel* m_Model;
 
-  QPushButton* m_ExecButton;
-  QPushButton* m_QuitButton;
-  QLabel* m_Message;
   QTextEdit *m_LogText;
   QTabWidget *m_TabWidget;
 
@@ -121,9 +114,6 @@ private:
   bool m_IsRunning;
 
 private slots:
-  void UpdateMessageAfterExecution(int status);
-  void UpdateMessageAfterApplicationReady(bool val);
-
   void OnProgressReportBegin();
   void OnProgressReportEnd( int status );
   void SetClosable( bool );

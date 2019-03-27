@@ -57,9 +57,6 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
   m_IconPathDone(""),
   m_IconPathFailed(""),
   m_Model( NULL ),
-  m_ExecButton( NULL ),
-  m_QuitButton( NULL ),
-  m_Message( NULL ),
   m_LogText( NULL ),
   m_TabWidget( NULL ),
   m_IsClosable( true ),
@@ -103,31 +100,13 @@ void QtWidgetView::CreateGui()
   m_TabWidget->addTab(m_LogText, tr("Logs"));
   mainLayout->addWidget(m_TabWidget);
 
-  m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>", this);
-  connect( m_Model, &QtWidgetModel::SetApplicationReady, this, &QtWidgetView::UpdateMessageAfterApplicationReady );
-  connect( m_Model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetView::UpdateMessageAfterExecution );
-  mainLayout->addWidget(m_Message);
-
   otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
   progressReport->SetApplication(m_Model->GetApplication());
 
-  // Execute / Cancel button
-  m_ExecButton = new QPushButton(this);
-  m_ExecButton->setDefault(true);
-  m_ExecButton->setEnabled(false);
-  m_ExecButton->setText(QObject::tr("Execute"));
-  connect( m_Model, &QtWidgetModel::SetApplicationReady, m_ExecButton, &QPushButton::setEnabled );
-  connect( m_ExecButton, &QPushButton::clicked, this, &QtWidgetView::OnExecButtonClicked );
-  connect( this, &QtWidgetView::ExecuteAndWriteOutput, m_Model, &QtWidgetModel::ExecuteAndWriteOutputSlot );
-  connect( this, &QtWidgetView::Stop, m_Model, &QtWidgetModel::Stop );
-
-  // Footer: progress bar and exec button
+  // Footer: progress bar
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
-  footLayout->addWidget(m_ExecButton);
   mainLayout->addLayout(footLayout);
-  footLayout->setAlignment(progressReport, Qt::AlignBottom);
-  footLayout->setAlignment(m_ExecButton, Qt::AlignBottom);
 
   QGroupBox *mainGroup = new QGroupBox(this);
   mainGroup->setLayout(mainLayout);
@@ -137,33 +116,6 @@ void QtWidgetView::CreateGui()
 
   // Make the final layout to the widget
   this->setLayout(finalLayout);
-}
-
-void QtWidgetView::UpdateMessageAfterExecution(int status)
-{
-  if (status >= 0)
-    {
-    m_Message->setText("<center>"+QString(m_IconPathDone.c_str())+
-      "<font color=\"#00A000\">"+tr("Done")+"</font></center>");
-    }
-  else
-    {
-    m_Message->setText("<center>"+QString(m_IconPathFailed.c_str())+
-      "<font color=\"#FF0000\">"+tr("Failed")+"</font></center>");
-    }
-  m_ExecButton->setText(QObject::tr("Execute"));
-  m_IsRunning = false;
-}
-
-void QtWidgetView::UpdateMessageAfterApplicationReady( bool val )
-{
-  if(!m_IsRunning)
-    {
-    if(val == true)
-      m_Message->setText("<center><font color=\"#00A000\">"+tr("Ready to run")+"</font></center>");
-    else
-      m_Message->setText("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>");
-    }
 }
 
 QWidget* QtWidgetView::CreateInputWidgets()
@@ -209,24 +161,6 @@ void QtWidgetView::closeEvent( QCloseEvent * e )
   deleteLater();
 }
 
-void
-QtWidgetView
-::OnExecButtonClicked()
-{
-  if (m_IsRunning)
-    {
-    m_Message->setText("<center><font color=\"#FF0000\">"+tr("Cancelling")+"...</font></center>");
-    emit Stop();
-    }
-  else
-    {
-    m_IsRunning =  true;
-    m_Message->setText("<center><font color=\"#FF0000\">"+tr("Running")+"</font></center>");
-    m_ExecButton->setText(QObject::tr("Cancel"));
-    emit ExecuteAndWriteOutput();
-    }
-}
-
 void QtWidgetView::UnhandledException(QString message)
 {
   this->OnExceptionRaised(message);
@@ -258,9 +192,6 @@ void QtWidgetView::SetClosable( bool enabled )
   m_IsClosable = enabled;
 
   setEnabled( true );
-
-  if( m_QuitButton!=NULL )
-    m_QuitButton->setEnabled( m_IsClosable );
 }
 
 void QtWidgetView::OnProgressReportBegin()
