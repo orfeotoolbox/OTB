@@ -28,7 +28,6 @@
 #include <string>
 
 
-
 namespace otb
 {
 namespace Wrapper

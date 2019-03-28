@@ -53,6 +53,7 @@ namespace otb
 namespace Wrapper
 {
 
+
 // Declare specialisation for UInt8RGBAImageType
 template<>
 void OutputImageParameter::SwitchInput(UInt8RGBAImageType * );
@@ -218,24 +219,91 @@ OutputImageParameter
 }
 
 
+namespace details
+{
+
+
+template< typename TOutputImage,
+	  typename TInputImage >
+struct Clamp
+{
+  using InputClampImageFilter =
+    ClampImageFilter< TInputImage, DoubleVectorImageType >;
+
+  using OutputClampImageFilter =
+    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
+
+
+  Clamp( TInputImage * in ) :
+    icif( InputClampImageFilter::New() ),
+    ocif( OutputClampImageFilter::New() ),
+    out( ocif->GetOutput() )
+  {
+    assert( in );
+
+    icif->SetInput( in );
+
+    ocif->SetInput( icif->GetOutput() );
+  }
+
+  typename InputClampImageFilter::Pointer icif;
+  typename OutputClampImageFilter::Pointer ocif;
+  TOutputImage * out;
+};
+
+
+template< typename TOutputImage >
+struct Clamp< TOutputImage,
+	      DoubleVectorImageType >
+{
+  using OutputClampImageFilter =
+    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
+
+
+  Clamp( DoubleVectorImageType * in ) :
+    ocif( OutputClampImageFilter::New() ),
+    out( ocif->GetOutput() )
+  {
+    assert( in );
+
+    ocif->SetInput( in );
+  }
+
+  itk::ProcessObject::Pointer icif;
+  typename OutputClampImageFilter::Pointer ocif;
+  TOutputImage * out;
+};
+
+
+template<>
+struct Clamp< DoubleVectorImageType,
+	      DoubleVectorImageType >
+{
+  Clamp( DoubleVectorImageType * in ) :
+    out( in )
+  {
+    assert( in );
+  }
+
+  itk::ProcessObject::Pointer icif;
+  itk::ProcessObject::Pointer ocif;
+  DoubleVectorImageType * out;
+};
+
+} // namespace details.
+
+
 template< typename TOutputImage,
 	  typename TInputImage >
 void
 OutputImageParameter
 ::ClampAndWriteVectorImage( TInputImage * in )
 {
+  assert( in );
   assert( !m_FileName.empty() );
 
-
-  auto icif =
-    ClampImageFilter< TInputImage, DoubleVectorImageType >::New();
-
-  auto clampFilter =
-    ClampImageFilter< DoubleVectorImageType , TOutputImage >::New();
-
-  icif->SetInput( in );
-
-  clampFilter->SetInput( icif->GetOutput() );
+  // Use metaprogramming to choose optimized pipeline.
+  details::Clamp< TOutputImage, TInputImage > clamp( in );
 
 
 #ifdef OTB_USE_MPI
@@ -254,15 +322,15 @@ OutputImageParameter
       auto vrtWriter =
 	otb::MPIVrtWriter< TOutputImage >::New();
 
-      vrtWriter->SetInput( clampFilter->GetOutput() );
+      vrtWriter->SetInput( clamp.out );
       vrtWriter->SetFileName( m_FileName );
       vrtWriter->SetAvailableRAM( m_RAMValue);
 
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster = icif;
-      m_OutputCaster = clampFilter;
+      m_InputCaster = clamp.icif;
+      m_OutputCaster = clamp.ocif;
 
       m_Writer = vrtWriter;
 
@@ -279,14 +347,14 @@ OutputImageParameter
 	otb::SimpleParallelTiffWriter< TOutputImage >::New();
 
       sptWriter->SetFileName( m_FileName );
-      sptWriter->SetInput( clampFilter->GetOutput() );
+      sptWriter->SetInput( clamp.out );
       sptWriter->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
 
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster = icif;
-      m_OutputCaster = clampFilter;
+      m_InputCaster = clamp.icif;
+      m_OutputCaster = clamp.ocif;
 
       m_Writer = sptWriter;
 
@@ -314,14 +382,14 @@ OutputImageParameter
   auto writer = otb::ImageFileWriter< TOutputImage >::New();
 
   writer->SetFileName( m_FileName );
-  writer->SetInput( clampFilter->GetOutput() );
+  writer->SetInput( clamp.out );
   writer->GetStreamingManager()->SetDefaultRAM( m_RAMValue );
 
   // Change internal state only when everything has been setup
   // without raising exception.
 
-  m_InputCaster = icif;
-  m_OutputCaster = clampFilter;
+  m_InputCaster = clamp.icif;
+  m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
 }
