@@ -19,20 +19,20 @@
  */
 
 #include "otbWrapperOutputImageParameter.h"
+
 #include "otbClampImageFilter.h"
 #include "otbImageIOFactory.h"
-#include "itksys/SystemTools.hxx"
+#include "otbWrapperCastImage.h"
 
 #ifdef OTB_USE_MPI
-
-#include "otbMPIConfig.h"
-#include "otbMPIVrtWriter.h"
-
-#ifdef OTB_USE_SPTW
-#include "otbSimpleParallelTiffWriter.h"
+#  include "otbMPIConfig.h"
+#  include "otbMPIVrtWriter.h"
+#  ifdef OTB_USE_SPTW
+#    include "otbSimpleParallelTiffWriter.h"
+#  endif
 #endif
 
-#endif
+#include "itksys/SystemTools.hxx"
 
 
 #define CAST_IMAGE_BASE( T, image_base )		\
@@ -219,80 +219,6 @@ OutputImageParameter
 }
 
 
-namespace details
-{
-
-
-template< typename TOutputImage,
-	  typename TInputImage >
-struct Clamp
-{
-  using InputClampImageFilter =
-    ClampImageFilter< TInputImage, DoubleVectorImageType >;
-
-  using OutputClampImageFilter =
-    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
-
-
-  Clamp( TInputImage * in ) :
-    icif( InputClampImageFilter::New() ),
-    ocif( OutputClampImageFilter::New() ),
-    out( ocif->GetOutput() )
-  {
-    assert( in );
-
-    icif->SetInput( in );
-
-    ocif->SetInput( icif->GetOutput() );
-  }
-
-  typename InputClampImageFilter::Pointer icif;
-  typename OutputClampImageFilter::Pointer ocif;
-  TOutputImage * out;
-};
-
-
-template< typename TOutputImage >
-struct Clamp< TOutputImage,
-	      DoubleVectorImageType >
-{
-  using OutputClampImageFilter =
-    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
-
-
-  Clamp( DoubleVectorImageType * in ) :
-    ocif( OutputClampImageFilter::New() ),
-    out( ocif->GetOutput() )
-  {
-    assert( in );
-
-    ocif->SetInput( in );
-  }
-
-  itk::ProcessObject::Pointer icif;
-  typename OutputClampImageFilter::Pointer ocif;
-  TOutputImage * out;
-};
-
-
-template<>
-struct Clamp< DoubleVectorImageType,
-	      DoubleVectorImageType >
-{
-  Clamp( DoubleVectorImageType * in ) :
-    out( in )
-  {
-    assert( in );
-  }
-
-  itk::ProcessObject::Pointer icif;
-  itk::ProcessObject::Pointer ocif;
-  DoubleVectorImageType * out;
-};
-
-} // namespace details.
-
-
 template< typename TOutputImage,
 	  typename TInputImage >
 void
@@ -303,7 +229,7 @@ OutputImageParameter
   assert( !m_FileName.empty() );
 
   // Use metaprogramming to choose optimized pipeline.
-  details::Clamp< TOutputImage, TInputImage > clamp( in );
+  details::CastImage< TOutputImage, TInputImage > clamp( in );
 
 
 #ifdef OTB_USE_MPI
