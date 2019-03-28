@@ -54,7 +54,7 @@ public:
 
   otb::Wrapper::Application::Pointer PrepareApplication(const QString& appName, bool isStandalone = false) const;
 
-  QWidget* NewOtbApplicationWindow(const QString& appName, bool isStandalone = false, QWidget* p = nullptr, Qt::WindowFlags = 0) const;
+  QWidget* NewOtbApplicationWindow(const QString& appName, bool isStandalone = false, QWidget* p = nullptr) const;
 };
 
 } // namespace mvd

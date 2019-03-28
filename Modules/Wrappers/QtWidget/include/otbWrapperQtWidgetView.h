@@ -70,6 +70,8 @@ public:
 
   void UnhandledException(QString message);
 
+  virtual void BeforeExecuteButtonClicked() {}
+
 signals:
   void QuitSignal();
 
@@ -82,19 +84,10 @@ protected:
   // QWidget overloads.
   void closeEvent( QCloseEvent * event ) override;
 
-protected:
-
-  /** Html section for 'Done' icon */
-  std::string m_IconPathDone;
-
-  /** Html section for 'Failed' icon */
-  std::string m_IconPathFailed;
-
 protected slots:
 
   void OnExceptionRaised( QString what );
 
-// Private methods.
 private:
 
   QtWidgetView(const QtWidgetView&) = delete;
@@ -102,7 +95,6 @@ private:
 
   QWidget* CreateFooter();
 
-// Private attributes.
 private:
 
   otb::Wrapper::QtWidgetModel* m_Model;

@@ -104,6 +104,7 @@ void QtMainWindow::on_executeButton_clicked()
   }
   else
   {
+    gui->BeforeExecuteButtonClicked();
     m_IsRunning = true;
     ui->statusBar->showMessage(tr("Running..."));
     ui->executeButton->setText(tr("Cancel"));

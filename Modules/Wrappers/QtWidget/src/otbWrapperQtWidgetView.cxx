@@ -54,8 +54,6 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
 		QWidget* parent,
 		Qt::WindowFlags flags ) :
   QWidget( parent, flags ),
-  m_IconPathDone(""),
-  m_IconPathFailed(""),
   m_Model( NULL ),
   m_LogText( NULL ),
   m_TabWidget( NULL ),
