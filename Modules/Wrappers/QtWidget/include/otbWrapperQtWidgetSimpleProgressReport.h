@@ -46,8 +46,6 @@ public:
   QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent);
   ~QtWidgetSimpleProgressReport() override;
 
-  void SetApplication(Application::Pointer app);
-
   typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
 
   void ProcessEvent( itk::Object * caller, const itk::EventObject & event );

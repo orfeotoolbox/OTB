@@ -35,6 +35,8 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model
   , m_CurrentProcess()
 {
   m_Model = model;
+  m_Application = model->GetApplication();
+
   connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show );
   connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init );
   connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess );
@@ -56,16 +58,11 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model
   m_Layout->addWidget(m_Bar);
 
   this->show();
+  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
 }
 
 QtWidgetSimpleProgressReport::~QtWidgetSimpleProgressReport()
 {
-}
-
-void QtWidgetSimpleProgressReport::SetApplication(Application::Pointer app)
-{
-  m_Application = app;
-  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
 }
 
 void

@@ -98,8 +98,7 @@ void QtWidgetView::CreateGui()
   m_TabWidget->addTab(m_LogText, tr("Logs"));
   mainLayout->addWidget(m_TabWidget);
 
-  otb::Wrapper::QtWidgetSimpleProgressReport * progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
-  progressReport->SetApplication(m_Model->GetApplication());
+  otb::Wrapper::QtWidgetSimpleProgressReport* progressReport = new otb::Wrapper::QtWidgetSimpleProgressReport(m_Model, this);
 
   // Footer: progress bar
   QHBoxLayout *footLayout = new QHBoxLayout;
