@@ -25,9 +25,9 @@ before_script:
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
-# Fix me, only xork for a given sitename...
 after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+  # - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+# TODO this is making the job fail...
 
 stages:
   - build
