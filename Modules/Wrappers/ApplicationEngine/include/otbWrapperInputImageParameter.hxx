@@ -23,7 +23,7 @@
 
 #include "otbWrapperInputImageParameter.h"
 
-#include "otbClampImageFilter.h"
+#include "otbWrapperCastImage.h"
 
 namespace otb
 {
@@ -84,32 +84,24 @@ TOutputImage *
 InputImageParameter
 ::Cast( TInputImage * image )
 {
-  // Optimize pipeline if input-image can be directly cast into
-  // output-image.
-  {
-    auto img = dynamic_cast< TOutputImage * >( image );
+  // // Optimize pipeline if input-image can be directly cast into
+  // // output-image.
+  // {
+  //   auto img = dynamic_cast< TOutputImage * >( image );
 
-    if( img )
-      return img;
-  }
+  //   if( img )
+  //     return img;
+  // }
 
-  // Allocate and link pipeline in local scope before overwriting
-  // member attributes in order to ensure exception safety.
 
-  auto icif = InputClampImageFilter< TInputImage >::New();
+  details::CastImage< TOutputImage, TInputImage > clamp( image );
 
-  auto ocif = OutputClampImageFilter< TOutputImage >::New();
+  clamp.ocif->UpdateOutputInformation();
 
-  icif->SetInput( image );
+  m_InputCaster = clamp.icif;
+  m_OutputCaster = clamp.ocif;
 
-  ocif->SetInput( icif->GetOutput() );
-
-  ocif->UpdateOutputInformation();
-
-  m_InputCaster = icif;
-  m_OutputCaster = ocif;
-
-  return ocif->GetOutput();
+  return clamp.out;
 }
 
 
