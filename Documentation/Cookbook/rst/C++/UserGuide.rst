@@ -783,7 +783,6 @@ following expressions:
    & \psi_6  = Im(c_{30}c_{12}^3) = \phi_7.\\
    \psi_7  = c_{22}; & \psi_8  = Re(c_{31}c_{12}^2); & \psi_9  = Im(c_{31}c_{12}~2);\\
    \psi_{10} = Re(c_{40}c_{12}^4); & \psi_{11} = Im(c_{40}c_{12}^2). &\\
-
    \end{array}
 
 * Flusser Moments for Images. See example :ref:`FlusserMomentsImageFunctionExample.cxx`.
