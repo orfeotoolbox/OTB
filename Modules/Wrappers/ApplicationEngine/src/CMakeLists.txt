@@ -19,7 +19,6 @@
 #
 
 set( OTBApplicationEngine_SRC
-  otbWrapperApplicationHtmlDocGenerator.cxx
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
   otbWrapperParameterGroup.cxx

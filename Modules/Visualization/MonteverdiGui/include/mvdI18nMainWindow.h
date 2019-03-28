@@ -265,6 +265,8 @@ private slots:
    */
   virtual void on_action_About_triggered();
 
+  virtual void on_action_Documentation_triggered();
+
 };
 
 } // end namespace 'mvd'
