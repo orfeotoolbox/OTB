@@ -26,8 +26,7 @@ before_script:
   - git checkout $CI_COMMIT_REF_NAME
 
 after_script:
-  # - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
-# TODO this is making the job fail...
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
   - build
