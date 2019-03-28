@@ -1006,9 +1006,9 @@ private:
 } //end namespace otb
 
 
-// #ifndef OTB_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbWrapperApplication.hxx"
-// #endif
+#endif
 
 
 namespace otb { namespace Wrapper {

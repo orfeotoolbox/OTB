@@ -73,73 +73,73 @@ namespace Wrapper
 {
 
 
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt8VectorImageType * Application::GetParameterImage< UInt8VectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE Int16VectorImageType * Application::GetParameterImage< Int16VectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt16VectorImageType * Application::GetParameterImage< UInt16VectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE Int32VectorImageType * Application::GetParameterImage< Int32VectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt32VectorImageType * Application::GetParameterImage< UInt32VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8VectorImageType * Application::GetParameterImage< UInt8VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int16VectorImageType * Application::GetParameterImage< Int16VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt16VectorImageType * Application::GetParameterImage< UInt16VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int32VectorImageType * Application::GetParameterImage< Int32VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt32VectorImageType * Application::GetParameterImage< UInt32VectorImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE FloatVectorImageType * Application::GetParameterImage< FloatVectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE DoubleVectorImageType * Application::GetParameterImage< DoubleVectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE FloatVectorImageType * Application::GetParameterImage< FloatVectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE DoubleVectorImageType * Application::GetParameterImage< DoubleVectorImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt16VectorImageType * Application::GetParameterImage< ComplexInt16VectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt32VectorImageType * Application::GetParameterImage< ComplexInt32VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16VectorImageType * Application::GetParameterImage< ComplexInt16VectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32VectorImageType * Application::GetParameterImage< ComplexInt32VectorImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexFloatVectorImageType * Application::GetParameterImage< ComplexFloatVectorImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexDoubleVectorImageType * Application::GetParameterImage< ComplexDoubleVectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatVectorImageType * Application::GetParameterImage< ComplexFloatVectorImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleVectorImageType * Application::GetParameterImage< ComplexDoubleVectorImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt8RGBImageType * Application::GetParameterImage< UInt8RGBImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt8RGBAImageType * Application::GetParameterImage< UInt8RGBAImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBImageType * Application::GetParameterImage< UInt8RGBImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBAImageType * Application::GetParameterImage< UInt8RGBAImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt8ImageType * Application::GetParameterImage< UInt8ImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE Int16ImageType * Application::GetParameterImage< Int16ImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt16ImageType * Application::GetParameterImage< UInt16ImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE Int32ImageType * Application::GetParameterImage< Int32ImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE UInt32ImageType * Application::GetParameterImage< UInt32ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8ImageType * Application::GetParameterImage< UInt8ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int16ImageType * Application::GetParameterImage< Int16ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt16ImageType * Application::GetParameterImage< UInt16ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int32ImageType * Application::GetParameterImage< Int32ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt32ImageType * Application::GetParameterImage< UInt32ImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE FloatImageType * Application::GetParameterImage< FloatImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE DoubleImageType * Application::GetParameterImage< DoubleImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE FloatImageType * Application::GetParameterImage< FloatImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE DoubleImageType * Application::GetParameterImage< DoubleImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt16ImageType * Application::GetParameterImage< ComplexInt16ImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt32ImageType * Application::GetParameterImage< ComplexInt32ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16ImageType * Application::GetParameterImage< ComplexInt16ImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32ImageType * Application::GetParameterImage< ComplexInt32ImageType >( std::string );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexFloatImageType * Application::GetParameterImage< ComplexFloatImageType >( std::string );
-template OTBApplicationEngine_EXPORT_TEMPLATE ComplexDoubleImageType * Application::GetParameterImage< ComplexDoubleImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatImageType * Application::GetParameterImage< ComplexFloatImageType >( std::string );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleImageType * Application::GetParameterImage< ComplexDoubleImageType >( std::string );
 
 //
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt8VectorImageType >( std::string, UInt8VectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< Int16VectorImageType >( std::string, Int16VectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt16VectorImageType >( std::string, UInt16VectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< Int32VectorImageType >( std::string, Int32VectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt32VectorImageType >( std::string, UInt32VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt8VectorImageType >( std::string, UInt8VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< Int16VectorImageType >( std::string, Int16VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt16VectorImageType >( std::string, UInt16VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< Int32VectorImageType >( std::string, Int32VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt32VectorImageType >( std::string, UInt32VectorImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< FloatVectorImageType >( std::string, FloatVectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< DoubleVectorImageType >( std::string, DoubleVectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< FloatVectorImageType >( std::string, FloatVectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< DoubleVectorImageType >( std::string, DoubleVectorImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt16VectorImageType >( std::string, ComplexInt16VectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt32VectorImageType >( std::string, ComplexInt32VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt16VectorImageType >( std::string, ComplexInt16VectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt32VectorImageType >( std::string, ComplexInt32VectorImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexFloatVectorImageType >( std::string, ComplexFloatVectorImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexDoubleVectorImageType >( std::string, ComplexDoubleVectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexFloatVectorImageType >( std::string, ComplexFloatVectorImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexDoubleVectorImageType >( std::string, ComplexDoubleVectorImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt8RGBImageType >( std::string, UInt8RGBImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt8RGBAImageType >( std::string, UInt8RGBAImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt8RGBImageType >( std::string, UInt8RGBImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt8RGBAImageType >( std::string, UInt8RGBAImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt8ImageType >( std::string, UInt8ImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< Int16ImageType >( std::string, Int16ImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt16ImageType >( std::string, UInt16ImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< Int32ImageType >( std::string, Int32ImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< UInt32ImageType >( std::string, UInt32ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt8ImageType >( std::string, UInt8ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< Int16ImageType >( std::string, Int16ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt16ImageType >( std::string, UInt16ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< Int32ImageType >( std::string, Int32ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< UInt32ImageType >( std::string, UInt32ImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< FloatImageType >( std::string, FloatImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< DoubleImageType >( std::string, DoubleImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< FloatImageType >( std::string, FloatImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< DoubleImageType >( std::string, DoubleImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt16ImageType >( std::string, ComplexInt16ImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt32ImageType >( std::string, ComplexInt32ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt16ImageType >( std::string, ComplexInt16ImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexInt32ImageType >( std::string, ComplexInt32ImageType * );
 
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexFloatImageType >( std::string, ComplexFloatImageType * );
-template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage< ComplexDoubleImageType >( std::string, ComplexDoubleImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexFloatImageType >( std::string, ComplexFloatImageType * );
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage< ComplexDoubleImageType >( std::string, ComplexDoubleImageType * );
 
 
 void Application::SetName( const std::string & name )
