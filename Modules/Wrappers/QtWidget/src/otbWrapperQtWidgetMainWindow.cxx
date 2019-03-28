@@ -117,6 +117,11 @@ QtMainWindow::~QtMainWindow()
   delete ui;
 }
 
+otb::Wrapper::QtWidgetView* QtMainWindow::Gui() const
+{
+  return gui;
+}
+
 void QtMainWindow::UnhandledException(QString message)
 {
   gui->UnhandledException(message);

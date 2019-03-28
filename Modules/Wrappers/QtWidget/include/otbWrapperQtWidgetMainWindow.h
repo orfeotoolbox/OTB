@@ -48,6 +48,8 @@ public:
   QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr);
   ~QtMainWindow();
 
+  otb::Wrapper::QtWidgetView* Gui() const;
+
 signals:
   void ExecuteAndWriteOutput();
   void Stop();

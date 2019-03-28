@@ -74,6 +74,10 @@ public:
 
 signals:
   void QuitSignal();
+  void ExecuteAndWriteOutput();
+  void Stop();
+  void OTBApplicationOutputImageChanged( const QString &, const QString &);
+  void ExecutionDone( int nbOutputs );
 
 protected:
 
@@ -86,7 +90,8 @@ protected:
 
 protected slots:
 
-  void OnExceptionRaised( QString what );
+  virtual void OnExecButtonClicked() {}
+  virtual void OnExceptionRaised( QString what );
 
 private:
 

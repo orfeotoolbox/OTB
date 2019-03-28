@@ -80,19 +80,14 @@ public:
 
   void BeforeExecuteButtonClicked() override;
 
-signals:
-
-  void OTBApplicationOutputImageChanged( const QString &, const QString &);
-
-  void ExecutionDone( int nbOutputs );
-
 protected:
   QWidget* CreateInputWidgets() override;
 
-public slots:
+protected slots:
+
   /** modify the behaviour of base class OnExceptionRaised
    */
-  void OnExceptionRaised( QString what );
+  void OnExceptionRaised( QString what ) override;
 
 private:
 
