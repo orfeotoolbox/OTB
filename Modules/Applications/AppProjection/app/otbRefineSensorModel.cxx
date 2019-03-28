@@ -118,8 +118,11 @@ private:
     otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
 
     // Read the geom file
-    sm->ReadGeomFile(GetParameterString("ingeom"));
+    bool isRead = sm->ReadGeomFile(GetParameterString("ingeom"));
     sm_ref->ReadGeomFile(GetParameterString("ingeom"));
+
+    if (!isRead)
+      otbAppLogFATAL("Can't read the input geom file!");
 
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
