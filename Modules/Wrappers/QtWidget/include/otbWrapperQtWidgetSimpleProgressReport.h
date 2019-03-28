@@ -61,8 +61,7 @@ public slots:
 
 private:
   QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
-  void operator=(const QtWidgetSimpleProgressReport&); //purposely not
-                                                       //implemented
+  void operator=(const QtWidgetSimpleProgressReport&) = delete;
 
   Application::Pointer              m_Application;
   QtWidgetModel *                   m_Model;
