@@ -64,6 +64,11 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   // Status bar and message default text
   ui->statusBar->showMessage(tr("Select parameters"));
   ui->message->setText("");
+
+  // Setup the progress bar to observe the model
+  ui->progressBar->SetModel(gui->GetModel());
+
+  connect(ui->progressBar, &QtWidgetSimpleProgressReport::SetText, ui->message, &QLabel::setText);
 }
 
 void QtMainWindow::UpdateMessageAfterApplicationReady( bool val )

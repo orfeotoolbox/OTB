@@ -30,35 +30,25 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent)
-  : QWidget(parent)
+QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QWidget * parent)
+  : itk::QtProgressBar(parent)
   , m_CurrentProcess()
 {
-  m_Model = model;
-  m_Application = model->GetApplication();
+}
 
+void QtWidgetSimpleProgressReport::SetModel(QtWidgetModel* model)
+{
   connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show );
   connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init );
   connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess );
 
-  m_Layout = new QVBoxLayout;
-  this->setLayout(m_Layout);
-
   m_AddProcessCommand = AddProcessCommandType::New();
   m_AddProcessCommand->SetCallbackFunction( this, &QtWidgetSimpleProgressReport::ProcessEvent );
 
-  m_Bar =  new itk::QtProgressBar(this);
+  connect( this, &itk::QtProgressBar::SetValueChanged, this, &itk::QtProgressBar::setValue );
+  connect( model, &QtWidgetModel::SetProgressReportDone, this, &itk::QtProgressBar::reset );
 
-  m_Label = new QLabel("No process", this);
-  m_Label->setWordWrap(true);
-  connect( m_Bar, &itk::QtProgressBar::SetValueChanged, m_Bar, &itk::QtProgressBar::setValue );
-  connect( m_Model, &QtWidgetModel::SetProgressReportDone, m_Bar, &itk::QtProgressBar::reset );
-
-  m_Layout->addWidget(m_Label);
-  m_Layout->addWidget(m_Bar);
-
-  this->show();
-  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
+  model->GetApplication()->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
 }
 
 QtWidgetSimpleProgressReport::~QtWidgetSimpleProgressReport()
@@ -84,15 +74,14 @@ QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
 
 void QtWidgetSimpleProgressReport::ReportProcess()
 {
-  m_Bar->Observe(m_CurrentProcess);
-  m_Label->setText(QString(m_CurrentDescription.c_str()));
+  this->Observe(m_CurrentProcess);
+  emit SetText(QString::fromStdString(m_CurrentDescription));
 }
-
 
 void QtWidgetSimpleProgressReport::Init()
 {
-  m_Bar->setValue(0);
-  m_Label->setText("No process");
+  this->setValue(0);
+  emit SetText(QString(""));
 }
 
 }
