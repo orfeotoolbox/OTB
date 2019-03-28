@@ -19,7 +19,6 @@
 #
 
 set( OTBApplicationEngine_SRC
-  otbWrapperApplicationHtmlDocGenerator.cxx
   otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
