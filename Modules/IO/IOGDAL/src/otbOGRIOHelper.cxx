@@ -187,6 +187,21 @@ void OGRIOHelper
 
   layer->ResetReading();
 
+  // Warn user that 3D data are not supported for reading/writing
+  auto geomType = layer->GetGeomType();
+
+  if(geomType == wkbPoint25D 
+     || geomType == wkbLineString25D 
+     || geomType == wkbPolygon25D 
+     || geomType == wkbMultiPoint25D 
+     || geomType == wkbMultiLineString25D 
+     || geomType == wkbMultiPolygon25D 
+     || geomType == wkbGeometryCollection25D)
+    {
+    otbLogMacro(Warning,<<"OGRVectorDataIO does not support 3D data. "<<OGRGeometryTypeToName(geomType)<<" will be converted to 2D upon reading."); 
+    }
+
+
   unsigned int   counter = 0;
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
