@@ -920,13 +920,10 @@ unsigned int OGRIOHelper
       }
       case FEATURE_MULTIPOINT:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multipoint.");
-        }
-
       OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*) OGRGeometryFactory::createGeometry(wkbMultiPoint);
       OGRFeature *   ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiPoint, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -938,21 +935,17 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
 
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTILINE:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multiline.");
-        }
-
       // Instantiate a new  ogrMultiLineString feature
       OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
         wkbMultiLineString);
 
       OGRFeature *ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiLineString, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -963,19 +956,16 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+
       break;
       }
       case FEATURE_MULTIPOLYGON:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multipolygon.");
-        }
-
       // Instantiate a new multipolygon feature
       OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
       OGRFeature *     ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiPolygon, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -986,20 +976,18 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+
       break;
       }
       case FEATURE_COLLECTION:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating collection.");
-        }
 
       OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(
         wkbGeometryCollection);
 
       OGRFeature *ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -1010,8 +998,6 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       }
