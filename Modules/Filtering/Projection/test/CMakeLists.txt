@@ -370,7 +370,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterPoints COMMAND otbProjectionTest
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterPolygons COMMAND otbProjectionTestDriver
-  --compare-ogr  ${EPSILON_9}
+  --compare-ogr  ${EPSILON_3}
   ${BASELINE_FILES}/prTvGeometriesProjectionFilterPolygons.shp
   ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
   otbGeometriesProjectionFilter
