@@ -36,6 +36,12 @@ List or link documentation modifications that were made (doxygen, example, Softw
 
 The copyright owner is *COPYRIGHT OWNER (OR OWNER'S AGENT)* and has signed the ORFEO ToolBox Contributor License Agreement.
 
+#### Dashboard status
+
+<!--- Replace branch_name with the name of the branch for this merge request to get a direct link to dashboard builds for this Merge Request --->
+
+[Direct link to all dashboard builds related to this Merge Request](https://cdash.orfeo-toolbox.org/index.php?project=OTB&filtercount=1&showfilters=1&field1=buildname&compare1=63&value1=branch_name)
+
 <hr>
 
 ***Check before merging:***
