@@ -102,6 +102,10 @@ public:
 
   void InitializeWriters();
 
+  ParameterType GetType() const override;
+  std::string   ToString() const override;
+  void          FromString(const std::string& value) override;
+
 protected:
   /** Constructor */
   ComplexOutputImageParameter();

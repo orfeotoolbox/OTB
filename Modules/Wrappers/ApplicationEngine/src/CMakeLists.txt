@@ -20,7 +20,6 @@
 #
 
 set( OTBApplicationEngine_SRC
-  otbWrapperApplicationHtmlDocGenerator.cxx
   otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
@@ -62,6 +61,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperMetaDataHelper.cxx
   otbWrapperParameter.cxx
   otbWrapperCastImage.cxx
+  otbWrapperTypes.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

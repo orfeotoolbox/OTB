@@ -232,7 +232,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType = std::vector<T>
   , bool Is_contiguous = boost::is_contiguous<ActualParamType>::value
   > class TagDispatchMemberContainerSetterPtr;
@@ -241,7 +245,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType
   > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, true>
     {
@@ -257,7 +265,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType
   > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, false>
     {

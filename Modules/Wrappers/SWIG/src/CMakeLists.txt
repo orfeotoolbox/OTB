@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-if ( OTB_WRAP_PYTHON OR OTB_WRAP_JAVA )
+if ( OTB_WRAP_PYTHON )
   include ( UseSWIGLocal )
   list(APPEND SWIG_EXTRA_DEPS
        otbWrapperSWIGIncludes.h
@@ -32,9 +32,4 @@ endif()
 # Python SWIG configuration
 if ( OTB_WRAP_PYTHON )
   add_subdirectory(python)
-endif()
-
-# JAVA SWIG configuration
-if ( OTB_WRAP_JAVA )
-  add_subdirectory(java)
 endif()

@@ -21,7 +21,7 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    reporting,
 
 -  A SWIG interface, which means that any application can be loaded,
-   set-up and executed into a high-level language such as Python or Java
+   set-up and executed into a high-level language such as Python
    for instance.
 
 -  `QGIS <http://www.qgis.org/>`_  plugin built on top of

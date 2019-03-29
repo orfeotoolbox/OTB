@@ -95,7 +95,7 @@ otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
   ${TEMP}/bfLogPolarTransformResampleOutput.tif
   otbLogPolarTransformResample
-  ${INPUTDATA}/circle.hdr
+  ${INPUTDATA}/circle.raw.hdr
   ${TEMP}/bfLogPolarTransformResampleOutput.tif
   )
 

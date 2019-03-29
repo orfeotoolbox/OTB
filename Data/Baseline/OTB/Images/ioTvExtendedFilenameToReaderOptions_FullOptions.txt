@@ -1,0 +1,12 @@
+1
+/home/data/filename.tif
+1
+/home/dev/custom.geom
+1
+2
+1
+4
+1
+1
+1
+[-23,:3,45:,-6,234:-5]

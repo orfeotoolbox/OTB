@@ -1,0 +1,16 @@
+ENVI
+description = {
+  Display Output to Image [Mon Sep 11 10:11:01 2006]}
+samples = 720
+lines   = 540
+bands   = 1
+header offset = 0
+file type = ENVI Standard
+data type = 1
+interleave = bsq
+sensor type = Unknown
+byte order = 0
+wavelength units = Unknown
+default stretch = 0.000000 255.000000 linear
+band names = {
+ Gray Scale (Image (DeuxCercles.png):[Memory2])}

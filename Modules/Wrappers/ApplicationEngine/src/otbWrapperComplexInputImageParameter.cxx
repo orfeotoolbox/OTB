@@ -146,6 +146,21 @@ ComplexInputImageParameter::ClearValue()
   m_UseFilename = true;
 }
 
+ParameterType ComplexInputImageParameter::GetType() const
+{
+  return ParameterType_ComplexInputImage;
+}
+
+std::string ComplexInputImageParameter::ToString() const
+{
+  return GetFileName();
+}
+
+void ComplexInputImageParameter::FromString(const std::string& value)
+{
+  SetFromFileName(value);
+}
+
 /* Support for ComplexInputImageParameter. This has been done to support 
 the macro otbGetParameterImageMacro of otbWrapperApplication.h */
 #define otbGetFalseImageMacro(image)                  \

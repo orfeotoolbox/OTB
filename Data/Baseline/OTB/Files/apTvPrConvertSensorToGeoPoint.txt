@@ -1,0 +1,4 @@
+output.idx: 1.43397522
+output.idy: 43.6022377
+output.town: Toulouse
+output.country: France

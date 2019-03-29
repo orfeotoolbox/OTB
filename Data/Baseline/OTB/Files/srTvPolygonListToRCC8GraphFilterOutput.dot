@@ -1,0 +1,12 @@
+digraph G {
+0 [NumberOfPointsInPath="4",P0x="0",P0y="0",P1x="2",P1y="0",P2x="2",P2y="6",P3x="0",P3y="6",SegmentationLevel="0",SegmentationType="1"];
+1 [NumberOfPointsInPath="4",P0x="1",P0y="1",P1x="4",P1y="1",P2x="4",P2y="5",P3x="1",P3y="5",SegmentationLevel="0",SegmentationType="1"];
+2 [NumberOfPointsInPath="4",P0x="3",P0y="1",P1x="4",P1y="1",P2x="4",P2y="2",P3x="3",P3y="2",SegmentationLevel="1",SegmentationType="1"];
+3 [NumberOfPointsInPath="4",P0x="5",P0y="1",P1x="8",P1y="1",P2x="8",P2y="5",P3x="5",P3y="5",SegmentationLevel="1",SegmentationType="1"];
+4 [NumberOfPointsInPath="4",P0x="6",P0y="2",P1x="7",P1y="2",P2x="7",P2y="3",P3x="6",P3y="3",SegmentationLevel="2",SegmentationType="1"];
+5 [NumberOfPointsInPath="4",P0x="8",P0y="1",P1x="9",P1y="1",P2x="9",P2y="5",P3x="8",P3y="5",SegmentationLevel="2",SegmentationType="1"];
+0 -> 1 [Value="2"];
+2 -> 1 [Value="3"];
+3 -> 5 [Value="2"];
+4 -> 3 [Value="5"];
+}

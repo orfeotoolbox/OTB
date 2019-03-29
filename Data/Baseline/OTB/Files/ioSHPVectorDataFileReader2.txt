@@ -1,0 +1,18 @@
++Root (Root)
++Document (ToulouseRoad-examples)
++Line () 6 points
+  -> Metadata:    VectorData Keyword list:    - Size: 1
+      number (Integer): 1
+
++Line () 4 points
+  -> Metadata:    VectorData Keyword list:    - Size: 1
+      number (Integer): 2
+
++Line () 9 points
+  -> Metadata:    VectorData Keyword list:    - Size: 1
+      number (Integer): 3
+
++Line () 4 points
+  -> Metadata:    VectorData Keyword list:    - Size: 1
+      number (Integer): 4
+

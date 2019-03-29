@@ -310,5 +310,19 @@ void ComplexOutputImageParameter::SetFileName (const std::string& filename)
   SetActive(true);
 }
 
+ParameterType ComplexOutputImageParameter::GetType() const
+{
+  return ParameterType_ComplexOutputImage;
+}
+
+std::string ComplexOutputImageParameter::ToString() const
+{
+  return GetFileName();
+}
+
+void ComplexOutputImageParameter::FromString(const std::string& value)
+{
+  SetFileName(value);
+}
 }
 }

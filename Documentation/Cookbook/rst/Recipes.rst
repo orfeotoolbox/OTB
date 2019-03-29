@@ -18,3 +18,4 @@ and demonstrate how they can be applied.
    recipes/pbclassif.rst
    recipes/featextract.rst
    recipes/stereo.rst
+   recipes/hyperspectral.rst

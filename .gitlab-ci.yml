@@ -1,6 +1,29 @@
+# WARNING!
+# OTB uses Git-LFS to store the (large) tests data.
+# Git-LFS is mostly transparent for the user and recent versions
+# are able to use Git-LFS quite efficiently.
+# But Git fails to manage efficiently numerous LFS data.
+# We have to use directly git-lfs wrapping commands to have an
+# efficient cloning step.
+# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of 
+# GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
+
 variables:
+  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/gbonnefille/otb-build-env
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
+  # Disable automatic checkout to let us fetch LFS before
+  GIT_CHECKOUT: "false"
+  # The fetch strategy fails with LFS and GitLab
+  GIT_STRATEGY: "clone"
+
+before_script:
+  # make sure LFS hooks are installed
+  - git lfs install
+  # Provision efficiently the local LFS cache before checkout
+  - git lfs fetch origin $CI_COMMIT_SHA
+  # Checkout the expected branch
+  - git checkout $CI_COMMIT_REF_NAME
 
 stages:
   - build
@@ -11,71 +34,35 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
-  # variables:
-  #   CI_DEBUG_TRACE: "true"
 
 native-build:
   extends: .general
   only: [merge_requests]
   stage: build
-  image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-native:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-.build-common:
+debian-build:
+  extends: .general
+  only: [merge_requests]
+  stage: build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+
+.common-build:
   extends: .general
   stage: build
-  image: registry.orfeo-toolbox.org/gbonnefille/otb-build-env/otb-ubuntu-shark:18.04
-  before_script:
-    # ccache configuration
-    - mkdir -p ccache
-    - export CCACHE_BASEDIR=${PWD}
-    - export CCACHE_DIR=${PWD}/ccache
-    - echo "max_size = 3G" > ccache/ccache.conf
-    - echo "run_second_cpp = true" >> ccache/ccache.conf
-    - echo "compiler_check = content" >> ccache/ccache.conf
-    - echo "sloppiness = time_macros" >> ccache/ccache.conf
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
-  cache:
-    key: "ubuntu-18.04-llvm-shark"
-    paths:
-      - ccache/
 
-build-wip:
-  extends: .build-common
-  variables:
-    OTB_CI_PROFILE: 'wip'
-  except:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
-  cache:
-    policy: pull
+build:ubuntu-llvm:
+  only: [merge_requests]
+  extends: .common-build
 
-build-mr:
-  extends: .build-common
-  variables:
-    OTB_CI_PROFILE: 'mr'
-  only:
-    - merge_requests
-  cache:
-    policy: pull
+build:ubuntu-llvm-wip:
+  except: [merge_requests]
+  extends: .common-build
 
-build-develop:
-  extends: .build-common
-  variables:
-    OTB_CI_PROFILE: 'develop'
-  only:
-    - develop
-  cache:
-    policy: pull-push
-
-build-release:
-  extends: .build-common
-  variables:
-    OTB_CI_PROFILE: 'release'
-  only:
-    - /^release-[0-9]+\.[0-9]+$/
-  cache:
-    policy: pull

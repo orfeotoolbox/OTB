@@ -178,11 +178,6 @@ if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EX
   set(HAVE_PYTHON TRUE)
 endif()
 
-set(HAVE_JAVA FALSE CACHE INTERNAL "Java wrappings")
-if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/java/org.otb.application.jar")
-  set(HAVE_JAVA TRUE)
-endif()
-
 #only for *nix
 if(UNIX)
   file(WRITE ${CMAKE_BINARY_DIR}/make_symlinks   "#!/bin/sh\n")
