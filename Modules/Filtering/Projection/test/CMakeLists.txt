@@ -371,7 +371,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterPoints COMMAND otbProjectionTest
 
 otb_add_test(NAME prTvGeometriesProjectionFilterPolygons COMMAND otbProjectionTestDriver
   --compare-ogr  ${EPSILON_9}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+  ${BASELINE_FILES}/prTvGeometriesProjectionFilterPolygons.shp
   ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
   otbGeometriesProjectionFilter
   ${INPUTDATA}/Capitole-Shadows.shp
