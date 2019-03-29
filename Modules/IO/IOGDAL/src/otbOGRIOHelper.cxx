@@ -715,8 +715,7 @@ unsigned int OGRIOHelper
       ogrCurrentLayer = m_DataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
         {
-        //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
-        std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
         }
       else
         {
@@ -768,7 +767,6 @@ unsigned int OGRIOHelper
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
           {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
-          //std::cout << "Failed to create feature in shapefile."
           }
 
         OGRFeature::DestroyFeature(ogrFeature);
@@ -1084,7 +1082,7 @@ std::vector<OGRLayer*> OGRIOHelper
                                       wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
         {
-        std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
         }
       else
         {
