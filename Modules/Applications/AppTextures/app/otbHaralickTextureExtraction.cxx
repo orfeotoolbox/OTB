@@ -91,7 +91,7 @@ SetDocLongDescription(
     "sharpness homogeneity), Low Grey-Level Run Emphasis, High Grey-Level Run Emphasis, "
     "Short Run Low Grey-Level Emphasis, Short Run High Grey-Level Emphasis, Long Run Low "
     "Grey-Level Emphasis and Long Run High Grey-Level Emphasis.\n\n"
-    "The documentation of textures (description are formulas) are available in the OTB Software Guide (section Textures) and also in corresponding doxygen "
+    "The documentation of textures (description are formulas) are available in the OTB CookBook (section Textures) and also in corresponding doxygen "
     "documentation of filters (see section *Detailed Description* in doxygen):\n"
     "* **simple**: otbScalarImageToTexturesFilter\n"
     "* **advanced**: otbScalarImageToAdvancedTexturesFilter\n"
