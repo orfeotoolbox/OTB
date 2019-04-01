@@ -19,10 +19,8 @@
 #
 
 set( OTBApplicationEngine_SRC
-  otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
-  otbWrapperComplexInputImageParameter.cxx
   otbWrapperParameterGroup.cxx
   otbWrapperOutputProcessXMLParameter.cxx
   otbWrapperInputImageListParameter.cxx

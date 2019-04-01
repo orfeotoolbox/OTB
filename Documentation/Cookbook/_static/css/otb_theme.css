@@ -10,6 +10,11 @@
     margin-top: .8em;
 }
 
+/* Small fix for the last section of the menu */
+.wy-menu-vertical {
+    margin-bottom: 1em;
+};
+
 /* Reduce the effect of the p bottom margin before lists
  * Very useful for choice parameters in app doc for example
  */

@@ -42,7 +42,7 @@ def generate_examples_index(rst_dir, list_of_examples):
     # Render index file and tag index files
     os.makedirs(join(rst_dir, "Examples"), exist_ok=True)
     index_f = open(join(rst_dir, "Examples.rst"), "w")
-    index_f.write(RstPageHeading("Examples", 3, ref="cpp-examples"))
+    index_f.write(RstPageHeading("C++ Examples", 3, ref="cpp-examples"))
 
     for tag, examples_filenames in tag_files.items():
         tag_filename = join("Examples", tag + ".rst")
