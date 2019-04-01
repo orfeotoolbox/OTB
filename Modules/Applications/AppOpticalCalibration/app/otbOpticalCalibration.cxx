@@ -299,10 +299,10 @@ private:
     AddChoice("atmo.aerosol.desertic",    "Desertic");
 
     AddParameter(ParameterType_Float, "atmo.oz", "Ozone Amount (cm-atm)");
-    SetParameterDescription("atmo.oz", "Ozone Amount (in cm-atm)");
+    SetParameterDescription("atmo.oz", "Stratospheric ozone layer content (in cm-atm)");
 
     AddParameter(ParameterType_Float, "atmo.wa", "Water Vapor Amount (g/cm2)");
-    SetParameterDescription("atmo.wa", "Water Vapor Amount (in g/cm2)");
+    SetParameterDescription("atmo.wa", "Total water vapor content over vertical atmospheric column (in g/cm2)");
 
     AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure (hPa)");
     SetParameterDescription("atmo.pressure", "Atmospheric Pressure (in hPa)");
