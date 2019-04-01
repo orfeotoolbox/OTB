@@ -1058,29 +1058,30 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 
       theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
 
+      // Patch_locS1 : do not fix the range time
       // Then, fix the range time
-      count=0;
+      // count=0;
 
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
-      {
-         ossimDpt estimatedImPt;
-         TimeType estimatedAzimuthTime;
-         double   estimatedRangeTime;
+      // for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+      // {
+      //    ossimDpt estimatedImPt;
+      //    TimeType estimatedAzimuthTime;
+      //    double   estimatedRangeTime;
 
-         ossimEcefPoint sensorPos;
-         ossimEcefVector sensorVel;
+      //    ossimEcefPoint sensorPos;
+      //    ossimEcefVector sensorVel;
 
-         // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+      //    // Estimate times
+      //    const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
-         if(s1)
-         {
-            cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
-            ++count;
-         }
-      }
+      //    if(s1)
+      //    {
+      //       cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
+      //       ++count;
+      //    }
+      // }
 
-      theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
+      // theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
    }
 
    void get(
