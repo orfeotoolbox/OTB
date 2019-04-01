@@ -96,7 +96,8 @@ InputImageParameter
 
   details::CastImage< TOutputImage, TInputImage > clamp( image );
 
-  clamp.ocif->UpdateOutputInformation();
+  if( clamp.ocif )
+    clamp.ocif->UpdateOutputInformation();
 
   m_InputCaster = clamp.icif;
   m_OutputCaster = clamp.ocif;
