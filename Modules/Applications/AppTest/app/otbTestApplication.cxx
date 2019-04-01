@@ -102,9 +102,6 @@ private:
     AddChoice("cl.choice2", "Choice2");
     MandatoryOff("cl");
 
-    AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
-    AddParameter(ParameterType_ComplexOutputImage,  "cout", "Output Complex Image");
-
     // Doc example parameter settings
     SetDocExampleParameterValue("boolean", "true");
     SetDocExampleParameterValue("filename", "myFilename.foo");
@@ -134,11 +131,6 @@ private:
       {
       otbAppLogFATAL("Waiting at least one input image");
       }
-
-    SetParameterComplexOutputImage(
-      "cout",
-      GetParameterComplexImage( "cin" )
-    );
 
     PrintStrings( "fl" );
   }
