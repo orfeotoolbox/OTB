@@ -342,7 +342,8 @@ private:
 
     // Pixel spacing
     AddParameter(ParameterType_Float, "atmo.pixsize", "Pixel size (in km)");
-    SetParameterDescription("atmo.pixsize", "Pixel size (in km) used to"
+    SetParameterDescription("atmo.pixsize",
+                            "Pixel size (in km) used to"
                             "compute adjacency effects, it doesn't have to"
                             "match the image spacing");
     SetMinimumParameterFloatValue("atmo.pixsize",0.0);
