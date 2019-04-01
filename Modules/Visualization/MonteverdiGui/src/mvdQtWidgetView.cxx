@@ -166,7 +166,6 @@ QtWidgetView
   //SetupWidget( widget, InputFilenameListInitializer() );
   SetupWidget( widget, InputImageInitializer() );
   //SetupWidget( widget, InputImageListInitializer() );
-  SetupWidget( widget, ComplexInputImageInitializer() );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   //SetupWidget( widget, InputVectorDataListInitializer() );
@@ -181,10 +180,6 @@ QtWidgetView
   SetupWidget(
     widget,
     OutputImageInitializer( GetModel()->GetApplication()->GetName() )
-  );
-  SetupWidget(
-    widget,
-    ComplexOutputImageInitializer( GetModel()->GetApplication()->GetName() )
   );
 
   SetupWidget( widget, OutputVectorDataInitializer() );
@@ -244,10 +239,6 @@ void QtWidgetView::BeforeExecuteButtonClicked()
 
       case otb::Wrapper::ParameterType_OutputVectorData:
         filename = otb::DynamicCast<otb::Wrapper::OutputVectorDataParameter>(param)->GetFileName();
-        break;
-
-      case otb::Wrapper::ParameterType_ComplexOutputImage:
-        filename = otb::DynamicCast<otb::Wrapper::ComplexOutputImageParameter>(param)->GetFileName();
         break;
 
       default:
