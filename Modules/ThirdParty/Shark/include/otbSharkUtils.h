@@ -139,9 +139,14 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 template <typename T> void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, 
                                                            std::vector<T>& dictionary)
 {
+  std::vector<T> sorted_labels;
+  std::copy(std::begin(labels), std::end(labels), std::back_inserter(sorted_labels));
+  std::sort(std::begin(sorted_labels), std::end(sorted_labels));
+  auto last = std::unique(std::begin(sorted_labels), std::end(sorted_labels));
+  sorted_labels.erase(last, std::end(sorted_labels));
   std::unordered_map<T, T> dictMap;
   T labelCount{0};
-  for(const auto& l : labels)
+  for(const auto& l : sorted_labels)
     {
     if(dictMap.find(l)==dictMap.end())
       dictMap.insert({l, labelCount++});
