@@ -280,12 +280,12 @@ private:
     SetDefaultParameterFloat("acqui.view.azim",0.0);
 
     //Gain & bias
-    AddParameter(ParameterType_InputFilename, "acqui.gainbias",   "Gains or biases");
+    AddParameter(ParameterType_InputFilename, "acqui.gainbias", "Gains or biases");
     SetParameterDescription("acqui.gainbias", "Gains or biases");
     MandatoryOff("acqui.gainbias");
     //Solar illuminations
-    AddParameter(ParameterType_InputFilename, "acqui.solarilluminations",   "Solar illuminations");
-    SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band)");
+    AddParameter(ParameterType_InputFilename, "acqui.solarilluminations", "Solar illuminations");
+    SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band, in W/m^2/micron)");
     MandatoryOff("acqui.solarilluminations");
 
     //Atmospheric parameters (TOC)
@@ -298,17 +298,17 @@ private:
     AddChoice("atmo.aerosol.urban",       "Urban");
     AddChoice("atmo.aerosol.desertic",    "Desertic");
 
-    AddParameter(ParameterType_Float, "atmo.oz",   "Ozone Amount");
-    SetParameterDescription("atmo.oz", "Ozone Amount");
+    AddParameter(ParameterType_Float, "atmo.oz", "Ozone Amount (cm-atm)");
+    SetParameterDescription("atmo.oz", "Ozone Amount (in cm-atm)");
 
-    AddParameter(ParameterType_Float, "atmo.wa",   "Water Vapor Amount");
-    SetParameterDescription("atmo.wa", "Water Vapor Amount (in saturation fraction of water)");
+    AddParameter(ParameterType_Float, "atmo.wa", "Water Vapor Amount (g/cm2)");
+    SetParameterDescription("atmo.wa", "Water Vapor Amount (in g/cm2)");
 
-    AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure");
+    AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure (hPa)");
     SetParameterDescription("atmo.pressure", "Atmospheric Pressure (in hPa)");
 
     AddParameter(ParameterType_Float, "atmo.opt",  "Aerosol Optical Thickness");
-    SetParameterDescription("atmo.opt", "Aerosol Optical Thickness");
+    SetParameterDescription("atmo.opt", "Aerosol Optical Thickness (unitless)");
 
     SetDefaultParameterFloat("atmo.oz", 0.);
     SetDefaultParameterFloat("atmo.wa",  2.5);
@@ -342,7 +342,7 @@ private:
 
     // Pixel spacing
     AddParameter(ParameterType_Float, "atmo.pixsize", "Pixel size (in km)");
-    SetParameterDescription("atmo.pixsize", "Pixel size (in km )used to"
+    SetParameterDescription("atmo.pixsize", "Pixel size (in km) used to"
                             "compute adjacency effects, it doesn't have to"
                             "match the image spacing");
     SetMinimumParameterFloatValue("atmo.pixsize",0.0);
