@@ -33,14 +33,12 @@
 */
 
 
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //
 //
 // The following example illustrates the use of the
-// otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
+// itk::UnaryFunctorImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red
 // and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
@@ -61,17 +59,12 @@
 //
 // For more details, refer to Plummer work \cite{AVI}.
 //
-// With the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class the input has to be a multi channel image and the user has to
-// specify the channel index of the red, green and NIR channel.
 //
 // Let's look at the minimal code required to use this
-// algorithm. First, the following header defining the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class must be included.
+// algorithm.
 
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -112,13 +105,13 @@ int main(int argc, char* argv[])
   typedef otb::Functor::AVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
+  // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndGAndNIRIndexImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> AVIImageFilterTypeType;
 
-  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
+  AVIImageFilterTypeType::Pointer filter = AVIImageFilterTypeType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -130,12 +123,12 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, green and NIR) are declared.
 
-  filter->SetRedIndex(::atoi(argv[5]));
-  filter->SetGreenIndex(::atoi(argv[6]));
-  filter->SetNIRIndex(::atoi(argv[7]));
+  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
+  filter->GetFunctor().SetGreenIndex(::atoi(argv[6]));
+  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
 
   // The $\lambda$ R, G and NIR parameters are set. The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
+  // \doxygen{otb::Functor}{AVI}
   // class sets the default values of $\lambda$ to $660$, $560$ and
   // $830$.
 
