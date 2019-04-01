@@ -623,6 +623,10 @@ otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProje
   0
   )
 
+set(VALID_CONDITION err=12)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION err=10)
+endif()
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
@@ -727,9 +731,13 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6063 144.66
   2450 2400 1.43239 43.6051 144.932
   2450 2450 1.43239 43.6038 136.794
-  err=10 # Tolerance in meters, the first goal of this test
+  ${VALID_CONDITION} # Tolerance in meters, the first goal of this test
   )
 
+set(VALID_CONDITION err=20)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION err=10)
+endif()
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
@@ -834,7 +842,7 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6059 0
   2450 2400 1.43238 43.6047 0
   2450 2450 1.43239 43.6034 0
-  err=10 # Tolerance in meters, the first goal of this test
+  ${VALID_CONDITION} # Tolerance in meters, the first goal of this test
   )
 
 otb_add_test(NAME prTvGeographicalDistance COMMAND otbProjectionTestDriver
@@ -861,10 +869,15 @@ otb_add_test(NAME prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 COM
   LARGEINPUT{PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2}
   )
 
-otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProjectionTestDriver
+set(VALID_CONDITION)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION
   --compare-image ${EPSILON_4}
   ${BASELINE}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
-  ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
+  ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif)
+endif()
+otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProjectionTestDriver
+  ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterAndOrtho
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
@@ -983,10 +996,15 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProject
   #LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
   #)
 
-otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
+set(VALID_CONDITION)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION
   --compare-ascii ${EPSILON_4}
   ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
-  ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
+  ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt)
+endif()
+otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
+  ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterWithoutDEM
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
