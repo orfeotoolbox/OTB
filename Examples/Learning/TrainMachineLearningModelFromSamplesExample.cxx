@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
     TargetListSample->PushBack(label);
   }
 
-  // Displays the corresponding values (not into the Software Guide)
+  // Displays the corresponding values
   for (int i = 0; i < nbSamples; ++i)
   {
     std::cout << i + 1 << "-label = " << TargetListSample->GetMeasurementVector(i) << std::endl;

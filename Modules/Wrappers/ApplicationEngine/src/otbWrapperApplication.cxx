@@ -858,25 +858,6 @@ int Application::ExecuteAndWriteOutput()
             outputParam->Write();
             }
           }
-        else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-
-          if(outputParam!=nullptr)
-            {
-            outputParam->InitializeWriters();
-            if (useRAM)
-              {
-              outputParam->SetRAMValue(ram);
-              }
-            std::ostringstream progressId;
-            progressId << "Writing " << outputParam->GetFileName() << "...";
-            AddProcess(outputParam->GetWriter(), progressId.str());
-            outputParam->Write();
-            }
-          }
         //xml writer parameter
         else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
                  && IsParameterEnabled(key) && HasValue(key) )
@@ -1123,13 +1104,6 @@ void Application::SetDefaultOutputPixelType(std::string key, ImagePixelType type
   param->SetPixelType(type);
 }
 
-void Application::SetDefaultOutputComplexPixelType(std::string key, ComplexImagePixelType type)
-{
-  auto param = downcast_check<ComplexOutputImageParameter>(GetParameterByKey(key));
-  param->SetDefaultComplexPixelType(type);
-  param->SetComplexPixelType(type);
-}
-
 void Application::SetMinimumParameterIntValue(std::string key, int value)
 {
   auto param = downcast_check<IntParameter>(GetParameterByKey(key));
@@ -1172,22 +1146,10 @@ void Application::SetParameterOutputImage(std::string key, FloatVectorImageType*
   param->SetValue(value);
 }
 
-void Application::SetParameterComplexOutputImage(std::string key, ComplexFloatVectorImageType* value)
-{
-  auto param = downcast_check<ComplexOutputImageParameter>(GetParameterByKey(key));
-  param->SetValue(value);
-}
-
 void Application::SetParameterOutputImagePixelType(std::string key, ImagePixelType pixelType)
 {
   auto param = downcast_check<OutputImageParameter>(GetParameterByKey(key));
   param->SetPixelType(pixelType);
-}
-
-void Application::SetParameterComplexOutputImagePixelType(std::string key, ComplexImagePixelType cpixelType)
-{
-  auto param = downcast_check<ComplexOutputImageParameter>(GetParameterByKey(key));
-  param->SetComplexPixelType(cpixelType);
 }
 
 void Application::SetParameterOutputVectorData(std::string key, VectorDataType* value)
@@ -1249,18 +1211,6 @@ ImageBaseType* Application::GetParameterOutputImage(std::string key)
   return param->GetValue();
 }
 
-void Application::SetParameterComplexInputImage(std::string key, ImageBaseType* inputImage)
-{
-  auto param = downcast_check<ComplexInputImageParameter>(GetParameterByKey(key));
-  param->SetImage(inputImage);
-}
-
-ImageBaseType* Application::GetParameterComplexOutputImage(std::string key)
-{
-  auto param = downcast_check<ComplexOutputImageParameter>(GetParameterByKey(key));
-  return param->GetValue();
-}
-
 void Application::AddImageToParameterInputImageList(std::string key, ImageBaseType* img)
 {
   auto param = downcast_check<InputImageListParameter>(GetParameterByKey(key));
@@ -1308,12 +1258,6 @@ FloatVectorImageListType* Application::GetParameterImageList(std::string key)
   return param->GetImageList();
 }
 
-ComplexFloatVectorImageType* Application::GetParameterComplexImage(std::string key)
-{
-  auto param = downcast_check<ComplexInputImageParameter>(GetParameterByKey(key));
-  return param->GetImage();
-}
-
 VectorDataType* Application::GetParameterVectorData(std::string key)
 {
   auto param = downcast_check<InputVectorDataParameter>(GetParameterByKey(key));
@@ -1335,12 +1279,6 @@ ImagePixelType Application::GetParameterOutputImagePixelType(std::string key)
 {
   auto param = downcast_check<OutputImageParameter>(GetParameterByKey(key));
   return param->GetPixelType();
-}
-
-ComplexImagePixelType Application::GetParameterComplexOutputImagePixelType(std::string key)
-{
-  auto param = downcast_check<ComplexOutputImageParameter>(GetParameterByKey(key));
-  return param->GetComplexPixelType();
 }
 
 void
@@ -1623,26 +1561,15 @@ Application::GetParameterImageBase(const std::string & key, unsigned int idx)
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     return paramDown->GetNthImage(idx);
     }
-  else if (dynamic_cast<ComplexInputImageParameter*>(param))
-    {
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-    return paramDown->GetImage<ImageBaseType>();
-    }
   else if (dynamic_cast<OutputImageParameter*>(param))
     {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     return paramDown->GetValue();
     }
-  else if (dynamic_cast<ComplexOutputImageParameter*>(param))
-    {
-    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-    return paramDown->GetValue();
-    }
   else
     {
     itkExceptionMacro("Wrong parameter type, expect InputImageParameter, "
-      "InputImageListParameter, ComplexInputImageParameter, "
-      "OutputImageParameter, ComplexOutputImageParameter");
+      "InputImageListParameter or OutputImageParameter");
     }
   return nullptr;
 }
@@ -1668,14 +1595,9 @@ Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, 
       paramDown->SetNthImage(idx, img);
       }
     }
-  else if (dynamic_cast<ComplexInputImageParameter*>(param))
-    {
-    ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-    paramDown->SetImage<ImageBaseType>(img);
-    }
   else
     {
-    itkExceptionMacro("Wrong parameter type, expect InputImageParameter, InputImageListParameter or ComplexInputImageParameter");
+    itkExceptionMacro("Wrong parameter type, expect InputImageParameter or InputImageListParameter");
     }
 }
 
@@ -1741,11 +1663,6 @@ Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
     if ( paramDown )                                                    \
       {                                                                 \
       return paramDown->Get##Image();                                   \
-      }                                                                 \
-    ComplexInputImageParameter* paramDownC = dynamic_cast<ComplexInputImageParameter*>(param); \
-    if ( paramDownC )                                                   \
-      {                                                                 \
-      return paramDownC->Get##Image();                                  \
       }                                                                 \
     return Image##Type::Pointer();                                      \
     }

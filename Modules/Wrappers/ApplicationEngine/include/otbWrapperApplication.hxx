@@ -69,21 +69,6 @@ Application
 }
 
 
-template <class TImageType>
-void
-Application
-::SetParameterComplexOutputImage(std::string parameter, TImageType* value)
-{
-  Parameter* param = GetParameterByKey(parameter);
-
-  if (dynamic_cast<ComplexOutputImageParameter*>(param))
-    {
-    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-    paramDown->SetValue(value);
-    }
-}
-
-
 } // End namespace Wrapper
 
 } // End namespace otb
