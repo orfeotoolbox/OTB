@@ -158,7 +158,7 @@ private:
     else if (GetParameterString("mode") == "apply")
       {
       m_MaskFilters.clear();
-      UInt8ImageType::Pointer maskPtr = this->GetParameterUInt8Image("mode.apply.mask");
+      UInt8ImageType::Pointer  maskPtr = this->GetParameterUInt8Image("mode.apply.mask");
       unsigned int nbBands = inputPtr->GetNumberOfComponentsPerPixel();
       itk::MetaDataDictionary &dict = inputPtr->GetMetaDataDictionary();
       std::vector<bool> flags;

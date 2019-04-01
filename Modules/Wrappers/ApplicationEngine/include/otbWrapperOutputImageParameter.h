@@ -96,7 +96,7 @@ public:
   void SetFileName (const char* filename);
   void SetFileName (const std::string& filename);
 
-  itkGetStringMacro( FileName );
+  itkGetStringMacro(FileName);
 
   void Write();
 
@@ -132,15 +132,14 @@ private:
   void operator =(const Parameter&) = delete;
 
   /** Switch TInputImage according to expected output type. */
-  template< typename TInputImage >
-    void SwitchInput( TInputImage * );
+  template <typename TInputImage>
+  void SwitchInput(TInputImage*);
 
   /** */
-  template< typename TOutputImage,
-	    typename TInputImage >
-    void ClampAndWriteVectorImage( TInputImage * );
+  template <typename TOutputImage, typename TInputImage>
+  void ClampAndWriteVectorImage(TInputImage*);
 
-  //FloatVectorImageType::Pointer m_Image;
+  // FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
 
   itk::ProcessObject::Pointer m_InputCaster;

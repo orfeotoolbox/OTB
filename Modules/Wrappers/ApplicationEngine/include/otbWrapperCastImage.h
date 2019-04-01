@@ -42,30 +42,24 @@ namespace details
  *
  * \ingroup OTBApplicationEngine
  */
-template< typename TOutputImage,
-	  typename TInputImage >
+template <typename TOutputImage, typename TInputImage>
 struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage
 {
   /** Input clamping */
-  using InputClampImageFilter =
-    ClampImageFilter< TInputImage, DoubleVectorImageType >;
+  using InputClampImageFilter = ClampImageFilter<TInputImage, DoubleVectorImageType>;
 
   /** Output clamping */
-  using OutputClampImageFilter =
-    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
+  using OutputClampImageFilter = ClampImageFilter<DoubleVectorImageType, TOutputImage>;
 
 
   /** Constructor. */
-  CastImage( TInputImage * in ) :
-    icif( InputClampImageFilter::New() ),
-    ocif( OutputClampImageFilter::New() ),
-    out( ocif->GetOutput() )
+  CastImage(TInputImage* in) : icif(InputClampImageFilter::New()), ocif(OutputClampImageFilter::New()), out(ocif->GetOutput())
   {
-    assert( in );
+    assert(in);
 
-    icif->SetInput( in );
+    icif->SetInput(in);
 
-    ocif->SetInput( icif->GetOutput() );
+    ocif->SetInput(icif->GetOutput());
   }
 
   /** Input-image clamp filter. */
@@ -75,7 +69,7 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage
   typename OutputClampImageFilter::Pointer ocif;
 
   /** Output image. */
-  TOutputImage * out;
+  TOutputImage* out;
 };
 
 
@@ -84,24 +78,20 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage
  * pipeline when input-image is DoubleVectorImageType.
  *
  * \ingroup OTBApplicationEngine
-*/
-template< typename TOutputImage >
-struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< TOutputImage,
-						       DoubleVectorImageType >
+ */
+template <typename TOutputImage>
+struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<TOutputImage, DoubleVectorImageType>
 {
   /** Output clamping */
-  using OutputClampImageFilter =
-    ClampImageFilter< DoubleVectorImageType , TOutputImage >;
+  using OutputClampImageFilter = ClampImageFilter<DoubleVectorImageType, TOutputImage>;
 
 
   /** Constructor. */
-  CastImage( DoubleVectorImageType * in ) :
-    ocif( OutputClampImageFilter::New() ),
-    out( ocif->GetOutput() )
+  CastImage(DoubleVectorImageType* in) : ocif(OutputClampImageFilter::New()), out(ocif->GetOutput())
   {
-    assert( in );
+    assert(in);
 
-    ocif->SetInput( in );
+    ocif->SetInput(in);
   }
 
   /** Input-image clamp filter. */
@@ -111,7 +101,7 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< TOutputImage,
   typename OutputClampImageFilter::Pointer ocif;
 
   /** Output image. */
-  TOutputImage * out;
+  TOutputImage* out;
 };
 
 
@@ -121,18 +111,17 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< TOutputImage,
  *
  * \ingroup OTBApplicationEngine
  */
-template< typename T >
-struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< T, T >
+template <typename T>
+struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<T, T>
 {
-  CastImage( T * in ) :
-    out( in )
+  CastImage(T* in) : out(in)
   {
-    assert( in );
+    assert(in);
   }
 
   itk::ProcessObject::Pointer icif;
   itk::ProcessObject::Pointer ocif;
-  T * out;
+  T*                          out;
 };
 
 
@@ -142,18 +131,17 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< T, T >
  *
  * \ingroup OTBApplicationEngine
  */
-template<>
-struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage< DoubleVectorImageType, DoubleVectorImageType >
+template <>
+struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<DoubleVectorImageType, DoubleVectorImageType>
 {
-  CastImage( DoubleVectorImageType * in ) :
-    out( in )
+  CastImage(DoubleVectorImageType* in) : out(in)
   {
-    assert( in );
+    assert(in);
   }
 
   itk::ProcessObject::Pointer icif;
   itk::ProcessObject::Pointer ocif;
-  DoubleVectorImageType * out;
+  DoubleVectorImageType*      out;
 };
 
 } // namespace details.

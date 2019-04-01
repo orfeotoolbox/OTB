@@ -64,7 +64,6 @@ public:
 private:
   PolygonClassStatistics()
     {
-
     }
 
   void DoInit() override
@@ -175,46 +174,39 @@ private:
 
   void DoExecute() override
   {
-  otb::ogr::DataSource::Pointer vectors =
-    otb::ogr::DataSource::New(this->GetParameterString("vec"));
+    otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(this->GetParameterString("vec"));
 
-  // Retrieve the field name
-  std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
+    // Retrieve the field name
+    std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
 
-  if(selectedCFieldIdx.empty())
+    if (selectedCFieldIdx.empty())
     {
     otbAppLogFATAL(<<"No field has been selected for data labelling!");
     }
 
-  std::vector<std::string> cFieldNames = GetChoiceNames("field");
-  std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
+    std::vector<std::string> cFieldNames = GetChoiceNames("field");
+    std::string              fieldName   = cFieldNames[selectedCFieldIdx.front()];
 
-  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
-  // Reproject geometries
-  FloatVectorImageType::Pointer inputImg = this->GetParameterImage("in");
-  std::string imageProjectionRef = inputImg->GetProjectionRef();
-  FloatVectorImageType::ImageKeywordlistType imageKwl =
-    inputImg->GetImageKeywordlist();
-  std::string vectorProjectionRef =
-    vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
+    // Reproject geometries
+    FloatVectorImageType::Pointer              inputImg            = this->GetParameterImage("in");
+    std::string                                imageProjectionRef  = inputImg->GetProjectionRef();
+    FloatVectorImageType::ImageKeywordlistType imageKwl            = inputImg->GetImageKeywordlist();
+    std::string                                vectorProjectionRef = vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
 
-  otb::ogr::DataSource::Pointer reprojVector = vectors;
-  GeometriesType::Pointer inputGeomSet;
-  ProjectionFilterType::Pointer geometriesProjFilter;
-  GeometriesType::Pointer outputGeomSet;
-  const OGRSpatialReference imgOGRSref =
-        OGRSpatialReference( imageProjectionRef.c_str() );
-    const OGRSpatialReference vectorOGRSref =
-        OGRSpatialReference( vectorProjectionRef.c_str() );
-  bool doReproj = true;
-  // don't reproject for these cases
-  if (  vectorProjectionRef.empty()
-     || ( imgOGRSref.IsSame( &vectorOGRSref ) )
-     || ( imageProjectionRef.empty() && imageKwl.GetSize() == 0) )
-    doReproj = false;
+    otb::ogr::DataSource::Pointer reprojVector = vectors;
+    GeometriesType::Pointer       inputGeomSet;
+    ProjectionFilterType::Pointer geometriesProjFilter;
+    GeometriesType::Pointer       outputGeomSet;
+    const OGRSpatialReference     imgOGRSref    = OGRSpatialReference(imageProjectionRef.c_str());
+    const OGRSpatialReference     vectorOGRSref = OGRSpatialReference(vectorProjectionRef.c_str());
+    bool                          doReproj      = true;
+    // don't reproject for these cases
+    if (vectorProjectionRef.empty() || (imgOGRSref.IsSame(&vectorOGRSref)) || (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+      doReproj = false;
 
-  if (doReproj)
+    if (doReproj)
     {
     inputGeomSet = GeometriesType::New(vectors);
     reprojVector = otb::ogr::DataSource::New();
@@ -236,7 +228,7 @@ private:
   filter->SetInput(this->GetParameterImage("in"));
   if (IsParameterEnabled("mask") && HasValue("mask"))
     {
-    filter->SetMask(this->GetParameterUInt8Image("mask"));
+      filter->SetMask(this->GetParameterUInt8Image("mask"));
     }
   filter->SetOGRData(reprojVector);
   filter->SetFieldName(fieldName);

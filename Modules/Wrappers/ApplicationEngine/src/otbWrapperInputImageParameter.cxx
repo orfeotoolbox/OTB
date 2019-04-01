@@ -63,17 +63,13 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 }
 
 
-ImageBaseType *
-InputImageParameter
-::GetImage()
+ImageBaseType* InputImageParameter ::GetImage()
 {
   return m_Image.GetPointer();
 }
 
 
-ImageBaseType const *
-InputImageParameter
-::GetImage() const
+ImageBaseType const* InputImageParameter ::GetImage() const
 {
   return m_Image.GetPointer();
 }
@@ -93,12 +89,10 @@ otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
 
-void
-InputImageParameter
-::SetImage( ImageBaseType * image )
+void InputImageParameter ::SetImage(ImageBaseType* image)
 {
   m_UseFilename = false;
-  m_Image = image;
+  m_Image       = image;
 }
 
 
@@ -114,8 +108,8 @@ InputImageParameter
 {
   m_Image  = nullptr;
   m_Reader = nullptr;
-  m_InputCaster = nullptr;
-  m_OutputCaster = nullptr;
+  m_InputCaster     = nullptr;
+  m_OutputCaster    = nullptr;
   m_FileName = "";
   m_PreviousFileName="";
   m_UseFilename = true;
