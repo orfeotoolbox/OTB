@@ -1,12 +1,16 @@
-diff -burN gdal-2.1.0.orig/nmake.opt gdal-2.1.0/nmake.opt
---- gdal-2.1.0.orig/nmake.opt	2016-06-14 11:39:22.911630802 +0200
-+++ gdal-2.1.0/nmake.opt	2016-06-14 11:39:39.827630670 +0200
-@@ -247,7 +247,7 @@
- JPEG_SUPPORTED = 1
+diff -burN gdal-2.4.1_orig/nmake.opt gdal-2.4.1/nmake.opt
+--- gdal-2.4.1_orig/nmake.opt	2019-03-15 13:30:03.000000000 +0100
++++ gdal-2.4.1/nmake.opt	2019-04-02 10:57:50.712191315 +0200
+@@ -276,9 +276,9 @@
+ !ENDIF
  
  # This will enable 12bit libjpeg - use only with internal jpeg builds.
+-!IFNDEF JPEG12_SUPPORTED
 -JPEG12_SUPPORTED = 1
+-!ENDIF
++#!IFNDEF JPEG12_SUPPORTED
 +#JPEG12_SUPPORTED = 1
++#!ENDIF
  
  #if using an external jpeg library uncomment the following lines
  #JPEG_EXTERNAL_LIB = 1
