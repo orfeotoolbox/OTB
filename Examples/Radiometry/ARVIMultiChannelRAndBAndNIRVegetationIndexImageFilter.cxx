@@ -31,14 +31,12 @@
 */
 
 
-// \index{otb::MultiChannelRAndBAndNIRIndexImageFilter}
-// \index{otb::MultiChannelRAndBAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndices}
 // \index{otb::VegetationIndices!header}
 //
 //
 // The following example illustrates the use of the
-//  \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} with the
+//  \doxygen{itk}{UnaryFunctorImageFilter} with the
 // use of the Atmospherically Resistant Vegetation Index (ARVI) \subdoxygen{otb}{Functor}{ARVI}.  ARVI
 // is an improved version of the NDVI that is more robust to the
 // atmospheric effect.  In addition to the red and NIR channels (used
@@ -76,15 +74,8 @@
 //  \item \subdoxygen{otb}{Functor}{EVI}
 //  \end{itemize}
 
-// With the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter} class the
-// input has to be a multi channel image and the user has to specify index channel
-// of the red, blue and NIR channel.
-//
-// Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
-// class must be included.
-
-#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -126,13 +117,13 @@ int main(int argc, char* argv[])
   typedef otb::Functor::ARVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
   // The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
+  // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the ARVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef otb::MultiChannelRAndBAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndBAndNIRIndexImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> ArviImageFilterType;
 
-  MultiChannelRAndBAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndBAndNIRIndexImageFilterType::New();
+  ArviImageFilterType::Pointer filter = ArviImageFilterType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -144,12 +135,12 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, blue and NIR) are declared.
 
-  filter->SetRedIndex(::atoi(argv[5]));
-  filter->SetBlueIndex(::atoi(argv[6]));
-  filter->SetNIRIndex(::atoi(argv[7]));
+  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
+  filter->GetFunctor().SetBlueIndex(::atoi(argv[6]));
+  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
 
   // The $\gamma$ parameter is set. The
-  // \doxygen{otb}{MultiChannelRAndBAndNIRIndexImageFilter}
+  // \doxygen{otb::Functor}{ARVI}
   // class sets the default value of $\gamma$ to $0.5$.  This parameter
   // is used to reduce the atmospheric effect on a global scale.
 

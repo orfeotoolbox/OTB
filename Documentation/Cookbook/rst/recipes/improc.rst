@@ -1,5 +1,5 @@
-Image processing and information extraction
-===========================================
+Image processing
+================
 
 Simple calculus with channels
 -----------------------------

@@ -54,7 +54,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent,
+		QWidget* parent=nullptr,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
@@ -67,8 +67,6 @@ public:
   QtWidgetModel* GetModel() const;
 
   bool IsClosable() const;
-
-public slots:
 
   void UnhandledException(QString message);
 
@@ -107,8 +105,6 @@ private:
   void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
-
-  QWidget* CreateDoc();
 
 // Private attributes.
 private:

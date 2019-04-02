@@ -35,11 +35,9 @@
 // Let's look at the minimal code required to use this algorithm. First, the
 // following headers must be included.
 
-#include "otbMultiChannelRAndNIRIndexImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 
-#include "otbImage.h"
-#include "otbImageFileWriter.h"
-
+#include "otbVegetationIndicesFunctor.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
@@ -63,19 +61,19 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ImageFileWriter<ImageVisuType>   VisuWriterType;
   typedef otb::ImageFileWriter<InputImageType>  InWriterType;
-  // Filter type is a generic \doxygen{otb}{MultiChannelRAndNIRIndexImageFilter} using Formosat2 specific LAI
+  // Filter type is a generic \doxygen{itk}{UnaryFunctorImageFilter} using Formosat2 specific LAI
   //  \doxygen{otb}{LAIFromNDVIFormosat2Functor}.
 
   typedef otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, InputImageType::InternalPixelType, OutputImageType::PixelType>
                                                                                                  FunctorType;
-  typedef otb::MultiChannelRAndNIRIndexImageFilter<InputImageType, OutputImageType, FunctorType> MultiChannelRAndNIRIndexImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> LAIFRomNDVIImageFilterType;
 
   // Instantiating object
 
   //  Next the filter is created by invoking the \code{New()}~method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
 
-  MultiChannelRAndNIRIndexImageFilterType::Pointer filter = MultiChannelRAndNIRIndexImageFilterType::New();
+  LAIFRomNDVIImageFilterType::Pointer filter = LAIFRomNDVIImageFilterType::New();
 
   ReaderType::Pointer     reader     = ReaderType::New();
   WriterType::Pointer     writer     = WriterType::New();
@@ -98,8 +96,8 @@ int main(int argc, char* argv[])
   //
   unsigned int redChannel = static_cast<unsigned int>(atoi(argv[5]));
   unsigned int nirChannel = static_cast<unsigned int>(atoi(argv[6]));
-  filter->SetRedIndex(redChannel);
-  filter->SetNIRIndex(nirChannel);
+  filter->GetFunctor().SetRedIndex(redChannel);
+  filter->GetFunctor().SetNIRIndex(nirChannel);
 
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.

@@ -34,8 +34,6 @@ typedef otb::Wrapper::DocExampleStructure                DocExampleStructure;
 typedef otb::Wrapper::Parameter                          Parameter;
 typedef otb::Wrapper::OutputImageParameter               OutputImageParameter;
 typedef otb::Wrapper::InputImageParameter                InputImageParameter;
-typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParameter;
-typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
 

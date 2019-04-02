@@ -1,7 +1,7 @@
 Feature extraction
 ==================
 
-As described in the OTB Software Guide, the term *Feature Extraction*
+The term *Feature Extraction*
 refers to techniques aiming at extracting added value information from
 images. These extracted items named *features* can be local statistical
 moments, edges, radiometric indices, morphological and textural
