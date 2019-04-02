@@ -114,17 +114,10 @@ void QtWidgetView::CreateGui()
 
 QWidget* QtWidgetView::CreateInputWidgets()
 {
-  QScrollArea *scrollArea = new QScrollArea(this);
-
-  scrollArea->setWidget( otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
+  return otb::Wrapper::QtWidgetParameterFactory::CreateQtWidget(
       m_Model->GetApplication()->GetParameterList(),
       m_Model,
-      this));
-  scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scrollArea->setWidgetResizable(true);
-
-  return scrollArea;
+      this);
 }
 
 
