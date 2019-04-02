@@ -109,18 +109,8 @@
      <string>Help</string>
     </property>
     <addaction name="actionDocumentation"/>
-    <addaction name="actionAbout"/>
-   </widget>
-   <widget class="QMenu" name="menuParameters">
-    <property name="title">
-     <string>Parameters</string>
-    </property>
-    <addaction name="actionReset"/>
-    <addaction name="actionLoad_from_XML"/>
-    <addaction name="actionSave_to_XML"/>
    </widget>
    <addaction name="menuApplication"/>
-   <addaction name="menuParameters"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
