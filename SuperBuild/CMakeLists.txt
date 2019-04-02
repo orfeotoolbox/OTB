@@ -323,15 +323,12 @@ option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
 option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
 
-#Cannot activate GLUT on OSX. See Mantis issue #1194")
-# do not activate GLFW by default on osx. see failing test
-# https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
+# Cannot activate GLUT on OSX. See Mantis issue #1194")
+# do not activate GLFW by default on osx.
 if(APPLE)
+  message(WARNING "Cannot activate GLUT on OSX because of required X11 extension. See mantis bug #1194.")
   option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
   option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
-else()
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
 endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
