@@ -99,6 +99,7 @@ void QtWidgetOutputImageParameter::DoCreateWidget()
   m_HLayout->addWidget(m_ComboBox);
 
   // Block mouse wheel events
+  m_ComboBox->setFocusPolicy(Qt::StrongFocus);
   m_ComboBox->installEventFilter(this);
 
   // Set up input text edit
