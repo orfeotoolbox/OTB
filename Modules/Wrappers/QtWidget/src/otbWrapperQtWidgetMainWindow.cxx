@@ -37,8 +37,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
     m_IsRunning(false)
 {
   ui->setupUi(this);
-  this->setWindowIcon(QIcon(":/otb_small.png"));
-  this->setWindowTitle(QString(app->GetDocName()).append(" - ").append(OTB_VERSION_STRING));
+  this->setWindowTitle(QString(app->GetName()).append(" - OTB ").append(OTB_VERSION_STRING));
 
   // Set the given application view widget
   gui->setParent(this);

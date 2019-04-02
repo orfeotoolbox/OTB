@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="otbWrapperQtWidgetIcons.qrc">
+    <normaloff>:/Utilities/Data/Icons/monteverdi-48x48.png</normaloff>:/Utilities/Data/Icons/monteverdi-48x48.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -193,6 +197,8 @@
    <header>otbWrapperQtWidgetSimpleProgressReport.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="otbWrapperQtWidgetIcons.qrc"/>
+ </resources>
  <connections/>
 </ui>
