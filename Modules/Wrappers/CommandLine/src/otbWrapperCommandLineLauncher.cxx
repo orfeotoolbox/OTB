@@ -437,10 +437,8 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
                  type == ParameterType_String ||
                  type == ParameterType_InputFilename ||
                  type == ParameterType_OutputFilename ||
-                 type == ParameterType_ComplexInputImage ||
                  type == ParameterType_InputImage ||
                  type == ParameterType_OutputImage ||
-                 type == ParameterType_ComplexOutputImage ||
                  type == ParameterType_InputVectorData ||
                  type == ParameterType_OutputVectorData ||
                  type == ParameterType_RAM ||
@@ -469,27 +467,6 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
               std::cerr << "ERROR: Too many values for parameter -" <<
                 paramKey << " (expected 2 or 1, got " << values.size() << ")."
                         << std::endl;
-              return INVALIDNUMBEROFVALUE;
-              }
-            }
-          else if (type == ParameterType_ComplexOutputImage)
-            {
-            // Check if pixel type is given
-            if (values.size() == 2)
-              {
-              ComplexImagePixelType cpixType = ComplexImagePixelType_float;
-              if ( !ComplexOutputImageParameter::ConvertStringToPixelType(values[1],cpixType) )
-                {
-                std::cerr << "ERROR: Invalid output type for parameter -" <<
-                  paramKey << ": " << values[1] << "." << std::endl;
-                return WRONGPARAMETERVALUE;
-                }
-              m_Application->SetParameterComplexOutputImagePixelType(paramKey, cpixType);
-              }
-            else if (values.size() > 2)
-              {
-              std::cerr << "ERROR: Too many values for parameter: -" << paramKey
-                        << " (expected 2 or 1, got " << values.size() << ")." <<std::endl;
               return INVALIDNUMBEROFVALUE;
               }
             }
@@ -742,12 +719,12 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss << "<float>         ";
     }
   else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
-           type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
-           type == ParameterType_String || type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
+          type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_String || 
+          type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
     {
     oss << "<string>        ";
     }
-  else if (type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
+  else if (type == ParameterType_OutputImage)
     {
     oss << "<string> [pixel]";
     }
@@ -778,19 +755,6 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     oss << " [pixel=uint8/uint16/int16/uint32/int32/float/double/cint16/cint32/cfloat/cdouble]";
     oss << " (default value is " << defPixType <<")";
     }
-
-  if (type == ParameterType_ComplexOutputImage)
-    {
-    ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param.GetPointer());
-    std::string defPixType("cfloat");
-    if (paramDown)
-      {
-      defPixType = ComplexOutputImageParameter::ConvertPixelTypeToString(paramDown->GetDefaultComplexPixelType());
-      }
-    oss << " [pixel=cfloat/cdouble]";
-    oss << " (default value is "<< defPixType <<")";
-    }
-
 
   if (type == ParameterType_Choice)
     {

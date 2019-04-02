@@ -23,7 +23,8 @@
 
 #include "otbImage.h"
 #include "otbWaterIndicesFunctor.h"
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "itkBinaryErodeImageFilter.h"
 #include "itkBinaryDilateImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
@@ -183,7 +184,7 @@ public:
   // NonVegetationNonWaterIndexFilter
   typedef Functor::RadiometricNonWaterNonVegetationDetectionFunctor<VectorImagePixelType,
       OutputImagePixelType> FunctorType;
-  typedef MultiChannelRAndGAndNIRIndexImageFilter <VectorImageType, OutputImageType,
+  typedef itk::UnaryFunctorImageFilter <VectorImageType, OutputImageType,
       FunctorType>                           UrbanAreaExtractionFilterType;
   typedef typename UrbanAreaExtractionFilterType::Pointer
   UrbanAreaExtrationFilterPointerType;
@@ -215,12 +216,12 @@ public:
   typedef typename MultiplyImageFilterType::Pointer                                   MultiplyImageFilterPointerType;
 
   /** Get/Set indices */
-  void SetRedIndex(int id){ m_UrbanAreaExtractionFilter->SetRedIndex(id); }
-  void SetGreenIndex(int id){ m_UrbanAreaExtractionFilter->SetGreenIndex(id); }
-  void SetNIRIndex(int id){ m_UrbanAreaExtractionFilter->SetNIRIndex(id); }
-  unsigned int GetRedIndex(){ return m_UrbanAreaExtractionFilter->GetRedIndex(); }
-  unsigned int GetGreenIndex(){ return m_UrbanAreaExtractionFilter->GetGreenIndex(); }
-  unsigned int GetNIRIndex(){ return m_UrbanAreaExtractionFilter->GetNIRIndex(); }
+  void SetRedIndex(int id){ m_UrbanAreaExtractionFilter->GetFunctor().SetRedIndex(id); }
+  void SetGreenIndex(int id){ m_UrbanAreaExtractionFilter->GetFunctor().SetGreenIndex(id); }
+  void SetNIRIndex(int id){ m_UrbanAreaExtractionFilter->GetFunctor().SetNIRIndex(id); }
+  unsigned int GetRedIndex(){ return m_UrbanAreaExtractionFilter->GetFunctor().GetRedIndex(); }
+  unsigned int GetGreenIndex(){ return m_UrbanAreaExtractionFilter->GetFunctor().GetGreenIndex(); }
+  unsigned int GetNIRIndex(){ return m_UrbanAreaExtractionFilter->GetFunctor().GetNIRIndex(); }
   /** Get/Set threshold values */
   itkGetMacro(ThresholdValue, double);
   itkSetMacro(ThresholdValue, double);

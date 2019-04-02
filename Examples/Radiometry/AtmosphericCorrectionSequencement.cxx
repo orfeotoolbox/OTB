@@ -40,8 +40,6 @@
                                     0.020
 */
 
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter}
-// \index{otb::MultiChannelRAndBAndNIRVegetationIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //

@@ -18,28 +18,42 @@
  * limitations under the License.
  */
 
-#include "otbWrapperTypes.h"
+#ifndef otbWrapperQtWidgetMainWindow_h
+#define otbWrapperQtWidgetMainWindow_h
+
+#include <QMainWindow>
+#include "OTBQtWidgetExport.h"
+
+#include "otbWrapperApplication.h"
+
+class QAction;
+class QMenu;
 
 namespace otb
 {
 namespace Wrapper
 {
 
-std::string ParameterTypeToString(ParameterType type)
-{
-  return parameterTypesStrings[type];
-}
+class QtWidgetView;
 
-ParameterType ParameterStringToType(const std::string& str)
+class OTBQtWidget_EXPORT QtMainWindow : public QMainWindow
 {
-  for (std::size_t i = 0; i < ParameterType_MAX__; i++)
-  {
-    if (str == parameterTypesStrings[i])
-    {
-      return ParameterType(i);
-    }
-  }
-  itkGenericExceptionMacro("Cannot convert string '" << str << "' to parameter type.");
-}
+  Q_OBJECT
+
+public:
+  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+
+public slots:
+  void UnhandledException(QString message);
+
+private:
+  QMenu*   helpMenu;
+  QAction* helpAction;
+
+  QtWidgetView* gui;
+};
+
 } // namespace Wrapper
 } // namespace otb
+
+#endif

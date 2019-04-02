@@ -29,12 +29,8 @@
 */
 
 
-// Software Guide : BeginDescription
-//
 // This example illustrates the use of the LineSegmentDetector.
 // This filter is designed to extract segments in mono channel images.
-//
-// Software Guide : EndDescription
 
 #include "otbLineSegmentDetector.h"
 

@@ -34,7 +34,6 @@ otbWrapperParameterListTest.cxx
 otbWrapperInputImageListParameterTest.cxx
 otbWrapperInputVectorDataListParameterTest.cxx
 otbWrapperApplicationDocTests.cxx
-otbWrapperApplicationHtmlDocGeneratorTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbApplicationMemoryConnectTest.cxx
 otbWrapperImageInterface.cxx
@@ -103,18 +102,6 @@ otb_add_test(NAME owTvInputVectorDataListParameter COMMAND otbApplicationEngineT
   ${INPUTDATA}/ToulouseRoads-examples.shp
   "mykey"
   "my description"
-  )
-
-otb_add_test(NAME owTvApplicationHtmlDocGeneratorTest
-  COMMAND otbApplicationEngineTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/owTvOReadImageInfoDoc.html
-  ${TEMP}/owTvOReadImageInfoDoc.html
-  otbWrapperApplicationHtmlDocGeneratorTest1
-  ReadImageInfo
-  $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
-  ${TEMP}/owTvOReadImageInfoDoc.html
-  0 # don't show key in the parameterdescription
   )
 
 otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDriver

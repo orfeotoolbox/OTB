@@ -27,7 +27,6 @@
 //// Included at first position before any other ones.
 #include "ConfigureMonteverdi.h"
 
-#define USE_TABBED_VIEW 0
 #define USE_PIXEL_DESCRIPTION 0
 
 #define RENDER_IMAGE_VIEW_DISABLED 0
@@ -225,18 +224,6 @@ protected slots:
   void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
 #endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
-  /**
-   */
-#if USE_TABBED_VIEW
-  void OnTabCloseRequested( int index );
-#endif
-
-  /**
-   */
-#if USE_TABBED_VIEW
-  void OnTabCloseRequested();
-#endif
-
   /** */
   void OnOTBApplicationOutputImageChanged( const QString & appName,
                                            const QString & outfname);
@@ -412,12 +399,6 @@ private:
    * \brief Quicklook-view dock.
    */
   QDockWidget* m_QuicklookViewDock;
-
-  /**
-   */
-#if USE_TABBED_VIEW
-  QTabWidget* m_CentralTabWidget;
-#endif // USE_TABBED_VIEW
 
   /**
    */
