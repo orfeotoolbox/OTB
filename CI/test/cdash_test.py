@@ -48,5 +48,26 @@ class TestHandler(unittest.TestCase):
     self.assertTrue( \
       "https://cdash.orfeo-toolbox.org/buildSummary.php?buildid=1" == url)
 
+  def test_GetBuildStatus (self):
+    handler = cdash_handler.Handler()
+    # We need to test error in configure, build, test, and no error
+    # test buildid 720
+    (status ,  error) = handler.GetBuildStatus("720")
+    self.assertTrue( status == "failed")
+    self.assertTrue( error == "Errors occur during tests")
+    # configure buildid 352
+    (status ,  error) = handler.GetBuildStatus("352")
+    self.assertTrue( status == "failed")
+    self.assertTrue( error == "Errors occur during configure")
+    # build buildid 358
+    (status ,  error) = handler.GetBuildStatus("358")
+    self.assertTrue( status == "failed")
+    self.assertTrue( error == "Errors occur during build")
+    # passing buildid 373
+    (status ,  error) = handler.GetBuildStatus("373")
+    self.assertTrue( status == "success")
+    self.assertTrue( error == "")
+
+
 if __name__ == '__main__':
   unittest.main()

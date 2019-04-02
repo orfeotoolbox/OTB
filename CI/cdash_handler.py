@@ -25,6 +25,7 @@ import glob
 import re
 import unittest
 import sys
+import json
 
 
 trace = False
@@ -204,6 +205,31 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     build_url += "buildid=" + buildid
     return build_url
 
+  def GetBuildStatus(self, buildid = "" ):
+    """
+    This function returns the status of a build id as a pair 'state' + 'errors'
+    """
+    if ( buildid == "" ):
+      buildid = self.buildid
+    if ( buildid == "" ):
+      print( "Not enougth argument given to build Status")
+      return
+    full_url = self.url + "/api/v1/buildSummary.php?buildid=" + buildid
+    response = urllib.request.urlopen(full_url).read().decode()
+    full_status = json.loads(response)
+    state = "success"
+    if full_status["configure"]["nerrors"] or full_status["build"]["nerrors"] \
+    or full_status["test"]["nerrors"] or full_status["test"]["nfailed"]:
+      state = 'failed'
+    errors = ""
+    if full_status["configure"]["nerrors"]:
+      errors = "Errors occur during configure"
+    elif full_status["build"]["nerrors"]:
+      errors = "Errors occur during build"
+    elif full_status["test"]["nerrors"] or full_status["test"]["nfailed"]:
+      errors = "Errors occur during tests"
+    return ( state , errors)
+
 """
 TODO :
  documentation, header, test if it is possible.
@@ -228,12 +254,13 @@ if __name__ == "__main__":
   handler.GetBuildId()
   # handler.buildid="1"
   cdash_url = handler.GetBuildUrl()
+  ( state , error ) = handler.GetBuildUrl()
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
-  params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': 'success' ,\
-   'target_url' : cdash_url})
+  params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
+   'target_url' : cdash_url , 'description' : error })
   gitlab_request = urllib.request.Request(gitlab_url)
   gitlab_request.add_header('PRIVATE-TOKEN' , sys.argv[4] )
   res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
