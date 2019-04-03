@@ -49,6 +49,7 @@ otb_module(OTBAppClassification
     OTBObjectList
     OTBCommon
     OTBSampling
+    OTBFunctor
 
   TEST_DEPENDS
     OTBTestKernel

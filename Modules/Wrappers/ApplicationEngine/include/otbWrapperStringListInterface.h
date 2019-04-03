@@ -75,7 +75,7 @@ public:
   virtual StringVector GetFileNameList() const = 0;
 
   /** Get one specific stored filename. */
-  virtual const std::string & GetNthFileName( std::size_t i ) const = 0;
+  virtual std::string GetNthFileName(std::size_t i) const = 0;
 
   /** Erase one element of the list. */
   virtual void Erase( std::size_t id );

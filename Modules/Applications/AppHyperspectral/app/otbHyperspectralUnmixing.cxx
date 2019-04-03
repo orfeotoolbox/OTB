@@ -179,7 +179,7 @@ private:
     endMember2Matrix->Update();
 
     MatrixType endMembersMatrix = endMember2Matrix->GetMatrix();
-    otbAppLogINFO("Endmembers matrix : " << endMembersMatrix);
+    otbAppLogDEBUG("Endmembers matrix : " << endMembersMatrix);
 
     /*
      * Unmix
@@ -196,7 +196,7 @@ private:
           UCLSUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
-      unmixer->SetMatrix(endMembersMatrix);
+      unmixer->GetModifiableFunctor().SetMatrix(endMembersMatrix);
       unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
 
       abundanceMap = unmixer->GetOutput();
@@ -212,7 +212,7 @@ private:
           ISRAUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
-      unmixer->SetEndmembersMatrix(endMembersMatrix);
+      unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMembersMatrix);
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
 
@@ -226,7 +226,7 @@ private:
           NCLSUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
-      unmixer->SetEndmembersMatrix(endMembersMatrix);
+      unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMembersMatrix);
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
 

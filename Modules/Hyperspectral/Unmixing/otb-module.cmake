@@ -34,6 +34,7 @@ otb_module(OTBUnmixing
     OTBImageBase
     OTBStatistics
     OTBWavelet
+    OTBFunctor
 
   TEST_DEPENDS
     OTBImageIO

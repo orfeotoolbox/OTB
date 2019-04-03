@@ -76,7 +76,7 @@ public:
                  INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
 
   /** Filter watcher list type */
-  typedef std::vector<StandardOneLineFilterWatcher *> WatcherListType;
+  typedef std::vector<StandardOneLineFilterWatcher<> *> WatcherListType;
 
   /** Command Member */
   typedef itk::MemberCommand< Self >        AddProcessCommandType;

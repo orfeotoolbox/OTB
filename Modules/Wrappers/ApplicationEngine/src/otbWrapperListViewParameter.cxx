@@ -49,8 +49,7 @@ ListViewParameter::AddChoice( std::string choicekey, std::string choiceName )
   m_ChoiceList.push_back(choice);
 }
 
-std::string
-ListViewParameter::GetChoiceKey( int i )
+std::string ListViewParameter::GetChoiceKey(int i) const
 {
   if (m_ChoiceList.empty())
   {
@@ -141,8 +140,7 @@ ListViewParameter::SetValue(std::string choiceKey)
   itkExceptionMacro(<< "Cannot find " << choiceKey);
 }
 
-unsigned int
-ListViewParameter::GetValue()
+unsigned int ListViewParameter::GetValue() const
 {
   return m_CurrentChoice;
 }

@@ -25,7 +25,7 @@
 #include "otbImageListToVectorImageFilter.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
 #include "otbStreamingStatisticsImageFilter.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "itkStreamingImageFilter.h"
 #include "otbInPlacePassFilter.h"
 
@@ -46,25 +46,23 @@ namespace Wrapper
 namespace Functor
 {
 
+template <class TInput, class TOutput>
 class LuminanceOperator
 {
-typedef FloatVectorImageType::PixelType OutPixel;
-typedef FloatVectorImageType::PixelType InPixel;
 public:
-  LuminanceOperator() {}
-  unsigned int GetOutputSize()
+  LuminanceOperator() = default;
+
+  size_t OutputSize(const std::array<size_t, 1>&) const
   {
     return 1;
   }
-  virtual ~LuminanceOperator() { }
+  virtual ~LuminanceOperator() = default;
 
- OutPixel operator() (  InPixel  input )
-  { 
-  OutPixel out(1);  
-  out[0] = m_LumCoef[0] * input[m_Rgb[0]] + 
-           m_LumCoef[1] * input[m_Rgb[1]] + 
-           m_LumCoef[2] * input[m_Rgb[2]] ;
-  return out;
+  TOutput operator()(TInput input)
+  {
+    TOutput out(1);
+    out[0] = m_LumCoef[0] * input[m_Rgb[0]] + m_LumCoef[1] * input[m_Rgb[1]] + m_LumCoef[2] * input[m_Rgb[2]];
+    return out;
   } // end operator ()
 
 
@@ -84,9 +82,9 @@ public:
 private:
   std::vector<unsigned int> m_Rgb;
   std::vector<float> m_LumCoef;
-}; // end of functor class  MultiplyOperator
+}; // end of functor class LuminanceOperator
 
-}  // end of functor 
+} // namespace functor
 
 class ContrastEnhancement : public Application
 {
@@ -127,9 +125,7 @@ public:
   typedef otb::StreamingStatisticsImageFilter < FloatImageType >
           StatsFilterType;
 
-  typedef otb::UnaryFunctorImageFilter < FloatVectorImageType ,
-          FloatVectorImageType , Functor::LuminanceOperator > 
-          LuminanceFunctorType;
+  typedef otb::FunctorImageFilter<Functor::LuminanceOperator<FloatVectorImageType::PixelType, FloatVectorImageType::PixelType>> LuminanceFunctorType;
 
   typedef itk::StreamingImageFilter < LutType , LutType > 
           StreamingImageFilterType;
@@ -705,8 +701,8 @@ private:
       lumCoef[i] /= sum;
       }
     m_LuminanceFunctor =  LuminanceFunctorType::New() ;
-    m_LuminanceFunctor->GetFunctor().SetRgb( rgb );
-    m_LuminanceFunctor->GetFunctor().SetLumCoef( lumCoef );
+    m_LuminanceFunctor->GetModifiableFunctor().SetRgb(rgb);
+    m_LuminanceFunctor->GetModifiableFunctor().SetLumCoef(lumCoef);
     m_LuminanceFunctor->SetInput( inImage );
     m_LuminanceFunctor->UpdateOutputInformation();
   }

@@ -1,0 +1,75 @@
+
+Case 1 
+Input region: ImageRegion (0x7ffff2b568c0)
+  Dimension: 2
+  Index: [45, 45]
+  Size: [1000, 1500]
+
+Input NumberOfSplits: 10
+Output GetNumberOfSplits: 14
+Output GetSplit(2,14, input region): 
+Output region: ImageRegion (0x7ffff2b56890)
+  Dimension: 2
+  Index: [45, 256]
+  Size: [467, 256]
+
+
+Case 2 
+Input region: ImageRegion (0x7ffff2b568c0)
+  Dimension: 2
+  Index: [45, 45]
+  Size: [1048576, 1048576]
+
+Input NumberOfSplits: 16777216
+Output GetNumberOfSplits: 16785409
+Output GetSplit(2,16785409, input region): 
+Output region: ImageRegion (0x7ffff2b56890)
+  Dimension: 2
+  Index: [512, 45]
+  Size: [256, 211]
+
+
+Case 3 
+Input region: ImageRegion (0x7ffff2b568c0)
+  Dimension: 2
+  Index: [45, 45]
+  Size: [1048576, 1048576]
+
+Input NumberOfSplits: 23
+Output GetNumberOfSplits: 23
+Output GetSplit(4,23, input region): 
+Output region: ImageRegion (0x7ffff2b56890)
+  Dimension: 2
+  Index: [45, 183296]
+  Size: [1048531, 45824]
+
+
+Case 4 
+Input region: ImageRegion (0x7ffff2b568c0)
+  Dimension: 2
+  Index: [45, 45]
+  Size: [1048576, 1024]
+
+Input NumberOfSplits: 16777216
+Output GetNumberOfSplits: 20485
+Output GetSplit(16387,20485, input region): 
+Output region: ImageRegion (0x7ffff2b56890)
+  Dimension: 2
+  Index: [1048576, 768]
+  Size: [45, 256]
+
+
+Case 5 
+Input region: ImageRegion (0x7ffff2b568c0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [513, 5376]
+
+Input NumberOfSplits: 8
+Output GetNumberOfSplits: 11
+Output GetSplit(9,11, input region): 
+Output region: ImageRegion (0x7ffff2b56890)
+  Dimension: 2
+  Index: [0, 4608]
+  Size: [768, 512]
+

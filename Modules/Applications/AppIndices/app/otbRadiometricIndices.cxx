@@ -21,13 +21,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbMultiChannelRAndNIRIndexImageFilter.h"
-#include "otbMultiChannelGAndRIndexImageFilter.h"
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
-#include "otbMultiChannelRAndBAndNIRIndexImageFilter.h"
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "otbWaterIndicesFunctor.h"
 #include "otbBuiltUpIndicesFunctor.h"
+#include "otbSoilIndicesFunctor.h"
 
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
@@ -98,18 +95,18 @@ public:
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDTIFunctorType>  NDTIFilterType;
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, SRWIFunctorType>  SRWIFilterType;
 
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, NDVIFunctor>              NDVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, TNDVIFunctor>             TNDVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, RVIFunctor>               RVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, SAVIFunctor>              SAVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, TSAVIFunctor>             TSAVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, MSAVIFunctor>             MSAVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, MSAVI2Functor>            MSAVI2FilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, GEMIFunctor>              GEMIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, IPVIFunctor>              IPVIFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVILogFunctor>    LAIFromNDVILogFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, LAIFromReflLinearFunctor> LAIFromReflLinearFilterType;
-  typedef MultiChannelRAndNIRIndexImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVIFormoFunctor>  LAIFromNDVIFormoFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDVIFunctor>              NDVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, TNDVIFunctor>             TNDVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, RVIFunctor>               RVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, SAVIFunctor>              SAVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, TSAVIFunctor>             TSAVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, MSAVIFunctor>             MSAVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, MSAVI2Functor>            MSAVI2FilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, GEMIFunctor>              GEMIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IPVIFunctor>              IPVIFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVILogFunctor>    LAIFromNDVILogFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromReflLinearFunctor> LAIFromReflLinearFilterType;
+  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVIFormoFunctor>  LAIFromNDVIFormoFilterType;
 
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IRFunctor>                  RIFilterType;
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, ICFunctor>                  CIFilterType;
@@ -462,10 +459,10 @@ private:
     type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
     std::ostringstream oss;                                               \
     oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;         \
-    l_##type##Filter->SetRedIndex(this->GetParameterInt(oss.str()));      \
+    l_##type##Filter->GetFunctor().SetRedIndex(this->GetParameterInt(oss.str())); \
     oss.str("");                                                          \
     oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;         \
-    l_##type##Filter->SetNIRIndex(this->GetParameterInt(oss.str()));      \
+    l_##type##Filter->GetFunctor().SetNIRIndex(this->GetParameterInt(oss.str())); \
     l_##type##Filter->SetInput(inImage);                                  \
     m_FilterList->PushBack( l_##type##Filter );                           \
     m_ImageList->PushBack( l_##type##Filter->GetOutput() );               \

@@ -29,14 +29,11 @@
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "itksys/SystemTools.hxx"
 #include "otbMacro.h"
 
@@ -333,12 +330,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
 	GetPixelTypeFromString( pixelType )
       );
       }
-    else if (type == ParameterType_ComplexOutputImage)
-      {
-      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-      if(paramDown!=nullptr)
-	paramDown->SetFileName(value);
-      }
     else if (type == ParameterType_Directory)
       {
       DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
@@ -368,15 +359,6 @@ InputProcessXMLParameter::Read(Application::Pointer this_)
       else
 	{
 	otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
-	}
-      }
-    else if (type == ParameterType_ComplexInputImage)
-      {
-      if(itksys::SystemTools::FileExists(value))
-	{
-	ComplexInputImageParameter* paramDown = dynamic_cast<ComplexInputImageParameter*>(param);
-	if(paramDown!=nullptr)
-	  paramDown->SetFromFileName(value);
 	}
       }
     else if (dynamic_cast<InputVectorDataParameter*>(param))

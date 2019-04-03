@@ -34,9 +34,21 @@ typedef otb::Wrapper::DocExampleStructure                DocExampleStructure;
 typedef otb::Wrapper::Parameter                          Parameter;
 typedef otb::Wrapper::OutputImageParameter               OutputImageParameter;
 typedef otb::Wrapper::InputImageParameter                InputImageParameter;
-typedef otb::Wrapper::ComplexOutputImageParameter        ComplexOutputImageParameter;
-typedef otb::Wrapper::ComplexInputImageParameter         ComplexInputImageParameter;
 
 typedef otb::Wrapper::ImageBaseType                      ImageBaseType;
+
+#if defined(SWIGPYTHON)
+#include "otbPythonLogOutput.h"
+#include "otbLogger.h"
+#include "otbProgressReporterManager.h"
+
+typedef otb::Logger                           Logger;
+typedef otb::Logger::Pointer                  Logger_Pointer;
+typedef otb::SwigPrintCallback                SwigPrintCallback;
+typedef otb::PythonLogOutput                  PythonLogOutput;
+typedef otb::PythonLogOutput::Pointer         PythonLogOutput_Pointer;
+typedef otb::ProgressReporterManager          ProgressReporterManager;
+typedef otb::ProgressReporterManager::Pointer ProgressReporterManager_Pointer;
+#endif
 
 #endif

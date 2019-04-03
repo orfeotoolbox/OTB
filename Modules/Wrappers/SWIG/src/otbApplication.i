@@ -31,9 +31,6 @@
 
 // Language specific extension
 %include "Python.i"
-%include "Java.i"
-%include "Ruby.i"
-%include "Lua.i"
 %include "itkMacro.i"
 %include "itkBase.i"
 
@@ -97,8 +94,6 @@ namespace Wrapper
     ParameterType_Radius,
     ParameterType_Group,
     ParameterType_ListView,
-    ParameterType_ComplexInputImage,
-    ParameterType_ComplexOutputImage,
     ParameterType_RAM,
     ParameterType_OutputProcessXML,
     ParameterType_InputProcessXML,
@@ -203,6 +198,13 @@ public:
 
 } // end of namespace otb
 
+#if SWIGPYTHON
+
+
+%include "otbPythonLogOutput.i"
+#endif
+
+
 class Application: public itkObject
 {
 public:
@@ -216,6 +218,31 @@ public:
   void UpdateParameters();
   int Execute();
   int ExecuteAndWriteOutput();
+
+#if SWIGPYTHON
+  Logger* GetLogger();
+#endif
+  unsigned long itk::Object::AddObserver(const EventObject & event, 
+                                          Command * command);
+
+
+#if SWIGPYTHON
+  %extend 
+    {
+    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+     * reporting for the application */
+    %pythoncode
+      {
+      def SetupLogger(self):
+          logger = self.GetLogger()
+          logger.AddLogOutput(_libraryLogOutput.GetPointer())
+          
+          self.AddObserver(AddProcessToWatchEvent(),
+                           _libraryProgressReportManager.GetAddProcessCommand()
+                          )
+      }
+    }
+#endif // SWIGPYTHON
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
@@ -248,10 +275,8 @@ public:
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
-  void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
 
   otb::Wrapper::ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
-  otb::Wrapper::ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
@@ -263,8 +288,6 @@ public:
 
   ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
-  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
-  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
   void AddImageToParameterInputImageList(std::string parameter,ImageBaseType * img);
   void AddParameterStringList(std::string parameter,const std::string & str);
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img);
@@ -483,9 +506,6 @@ public:
 
 protected:
   Application();
-#if SWIGJAVA
-  virtual ~Application();
-#endif
 private:
   Application(const Application &);
   void operator =(const Application&);
@@ -568,7 +588,6 @@ class ApplicationProxy(object):
 				ParameterType_OutputFilename : 'ParameterType_OutputFilename',
 				ParameterType_Directory : 'ParameterType_Directory',
 				ParameterType_InputImage : 'ParameterType_InputImage',
-				ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
 				ParameterType_InputVectorData : 'ParameterType_InputVectorData',
 				ParameterType_InputImageList : 'ParameterType_InputImageList',
 				ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
@@ -601,7 +620,7 @@ class ApplicationProxy(object):
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
 											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+											 ParameterType_InputVectorData]:
 			  return self.SetParameterString(paramKey, value)
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
@@ -635,7 +654,7 @@ class ApplicationProxy(object):
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
 											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+											 ParameterType_InputVectorData]:
 			  return self.GetParameterString(paramKey)
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
@@ -877,7 +896,21 @@ class Registry : public itkObject
 public:
 
   static std::vector<std::string> GetAvailableApplications();
+  #if SWIGPYTHON
+  %rename("CreateApplicationWithoutLogger") CreateApplication;
   static Application_Pointer CreateApplication(const std::string& name);
+  %pythoncode
+  {
+    @staticmethod
+    def CreateApplication(name):
+        application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
+        if application is not None:
+            application.SetupLogger()
+        return application
+  }
+  #else
+  static Application_Pointer CreateApplication(const std::string& name);
+  #endif
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
   static void CleanRegistry();

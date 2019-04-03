@@ -26,7 +26,25 @@ set (ENV{LANG} "C") # Only ascii output
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_CMAKE_GENERATOR "Ninja")
 
-set (CTEST_BUILD_NAME "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}_to_$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+# Find the build name and CI profile
+set(ci_profile wip)
+set(ci_mr_source "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}")
+set(ci_mr_target "$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+set(ci_mr_iid "$ENV{CI_MERGE_REQUEST_IID}")
+set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
+set (CTEST_BUILD_NAME "$ENV{CI_COMMIT_SHORT_SHA}")
+if(ci_mr_source AND ci_mr_target AND ci_mr_iid)
+  set (CTEST_BUILD_NAME "${ci_mr_source} (MR ${ci_mr_iid})")
+  set(ci_profile mr)
+elseif(ci_ref_name)
+  set (CTEST_BUILD_NAME "${ci_ref_name}")
+  if("${ci_ref_name}" STREQUAL "develop")
+    set(ci_profile develop)
+  elseif("${ci_ref_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
+    set(ci_profile release)
+  endif()
+endif()
+
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable
@@ -39,18 +57,26 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 set (CMAKE_COMMAND "cmake")
 
 # Data directory setting
-set (OTB_DATA_ROOT "${OTB_SOURCE_DIR}/otb-data/") # todo
 set (OTB_LARGEINPUT_ROOT "") # todo
 
+message(STATUS "CI profile : ${ci_profile}")
 
 #The following file set the CONFIGURE_OPTIONS variable
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
 # End of configuration
 
 
 ctest_start (Experimental TRACK Experimental)
+
+ctest_update()
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"
@@ -74,6 +100,15 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-# ctest_test(PARALLEL_LEVEL 8)
+# Uncomment when ready for test
+# ctest_test(PARALLEL_LEVEL 8
+#            RETURN_VALUE _test_rv
+#            CAPTURE_CMAKE_ERROR _test_error
+#            )
+
+# if ( NOT _test_rv EQUAL 0 )
+#   ctest_submit()
+#   message( SEND_ERROR "An error occurs during ctest_test.")
+# endif()
 
 ctest_submit()

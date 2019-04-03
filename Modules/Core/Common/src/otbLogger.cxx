@@ -49,15 +49,13 @@ Logger * Logger::CreateInstance()
 {
   Logger * logger = new Logger;
 
-  // By default, redirect logs to std::cout
-  itk::StdStreamLogOutput::Pointer defaultOutput = 
-    itk::StdStreamLogOutput::New();
+  // By default redirect logs to std::cout
+  itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
   defaultOutput->SetStream(std::cout);
-  
   logger->AddLogOutput(defaultOutput);
+
   return logger;
 }
-
 
 Logger * Logger::Instance()
 {
@@ -108,6 +106,11 @@ void Logger::LogSetupInformation()
     LogSetupInformationDone();
     Instance()->LogSetupInformationDone();
     }
+}
+
+void Logger::ResetOutputs()
+{
+  m_Output = itk::MultipleLogOutput::New();
 }
 
 bool Logger::IsLogSetupInformationDone()

@@ -71,8 +71,6 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData] = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename] = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory] = "QgsProcessingParameterFile";
-  parameterTypeToString[ParameterType_ComplexInputImage] = "QgsProcessingParameterRasterLayer";
-  parameterTypeToString[ParameterType_ComplexOutputImage] = "QgsProcessingParameterRasterDestination";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
   // ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
@@ -256,7 +254,6 @@ int main(int argc, char* argv[])
       default_value = "None|True";
       }
     else if (type == ParameterType_InputImage
-          || type == ParameterType_ComplexInputImage
           || type == ParameterType_OutputImage
           || type == ParameterType_OutputFilename
           || type == ParameterType_ComplexOutputImage)

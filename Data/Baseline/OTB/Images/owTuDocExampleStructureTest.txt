@@ -1,0 +1,4 @@
+Exmaple1
+otbcli_TestApplication -key1 val1_1 -key2 val1_2 -key3 name3
+Example2
+otbcli_TestApplication -key2 val2_2 -key3 val2_3
