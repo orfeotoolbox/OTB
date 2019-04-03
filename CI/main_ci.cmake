@@ -77,6 +77,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     )
 
 if ( NOT _configure_rv EQUAL 0 )
+  # stop processing here
   ctest_submit()
   message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
@@ -87,7 +88,6 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             )
 
 if ( NOT _build_rv EQUAL 0 )
-  ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
@@ -97,7 +97,6 @@ ctest_test(PARALLEL_LEVEL 8
            )
 
 if ( NOT _test_rv EQUAL 0 )
-  ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_test.")
 endif()
 
