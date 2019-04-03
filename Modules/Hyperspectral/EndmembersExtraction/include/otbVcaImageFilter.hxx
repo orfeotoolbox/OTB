@@ -173,7 +173,7 @@ void VCAImageFilter<TImage>::GenerateData()
     otbMsgDevMacro( "Compute projective projection" )
     typename ProjectiveProjectionImageFilterType::Pointer proj = ProjectiveProjectionImageFilterType::New();
     proj->SetInput(Xd);
-    proj->SetProjectionDirection(Xdmean);
+    proj->GetModifiableFunctor().SetProjectionDirection(Xdmean);
     refHolder.push_back(proj.GetPointer());
 
     Xd = proj->GetOutput();
@@ -266,7 +266,7 @@ void VCAImageFilter<TImage>::GenerateData()
     dotfY->SetInput(Y);
 
     typename VectorImageType::PixelType fV(f.data_block(), f.size());
-    dotfY->SetVector(typename VectorImageType::PixelType(fV));
+    dotfY->GetModifiableFunctor().SetVector(typename VectorImageType::PixelType(fV));
     typename ImageType::Pointer v = dotfY->GetOutput();
 
     // abs(v)

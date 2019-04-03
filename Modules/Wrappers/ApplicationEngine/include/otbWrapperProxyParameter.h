@@ -75,9 +75,18 @@ public:
     return m_Target.first.IsNotNull();
     }
 
-protected:
-  ProxyParameter() {}
-  ~ProxyParameter() override {}
+    ParameterType GetType() const override
+    {
+      return m_Target.first->GetType();
+    }
+
+
+  protected:
+    ProxyParameter()
+    {
+    }
+    ~ProxyParameter() override
+    {}
 
 private:
   ProxyParameter(const Self &) = delete;

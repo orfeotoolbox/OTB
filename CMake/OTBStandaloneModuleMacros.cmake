@@ -251,7 +251,7 @@ macro(otb_module_impl)
 
   find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB-Data)
+  HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB/Data)
   mark_as_advanced(OTB_DATA_ROOT)
 
   set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
@@ -260,11 +260,11 @@ macro(otb_module_impl)
   set(TEMP           ${CMAKE_BINARY_DIR}/Testing/Temporary)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
-  
+
   if(BUILD_TESTING)
     enable_testing()
   endif()
-  
+
   include(otb-module.cmake) # Load module meta-data
   set(${otb-module}_INSTALL_RUNTIME_DIR ${CMAKE_INSTALL_PREFIX}/bin)
   set(${otb-module}_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_PREFIX}/lib)
@@ -273,7 +273,7 @@ macro(otb_module_impl)
 
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-  
+
   # Collect all sources and headers for IDE projects.
   set(_srcs "")
   if("${CMAKE_GENERATOR}" MATCHES "Xcode|Visual Studio|KDevelop"
@@ -361,7 +361,7 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/app/CMakeLists.txt AND NOT ${otb-module}_NO_SRC)
-    add_subdirectory(app) 
+    add_subdirectory(app)
   endif()
 
   if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
@@ -418,4 +418,3 @@ macro(otb_module_impl)
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
 endmacro()
-

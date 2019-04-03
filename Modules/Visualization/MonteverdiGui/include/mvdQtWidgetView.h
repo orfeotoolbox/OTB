@@ -80,32 +80,12 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p =0,
+		QWidget* p = nullptr,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
   ~QtWidgetView() override;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  void OTBApplicationOutputImageChanged( const QString &, const QString &);
-
-  void ExecutionDone( int nbOutputs );
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
 protected:
 
   QWidget* CreateInputWidgets() override;
@@ -113,16 +93,12 @@ protected:
 protected slots:
 
   /** extend the behaviour of base class OnExecButtonClicked */
-  void OnExecButtonClicked();
+  void OnExecButtonClicked() override;
 
   /** modify the behaviour of base class OnExceptionRaised
    */
-  void OnExceptionRaised( QString what );
+  void OnExceptionRaised( QString what ) override;
 
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
 private:
 
   QtWidgetView(const QtWidgetView&) = delete;
@@ -136,10 +112,6 @@ private:
    */
   void SetupFileSelectionWidget( QWidget * );
 
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
 private slots:
 
   // slot in charge of emitting a signal to the catalogue mainWindow.

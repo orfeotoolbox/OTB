@@ -59,7 +59,7 @@ public:
 
   // Set/Get Value
   otbSetObjectMemberMacro(StringParam, Value , std::string);
-  otbGetObjectMemberMacro(StringParam, Value , std::string);
+  otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Clear Value
   void ClearValue() override
@@ -76,6 +76,21 @@ public:
 
   // GetActive method
   otbGetObjectMemberConstMacro(StringParam, Active, bool);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Directory;
+  }
+
+  std::string ToString() const override
+  {
+    return GetValue();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
 
 protected:
   /** Constructor */

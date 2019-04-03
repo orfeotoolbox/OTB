@@ -278,13 +278,17 @@ private:
         SetDefaultParameterInt( "sizey" , largestRegion.GetSize(1) );
         SetDefaultParameterInt( "startx" , largestRegion.GetIndex(0) );
         SetDefaultParameterInt( "starty" , largestRegion.GetIndex(1) );
+
         // Setting actual value
-        if ( !HasUserValue("sizex") )
-          SetParameterFloat( "sizex" , 
-            GetDefaultParameterFloat( "sizex" ) );
-        if ( !HasUserValue("sizey") )
-          SetParameterFloat( "sizey" , 
-            GetDefaultParameterFloat( "sizey" ) );
+        if (!HasUserValue("sizex"))
+        {
+          SetParameterInt("sizex", GetDefaultParameterInt("sizex"));
+        }
+        if (!HasUserValue("sizey"))
+        {
+          SetParameterInt("sizey", GetDefaultParameterInt("sizey"));
+        }
+
         // Compute radius parameters default value
         ComputeRadiusFromIndex( inImage , largestRegion );
         // Compute extent parameters default value

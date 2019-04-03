@@ -53,7 +53,7 @@
 #include "otbSpatialisationFilter.h"
 #include "otbAttributesMapLabelObject.h"
 #include "itkTernaryFunctorImageFilter.h"
-#include "otbRAndNIRIndexImageFilter.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "otbVectorDataToLabelMapWithAttributesFilter.h"
 
 namespace otb

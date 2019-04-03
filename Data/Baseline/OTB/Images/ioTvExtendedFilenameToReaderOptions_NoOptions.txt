@@ -1,0 +1,12 @@
+1
+/home/data/filename.tif
+0
+
+0
+0
+0
+0
+0
+0
+0
+[]

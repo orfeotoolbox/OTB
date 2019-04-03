@@ -105,6 +105,21 @@ public:
 
   std::string CheckFileName(bool fixMissingExtension = false);
 
+  ParameterType GetType() const override
+  {
+    return ParameterType_OutputImage;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFileName(value);
+  }
+
 protected:
   /** Constructor */
   OutputImageParameter();

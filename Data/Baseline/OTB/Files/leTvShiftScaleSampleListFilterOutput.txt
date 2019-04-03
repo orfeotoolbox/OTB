@@ -1,0 +1,12 @@
+Sample size: 2
+Nb samples : 3
+Shifts: [-1, -3]
+Scales: [1, 2]
+Input samples: 
+[-2, -5]
+[-1, -3]
+[0, -1]
+Output samples: 
+[-1, -1]
+[0, 0]
+[1, 1]

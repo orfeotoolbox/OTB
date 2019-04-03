@@ -26,6 +26,9 @@
 #include "gdal.h"
 #include "itkMultiThreader.h"
 
+#include <type_traits>
+#include <cassert>
+
 namespace otb
 {
 
@@ -46,15 +49,13 @@ Logger * Logger::CreateInstance()
 {
   Logger * logger = new Logger;
 
-  // By default, redirect logs to std::cout
-  itk::StdStreamLogOutput::Pointer defaultOutput = 
-    itk::StdStreamLogOutput::New();
+  // By default redirect logs to std::cout
+  itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
   defaultOutput->SetStream(std::cout);
-  
   logger->AddLogOutput(defaultOutput);
+
   return logger;
 }
-
 
 Logger * Logger::Instance()
 {
@@ -107,6 +108,11 @@ void Logger::LogSetupInformation()
     }
 }
 
+void Logger::ResetOutputs()
+{
+  m_Output = itk::MultipleLogOutput::New();
+}
+
 bool Logger::IsLogSetupInformationDone()
 {
   return m_LogSetupInfoDone;
@@ -116,5 +122,22 @@ void Logger::LogSetupInformationDone()
 {
   m_LogSetupInfoDone = true;
 }
+
+std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const& content)
+{
+  static const std::string levelString[] = {"(MUSTFLUSH)", "(FATAL)", "(CRITICAL)", "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)"};
+
+  assert(level <= std::extent<decltype(levelString)>::value);
+
+  if (strcmp(this->GetName(), "") == 0)
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + ": " + content;
+  }
+  else
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + " " + this->GetName() + ": " + content;
+  }
+}
+
 
 } // namespace otb

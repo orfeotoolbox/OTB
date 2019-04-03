@@ -54,7 +54,7 @@ otb_add_test(NAME feTvForwardFourierMellinImageFilter COMMAND otbDescriptorsTest
   ${BASELINE}/feForwardFourierMellinImageFilterImag.tif
   ${TEMP}/feForwardFourierMellinImageFilterImag.tif
   otbFourierMellinImageFilter
-  ${INPUTDATA}/circle.hdr
+  ${INPUTDATA}/circle.raw.hdr
   ${TEMP}/feForwardFourierMellinImageFilterReal.tif
   ${TEMP}/feForwardFourierMellinImageFilterImag.tif)
 

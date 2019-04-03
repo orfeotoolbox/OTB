@@ -54,7 +54,7 @@ public:
 
   /** \brief Constructor. */
   QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent,
+		QWidget* parent=nullptr,
 		Qt::WindowFlags flags =0 );
 
   /** \brief Destructor. */
@@ -68,14 +68,14 @@ public:
 
   bool IsClosable() const;
 
-public slots:
-
   void UnhandledException(QString message);
 
 signals:
   void QuitSignal();
   void ExecuteAndWriteOutput();
   void Stop();
+  void OTBApplicationOutputImageChanged( const QString &, const QString &);
+  void ExecutionDone( int nbOutputs );
 
 protected:
 
@@ -96,9 +96,9 @@ protected:
 
 protected slots:
 
-  void OnExecButtonClicked();
+  virtual void OnExecButtonClicked();
 
-  void OnExceptionRaised( QString what );
+  virtual void OnExceptionRaised( QString what );
 
 // Private methods.
 private:
@@ -107,8 +107,6 @@ private:
   void operator=(const QtWidgetView&) = delete;
 
   QWidget* CreateFooter();
-
-  QWidget* CreateDoc();
 
 // Private attributes.
 private:

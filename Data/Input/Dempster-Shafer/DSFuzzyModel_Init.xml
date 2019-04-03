@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<FuzzydDescriptorsModel>
+    <Descriptor name="NONDVI">
+        <Parameter value="0.05" />
+        <Parameter value="0.15" />
+        <Parameter value="0.20" />
+        <Parameter value="0.95" />
+    </Descriptor>
+    <Descriptor name="ROADSA">
+        <Parameter value="0.15" />
+        <Parameter value="0.30" />
+        <Parameter value="0.50" />
+        <Parameter value="0.95" />
+    </Descriptor>
+    <Descriptor name="NOBUIL">
+        <Parameter value="0.05" />
+        <Parameter value="0.07" />
+        <Parameter value="0.10" />
+        <Parameter value="0.95" />
+    </Descriptor>
+</FuzzydDescriptorsModel>

@@ -1,0 +1,183 @@
+polygon1->IsInside([2, 10]) = 0
+polygon1->IsOnEdge([2, 10]) = 1
+polygon2->IsInside([2, 10]) = 0
+polygon2->IsOnEdge([2, 10]) = 0
+polygon1->IsInside([7, 10]) = 0
+polygon1->IsOnEdge([7, 10]) = 1
+polygon2->IsInside([7, 10]) = 0
+polygon2->IsOnEdge([7, 10]) = 1
+polygon1->IsInside([7, 9]) = 0
+polygon1->IsOnEdge([7, 9]) = 1
+polygon2->IsInside([7, 9]) = 1
+polygon2->IsOnEdge([7, 9]) = 0
+polygon1->IsInside([5, 9]) = 1
+polygon1->IsOnEdge([5, 9]) = 1
+polygon2->IsInside([5, 9]) = 0
+polygon2->IsOnEdge([5, 9]) = 0
+polygon1->IsInside([5, 8]) = 0
+polygon1->IsOnEdge([5, 8]) = 1
+polygon2->IsInside([5, 8]) = 0
+polygon2->IsOnEdge([5, 8]) = 0
+polygon1->IsInside([7, 8]) = 0
+polygon1->IsOnEdge([7, 8]) = 1
+polygon2->IsInside([7, 8]) = 1
+polygon2->IsOnEdge([7, 8]) = 0
+polygon1->IsInside([7, 6]) = 0
+polygon1->IsOnEdge([7, 6]) = 1
+polygon2->IsInside([7, 6]) = 0
+polygon2->IsOnEdge([7, 6]) = 0
+polygon1->IsInside([9, 6]) = 0
+polygon1->IsOnEdge([9, 6]) = 1
+polygon2->IsInside([9, 6]) = 1
+polygon2->IsOnEdge([9, 6]) = 0
+polygon1->IsInside([9, 5]) = 0
+polygon1->IsOnEdge([9, 5]) = 1
+polygon2->IsInside([9, 5]) = 1
+polygon2->IsOnEdge([9, 5]) = 0
+polygon1->IsInside([7, 5]) = 1
+polygon1->IsOnEdge([7, 5]) = 1
+polygon2->IsInside([7, 5]) = 0
+polygon2->IsOnEdge([7, 5]) = 0
+polygon1->IsInside([7, 3]) = 0
+polygon1->IsOnEdge([7, 3]) = 1
+polygon2->IsInside([7, 3]) = 1
+polygon2->IsOnEdge([7, 3]) = 0
+polygon1->IsInside([2, 3]) = 1
+polygon1->IsOnEdge([2, 3]) = 1
+polygon2->IsInside([2, 3]) = 0
+polygon2->IsOnEdge([2, 3]) = 0
+
+
+polygon1->IsInside([6, 10]) = 0
+polygon1->IsOnEdge([6, 10]) = 1
+polygon2->IsInside([6, 10]) = 0
+polygon2->IsOnEdge([6, 10]) = 1
+polygon1->IsInside([11, 10]) = 0
+polygon1->IsOnEdge([11, 10]) = 0
+polygon2->IsInside([11, 10]) = 0
+polygon2->IsOnEdge([11, 10]) = 1
+polygon1->IsInside([11, 2]) = 0
+polygon1->IsOnEdge([11, 2]) = 0
+polygon2->IsInside([11, 2]) = 0
+polygon2->IsOnEdge([11, 2]) = 1
+polygon1->IsInside([4, 2]) = 0
+polygon1->IsOnEdge([4, 2]) = 0
+polygon2->IsInside([4, 2]) = 1
+polygon2->IsOnEdge([4, 2]) = 1
+polygon1->IsInside([3, 4]) = 1
+polygon1->IsOnEdge([3, 4]) = 0
+polygon2->IsInside([3, 4]) = 0
+polygon2->IsOnEdge([3, 4]) = 1
+polygon1->IsInside([8, 4]) = 0
+polygon1->IsOnEdge([8, 4]) = 0
+polygon2->IsInside([8, 4]) = 1
+polygon2->IsOnEdge([8, 4]) = 1
+polygon1->IsInside([8, 7]) = 0
+polygon1->IsOnEdge([8, 7]) = 0
+polygon2->IsInside([8, 7]) = 1
+polygon2->IsOnEdge([8, 7]) = 1
+polygon1->IsInside([6, 7]) = 1
+polygon1->IsOnEdge([6, 7]) = 0
+polygon2->IsInside([6, 7]) = 1
+polygon2->IsOnEdge([6, 7]) = 1
+
+
+polygon1->NbCrossing([2, 10], [7, 10]) = 0
+polygon1->NbTouching([2, 10], [7, 10]) = 3
+polygon2->NbCrossing([2, 10], [7, 10]) = 0
+polygon2->NbTouching([2, 10], [7, 10]) = 2
+polygon1->NbCrossing([7, 10], [7, 9]) = 0
+polygon1->NbTouching([7, 10], [7, 9]) = 3
+polygon2->NbCrossing([7, 10], [7, 9]) = 0
+polygon2->NbTouching([7, 10], [7, 9]) = 1
+polygon1->NbCrossing([7, 9], [5, 9]) = 0
+polygon1->NbTouching([7, 9], [5, 9]) = 3
+polygon2->NbCrossing([7, 9], [5, 9]) = 1
+polygon2->NbTouching([7, 9], [5, 9]) = 0
+polygon1->NbCrossing([5, 9], [5, 8]) = 0
+polygon1->NbTouching([5, 9], [5, 8]) = 3
+polygon2->NbCrossing([5, 9], [5, 8]) = 0
+polygon2->NbTouching([5, 9], [5, 8]) = 0
+polygon1->NbCrossing([5, 8], [7, 8]) = 0
+polygon1->NbTouching([5, 8], [7, 8]) = 3
+polygon2->NbCrossing([5, 8], [7, 8]) = 1
+polygon2->NbTouching([5, 8], [7, 8]) = 0
+polygon1->NbCrossing([7, 8], [7, 6]) = 0
+polygon1->NbTouching([7, 8], [7, 6]) = 3
+polygon2->NbCrossing([7, 8], [7, 6]) = 1
+polygon2->NbTouching([7, 8], [7, 6]) = 0
+polygon1->NbCrossing([7, 6], [9, 6]) = 0
+polygon1->NbTouching([7, 6], [9, 6]) = 3
+polygon2->NbCrossing([7, 6], [9, 6]) = 1
+polygon2->NbTouching([7, 6], [9, 6]) = 0
+polygon1->NbCrossing([9, 6], [9, 5]) = 0
+polygon1->NbTouching([9, 6], [9, 5]) = 3
+polygon2->NbCrossing([9, 6], [9, 5]) = 0
+polygon2->NbTouching([9, 6], [9, 5]) = 0
+polygon1->NbCrossing([9, 5], [7, 5]) = 0
+polygon1->NbTouching([9, 5], [7, 5]) = 3
+polygon2->NbCrossing([9, 5], [7, 5]) = 1
+polygon2->NbTouching([9, 5], [7, 5]) = 0
+polygon1->NbCrossing([7, 5], [7, 3]) = 0
+polygon1->NbTouching([7, 5], [7, 3]) = 3
+polygon2->NbCrossing([7, 5], [7, 3]) = 1
+polygon2->NbTouching([7, 5], [7, 3]) = 0
+polygon1->NbCrossing([7, 3], [2, 3]) = 0
+polygon1->NbTouching([7, 3], [2, 3]) = 3
+polygon2->NbCrossing([7, 3], [2, 3]) = 1
+polygon2->NbTouching([7, 3], [2, 3]) = 0
+polygon1->NbCrossing([2, 3], [2, 10]) = 0
+polygon1->NbTouching([2, 3], [2, 10]) = 3
+polygon2->NbCrossing([2, 3], [2, 10]) = 0
+polygon2->NbTouching([2, 3], [2, 10]) = 0
+
+
+polygon1->NbCrossing([6, 10], [11, 10]) = 0
+polygon1->NbTouching([6, 10], [11, 10]) = 2
+polygon2->NbCrossing([6, 10], [11, 10]) = 0
+polygon2->NbTouching([6, 10], [11, 10]) = 3
+polygon1->NbCrossing([11, 10], [11, 2]) = 0
+polygon1->NbTouching([11, 10], [11, 2]) = 0
+polygon2->NbCrossing([11, 10], [11, 2]) = 0
+polygon2->NbTouching([11, 10], [11, 2]) = 3
+polygon1->NbCrossing([11, 2], [4, 2]) = 0
+polygon1->NbTouching([11, 2], [4, 2]) = 0
+polygon2->NbCrossing([11, 2], [4, 2]) = 0
+polygon2->NbTouching([11, 2], [4, 2]) = 3
+polygon1->NbCrossing([4, 2], [3, 4]) = 1
+polygon1->NbTouching([4, 2], [3, 4]) = 0
+polygon2->NbCrossing([4, 2], [3, 4]) = 0
+polygon2->NbTouching([4, 2], [3, 4]) = 3
+polygon1->NbCrossing([3, 4], [8, 4]) = 1
+polygon1->NbTouching([3, 4], [8, 4]) = 0
+polygon2->NbCrossing([3, 4], [8, 4]) = 0
+polygon2->NbTouching([3, 4], [8, 4]) = 3
+polygon1->NbCrossing([8, 4], [8, 7]) = 2
+polygon1->NbTouching([8, 4], [8, 7]) = 0
+polygon2->NbCrossing([8, 4], [8, 7]) = 0
+polygon2->NbTouching([8, 4], [8, 7]) = 3
+polygon1->NbCrossing([8, 7], [6, 7]) = 1
+polygon1->NbTouching([8, 7], [6, 7]) = 0
+polygon2->NbCrossing([8, 7], [6, 7]) = 0
+polygon2->NbTouching([8, 7], [6, 7]) = 3
+polygon1->NbCrossing([6, 7], [6, 10]) = 2
+polygon1->NbTouching([6, 7], [6, 10]) = 1
+polygon2->NbCrossing([6, 7], [6, 10]) = 0
+polygon2->NbTouching([6, 7], [6, 10]) = 3
+
+
+Bounding Boxs computation : 
+Bounding Box 1
+Index : [2, 3] , Size : [7, 7]
+Bounding Box 2
+Index : [3, 2] , Size : [8, 8]
+
+
+Surface computation : 
+Surface 1 :35
+Surface 2 :39
+
+
+Length computation : 
+Length 1 :32
+Length 2 :35.2361

@@ -141,7 +141,6 @@ private:
     SetDefaultParameterFloat("khir",  0.);
     SetDefaultParameterInt("emissionh", 0);
     SetDefaultParameterInt("emissionv", 0);
-	SetDefaultParameterFloat("mode",  0);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "sar.tif");

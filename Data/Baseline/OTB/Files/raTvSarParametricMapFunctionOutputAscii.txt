@@ -1,0 +1,3 @@
+Sar Radiometric Calibration computed for the point : DN[[0, 0]] = 27 is 30
+Sar Radiometric Calibration computed for the point : DN[[164, 87]] = 87 is 10
+Sar Radiometric Calibration computed for the point : DN[[164, 43]] = 54 is 10

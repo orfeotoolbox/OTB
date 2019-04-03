@@ -22,6 +22,7 @@
 #define otbOGRVectorDataIO_h
 
 #include <string>
+#include <map>
 #include <cassert>
 
 #include "otbVectorDataIOBase.h"
@@ -124,6 +125,19 @@ private:
 
   GDALDataset * m_DataSource;
 
+  const std::map<std::string, std::string> 
+    m_OGRExtensionsToDrivers = {
+                                { ".SHP", "ESRI Shapefile"},
+                                { ".TAB", "MapInfo File"},
+                                { ".GML", "GML"},
+                                { ".GPX", "GPX"},
+                                { ".SQLITE", "SQLite"},
+                                {".KML", "KML"},
+                                { ".GMT", "OGR_GMT"},
+                                { ".GPKG", "GPKG"},
+                                { ".JSON", "GeoJSON"},
+                                { ".GEOJSON", "GeoJSON"}
+  };
 };
 
 } // end namespace otb

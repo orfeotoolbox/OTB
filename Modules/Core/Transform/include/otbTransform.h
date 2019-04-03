@@ -188,7 +188,11 @@ public:
    *
    * \f]
    * */
+#ifdef ITKV3_COMPATIBILITY
+  const JacobianType & GetJacobian(const InputPointType  &) const override
+#else
   virtual const JacobianType & GetJacobian(const InputPointType  &) const
+#endif
     {
     itkExceptionMacro( << "Subclass should override this method (GetJacobian)" );
     // Next line is needed to avoid errors due to:

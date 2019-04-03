@@ -1,0 +1,2 @@
+Density computed for the point : [14.9, 24] is 0.0795775
+Density computed for the point : [9, 5] is 0.0795775

@@ -37,8 +37,7 @@ namespace Wrapper
 
 /** \class DocExampleStructure
  *  \brief This class is a structure that gathered the necessary
- *  element to generate an example (for CommandLine, python, Java
- *  ...).
+ *  element to generate an example (for CommandLine, python ...).
  * User has to set the application name, the binary path and a list of
  *  key/value couple.
  *

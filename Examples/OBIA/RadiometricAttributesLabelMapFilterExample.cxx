@@ -36,7 +36,7 @@
 //  This example shows the basic approach to perform object based analysis on a image.
 //  The input image is firstly segmented using the \doxygen{otb}{MeanShiftSegmentationFilter}
 //  Then each segmented region is converted to a Map of labeled objects.
-//  Afterwards the \doxygen{otb}{otbMultiChannelRAndNIRIndexImageFilter} computes
+//  Afterwards the \doxygen{itk}{UnaryFunctorImageFilter} computes
 //  radiometric attributes for each object. In this example the NDVI is computed.
 //  The computed feature is passed to the \doxygen{otb}{BandsStatisticsAttributesLabelMapFilter}
 //  which computes statistics over the resulting band.
@@ -56,7 +56,8 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbAttributesMapOpeningLabelMapFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbMultiChannelRAndNIRIndexImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 #include "otbImageToVectorImageCastFilter.h"
 
 int main(int argc, char* argv[])
@@ -106,8 +107,8 @@ int main(int argc, char* argv[])
   typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>                       OpeningLabelMapFilterType;
   typedef itk::LabelMapToBinaryImageFilter<LabelMapType, MaskImageType>               LabelMapToBinaryImageFilterType;
-  typedef otb::MultiChannelRAndNIRIndexImageFilter<VectorImageType, ImageType>        NDVIImageFilterType;
-  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>               ImageToVectorImageCastFilterType;
+  typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType,otb::Functor::NDVI<PixelType,PixelType,PixelType> > NDVIImageFilterType;
+  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>   ImageToVectorImageCastFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
@@ -165,8 +166,8 @@ int main(int argc, char* argv[])
   //  In our case, statistics are computed on the NDVI coefficient on each label object.
   NDVIImageFilterType::Pointer ndviImageFilter = NDVIImageFilterType::New();
 
-  ndviImageFilter->SetRedIndex(3);
-  ndviImageFilter->SetNIRIndex(4);
+  ndviImageFilter->GetFunctor().SetRedIndex(3);
+  ndviImageFilter->GetFunctor().SetNIRIndex(4);
   ndviImageFilter->SetInput(vreader->GetOutput());
 
   ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter = ImageToVectorImageCastFilterType::New();

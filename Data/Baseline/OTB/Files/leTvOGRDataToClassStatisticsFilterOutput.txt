@@ -1,0 +1,36 @@
+# Layer 0 : polygons
+# Class sample counts
+class 1 = 104
+class 2 = 160
+class 3 = 211
+# Vector sizes
+feature 1 = 78
+feature 2 = 62
+feature 3 = 26
+feature 4 = 98
+feature 5 = 211
+# Layer 1 : lines
+# Class sample counts
+class 1 = 63
+class 2 = 100
+class 3 = 27
+# Vector sizes
+feature 1 = 39
+feature 2 = 24
+feature 3 = 51
+feature 4 = 49
+feature 5 = 27
+# Layer 2 : points
+# Class sample counts
+class 1 = 2
+class 2 = 1
+class 3 = 2
+# Vector sizes
+feature 1 = 1
+feature 2 = 0
+feature 3 = 0
+feature 4 = 1
+feature 5 = 1
+feature 6 = 1
+feature 7 = 1
+feature 8 = 0

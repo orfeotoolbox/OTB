@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><Folder><name>ToulouseRoad_examples</name>
+<Schema name="ToulouseRoad_examples" id="ToulouseRoad_examples">
+	<SimpleField name="Name" type="string"></SimpleField>
+	<SimpleField name="Description" type="string"></SimpleField>
+	<SimpleField name="number" type="int"></SimpleField>
+</Schema>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#ToulouseRoad_examples">
+		<SimpleData name="number">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <LineString><coordinates>1.440678345674316,43.604547672787255 1.441717728552258,43.604662842338669 1.44263095484152,43.604729994574505 1.443728016795267,43.604854347924118 1.444283964931591,43.604853500321134 1.444278176063859,43.604853421526549</coordinates></LineString>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#ToulouseRoad_examples">
+		<SimpleData name="number">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <LineString><coordinates>1.4417236260042,43.604658714657717 1.441761226015994,43.604099551863683 1.44185584376577,43.603574831010818 1.44185584376577,43.603574831010818</coordinates></LineString>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#ToulouseRoad_examples">
+		<SimpleData name="number">3</SimpleData>
+	</SchemaData></ExtendedData>
+      <LineString><coordinates>1.441071683497673,43.602322752583298 1.441483499380402,43.602744969397953 1.441991632069936,43.603025422731264 1.442292170530537,43.603496616714992 1.442668691389598,43.603716360022815 1.44320028035296,43.603761474721253 1.444338498057205,43.603861134253606 1.444338498057205,43.603861134253606 1.4442862906756,43.603864631740194</coordinates></LineString>
+  </Placemark>
+  <Placemark>
+	<Style><LineStyle><color>ff0000ff</color></LineStyle><PolyStyle><fill>0</fill></PolyStyle></Style>
+	<ExtendedData><SchemaData schemaUrl="#ToulouseRoad_examples">
+		<SimpleData name="number">4</SimpleData>
+	</SchemaData></ExtendedData>
+      <LineString><coordinates>1.443532064472475,43.602347868118983 1.443484098330237,43.602860601553964 1.44330447803766,43.603762893932945 1.44330447803766,43.603762893932945</coordinates></LineString>
+  </Placemark>
+</Folder></Document></kml>

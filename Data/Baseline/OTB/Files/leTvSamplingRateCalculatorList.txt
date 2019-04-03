@@ -1,0 +1,280 @@
+# Test the strategy : smallest - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	83	104	0.798077
+   2	83	160	0.51875
+   3	83	211	0.393365
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	83	98	0.846939
+   2	83	190	0.436842
+   3	83	178	0.466292
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	83	130	0.638462
+   2	83	144	0.576389
+   4	83	250	0.332
+# Test the strategy : smallest - custom
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	104	104	1
+   2	104	160	0.65
+   3	104	211	0.492891
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	98	98	1
+   2	98	190	0.515789
+   3	98	178	0.550562
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	130	130	1
+   2	130	144	0.902778
+   4	130	250	0.52
+# Test the strategy : constant - proportional
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	47	104	0.451923
+   2	48	160	0.3
+   3	81	211	0.383886
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	44	98	0.44898
+   2	58	190	0.305263
+   3	69	178	0.38764
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	59	130	0.453846
+   2	44	144	0.305556
+   3	0	0	0
+   4	151	250	0.604
+# Test the strategy : constant - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	50	104	0.480769
+   2	50	160	0.3125
+   3	50	211	0.236967
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	50	98	0.510204
+   2	50	190	0.263158
+   3	50	178	0.280899
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	50	130	0.384615
+   2	50	144	0.347222
+   3	0	0	0
+   4	50	250	0.2
+# Test the strategy : constant - custom
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	70	104	0.673077
+   2	70	160	0.4375
+   3	70	211	0.331754
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	80	98	0.816327
+   2	80	190	0.421053
+   3	80	178	0.449438
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	90	130	0.692308
+   2	90	144	0.625
+   3	0	0	0
+   4	90	250	0.36
+# Test the strategy : byClass - proportional
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	43	104	0.413462
+   2	42	160	0.2625
+   3	67	211	0.317536
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	41	98	0.418367
+   2	50	190	0.263158
+   3	56	178	0.314607
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	54	130	0.415385
+   2	37	144	0.256944
+   3	0	0	0
+   4	0	250	0
+# Test the strategy : byClass - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	46	104	0.442308
+   2	43	160	0.26875
+   3	41	211	0.194313
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	46	98	0.469388
+   2	43	190	0.226316
+   3	41	178	0.230337
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	46	130	0.353846
+   2	43	144	0.298611
+   3	0	0	0
+   4	0	250	0
+# Test the strategy : byClass - custom
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	67	104	0.644231
+   2	55	160	0.34375
+   3	72	211	0.341232
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	77	98	0.785714
+   2	69	190	0.363158
+   3	34	178	0.191011
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	86	130	0.661538
+   2	43	144	0.298611
+   3	0	0	0
+   4	98	250	0.392
+# Test the strategy : all - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	104	104	1
+   2	160	160	1
+   3	211	211	1
+   4	0	0	1
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	98	98	1
+   2	190	190	1
+   3	178	178	1
+   4	0	0	1
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	130	130	1
+   2	144	144	1
+   3	0	0	1
+   4	250	250	1
+#Test the strategy : percent - proportional
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	34	104	0.33
+   2	53	160	0.33
+   3	70	211	0.33
+   4	0	0	0.33
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	32	98	0.33
+   2	63	190	0.33
+   3	59	178	0.33
+   4	0	0	0.33
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	43	130	0.33
+   2	48	144	0.33
+   3	0	0	0.33
+   4	83	250	0.33
+#Test the strategy : percent - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	37	104	0.355769
+   2	54	160	0.3375
+   3	43	211	0.203791
+   4	28	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	37	98	0.377551
+   2	54	190	0.284211
+   3	43	178	0.241573
+   4	28	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	37	130	0.284615
+   2	54	144	0.375
+   3	43	0	0
+   4	28	250	0.112
+#Test the strategy : total - proportional
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	21	104	0.201923
+   2	33	160	0.20625
+   3	43	211	0.203791
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	20	98	0.204082
+   2	39	190	0.205263
+   3	36	178	0.202247
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	27	130	0.207692
+   2	29	144	0.201389
+   3	0	0	0
+   4	51	250	0.204
+#Test the strategy : total - equal
+# Input 0
+ SamplingRateCalculator (0x10e1960)
+   #className requiredSamples totalSamples rate
+   1	22	104	0.211538
+   2	34	160	0.2125
+   3	44	211	0.208531
+   4	0	0	0
+# Input 1
+ SamplingRateCalculator (0x10e1d90)
+   #className requiredSamples totalSamples rate
+   1	21	98	0.214286
+   2	41	190	0.215789
+   3	38	178	0.213483
+   4	0	0	0
+# Input 2
+ SamplingRateCalculator (0x10e1e00)
+   #className requiredSamples totalSamples rate
+   1	25	130	0.192308
+   2	27	144	0.1875
+   3	0	0	0
+   4	48	250	0.192

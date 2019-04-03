@@ -101,7 +101,7 @@ otb_add_test(NAME coTvImageToVectorImageCastFilter COMMAND otbImageManipulationT
   ${BASELINE}/coImageToVectorImageCastFilterOutput.tif
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   otbImageToVectorImageCastFilter
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   )
 

@@ -23,6 +23,8 @@
 #include "otbImageKeywordlist.h"
 #include "otbMacro.h"
 
+#include "otb_ossim.h"
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"

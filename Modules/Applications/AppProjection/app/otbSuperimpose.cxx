@@ -283,7 +283,7 @@ private:
       
       m_BasicResampler->SetOutputSpacing(xsSpacing);
       m_BasicResampler->SetOutputSize(size);
-      m_Resampler->SetOutputStartIndex(start);
+      m_BasicResampler->SetOutputStartIndex(start);
       m_BasicResampler->SetEdgePaddingValue(defaultValue);
 
       m_GeoImport->SetInput(m_BasicResampler->GetOutput());
