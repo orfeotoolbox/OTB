@@ -254,7 +254,7 @@ if __name__ == "__main__":
   handler.GetBuildId()
   # handler.buildid="1"
   cdash_url = handler.GetBuildUrl()
-  ( state , error ) = handler.GetBuildUrl()
+  ( state , error ) = handler.GetBuildStatus()
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
