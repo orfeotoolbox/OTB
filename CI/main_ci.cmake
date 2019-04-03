@@ -101,8 +101,4 @@ if ( NOT _test_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_test.")
 endif()
 
-execute_process(COMMAND date OUTPUT_VARIABLE cur_time)
-message(STATUS "Before submit : ${cur_time}")
 ctest_submit()
-execute_process(COMMAND date OUTPUT_VARIABLE cur_time)
-message(STATUS "After submit : ${cur_time}")
