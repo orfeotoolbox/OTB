@@ -20,6 +20,7 @@
  */
 
 
+#include "otbWrapperQtWidgetMainWindow.h"
 #include "mvdMainWindow.h"
 #include "ui_mvdMainWindow.h"
 
@@ -2182,7 +2183,7 @@ MainWindow
     Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
   );
 
-  QWidget * appWidget =
+  otb::Wrapper::QtMainWindow* appWidget =
     Application::ConstInstance()
     ->GetOTBApplicationsModel()
     ->GetLauncher()
@@ -2196,25 +2197,21 @@ MainWindow
 
   appWidget->show();
 
-  //
-  // connections. not using m_CentralTabWidget->currentWidget() leads
-  // to a wrong connection!!!!
+  auto gui = appWidget->Gui();
   QObject::connect(
-    appWidget,
-    SIGNAL( OTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) ),
+    gui,
+    &otb::Wrapper::QtWidgetView::OTBApplicationOutputImageChanged,
     // to:
     this,
-    SLOT( OnOTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) )
+    &MainWindow::OnOTBApplicationOutputImageChanged
     );
 
   QObject::connect(
-    appWidget,
-    SIGNAL( ExecutionDone( int ) ),
+    gui,
+    &otb::Wrapper::QtWidgetView::ExecutionDone,
     // to:
     this,
-    SLOT( OnExecutionDone( int ) )
+    &MainWindow::OnExecutionDone
   );
 }
 
