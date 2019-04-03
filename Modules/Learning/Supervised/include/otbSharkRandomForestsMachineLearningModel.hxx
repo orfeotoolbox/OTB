@@ -53,6 +53,7 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   this->m_IsRegressionSupported = false;
   this->m_IsDoPredictBatchMultiThreaded = true;
   this->m_NormalizeClassLabels = true;
+  this->m_ComputeMargin = false;
 }
 
 
