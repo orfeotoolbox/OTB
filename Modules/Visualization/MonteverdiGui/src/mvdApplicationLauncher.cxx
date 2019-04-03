@@ -179,7 +179,7 @@ ApplicationLauncher
 }
 
 
-QWidget*
+otb::Wrapper::QtMainWindow*
 ApplicationLauncher
 ::NewOtbApplicationWindow( const QString & appName,
 			   bool isStandalone,

@@ -19,6 +19,7 @@
  */
 
 
+#include "otbWrapperQtWidgetMainWindow.h"
 #include "mvdMaplaMainWindow.h"
 #include "ui_mvdMaplaMainWindow.h"
 
@@ -231,7 +232,7 @@ MaplaMainWindow
     ->GetLauncher()!=NULL
   );
 
-  QWidget * appWindow =
+  otb::Wrapper::QtMainWindow* appWindow =
     MaplaApplication::ConstInstance()
     ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()
