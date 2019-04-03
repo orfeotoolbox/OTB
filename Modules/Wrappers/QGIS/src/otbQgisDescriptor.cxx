@@ -255,8 +255,7 @@ int main(int argc, char* argv[])
       }
     else if (type == ParameterType_InputImage
           || type == ParameterType_OutputImage
-          || type == ParameterType_OutputFilename
-          || type == ParameterType_ComplexOutputImage)
+          || type == ParameterType_OutputFilename)
       {
       // default is None and nothing to add to dFile
       }
