@@ -2,23 +2,16 @@ Testing geopoint: [1.3561728980, 43.4876035537]
 
 Testing wgs84 to wgs84: [1.3561728980, 43.4876035537] -> [1.3561728980, 43.4876035537]
 Testing utm 31 north to utm 31 north: [367077.723, 4816277.087] -> [367077.723, 4816277.087]
-Testing lambert 2 to lambert 2: [520521.365, 1832217.887] -> [520521.365, 1832217.887]
-Testing transmercator 31 north to transmercator: [-388621.465, -693821.597] -> [-388621.465, -693821.597]
+Testing lambert 93 to lambert 93: [520573.738, 1832222.818] -> [520573.738, 1832222.818]
 
 Testing geo 2 carto ...
 
 Testing wgs84 to utm 31 north: [1.3561728980, 43.4876035537] -> [367077.723, 4816277.087]
 Testing utm 31 north to wgs84: [367077.723, 4816277.087] -> [1.3561728980, 43.4876035537]
-Testing wgs84 to lambert 2: [1.3561728980, 43.4876035537] -> [520521.365, 1832217.887]
-Testing lambert 2 to wgs84: [520521.365, 1832217.887] -> [1.3561728980, 43.4876035537]
-Testing wgs84 to transmeractor: [1.3561728980, 43.4876035537] -> [-388621.465, -693821.597]
-Testing transmercator to wgs84: [-388621.465, -693821.597] -> [1.3561728982, 43.4876035537]
+Testing wgs84 to lambert 93: [1.3561728980, 43.4876035537] -> [520573.738, 1832222.818]
+Testing lambert 93 to wgs84: [520573.738, 1832222.818] -> [1.3561728980, 43.4876035537]
 
 Testing cross geo ...
 
-Testing lambert 2 to utm 31 north: [520521.365, 1832217.887] -> [367077.723, 4816277.087]
-Testing utm 31 north to lambert 2: [367077.723, 4816277.087] -> [520521.365, 1832217.887]
-Testing lambert 2 to transmercator: [520521.365, 1832217.887] -> [-388621.465, -693821.597]
-Testing transmercator to lambert 2: [-388621.465, -693821.597] -> [520521.365, 1832217.887]
-Testing transmercator to utm 31 north: [-388621.465, -693821.597] -> [367077.723, 4816277.087]
-Testing utm 31 north to transmercator: [367077.723, 4816277.087] -> [-388621.465, -693821.597]
+Testing lambert 93 to utm 31 north: [520573.738, 1832222.818] -> [367077.723, 4816277.087]
+Testing utm 31 north to lambert 93: [367077.723, 4816277.087] -> [520573.738, 1832222.818]

@@ -1,0 +1,6 @@
+#Reference labels (rows):1,2,3,4
+#Produced labels (columns):1,2,3,4
+42,0,0,0
+0,42,0,0
+0,1,41,0
+0,0,0,42
