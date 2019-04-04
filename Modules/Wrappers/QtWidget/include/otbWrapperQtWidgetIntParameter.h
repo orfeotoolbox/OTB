@@ -57,8 +57,6 @@ private:
   void DoCreateWidget() override;
   void DoUpdateGUI() override;
 
-  bool eventFilter( QObject * o, QEvent * e ) override;
-
   QHBoxLayout *         m_QHBoxLayout;
   QtWidgetSpinBox* m_QSpinBox;
 
