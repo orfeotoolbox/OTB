@@ -55,8 +55,6 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
 		Qt::WindowFlags flags ) :
   QWidget( parent, flags ),
   m_Model( NULL ),
-  m_LogText( NULL ),
-  m_TabWidget( NULL ),
   m_IsClosable( true ),
   m_IsRunning(false)
 {
@@ -73,11 +71,6 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
     m_Model, &QtWidgetModel::SetProgressReportDone,
     this, &QtWidgetView::OnProgressReportEnd
   );
-
-  QObject::connect(
-    m_Model, &QtWidgetModel::ExceptionRaised,
-    this, &QtWidgetView::OnExceptionRaised
-  );
 }
 
 QtWidgetView::~QtWidgetView()
@@ -88,28 +81,9 @@ QtWidgetView::~QtWidgetView()
 
 void QtWidgetView::CreateGui()
 {
-  // Create a VBoxLayout with the header, the input widgets, and the footer
-  QVBoxLayout *mainLayout = new QVBoxLayout;
-  m_TabWidget = new QTabWidget(this);
-
-  m_TabWidget->addTab(CreateInputWidgets(), tr("Parameters"));
-  m_LogText = new QTextEdit(this);
-  connect( m_Model->GetLogOutput(), &QtLogOutput::NewContentLog, m_LogText, &QTextEdit::append );
-  m_TabWidget->addTab(m_LogText, tr("Logs"));
-  mainLayout->addWidget(m_TabWidget);
-
-  // Footer: progress bar
-  QHBoxLayout *footLayout = new QHBoxLayout;
-  mainLayout->addLayout(footLayout);
-
-  QGroupBox *mainGroup = new QGroupBox(this);
-  mainGroup->setLayout(mainLayout);
-
-  QVBoxLayout  *finalLayout = new QVBoxLayout;
-  finalLayout->addWidget(mainGroup);
-
-  // Make the final layout to the widget
-  this->setLayout(finalLayout);
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  this->setLayout(mainLayout);
+  mainLayout->addWidget(CreateInputWidgets());
 }
 
 QWidget* QtWidgetView::CreateInputWidgets()
@@ -146,17 +120,6 @@ void QtWidgetView::closeEvent( QCloseEvent * e )
   emit QuitSignal();
 
   deleteLater();
-}
-
-void QtWidgetView::UnhandledException(QString message)
-{
-  this->OnExceptionRaised(message);
-  m_LogText->append(message);
-}
-
-void QtWidgetView::OnExceptionRaised( QString /*message*/)
-{
-  m_TabWidget->setCurrentIndex(1);
 }
 
 bool QtWidgetView::IsRunning() const

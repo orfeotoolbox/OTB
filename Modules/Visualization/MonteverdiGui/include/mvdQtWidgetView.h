@@ -83,12 +83,6 @@ public:
 protected:
   QWidget* CreateInputWidgets() override;
 
-protected slots:
-
-  /** modify the behaviour of base class OnExceptionRaised
-   */
-  void OnExceptionRaised( QString what ) override;
-
 private:
 
   QtWidgetView(const QtWidgetView&) = delete;

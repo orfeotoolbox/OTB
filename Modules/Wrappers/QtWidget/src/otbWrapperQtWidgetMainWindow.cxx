@@ -60,6 +60,8 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   connect( gui->GetModel(), &QtWidgetModel::SetApplicationReady, this, &QtMainWindow::UpdateMessageAfterApplicationReady );
   connect( gui->GetModel(), &QtWidgetModel::SetProgressReportDone, this, &QtMainWindow::UpdateMessageAfterExecution );
 
+  connect(gui->GetModel(), &QtWidgetModel::ExceptionRaised, [&] { ui->tabWidget->setCurrentIndex(1); });
+
   // Status bar and message default text
   ui->statusBar->showMessage(tr("Select parameters"));
   ui->message->setText("");
@@ -67,7 +69,11 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   // Setup the progress bar to observe the model
   ui->progressBar->SetModel(gui->GetModel());
 
+  // Connect application progress text to the QLabel
   connect(ui->progressBar, &QtWidgetSimpleProgressReport::SetText, ui->message, &QLabel::setText);
+
+  // Connect log output to the textEdit area
+  connect(gui->GetModel()->GetLogOutput(), &QtLogOutput::NewContentLog, ui->plainTextEdit, &QPlainTextEdit::appendPlainText);
 }
 
 void QtMainWindow::UpdateMessageAfterApplicationReady( bool val )
@@ -128,7 +134,8 @@ otb::Wrapper::QtWidgetView* QtMainWindow::Gui() const
 
 void QtMainWindow::UnhandledException(QString message)
 {
-  gui->UnhandledException(message);
+  ui->plainTextEdit->appendPlainText(message);
+  ui->tabWidget->setCurrentIndex(1);
 }
 
 } // namespace Wrapper

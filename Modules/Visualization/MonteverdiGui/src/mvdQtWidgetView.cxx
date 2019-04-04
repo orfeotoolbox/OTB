@@ -319,23 +319,6 @@ void QtWidgetView::BeforeExecuteButtonClicked()
 /*******************************************************************************/
 void
 QtWidgetView
-::OnExceptionRaised( QString what  )
-{
-  qWarning() << what;
-
-#if defined( OTB_DEBUG )
-  QMessageBox::warning(
-    this,
-    PROJECT_NAME,
-    what,
-    QMessageBox::Ok
-  );
-#endif
-}
-
-/*******************************************************************************/
-void
-QtWidgetView
 ::OnApplicationExecutionDone( int status )
 {
   otb::Wrapper::Application::Pointer otbApp( GetModel()->GetApplication() );

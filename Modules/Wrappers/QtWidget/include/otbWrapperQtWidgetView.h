@@ -68,8 +68,6 @@ public:
 
   bool IsClosable() const;
 
-  void UnhandledException(QString message);
-
   virtual void BeforeExecuteButtonClicked() {}
 
 signals:
@@ -91,7 +89,6 @@ protected:
 protected slots:
 
   virtual void OnExecButtonClicked() {}
-  virtual void OnExceptionRaised( QString what );
 
 private:
 
@@ -103,9 +100,6 @@ private:
 private:
 
   otb::Wrapper::QtWidgetModel* m_Model;
-
-  QTextEdit *m_LogText;
-  QTabWidget *m_TabWidget;
 
   bool m_IsClosable : 1;
   bool m_IsRunning;
