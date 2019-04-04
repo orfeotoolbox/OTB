@@ -213,7 +213,7 @@ ApplicationRegistry::CreateApplication(const std::string& name, bool useFactory)
         }
       }
     }
-  
+
   return appli;
 }
 
@@ -430,7 +430,9 @@ ApplicationRegistry::LoadApplicationFromPath(std::string path,std::string name)
       }
     else
       {
-      otbLogMacro(Warning,<< "Failed to load libraries from " << path << " while trying to create application "<<name );
+      otbLogMacro(Warning,<< "Failed to load libraries from " << path << " while trying to create application "<<name
+          << "\nbecause: -> " << itksys::DynamicLoader::LastError()
+          );
       }
     }
   return appli;
