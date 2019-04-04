@@ -23,7 +23,6 @@
 #include "otbImageFileWriter.h"
 #include "otbGenericMapProjection.h"
 #include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
 #include "otbMacro.h"
 
 int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
