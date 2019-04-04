@@ -1153,7 +1153,7 @@ namespace ossimplugins
       for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode,++idx)
       {
          int pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), idx);
-         assert(pos >= SR_PREFIX.size()+4 && pos < 1024);
+         assert(pos >= GCP_PREFIX.size()+4 && pos < sizeof(prefix));
 #if defined(USE_BOOST_TIME)
          const TimeType azimuthTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
          add(theProductKwl, prefix, attAzimuthTime, azimuthTime);
