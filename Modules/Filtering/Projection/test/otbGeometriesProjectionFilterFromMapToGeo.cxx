@@ -26,7 +26,7 @@
 #include "otbGeometriesSet.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbGeoInformationConversion.h"
+// #include "otbSpatialReference.h"
 
 /*===========================================================================*/
 /*==============================[ other stuff ]==============================*/
@@ -56,7 +56,8 @@ int otbGeometriesProjectionFilterFromMapToGeo(int argc, char* argv[])
   GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
   filter->SetInput(in_set);
   filter->SetOutput(out_set);
-  filter->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+
+  filter->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
 
   filter->Update();
 

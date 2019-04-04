@@ -252,8 +252,8 @@ int otbSensorModel(int argc, char* argv[])
      std::cerr<<"Invalid sensor model (GRSTransformType::Pointer is NULL)"<<std::endl;
      return EXIT_FAILURE;
    }
-  wgs2img->SetInputProjectionRef("");
-  wgs2img->SetOutputProjectionRef(wgsRef);
+  wgs2img->SetInputProjectionRef(wgsRef);
+  wgs2img->SetOutputProjectionRef("");
   wgs2img->SetOutputKeywordList(kwlist);
   wgs2img->InstantiateTransform();
 

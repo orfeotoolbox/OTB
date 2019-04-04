@@ -23,8 +23,6 @@
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 
-#include "otbMapProjections.h"
-
 #include <iostream>
 #include <fstream>
 
@@ -57,7 +55,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
-  filter->SetOutputProjectionRef("4326");  //WGS84
+  filter->SetOutputProjectionRef("EPSG:4326");  //WGS84
   filter->Compute();
 
   // Output file
@@ -70,7 +68,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   outfile<< std::endl;
 
   // Target SRS : 32631 UTM 31 N
-  filter->SetOutputProjectionRef("32631");  // UTM 31 N
+  filter->SetOutputProjectionRef("EPSG:32631");  // UTM 31 N
   filter->Compute();
 
   outfile<<"Output Parameters for SRID : 32631 (UTM 31 N)"<<std::endl;
@@ -80,9 +78,7 @@ int otbImageToGenericRSOutputParameters (int itkNotUsed(argc), char * argv[])
   outfile<< std::endl;
 
   // Target SRS : lambertII
-  typedef otb::Lambert2EtenduForwardProjection Lambert2Type;
-  Lambert2Type::Pointer lambert2Projection = Lambert2Type::New();
-  std::string  lambertRef = lambert2Projection->GetWkt();
+  std::string  lambertRef = otb::SpatialReference::FromDescription("EPSG:27572").ToWkt();
 
   filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();
