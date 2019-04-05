@@ -90,10 +90,11 @@ int main(int argc, char* argv[])
   // \end{itemize}
 
   typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
-  InverseProjectionType::Pointer                                      utmMapProjection = InverseProjectionType::New();
-  utmMapProjection->SetWkt("Utm");
-  utmMapProjection->SetParameter("Zone", argv[4]);
-  utmMapProjection->SetParameter("Hemisphere", argv[5]);
+  InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
+  utmMapProjection->SetWkt(
+    otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? 
+      otb::SpatialReference::hemisphere::north : 
+      otb::SpatialReference::hemisphere::south).ToWkt());
 
   //  We will need to pass several parameters to the orthorectification
   // concerning the desired output region:
