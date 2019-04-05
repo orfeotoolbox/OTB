@@ -37,7 +37,6 @@ otb_module_target_label(otbMPITiffWriterTestDriver)
 
 otb_add_test_mpi(NAME otbMPISPTWReadWriteTest
   NBPROCS 2
-  EXTRA_OPT --allow-run-as-root
   COMMAND otbMPITiffWriterTestDriver
   --compare-image ${NOTOL}
   ${INPUTDATA}/ToulouseQuickBird_Extrait_1500_3750.tif
