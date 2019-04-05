@@ -93,7 +93,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
   grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
   otbLogMacro(Debug, <<rpcEstimator->GetKeywordlist());
-  grsTrasnform->SetOutputProjectionRef("4326");
+  grsTrasnform->SetOutputProjectionRef("EPSG:4326");
 
   // Set the DEM Directory
   if ( std::string(argv[2]).compare("no_output") != 0)
