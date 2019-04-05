@@ -35,7 +35,7 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-native-build:
+ubuntu-gcc:
   extends: .general
   only: [merge_requests]
   stage: build
