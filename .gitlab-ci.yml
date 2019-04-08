@@ -54,8 +54,8 @@ debian-build:
 ubuntu-llvm:
   extends: .general
   only:
+    - branches
     - merge_requests
-    - pushes
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
