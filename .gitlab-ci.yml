@@ -26,6 +26,7 @@ before_script:
   - git checkout $CI_COMMIT_REF_NAME
 
 stages:
+  - prepare
   - build
 
 .general:
@@ -92,7 +93,7 @@ superbuild-prepare:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
 
-superbuild:
+superbuild-build:
   only: [merge_requests]
   extends: .common-build
   stage: build
