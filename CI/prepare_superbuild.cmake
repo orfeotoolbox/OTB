@@ -117,25 +117,25 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     CAPTURE_CMAKE_ERROR _configure_error
     )
 
-# if ( NOT _configure_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_configure.")
-#   return()
-# endif()
+if ( NOT _configure_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_configure.")
+  return()
+endif()
 
-# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-#             TARGET "OTB_DEPENDS"
-#             RETURN_VALUE _build_rv
-#             CAPTURE_CMAKE_ERROR _build_error
-#             )
+ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+            TARGET "OTB_DEPENDS"
+            RETURN_VALUE _build_rv
+            CAPTURE_CMAKE_ERROR _build_error
+            )
 
-# if ( NOT _build_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_build.")
-#   return()
-# endif()
+if ( NOT _build_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_build.")
+  return()
+endif()
 
-# ctest_submit()
+ctest_submit()
 
 ########################################################################
 ########################################################################
