@@ -30,9 +30,11 @@ namespace otb
 {
 namespace Functor
 {
-enum class Band {COASTAL_BLUE, BLUE, GREEN, RED, RED_EDGE, NIR, SWIR, MIR};
+enum class Band {COASTAL_BLUE, BLUE, GREEN, RED, RED_EDGE, NIR, SWIR, MIR, MODIS_860,MODIS_1240};
 
-constexpr size_t NumberOfBands = 8;
+constexpr size_t NumberOfBands = 10;
+constexpr double EpsilonToBeConsideredAsZero = 0.0000001;
+
 
 template <typename TInput, typename TOutput>
 class RadiometricIndice
@@ -41,7 +43,7 @@ public:
   RadiometricIndice(const std::string & name, const std::set<Band>& requiredBands)
     : m_RequiredBands(),
       m_BandIndices(),
-    : m_Name(name)
+      m_Name(name)
   {
     m_RequiredBands.fill(false);
     m_BandIndices.fill(0);
@@ -70,6 +72,11 @@ public:
     m_BandIndices[static_cast<size_t>(band)]=index;
   }
 
+  size_t GetBandIndex(const Band & band) const
+  {
+    return m_BandIndices[static_cast<size_t>(band)];
+  }
+
   const std::string & GetName() const
   {
     return m_Name;
@@ -81,8 +88,7 @@ public:
 protected:
   size_t BandIndex(const Band & band) const
   {
-    // TODO: No checks here if band index is really set
-    
+    // TODO: Assert if this band is really mandatory for this functor    
     return m_BandIndices[static_cast<size_t>(band)];
   }
   
@@ -90,8 +96,6 @@ protected:
   {
     return static_cast<double>(input[BandIndex(band)]);
   }
-
-  static const double    EpsilonToBeTreatedAsZero = 0.0000001;
 
 private:
   using RequiredBandsContainer = std::array<bool,NumberOfBands>;

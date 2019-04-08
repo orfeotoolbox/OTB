@@ -43,8 +43,7 @@ template <class TInput, class TOutput>
 class NDVI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /// Constructor
-  NDVI() : RadiometricIndice<TInput,TOutput>("NDVI",{Band::RED, Band::NIR}) {};
+  NDVI() : RadiometricIndice<TInput,TOutput>("NDVI",{Band::RED, Band::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -191,7 +190,7 @@ public:
       {
       return static_cast<TOutput>(0.);
       }
-    return (static_cast<TOutput>((m_A * (nir - A * red - S)) / denominator));
+    return (static_cast<TOutput>((A * (nir - A * red - S)) / denominator));
   }
 
   /** A and S parameters */
@@ -250,9 +249,6 @@ template <class TInput, class TOutput>
 class MSAVI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  typedef NDVI<TInput, TOutput> NDVIType;
-  typedef WDVI<TInput, TOutput> WDVIType;
-
   MSAVI() : RadiometricIndice<TInput,TOutput>("MSAVI",{Band::RED, Band::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
@@ -260,8 +256,8 @@ public:
     auto red = this->Value(Band::RED,input);
     auto nir = this->Value(Band::NIR,input);
 
-    double ndvi = NDVIType::Compute(red,nir);
-    double wdvi = WDVIType::Comppute(red, nir);
+    double ndvi = NDVI<TInput,TOutput>::Compute(red,nir);
+    double wdvi = WDVI<TInput,TOutput>::Comppute(red, nir);
 
     double L = 1 - 2 * S * ndvi * wdvi;
 
@@ -277,7 +273,7 @@ public:
 
 private:
   /** Slope of soil line */
-  static constexrp double S = 0.4;
+  static constexpr double S = 0.4;
 };
 
 /** \class MSAVI2
@@ -394,7 +390,7 @@ public:
       dterm1 = std::atan(dfact1 / (nir - red));
       }
 
-    if (std::abs(green - red)  < m_EpsilonToBeConsideredAsZero)
+    if (std::abs(green - red)  < EpsilonToBeConsideredAsZero)
       {
       dterm2 = 0;
       }
@@ -471,6 +467,8 @@ class TSARVI : public RadiometricIndice<TInput,TOutput>
 public:
 
   TSARVI() : RadiometricIndice<TInput,TOutput>("TSARVI",{Band::BLUE, Band::RED, Band::NIR}) {}
+
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto blue  = this->Value(Band::BLUE,input);
     auto red   = this->Value(Band::RED,input);
@@ -512,15 +510,16 @@ class EVI : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  EVI(): RadiometricIndice<TInput,TOutput>("EVI",{Band::BLUE, Band::RED, Band::NIR}) {}
+  EVI() : RadiometricIndice<TInput,TOutput>("EVI",{Band::BLUE, Band::RED, Band::NIR}) {}
 
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto blue  = this->Value(Band::BLUE,input);
     auto red   = this->Value(Band::RED,input);
     auto nir   = this->Value(Band::NIR,input);
 
     double denominator = nir + C1 * red - C2 * blue + L;
-    if (std::abs(denominator) < m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator) < EpsilonToBeConsideredAsZero)
       {
       return (static_cast<TOutput>(0.));
       }
@@ -550,31 +549,24 @@ public:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class IPVI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "IPVI";
-  }
+  IPVI() : RadiometricIndice<TInput,TOutput>("IPVI",{Band::RED, Band::NIR}) {}
 
-  IPVI() {}
-  ~IPVI() override {}
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-    if (std::abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero)
+    auto red   = this->Value(Band::RED,input);
+    auto nir   = this->Value(Band::NIR,input);
+
+    if (std::abs(nir + red)  < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
     else
       {
-      return (static_cast<TOutput>(dnir / (dnir + dr)));
+      return (static_cast<TOutput>(nir / (nir + red)));
       }
   }
 };
@@ -589,40 +581,28 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class TNDVI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "TNDVI";
-  }
+  TNDVI() : RadiometricIndice<TInput,TOutput>("TNDVI",{Band::RED, Band::NIR}) {}
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  TNDVI() {}
-  ~TNDVI() override {}
-
-  NDVIFunctorType GetNDVI(void) const
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    return (m_NDVIfunctor);
-  }
+    auto red   = this->Value(Band::RED,input);
+    auto nir   = this->Value(Band::NIR,input);
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dval = this->GetNDVI() (r, nir) + 0.5;
-    if (dval < 0)
+    double val = NDVI<TInput,TOutput>::Compute(red,nir) + 0.5;
+
+    if (val < 0)
       {
       return  (static_cast<TOutput>(0));
       }
     else
       {
-      return (static_cast<TOutput>(std::sqrt(dval)));
+      return (static_cast<TOutput>(std::sqrt(val)));
       }
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
 };
 
 /** \class LAIFromNDVILogarithmic
@@ -641,69 +621,63 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class LAIFromNDVILogarithmic : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class LAIFromNDVILogarithmic : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "LAIFromNDVILogarithmic";
-  }
+  LAIFromNDVILogarithmic() : RadiometricIndice<TInput,TOutput>("LAIFromNDVILogarithmic",{Band::RED, Band::NIR}),
+                             m_NdviSoil(0.1),
+                             m_NdviInf(0.89),
+                             m_ExtinctionCoefficient(0.71) {}
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  LAIFromNDVILogarithmic() : m_NdviSoil(0.10), m_NdviInf(0.89), m_ExtinctionCoefficient(0.71) {}
-  ~LAIFromNDVILogarithmic() override {}
-
-  NDVIFunctorType GetNDVI(void) const
-  {
-    return (m_NDVIfunctor);
-  }
-
-  void SetNdviSoil(const double val)
+  void SetNdviSoil(const double & val)
   {
     m_NdviSoil = val;
   }
-  double GetNdviSoil(void) const
+
+  const double & GetNdviSoil() const
   {
-    return (m_NdviSoil);
+    return m_NdviSoil;
   }
 
-  void SetNdviInf(const double val)
+  void SetNdviInf(const double & val)
   {
     m_NdviInf = val;
   }
-  double GetNdviInf(void) const
+
+  const double & GetNdviInf() const
   {
-    return (m_NdviInf);
+    return m_NdviInf;
   }
 
-  void SetExtinctionCoefficient(const double val)
+  void SetExtinctionCoefficient(const double & val)
   {
     m_ExtinctionCoefficient = val;
   }
-  double GetExtinctionCoefficient(void) const
+
+  const double & GetExtionctionCoefficient() const
   {
-    return (m_ExtinctionCoefficient);
+    return m_ExtinctionCoefficient;
   }
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    double dval = this->GetNDVI() (r, nir);
-    if (dval < 0)
+    auto red   = this->Value(Band::RED,input);
+    auto nir   = this->Value(Band::NIR,input);
+
+    double val = NDVI<TInput,TOutput>::Compute(red,nir);
+
+    if (val < 0)
       {
       return  (static_cast<TOutput>(0));
       }
     else
       {
-      return (static_cast<TOutput>(
-    -(1.0/m_ExtinctionCoefficient)*std::log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
-    ));
+      return static_cast<TOutput>(
+                -(1.0/m_ExtinctionCoefficient)*std::log((val- m_NdviInf)/(m_NdviSoil-m_NdviInf)));
       }
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
+
   double m_NdviSoil;
   double m_NdviInf;
   double m_ExtinctionCoefficient;
@@ -727,50 +701,44 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class LAIFromReflectancesLinear : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "LAIFromReflectancesLinear";
-  }
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  LAIFromReflectancesLinear() : m_RedCoef(-17.91), m_NirCoef(12.26) {}
-  ~LAIFromReflectancesLinear() override {}
 
-  NDVIFunctorType GetReflectances(void) const
-  {
-    return (m_NDVIfunctor);
-  }
+  LAIFromReflectancesLinear() : RadiometricIndice<TInput,TOutput>("LAIFromReflectanceLinear",{Band::RED, Band::NIR}),
+                                m_RedCoef(-17.91),
+                                m_NirCoef(12.26) {}
 
-  void SetRedCoef(const double val)
+  void SetRedCoef(const double & val)
   {
     m_RedCoef = val;
   }
-  double GetRedCoef(void) const
+
+  const double & GetRedCoef() const
   {
-    return (m_RedCoef);
+    return m_RedCoef;
   }
 
-  void SetNirCoef(const double val)
+  void SetNirCoef(const double & val)
   {
     m_NirCoef = val;
   }
-  double GetNirCoef(void) const
+
+  const double & GetNirCoef() const
   {
-    return (m_NirCoef);
+    return m_NirCoef;
   }
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-      return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
+    auto red   = this->Value(Band::RED,input);
+    auto nir   = this->Value(Band::NIR,input);
+
+    return (static_cast<TOutput>(m_RedCoef*red+m_NirCoef*nir));
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
+
   double m_RedCoef;
   double m_NirCoef;
 };
@@ -795,40 +763,29 @@ private:
   */
 
 
-  template <class TInput1, class TInput2, class TOutput>
-  class LAIFromNDVIFormosat2Functor : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+  template <class TInput, class TOutput>
+  class LAIFromNDVIFormosat2Functor : public RadiometricIndice<TInput,TOutput>
   {
   public:
-
-    /** Return the index name */
-    std::string GetName() const override
+    
+    LAIFromNDVIFormosat2Functor(): RadiometricIndice<TInput,TOutput>("LAIFromNDVIFormosat2",{Band::RED, Band::NIR}) {}
+    
+    TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
     {
-      return "LAIFromNDVIFormosat2Functor";
-    }
+      auto red   = this->Value(Band::RED,input);
+      auto nir   = this->Value(Band::NIR,input);
 
-    /// Constructor
-    LAIFromNDVIFormosat2Functor() {}
-    /// Desctructor
-    ~LAIFromNDVIFormosat2Functor() override {}
-    // Operator on r and nir single pixel values
-  protected:
-    inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-    {
-    double a = 0.1519;
-    double b = 3.9443;
-    double c = 0.13;
-
-      double dr = static_cast<double>(r);
-      double dnir = static_cast<double>(nir);
-      if (std::abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
+      if (std::abs(nir + red) < EpsilonToBeConsideredAsZero)
         {
         return static_cast<TOutput>(0.);
         }
 
-      return  static_cast<TOutput>(a*(std::exp(static_cast<double>(dnir-dr)/static_cast<double>(dr+dnir)*b)-std::exp(c*b)));
-    };
+      return  static_cast<TOutput>(A*((std::exp((nir-red)/((red+nir)*B))-std::exp(C*B))));
+    }
 
-
+    static constexpr double A = 0.1519;
+    static constexpr double B = 3.9443;
+    static constexpr double C = 0.13;
 };
 
 

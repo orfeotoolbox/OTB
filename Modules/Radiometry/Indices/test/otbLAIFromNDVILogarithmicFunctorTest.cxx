@@ -21,11 +21,13 @@
 #include "itkMacro.h"
 #include "otbVegetationIndicesFunctor.h"
 
+using namespace otb::Functor;
+
 int otbLAIFromNDVILogarithmic(int itkNotUsed(argc), char * argv[])
 {
   typedef double                           PixelType;
 
-  typedef otb::Functor::LAIFromNDVILogarithmic<PixelType, PixelType, PixelType> FunctorType;
+  typedef otb::Functor::LAIFromNDVILogarithmic<PixelType, PixelType> FunctorType;
 
   FunctorType laiFunct = FunctorType();
 
@@ -42,8 +44,8 @@ int otbLAIFromNDVILogarithmic(int itkNotUsed(argc), char * argv[])
   laiFunct.SetNdviSoil(ndviSoil);
   laiFunct.SetExtinctionCoefficient(extCoef);
 
-  laiFunct.SetRedIndex(1);
-  laiFunct.SetNIRIndex(2);
+  laiFunct.SetBandIndex(Band::RED,1);
+  laiFunct.SetBandIndex(Band::NIR,2);
 
   itk::VariableLengthVector<PixelType> pixel;
   pixel.Reserve(2);

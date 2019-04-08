@@ -56,36 +56,35 @@ public:
   typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ImageListToVectorImageFilterType;
 
   /** Radiometric water indices functors typedef */
-  typedef Functor::SRWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  SRWIFunctorType;
-  typedef Functor::NDWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDWIFunctorType;
-  typedef Functor::NDWI2<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDWI2FunctorType;
-  typedef Functor::MNDWI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MNDWIFunctorType;
-  typedef Functor::NDPI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDPIFunctorType;
-  typedef Functor::NDTI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDTIFunctorType;
-  //typedef Functor::WaterSqrtSpectralAngleFunctor<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> WaterSqrtSpectralAngleFunctor;
+  typedef Functor::SRWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  SRWIFunctorType;
+  typedef Functor::NDWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDWIFunctorType;
+  typedef Functor::NDWI2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDWI2FunctorType;
+  typedef Functor::MNDWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MNDWIFunctorType;
+  typedef Functor::NDPI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDPIFunctorType;
+  typedef Functor::NDTI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDTIFunctorType;
 
   /** Radiometric vegetation indices functors typedef */
-  typedef Functor::NDVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDVIFunctor;
-  typedef Functor::TNDVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TNDVIFunctor;
-  typedef Functor::RVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> RVIFunctor;
-  typedef Functor::SAVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> SAVIFunctor;
-  typedef Functor::TSAVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TSAVIFunctor;
-  typedef Functor::MSAVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVIFunctor;
-  typedef Functor::MSAVI2<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVI2Functor;
-  typedef Functor::GEMI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> GEMIFunctor;
-  typedef Functor::IPVI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IPVIFunctor;
-  typedef Functor::LAIFromNDVILogarithmic<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVILogFunctor;
-  typedef Functor::LAIFromReflectancesLinear<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromReflLinearFunctor;
-  typedef Functor::LAIFromNDVIFormosat2Functor<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVIFormoFunctor;
+  typedef Functor::NDVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDVIFunctor;
+  typedef Functor::TNDVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TNDVIFunctor;
+  typedef Functor::RVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> RVIFunctor;
+  typedef Functor::SAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> SAVIFunctor;
+  typedef Functor::TSAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TSAVIFunctor;
+  typedef Functor::MSAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVIFunctor;
+  typedef Functor::MSAVI2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVI2Functor;
+  typedef Functor::GEMI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> GEMIFunctor;
+  typedef Functor::IPVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IPVIFunctor;
+  typedef Functor::LAIFromNDVILogarithmic< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVILogFunctor;
+  typedef Functor::LAIFromReflectancesLinear< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromReflLinearFunctor;
+  typedef Functor::LAIFromNDVIFormosat2Functor< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVIFormoFunctor;
 
   /** Radiometric soil indices functors typedef */
-  typedef Functor::IR<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IRFunctor;
-  typedef Functor::IC<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> ICFunctor;
-  typedef Functor::IB<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IBFunctor;
-  typedef Functor::IB2<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType, FloatImageType::PixelType> IB2Functor;
+  typedef Functor::IR< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IRFunctor;
+  typedef Functor::IC< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> ICFunctor;
+  typedef Functor::IB< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IBFunctor;
+  typedef Functor::IB2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IB2Functor;
 
   /** Radiometric built up indices functors typedef */
-  typedef Functor::NDBI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDBIFunctor;
+  typedef Functor::NDBI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDBIFunctor;
 
   /** Radiometric indices filters typedef */
   typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDWIFunctorType>  NDWIFilterType;
@@ -165,12 +164,6 @@ private:
     AddParameter(ParameterType_Int,  "channels.mir",  "Mir Channel");
     SetParameterDescription("channels.mir", "Mir channel index");
     SetDefaultParameterInt("channels.mir", 1);
-    //AddParameter(ParameterType_Int,  "channels.rho860",  "Rho860 Channel");
-    //SetParameterDescription("channels.rho860", "860nm band channel index");
-    //SetDefaultParameterInt("channels.rho860", 1);
-    //AddParameter(ParameterType_Int,  "channels.rho1240",  "Rho1240 Channel");
-    //SetParameterDescription("channels.rho1240", "1240nm band channel index");
-    //SetDefaultParameterInt("channels.rho1240", 1);
 
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
     SetParameterDescription("list",

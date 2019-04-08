@@ -22,253 +22,12 @@
 #define otbSoilIndicesFunctor_h
 
 #include "otbMath.h"
-#include "itkVariableLengthVector.h"
-#include "otbBandName.h"
-#include <string>
+#include "otbRadiometricIndice.h"
 
 namespace otb
 {
 namespace Functor
 {
-/**
- * \class GAndRIndexBase
- *
- * \brief Base class for Green And Red channels of Spot Images
- *  XS1 corresponds to the green channel
- *  XS2 corresponds to the red channel
- *  XS3 corresponds to the Nir channel
- *  XS4 corresponds to the Mir channel (for Spot 4 & 5)
- *  Implement operators for UnaryFunctorImageFilter templated with a
- *  VectorImage and BinaryFunctorImageFilter templated with single
- *  images.
- *  Subclasses should NOT overload operators, they must  re-implement
- *  the Evaluate() method.
- *
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
-*/
-template<class TInput1, class TInput2, class TOutput>
-class GAndRIndexBase
-{
-public:
-  /// Vector pixel type used to support both vector images and multiple
-  /// input images
-  typedef itk::VariableLengthVector<TInput1> InputVectorType;
-
-  //operators !=
-  bool operator !=(const GAndRIndexBase&) const
-  {
-    return true;
-  }
-  //operator ==
-  bool operator ==(const GAndRIndexBase& other) const
-  {
-    return !(*this != other);
-  }
-
-  // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector) const
-  {
-    return this->Evaluate(inputVector[m_GreenIndex - 1], static_cast<TInput2>(inputVector[m_RedIndex - 1]));
-  }
-
-  // Binary operator
-  inline TOutput operator ()(const TInput1& g, const TInput2& r) const
-  {
-    return this->Evaluate(g, r);
-  }
-  /// Constructor
-  GAndRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_GreenIndex(1), m_RedIndex(2) {}
-  /// Desctructor
-  virtual ~GAndRIndexBase() {}
-
-  /// Set Green Index
-  void SetGreenIndex(unsigned int channel)
-  {
-    m_GreenIndex = channel;
-  }
-  /// Get Green Index
-  unsigned int GetGreenIndex() const
-  {
-    return m_GreenIndex;
-  }
-  /// Set Red Index
-  void SetRedIndex(unsigned int channel)
-  {
-    m_RedIndex = channel;
-  }
-  /// Get Red Index
-  unsigned int GetRedIndex() const
-  {
-    return m_RedIndex;
-  }
-
-  /** Set index, generic method */
-  void SetIndex(BandName::BandName band, unsigned int channel)
-  {
-    if (band == BandName::RED)
-      {
-      m_RedIndex = channel;
-      }
-    if (band == BandName::GREEN)
-      {
-      m_GreenIndex = channel;
-      }
-  }
-  /** Get index, generic method */
-  unsigned int GetIndex(BandName::BandName band) const
-  {
-    if (band == BandName::RED)
-      {
-      return m_RedIndex;
-      }
-    if (band == BandName::GREEN)
-      {
-      return m_GreenIndex;
-      }
-  }
-
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
-
-protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
-  virtual TOutput Evaluate(const TInput1& g, const TInput2& r) const = 0;
-  double m_EpsilonToBeConsideredAsZero;
-
-private:
-  unsigned int m_GreenIndex;
-  unsigned int m_RedIndex;
-};
-
-/**
- * \class GAndRAndNirIndexBase
- * \brief Base class for Green And Red And NIR channels of Spot Images
- *
- *
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template<class TInput1, class TInput2, class TInput3, class TOutput>
-class GAndRAndNirIndexBase
-{
-public:
-  /// Vector pixel type used to support both vector images and multiple
-  /// input images
-  typedef itk::VariableLengthVector<TInput1> InputVectorType;
-
-  //operators !=
-  bool operator !=(const GAndRAndNirIndexBase&) const
-  {
-    return true;
-  }
-  //operator ==
-  bool operator ==(const GAndRAndNirIndexBase& other) const
-  {
-    return !(*this != other);
-  }
-
-  // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector) const
-  {
-    return this->Evaluate(static_cast<TInput1>(inputVector[m_GreenIndex - 1]),
-                          static_cast<TInput2>(inputVector[m_RedIndex - 1]),
-                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
-  }
-
-  // Binary operator
-  inline TOutput operator ()(const TInput1& g, const TInput2& r, const TInput2& nir) const
-  {
-    return this->Evaluate(g, r, nir);
-  }
-  /// Constructor
-  GAndRAndNirIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_GreenIndex(1), m_RedIndex(2),  m_NIRIndex(3) {}
-  /// Desctructor
-  virtual ~GAndRAndNirIndexBase() {}
-
-  /// Set Green Index
-  void SetGreenIndex(unsigned int channel)
-  {
-    m_GreenIndex = channel;
-  }
-  /// Get Green Index
-  unsigned int GetGreenIndex() const
-  {
-    return m_GreenIndex;
-  }
-  /// Set Red Index
-  void SetRedIndex(unsigned int channel)
-  {
-    m_RedIndex = channel;
-  }
-  /// Get Red Index
-  unsigned int GetRedIndex() const
-  {
-    return m_RedIndex;
-  }
-  /// Set Nir Index
-  void SetNIRIndex(unsigned int channel)
-  {
-    m_NIRIndex = channel;
-  }
-  /// Get Nir Index
-  unsigned int GetNIRIndex() const
-  {
-    return m_NIRIndex;
-  }
-
-  /** Set index, generic method */
-  void SetIndex(BandName::BandName band, unsigned int channel)
-  {
-    if (band == BandName::RED)
-      {
-      m_RedIndex = channel;
-      }
-    if (band == BandName::GREEN)
-      {
-      m_GreenIndex = channel;
-      }
-    if (band == BandName::NIR)
-      {
-      m_NIRIndex = channel;
-      }
-  }
-  /** Get index, generic method */
-  unsigned int GetIndex(BandName::BandName band) const
-  {
-    if (band == BandName::RED)
-      {
-      return m_RedIndex;
-      }
-    if (band == BandName::GREEN)
-      {
-      return m_GreenIndex;
-      }
-    if (band == BandName::NIR)
-      {
-      return m_NIRIndex;
-      }
-  }
-
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
-
-protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
-  virtual TOutput Evaluate(const TInput1& g, const TInput2& r, const TInput2& nir) const = 0;
-
-  double m_EpsilonToBeConsideredAsZero;
-
-private:
-  unsigned int m_GreenIndex;
-  unsigned int m_RedIndex;
-  unsigned int m_NIRIndex;
-};
-
 /** \class IR
  *  \brief This functor computes the Redness Index (IR)
  *
@@ -283,32 +42,23 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class IR : public GAndRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class IR : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "IR";
-  }
+  IR() : RadiometricIndice<TInput,TOutput>("IR",{Band::RED, Band::GREEN}) {}
 
-  /// Constructor
-  IR() {}
-  /// Desctructor
-  ~IR() override {}
-  // Operator on r and nir single pixel values
-protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override  
   {
-    double dGreen = static_cast<double>(pGreen);
-    double dRed = static_cast<double>(pRed);
-    if (std::abs(dGreen) < this->m_EpsilonToBeConsideredAsZero)
+    auto green = this->Value(Band::GREEN,input);
+    auto red = this->Value(Band::RED,input);
+  
+    if (std::abs(green) < this->EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return static_cast<TOutput>(dRed * dRed / (dGreen * dGreen * dGreen));
+    return static_cast<TOutput>(red * red / (green * green * green));
   }
 };
 
@@ -326,32 +76,23 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class IC : public GAndRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class IC : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "IC";
-  }
+  IC() : RadiometricIndice<TInput,TOutput>("IC",{Band::RED, Band::GREEN}) {}
 
-  /// Constructor
-  IC() {}
-  /// Desctructor
-  ~IC() override {}
-  // Operator on r and nir single pixel values
-protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    double dGreen = static_cast<double>(pGreen);
-    double dRed = static_cast<double>(pRed);
-    if (std::abs(dGreen + dRed) < this->m_EpsilonToBeConsideredAsZero)
+    auto green = this->Value(Band::GREEN,input);
+    auto red = this->Value(Band::RED,input);
+
+    if (std::abs(green + red) < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
 
-    return (static_cast<TOutput>((dRed - dGreen) / (dRed + dGreen)));
+    return (static_cast<TOutput>((red - green) / (red + green)));
   }
 };
 
@@ -365,28 +106,18 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class IB : public GAndRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class IB : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "IB";
-  }
+  IB() : RadiometricIndice<TInput,TOutput>("IB",{Band::RED, Band::GREEN}) {}
 
-  /// Constructor
-  IB() {}
-  /// Desctructor
-  ~IB() override {}
-  // Operator on r and nir single pixel values
-protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    double dGreen = static_cast<double>(pGreen);
-    double dRed = static_cast<double>(pRed);
+    auto green = this->Value(Band::GREEN,input);
+    auto red = this->Value(Band::RED,input);
 
-    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen) / 2.)));
+    return (static_cast<TOutput>(std::sqrt((red * red + green * green) / 2.)));
   }
 };
 
@@ -400,29 +131,20 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TInput3, class TOutput>
-class IB2 : public GAndRAndNirIndexBase<TInput1, TInput2, TInput3, TOutput>
+template <class TInput, class TOutput>
+class IB2 : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  
+  IB2() : RadiometricIndice<TInput,TOutput>("IB2",{Band::RED, Band::GREEN, Band::NIR}) {}
+ 
+ TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    return "IB2";
-  }
+    auto green = this->Value(Band::GREEN,input);
+    auto red = this->Value(Band::RED,input);
+    auto nir = this->Value(Band::NIR,input);
 
-  /// Constructor
-  IB2() {}
-  /// Desctructor
-  ~IB2() override {}
-  // Operator on r and nir single pixel values
-protected:
-  inline TOutput Evaluate(const TInput1& pGreen, const TInput2& pRed, const TInput2& pNir) const override
-  {
-    double dGreen = static_cast<double>(pGreen);
-    double dRed = static_cast<double>(pRed);
-    double dNir = static_cast<double>(pNir);
-
-    return (static_cast<TOutput>(std::sqrt((dRed * dRed + dGreen * dGreen + dNir * dNir) / 3.)));
+    return (static_cast<TOutput>(std::sqrt((red * red + green * green + nir * nir) / 3.)));
   }
 };
 
