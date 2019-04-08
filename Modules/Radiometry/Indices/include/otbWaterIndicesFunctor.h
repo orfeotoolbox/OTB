@@ -138,7 +138,7 @@ public:
 template <class TInput, class TOutput>
 class MNDWI : public RadiometricIndice<TInput,TOutput>
 {
-
+public:
   MNDWI() : RadiometricIndice<TInput,TOutput>("MNDWI",{Band::MIR, Band::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override

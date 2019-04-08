@@ -186,7 +186,7 @@ public:
 
     double denominator = A * nir + red + X * (1. + A * A);
 
-    if (std::abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator) < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -257,13 +257,13 @@ public:
     auto nir = this->Value(Band::NIR,input);
 
     double ndvi = NDVI<TInput,TOutput>::Compute(red,nir);
-    double wdvi = WDVI<TInput,TOutput>::Comppute(red, nir);
+    double wdvi = WDVI<TInput,TOutput>::Compute(red, nir);
 
     double L = 1 - 2 * S * ndvi * wdvi;
 
     double denominator = nir + red + L;
 
-    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
+    if (std::abs(denominator)  < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }

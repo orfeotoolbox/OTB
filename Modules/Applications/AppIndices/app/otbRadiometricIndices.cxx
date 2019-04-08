@@ -20,16 +20,14 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
+#include "otbWrapperNumericalParameter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
 #include "otbWaterIndicesFunctor.h"
 #include "otbBuiltUpIndicesFunctor.h"
 #include "otbSoilIndicesFunctor.h"
-
-#include "otbImageList.h"
-#include "otbImageListToVectorImageFilter.h"
-
-#include "otbWrapperNumericalParameter.h"
+#include "otbCompositeIndicesFunctor.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
 {
@@ -49,78 +47,22 @@ public:
   itkNewMacro(Self);
 
   itkTypeMacro(RadiometricIndices, otb::Wrapper::Application);
+  
+  using InputType = FloatVectorImageType::InternalPixelType;
+  using OutputType = FloatImageType::PixelType;
 
-  /** Output  containers typedef */
-  typedef ObjectList<itk::ProcessObject>                                    FilterListType;
-  typedef ImageList<FloatImageType>                                         ImageListType;
-  typedef ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ImageListToVectorImageFilterType;
+  using RadiometricIndiceType = otb::Functor::RadiometricIndice<InputType, OutputType>;
+  using CompositeIndicesFunctorType = otb::Functor::CompositeIndicesFunctor<InputType,OutputType>;
 
-  /** Radiometric water indices functors typedef */
-  typedef Functor::SRWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  SRWIFunctorType;
-  typedef Functor::NDWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDWIFunctorType;
-  typedef Functor::NDWI2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDWI2FunctorType;
-  typedef Functor::MNDWI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MNDWIFunctorType;
-  typedef Functor::NDPI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDPIFunctorType;
-  typedef Functor::NDTI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType>  NDTIFunctorType;
-
-  /** Radiometric vegetation indices functors typedef */
-  typedef Functor::NDVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDVIFunctor;
-  typedef Functor::TNDVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TNDVIFunctor;
-  typedef Functor::RVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> RVIFunctor;
-  typedef Functor::SAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> SAVIFunctor;
-  typedef Functor::TSAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> TSAVIFunctor;
-  typedef Functor::MSAVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVIFunctor;
-  typedef Functor::MSAVI2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> MSAVI2Functor;
-  typedef Functor::GEMI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> GEMIFunctor;
-  typedef Functor::IPVI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IPVIFunctor;
-  typedef Functor::LAIFromNDVILogarithmic< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVILogFunctor;
-  typedef Functor::LAIFromReflectancesLinear< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromReflLinearFunctor;
-  typedef Functor::LAIFromNDVIFormosat2Functor< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> LAIFromNDVIFormoFunctor;
-
-  /** Radiometric soil indices functors typedef */
-  typedef Functor::IR< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IRFunctor;
-  typedef Functor::IC< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> ICFunctor;
-  typedef Functor::IB< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IBFunctor;
-  typedef Functor::IB2< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> IB2Functor;
-
-  /** Radiometric built up indices functors typedef */
-  typedef Functor::NDBI< FloatVectorImageType::InternalPixelType, FloatImageType::PixelType> NDBIFunctor;
-
-  /** Radiometric indices filters typedef */
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDWIFunctorType>  NDWIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDWI2FunctorType> NDWI2FilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, MNDWIFunctorType> MNDWIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDPIFunctorType>  NDPIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDTIFunctorType>  NDTIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, SRWIFunctorType>  SRWIFilterType;
-
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, NDVIFunctor>              NDVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, TNDVIFunctor>             TNDVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, RVIFunctor>               RVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, SAVIFunctor>              SAVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, TSAVIFunctor>             TSAVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, MSAVIFunctor>             MSAVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, MSAVI2Functor>            MSAVI2FilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, GEMIFunctor>              GEMIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IPVIFunctor>              IPVIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVILogFunctor>    LAIFromNDVILogFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromReflLinearFunctor> LAIFromReflLinearFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, LAIFromNDVIFormoFunctor>  LAIFromNDVIFormoFilterType;
-
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IRFunctor>                  RIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, ICFunctor>                  CIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IBFunctor>                  BIFilterType;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatImageType, IB2Functor>                 BI2FilterType;
-
-  struct indiceSpec
+  class indiceSpec
   {
+  public:
+    indiceSpec(std::string k, std::string i, RadiometricIndiceType * ind)
+      : key(k), item(i), indice(ind)
+    {}
     std::string key;
     std::string item;
-    std::string description;
-    std::string type;
-    std::string chan1;
-    std::string chan2;
-    std::string chan3;
+    std::unique_ptr<RadiometricIndiceType> indice;
   };
 
 
@@ -198,233 +140,47 @@ private:
 
     m_Map.clear();
 
-    // Add Available choices
-    indiceSpec s_NDVI;
-    s_NDVI.key   = "list.ndvi";
-    s_NDVI.item  = "Vegetation:NDVI";
-    s_NDVI.description = "";
-    s_NDVI.type  = "NDVI";
-    s_NDVI.chan1 = "red";
-    s_NDVI.chan2 = "nir";
-    s_NDVI.chan3 = "";
-    m_Map.push_back(s_NDVI);
-
-    indiceSpec s_TNDVI;
-    s_TNDVI.key   = "list.tndvi";
-    s_TNDVI.item  = "Vegetation:TNDVI";
-    s_TNDVI.description = "";
-    s_TNDVI.type  = "TNDVI";
-    s_TNDVI.chan1 = "red";
-    s_TNDVI.chan2 = "nir";
-    s_TNDVI.chan3 = "";
-    m_Map.push_back(s_TNDVI);
-
-    indiceSpec s_RVI;
-    s_RVI.key   = "list.rvi";
-    s_RVI.item  = "Vegetation:RVI";
-    s_RVI.description = "";
-    s_RVI.type  = "RVI";
-    s_RVI.chan1 = "red";
-    s_RVI.chan2 = "nir";
-    s_RVI.chan3 = "";
-    m_Map.push_back(s_RVI);
-
-    indiceSpec s_SAVI;
-    s_SAVI.key   = "list.savi";
-    s_SAVI.item  = "Vegetation:SAVI";
-    s_SAVI.description = "";
-    s_SAVI.type  = "SAVI";
-    s_SAVI.chan1 = "red";
-    s_SAVI.chan2 = "nir";
-    s_SAVI.chan3 = "";
-    m_Map.push_back(s_SAVI);
-
-    indiceSpec s_TSAVI;
-    s_TSAVI.key   = "list.tsavi";
-    s_TSAVI.item  = "Vegetation:TSAVI";
-    s_TSAVI.description = "";
-    s_TSAVI.type  = "TSAVI";
-    s_TSAVI.chan1 = "red";
-    s_TSAVI.chan2 = "nir";
-    s_TSAVI.chan3 = "";
-    m_Map.push_back(s_TSAVI);
-
-    indiceSpec s_MSAVI;
-    s_MSAVI.key   = "list.msavi";
-    s_MSAVI.item  = "Vegetation:MSAVI";
-    s_MSAVI.description = "";
-    s_MSAVI.type  = "MSAVI";
-    s_MSAVI.chan1 = "red";
-    s_MSAVI.chan2 = "nir";
-    s_MSAVI.chan3 = "";
-    m_Map.push_back(s_MSAVI);
-
-    indiceSpec s_MSAVI2;
-    s_MSAVI2.key   = "list.msavi2";
-    s_MSAVI2.item  = "Vegetation:MSAVI2";
-    s_MSAVI2.description = "";
-    s_MSAVI2.type  = "MSAVI2";
-    s_MSAVI2.chan1 = "red";
-    s_MSAVI2.chan2 = "nir";
-    s_MSAVI2.chan3 = "";
-    m_Map.push_back(s_MSAVI2);
-
-    indiceSpec s_GEMI;
-    s_GEMI.key   = "list.gemi";
-    s_GEMI.item  = "Vegetation:GEMI";
-    s_GEMI.description = "";
-    s_GEMI.type  = "GEMI";
-    s_GEMI.chan1 = "red";
-    s_GEMI.chan2 = "nir";
-    s_GEMI.chan3 = "";
-    m_Map.push_back(s_GEMI);
-
-    indiceSpec s_IPVI;
-    s_IPVI.key   = "list.ipvi";
-    s_IPVI.item  = "Vegetation:IPVI";
-    s_IPVI.description = "";
-    s_IPVI.type  = "IPVI";
-    s_IPVI.chan1 = "red";
-    s_IPVI.chan2 = "nir";
-    s_IPVI.chan3 = "";
-    m_Map.push_back(s_IPVI);
-
-    indiceSpec s_LAIFromNDVILog;
-    s_LAIFromNDVILog.key   = "list.laindvilog";
-    s_LAIFromNDVILog.item  = "Vegetation:LAIFromNDVILog";
-    s_LAIFromNDVILog.description = "";
-    s_LAIFromNDVILog.type  = "LAIFromNDVILog";
-    s_LAIFromNDVILog.chan1 = "red";
-    s_LAIFromNDVILog.chan2 = "nir";
-    s_LAIFromNDVILog.chan3 = "";
-    m_Map.push_back(s_LAIFromNDVILog);
-
-    indiceSpec s_LAIFromReflLinear;
-    s_LAIFromReflLinear.key   = "list.lairefl";
-    s_LAIFromReflLinear.item  = "Vegetation:LAIFromReflLinear";
-    s_LAIFromReflLinear.description = "";
-    s_LAIFromReflLinear.type  = "LAIFromReflLinear";
-    s_LAIFromReflLinear.chan1 = "red";
-    s_LAIFromReflLinear.chan2 = "nir";
-    s_LAIFromReflLinear.chan3 = "";
-    m_Map.push_back(s_LAIFromReflLinear);
-
-    indiceSpec s_LAIFromNDVIFormo;
-    s_LAIFromNDVIFormo.key   = "list.laindviformo";
-    s_LAIFromNDVIFormo.item  = "Vegetation:LAIFromNDVIFormo";
-    s_LAIFromNDVIFormo.description = "";
-    s_LAIFromNDVIFormo.type  = "LAIFromNDVIFormo";
-    s_LAIFromNDVIFormo.chan1 = "red";
-    s_LAIFromNDVIFormo.chan2 = "nir";
-    s_LAIFromNDVIFormo.chan3 = "";
-    m_Map.push_back(s_LAIFromNDVIFormo);
-
-    indiceSpec s_NDWI;
-    s_NDWI.key   = "list.ndwi";
-    s_NDWI.item  = "Water:NDWI";
-    s_NDWI.description = "";
-    s_NDWI.type  = "NDWI";
-    s_NDWI.chan1 = "nir";
-    s_NDWI.chan2 = "mir";
-    s_NDWI.chan3 = "";
-    m_Map.push_back(s_NDWI);
-
-    indiceSpec s_NDWI2;
-    s_NDWI2.key   = "list.ndwi2";
-    s_NDWI2.item  = "Water:NDWI2";
-    s_NDWI2.description = "";
-    s_NDWI2.type  = "NDWI2";
-    s_NDWI2.chan1 = "green";
-    s_NDWI2.chan2 = "nir";
-    s_NDWI2.chan3 = "";
-    m_Map.push_back(s_NDWI2);
-
-    indiceSpec s_MNDWI;
-    s_MNDWI.key   = "list.mndwi";
-    s_MNDWI.item  = "Water:MNDWI";
-    s_MNDWI.description = "";
-    s_MNDWI.type  = "MNDWI";
-    s_MNDWI.chan1 = "green";
-    s_MNDWI.chan2 = "mir";
-    s_MNDWI.chan3 = "";
-    m_Map.push_back(s_MNDWI);
-
-    indiceSpec s_NDPI;
-    s_NDPI.key   = "list.ndpi";
-    s_NDPI.item  = "Water:NDPI";
-    s_NDPI.description = "";
-    s_NDPI.type  = "NDPI";
-    s_NDPI.chan1 = "mir";
-    s_NDPI.chan2 = "green";
-    s_NDPI.chan3 = "";
-    m_Map.push_back(s_NDPI);
-
-    indiceSpec s_NDTI;
-    s_NDTI.key   = "list.ndti";
-    s_NDTI.item  = "Water:NDTI";
-    s_NDTI.description = "";
-    s_NDTI.type  = "NDTI";
-    s_NDTI.chan1 = "red";
-    s_NDTI.chan2 = "green";
-    s_NDTI.chan3 = "";
-    m_Map.push_back(s_NDTI);
-
-    indiceSpec s_SRWI;
-    s_SRWI.key   = "list.srwi";
-    s_SRWI.item  = "Water:SRWI";
-    s_SRWI.description = "";
-    s_SRWI.type  = "SRWI";
-    s_SRWI.chan1 = "rho860";
-    s_SRWI.chan2 = "rho1240";
-    s_SRWI.chan3 = "";
-    //m_Map.push_back(s_SRWI);
-
-    indiceSpec s_RI;
-    s_RI.key   = "list.ri";
-    s_RI.item  = "Soil:RI";
-    s_RI.description = "";
-    s_RI.type  = "RI";
-    s_RI.chan1 = "red";
-    s_RI.chan2 = "green";
-    s_RI.chan3 = "";
-    m_Map.push_back(s_RI);
-
-    indiceSpec s_CI;
-    s_CI.key   = "list.ci";
-    s_CI.item  = "Soil:CI";
-    s_CI.description = "";
-    s_CI.type  = "CI";
-    s_CI.chan1 = "red";
-    s_CI.chan2 = "green";
-    s_CI.chan3 = "";
-    m_Map.push_back(s_CI);
-
-    indiceSpec s_BI;
-    s_BI.key   = "list.bi";
-    s_BI.item  = "Soil:BI";
-    s_BI.description = "";
-    s_BI.type  = "BI";
-    s_BI.chan1 = "red";
-    s_BI.chan2 = "green";
-    s_BI.chan3 = "";
-    m_Map.push_back(s_BI);
-
-    indiceSpec s_BI2;
-    s_BI2.key   = "list.bi2";
-    s_BI2.item  = "Soil:BI2";
-    s_BI2.description = "";
-    s_BI2.type  = "BI2";
-    s_BI2.chan1 = "nir";
-    s_BI2.chan2 = "red";
-    s_BI2.chan3 = "green";
-    m_Map.push_back(s_BI2);
+    m_Map.push_back({"list.ndvi","Vegetation::NDVI",new otb::Functor::NDVI<InputType,OutputType>()});
+    m_Map.push_back({"list.tndvi","Vegetation::TNDVI",new otb::Functor::TNDVI<InputType,OutputType>()});
+    m_Map.push_back({"list.rdvi","Vegetation::RVI",new otb::Functor::RVI<InputType,OutputType>()});
+    m_Map.push_back({"list.savi","Vegetation::SAVI",new otb::Functor::SAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.tsavi","Vegetation::TSAVI",new otb::Functor::TSAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.msavi","Vegetation::MSAVI",new otb::Functor::MSAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.msavi2","Vegetation::MSAVI2",new otb::Functor::MSAVI2<InputType,OutputType>()});
+    m_Map.push_back({"list.gemi","Vegetation::GEMI",new otb::Functor::GEMI<InputType,OutputType>()});
+    m_Map.push_back({"list.ipvi","Vegetation::IPVI",new otb::Functor::IPVI<InputType,OutputType>()});
+    m_Map.push_back({"list.laindvilog","Vegetation::LAIFromNDVILog",new otb::Functor::LAIFromNDVILogarithmic<InputType,OutputType>()});
+    m_Map.push_back({"list.lairefl","Vegetation::LAIFromReflLinear",new otb::Functor::LAIFromReflectancesLinear<InputType,OutputType>()});
+    m_Map.push_back({"list.laindviformo","Vegetation::LAIFromNDVIFormo",new otb::Functor::LAIFromNDVIFormosat2Functor<InputType,OutputType>()});
+    m_Map.push_back({"list.ndwi","Water::NDWI",new otb::Functor::NDWI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndwi2","Water::NDWI2",new otb::Functor::NDWI2<InputType,OutputType>()});
+    m_Map.push_back({"list.mndwi","Water::MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndpi","Water::NDPI",new otb::Functor::NDPI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndpi","Water::NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
+    m_Map.push_back({"list.srwi","Water::SRWI",new otb::Functor::SRWI<InputType,OutputType>()});
+    m_Map.push_back({"list.si","Soil::RI",new otb::Functor::RI<InputType,OutputType>()});
+    m_Map.push_back({"list.ci","Soil::CI",new otb::Functor::CI<InputType,OutputType>()});
+    m_Map.push_back({"list.bi","Soil::BI",new otb::Functor::BI<InputType,OutputType>()});
+    m_Map.push_back({"list.bi2","Soil::BI2",new otb::Functor::BI2<InputType,OutputType>()});
 
     ClearChoices("list");
     for ( unsigned int i=0; i<m_Map.size(); i++ )
       {
       AddChoice(m_Map[i].key, m_Map[i].item);
-      //SetParameterDescription(m_Map[i].item, m_Map[i].description);
       }
+  }
+
+  // Compute required bands for selected indices
+  std::set<otb::Functor::Band> GetRequiredBands()
+  {
+    std::set<otb::Functor::Band> required;
+   
+    for (unsigned int idx = 0; idx < GetSelectedItems("list").size(); ++idx)
+        {
+        auto requiredForCurrentIndice = m_Map[GetSelectedItems("list")[idx]].indice->GetRequiredBands();
+        required.insert(requiredForCurrentIndice.begin(),requiredForCurrentIndice.end());
+        }
+    return required;
   }
 
   void DoUpdateParameters() override
@@ -432,157 +188,71 @@ private:
     //Nothing to do here
   }
 
-#define otbRadiometricWaterIndicesMacro( type )                           \
-    {                                                                     \
-    type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
-    std::ostringstream oss;                                               \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;         \
-    l_##type##Filter->GetFunctor().SetIndex1(this->GetParameterInt(oss.str()));\
-    oss.str("");                                                          \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;         \
-    l_##type##Filter->GetFunctor().SetIndex2(this->GetParameterInt(oss.str()));\
-    l_##type##Filter->SetInput(inImage);                                  \
-    m_FilterList->PushBack( l_##type##Filter );                           \
-    m_ImageList->PushBack( l_##type##Filter->GetOutput() );               \
-    otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");\
-    }
-
-#define otbRadiometricVegetationIndicesMacro( type )                      \
-    {                                                                     \
-    type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
-    std::ostringstream oss;                                               \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;         \
-    l_##type##Filter->GetFunctor().SetRedIndex(this->GetParameterInt(oss.str())); \
-    oss.str("");                                                          \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;         \
-    l_##type##Filter->GetFunctor().SetNIRIndex(this->GetParameterInt(oss.str())); \
-    l_##type##Filter->SetInput(inImage);                                  \
-    m_FilterList->PushBack( l_##type##Filter );                           \
-    m_ImageList->PushBack( l_##type##Filter->GetOutput() );               \
-    otbAppLogINFO(<<m_Map[GetSelectedItems("list")[idx]].item<<" added.");\
-    }
-
-#define otbRadiometricSoilIndicesMacro( type )                            \
-    {                                                                     \
-    type##FilterType::Pointer l_##type##Filter = type##FilterType::New(); \
-    std::ostringstream oss;                                               \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;         \
-    l_##type##Filter->GetFunctor().SetRedIndex(this->GetParameterInt(oss.str()));\
-    oss.str("");                                                          \
-    oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;         \
-    l_##type##Filter->GetFunctor().SetGreenIndex(this->GetParameterInt(oss.str()));\
-    l_##type##Filter->SetInput(inImage);                                  \
-    m_FilterList->PushBack( l_##type##Filter );                           \
-    m_ImageList->PushBack( l_##type##Filter->GetOutput() );               \
-    otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");\
-    }
-
   void DoExecute() override
   {
+    // Retrieve number of bands of input image
+    unsigned int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
 
-    int nbChan = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
+    // Derive required bands from selected indices
+    auto requiredBands = GetRequiredBands();
 
-    if (   (this->GetParameterInt("channels.blue")  <= nbChan)
-        && (this->GetParameterInt("channels.green") <= nbChan)
-        && (this->GetParameterInt("channels.red")   <= nbChan)
-        && (this->GetParameterInt("channels.nir")   <= nbChan)
-        && (this->GetParameterInt("channels.mir")   <= nbChan))
-      {
+    // Map to store association between bands and indices
+    std::map<otb::Functor::Band,size_t> bandIndicesMap;
 
-      m_FilterList = FilterListType::New();
-      m_ImageList  = ImageListType::New();
-      m_Concatener = ImageListToVectorImageFilterType::New();
-
-      FloatVectorImageType* inImage = GetParameterImage("in");
-
-      for (unsigned int idx = 0; idx < GetSelectedItems("list").size(); ++idx)
+    // Lambda that will:
+    // - Check if band is required,
+    // - Check band index range,
+    // - Populate the bandIndicesMap
+    auto bandChecker = [this,requiredBands, nbChan] (std::map<otb::Functor::Band, size_t> & indicesMap, const otb::Functor::Band& band, const std::string & key)
+    {
+      if(requiredBands.find(band) != requiredBands.end())
         {
-
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:NDVI")
-          otbRadiometricVegetationIndicesMacro(NDVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:TNDVI")
-          otbRadiometricVegetationIndicesMacro(TNDVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:RVI")
-          otbRadiometricVegetationIndicesMacro(RVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:SAVI")
-          otbRadiometricVegetationIndicesMacro(SAVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:TSAVI")
-          otbRadiometricVegetationIndicesMacro(TSAVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:MSAVI")
-          otbRadiometricVegetationIndicesMacro(MSAVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:MSAVI2")
-          otbRadiometricVegetationIndicesMacro(MSAVI2);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:GEMI")
-          otbRadiometricVegetationIndicesMacro(GEMI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:IPVI")
-          otbRadiometricVegetationIndicesMacro(IPVI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:LAIFromNDVILog")
-          otbRadiometricVegetationIndicesMacro(LAIFromNDVILog);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:LAIFromReflLinear")
-          otbRadiometricVegetationIndicesMacro(LAIFromReflLinear);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Vegetation:LAIFromNDVIFormo")
-          otbRadiometricVegetationIndicesMacro(LAIFromNDVIFormo);
-
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:NDWI")
-          otbRadiometricWaterIndicesMacro(NDWI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:NDWI2")
-          otbRadiometricWaterIndicesMacro(NDWI2);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:MNDWI")
-          otbRadiometricWaterIndicesMacro(MNDWI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:NDPI")
-          otbRadiometricWaterIndicesMacro(NDPI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:NDTI")
-          otbRadiometricWaterIndicesMacro(NDTI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Water:SRWI")
-          otbRadiometricWaterIndicesMacro(SRWI);
-
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Soil:RI")
-          otbRadiometricSoilIndicesMacro(RI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Soil:CI")
-          otbRadiometricSoilIndicesMacro(CI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Soil:BI")
-          otbRadiometricSoilIndicesMacro(BI);
-        if (m_Map[GetSelectedItems("list")[idx]].item == "Soil:BI2")
-          {
-          BI2FilterType::Pointer l_BI2Filter = BI2FilterType::New();
-          std::ostringstream oss;
-          oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan1;
-          l_BI2Filter->GetFunctor().SetNIRIndex(this->GetParameterInt(oss.str()));
-          oss.str("");
-          oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan2;
-          l_BI2Filter->GetFunctor().SetRedIndex(this->GetParameterInt(oss.str()));
-          oss.str("");
-          oss<<"channels."<<m_Map[GetSelectedItems("list")[idx]].chan3;
-          l_BI2Filter->GetFunctor().SetGreenIndex(this->GetParameterInt(oss.str()));
-          l_BI2Filter->SetInput(inImage);
-          m_FilterList->PushBack( l_BI2Filter );
-          m_ImageList->PushBack( l_BI2Filter->GetOutput() );
-          otbAppLogINFO(<< m_Map[GetSelectedItems("list")[idx]].item << " added.");
-          }
-
+          unsigned int idx = this->GetParameterInt(key);
+          
+          if(idx > nbChan)
+            {
+            otbAppLogFATAL(<<"Index for band "<<key<<" exceeds the number of channels in image ("<<nbChan<<")");
+            }
+          else
+            {
+              indicesMap[band] = idx;
+            }
         }
+    };
 
-      if( m_ImageList->Size() == 0 )
-        {
-        itkExceptionMacro(<< "No indices selected...");
-        }
+    // Call lambda for each possible band
+    bandChecker(bandIndicesMap,otb::Functor::Band::BLUE,"channels.blue");
+    bandChecker(bandIndicesMap,otb::Functor::Band::GREEN,"channels.green");
+    bandChecker(bandIndicesMap,otb::Functor::Band::RED,"channels.red");
+    bandChecker(bandIndicesMap,otb::Functor::Band::NIR,"channels.nir");
+    bandChecker(bandIndicesMap,otb::Functor::Band::MIR,"channels.mir");
 
-      m_Concatener->SetInput( m_ImageList );
-      m_Concatener->UpdateOutputInformation();
+    std::vector<RadiometricIndiceType*> indices;
 
-      SetParameterOutputImage("out", m_Concatener->GetOutput());
-      }
-    else
+    // Find selected indices
+    for(unsigned int idx = 0; idx < GetSelectedItems("list").size(); ++idx)
       {
-      itkExceptionMacro(<< "At least one needed channel has an invalid index");
+      // Retrieve the indice instance
+      indices.push_back(m_Map[GetSelectedItems("list")[idx]].indice.get());
+      
+      // And set bands using the band map
+      indices.back()->SetBandsIndices(bandIndicesMap);
       }
 
+    // Build a composite indices functor to compute all indices at
+    // once
+    auto compositeFunctor = CompositeIndicesFunctorType(indices);
+
+    // Build and plug functor filter
+    auto filter = NewFunctorFilter(compositeFunctor);
+    filter->SetInputs(GetParameterImage("in"));
+    SetParameterOutputImage("out", filter->GetOutput());
+
+    // Call register pipeline to allow streaming and garbage collection
+    RegisterPipeline();
   }
 
-  FilterListType::Pointer                   m_FilterList;
-  ImageListType::Pointer                    m_ImageList;
-  ImageListToVectorImageFilterType::Pointer m_Concatener;
-  std::vector<indiceSpec>                   m_Map;
+  std::vector<indiceSpec> m_Map;
 
 };
 

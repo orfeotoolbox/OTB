@@ -28,8 +28,8 @@ namespace otb
 {
 namespace Functor
 {
-/** \class IR
- *  \brief This functor computes the Redness Index (IR)
+/** \class RI
+ *  \brief This functor computes the Redness Index (RI)
  *
  *  [Pouget et al., "Caracteristiques spectrales des surfaces sableuses
  *   de la region cotiere nord-ouest de l'Egypte: application aux donnees
@@ -43,17 +43,17 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class IR : public RadiometricIndice<TInput,TOutput>
+class RI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  IR() : RadiometricIndice<TInput,TOutput>("IR",{Band::RED, Band::GREEN}) {}
+  RI() : RadiometricIndice<TInput,TOutput>("RI",{Band::RED, Band::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override  
   {
     auto green = this->Value(Band::GREEN,input);
     auto red = this->Value(Band::RED,input);
   
-    if (std::abs(green) < this->EpsilonToBeConsideredAsZero)
+    if (std::abs(green) < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
       }
@@ -62,7 +62,7 @@ public:
   }
 };
 
-/** \class IC
+/** \class CI
  *  \brief This functor computes the Color Index (IC)
  *
  *  [Pouget et al., "Caracteristiques spectrales des surfaces sableuses
@@ -77,10 +77,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class IC : public RadiometricIndice<TInput,TOutput>
+class CI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  IC() : RadiometricIndice<TInput,TOutput>("IC",{Band::RED, Band::GREEN}) {}
+  CI() : RadiometricIndice<TInput,TOutput>("CI",{Band::RED, Band::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -96,8 +96,8 @@ public:
   }
 };
 
-/** \class IB
- *  \brief This functor computes the Brilliance Index (IB)
+/** \class BI
+ *  \brief This functor computes the Brilliance Index (BI)
  *
  *  [ ]
  *
@@ -107,10 +107,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class IB : public RadiometricIndice<TInput,TOutput>
+class BI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  IB() : RadiometricIndice<TInput,TOutput>("IB",{Band::RED, Band::GREEN}) {}
+  BI() : RadiometricIndice<TInput,TOutput>("BI",{Band::RED, Band::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -121,8 +121,8 @@ public:
   }
 };
 
-/** \class IB2
- *  \brief This functor computes the Brilliance Index (IB2)
+/** \class BI2
+ *  \brief This functor computes the Brilliance Index (BI2)
  *
  *  [ ]
  *
@@ -132,11 +132,11 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class IB2 : public RadiometricIndice<TInput,TOutput>
+class BI2 : public RadiometricIndice<TInput,TOutput>
 {
 public:
   
-  IB2() : RadiometricIndice<TInput,TOutput>("IB2",{Band::RED, Band::GREEN, Band::NIR}) {}
+  BI2() : RadiometricIndice<TInput,TOutput>("BI2",{Band::RED, Band::GREEN, Band::NIR}) {}
  
  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {

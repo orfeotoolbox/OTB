@@ -59,7 +59,7 @@ public:
   std::set<Band> GetRequiredBands() const
   {
     std::set<Band> resp;
-    for(auto i = 0; i < NumberOfBands; ++i)
+    for(size_t i = 0; i < NumberOfBands; ++i)
       {
       resp.insert(static_cast<Band>(i));
       }
@@ -70,6 +70,14 @@ public:
   void SetBandIndex(const Band & band, const size_t & index)
   {
     m_BandIndices[static_cast<size_t>(band)]=index;
+  }
+
+  void SetBandsIndices(const std::map<Band,size_t> & indicesMap)
+  {
+    for(auto it: indicesMap)
+      {
+      SetBandIndex(it.first,it.second);
+      }
   }
 
   size_t GetBandIndex(const Band & band) const
