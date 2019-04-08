@@ -72,11 +72,11 @@ ubuntu-llvm-wip:
   except: [merge_requests]
   extends: .common-build
 
-superbuild-prepare:
-  only: [merge_requests]
+.common-prepare:
+  # only: [merge_requests]
   extends: .common-build
   stage: prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  # image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   before_script:
 # This override the previous before_script
     - git checkout $CI_COMMIT_REF_NAME
@@ -90,8 +90,8 @@ superbuild-prepare:
     - ssh-add <(echo "$K8S_SECRET_SSH")
 # This is for debug, we are checking the owner of the ssh key
     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  # script:
+  #  - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   after_script:
     - echo "Nothing to do for after_script"
   artifacts:
@@ -99,6 +99,20 @@ superbuild-prepare:
     paths:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
+
+ubuntu-superbuild-prepare:
+  only: [merge_requests]
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+
+centos-superbuild-prepare:
+  only: [merge_requests]
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
 superbuild-build:
   only: [merge_requests]
