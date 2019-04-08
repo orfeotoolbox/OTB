@@ -34,6 +34,8 @@ get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
 #   CI_PROJ_DIR=/builds/{project_dir}
 #   CI_ROOT_DIR=/builds
 
+set ( DEBUG "1" )
+
 set ( SUPERBUILD_SOURCE_DIR "${OTB_SOURCE_DIR}/SuperBuild" )
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )

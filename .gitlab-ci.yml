@@ -89,7 +89,7 @@ superbuild-prepare:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$K8S_SECRET_SSH")
 # This is for debug, we are checking the owner of the ssh key
-# - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   after_script:
