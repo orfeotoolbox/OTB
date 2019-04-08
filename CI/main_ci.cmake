@@ -45,6 +45,8 @@ elseif(ci_ref_name)
   endif()
 endif()
 
+#Warning, this variable is used in cdash_status.py. If change from 
+# ${IMAGE_NAME} to something else do not forget to change it.
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable

@@ -25,6 +25,9 @@ before_script:
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
+after_script:
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+
 stages:
   - prepare
   - build
@@ -59,11 +62,13 @@ debian-build:
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
 
-build:ubuntu-llvm:
+
+# This is needed to have only one pipeline in a merge request context
+ubuntu-llvm:
   only: [merge_requests]
   extends: .common-build
 
-build:ubuntu-llvm-wip:
+ubuntu-llvm-wip:
   except: [merge_requests]
   extends: .common-build
 
