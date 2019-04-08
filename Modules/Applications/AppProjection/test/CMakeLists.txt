@@ -287,7 +287,8 @@ otb_test_application(NAME  apTvPrRefineSensorModel
                              -elev.geoid ${INPUTDATA}/DEM/egm96.grd
                      VALID   --compare-ascii 0.1
                              ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
-                             ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom)
+                             ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
+                             --ignore-lines-with 1 support_data.)
 
 # Remove baseline for OSSIM >= 2, as ossimRPCProjection.optimizeFit() is broken
 set(VALID_CONDITION)
