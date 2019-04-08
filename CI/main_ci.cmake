@@ -30,13 +30,14 @@ set (CTEST_CMAKE_GENERATOR "Ninja")
 set(ci_profile wip)
 set(ci_mr_source "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}")
 set(ci_mr_target "$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
+set(ci_mr_iid "$ENV{CI_MERGE_REQUEST_IID}")
 set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
 set (CTEST_BUILD_NAME "$ENV{CI_COMMIT_SHORT_SHA}")
-if(ci_mr_source AND ci_mr_target)
-  set (CTEST_BUILD_NAME "${CTEST_BUILD_NAME} (${ci_mr_source} to ${ci_mr_target})")
+if(ci_mr_source AND ci_mr_target AND ci_mr_iid)
+  set (CTEST_BUILD_NAME "${ci_mr_source} (MR ${ci_mr_iid})")
   set(ci_profile mr)
 elseif(ci_ref_name)
-  set (CTEST_BUILD_NAME "${CTEST_BUILD_NAME} (${ci_ref_name})")
+  set (CTEST_BUILD_NAME "${ci_ref_name}")
   if("${ci_ref_name}" STREQUAL "develop")
     set(ci_profile develop)
   elseif("${ci_ref_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
@@ -44,6 +45,8 @@ elseif(ci_ref_name)
   endif()
 endif()
 
+#Warning, this variable is used in cdash_status.py. If change from 
+# ${IMAGE_NAME} to something else do not forget to change it.
 set (CTEST_SITE "${IMAGE_NAME}")
 
 # Directory variable
@@ -64,10 +67,18 @@ message(STATUS "CI profile : ${ci_profile}")
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
 # End of configuration
 
 
 ctest_start (Experimental TRACK Experimental)
+
+ctest_update()
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"

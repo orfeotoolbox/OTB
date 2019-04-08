@@ -26,11 +26,9 @@
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperOutputProcessXMLParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
@@ -366,16 +364,6 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         newParam = ListViewParameter::New();
         }
         break;
-      case ParameterType_ComplexInputImage:
-        {
-        newParam = ComplexInputImageParameter::New();
-        }
-        break;
-      case ParameterType_ComplexOutputImage:
-        {
-        newParam = ComplexOutputImageParameter::New();
-        }
-        break;
       case ParameterType_RAM:
         {
         newParam = RAMParameter::New();
@@ -395,6 +383,8 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
         {
        newParam = BoolParameter::New();
         }
+        break;
+      default:
         break;
       }
 

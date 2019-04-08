@@ -23,8 +23,6 @@
 */
 
 
-//  Software Guide : BeginDescription
-//
 // This filter is based on the mathematical parser library muParser.
 // The built in functions and operators list is available at:
 // http://muparser.sourceforge.net/mup_features.html.
@@ -39,8 +37,6 @@
 // The next step is to set the expression according to the variable
 // names. For example, in the default case with three input images the
 // following expression is valid: ``(b1+b2)*b3``.
-//
-// Software Guide : EndDescription
 
 #include "itkMacro.h"
 #include <iostream>

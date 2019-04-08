@@ -39,14 +39,14 @@ template for in depth description called 'Request for Comments'.
 
 ## Documentation improvements
 
-The two main OTB documentations are the [Software Guide](https://www.orfeo-toolbox.org/SoftwareGuide/index.html)
-and the [CookBook](https://www.orfeo-toolbox.org/CookBook/).  Their sources are
+The main OTB documentation is
+the [CookBook](https://www.orfeo-toolbox.org/CookBook/).  The source is
 hosted in the main OTB repository in the `Documentation/` directory. Then, to
 contribute documentation use the same workflow as for code contributions (see
 below).
 
-See also the [Compiling documentation](https://wiki.orfeo-toolbox.org/index.php/Compiling_documentation)
-wiki page for help on building the Sphinx and Latex source.
+See also the "Compiling documentation" section of the CookBook
+for help on building the Sphinx source.
 
 ## Code contribution
 

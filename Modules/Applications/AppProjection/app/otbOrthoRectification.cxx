@@ -101,7 +101,7 @@ private:
     SetDocLongDescription(oss.str());
     SetDocLimitations("Supported sensors (both optical and radar) are: GeoEye, Ikonos, Pleiades, Quickbird, RadarSat, Sentinel-1, SPOT5 (TIF format), SPOT6/7, TerraSAR-X, Worldview 1/2/3, and any TIF image with embedded RPC tags.\n Also note that the opt.gridspacing default value may not be suitable for all sensors. In particular, if this value is lower than the target ground sampling distance, the processing time may increase a lot. A warning is issued in this case. Typical values should be half the DEM ground sampling distance.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("Ortho-rectification chapter from the OTB Software Guide");
+    SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Geometry);
 
@@ -486,7 +486,7 @@ private:
         {
         // Update opt.gridspacing
         // In case output coordinate system is WG84,
-        if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+        if (m_OutputProjectionRef == otb::SpatialReference::FromWGS84().ToWkt())
           {
           // How much is 4 meters in degrees ?
           typedef itk::Point<float,2> FloatPointType;
@@ -524,10 +524,10 @@ private:
           otbAppLogINFO( "Setting grid spacing to " << optimalSpacing );
           SetParameterFloat("opt.gridspacing",optimalSpacing);
           }
-        else // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+        else // if (m_OutputProjectionRef == otb::SpatialReference().ToWkt())
           {
           SetParameterFloat("opt.gridspacing",DefaultGridSpacingMeter);
-          } // if (m_OutputProjectionRef == otb::GeoInformationConversion::ToWKT(4326))
+          } // if (m_OutputProjectionRef == otb::SpatialReference().ToWkt())
         } // if (!HasUserValue("opt.gridspacing"))
       } // if (HasValue("io.in"))
   }

@@ -29,12 +29,11 @@
 */
 
 
-// \index{otb::RAndNIRIndexImageFilter}
 // \index{otb::VegetationIndicesFunctor}
 // \index{otb::VegetationIndicesFunctor!header}
 //
 // The following example illustrates the use of the
-// \doxygen{otb}{RAndNIRIndexImageFilter} with the use of the Normalized
+// \doxygen{itk}{BinaryFunctorImageFilter} with the use of the Normalized
 // Difference Vegatation Index (NDVI).
 // NDVI computes the difference between the NIR channel, noted $L_{NIR}$, and the red channel,
 // noted $L_{r}$ radiances reflected from the surface and transmitted through the atmosphere:
@@ -55,22 +54,15 @@
 //  \item \subdoxygen{otb}{Functor}{IPVI}
 //  \item \subdoxygen{otb}{Functor}{TNDVI}
 //  \end{itemize}
-
-// With the \doxygen{otb}{RAndNIRIndexImageFilter} class the filter
-// inputs are one channel images: one inmage represents the NIR channel, the
-// the other the NIR channel.
 //
-// Let's look at the minimal code required to use this algorithm. First, the following header
-// defining the \doxygen{otb}{RAndNIRIndexImageFilter}
-// class must be included.
-
-#include "otbRAndNIRIndexImageFilter.h"
+// Let's look at the minimal code required to use this algorithm.
 
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "itkUnaryFunctorImageFilter.h"
+#include "itkBinaryFunctorImageFilter.h"
+#include "otbVegetationIndicesFunctor.h"
 #include "itkRescaleIntensityImageFilter.h"
 
 int main(int argc, char* argv[])
@@ -101,17 +93,17 @@ int main(int argc, char* argv[])
   // The NDVI (Normalized Difference Vegetation Index) is instantiated using
   // the images pixel type as template parameters. It is
   // implemented as a functor class which will be passed as a
-  // parameter to an \doxygen{otb}{RAndNIRIndexImageFilter}.
+  // parameter to an \doxygen{itk}{BinaryFunctorImageFilter}.
 
   typedef otb::Functor::NDVI<InputPixelType, InputPixelType, OutputPixelType> FunctorType;
 
-  // The \doxygen{otb}{RAndNIRIndexImageFilter} type is instantiated using the images
+  // The \doxygen{itk}{BinaryFunctorImageFilter} type is instantiated using the images
   // types and the NDVI functor as template parameters.
 
-  typedef otb::RAndNIRIndexImageFilter<InputRImageType, InputNIRImageType, OutputImageType, FunctorType> RAndNIRIndexImageFilterType;
+  typedef itk::BinaryFunctorImageFilter<InputRImageType, InputNIRImageType, OutputImageType, FunctorType> NDVIImageFilterType;
 
   // Instantiating object
-  RAndNIRIndexImageFilterType::Pointer filter    = RAndNIRIndexImageFilterType::New();
+  NDVIImageFilterType::Pointer filter            = NDVIImageFilterType::New();
   RReaderType::Pointer                 readerR   = RReaderType::New();
   NIRReaderType::Pointer               readerNIR = NIRReaderType::New();
   WriterType::Pointer                  writer    = WriterType::New();
@@ -126,8 +118,8 @@ int main(int argc, char* argv[])
   // the reader output and the filter output is linked to the writer
   // input.
 
-  filter->SetInputR(readerR->GetOutput());
-  filter->SetInputNIR(readerNIR->GetOutput());
+  filter->SetInput1(readerR->GetOutput());
+  filter->SetInput2(readerNIR->GetOutput());
 
   writer->SetInput(filter->GetOutput());
 

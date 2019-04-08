@@ -32,7 +32,7 @@ std::string ParameterTypeToString(ParameterType type)
 
 ParameterType ParameterStringToType(const std::string& str)
 {
-  for (std::size_t i = 0; i < parameterTypesStrings.size(); i++)
+  for (std::size_t i = 0; i < ParameterType_MAX__; i++)
   {
     if (str == parameterTypesStrings[i])
     {
