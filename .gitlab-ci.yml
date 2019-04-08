@@ -67,6 +67,8 @@ build:ubuntu-llvm-wip:
   extends: .common-build
 
 superbuild-prepare:
+  only: [merge_requests]
+  extends: .common-build
   stage: prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   before_script:
@@ -90,3 +92,10 @@ superbuild-prepare:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
 
+superbuild:
+  only: [merge_requests]
+  extends: .common-build
+  stage: build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
