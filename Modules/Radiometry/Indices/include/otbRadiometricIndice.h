@@ -25,6 +25,7 @@
 #include <array>
 #include <set>
 #include <string>
+#include <map>
 
 namespace otb
 {

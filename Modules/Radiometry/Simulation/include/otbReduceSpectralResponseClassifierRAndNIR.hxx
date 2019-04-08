@@ -50,7 +50,13 @@ namespace otb
       ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
   ::operator()()
   {
-      return m_Functor((*m_InputReduceSpectralResponse)(m_RBandNumber), (*m_InputReduceSpectralResponse)(m_NIRBandNumber));
+    itk::VariableLengthVector<ValuePrecisionType> sr(2);
+    sr[0]=(*m_InputReduceSpectralResponse)(m_RBandNumber);
+    sr[1]=(*m_InputReduceSpectralResponse)(m_NIRBandNumber);
+    m_Functor.SetBandIndex(otb::Functor::Band::RED,0);
+    m_Functor.SetBandIndex(otb::Functor::Band::NIR,1);
+
+    return m_Functor(sr);
   }
 
 

@@ -26,8 +26,7 @@
                                                         Output/pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png \
                                                         1 \
                                                         3 \
-                                                        2 \
-                                                        0.6
+                                                        2 
 */
 
 
@@ -87,11 +86,11 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc < 8)
+  if (argc < 7)
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel , gama" << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , blueChannel , nirChannel" << std::endl;
     return 1;
   }
 
@@ -114,7 +113,7 @@ int main(int argc, char* argv[])
   // Note that we also can use other functors which operate with the
   // Red, Blue and Nir channels such as EVI, ARVI and TSARVI.
 
-  typedef otb::Functor::ARVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
+  typedef otb::Functor::ARVI<InputPixelType, OutputPixelType> FunctorType;
 
   // The
   // \doxygen{itk}{UnaryFunctorImageFilter}
@@ -134,17 +133,9 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   // The three used index bands (red, blue and NIR) are declared.
-
-  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
-  filter->GetFunctor().SetBlueIndex(::atoi(argv[6]));
-  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
-
-  // The $\gamma$ parameter is set. The
-  // \doxygen{otb::Functor}{ARVI}
-  // class sets the default value of $\gamma$ to $0.5$.  This parameter
-  // is used to reduce the atmospheric effect on a global scale.
-
-  filter->GetFunctor().SetGamma(::atof(argv[8]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::RED,::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::GREEN,::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::NIR,::atoi(argv[7]));
 
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.

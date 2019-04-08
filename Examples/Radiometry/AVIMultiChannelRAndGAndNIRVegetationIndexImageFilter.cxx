@@ -26,10 +26,7 @@
                                                        Output/pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png \
                                                        3 \
                                                        2 \
-                                                       4 \
-                                                       660 \
-                                                       560 \
-                                                       830
+                                                       4
 */
 
 
@@ -76,12 +73,11 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc < 11)
+  if (argc < 8)
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
-    std::cerr << " lambdaR, lambdaG, lambdaNIR " << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,"<<std::endl;
     return 1;
   }
 
@@ -102,7 +98,7 @@ int main(int argc, char* argv[])
   // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
 
-  typedef otb::Functor::AVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
+  typedef otb::Functor::AVI<InputPixelType, OutputPixelType> FunctorType;
 
   // The
   // \doxygen{itk}{UnaryFunctorImageFilter}
@@ -123,18 +119,9 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, green and NIR) are declared.
 
-  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
-  filter->GetFunctor().SetGreenIndex(::atoi(argv[6]));
-  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
-
-  // The $\lambda$ R, G and NIR parameters are set. The
-  // \doxygen{otb::Functor}{AVI}
-  // class sets the default values of $\lambda$ to $660$, $560$ and
-  // $830$.
-
-  filter->GetFunctor().SetLambdaR(::atof(argv[8]));
-  filter->GetFunctor().SetLambdaG(::atof(argv[9]));
-  filter->GetFunctor().SetLambdaNir(::atof(argv[10]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::RED,::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::GREEN,::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(otb::Functor::Band::NIR,::atoi(argv[7]));
 
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.

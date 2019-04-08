@@ -52,7 +52,7 @@ namespace otb
  *
  * \ingroup OTBSimulation
  */
-  template <class TReduceSpectralResponse , class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType, typename TReduceSpectralResponse::ValuePrecisionType,
+  template <class TReduceSpectralResponse , class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType,
   typename TReduceSpectralResponse::ValuePrecisionType > >
       class ReduceSpectralResponseClassifierRAndNIR
   : public itk::DataObject
