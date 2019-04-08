@@ -92,6 +92,8 @@ superbuild-prepare:
 # - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  after_script:
+    - echo "Nothing to do for after_script"
   artifacts:
     expire_in: 24 hrs
     paths:
