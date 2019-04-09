@@ -111,7 +111,7 @@ superbuild-build:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   artifacts:  
     paths:
-      - /builds/xdk
+      - install/
       - build/
 
 packages:
@@ -122,6 +122,7 @@ packages:
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   dependencies:
     - superbuild-build
-  artifacts:  
+  artifacts:
+    expire_in: 24 hrs  
     paths:
       - build_packages/

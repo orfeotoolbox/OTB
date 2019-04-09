@@ -160,3 +160,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
 # # endif()
 
 # ctest_submit()
+
+# Artifacts can only be in project dir...
+file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
+
