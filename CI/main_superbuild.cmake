@@ -133,33 +133,49 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     CAPTURE_CMAKE_ERROR _configure_error
     )
 
-# if ( NOT _configure_rv EQUAL 0 )
+if ( NOT _configure_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_configure.")
+endif()
+
+ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+            RETURN_VALUE _build_rv
+            CAPTURE_CMAKE_ERROR _build_error
+            )
+
+if ( NOT _build_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_build.")
+endif()
+
+# Uncomment when ready for test
+# ctest_test(PARALLEL_LEVEL 8
+#            RETURN_VALUE _test_rv
+#            CAPTURE_CMAKE_ERROR _test_error
+#            )
+
+# if ( NOT _test_rv EQUAL 0 )
 #   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_configure.")
+#   message( SEND_ERROR "An error occurs during ctest_test.")
 # endif()
 
-# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-#             RETURN_VALUE _build_rv
-#             CAPTURE_CMAKE_ERROR _build_error
-#             )
+ctest_submit()
 
-# if ( NOT _build_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_build.")
-# endif()
+# We need to install OTB for package purposes
+execute_process(
+  COMMAND ${CMAKE_COMMAND} "install"
+  WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY}
+  RESULT_VARIABLE install_res
+  OUTPUT_VARIABLE install_out
+  ERROR_VARIABLE install_err
+  )
 
-# # Uncomment when ready for test
-# # ctest_test(PARALLEL_LEVEL 8
-# #            RETURN_VALUE _test_rv
-# #            CAPTURE_CMAKE_ERROR _test_error
-# #            )
-
-# # if ( NOT _test_rv EQUAL 0 )
-# #   ctest_submit()
-# #   message( SEND_ERROR "An error occurs during ctest_test.")
-# # endif()
-
-# ctest_submit()
+if ( DEBUG )
+  message( "Install output")
+  message( "install_res = ${install_res}" )
+  message( "install_out = ${install_out}" )
+  message( "install_err = ${install_err}" )
+endif()
 
 # Artifacts can only be in project dir...
 file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
