@@ -54,7 +54,7 @@ set ( CONFIGURE_OPTIONS
 ctest_start (Experimental TRACK Experimental)
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
-    SOURCE "${OTB_SOURCE_DIR}"
+    SOURCE "${CTEST_SOURCE_DIRECTORY}"
     OPTIONS "${CONFIGURE_OPTIONS}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
