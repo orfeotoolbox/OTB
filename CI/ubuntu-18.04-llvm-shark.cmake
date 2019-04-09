@@ -40,4 +40,5 @@ if(NOT ${ci_do_doxygen} EQUAL -1)
   set(site_option
 "${site_option}
 BUILD_DOCUMENTATION:BOOL=ON")
+  set (ENABLE_DOXYGEN ON)
 endif()

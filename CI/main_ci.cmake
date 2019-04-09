@@ -70,6 +70,7 @@ set (OTB_LARGEINPUT_ROOT "") # todo
 message(STATUS "CI profile : ${ci_profile}")
 
 #The following file set the CONFIGURE_OPTIONS variable
+set (ENABLE_DOXYGEN OFF)
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 
@@ -108,7 +109,7 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-if(NOT ${ci_do_doxygen} EQUAL -1)
+if(ENABLE_DOXYGEN)
   # compile doxygen
   ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
               TARGET Documentation
