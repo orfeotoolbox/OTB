@@ -33,7 +33,7 @@ set ( CTEST_BUILD_NAME "Packages" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
 
 # Directory variable
-set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}/Packages" )
+set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}/Packaging" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build_packages/" )
 set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install_packages" )
 set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
