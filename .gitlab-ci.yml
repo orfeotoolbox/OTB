@@ -19,14 +19,14 @@ variables:
 
 before_script:
   # make sure LFS hooks are installed
-  - git lfs install
+  # - git lfs install
   # Provision efficiently the local LFS cache before checkout
-  - git lfs fetch origin $CI_COMMIT_SHA
+  # - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
-after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+# after_script:
+  # - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
   - prepare
@@ -39,21 +39,21 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-native-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
-  script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
+# native-build:
+  # extends: .general
+  # only: [merge_requests]
+  # stage: build
+  # image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
+  # script:
+    # - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-debian-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+# debian-build:
+  # extends: .general
+  # only: [merge_requests]
+  # stage: build
+  # image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  # script:
+    # - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 .common-build:
   extends: .general
@@ -63,14 +63,14 @@ debian-build:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
 
 
-# This is needed to have only one pipeline in a merge request context
-ubuntu-llvm:
-  only: [merge_requests]
-  extends: .common-build
+# # This is needed to have only one pipeline in a merge request context
+# ubuntu-llvm:
+#   only: [merge_requests]
+#   extends: .common-build
 
-ubuntu-llvm-wip:
-  except: [merge_requests]
-  extends: .common-build
+# ubuntu-llvm-wip:
+#   except: [merge_requests]
+#   extends: .common-build
 
 superbuild-prepare:
   only: [merge_requests]
