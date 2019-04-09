@@ -5,7 +5,7 @@
 # But Git fails to manage efficiently numerous LFS data.
 # We have to use directly git-lfs wrapping commands to have an
 # efficient cloning step.
-# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of 
+# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of
 # GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
 
 variables:
@@ -47,13 +47,13 @@ native-build:
   script:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
-debian-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+# debian-build:
+#  extends: .general
+#  only: [merge_requests]
+#  stage: build
+#  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+#  script:
+#    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 .common-build:
   extends: .general
@@ -63,14 +63,14 @@ debian-build:
     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
 
 
-# This is needed to have only one pipeline in a merge request context
-ubuntu-llvm:
-  only: [merge_requests]
-  extends: .common-build
+# # This is needed to have only one pipeline in a merge request context
+# ubuntu-llvm:
+#   only: [merge_requests]
+#   extends: .common-build
 
-ubuntu-llvm-wip:
-  except: [merge_requests]
-  extends: .common-build
+# ubuntu-llvm-wip:
+#   except: [merge_requests]
+#   extends: .common-build
 
 .common-prepare:
   # only: [merge_requests]
@@ -100,12 +100,12 @@ ubuntu-llvm-wip:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
 
-ubuntu-superbuild-prepare:
-  only: [merge_requests]
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+# ubuntu-superbuild-prepare:
+#   only: [merge_requests]
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-prepare:
   only: [merge_requests]
@@ -114,13 +114,13 @@ centos-superbuild-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
-ubuntu-superbuild-build:
-  only: [merge_requests]
-  extends: .common-build
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  script:
-    - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+# ubuntu-superbuild-build:
+#   only: [merge_requests]
+#   extends: .common-build
+#   stage: build
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+#   script:
+#     - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-build:
   only: [merge_requests]
