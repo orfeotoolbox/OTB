@@ -73,7 +73,7 @@ stages:
 #   extends: .common-build
 
 superbuild-prepare:
-  only: [merge_requests]
+  # only: [merge_requests]
   extends: .general
   stage: prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
@@ -101,7 +101,7 @@ superbuild-prepare:
       - build/*/*/*/*.log
 
 superbuild-build:
-  only: [merge_requests]
+  # only: [merge_requests]
   extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
