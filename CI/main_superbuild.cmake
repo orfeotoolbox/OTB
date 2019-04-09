@@ -104,7 +104,9 @@ set ( CTEST_SITE "${IMAGE_NAME}" )
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
-set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/" )
+# install in same directory as xdk to be able to produce
+# package afterwards
+set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 # SuperBuild case : one configure option
