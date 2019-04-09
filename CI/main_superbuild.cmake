@@ -24,6 +24,7 @@ get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
 get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
 
+set ( DEBUG "1" )
 ###########################################################################
 ###########################################################################
 # Download xkd
