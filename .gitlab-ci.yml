@@ -26,6 +26,7 @@ before_script:
   - git checkout $CI_COMMIT_REF_NAME
 
 stages:
+  - check
   - build
 
 .general:
@@ -34,6 +35,13 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
+
+ubuntu-fast:
+  extends: .general
+  stage: check
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
+  script:
+    - echo Done
 
 ubuntu-gcc:
   extends: .general
@@ -53,9 +61,7 @@ debian-build:
 
 ubuntu-llvm:
   extends: .general
-  only:
-    - branches
-    - merge_requests
+  only: [merge_requests]
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
