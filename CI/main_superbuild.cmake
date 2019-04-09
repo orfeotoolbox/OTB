@@ -162,8 +162,9 @@ endif()
 ctest_submit()
 
 # We need to install OTB for package purposes
+set ( MAKE_COMMAND "make")
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "install"
+  COMMAND ${MAKE_COMMAND} "install"
   WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY}
   RESULT_VARIABLE install_res
   OUTPUT_VARIABLE install_out
