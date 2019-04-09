@@ -52,7 +52,6 @@ set ( CONFIGURE_OPTIONS
 -DSUPERBUILD_INSTALL_DIR=${CI_ROOT_DIR}/xdk;
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR};
   " )
-}
 
 ctest_start (Experimental TRACK Experimental)
 
