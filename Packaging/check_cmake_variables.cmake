@@ -31,7 +31,7 @@ macro(check_cmake_variables)
   foreach(req
       ${required_vars}
       PKG_STAGE_DIR
-      SUPERBUILD_BINARY_DIR
+      OTB_BINARY_DIR
       SUPERBUILD_INSTALL_DIR
       SUPERBUILD_SOURCE_DIR
       PACKAGE_OTB_SRC_DIR

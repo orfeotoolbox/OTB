@@ -40,6 +40,7 @@ set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
 set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 
 #variables based on above user-defined variables
+set(OTB_BINARY_DIR "" CACHE PATH "path to otb binary directory")
 message( "OTB_BINARY_DIR=${OTB_BINARY_DIR}" )
 if ( NOT OTB_BINARY_DIR )
   set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
