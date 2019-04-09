@@ -22,7 +22,7 @@ set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
 set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/panOrthoToul.tif
     ${TEMP}/panOrthoToul.tif
   Execute $<TARGET_FILE:OrthoRectificationExample>
@@ -39,7 +39,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/xsOrthoToul.tif
     ${TEMP}/xsOrthoToul.tif
   Execute $<TARGET_FILE:OrthoRectificationExample>
