@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+# This modification is done to change md5sum to not interfer with current
+# CI
 cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
