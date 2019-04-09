@@ -45,6 +45,12 @@ elseif(ci_ref_name)
   endif()
 endif()
 
+# set pipelines to enable documentation
+set(ci_cookbook_profiles mr develop release)
+set(ci_doxygen_profiles mr develop release)
+list(FIND ci_cookbook_profiles ${ci_profile} ci_do_cookbook)
+list(FIND ci_doxygen_profiles ${ci_profile} ci_do_doxygen)
+
 #Warning, this variable is used in cdash_status.py. If change from 
 # ${IMAGE_NAME} to something else do not forget to change it.
 set (CTEST_SITE "${IMAGE_NAME}")
@@ -100,6 +106,15 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
 if ( NOT _build_rv EQUAL 0 )
   ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_build.")
+endif()
+
+if(NOT ${ci_do_doxygen} EQUAL -1)
+  # compile doxygen
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              TARGET Documentation
+              RETURN_VALUE _doxy_rv
+              CAPTURE_CMAKE_ERROR _doxy_error
+              )
 endif()
 
 # Uncomment when ready for test

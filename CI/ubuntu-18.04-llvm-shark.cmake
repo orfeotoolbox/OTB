@@ -29,3 +29,15 @@ CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
 CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache")
+
+if(NOT ${ci_do_cookbook} EQUAL -1)
+  set(site_option
+"${site_option}
+BUILD_COOKBOOK:BOOL=ON")
+endif()
+
+if(NOT ${ci_do_doxygen} EQUAL -1)
+  set(site_option
+"${site_option}
+BUILD_DOCUMENTATION:BOOL=ON")
+endif()
