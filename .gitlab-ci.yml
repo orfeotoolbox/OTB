@@ -72,33 +72,33 @@ stages:
 #   except: [merge_requests]
 #   extends: .common-build
 
-superbuild-prepare:
-  # only: [merge_requests]
-  extends: .general
-  stage: prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  before_script:
-# This override the previous before_script
-    - git checkout $CI_COMMIT_REF_NAME
-# We are now doing the git-lfs install
-# This is done after the checkout so we avoid downloading Data
-# But we need it to upload the archive
-    - git-lfs install
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$K8S_SECRET_SSH")
-# This is for debug, we are checking the owner of the ssh key
-    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
-  after_script:
-    - echo "Nothing to do for after_script"
-  artifacts:
-    expire_in: 24 hrs
-    paths:
-      # This recovers logs from superbuild build
-      - build/*/*/*/*.log
+# superbuild-prepare:
+#   # only: [merge_requests]
+#   extends: .general
+#   stage: prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+#   before_script:
+# # This override the previous before_script
+#     - git checkout $CI_COMMIT_REF_NAME
+# # We are now doing the git-lfs install
+# # This is done after the checkout so we avoid downloading Data
+# # But we need it to upload the archive
+#     - git-lfs install
+#     - git config --global user.email "otbbot@orfeo-toolbox.org"
+#     - git config --global user.name "otbbot"
+#     - eval $(ssh-agent -s)
+#     - ssh-add <(echo "$K8S_SECRET_SSH")
+# # This is for debug, we are checking the owner of the ssh key
+#     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+#   after_script:
+#     - echo "Nothing to do for after_script"
+#   artifacts:
+#     expire_in: 24 hrs
+#     paths:
+#       # This recovers logs from superbuild build
+#       - build/*/*/*/*.log
 
 superbuild-build:
   # only: [merge_requests]
@@ -106,4 +106,5 @@ superbuild-build:
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
+    - git lfs install
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
