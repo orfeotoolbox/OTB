@@ -31,6 +31,7 @@ before_script:
 stages:
   - prepare
   - build
+  - packages
 
 .general:
   retry:
@@ -108,3 +109,19 @@ superbuild-build:
   script:
     - git lfs install
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  artifacts:  
+    paths:
+      - /builds/xdk
+      - build/
+
+packages:
+  extends: .general
+  stage: packages
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  dependencies:
+    - superbuild-build
+  artifacts:  
+    paths:
+      - build_packages/
