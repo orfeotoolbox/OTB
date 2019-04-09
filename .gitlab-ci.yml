@@ -123,6 +123,6 @@ packages:
   dependencies:
     - superbuild-build
   artifacts:
-    expire_in: 24 hrs  
+    expire_in: 1h
     paths:
       - build_packages/
