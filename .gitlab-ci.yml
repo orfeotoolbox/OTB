@@ -39,13 +39,13 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-native-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
-  script:
-    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
+# native-build:
+#   extends: .general
+#   only: [merge_requests]
+#   stage: build
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
+#   script:
+#     - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
 # debian-build:
 #  extends: .general
