@@ -94,8 +94,6 @@ namespace Wrapper
     ParameterType_Radius,
     ParameterType_Group,
     ParameterType_ListView,
-    ParameterType_ComplexInputImage,
-    ParameterType_ComplexOutputImage,
     ParameterType_RAM,
     ParameterType_OutputProcessXML,
     ParameterType_InputProcessXML,
@@ -277,10 +275,8 @@ public:
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
-  void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
 
   otb::Wrapper::ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
-  otb::Wrapper::ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
@@ -292,8 +288,6 @@ public:
 
   ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
-  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
-  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
   void AddImageToParameterInputImageList(std::string parameter,ImageBaseType * img);
   void AddParameterStringList(std::string parameter,const std::string & str);
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img);
@@ -594,7 +588,6 @@ class ApplicationProxy(object):
 				ParameterType_OutputFilename : 'ParameterType_OutputFilename',
 				ParameterType_Directory : 'ParameterType_Directory',
 				ParameterType_InputImage : 'ParameterType_InputImage',
-				ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
 				ParameterType_InputVectorData : 'ParameterType_InputVectorData',
 				ParameterType_InputImageList : 'ParameterType_InputImageList',
 				ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
@@ -627,7 +620,7 @@ class ApplicationProxy(object):
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
 											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+											 ParameterType_InputVectorData]:
 			  return self.SetParameterString(paramKey, value)
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,
@@ -661,7 +654,7 @@ class ApplicationProxy(object):
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
 											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
+											 ParameterType_InputVectorData]:
 			  return self.GetParameterString(paramKey)
 			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
 												 ParameterType_InputFilenameList, ParameterType_StringList,

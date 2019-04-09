@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbMapProjectionAdapter.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -90,8 +90,13 @@ private:
 
   void DoExecute() override
   {
-    int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
-                                                  GetParameterFloat("lat"));
+    unsigned int utmZone = 0;
+    otb::SpatialReference::hemisphere hem;
+
+
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
+                                                     GetParameterFloat("lat"),utmZone,hem);
+
     SetParameterInt("utm",utmZone);
   }
 

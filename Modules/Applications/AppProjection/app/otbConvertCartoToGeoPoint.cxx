@@ -107,7 +107,8 @@ private:
     // Output : WGS84 corresponding to epsg code 4326
     TransformType::Pointer  transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
-    transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+    // Default to wgs84
+    transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
     transform->InstantiateTransform();
 
     TransformType::InputPointType   cartoPoint;

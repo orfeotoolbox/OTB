@@ -153,11 +153,11 @@ private:
   int m_Day;
   /** Month */
   int m_Month;
-  /** The Atmospheric pressure */
+  /** The Atmospheric pressure (hPa*/
   double m_AtmosphericPressure;
-  /** The Water vapor amount (Total water vapor content over vertical atmospheric column) */
+  /** The Water vapor amount (Total water vapor content over vertical atmospheric column, g/cm2) */
   double m_WaterVaporAmount;
-  /** The Ozone amount (Stratospheric ozone layer content) */
+  /** The Ozone amount (Stratospheric ozone layer content, in cm-atm) */
   double m_OzoneAmount;
   /** The Aerosol model */
   AerosolModelType m_AerosolModel;
