@@ -36,8 +36,17 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-ubuntu-fast:
+ubuntu-fast-wip:
   extends: .general
+  except: [merge_requests]
+  stage: check
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
+  script:
+    - echo Done
+
+ubuntu-fast-mr:
+  extends: .general
+  only: [merge_requests]
   stage: check
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
   script:
