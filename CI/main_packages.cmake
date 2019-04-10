@@ -39,7 +39,8 @@ set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install_packages" )
 set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 
 # Copy back xdk for RUN_PATH reason
-file ( COPY "${OTB_SOURCE_DIR}/install" DESTINATION "${CI_ROOT_DIR}/xdk")
+# We might want to change the name of artifact in main_superbuild
+file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}/xdk")
 # Packages case: 
 # SUPERBUILD_BINARY_DIR this is needed for OTB_BINARY_DIR, not sure we need it
 # SUPERBUILD_INSTALL_DIR do we need it? it seems so... We will set it to anything
