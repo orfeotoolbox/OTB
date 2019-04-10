@@ -110,13 +110,15 @@ set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
 set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
-# SuperBuild case : one configure option
+set (CONFIGURE_OPTIONS  "")
+include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
+# SuperBuild case : one more configure option
 set ( CONFIGURE_OPTIONS  
-"-DCMAKE_PREFIX_PATH=${XDK_PATH};\
--DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY};" )
-# TODO add option to enable all modules
-# Add this in the superbuild MR too
-# use external_otb.cmake
+  "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
+
+# Hack because there is no more superbuild available (LIBKML)
+set ( CONFIGURE_OPTIONS  
+  "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
