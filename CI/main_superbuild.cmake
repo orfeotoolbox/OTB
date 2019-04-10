@@ -114,7 +114,9 @@ set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 set ( CONFIGURE_OPTIONS  
 "-DCMAKE_PREFIX_PATH=${XDK_PATH};\
 -DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY};" )
-
+# TODO add option to enable all modules
+# Add this in the superbuild MR too
+# use external_otb.cmake
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
