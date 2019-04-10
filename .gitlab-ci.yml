@@ -110,7 +110,7 @@ superbuild-build:
     - git lfs install
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   artifacts:
-    expire_in: 10 mins
+    expire_in: 1 hour
     paths:
       - install/
       - build/
@@ -124,6 +124,6 @@ packages:
   dependencies:
     - superbuild-build
   artifacts:
-    expire_in: 10 mins
+    expire_in: 1 hour
     paths:
       - build_packages/
