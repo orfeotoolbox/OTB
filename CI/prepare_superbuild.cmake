@@ -65,13 +65,12 @@ ctest_start (Experimental TRACK Experimental)
 
 set(CTEST_BUILD_FLAGS "-j16")
 
-# FIXME why do we have to pass CTEST_INSTALL to CMAKE_INSTALL
-set (CONFIGURE_OPTIONS  
-  "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY}")
+set ( SB_CONFIGURE_OPTIONS "")
+include( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${SUPERBUILD_SOURCE_DIR}"
-    OPTIONS "${CONFIGURE_OPTIONS}"
+    OPTIONS "${SB_CONFIGURE_OPTIONS}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
