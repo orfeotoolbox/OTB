@@ -167,9 +167,12 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   assert(input != nullptr);
   assert(targets != nullptr);
 
-  assert(input->Size()==targets->Size()&&"Input sample list and target label list do not have the same size.");
-  assert(((quality==nullptr)||(quality->Size()==input->Size()))&&"Quality samples list is not null and does not have the same size as input samples list");
-  assert((proba==nullptr)||(input->Size()==proba->Size())&&"Proba sample list and target label list do not have the same size.");
+  assert(input->Size() == targets->Size()
+          && "Input sample list and target label list do not have the same size.");
+  assert(((quality == nullptr) || (quality->Size() == input->Size()))
+          && "Quality samples list is not null and does not have the same size as input samples list");
+  assert(((proba == nullptr) || (input->Size() == proba->Size()))
+          && "Proba sample list and target label list do not have the same size.");
 
   if(startIndex+size>input->Size())
     {

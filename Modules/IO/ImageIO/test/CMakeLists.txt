@@ -1352,6 +1352,7 @@ otb_add_test(NAME ioTvCompoundMetadataReaderTest
   --compare-ascii ${EPSILON_9}
   ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.geom
   ${TEMP}/ioTvCompoundMetadataReaderTest.geom
+  --ignore-lines-with 1 support_data.
   otbWriteGeomFile
   ${INPUTDATA}/QB_Toulouse_combo.vrt
   ${TEMP}/ioTvCompoundMetadataReaderTest.tif)
