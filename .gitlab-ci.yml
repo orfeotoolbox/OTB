@@ -74,7 +74,7 @@ stages:
 
 .common-prepare:
   # only: [merge_requests]
-  extends: .common-build
+  extends: .general
   stage: prepare
   # image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   before_script:
@@ -124,7 +124,7 @@ centos-superbuild-prepare:
 
 centos-superbuild-build:
   only: [merge_requests]
-  extends: .common-build
+  extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
