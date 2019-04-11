@@ -23,8 +23,12 @@ set ( cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
+set ( temporary_option
+"OTB_USE_LIBKML=OFF")
+
 set(concat_options
 "${cmake_configure_option}
+${temporary_option}
 ")
 
 #Transform the previous string in list
