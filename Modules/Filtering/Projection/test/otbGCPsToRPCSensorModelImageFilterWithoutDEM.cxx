@@ -53,7 +53,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
 
   unsigned int nbGCPs = (argc - 3) / 5;
 
-  std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
+  otbLogMacro(Info, << "Receiving " << nbGCPs << " from command line.");
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
@@ -66,7 +66,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
     geoPoint[1] = atof(argv[6 + 5 * gcpId]);
     geoPoint[2] = atof(argv[7 + 5 * gcpId]);
 
-    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
+    otbLogMacro(Debug, << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }

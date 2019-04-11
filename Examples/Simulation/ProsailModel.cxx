@@ -34,7 +34,7 @@
 
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
-
+#include "otbMacro.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -151,13 +151,12 @@ int main(int argc, char* argv[])
 
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
   {
-    std::cout << "wavelength  : ";
-    std::cout << sail->GetViewingReflectance()->GetResponse()[i].first;
-    std::cout << ". Viewing reflectance ";
-    std::cout << sail->GetViewingReflectance()->GetResponse()[i].second;
-    std::cout << ". Hemispherical reflectance ";
-    std::cout << sail->GetHemisphericalReflectance()->GetResponse()[i].second;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "wavelength  : "
+       << sail->GetViewingReflectance()->GetResponse()[i].first
+       << ". Viewing reflectance "
+       << sail->GetViewingReflectance()->GetResponse()[i].second
+       << ". Hemispherical reflectance "
+       << sail->GetHemisphericalReflectance()->GetResponse()[i].second);
   }
 
   std::ofstream outputFile(OutputName, std::ios::out);
