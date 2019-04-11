@@ -26,6 +26,7 @@ import re
 import unittest
 import sys
 import json
+import time
 
 
 trace = False
@@ -176,11 +177,17 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    response = urllib.request.urlopen(full_url).read().decode()
-    if trace:
-      print ( "response: " + response )
+    nb_try = 3
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
-    buildid = build_id_regex.search( response )
+    while nb_try:
+      response = urllib.request.urlopen(full_url).read().decode()
+      if trace:
+        print ( "response: " + response )
+      buildid = build_id_regex.search( response )
+      nb_try -= 1
+      if buildid or (nb_try == 0):
+        break
+      time.sleep(60)
     if buildid:
       self.buildid = buildid.group(1)
       if trace:
