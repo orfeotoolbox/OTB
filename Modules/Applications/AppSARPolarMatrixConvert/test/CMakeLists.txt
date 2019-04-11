@@ -95,7 +95,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertRecLinCovToRecCirCov
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mlinearcovariancetocircularcovariance
-							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovToRecCoh.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecLinCovToRecCirCov.tif
 							 
                      )
                              

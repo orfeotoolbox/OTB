@@ -23,6 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbGenericMapProjection.h"
 #include "otbOrthoRectificationFilter.h"
+#include "otbMacro.h"
 
 int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 {
@@ -58,7 +59,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   unsigned int nbGCPs = (argc - 11) / 5;
 
-  std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
+  otbLogMacro(Info, << "Receiving " << nbGCPs << " from command line.");
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
@@ -71,7 +72,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
     geoPoint[1] = atof(argv[14 + 5 * gcpId]);
     geoPoint[2] = atof(argv[15 + 5 * gcpId]);
 
-    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
+    otbLogMacro(Debug, << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
@@ -82,8 +83,8 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   std::cout.setf(std::ios::fixed, std::ios::floatfield);
   std::cout.precision(10);
 
-  std::cout << rpcEstimator->GetOutput()->GetImageKeywordlist() << std::endl;
-  std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
+  otbLogMacro(Debug, << rpcEstimator->GetOutput()->GetImageKeywordlist());
+  otbLogMacro(Info, << "Residual ground error: " << rpcEstimator->GetRMSGroundError());
 
   // Orthorectify the output image
   WriterType::Pointer writer = WriterType::New();

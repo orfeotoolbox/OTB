@@ -106,16 +106,19 @@ void TestHelper::CheckValueTolerance(const char *comment, double ref, double tes
 }
 
 int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage,
-                                        const StringList& testFilenamesImage)
+                                        const StringList& testFilenamesImage,
+                                        const EpsilonList& epsilons)
 {
   int result = 0;
   StringListIt itbaselineFilenames = baselineFilenamesImage.begin();
   StringListIt itTestFilenames = testFilenamesImage.begin();
+  EpsilonListIt itEpsilon = epsilons.begin();
   int                                cpt(1);
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesImage.end())
-         && (itTestFilenames != testFilenamesImage.end());
-       ++itbaselineFilenames, ++itTestFilenames)
+         && (itTestFilenames != testFilenamesImage.end())
+         && (itEpsilon != epsilons.end());
+       ++itbaselineFilenames, ++itTestFilenames, ++itEpsilon)
     {
     std::string baselineFilenameImage = (*itbaselineFilenames);
     std::string testFilenameImage = (*itTestFilenames);
@@ -131,7 +134,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
                                                         (baseline->first).c_str(),
-                                                        m_ToleranceDiffValue);
+                                                        *itEpsilon);
 
       multiResult = baseline->second;
       ++baseline;
@@ -143,7 +146,7 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
       baseline->second
         = this->RegressionTestImage(cpt, testFilenameImage.c_str(),
                                          (baseline->first).c_str(),
-                                         m_ToleranceDiffValue);
+                                         *itEpsilon);
       }
     ++cpt;
     result += multiResult;
@@ -152,16 +155,19 @@ int TestHelper::RegressionTestAllImages(const StringList& baselineFilenamesImage
 }
 
 int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
-                                          const StringList& testFilenamesMetaData)
+                                          const StringList& testFilenamesMetaData,
+                                          const EpsilonList& epsilons)
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
   StringListIt itbaselineFilenames = baselineFilenamesMetaData.begin();
   StringListIt itTestFilenames = testFilenamesMetaData.begin();
+  EpsilonListIt itEpsilon = epsilons.begin();
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesMetaData.end())
-         && (itTestFilenames != testFilenamesMetaData.end());
-       ++itbaselineFilenames, ++itTestFilenames)
+         && (itTestFilenames != testFilenamesMetaData.end())
+         && (itEpsilon != epsilons.end());
+       ++itbaselineFilenames, ++itTestFilenames, ++itEpsilon)
     {
     std::string baselineFilenameImage = (*itbaselineFilenames);
     std::string testFilenameImage = (*itTestFilenames);
@@ -177,7 +183,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestMetaData(testFilenameImage.c_str(),
                                                            (baseline->first).c_str(),
-                                                           m_ToleranceDiffValue);
+                                                           *itEpsilon);
 
       multiResult = baseline->second;
       ++baseline;
@@ -189,7 +195,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
       baseline->second
         = this->RegressionTestMetaData(testFilenameImage.c_str(),
                                             (baseline->first).c_str(),
-                                            m_ToleranceDiffValue);
+                                            *itEpsilon);
       }
     result += multiResult;
     }
@@ -198,6 +204,7 @@ int TestHelper::RegressionTestAllMetaData(const StringList& baselineFilenamesMet
 
 int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
                                        const StringList& testFilenamesAscii,
+                                       const EpsilonList& epsilons,
                                        const StringList& ignoredLines)
 {
   int result = 0;
@@ -205,6 +212,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
   StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
   StringListIt itTestFilenames = testFilenamesAscii.begin();
   StringListIt itIgnoredLines = ignoredLines.begin();
+  EpsilonListIt itEpsilon = epsilons.begin();
 
   // Warning message
   if (ignoredLines.size() > 0)
@@ -219,8 +227,9 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
 
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesAscii.end())
-         && (itTestFilenames != testFilenamesAscii.end());
-       ++itbaselineFilenames, ++itTestFilenames)
+         && (itTestFilenames != testFilenamesAscii.end())
+         && (itEpsilon != epsilons.end());
+       ++itbaselineFilenames, ++itTestFilenames, ++itEpsilon)
     {
     std::string baselineFilenameAscii = (*itbaselineFilenames);
     std::string testFilenameAscii = (*itTestFilenames);
@@ -237,7 +246,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
-                                                            m_Epsilon,
+                                                            *itEpsilon,
                                                             ignoredLines);
 
       multiResult = baseline->second;
@@ -250,7 +259,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
       baseline->second
         = this->RegressionTestAsciiFile(testFilenameAscii.c_str(),
                                              (baseline->first).c_str(),
-                                             m_Epsilon,
+                                             *itEpsilon,
                                              ignoredLines);
       }
     result += multiResult;
@@ -261,6 +270,7 @@ int TestHelper::RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
 
 int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
                                        const StringList& testFilenamesAscii,
+                                       const EpsilonList& epsilons,
                                        const StringList& ignoredLines)
 {
   int result = 0;
@@ -268,6 +278,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
   StringListIt itbaselineFilenames = baselineFilenamesAscii.begin();
   StringListIt itTestFilenames = testFilenamesAscii.begin();
   StringListIt itIgnoredLines = ignoredLines.begin();
+  EpsilonListIt itEpsilon = epsilons.begin();
 
   // Warning message
   if (ignoredLines.size() > 0)
@@ -282,8 +293,9 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
 
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesAscii.end())
-         && (itTestFilenames != testFilenamesAscii.end());
-       ++itbaselineFilenames, ++itTestFilenames)
+         && (itTestFilenames != testFilenamesAscii.end())
+         && (itEpsilon != epsilons.end());
+       ++itbaselineFilenames, ++itTestFilenames, ++itEpsilon)
     {
     std::string baselineFilenameAscii = (*itbaselineFilenames);
     std::string testFilenameAscii = (*itTestFilenames);
@@ -300,7 +312,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
                                                             (baseline->first).c_str(),
-                                                            m_Epsilon,
+                                                            *itEpsilon,
                                                             ignoredLines);
 
       multiResult = baseline->second;
@@ -313,7 +325,7 @@ int TestHelper::RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
       baseline->second
         = this->RegressionTestDiffFile(testFilenameAscii.c_str(),
                                              (baseline->first).c_str(),
-                                             m_Epsilon,
+                                             *itEpsilon,
                                              ignoredLines);
       }
     result += multiResult;
@@ -369,16 +381,19 @@ int TestHelper::RegressionTestAllBinary(const StringList& baselineFilenamesBinar
 }
 
 int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
-                                     const StringList& testFilenamesOgr)
+                                     const StringList& testFilenamesOgr,
+                                     const EpsilonList& epsilons)
 {
   int result = 0;
   // Creates iterators on baseline filenames vector and test filenames vector
   StringListIt itbaselineFilenames = baselineFilenamesOgr.begin();
   StringListIt itTestFilenames = testFilenamesOgr.begin();
+  EpsilonListIt itEpsilon = epsilons.begin();
   // For each couple of baseline and test file, do the comparison
   for (; (itbaselineFilenames != baselineFilenamesOgr.end())
-         && (itTestFilenames != testFilenamesOgr.end());
-       ++itbaselineFilenames, ++itTestFilenames)
+         && (itTestFilenames != testFilenamesOgr.end())
+         && (itEpsilon != epsilons.end());
+       ++itbaselineFilenames, ++itTestFilenames, ++itEpsilon)
     {
     std::string baselineFilenameOgr = (*itbaselineFilenames);
     std::string testFilenameOgr = (*itTestFilenames);
@@ -394,8 +409,8 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
       std::cout << "Testing non-regression on OGR file: " << (baseline->first) << std::endl;
       this->ReportErrorsOff();
       baseline->second = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
-                                                          (baseline->first).c_str(),
-                                                          m_ToleranceDiffValue);
+                                                    (baseline->first).c_str(),
+                                                    *itEpsilon);
 
       multiResult = baseline->second;
       ++baseline;
@@ -407,7 +422,7 @@ int TestHelper::RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
       baseline->second
         = this->RegressionTestOgrFile(testFilenameOgr.c_str(),
                                            (baseline->first).c_str(),
-                                           m_ToleranceDiffValue);
+                                           *itEpsilon);
       }
     result += multiResult;
     }
@@ -1326,6 +1341,12 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
 
   ImageType::PixelType status = diff->GetTotalDifference();
   unsigned long        numberOfPixelsWithDifferences = diff->GetNumberOfPixelsWithDifferences();
+  int ret = 0;
+  if ((status.GetSquaredNorm() > 0) &&
+      ((double) numberOfPixelsWithDifferences > m_ToleranceRatio*baselineSize[0]*baselineSize[1]))
+    {
+    ret = 1;
+    }
 
   //Write only one this message
   if (m_ReportErrors == 0)
@@ -1335,7 +1356,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
                             << status << " for " << numberOfPixelsWithDifferences << " pixel(s).");
     }
   // if there are discrepencies, create an diff image
-  if (status.GetSquaredNorm() > 0 && m_ReportErrors)
+  if (ret && m_ReportErrors)
     {
     typedef otb::PrintableImageFilter<ImageType>               RescaleType;
     typedef otb::ImageFileWriter<RescaleType::OutputImageType> WriterType;
@@ -1479,7 +1500,7 @@ int TestHelper::RegressionTestImage(int cpt, const char *testImageFilename, cons
       std::cout << "</DartMeasurement>" << std::endl;
       }
     }
-  return (status.GetSquaredNorm() > 0) ? 1 : 0;
+  return ret;
 }
 
 int TestHelper::RegressionTestMetaData(const char *testImageFilename, const char *baselineImageFilename,
@@ -2643,8 +2664,7 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
 }
 
 TestHelper::TestHelper() :
-    m_ToleranceDiffValue(0),
-    m_Epsilon(0),
+    m_ToleranceRatio(0),
     m_EpsilonBoundaryChecking(1.0e-30),
     m_ReportErrors(false),
     m_IgnoreLineOrder(false),
