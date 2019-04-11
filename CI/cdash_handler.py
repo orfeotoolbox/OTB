@@ -187,6 +187,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       nb_try -= 1
       if buildid or (nb_try == 0):
         break
+      print("No build id, retry ...")
       time.sleep(60)
     if buildid:
       self.buildid = buildid.group(1)
