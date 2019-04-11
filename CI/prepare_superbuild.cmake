@@ -19,11 +19,6 @@
 #
 # This script is for the superbuild build on the CI platform
 
-########################################################################
-########################################################################
-# Check process
-########################################################################
-########################################################################
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
@@ -60,7 +55,44 @@ set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
 set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
 set (CMAKE_COMMAND "cmake")
 
-# How to get md5sum of the sources.
+########################################################################
+########################################################################
+# Build process
+########################################################################
+########################################################################
+
+ctest_start (Experimental TRACK Experimental)
+
+set(CTEST_BUILD_FLAGS "-j16")
+
+# FIXME why do we have to pass CTEST_INSTALL to CMAKE_INSTALL
+set (CONFIGURE_OPTIONS  
+  "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY}")
+
+ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
+    SOURCE "${SUPERBUILD_SOURCE_DIR}"
+    OPTIONS "${CONFIGURE_OPTIONS}"
+    RETURN_VALUE _configure_rv
+    CAPTURE_CMAKE_ERROR _configure_error
+    )
+
+if ( NOT _configure_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_configure.")
+  return()
+endif()
+
+########################################################################
+########################################################################
+# Check process
+########################################################################
+########################################################################
+# Once that we have configure our build we can check if it exists a
+# corresponding SB on superbuild-artifact
+
+# How to get md5sum:
+# * concatenate all source files in one
+# * add configure result : CMakeCache.txt
 ####################################
 file( GLOB_RECURSE sb_file_list "${OTB_SOURCE_DIR}/SuperBuild/*")
 set( SB_TXT "${OTB_SOURCE_DIR}/full_sb.txt")
@@ -68,6 +100,8 @@ foreach(sb_file  ${sb_file_list})
   file(READ ${sb_file} CONTENTS)
   file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
 endforeach(sb_file)
+file(READ "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" CONTENTS)
+file(APPEND ${SB_TXT} "CMakeCache.txt${CONTENTS}")
 file ( MD5 "${SB_TXT}" SB_MD5)
 message ( "SB_MD5 = ${SB_MD5}" )
 file (REMOVE ${SB_TXT})
@@ -94,34 +128,7 @@ else()
   message( "No build available, this job will build and push OTB_DEPENDS")
 endif()
 ####################################
-
-########################################################################
-########################################################################
-# Build process
-########################################################################
-########################################################################
-
-ctest_start (Experimental TRACK Experimental)
-
-set(CTEST_BUILD_FLAGS "-j16")
-
-# FIXME we should not have to pass through CMAKE_INSTALL_PREFIX
-# this is a superbuild issue
-set (CONFIGURE_OPTIONS  
-  "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY}")
-
-ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
-    SOURCE "${SUPERBUILD_SOURCE_DIR}"
-    OPTIONS "${CONFIGURE_OPTIONS}"
-    RETURN_VALUE _configure_rv
-    CAPTURE_CMAKE_ERROR _configure_error
-    )
-
-if ( NOT _configure_rv EQUAL 0 )
-  ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_configure.")
-  return()
-endif()
+# Back to build
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             TARGET "OTB_DEPENDS"
