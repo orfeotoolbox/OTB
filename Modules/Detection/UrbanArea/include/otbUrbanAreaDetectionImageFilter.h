@@ -58,12 +58,12 @@ public:
   VegetationFunctorType GetVegetationFunctor(){ return m_VegetationFunctor; }
   WaterFunctorType GetWaterFunctor(){ return m_WaterFunctor; }
 
-  void SetRedIndex(int id){ m_VegetationFunctor.SetBandIndex(otb::Functor::Band::RED,id); }
-  void SetGreenIndex(int id){ m_WaterFunctor.SetBandIndex(otb::Functor::Band::GREEN,id); }
+  void SetRedIndex(int id){ m_VegetationFunctor.SetBandIndex(CommonBandNames::RED,id); }
+  void SetGreenIndex(int id){ m_WaterFunctor.SetBandIndex(CommonBandNames::GREEN,id); }
   void SetNIRIndex(int id)
   {
-    m_VegetationFunctor.SetBandIndex(otb::Functor::Band::NIR,id);
-    m_WaterFunctor.SetBandIndex(otb::Functor::Band::NIR,id);
+    m_VegetationFunctor.SetBandIndex(CommonBandNames::NIR,id);
+    m_WaterFunctor.SetBandIndex(CommonBandNames::NIR,id);
   }
 
   RadiometricNonWaterNonVegetationIndexFunctor(){}

@@ -30,8 +30,9 @@ namespace BandName
 * Provides a way to identify bands when passing the parameters
 * to the radiometric functors.*
 */
-enum BandName {BLUE, GREEN, RED, NIR, MIR};
-enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7};
+enum class CommonBandNames {BLUE, GREEN, RED, NIR, MIR, MAX};
+enum class ModisBandNames {M860, M1240,MAX};
+enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7, MAX};
 
 // Note for landsat equivalence
 // http://landsat.gsfc.nasa.gov/news/news-archive/sci_0017.html

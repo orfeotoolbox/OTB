@@ -41,16 +41,16 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class SRWI : public RadiometricIndice<TInput,TOutput>
+class SRWI : public RadiometricIndice<TInput,TOutput,ModisBandNames>
 {
 public:
 
-  SRWI() : RadiometricIndice<TInput,TOutput>("SRWI",{Band::MODIS_860, Band::MODIS_1240}) {}
+  SRWI() : RadiometricIndice<TInput,TOutput>("SRWI",{ModisBandNames::M860, ModisBandNames::M1240}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    double rho860 = this->Value(Band::MODIS_860,input);
-    double rho1240 = this->Value(Band::MODIS_1240,input);
+    double rho860 = this->Value(ModisBandNames::M860,input);
+    double rho1240 = this->Value(ModisBandNames::M1240,input);
     if (std::abs(rho1240) < EpsilonToBeConsideredAsZero)
       {
       return static_cast<TOutput>(0.);
@@ -78,12 +78,12 @@ class NDWI : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDWI(): RadiometricIndice<TInput,TOutput>("NDWI",{Band::NIR, Band::MIR}) {}
+  NDWI(): RadiometricIndice<TInput,TOutput>("NDWI",{CommonBandNames::NIR, CommonBandNames::MIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    auto mir   = this->Value(Band::MIR,input);
-    auto nir   = this->Value(Band::NIR,input);
+    auto mir   = this->Value(CommonBandNames::MIR,input);
+    auto nir   = this->Value(CommonBandNames::NIR,input);
 
         if (std::abs(nir + mir) < EpsilonToBeConsideredAsZero)
       {
@@ -109,12 +109,12 @@ class NDWI2 : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDWI2() : RadiometricIndice<TInput,TOutput>("NDWI2",{Band::NIR, Band::GREEN}) {}
+  NDWI2() : RadiometricIndice<TInput,TOutput>("NDWI2",{CommonBandNames::NIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    auto green   = this->Value(Band::GREEN,input);
-    auto nir   = this->Value(Band::NIR,input);
+    auto green   = this->Value(CommonBandNames::GREEN,input);
+    auto nir   = this->Value(CommonBandNames::NIR,input);
 
     if (std::abs(nir + green) < EpsilonToBeConsideredAsZero)
       {
@@ -139,12 +139,12 @@ template <class TInput, class TOutput>
 class MNDWI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  MNDWI() : RadiometricIndice<TInput,TOutput>("MNDWI",{Band::MIR, Band::GREEN}) {}
+  MNDWI() : RadiometricIndice<TInput,TOutput>("MNDWI",{CommonBandNames::MIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    auto green   = this->Value(Band::GREEN,input);
-    auto mir   = this->Value(Band::MIR,input);
+    auto green   = this->Value(CommonBandNames::GREEN,input);
+    auto mir   = this->Value(CommonBandNames::MIR,input);
 
     if (std::abs(mir + green) < EpsilonToBeConsideredAsZero)
       {
@@ -169,12 +169,12 @@ template <class TInput, class TOutput>
 class NDPI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  NDPI() : RadiometricIndice<TInput,TOutput>("NDPI",{Band::MIR, Band::GREEN}) {}
+  NDPI() : RadiometricIndice<TInput,TOutput>("NDPI",{CommonBandNames::MIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    auto green   = this->Value(Band::GREEN,input);
-    auto mir   = this->Value(Band::MIR,input);
+    auto green   = this->Value(CommonBandNames::GREEN,input);
+    auto mir   = this->Value(CommonBandNames::MIR,input);
 
     if (std::abs(mir + green) < EpsilonToBeConsideredAsZero)
       {
@@ -200,12 +200,12 @@ class NDTI : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDTI() : RadiometricIndice<TInput,TOutput>("NDPI",{Band::RED, Band::GREEN}) {}
+  NDTI() : RadiometricIndice<TInput,TOutput>("NDPI",{CommonBandNames::RED, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
-    auto green = this->Value(Band::GREEN,input);
-    auto red   = this->Value(Band::RED,input);
+    auto green = this->Value(CommonBandNames::GREEN,input);
+    auto red   = this->Value(CommonBandNames::RED,input);
 
     if (std::abs(red + green) < EpsilonToBeConsideredAsZero)
       {

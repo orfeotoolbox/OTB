@@ -96,8 +96,8 @@ int main(int argc, char* argv[])
   //
   unsigned int redChannel = static_cast<unsigned int>(atoi(argv[5]));
   unsigned int nirChannel = static_cast<unsigned int>(atoi(argv[6]));
-  filter->GetFunctor().SetBandIndex(otb::Functor::Band::RED,redChannel);
-  filter->GetFunctor().SetBandIndex(otb::Functor::Band::NIR,nirChannel);
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED,redChannel);
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR,nirChannel);
 
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.

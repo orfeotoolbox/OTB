@@ -41,8 +41,9 @@ int otbLAIFromReflectancesLinear(int itkNotUsed(argc), char * argv[])
   laiFunct.SetRedCoef(redCoef);
   laiFunct.SetNirCoef(nirCoef);
 
-  laiFunct.SetBandIndex(Band::RED,1);
-  laiFunct.SetBandIndex(Band::NIR,2);
+  laiFunct.SetBandIndex(CommonBandNames::RED,1);
+  laiFunct.SetBandIndex(CommonBandNames
+::NIR,2);
 
   itk::VariableLengthVector<PixelType> pixel;
   pixel.Reserve(2);

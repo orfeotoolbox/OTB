@@ -166,8 +166,8 @@ int main(int argc, char* argv[])
   //  In our case, statistics are computed on the NDVI coefficient on each label object.
   NDVIImageFilterType::Pointer ndviImageFilter = NDVIImageFilterType::New();
 
-  ndviImageFilter->GetFunctor().SetBandIndex(otb::Functor::Band::RED,3);
-  ndviImageFilter->GetFunctor().SetBandIndex(otb::Functor::Band::NIR,4);
+  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::RED,3);
+  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::NIR,4);
   ndviImageFilter->SetInput(vreader->GetOutput());
 
   ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter = ImageToVectorImageCastFilterType::New();

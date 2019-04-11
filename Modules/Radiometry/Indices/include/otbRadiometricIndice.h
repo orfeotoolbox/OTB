@@ -22,26 +22,28 @@
 #define otbRadiometricIndice_h
 
 #include "itkVariableLengthVector.h"
+#include "otbBandName.h"
 #include <array>
 #include <set>
 #include <string>
 #include <map>
 
+using namespace otb::BandName;
+
 namespace otb
 {
 namespace Functor
 {
-enum class Band {COASTAL_BLUE, BLUE, GREEN, RED, RED_EDGE, NIR, SWIR, MIR, MODIS_860,MODIS_1240};
-
-constexpr size_t NumberOfBands = 10;
 constexpr double EpsilonToBeConsideredAsZero = 0.0000001;
 
-
-template <typename TInput, typename TOutput>
+template <typename TInput, typename TOutput, typename TBandNameEnum = CommonBandNames>
 class RadiometricIndice
 {
 public:
-  RadiometricIndice(const std::string & name, const std::set<Band>& requiredBands)
+  using BandNameType = TBandNameEnum;
+  static constexpr size_t NumberOfBands = static_cast<size_t>(BandNameType::MAX);
+
+  RadiometricIndice(const std::string & name, const std::set<BandNameType>& requiredBands)
     : m_RequiredBands(),
       m_BandIndices(),
       m_Name(name)
@@ -57,23 +59,23 @@ public:
   
   ~RadiometricIndice() = default;
   
-  std::set<Band> GetRequiredBands() const
+  std::set<BandNameType> GetRequiredBands() const
   {
-    std::set<Band> resp;
+    std::set<BandNameType> resp;
     for(size_t i = 0; i < NumberOfBands; ++i)
       {
-      resp.insert(static_cast<Band>(i));
+      resp.insert(static_cast<BandNameType>(i));
       }
 
     return resp;
   }
 
-  void SetBandIndex(const Band & band, const size_t & index)
+  void SetBandIndex(const BandNameType & band, const size_t & index)
   {
     m_BandIndices[static_cast<size_t>(band)]=index;
   }
 
-  void SetBandsIndices(const std::map<Band,size_t> & indicesMap)
+  void SetBandsIndices(const std::map<BandNameType,size_t> & indicesMap)
   {
     for(auto it: indicesMap)
       {
@@ -81,7 +83,7 @@ public:
       }
   }
 
-  size_t GetBandIndex(const Band & band) const
+  size_t GetBandIndex(const BandNameType & band) const
   {
     return m_BandIndices[static_cast<size_t>(band)];
   }
@@ -95,13 +97,13 @@ public:
  
 
 protected:
-  size_t BandIndex(const Band & band) const
+  size_t BandIndex(const BandNameType & band) const
   {
     // TODO: Assert if this band is really mandatory for this functor    
     return m_BandIndices[static_cast<size_t>(band)];
   }
   
-  double Value(const Band & band, const itk::VariableLengthVector<TInput> & input) const
+  double Value(const BandNameType & band, const itk::VariableLengthVector<TInput> & input) const
   {
     return static_cast<double>(input[BandIndex(band)]);
   }

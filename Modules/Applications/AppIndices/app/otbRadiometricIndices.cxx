@@ -157,7 +157,6 @@ private:
     m_Map.push_back({"list.mndwi","Water::MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
     m_Map.push_back({"list.ndpi","Water::NDPI",new otb::Functor::NDPI<InputType,OutputType>()});
     m_Map.push_back({"list.ndpi","Water::NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
-    m_Map.push_back({"list.srwi","Water::SRWI",new otb::Functor::SRWI<InputType,OutputType>()});
     m_Map.push_back({"list.si","Soil::RI",new otb::Functor::RI<InputType,OutputType>()});
     m_Map.push_back({"list.ci","Soil::CI",new otb::Functor::CI<InputType,OutputType>()});
     m_Map.push_back({"list.bi","Soil::BI",new otb::Functor::BI<InputType,OutputType>()});
@@ -171,9 +170,9 @@ private:
   }
 
   // Compute required bands for selected indices
-  std::set<otb::Functor::Band> GetRequiredBands()
+  std::set<CommonBandNames> GetRequiredBands()
   {
-    std::set<otb::Functor::Band> required;
+    std::set<CommonBandNames> required;
    
     for (unsigned int idx = 0; idx < GetSelectedItems("list").size(); ++idx)
         {
@@ -197,13 +196,13 @@ private:
     auto requiredBands = GetRequiredBands();
 
     // Map to store association between bands and indices
-    std::map<otb::Functor::Band,size_t> bandIndicesMap;
+    std::map<CommonBandNames,size_t> bandIndicesMap;
 
     // Lambda that will:
     // - Check if band is required,
     // - Check band index range,
     // - Populate the bandIndicesMap
-    auto bandChecker = [this,requiredBands, nbChan] (std::map<otb::Functor::Band, size_t> & indicesMap, const otb::Functor::Band& band, const std::string & key)
+    auto bandChecker = [this,requiredBands, nbChan] (std::map<CommonBandNames, size_t> & indicesMap, const CommonBandNames& band, const std::string & key)
     {
       if(requiredBands.find(band) != requiredBands.end())
         {
@@ -221,11 +220,11 @@ private:
     };
 
     // Call lambda for each possible band
-    bandChecker(bandIndicesMap,otb::Functor::Band::BLUE,"channels.blue");
-    bandChecker(bandIndicesMap,otb::Functor::Band::GREEN,"channels.green");
-    bandChecker(bandIndicesMap,otb::Functor::Band::RED,"channels.red");
-    bandChecker(bandIndicesMap,otb::Functor::Band::NIR,"channels.nir");
-    bandChecker(bandIndicesMap,otb::Functor::Band::MIR,"channels.mir");
+    bandChecker(bandIndicesMap,CommonBandNames::BLUE,"channels.blue");
+    bandChecker(bandIndicesMap,CommonBandNames::GREEN,"channels.green");
+    bandChecker(bandIndicesMap,CommonBandNames::RED,"channels.red");
+    bandChecker(bandIndicesMap,CommonBandNames::NIR,"channels.nir");
+    bandChecker(bandIndicesMap,CommonBandNames::MIR,"channels.mir");
 
     std::vector<RadiometricIndiceType*> indices;
 
