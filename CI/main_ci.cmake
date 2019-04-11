@@ -109,15 +109,6 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-if(ENABLE_DOXYGEN)
-  # compile doxygen
-  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-              TARGET Documentation
-              RETURN_VALUE _doxy_rv
-              CAPTURE_CMAKE_ERROR _doxy_error
-              )
-endif()
-
 ctest_test(PARALLEL_LEVEL 8
            RETURN_VALUE _test_rv
            CAPTURE_CMAKE_ERROR _test_error
@@ -128,3 +119,12 @@ if ( NOT _test_rv EQUAL 0 )
 endif()
 
 ctest_submit()
+
+if(ENABLE_DOXYGEN)
+  # compile doxygen
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              TARGET Documentation
+              RETURN_VALUE _doxy_rv
+              CAPTURE_CMAKE_ERROR _doxy_error
+              )
+endif()
