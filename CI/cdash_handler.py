@@ -168,7 +168,7 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Not enougth argument given for buildid request \
+      print( "Missing argument for buildid request \
 site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       return
     buildid_api = "/api/v1/getbuildid.php?"
@@ -198,7 +198,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     if ( buildid == "" ):
       buildid = self.buildid
     if ( buildid == "" ):
-      print( "Not enougth argument given to build url")
+      print( "Missing argument to build url")
       return
     build_url = self.url
     build_url +="/buildSummary.php?"
@@ -212,7 +212,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     if ( buildid == "" ):
       buildid = self.buildid
     if ( buildid == "" ):
-      print( "Not enougth argument given to build Status")
+      print( "Missing argument to build Status")
       return
     full_url = self.url + "/api/v1/buildSummary.php?buildid=" + buildid
     response = urllib.request.urlopen(full_url).read().decode()
@@ -251,10 +251,13 @@ if __name__ == "__main__":
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
-  handler.GetBuildId()
-  # handler.buildid="1"
-  cdash_url = handler.GetBuildUrl()
-  ( state , error ) = handler.GetBuildStatus()
+  if handler.GetBuildId() is None:
+    cdash_url = "https://cdash.orfeo-toolbox.org"
+    state = 'failed'
+    error = "Failed to get build id"
+  else:
+    cdash_url = handler.GetBuildUrl()
+    ( state , error ) = handler.GetBuildStatus()
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
