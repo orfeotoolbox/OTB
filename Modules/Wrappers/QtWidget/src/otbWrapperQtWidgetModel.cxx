@@ -64,6 +64,8 @@ void
 QtWidgetModel
 ::NotifyUpdate()
 {
+  assert(!m_IsRunning && "Cannot update parameters while application is running.");
+
   // Update the parameters
   try
   {

@@ -50,6 +50,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
 {
   // a GridLayout with two columns : parameter label / parameter widget
   QGridLayout *gridLayout = new QGridLayout;
+  this->setLayout(gridLayout);
   //gridLayout->setSpacing(1);
   //gridLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -139,8 +140,6 @@ void QtWidgetParameterGroup::DoCreateWidget()
         }
       }
     }
-
-  this->setLayout(gridLayout);
 }
 
 

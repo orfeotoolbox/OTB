@@ -103,17 +103,20 @@ void QtMainWindow::UpdateMessageAfterExecution(int status)
   }
   ui->executeButton->setText(tr("Execute"));
   m_IsRunning = false;
+  gui->Enable();
 }
 
 void QtMainWindow::on_executeButton_clicked()
 {
   if (m_IsRunning)
   {
+    gui->Enable();
     ui->statusBar->showMessage(tr("Cancelling..."));
     emit Stop();
   }
   else
   {
+    gui->Disable();
     gui->BeforeExecuteButtonClicked();
     m_IsRunning = true;
     ui->statusBar->showMessage(tr("Running..."));

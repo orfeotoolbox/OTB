@@ -70,6 +70,9 @@ public:
 
   virtual void BeforeExecuteButtonClicked() {}
 
+  void Disable();
+  void Enable();
+
 signals:
   void QuitSignal();
   void ExecuteAndWriteOutput();
@@ -98,11 +101,12 @@ private:
   QWidget* CreateFooter();
 
 private:
-
   otb::Wrapper::QtWidgetModel* m_Model;
 
-  bool m_IsClosable : 1;
+  bool m_IsClosable;
   bool m_IsRunning;
+
+  std::map<QWidget*, bool> m_EnabledState;
 
 private slots:
   void OnProgressReportBegin();

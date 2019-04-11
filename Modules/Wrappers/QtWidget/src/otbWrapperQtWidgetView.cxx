@@ -81,7 +81,7 @@ QtWidgetView::~QtWidgetView()
 
 void QtWidgetView::CreateGui()
 {
-  QVBoxLayout *mainLayout = new QVBoxLayout(this);
+  QVBoxLayout *mainLayout = new QVBoxLayout;
   this->setLayout(mainLayout);
   mainLayout->addWidget(CreateInputWidgets());
 }
@@ -152,6 +152,36 @@ void QtWidgetView::OnProgressReportBegin()
 void QtWidgetView::OnProgressReportEnd( int )
 {
   SetClosable( true );
+}
+
+void QtWidgetView::Disable()
+{
+  qInfo() << "QtWidgetView::Disable()";
+  // Disable all widgets to make sure parameters are not updated when the application is running in another thread
+  // Save their enabled state for
+  m_EnabledState.clear();
+  for (QWidget* w : this->findChildren<QWidget*>())
+  {
+    m_EnabledState[w] = w->isEnabled();
+    qInfo() << w << w->isEnabled();
+  }
+
+  for (QWidget* w : this->findChildren<QWidget*>())
+  {
+    w->setEnabled(false);
+  }
+  this->setEnabled(false);
+}
+
+void QtWidgetView::Enable()
+{
+  qInfo() << "QtWidgetView::Enable()";
+  this->setEnabled(true);
+  for (QWidget* w : this->findChildren<QWidget*>())
+  {
+    qInfo() << "enabling " << w << m_EnabledState[w];
+    w->setEnabled(m_EnabledState[w]);
+  }
 }
 
 } // end of namespace Wrapper
