@@ -19,3 +19,5 @@
 #
 
 find_package ( MPI REQUIRED )
+
+set(OTB_MPIEXEC_OPT "" CACHE STRING "Additional options for mpiexec tests")

@@ -156,14 +156,9 @@ void
 WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 ::ReduceFilterLength(CoefficientVector& coeff)
 {
-  const unsigned int length = coeff.size();
-  assert(length >= 2);
-  CoefficientVector newFilter(length - 2);
-  for (unsigned int i = 0; i < newFilter.size(); ++i)
-    {
-    newFilter[i] = coeff[i + 1];
-    }
-  coeff = newFilter;
+  assert(coeff.size() >= 2);
+  coeff.pop_back();
+  coeff.erase(coeff.begin());
 }
 
 } // end of namespace otb
