@@ -99,6 +99,7 @@ superbuild-prepare:
     paths:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
+      - sb_branch.txt
 
 superbuild-build:
   only: [merge_requests]
@@ -107,3 +108,5 @@ superbuild-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  dependencies:
+    - superbuild-prepare
