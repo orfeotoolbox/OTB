@@ -68,11 +68,11 @@ bool IsEqual(itk::VariableLengthVector<TInternalPixel> output, itk::VariableLeng
 template<class TIndex, class TPixel>
 bool TestCompare(TIndex idx, TPixel output, TPixel expected)
 {
-  std::cout << "PIXEL " << idx << "  -->  "
+  otbLogMacro(Debug, << "PIXEL " << idx << "  -->  "
             << "OUTPUT = "   << output
             << "   ||   "
             << "EXPECTED = " << expected
-            << std::endl;
+            << std::endl);
 
   if (!IsEqual(output, expected))
     {

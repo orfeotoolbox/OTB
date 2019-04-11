@@ -44,7 +44,7 @@ otb_test_application(NAME apTvUtDynamicConvertBasic
 otb_test_application(NAME apTuUtDynamicConvertExtendedFilename_writer
                      APP  DynamicConvert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
+                             -out ${TEMP}/apTvUtNoGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
                      )
 
 otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM

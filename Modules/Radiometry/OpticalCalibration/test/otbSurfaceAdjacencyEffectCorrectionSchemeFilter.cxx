@@ -26,6 +26,7 @@
 #include "otbImageFileWriter.h"
 #include "otbAtmosphericCorrectionParameters.h"
 #include "otbAtmosphericRadiativeTerms.h"
+#include "otbMacro.h"
 #include <fstream>
 #include <iostream>
 
@@ -150,9 +151,9 @@ int otbSurfaceAdjacencyEffectCorrectionSchemeFilter(int itkNotUsed(argc), char *
       {
       value = atof(line.c_str());
       vect.push_back(value);
-      std::cout << "value " << value << std::endl;
+      otbLogMacro(Debug, << "value " << value);
       }
-    std::cout << "vec size " << vect.size()<< std::endl;
+    otbLogMacro(Debug, << "vec size " << vect.size());
     fin2.close();
     functionValues->SetFilterFunctionValues(vect);
     functionValues->SetMinSpectralValue(minSpectralValue);
