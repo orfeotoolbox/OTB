@@ -134,13 +134,16 @@ endif()
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             TARGET "OTB_DEPENDS"
             RETURN_VALUE _build_rv
+            NUMBER_ERRORS _build_nb_err
             CAPTURE_CMAKE_ERROR _build_error
             )
-
-if ( NOT _build_rv EQUAL 0 )
+message( "Status for build:" )
+message("_build_rv=${_build_rv}")
+message("_build_nb_err=${_build_nb_err}")
+message("_build_error=${_build_error}")
+if ( CAPTURE_CMAKE_ERROR EQUAL -1 )
   ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_build.")
-  return()
+  message( FATAL_ERROR "An error occurs during ctest_build.")
 endif()
 
 ctest_submit()
