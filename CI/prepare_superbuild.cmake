@@ -55,7 +55,7 @@ set ( CTEST_BUILD_NAME "Superbuild_Build_Depends" ) # FIXME
 set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
 
 # HACK
-# This is needed because when using return() function ctest is trying 
+# This is needed because when using return() function ctest is trying
 # to run the CTEST_COMMAND. And we need it to not produce an error
 set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
 set (CMAKE_COMMAND "cmake")
@@ -84,7 +84,7 @@ set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/"
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
 set( GIT "git" )
 execute_process(
-  COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}" 
+  COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}"
   OUTPUT_VARIABLE IS_SB_BUILD
   )
 if ( IS_SB_BUILD )
@@ -107,7 +107,7 @@ set(CTEST_BUILD_FLAGS "-j16")
 
 # FIXME we should not have to pass through CMAKE_INSTALL_PREFIX
 # this is a superbuild issue
-set (CONFIGURE_OPTIONS  
+set (CONFIGURE_OPTIONS
   "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY}")
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
@@ -147,17 +147,17 @@ ctest_submit()
 # The image used will be passed to this script.
 # TODO verify that images does not have forbidden char in there name
 # TODO right now we rely on ctest_build to know whether there has been an error
-# in build, whereas SuperBuild does not necessarily return an error if something 
+# in build, whereas SuperBuild does not necessarily return an error if something
 # goes wrong
 set ( SB_ARTIFACT_GIT "${CI_PROJ_DIR}/superbuild-artifact" )
 
-# REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are 
+# REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
 # different because one is https and one is ssh. Both should be ssh.
 set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git")
 # We clone master to have a basic configuration, mainly a correct .gitattribute
 # git clone $REMOTE --branch master --depth 1 superbuild-artifact
 execute_process(
-  COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}" 
+  COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}"
   "--branch" "master" "--depth" "1" "superbuild-artifact"
   WORKING_DIRECTORY "${CI_PROJ_DIR}"
   )
@@ -166,7 +166,7 @@ execute_process(
 # StrictHostKeyChecking so we don't have to add the host as a known key
 # -F /dev/null so the agent is not taking a default file ~/.ssh/..
 execute_process(
-  COMMAND ${GIT} "config" "core.sshCommand" 
+  COMMAND ${GIT} "config" "core.sshCommand"
   "ssh -o StrictHostKeyChecking=no -F /dev/null"
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE ssh_res
@@ -233,13 +233,13 @@ set ( SB_TAR_NAME "SuperBuild_Install.tar" )
 # We need to create tar in its directory to avoid weird name in file
 # "tar: Removing leading `../../' from member names"
 # WARNING
-# We are creating a tar containing xdk/.., so when extracting the archive in 
+# We are creating a tar containing xdk/.., so when extracting the archive in
 # an other environment the output file will be xdk... Obvious isn't it?
 # Well... Not for everyone...
-# May be for easier maintainability the tar name should be the same as the 
+# May be for easier maintainability the tar name should be the same as the
 # file inside.
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}" 
+  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}"
   -- "${CTEST_INSTALL_DIRECTORY}"
   WORKING_DIRECTORY ${CI_ROOT_DIR}
   )
@@ -280,7 +280,7 @@ endif()
 # In our case if toto is deploying a key in superbuild-artifact repo
 # the the mail will be toto's
 execute_process(
-  COMMAND ${GIT} "commit" "--author=\"otbbot <otbbot@orfeo-toolbox.org>\"" 
+  COMMAND ${GIT} "commit" "--author=\"otbbot <otbbot@orfeo-toolbox.org>\""
   "-m" "\"New Superbuild for ${SB_MD5} on ${IMAGE_NAME}\""
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE com_res
@@ -327,4 +327,4 @@ if ( DEBUG )
   message( "push_res = ${push_res}" )
   message( "push_out = ${push_out}" )
   message( "push_err = ${push_err}" )
-endif() 
+endif()
