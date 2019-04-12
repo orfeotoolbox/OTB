@@ -115,7 +115,7 @@ superbuild-build:
   after_script:
     - echo "Nothing to do for after_script"
   artifacts:
-    expire_in: 1 hour
+    expire_in: 1 week
     paths:
       - build/*/*/*/*.log
       - build_packages/OTB-6.7.0-Linux64.run
