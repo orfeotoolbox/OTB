@@ -77,7 +77,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_configure.")
+  message( SEND_ERROR "An error occurs during ctest_configure. Dependencies might be buggy.")
   return()
 endif()
 
@@ -137,11 +137,15 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             NUMBER_ERRORS _build_nb_err
             CAPTURE_CMAKE_ERROR _build_error
             )
-message( "Status for build:" )
-message("_build_rv=${_build_rv}")
-message("_build_nb_err=${_build_nb_err}")
-message("_build_error=${_build_error}")
-if ( CAPTURE_CMAKE_ERROR EQUAL -1 )
+
+if ( DEBUG )
+  message( "Status for build:" )
+  message("_build_rv=${_build_rv}")
+  message("_build_nb_err=${_build_nb_err}")
+  message("_build_error=${_build_error}")
+endif()
+
+if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
   ctest_submit()
   message( FATAL_ERROR "An error occurs during ctest_build.")
 endif()
