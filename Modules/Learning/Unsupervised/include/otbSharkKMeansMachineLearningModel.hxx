@@ -40,6 +40,7 @@
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
 #include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
+#include <shark/Data/Csv.h> //load the csv file
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -66,6 +67,18 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 {
 }
 
+template<class TInputValue, class TOutputValue>
+bool 
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
+::InitializeCentroids()
+{
+  shark::Data<shark::RealVector> data;
+  shark::importCSV(data, m_CentroidFilename, ' ');
+  m_Centroids.setCentroids(data);
+  std::cout <<m_Centroids.centroids() << std::endl;
+  return 1;
+}
+
 /** Train the machine learning model */
 template<class TInputValue, class TOutputValue>
 void
@@ -77,6 +90,9 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
   shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
 
+  if (!m_CentroidFilename.empty())
+    InitializeCentroids();
+  
   // Normalized input value if necessary
   if( m_Normalized )
     data = NormalizeData( data );

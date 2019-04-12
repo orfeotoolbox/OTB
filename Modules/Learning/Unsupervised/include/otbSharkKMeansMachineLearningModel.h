@@ -128,6 +128,10 @@ public:
   itkGetMacro( Normalized, bool );
   itkSetMacro( Normalized, bool );
 
+  /** If true, normalized input data sample list */
+  itkGetMacro( CentroidFilename, std::string );
+  itkSetMacro( CentroidFilename, std::string );
+
 protected:
   /** Constructor */
   SharkKMeansMachineLearningModel();
@@ -152,6 +156,9 @@ private:
   SharkKMeansMachineLearningModel(const Self &) = delete;
   void operator=(const Self &) = delete;
 
+  bool InitializeCentroids();
+  
+
   // Parameters set by the user
   bool m_Normalized;
   unsigned int m_K;
@@ -162,6 +169,8 @@ private:
   /** Centroids results form kMeans */
   shark::Centroids m_Centroids;
 
+  /** Input centroid filename */
+  std::string m_CentroidFilename;
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */
   boost::shared_ptr<ClusteringModelType> m_ClusteringModel;
