@@ -131,4 +131,4 @@ centos-superbuild-build:
   script:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
-    - superbuild-prepare
+    - .common-prepare
