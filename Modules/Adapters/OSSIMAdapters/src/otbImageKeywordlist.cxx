@@ -19,6 +19,7 @@
  */
 
 #include "otbImageKeywordlist.h"
+#include "otbConfigurationManager.h"
 
 #include <cassert>
 
@@ -38,6 +39,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
+#include "ossim/base/ossimNotify.h"
 #pragma GCC diagnostic pop
 #else
 #include "ossim/base/ossimKeywordlist.h"
@@ -47,6 +49,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
+#include "ossim/base/ossimNotify.h"
 #endif
 
 #include "otbSensorModelAdapter.h"
@@ -228,6 +231,15 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   ossimKeywordlist geom_kwl; // = new ossimKeywordlist();
   ImageKeywordlist otb_kwl;
 
+  // Save Ossim notify flags
+  ossimPushNotifyFlags();
+
+  // Except for DEBUG logger level, only fatal errors of OSSIM should be seen
+  if(otb::ConfigurationManager::GetLoggerLevel() < itk::LoggerBase::DEBUG)
+    {
+    ossimSetNotifyFlag(ossimNotifyFlags_FATAL);
+    }
+
   /****************************************************/
   /* First try : test the OSSIM plugins factory       */
   /****************************************************/
@@ -312,6 +324,9 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   // We then verify it is a valid sensor model by using otb::SensorModelAdapter
   // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
   // thus by-passing the need for a valid ossimImageHandler.
+
+  // Restore Ossim notify flags
+  ossimPopNotifyFlags();
 
   return otb_kwl;
 }

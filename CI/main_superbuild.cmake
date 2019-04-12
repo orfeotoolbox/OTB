@@ -31,17 +31,12 @@ set ( DEBUG "1" )
 ###########################################################################
 ###########################################################################
 
-# Get md5sum of the sources
+# How to get md5sum:
+# * concatenate all source files in one
+# * add configure result from previous job ${OTB_SOURCE_DIR}/build/CMakeCache.txt
 ###########################
-file( GLOB_RECURSE sb_file_list "${OTB_SOURCE_DIR}/SuperBuild/*")
-set( SB_TXT "${OTB_SOURCE_DIR}/full_sb.txt")
-foreach(sb_file  ${sb_file_list})
-  file(READ ${sb_file} CONTENTS)
-  file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
-endforeach(sb_file)
-file ( MD5 "${SB_TXT}" SB_MD5)
-message ( "SB_MD5 = ${SB_MD5}" )
-file (REMOVE ${SB_TXT})
+
+file(READ "${OTB_SOURCE_DIR}/sb_branch.txt" BRANCH_NAME)
 
 ####################################
 
@@ -49,7 +44,7 @@ file (REMOVE ${SB_TXT})
 # git clone $REPOSITORY_URL --branch $BRANCH_NAME --depth 1 superbuild-artifact
 ###############################################################################
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact.git")
-set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
+# set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
 set( GIT "git" )
 
 execute_process(

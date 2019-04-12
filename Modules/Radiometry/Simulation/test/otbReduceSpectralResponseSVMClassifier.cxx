@@ -19,7 +19,7 @@
  */
 
 
-
+#include "otbMacro.h"
 #include "otbSatelliteRSR.h"
 #include "otbReduceSpectralResponse.h"
 
@@ -89,7 +89,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
 
   for (unsigned int i = 0; i < dirSR.size(); ++i) //for each class (directory)
     {
-      std::cout << "dirSR[" << i << "] : " << dirSR[i] << std::endl;
+      otbLogMacro(Info, << "dirSR[" << i << "] : " << dirSR[i]);
 
       std::string fileExp = dirSR[i];
       // Find all .txt file in the directory
@@ -97,7 +97,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
       itksys::Glob glob;
       if ( glob.FindFiles( fileExp ) == false )
         {
-          std::cout<<"No .txt file found in "<<dirSR[i]<<"."<<std::endl;
+          otbLogMacro(Warning,<<"No .txt file found in "<<dirSR[i]<<".");
           return EXIT_FAILURE;
         }
 
@@ -122,14 +122,14 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     //add to global training files and testing files
     for (unsigned int k = 0; k < testing.size(); ++k)
       {
-        std::cout << "testing[" << k << "] : " << testing[k] << std::endl;
+        otbLogMacro(Debug, << "testing[" << k << "] : " << testing[k]);
         testingFiles.push_back(testing[k]);
         testingGTClasses.push_back(i);
       }
 
     for (unsigned int l = 0; l < training.size(); ++l)
       {
-        std::cout << "training[" << l << "] : " << training[l] << std::endl;
+        otbLogMacro(Debug, << "training[" << l << "] : " << training[l]);
         trainingFiles.push_back(training[l]);
         trainingClasses.push_back(i); //class is the directory number
       }
@@ -141,7 +141,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   for (unsigned int i = 0; i < trainingFiles.size(); ++i)
     {
     ResponsePointerType spectralResponse = ResponseType::New();
-    std::cout << "training file : " << trainingFiles[i] << std::endl;
+    otbLogMacro(Debug, << "training file : " << trainingFiles[i]);
     spectralResponse->Load(trainingFiles[i], 100.0);
 
     //Compute Reduce Spectral Response
@@ -156,17 +156,19 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
     SampleType sample;
     TrainingSampleType trainingSample;
     sample.SetSize(reduceResponse->GetReduceResponse()->Size());
-    std::cout << "reduce response : [";
+    std::ostringstream oss;
+    oss << "reduce response : [";
     for (unsigned int j = 0; j < reduceResponse->GetReduceResponse()->Size(); ++j)
       {
       sample[j] = reduceResponse->GetReduceResponse()->GetResponse()[j].second;
-      std::cout << reduceResponse->GetReduceResponse()->GetResponse()[j].second << " ";
+      oss << reduceResponse->GetReduceResponse()->GetResponse()[j].second << " ";
       }
-    std::cout << "]" << std::endl;
+    oss << "]";
+    otbLogMacro(Debug, << oss.str());
     sampleList->SetMeasurementVectorSize(nbBand);
     sampleList->PushBack(sample);
     trainingSample = trainingClasses[i];
-    std::cout << "training class : " << trainingSample << std::endl;
+    otbLogMacro(Debug, << "training class : " << trainingSample);
     trainingList->PushBack(trainingSample);
     }
 
@@ -191,7 +193,7 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
     ResponsePointerType spectralResponse = ResponseType::New();
-    std::cout << "testing file : " << testingFiles[i] << std::endl;
+    otbLogMacro(Debug, << "testing file : " << testingFiles[i]);
     spectralResponse->Load(testingFiles[i], 100.0);
 
     //Compute Reduce Spectral Response
@@ -222,12 +224,12 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   TrainingSampleListType::ConstIterator it = classifierListLabel->Begin();
   while (it != classifierListLabel->End())
     {
-    std::cout << "class : " << it.GetMeasurementVector()[0] << std::endl;
+    otbLogMacro(Debug, << "class : " << it.GetMeasurementVector()[0]);
     ++it;
     }
   for (unsigned int i = 0; i < testingFiles.size(); ++i)
     {
-      std::cout << "ground truth class : " << testingGTClasses[i] << std::endl;
+    otbLogMacro(Debug, << "ground truth class : " << testingGTClasses[i]);
     }
 
   //Compute confusion matrix
@@ -236,9 +238,8 @@ int otbReduceSpectralResponseSVMClassifier(int argc, char * argv[])
   confMatCalc->SetProducedLabels(classifierListLabel);
   confMatCalc->Compute();
 
-  std::cout << std::endl;
-  std::cout << "Confusion matrix: " << std::endl << confMatCalc->GetConfusionMatrix() << std::endl << std::endl;
-  std::cout << "Kappa Index: " << std::endl << confMatCalc->GetKappaIndex() << std::endl << std::endl;
+  otbLogMacro(Info, << "Confusion matrix: " << std::endl << confMatCalc->GetConfusionMatrix());
+  otbLogMacro(Info, << "Kappa Index: " << std::endl << confMatCalc->GetKappaIndex());
 
   return EXIT_SUCCESS;
 }
