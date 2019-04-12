@@ -24,7 +24,7 @@ set ( cmake_configure_option
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
 set ( temporary_option
-"OTB_USE_LIBKML=ON")
+"OTB_USE_LIBKML=OFF")
 
 set(concat_options
 "${cmake_configure_option}
