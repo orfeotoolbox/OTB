@@ -60,7 +60,11 @@ debian-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
-
+  artifacts:
+    paths:
+      - build/CookBook-*-html.tar.gz
+      - build/Documentation/Cookbook/latex/CookBook-*.pdf
+      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 # This is needed to have only one pipeline in a merge request context
 ubuntu-llvm:

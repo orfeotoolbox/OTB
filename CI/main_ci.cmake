@@ -45,6 +45,12 @@ elseif(ci_ref_name)
   endif()
 endif()
 
+# set pipelines to enable documentation
+set(ci_cookbook_profiles mr develop release)
+set(ci_doxygen_profiles mr develop release)
+list(FIND ci_cookbook_profiles ${ci_profile} ci_do_cookbook)
+list(FIND ci_doxygen_profiles ${ci_profile} ci_do_doxygen)
+
 #Warning, this variable is used in cdash_status.py. If change from 
 # ${IMAGE_NAME} to something else do not forget to change it.
 set (CTEST_SITE "${IMAGE_NAME}")
@@ -64,6 +70,7 @@ set (OTB_LARGEINPUT_ROOT "") # todo
 message(STATUS "CI profile : ${ci_profile}")
 
 #The following file set the CONFIGURE_OPTIONS variable
+set (ENABLE_DOXYGEN OFF)
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 
@@ -112,3 +119,12 @@ if ( NOT _test_rv EQUAL 0 )
 endif()
 
 ctest_submit()
+
+if(ENABLE_DOXYGEN)
+  # compile doxygen
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              TARGET Documentation
+              RETURN_VALUE _doxy_rv
+              CAPTURE_CMAKE_ERROR _doxy_error
+              )
+endif()
