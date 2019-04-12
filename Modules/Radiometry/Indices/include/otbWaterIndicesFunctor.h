@@ -45,13 +45,13 @@ class SRWI : public RadiometricIndice<TInput,TOutput,ModisBandNames>
 {
 public:
 
-  SRWI() : RadiometricIndice<TInput,TOutput>("SRWI",{ModisBandNames::M860, ModisBandNames::M1240}) {}
+  SRWI() : RadiometricIndice<TInput,TOutput>({ModisBandNames::M860, ModisBandNames::M1240}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     double rho860 = this->Value(ModisBandNames::M860,input);
     double rho1240 = this->Value(ModisBandNames::M1240,input);
-    if (std::abs(rho1240) < EpsilonToBeConsideredAsZero)
+    if (std::abs(rho1240) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -78,14 +78,14 @@ class NDWI : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDWI(): RadiometricIndice<TInput,TOutput>("NDWI",{CommonBandNames::NIR, CommonBandNames::MIR}) {}
+  NDWI(): RadiometricIndice<TInput,TOutput>({CommonBandNames::NIR, CommonBandNames::MIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto mir   = this->Value(CommonBandNames::MIR,input);
     auto nir   = this->Value(CommonBandNames::NIR,input);
 
-        if (std::abs(nir + mir) < EpsilonToBeConsideredAsZero)
+        if (std::abs(nir + mir) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }
@@ -109,14 +109,14 @@ class NDWI2 : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDWI2() : RadiometricIndice<TInput,TOutput>("NDWI2",{CommonBandNames::NIR, CommonBandNames::GREEN}) {}
+  NDWI2() : RadiometricIndice<TInput,TOutput>({CommonBandNames::NIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto green   = this->Value(CommonBandNames::GREEN,input);
     auto nir   = this->Value(CommonBandNames::NIR,input);
 
-    if (std::abs(nir + green) < EpsilonToBeConsideredAsZero)
+    if (std::abs(nir + green) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }
@@ -139,14 +139,14 @@ template <class TInput, class TOutput>
 class MNDWI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  MNDWI() : RadiometricIndice<TInput,TOutput>("MNDWI",{CommonBandNames::MIR, CommonBandNames::GREEN}) {}
+  MNDWI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::MIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto green   = this->Value(CommonBandNames::GREEN,input);
     auto mir   = this->Value(CommonBandNames::MIR,input);
 
-    if (std::abs(mir + green) < EpsilonToBeConsideredAsZero)
+    if (std::abs(mir + green) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }
@@ -169,14 +169,14 @@ template <class TInput, class TOutput>
 class NDPI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  NDPI() : RadiometricIndice<TInput,TOutput>("NDPI",{CommonBandNames::MIR, CommonBandNames::GREEN}) {}
+  NDPI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::MIR, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto green   = this->Value(CommonBandNames::GREEN,input);
     auto mir   = this->Value(CommonBandNames::MIR,input);
 
-    if (std::abs(mir + green) < EpsilonToBeConsideredAsZero)
+    if (std::abs(mir + green) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }
@@ -200,14 +200,14 @@ class NDTI : public RadiometricIndice<TInput,TOutput>
 {
 public:
 
-  NDTI() : RadiometricIndice<TInput,TOutput>("NDPI",{CommonBandNames::RED, CommonBandNames::GREEN}) {}
+  NDTI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto green = this->Value(CommonBandNames::GREEN,input);
     auto red   = this->Value(CommonBandNames::RED,input);
 
-    if (std::abs(red + green) < EpsilonToBeConsideredAsZero)
+    if (std::abs(red + green) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }

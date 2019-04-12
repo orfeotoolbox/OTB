@@ -23,7 +23,7 @@
 
 #include "otbMath.h"
 #include "itkVariableLengthVector.h"
-#include "otbBandName.h"
+#include "otbRadiometricIndice.h"
 #include "otbFuzzyVariable.h"
 #include <vector>
 #include <algorithm>

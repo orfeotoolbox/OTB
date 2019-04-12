@@ -27,6 +27,7 @@
 #include <set>
 #include <string>
 #include <map>
+#include <stdexcept>
 
 using namespace otb::BandName;
 
@@ -34,20 +35,59 @@ namespace otb
 {
 namespace Functor
 {
-constexpr double EpsilonToBeConsideredAsZero = 0.0000001;
-
+/**
+ * \class RadiometricIndice
+ * \brief Base class for all radiometric indices
+ * 
+ * This class is the base class for all radiometric indices.
+ * 
+ * It offers services to:
+ * - Indicate which band are required among the list provided by
+ * TBandNameEnum
+ * - Set indices of each required band
+ * - Compute the indice response to a pixel by subclassing the pure
+ * virtual operator()
+ * 
+ * This class is designed for performance on the critical path. For
+ * best performances use the Value() method when implementing
+ * operator() to avoid branches.
+ * 
+ * TBandName enum should end with a MAX value that will be used to
+ * derive the number of bands.
+ *  
+ * \ingroup Indices
+ */
 template <typename TInput, typename TOutput, typename TBandNameEnum = CommonBandNames>
 class RadiometricIndice
 {
 public:
+  /// Types for input/output
+  using InputType = TInput;
+  using PixelType = itk::VariableLengthVector<InputType>;
+  using OutputType = TOutput;
+
+  /// Enum Among which bands are used
   using BandNameType = TBandNameEnum;
+
+  /// The number of bands, derived from the Enum MAX value
   static constexpr size_t NumberOfBands = static_cast<size_t>(BandNameType::MAX);
 
-  RadiometricIndice(const std::string & name, const std::set<BandNameType>& requiredBands)
+  static constexpr double Epsilon = 0.0000001;
+
+  /** 
+   * \param requiredBands the set<TBandNameEnum> of required bands 
+   * \throw runtime_error if requiredBands contains TBandNameEnum::MAX
+   */
+  RadiometricIndice(const std::set<BandNameType>& requiredBands)
     : m_RequiredBands(),
-      m_BandIndices(),
-      m_Name(name)
+      m_BandIndices()
   {
+    if(requiredBands.find(BandNameType::MAX) != requiredBands.end())
+      {
+      throw std::runtime_error("TBandNameEnum::MAX can not be used as a required band");
+      }
+
+    // Fill the required bands array
     m_RequiredBands.fill(false);
     m_BandIndices.fill(0);
 
@@ -56,9 +96,11 @@ public:
       m_RequiredBands[static_cast<size_t>(b)]=true;
       }
   }
-  
-  ~RadiometricIndice() = default;
-  
+
+  /**
+   * \return a set<TBandNameEnum> containing the required bands for
+   * this indice.
+   */
   std::set<BandNameType> GetRequiredBands() const
   {
     std::set<BandNameType> resp;
@@ -70,11 +112,25 @@ public:
     return resp;
   }
 
+  /**
+   * \param band The band to set (value in TBandNameEnum)
+   * \param index The index of the band to set
+   * \throw runtime_error if band is TBandNameEnum::MAX
+   */
   void SetBandIndex(const BandNameType & band, const size_t & index)
   {
+    if(band == BandNameType::MAX)
+      {
+      throw std::runtime_error("Can not set index for TBandNameEnum::MAX");
+      }
     m_BandIndices[static_cast<size_t>(band)]=index;
   }
 
+  /**
+   * \param indicesMap a std::map<TBandNameEnum,size_t> containing all
+   * bands indices to set
+   * \throw runtime_error if indicesMap contains TBandNameEnum::MAX
+   */
   void SetBandsIndices(const std::map<BandNameType,size_t> & indicesMap)
   {
     for(auto it: indicesMap)
@@ -83,40 +139,79 @@ public:
       }
   }
 
+  /**
+   * \param band The band for which to retrieve indice
+   * \return The indices of the band
+   * \throw runtime_error if band is TBandNameEnum::MAX
+   */
   size_t GetBandIndex(const BandNameType & band) const
   {
+    if(band == BandNameType::MAX)
+      {
+      throw std::runtime_error("Can not get index for TBandNameEnum::MAX");
+      }
     return m_BandIndices[static_cast<size_t>(band)];
   }
 
-  const std::string & GetName() const
-  {
-    return m_Name;
-  }
-
+  /**
+   * Astract method which will compute the radiometric indice
+   * \param input A itk::VariableLengthVector<TInput> holding the
+   * pixel values for each band
+   * \return The indice value as TOutput
+   */
   virtual TOutput operator()(const itk::VariableLengthVector<TInput> & input) const = 0;
- 
 
 protected:
-  size_t BandIndex(const BandNameType & band) const
+  /**
+   * Helper method to retrieve index for band name. With respect to
+   * the public method, this method will not throw an exception if
+   * TBandNameEnum::MAX is used as a parameter. Since it is meant for
+   * internal use in the critical path and not for client code, it
+   * will only assert that band is not TBandNameEnum::MAX in debug
+   * mode.
+   *
+   * \param band The band for which to retrieve indice
+   * \return The indices of the band
+   */
+  size_t UncheckedBandIndex(const BandNameType & band) const
   {
-    // TODO: Assert if this band is really mandatory for this functor    
+    assert(band != BandNameType::MAX && "Can not retrieve index for band TBandNameEnum::MAX");
     return m_BandIndices[static_cast<size_t>(band)];
   }
   
+  /**
+   * Helper method to parse input  itk::VariableLengthVector<TInput>
+   * and get the corresponding band value.
+   * For instance:  
+   * \snippet auto red   = this->Value(CommonBandNames::RED,input);
+   *
+   * As this function is on the critical performance path, no checks
+   * are made to see wether this band is really required for this
+   * indice. However an assertion will be raised in debug mode.
+   *
+   * \param band The band for which to retrieve the value
+   * \param input A itk::VariableLengthVector<TInput> holding the
+   * pixel values for each band
+   * \return The value of the band as double
+   *
+   */ 
   double Value(const BandNameType & band, const itk::VariableLengthVector<TInput> & input) const
   {
-    return static_cast<double>(input[BandIndex(band)]);
+    assert(m_RequiredBands[band] && "Retrieving value for a band that is not in the required bands list");
+    return static_cast<double>(input[UncheckedBandIndex(band)]);
   }
 
 private:
-  using RequiredBandsContainer = std::array<bool,NumberOfBands>;
-  using BandIndicesContainer   = std::array<size_t,NumberOfBands>;
-
+  // Explicitely disable default constructor
   RadiometricIndice() = delete;
 
+  /// An array storing the required status for each band
+  using RequiredBandsContainer = std::array<bool,NumberOfBands>;
   RequiredBandsContainer m_RequiredBands;
+
+  /// An array storing the indice for each band
+  using BandIndicesContainer   = std::array<size_t,NumberOfBands>;  
   BandIndicesContainer   m_BandIndices;
-  std::string            m_Name;
 };
 
 } // End namespace Indices

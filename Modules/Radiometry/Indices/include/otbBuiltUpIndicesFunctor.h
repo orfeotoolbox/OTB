@@ -49,14 +49,14 @@ template <class TInput, class TOutput>
 class NDBI : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  NDBI() : RadiometricIndice<TInput,TOutput>("NDBI",{CommonBandNames::RED, CommonBandNames::NIR}) {}
+  NDBI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto red = this->Value(CommonBandNames::RED,input);
     auto nir = this->Value(CommonBandNames::NIR,input);
 
-    if (std::abs(red+nir) < EpsilonToBeConsideredAsZero)
+    if (std::abs(red+nir) < RadiometricIndice<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -80,7 +80,7 @@ template <class TInput, class TOutput>
 class ISU : public RadiometricIndice<TInput,TOutput>
 {
 public:
-  ISU()  : RadiometricIndice<TInput,TOutput>("ISU",{CommonBandNames::RED, CommonBandNames::NIR}) {}
+  ISU()  : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {

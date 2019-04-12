@@ -26,7 +26,7 @@
 #include "otbWaterIndicesFunctor.h"
 #include "otbBuiltUpIndicesFunctor.h"
 #include "otbSoilIndicesFunctor.h"
-#include "otbCompositeIndicesFunctor.h"
+#include "otbIndicesStackFunctor.h"
 #include "otbFunctorImageFilter.h"
 
 namespace otb
@@ -52,7 +52,7 @@ public:
   using OutputType = FloatImageType::PixelType;
 
   using RadiometricIndiceType = otb::Functor::RadiometricIndice<InputType, OutputType>;
-  using CompositeIndicesFunctorType = otb::Functor::CompositeIndicesFunctor<InputType,OutputType>;
+  using IndicesStackFunctorType = otb::Functor::IndicesStackFunctor<RadiometricIndiceType>;
 
   class indiceSpec
   {
@@ -240,7 +240,7 @@ private:
 
     // Build a composite indices functor to compute all indices at
     // once
-    auto compositeFunctor = CompositeIndicesFunctorType(indices);
+    auto compositeFunctor = IndicesStackFunctorType(indices);
 
     // Build and plug functor filter
     auto filter = NewFunctorFilter(compositeFunctor);
