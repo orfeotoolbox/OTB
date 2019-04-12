@@ -106,7 +106,7 @@ set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 set (CONFIGURE_OPTIONS  "")
-include ( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )
+include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 # SuperBuild case : one more configure option
 set ( CONFIGURE_OPTIONS  
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
@@ -177,5 +177,6 @@ if ( DEBUG )
 endif()
 
 # Artifacts can only be in project dir...
-file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
+# file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
 
+include ( "${CMAKE_CURRENT_LIST_DIR}/main_packages.cmake" )

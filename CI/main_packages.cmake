@@ -17,20 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+# We are included from main_superbuild.cmake
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
-set (ENV{LANG} "C") # Only ascii output
-get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
-get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
 
 set ( DEBUG "1" )
 
-set ( CTEST_BUILD_CONFIGURATION "Release" )
-set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
+# set ( CTEST_BUILD_CONFIGURATION "Release" )
+# set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
 set ( CTEST_BUILD_FLAGS "-j1" )
 set ( CTEST_BUILD_NAME "Packages" )
-set ( CTEST_SITE "${IMAGE_NAME}" )
+# set ( CTEST_SITE "${IMAGE_NAME}" )
 
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}/Packaging" )
@@ -40,7 +36,7 @@ set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 
 # Copy back xdk for RUN_PATH reason
 # We might want to change the name of artifact in main_superbuild
-file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
+# file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
 # Packages case: 
 # SUPERBUILD_BINARY_DIR this is needed for OTB_BINARY_DIR, not sure we need it
 # SUPERBUILD_INSTALL_DIR do we need it? it seems so... We will set it to anything
@@ -48,11 +44,10 @@ file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
 # OTB_BINARY_DIR
 # CMAKE_INSTALL_PREFIX
 set ( CONFIGURE_OPTIONS  
-  "-DCMAKE_PREFIX_PATH=${CTEST_INSTALL_DIRECTORY};\
+"-DCMAKE_PREFIX_PATH=${CTEST_INSTALL_DIRECTORY};\
 -DOTB_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
 -DSUPERBUILD_INSTALL_DIR=${CI_ROOT_DIR}/xdk;\
--DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR};
-  " )
+-DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR};" )
 
 ctest_start (Experimental TRACK Experimental)
 
@@ -63,10 +58,10 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     CAPTURE_CMAKE_ERROR _configure_error
     )
 
-# if ( NOT _configure_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_configure.")
-# endif()
+if ( NOT _configure_rv EQUAL 0 )
+  ctest_submit()
+  message( SEND_ERROR "An error occurs during ctest_configure.")
+endif()
 
 # ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
 #             RETURN_VALUE _build_rv
