@@ -111,6 +111,10 @@ include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 set ( CONFIGURE_OPTIONS  
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
 
+# Hack for KML
+set ( CONFIGURE_OPTIONS  
+  "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML=OFF;")
+
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
