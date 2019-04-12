@@ -19,11 +19,6 @@
 #
 # This script is for the superbuild build on the CI platform
 
-########################################################################
-########################################################################
-# Check process
-########################################################################
-########################################################################
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
@@ -55,45 +50,10 @@ set ( CTEST_BUILD_NAME "Superbuild_Build_Depends" ) # FIXME
 set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
 
 # HACK
-# This is needed because when using return() function ctest is trying
+# This is needed because when using return() function ctest is trying 
 # to run the CTEST_COMMAND. And we need it to not produce an error
 set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
 set (CMAKE_COMMAND "cmake")
-
-# How to get md5sum of the sources.
-####################################
-file( GLOB_RECURSE sb_file_list "${OTB_SOURCE_DIR}/SuperBuild/*")
-set( SB_TXT "${OTB_SOURCE_DIR}/full_sb.txt")
-foreach(sb_file  ${sb_file_list})
-  file(READ ${sb_file} CONTENTS)
-  file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
-endforeach(sb_file)
-file ( MD5 "${SB_TXT}" SB_MD5)
-message ( "SB_MD5 = ${SB_MD5}" )
-file (REMOVE ${SB_TXT})
-
-####################################
-
-# checkout part
-# we look for the right branch
-# Branch name cannot have a ":"
-# git ls-remote $REMOTE $BRANCH_NAME
-####################################
-message( "Checking out git for existence of archive")
-set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/")
-set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
-set( GIT "git" )
-execute_process(
-  COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}"
-  OUTPUT_VARIABLE IS_SB_BUILD
-  )
-if ( IS_SB_BUILD )
-  message( "Superbuild is already build for ${IMAGE_NAME} with sources as ${SB_MD5}")
-  return()
-else()
-  message( "No build available, this job will build and push OTB_DEPENDS")
-endif()
-####################################
 
 ########################################################################
 ########################################################################
@@ -105,34 +65,89 @@ ctest_start (Experimental TRACK Experimental)
 
 set(CTEST_BUILD_FLAGS "-j16")
 
-# FIXME we should not have to pass through CMAKE_INSTALL_PREFIX
-# this is a superbuild issue
-set (CONFIGURE_OPTIONS
-  "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY}")
+set ( SB_CONFIGURE_OPTIONS "")
+include( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${SUPERBUILD_SOURCE_DIR}"
-    OPTIONS "${CONFIGURE_OPTIONS}"
+    OPTIONS "${SB_CONFIGURE_OPTIONS}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_configure.")
+  message( SEND_ERROR "An error occurs during ctest_configure. Dependencies might be buggy.")
   return()
 endif()
+
+########################################################################
+########################################################################
+# Check process
+########################################################################
+########################################################################
+# Once that we have configure our build we can check if it exists a
+# corresponding SB on superbuild-artifact
+
+# How to get md5sum:
+# * concatenate all source files in one
+# * add configure result : CMakeCache.txt
+####################################
+file( GLOB_RECURSE sb_file_list "${OTB_SOURCE_DIR}/SuperBuild/*")
+set( SB_TXT "${OTB_SOURCE_DIR}/full_sb.txt")
+foreach(sb_file  ${sb_file_list})
+  file(READ ${sb_file} CONTENTS)
+  file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
+endforeach(sb_file)
+file(READ "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" CMAKE_ORIG)
+string(REPLACE "${CI_PROJ_DIR}" "" CMAKE_UNIFIED ${CMAKE_ORIG})
+file(APPEND ${SB_TXT} "CMakeCache.txt${CMAKE_UNIFIED}")
+file ( MD5 "${SB_TXT}" SB_MD5)
+message ( "SB_MD5 = ${SB_MD5}" )
+file (REMOVE ${SB_TXT})
+
+####################################
+
+# checkout part
+# we look for the right branch
+# Branch name cannot have a ":"
+# git ls-remote $REMOTE $BRANCH_NAME
+####################################
+file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
+message( "Checking out git for existence of archive")
+set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/")
+set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
+set( GIT "git" )
+execute_process(
+  COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}" 
+  OUTPUT_VARIABLE IS_SB_BUILD
+  )
+if ( IS_SB_BUILD )
+  message( "Superbuild is already build for ${IMAGE_NAME} with sources as ${SB_MD5}")
+  return()
+else()
+  message( "No build available, this job will build and push OTB_DEPENDS")
+endif()
+####################################
+# Back to build
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             TARGET "OTB_DEPENDS"
             RETURN_VALUE _build_rv
+            NUMBER_ERRORS _build_nb_err
             CAPTURE_CMAKE_ERROR _build_error
             )
 
-if ( NOT _build_rv EQUAL 0 )
+if ( DEBUG )
+  message( "Status for build:" )
+  message("_build_rv=${_build_rv}")
+  message("_build_nb_err=${_build_nb_err}")
+  message("_build_error=${_build_error}")
+endif()
+
+if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
   ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_build.")
-  return()
+  message( FATAL_ERROR "An error occurs during ctest_build.")
 endif()
 
 ctest_submit()
@@ -147,17 +162,17 @@ ctest_submit()
 # The image used will be passed to this script.
 # TODO verify that images does not have forbidden char in there name
 # TODO right now we rely on ctest_build to know whether there has been an error
-# in build, whereas SuperBuild does not necessarily return an error if something
+# in build, whereas SuperBuild does not necessarily return an error if something 
 # goes wrong
 set ( SB_ARTIFACT_GIT "${CI_PROJ_DIR}/superbuild-artifact" )
 
-# REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
+# REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are 
 # different because one is https and one is ssh. Both should be ssh.
 set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git")
 # We clone master to have a basic configuration, mainly a correct .gitattribute
 # git clone $REMOTE --branch master --depth 1 superbuild-artifact
 execute_process(
-  COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}"
+  COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}" 
   "--branch" "master" "--depth" "1" "superbuild-artifact"
   WORKING_DIRECTORY "${CI_PROJ_DIR}"
   )
@@ -166,7 +181,7 @@ execute_process(
 # StrictHostKeyChecking so we don't have to add the host as a known key
 # -F /dev/null so the agent is not taking a default file ~/.ssh/..
 execute_process(
-  COMMAND ${GIT} "config" "core.sshCommand"
+  COMMAND ${GIT} "config" "core.sshCommand" 
   "ssh -o StrictHostKeyChecking=no -F /dev/null"
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE ssh_res
@@ -233,13 +248,13 @@ set ( SB_TAR_NAME "SuperBuild_Install.tar" )
 # We need to create tar in its directory to avoid weird name in file
 # "tar: Removing leading `../../' from member names"
 # WARNING
-# We are creating a tar containing xdk/.., so when extracting the archive in
+# We are creating a tar containing xdk/.., so when extracting the archive in 
 # an other environment the output file will be xdk... Obvious isn't it?
 # Well... Not for everyone...
-# May be for easier maintainability the tar name should be the same as the
+# May be for easier maintainability the tar name should be the same as the 
 # file inside.
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}"
+  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}" 
   -- "${CTEST_INSTALL_DIRECTORY}"
   WORKING_DIRECTORY ${CI_ROOT_DIR}
   )
@@ -280,7 +295,7 @@ endif()
 # In our case if toto is deploying a key in superbuild-artifact repo
 # the the mail will be toto's
 execute_process(
-  COMMAND ${GIT} "commit" "--author=\"otbbot <otbbot@orfeo-toolbox.org>\""
+  COMMAND ${GIT} "commit" "--author=\"otbbot <otbbot@orfeo-toolbox.org>\"" 
   "-m" "\"New Superbuild for ${SB_MD5} on ${IMAGE_NAME}\""
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE com_res
@@ -327,4 +342,4 @@ if ( DEBUG )
   message( "push_res = ${push_res}" )
   message( "push_out = ${push_out}" )
   message( "push_err = ${push_err}" )
-endif()
+endif() 

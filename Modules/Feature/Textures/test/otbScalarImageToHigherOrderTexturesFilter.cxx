@@ -22,6 +22,7 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkExtractImageFilter.h"
+#include "otbMacro.h"
 
 const unsigned int Dimension = 2;
 typedef float                            PixelType;
@@ -128,9 +129,9 @@ int ValidateAt( ImageType* inputImage, std::vector<ImageType::Pointer> computeRe
     PixelType output = computeResults[i]->GetPixel(idx);
     PixelType reference = featuresMeans[i];
 
-    std::cout << "index     : " << idx << std::endl;
-    std::cout << "compute : " << output << std::endl;
-    std::cout << "ref     : " << reference << std::endl;
+    otbLogMacro(Debug, << "index = " << idx
+      << " ; compute = " << output
+      << " ; ref = " << reference);
 
     if (reference != output)
     {

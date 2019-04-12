@@ -70,7 +70,7 @@ def setGroup( fname, group ):
 
 def checkGroup( fname, group ):
 # sys.stderr.write("Checking"+ fname + "\n")
-  f = open( fname, "r" )
+  f = open( fname, "r", encoding='utf-8')
   # load everything in memory
   fcontent = f.read()
   f.close()
