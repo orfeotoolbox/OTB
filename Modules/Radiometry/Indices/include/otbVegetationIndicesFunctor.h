@@ -33,7 +33,7 @@ namespace Functor
  *  \brief This functor computes the Normalized Difference Vegetation Index (NDVI)
  *
  *  [Rouse et al., 1973]
- *
+ * 
  *  \ingroup Functor
  * \ingroup Radiometry
  *
@@ -461,6 +461,7 @@ public:
  *
  * \ingroup OTBIndices
  */
+// TODO: Default parameter of this indice always return 0
 template <class TInput,class TOutput>
 class TSARVI : public RadiometricIndice<TInput,TOutput>
 {

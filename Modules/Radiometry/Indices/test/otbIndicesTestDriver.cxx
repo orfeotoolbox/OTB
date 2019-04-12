@@ -46,4 +46,5 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMKernelSpectralRulesWithImage);
   REGISTER_TEST(otbLandsatTMIndexNDBSI);
   REGISTER_TEST(otbLandsatTMThickCloudTest);
+  REGISTER_TEST(otbVegetationIndicesTest);
 }
