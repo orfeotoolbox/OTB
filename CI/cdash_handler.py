@@ -177,7 +177,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    nb_try = 3
+    nb_try = 6
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
       response = urllib.request.urlopen(full_url).read().decode()
