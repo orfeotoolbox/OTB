@@ -69,7 +69,7 @@ endif()
 
 set (CMAKE_COMMAND "cmake")
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf" 
+  COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
   "${CI_PROJ_DIR}/superbuild-artifact/SuperBuild_Install.tar"
   WORKING_DIRECTORY ${CI_ROOT_DIR}
   )
@@ -92,7 +92,7 @@ endif()
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )
 set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
-set ( CTEST_BUILD_FLAGS "-j16" )
+set ( CTEST_BUILD_FLAGS "-j8" )
 set ( CTEST_BUILD_NAME "Superbuild_Build_Otb" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
 
@@ -105,18 +105,18 @@ set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 # SuperBuild case : one more configure option
-set ( CONFIGURE_OPTIONS  
+set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
 
 # Hack because there is no more superbuild available (LIBKML)
-set ( CONFIGURE_OPTIONS  
+set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
 set( PROJ_LIB "${XDK_PATH}/share" )
-set( CTEST_ENVIRONMENT 
+set( CTEST_ENVIRONMENT
 "PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}
 GDAL_DATA= GDAL_DATA
 GEOTIFF_CSV= GEOTIFF_CSV
@@ -157,5 +157,10 @@ endif()
 #   ctest_submit()
 #   message( SEND_ERROR "An error occurs during ctest_test.")
 # endif()
+
+ctest_test(
+  BUILD "${CTEST_BINARY_DIRECTORY}"
+  PARALLEL_LEVEL 4
+  )
 
 ctest_submit()
