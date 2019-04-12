@@ -80,6 +80,10 @@ protected:
     SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
+    
+    AddParameter(ParameterType_String, "incentroid", "Maximum number of iterations");
+    SetParameterDescription("incentroid", "Maximum number of iterations for the learning step.");
+    MandatoryOff("incentroid");
 
     AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "Output text file containing centroid positions");
@@ -248,6 +252,8 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
+    GetInternalApplication("training")->SetParameterString("classifier.sharkkm.incentroid",
+                                                        GetParameterString("incentroid"));
 
     if( IsParameterEnabled("rand"))
       GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));

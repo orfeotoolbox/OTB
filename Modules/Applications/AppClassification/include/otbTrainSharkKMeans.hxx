@@ -44,6 +44,12 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   SetParameterInt("classifier.sharkkm.k", 2);
   SetParameterDescription("classifier.sharkkm.k", "The number of classes used for the kmeans algorithm. Default set to 2 class");
   SetMinimumParameterIntValue("classifier.sharkkm.k", 2);
+  
+  
+  // Number of classes
+  AddParameter(ParameterType_String, "classifier.sharkkm.incentroid", "Number of classes for the kmeans algorithm");
+  SetParameterDescription("classifier.sharkkm.incentroid", "The number of classes used for the kmeans algorithm. Default set to 2 class");
+  MandatoryOff("classifier.sharkkm.incentroid");
 }
 
 template<class TInputValue, class TOutputValue>
@@ -60,6 +66,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
   classifier->SetInputListSample( trainingListSample );
   classifier->SetTargetListSample( trainingLabeledListSample );
   classifier->SetK( k );
+  classifier->SetCentroidFilename( GetParameterString( "classifier.sharkkm.incentroid") );
   classifier->SetMaximumNumberOfIterations( nbMaxIter );
   classifier->Train();
   classifier->Save( modelPath );
