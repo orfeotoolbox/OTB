@@ -112,10 +112,13 @@ superbuild-build:
   script:
     - git lfs install
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  after_script:
+    - echo "Nothing to do for after_script"
   artifacts:
     expire_in: 1 hour
     paths:
       - build/*/*/*/*.log
+      - build_packages/OTB-6.7.0-Linux64.run
       
 
 # packages:
