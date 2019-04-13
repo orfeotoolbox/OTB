@@ -81,11 +81,4 @@ target_link_libraries(OTBApplicationEngine
   ${OTBMPIVrtWriter_LIBRARIES}
   )
 
-# target_compile_options(
-#   OTBApplicationEngine
-#   # PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Q>
-#   PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-ftime-report>
-#   # PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-E>
-#   )
-
 otb_module_target(OTBApplicationEngine)

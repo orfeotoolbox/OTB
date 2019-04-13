@@ -84,16 +84,6 @@ TOutputImage *
 InputImageParameter
 ::Cast( TInputImage * image )
 {
-  // // Optimize pipeline if input-image can be directly cast into
-  // // output-image.
-  // {
-  //   auto img = dynamic_cast< TOutputImage * >( image );
-
-  //   if( img )
-  //     return img;
-  // }
-
-
   details::CastImage< TOutputImage, TInputImage > clamp( image );
 
   if( clamp.ocif )
