@@ -29,6 +29,7 @@ after_script:
   - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
+  - precheck
   - build
 
 .general:
@@ -37,6 +38,14 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
+
+fast-build:
+  extends: .general
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $CI_REGISTRY/gpasero/otb-install-ubuntu-native
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
 
 debian-build:
   extends: .general
