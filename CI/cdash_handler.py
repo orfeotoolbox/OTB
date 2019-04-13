@@ -29,7 +29,7 @@ import json
 import time
 
 
-trace = False
+trace = True
 
 class Handler:
 # project
