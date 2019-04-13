@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
@@ -57,6 +58,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperBoolParameter.cxx
   otbWrapperMetaDataHelper.cxx
   otbWrapperParameter.cxx
+  otbWrapperCastImage.cxx
   otbWrapperTypes.cxx
   )
 
