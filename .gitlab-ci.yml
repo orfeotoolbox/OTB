@@ -45,6 +45,7 @@ fast-build:
   stage: precheck
   image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
   before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout $CI_COMMIT_REF_NAME
     - python3 CI/check_twin_pipelines.py
   script:
