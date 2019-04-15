@@ -32,13 +32,13 @@ The request parameter is added after `project/:id/`
 def GitlabRequest(request, project=53,data={}, token=''):
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url+= str(project) + '/' + request
-  params = ''
+  params = None
   if data:
-    params = urllib.parse.urlencode(data)
+    params = urllib.parse.urlencode(data).encode('ascii')
   gitlab_request = urllib.request.Request(gitlab_url)
   if token:
     gitlab_request.add_header('PRIVATE-TOKEN' , token )
-  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
+  res = urllib.request.urlopen(gitlab_request, data=params)
   return json.loads(res.read().decode())
 
 """
