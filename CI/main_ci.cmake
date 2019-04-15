@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 set (ENV{LANG} "C") # Only ascii output
@@ -36,23 +38,7 @@ else()
 endif()
 
 # Find the build name and CI profile
-set(ci_profile wip)
-set(ci_mr_source "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}")
-set(ci_mr_target "$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
-set(ci_mr_iid "$ENV{CI_MERGE_REQUEST_IID}")
-set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
-set (CTEST_BUILD_NAME ${ci_short_sha})
-if(ci_mr_source AND ci_mr_target AND ci_mr_iid)
-  set (CTEST_BUILD_NAME "${ci_mr_source} (MR ${ci_mr_iid})")
-  set(ci_profile mr)
-elseif(ci_ref_name)
-  set (CTEST_BUILD_NAME "${ci_ref_name}")
-  if("${ci_ref_name}" STREQUAL "develop")
-    set(ci_profile develop)
-  elseif("${ci_ref_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
-    set(ci_profile release)
-  endif()
-endif()
+set_dash_build_name()
 
 # set pipelines to enable documentation
 set(ci_cookbook_profiles mr develop release)
