@@ -45,8 +45,8 @@ fast-build:
   stage: precheck
   image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
   before_script:
-    - python3 CI/check_twin_pipelines.py
     - git checkout $CI_COMMIT_REF_NAME
+    - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
