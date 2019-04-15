@@ -431,10 +431,6 @@ std::string OutputProcessXMLParameter::MakeCommandLine(Application::Pointer appl
 
       pParam = pParam->NextSiblingElement(); // iteration over parameters
     }
-
-    // Insert a new line character at the end of the command line
-    cmdLine << std::endl;
-
   }
 
   return cmdLine.str();

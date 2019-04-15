@@ -63,13 +63,12 @@ public slots:
   void UpdateMessageAfterApplicationReady(bool val);
   void UpdateMessageAfterExecution(int status);
   void on_executeButton_clicked();
-  void UpdateCommandLine();
+  void CopyCommandLine();
 
 private:
   ::Ui::AppMainWindow* ui;
 
   QtWidgetView* gui;
-  QPlainTextEdit* cmdLineView;
 };
 
 } // namespace Wrapper

@@ -170,7 +170,7 @@
      <string>Application</string>
     </property>
     <addaction name="separator"/>
-    <addaction name="actionView_command_line"/>
+    <addaction name="actionCopy_command_line"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -248,9 +248,9 @@
     <string>Save to XML</string>
    </property>
   </action>
-  <action name="actionView_command_line">
+  <action name="actionCopy_command_line">
    <property name="text">
-    <string>View command line</string>
+    <string>Copy command line to clipboard</string>
    </property>
   </action>
  </widget>
