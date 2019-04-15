@@ -66,7 +66,7 @@ public slots:
   void UpdateCommandLine();
 
 private:
-  Ui::AppMainWindow* ui;
+  ::Ui::AppMainWindow* ui;
 
   QtWidgetView* gui;
   QPlainTextEdit* cmdLineView;
