@@ -52,6 +52,8 @@ public:
 
   otb::Wrapper::QtWidgetView* Gui() const;
 
+  void closeEvent(QCloseEvent* event) override;
+
 signals:
   void ExecuteAndWriteOutput();
   void Stop();

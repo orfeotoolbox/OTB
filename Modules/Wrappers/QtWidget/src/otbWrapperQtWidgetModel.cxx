@@ -34,6 +34,7 @@ namespace Wrapper
 QtWidgetModel
 ::QtWidgetModel(Application* app) :
   m_LogOutput(),
+  m_taskAppli(nullptr),
   m_Application(app),
   m_IsRunning(false)
 {
@@ -51,6 +52,7 @@ QtWidgetModel
 
 QtWidgetModel::~QtWidgetModel()
 {
+  delete m_taskAppli;
 }
 
 void
@@ -114,26 +116,31 @@ QtWidgetModel
   m_IsRunning = true;
 
   // launch the output image writing
-  AppliThread *taskAppli = new AppliThread( m_Application );
+  delete m_taskAppli;
+  m_taskAppli = new AppliThread(m_Application);
 
-  QObject::connect( taskAppli, &AppliThread::ExceptionRaised,
+  QObject::connect( m_taskAppli, &AppliThread::ExceptionRaised,
                     this, &QtWidgetModel::ExceptionRaised );
 
-  QObject::connect( taskAppli, &AppliThread::ApplicationExecutionDone,
+  QObject::connect( m_taskAppli, &AppliThread::ApplicationExecutionDone,
                     this, &QtWidgetModel::OnApplicationExecutionDone );
-
-  QObject::connect( taskAppli, &AppliThread::finished,
-                    taskAppli, &AppliThread::deleteLater );
-
-  QObject::connect( this, &QtWidgetModel::Stop,
-                    taskAppli, &AppliThread::Stop );
 
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
-  taskAppli->Execute();
+  m_taskAppli->Execute();
 
   emit SetApplicationReady(true);
+}
+
+void QtWidgetModel::Stop()
+{
+  if (m_taskAppli && m_IsRunning)
+  {
+    m_taskAppli->Stop();
+    m_taskAppli->wait();
+    m_IsRunning = false;
+  }
 }
 
 void

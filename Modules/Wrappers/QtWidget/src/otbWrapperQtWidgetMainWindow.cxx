@@ -66,7 +66,6 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
 
   connect(gui->GetModel(), &QtWidgetModel::SetApplicationReady, ui->executeButton, &QPushButton::setEnabled);
   connect(this, &QtMainWindow::ExecuteAndWriteOutput, gui->GetModel(), &QtWidgetModel::ExecuteAndWriteOutputSlot);
-  connect(this, &QtMainWindow::Stop, gui->GetModel(), &QtWidgetModel::Stop);
 
   connect( gui->GetModel(), &QtWidgetModel::SetApplicationReady, this, &QtMainWindow::UpdateMessageAfterApplicationReady );
   connect( gui->GetModel(), &QtWidgetModel::SetProgressReportDone, this, &QtMainWindow::UpdateMessageAfterExecution );
@@ -126,7 +125,7 @@ void QtMainWindow::on_executeButton_clicked()
   if (m_IsRunning)
   {
     ui->statusBar->showMessage(tr("Cancelling..."));
-    emit Stop();
+    gui->GetModel()->Stop();
   }
   else
   {
@@ -161,6 +160,13 @@ void QtMainWindow::UnhandledException(QString message)
 {
   ui->plainTextEdit->appendPlainText(message);
   ui->tabWidget->setCurrentIndex(1);
+}
+
+void QtMainWindow::closeEvent(QCloseEvent* event)
+{
+  gui->GetModel()->Stop();
+  cmdLineView->close();
+  QMainWindow::closeEvent(event);
 }
 
 } // namespace Wrapper

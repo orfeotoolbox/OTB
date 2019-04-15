@@ -50,6 +50,13 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
     start();
   }
 
+  /** Ask the running application to stop */
+  void Stop()
+  {
+    assert(m_Application.IsNotNull());
+    m_Application->Stop();
+  }
+
 signals:
   /**
    * \brief Signal emitted when the OTB-application has finished.
@@ -65,13 +72,6 @@ signals:
    * \param what The std::exception::what() which is forwarded to listeners.
    */
   void ExceptionRaised( QString what );
-
-public slots:
-  /** Ask the running application to stop */
-  void Stop()
-    {
-    m_Application->Stop();
-    }
 
 protected:
   void run() override;
@@ -106,6 +106,8 @@ public:
   {
     return m_LogOutput;
   }
+
+  void Stop();
 
   /** Logger warning message sender */
   void SendLogWARNING( const std::string & mes );
@@ -144,8 +146,6 @@ signals:
 
   void UpdateGui();
 
-  void Stop();
-
 public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
@@ -173,6 +173,8 @@ private:
   void operator=(const QtWidgetModel&) = delete;
 
   QtLogOutput::Pointer  m_LogOutput;
+
+  AppliThread* m_taskAppli;
 
 public:
   Application::Pointer m_Application;
