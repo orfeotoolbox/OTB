@@ -27,12 +27,6 @@ namespace otb
 {
 namespace Functor
 {
-/**
-   * \class TM4AndTM5IndexBase
-   * \brief Base class for TM4 And TM5 channels of Land Sat
-   * (equivalent to Red and NIR of SPOT5)
-*/
-
 /** \class NDBI
  *  \brief This functor computes the Normalized Difference Built Up Index (NDBI)
  *  Band mapping with respect to paper:
