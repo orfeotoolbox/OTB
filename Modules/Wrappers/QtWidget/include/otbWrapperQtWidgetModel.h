@@ -107,6 +107,8 @@ public:
     return m_LogOutput;
   }
 
+  bool IsRunning() const;
+
   void Stop();
 
   /** Logger warning message sender */
@@ -176,9 +178,10 @@ private:
 
   AppliThread* m_taskAppli;
 
+  bool m_IsRunning;
+
 public:
   Application::Pointer m_Application;
-  bool m_IsRunning;
 };
 
 

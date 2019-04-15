@@ -35,8 +35,8 @@ QtWidgetModel
 ::QtWidgetModel(Application* app) :
   m_LogOutput(),
   m_taskAppli(nullptr),
-  m_Application(app),
-  m_IsRunning(false)
+  m_IsRunning(false),
+  m_Application(app)
 {
   // Init only if not already done
   if(!m_Application->IsInitialized())
@@ -147,6 +147,8 @@ void
 QtWidgetModel
 ::OnApplicationExecutionDone( int status )
 {
+  m_IsRunning = false;
+
   // For the progressReport to close the Progress widget
   // and the GUI to update message
   emit SetProgressReportDone( status );
@@ -246,6 +248,11 @@ AppliThread
 
   // Signal OTB-application has ended with result status.
   emit ApplicationExecutionDone( result );
+}
+
+bool QtWidgetModel::IsRunning() const
+{
+  return m_IsRunning;
 }
 
 }

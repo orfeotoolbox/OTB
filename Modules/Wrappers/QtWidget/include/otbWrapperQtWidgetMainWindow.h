@@ -70,7 +70,6 @@ private:
 
   QtWidgetView* gui;
   QPlainTextEdit* cmdLineView;
-  bool m_IsRunning;
 };
 
 } // namespace Wrapper

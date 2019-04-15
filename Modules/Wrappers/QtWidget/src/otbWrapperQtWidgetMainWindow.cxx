@@ -36,8 +36,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
     QMainWindow(parent),
     ui(new Ui::AppMainWindow),
     gui(gui),
-    cmdLineView(new QPlainTextEdit),
-    m_IsRunning(false)
+    cmdLineView(new QPlainTextEdit)
 {
   ui->setupUi(this);
 
@@ -91,7 +90,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
 
 void QtMainWindow::UpdateMessageAfterApplicationReady( bool val )
 {
-  if (!m_IsRunning)
+  if (!gui->GetModel()->IsRunning())
   {
     if (val == true)
     {
@@ -115,14 +114,12 @@ void QtMainWindow::UpdateMessageAfterExecution(int status)
     ui->statusBar->showMessage(tr("Failed!"));
   }
   ui->executeButton->setText(tr("Execute"));
-  m_IsRunning = false;
-  gui->GetModel()->m_IsRunning = false;
   gui->Enable();
 }
 
 void QtMainWindow::on_executeButton_clicked()
 {
-  if (m_IsRunning)
+  if (gui->GetModel()->IsRunning())
   {
     ui->statusBar->showMessage(tr("Cancelling..."));
     gui->GetModel()->Stop();
@@ -131,7 +128,6 @@ void QtMainWindow::on_executeButton_clicked()
   {
     gui->Disable();
     gui->BeforeExecuteButtonClicked();
-    m_IsRunning = true;
     ui->statusBar->showMessage(tr("Running..."));
     ui->executeButton->setText(tr("Cancel"));
     emit ExecuteAndWriteOutput();
