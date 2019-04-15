@@ -158,7 +158,7 @@ ctest_test(PARALLEL_LEVEL 8
            )
 
 if ( NOT _test_rv EQUAL 0 )
-  message( SEND_ERROR "An error occurs during ctest_test.")
+  message( WARNING "Some tests have failed.")
 endif()
 
 ctest_submit()
