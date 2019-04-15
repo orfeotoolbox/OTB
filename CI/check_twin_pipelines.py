@@ -29,16 +29,14 @@ import time
 Send a request to Gitlab and return the answer
 The request parameter is added after `project/:id/`
 """
-def GitlabRequest(request, project=53,data={}, token=''):
+def GitlabRequest(request, project=53, token=''):
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url+= str(project) + '/' + request
-  params = None
-  if data:
-    params = urllib.parse.urlencode(data).encode('ascii')
-  gitlab_request = urllib.request.Request(gitlab_url)
+  myHeader = {}
   if token:
-    gitlab_request.add_header('PRIVATE-TOKEN' , token )
-  res = urllib.request.urlopen(gitlab_request, data=params)
+    myHeader = {'PRIVATE-TOKEN':token}
+  gitlab_request = urllib.request.Request(gitlab_url,headers=myHeader)
+  res = urllib.request.urlopen(gitlab_request)
   return json.loads(res.read().decode())
 
 """
@@ -76,7 +74,7 @@ if __name__ == "__main__":
       sys.exit(1)
     else:
       # No: cancel any previous "normal" pipeline on the same SHA1
-      jres = GitlabRequest('pipelines', project=env['CI_PROJECT_ID'], data={'sha':sha1}, token=env['K8S_SECRET_TWIN_PIPELINE'])
+      jres = GitlabRequest('pipelines?sha='+sha1, project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_TWIN_PIPELINE'])
       for item in jres:
         if item["id"] < int(env['CI_PIPELINE_ID']) and item["status"] == "running":
           print("Cancel pipeline "+str(item["id"]))
