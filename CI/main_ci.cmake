@@ -68,6 +68,11 @@ if(NOT DEFINED IMAGE_NAME)
 endif()
 set (CTEST_SITE "${IMAGE_NAME}")
 
+# Detect "skip testing"
+if(DEFINED ENV{CI_SKIP_TESTING})
+  set(ci_skip_testing 1)
+endif()
+
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
 if(BUILD_DIR)
