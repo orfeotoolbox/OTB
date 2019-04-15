@@ -128,3 +128,23 @@ centos-superbuild-build:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
+
+macos-superbuild-prepare:
+  tags:
+    - macos
+  only: [merge_requests, branches]
+  extends: .common-prepare
+  stage: prepare
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+
+macos-superbuild-build:
+  tags:
+    - macos
+  only: [merge_requests, branches]
+  extends: .general
+  stage: build
+  script:
+    - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  dependencies:
+    - macos-superbuild-prepare
