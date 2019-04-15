@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
@@ -98,8 +100,10 @@ endif()
 set ( CTEST_BUILD_CONFIGURATION "Release" )
 set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
 set ( CTEST_BUILD_FLAGS "-j8" )
-set ( CTEST_BUILD_NAME "Superbuild_Build_Otb" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
+
+# Find the build name and CI profile
+set_dash_build_name()
 
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}" )
