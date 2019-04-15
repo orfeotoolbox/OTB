@@ -140,27 +140,27 @@ private:
 
     m_Map.clear();
 
-    m_Map.push_back({"list.ndvi","Vegetation::NDVI",new otb::Functor::NDVI<InputType,OutputType>()});
-    m_Map.push_back({"list.tndvi","Vegetation::TNDVI",new otb::Functor::TNDVI<InputType,OutputType>()});
-    m_Map.push_back({"list.rdvi","Vegetation::RVI",new otb::Functor::RVI<InputType,OutputType>()});
-    m_Map.push_back({"list.savi","Vegetation::SAVI",new otb::Functor::SAVI<InputType,OutputType>()});
-    m_Map.push_back({"list.tsavi","Vegetation::TSAVI",new otb::Functor::TSAVI<InputType,OutputType>()});
-    m_Map.push_back({"list.msavi","Vegetation::MSAVI",new otb::Functor::MSAVI<InputType,OutputType>()});
-    m_Map.push_back({"list.msavi2","Vegetation::MSAVI2",new otb::Functor::MSAVI2<InputType,OutputType>()});
-    m_Map.push_back({"list.gemi","Vegetation::GEMI",new otb::Functor::GEMI<InputType,OutputType>()});
-    m_Map.push_back({"list.ipvi","Vegetation::IPVI",new otb::Functor::IPVI<InputType,OutputType>()});
-    m_Map.push_back({"list.laindvilog","Vegetation::LAIFromNDVILog",new otb::Functor::LAIFromNDVILogarithmic<InputType,OutputType>()});
-    m_Map.push_back({"list.lairefl","Vegetation::LAIFromReflLinear",new otb::Functor::LAIFromReflectancesLinear<InputType,OutputType>()});
-    m_Map.push_back({"list.laindviformo","Vegetation::LAIFromNDVIFormo",new otb::Functor::LAIFromNDVIFormosat2Functor<InputType,OutputType>()});
-    m_Map.push_back({"list.ndwi","Water::NDWI",new otb::Functor::NDWI<InputType,OutputType>()});
-    m_Map.push_back({"list.ndwi2","Water::NDWI2",new otb::Functor::NDWI2<InputType,OutputType>()});
-    m_Map.push_back({"list.mndwi","Water::MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
-    m_Map.push_back({"list.ndpi","Water::NDPI",new otb::Functor::NDPI<InputType,OutputType>()});
-    m_Map.push_back({"list.ndpi","Water::NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
-    m_Map.push_back({"list.si","Soil::RI",new otb::Functor::RI<InputType,OutputType>()});
-    m_Map.push_back({"list.ci","Soil::CI",new otb::Functor::CI<InputType,OutputType>()});
-    m_Map.push_back({"list.bi","Soil::BI",new otb::Functor::BI<InputType,OutputType>()});
-    m_Map.push_back({"list.bi2","Soil::BI2",new otb::Functor::BI2<InputType,OutputType>()});
+    m_Map.push_back({"list.ndvi","Vegetation:NDVI",new otb::Functor::NDVI<InputType,OutputType>()});
+    m_Map.push_back({"list.tndvi","Vegetation:TNDVI",new otb::Functor::TNDVI<InputType,OutputType>()});
+    m_Map.push_back({"list.rdvi","Vegetation:RVI",new otb::Functor::RVI<InputType,OutputType>()});
+    m_Map.push_back({"list.savi","Vegetation:SAVI",new otb::Functor::SAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.tsavi","Vegetation:TSAVI",new otb::Functor::TSAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.msavi","Vegetation:MSAVI",new otb::Functor::MSAVI<InputType,OutputType>()});
+    m_Map.push_back({"list.msavi2","Vegetation:MSAVI2",new otb::Functor::MSAVI2<InputType,OutputType>()});
+    m_Map.push_back({"list.gemi","Vegetation:GEMI",new otb::Functor::GEMI<InputType,OutputType>()});
+    m_Map.push_back({"list.ipvi","Vegetation:IPVI",new otb::Functor::IPVI<InputType,OutputType>()});
+    m_Map.push_back({"list.laindvilog","Vegetation:LAIFromNDVILog",new otb::Functor::LAIFromNDVILogarithmic<InputType,OutputType>()});
+    m_Map.push_back({"list.lairefl","Vegetation:LAIFromReflLinear",new otb::Functor::LAIFromReflectancesLinear<InputType,OutputType>()});
+    m_Map.push_back({"list.laindviformo","Vegetation:LAIFromNDVIFormo",new otb::Functor::LAIFromNDVIFormosat2Functor<InputType,OutputType>()});
+    m_Map.push_back({"list.ndwi","Water:NDWI",new otb::Functor::NDWI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndwi2","Water:NDWI2",new otb::Functor::NDWI2<InputType,OutputType>()});
+    m_Map.push_back({"list.mndwi","Water:MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndpi","Water:NDPI",new otb::Functor::NDPI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndpi","Water:NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
+    m_Map.push_back({"list.si","Soil:RI",new otb::Functor::RI<InputType,OutputType>()});
+    m_Map.push_back({"list.ci","Soil:CI",new otb::Functor::CI<InputType,OutputType>()});
+    m_Map.push_back({"list.bi","Soil:BI",new otb::Functor::BI<InputType,OutputType>()});
+    m_Map.push_back({"list.bi2","Soil:BI2",new otb::Functor::BI2<InputType,OutputType>()});
 
     ClearChoices("list");
     for ( unsigned int i=0; i<m_Map.size(); i++ )
