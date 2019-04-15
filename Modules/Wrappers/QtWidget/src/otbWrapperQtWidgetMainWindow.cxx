@@ -47,6 +47,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   cmdLineView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   cmdLineView->setMinimumSize(600, 130);
   cmdLineView->resize(600, 130);
+  this->UpdateCommandLine();
 
   // Set the given application view widget
   gui->setParent(this);
