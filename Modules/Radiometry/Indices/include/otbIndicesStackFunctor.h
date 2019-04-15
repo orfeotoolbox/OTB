@@ -75,6 +75,7 @@ public:
     for(auto indice : m_Indices)
       {
       out[idx] = (*indice)(in);
+      ++idx;
       }
   }
   /**
