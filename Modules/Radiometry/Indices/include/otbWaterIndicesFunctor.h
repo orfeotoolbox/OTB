@@ -28,37 +28,6 @@ namespace otb
 {
 namespace Functor
 {
-
-/** \class SRWI
- *  \brief This functor computes the Simple Ratio Water Index (SRWI)
- *  \brief For MODIS bands 860 & 1240
- *
- *   [Zarco-Tejada 2001]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template <class TInput, class TOutput>
-class SRWI : public RadiometricIndice<TInput,TOutput,ModisBandNames>
-{
-public:
-
-  SRWI() : RadiometricIndice<TInput,TOutput>({ModisBandNames::M860, ModisBandNames::M1240}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
-  {
-    double rho860 = this->Value(ModisBandNames::M860,input);
-    double rho1240 = this->Value(ModisBandNames::M1240,input);
-    if (std::abs(rho1240) < RadiometricIndice<TInput,TOutput>::Epsilon)
-      {
-      return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>(rho860 / rho1240));
-  }
-};
-
 /** \class NDWI
  *  \brief This functor computes the Normalized Difference Water Index (NDWI)
  *  \brief Also called :
@@ -130,6 +99,10 @@ public:
  *
  *  [Xu & al., 2006 ]
  *
+ * Similar to Normalized Difference Pond Index (NDPI)
+ *
+ *  [J.P Lacaux & al., 2006 ]
+ *
  *  \ingroup Functor
  * \ingroup Radiometry
  *
@@ -152,36 +125,6 @@ public:
       }
 
     return (green - mir) / (green + mir);
-  }
-};
-
-/** \class NDPI
- *  \brief This functor computes the Normalized Difference Pond Index (NDPI)
- *
- *  [J.P Lacaux & al., 2006 ]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template <class TInput, class TOutput>
-class NDPI : public RadiometricIndice<TInput,TOutput>
-{
-public:
-  NDPI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::MIR, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
-  {
-    auto green   = this->Value(CommonBandNames::GREEN,input);
-    auto mir   = this->Value(CommonBandNames::MIR,input);
-
-    if (std::abs(mir + green) < RadiometricIndice<TInput,TOutput>::Epsilon)
-      {
-      return 0.;
-      }
-    // TODO: Completely equivalent to MNDWI ?
-    return (mir -green) / (green + mir);
   }
 };
 

@@ -31,7 +31,6 @@ namespace BandName
 * to the radiometric functors.*
 */
 enum class CommonBandNames {BLUE, GREEN, RED, NIR, MIR, MAX};
-enum class ModisBandNames {M860, M1240,MAX};
 enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7, MAX};
 
 // Note for landsat equivalence

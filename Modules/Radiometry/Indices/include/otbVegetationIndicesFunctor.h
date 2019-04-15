@@ -451,49 +451,6 @@ public:
   static constexpr double Gamma = 0.5;
 };
 
-/** \class TSARVI
- *  \brief This functor computes the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
- *
- *  [Yoram J. Kaufman and Didier Tanre, 1992]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-// TODO: Default parameter of this indice always return 0
-template <class TInput,class TOutput>
-class TSARVI : public RadiometricIndice<TInput,TOutput>
-{
-public:
-
-  TSARVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
-  {
-    auto blue  = this->Value(CommonBandNames::BLUE,input);
-    auto red   = this->Value(CommonBandNames::RED,input);
-    auto nir   = this->Value(CommonBandNames::NIR,input);
-
-    double dRB = red - Gamma * (blue - red);
-    double denominator = dRB + A * nir - A * B + X * (1. + A * A);
-    if (std::abs(denominator)  < RadiometricIndice<TInput,TOutput>::Epsilon)
-      {
-      return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((A * (nir - A * dRB - B)) / denominator));
-  }
-
-  /** A and B parameters */
-  static constexpr double A = 0.0;
-  static constexpr double B = 0.0;
-  /** X parameter */
-  static constexpr double X = 0.08;
-  /** Gamma parameter */
-  static constexpr double Gamma = 0.5;
-
-};
-
 /** \class EVI
  *  \brief This functor computes the Enhanced Vegetation Index (EVI)
  *

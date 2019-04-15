@@ -86,8 +86,6 @@ int otbVegetationIndicesTest(int, char**)
   res = res & CheckResult< GEMI<int,double> >("gemi_pixel",bandMap,{1,4,3,2},2.0625);
   res = res & CheckResult< AVI<int,double> >("avi_pixel",bandMap,{0,0,1,2},0.1017245527);
   res = res & CheckResult< ARVI<int,double> >("arvi_pixel",bandMap,{0,0,1,2},0.1428571429);
-  /// TODO: TSARVI always returns 0, remove it?
-  res = res & CheckResult< TSARVI<int,double> >("tsarvi_pixel",bandMap,{1,4,3,2},0.);
   res = res & CheckResult< EVI<int,double> >("evi_pixel",bandMap,{0,0,1,2},0.2777777778);
   res = res & CheckResult< IPVI<int,double> >("ipvi_pixel",bandMap,{0,0,1,2},0.6666666667);
   res = res & CheckResult< LAIFromNDVILogarithmic<int,double> >("lailog_pixel",bandMap,{0,0,1,2},0.4930511672);
@@ -115,15 +113,8 @@ int otbWaterIndicesTest(int, char**)
   res = res & CheckResult< NDWI2<int,double> >("ndwi2_pixel",bandMap,{1,2,3,4,5},-0.3333333333);
   res = res & CheckResult< MNDWI<int,double> >("mndwi_null",bandMap,{0,0,0,0,0},0.);
   res = res & CheckResult< MNDWI<int,double> >("mndwi_pixel",bandMap,{1,2,3,4,5},-0.4285714286);
-  res = res & CheckResult< NDPI<int,double> >("ndpi_null",bandMap,{0,0,0,0,0},0.);
-  res = res & CheckResult< NDPI<int,double> >("ndpi_pixel",bandMap,{1,2,3,4,5},0.4285714286);
   res = res & CheckResult< NDTI<int,double> >("ndti_null",bandMap,{0,0,0,0,0},0.);
   res = res & CheckResult< NDTI<int,double> >("ndti_pixel",bandMap,{1,2,3,4,5},0.2);
-
-  const std::map<ModisBandNames,size_t> bandMapModis = {{ModisBandNames::M860,0},{ModisBandNames::M1240,1}};
-
-  res = res & CheckResult< NDWI2<int,double> >("srwi_null",bandMap,{0,0},0.5);
-  res = res & CheckResult< NDWI2<int,double> >("srwi_pixel",bandMap,{1,2},0.5);
 
   if(res)
     {
@@ -160,9 +151,7 @@ int otbBuiltUpIndicesTest(int, char**)
   const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}, {CommonBandNames::MIR,4}};
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
-  bool res = CheckResult< NDBI<int,double> >("ndbi_null ",bandMap,{0,0,0,0,0},0.);
-  res = res & CheckResult< NDBI<int,double> >("ndbi_pixel",bandMap,{1,2,3,4,5},0.1428571429);
-  res = res & CheckResult< ISU<int,double> >("isu_null",bandMap,{0,0,0,0,0},0.);
+  bool res = CheckResult< ISU<int,double> >("isu_null",bandMap,{0,0,0,0,0},0.);
   res = res & CheckResult< ISU<int,double> >("isu_pixel",bandMap,{1,2,3,4,5},81.25);
 
   if(res)

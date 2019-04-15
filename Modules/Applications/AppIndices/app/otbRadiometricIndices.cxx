@@ -122,7 +122,6 @@ private:
         "* Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n"
         "* Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n"
         "* Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n"
-        "* Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)\n"
         "* Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)\n"
         "* Soil:RI - Redness index (Red, Green)\n"
         "* Soil:CI - Color index (Red, Green)\n"
@@ -155,8 +154,7 @@ private:
     m_Map.push_back({"list.ndwi","Water:NDWI",new otb::Functor::NDWI<InputType,OutputType>()});
     m_Map.push_back({"list.ndwi2","Water:NDWI2",new otb::Functor::NDWI2<InputType,OutputType>()});
     m_Map.push_back({"list.mndwi","Water:MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
-    m_Map.push_back({"list.ndpi","Water:NDPI",new otb::Functor::NDPI<InputType,OutputType>()});
-    m_Map.push_back({"list.ndpi","Water:NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
+    m_Map.push_back({"list.ndti","Water:NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
     m_Map.push_back({"list.si","Soil:RI",new otb::Functor::RI<InputType,OutputType>()});
     m_Map.push_back({"list.ci","Soil:CI",new otb::Functor::CI<InputType,OutputType>()});
     m_Map.push_back({"list.bi","Soil:BI",new otb::Functor::BI<InputType,OutputType>()});

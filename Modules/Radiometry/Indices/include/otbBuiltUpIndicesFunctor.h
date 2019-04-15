@@ -27,39 +27,6 @@ namespace otb
 {
 namespace Functor
 {
-/** \class NDBI
- *  \brief This functor computes the Normalized Difference Built Up Index (NDBI)
- *  Band mapping with respect to paper:
- *  TM4 = red
- *  TM5 = nir
- *  [Zha 2003]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template <class TInput, class TOutput>
-class NDBI : public RadiometricIndice<TInput,TOutput>
-{
-public:
-  NDBI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
-  {
-    auto red = this->Value(CommonBandNames::RED,input);
-    auto nir = this->Value(CommonBandNames::NIR,input);
-
-    if (std::abs(red+nir) < RadiometricIndice<TInput,TOutput>::Epsilon)
-      {
-      return static_cast<TOutput>(0.);
-      }
-
-    // TODO: Completely equivalent to NDVI ?
-    return (static_cast<TOutput>((nir - red) / (nir + red)));
-  }
-};
-
 /** \class ISU
  *  \brief This functor computes the Index surfaces built (ISU)
  *
