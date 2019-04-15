@@ -106,7 +106,10 @@ public:
     std::set<BandNameType> resp;
     for(size_t i = 0; i < NumberOfBands; ++i)
       {
-      resp.insert(static_cast<BandNameType>(i));
+      if(m_RequiredBands[i])
+        {
+        resp.insert(static_cast<BandNameType>(i));
+        }
       }
 
     return resp;
