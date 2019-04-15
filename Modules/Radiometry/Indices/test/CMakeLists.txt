@@ -22,7 +22,7 @@ otb_module_test()
 
 set(OTBIndicesTests
 otbIndicesTestDriver.cxx
-otbIndices.cxx
+otbRadiometricIndicesTest.cxx
 otbNDVIDataNodeFeatureFunction.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
@@ -342,5 +342,20 @@ otb_add_test(NAME raTvLandsatTMThickCloudTest COMMAND otbIndicesTestDriver
   )
 
 
+otb_add_test(NAME raTvRadiometricIndicesBaseClassTest COMMAND otbIndicesTestDriver
+                  otbRadiometricIndiceTest)
+
 otb_add_test(NAME raTvVegetationIndicesTest COMMAND otbIndicesTestDriver
                   otbVegetationIndicesTest)
+
+otb_add_test(NAME raTvWaterIndicesTest COMMAND otbIndicesTestDriver
+                  otbWaterIndicesTest)
+
+otb_add_test(NAME raTvBuiltUpIndicesTest COMMAND otbIndicesTestDriver
+                  otbBuiltUpIndicesTest)
+
+otb_add_test(NAME raTvSoilIndicesTest COMMAND otbIndicesTestDriver
+                  otbSoilIndicesTest)
+
+otb_add_test(NAME raTvIndicesStackFunctorTest COMMAND otbIndicesTestDriver
+                  otbIndicesStackFunctorTest)

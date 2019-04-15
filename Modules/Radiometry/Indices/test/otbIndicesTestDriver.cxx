@@ -47,4 +47,9 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMIndexNDBSI);
   REGISTER_TEST(otbLandsatTMThickCloudTest);
   REGISTER_TEST(otbVegetationIndicesTest);
+  REGISTER_TEST(otbWaterIndicesTest);
+  REGISTER_TEST(otbBuiltUpIndicesTest);
+  REGISTER_TEST(otbSoilIndicesTest);
+  REGISTER_TEST(otbRadiometricIndiceTest);
+  REGISTER_TEST(otbIndicesStackFunctorTest);
 }
