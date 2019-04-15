@@ -264,12 +264,6 @@ void ShowUsage(char* argv[])
 
 int main(int argc, char* argv[])
 {
-  #ifdef OTB_USE_MPI
-  otb::MPIConfig::Instance()->Init(argc,argv);
-  #endif
-
-  otb::ConfigurationManager::InitOpenMPThreads();
-
   if (argc < 2)
   {
       ShowUsage(argv);
@@ -299,14 +293,21 @@ int main(int argc, char* argv[])
       }
     }
 
-  typedef otb::Wrapper::CommandLineLauncher LauncherType;
-  LauncherType::Pointer launcher = LauncherType::New();
-
   if (vexp.empty())
   {
     ShowUsage(argv);
     return EXIT_FAILURE;
   }
+
+  #ifdef OTB_USE_MPI
+  if (std::find(vexp.begin(), vexp.end(), "-testenv") == vexp.end() )
+    otb::MPIConfig::Instance()->Init(argc,argv);
+  #endif
+
+  otb::ConfigurationManager::InitOpenMPThreads();
+
+  typedef otb::Wrapper::CommandLineLauncher LauncherType;
+  LauncherType::Pointer launcher = LauncherType::New();
 
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
