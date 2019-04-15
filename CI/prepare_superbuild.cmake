@@ -61,7 +61,12 @@ set (CMAKE_COMMAND "cmake")
 ########################################################################
 ########################################################################
 
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+
 ctest_start (Experimental TRACK Experimental)
+
+ctest_update()
 
 set(CTEST_BUILD_FLAGS "-j16")
 
