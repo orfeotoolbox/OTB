@@ -155,11 +155,11 @@ private:
     m_Map.push_back({"list.ndwi2","Water:NDWI2",new otb::Functor::NDWI2<InputType,OutputType>()});
     m_Map.push_back({"list.mndwi","Water:MNDWI",new otb::Functor::MNDWI<InputType,OutputType>()});
     m_Map.push_back({"list.ndti","Water:NDTI",new otb::Functor::NDTI<InputType,OutputType>()});
-    m_Map.push_back({"list.si","Soil:RI",new otb::Functor::RI<InputType,OutputType>()});
+    m_Map.push_back({"list.ri","Soil:RI",new otb::Functor::RI<InputType,OutputType>()});
     m_Map.push_back({"list.ci","Soil:CI",new otb::Functor::CI<InputType,OutputType>()});
     m_Map.push_back({"list.bi","Soil:BI",new otb::Functor::BI<InputType,OutputType>()});
     m_Map.push_back({"list.bi2","Soil:BI2",new otb::Functor::BI2<InputType,OutputType>()});
-
+    m_Map.push_back({"list.isu","BuiltUp:ISU",new otb::Functor::ISU<InputType,OutputType>()});
     ClearChoices("list");
     for ( unsigned int i=0; i<m_Map.size(); i++ )
       {
