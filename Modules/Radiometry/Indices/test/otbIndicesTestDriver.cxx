@@ -25,10 +25,8 @@ void RegisterTests()
   REGISTER_TEST(otbNDVIDataNodeFeatureFunction);
   REGISTER_TEST(otbLandsatTMIndexNDSI);
   REGISTER_TEST(otbLandsatTMIndexBIO);
-  REGISTER_TEST(otbLAIFromReflectancesLinear);
   REGISTER_TEST(otbLandsatTMIndexMIR2);
   REGISTER_TEST(otbLandsatTMIndexNDVI);
-  REGISTER_TEST(otbLAIFromNDVILogarithmic);
   REGISTER_TEST(otbLandsatTMIndexVis);
   REGISTER_TEST(otbWaterSqrtSpectralAngleImageFilter);
   REGISTER_TEST(otbLandsatTMIndexBright);

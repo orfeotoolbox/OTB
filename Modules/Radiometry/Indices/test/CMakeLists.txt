@@ -26,10 +26,8 @@ otbRadiometricIndicesTest.cxx
 otbNDVIDataNodeFeatureFunction.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
-otbLAIFromReflectancesLinearFunctorTest.cxx
 otbLandsatTMIndexMIR2Test.cxx
 otbLandsatTMIndexNDVITest.cxx
-otbLAIFromNDVILogarithmicFunctorTest.cxx
 otbLandsatTMIndexVisTest.cxx
 otbWaterSqrtSpectralAngleImageFilter.cxx
 otbLandsatTMIndexBrightTest.cxx
@@ -103,14 +101,6 @@ otb_add_test(NAME raTvLandsatTMIndexBIOTest COMMAND otbIndicesTestDriver
   21  #TM7
   )
 
-otb_add_test(NAME raTvLAIFromReflectancesLinearFunctorTest COMMAND otbIndicesTestDriver
-  otbLAIFromReflectancesLinear
-  3   # red
-  4   # nir
-  -18   # red coef
-  13   # nir coef
-  )
-
 otb_add_test(NAME raTvLandsatTMIndexMIR2Test COMMAND otbIndicesTestDriver
   otbLandsatTMIndexMIR2
   3   #TM1
@@ -133,16 +123,6 @@ otb_add_test(NAME raTvLandsatTMIndexNDVITest COMMAND otbIndicesTestDriver
   41  #TM61
   8   #TM62
   21  #TM7
-  )
-
-
-otb_add_test(NAME raTvLAIFromNDVILogarithmicFunctorTest COMMAND otbIndicesTestDriver
-  otbLAIFromNDVILogarithmic
-  3   # red
-  4   # nir
-  0.12   # ndvi soil
-  0.91   # ndvi infinity
-  0.70   # extinction coefficient
   )
 
 otb_add_test(NAME raTvLandsatTMIndexVisTest COMMAND otbIndicesTestDriver
