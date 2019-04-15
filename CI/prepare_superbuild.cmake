@@ -58,11 +58,19 @@ set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
 # This is needed because when using return() function ctest is trying
 # to run the CTEST_COMMAND. And we need it to not produce an error
 set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
-set (CMAKE_COMMAND "cmake")########################################################################
+set (CMAKE_COMMAND "cmake")
+
+########################################################################
 ########################################################################
 # Build process
 ########################################################################
 ########################################################################
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
+# FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
+set( GIT "${CTEST_GIT_COMMAND}" )
 
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)
@@ -125,12 +133,6 @@ file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
 message( "Checking out git for existence of archive")
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/")
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
-
-# Look for a GIT command-line client.
-find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
-
-# FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
-set( GIT "git" )
 
 execute_process(
   COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}"
