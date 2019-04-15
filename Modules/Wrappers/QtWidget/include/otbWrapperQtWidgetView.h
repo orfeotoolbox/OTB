@@ -44,10 +44,6 @@ class OTBQtWidget_EXPORT QtWidgetView :
 {
   Q_OBJECT
 
-  Q_PROPERTY( bool isClosable
-	      READ IsClosable
-	      WRITE SetClosable );
-
 public:
 
   static char const * const OBJECT_NAME;
@@ -66,15 +62,12 @@ public:
   /** \brief Model Accessor */
   QtWidgetModel* GetModel() const;
 
-  bool IsClosable() const;
-
   virtual void BeforeExecuteButtonClicked() {}
 
   void Disable();
   void Enable();
 
 signals:
-  void QuitSignal();
   void ExecuteAndWriteOutput();
   void Stop();
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
@@ -85,9 +78,6 @@ protected:
   bool IsRunning() const;
 
   virtual QWidget* CreateInputWidgets();
-
-  // QWidget overloads.
-  void closeEvent( QCloseEvent * event ) override;
 
 protected slots:
 
@@ -103,16 +93,7 @@ private:
 private:
   otb::Wrapper::QtWidgetModel* m_Model;
 
-  bool m_IsClosable;
   bool m_IsRunning;
-
-  std::map<QWidget*, bool> m_EnabledState;
-
-private slots:
-  void OnProgressReportBegin();
-  void OnProgressReportEnd( int status );
-  void SetClosable( bool );
-
 };
 
 } // end namespace 'Wrapper'

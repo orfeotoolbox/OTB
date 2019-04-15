@@ -20,8 +20,6 @@
 
 #include "otbWrapperQtWidgetView.h"
 
-#include <functional>
-
 #include "otbWrapperQtWidgetParameterGroup.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperOutputFilenameParameter.h"
@@ -55,22 +53,10 @@ QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
 		Qt::WindowFlags flags ) :
   QWidget( parent, flags ),
   m_Model( NULL ),
-  m_IsClosable( true ),
   m_IsRunning(false)
 {
   setObjectName( QtWidgetView::OBJECT_NAME );
-
   m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
-
-  QObject::connect(
-    m_Model, &QtWidgetModel::SetProgressReportBegin,
-    this, &QtWidgetView::OnProgressReportBegin
-  );
-
-  QObject::connect(
-    m_Model, &QtWidgetModel::SetProgressReportDone,
-    this, &QtWidgetView::OnProgressReportEnd
-  );
 }
 
 QtWidgetView::~QtWidgetView()
@@ -94,34 +80,6 @@ QWidget* QtWidgetView::CreateInputWidgets()
       this);
 }
 
-
-void QtWidgetView::closeEvent( QCloseEvent * e )
-{
-  assert( e!=NULL );
-
-  if( !IsClosable() )
-    {
-    assert( GetModel()->GetApplication() );
-
-    QMessageBox::warning(
-      this,
-      tr( "Warning!" ),
-      tr( "OTB-Application '%1' cannot be closed while running!")
-      .arg( GetModel()->GetApplication()->GetDocName() )
-    );
-
-    e->ignore();
-
-    return;
-    }
-
-  QWidget::closeEvent( e );
-
-  emit QuitSignal();
-
-  deleteLater();
-}
-
 bool QtWidgetView::IsRunning() const
 {
   return m_IsRunning;
@@ -132,39 +90,9 @@ QtWidgetModel* QtWidgetView::GetModel() const
 return m_Model;
 }
 
-bool QtWidgetView::IsClosable() const
-{
-  return m_IsClosable;
-}
-
-void QtWidgetView::SetClosable( bool enabled )
-{
-  m_IsClosable = enabled;
-
-  setEnabled( true );
-}
-
-void QtWidgetView::OnProgressReportBegin()
-{
-  SetClosable( false );
-}
-
-void QtWidgetView::OnProgressReportEnd( int )
-{
-  SetClosable( true );
-}
-
 void QtWidgetView::Disable()
 {
   // Disable all widgets to make sure parameters are not updated when the application is running in another thread
-  // Save all widgets enabled state to restore it later
-  m_EnabledState.clear();
-  for (QWidget* w : this->findChildren<QWidget*>())
-  {
-    m_EnabledState[w] = w->isEnabled();
-  }
-
-  // Disable all widgets of the view
   for (QWidget* w : this->findChildren<QWidget*>())
   {
     w->setEnabled(false);
@@ -179,7 +107,6 @@ void QtWidgetView::Enable()
   for (QWidget* w : this->findChildren<QWidget*>())
   {
     w->setEnabled(true);
-    //assert(w->isEnabled() == m_EnabledState[w]);
   }
   // Resync widgets enabled state with parameter enabled flag
   this->GetModel()->NotifyUpdate();
