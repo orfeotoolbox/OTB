@@ -132,9 +132,9 @@ int otbSoilIndicesTest(int, char**)
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
   bool res = CheckResult< CI<int,double> >("ci_null ",bandMap,{0,0,0,0,0},0.);
-  res = res & CheckResult< CI<int,double> >("ci_pixel",bandMap,{1,2,3,4,5},-0.1111111111);
-  res = res & CheckResult< BI<int,double> >("bi_pixel",bandMap,{1,2,3,4,5},-0.3333333333);
-  res = res & CheckResult< BI2<int,double> >("bi2_pixel",bandMap,{1,2,3,4,5},-0.4285714286);
+  res = res & CheckResult< CI<int,double> >("ci_pixel",bandMap,{1,2,3,4,5},0.2);
+  res = res & CheckResult< BI<int,double> >("bi_pixel",bandMap,{1,2,3,4,5},2.549509757);
+  res = res & CheckResult< BI2<int,double> >("bi2_pixel",bandMap,{1,2,3,4,5},3.109126351);
 
   if(res)
     {
