@@ -33,8 +33,8 @@ namespace Wrapper
 
 QtWidgetModel
 ::QtWidgetModel(Application* app) :
-  m_Application(app),
   m_LogOutput(),
+  m_Application(app),
   m_IsRunning(false)
 {
   // Init only if not already done
@@ -112,81 +112,6 @@ QtWidgetModel
   // Deactivate the Execute button while processing
   emit SetApplicationReady(false);
   m_IsRunning = true;
-
-  //Buld corresponding command line and display to the Log tab
-
-  //Build XML DOM from m_application
-  OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
-
-  TiXmlElement* XMLAppElement = outXMLParam->ParseApplication(m_Application);
-
-  //Create command line from the XML document
-  TiXmlElement * pName, *pParam;
-  std::ostringstream cmdLine;
-
-  cmdLine << "";
-
-  if(XMLAppElement)
-    {
-    pName = XMLAppElement->FirstChildElement("name");
-
-    cmdLine << "otbcli_" << pName->GetText();
-#ifdef _WIN32
-    cmdLine << ".bat";
-#endif
-    cmdLine << " ";
-
-    //Parse application parameters
-    pParam = XMLAppElement->FirstChildElement("parameter");
-
-    while(pParam)
-      {
-      //Get parameter key
-      cmdLine << "-";
-      cmdLine << pParam->FirstChildElement("key")->GetText();
-      cmdLine << " ";
-
-      //Some parameters can have multiple values. Test it and handle this
-      //specific case
-      TiXmlElement * values = pParam->FirstChildElement("values");
-
-      if (values)
-        {
-        //Loop over value
-        TiXmlElement * pValue = values->FirstChildElement("value");
-        while(pValue)
-          {
-          cmdLine << pValue->GetText();
-          cmdLine << " ";
-
-          pValue = pValue->NextSiblingElement(); // iteration over multiple values
-          }
-        }
-      else
-        {
-        //Get parameter value
-        cmdLine << pParam->FirstChildElement("value")->GetText();
-        cmdLine << " ";
-
-        //In case of OutputImageparameter we need to report output pixel type
-        TiXmlElement * pPixType = pParam->FirstChildElement("pixtype");
-
-        if (pPixType)
-          {
-          cmdLine << pPixType->GetText();
-          cmdLine << " ";
-          }
-        }
-
-      pParam = pParam->NextSiblingElement(); // iteration over parameters
-      }
-
-    //Insert a new line character at the end of the command line
-    cmdLine << std::endl;
-
-    //Report the command line string to the application logger
-    m_Application->GetLogger()->Write(itk::LoggerBase::INFO, cmdLine.str());
-    }
 
   // launch the output image writing
   AppliThread *taskAppli = new AppliThread( m_Application );

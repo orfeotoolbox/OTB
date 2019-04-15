@@ -156,7 +156,6 @@ void QtWidgetView::OnProgressReportEnd( int )
 
 void QtWidgetView::Disable()
 {
-  qInfo() << "QtWidgetView::Disable()";
   // Disable all widgets to make sure parameters are not updated when the application is running in another thread
   // Save all widgets enabled state to restore it later
   m_EnabledState.clear();
@@ -175,7 +174,6 @@ void QtWidgetView::Disable()
 
 void QtWidgetView::Enable()
 {
-  qInfo() << "QtWidgetView::Enable()";
   // Reset all widgets of the view to their previous enabled state
   this->setEnabled(true);
   for (QWidget* w : this->findChildren<QWidget*>())

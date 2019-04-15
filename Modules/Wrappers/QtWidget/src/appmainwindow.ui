@@ -170,6 +170,7 @@
      <string>Application</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="actionView_command_line"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -245,6 +246,11 @@
   <action name="actionSave_to_XML">
    <property name="text">
     <string>Save to XML</string>
+   </property>
+  </action>
+  <action name="actionView_command_line">
+   <property name="text">
+    <string>View command line</string>
    </property>
   </action>
  </widget>

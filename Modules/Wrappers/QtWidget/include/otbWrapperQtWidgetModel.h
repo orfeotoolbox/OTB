@@ -172,11 +172,10 @@ private:
   QtWidgetModel(const QtWidgetModel&) = delete;
   void operator=(const QtWidgetModel&) = delete;
 
-  Application::Pointer m_Application;
-
   QtLogOutput::Pointer  m_LogOutput;
 
 public:
+  Application::Pointer m_Application;
   bool m_IsRunning;
 };
 

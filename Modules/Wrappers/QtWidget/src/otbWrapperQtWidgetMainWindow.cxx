@@ -21,7 +21,9 @@
 #include "otbWrapperQtWidgetMainWindow.h"
 
 #include <QtWidgets>
+
 #include "otbWrapperQtWidgetView.h"
+#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 
 #include "ui_appmainwindow.h"
 
@@ -34,10 +36,18 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
     QMainWindow(parent),
     ui(new Ui::AppMainWindow),
     gui(gui),
+    cmdLineView(new QPlainTextEdit),
     m_IsRunning(false)
 {
   ui->setupUi(this);
+
+  // Setup the "View command line" widget
   this->setWindowTitle(QString(app->GetName()).append(" - OTB ").append(OTB_VERSION_STRING));
+  cmdLineView->setWindowTitle(this->windowTitle());
+  cmdLineView->setReadOnly(true);
+  cmdLineView->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+  cmdLineView->setMinimumSize(600, 130);
+  cmdLineView->resize(600, 130);
 
   // Set the given application view widget
   gui->setParent(this);
@@ -47,6 +57,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
   const auto url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
   connect(ui->actionDocumentation, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
+  connect(ui->actionView_command_line, &QAction::triggered, cmdLineView, &QWidget::show);
 
   // Setup execute / cancel button
   ui->executeButton->setDefault(true);
@@ -74,6 +85,9 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
 
   // Connect log output to the textEdit area
   connect(gui->GetModel()->GetLogOutput(), &QtLogOutput::NewContentLog, ui->plainTextEdit, &QPlainTextEdit::appendPlainText);
+
+  // Update the "view command line" widget content when application parameters change
+  connect(gui->GetModel(), &QtWidgetModel::UpdateGui, this, &QtMainWindow::UpdateCommandLine);
 }
 
 void QtMainWindow::UpdateMessageAfterApplicationReady( bool val )
@@ -125,9 +139,17 @@ void QtMainWindow::on_executeButton_clicked()
   }
 }
 
+void QtMainWindow::UpdateCommandLine()
+{
+  cmdLineView->clear();
+  auto cmdLine = OutputProcessXMLParameter::MakeCommandLine(gui->GetModel()->m_Application);
+  cmdLineView->appendPlainText(QString::fromStdString(cmdLine));
+}
+
 QtMainWindow::~QtMainWindow()
 {
   delete ui;
+  delete cmdLineView;
 }
 
 otb::Wrapper::QtWidgetView* QtMainWindow::Gui() const

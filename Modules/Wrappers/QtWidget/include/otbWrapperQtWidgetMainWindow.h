@@ -22,16 +22,18 @@
 #define otbWrapperQtWidgetMainWindow_h
 
 #include <QMainWindow>
+
 #include "OTBQtWidgetExport.h"
 
 #include "otbWrapperApplication.h"
 
 namespace Ui {
-    class AppMainWindow;
+  class AppMainWindow;
 }
 
 class QAction;
 class QMenu;
+class QPlainTextEdit;
 
 namespace otb
 {
@@ -59,10 +61,13 @@ public slots:
   void UpdateMessageAfterApplicationReady(bool val);
   void UpdateMessageAfterExecution(int status);
   void on_executeButton_clicked();
+  void UpdateCommandLine();
 
 private:
   Ui::AppMainWindow* ui;
+
   QtWidgetView* gui;
+  QPlainTextEdit* cmdLineView;
   bool m_IsRunning;
 };
 
