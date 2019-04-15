@@ -102,14 +102,14 @@ ubuntu-superbuild-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-prepare:
   only: [merge_requests, branches]
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
 ubuntu-superbuild-build:
   only: [merge_requests]
@@ -117,7 +117,7 @@ ubuntu-superbuild-build:
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - ctest -V -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-build:
   only: [merge_requests, branches]
@@ -125,7 +125,7 @@ centos-superbuild-build:
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
 

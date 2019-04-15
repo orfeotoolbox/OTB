@@ -19,6 +19,8 @@
 #
 # This script is for the superbuild build on the CI platform
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
@@ -39,7 +41,10 @@ set ( PROJECT_SOURCE_DIR "${SUPERBUILD_SOURCE_DIR}" )
 set ( CTEST_SOURCE_DIRECTORY "${SUPERBUILD_SOURCE_DIR}" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
-set ( CTEST_BUILD_NAME "Superbuild_Build_Depends" ) # FIXME
+
+
+# Find the build name and CI profile
+set_dash_build_name()
 
 # We need a directory independent from user
 # in CI the architecture is /builds/user/otb
@@ -53,15 +58,18 @@ set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
 # This is needed because when using return() function ctest is trying
 # to run the CTEST_COMMAND. And we need it to not produce an error
 set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
-set (CMAKE_COMMAND "cmake")
-
-########################################################################
+set (CMAKE_COMMAND "cmake")########################################################################
 ########################################################################
 # Build process
 ########################################################################
 ########################################################################
 
-ctest_start (Experimental TRACK Experimental)
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+
+ctest_start (Experimental TRACK CI_Prepare)
+
+ctest_update()
 
 set(CTEST_BUILD_FLAGS "-j16")
 
@@ -117,7 +125,13 @@ file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
 message( "Checking out git for existence of archive")
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact/")
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
+# FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
 set( GIT "git" )
+
 execute_process(
   COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}"
   OUTPUT_VARIABLE IS_SB_BUILD
