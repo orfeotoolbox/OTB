@@ -117,7 +117,7 @@ public:
 
   /**
    * \param band The band to set (value in TBandNameEnum)
-   * \param index The index of the band to set
+   * \param index The index of the band to set (starts at 1 for first band)
    * \throw runtime_error if band is TBandNameEnum::MAX
    */
   void SetBandIndex(const BandNameType & band, const size_t & index)
@@ -131,7 +131,7 @@ public:
 
   /**
    * \param indicesMap a std::map<TBandNameEnum,size_t> containing all
-   * bands indices to set
+   * bands indices to set  (starts at 1 for first band)
    * \throw runtime_error if indicesMap contains TBandNameEnum::MAX
    */
   void SetBandsIndices(const std::map<BandNameType,size_t> & indicesMap)
@@ -160,7 +160,7 @@ public:
    * Astract method which will compute the radiometric indice
    * \param input A itk::VariableLengthVector<TInput> holding the
    * pixel values for each band
-   * \return The indice value as TOutput
+   * \return The indice value as TOutput  (starts at 1 for first band)
    */
   virtual TOutput operator()(const itk::VariableLengthVector<TInput> & input) const = 0;
 
@@ -201,7 +201,7 @@ protected:
   double Value(const BandNameType & band, const itk::VariableLengthVector<TInput> & input) const
   {
     assert(m_RequiredBands[band] && "Retrieving value for a band that is not in the required bands list");
-    return static_cast<double>(input[UncheckedBandIndex(band)]);
+    return static_cast<double>(input[UncheckedBandIndex(band)-1]);
   }
 
 private:

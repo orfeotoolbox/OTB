@@ -737,8 +737,7 @@ public:
         {
         return static_cast<TOutput>(0.);
         }
-
-      return  static_cast<TOutput>(A*((std::exp((nir-red)/((red+nir)*B))-std::exp(C*B))));
+      return  static_cast<TOutput>(A*(std::exp((nir-red)/(red+nir)*B)-std::exp(C*B)));
     }
 
     static constexpr double A = 0.1519;

@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, blue and NIR) are declared.
   filter->GetFunctor().SetBandIndex(CommonBandNames::RED,::atoi(argv[5]));
-  filter->GetFunctor().SetBandIndex(CommonBandNames::GREEN,::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::BLUE,::atoi(argv[6]));
   filter->GetFunctor().SetBandIndex(CommonBandNames::NIR,::atoi(argv[7]));
 
   // The filter input is linked to the reader output and

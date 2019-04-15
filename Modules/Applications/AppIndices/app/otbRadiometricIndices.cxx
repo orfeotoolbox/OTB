@@ -94,18 +94,27 @@ private:
     AddParameter(ParameterType_Int,  "channels.blue",  "Blue Channel");
     SetParameterDescription("channels.blue", "Blue channel index");
     SetDefaultParameterInt("channels.blue", 1);
+    SetMinimumParameterIntValue("channels.blue",1);
+
     AddParameter(ParameterType_Int,  "channels.green",  "Green Channel");
     SetParameterDescription("channels.green", "Green channel index");
     SetDefaultParameterInt("channels.green", 1);
+    SetMinimumParameterIntValue("channels.green",1);
+
     AddParameter(ParameterType_Int,  "channels.red",  "Red Channel");
     SetParameterDescription("channels.red", "Red channel index");
     SetDefaultParameterInt("channels.red", 1);
+    SetMinimumParameterIntValue("channels.red",1);
+
     AddParameter(ParameterType_Int,  "channels.nir",  "NIR Channel");
     SetParameterDescription("channels.nir", "NIR channel index");
     SetDefaultParameterInt("channels.nir", 1);
+    SetMinimumParameterIntValue("channels.nir",1);
+
     AddParameter(ParameterType_Int,  "channels.mir",  "Mir Channel");
     SetParameterDescription("channels.mir", "Mir channel index");
     SetDefaultParameterInt("channels.mir", 1);
+    SetMinimumParameterIntValue("channels.mir",1);
 
     AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
     SetParameterDescription("list",
@@ -212,7 +221,7 @@ private:
             }
           else
             {
-              indicesMap[band] = idx-1;
+              indicesMap[band] = idx;
             }
         }
     };

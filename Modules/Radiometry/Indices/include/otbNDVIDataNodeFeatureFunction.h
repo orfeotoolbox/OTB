@@ -97,22 +97,22 @@ public:
   //TODO replace by metadata parsing
   unsigned int GetREDChannelIndex() const
   {
-    return m_NDVIFunctor.GetBandIndex(CommonBandNames::RED)+1;
+    return m_NDVIFunctor.GetBandIndex(CommonBandNames::RED);
   }
 
   void SetREDChannelIndex(unsigned int id)
   {
-    m_NDVIFunctor.SetBandIndex(CommonBandNames::RED,id-1);
+    m_NDVIFunctor.SetBandIndex(CommonBandNames::RED,id);
   }
 
   unsigned int GetNIRChannelIndex() const
   {
-    return m_NDVIFunctor.GetBandIndex(CommonBandNames::NIR)+1;
+    return m_NDVIFunctor.GetBandIndex(CommonBandNames::NIR);
   }
 
   void SetNIRChannelIndex(unsigned int id)
   {
-    m_NDVIFunctor.SetBandIndex(CommonBandNames::NIR,id-1);
+    m_NDVIFunctor.SetBandIndex(CommonBandNames::NIR,id);
   }
 
 protected:

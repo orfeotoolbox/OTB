@@ -68,7 +68,7 @@ using namespace otb::Functor;
 int otbVegetationIndicesTest(int, char**)
 {
   
-  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}};
+  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,1},{CommonBandNames::GREEN,2},{CommonBandNames::RED,3},{CommonBandNames::NIR,4}};
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
   bool res = CheckResult< NDVI<int,double> >("ndvi_null ",bandMap,{0,0,0,0},0.);
@@ -90,7 +90,7 @@ int otbVegetationIndicesTest(int, char**)
   res = res & CheckResult< IPVI<int,double> >("ipvi_pixel",bandMap,{0,0,1,2},0.6666666667);
   res = res & CheckResult< LAIFromNDVILogarithmic<int,double> >("lailog_pixel",bandMap,{0,0,1,2},0.4930511672);
   res = res & CheckResult< LAIFromReflectancesLinear<int,double> >("lailog_pixel",bandMap,{0,0,1,2},6.61);
-  res = res & CheckResult< LAIFromNDVIFormosat2Functor<int,double> >("laifrom_pixel",bandMap,{0,0,1,2},-0.08836147592);  
+  res = res & CheckResult< LAIFromNDVIFormosat2Functor<int,double> >("laifrom_pixel",bandMap,{0,0,1,2},0.3120010659);  
 
   if(res)
     {
@@ -104,7 +104,7 @@ int otbVegetationIndicesTest(int, char**)
 
 int otbWaterIndicesTest(int, char**)
 {
-  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}, {CommonBandNames::MIR,4}};
+  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,1},{CommonBandNames::GREEN,2},{CommonBandNames::RED,3},{CommonBandNames::NIR,4}, {CommonBandNames::MIR,5}};
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
   bool res = CheckResult< NDWI<int,double> >("ndwi_null ",bandMap,{0,0,0,0,0},0.);
@@ -128,7 +128,7 @@ int otbWaterIndicesTest(int, char**)
 
 int otbSoilIndicesTest(int, char**)
 {
-  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}, {CommonBandNames::MIR,4}};
+  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,1},{CommonBandNames::GREEN,2},{CommonBandNames::RED,3},{CommonBandNames::NIR,4}, {CommonBandNames::MIR,5}};
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
   bool res = CheckResult< CI<int,double> >("ci_null ",bandMap,{0,0,0,0,0},0.);
@@ -148,7 +148,7 @@ int otbSoilIndicesTest(int, char**)
 
 int otbBuiltUpIndicesTest(int, char**)
 {
-  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}, {CommonBandNames::MIR,4}};
+  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,1},{CommonBandNames::GREEN,2},{CommonBandNames::RED,3},{CommonBandNames::NIR,4}, {CommonBandNames::MIR,5}};
 
   // Syntax: CheckResult<Indice Class>("test_name",bandMap,{red_value,nir_value},expected_result)
   bool res = CheckResult< ISU<int,double> >("isu_null",bandMap,{0,0,0,0,0},0.);
@@ -237,7 +237,7 @@ int otbIndicesStackFunctorTest(int, char**)
     success = false;
     }
 
-  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,0},{CommonBandNames::GREEN,1},{CommonBandNames::RED,2},{CommonBandNames::NIR,3}, {CommonBandNames::MIR,4}};
+  const std::map<CommonBandNames,size_t> bandMap = {{CommonBandNames::BLUE,1},{CommonBandNames::GREEN,2},{CommonBandNames::RED,3},{CommonBandNames::NIR,4}, {CommonBandNames::MIR,5}};
 
   ndvi.SetBandsIndices(bandMap);
   ndwi.SetBandsIndices(bandMap);
