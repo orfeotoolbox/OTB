@@ -90,7 +90,7 @@ find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 # End of configuration
 
 
-ctest_start (Experimental TRACK Experimental)
+ctest_start (Experimental TRACK CI_Build)
 
 ctest_update()
 
