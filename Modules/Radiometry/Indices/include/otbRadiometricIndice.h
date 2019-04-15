@@ -55,7 +55,7 @@ namespace Functor
  * TBandName enum should end with a MAX value that will be used to
  * derive the number of bands.
  *  
- * \ingroup Indices
+ * \ingroup OTBIndices
  */
 template <typename TInput, typename TOutput, typename TBandNameEnum = CommonBandNames>
 class RadiometricIndice

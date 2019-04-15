@@ -35,8 +35,10 @@ namespace Functor {
  * will apply each functor of this vector to the input pixel, and
  * return a VariableLengthVector containing the list resulting
  * values. It can be used with otb::FunctorImageFilter
+ *
  * \sa FunctorImageFilter
- * \ingroup Indices
+ * 
+ * \ingroup OTBIndices
  */
 template <typename TIndice>
 class IndicesStackFunctor
