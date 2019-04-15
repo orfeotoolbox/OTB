@@ -37,23 +37,16 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
  Q_OBJECT
 
  public:
-  AppliThread(Application* app)
+  AppliThread(Application::Pointer app) :
+      m_Application(app)
     {
-      m_Application = app;
     }
 
   ~AppliThread() override;
 
-  void Execute()
-  {
-    // Call the signal start to begin running the program
-    start();
-  }
-
   /** Ask the running application to stop */
   void Stop()
   {
-    assert(m_Application.IsNotNull());
     m_Application->Stop();
   }
 

@@ -128,7 +128,8 @@ QtWidgetModel
   // Tell the Progress Reporter to begin
   emit SetProgressReportBegin();
 
-  m_taskAppli->Execute();
+  // Run the application
+  m_taskAppli->start();
 
   emit SetApplicationReady(true);
 }
