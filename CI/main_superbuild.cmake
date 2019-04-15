@@ -44,7 +44,12 @@ file(READ "${OTB_SOURCE_DIR}/sb_branch.txt" BRANCH_NAME)
 ###############################################################################
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact.git")
 # set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
-set( GIT "git" )
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
+# FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
+set( GIT "${CTEST_GIT_COMMAND}" )
 
 execute_process(
   COMMAND ${GIT} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
