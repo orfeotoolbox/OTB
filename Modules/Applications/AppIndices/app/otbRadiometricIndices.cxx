@@ -214,7 +214,7 @@ private:
             }
           else
             {
-              indicesMap[band] = idx;
+              indicesMap[band] = idx-1;
             }
         }
     };
