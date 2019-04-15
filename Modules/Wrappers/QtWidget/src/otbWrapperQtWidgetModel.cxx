@@ -47,17 +47,10 @@ QtWidgetModel
 
   // Attach log output to the Application logger
   m_Application->GetLogger()->AddLogOutput(m_LogOutput);
-
-  m_Timer = new QTimer(this);
-  m_Timer->setSingleShot(true);
-  m_Timer->setInterval(1000);
-  QObject::connect( m_Timer, &QTimer::timeout, this, &QtWidgetModel::TimerDone );
 }
 
 QtWidgetModel::~QtWidgetModel()
 {
-  if (m_Timer)
-    delete m_Timer;
 }
 
 void
@@ -232,18 +225,6 @@ QtWidgetModel
     oss << "Execution took "<< m_Application->GetLastExecutionTiming() << " sec";
     SendLogINFO(oss.str());
     }
-
-  // start timer
-  m_Timer->start();
-}
-
-void
-QtWidgetModel
-::TimerDone()
-{
-  m_IsRunning = false;
-  // Require GUI update.
-  NotifyUpdate();
 }
 
 void

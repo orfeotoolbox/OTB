@@ -168,8 +168,6 @@ private slots:
    */
   void OnApplicationExecutionDone( int status );
 
-  void TimerDone();
-
 private:
   QtWidgetModel(const QtWidgetModel&) = delete;
   void operator=(const QtWidgetModel&) = delete;
@@ -178,9 +176,8 @@ private:
 
   QtLogOutput::Pointer  m_LogOutput;
 
+public:
   bool m_IsRunning;
-
-  QTimer *m_Timer;
 };
 
 

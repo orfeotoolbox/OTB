@@ -158,14 +158,14 @@ void QtWidgetView::Disable()
 {
   qInfo() << "QtWidgetView::Disable()";
   // Disable all widgets to make sure parameters are not updated when the application is running in another thread
-  // Save their enabled state for
+  // Save all widgets enabled state to restore it later
   m_EnabledState.clear();
   for (QWidget* w : this->findChildren<QWidget*>())
   {
     m_EnabledState[w] = w->isEnabled();
-    qInfo() << w << w->isEnabled();
   }
 
+  // Disable all widgets of the view
   for (QWidget* w : this->findChildren<QWidget*>())
   {
     w->setEnabled(false);
@@ -176,12 +176,15 @@ void QtWidgetView::Disable()
 void QtWidgetView::Enable()
 {
   qInfo() << "QtWidgetView::Enable()";
+  // Reset all widgets of the view to their previous enabled state
   this->setEnabled(true);
   for (QWidget* w : this->findChildren<QWidget*>())
   {
-    qInfo() << "enabling " << w << m_EnabledState[w];
-    w->setEnabled(m_EnabledState[w]);
+    w->setEnabled(true);
+    //assert(w->isEnabled() == m_EnabledState[w]);
   }
+  // Resync widgets enabled state with parameter enabled flag
+  this->GetModel()->NotifyUpdate();
 }
 
 } // end of namespace Wrapper
