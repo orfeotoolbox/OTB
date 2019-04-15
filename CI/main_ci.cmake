@@ -130,10 +130,15 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-ctest_test(PARALLEL_LEVEL 8
-           RETURN_VALUE _test_rv
-           CAPTURE_CMAKE_ERROR _test_error
-           )
+if(ci_skip_testing)
+  message(STATUS "Skip testing")
+  set(_test_rv 0)
+else()
+  ctest_test(PARALLEL_LEVEL 8
+             RETURN_VALUE _test_rv
+             CAPTURE_CMAKE_ERROR _test_error
+             )
+endif()
 
 if ( NOT _test_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_test.")

@@ -43,9 +43,13 @@ fast-build:
   extends: .general
   only: [merge_requests, branches]
   stage: precheck
-  image: $CI_REGISTRY/gpasero/otb-install-ubuntu-native
+  image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
+  before_script:
+    - python3 CI/check_twin_pipelines.py
+    - git checkout $CI_COMMIT_REF_NAME
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
 debian-build:
   extends: .general
