@@ -56,7 +56,7 @@ public:
    * the indice stack
    * \throw std::runtime_error if indices is empty
    */
-  IndicesStackFunctor(std::vector<IndiceType*> indices) 
+  IndicesStackFunctor(const std::vector<IndiceType*> & indices) 
     : m_Indices(std::move(indices))
   {
     if(indices.empty())
