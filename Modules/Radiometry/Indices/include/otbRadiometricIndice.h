@@ -120,7 +120,7 @@ public:
    * \param index The index of the band to set (starts at 1 for first band)
    * \throw runtime_error if band is TBandNameEnum::MAX
    */
-  void SetBandIndex(const BandNameType & band, const size_t & index)
+  void SetBandIndex(BandNameType band, size_t index)
   {
     if(band == BandNameType::MAX)
       {
@@ -147,7 +147,7 @@ public:
    * \return The indices of the band
    * \throw runtime_error if band is TBandNameEnum::MAX
    */
-  size_t GetBandIndex(const BandNameType & band) const
+  size_t GetBandIndex(BandNameType band) const
   {
     if(band == BandNameType::MAX)
       {
@@ -176,7 +176,7 @@ protected:
    * \param band The band for which to retrieve indice
    * \return The indices of the band
    */
-  size_t UncheckedBandIndex(const BandNameType & band) const
+  size_t UncheckedBandIndex(BandNameType band) const
   {
     assert(band != BandNameType::MAX && "Can not retrieve index for band TBandNameEnum::MAX");
     return m_BandIndices[static_cast<size_t>(band)];
@@ -198,7 +198,7 @@ protected:
    * \return The value of the band as double
    *
    */ 
-  double Value(const BandNameType & band, const itk::VariableLengthVector<TInput> & input) const
+  double Value(BandNameType band, const itk::VariableLengthVector<TInput> & input) const
   {
     assert(m_RequiredBands[band] && "Retrieving value for a band that is not in the required bands list");
     return static_cast<double>(input[UncheckedBandIndex(band)-1]);
