@@ -322,8 +322,8 @@ otb_add_test(NAME raTvLandsatTMThickCloudTest COMMAND otbIndicesTestDriver
   )
 
 
-otb_add_test(NAME raTvRadiometricIndicesBaseClassTest COMMAND otbIndicesTestDriver
-                  otbRadiometricIndiceTest)
+otb_add_test(NAME raTvRadiometricIndexBaseClassTest COMMAND otbIndicesTestDriver
+                  otbRadiometricIndexTest)
 
 otb_add_test(NAME raTvVegetationIndicesTest COMMAND otbIndicesTestDriver
                   otbVegetationIndicesTest)

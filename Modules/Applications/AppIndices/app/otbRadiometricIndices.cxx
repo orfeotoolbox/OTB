@@ -51,18 +51,18 @@ public:
   using InputType = FloatVectorImageType::InternalPixelType;
   using OutputType = FloatImageType::PixelType;
 
-  using RadiometricIndiceType = otb::Functor::RadiometricIndice<InputType, OutputType>;
-  using IndicesStackFunctorType = otb::Functor::IndicesStackFunctor<RadiometricIndiceType>;
+  using RadiometricIndexType = otb::Functor::RadiometricIndex<InputType, OutputType>;
+  using IndicesStackFunctorType = otb::Functor::IndicesStackFunctor<RadiometricIndexType>;
 
   class indiceSpec
   {
   public:
-    indiceSpec(std::string k, std::string i, RadiometricIndiceType * ind)
+    indiceSpec(std::string k, std::string i, RadiometricIndexType * ind)
       : key(k), item(i), indice(ind)
     {}
     std::string key;
     std::string item;
-    std::unique_ptr<RadiometricIndiceType> indice;
+    std::unique_ptr<RadiometricIndexType> indice;
   };
 
 
@@ -233,7 +233,7 @@ private:
     bandChecker(bandIndicesMap,CommonBandNames::NIR,"channels.nir");
     bandChecker(bandIndicesMap,CommonBandNames::MIR,"channels.mir");
 
-    std::vector<RadiometricIndiceType*> indices;
+    std::vector<RadiometricIndexType*> indices;
 
     // Find selected indices
     for(unsigned int idx = 0; idx < GetSelectedItems("list").size(); ++idx)

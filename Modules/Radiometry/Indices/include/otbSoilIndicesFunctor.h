@@ -22,7 +22,7 @@
 #define otbSoilIndicesFunctor_h
 
 #include "otbMath.h"
-#include "otbRadiometricIndice.h"
+#include "otbRadiometricIndex.h"
 
 namespace otb
 {
@@ -43,17 +43,17 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class RI : public RadiometricIndice<TInput,TOutput>
+class RI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  RI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
+  RI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override  
   {
     auto green = this->Value(CommonBandNames::GREEN,input);
     auto red = this->Value(CommonBandNames::RED,input);
   
-    if (std::abs(green) < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(green) < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -77,17 +77,17 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class CI : public RadiometricIndice<TInput,TOutput>
+class CI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  CI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
+  CI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto green = this->Value(CommonBandNames::GREEN,input);
     auto red = this->Value(CommonBandNames::RED,input);
 
-    if (std::abs(green + red) < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(green + red) < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -107,10 +107,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class BI : public RadiometricIndice<TInput,TOutput>
+class BI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  BI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
+  BI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -132,11 +132,11 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class BI2 : public RadiometricIndice<TInput,TOutput>
+class BI2 : public RadiometricIndex<TInput,TOutput>
 {
 public:
   
-  BI2() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN, CommonBandNames::NIR}) {}
+  BI2() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN, CommonBandNames::NIR}) {}
  
  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {

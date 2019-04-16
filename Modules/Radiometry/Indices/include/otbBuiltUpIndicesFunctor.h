@@ -21,7 +21,7 @@
 #ifndef otbBuiltUpIndicesFunctor_h
 #define otbBuiltUpIndicesFunctor_h
 
-#include "otbRadiometricIndice.h"
+#include "otbRadiometricIndex.h"
 
 namespace otb
 {
@@ -38,10 +38,10 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class ISU : public RadiometricIndice<TInput,TOutput>
+class ISU : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  ISU()  : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  ISU()  : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {

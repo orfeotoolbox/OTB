@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbRadiometricIndice_h
-#define otbRadiometricIndice_h
+#ifndef otbRadiometricIndex_h
+#define otbRadiometricIndex_h
 
 #include "itkVariableLengthVector.h"
 #include "otbBandName.h"
@@ -36,7 +36,7 @@ namespace otb
 namespace Functor
 {
 /**
- * \class RadiometricIndice
+ * \class RadiometricIndex
  * \brief Base class for all radiometric indices
  * 
  * This class is the base class for all radiometric indices.
@@ -58,7 +58,7 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <typename TInput, typename TOutput, typename TBandNameEnum = CommonBandNames>
-class RadiometricIndice
+class RadiometricIndex
 {
 public:
   /// Types for input/output
@@ -78,7 +78,7 @@ public:
    * \param requiredBands the set<TBandNameEnum> of required bands 
    * \throw runtime_error if requiredBands contains TBandNameEnum::MAX
    */
-  RadiometricIndice(const std::set<BandNameType>& requiredBands)
+  RadiometricIndex(const std::set<BandNameType>& requiredBands)
     : m_RequiredBands(),
       m_BandIndices()
   {
@@ -206,7 +206,7 @@ protected:
 
 private:
   // Explicitely disable default constructor
-  RadiometricIndice() = delete;
+  RadiometricIndex() = delete;
 
   /// An array storing the required status for each band
   using RequiredBandsContainer = std::array<bool,NumberOfBands>;

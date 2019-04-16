@@ -165,7 +165,7 @@ int otbBuiltUpIndicesTest(int, char**)
 }
 
 
-int otbRadiometricIndiceTest(int,char**)
+int otbRadiometricIndexTest(int,char**)
 {
   auto ndvi = NDVI<double,double>();
   
@@ -219,7 +219,7 @@ int otbRadiometricIndiceTest(int,char**)
 
 int otbIndicesStackFunctorTest(int, char**)
 {
-  using IndicesType = RadiometricIndice<double,int,CommonBandNames>;
+  using IndicesType = RadiometricIndex<double,int,CommonBandNames>;
   using StackFunctorType = IndicesStackFunctor<IndicesType>;
 
   auto ndvi = NDVI<double,int>();

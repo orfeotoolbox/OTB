@@ -22,7 +22,7 @@
 #define otbVegetationIndicesFunctor_h
 
 #include "otbMath.h"
-#include "otbRadiometricIndice.h"
+#include "otbRadiometricIndex.h"
 
 namespace otb
 {
@@ -40,10 +40,10 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class NDVI : public RadiometricIndice<TInput,TOutput>
+class NDVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  NDVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  NDVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -56,7 +56,7 @@ public:
   // This static compute will be used in indices derived from NDVI
   static double Compute(const double & red, const double & nir)
   {
-    if (std::abs(nir + red) < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(nir + red) < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return 0.;
       }
@@ -77,17 +77,17 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class RVI : public RadiometricIndice<TInput,TOutput> 
+class RVI : public RadiometricIndex<TInput,TOutput> 
 {
 public:
-  RVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  RVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto red = this->Value(CommonBandNames::RED,input);
     auto nir = this->Value(CommonBandNames::NIR,input);
 
-    if (std::abs(red)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(red)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -110,10 +110,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class PVI : public RadiometricIndice<TInput,TOutput>
+class PVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  PVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  PVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -141,17 +141,17 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class SAVI : public RadiometricIndice<TInput,TOutput>
+class SAVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  SAVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  SAVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto red = this->Value(CommonBandNames::RED,input);
     auto nir = this->Value(CommonBandNames::NIR,input);
 
-    if (std::abs(nir + red + L)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(nir + red + L)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -174,10 +174,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class TSAVI : public RadiometricIndice<TInput,TOutput>
+class TSAVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  TSAVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  TSAVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -186,7 +186,7 @@ public:
 
     double denominator = A * nir + red + X * (1. + A * A);
 
-    if (std::abs(denominator) < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denominator) < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -211,11 +211,11 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class WDVI : public RadiometricIndice<TInput,TOutput>
+class WDVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
   /// Constructor
-  WDVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  WDVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -246,10 +246,10 @@ public:
  */
 
 template <class TInput, class TOutput>
-class MSAVI : public RadiometricIndice<TInput,TOutput>
+class MSAVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  MSAVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  MSAVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -263,7 +263,7 @@ public:
 
     double denominator = nir + red + L;
 
-    if (std::abs(denominator)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denominator)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -287,11 +287,11 @@ private:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class MSAVI2 : public RadiometricIndice<TInput,TOutput>
+class MSAVI2 : public RadiometricIndex<TInput,TOutput>
 {
 public:
 
-  MSAVI2() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  MSAVI2() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -319,10 +319,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class GEMI : public RadiometricIndice<TInput,TOutput>
+class GEMI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  GEMI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  GEMI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -333,7 +333,7 @@ public:
     double num_nu;
     double denom_nu = nir + red + 0.5;
 
-    if (std::abs(denom_nu)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denom_nu)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       nu = 0;
       }
@@ -344,7 +344,7 @@ public:
       }
 
     double denom_GEMI = 1 - red;
-    if (std::abs(denom_GEMI)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denom_GEMI)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -366,10 +366,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class AVI: public RadiometricIndice<TInput,TOutput>
+class AVI: public RadiometricIndex<TInput,TOutput>
 {
 public:
-  AVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::GREEN, CommonBandNames::RED, CommonBandNames::NIR}) {}
+  AVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::GREEN, CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -381,7 +381,7 @@ public:
     constexpr double dfact2 = (LambdaR - LambdaG) / LambdaR;
     double dterm1;
     double dterm2;
-    if (std::abs(nir - red)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(nir - red)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       dterm1 = 0;
       }
@@ -390,7 +390,7 @@ public:
       dterm1 = std::atan(dfact1 / (nir - red));
       }
 
-    if (std::abs(green - red)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(green - red)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       dterm2 = 0;
       }
@@ -426,11 +426,11 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class ARVI : public RadiometricIndice<TInput,TOutput>
+class ARVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
 
-  ARVI(): RadiometricIndice<TInput,TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR}) {}
+  ARVI(): RadiometricIndex<TInput,TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -440,7 +440,7 @@ public:
 
     double RHOrb = red - Gamma * (blue - red);
     double denominator = nir + RHOrb;
-    if (std::abs(denominator)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denominator)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -464,11 +464,11 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class EVI : public RadiometricIndice<TInput,TOutput>
+class EVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
 
-  EVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR}) {}
+  EVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -477,7 +477,7 @@ public:
     auto nir   = this->Value(CommonBandNames::NIR,input);
 
     double denominator = nir + C1 * red - C2 * blue + L;
-    if (std::abs(denominator) < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(denominator) < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return (static_cast<TOutput>(0.));
       }
@@ -508,17 +508,17 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class IPVI : public RadiometricIndice<TInput,TOutput>
+class IPVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  IPVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  IPVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
     auto red   = this->Value(CommonBandNames::RED,input);
     auto nir   = this->Value(CommonBandNames::NIR,input);
 
-    if (std::abs(nir + red)  < RadiometricIndice<TInput,TOutput>::Epsilon)
+    if (std::abs(nir + red)  < RadiometricIndex<TInput,TOutput>::Epsilon)
       {
       return static_cast<TOutput>(0.);
       }
@@ -540,10 +540,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class TNDVI : public RadiometricIndice<TInput,TOutput>
+class TNDVI : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  TNDVI() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+  TNDVI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
 
   TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
   {
@@ -580,10 +580,10 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class LAIFromNDVILogarithmic : public RadiometricIndice<TInput,TOutput>
+class LAIFromNDVILogarithmic : public RadiometricIndex<TInput,TOutput>
 {
 public:
-  LAIFromNDVILogarithmic() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}),
+  LAIFromNDVILogarithmic() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}),
                              m_NdviSoil(0.1),
                              m_NdviInf(0.89),
                              m_ExtinctionCoefficient(0.71) {}
@@ -660,12 +660,12 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class LAIFromReflectancesLinear : public RadiometricIndice<TInput,TOutput>
+class LAIFromReflectancesLinear : public RadiometricIndex<TInput,TOutput>
 {
 public:
 
 
-  LAIFromReflectancesLinear() : RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}),
+  LAIFromReflectancesLinear() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}),
                                 m_RedCoef(-17.91),
                                 m_NirCoef(12.26) {}
 
@@ -722,18 +722,18 @@ public:
 
 
   template <class TInput, class TOutput>
-  class LAIFromNDVIFormosat2Functor : public RadiometricIndice<TInput,TOutput>
+  class LAIFromNDVIFormosat2Functor : public RadiometricIndex<TInput,TOutput>
   {
   public:
     
-    LAIFromNDVIFormosat2Functor(): RadiometricIndice<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
+    LAIFromNDVIFormosat2Functor(): RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
     
     TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
     {
       auto red   = this->Value(CommonBandNames::RED,input);
       auto nir   = this->Value(CommonBandNames::NIR,input);
 
-      if (std::abs(nir + red) < RadiometricIndice<TInput,TOutput>::Epsilon)
+      if (std::abs(nir + red) < RadiometricIndex<TInput,TOutput>::Epsilon)
         {
         return static_cast<TOutput>(0.);
         }
