@@ -128,6 +128,9 @@ private:
         "* Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)\n"
         "* Vegetation:GEMI - Global environment monitoring index (Red, NIR)\n"
         "* Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)\n"
+        "* Vegetation:LAIFromNDVILog - Leaf Area Index from log NDVI (Red, NIR)\n"
+        "* Vegetation::LAIFromReflLinear - Leaf Area Index from reflectances with linear combination (Red, NIR)\n"
+        "* Vegetation::LAIFromNDVIFormo - Leaf Area Index from Formosat 2  TOC (Red, NIR)\n"
         "* Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)\n"
         "* Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)\n"
         "* Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)\n"
@@ -135,7 +138,8 @@ private:
         "* Soil:RI - Redness index (Red, Green)\n"
         "* Soil:CI - Color index (Red, Green)\n"
         "* Soil:BI - Brightness index (Red, Green)\n"
-        "* Soil:BI2 - Brightness index 2 (NIR, Red, Green)");
+        "* Soil:BI2 - Brightness index 2 (NIR, Red, Green)\n"
+        "* BuiltUp:ISU - Built Surfaces Index (NIR,Red) ");
 
     AddRAMParameter();
 
@@ -169,7 +173,9 @@ private:
     m_Map.push_back({"list.bi","Soil:BI",new otb::Functor::BI<InputType,OutputType>()});
     m_Map.push_back({"list.bi2","Soil:BI2",new otb::Functor::BI2<InputType,OutputType>()});
     m_Map.push_back({"list.isu","BuiltUp:ISU",new otb::Functor::ISU<InputType,OutputType>()});
+
     ClearChoices("list");
+
     for ( unsigned int i=0; i<m_Map.size(); i++ )
       {
       AddChoice(m_Map[i].key, m_Map[i].item);
