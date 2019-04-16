@@ -78,7 +78,7 @@ public:
   /** \brief Destructor. */
   ~QtWidgetView() override;
 
-  void BeforeExecuteButtonClicked() override;
+  bool BeforeExecuteButtonClicked() override;
 
 protected:
   QWidget* CreateInputWidgets() override;

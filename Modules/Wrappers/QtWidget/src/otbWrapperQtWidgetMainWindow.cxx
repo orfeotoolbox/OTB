@@ -118,11 +118,13 @@ void QtMainWindow::on_executeButton_clicked()
   }
   else
   {
-    gui->Disable();
-    gui->BeforeExecuteButtonClicked();
-    ui->statusBar->showMessage(tr("Running..."));
-    ui->executeButton->setText(tr("Cancel"));
-    emit ExecuteAndWriteOutput();
+    if (gui->BeforeExecuteButtonClicked())
+    {
+      gui->Disable();
+      ui->statusBar->showMessage(tr("Running..."));
+      ui->executeButton->setText(tr("Cancel"));
+      emit ExecuteAndWriteOutput();
+    }
   }
 }
 

@@ -200,7 +200,7 @@ QtWidgetView
   initialize( qobject_cast< FileSelectionInitializer::argument_type >( widget ) );
 }
 
-void QtWidgetView::BeforeExecuteButtonClicked()
+bool QtWidgetView::BeforeExecuteButtonClicked()
 {
   assert(GetModel() != NULL);
   assert(GetModel()->GetApplication() != NULL);
@@ -216,7 +216,6 @@ void QtWidgetView::BeforeExecuteButtonClicked()
   QStringList  filenames1;
 
   KeyLayerAccumulator::KeyLayerPairList layers;
-  QStringList                           filenames2;
 
   for (StringVector::const_iterator it(paramKeys.begin()); it != paramKeys.end(); ++it)
   {
@@ -251,9 +250,6 @@ void QtWidgetView::BeforeExecuteButtonClicked()
       if (layerStack != NULL)
       {
         KeyLayerAccumulator accumulator(std::for_each(layerStack->Begin(), layerStack->End(), KeyLayerAccumulator(filename, layers)));
-
-        if (accumulator.GetCount() > 0)
-          filenames2.push_back(filename.c_str());
       }
     }
   }
@@ -275,45 +271,19 @@ void QtWidgetView::BeforeExecuteButtonClicked()
       QMessageBox::StandardButton button = QMessageBox::question(this, PROJECT_NAME, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
       if (button == QMessageBox::No)
-        return;
+        return false;
     }
   }
 
+  // Delete from layer stack the images that will be overwritten and reloaded
+  while (!layers.empty())
   {
-    QString message;
+    layerStack->Delete(layers.front().first);
 
-    if (filenames2.size() == 1)
-    {
-      message = tr("File '%1' is being viewed in " PROJECT_NAME
-                   " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded "
-                   "after.\n\nDo you want to continue?")
-                    .arg(filenames2.front())
-                    .arg(otbApp->GetDocName());
-    }
-    else if (filenames2.size() > 1)
-    {
-      message =
-          tr("Following files are being viewed in " PROJECT_NAME
-             " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1")
-              .arg(filenames2.join("\n- "))
-              .arg(otbApp->GetDocName());
-    }
-
-    if (!message.isEmpty())
-    {
-      QMessageBox::StandardButton button = QMessageBox::question(this, PROJECT_NAME, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-
-      if (button == QMessageBox::No)
-        return;
-
-      while (!layers.empty())
-      {
-        layerStack->Delete(layers.front().first);
-
-        layers.pop_front();
-      }
-    }
+    layers.pop_front();
   }
+
+  return true;
 }
 
 /*******************************************************************************/
@@ -340,18 +310,6 @@ QtWidgetView
 
     return;
     }
-
-  /*
-  // Removed as per MVDX-259.
-  QMessageBox::information(
-    this,
-    PROJECT_NAME,
-    tr( "'%1' has succeeded.\n"
-	"Result(s) will be imported as dataset(s).\n")
-    .arg( otbApp->GetName() ),
-    QMessageBox::Ok
-  );
-  */
 
   CountType count = 0;
 

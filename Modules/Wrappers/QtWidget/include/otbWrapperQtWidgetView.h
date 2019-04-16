@@ -62,7 +62,7 @@ public:
   /** \brief Model Accessor */
   QtWidgetModel* GetModel() const;
 
-  virtual void BeforeExecuteButtonClicked() {}
+  virtual bool BeforeExecuteButtonClicked() { return true; }
 
   void Disable();
   void Enable();
