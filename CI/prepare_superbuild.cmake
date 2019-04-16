@@ -77,7 +77,7 @@ set(CTEST_GIT_UPDATE_CUSTOM echo No update)
 
 ctest_start (Experimental TRACK CI_Prepare)
 
-ctest_update()
+ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 
 set(CTEST_BUILD_FLAGS "-j16")
 
