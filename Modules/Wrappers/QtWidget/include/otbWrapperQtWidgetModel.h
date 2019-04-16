@@ -37,17 +37,17 @@ class OTBQtWidget_EXPORT AppliThread : public QThread
  Q_OBJECT
 
  public:
-  AppliThread(Application* app)
+  AppliThread(Application::Pointer app) :
+      m_Application(app)
     {
-      m_Application = app;
     }
 
   ~AppliThread() override;
 
-  void Execute()
+  /** Ask the running application to stop */
+  void Stop()
   {
-    // Call the signal start to begin running the program
-    start();
+    m_Application->Stop();
   }
 
 signals:
@@ -65,13 +65,6 @@ signals:
    * \param what The std::exception::what() which is forwarded to listeners.
    */
   void ExceptionRaised( QString what );
-
-public slots:
-  /** Ask the running application to stop */
-  void Stop()
-    {
-    m_Application->Stop();
-    }
 
 protected:
   void run() override;
@@ -106,6 +99,10 @@ public:
   {
     return m_LogOutput;
   }
+
+  bool IsRunning() const;
+
+  void Stop();
 
   /** Logger warning message sender */
   void SendLogWARNING( const std::string & mes );
@@ -144,8 +141,6 @@ signals:
 
   void UpdateGui();
 
-  void Stop();
-
 public slots:
   /**
    * \brief Slots called every time one of the widget needs to be
@@ -168,19 +163,18 @@ private slots:
    */
   void OnApplicationExecutionDone( int status );
 
-  void TimerDone();
-
 private:
   QtWidgetModel(const QtWidgetModel&) = delete;
   void operator=(const QtWidgetModel&) = delete;
 
-  Application::Pointer m_Application;
-
   QtLogOutput::Pointer  m_LogOutput;
+
+  AppliThread* m_taskAppli;
 
   bool m_IsRunning;
 
-  QTimer *m_Timer;
+public:
+  Application::Pointer m_Application;
 };
 
 

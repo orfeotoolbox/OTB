@@ -25,7 +25,6 @@
 #include "otbQtApplication.h"
 #include "otbWrapperApplicationRegistry.h"
 #include "otbWrapperQtWidgetView.h"
-#include "otbWrapperQtWidgetProgressReport.h"
 #include "itksys/SystemTools.hxx"
 
 
@@ -33,7 +32,6 @@ using otb::Wrapper::Application;
 using otb::Wrapper::ApplicationRegistry;
 using otb::Wrapper::QtApplication;
 using otb::Wrapper::QtWidgetView;
-using otb::Wrapper::QtWidgetProgressReport;
 
 
 struct static_finalizer
@@ -113,19 +111,6 @@ otbWrapperQtWidgetShowWidget( int argc, char* argv[] )
 	  );
 
 	  layout->addWidget( qwv );
-
-	  // Create OTB-Application progress-report.
-	  //
-	  // SAT: QWidget should be created without parent when adding
-	  // into QLayout (because QLayout will take ownership of the
-	  // reference-counted pointer) but OTB API doesn't defined default nullptr
-	  // value such as in Qt.
-	  QtWidgetProgressReport * qwpr =
-	    new QtWidgetProgressReport( qwv->GetModel(), widget );
-
-	  qwpr->SetApplication( otb_application );
-
-	  layout->addWidget( qwpr );
 	}
         widget->setLayout( layout );
       }

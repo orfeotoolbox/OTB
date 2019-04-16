@@ -366,6 +366,77 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
     }
 }
 
+std::string OutputProcessXMLParameter::MakeCommandLine(Application::Pointer application)
+{
+  OutputProcessXMLParameter::Pointer outXMLParam = OutputProcessXMLParameter::New();
+  TiXmlElement* XMLAppElement = outXMLParam->ParseApplication(application);
+
+  // Create command line from the XML document
+  TiXmlElement *     pName, *pParam;
+  std::ostringstream cmdLine;
+
+  cmdLine << "";
+
+  if (XMLAppElement)
+  {
+    pName = XMLAppElement->FirstChildElement("name");
+
+    cmdLine << "otbcli_" << pName->GetText();
+#ifdef _WIN32
+    cmdLine << ".bat";
+#endif
+    cmdLine << " ";
+
+    // Parse application parameters
+    pParam = XMLAppElement->FirstChildElement("parameter");
+
+    while (pParam)
+    {
+      // Get parameter key
+      cmdLine << "-";
+      cmdLine << pParam->FirstChildElement("key")->GetText();
+      cmdLine << " ";
+
+      // Some parameters can have multiple values. Test it and handle this
+      // specific case
+      TiXmlElement* values = pParam->FirstChildElement("values");
+
+      if (values)
+      {
+        // Loop over value
+        TiXmlElement* pValue = values->FirstChildElement("value");
+        while (pValue)
+        {
+          cmdLine << pValue->GetText();
+          cmdLine << " ";
+
+          pValue = pValue->NextSiblingElement(); // iteration over multiple values
+        }
+      }
+      else
+      {
+        // Get parameter value
+        cmdLine << pParam->FirstChildElement("value")->GetText();
+        cmdLine << " ";
+
+        // In case of OutputImageparameter we need to report output pixel type
+        TiXmlElement* pPixType = pParam->FirstChildElement("pixtype");
+
+        if (pPixType)
+        {
+          cmdLine << pPixType->GetText();
+          cmdLine << " ";
+        }
+      }
+
+      pParam = pParam->NextSiblingElement(); // iteration over parameters
+    }
+  }
+
+  return cmdLine.str();
+}
+
+
 } //end namespace wrapper
 
 } //end namespace otb
