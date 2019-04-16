@@ -29,6 +29,7 @@ after_script:
   - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
+  - precheck
   - prepare
   - build
 
@@ -38,6 +39,19 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
+
+fast-build:
+  extends: .general
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout $CI_COMMIT_REF_NAME
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
 debian-build:
   extends: .general
@@ -59,13 +73,8 @@ debian-build:
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
-# This is needed to have only one pipeline in a merge request context
 ubuntu-llvm:
   only: [merge_requests]
-  extends: .common-build
-
-ubuntu-llvm-wip:
-  except: [merge_requests]
   extends: .common-build
 
 .common-prepare:
