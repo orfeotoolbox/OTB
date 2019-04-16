@@ -105,7 +105,7 @@ ubuntu-superbuild-prepare:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-prepare:
-  only: [merge_requests, branches]
+  only: [merge_requests]
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
@@ -120,7 +120,7 @@ ubuntu-superbuild-build:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-build:
-  only: [merge_requests, branches]
+  only: [merge_requests]
   extends: .general
   stage: build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
