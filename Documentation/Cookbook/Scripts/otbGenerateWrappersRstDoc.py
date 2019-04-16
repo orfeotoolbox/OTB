@@ -426,7 +426,7 @@ def GenerateRstForApplications(rst_dir):
                 tagFile.write("\tapp_" + appName + "\n")
 
         # Write application rst
-        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
+        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
             appFile.write(render_application(appName, appNames))
 
 if __name__ == "__main__":

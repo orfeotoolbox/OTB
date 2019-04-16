@@ -66,7 +66,7 @@ otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeGeometriesProjectionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_7}
     ${BASELINE}/geometriesProjectionExample.shp
     ${TEMP}/geometriesProjectionExample.shp
   Execute $<TARGET_FILE:GeometriesProjectionExample>

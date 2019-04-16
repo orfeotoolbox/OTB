@@ -33,7 +33,7 @@ namespace Wrapper
  *
  * This application gathers the 4 steps of the large-scale MeanShift
  * segmentation framework.
- * 
+ *
  */
 class LargeScaleMeanShift : public CompositeApplication
 {
@@ -191,13 +191,11 @@ private:
       if (IsParameterEnabled("mode.vector.imfield") &&
           HasValue("mode.vector.imfield"))
         {
-        GetInternalApplication("vectorization")->SetParameterInputImage("in",
-          GetParameterImage<ImageBaseType>("mode.vector.imfield"));
+          GetInternalApplication("vectorization")->SetParameterInputImage("in", GetParameterImageBase("mode.vector.imfield"));
         }
       else
         {
-        GetInternalApplication("vectorization")->SetParameterInputImage("in",
-          GetParameterImage<ImageBaseType>("in"));
+          GetInternalApplication("vectorization")->SetParameterInputImage("in", GetParameterImageBase("in"));
         }
       GetInternalApplication("vectorization")->SetParameterString("inseg",
         tmpFilenames[2]);
