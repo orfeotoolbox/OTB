@@ -343,7 +343,8 @@ otb_test_application(NAME apTvPrConvertSensorToGeoPoint
                      TESTENVOPTIONS ${TEMP}/apTvPrConvertSensorToGeoPoint.txt
                      VALID  --compare-ascii ${EPSILON_7}
                         ${BASELINE_FILES}/apTvPrConvertSensorToGeoPoint.txt
-                        ${TEMP}/apTvPrConvertSensorToGeoPoint.txt)
+                        ${TEMP}/apTvPrConvertSensorToGeoPoint.txt
+                        --ignore-lines-with 2 town country)
 
 
 #----------- Superimpose TESTS ----------------

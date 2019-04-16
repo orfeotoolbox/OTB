@@ -29,6 +29,7 @@ after_script:
   - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
+  - prepare
   - build
 
 .general:
@@ -37,14 +38,6 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
-
-native-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
-  script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-gcc
 
 debian-build:
   extends: .general
@@ -57,10 +50,14 @@ debian-build:
 .common-build:
   extends: .general
   stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
-
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
+  artifacts:
+    paths:
+      - build/CookBook-*-html.tar.gz
+      - build/Documentation/Cookbook/latex/CookBook-*.pdf
+      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 # This is needed to have only one pipeline in a merge request context
 ubuntu-llvm:
@@ -71,3 +68,41 @@ ubuntu-llvm-wip:
   except: [merge_requests]
   extends: .common-build
 
+superbuild-prepare:
+  only: [merge_requests]
+  extends: .general
+  stage: prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  before_script:
+# This override the previous before_script
+    - git checkout $CI_COMMIT_REF_NAME
+# We are now doing the git-lfs install
+# This is done after the checkout so we avoid downloading Data
+# But we need it to upload the archive
+    - git-lfs install
+    - git config --global user.email "otbbot@orfeo-toolbox.org"
+    - git config --global user.name "otbbot"
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$K8S_SECRET_SSH")
+# This is for debug, we are checking the owner of the ssh key
+    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  after_script:
+    - echo "Nothing to do for after_script"
+  artifacts:
+    expire_in: 24 hrs
+    paths:
+      # This recovers logs from superbuild build
+      - build/*/*/*/*.log
+      - sb_branch.txt
+
+superbuild-build:
+  only: [merge_requests]
+  extends: .general
+  stage: build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+  dependencies:
+    - superbuild-prepare
