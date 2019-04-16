@@ -120,7 +120,6 @@ void QtWidgetListViewParameter::DoCreateWidget()
   m_VLayout = new QHBoxLayout;
   m_VLayout->setContentsMargins(0, 0, 0, 0);
   m_VLayout->addWidget(m_ListView);
-  m_ListView->setMaximumSize(m_ListView->width() ,  4* m_LineHeight);
   m_VLayout->activate();
 
   this->setLayout(m_VLayout);
@@ -144,6 +143,9 @@ void QtWidgetListViewParameter::SelectedItems()
   // make sure parameter is enabled
   m_ListViewParam->SetActive(true);
   m_ListViewParam->SetUserValue(true);
+
+  // Call the application DoUpdateParameters, then all widgets' DoUpdateGUI (including this one)
+  this->GetModel()->NotifyUpdate();
 }
 
 }
