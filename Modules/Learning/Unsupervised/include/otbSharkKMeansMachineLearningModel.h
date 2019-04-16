@@ -48,6 +48,7 @@
 #include "shark/Models/Clustering/Centroids.h"
 #include "shark/Models/Clustering/ClusteringModel.h"
 #include "shark/Algorithms/KMeans.h"
+#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -132,6 +133,13 @@ public:
   itkGetMacro( CentroidFilename, std::string );
   itkSetMacro( CentroidFilename, std::string );
 
+  /** Initialize the centroids for the kmeans algorithm */
+  void SetCentroidsFromData(const shark::Data<shark::RealVector> & data)
+  {
+    m_Centroids.setCentroids(data);
+    this->Modified();
+  }
+  
 protected:
   /** Constructor */
   SharkKMeansMachineLearningModel();
@@ -148,6 +156,9 @@ protected:
 
   template<typename DataType>
   DataType NormalizeData(const DataType &data) const;
+  
+  template<typename DataType>
+  shark::Normalizer<> TrainNormalizer(const DataType &data) const;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream &os, itk::Indent indent) const override;

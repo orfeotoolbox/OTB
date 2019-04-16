@@ -39,7 +39,6 @@
 #include "shark/Algorithms/KMeans.h" //k-means algorithm
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
-#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
 #include <shark/Data/Csv.h> //load the csv file
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -67,18 +66,6 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 {
 }
 
-template<class TInputValue, class TOutputValue>
-bool 
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::InitializeCentroids()
-{
-  shark::Data<shark::RealVector> data;
-  shark::importCSV(data, m_CentroidFilename, ' ');
-  m_Centroids.setCentroids(data);
-  std::cout <<m_Centroids.centroids() << std::endl;
-  return 1;
-}
-
 /** Train the machine learning model */
 template<class TInputValue, class TOutputValue>
 void
@@ -90,12 +77,12 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
   shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
 
-  if (!m_CentroidFilename.empty())
-    InitializeCentroids();
-  
   // Normalized input value if necessary
   if( m_Normalized )
-    data = NormalizeData( data );
+  {
+    auto normalizer = TrainNormalizer(data);
+    data = normalizer(data);
+  }
 
   // Use a Hard Clustering Model for classification
   shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
@@ -112,6 +99,18 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   shark::NormalizeComponentsUnitVariance<> normalizingTrainer( true );//zero mean
   normalizingTrainer.train( normalizer, data );
   return normalizer( data );
+}
+
+template<class TInputValue, class TOutputValue>
+template<typename DataType>
+shark::Normalizer<>
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
+::TrainNormalizer(const DataType &data) const
+{
+  shark::Normalizer<> normalizer;
+  shark::NormalizeComponentsUnitVariance<> normalizingTrainer( true );//zero mean
+  normalizingTrainer.train( normalizer, data );
+  return normalizer;
 }
 
 template<class TInputValue, class TOutputValue>
