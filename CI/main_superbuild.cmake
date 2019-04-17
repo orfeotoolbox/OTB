@@ -79,8 +79,18 @@ set (CMAKE_COMMAND "cmake")
 execute_process(
   COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
   "${CI_PROJ_DIR}/superbuild-artifact/SuperBuild_Install.tar"
+  RESULT_VARIABLE tar_res
+  OUTPUT_VARIABLE tar_out
+  ERROR_VARIABLE tar_err
   WORKING_DIRECTORY ${CI_ROOT_DIR}
   )
+
+if ( DEBUG )
+  message( "${CMAKE_COMMAND} -E tar xf ${CI_PROJ_DIR}/superbuild-artifact/SuperBuild_Install.tar")
+  message( "tar_res: '${clone_res}'" )
+  message( "tar_out: '${tar_out}'" )
+  message( "tar_err: '${tar_err}'" )
+endif()
 
 set( XDK_PATH "${CI_ROOT_DIR}/xdk")
 
