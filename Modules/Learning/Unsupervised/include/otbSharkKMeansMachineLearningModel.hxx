@@ -35,7 +35,6 @@
 
 #include "otb_shark.h"
 #include "otbSharkUtils.h"
-#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h" //normalize
 #include "shark/Algorithms/KMeans.h" //k-means algorithm
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
@@ -80,18 +79,6 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   // Use a Hard Clustering Model for classification
   shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
   m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
-}
-
-template<class TInputValue, class TOutputValue>
-template<typename DataType>
-shark::Normalizer<>
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::TrainNormalizer(const DataType &data) const
-{
-  shark::Normalizer<> normalizer;
-  shark::NormalizeComponentsUnitVariance<> normalizingTrainer( true );//zero mean
-  normalizingTrainer.train( normalizer, data );
-  return normalizer;
 }
 
 template<class TInputValue, class TOutputValue>

@@ -48,7 +48,6 @@
 #include "shark/Models/Clustering/Centroids.h"
 #include "shark/Models/Clustering/ClusteringModel.h"
 #include "shark/Algorithms/KMeans.h"
-#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -145,9 +144,6 @@ protected:
 
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
                               TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
-
-  template<typename DataType>
-  shark::Normalizer<> TrainNormalizer(const DataType &data) const;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream &os, itk::Indent indent) const override;

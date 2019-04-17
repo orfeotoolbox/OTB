@@ -23,6 +23,7 @@
 #include "otbLearningApplicationBase.h"
 #include "otbSharkKMeansMachineLearningModel.h"
 #include "otbStatisticsXMLFileReader.h"
+#include "shark/Models/Normalizer.h"
 
 namespace otb
 {
