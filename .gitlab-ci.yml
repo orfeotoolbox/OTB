@@ -88,7 +88,7 @@ ubuntu-llvm:
 
 .common-prepare:
   extends: .general
-  only: [merge_requests, branches]
+  only: [merge_requests]
   stage: prepare
   before_script:
 # This override the previous before_script
@@ -114,6 +114,7 @@ ubuntu-llvm:
 
 ubuntu-superbuild-prepare:
   extends: .common-prepare
+  only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
@@ -131,7 +132,7 @@ centos-superbuild-prepare:
 ## SuperBuild builds section.
 
 .superbuild-build:
-  only: [merge_requests, branches]
+  only: [merge_requests]
   extends: .common-build
   # dependencies:
   #   - superbuild-prepare
@@ -143,6 +144,7 @@ centos-superbuild-prepare:
 
 ubuntu-superbuild-build:
   extends: .superbuild-build
+  only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
