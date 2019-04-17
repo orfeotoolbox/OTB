@@ -118,8 +118,11 @@ private:
     otb::SensorModelAdapter::Pointer sm_ref = otb::SensorModelAdapter::New();
 
     // Read the geom file
-    sm->ReadGeomFile(GetParameterString("ingeom"));
+    bool isRead = sm->ReadGeomFile(GetParameterString("ingeom"));
     sm_ref->ReadGeomFile(GetParameterString("ingeom"));
+
+    if (!isRead)
+      otbAppLogFATAL("Can't read the input geom file!");
 
     // Setup the DEM Handler
     otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
@@ -156,7 +159,7 @@ private:
 
       z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon,lat);
 
-      otbAppLogINFO("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
+      otbAppLogDEBUG("Adding tie point x="<<x<<", y="<<y<<", z="<<z<<", lon="<<lon<<", lat="<<lat);
 
       sm->AddTiePoint(x,y,z,lon,lat);
 
@@ -210,12 +213,29 @@ private:
     ofs<<"#ref_lon ref_lat elevation predicted_lon predicted_lat predicted_elev x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) global_error(meters)"<<std::endl;
     }
 
+  size_t validPoints=0;
   for(TiePointsType::const_iterator it = tiepoints.begin();
       it!=tiepoints.end(); ++it)
     {
     PointType tmpPoint,tmpPoint_ref,ref;
     sm->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint[0],tmpPoint[1],tmpPoint[2]);
     sm_ref->ForwardTransformPoint(it->first[0],it->first[1],it->first[2],tmpPoint_ref[0],tmpPoint_ref[1],tmpPoint_ref[2]);
+
+    if (!(std::isfinite(tmpPoint[0]) &&
+          std::isfinite(tmpPoint[1]) &&
+          std::isfinite(tmpPoint[2])))
+      {
+      otbAppLogWARNING("Can't project tie point at ["<<it->first[0]<<","<<it->first[1]<<","<<it->first[2]<<"] with optimized model!");
+      continue;
+      }
+
+    if (!(std::isfinite(tmpPoint_ref[0]) &&
+          std::isfinite(tmpPoint_ref[1]) &&
+          std::isfinite(tmpPoint_ref[2])))
+      {
+      otbAppLogWARNING("Can't project tie point at ["<<it->first[0]<<","<<it->first[1]<<","<<it->first[2]<<"] with original model!");
+      continue;
+      }
 
     tmpPoint = rsTransform->TransformPoint(tmpPoint);
     tmpPoint_ref = rsTransform->TransformPoint(tmpPoint_ref);
@@ -257,29 +277,34 @@ private:
     meanx_ref += xerror_ref;
     meany_ref += yerror_ref;
 
-
+    validPoints++;
     }
 
-  rmse/=tiepoints.size();
+  if (!validPoints)
+    {
+    otbAppLogFATAL("No valid points to compute RMSE !");
+    }
 
-  rmsex/=tiepoints.size();
+  rmse/=validPoints;
 
-  rmsey/=tiepoints.size();
+  rmsex/=validPoints;
 
-
-  meanx/=tiepoints.size();
-  meany/=tiepoints.size();
-
-
-  rmse_ref/=tiepoints.size();
-
-  rmsex_ref/=tiepoints.size();
-
-  rmsey_ref/=tiepoints.size();
+  rmsey/=validPoints;
 
 
-  meanx_ref/=tiepoints.size();
-  meany_ref/=tiepoints.size();
+  meanx/=validPoints;
+  meany/=validPoints;
+
+
+  rmse_ref/=validPoints;
+
+  rmsex_ref/=validPoints;
+
+  rmsey_ref/=validPoints;
+
+
+  meanx_ref/=validPoints;
+  meany_ref/=validPoints;
 
 
   double stdevx = std::sqrt(rmsex - meanx * meanx);

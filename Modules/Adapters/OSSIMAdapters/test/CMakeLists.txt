@@ -24,7 +24,6 @@ set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
 otbTestImageKeywordlist.cxx
 otbOssimJpegFileResourceLeakTest.cxx
-otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
 otbDEMHandlerTest.cxx
@@ -143,14 +142,6 @@ otb_add_test(NAME ioTvOssimJpegFileResourceLeak COMMAND otbOSSIMAdaptersTestDriv
   otbOssimJpegFileResourceLeakTest
   ${INPUTDATA}/poupees.jpg
   1200
-  )
-
-otb_add_test(NAME ioTvMapProjectionAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${BASELINE_FILES}/ioTvMapProjectionAdapterTest.txt
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
-  otbMapProjectionAdapterTest
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
   )
 
 otb_add_test(NAME prTvossimElevManagerTest2 COMMAND otbOSSIMAdaptersTestDriver

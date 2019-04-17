@@ -27,13 +27,12 @@
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbMapProjections.h"
+#include "otbGenericMapProjection.h"
 #include "itkUnaryFunctorImageFilter.h"
 //#include "itkComplexToModulusImageFilter.h"
 #include "otbDEMHandler.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
 #include "otbComplexToIntensityImageFilter.h"
 #include "otbPerBandVectorImageFilter.h"
 
@@ -56,15 +55,14 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   typedef otb::ImageFileReader<VectorImageType>                                     ReaderType;
   typedef otb::ImageFileReader<ComplexVectorImageType>                              ComplexReaderType;
   typedef otb::ImageFileWriter<VectorImageType>                                     WriterType;
-  typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
 
   // Handling of complex images
   typedef otb::Image<ComplexPixelType> ComplexImageType;
   typedef otb::Image<double>           ImageType;
   typedef otb::ComplexToIntensityImageFilter<ComplexImageType, ImageType> IntensityFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexVectorImageType,VectorImageType,IntensityFilterType> PerBandIntensityFilterType;
-  
-  typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType, UtmMapProjectionType> OrthoRectifFilterType;
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
+  typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType, MapProjectionType> OrthoRectifFilterType;
 
   //Allocate pointer
   ReaderType::Pointer reader = ReaderType::New();
@@ -73,7 +71,6 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   PerBandIntensityFilterType::Pointer intensityFilter = PerBandIntensityFilterType::New();
   
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
-  UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
 
   writer->SetFileName(argv[2]);
   
@@ -119,8 +116,8 @@ int otbOrthoRectificationFilter(int argc, char* argv[])
   origin[1] = strtod(argv[4], nullptr);         //Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  utmMapProjection->SetZone(atoi(argv[9]));
-  utmMapProjection->SetHemisphere(argv[10][0]);
+  MapProjectionType::Pointer utmMapProjection = MapProjectionType::New();
+  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[9]),atoi(argv[10]) ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
   orthoRectifFilter->SetMapProjection(utmMapProjection);
 
   // Displacement Field spacing

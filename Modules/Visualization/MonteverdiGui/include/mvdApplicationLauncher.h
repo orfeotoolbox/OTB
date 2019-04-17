@@ -31,6 +31,14 @@
 #include "OTBMonteverdiGUIExport.h"
 #include "otbWrapperApplication.h"
 
+namespace otb
+{
+namespace Wrapper
+{
+  class QtMainWindow;
+}
+}
+
 namespace mvd
 {
 
@@ -54,7 +62,7 @@ public:
 
   otb::Wrapper::Application::Pointer PrepareApplication(const QString& appName, bool isStandalone = false) const;
 
-  QWidget* NewOtbApplicationWindow(const QString& appName, bool isStandalone = false, QWidget* p = nullptr, Qt::WindowFlags = 0) const;
+  otb::Wrapper::QtMainWindow* NewOtbApplicationWindow(const QString& appName, bool isStandalone = false, QWidget* p = nullptr, Qt::WindowFlags = 0) const;
 };
 
 } // namespace mvd

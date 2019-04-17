@@ -21,6 +21,7 @@
 
 
 #include "otbMassOfBelief.h"
+#include "otbMacro.h"
 
 typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
 
@@ -44,56 +45,60 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   massFunction->SetMass(set2, 0.3);
   massFunction->SetMass(set4, 0.1);
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
-  std::cout<<"Removing mass from set ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set4);
-  std::cout<<std::endl;
+  std::ostringstream oss;
+  MassOfBeliefFunctionType::PrintLabelSet(oss, set4);
+  otbLogMacro(Info, << "Removing mass from set " << oss.str());
 
   massFunction->RemoveMass(set4);
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
-  std::cout<<"Estimating uncertainty "<<std::endl;
+  otbLogMacro(Info, <<"Estimating uncertainty");
   massFunction->EstimateUncertainty();
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
-  std::cout<<"Removing mass ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set2);
-  std::cout<<" and adding mass ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
-  std::cout<<std::endl;
+  oss.str(std::string());
+  oss << "Removing mass ";
+  MassOfBeliefFunctionType::PrintLabelSet(oss, set2);
+  oss << " and adding mass ";
+  MassOfBeliefFunctionType::PrintLabelSet(oss, set3);
+  otbLogMacro(Info, << oss.str());
+
   massFunction->RemoveMass(set2);
   massFunction->SetMass(set3, 0.6);
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
-  std::cout<<"Normalizing masses "<<std::endl;
+  otbLogMacro(Info, <<"Normalizing masses ");
   massFunction->Normalize();
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
-  std::cout<<"Belief of ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
-  std::cout<<" is "<<massFunction->GetBelief(set3)<<std::endl;
-  
-  std::cout<<"Plausibility of ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, set3);
-  std::cout<<" is "<<massFunction->GetPlausibility(set3)<<std::endl;
+  oss.str(std::string());
+  MassOfBeliefFunctionType::PrintLabelSet(oss, set3);
+  otbLogMacro(Info, <<"Belief of "<< oss.str()
+    << " is "<< massFunction->GetBelief(set3));
+
+  oss.str(std::string());
+  MassOfBeliefFunctionType::PrintLabelSet(oss, set3);
+  otbLogMacro(Info, <<"Plausibility of " << oss.str()
+    << " is " << massFunction->GetPlausibility(set3));
 
   MassOfBeliefFunctionType::LabelSetType otherSet;
   otherSet.insert("cat");
   otherSet.insert("dog");
   otherSet.insert("bird");
 
-  std::cout<<"Initializing with power set from universal set ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, otherSet);
-  std::cout<<std::endl;
-  
+  oss.str(std::string());
+  MassOfBeliefFunctionType::PrintLabelSet(oss, otherSet);
+  otbLogMacro(Info, <<"Initializing with power set from universal set "<< oss.str());
+
   massFunction->InitializePowerSetMasses(otherSet);
 
-  std::cout<<massFunction<<std::endl;
+  otbLogMacro(Debug, <<massFunction);
 
   return EXIT_SUCCESS;
 }

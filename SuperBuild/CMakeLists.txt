@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+## COMMMENT to dirty superbuild artifact. TAG: 1.
+
 cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
@@ -293,7 +295,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
+option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)

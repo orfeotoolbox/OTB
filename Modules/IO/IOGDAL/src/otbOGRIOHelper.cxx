@@ -187,6 +187,21 @@ void OGRIOHelper
 
   layer->ResetReading();
 
+  // Warn user that 3D data are not supported for reading/writing
+  auto geomType = layer->GetGeomType();
+
+  if(geomType == wkbPoint25D 
+     || geomType == wkbLineString25D 
+     || geomType == wkbPolygon25D 
+     || geomType == wkbMultiPoint25D 
+     || geomType == wkbMultiLineString25D 
+     || geomType == wkbMultiPolygon25D 
+     || geomType == wkbGeometryCollection25D)
+    {
+    otbLogMacro(Warning,<<"OGRVectorDataIO does not support 3D data. "<<OGRGeometryTypeToName(geomType)<<" will be converted to 2D upon reading."); 
+    }
+
+
   unsigned int   counter = 0;
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
 
@@ -715,8 +730,7 @@ unsigned int OGRIOHelper
       ogrCurrentLayer = m_DataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
         {
-        //itkExceptionMacro(<<"Failed to create layer "<<dataNode->GetNodeId());
-        std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
         }
       else
         {
@@ -758,7 +772,9 @@ unsigned int OGRIOHelper
           if (std::string(key) != "FID")
             {
             // Edit the value of the field and add it to the current feature
-            ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+            int fIndex = ogrFeature->GetFieldIndex(key);
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
             }
           }
 
@@ -768,7 +784,6 @@ unsigned int OGRIOHelper
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
           {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
-          //std::cout << "Failed to create feature in shapefile."
           }
 
         OGRFeature::DestroyFeature(ogrFeature);
@@ -813,7 +828,9 @@ unsigned int OGRIOHelper
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          int fIndex = ogrFeature->GetFieldIndex(key);
+          if (fIndex >= 0)
+            ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
           }
 
 //        ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -898,7 +915,9 @@ unsigned int OGRIOHelper
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          int fIndex = ogrFeature->GetFieldIndex(key);
+          if (fIndex >= 0)
+            ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
           }
 
         ogrFeature->SetGeometry(ogrPolygon);
@@ -920,13 +939,10 @@ unsigned int OGRIOHelper
       }
       case FEATURE_MULTIPOINT:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multipoint.");
-        }
-
       OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*) OGRGeometryFactory::createGeometry(wkbMultiPoint);
       OGRFeature *   ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiPoint, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -938,21 +954,17 @@ unsigned int OGRIOHelper
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
 
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       case FEATURE_MULTILINE:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multiline.");
-        }
-
       // Instantiate a new  ogrMultiLineString feature
       OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
         wkbMultiLineString);
 
       OGRFeature *ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiLineString, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -963,19 +975,16 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+
       break;
       }
       case FEATURE_MULTIPOLYGON:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating multipolygon.");
-        }
-
       // Instantiate a new multipolygon feature
       OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
       OGRFeature *     ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrMultiPolygon, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -986,20 +995,18 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
+
       break;
       }
       case FEATURE_COLLECTION:
       {
-      if (ogrCollection != nullptr)
-        {
-        itkExceptionMacro(<< "Problem while creating collection.");
-        }
 
       OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(
         wkbGeometryCollection);
 
       OGRFeature *ogrFeature;
+
+      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 //      ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -1010,8 +1017,6 @@ unsigned int OGRIOHelper
         {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
         }
-
-      ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
       }
       }
@@ -1098,7 +1103,7 @@ std::vector<OGRLayer*> OGRIOHelper
                                       wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
         {
-        std::cout << "Failed to create layer " << dataNode->GetNodeId() << std::endl;
+        itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
         }
       else
         {

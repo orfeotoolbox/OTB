@@ -57,7 +57,7 @@ int otbGeometriesProjectionFilter(int argc, char * argv[])
   otb::StandardFilterWatcher watcher(filter, "GeometriesProjection");
 
   otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-    argv[2], otb::ogr::DataSource::Modes::Update_LayerCreateOnly);
+    argv[2], otb::ogr::DataSource::Modes::Overwrite);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   filter->SetOutput(out_set);

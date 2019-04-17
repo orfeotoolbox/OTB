@@ -51,6 +51,11 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   QObject::connect(helpAction, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
 }
 
+QtWidgetView* QtMainWindow::Gui() const
+{
+  return gui;
+}
+
 void QtMainWindow::UnhandledException(QString message)
 {
   gui->UnhandledException(message);

@@ -200,6 +200,7 @@ int Execute(int argc, char * argv[])
   itksysProcess_Execute(process);
   itksysProcess_WaitForExit(process, nullptr);
   int retCode = itksysProcess_GetExitValue(process);
+  itksysProcess_Delete(process);
   return retCode;
 }
 

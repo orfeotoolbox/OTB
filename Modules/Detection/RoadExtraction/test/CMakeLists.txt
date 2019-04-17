@@ -163,7 +163,7 @@ otb_add_test(NAME feTvRemoveIsolatedByDirectionFilter COMMAND otbRoadExtractionT
   )
 
 otb_add_test(NAME fzTvVectorDataToRoadDescriptionFilter COMMAND otbRoadExtractionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
   ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
   otbVectorDataToRoadDescriptionFilter

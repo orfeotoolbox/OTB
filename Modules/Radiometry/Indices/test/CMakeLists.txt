@@ -54,7 +54,7 @@ otb_module_target_label(otbIndicesTestDriver)
 # Tests Declaration
 
 otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
   otbNDVIDataNodeFeatureFunction
@@ -66,7 +66,7 @@ otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTest
   )
 
 otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Line COMMAND otbIndicesTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
   otbNDVIDataNodeFeatureFunction

@@ -19,13 +19,13 @@
 #
 
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
-#This file set the following variable : 
+#This file set the following variable :
 # * otb_build_project_option
 # * otb_use_option
 # * otb_wrap_option
 # * CONFIGURE_OPTIONS
 
-set (otb_build_project_option 
+set (otb_build_project_option
 "BUILD_COOKBOOK:BOOL=OFF
 BUILD_EXAMPLES:BOOL=ON
 BUILD_SHARED_LIBS:BOOL=ON
@@ -40,7 +40,7 @@ OTB_USE_GLUT:BOOL=ON
 OTB_USE_GSL:BOOL=ON
 OTB_USE_LIBKML:BOOL=ON
 OTB_USE_LIBSVM:BOOL=ON
-OTB_USE_MPI:BOOL=ON
+OTB_USE_MPI:BOOL=OFF
 OTB_USE_MUPARSER:BOOL=ON
 OTB_USE_MUPARSERX:BOOL=ON
 OTB_USE_OPENCV:BOOL=ON
@@ -51,12 +51,12 @@ OTB_USE_QWT:BOOL=ON
 OTB_USE_SHARK:BOOL=ON
 OTB_USE_SIFTFAST:BOOL=ON
 OTB_USE_SPTW:BOOL=ON
-OTB_USE_SSE_FLAGS:BOOL=ON")
+OTB_USE_SSE_FLAGS:BOOL=ON
+OTB_MPIEXEC_OPT:STRING=--allow-run-as-root")
 
 set (otb_wrap_option
 "OTB_WRAP_JAVA:BOOL=ON
-OTB_WRAP_PYTHON:BOOL=ON
-OTB_WRAP_PYTHON3:BOOL=ON")
+OTB_WRAP_PYTHON:BOOL=ON")
 
 set (otb_data_option
 "OTB_DATA_USE_LARGEINPUT:BOOL=OFF
