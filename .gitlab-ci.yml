@@ -5,7 +5,7 @@
 # But Git fails to manage efficiently numerous LFS data.
 # We have to use directly git-lfs wrapping commands to have an
 # efficient cloning step.
-# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of 
+# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of
 # GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
 
 variables:
@@ -25,10 +25,11 @@ before_script:
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
-# after_script:
-  # - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+after_script:
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
+  - precheck
   - prepare
   - build
   - packages
@@ -39,6 +40,19 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
+
+fast-build:
+  extends: .general
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout $CI_COMMIT_REF_NAME
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
 # native-build:
 #   extends: .general
@@ -58,10 +72,14 @@ stages:
 
 .common-build:
   extends: .general
+  only: [merge_requests]
   stage: build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-shark:18.04
+
+debian-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-shark
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 
 # # This is needed to have only one pipeline in a merge request context
@@ -73,11 +91,21 @@ stages:
 #   except: [merge_requests]
 #   extends: .common-build
 
-superbuild-prepare:
-  # only: [merge_requests]
+ubuntu-llvm:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native:18.04
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
+  artifacts:
+    paths:
+      - build/CookBook-*-html.tar.gz
+      - build/Documentation/Cookbook/latex/CookBook-*.pdf
+      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
+
+.common-prepare:
   extends: .general
+  only: [merge_requests]
   stage: prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   before_script:
 # This override the previous before_script
     - git checkout $CI_COMMIT_REF_NAME
@@ -119,7 +147,7 @@ superbuild-build:
     paths:
       - build/*/*/*/*.log
       - build_packages/OTB-6.7.0-Linux64.run
-      
+
 
 # packages:
 #   extends: .general
