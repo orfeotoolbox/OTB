@@ -167,7 +167,7 @@ centos-superbuild-build:
 
 .superbuild-package:
   extends: .general
-  only: [merge_requests, branches]
+  only: [merge_requests]
   stage: package
   artifacts:
     expire_in: 1 hour
@@ -177,6 +177,7 @@ centos-superbuild-build:
 
 ubuntu-package:
   extends: .superbuild-package
+  only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
