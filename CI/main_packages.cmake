@@ -20,13 +20,18 @@
 # We are included from main_superbuild.cmake
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 set ( DEBUG "1" )
 
 # set ( CTEST_BUILD_CONFIGURATION "Release" )
 # set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
 set ( CTEST_BUILD_FLAGS "-j1" )
 set ( CTEST_BUILD_NAME "Packages" )
-# set ( CTEST_SITE "${IMAGE_NAME}" )
+set ( CTEST_SITE "${IMAGE_NAME}" )
+
+# Find the build name and CI profile
+set_dash_build_name()
 
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}/Packaging" )
@@ -37,51 +42,63 @@ set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 # Copy back xdk for RUN_PATH reason
 # We might want to change the name of artifact in main_superbuild
 # file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
-# Packages case: 
+# Packages case:
 # SUPERBUILD_BINARY_DIR this is needed for OTB_BINARY_DIR, not sure we need it
 # SUPERBUILD_INSTALL_DIR do we need it? it seems so... We will set it to anything
 # DOWNLOAD_LOCATION
 # OTB_BINARY_DIR
 # CMAKE_INSTALL_PREFIX
-set ( CONFIGURE_OPTIONS  
+set ( CONFIGURE_OPTIONS
 "-DCMAKE_PREFIX_PATH=${CTEST_INSTALL_DIRECTORY};\
 -DOTB_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
 -DSUPERBUILD_INSTALL_DIR=${CI_ROOT_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR};" )
 
-ctest_start (Experimental TRACK Experimental)
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
 
-ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
-    SOURCE "${CTEST_SOURCE_DIRECTORY}"
-    OPTIONS "${CONFIGURE_OPTIONS}"
-    RETURN_VALUE _configure_rv
-    CAPTURE_CMAKE_ERROR _configure_error
-    )
 
-if ( NOT _configure_rv EQUAL 0 )
+ctest_start( Experimental TRACK Experimental )
+# TODO: ctest_start( Experimental TRACK CI_Package )
+
+ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
+
+
+ctest_configure(
+  BUILD "${CTEST_BINARY_DIRECTORY}"
+  SOURCE "${CTEST_SOURCE_DIRECTORY}"
+  OPTIONS "${CONFIGURE_OPTIONS}"
+  RETURN_VALUE _configure_rv
+  CAPTURE_CMAKE_ERROR _configure_error
+  )
+
+if( NOT _configure_rv EQUAL 0 )
   ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_configure.")
+  # return()
 endif()
 
-# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-#             RETURN_VALUE _build_rv
-#             CAPTURE_CMAKE_ERROR _build_error
-#             )
 
-# if ( NOT _build_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_build.")
-# endif()
+ctest_build(
+  BUILD "${CTEST_BINARY_DIRECTORY}"
+  RETURN_VALUE _build_rv
+  CAPTURE_CMAKE_ERROR _build_error
+  )
 
-# Uncomment when ready for test
-# ctest_test(PARALLEL_LEVEL 8
-#            RETURN_VALUE _test_rv
-#            CAPTURE_CMAKE_ERROR _test_error
-#            )
+if( NOT _build_rv EQUAL 0 )
+  message( SEND_ERROR "An error occurs during ctest_build.")
+endif()
 
-# if ( NOT _test_rv EQUAL 0 )
-#   ctest_submit()
+
+# ctest_test(
+#   PARALLEL_LEVEL 4
+#   RETURN_VALUE _test_rv
+#   CAPTURE_CMAKE_ERROR _test_error
+#   )
+
+# if( NOT _test_rv EQUAL 0 )
 #   message( SEND_ERROR "An error occurs during ctest_test.")
 # endif()
 
-# ctest_submit()
+
+ctest_submit()
