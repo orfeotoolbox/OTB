@@ -81,22 +81,18 @@ protected:
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     
-    AddParameter( ParameterType_Group, "inmeans", "Input centroids parameters" );
-    SetParameterDescription( "inmeans", 
+    AddParameter( ParameterType_Group, "incentroids", "Input centroids parameters" );
+    SetParameterDescription( "incentroids", 
     "Group of parameters for used defined input centroids." );
 
-    AddParameter(ParameterType_InputFilename, "inmeans.in", "input centroids");
-    SetParameterDescription("inmeans.in", "Input text file containing centroid posistions.");
-    MandatoryOff("inmeans.in");
+    AddParameter(ParameterType_InputFilename, "incentroids.in", "input centroids text file");
+    SetParameterDescription("incentroids.in", "Input text file containing centroid posistions.");
+    MandatoryOff("incentroids.in");
     
-    AddParameter(ParameterType_Bool, "inmeans.normalize", "Normalize input centroids");
-    SetParameterDescription("inmeans.normalize", "Normalize input centroids using the image statistics"
+    AddParameter(ParameterType_Bool, "incentroids.normalize", "Normalize input centroids");
+    SetParameterDescription("incentroids.normalize", "Normalize input centroids using the image statistics"
     " computed during the execution of the application");
-    SetDefaultParameterInt("inmeans.normalize", true);
-
-    AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
-    SetParameterDescription("outmeans", "Output text file containing centroid positions");
-    MandatoryOff("outmeans");
+    SetDefaultParameterInt("incentroids.normalize", true);
 
     ShareKMSamplingParameters();
     ConnectKMSamplingParams();
@@ -112,6 +108,7 @@ protected:
   {
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
+    ShareParameter("outcentroids", "training.classifier.sharkkm.outcentroids");
     ShareParameter("vm", "polystats.mask", "Validity Mask",
       "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
@@ -261,11 +258,11 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
-    if(IsParameterEnabled("inmeans.in") && HasValue("inmeans.in"))
+    if(IsParameterEnabled("incentroids.in") && HasValue("incentroids.in"))
     {
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
-                                                        GetParameterString("inmeans.in"));
-      if(GetParameterInt("inmeans.normalize"))
+                                                        GetParameterString("incentroids.in"));
+      if(GetParameterInt("incentroids.normalize"))
         GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
                                               GetInternalApplication("imgstats")->GetParameterString("out"));
     }
@@ -296,55 +293,6 @@ protected:
   void KMeansClassif()
   {
     ExecuteInternal( "classif" );
-  }
-
-  void CreateOutMeansFile(FloatVectorImageType *image,
-                          const std::string &modelFileName,
-                          unsigned int nbClasses)
-  {
-    if (IsParameterEnabled("outmeans"))
-    {
-      unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
-      unsigned int nbElements = nbClasses * nbBands;
-      // get the line in model file that contains the centroids positions
-      std::ifstream infile(modelFileName);
-      if(!infile)
-      {
-        itkExceptionMacro(<< "File: " << modelFileName << " couldn't be opened");
-      }
-
-      // get the line with the centroids (starts with "2 ")
-      std::string line, centroidLine;
-      while(std::getline(infile,line))
-      {
-        if (line.size() > 2 && line[0] == '2' && line[1] == ' ')
-          {
-          centroidLine = line;
-          break;
-          }
-      }
-
-      std::vector<std::string> centroidElm;
-      boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
-
-      // remove the first elements, not the centroids positions
-      int nbWord = centroidElm.size();
-      int beginCentroid = nbWord-nbElements;
-      centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
-
-      // write in the output file
-      std::ofstream outfile;
-      outfile.open(GetParameterString("outmeans"));
-
-      for (unsigned int i = 0; i < nbClasses; i++)
-      {
-        for (unsigned int j = 0; j < nbBands; j++)
-        {
-          outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
-        }
-        outfile << std::endl;
-      }
-    }
   }
 
   class KMeansFileNamesHandler
@@ -516,9 +464,6 @@ private:
 
     // Compute a classification of the input image according to a model file
     Superclass::KMeansClassif();
-
-    // Create the output text file containing centroids positions
-    Superclass::CreateOutMeansFile(GetParameterImage("in"), fileNames.modelFile, GetParameterInt("nc"));
 
     // Remove all tempory files
     if( GetParameterInt( "cleanup" ) )
