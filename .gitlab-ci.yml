@@ -89,7 +89,6 @@ ubuntu-llvm:
     - git config --global user.email "otbbot@orfeo-toolbox.org"
     - git config --global user.name "otbbot"
     - eval $(ssh-agent -s)
-    - echo "$K8S_SECRET_SSH"
     - ssh-add <(echo "$K8S_SECRET_SSH")
 # This is for debug, we are checking the owner of the ssh key
     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
@@ -136,6 +135,9 @@ macos-superbuild-prepare:
   only: [merge_requests, branches]
   extends: .common-prepare
   stage: prepare
+  before_script:
+# This override the previous before_script
+    - git checkout $CI_COMMIT_REF_NAME
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
 
