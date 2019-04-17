@@ -85,21 +85,18 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
       auto stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
   
       // Convert itk Variable Length Vector to shark Real Vector
-      shark::RealVector meanMeasurementRV(meanMeasurementVector.Size());
+      shark::RealVector offsetRV(meanMeasurementVector.Size());
+      shark::RealVector stddevMeasurementRV(stddevMeasurementVector.Size());
+      
+      assert(meanMeasurementVector.Size()==stddevMeasurementVector.Size());
       for (unsigned int i = 0; i<meanMeasurementVector.Size(); ++i)
       {
-        // Substract the mean
-        meanMeasurementRV[i] = - meanMeasurementVector[i];
-      }
-  
-      shark::RealVector stddevMeasurementRV(stddevMeasurementVector.Size());
-      for (unsigned int i = 0; i<stddevMeasurementVector.Size(); ++i)
-      {
         stddevMeasurementRV[i] = stddevMeasurementVector[i];
+        // Substract the normalized mean
+        offsetRV[i] = - meanMeasurementVector[i]/stddevMeasurementVector[i];
       }
       
-      shark::Normalizer<> normalizer(stddevMeasurementRV, meanMeasurementRV);
-
+      shark::Normalizer<> normalizer(stddevMeasurementRV, offsetRV);
       centroidData = normalizer(centroidData);
     }
     
