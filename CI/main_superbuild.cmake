@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
@@ -45,7 +47,12 @@ file(READ "${OTB_SOURCE_DIR}/sb_branch.txt" BRANCH_NAME)
 ###############################################################################
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact.git")
 # set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
-set( GIT "git" )
+
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
+# FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
+set( GIT "${CTEST_GIT_COMMAND}" )
 
 execute_process(
   COMMAND ${GIT} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
@@ -70,7 +77,7 @@ endif()
 
 set (CMAKE_COMMAND "cmake")
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf" 
+  COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
   "${CI_PROJ_DIR}/superbuild-artifact/SuperBuild_Install.tar"
   WORKING_DIRECTORY ${CI_ROOT_DIR}
   )
@@ -93,9 +100,11 @@ endif()
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )
 set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
-set ( CTEST_BUILD_FLAGS "-j16" )
-set ( CTEST_BUILD_NAME "Superbuild_Build_Otb" )
+set ( CTEST_BUILD_FLAGS "-j8" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
+
+# Find the build name and CI profile
+set_dash_build_name()
 
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}" )
@@ -108,25 +117,30 @@ set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
 # SuperBuild case : one more configure option
-set ( CONFIGURE_OPTIONS  
+set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
 
-# Hack for KML
-set ( CONFIGURE_OPTIONS  
-  "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML=OFF;")
+# # Hack because there is no more superbuild available (LIBKML)
+# set ( CONFIGURE_OPTIONS
+#   "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
 set( PROJ_LIB "${XDK_PATH}/share" )
-set( CTEST_ENVIRONMENT 
+set( CTEST_ENVIRONMENT
 "PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}
 GDAL_DATA= GDAL_DATA
 GEOTIFF_CSV= GEOTIFF_CSV
 PROJ_LIB= PROJ_LIB
 ")
 
-ctest_start (Experimental TRACK Experimental)
+# Sources are already checked out : do nothing for update
+set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+
+ctest_start (Experimental TRACK CI_Build)
+
+ctest_update()
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"
@@ -137,7 +151,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_configure.")
+  message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
 
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
@@ -146,20 +160,18 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             )
 
 if ( NOT _build_rv EQUAL 0 )
-  ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
 # Uncomment when ready for test
-# ctest_test(PARALLEL_LEVEL 8
-#            RETURN_VALUE _test_rv
-#            CAPTURE_CMAKE_ERROR _test_error
-#            )
+ctest_test(PARALLEL_LEVEL 8
+           RETURN_VALUE _test_rv
+           CAPTURE_CMAKE_ERROR _test_error
+           )
 
-# if ( NOT _test_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_test.")
-# endif()
+if ( NOT _test_rv EQUAL 0 )
+  message( WARNING "Some tests have failed.")
+endif()
 
 ctest_submit()
 
