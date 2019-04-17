@@ -53,8 +53,8 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   
   // Number of classes
   AddParameter(ParameterType_String, "classifier.sharkkm.centroids", "Number of classes for the kmeans algorithm");
-  SetParameterDescription("classifier.sharkkm.incentroid", "The number of classes used for the kmeans algorithm. Default set to 2 class");
-  MandatoryOff("classifier.sharkkm.incentroid");
+  SetParameterDescription("classifier.sharkkm.centroids", "The number of classes used for the kmeans algorithm. Default set to 2 class");
+  MandatoryOff("classifier.sharkkm.centroids");
 }
 
 template<class TInputValue, class TOutputValue>
@@ -76,8 +76,8 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
   if(HasValue("classifier.sharkkm.centroids"))
   {
     shark::Data<shark::RealVector> centroidData;
-    shark::importCSV(centroidData, GetParameterString( "classifier.sharkkm.centroidstats"), ' ');
-    if( HasValue( "classifier.sharkkm.centroids" ) )
+    shark::importCSV(centroidData, GetParameterString( "classifier.sharkkm.centroids"), ' ');
+    if( HasValue( "classifier.sharkkm.centroidstats" ) )
     {
       auto statisticsReader = otb::StatisticsXMLFileReader< itk::VariableLengthVector<float> >::New();
       statisticsReader->SetFileName(GetParameterString( "classifier.sharkkm.centroidstats" ));
