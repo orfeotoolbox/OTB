@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+# FIXME: Invalidate SuperBuild/CMakeList.
+
 cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
