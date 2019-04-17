@@ -52,7 +52,7 @@ namespace otb
 template<class TInputValue, class TOutputValue>
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::SharkKMeansMachineLearningModel() :
-        m_Normalized( false ), m_K(2), m_MaximumNumberOfIterations( 10 )
+        m_K(2), m_MaximumNumberOfIterations( 10 )
 {
   // Default set HardClusteringModel
   this->m_ConfidenceIndex = true;
@@ -77,28 +77,9 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
   shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
 
-  // Normalized input value if necessary
-  if( m_Normalized )
-  {
-    auto normalizer = TrainNormalizer(data);
-    data = normalizer(data);
-  }
-
   // Use a Hard Clustering Model for classification
   shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
   m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
-}
-
-template<class TInputValue, class TOutputValue>
-template<typename DataType>
-DataType
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::NormalizeData(const DataType &data) const
-{
-  shark::Normalizer<> normalizer;
-  shark::NormalizeComponentsUnitVariance<> normalizingTrainer( true );//zero mean
-  normalizingTrainer.train( normalizer, data );
-  return normalizer( data );
 }
 
 template<class TInputValue, class TOutputValue>

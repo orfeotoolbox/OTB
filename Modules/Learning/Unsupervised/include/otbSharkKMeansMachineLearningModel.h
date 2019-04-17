@@ -125,10 +125,6 @@ public:
   /** Set the number of class for the kMeans algorithm.*/
   itkSetMacro( K, unsigned );
 
-  /** If true, normalized input data sample list */
-  itkGetMacro( Normalized, bool );
-  itkSetMacro( Normalized, bool );
-
   /** Initialize the centroids for the kmeans algorithm */
   void SetCentroidsFromData(const shark::Data<shark::RealVector> & data)
   {
@@ -151,9 +147,6 @@ protected:
                               TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
 
   template<typename DataType>
-  DataType NormalizeData(const DataType &data) const;
-  
-  template<typename DataType>
   shark::Normalizer<> TrainNormalizer(const DataType &data) const;
 
   /** PrintSelf method */
@@ -164,7 +157,6 @@ private:
   void operator=(const Self &) = delete;
 
   // Parameters set by the user
-  bool m_Normalized;
   unsigned int m_K;
   unsigned int m_MaximumNumberOfIterations;
   bool m_CanRead;
