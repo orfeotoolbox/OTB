@@ -45,16 +45,18 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   SetParameterInt("classifier.sharkkm.k", 2);
   SetParameterDescription("classifier.sharkkm.k", "The number of classes used for the kmeans algorithm. Default set to 2 class");
   SetMinimumParameterIntValue("classifier.sharkkm.k", 2);
-  
+
+  // Input centroids
+  AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids", "input centroids");
+  SetParameterDescription("classifier.sharkkm.centroids", "Text file containing input centroids.");
+  MandatoryOff("classifier.sharkkm.centroids");
+
+  // Centroid statistics
   AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroidstats", "Statistics file");
   SetParameterDescription("classifier.sharkkm.centroidstats", "A XML file containing mean and standard deviation to center"
-    "and reduce the centroids before classification, produced by ComputeImagesStatistics application.");
+    "and reduce the centroids before the KMeans algorithm, produced by ComputeImagesStatistics application.");
   MandatoryOff("classifier.sharkkm.centroidstats");
   
-  // Number of classes
-  AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids", "Number of classes for the kmeans algorithm");
-  SetParameterDescription("classifier.sharkkm.centroids", "The number of classes used for the kmeans algorithm. Default set to 2 class");
-  MandatoryOff("classifier.sharkkm.centroids");
 }
 
 template<class TInputValue, class TOutputValue>

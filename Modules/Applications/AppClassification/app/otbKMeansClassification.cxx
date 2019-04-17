@@ -81,13 +81,18 @@ protected:
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     
-    AddParameter(ParameterType_String, "inmeans", "Maximum number of iterations");
-    SetParameterDescription("inmeans", "Maximum number of iterations for the learning step.");
-    MandatoryOff("inmeans");
+    AddParameter( ParameterType_Group, "inmeans", "Input centroids parameters" );
+    SetParameterDescription( "inmeans", 
+    "Group of parameters for used defined input centroids." );
+
+    AddParameter(ParameterType_InputFilename, "inmeans.in", "input centroids");
+    SetParameterDescription("inmeans.in", "Input text file containing centroid posistions.");
+    MandatoryOff("inmeans.in");
     
-    AddParameter(ParameterType_Bool, "normalizeinmeans", "Number of classes");
-    SetParameterDescription("normalizeinmeans", "Number of modes, which will be used to generate class membership.");
-    SetDefaultParameterInt("normalizeinmeans", true);
+    AddParameter(ParameterType_Bool, "inmeans.normalize", "Normalize input centroids");
+    SetParameterDescription("inmeans.normalize", "Normalize input centroids using the image statistics"
+    " computed during the execution of the application");
+    SetDefaultParameterInt("inmeans.normalize", true);
 
     AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "Output text file containing centroid positions");
@@ -256,11 +261,11 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
-    if(IsParameterEnabled("inmeans") && HasValue("inmeans"))
+    if(IsParameterEnabled("inmeans.in") && HasValue("inmeans.in"))
     {
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
-                                                        GetParameterString("inmeans"));
-      if(GetParameterInt("normalizeinmeans"))
+                                                        GetParameterString("inmeans.in"));
+      if(GetParameterInt("inmeans.normalize"))
         GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
                                               GetInternalApplication("imgstats")->GetParameterString("out"));
     }
