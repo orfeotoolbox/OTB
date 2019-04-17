@@ -131,6 +131,8 @@ public:
     this->Modified();
   }
   
+  void ExportCentroids(const std::string & filename);
+  
 protected:
   /** Constructor */
   SharkKMeansMachineLearningModel();

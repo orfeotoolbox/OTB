@@ -244,6 +244,14 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 template<class TInputValue, class TOutputValue>
 void
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
+::ExportCentroids(const std::string & filename)
+{
+  shark::exportCSV(m_Centroids.centroids(), filename, ' ');
+}
+
+template<class TInputValue, class TOutputValue>
+void
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::PrintSelf(std::ostream &os, itk::Indent indent) const
 {
   // Call superclass implementation

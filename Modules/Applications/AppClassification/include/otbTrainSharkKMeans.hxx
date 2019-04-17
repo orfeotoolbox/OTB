@@ -48,7 +48,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   SetMinimumParameterIntValue("classifier.sharkkm.k", 2);
 
   // Input centroids
-  AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids", "input centroids");
+  AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids", "User definied input centroids");
   SetParameterDescription("classifier.sharkkm.centroids", "Text file containing input centroids.");
   MandatoryOff("classifier.sharkkm.centroids");
 
@@ -57,6 +57,11 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   SetParameterDescription("classifier.sharkkm.centroidstats", "A XML file containing mean and standard deviation to center"
     "and reduce the centroids before the KMeans algorithm, produced by ComputeImagesStatistics application.");
   MandatoryOff("classifier.sharkkm.centroidstats");
+  
+  // output centroids
+  AddParameter(ParameterType_OutputFilename, "classifier.sharkkm.outcentroids", "Output centroids text file");
+  SetParameterDescription("classifier.sharkkm.outcentroids", "Output text file containing centroids after the kmean algorithm.");
+  MandatoryOff("classifier.sharkkm.outcentroids");
   
 }
 
@@ -109,6 +114,9 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
   classifier->SetMaximumNumberOfIterations( nbMaxIter );
   classifier->Train();
   classifier->Save( modelPath );
+  
+  if( HasValue( "classifier.sharkkm.outcentroids"))
+    classifier->ExportCentroids( GetParameterString( "classifier.sharkkm.outcentroids" ));
 }
 
 } //end namespace wrapper
