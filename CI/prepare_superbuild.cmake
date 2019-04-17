@@ -162,7 +162,6 @@ if ( DEBUG )
 endif()
 
 if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
-  ctest_submit()
   message( FATAL_ERROR "An error occurs during ctest_build.")
 endif()
 
