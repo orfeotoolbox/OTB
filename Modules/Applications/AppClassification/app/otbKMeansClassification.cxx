@@ -81,9 +81,13 @@ protected:
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     
-    AddParameter(ParameterType_String, "incentroid", "Maximum number of iterations");
-    SetParameterDescription("incentroid", "Maximum number of iterations for the learning step.");
-    MandatoryOff("incentroid");
+    AddParameter(ParameterType_String, "inmeans", "Maximum number of iterations");
+    SetParameterDescription("inmeans", "Maximum number of iterations for the learning step.");
+    MandatoryOff("inmeans");
+    
+    AddParameter(ParameterType_Bool, "normalizeinmeans", "Number of classes");
+    SetParameterDescription("normalizeinmeans", "Number of modes, which will be used to generate class membership.");
+    SetDefaultParameterInt("normalizeinmeans", true);
 
     AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
     SetParameterDescription("outmeans", "Output text file containing centroid positions");
@@ -252,8 +256,15 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
-    GetInternalApplication("training")->SetParameterString("classifier.sharkkm.incentroid",
-                                                        GetParameterString("incentroid"));
+    if(IsParameterEnabled("inmeans") && HasValue("inmeans"))
+    {
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
+                                                        GetParameterString("inmeans"));
+      if(GetParameterInt("normalizeinmeans"))
+        GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
+                                              GetInternalApplication("imgstats")->GetParameterString("out"));
+    }
+    
 
     if( IsParameterEnabled("rand"))
       GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));
