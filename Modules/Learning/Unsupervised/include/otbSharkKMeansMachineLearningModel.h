@@ -126,14 +126,14 @@ public:
   itkSetMacro( K, unsigned );
 
   /** Initialize the centroids for the kmeans algorithm */
-  void SetCentroidsFromData(const shark::Data<shark::RealVector> & data)
+  void SetCentroidsFromData(const shark::Data<shark::RealVector>& data)
   {
     m_Centroids.setCentroids(data);
     this->Modified();
   }
-  
-  void ExportCentroids(const std::string & filename);
-  
+
+  void ExportCentroids(const std::string& filename);
+
 protected:
   /** Constructor */
   SharkKMeansMachineLearningModel();

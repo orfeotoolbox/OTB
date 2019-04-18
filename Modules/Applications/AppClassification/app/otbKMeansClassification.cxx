@@ -77,21 +77,22 @@ protected:
     MandatoryOff("ts");
 
     AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
-    SetParameterDescription("maxit", "Maximum number of iterations for the learning step." 
-      " If this parameter is set to 0, the KMeans algorithm will not stop until convergence");
+    SetParameterDescription("maxit",
+                            "Maximum number of iterations for the learning step."
+                            " If this parameter is set to 0, the KMeans algorithm will not stop until convergence");
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
-    
-    AddParameter( ParameterType_Group, "centroids", "Centroids IO parameters" );
-    SetParameterDescription( "centroids", 
-    "Group of parameters for centroids IO." );
+
+    AddParameter(ParameterType_Group, "centroids", "Centroids IO parameters");
+    SetParameterDescription("centroids", "Group of parameters for centroids IO.");
 
     AddParameter(ParameterType_InputFilename, "centroids.in", "input centroids text file");
-    SetParameterDescription("centroids.in", "Input text file containing centroid posistions used to initialize the algorithm."
-    " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
-    " centroids in this file must match the number of classes (nc parameter).");
+    SetParameterDescription("centroids.in",
+                            "Input text file containing centroid posistions used to initialize the algorithm."
+                            " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
+                            " centroids in this file must match the number of classes (nc parameter).");
     MandatoryOff("centroids.in");
-    
+
     ShareKMSamplingParameters();
     ConnectKMSamplingParams();
   }
@@ -256,15 +257,14 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
-    if(IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
+    if (IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
     {
-      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in",
-                                                        GetParameterString("centroids.in"));
-      
-      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.stats",
-                                              GetInternalApplication("imgstats")->GetParameterString("out"));
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in", GetParameterString("centroids.in"));
+
+      GetInternalApplication("training")
+          ->SetParameterString("classifier.sharkkm.centroids.stats", GetInternalApplication("imgstats")->GetParameterString("out"));
     }
-    
+
 
     if( IsParameterEnabled("rand"))
       GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));
