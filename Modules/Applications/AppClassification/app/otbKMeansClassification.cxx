@@ -89,11 +89,6 @@ protected:
     SetParameterDescription("incentroids.in", "Input text file containing centroid posistions.");
     MandatoryOff("incentroids.in");
     
-    AddParameter(ParameterType_Bool, "incentroids.normalize", "Normalize input centroids");
-    SetParameterDescription("incentroids.normalize", "Normalize input centroids using the image statistics"
-    " computed during the execution of the application");
-    SetDefaultParameterInt("incentroids.normalize", true);
-
     ShareKMSamplingParameters();
     ConnectKMSamplingParams();
   }
@@ -262,8 +257,8 @@ protected:
     {
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
                                                         GetParameterString("incentroids.in"));
-      if(GetParameterInt("incentroids.normalize"))
-        GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
+      
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
                                               GetInternalApplication("imgstats")->GetParameterString("out"));
     }
     
