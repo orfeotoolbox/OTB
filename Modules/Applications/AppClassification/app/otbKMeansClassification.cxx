@@ -77,7 +77,8 @@ protected:
     MandatoryOff("ts");
 
     AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
-    SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
+    SetParameterDescription("maxit", "Maximum number of iterations for the learning step." 
+      " If this parameter is set to 0, the KMeans algorithm will not stop until convergence");
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     
@@ -86,7 +87,9 @@ protected:
     "Group of parameters for centroids IO." );
 
     AddParameter(ParameterType_InputFilename, "centroids.in", "input centroids text file");
-    SetParameterDescription("centroids.in", "Input text file containing centroid posistions.");
+    SetParameterDescription("centroids.in", "Input text file containing centroid posistions used to initialize the algorithm."
+    " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
+    " centroids in this file must match the number of classes (nc parameter).");
     MandatoryOff("centroids.in");
     
     ShareKMSamplingParameters();

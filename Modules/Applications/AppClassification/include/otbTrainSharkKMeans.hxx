@@ -46,14 +46,15 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
   SetParameterDescription("classifier.sharkkm.k", "The number of classes used for the kmeans algorithm. Default set to 2 class");
   SetMinimumParameterIntValue("classifier.sharkkm.k", 2);
 
-
+  // Centroid IO
   AddParameter( ParameterType_Group, "classifier.sharkkm.centroids", "Centroids IO parameters" );
   SetParameterDescription( "classifier.sharkkm.centroids", "Group of parameters for centroids IO." );
 
-
   // Input centroids
   AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids.in", "User definied input centroids");
-  SetParameterDescription("classifier.sharkkm.centroids", "Text file containing input centroids.");
+  SetParameterDescription("classifier.sharkkm.centroids.in", "Input text file containing centroid posistions used to initialize the algorithm."
+    " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
+    " centroids in this file must match the number of classes (classifier.sharkkm.k).");
   MandatoryOff("classifier.sharkkm.centroids");
 
   // Centroid statistics
@@ -62,7 +63,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
     "and reduce the centroids before the KMeans algorithm, produced by ComputeImagesStatistics application.");
   MandatoryOff("classifier.sharkkm.centroids.stats");
   
-  // output centroids
+  // Output centroids
   AddParameter(ParameterType_OutputFilename, "classifier.sharkkm.centroids.out", "Output centroids text file");
   SetParameterDescription("classifier.sharkkm.centroids.out", "Output text file containing centroids after the kmean algorithm.");
   MandatoryOff("classifier.sharkkm.centroids.out");
