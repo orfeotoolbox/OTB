@@ -183,7 +183,7 @@ add_custom_target(OTB_DEPENDS
   VERBATIM
   )
 
-add_dependencis( OTB_DEPENDS
+add_dependencies( OTB_DEPENDS
   EMBED_COPYRIGHT
   )
 
