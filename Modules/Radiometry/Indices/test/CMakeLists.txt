@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBIndicesTests
 otbIndicesTestDriver.cxx
-otbNDVIDataNodeFeatureFunction.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
 otbLAIFromReflectancesLinearFunctorTest.cxx
@@ -52,31 +51,6 @@ target_link_libraries(otbIndicesTestDriver ${OTBIndices-Test_LIBRARIES})
 otb_module_target_label(otbIndicesTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTestDriver
-  --compare-ogr ${EPSILON_3}
-  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  otbNDVIDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  0
-  )
-
-otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Line COMMAND otbIndicesTestDriver
-  --compare-ogr ${EPSILON_9}
-  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  otbNDVIDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  0
-  )
-
 
 otb_add_test(NAME raTvLandsatTMIndexNDSITest COMMAND otbIndicesTestDriver
   otbLandsatTMIndexNDSI

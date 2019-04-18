@@ -22,7 +22,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbNDVIDataNodeFeatureFunction);
   REGISTER_TEST(otbLandsatTMIndexNDSI);
   REGISTER_TEST(otbLandsatTMIndexBIO);
   REGISTER_TEST(otbLAIFromReflectancesLinear);

@@ -46,7 +46,6 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSTransformImageAndMNTToWGS84ConversionChecking);
   REGISTER_TEST(otbCompositeTransform);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
-  REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunction);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterCheckRpcModel);
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbTileImageFilterRSTransformTest);
