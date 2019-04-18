@@ -20,6 +20,9 @@ variables:
 before_script:
   # make sure LFS hooks are installed
   - git lfs install
+  # Setup user.
+  - git config --global user.email "otbbot@orfeo-toolbox.org"
+  - git config --global user.name "otbbot"
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
@@ -97,8 +100,6 @@ ubuntu-llvm:
 # This is done after the checkout so we avoid downloading Data
 # But we need it to upload the archive
     - git-lfs install
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$K8S_SECRET_SSH")
 # This is for debug, we are checking the owner of the ssh key
