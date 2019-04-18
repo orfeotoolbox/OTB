@@ -112,7 +112,7 @@ ubuntu-llvm:
     expire_in: 24 hrs
     paths:
       # This recovers logs from superbuild build
-      - build/*/*/*/*.log
+      # - build/*/*/*/*.log
       - sb_branch.txt
 
 ubuntu-superbuild-prepare:
