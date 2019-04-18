@@ -164,6 +164,18 @@ add_custom_command(OUTPUT otb_depends_done.txt
   DEPENDS ${OTB_DEPENDENCIES}
   )
 
+add_custom_target( EMBED_COPYRIGHT
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/LICENSE ${CMAKE_INSTALL_PREFIX}/share/copyright/LICENSE
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/NOTICE ${CMAKE_INSTALL_PREFIX}/share/copyright/NOTICE
+
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CMAKE_SOURCE_DIR}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
+  )
+
 add_custom_target(OTB_DEPENDS
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/otb_depends_done.txt
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -171,6 +183,9 @@ add_custom_target(OTB_DEPENDS
   VERBATIM
   )
 
+add_dependencis( OTB_DEPENDS
+  EMBED_COPYRIGHT
+  )
 
 ExternalProject_Add(OTB
   DEPENDS ${OTB_DEPENDENCIES}
@@ -220,14 +235,10 @@ ExternalProject_Add(OTB
 
 ExternalProject_Add_Step(
   OTB install_copyright
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${OTB_SB_SRC}/LICENSE ${CMAKE_INSTALL_PREFIX}/share/copyright/LICENSE
-
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${OTB_SB_SRC}/NOTICE ${CMAKE_INSTALL_PREFIX}/share/copyright/NOTICE
-
-  COMMAND ${CMAKE_COMMAND}
-  -E copy_directory
-  ${CMAKE_SOURCE_DIR}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
   DEPENDEES install
+  )
+
+ExternalProject_Add_StepDependencies(
+  OTB install_copyright
+  EMBED_COPYRIGHT
   )
