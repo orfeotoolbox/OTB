@@ -59,12 +59,6 @@ target_link_libraries(PanTexExample ${OTB_LIBRARIES})
 add_executable(RatioLineDetectorExample RatioLineDetectorExample.cxx)
 target_link_libraries(RatioLineDetectorExample ${OTB_LIBRARIES})
 
-add_executable(SeamCarvingExample SeamCarvingExample.cxx)
-target_link_libraries(SeamCarvingExample ${OTB_LIBRARIES})
-
-add_executable(SeamCarvingOtherExample SeamCarvingOtherExample.cxx)
-target_link_libraries(SeamCarvingOtherExample ${OTB_LIBRARIES})
-
 add_executable(SFSExample SFSExample.cxx)
 target_link_libraries(SFSExample ${OTB_LIBRARIES})
 

@@ -90,27 +90,6 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     5 1
 )
 
-# ------- SeamCarvingExamplesTest----------
-
-otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/SeamCarvingExampleOutput.png
-    ${TEMP}/SeamCarvingExampleOutput.png
-  Execute $<TARGET_FILE:SeamCarvingExample>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/SeamCarvingExampleOutput.png
-    50
-)
-
-otb_add_test(NAME feTeSeamCarvingOtherExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/SeamCarvingOtherExampleOutput.png
-    ${TEMP}/SeamCarvingOtherExampleOutput.png
-  Execute $<TARGET_FILE:SeamCarvingOtherExample>
-    ${INPUTDATA}/QB_Suburb.png
-    ${TEMP}/SeamCarvingOtherExampleOutput.png
-    50
-)
 
 #otb_add_test(NAME feTeImageToSIFTKeyPointSetFilterTest COMMAND ${OTB_TEST_DRIVER}
 #        --compare-image ${NOTOL}
