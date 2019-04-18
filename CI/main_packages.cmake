@@ -64,8 +64,7 @@ set ( CONFIGURE_OPTIONS
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)
 
 
-ctest_start( Experimental TRACK Experimental )
-# TODO: ctest_start( Experimental TRACK CI_Package )
+ctest_start( Experimental TRACK CI_Package )
 
 ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 
