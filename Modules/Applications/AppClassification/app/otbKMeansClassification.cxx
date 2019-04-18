@@ -81,13 +81,13 @@ protected:
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
     
-    AddParameter( ParameterType_Group, "incentroids", "Input centroids parameters" );
-    SetParameterDescription( "incentroids", 
-    "Group of parameters for used defined input centroids." );
+    AddParameter( ParameterType_Group, "centroids", "Centroids IO parameters" );
+    SetParameterDescription( "centroids", 
+    "Group of parameters for centroids IO." );
 
-    AddParameter(ParameterType_InputFilename, "incentroids.in", "input centroids text file");
-    SetParameterDescription("incentroids.in", "Input text file containing centroid posistions.");
-    MandatoryOff("incentroids.in");
+    AddParameter(ParameterType_InputFilename, "centroids.in", "input centroids text file");
+    SetParameterDescription("centroids.in", "Input text file containing centroid posistions.");
+    MandatoryOff("centroids.in");
     
     ShareKMSamplingParameters();
     ConnectKMSamplingParams();
@@ -103,7 +103,7 @@ protected:
   {
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
-    ShareParameter("outcentroids", "training.classifier.sharkkm.outcentroids");
+    ShareParameter("centroids.out", "training.classifier.sharkkm.outcentroids");
     ShareParameter("vm", "polystats.mask", "Validity Mask",
       "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
@@ -253,10 +253,10 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
-    if(IsParameterEnabled("incentroids.in") && HasValue("incentroids.in"))
+    if(IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
     {
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
-                                                        GetParameterString("incentroids.in"));
+                                                        GetParameterString("centroids.in"));
       
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
                                               GetInternalApplication("imgstats")->GetParameterString("out"));
