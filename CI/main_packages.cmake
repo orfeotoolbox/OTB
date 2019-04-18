@@ -22,6 +22,12 @@
 
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
+set (ENV{LANG} "C") # Only ascii output
+
+get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
+get_filename_component( CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY )
+get_filename_component( CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY )
+
 set ( DEBUG "1" )
 
 # set ( CTEST_BUILD_CONFIGURATION "Release" )
