@@ -111,6 +111,10 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(
       shark::Normalizer<> normalizer(scaleRV, offsetRV);
       centroidData = normalizer(centroidData);
     }
+
+    if (centroidData.numberOfElements() != k)
+      otbAppLogWARNING( "The input centroid file will not be used because it contains " << centroidData.numberOfElements() <<
+      " points, which is different than from the requested number of class: " << k <<".");
     
     classifier->SetCentroidsFromData( centroidData);
   }
