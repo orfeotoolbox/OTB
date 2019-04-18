@@ -31,7 +31,7 @@ get_filename_component( CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY )
 set ( DEBUG "1" )
 
 # set ( CTEST_BUILD_CONFIGURATION "Release" )
-# set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
+set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
 set ( CTEST_BUILD_FLAGS "-j1" )
 set ( CTEST_BUILD_NAME "Packages" )
 set ( CTEST_SITE "${IMAGE_NAME}" )
