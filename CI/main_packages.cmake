@@ -80,7 +80,7 @@ ctest_configure(
 if( NOT _configure_rv EQUAL 0 )
   ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_configure.")
-  # return()
+  return()
 endif()
 
 
