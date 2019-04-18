@@ -24,7 +24,6 @@ set(OTBProjectionTests
 otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
-otbOrthoRectificationFilter.cxx
 otbGenericRSResampleImageFilter.cxx
 otbGeometriesProjectionFilter.cxx
 otbGenericRSTransformGenericTest.cxx
@@ -312,7 +311,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
 		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
-		  otbOrthoRectificationFilter
+		  otbGenericRSResampleImageFilter
 		  LARGEINPUT{${current_img}?&geom=${INPUTDATA}/${current_geomgcp}.geom}
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${current_originx}
@@ -334,19 +333,6 @@ endforeach()
 #------------------------------------------------------------------------
 #----------------- OrthoRectification tests (end) -----------------------
 #------------------------------------------------------------------------
-
-otb_add_test(NAME prTvotbGenericRSResampleImageFilter COMMAND otbProjectionTestDriver
-  --compare-image ${EPSILON_4}
-  ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  otbGenericRSResampleImageFilter
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  1000
-  15
-  0
-  1
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterLines COMMAND otbProjectionTestDriver
   --compare-ogr ${EPSILON_9}
@@ -1185,28 +1171,3 @@ set(GenericConversionChecking_INPUTS
       #${INPUTDATA}/DEM/srtm_directory
       #3 )
   #endforeach()
-
-
-
-  set(SENSOR_TYPES
-    "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
-    "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
-    "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
-    )
-
-  foreach( file ${SENSOR_TYPES})
-    # Get the sensor name
-    set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-    string(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
-    # Tests
-    otb_add_test(NAME prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} COMMAND otbProjectionTestDriver
-      --compare-image ${EPSILON_4}
-      ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      otbGenericRSResampleImageFilterFromMap
-      LARGEINPUT{${file}}
-      15
-      0
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      )
-  endforeach()

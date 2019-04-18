@@ -24,9 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
-  REGISTER_TEST(otbOrthoRectificationFilter);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
-  REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
   REGISTER_TEST(otbGeometriesProjectionFilter);
   REGISTER_TEST(otbGenericRSTransformGenericTest);
   REGISTER_TEST(otbVectorDataTransformFilter);

@@ -21,8 +21,7 @@
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbImageFileWriter.h"
-#include "otbGenericMapProjection.h"
-#include "otbOrthoRectificationFilter.h"
+#include "otbGenericRSResampleImageFilter.h"
 #include "otbMacro.h"
 
 int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
@@ -47,8 +46,7 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
   typedef otb::ImageFileWriter<ImageType>                                  WriterType;
-  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
-  typedef otb::OrthoRectificationFilter<ImageType, ImageType, MapProjectionType> OrthoRectifFilterType;
+  typedef otb::GenericRSResampleImageFilter<ImageType, ImageType> OrthoRectifFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -91,9 +89,6 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
 
-
-  MapProjectionType::Pointer  utmMapProjection = MapProjectionType::New();
-
   orthoRectifFilter->SetInput(rpcEstimator->GetOutput());
 
   ImageType::IndexType start;
@@ -116,9 +111,9 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   origin[1] = strtod(argv[4], nullptr);         //Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[9]),argv[10][0]=='N'?otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
+  std::string wkt = otb::SpatialReference::FromUTM(atoi(argv[9]),argv[10][0]=='N'?otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt();
 
-  orthoRectifFilter->SetMapProjection(utmMapProjection);
+  orthoRectifFilter->SetOutputProjectionRef(wkt);
 
   ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   no_data.Fill(0.0);
