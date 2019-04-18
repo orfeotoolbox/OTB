@@ -90,33 +90,6 @@ otb_add_test(NAME feTeRatioLineDetectorExampleTest COMMAND ${OTB_TEST_DRIVER}
     5 1
 )
 
-# ------- RoadExtractionExamplesTest----------
-
-
-otb_add_test(NAME feTeExtractRoadByStepsExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-n-images ${NOTOL} 2
-    ${BASELINE}/qb_ExtractRoad_pretty.png
-    ${TEMP}/qb_ExtractRoad_pretty.png
-    ${BASELINE}/ExtractRoadByStepsExampleOutput.png
-    ${TEMP}/ExtractRoadByStepsExampleOutput.png
-  Execute $<TARGET_FILE:ExtractRoadByStepsExample>
-    ${INPUTDATA}/qb_RoadExtract.tif
-    ${TEMP}/ExtractRoadByStepsExampleOutput.png
-    ${TEMP}/qb_ExtractRoad_pretty.png
-    337 557 432 859 0.00005 1.0
-)
-
-
-otb_add_test(NAME feTeExtractRoadExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/ExtractRoadExampleOutput.png
-    ${TEMP}/ExtractRoadExampleOutput.png
-  Execute $<TARGET_FILE:ExtractRoadExample>
-    ${INPUTDATA}/qb_RoadExtract.tif
-    ${TEMP}/ExtractRoadExampleOutput.png
-    337 557 432 859 1.0 0.00005 1.0 0.39269 1.0 10.0 25.
-)
-
 # ------- SeamCarvingExamplesTest----------
 
 otb_add_test(NAME feTeSeamCarvingExampleTest COMMAND ${OTB_TEST_DRIVER}
