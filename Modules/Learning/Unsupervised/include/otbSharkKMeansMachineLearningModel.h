@@ -48,6 +48,7 @@
 #include "shark/Models/Clustering/Centroids.h"
 #include "shark/Models/Clustering/ClusteringModel.h"
 #include "shark/Algorithms/KMeans.h"
+#include "shark/Models/Normalizer.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
