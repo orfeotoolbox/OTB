@@ -19,9 +19,9 @@ variables:
 
 before_script:
   # make sure LFS hooks are installed
-  # - git lfs install
+  - git lfs install
   # Provision efficiently the local LFS cache before checkout
-  # - git lfs fetch origin $CI_COMMIT_SHA
+  - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
   - git checkout $CI_COMMIT_REF_NAME
 
