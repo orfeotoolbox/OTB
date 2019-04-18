@@ -60,6 +60,9 @@ set ( CONFIGURE_OPTIONS
 -DSUPERBUILD_INSTALL_DIR=${CI_ROOT_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR};" )
 
+# Look for a GIT command-line client.
+find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
+
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)
 
