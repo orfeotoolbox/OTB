@@ -103,7 +103,7 @@ protected:
   {
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
-    ShareParameter("centroids.out", "training.classifier.sharkkm.outcentroids");
+    ShareParameter("centroids.out", "training.classifier.sharkkm.centroids.out");
     ShareParameter("vm", "polystats.mask", "Validity Mask",
       "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
@@ -255,10 +255,10 @@ protected:
                                                         GetParameterInt("nc"));
     if(IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
     {
-      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids",
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in",
                                                         GetParameterString("centroids.in"));
       
-      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroidstats",
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.stats",
                                               GetInternalApplication("imgstats")->GetParameterString("out"));
     }
     
