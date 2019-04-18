@@ -179,6 +179,9 @@ foreach(classifier ${classifierList})
     VALID    ${valid}
   )
 
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1 PROPERTIES
+    RESOURCE_LOCK ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format})
+
   if(${_classifier_has_baseline} EQUAL -1)
     set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
