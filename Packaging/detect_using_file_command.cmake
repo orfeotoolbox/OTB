@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 function(detect_using_file_command input_file result_type result_dir)
-  
+
   execute_process(COMMAND "${FILE_COMMAND}" "${input_file}"
     RESULT_VARIABLE file_rv
     OUTPUT_VARIABLE file_ov
@@ -32,6 +32,11 @@ function(detect_using_file_command input_file result_type result_dir)
   get_filename_component(input_file_NAME ${input_file} NAME)
   string(REPLACE "${input_file}" " _file_full_ " file_ov "${file_ov}")
   string(TOLOWER "${file_ov}" file_ov_lower)
+
+  message( "input_file: '${input_file}'" )
+  message( "input_file_NAME: '${input_file_NAME}'" )
+  message( "file_ov: '${file_ov}'" )
+  message( "file_ov_lower: '${file_ov_lower}'" )
 
   set(detected_type)
   set(detected_dir)
@@ -85,9 +90,9 @@ function(detect_using_file_command input_file result_type result_dir)
 
     set(is_this_a_symbolic_link FALSE)
     set(target_file)
-    isfile_symlink("${input_file}" is_this_a_symbolic_link target_file)    
+    isfile_symlink("${input_file}" is_this_a_symbolic_link target_file)
     if(is_this_a_symbolic_link)
-      
+
       if(target_file)
 	set(libdir "lib")
 	setif_value_in_list(is_gtk_lib "${input_file_NAME}" GTK_LIB_LIST_1)
