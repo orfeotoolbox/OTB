@@ -70,7 +70,7 @@ otb_add_test(NAME bfTvVectorDataToRandomLineGenerator COMMAND otbVectorDataManip
   ${BASELINE_FILES}/bfTvVectorDataToRandomLineGeneratorOutput.shp
   ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp
   otbVectorDataToRandomLineGenerator
-  ${INPUTDATA}/ObjectReco/Boats/maur_B010202_01Polygons.shp
+  ${INPUTDATA}/Capitole-Shadows.shp
   ${TEMP}/bfTvVectorDataToRandomLineGeneratorOutput.shp
   )
 
