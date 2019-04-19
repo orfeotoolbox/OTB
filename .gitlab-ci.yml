@@ -145,7 +145,7 @@ windows-prepare:
     - git config --global user.email "otbbot@orfeo-toolbox.org"
     - git config --global user.name "otbbot"
     - set PATH=%PATH%;C:\tools\Git\usr\bin
-    - ssh-agent -s
+    - start-ssh-agent
     - ssh-add <(echo "%K8S_SECRET_SSH%")
 # This is for debug, we are checking the owner of the ssh key
     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
