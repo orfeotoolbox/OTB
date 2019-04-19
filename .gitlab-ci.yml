@@ -144,11 +144,13 @@ windows-prepare:
     - git-lfs install
     - git config --global user.email "otbbot@orfeo-toolbox.org"
     - git config --global user.name "otbbot"
-    - set PATH=%PATH%;C:\tools\Git\usr\bin
-    - start-ssh-agent
-    - ssh-add <(echo "%K8S_SECRET_SSH%")
+    #~ - set PATH=%PATH%;C:\tools\Git\usr\bin
+    #~ - start-ssh-agent
+    #~ - echo %K8S_SECRET_SSH% > key.txt
+    #~ - ssh-add key.txt
+    #~ - del key.txt
 # This is for debug, we are checking the owner of the ssh key
-    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+    #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
     - .\CI\dev_env.bat x64
     - start /b clcache-server.exe
   script:
