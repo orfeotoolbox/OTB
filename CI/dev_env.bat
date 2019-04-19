@@ -40,7 +40,7 @@ set PATH=%PATH%;C:\tools\Python35-%ARCH%
 set PATH=%PATH%;C:\tools\Python35-%ARCH%\Scripts
 
 :: Setup compiler
-call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\VC\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
+call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
 :: Setup Clcache
 set CLCACHE_DIR=C:\clcache\%ARCH%-%TARGET%-%VCVER%
