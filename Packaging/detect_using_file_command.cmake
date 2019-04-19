@@ -29,6 +29,8 @@ function(detect_using_file_command input_file result_type result_dir)
     message(FATAL_ERROR "${FILE_COMMAND} failed: ${file_rv}\n${file_ev}\n${file_ov}")
   endif()
 
+  message( "file_ov: '${file_ov}'" )
+
   get_filename_component(input_file_NAME ${input_file} NAME)
   string(REPLACE "${input_file}" " _file_full_ " file_ov "${file_ov}")
   string(TOLOWER "${file_ov}" file_ov_lower)
