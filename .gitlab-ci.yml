@@ -150,7 +150,8 @@ windows-prepare:
     #~ - del key.txt
 # This is for debug, we are checking the owner of the ssh key
     #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-    - .\CI\dev_env.bat x64
+    - ./CI/dev_env.bat x64
+    - echo Now start clcache server
     - start /b clcache-server.exe
   script:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-windows-superbuild-base

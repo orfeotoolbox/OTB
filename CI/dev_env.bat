@@ -47,7 +47,7 @@ set CLCACHE_DIR=C:\clcache\%ARCH%-%TARGET%-%VCVER%
 set CLCACHE_HARDLINK=1
 set CLCACHE_SERVER=1
 set CLCACHE_CL=
-for /F %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL=%%a)
+for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL="%%a")
 
 echo CL path: "%CLCACHE_CL%"
 
@@ -65,4 +65,3 @@ echo "    '14.20' (i.e. VS 2019)"
 echo "    '14.16' (i.e. VS 2017)"
 echo "    '14.0'  (i.e. VS 2015) (default)"
 endlocal
-goto :eof
