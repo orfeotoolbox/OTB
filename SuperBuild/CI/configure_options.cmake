@@ -25,8 +25,7 @@ CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
 set ( temporary_option
 "OTB_USE_LIBKML=OFF
-OTB_USE_MPI=OFF
-OTB_USE_NETCDF=OFF")
+OTB_USE_MPI=OFF")
 
 set(concat_options
 "${cmake_configure_option}
