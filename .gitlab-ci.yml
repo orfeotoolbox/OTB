@@ -117,13 +117,13 @@ ubuntu-llvm:
 
 ubuntu-superbuild-prepare:
   extends: .common-prepare
-  only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-prepare:
   extends: .common-prepare
+  only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
