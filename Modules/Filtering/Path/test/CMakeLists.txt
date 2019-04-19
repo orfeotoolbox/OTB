@@ -62,12 +62,12 @@ otb_add_test(NAME feTvImageToEdgePathFilterBis COMMAND otbPathTestDriver
 
 otb_add_test(NAME feTvImageToEdgePathFilter COMMAND otbPathTestDriver
   --compare-image ${EPSILON_8}
-  ${BASELINE}/feImageToEdgePathFilter_rcc8_mire4.png
-  ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
+  ${BASELINE}/feImageToEdgePathFilterOutput.tif
+  ${TEMP}/feImageToEdgePathFilterOutput.tif
   otbImageToEdgePathFilter
-  ${INPUTDATA}/rcc8_mire4.png
-  ${TEMP}/feImageToEdgePathFilter_rcc8_mire4.png
-  255
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
+  ${TEMP}/feImageToEdgePathFilterOutput.tif
+  3
   )
 
 otb_add_test(NAME feTuCompacityPathCircle COMMAND otbPathTestDriver
