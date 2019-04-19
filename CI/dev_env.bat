@@ -39,20 +39,27 @@ if %3.==. (
 set PATH=%PATH%;C:\tools\Python35-%ARCH%
 set PATH=%PATH%;C:\tools\Python35-%ARCH%\Scripts
 
+echo Error level %ERRORLEVEL%
+
 :: Setup compiler
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
+
+echo Error level %ERRORLEVEL%
 
 :: Setup Clcache
 set CLCACHE_DIR=C:\clcache\%ARCH%-%TARGET%-%VCVER%
 set CLCACHE_HARDLINK=1
 set CLCACHE_SERVER=1
 set CLCACHE_CL=
-for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL="%%a")
+for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL=%%a)
+
+echo Error level %ERRORLEVEL%
 
 echo CL path: "%CLCACHE_CL%"
 
 :: if we need to change cache max size: clcache -M <size-in-bytes>
 
+echo Error level %ERRORLEVEL%
 goto :eof
 
 :Help
