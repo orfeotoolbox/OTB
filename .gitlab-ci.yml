@@ -148,6 +148,6 @@ macos-superbuild-build:
   extends: .general
   stage: build
   script:
-    - ctest -VV -S CI/build_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
