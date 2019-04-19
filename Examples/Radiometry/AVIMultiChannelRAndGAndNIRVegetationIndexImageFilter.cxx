@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,"<<std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ," << std::endl;
     return 1;
   }
 
@@ -119,9 +119,9 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, green and NIR) are declared.
 
-  filter->GetFunctor().SetBandIndex(CommonBandNames::RED,::atoi(argv[5]));
-  filter->GetFunctor().SetBandIndex(CommonBandNames::GREEN,::atoi(argv[6]));
-  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR,::atoi(argv[7]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED, ::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::GREEN, ::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR, ::atoi(argv[7]));
 
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.

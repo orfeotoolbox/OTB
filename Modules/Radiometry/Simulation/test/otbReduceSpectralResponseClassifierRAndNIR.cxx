@@ -45,7 +45,7 @@ int otbReduceSpectralResponseClassifierRAndNIR(int argc, char * argv[])
   typedef otb::ReduceSpectralResponse < ResponseType, SatRSRType>  ReduceResponseType;
   typedef ReduceResponseType::Pointer  ReduceResponseTypePointerType;
 
-  typedef otb::Functor::NDVI<double, double>               TFunctionType;
+  typedef otb::Functor::NDVI<double, double>                                               TFunctionType;
   typedef otb::ReduceSpectralResponseClassifierRAndNIR <ReduceResponseType, TFunctionType> ReduceSpectralResponseClassifierRAndNIRType;
   typedef ReduceSpectralResponseClassifierRAndNIRType::Pointer  ReduceSpectralResponseClassifierRAndNIRPointerType;
 

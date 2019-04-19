@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
   typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>                       OpeningLabelMapFilterType;
   typedef itk::LabelMapToBinaryImageFilter<LabelMapType, MaskImageType>               LabelMapToBinaryImageFilterType;
-  typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType,otb::Functor::NDVI<PixelType,PixelType> > NDVIImageFilterType;
+  typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType, otb::Functor::NDVI<PixelType, PixelType>> NDVIImageFilterType;
   typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>   ImageToVectorImageCastFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -166,8 +166,8 @@ int main(int argc, char* argv[])
   //  In our case, statistics are computed on the NDVI coefficient on each label object.
   NDVIImageFilterType::Pointer ndviImageFilter = NDVIImageFilterType::New();
 
-  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::RED,3);
-  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::NIR,4);
+  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::RED, 3);
+  ndviImageFilter->GetFunctor().SetBandIndex(CommonBandNames::NIR, 4);
   ndviImageFilter->SetInput(vreader->GetOutput());
 
   ImageToVectorImageCastFilterType::Pointer ndviVectorImageFilter = ImageToVectorImageCastFilterType::New();

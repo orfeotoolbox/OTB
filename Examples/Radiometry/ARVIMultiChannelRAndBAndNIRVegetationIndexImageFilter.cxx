@@ -26,7 +26,7 @@
                                                         Output/pretty_ARVIMultiChannelRAndBAndNIRVegetationIndex.png \
                                                         1 \
                                                         3 \
-                                                        2 
+                                                        2
 */
 
 
@@ -133,9 +133,9 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   // The three used index bands (red, blue and NIR) are declared.
-  filter->GetFunctor().SetBandIndex(CommonBandNames::RED,::atoi(argv[5]));
-  filter->GetFunctor().SetBandIndex(CommonBandNames::BLUE,::atoi(argv[6]));
-  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR,::atoi(argv[7]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED, ::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::BLUE, ::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR, ::atoi(argv[7]));
 
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.

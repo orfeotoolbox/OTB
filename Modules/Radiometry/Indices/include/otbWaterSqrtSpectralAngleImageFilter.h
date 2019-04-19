@@ -48,32 +48,38 @@ public:
   WaterSqrtSpectralAngleFunctor()
   {
 
-    //Set the channels indices
-    m_BlueIndex = 0;
+    // Set the channels indices
+    m_BlueIndex  = 0;
     m_GreenIndex = 1;
-    m_RedIndex = 2;
-    m_NIRIndex = 3;
+    m_RedIndex   = 2;
+    m_NIRIndex   = 3;
 
-    //Set reference water value
+    // Set reference water value
     InputVectorPixelType reference;
     reference.SetSize(4);
-    reference[0] = 136.0; reference[1] = 132.0; reference[2] = 47.0; reference[3] = 24.0;
+    reference[0] = 136.0;
+    reference[1] = 132.0;
+    reference[2] = 47.0;
+    reference[3] = 24.0;
     this->SetReferenceWaterPixel(reference);
   }
-  ~WaterSqrtSpectralAngleFunctor() override {}
+  ~WaterSqrtSpectralAngleFunctor() override
+  {
+  }
 
   /** Set Reference Pixel */
   void SetReferenceWaterPixel(InputVectorPixelType ref)
   {
     if (ref.GetSize() != 4)
-      {
-      }
+    {
+    }
     InputVectorPixelType reference;
     reference.SetSize(4);
-    reference[m_BlueIndex] = ref[0]; reference[m_GreenIndex] = ref[1]; reference[m_RedIndex] = ref[2];
-    reference[m_NIRIndex] = ref[3];
+    reference[m_BlueIndex]  = ref[0];
+    reference[m_GreenIndex] = ref[1];
+    reference[m_RedIndex]   = ref[2];
+    reference[m_NIRIndex]   = ref[3];
     this->SetReferencePixel(reference);
-
   }
 
   /** Getters and setters */

@@ -43,22 +43,24 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class RI : public RadiometricIndex<TInput,TOutput>
+class RI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  RI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override  
+  RI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::GREEN})
   {
-    auto green = this->Value(CommonBandNames::GREEN,input);
-    auto red = this->Value(CommonBandNames::RED,input);
-  
-    if (std::abs(green) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  }
+
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
+
+    if (std::abs(green) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
       }
 
-    return static_cast<TOutput>(red * red / (green * green * green));
+      return static_cast<TOutput>(red * red / (green * green * green));
   }
 };
 
@@ -77,22 +79,24 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class CI : public RadiometricIndex<TInput,TOutput>
+class CI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  CI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  CI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::GREEN})
   {
-    auto green = this->Value(CommonBandNames::GREEN,input);
-    auto red = this->Value(CommonBandNames::RED,input);
+  }
 
-    if (std::abs(green + red) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
+
+    if (std::abs(green + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
       }
 
-    return (static_cast<TOutput>((red - green) / (red + green)));
+      return (static_cast<TOutput>((red - green) / (red + green)));
   }
 };
 
@@ -107,15 +111,17 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class BI : public RadiometricIndex<TInput,TOutput>
+class BI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  BI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  BI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::GREEN})
   {
-    auto green = this->Value(CommonBandNames::GREEN,input);
-    auto red = this->Value(CommonBandNames::RED,input);
+  }
+
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
 
     return (static_cast<TOutput>(std::sqrt((red * red + green * green) / 2.)));
   }
@@ -132,17 +138,18 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class BI2 : public RadiometricIndex<TInput,TOutput>
+class BI2 : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  
-  BI2() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN, CommonBandNames::NIR}) {}
- 
- TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  BI2() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::GREEN, CommonBandNames::NIR})
   {
-    auto green = this->Value(CommonBandNames::GREEN,input);
-    auto red = this->Value(CommonBandNames::RED,input);
-    auto nir = this->Value(CommonBandNames::NIR,input);
+  }
+
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
+    auto nir   = this->Value(CommonBandNames::NIR, input);
 
     return (static_cast<TOutput>(std::sqrt((red * red + green * green + nir * nir) / 3.)));
   }

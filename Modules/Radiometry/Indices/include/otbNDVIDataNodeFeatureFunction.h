@@ -83,8 +83,7 @@ public:
   typedef PolyLineImageConstIterator<InputImageType, LineType>
                                                       ImageLineIteratorType;
 
-  typedef Functor::NDVI<ScalarRealType, ScalarRealType>
-                                                      NDVIFunctorType;
+  typedef Functor::NDVI<ScalarRealType, ScalarRealType> NDVIFunctorType;
 
   typedef std::vector<PrecisionType>                  OutputType;
 
@@ -102,7 +101,7 @@ public:
 
   void SetREDChannelIndex(unsigned int id)
   {
-    m_NDVIFunctor.SetBandIndex(CommonBandNames::RED,id);
+    m_NDVIFunctor.SetBandIndex(CommonBandNames::RED, id);
   }
 
   unsigned int GetNIRChannelIndex() const
@@ -112,7 +111,7 @@ public:
 
   void SetNIRChannelIndex(unsigned int id)
   {
-    m_NDVIFunctor.SetBandIndex(CommonBandNames::NIR,id);
+    m_NDVIFunctor.SetBandIndex(CommonBandNames::NIR, id);
   }
 
 protected:

@@ -43,23 +43,24 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class NDWI : public RadiometricIndex<TInput,TOutput>
+class NDWI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  NDWI(): RadiometricIndex<TInput,TOutput>({CommonBandNames::NIR, CommonBandNames::MIR}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  NDWI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::NIR, CommonBandNames::MIR})
   {
-    auto mir   = this->Value(CommonBandNames::MIR,input);
-    auto nir   = this->Value(CommonBandNames::NIR,input);
+  }
 
-        if (std::abs(nir + mir) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto mir = this->Value(CommonBandNames::MIR, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    if (std::abs(nir + mir) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return 0.;
       }
 
-    return (nir - mir) / (nir + mir);
+      return (nir - mir) / (nir + mir);
   }
 };
 
@@ -74,23 +75,24 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class NDWI2 : public RadiometricIndex<TInput,TOutput>
+class NDWI2 : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  NDWI2() : RadiometricIndex<TInput,TOutput>({CommonBandNames::NIR, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  NDWI2() : RadiometricIndex<TInput, TOutput>({CommonBandNames::NIR, CommonBandNames::GREEN})
   {
-    auto green   = this->Value(CommonBandNames::GREEN,input);
-    auto nir   = this->Value(CommonBandNames::NIR,input);
+  }
 
-    if (std::abs(nir + green) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto nir   = this->Value(CommonBandNames::NIR, input);
+
+    if (std::abs(nir + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return 0.;
       }
 
-    return (green - nir) / (green + nir);
+      return (green - nir) / (green + nir);
   }
 };
 
@@ -109,22 +111,24 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class MNDWI : public RadiometricIndex<TInput,TOutput>
+class MNDWI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  MNDWI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::MIR, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  MNDWI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::MIR, CommonBandNames::GREEN})
   {
-    auto green   = this->Value(CommonBandNames::GREEN,input);
-    auto mir   = this->Value(CommonBandNames::MIR,input);
+  }
 
-    if (std::abs(mir + green) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto mir   = this->Value(CommonBandNames::MIR, input);
+
+    if (std::abs(mir + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return 0.;
       }
 
-    return (green - mir) / (green + mir);
+      return (green - mir) / (green + mir);
   }
 };
 
@@ -139,23 +143,24 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class NDTI : public RadiometricIndex<TInput,TOutput>
+class NDTI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  NDTI() : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::GREEN}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  NDTI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::GREEN})
   {
-    auto green = this->Value(CommonBandNames::GREEN,input);
-    auto red   = this->Value(CommonBandNames::RED,input);
+  }
 
-    if (std::abs(red + green) < RadiometricIndex<TInput,TOutput>::Epsilon)
-      {
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
+
+    if (std::abs(red + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return 0.;
       }
 
-    return (red -green) / (green + red);
+      return (red - green) / (green + red);
   }
 };
 

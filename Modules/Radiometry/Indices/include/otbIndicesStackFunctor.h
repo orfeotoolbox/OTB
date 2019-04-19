@@ -24,20 +24,22 @@
 #include <vector>
 #include <stdexcept>
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 /**
  * \class IndicesStackFunctor
  * \brief A class to compute a stack of radiometric indices
- * 
+ *
  * This functor can be built from a vector of TIndice*. its operator()
  * will apply each functor of this vector to the input pixel, and
  * return a VariableLengthVector containing the list resulting
  * values. It can be used with otb::FunctorImageFilter
  *
  * \sa FunctorImageFilter
- * 
+ *
  * \ingroup OTBIndices
  */
 template <typename TIndice>
@@ -56,37 +58,36 @@ public:
    * the indice stack
    * \throw std::runtime_error if indices is empty
    */
-  IndicesStackFunctor(const std::vector<IndiceType*> & indices) 
-    : m_Indices(std::move(indices))
+  IndicesStackFunctor(const std::vector<IndiceType*>& indices) : m_Indices(std::move(indices))
   {
-    if(indices.empty())
-      {
+    if (indices.empty())
+    {
       throw std::runtime_error("Can not build IndicesStackFunctor from an empty list of indices.");
-      }
+    }
   }
 
-  /** 
+  /**
    * \param input A itk::VariableLengthVector<TInput> holding the
    * pixel values for each band
    * \return A VariableLengthVector<TInput::OutputType> holding all
    * the indices values
    */
-  void operator()(OutputType & out, const PixelType & in) const
+  void operator()(OutputType& out, const PixelType& in) const
   {
     size_t idx = 0;
-    for(auto indice : m_Indices)
-      {
+    for (auto indice : m_Indices)
+    {
       out[idx] = (*indice)(in);
       ++idx;
-      }
+    }
   }
   /**
-   * \return the size of the indices list (to be used by FunctorImgeFilter) 
+   * \return the size of the indices list (to be used by FunctorImgeFilter)
    */
   size_t OutputSize(...) const
   {
     return m_Indices.size();
-  } 
+  }
 
 private:
   /// The list of indices to use

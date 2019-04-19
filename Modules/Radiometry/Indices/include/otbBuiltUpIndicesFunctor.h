@@ -38,22 +38,24 @@ namespace Functor
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class ISU : public RadiometricIndex<TInput,TOutput>
+class ISU : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  ISU()  : RadiometricIndex<TInput,TOutput>({CommonBandNames::RED, CommonBandNames::NIR}) {}
-
-  TOutput operator()(const itk::VariableLengthVector<TInput> & input) const override
+  ISU() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    auto red = this->Value(CommonBandNames::RED,input);
-    auto nir = this->Value(CommonBandNames::NIR,input);
+  }
+
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
     if (nir == 0)
-      {
+    {
       return static_cast<TOutput>(0.);
       }
 
-    return (static_cast<TOutput>(A - (B * red) / nir));
+      return (static_cast<TOutput>(A - (B * red) / nir));
   }
 
   static constexpr double A = 100.;
