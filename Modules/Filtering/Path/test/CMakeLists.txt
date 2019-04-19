@@ -36,7 +36,6 @@ otbDrawPathFilter.cxx
 otbOrientationPath.cxx
 otbPolyLineImageConstIterator.cxx
 otbRegionImageToRectangularPathListFilter.cxx
-otbVectorizationPathListFilter.cxx
 otbClosePathFunctor.cxx
 otbPolyLineImageIterator.cxx
 )
@@ -164,31 +163,6 @@ otb_add_test(NAME feTvRegionImageToRectangularPathListFilter COMMAND otbPathTest
   ${TEMP}/feRectangle.txt
   0.9 #fit score
   10)  #minimum size
-
-otb_add_test(NAME feTvVectorizationPathListFilterImageOutput COMMAND otbPathTestDriver
-  --compare-image ${EPSILON_8}
-  ${BASELINE}/feTvVectorizationPathListOutput.png
-  ${TEMP}/feTvVectorizationPathListOutput.png
-  otbVectorizationPathListFilter
-  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.raw.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
-  ${TEMP}/feTvVectorizationPathListOutputIgnored.txt
-  ${TEMP}/feTvVectorizationPathListOutput.png
-  0.0001
-  )
-
-otb_add_test(NAME feTvVectorizationPathListFilterAsciiOutput COMMAND otbPathTestDriver
-  --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvVectorizationPathListOutput.txt
-  ${TEMP}/feTvVectorizationPathListOutput.txt
-  otbVectorizationPathListFilter
-  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.raw.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
-  ${TEMP}/feTvVectorizationPathListOutput.txt
-  ${TEMP}/feTvVectorizationPathListOutputIgnored.png
-  0.0005
-  )
-
 
 otb_add_test(NAME bfTvClosePathFunctor COMMAND otbPathTestDriver
   --compare-ascii ${NOTOL}
