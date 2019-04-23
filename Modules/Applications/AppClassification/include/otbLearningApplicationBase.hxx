@@ -122,7 +122,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
 ::InitUnsupervisedClassifierParams()
 {
 #ifdef OTB_USE_SHARK
-  InitSharkKMeansParams();
+  if (!m_RegressionFlag)
+  {
+    InitSharkKMeansParams(); // Regression not supported
+  }
 #endif
 }
 
