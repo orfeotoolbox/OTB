@@ -39,9 +39,9 @@ The copyright owner is *COPYRIGHT OWNER (OR OWNER'S AGENT)* and has signed the O
 <hr>
 
 ***Check before merging:***
-- Run `git diff develop... -U0 --no-color | clang-format-diff.py -p1 -i` on latest changes and commit
 - All discussions are resolved
 - At least 2 :thumbsup: votes from core developers, no :thumbsdown: vote.
 - The feature branch is (reasonably) up-to-date with the base branch
 - Dashboard is green
 - Copyright owner has signed the ORFEO ToolBox Contributor License Agreement
+- Optionally, run `git diff develop... -U0 --no-color | clang-format-diff.py -p1 -i` on latest changes and commit
