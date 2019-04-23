@@ -39,6 +39,7 @@ The copyright owner is *COPYRIGHT OWNER (OR OWNER'S AGENT)* and has signed the O
 <hr>
 
 ***Check before merging:***
+
 - All discussions are resolved
 - At least 2 :thumbsup: votes from core developers, no :thumbsdown: vote.
 - The feature branch is (reasonably) up-to-date with the base branch
