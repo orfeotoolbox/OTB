@@ -129,7 +129,6 @@ private:
       "according to a dimensionality reduction model file.");
 
     // Documentation
-    SetDocName("Image Dimensionality Reduction");
     SetDocLongDescription("This application reduces the dimension of an input"
                           " image, based on a machine learning model file produced by"
                           " the TrainDimensionalityReduction application. Pixels of the "

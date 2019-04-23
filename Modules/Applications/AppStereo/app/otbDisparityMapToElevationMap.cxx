@@ -67,7 +67,6 @@ private:
     SetName("DisparityMapToElevationMap");
     SetDescription("Projects a disparity map into a regular elevation map.");
 
-    SetDocName("Disparity map to elevation map");
     SetDocLongDescription(
       "This application uses a disparity map computed from "
       "a stereo image pair to produce an elevation map on the ground area "

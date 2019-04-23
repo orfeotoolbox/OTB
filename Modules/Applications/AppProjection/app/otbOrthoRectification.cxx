@@ -91,7 +91,6 @@ private:
   {
     SetName("OrthoRectification");
     SetDescription("This application allows ortho-rectifying optical and radar images from supported sensors.");
-    SetDocName("Ortho-rectification");
     std::ostringstream oss;
     oss<<"This application uses inverse sensor modelling combined with a choice of interpolation functions to resample a sensor geometry image into a ground geometry regular grid. ";
     oss<<"The ground geometry regular grid is defined with respect to a map projection (see map parameter). The application offers several modes to estimate the output grid parameters (origin and ground sampling distance), including automatic estimation of image size, ground sampling distance, or both, from image metadata, user-defined ROI corners, or another ortho-image.";

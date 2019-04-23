@@ -52,7 +52,6 @@ private:
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate vector data files");
 
-    SetDocName("Concatenate Vector Data");
     SetDocLongDescription("This application concatenates a list of vector data "
       "files to produce a unique vector data output file.\n\n"
       "This application will gather all the geometries from the input files and"

@@ -57,7 +57,6 @@ private:
     SetName("GeneratePlyFile");
     SetDescription("Generate a 3D Ply file from a DEM and a color image.");
 
-    SetDocName("Ply 3D files generation");
     SetDocLongDescription("The application converts an image containing "
       "elevations into a PLY file, which is a file format to store 3D models. "
       "This format is adpated for visualization on software such as MeshLab [2]"

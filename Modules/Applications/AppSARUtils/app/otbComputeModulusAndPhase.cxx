@@ -61,7 +61,6 @@ private:
     SetName("ComputeModulusAndPhase");
     SetDescription("This application computes the modulus and the phase of a complex SAR image or an image with 2 components (real and imaginary parts).");
 
-    SetDocName("Compute Modulus and Phase");
     SetDocLongDescription(
       "This application computes the modulus and the phase of a "
       "complex SAR image. The input should be a single band image with "

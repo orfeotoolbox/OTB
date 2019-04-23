@@ -402,7 +402,6 @@ private:
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
 
-    SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Unsupervised KMeans image classification. "
       "This is a composite application, using existing training and classification applications. "
       "The SharkKMeans model is used.\n\n"

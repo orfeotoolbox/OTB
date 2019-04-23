@@ -105,7 +105,6 @@ void DoInit() override
     "Train a classifier from multiple images to perform regression.");
 
   // Documentation
-  SetDocName("Train a regression model");
   SetDocLongDescription(
     "This application trains a classifier from multiple input images or a csv "
     "file, in order to perform regression. Predictors are composed of pixel "
