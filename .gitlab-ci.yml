@@ -57,6 +57,7 @@ fast-build:
   extends: .general
   only: [merge_requests]
   stage: build
+  dependencies: []
 
 debian-build:
   extends: .common-build
