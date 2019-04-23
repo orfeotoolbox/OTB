@@ -67,7 +67,7 @@ bool CheckResult(const std::string& testName, std::map<typename TIndice::BandNam
 
 using namespace otb::Functor;
 
-int otbVegetationIndicesTest(int, char**)
+int otbVegetationIndicesTest(int, char ** const)
 {
 
   const std::map<CommonBandNames, size_t> bandMap = {
@@ -105,7 +105,7 @@ int otbVegetationIndicesTest(int, char**)
   }
 }
 
-int otbWaterIndicesTest(int, char**)
+int otbWaterIndicesTest(int, char ** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -130,7 +130,7 @@ int otbWaterIndicesTest(int, char**)
   }
 }
 
-int otbSoilIndicesTest(int, char**)
+int otbSoilIndicesTest(int, char ** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -151,7 +151,7 @@ int otbSoilIndicesTest(int, char**)
   }
 }
 
-int otbBuiltUpIndicesTest(int, char**)
+int otbBuiltUpIndicesTest(int, char ** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -171,7 +171,7 @@ int otbBuiltUpIndicesTest(int, char**)
 }
 
 
-int otbRadiometricIndexTest(int, char**)
+int otbRadiometricIndexTest(int, char ** const)
 {
   auto ndvi = NDVI<double, double>();
 
@@ -224,7 +224,7 @@ int otbRadiometricIndexTest(int, char**)
   }
 }
 
-int otbIndicesStackFunctorTest(int, char**)
+int otbIndicesStackFunctorTest(int, char ** const)
 {
   using IndicesType      = RadiometricIndex<double, int, CommonBandNames>;
   using StackFunctorType = IndicesStackFunctor<IndicesType>;
