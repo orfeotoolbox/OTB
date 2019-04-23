@@ -25,11 +25,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainVectorRegression : public TrainVectorBase
+class TrainVectorRegression : public TrainVectorBase<float, int>
 {
 public:
   typedef TrainVectorRegression Self;
-  typedef TrainVectorBase Superclass;
+  typedef TrainVectorBase<float, int> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   
@@ -83,6 +83,13 @@ protected:
       }
 
     Superclass::DoExecute();
+    
+    /*
+    std::cout << m_PredictedList << std::endl;
+    std::cout << m_ClassificationSamplesWithLabel.labeledListSample << std::endl;
+    */
+    
+    
   }
   
 private:

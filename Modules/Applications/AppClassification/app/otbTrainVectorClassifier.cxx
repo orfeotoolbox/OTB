@@ -29,11 +29,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainVectorClassifier : public TrainVectorBase
+class TrainVectorClassifier : public TrainVectorBase<float, int>
 {
 public:
   typedef TrainVectorClassifier Self;
-  typedef TrainVectorBase Superclass;
+  typedef TrainVectorBase<float, int> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   itkNewMacro( Self )

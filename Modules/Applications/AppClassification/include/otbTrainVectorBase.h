@@ -49,21 +49,22 @@ bool IsNotAlphaNum(char c)
   return !std::isalnum( c );
 }
 
-class TrainVectorBase : public LearningApplicationBase<float, int>
+template <class TInputValue, class TOutputValue>
+class TrainVectorBase : public LearningApplicationBase<TInputValue, TOutputValue>
 {
 public:
   /** Standard class typedefs. */
   typedef TrainVectorBase Self;
-  typedef LearningApplicationBase<float, int> Superclass;
+  typedef LearningApplicationBase<TInputValue, TOutputValue> Superclass;
   typedef itk::SmartPointer <Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
   itkTypeMacro(Self, Superclass);
 
-  typedef Superclass::SampleType SampleType;
-  typedef Superclass::ListSampleType ListSampleType;
-  typedef Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::SampleType SampleType;
+  typedef typename Superclass::ListSampleType ListSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
   typedef double ValueType;
   typedef itk::VariableLengthVector <ValueType> MeasurementType;
@@ -86,8 +87,8 @@ protected:
   class SamplesWithLabel
   {
   public:
-    ListSampleType::Pointer listSample;
-    TargetListSampleType::Pointer labeledListSample;
+    typename ListSampleType::Pointer listSample;
+    typename TargetListSampleType::Pointer labeledListSample;
     SamplesWithLabel()
     {
       listSample = ListSampleType::New();
@@ -178,7 +179,7 @@ protected:
 
   SamplesWithLabel m_TrainingSamplesWithLabel;
   SamplesWithLabel m_ClassificationSamplesWithLabel;
-  TargetListSampleType::Pointer m_PredictedList;
+  typename TargetListSampleType::Pointer m_PredictedList;
   FeaturesInfo m_FeaturesInfo;
 
   void DoInit() override;
