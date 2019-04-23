@@ -119,7 +119,7 @@ ubuntu-superbuild-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 centos-superbuild-prepare:
   extends: .common-prepare
@@ -143,6 +143,7 @@ centos-superbuild-prepare:
     expire_in: 1 week
     paths:
       # - build/*/*/*/*.log
+      - build_packages/*/*/*/*.log
       - build_packages/OTB-*.run
 
 ubuntu-superbuild-build:
@@ -159,8 +160,8 @@ centos-superbuild-build:
   only: [merge_requests, branches]
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
 
