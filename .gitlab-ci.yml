@@ -152,13 +152,16 @@ windows-prepare:
     #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
     - call ./CI/dev_env.bat x64
     - echo Now start clcache server
-    - start /b clcache-server.exe
+    #~ - start /b clcache-server.exe
   script:
-    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-windows-superbuild-base
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-windows-superbuild-base
+    - echo CTest done
   after_script:
-    - taskkill /f /im clcache-server.exe
+    - echo Killing clcache-server
+    #~ - taskkill /f /im clcache-server.exe
   artifacts:
     expire_in: 24 hrs
+    when: always
     paths:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
