@@ -306,9 +306,9 @@ TrainVectorBase<TInputValue, TOutputValue>
         input->PushBack( mv );
 
         if(cFieldIndex>=0 && ogr::Field(feature,cFieldIndex).HasBeenSet())
-          target->PushBack( feature.ogr().GetFieldAsInteger( cFieldIndex ) );
+          target->PushBack( feature.ogr().GetFieldAsDouble( cFieldIndex ) );
         else
-          target->PushBack( 0 );
+          target->PushBack( 0. );
 
         feature = layer.ogr().GetNextFeature();
         goesOn = feature.addr() != 0;
