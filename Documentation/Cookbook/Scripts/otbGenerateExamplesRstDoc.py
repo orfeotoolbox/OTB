@@ -42,7 +42,7 @@ def generate_examples_index(rst_dir, list_of_examples):
     # Render index file and tag index files
     os.makedirs(join(rst_dir, "Examples"), exist_ok=True)
     index_f = open(join(rst_dir, "Examples.rst"), "w")
-    index_f.write(RstPageHeading("Examples", 3, ref="cpp-examples"))
+    index_f.write(RstPageHeading("C++ Examples", 3, ref="cpp-examples"))
 
     for tag, examples_filenames in tag_files.items():
         tag_filename = join("Examples", tag + ".rst")
@@ -95,9 +95,10 @@ def render_example(filename, otb_root):
         rst_description = ""
 
     # Render the template
+    name = os.path.basename(filename)
     template_example = open("templates/example.rst").read()
     output_rst = template_example.format(
-        label="example-" + root,
+        label=name,
         heading=rst_section(name, "="),
         description=rst_description,
         usage=example_usage,
@@ -108,7 +109,7 @@ def render_example(filename, otb_root):
 
     return output_rst
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(usage="Export examples to rst")
     parser.add_argument("rst_dir", help="Directory where rst files are generated")
     parser.add_argument("otb_root", help="OTB repository root")
@@ -130,3 +131,6 @@ if __name__ == "__main__":
         os.makedirs(join(args.rst_dir, "C++", "Examples", tag), exist_ok=True)
         with open(join(args.rst_dir, "C++", "Examples", tag, root + ".rst"), "w") as output_file:
             output_file.write(render_example(filename, args.otb_root))
+
+if __name__ == "__main__":
+    main()

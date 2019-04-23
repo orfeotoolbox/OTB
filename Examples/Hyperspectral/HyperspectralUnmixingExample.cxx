@@ -44,6 +44,8 @@
 #include "otbVcaImageFilter.h"
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 
+#include "itkMersenneTwisterRandomVariateGenerator.h"
+
 int main(int argc, char* argv[])
 {
   if (argc != 7)
@@ -70,6 +72,10 @@ int main(int argc, char* argv[])
 
   typedef otb::VectorRescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType>               VectorImageToMatrixImageFilterType;
+
+  // We set the seed of the random number generator.
+
+  itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(121212);
 
   // We instantiate now the image reader and we set the image file name.
 
@@ -119,7 +125,7 @@ int main(int argc, char* argv[])
   typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
   UCLSUnmixingFilterType::Pointer                                                unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
-  unmixer->SetMatrix(endMember2Matrix->GetMatrix());
+  unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
 
   unmixer->SetNumberOfThreads(1); // FIXME : currently buggy
 

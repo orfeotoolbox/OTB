@@ -44,7 +44,7 @@ otb_test_application(NAME apTvUtDynamicConvertBasic
 otb_test_application(NAME apTuUtDynamicConvertExtendedFilename_writer
                      APP  DynamicConvert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
+                             -out ${TEMP}/apTvUtNoGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
                      )
 
 otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM
@@ -261,10 +261,10 @@ otb_test_application(NAME apTvUtConcatenateImages
 
 otb_test_application(NAME apTvUtConcatenateImages_1Image
                      APP  ConcatenateImages
-                     OPTIONS -il ${INPUTDATA}/poupees_c1
+                     OPTIONS -il ${INPUTDATA}/poupees_c1.raw
                              -out ${TEMP}/apTvUtConcatenateImages_1Image.tif
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/poupees_c1
+                             ${INPUTDATA}/poupees_c1.raw
                              ${TEMP}/apTvUtConcatenateImages_1Image.tif)
 
 

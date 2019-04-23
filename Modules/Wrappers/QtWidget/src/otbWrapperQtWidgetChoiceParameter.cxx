@@ -97,6 +97,10 @@ void QtWidgetChoiceParameter::DoCreateWidget()
   m_VLayout->addStretch();
 
   this->setLayout(m_VLayout);
+
+  // Block mouse wheel events
+  m_ComboBox->setFocusPolicy(Qt::StrongFocus);
+  m_ComboBox->installEventFilter(this);
 }
 
 void QtWidgetChoiceParameter::SetValue(int value)

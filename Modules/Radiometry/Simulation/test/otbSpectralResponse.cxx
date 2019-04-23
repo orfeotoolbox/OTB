@@ -45,7 +45,7 @@ int otbSpectralResponse(int argc, char * argv[])
   ImageType::Pointer image = ImageType::New();
   myResponse->GetImage(image);
 
-  std::cout<<myResponse<<std::endl;
-  std::cout << "SpectResponse("<<lambda<<")= " << (*myResponse)(lambda) << std::endl;
+  otbLogMacro(Debug, << myResponse);
+  otbLogMacro(Info, << "SpectResponse("<<lambda<<")= " << (*myResponse)(lambda));
   return EXIT_SUCCESS;
 }

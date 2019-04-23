@@ -59,9 +59,9 @@ int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
   UnmixingImageFilterType::Pointer unmixer = UnmixingImageFilterType::New();
 
   unmixer->SetInput(readerImage->GetOutput());
-  unmixer->SetMaxIteration(maxIter);
+  unmixer->GetModifiableFunctor().SetMaxIteration(maxIter);
   //unmixer->SetNumberOfThreads(1);
-  unmixer->SetEndmembersMatrix(endMember2Matrix->GetMatrix());
+  unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMember2Matrix->GetMatrix());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputImage);

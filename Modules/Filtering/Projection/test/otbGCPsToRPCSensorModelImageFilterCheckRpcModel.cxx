@@ -23,6 +23,7 @@
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
+#include "otbMacro.h"
 #include <string>
 
 int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
@@ -62,7 +63,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
   rpcEstimator->SetInput(reader->GetOutput());
 
   unsigned int nbGCPs = nbPoints / 5;
-  std::cout << "Receiving " << nbPoints << " from command line." << std::endl;
+  otbLogMacro(Info, << "Receiving " << nbPoints << " from command line.");
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
     {
@@ -75,7 +76,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
     geoPoint[1] = std::stof(argv[ 6 + gcpId * 5]);
     geoPoint[2] = std::stof(argv[ 7 + gcpId * 5]);
 
-    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
+    otbLogMacro(Debug, << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
     }
@@ -91,8 +92,8 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
 
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
   grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
-  std::cout<<rpcEstimator->GetKeywordlist()<<std::endl;
-  grsTrasnform->SetOutputProjectionRef("4326");
+  otbLogMacro(Debug, <<rpcEstimator->GetKeywordlist());
+  grsTrasnform->SetOutputProjectionRef("EPSG:4326");
 
   // Set the DEM Directory
   if ( std::string(argv[2]).compare("no_output") != 0)
@@ -126,11 +127,9 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
     // Search for nans
     if ( vnl_math_isnan(transformedPoint2D[0]) || vnl_math_isnan(transformedPoint2D[1]) )
       {
-      std::cout << "Reference : "<< geoPoint
-                <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint2D
-                << std::endl;
-      std::cout<<"The result of the projection is nan, there is a problem with the estimated RpcModel "
-               << std::endl<<std::endl;
+      otbLogMacro(Warning, << "Reference : "<< geoPoint
+        <<" --> Result of the reprojection using the estimated RpcModel "<<  transformedPoint2D);
+      otbLogMacro(Warning, <<"The result of the projection is nan, there is a problem with the estimated RpcModel");
       isErrorDetected = true;
       }
 
@@ -138,14 +137,13 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char * argv[])
     double residual = geoDistance->Evaluate(geoPoint, transformedPoint2D);
     if( residual > tol )
       {
-      std::cout << "Reference : "<< geoPoint
-                <<" --> Result of the reprojection using the estimated RpcModel "
-                << transformedPoint2D
-                << std::endl
-                << " Residual ["<< residual << "] is higher than the tolerance ["
-                << tol
-                <<"], there is a problem with the estimated RpcModel"
-                <<std::endl<<std::endl;
+      otbLogMacro(Warning, << "Reference : "<< geoPoint
+        <<" --> Result of the reprojection using the estimated RpcModel "
+        << transformedPoint2D
+        << std::endl
+        << " Residual ["<< residual << "] is higher than the tolerance ["
+        << tol
+        <<"], there is a problem with the estimated RpcModel");
       isErrorDetected = true;
       }
     }

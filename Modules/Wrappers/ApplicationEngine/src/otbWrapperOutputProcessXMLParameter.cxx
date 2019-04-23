@@ -29,14 +29,11 @@
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
-#include "otbWrapperRadiusParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "itksys/SystemTools.hxx"
 
 namespace otb
@@ -284,9 +281,9 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
            }
          else if ( type == ParameterType_String || type == ParameterType_InputFilename ||
                    type == ParameterType_Directory || type == ParameterType_InputImage ||
-                   type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
-                   type == ParameterType_Choice || type == ParameterType_OutputVectorData ||
-                   type == ParameterType_OutputFilename || type == ParameterType_Bool)
+                   type == ParameterType_InputVectorData || type == ParameterType_Choice ||
+                   type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename ||
+                   type == ParameterType_Bool)
            {
            value = m_Appli->GetParameterString(key);
            }
@@ -303,7 +300,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
          //get only file name
     /*
       if(type == ParameterType_InputFilename || type == ParameterType_InputImage ||
-      type == ParameterType_ComplexInputImage || type == ParameterType_InputVectorData ||
+      type == ParameterType_InputVectorData ||
       type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename)
            {
            unsigned found = value.find_last_of("/\\");
@@ -338,7 +335,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
          AddChildNodeTo(n_Parameter, "type", typeAsString);
          AddChildNodeTo(n_Parameter, "name", paramName);
 
-         if(type == ParameterType_OutputImage || type == ParameterType_ComplexOutputImage)
+         if(type == ParameterType_OutputImage)
            {
            AddChildNodeTo(n_Parameter, "pixtype", pixelTypeAsString);
            }

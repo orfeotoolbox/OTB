@@ -44,13 +44,8 @@ int otbSatelliteRSR(int argc, char * argv[])
   unsigned int NumBand = atoi(argv[4]);
   double lambda = atof(argv[3]);
 
-  std::cout << myResponse <<std::endl;
-  std::cout << "RSR("<<lambda<<","<< NumBand <<")= " << (*myResponse)(lambda, NumBand) << std::endl;
-//   for(unsigned int i=0; i<myResponse->GetRSR()[NumBand]->GetResponse().size(); ++i)
-//   {
-//      std::cout << "RSR("<<myResponse->GetRSR()[NumBand]->GetResponse()[i]->first<<","<< NumBand <<")= " << myResponse->GetRSR()[NumBand]->GetResponse()[i]->second << std::endl;
-//   }
-
+  otbLogMacro(Debug, << myResponse);
+  otbLogMacro(Info, << "RSR("<<lambda<<","<< NumBand <<")= " << (*myResponse)(lambda, NumBand));
 
   return EXIT_SUCCESS;
 }

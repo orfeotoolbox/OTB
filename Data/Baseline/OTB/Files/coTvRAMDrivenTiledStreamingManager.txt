@@ -1,0 +1,15 @@
+ImageRegion (0xbf926080)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [176, 176]
+
+ImageRegion (0xbf926080)
+  Dimension: 2
+  Index: [176, 0]
+  Size: [176, 176]
+
+ImageRegion (0xbf926080)
+  Dimension: 2
+  Index: [9856, 5632]
+  Size: [157, 95]
+

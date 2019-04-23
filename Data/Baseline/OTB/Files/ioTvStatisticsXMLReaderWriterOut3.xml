@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<FeatureStatistics>
+    <Statistic name="meanTest">
+        <StatisticVector value="531.4" />
+        <StatisticVector value="0.151" />
+        <StatisticVector value="-43.9" />
+        <StatisticVector value="0.00015" />
+    </Statistic>
+    <Statistic name="meanTestBis">
+        <StatisticVector value="-5" />
+        <StatisticVector value="67.3" />
+        <StatisticVector value="-35000" />
+    </Statistic>
+</FeatureStatistics>
+<GeneralStatistics>
+    <Statistic name="classCounts">
+        <StatisticMap key="forest" value="32896" />
+        <StatisticMap key="soil" value="7856126" />
+        <StatisticMap key="water" value="4986" />
+    </Statistic>
+    <Statistic name="polygonSize">
+        <StatisticMap key="126" value="-4.5999999999999996" />
+        <StatisticMap key="5567" value="460000000" />
+        <StatisticMap key="98315" value="64.700000000000003" />
+    </Statistic>
+</GeneralStatistics>

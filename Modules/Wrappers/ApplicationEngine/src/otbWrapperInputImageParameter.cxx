@@ -24,6 +24,7 @@
 #include "otbWrapperInputImageParameterMacros.h"
 #include "otb_boost_string_header.h"
 
+
 namespace otb
 {
 
@@ -62,11 +63,17 @@ InputImageParameter::SetFromFileName(const std::string& filename)
 }
 
 
-FloatVectorImageType*
-InputImageParameter::GetImage()
+ImageBaseType* InputImageParameter ::GetImage()
 {
-  return this->GetImage<FloatVectorImageType>();
+  return m_Image.GetPointer();
 }
+
+
+ImageBaseType const* InputImageParameter ::GetImage() const
+{
+  return m_Image.GetPointer();
+}
+
 
 template <>
 ImageBaseType*
@@ -81,21 +88,18 @@ InputImageParameter::GetImage<ImageBaseType>()
 otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
-void
-InputImageParameter::SetImage(FloatVectorImageType* image)
+
+void InputImageParameter ::SetImage(ImageBaseType* image)
 {
   m_UseFilename = false;
-  this->SetImage<FloatVectorImageType>( image );
+  m_Image       = image;
 }
 
 
 bool
 InputImageParameter::HasValue() const
 {
-  if( m_FileName.empty() && m_Image.IsNull() )
-    return false;
-  else
-    return true;
+  return !m_FileName.empty() || !m_Image.IsNull();
 }
 
 void
@@ -104,11 +108,26 @@ InputImageParameter
 {
   m_Image  = nullptr;
   m_Reader = nullptr;
-  m_Caster = nullptr;
+  m_InputCaster     = nullptr;
+  m_OutputCaster    = nullptr;
   m_FileName = "";
   m_PreviousFileName="";
   m_UseFilename = true;
 }
 
+ParameterType InputImageParameter::GetType() const
+{
+  return ParameterType_InputImage;
+}
+
+std::string InputImageParameter::ToString() const
+{
+  return GetFileName();
+}
+
+void InputImageParameter::FromString(const std::string& value)
+{
+  SetFromFileName(value);
+}
 }
 }

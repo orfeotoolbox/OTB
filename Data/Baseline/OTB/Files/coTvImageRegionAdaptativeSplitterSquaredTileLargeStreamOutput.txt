@@ -1,0 +1,51 @@
+ImageRegionAdaptativeSplitter (0x1680c60)
+  RTTI typeinfo:   otb::ImageRegionAdaptativeSplitter<2u>
+  Reference Count: 2
+  Modified Time: 6
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  IsUpToDate: true
+  ImageRegion: ImageRegion (0x1680cd0)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [8192, 8192]
+
+  Tile hint: [2048, 2048]
+  Requested number of splits: 8
+  Actual number of splits: 8
+
+Split map: 
+Split 0: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [0, 0]
+  Size: [4096, 2048]
+Split 1: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [4096, 0]
+  Size: [4096, 2048]
+Split 2: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [0, 2048]
+  Size: [4096, 2048]
+Split 3: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [4096, 2048]
+  Size: [4096, 2048]
+Split 4: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [0, 4096]
+  Size: [4096, 2048]
+Split 5: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [4096, 4096]
+  Size: [4096, 2048]
+Split 6: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [0, 6144]
+  Size: [4096, 2048]
+Split 7: ImageRegion (0x7fff44efaf00)
+  Dimension: 2
+  Index: [4096, 6144]
+  Size: [4096, 2048]

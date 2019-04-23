@@ -1,5 +1,5 @@
-Stereoscopic reconstruction from VHR optical images pair
-========================================================
+Stereoscopic reconstruction
+===========================
 
 This section describes how to convert pair of stereo images into
 elevation information.

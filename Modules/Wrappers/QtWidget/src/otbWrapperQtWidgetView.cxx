@@ -24,7 +24,6 @@
 
 #include "otbWrapperQtWidgetParameterGroup.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
-#include "otbWrapperApplicationHtmlDocGenerator.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
@@ -103,7 +102,6 @@ void QtWidgetView::CreateGui()
   m_LogText = new QTextEdit(this);
   connect( m_Model->GetLogOutput(), &QtLogOutput::NewContentLog, m_LogText, &QTextEdit::append );
   m_TabWidget->addTab(m_LogText, tr("Logs"));
-  m_TabWidget->addTab(CreateDoc(), tr("Documentation"));
   mainLayout->addWidget(m_TabWidget);
 
   m_Message = new QLabel("<center><font color=\"#FF0000\">"+tr("Select parameters")+"</font></center>", this);
@@ -115,7 +113,7 @@ void QtWidgetView::CreateGui()
   progressReport->SetApplication(m_Model->GetApplication());
 
   QWidget* footer = CreateFooter();
-   
+
   QHBoxLayout *footLayout = new QHBoxLayout;
   footLayout->addWidget(progressReport);
   footLayout->addWidget(footer);
@@ -181,10 +179,6 @@ QWidget* QtWidgetView::CreateFooter()
   // an HLayout with two buttons : Execute and Quit
   QGroupBox *footerGroup = new QGroupBox(this);
   QHBoxLayout *footerLayout = new QHBoxLayout;
- 
-  footerGroup->setFixedHeight(40);
-  footerGroup->setContentsMargins(0, 0, 0, 0);
-  footerLayout->setContentsMargins(5, 5, 5, 5);
 
   m_ExecButton = new QPushButton(footerGroup);
   m_ExecButton->setDefault(true);
@@ -210,23 +204,6 @@ QWidget* QtWidgetView::CreateFooter()
   footerGroup->setLayout(footerLayout);
 
   return footerGroup;
-}
-
-QWidget* QtWidgetView::CreateDoc()
-{
-  QTextEdit *text = new QTextEdit(this);
-  text->setReadOnly(true);
-
-  QTextDocument * doc = new QTextDocument(this);
-
-  std::string docContain;
-  otb::Wrapper::ApplicationHtmlDocGenerator::GenerateDoc( GetModel()->GetApplication(), docContain);
-
-  doc->setHtml(docContain.c_str());
-
-  text->setDocument(doc);
-
-  return text;
 }
 
 void QtWidgetView::closeEvent( QCloseEvent * e )

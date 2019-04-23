@@ -1,0 +1,4 @@
+#className requiredSamples totalSamples rate
+1	83	104	0.798077
+2	83	160	0.51875
+3	83	211	0.393365

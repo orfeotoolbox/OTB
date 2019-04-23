@@ -126,7 +126,7 @@ private:
     SetParameterDescription("strategy.smote.neighbors", 
                             "Number of nearest neighbors to be used in the "
                             "SMOTE algorithm");
-    SetDefaultParameterFloat("strategy.smote.neighbors", 5);
+    SetDefaultParameterInt("strategy.smote.neighbors", 5);
 
     AddRANDParameter("seed");
     MandatoryOff("seed");

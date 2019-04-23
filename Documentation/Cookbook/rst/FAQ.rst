@@ -1,39 +1,6 @@
 Frequently Asked Questions
 ==========================
 
-What's in OTB?
---------------
-
--  Image access: optimized read/write access for most of remote sensing
-   image formats, meta-data access, simple visualization;
-
--  Sensor geometry: sensor models, cartographic projections;
-
--  Radiometry: atmospheric corrections, vegetation indices;
-
--  Filtering: blurring, denoising, enhancement;
-
--  Fusion: image pansharpening;
-
--  Feature extraction: interest points, alignments, lines;
-
--  Image segmentation: region growing, watershed, level sets;
-
--  Classification: K-means, SVM, Markov random fields;
-
--  Change detection.
-
--  Object based image analysis.
-
--  Geospatial analysis.
-
-For a full list of applications see the chapter :ref:`apprefdoc`.
-For an introduction to the C++ API see the
-`Software Guide <https://www.orfeo-toolbox.org/SoftwareGuide/>`_.
-And for an exhaustive description of the C++ API see the
-`Doxygen <https://www.orfeo-toolbox.org/doxygen/>`_.
-
-
 License
 -------
 

@@ -109,12 +109,10 @@ int main(int argc, char* argv[])
 
   height = demHandler->GetHeightAboveEllipsoid(point);
   std::cout << "height above ellipsoid (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
-  //
+
   // Note that OSSIM internal calls for sensor
   // modelling use the height above ellipsoid, and follow the same logic as the
   // \code{GetHeightAboveEllipsoid()} method.
-  //
-  // Software Guide : EndLatex
 
   // Check for Nan
   if (vnl_math_isnan(height))

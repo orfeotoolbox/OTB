@@ -39,7 +39,7 @@
 #include "itkVariableLengthVector.h"
 
 #include "itkImageRegionConstIterator.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
 
 #include "itkCastImageFilter.h"
@@ -84,7 +84,7 @@ public:
   typedef typename TOutput::ValueType ValueType;
 
   VectorMapping() : m_OutputSize(0) {}
-  virtual ~VectorMapping() {}
+  virtual ~VectorMapping() = default;
 
   typedef std::map<TInput, TOutput, VectorLexicographicCompare<TInput> > ChangeMapType;
 
@@ -92,22 +92,12 @@ public:
   {
     m_OutputSize = nb;
   }
-  unsigned int GetOutputSize()
+
+  size_t OutputSize(const std::array<size_t, 1>&) const
   {
     return m_OutputSize;
   }
-  bool operator !=(const VectorMapping& other) const
-  {
-    if (m_ChangeMap != other.m_ChangeMap)
-      {
-      return true;
-      }
-    return false;
-  }
-  bool operator ==(const VectorMapping& other) const
-  {
-    return !(*this != other);
-  }
+
   TOutput GetChange(const TInput& original)
   {
     return m_ChangeMap[original];
@@ -234,10 +224,7 @@ public:
     StreamingStatisticsMapFromLabelImageFilterType;
 
   // Inverse mapper for color->label operation
-  typedef otb::UnaryFunctorImageFilter
-    <RGBImageType, LabelVectorImageType,
-     Functor::VectorMapping
-      <RGBPixelType, LabelVectorType> >               ColorToLabelFilterType;
+  typedef otb::FunctorImageFilter<Functor::VectorMapping<RGBPixelType, LabelVectorType>> ColorToLabelFilterType;
 
   // Streaming the input image for color->label operation
   typedef RGBImageType::RegionType                    RegionType;
@@ -685,10 +672,10 @@ private:
     RGBImageType::Pointer input = GetParameterUInt8RGBImage("in");
     m_InverseMapper = ColorToLabelFilterType::New();
     m_InverseMapper->SetInput(input);
-    m_InverseMapper->GetFunctor().SetOutputSize(1);
+    m_InverseMapper->GetModifiableFunctor().SetOutputSize(1);
     LabelVectorType notFoundValue(1);
     notFoundValue[0] = GetParameterInt("op.colortolabel.notfound");
-    m_InverseMapper->GetFunctor().SetNotFoundValue(notFoundValue);
+    m_InverseMapper->GetModifiableFunctor().SetNotFoundValue(notFoundValue);
 
     if(GetParameterInt("method")==0)
       {
@@ -710,7 +697,7 @@ private:
       colorList.insert(background);
       LabelVectorType currentVectorLabel(1);
       currentVectorLabel[0] = currentLabel;
-      m_InverseMapper->GetFunctor().SetChange(background, currentVectorLabel);
+      m_InverseMapper->GetModifiableFunctor().SetChange(background, currentVectorLabel);
       ++currentLabel;
 
       // Setting up local streaming capabilities
@@ -747,7 +734,7 @@ private:
             {
             colorList.insert(it.Get());
             currentVectorLabel[0] = currentLabel;
-            m_InverseMapper->GetFunctor().SetChange(it.Get(), currentVectorLabel);
+            m_InverseMapper->GetModifiableFunctor().SetChange(it.Get(), currentVectorLabel);
             ++currentLabel;
             }
           ++it;
@@ -824,7 +811,7 @@ private:
           rgbcolor[0] = static_cast<int>(color[0]);
           rgbcolor[1] = static_cast<int>(color[1]);
           rgbcolor[2] = static_cast<int>(color[2]);
-          m_InverseMapper->GetFunctor().SetChange(rgbcolor, cvlabel);
+          m_InverseMapper->GetModifiableFunctor().SetChange(rgbcolor, cvlabel);
           }
         }
       }

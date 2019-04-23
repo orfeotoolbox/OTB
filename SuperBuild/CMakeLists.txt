@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+## COMMMENT to dirty superbuild artifact. TAG: 1.
+
 cmake_minimum_required(VERSION 3.3.0)
 
 project(OTB-SuperBuild)
@@ -293,7 +295,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
+option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
@@ -350,7 +352,6 @@ find_path(OTB_DATA_ROOT README-OTB-Data
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
-option(OTB_WRAP_PYTHON3 "Enable python 3 wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
@@ -375,6 +376,22 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "| ${lib}")
   message(STATUS "|----------------------------------------------------------")
 endforeach()
+
+# Python
+# This should set the following variables (and more):
+#   -PYTHON_EXECUTABLE
+#   -PYTHON_INCLUDE_DIR
+#   -PYTHON_LIBRARY
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
 
 include(External_otb)
 

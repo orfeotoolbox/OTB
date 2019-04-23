@@ -56,6 +56,8 @@ public:
    */
   static Logger * Instance();
 
+  void ResetOutputs();
+
   static Pointer New();
   itkCreateAnotherMacro( Logger )
   itkCloneMacro( Logger )
@@ -68,6 +70,9 @@ public:
 
   /** Set the flag m_LogSetupInfoDone to true */
   void LogSetupInformationDone();
+
+  // Overwrite this to provide custom formatting of log entries
+  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
 
 protected:
   Logger();

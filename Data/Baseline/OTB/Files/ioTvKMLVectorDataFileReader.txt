@@ -1,0 +1,32 @@
++Root (Root)
++Document (Paths)
++Line () 2 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Tessellated
+      Description (String): If the <tessellate> tag has a value of 1, the line will contour to the underlying terrain
+
++Line () 2 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Untessellated
+      Description (String): If the <tessellate> tag has a value of 0, the line follow a simple straight-line path from point to point
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Absolute
+      Description (String): Transparent purple line
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Absolute Extruded
+      Description (String): Transparent green wall with yellow outlines
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Relative
+      Description (String): Black line (10 pixels wide), height tracks terrain
+
++Line () 11 points
+  -> Metadata:    VectorData Keyword list:    - Size: 2
+      Name (String): Relative Extruded
+      Description (String): Opaque blue walls with red outline, height tracks terrain
+

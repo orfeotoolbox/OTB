@@ -28,7 +28,6 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
-#include "otbGeoInformationConversion.h"
 #include "otbStreamingShrinkImageFilter.h"
 
 // sahpe index necessary includes

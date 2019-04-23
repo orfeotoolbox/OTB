@@ -33,8 +33,6 @@
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperOutputImageParameter.h"
-#include "otbWrapperComplexInputImageParameter.h"
-#include "otbWrapperComplexOutputImageParameter.h"
 #include "otbWrapperDocExampleStructure.h"
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "OTBApplicationEngineExport.h"
@@ -261,7 +259,6 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
-   * \li ParameterType_ComplexInputImageParameter
    * \li ParameterType_InputVectorDataParameter
    * \li ParameterType_OutputImageParameter
    * \li ParameterType_OutputVectorDataParameter
@@ -397,26 +394,12 @@ public:
    */
   void SetParameterOutputImage(std::string parameter, FloatVectorImageType* value);
 
-  /* Set a complex output image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
-   */
-  void SetParameterComplexOutputImage(std::string parameter, ComplexFloatVectorImageType* value);
-
   /* Set the pixel type in which the image will be saved
    *
    * Can be called for types :
    * \li ParameterType_OutputImage
    */
   void SetParameterOutputImagePixelType(std::string parameter, ImagePixelType pixelType);
-
-  /* Set the complex pixel type in which the image will be saved
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
-   */
-  void SetParameterComplexOutputImagePixelType(std::string parameter, ComplexImagePixelType cpixelType);
 
   /* Set an output vector data value
    *
@@ -451,7 +434,6 @@ public:
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
-   * \li ParameterType_ComplexInputImage
    * \li ParameterType_InputVectorData
    * \li ParameterType_OutputImage
    * \li ParameterType_OutputVectorData
@@ -497,28 +479,6 @@ public:
    * OutputImageParameter
    */
   ImageBaseType * GetParameterOutputImage(std::string parameter);
-
-  /**
-   * Set the input complex image parameter as an ImageBase * instead
-   * of filename. Useful to connect pipelines between different
-   * application instances.
-   * \in parameter The parameter key
-   * \in inputImage ImageBase pointer to use as input
-   * \throw itk::Exception if parameter is not found or not an
-   * ComplexInputImageParameter
-   */
-  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
-
-  /**
-   * Get the complex output image parameter as an ImageBase * instead
-   * of writing to disk. Useful to connect pipelines between different
-   * application instances.
-   * \in parameter The parameter key
-   * \return The ImageBase * pointer to the output image
-   * \throw itk::Exception if parameter is not found or not an
-   * ComplexOutputImageParameter
-   */
-  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
 
   /**
    * Add an image to an InputImageList parameter as an ImageBase
@@ -633,13 +593,6 @@ public:
    */
   FloatVectorImageListType* GetParameterImageList(std::string parameter);
 
-  /* Get a complex image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexInputImage
-   */
-  ComplexFloatVectorImageType* GetParameterComplexImage(std::string parameter);
-
   /* GetParameterVectorData
    *
    * Can be called for types :
@@ -668,7 +621,6 @@ public:
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
    * \li ParameterType_InputImage
-   * \li ParameterType_ComplexInputImage
    * \li ParameterType_InputVectorData
    * \li ParameterType_OutputImage
    * \li ParameterType_OutputVectorData
@@ -690,13 +642,6 @@ public:
   {
     m_ParameterList = paramGroup;
   }
-
-  /* Get the pixel type in which the complex image will be saved
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
-   */
-  ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
   otb::Logger* GetLogger() const;
 
@@ -807,8 +752,6 @@ public:
    *  \li ParameterType_InputImage
    *  \li ParameterType_InputImageList
    *  \li ParameterType_OutputImage
-   *  \li ParameterType_ComplexInputImage
-   *  \li ParameterType_ComplexOutputImage
    */
   ImageBaseType* GetParameterImageBase(const std::string & key, unsigned int idx = 0);
 
@@ -818,18 +761,17 @@ public:
    *  Works on parameters:
    *  \li ParameterType_InputImage
    *  \li ParameterType_InputImageList
-   *  \li ParameterType_ComplexInputImage
    */
   void SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx = 0);
 
   /**
-  Register all ProcessObject that are linked to parameters : 
+  Register all ProcessObject that are linked to parameters :
     \li ParameterType_OutputImage
     \li ParameterType_OutputVectorData
 
-    Those ProcessObjects are stored in the m_Filters set and are deleted at the 
+    Those ProcessObjects are stored in the m_Filters set and are deleted at the
   end of ExecuteAndWriteOutput (if there are only held by the set)
-  This method can be called just before the end of a DoExecute in a derived 
+  This method can be called just before the end of a DoExecute in a derived
   class of Application.
   */
   void RegisterPipeline();
@@ -908,21 +850,7 @@ protected:
    * \li ParameterType_InputImage
    */
   template <class TImageType>
-    TImageType* GetParameterImage(std::string parameter)
-  {
-    typename TImageType::Pointer ret;
-    Parameter* param = GetParameterByKey(parameter);
-    InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    if (paramDown)
-    {
-      return paramDown->GetImage<TImageType>();
-    }
-    else
-    {
-      itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
-      return nullptr;
-    }
-  }
+  TImageType* GetParameterImage(std::string parameter);
 
   /** Declare a parameter as having an automatic value */
   void AutomaticValueOn(std::string paramKey);
@@ -936,33 +864,7 @@ protected:
    * \li ParameterType_OutputImage
    */
   template <class TImageType>
-    void SetParameterOutputImage(std::string parameter, TImageType* value)
-  {
-    Parameter* param = GetParameterByKey(parameter);
-
-    if (dynamic_cast<OutputImageParameter*>(param))
-      {
-      OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
-      paramDown->SetValue(value);
-      }
-  }
-
-    /* Set a complex output image value
-   *
-   * Can be called for types :
-   * \li ParameterType_ComplexOutputImage
-   */
-  template <class TImageType>
-    void SetParameterComplexOutputImage(std::string parameter, TImageType* value)
-  {
-    Parameter* param = GetParameterByKey(parameter);
-
-    if (dynamic_cast<ComplexOutputImageParameter*>(param))
-      {
-      ComplexOutputImageParameter* paramDown = dynamic_cast<ComplexOutputImageParameter*>(param);
-      paramDown->SetValue(value);
-      }
-  }
+  void SetParameterOutputImage(std::string parameter, TImageType* value);
 
 private:
   /* Implement this method to add parameters */
@@ -1038,9 +940,90 @@ private:
 } //end namespace otb
 
 
-//#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperApplication.hxx"
-//#endif
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbWrapperApplication.hxx"
+#endif
+
+
+namespace otb
+{
+namespace Wrapper
+{
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt8VectorImageType* Application::GetParameterImage<UInt8VectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE Int16VectorImageType* Application::GetParameterImage<Int16VectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt16VectorImageType* Application::GetParameterImage<UInt16VectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE Int32VectorImageType* Application::GetParameterImage<Int32VectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt32VectorImageType* Application::GetParameterImage<UInt32VectorImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE FloatVectorImageType* Application::GetParameterImage<FloatVectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE DoubleVectorImageType* Application::GetParameterImage<DoubleVectorImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt16VectorImageType* Application::GetParameterImage<ComplexInt16VectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt32VectorImageType* Application::GetParameterImage<ComplexInt32VectorImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexFloatVectorImageType* Application::GetParameterImage<ComplexFloatVectorImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexDoubleVectorImageType* Application::GetParameterImage<ComplexDoubleVectorImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt8RGBImageType* Application::GetParameterImage<UInt8RGBImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt8RGBAImageType* Application::GetParameterImage<UInt8RGBAImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt8ImageType* Application::GetParameterImage<UInt8ImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE Int16ImageType* Application::GetParameterImage<Int16ImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt16ImageType* Application::GetParameterImage<UInt16ImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE Int32ImageType* Application::GetParameterImage<Int32ImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE UInt32ImageType* Application::GetParameterImage<UInt32ImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE FloatImageType* Application::GetParameterImage<FloatImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE DoubleImageType* Application::GetParameterImage<DoubleImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt16ImageType* Application::GetParameterImage<ComplexInt16ImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexInt32ImageType* Application::GetParameterImage<ComplexInt32ImageType>(std::string);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexFloatImageType* Application::GetParameterImage<ComplexFloatImageType>(std::string);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE ComplexDoubleImageType* Application::GetParameterImage<ComplexDoubleImageType>(std::string);
+
+//
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt8VectorImageType>(std::string, UInt8VectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<Int16VectorImageType>(std::string, Int16VectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt16VectorImageType>(std::string, UInt16VectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<Int32VectorImageType>(std::string, Int32VectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt32VectorImageType>(std::string, UInt32VectorImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<FloatVectorImageType>(std::string, FloatVectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<DoubleVectorImageType>(std::string, DoubleVectorImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16VectorImageType>(std::string,
+                                                                                                                            ComplexInt16VectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32VectorImageType>(std::string,
+                                                                                                                            ComplexInt32VectorImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatVectorImageType>(std::string,
+                                                                                                                            ComplexFloatVectorImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleVectorImageType>(std::string,
+                                                                                                                             ComplexDoubleVectorImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt8RGBImageType>(std::string, UInt8RGBImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt8RGBAImageType>(std::string, UInt8RGBAImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt8ImageType>(std::string, UInt8ImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<Int16ImageType>(std::string, Int16ImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt16ImageType>(std::string, UInt16ImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<Int32ImageType>(std::string, Int32ImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<UInt32ImageType>(std::string, UInt32ImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<FloatImageType>(std::string, FloatImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<DoubleImageType>(std::string, DoubleImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16ImageType>(std::string, ComplexInt16ImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32ImageType>(std::string, ComplexInt32ImageType*);
+
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatImageType>(std::string, ComplexFloatImageType*);
+extern template OTBApplicationEngine_EXPORT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleImageType>(std::string, ComplexDoubleImageType*);
+
+} // namespace Wrapper
+} // namespace otb
 
 
 #endif // otbWrapperApplication_h_

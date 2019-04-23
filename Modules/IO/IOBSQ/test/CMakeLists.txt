@@ -37,4 +37,3 @@ otb_add_test(NAME ioTuBSQImageIOCanRead COMMAND otbIOBSQTestDriver otbBSQImageIO
 
 otb_add_test(NAME ioTuBSQImageIOCanWrite COMMAND otbIOBSQTestDriver otbBSQImageIOTestCanWrite
   ${TEMP}/poupees.hd)
-

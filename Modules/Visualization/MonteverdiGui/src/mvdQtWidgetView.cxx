@@ -29,7 +29,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbWrapperApplicationHtmlDocGenerator.h"
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetSimpleProgressReport.h"
@@ -178,7 +177,6 @@ QtWidgetView
   //SetupWidget( widget, InputFilenameListInitializer() );
   SetupWidget( widget, InputImageInitializer() );
   //SetupWidget( widget, InputImageListInitializer() );
-  SetupWidget( widget, ComplexInputImageInitializer() );
   SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   //SetupWidget( widget, InputVectorDataListInitializer() );
@@ -193,10 +191,6 @@ QtWidgetView
   SetupWidget(
     widget,
     OutputImageInitializer( GetModel()->GetApplication()->GetName() )
-  );
-  SetupWidget(
-    widget,
-    ComplexOutputImageInitializer( GetModel()->GetApplication()->GetName() )
   );
 
   SetupWidget( widget, OutputVectorDataInitializer() );
@@ -284,13 +278,6 @@ QtWidgetView
     case otb::Wrapper::ParameterType_OutputVectorData:
       filename =
         otb::DynamicCast< otb::Wrapper::OutputVectorDataParameter >( param )
-        ->GetFileName();
-      break;
-    //
-    // COMPLEX IMAGE.
-    case otb::Wrapper::ParameterType_ComplexOutputImage:
-      filename =
-        otb::DynamicCast< otb::Wrapper::ComplexOutputImageParameter >( param )
         ->GetFileName();
       break;
     //
