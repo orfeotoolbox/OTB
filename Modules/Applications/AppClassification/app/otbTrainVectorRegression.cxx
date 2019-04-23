@@ -41,6 +41,11 @@ public:
   typedef Superclass::TargetListSampleType TargetListSampleType;
 
 protected:
+  TrainVectorRegression()
+  {
+    this->m_RegressionFlag = true;
+  }
+  
   void DoInit() override
   {
     SetName( "TrainVectorRegression" );
