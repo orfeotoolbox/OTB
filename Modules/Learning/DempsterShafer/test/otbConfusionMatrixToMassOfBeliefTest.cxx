@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include <iostream>
 
 #include "otbConfusionMatrixToMassOfBelief.h"

@@ -21,12 +21,17 @@
 #ifndef otbWrapperParameter_h
 #define otbWrapperParameter_h
 
-#include "otbMacro.h"
-#include "itkObjectFactory.h"
 
-#include "otbWrapperTypes.h"
 #include "OTBApplicationEngineExport.h"
+#include "otbMacro.h"
+#include "otbWrapperTypes.h"
+
+
+#include <itkObjectFactory.h>
+
+
 #include <string>
+
 
 namespace otb
 {
@@ -65,11 +70,11 @@ public:
   /** Set/get the parameter key */
   virtual void SetKey(const std::string&);
   virtual const char* GetKey() const;
-  
+
   /** Set the parameter Active flag */
   virtual void SetActive(bool flag);
   bool GetActive(bool recurseParents = false) const;
-  
+
   /** Set the parameter Mandatory flag */
   virtual void SetMandatory(bool flag);
   virtual bool GetMandatory() const;
@@ -78,19 +83,19 @@ public:
 
   /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
   virtual void SetAutomaticValue(bool flag);
- 
+
   /** Get the parameter AutomaticValue flag */
   virtual bool GetAutomaticValue() const;
-  
+
   /** Toogle ON the parameter AutomaticValue flag */
   void AutomaticValueOn();
-  
+
   /** Toogle OFF the parameter AutomaticValue flag */
   void AutomaticValueOff();
 
   /** Set the user access level */
   virtual void SetUserLevel(const UserLevel level);
-  
+
   /** Get the user access level */
   virtual UserLevel GetUserLevel() const;
 
@@ -104,7 +109,7 @@ public:
    * nothing
    */
   virtual void Reset();
-  
+
   virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const;

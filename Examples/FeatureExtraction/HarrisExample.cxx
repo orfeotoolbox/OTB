@@ -19,7 +19,7 @@
  */
 
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
   {
     typedef OutputPointSetType::PointType OutputPointType;
     OutputPointType                       pCoordinate = (itList.Value());
-    std::cout << pCoordinate << std::endl;
+    otbLogMacro(Debug, << pCoordinate);
     ++itList;
   }
 
