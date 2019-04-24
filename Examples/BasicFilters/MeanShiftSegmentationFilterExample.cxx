@@ -32,29 +32,15 @@
                                      0.1
 */
 
-
-//  This example demonstrates the use of the
-//  \doxygen{otb}{MeanShiftSegmentationFilter} class which implements
-//  filtering and clustering using the mean shift algorithm
-//  \cite{Comaniciu2002}. For a given pixel, the mean shift will
-//  build a set of neighboring pixels within a given spatial radius
-//  and a color range. The spatial and color center of this set is
-//  then computed and the algorithm iterates with this new spatial and
-//  color center. The Mean Shift can be used for edge-preserving
-//  smoothing, or for clustering.
-
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
-
 #include "itkScalarToRGBPixelFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
-
-//  We start by including the needed header file.
-
 #include "otbMeanShiftSegmentationFilter.h"
+
 int main(int argc, char* argv[])
 {
   if (argc != 11)
@@ -75,9 +61,6 @@ int main(int argc, char* argv[])
   const unsigned int maxiter         = atoi(argv[9]);
   const double       thres           = atof(argv[10]);
 
-  //  We start by the classical \code{typedef}s needed for reading and
-  //  writing the images.
-
   const unsigned int Dimension = 2;
 
   typedef float                        PixelType;
@@ -94,36 +77,39 @@ int main(int argc, char* argv[])
 
   typedef otb::MeanShiftSegmentationFilter<ImageType, LabelImageType, ImageType> FilterType;
 
-  //  We instantiate the filter, the reader, and 2 writers (for the
-  //  labeled and clustered images).
+  // We instantiate the filter, the reader, and 2 writers (for the
+  // labeled and clustered images).
 
   FilterType::Pointer      filter  = FilterType::New();
   ReaderType::Pointer      reader  = ReaderType::New();
   WriterType::Pointer      writer1 = WriterType::New();
   LabelWriterType::Pointer writer2 = LabelWriterType::New();
 
-  //  We set the file names for the reader and the writers:
-
+  // We set the file names for the reader and the writers:
   reader->SetFileName(infname);
   writer1->SetFileName(clusteredfname);
   writer2->SetFileName(labeledfname);
 
-  //  We can now set the parameters for the filter. There are 3 main
-  //  parameters: the spatial radius used for defining the neighborhood,
-  //  the range radius used for defining the interval in the color space
-  //  and the minimum size for the regions to be kept after clustering.
+  // We can now set the parameters for the filter. There are 3 main
+  // parameters: the spatial radius used for defining the neighborhood,
+  // the range radius used for defining the interval in the color space
+  // and the minimum size for the regions to be kept after clustering.
 
   filter->SetSpatialBandwidth(spatialRadius);
   filter->SetRangeBandwidth(rangeRadius);
   filter->SetMinRegionSize(minRegionSize);
-  // Two another parameters can be set  : the maximum iteration number, which defines maximum number of iteration until convergence.
-  //  Algorithm iterative scheme will stop if convergence hasn't been reached after the maximum number of iterations.
-  //  Threshold parameter defines mean-shift vector convergence value. Algorithm iterative scheme will stop if mean-shift vector is below this threshold or if
-  //  iteration number reached maximum number of iterations.
+
+  // Two another parameters can be set: the maximum iteration number, which
+  // defines maximum number of iteration until convergence.  Algorithm
+  // iterative scheme will stop if convergence hasn't been reached after the
+  // maximum number of iterations.  Threshold parameter defines mean-shift
+  // vector convergence value. Algorithm iterative scheme will stop if
+  // mean-shift vector is below this threshold or if iteration number reached
+  // maximum number of iterations.
 
   filter->SetMaxIterationNumber(maxiter);
   filter->SetThreshold(thres);
-  //  We can now plug the pipeline and run it.
+  // We can now plug the pipeline and run it.
 
   filter->SetInput(reader->GetOutput());
   writer1->SetInput(filter->GetClusteredOutput());
@@ -131,19 +117,6 @@ int main(int argc, char* argv[])
 
   writer1->Update();
   writer2->Update();
-
-  // Figure~\ref{fig:MeanShiftSegmentationFilter} shows the result of applying the mean shift
-  // to a Quickbird image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.40\textwidth]{ROI_QB_MUL_1.eps}
-  // \includegraphics[width=0.40\textwidth]{MSClusteredOutput-pretty.eps}
-  // \includegraphics[width=0.40\textwidth]{MSLabeledOutput-pretty.eps}
-  // \itkcaption[Mean Shift]{From top to bottom and left to right:
-  // Original image, image filtered by
-  // mean shift after clustering , and labeled image.}
-  // \label{fig:MeanShiftSegmentationFilter}
-  // \end{figure}
 
   typedef otb::PrintableImageFilter<ImageType> PrintableFilterType;
   PrintableFilterType::Pointer                 printableImageFilter = PrintableFilterType::New();
@@ -176,6 +149,4 @@ int main(int argc, char* argv[])
   labelRGBWriter->SetFileName(labeledpretty);
   labelRGBWriter->SetInput(labelToRGB->GetOutput());
   labelRGBWriter->Update();
-
-  return EXIT_SUCCESS;
 }
