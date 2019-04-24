@@ -51,6 +51,9 @@ for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else
 
 echo CL path: "%CLCACHE_CL%"
 
+set CC=clcache
+set CXX=clcache
+
 :: if we need to change cache max size: clcache -M <size-in-bytes>
 
 goto :eof
