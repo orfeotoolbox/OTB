@@ -153,6 +153,21 @@ macos-superbuild-build:
   only: [merge_requests, branches]
   extends: .general
   stage: build
+  before_script:
+# This override the previous before_script
+    - git checkout $CI_COMMIT_REF_NAME
+# We are now doing the git-lfs install
+# This is done after the checkout so we avoid downloading Data
+# But we need it to upload the archive
+    - git-lfs install
+    - git config --global user.email "otbbot@orfeo-toolbox.org"
+    - git config --global user.name "otbbot"
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$K8S_SECRET_SSH")
+# This is for debug, we are checking the owner of the ssh key
+    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+  after_script:
+    - echo "Nothing to do for after_script"
   script:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
