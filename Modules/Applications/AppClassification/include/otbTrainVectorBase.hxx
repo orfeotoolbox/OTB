@@ -142,7 +142,7 @@ TrainVectorBase<TInputValue, TOutputValue>
         std::string tmpKey = "feat." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         this->AddChoice( tmpKey, item );
         }
-      if( fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64 )
+      if( fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal )
         {
         std::string tmpKey = "cfield." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         this->AddChoice( tmpKey, item );
