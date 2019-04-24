@@ -140,6 +140,12 @@ macos-superbuild-prepare:
     - git checkout $CI_COMMIT_REF_NAME
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  artifacts:
+    expire_in: 24 hrs
+    paths:
+      # This recovers logs from superbuild build
+      - build/*/*/*/*.log
+      - sb_branch.txt
 
 macos-superbuild-build:
   tags:

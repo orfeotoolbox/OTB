@@ -147,12 +147,12 @@ endif()
 ####################################
 # Back to build
 
-ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-            TARGET "OTB_DEPENDS"
-            RETURN_VALUE _build_rv
-            NUMBER_ERRORS _build_nb_err
-            CAPTURE_CMAKE_ERROR _build_error
-            )
+# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+#             TARGET "OTB_DEPENDS"
+#             RETURN_VALUE _build_rv
+#             NUMBER_ERRORS _build_nb_err
+#             CAPTURE_CMAKE_ERROR _build_error
+#             )
 
 if ( DEBUG )
   message( "Status for build:" )
@@ -161,10 +161,10 @@ if ( DEBUG )
   message("_build_error=${_build_error}")
 endif()
 
-if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
-  ctest_submit()
-  message( FATAL_ERROR "An error occurs during ctest_build.")
-endif()
+# if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
+#   ctest_submit()
+#   message( FATAL_ERROR "An error occurs during ctest_build.")
+# endif()
 
 ctest_submit()
 
