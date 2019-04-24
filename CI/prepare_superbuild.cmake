@@ -345,20 +345,20 @@ endif()
 
 # push
 # we should be able to do a simple : git push origin $BRANCH_NAME
-execute_process(
-  COMMAND ${GIT} "push" "${REPOSITORY_GIT_URL}" "${BRANCH_NAME}"
-  WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-  RESULT_VARIABLE push_res
-  OUTPUT_VARIABLE push_out
-  ERROR_VARIABLE push_err
-  )
+# execute_process(
+#   COMMAND ${GIT} "push" "${REPOSITORY_GIT_URL}" "${BRANCH_NAME}"
+#   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
+#   RESULT_VARIABLE push_res
+#   OUTPUT_VARIABLE push_out
+#   ERROR_VARIABLE push_err
+#   )
 
-if ( DEBUG )
-  message( "Step 7: push")
-  message( "push_res = ${push_res}" )
-  message( "push_out = ${push_out}" )
-  message( "push_err = ${push_err}" )
-endif()
+# if ( DEBUG )
+#   message( "Step 7: push")
+#   message( "push_res = ${push_res}" )
+#   message( "push_out = ${push_out}" )
+#   message( "push_err = ${push_err}" )
+# endif()
 
 # MacOS cleanup
 if(APPLE)
