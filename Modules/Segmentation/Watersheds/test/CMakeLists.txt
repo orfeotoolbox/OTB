@@ -36,7 +36,7 @@ otb_add_test(NAME obTuWatershedSegmentationFilter COMMAND otbWatershedsTestDrive
   ${BASELINE}/obTuWatershedSegmentationFilterLabelImage.tif
   ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
   otbWatershedSegmentationFilter
-  ${EXAMPLEDATA}/ROI_QB_PAN_1.tif
+  ${INPUTDATA}/ROI_QB_PAN_1.tif
   ${TEMP}/obTuWatershedSegmentationFilterLabelImage.tif
   0.01
   0.2

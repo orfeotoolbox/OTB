@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Tutorials)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME  trTeTutorialsHelloWorld COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:HelloWorldOTB>
@@ -65,7 +65,7 @@ otb_add_test(NAME  trTeTutorialsMultispectralTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME  trTeTutorialsOrthoFusionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/TutorialsOrthoFusionOutput.tif
     ${TEMP}/TutorialsOrthoFusionOutput.tif
   Execute $<TARGET_FILE:OrthoFusion>

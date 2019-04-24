@@ -50,7 +50,7 @@ otb_add_test(NAME feTvLikelihoodPathListFilter COMMAND otbRoadExtractionTestDriv
   ${BASELINE_FILES}/feTvLikelihoodPathOutput.txt
   ${TEMP}/feTvLikelihoodPathOutput.txt
   otbLikelihoodPathListFilter
-  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.hdr
+  ${INPUTDATA}/InputForRoadDetection_NonMaxRem.raw.hdr
   ${TEMP}/feTvLikelihoodPathOutput.txt
   157 335 204 376 |
   21 305 35 308 77 354 85 358 |
@@ -62,8 +62,8 @@ otb_add_test(NAME feTvRemoveWrongDirectionFilter COMMAND otbRoadExtractionTestDr
   ${BASELINE}/feTvRemoveWrongDirectionOutput.tif
   ${TEMP}/feTvRemoveWrongDirectionOutput.tif
   otbRemoveWrongDirectionFilter
-  ${INPUTDATA}/InputForRoadDetection_IsolatedRem.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+  ${INPUTDATA}/InputForRoadDetection_IsolatedRem.raw.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
   ${TEMP}/feTvRemoveWrongDirectionOutput.tif
   )
 
@@ -84,7 +84,7 @@ otb_add_test(NAME feTvAlignMV2ITK COMMAND otbRoadExtractionTestDriver
   --compare-ascii ${EPSILON_3}     ${BASELINE_FILES}/feAlign.txt
   ${TEMP}/feAlign.txt
   otbAlignImageToPath
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/feAlign.txt)
 
 otb_add_test(NAME feTvNonMaxRemovalByDirectionFilter COMMAND otbRoadExtractionTestDriver
@@ -92,8 +92,8 @@ otb_add_test(NAME feTvNonMaxRemovalByDirectionFilter COMMAND otbRoadExtractionTe
   ${BASELINE}/feTvNonMaxRemovalByDirectionOutput.tif
   ${TEMP}/feTvNonMaxRemovalByDirectionOutput.tif
   otbNonMaxRemovalByDirectionFilter
-  ${INPUTDATA}/InputForRoadDetection_WrongRem.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+  ${INPUTDATA}/InputForRoadDetection_WrongRem.raw.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
   ${TEMP}/feTvNonMaxRemovalByDirectionOutput.tif
   )
 
@@ -157,13 +157,13 @@ otb_add_test(NAME feTvRemoveIsolatedByDirectionFilter COMMAND otbRoadExtractionT
   ${BASELINE}/feTvRemoveIsolatedByDirectionOutput.tif
   ${TEMP}/feTvRemoveIsolatedByDirectionOutput.tif
   otbRemoveIsolatedByDirectionFilter
-  ${INPUTDATA}/InputForRoadDetectionScalarProductMod.hdr
-  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductMod.raw.hdr
+  ${INPUTDATA}/InputForRoadDetectionScalarProductDir.raw.hdr
   ${TEMP}/feTvRemoveIsolatedByDirectionOutput.tif
   )
 
 otb_add_test(NAME fzTvVectorDataToRoadDescriptionFilter COMMAND otbRoadExtractionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
   ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
   otbVectorDataToRoadDescriptionFilter
@@ -188,7 +188,7 @@ otb_add_test(NAME feTvNeighborhoodScalarProductFilter COMMAND otbRoadExtractionT
   ${BASELINE}/feTvNeighborhoodScalarProductDirectionOutput.tif
   ${TEMP}/feTvNeighborhoodScalarProductDirectionOutput.tif
   otbNeighborhoodScalarProductFilter
-  ${INPUTDATA}/InputForRoadDetection_SpectralAngle.hdr
+  ${INPUTDATA}/InputForRoadDetection_SpectralAngle.raw.hdr
   ${TEMP}/feTvNeighborhoodScalarProductModulusOutput.tif
   ${TEMP}/feTvNeighborhoodScalarProductDirectionOutput.tif
   1.0

@@ -24,7 +24,6 @@ set(OTBTransformTests
 otbTransformTestDriver.cxx
 otbGenericRSTransformWithSRID.cxx
 otbCreateInverseForwardSensorModel.cxx
-otbGenericRSTransform.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbLogPolarTransformResample.cxx
 otbLogPolarTransform.cxx
@@ -71,16 +70,6 @@ otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTr
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   )
 
-otb_add_test(NAME prTvGenericRSTransform COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvGenericRSTransform.txt
-  ${TEMP}/prTvGenericRSTransform.txt
-  otbGenericRSTransform
-  1.35617289802566
-  43.4876035537
-  ${TEMP}/prTvGenericRSTransform.txt
-  )
-
 otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Cevennes COMMAND otbTransformTestDriver
   otbCreateProjectionWithOSSIM
   LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
@@ -95,7 +84,7 @@ otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
   ${TEMP}/bfLogPolarTransformResampleOutput.tif
   otbLogPolarTransformResample
-  ${INPUTDATA}/circle.hdr
+  ${INPUTDATA}/circle.raw.hdr
   ${TEMP}/bfLogPolarTransformResampleOutput.tif
   )
 

@@ -25,9 +25,11 @@ import argparse
 import re
 
 import otbApplication
-from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
 
 from otb_warnings import application_documentation_warnings
+
+from rst_utils import rst_section, RstPageHeading
 
 linesep = os.linesep
 
@@ -116,9 +118,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         if paramtype == ParameterType_InputImage :
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
-        if paramtype == ParameterType_ComplexInputImage:
-            # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
         if paramtype == ParameterType_InputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
@@ -130,10 +129,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
                 output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")"
             else:
                 output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
-        if paramtype == ParameterType_ComplexOutputImage :
-            # TODO: handle complex type properly
-            # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
         if paramtype == ParameterType_OutputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
             output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
@@ -179,17 +174,6 @@ def render_choice(app, key):
         choices=choice_entries,
     )
 
-def rst_section(text, delimiter, ref=None):
-    "Make a rst section title"
-
-    output = ""
-
-    if ref is not None:
-        output += ".. _" + ref + ":\n\n"
-
-    output += text + "\n" + delimiter * len(text) + "\n\n"
-    return output
-
 def rst_parameter_value(app, key):
     "Render a parameter value to rst"
 
@@ -210,8 +194,8 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_String: "string"})
     values.update({ParameterType_StringList: "string1 string2..."})
     values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"))
-    values.update(dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"))
-    values.update(dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"))
+    values.update({ParameterType_InputImage: "image"})
+    values.update({ParameterType_OutputImage: "image [dtype]"})
     values.update(dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"))
     values.update({ParameterType_Directory: "directory"})
     values.update({ParameterType_Choice: "choice"})
@@ -369,7 +353,7 @@ def multireplace(string, replacements):
 def make_links(text, allapps):
     "Replace name of applications by internal rst links"
 
-    rep = {appname: ":ref:`{}`".format("app-" + appname) for appname in allapps}
+    rep = {appname: ":ref:`{}`".format(appname) for appname in allapps}
     return multireplace(text, rep)
 
 def render_application(appname, allapps):
@@ -383,7 +367,7 @@ def render_application(appname, allapps):
     application_documentation_warnings(app)
 
     output = template_application.format(
-        label="app-" + appname,
+        label=appname,
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
@@ -400,13 +384,6 @@ def GetApplicationTags(appname):
      app = otbApplication.Registry.CreateApplication(appname)
      return app.GetDocTags()
 
-def RstPageHeading(text, maxdepth, ref=None):
-    output = rst_section(text, "=", ref=ref)
-    output += ".. toctree::" + linesep
-    output += "\t:maxdepth: " + maxdepth + linesep
-    output += linesep + linesep
-    return output
-
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
 
@@ -420,7 +397,7 @@ def GenerateRstForApplications(rst_dir):
     appNames = [app for app in allApps if app not in blackList]
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
+    appIndexFile.write(RstPageHeading("All Applications", "2", ref="apprefdoc"))
 
     print("Generating rst for {} applications".format(len(appNames)))
 
@@ -449,7 +426,7 @@ def GenerateRstForApplications(rst_dir):
                 tagFile.write("\tapp_" + appName + "\n")
 
         # Write application rst
-        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
+        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
             appFile.write(render_application(appName, appNames))
 
 if __name__ == "__main__":

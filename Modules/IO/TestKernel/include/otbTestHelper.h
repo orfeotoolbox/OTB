@@ -60,38 +60,45 @@ public:
   typedef std::vector<std::string> StringList;
   typedef StringList::const_iterator StringListIt;
 
+  typedef std::vector<double> EpsilonList;
+  typedef EpsilonList::const_iterator EpsilonListIt;
+
   TestHelper();
 
   ~TestHelper() override;
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
-                              const StringList& testFilenamesImage);
+                              const StringList& testFilenamesImage,
+                              const EpsilonList& epsilons);
 
   int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
-                                const StringList& testFilenamesMetaData);
+                                const StringList& testFilenamesMetaData,
+                                const EpsilonList& epsilons);
 
   int RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
                              const StringList& testFilenamesAscii,
+                             const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
   int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
                              const StringList& testFilenamesAscii,
+                             const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
   int RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
                               const StringList& testFilenamesBinary);
 
   int RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
-                           const StringList& testFilenamesOgr);
+                           const StringList& testFilenamesOgr,
+                           const EpsilonList& epsilons);
 
   itkSetMacro(ReportErrors, bool);
   itkBooleanMacro(ReportErrors);
   itkSetMacro(IgnoreLineOrder, bool);
   itkBooleanMacro(IgnoreLineOrder);
 
-  itkSetMacro(ToleranceDiffValue, double);
-  itkSetMacro(Epsilon, double);
   itkSetMacro(EpsilonBoundaryChecking, double);
+  itkSetMacro(ToleranceRatio, double);
 
 private:
 
@@ -157,8 +164,7 @@ private:
   static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
   static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = nullptr);
 
-  double m_ToleranceDiffValue;
-  double m_Epsilon;
+  double m_ToleranceRatio;
   double m_EpsilonBoundaryChecking;
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;

@@ -217,8 +217,53 @@ std::vector<Parameter::Pointer > Parameter::GetChildrenList()
   return m_ChildrenList;
 }
 
+void Parameter::TypeError(const std::string& target_type) const
+{
+  itkGenericExceptionMacro(<< "Cannot convert parameter '" << this->GetKey() << "'"
+                           << " of type " << ParameterTypeToString(this->GetType()) << " to/from type " << target_type);
+}
 
+// Base implementation of To*/From* indicate that the parameter cannot be converted
+// Derived classes override them if they can provide the conversion
 
+int Parameter::ToInt() const
+{
+  TypeError("int");
+}
 
+float Parameter::ToFloat() const
+{
+  TypeError("float");
+}
+
+std::string Parameter::ToString() const
+{
+  TypeError("std::string");
+}
+
+std::vector<std::string> Parameter::ToStringList() const
+{
+  TypeError("std::vector<std::string>");
+}
+
+void Parameter::FromInt(int)
+{
+  TypeError("int");
+}
+
+void Parameter::FromFloat(float)
+{
+  TypeError("float");
+}
+
+void Parameter::FromString(const std::string&)
+{
+  TypeError("std::string");
+}
+
+void Parameter::FromStringList(const std::vector<std::string>&)
+{
+  TypeError("std::vector<std::string>");
+}
 }
 }

@@ -26,12 +26,6 @@ target_link_libraries(CompositeFilterExample ${OTB_LIBRARIES})
 add_executable(DanielssonDistanceMapImageFilter DanielssonDistanceMapImageFilter.cxx)
 target_link_libraries(DanielssonDistanceMapImageFilter ${OTB_LIBRARIES})
 
-add_executable(GeometriesChangeSpatialReference GeometriesChangeSpatialReference.cxx)
-target_link_libraries(GeometriesChangeSpatialReference ${OTB_LIBRARIES})
-
-add_executable(GeometriesFilter GeometriesFilter.cxx)
-target_link_libraries(GeometriesFilter ${OTB_LIBRARIES})
-
 add_executable(SecondDerivativeRecursiveGaussianImageFilter SecondDerivativeRecursiveGaussianImageFilter.cxx)
 target_link_libraries(SecondDerivativeRecursiveGaussianImageFilter ${OTB_LIBRARIES})
 

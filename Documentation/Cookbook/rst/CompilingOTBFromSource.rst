@@ -1,3 +1,5 @@
+.. _compilingfromsource:
+
 Compiling OTB from source
 =========================
 
@@ -374,3 +376,32 @@ directory where you built OTB and run ``ctest -N`` to have a list of all
 the tests. Just using ``ctest`` will run all the tests. To select a
 subset, you can do ``ctest -R Kml`` to run all tests related to kml
 files or ``ctest -I 1,10`` to run tests from 1 to 10.
+
+Compiling documentation
+-----------------------
+
+To build the CookBook documentation, the following python packages are required:
+``numpy, sphinx, sphinx_rtd_theme``. They are available on pip:
+
+::
+
+    pip install numpy sphinx sphinx_rtd_theme
+
+A working installation of ``latex`` is
+required for building the PDF version.
+
+Enable Python bindings and set ``BUILD_COOKBOOK``:
+
+::
+
+    cmake -DOTB_WRAP_PYTHON=ON -DBUILD_COOKBOOK=ON .
+
+Then, build the target:
+
+::
+
+    make CookbookHTML
+
+::
+
+    make CookBookPDF

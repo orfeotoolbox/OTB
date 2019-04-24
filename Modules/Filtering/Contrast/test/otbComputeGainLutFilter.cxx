@@ -23,6 +23,7 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 #include "otbComputeGainLutFilter.h"
+#include "otbMacro.h"
 
 int otbComputeGainLutFilter(int itkNotUsed(argc), char * argv [])
 {
@@ -62,7 +63,7 @@ int otbComputeGainLutFilter(int itkNotUsed(argc), char * argv [])
   writer->Update();
 
   auto index = computeGainLut->GetOutput()->GetLargestPossibleRegion().GetIndex();
-  std::cout<<computeGainLut->GetOutput()->GetPixel( index )<<std::endl;
+  otbLogMacro(Debug, <<computeGainLut->GetOutput()->GetPixel( index ));
 
   return EXIT_SUCCESS;
 }

@@ -358,6 +358,15 @@ I18nMainWindow
   aboutDialog.exec();
 }
 
+void
+I18nMainWindow
+::on_action_Documentation_triggered()
+{
+  QDesktopServices::openUrl(QUrl("https://www.orfeo-toolbox.org/CookBook/"));
+}
+
+
+
 /*****************************************************************************/
 
 } // end namespace 'mvd'

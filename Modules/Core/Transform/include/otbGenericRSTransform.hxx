@@ -26,7 +26,7 @@
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
 
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 
 #include "ogr_spatialref.h"
 
@@ -102,29 +102,16 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
   m_InputTransform = nullptr;
   m_OutputTransform = nullptr;
 
-  bool firstTransformGiveGeo = true;
   bool inputTransformIsSensor = false;
   bool inputTransformIsMap = false;
   bool outputTransformIsSensor = false;
   bool outputTransformIsMap = false;
 
-  // Prepare the projection ref (eventually convert the EPSG code into full WKT)
-  //
-  // Note that we do that at the GenericRSTransform level and not in the member
-  // class for several reasons:
-  // - at the GenericMapProjection and MapProjectionAdapter the method are
-  // called SetWkt and thus should not take a SRID.
-  // - we do not want to mix the GeoInformationConversion (which uses gdal) in
-  // the MapProjectionAdapter to keep ossim and gdal dependencies as separated
-  // as possible.
-  m_InputProjectionRef = GeoInformationConversion::ToWKT(m_InputProjectionRef);
-  m_OutputProjectionRef = GeoInformationConversion::ToWKT(m_OutputProjectionRef);
-
   //*****************************
   //Set the input transformation
   //*****************************
 
-    // First, try to make a geo transform
+  // First, try to make a geo transform
   if (!m_InputProjectionRef.empty()) //map projection
     {
     typedef otb::GenericMapProjection<TransformDirection::INVERSE, ScalarType, InputSpaceDimension, InputSpaceDimension>
@@ -154,34 +141,6 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
       }
-    }
-
-  if (m_InputTransform.IsNull()) //default if we didn't manage to instantiate it before
-    {
-    m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
-//     firstTransformGiveGeo = false;
-
-    OGRSpatialReferenceH hSRS = nullptr;
-    hSRS = OSRNewSpatialReference(nullptr);
-    const char * wktString = m_InputProjectionRef.c_str();
-    if (OSRImportFromWkt(hSRS, (char **) &wktString) != OGRERR_NONE)
-      {
-      firstTransformGiveGeo = false;
-      otbMsgDevMacro(<< "- Considering that the first transform does not give geo (WKT)")
-      }
-
-    else if ( OSRIsGeographic(hSRS) )
-      {
-      firstTransformGiveGeo = true;
-      otbMsgDevMacro(<< "- Considering that the first transform gives geo")
-      }
-    else
-      {
-      firstTransformGiveGeo = false;
-      otbMsgDevMacro(<< "- Considering that the first transform does not give geo (fallback)")
-      }
-    OSRRelease(hSRS);
-    otbMsgDevMacro(<< "Input projection set to identity")
     }
 
   //*****************************
@@ -217,15 +176,31 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
       }
     }
 
+  if (m_InputTransform.IsNull()) //default if we didn't manage to instantiate it before
+    {
+    // In this case, if output transform is set, we set
+    // inputProjectionRef to wgs84 to ensure consistency
+    if(outputTransformIsSensor || outputTransformIsMap)
+      {
+      m_InputProjectionRef = SpatialReference::FromWGS84().ToWkt();
+      }
+
+    m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
+    }
+
+
 
   if (m_OutputTransform.IsNull()) //default if we didn't manage to instantiate it before
     {
-    m_OutputTransform = itk::IdentityTransform<double, NOutputDimensions>::New();
-    if (firstTransformGiveGeo)
+    // In this case, if input transform is set, we set
+    // outputProjectionRef to wgs84 to ensure consistency
+    if(inputTransformIsSensor || inputTransformIsMap)
       {
-      m_OutputProjectionRef =
-        "GEOGCS[\"GCS_WGS_1984\", DATUM[\"D_WGS_1984\", SPHEROID[\"WGS_1984\", 6378137, 298.257223563]], PRIMEM[\"Greenwich\", 0], UNIT[\"Degree\", 0.017453292519943295]]";
+      m_OutputProjectionRef = SpatialReference::FromWGS84().ToWkt();
       }
+
+
+    m_OutputTransform = itk::IdentityTransform<double, NOutputDimensions>::New();
     otbMsgDevMacro(<< "Output projection set to identity");
     }
 
@@ -239,7 +214,7 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>
     //Sensor model
     m_TransformAccuracy = Projection::ESTIMATE;
     }
-  else if (firstTransformGiveGeo && !outputTransformIsSensor && !outputTransformIsMap)
+  else if (!outputTransformIsSensor && !outputTransformIsMap)
     {
     //The original image was in lon/lat and we did not change anything
     m_TransformAccuracy = Projection::PRECISE;

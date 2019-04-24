@@ -22,21 +22,11 @@ INCLUDE_ONCE_MACRO(SWIG)
 
 SETUP_SUPERBUILD(SWIG)
 
-set(PythonInterp_FIND_VERSION 2.7)
-find_package(PythonInterp)
-if(PYTHONINTERP_FOUND)
+if( PYTHON_EXECUTABLE )
   set(SWIG_SB_PYTHON_CONFIG "--with-python=${PYTHON_EXECUTABLE}")
 else()
   set(SWIG_SB_PYTHON_CONFIG)
   message(WARNING "  No suitable python interpreter was found !")
-endif()
-
-find_package(Java)
-if(JAVA_FOUND)
-  set(SWIG_SB_JAVA_CONFIG "--with-java=${Java_JAVA_EXECUTABLE}")
-else()
-  set(SWIG_SB_JAVA_CONFIG)
-  message(WARNING "  No Java executable was found !")
 endif()
 
 if(MSVC)
@@ -71,7 +61,6 @@ else()
     ${SWIG_SB_BUILD_DIR}/configure
     --prefix=${SB_INSTALL_PREFIX}
     ${SWIG_SB_PYTHON_CONFIG}
-    ${SWIG_SB_JAVA_CONFIG}
     ${SWIG_SB_CONFIG}
     BUILD_COMMAND $(MAKE)
     INSTALL_COMMAND $(MAKE) install

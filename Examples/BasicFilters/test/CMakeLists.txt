@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/BasicFilters)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME bfTeLeeImageFilterTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 1
@@ -51,7 +51,7 @@ otb_add_test(NAME bfTeDEMToRainbowExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/DEMToRainbowImageGenerator.png
   Execute $<TARGET_FILE:DEMToRainbowExample>
     ${TEMP}/DEMToRainbowImageGenerator.png
-    6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
+    6.5 45.5 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
 )
 
 
@@ -139,5 +139,5 @@ otb_add_test(NAME bfTeHillShadingExampleTest COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:HillShadingExample>
     ${TEMP}/HillShadingExample.png
     ${TEMP}/HillShadingColorExample.png
-    6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Examples/DEM_srtm
+    6.8 45.3 500 500 0.002 -0.002 ${OTB_DATA_ROOT}/Input/DEM_srtm
 )

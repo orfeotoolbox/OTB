@@ -1,0 +1,12 @@
+Flusser Image moments: [10]
+Flusser(1) = 0.1666422505
+Flusser(2) = 6.808173509e-06
+Flusser(3) = 6.751631435e-08
+Flusser(4) = -2.265947559e-08
+Flusser(5) = 2.418733407e-11
+Flusser(6) = -4.902784502e-11
+Flusser(7) = 0.03742129043
+Flusser(8) = 1.37888577e-08
+Flusser(9) = -2.464816343e-09
+Flusser(10) = -7.709745703e-13
+Flusser(11) = -7.697493919e-14

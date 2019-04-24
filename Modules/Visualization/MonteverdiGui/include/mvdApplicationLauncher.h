@@ -27,47 +27,20 @@
 #include "ConfigureMonteverdi.h"
 
 
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
 #include <QtWidgets>
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
 #include "OTBMonteverdiGUIExport.h"
-//
-// Monteverdi includes (sorted by alphabetic order)
+#include "otbWrapperApplication.h"
 
-
-/*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
-
-//
-// External classes pre-declaration.
-namespace
+namespace otb
 {
+namespace Wrapper
+{
+  class QtMainWindow;
+}
 }
 
 namespace mvd
 {
-//
-// Internal classes pre-declaration.
-namespace Wrapper
-{
-class QtWidgetView;
-}
-
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
 
 /**
  * \class ApplicationLauncher
@@ -76,106 +49,22 @@ class QtWidgetView;
  *
  * \brief WIP.
  */
-class OTBMonteverdiGUI_EXPORT ApplicationLauncher :
-    public QObject
+class OTBMonteverdiGUI_EXPORT ApplicationLauncher : public QObject
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT;
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public methods.
 public:
-
   /** \brief Constructor. */
-  ApplicationLauncher( QObject* p =NULL );
+  ApplicationLauncher(QObject* p = nullptr);
 
   /** \brief Destructor. */
   ~ApplicationLauncher() override;
 
-  /**
-   * \return A new instance of the automatically-generated widget of
-   * the given OTB application.
-   */
-  Wrapper::QtWidgetView *
-    NewOtbApplicationWidget( const QString & appName,
-                             bool isStandalone =false,
-			     QWidget * p =NULL,
-			     Qt::WindowFlags =0 ) const;
+  otb::Wrapper::Application::Pointer PrepareApplication(const QString& appName, bool isStandalone = false) const;
 
-  /**
-   */
-  QWidget * NewOtbApplicationWindow( const QString & appName,
-				     bool isStandalone =false,
-				     QWidget * p =NULL,
-				     Qt::WindowFlags =0 ) const;
-
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
-private:
-
-
-//
-// Private attributes.
-private:
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
+  otb::Wrapper::QtMainWindow* NewOtbApplicationWindow(const QString& appName, bool isStandalone = false, QWidget* p = nullptr, Qt::WindowFlags = 0) const;
 };
 
-} // end namespace 'mvd'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-namespace mvd
-{
-} // end namespace 'mvd'
+} // namespace mvd
 
 #endif // mvdApplicationLauncher_h

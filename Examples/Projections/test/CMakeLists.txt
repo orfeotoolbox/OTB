@@ -19,10 +19,10 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Projections)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/panOrthoToul.tif
     ${TEMP}/panOrthoToul.tif
   Execute $<TARGET_FILE:OrthoRectificationExample>
@@ -39,7 +39,7 @@ otb_add_test(NAME prTeOrthoRectificationExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeOrthoRectificationExampleXSTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
+  --compare-image ${EPSILON_2}
     ${BASELINE}/xsOrthoToul.tif
     ${TEMP}/xsOrthoToul.tif
   Execute $<TARGET_FILE:OrthoRectificationExample>
@@ -66,7 +66,7 @@ otb_add_test(NAME prTeVectorDataProjectionExampleTest COMMAND ${OTB_TEST_DRIVER}
 )
 
 otb_add_test(NAME prTeGeometriesProjectionTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_7}
     ${BASELINE}/geometriesProjectionExample.shp
     ${TEMP}/geometriesProjectionExample.shp
   Execute $<TARGET_FILE:GeometriesProjectionExample>
@@ -110,13 +110,3 @@ otb_add_test(NAME prTePlaceNameToLonLatExampleTest COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:PlaceNameToLonLatExample>
     Toulouse
 )
-
-# The following test is disabled (GitLab #1669 !244) 
-# otb_add_test(NAME prTeCoordinateToNameExampleTest COMMAND ${OTB_TEST_DRIVER}
-#   --compare-ascii ${NOTOL}
-#     ${BASELINE}/CoordinateToNameExample.txt
-#     ${TEMP}/CoordinateToNameExample.txt
-#   Execute $<TARGET_FILE:CoordinateToNameExample>
-#     103.78 1.29
-#     ${TEMP}/CoordinateToNameExample.txt
-# )

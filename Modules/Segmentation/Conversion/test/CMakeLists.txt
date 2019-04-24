@@ -128,6 +128,7 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriv
   --compare-image 0.0001
   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+  --tolerance-ratio 0.01
   otbVectorDataRasterizeFilter
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
   ${INPUTDATA}/Capitole-Shadows.shp

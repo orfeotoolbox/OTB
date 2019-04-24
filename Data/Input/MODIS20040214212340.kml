@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.0">
+<Document>
+<Folder>
+<name>MODIS20040214212340.kml</name>
+<open>1</open>
+  <Placemark>
+     <name>Fire 34.294472,133.146225</name>
+     <LookAt>
+        <longitude>133.146225</longitude>
+        <latitude>34.294472</latitude>
+        <range>100000.000</range>
+        <tilt>0.0</tilt>
+        <heading>0.0</heading>
+     </LookAt>
+     <StyleUrl>#khStyle688</StyleUrl>
+     <Style>
+        <IconStyle>
+           <Icon>
+              <href>root://icons/palette-3.png</href>
+              <x>64</x>
+              <y>96</y>
+              <w>32</w>
+              <h>32</h>
+           </Icon>
+        </IconStyle>
+     </Style>
+     <Point>
+        <coordinates>133.146225,34.294472,0</coordinates>
+     </Point>
+  </Placemark>
+  <Placemark>
+     <name>Fire 34.300812,133.102097</name>
+     <LookAt>
+        <longitude>133.102097</longitude>
+        <latitude>34.300812</latitude>
+        <range>100000.000</range>
+        <tilt>0.0</tilt>
+        <heading>0.0</heading>
+     </LookAt>
+     <StyleUrl>#khStyle688</StyleUrl>
+     <Style>
+        <IconStyle>
+           <Icon>
+              <href>root://icons/palette-3.png</href>
+              <x>64</x>
+              <y>96</y>
+              <w>32</w>
+              <h>32</h>
+           </Icon>
+        </IconStyle>
+     </Style>
+     <Point>
+        <coordinates>133.102097,34.300812,0</coordinates>
+     </Point>
+  </Placemark>
+  <Placemark>
+     <name>Fire 34.302303,133.137177</name>
+     <LookAt>
+        <longitude>133.137177</longitude>
+        <latitude>34.302303</latitude>
+        <range>100000.000</range>
+        <tilt>0.0</tilt>
+        <heading>0.0</heading>
+     </LookAt>
+     <StyleUrl>#khStyle688</StyleUrl>
+     <Style>
+        <IconStyle>
+           <Icon>
+              <href>root://icons/palette-3.png</href>
+              <x>64</x>
+              <y>96</y>
+              <w>32</w>
+              <h>32</h>
+           </Icon>
+        </IconStyle>
+     </Style>
+     <Point>
+        <coordinates>133.137177,34.302303,0</coordinates>
+     </Point>
+  </Placemark>
+</Folder>
+</Document>
+</kml>

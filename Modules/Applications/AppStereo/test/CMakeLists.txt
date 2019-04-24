@@ -71,8 +71,8 @@ otb_module_test()
 otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTest
                      APP  StereoRectificationGridGenerator
 
-                     OPTIONS -io.inleft ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             -io.inright ${EXAMPLEDATA}/sensor_stereo_right.tif
+                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left.tif
+                             -io.inright ${INPUTDATA}/sensor_stereo_right.tif
                              -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
                              -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
                              -inverse.outleft  ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTest.tif
@@ -144,8 +144,8 @@ otb_test_application(NAME apTvDmFineRegistrationWithWarpingTest
 #otb_test_application(NAME apTvDmDisparityMapToElevationMap
                      #APP  DisparityMapToElevationMap
                      #OPTIONS -io.in ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-                             #-io.left ${EXAMPLEDATA}/sensor_stereo_left.tif
-                             #-io.right ${EXAMPLEDATA}/sensor_stereo_right.tif
+                             #-io.left ${INPUTDATA}/sensor_stereo_left.tif
+                             #-io.right ${INPUTDATA}/sensor_stereo_right.tif
                              #-io.lgrid ${INPUTDATA}/sensor_stereo_rectif_left.tif
                              #-io.rgrid ${INPUTDATA}/sensor_stereo_rectif_right.tif
                              #-io.out ${TEMP}/apTvDmDisparityMapToElevationMapTest.tif

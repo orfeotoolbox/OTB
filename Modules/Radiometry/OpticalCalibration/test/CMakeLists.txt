@@ -106,8 +106,32 @@ otb_add_test(NAME raTvReflectanceToImageImageFilterDayMonth COMMAND otbOpticalCa
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  2   #day/month mode
   3   #day
   5   #month
+  )
+
+  otb_add_test(NAME raTvReflectanceToImageImageFilterSolarDistance COMMAND otbOpticalCalibrationTestDriver
+  --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterSolarDistance.tif
+  otbReflectanceToImageImageFilter
+  ${BASELINE}/raTvImageToReflectanceImageFilterSolarDistance.tif
+  ${TEMP}/raTvReflectanceToImageImageFilterSolarDistance.tif
+  0.2  #radius
+  1    #channel 1 alpha
+  2    #channel 2 alpha
+  3    #channel 3 alpha
+  4    #channel 4 alpha
+  10   #channel 1 beta
+  11   #channel 2 beta
+  12   #channel 3 beta
+  13   #channel 4 beta
+  10   #channel 1 illumination
+  20   #channel 2 illumination
+  30   #channel 3 illumination
+  40   #channel 4 illumination
+  1    #solar distance mode
+  0.99 #solar distance
   )
 
 otb_add_test(NAME raTvReflectanceToImageImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -129,6 +153,7 @@ otb_add_test(NAME raTvReflectanceToImageImageFilter COMMAND otbOpticalCalibratio
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  0   #flux normalization mode
   0.9923885328 #d/d0 corresponding to the date 03/05
   )
 
@@ -152,6 +177,7 @@ otb_add_test(NAME raTvRomaniaReflectanceToImage COMMAND otbOpticalCalibrationTes
   1570.23              #channel 2 illumination
   1842.94              #channel 3 illumination
   232.820              #channel 4 illumination
+  0                    #flux normalization mode
   0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05
   )
 
@@ -521,8 +547,32 @@ otb_add_test(NAME raTvImageToReflectanceImageFilterDayMonth COMMAND otbOpticalCa
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  2   #day/month mode
   3   #day
   5   #month
+  )
+
+otb_add_test(NAME raTvImageToReflectanceImageFilterSolarDistance COMMAND otbOpticalCalibrationTestDriver
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterSolarDistance.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterSolarDistance.tif
+  otbImageToReflectanceImageFilter
+  ${INPUTDATA}/verySmallFSATSW.tif
+  ${TEMP}/raTvImageToReflectanceImageFilterSolarDistance.tif
+  0.2  #radius
+  1    #channel 1 alpha
+  2    #channel 2 alpha
+  3    #channel 3 alpha
+  4    #channel 4 alpha
+  10   #channel 1 beta
+  11   #channel 2 beta
+  12   #channel 3 beta
+  13   #channel 4 beta
+  10   #channel 1 illumination
+  20   #channel 2 illumination
+  30   #channel 3 illumination
+  40   #channel 4 illumination
+  1    #solar distance mode
+  0.99 #solar distance
   )
 
 otb_add_test(NAME raTvImageToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -544,6 +594,7 @@ otb_add_test(NAME raTvImageToReflectanceImageFilter COMMAND otbOpticalCalibratio
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  0   #flux normalization mode
   0.9923885328 #d/d0 corresponding to the date 03/05
   )
 
@@ -567,6 +618,7 @@ otb_add_test(NAME raTvRomaniaImageToReflectance COMMAND otbOpticalCalibrationTes
   1570.23              #channel 2 illumination
   1842.94              #channel 3 illumination
   232.820              #channel 4 illumination
+  0                    #flux normalization mode
   0.9889145564708814   #= sqrt(0.977952) d/d0 corresponding to the date 03/05
   )
 
@@ -581,8 +633,24 @@ otb_add_test(NAME raTvRadianceToReflectanceImageFilterDayMonth COMMAND otbOptica
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  2   #day/month mode
   3   #day
   5   #month
+  )
+
+otb_add_test(NAME raTvRadianceToReflectanceImageFilterSolarDistance COMMAND otbOpticalCalibrationTestDriver
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvRadianceToReflectanceImageFilterSolarDistance.tif
+  ${TEMP}/raTvRadianceToReflectanceImageFilterSolarDistance.tif
+  otbRadianceToReflectanceImageFilter
+  ${INPUTDATA}/verySmallFSATSW.tif
+  ${TEMP}/raTvRadianceToReflectanceImageFilterSolarDistance.tif
+  0.2  #radius
+  10   #channel 1 illumination
+  20   #channel 2 illumination
+  30   #channel 3 illumination
+  40   #channel 4 illumination
+  1    #solar distance mode
+  0.99 #solar distance
   )
 
 otb_add_test(NAME raTvRadianceToReflectanceImageFilter COMMAND otbOpticalCalibrationTestDriver
@@ -596,6 +664,7 @@ otb_add_test(NAME raTvRadianceToReflectanceImageFilter COMMAND otbOpticalCalibra
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  0   #flux normalization mode
   0.9923885328 #d/d0 corresponding to the date 03/05
   )
 
@@ -824,6 +893,7 @@ otb_add_test(NAME raTvReflectanceToRadianceImageFilter COMMAND otbOpticalCalibra
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  0   #flux normalization mode
   0.9923885328
   )
 
@@ -838,8 +908,24 @@ otb_add_test(NAME raTvReflectanceToRadianceImageFilterDayMonth COMMAND otbOptica
   20  #channel 2 illumination
   30  #channel 3 illumination
   40  #channel 4 illumination
+  2   #day/month mode
   3   #day
   5   #month
+  )
+
+otb_add_test(NAME raTvReflectanceToRadianceImageFilterSolarDistance COMMAND otbOpticalCalibrationTestDriver
+  --compare-image ${EPSILON_12}  ${INPUTDATA}/verySmallFSATSW.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterSolarDistance.tif
+  otbReflectanceToRadianceImageFilter
+  ${BASELINE}/raTvRadianceToReflectanceImageFilterSolarDistance.tif
+  ${TEMP}/raTvverySmallFSATSWImageFilterSolarDistance.tif
+  0.2  #radius
+  10   #channel 1 illumination
+  20   #channel 2 illumination
+  30   #channel 3 illumination
+  40   #channel 4 illumination
+  1    #solar distance mode
+  0.99 #solar distance
   )
 
 otb_add_test(NAME raTvImageToRadianceImageFilter COMMAND otbOpticalCalibrationTestDriver

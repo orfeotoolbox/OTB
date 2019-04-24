@@ -73,6 +73,21 @@ public:
     m_Value = "";
   }
 
+  ParameterType GetType() const override
+  {
+    return ParameterType_String;
+  }
+
+  std::string ToString() const override
+  {
+    return m_Value;
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
 protected:
   /** Constructor */
   StringParameter()

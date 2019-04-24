@@ -101,7 +101,7 @@ otb_add_test(NAME bfTvComplexToVectorImageCastFilterTest COMMAND otbImageBaseTes
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
-  ${INPUTDATA}/monobandComplexDouble
+  ${INPUTDATA}/monobandComplexDouble.raw
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   )
@@ -135,7 +135,7 @@ otb_add_test(NAME coTvMultiChannelROI_5c_BSQ COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
   ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
   -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
@@ -443,7 +443,7 @@ otb_add_test(NAME  ioTvMultiChannelROI_ENVI2PNG_2 COMMAND otbImageBaseTestDriver
   #   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   #                     ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   otbMultiChannelExtractROI
-  -uchar ${INPUTDATA}/poupees.hdr
+  -uchar ${INPUTDATA}/poupees.raw.hdr
   -uchar ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   -startX 100 -startY 100 -sizeX 77 -sizeY 300
   -channels 1 2 3 )

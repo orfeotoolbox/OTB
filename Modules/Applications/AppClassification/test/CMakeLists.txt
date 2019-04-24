@@ -67,7 +67,7 @@ otb_test_application(NAME apTvClSOMClassificationFull
 
 # Input file types
 set(raster_input_format ".tif")
-set(vector_input_format ".shp")
+set(vector_input_format ".sqlite")
 set(stat_input_format ".xml")
 
 # Input file depending on classifier
@@ -110,6 +110,7 @@ set(sharkkm_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
+set(ascii_confmat_comparison --compare-ascii 2)
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 set(raster_comparison_three --compare-n-images ${NOTOL} 3)
@@ -125,6 +126,9 @@ set(classifierList)
 if(OTB_USE_OPENCV)
   #list(APPEND classifierList "SVM" "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
   list(APPEND classifierList "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
+  if(NOT OTB_OPENCV_3)
+   set(dt_output_format "cv2.dt")
+  endif()
 endif()
 if(OTB_USE_SHARK)
   list(APPEND classifierList "SHARKRF" "SHARKKM")
@@ -135,7 +139,7 @@ set(classifier_with_probamap "SHARKRF")
 
 # This is a black list for classifier that can not have a baseline
 # because they are using randomness and seed can not be set
-set(classifier_without_baseline "SHARKRF" "SHARKKM")
+set(classifier_without_baseline "")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
@@ -144,10 +148,8 @@ foreach(classifier ${classifierList})
   # Derive output file name
   set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
 
-  # special case for DT, use OpenCV 2.x model file if not using OpenCV 3.x
-  if(${classifier} STREQUAL "DT" AND NOT OTB_OPENCV_3)
-    set(OUTMODELFILE clDT_ModelQB1-opencv2.dt)
-  endif()
+  # Derive confusion matrix file name
+  set(OUTCONFMATFILE cl${classifier}_ConfMatQB1${${lclassifier}_output_format})
 
 
   set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
@@ -156,7 +158,7 @@ foreach(classifier ${classifierList})
 
   list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/${OUTMODELFILE})
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
@@ -165,20 +167,23 @@ foreach(classifier ${classifierList})
     NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
     APP      TrainImagesClassifier
     OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
-    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1${vector_input_format}
+    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format}
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
     -classifier ${lclassifier}
     ${${lclassifier}_parameters}
     -io.out ${TEMP}/${OUTMODELFILE}
-    -sample.vfn Class
+    -sample.vfn class
     -rand 121212
     -outxml ${TEMP}/cl${classifier}_OutXML1.xml
-
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
     VALID    ${valid}
   )
 
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1 PROPERTIES
+    RESOURCE_LOCK ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format})
+
   if(${_classifier_has_baseline} EQUAL -1)
-    set(valid ${ascii_comparison} ${ascii_ref_path}/${OUTMODELFILE} ${TEMP}/OutXML1_${OUTMODELFILE})
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
   else()
     set(valid "")
   endif()
@@ -188,7 +193,7 @@ foreach(classifier ${classifierList})
     APP      TrainImagesClassifier
     OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
     -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
-
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
     VALID    ${valid}
   )
 
@@ -373,8 +378,8 @@ otb_test_application(NAME apTvComputeConfusionMatrixV
   APP  ComputeConfusionMatrix
   OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
   -ref vector
-  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
-  -ref.vector.field Class
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
   -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.csv
@@ -384,8 +389,8 @@ otb_test_application(NAME apTvComputeConfusionMatrixExtraReferenceLabelsV
   APP  ComputeConfusionMatrix
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
   -ref vector
-  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp
-  -ref.vector.field Class
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
   -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
@@ -683,9 +688,10 @@ if(OTB_USE_LIBSVM)
     OPTIONS
     -inxml ${TEMP}/clsvmModelQB1_allOpt.xml
     -io.out ${TEMP}/clsvmModelQB1_allOpt_InXML.svm
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_allOpt_InXML.svm)
+    -io.confmatout ${TEMP}/clsvmConfMatQB1_allOpt_InXML.svm
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1_allOpt.svm
+    ${TEMP}/clsvmConfMatQB1_allOpt_InXML.svm)
 
   set_tests_properties(apTvClTrainSVMImagesClassifierQB1_allOpt_InXML PROPERTIES DEPENDS apTvClTrainSVMImagesClassifierQB1_allOpt)
 
@@ -694,11 +700,11 @@ if(OTB_USE_LIBSVM)
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
     ${INPUTDATA}/Classification/QB_2_ortho.tif
     ${INPUTDATA}/Classification/QB_3_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
-    ${INPUTDATA}/Classification/VectorData_QB2.shp
-    ${INPUTDATA}/Classification/VectorData_QB3.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB2_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB3_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
-    -sample.vfn Class
+    -sample.vfn class
     -classifier libsvm
     -classifier.libsvm.opt true
     -io.out ${TEMP}/clsvmModelQB123.svm
@@ -711,27 +717,28 @@ if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1
     APP  TrainImagesClassifier
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
     -classifier libsvm
     -classifier.libsvm.opt true
-    -sample.vfn Class
+    -sample.vfn class
     -io.out ${TEMP}/clsvmModelQB1.svm
+    -io.confmatout ${TEMP}/clsvmConfMatQB1.svm
     -rand 121212
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1.svm)
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1.svm
+    ${TEMP}/clsvmConfMatQB1.svm)
 
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB456
     APP  TrainImagesClassifier
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_4_extract.tif
     ${INPUTDATA}/Classification/QB_5_extract.tif
     ${INPUTDATA}/Classification/QB_6_extract.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB4.shp
-    ${INPUTDATA}/Classification/VectorData_QB5.shp
-    ${INPUTDATA}/Classification/VectorData_QB6.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB4_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB5_utm31n.sqlite
+    ${INPUTDATA}/Classification/VectorData_QB6_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
-    -sample.vfn Class
+    -sample.vfn class
     -classifier libsvm
     -classifier.libsvm.opt true
     -io.out ${TEMP}/clsvmModelQB456.svm
@@ -745,20 +752,21 @@ if(OTB_USE_LIBSVM)
   otb_test_application(NAME apTvClTrainSVMImagesClassifierQB1_allOpt
     APP  TrainImagesClassifier
     OPTIONS -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif
-    -io.vd ${INPUTDATA}/Classification/VectorData_QB1.shp
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
     -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
     -classifier libsvm
     -sample.mv 100
     -sample.mt 100
     -sample.vtr 0.5
-    -sample.vfn Class
+    -sample.vfn class
     -classifier.libsvm.opt true
     -rand 121212
     -io.out ${TEMP}/clsvmModelQB1_allOpt.svm
+    -io.confmatout ${TEMP}/clsvmConfMatQB1_allOpt.svm
     -outxml ${TEMP}/clsvmModelQB1_allOpt.xml
-    VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/clsvmModelQB1.svm
-    ${TEMP}/clsvmModelQB1_allOpt.svm)
+    VALID   ${ascii_confmat_comparison}
+    ${OTBAPP_BASELINE_FILES}/clsvmConfMatQB1_allOpt.svm
+    ${TEMP}/clsvmConfMatQB1_allOpt.svm)
 endif()
 
 #----------- DSFuzzyModelEstimation TESTS ----------------
@@ -893,9 +901,10 @@ if(OTB_USE_OPENCV)
     -classifier.rf.ra 0.0001
     -classifier.rf.max 6
     -classifier.rf.acc 0.0005
+    TESTENVOPTIONS ${TEMP}/apTvClTrainRegressionTest_monovar.txt
     VALID    ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
-    ${TEMP}/apTvClTrainRegressionTest_monovar.rf)
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.txt
+    ${TEMP}/apTvClTrainRegressionTest_monovar.txt)
 
   #----------- PredictRegression TESTS ----------------
   otb_test_application(NAME apTvClPredictRegressionTest_monovar
@@ -914,8 +923,8 @@ endif()
 otb_test_application(NAME apTvClPolygonClassStatisticsTest
   APP PolygonClassStatistics
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-  -field Class
+  -vec ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+  -field class
   -out ${TEMP}/apTvClPolygonClassStatisticsOut.xml
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
@@ -925,8 +934,8 @@ otb_test_application(NAME apTvClPolygonClassStatisticsTest
 otb_test_application(NAME apTvClSampleSelection
   APP SampleSelection
   OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho.tif
-  -vec ${INPUTDATA}/Classification/VectorData_QB1.shp
-  -field Class
+  -vec ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+  -field class
   -out ${TEMP}/apTvClSampleSelectionOut.sqlite
   -instats ${OTBAPP_BASELINE_FILES}/apTvClPolygonClassStatisticsOut.xml
   -outrates ${TEMP}/apTvClSampleSelectionOutRates.txt
@@ -1040,8 +1049,8 @@ otb_test_application(NAME apTvClSampleAugmentationSmote
 #----------- ZonalStatistics TESTS ----------------
 otb_test_application(NAME apTvClZonalStatisticsVec
   APP  ZonalStatistics
-  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
-  VALID   --compare-ogr ${NOTOL}
+  OPTIONS -inzone vector -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite -out.vector.filename ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite -in ${INPUTDATA}/Classification/QB_1_ortho.tif -inzone.vector.reproject 1
+  VALID   --compare-ogr ${EPSILON_9}
   ${OTBAPP_BASELINE_FILES}/apTvClVectorData_QB1_ter_with_stats.sqlite
   ${TEMP}/apTvClVectorData_QB1_ter_with_stats.sqlite)
 
@@ -1065,7 +1074,7 @@ otb_test_application(NAME apTvClZonalStatisticsInVecOutRaster
   OPTIONS 
   -in ${INPUTDATA}/Classification/QB_1_ortho.tif 
   -inzone vector 
-  -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter.shp  
+  -inzone.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
   -inzone.vector.reproject 1
   -out raster  
   -out.raster.filename ${TEMP}/apTvClZonalStats_QB1_ter_with_stats_invec.tif

@@ -1,0 +1,20 @@
+Aeronet data extracted:
+Input file name: 990101_011231_Toulouse.lev20
+Inputs user parameters:
+    Day:                       31
+    Month:                     8
+    Year:                      1999
+    Hour:                      16
+    Minute:                    30
+Outputs results:
+
+    AerosolOpticalThickness:   0.13780575942029
+    AngstromCoefficient:       1.73803426666667
+    Water:                     0
+    CloudEstimation:           0
+    SolarZenithAngle:          67.0969975333333
+ Statisctics:
+    Date:                      (hh/mm/yyyy hh:mm:ss) 31/8/1999 16:30:00
+    Epsilon date:              2
+    Number Of date used:       15
+    StdDev Aero. Optical Thic.:0.000113399921438257

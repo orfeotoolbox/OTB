@@ -284,7 +284,7 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
   ${TEMP}/ioTvImageMetadataInterface.txt
   otbImageMetadataInterfaceTest2
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract.tif
   ${TEMP}/ioTvImageMetadataInterface.txt
   )
 

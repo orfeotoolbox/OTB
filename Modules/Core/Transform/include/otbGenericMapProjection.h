@@ -25,7 +25,7 @@
 
 #include "otbTransform.h"
 #include "itkMacro.h"
-#include "otbMapProjectionAdapter.h"
+#include "otbCoordinateTransformation.h"
 #include <string>
 
 namespace otb
@@ -73,7 +73,6 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType           ScalarType;
-  typedef MapProjectionAdapter                      MapProjectionType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -96,27 +95,18 @@ public:
   /** Instantiate the projection according to the Wkt specification*/
   virtual void SetWkt(const std::string& projectionRefWkt);
 
-  virtual void PrintMap() const;
-
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
-  virtual bool InstantiateProjection();
-
-  const MapProjectionAdapter* GetMapProjection() const;
-
-  virtual bool IsProjectionDefined() const;
-
-  void SetParameter(const std::string& key, const std::string& value);
-  std::string GetParameter(const std::string& key) const;
-
+  bool IsProjectionDefined() const;
+  
 protected:
   GenericMapProjection();
   ~GenericMapProjection() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  MapProjectionAdapter::Pointer m_MapProjection;
-
+  std::unique_ptr<CoordinateTransformation> m_MapProjection;
+  
 private:
   GenericMapProjection(const Self &) = delete;
   void operator =(const Self&) = delete;

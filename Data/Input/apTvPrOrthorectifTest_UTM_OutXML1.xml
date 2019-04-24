@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<OTB>
+    <version>3.18</version>
+    <build>18-05-2013</build>
+    <platform>Linux</platform>
+    <application>
+        <name>OrthoRectification</name>
+        <descr>This application allows to ortho-rectify optical images from supported sensors.&#x0A;</descr>
+        <doc>
+            <name>Ortho-rectification</name>
+            <longdescr>An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. A Digital Elevation Model can be specified to account for terrain deformations. &#x0A;In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.</longdescr>
+            <authors>OTB-Team</authors>
+            <limitations>Supported sensors are Pleiades, SPOT5 (TIF format), Ikonos, Quickbird, Worldview2, GeoEye.</limitations>
+            <seealso>Ortho-rectification chapter from the OTB Software Guide</seealso>
+            <tags>
+                <tag>Geometry</tag>
+            </tags>
+        </doc>
+        <parameter mandatory="true">
+            <key>io.in</key>
+            <type>InputImage</type>
+            <name>Input Image</name>
+            <value>/media/ssh/pc-inglada/media/TeraDisk2/LargeInput/QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>io.out</key>
+            <type>OutputImage</type>
+            <name>Output Image</name>
+            <value>/home/rashad/repos/orfeo/build/OTB_/test-build/Testing/Temporary/apTvPrOrthorectifTest_UTM_OutXML1.tif</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>map</key>
+            <type>Choice</type>
+            <name>Output Cartographic Map Projection</name>
+            <value>utm</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.ulx</key>
+            <type>Float</type>
+            <name>Upper Left X</name>
+            <value>374100.8125</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.uly</key>
+            <type>Float</type>
+            <name>Upper Left Y</name>
+            <value>4829185</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.sizex</key>
+            <type>Int</type>
+            <name>Size X</name>
+            <value>500</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.sizey</key>
+            <type>Int</type>
+            <name>Size Y</name>
+            <value>500</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.spacingx</key>
+            <type>Float</type>
+            <name>Pixel Size X</name>
+            <value>0.5</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>outputs.spacingy</key>
+            <type>Float</type>
+            <name>Pixel Size Y</name>
+            <value>-0.5</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>elev.dem</key>
+            <type>Directory</type>
+            <name>DEM directory</name>
+            <value>/home/rashad/repos/orfeo/OTB-Data/Input/DEM/srtm_directory/</value>
+        </parameter>
+        <parameter mandatory="true">
+            <key>interpolator</key>
+            <type>Choice</type>
+            <name>Interpolation</name>
+            <value>linear</value>
+        </parameter>
+        <parameter mandatory="false">
+            <key>opt.gridspacing</key>
+            <type>Float</type>
+            <name>Resampling grid spacing</name>
+            <value>4</value>
+        </parameter>
+    </application>
+</OTB>

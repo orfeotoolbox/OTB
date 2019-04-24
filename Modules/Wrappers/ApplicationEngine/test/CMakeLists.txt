@@ -28,14 +28,12 @@ otbWrapperStringParameterTest.cxx
 otbWrapperChoiceParameterTest.cxx
 otbWrapperApplicationRegistryTest.cxx
 otbWrapperStringListParameterTest.cxx
-otbWrapperRAMParameterTest.cxx
 otbWrapperDocExampleStructureTest.cxx
 otbWrapperParameterKeyTest.cxx
 otbWrapperParameterListTest.cxx
 otbWrapperInputImageListParameterTest.cxx
 otbWrapperInputVectorDataListParameterTest.cxx
 otbWrapperApplicationDocTests.cxx
-otbWrapperApplicationHtmlDocGeneratorTest.cxx
 otbWrapperOutputImageParameterTest.cxx
 otbApplicationMemoryConnectTest.cxx
 otbWrapperImageInterface.cxx
@@ -54,11 +52,16 @@ otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
   "my description"
   )
 
-otb_add_test(NAME owTvNumericalParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperNumericalParameterTest1
-  42.42
-  "mykey"
-  "my description"
+otb_add_test(NAME owTvFloatParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperFloatParameterTest
+  )
+
+otb_add_test(NAME owTvIntParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperIntParameterTest
+  )
+
+otb_add_test(NAME owTvRAMParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperRAMParameterTest
   )
 
 otb_add_test(NAME owTvStringParameter COMMAND otbApplicationEngineTestDriver
@@ -87,7 +90,7 @@ otb_add_test(NAME owTvParameterKey COMMAND otbApplicationEngineTestDriver
 
 otb_add_test(NAME owTvInputImageListParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputImageListParameterTest1
-  ${INPUTDATA}/poupees_c1.hdr
+  ${INPUTDATA}/poupees_c1.raw.hdr
   ${INPUTDATA}/poupees.tif
   "mykey"
   "my description"
@@ -99,18 +102,6 @@ otb_add_test(NAME owTvInputVectorDataListParameter COMMAND otbApplicationEngineT
   ${INPUTDATA}/ToulouseRoads-examples.shp
   "mykey"
   "my description"
-  )
-
-otb_add_test(NAME owTvApplicationHtmlDocGeneratorTest
-  COMMAND otbApplicationEngineTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/owTvOReadImageInfoDoc.html
-  ${TEMP}/owTvOReadImageInfoDoc.html
-  otbWrapperApplicationHtmlDocGeneratorTest1
-  ReadImageInfo
-  $<TARGET_FILE_DIR:otbapp_ReadImageInfo>
-  ${TEMP}/owTvOReadImageInfoDoc.html
-  0 # don't show key in the parameterdescription
   )
 
 otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDriver

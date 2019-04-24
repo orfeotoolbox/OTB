@@ -20,6 +20,7 @@
  */
 
 
+#include "otbWrapperQtWidgetMainWindow.h"
 #include "mvdMainWindow.h"
 #include "ui_mvdMainWindow.h"
 
@@ -137,9 +138,6 @@ MainWindow
 #endif
   m_ImageView( NULL ),
   m_QuicklookViewDock( NULL ),
-#if USE_TABBED_VIEW
-  m_CentralTabWidget( NULL ),
-#endif // USE_TABBED_VIEW
   m_StatusBarWidget( NULL ),
   m_ShaderWidget( NULL ),
   m_FilenameDragAndDropEventFilter( NULL ),
@@ -398,17 +396,6 @@ MainWindow
     m_HistogramDock->findChild< AbstractModelController* >(),
     SLOT( OnHistogramRefreshed() )
   );
-
-  //
-  // close tabs handling
-#if USE_TABBED_VIEW
-  QObject::connect(
-    m_CentralTabWidget,
-    SIGNAL( tabCloseRequested( int ) ),
-    this,
-    SLOT( OnTabCloseRequested( int ) )
-  );
-#endif // USE_TABBED_VIEW
 
   //
   // Other connections.
@@ -981,40 +968,11 @@ void
 MainWindow
 ::InitializeCentralWidget()
 {
-#if USE_TABBED_VIEW
-  // Create central tab-widget for multi-view support.
-  assert( m_CentralTabWidget==NULL );
-  m_CentralTabWidget = new QTabWidget( this );
-
-  // Customize it.
-  m_CentralTabWidget->setTabsClosable( true );
-
-  // Set-it up as central widget.
-  setCentralWidget( m_CentralTabWidget );
-
-  //
-  // access to the quicklook tabBar to remove the close button
-  QTabBar* tabBar = m_CentralTabWidget->findChild< QTabBar* >();
-#endif // USE_TABBED_VIEW
-
   // Initialize image-view.
   assert( m_ImageView==NULL );
   m_ImageView = CreateImageViewWidget();
 
-#if USE_TABBED_VIEW
-  // Add first tab: image-view.
-  int index = m_CentralTabWidget->addTab(
-    m_ImageView,
-    tr( "Image view" )
-  );
-
-  tabBar->setTabButton( index, QTabBar::RightSide, 0);
-  tabBar->setTabButton( index, QTabBar::LeftSide, 0);
-
-#else // USE_TABBED_VIEW
   setCentralWidget( m_ImageView );
-
-#endif // USE_TABBED_VIEW
 }
 
 /*****************************************************************************/
@@ -2225,41 +2183,7 @@ MainWindow
     Application::ConstInstance()->GetOTBApplicationsModel()->GetLauncher()!=NULL
   );
 
-#if USE_TABBED_VIEW
-  Wrapper::QtWidgetView * appWidget =
-    Application::ConstInstance()
-    ->GetOTBApplicationsModel()
-    ->GetLauncher()
-    ->NewOtbApplicationWidget(
-      appName,
-      true
-    );
-
-  assert( appWidget!=NULL );
-
-  //
-  // add the application in a tab
-  // TODO : check if this application is already opened ???
-  int tabIndex = m_CentralTabWidget->addTab(
-    appWidget, QIcon( ":/icons/process" ), docName );
-
-  // no checking needed here, if index is not available nothing is
-  // done. Focus on the newly added tab
-  m_CentralTabWidget->setCurrentIndex( tabIndex );
-
-  //
-  // on quit widget signal, close its tab
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    this,
-    SLOT( OnTabCloseRequested() )
-    );
-
-#else // USE_TABBED_VIEW
-
-  QWidget * appWidget =
+  otb::Wrapper::QtMainWindow* appWidget =
     Application::ConstInstance()
     ->GetOTBApplicationsModel()
     ->GetLauncher()
@@ -2273,87 +2197,25 @@ MainWindow
 
   appWidget->show();
 
-#endif // USE_TABBED_VIEW
-
-  //
-  // connections. not using m_CentralTabWidget->currentWidget() leads
-  // to a wrong connection!!!!
+  auto gui = appWidget->Gui();
   QObject::connect(
-    appWidget,
-    SIGNAL( OTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) ),
+    gui,
+    &otb::Wrapper::QtWidgetView::OTBApplicationOutputImageChanged,
     // to:
     this,
-    SLOT( OnOTBApplicationOutputImageChanged( const QString&,
-					      const QString& ) )
+    &MainWindow::OnOTBApplicationOutputImageChanged
     );
 
   QObject::connect(
-    appWidget,
-    SIGNAL( ExecutionDone( int ) ),
+    gui,
+    &otb::Wrapper::QtWidgetView::ExecutionDone,
     // to:
     this,
-    SLOT( OnExecutionDone( int ) )
+    &MainWindow::OnExecutionDone
   );
 }
 
 #endif // defined( OTB_USE_QT ) && USE_OTB_APPS
-
-/*****************************************************************************/
-#if USE_TABBED_VIEW
-
-void
-MainWindow
-::OnTabCloseRequested()
-{
-  // get current tab index
-  int currentIndex = m_CentralTabWidget->currentIndex();
-
-  // close tab and delete its widget
-  OnTabCloseRequested( currentIndex );
-}
-
-#endif // USE_TABBED_VIEW
-
-/*****************************************************************************/
-#if USE_TABBED_VIEW
-
-void
-MainWindow
-::OnTabCloseRequested( int index )
-{
-  assert( index >= 1 );
-
-  QWidget* appWidget = m_CentralTabWidget->widget( index );
-  assert( appWidget!=NULL );
-
-#if defined( OTB_USE_QT ) && USE_OTB_APPS
-
-  assert( appWidget==qobject_cast< Wrapper::QtWidgetView* >( appWidget ) );
-  Wrapper::QtWidgetView* appWidgetView =
-    qobject_cast< Wrapper::QtWidgetView* >( appWidget );
-  assert( appWidgetView!=NULL );
-
-  if( !appWidgetView->IsClosable() )
-    {
-    QMessageBox::warning(
-      this,
-      tr( "Warning!" ),
-      tr( "Tab cannot be closed while OTB application is running." )
-    );
-
-    return;
-    }
-
-#endif
-
-  m_CentralTabWidget->removeTab( index );
-
-  delete appWidget;
-  appWidget = NULL;
-}
-
-#endif // USE_TABBED_VIEW
 
 /*****************************************************************************/
 void

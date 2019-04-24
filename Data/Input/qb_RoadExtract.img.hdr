@@ -1,0 +1,20 @@
+ENVI
+description = {
+  File Resize Result, x resize factor: 1.000000, y resize factor: 1.000000.
+  [Wed Dec 13 14:46:33 2006]}
+samples = 1000
+lines   = 1000
+bands   = 4
+header offset = 0
+file type = ENVI Standard
+data type = 12
+interleave = bsq
+sensor type = Unknown
+byte order = 1
+x start = 6000
+y start = 3500
+map info = {UTM, 1.000, 1.000, 439136.400, 5273706.600, 6.0000000000e-01, 6.0000000000e-01, 32, North, WGS-84, units=Meters}
+wavelength units = Unknown
+band names = {
+ Resize (Band 1:qb20060901ortho.tif), Resize (Band 2:qb20060901ortho.tif), 
+ Resize (Band 3:qb20060901ortho.tif), Resize (Band 4:qb20060901ortho.tif)}

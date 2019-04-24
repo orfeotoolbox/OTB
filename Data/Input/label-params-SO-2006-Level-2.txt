@@ -1,0 +1,20 @@
+#label 1 Cab Car CBrown Cw Cm N   --> for vegetation classes
+#label 0 /path/to/spectra/file    --> for other classes
+1 1 26.3  8.   0.0  0.015  0.009  1.2  # fp  
+2 1 27.9 5.2   0.0  0.015  0.009  1.2  # pr  
+3 1 25.6 4.5   0.0  0.015  0.009  1.2  # co  
+4 0 BD-CNES/JHU/becknic/manmade/txt/0397uuu.txt # ba
+5 1 25.6 4.5   0.0  0.015  0.009  1.2  # bl  
+6 1 16.5 3.3   0.0  0.015  0.009  1.2  # res 
+7 0 BD-CNES/JHU/becknic/soils/txt/82P2695c.txt  # bd 
+8 1 36.2 7.7   0.0  0.015  0.009  1.2  # soj 
+9 1 36.2 7.7   0.0  0.015  0.009  1.2  # po  
+10 1 24.2  4.   0.0  0.015  0.009  1.2  # to  
+11 1 27.9 5.2   0.0  0.015  0.009  1.2  # ja  
+12 1 25.6 4.5  0.0  0.015  0.009  1.2 # sor 
+13 0 BD-CNES/JHU/becknic/soils/txt/86P1994c.txt # gra 
+14 1  19.1 2.2   0.0  0.015  0.009  1.2  # eu  
+15 1 37.0 6.6   0.0  0.015  0.009  1.2  # ma  
+16 0 BD-CNES/JHU/becknic/water/txt/tapwater.txt #lac 
+17 0 BD-CNES/JHU/becknic/water/txt/distwatr.txt #eau 
+18 1 25.6 4.5   0.0  0.015  0.009  1.2  # or  

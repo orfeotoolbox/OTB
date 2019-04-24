@@ -1,8 +1,3 @@
-.. OTB documentation master file, created by
-   sphinx-quickstart on Thu Jul  9 11:22:08 2015
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Orfeo ToolBox!
 =========================
 
@@ -37,10 +32,61 @@ joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
 For other documentation, be sure to read:
 
 - OTB's website: `www.orfeo-toolbox.org <https://www.orfeo-toolbox.org/>`_
-- `OTB Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_ for advanced users and developers.
-  The software guide contains documented code examples,
-  descriptions of the ITK pipeline model, multithreading and
-  streaming functionalities, and an introduction to the C++ API.
 - `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
+Table of Contents
+=================
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Get Started
+
+    Installation
+    Monteverdi
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Applications
+
+    CliInterface
+    GraphicalInterface
+    PythonAPI
+    QGISInterface
+    Applications
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Recipes
+
+    recipes/optpreproc.rst
+    recipes/sarprocessing.rst
+    recipes/residual_registration.rst
+    recipes/improc.rst
+    recipes/contrast_enhancement.rst
+    recipes/pbclassif.rst
+    recipes/featextract.rst
+    recipes/stereo.rst
+    recipes/hyperspectral.rst
+
+.. toctree::
+    :maxdepth: 1
+    :caption: C++ API
+
+    C++/SystemOverview.rst
+    C++/Tutorial.rst
+    C++/UserGuide.rst
+    C++/AboutBandMathX.rst
+    C++/Examples.rst
+
+    C++/DeveloperGuide.rst
+
+.. toctree::
+    :maxdepth: 1
+    :caption: Advanced use
+
+    EnvironmentVariables
+    ExtendedFilenames
+    CompilingOTBFromSource
+    FAQ
+    Contributors

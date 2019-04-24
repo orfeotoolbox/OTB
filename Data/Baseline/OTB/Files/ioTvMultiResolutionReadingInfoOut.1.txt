@@ -1,0 +1,6 @@
+RESOLUTION: 0; DESC: Resolution: 0 (Image [w x h]: 2592x1944)
+RESOLUTION: 1; DESC: Resolution: 1 (Image [w x h]: 1296x972)
+RESOLUTION: 2; DESC: Resolution: 2 (Image [w x h]: 648x486)
+RESOLUTION: 3; DESC: Resolution: 3 (Image [w x h]: 324x243)
+RESOLUTION: 4; DESC: Resolution: 4 (Image [w x h]: 162x121)
+RESOLUTION: 5; DESC: Resolution: 5 (Image [w x h]: 81x60)

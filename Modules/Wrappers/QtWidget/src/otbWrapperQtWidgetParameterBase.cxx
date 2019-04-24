@@ -102,6 +102,17 @@ QtWidgetParameterBase
   return m_Param;
 }
 
+// Used to block mouse wheel events to avoid conflict with scrolling in the parent QScrollArea
+bool QtWidgetParameterBase::eventFilter(QObject* o, QEvent* e)
+{
+  if (e->type() == QEvent::Wheel)
+  {
+    e->ignore();
+    return true;
+  }
+  return QWidget::eventFilter(o, e);
+}
+
 
 }
 
