@@ -159,11 +159,12 @@ macos-superbuild-build:
 # We are now doing the git-lfs install
 # This is done after the checkout so we avoid downloading Data
 # But we need it to upload the archive
-    - git-lfs install
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$K8S_SECRET_SSH")
+    # - git-lfs install
+    # - git config --global user.email "otbbot@orfeo-toolbox.org"
+    # - git config --global user.name "otbbot"
+    # - eval $(ssh-agent -s)
+    # - ssh-add <(echo "$K8S_SECRET_SSH")
+    # we do not need this as we are on a persistent machine
 # This is for debug, we are checking the owner of the ssh key
     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
   after_script:
