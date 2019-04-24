@@ -200,7 +200,9 @@ unsigned int SpatialReference::ToEPSG() const
   
   OGRSpatialReferencePtr tmpSRS(m_SR->Clone());
 
+#if GDAL_VERSION_NUM < 2050000
   tmpSRS->Fixup();
+#endif
   tmpSRS->AutoIdentifyEPSG();
   
   const char * epsg = nullptr;
