@@ -688,7 +688,9 @@ if(OTB_USE_SHARK)
     -ts 30000
     -nc 5
     -maxit 10000
+    -sampler periodic
     -nodatalabel 255
+    -rand 121212
     -centroids.in ${INPUTDATA}/Classification/KMeansInputCentroids.txt
     -out ${TEMP}/apTvClKMeansImageClassificationInputCentroids.tif uint8
     -cleanup 0
