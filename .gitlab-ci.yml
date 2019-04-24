@@ -44,7 +44,7 @@ fast-build:
   extends: .general
   only: [merge_requests, branches]
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout $CI_COMMIT_REF_NAME
