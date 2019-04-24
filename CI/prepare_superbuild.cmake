@@ -359,3 +359,9 @@ if ( DEBUG )
   message( "push_out = ${push_out}" )
   message( "push_err = ${push_err}" )
 endif()
+
+# MacOS cleanup
+if(APPLE)
+  file(REMOVE_RECURSE CTEST_INSTALL_DIRECTORY)
+  file(REMOVE_RECURSE CI_PROJ_DIR)
+endif()
