@@ -365,6 +365,6 @@ if(APPLE)
   message("MacOS cleanup")
   file(REMOVE_RECURSE CTEST_INSTALL_DIRECTORY)
   file(REMOVE_RECURSE CI_PROJ_DIR)
-else
+else()
   message("not apple")
 endif()
