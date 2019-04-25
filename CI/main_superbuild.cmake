@@ -205,4 +205,4 @@ endif()
 # Artifacts can only be in project dir...
 # file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
 
-include ( "${CMAKE_CURRENT_LIST_DIR}/main_packages.cmake" )
+# include ( "${CMAKE_CURRENT_LIST_DIR}/main_packages.cmake" )
