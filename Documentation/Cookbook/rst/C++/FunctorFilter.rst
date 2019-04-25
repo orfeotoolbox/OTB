@@ -89,6 +89,8 @@ From the basic types, the following deduction rules apply:
 - If ``TN`` is of type  ``const itk::ConstNeighborhoodIterator<otb::Image<T>> &`` with T a basic type as defined above, the Nth input will be of type ``otb::Image<TN>``
 - If ``TN`` is of type  ``const itk::ConstNeighborhoodIterator<otb::VectorImage<T>> &`` with T a basic type as defined above, the Nth input will be of type ``otb::VectorImage<TN>``
 
+Note that this will work for any number of inputs.
+
 Automatic output type deduction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Rules for output type deduction are simpler:
@@ -133,6 +135,67 @@ This is strictly equivalent to:
                         const itk::ConstNeighborhoodIterator<otb::Image<double>> & d) {...}
 
 Since the output type is of type ``itk::VariableLengthVector<T>``, the latter should be preferred.
+
+
+Using the filter
+----------------
+
+Setting inputs
+~~~~~~~~~~~~~~
+
+The Nth parameter can be set with the template ``SetInput()`` method:
+
+.. code-block:: cpp
+
+    myFilter->SetInput<N>(imageN);
+    
+You can also set all inputs at once with the ``SetInputs()`` method:
+
+.. code-block:: cpp
+
+    myFilter->SetInputs(image0,...,imageN);
+
+If you only have one input, you can simply call:
+
+.. code-block:: cpp
+
+    myFilter->SetInput(image);
+
+Of course, your input types must match the types deducted from the operator(), free function or lambda!
+
+Accessing the function
+~~~~~~~~~~~~~~~~~~~~~~
+
+If ``FunctorImageFilter`` was built from a functor class, this class may have parameters that you wish to change or read.
+
+You can call ``GetFunctor()`` to access a const reference to the functor in order to read a parameter value:
+
+.. code-block:: cpp
+
+    auto a = myFilter->GetFunctor().GetParameterA();
+    
+If you wish to modify a parameter of the functor, you will have to call ``GetModifiableFunctor()``, which will return a non-const reference to the functor and ensure that the filter will be re-run when updated.
+
+Setting the neighborhood radius
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+If you have ``itk::ConstNeighborhoodIterator<otb::Image<T>>`` or ``itk::ConstNeighborhoodIterator<otb::VectorImage<T>>`` as input type, you can set the neighborhood radius when building the filter instance, with:
+
+.. code-block:: cpp
+
+    auto filterFromFunctor = NewFunctorFilter(MyFunctor,{{3,3}});
+    
+Advanced use
+------------
+
+Number of output bands
+~~~~~~~~~~~~~~~~~~~~~~
+
+Named inputs
+~~~~~~~~~~~~
+
+
+
+
 
 
 
