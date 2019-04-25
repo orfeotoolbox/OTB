@@ -226,7 +226,7 @@ int otbRadiometricIndexTest(int, char ** const)
 
 int otbIndicesStackFunctorTest(int, char ** const)
 {
-  using IndicesType      = RadiometricIndex<double, int, CommonBandNames>;
+  using IndicesType      = RadiometricIndex<double, int>;
   using StackFunctorType = IndicesStackFunctor<IndicesType>;
 
   auto ndvi = NDVI<double, int>();

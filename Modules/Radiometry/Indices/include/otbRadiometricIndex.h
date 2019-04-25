@@ -42,8 +42,7 @@ namespace Functor
  * This class is the base class for all radiometric indices.
  *
  * It offers services to:
- * - Indicate which band are required among the list provided by
- * TBandNameEnum
+ * - Indicate which band are required among CommonBandNames enum
  * - Set indices of each required band
  * - Compute the indice response to a pixel by subclassing the pure
  * virtual operator()
@@ -52,12 +51,9 @@ namespace Functor
  * best performances use the Value() method when implementing
  * operator() to avoid branches.
  *
- * TBandName enum should end with a MAX value that will be used to
- * derive the number of bands.
- *
  * \ingroup OTBIndices
  */
-template <typename TInput, typename TOutput, typename TBandNameEnum = CommonBandNames>
+template <typename TInput, typename TOutput>
 class RadiometricIndex
 {
 public:
@@ -67,7 +63,7 @@ public:
   using OutputType = TOutput;
 
   /// Enum Among which bands are used
-  using BandNameType = TBandNameEnum;
+  using BandNameType = CommonBandNames;
 
   /// The number of bands, derived from the Enum MAX value
   static constexpr size_t NumberOfBands = static_cast<size_t>(BandNameType::MAX);
@@ -75,8 +71,8 @@ public:
   static constexpr double Epsilon = 0.0000001;
 
   /**
-   * \param requiredBands the set<TBandNameEnum> of required bands
-   * \throw runtime_error if requiredBands contains TBandNameEnum::MAX
+   * \param requiredBands the set<CommonBandNames> of required bands
+   * \throw runtime_error if requiredBands contains CommonBandNames::MAX
    */
   RadiometricIndex(const std::set<BandNameType>& requiredBands) : m_RequiredBands(), m_BandIndices()
   {
@@ -96,7 +92,7 @@ public:
   }
 
   /**
-   * \return a set<TBandNameEnum> containing the required bands for
+   * \return a set<CommandBandName> containing the required bands for
    * this indice.
    */
   std::set<BandNameType> GetRequiredBands() const
@@ -114,23 +110,23 @@ public:
   }
 
   /**
-   * \param band The band to set (value in TBandNameEnum)
+   * \param band The band to set (value in CommandBandName)
    * \param index The index of the band to set (starts at 1 for first band)
-   * \throw runtime_error if band is TBandNameEnum::MAX
+   * \throw runtime_error if band is CommandBandName::MAX
    */
   void SetBandIndex(BandNameType band, size_t index)
   {
     if (band == BandNameType::MAX)
     {
-      throw std::runtime_error("Can not set index for TBandNameEnum::MAX");
+      throw std::runtime_error("Can not set index for CommandBandName::MAX");
     }
     m_BandIndices[static_cast<size_t>(band)] = index;
   }
 
   /**
-   * \param indicesMap a std::map<TBandNameEnum,size_t> containing all
+   * \param indicesMap a std::map<CommandBandName,size_t> containing all
    * bands indices to set  (starts at 1 for first band)
-   * \throw runtime_error if indicesMap contains TBandNameEnum::MAX
+   * \throw runtime_error if indicesMap contains CommandBandName::MAX
    */
   void SetBandsIndices(const std::map<BandNameType, size_t>& indicesMap)
   {
@@ -143,13 +139,13 @@ public:
   /**
    * \param band The band for which to retrieve indice
    * \return The indices of the band
-   * \throw runtime_error if band is TBandNameEnum::MAX
+   * \throw runtime_error if band is CommandBandName::MAX
    */
   size_t GetBandIndex(BandNameType band) const
   {
     if (band == BandNameType::MAX)
     {
-      throw std::runtime_error("Can not get index for TBandNameEnum::MAX");
+      throw std::runtime_error("Can not get index for CommandBandName::MAX");
     }
     return m_BandIndices[static_cast<size_t>(band)];
   }
@@ -166,9 +162,9 @@ protected:
   /**
    * Helper method to retrieve index for band name. With respect to
    * the public method, this method will not throw an exception if
-   * TBandNameEnum::MAX is used as a parameter. Since it is meant for
+   * CommandBandName::MAX is used as a parameter. Since it is meant for
    * internal use in the critical path and not for client code, it
-   * will only assert that band is not TBandNameEnum::MAX in debug
+   * will only assert that band is not CommandBandName::MAX in debug
    * mode.
    *
    * \param band The band for which to retrieve indice
@@ -176,7 +172,7 @@ protected:
    */
   size_t UncheckedBandIndex(BandNameType band) const
   {
-    assert(band != BandNameType::MAX && "Can not retrieve index for band TBandNameEnum::MAX");
+    assert(band != BandNameType::MAX && "Can not retrieve index for band CommandBandName::MAX");
     return m_BandIndices[static_cast<size_t>(band)];
   }
 
@@ -184,7 +180,7 @@ protected:
    * Helper method to parse input  itk::VariableLengthVector<TInput>
    * and get the corresponding band value.
    * For instance:
-   * \snippet auto red   = this->Value(CommonBandNames::RED,input);
+   * \snippet auto red   = this->Value(CommonBandNamess::RED,input);
    *
    * As this function is on the critical performance path, no checks
    * are made to see wether this band is really required for this
