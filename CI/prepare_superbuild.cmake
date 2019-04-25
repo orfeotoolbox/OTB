@@ -147,12 +147,12 @@ endif()
 ####################################
 # Back to build
 
-# ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-#             TARGET "OTB_DEPENDS"
-#             RETURN_VALUE _build_rv
-#             NUMBER_ERRORS _build_nb_err
-#             CAPTURE_CMAKE_ERROR _build_error
-#             )
+ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+            TARGET "OTB_DEPENDS"
+            RETURN_VALUE _build_rv
+            NUMBER_ERRORS _build_nb_err
+            CAPTURE_CMAKE_ERROR _build_error
+            )
 
 if ( DEBUG )
   message( "Status for build:" )
@@ -161,10 +161,10 @@ if ( DEBUG )
   message("_build_error=${_build_error}")
 endif()
 
-# if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
-#   ctest_submit()
-#   message( FATAL_ERROR "An error occurs during ctest_build.")
-# endif()
+if ( ( NOT ${_build_nb_err} EQUAL 0 ) OR ( ${_build_error} EQUAL -1 ))
+  ctest_submit()
+  message( FATAL_ERROR "An error occurs during ctest_build.")
+endif()
 
 ctest_submit()
 
@@ -198,7 +198,7 @@ execute_process(
 # -F /dev/null so the agent is not taking a default file ~/.ssh/..
 execute_process(
   COMMAND ${GIT} "config" "core.sshCommand"
-  "ssh -o StrictHostKeyChecking=no -F /dev/null"
+  "ssh -o StrictHostKeyChecking=no"
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE ssh_res
   OUTPUT_VARIABLE ssh_out
@@ -346,19 +346,19 @@ endif()
 # push
 # we should be able to do a simple : git push origin $BRANCH_NAME
 # execute_process(
-#   COMMAND ${GIT} "push" "${REPOSITORY_GIT_URL}" "${BRANCH_NAME}"
-#   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-#   RESULT_VARIABLE push_res
-#   OUTPUT_VARIABLE push_out
-#   ERROR_VARIABLE push_err
-#   )
+  COMMAND ${GIT} "push" "${REPOSITORY_GIT_URL}" "${BRANCH_NAME}"
+  WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
+  RESULT_VARIABLE push_res
+  OUTPUT_VARIABLE push_out
+  ERROR_VARIABLE push_err
+  )
 
-# if ( DEBUG )
-#   message( "Step 7: push")
-#   message( "push_res = ${push_res}" )
-#   message( "push_out = ${push_out}" )
-#   message( "push_err = ${push_err}" )
-# endif()
+if ( DEBUG )
+  message( "Step 7: push")
+  message( "push_res = ${push_res}" )
+  message( "push_out = ${push_out}" )
+  message( "push_err = ${push_err}" )
+endif()
 
 # MacOS cleanup
 if(APPLE)
