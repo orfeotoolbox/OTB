@@ -345,7 +345,7 @@ endif()
 
 # push
 # we should be able to do a simple : git push origin $BRANCH_NAME
-# execute_process(
+execute_process(
   COMMAND ${GIT} "push" "${REPOSITORY_GIT_URL}" "${BRANCH_NAME}"
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE push_res
