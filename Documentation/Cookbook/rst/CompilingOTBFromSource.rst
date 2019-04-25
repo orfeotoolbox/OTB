@@ -23,7 +23,6 @@ majority) are optional and can be activated or not during the build
 process:
 
 .. table:: External libraries used in OTB
-    :widths: 50 20 30
     :align: center
 
     +------------------------------------------------------------------+-----------------------+--------------------------+
