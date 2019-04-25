@@ -117,7 +117,6 @@ macro(SUPERBUILD_PATCH_SOURCE project)
 
   if(WIN32)
     set(DIFF_FILE_MATCH_STRING "win")
-    endif()
   else()
     if(APPLE)
       set(DIFF_FILE_MATCH_STRING "macx")
