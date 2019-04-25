@@ -71,6 +71,12 @@ endif()
 
 if (clone_res)
   message( SEND_ERROR "Problem in retreiving the archive")
+  message( "Command : COMMAND ${GIT} clone ${REMOTE} --branch ${BRANCH_NAME} \
+    --depth 1 superbuild-artifact")
+  message( "Result :")
+  message( "clone_res = ${clone_res}" )
+  message( "clone_out = ${clone_out}" )
+  message( "clone_err = ${clone_err}" )
   return()
 endif()
 
