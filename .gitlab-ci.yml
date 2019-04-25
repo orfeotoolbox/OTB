@@ -156,12 +156,11 @@ macos-superbuild-build:
   stage: build
   before_script:
 # First we need to clean the environment
-    - rm -rf ../xdk # install dir
-    - rm -rf ../SuperBuild_Install.tar # sb tar
-    - rm -rf otb/sb_branch.txt # sb_branch
-    - rm -rf otb/build # binary dir
-    - rm -rf superbuild-artifact # sb_artifact folder
-    - pwd
+    - rm -rf ../../xdk # install dir
+    - rm -rf ../../SuperBuild_Install.tar # sb tar
+    # - rm -rf otb/sb_branch.txt # sb_branch
+    # - rm -rf otb/build # binary dir
+    - rm -rf ../superbuild-artifact # sb_artifact folder
 # This override the previous before_script
     - git checkout $CI_COMMIT_REF_NAME
 # We are now doing the git-lfs install
