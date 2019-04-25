@@ -1,7 +1,7 @@
 .. _FunctorFilter:
 
-Using FunctorImageFilter
-========================
+FunctorImageFilter
+==================
 
 In image processing and remote sensing, it is very common to write custom pixel-based or neighborhood-based operations between one or several co-registered images. Starting OTB 7.0, there is now a unique filter ``otb::FunctorImageFilter`` that will handle most cases:
 - Any number of input images, being either ``Image``, ``VectorImage`` or a mix of both,
@@ -97,6 +97,8 @@ Rules for output type deduction are simpler:
 - If ``R`` is a basic type, output of the filter will be of type ``otb::Image<R>``
 - If ``R`` is of type ``itk::VariableLengthVector<T>`` with T a basic type as defined above, the output of the filter will be of type ``otb::VectorImage<R>``
 
+Note that if ``R`` is of type ``itk::VariableLengthVector<T>``, you need extra steps so that the filter can allocate the correct number of output bands, as explained in NumberOfOutputBands_ section.
+
 Alternative prototype for performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Automatic type deduction will also work with the following signature:
@@ -189,13 +191,48 @@ Advanced use
 
 Number of output bands
 ~~~~~~~~~~~~~~~~~~~~~~
+.. _NumberOfOutputBands:
 
-Named inputs
-~~~~~~~~~~~~
+If is of type ``itk::VariableLengthVector<T>``, then the functor class should provide an ``OutputSize()`` method as follows.
 
+If the number of output bands is fixed:
 
+.. code-block:: cpp
 
+    class MyFunctor {
+    public:
+    ...
+    constexpr size_t OutputSize(...) const
+        {
+        // Return the number of output bands
+        return 3;
+        }
+    };
+    
+If the number of output bands depends on the number of bands in one or more input images:
 
+.. code-block:: cpp
+
+    class MyFunctor {
+    public:
+    ...
+    size_t OutputSize(const std::array<size_t,N> & nbBands) const
+        {
+        // N Is the number of inputs
+        // nbBands is an array containing the number of bands for each input
+        ...
+        return outputNumberOfBands;
+        }
+    };
+
+In this case you can use the information provided by the ``nbBands`` parameter which contain the number of bands for each input, to derive and return the output number of bands.
+
+If you are using a lambda, a free function or an existing functor which does not offer the ``OutputSize()`` method, you can still use ``FunctorImageFilter`` but you need to provide the number of bands when constructing the filter instance:
+
+.. code-block:: cpp
+
+    // Specify that the lambda output has 3 bands
+    auto filterFromLambda       = NewFunctorFilter(myLambda,3);
 
 
 
