@@ -17,23 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# For know OTB_DEPENDS is build with default value
 
-set ( cmake_configure_option
-"CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
-CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
+# Configuration options for ubuntu-18.04-llvm-nodoc
 
-set ( temporary_option
-"OTB_USE_LIBKML=OFF")
-
-set(concat_options
-"${cmake_configure_option}
-${temporary_option}
-")
-
-#Transform the previous string in list
-string (REPLACE "\n" ";" sb_options ${concat_options})
-
-foreach(item ${sb_options})
-  set( SB_CONFIGURE_OPTIONS "${SB_CONFIGURE_OPTIONS}-D${item};")
-endforeach(item)
+set(site_option
+"opencv_INCLUDE_DIR:PATH=/usr/include
+CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
+CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
+OTB_USE_SHARK:BOOL=OFF")
