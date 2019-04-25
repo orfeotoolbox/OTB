@@ -56,6 +56,9 @@ set CXX=clcache
 
 :: if we need to change cache max size: clcache -M <size-in-bytes>
 
+:: setup path to perl, but add it last ... (there is a libstdc++.dll in that folder...)
+set PATH=%PATH%;C:\tools\perl\perl\bin
+
 goto :eof
 
 :Help
