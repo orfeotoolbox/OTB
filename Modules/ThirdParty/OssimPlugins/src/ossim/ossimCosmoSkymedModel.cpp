@@ -462,35 +462,77 @@ namespace ossimplugins
 
 
     //////////////// Add GCPs one for the moment ////////////////
-    add(theProductKwl, GCP_NUMBER_KEY, ossimString("1"));
-     char prefix[1024];
-     pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), 0);
-
-     add(theProductKwl, prefix, attAzimuthTime, ossimplugins::time::toModifiedJulianDate(first_line_time));
-     add(theProductKwl, prefix, keyImPtX, ossimString("0"));
-     add(theProductKwl, prefix, keyImPtY, ossimString("0"));
-     add(theProductKwl, prefix, keySlantRangeTime, 
-		  metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
     
-     std::string geoCoor = metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"];
-     std::vector<std::string> vGeoCoor;
-     otb::Utils::ConvertStringToVector(geoCoor, vGeoCoor, "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
+    // Get the borders
+    std::string geoCoor_TL = metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_TL;
+    otb::Utils::ConvertStringToVector(geoCoor_TL, vGeoCoor_TL, "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
 
-     
-     add(theProductKwl, prefix, keyWorldPtLat, vGeoCoor[0]);
-     add(theProductKwl, prefix, keyWorldPtLon,  vGeoCoor[1]);
-     add(theProductKwl, prefix, keyWorldPtHgt, vGeoCoor[2]);
+    std::string geoCoor_TR = metadataBands[0]["S01_SBI_Top_Right_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_TR;
+    otb::Utils::ConvertStringToVector(geoCoor_TR, vGeoCoor_TR, "S01_SBI_Top_Right_Geodetic_Coordinates", " ");
+    
+    std::string geoCoor_BL = metadataBands[0]["S01_SBI_Bottom_Left_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_BL;
+    otb::Utils::ConvertStringToVector(geoCoor_BL, vGeoCoor_BL, "S01_SBI_Bottom_Left_Geodetic_Coordinates", " ");
+    
+    std::string geoCoor_BR = metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_BR;
+    otb::Utils::ConvertStringToVector(geoCoor_BR, vGeoCoor_BR, "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+    
+    // Mean
+    std::vector<double> vGeoCoor_Mean;
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[0]) + std::stod(vGeoCoor_TR[0]) + std::stod(vGeoCoor_BL[0]) +
+			     std::stod(vGeoCoor_BR[0]))/4.);
 
-     ////////////////// Load the kwl ////////////////
-     loadState(theProductKwl);
-     
-     // Update Sensor and image Id
-     theSensorID = "CSK";
-     theImageID = std::to_string(std::stoi(metadataDataSet["Programmed_Image_ID"]));
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[1]) + std::stod(vGeoCoor_TR[1]) + std::stod(vGeoCoor_BL[1]) +
+			     std::stod(vGeoCoor_BR[1]))/4.);
 
-     return true;
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[2]) + std::stod(vGeoCoor_TR[2]) + std::stod(vGeoCoor_BL[2]) +
+			     std::stod(vGeoCoor_BR[2]))/4.);
+
+    ossimGpt gptPt;
+    gptPt.lat = vGeoCoor_Mean[0];
+    gptPt.lon = vGeoCoor_Mean[1];
+    gptPt.hgt = vGeoCoor_Mean[2];
+
+    ossimDpt estimatedImPt;
+    TimeType estimatedAzimuthTime;
+    double   estimatedRangeTime;
+    
+    // Inverse model for the middle point
+    loadState(theProductKwl); // Load the kwl to make the inverse projection
+    ossimEcefPoint sensorPos;
+    ossimEcefVector sensorVel;
+    const bool s1 = this->worldToAzimuthRangeTime(gptPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos,
+						  sensorVel);
+    this->worldToLineSample(gptPt,estimatedImPt);
+    
+    // Add the GCP to kwl
+    add(theProductKwl, GCP_NUMBER_KEY, ossimString("1"));
+    char prefix[1024];
+    pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), 0);
+    
+    add(theProductKwl, prefix, attAzimuthTime, estimatedAzimuthTime);
+    add(theProductKwl, prefix, keySlantRangeTime, 
+	estimatedRangeTime);
+    
+    add(theProductKwl, prefix, keyImPtX, estimatedImPt.x);
+    add(theProductKwl, prefix, keyImPtY, estimatedImPt.y);
+    add(theProductKwl, prefix, keyWorldPtLat, vGeoCoor_Mean[0]);
+    add(theProductKwl, prefix, keyWorldPtLon,  vGeoCoor_Mean[1]);
+    add(theProductKwl, prefix, keyWorldPtHgt, vGeoCoor_Mean[2]);
+    
+    ////////////////// (Re) Load the kwl ////////////////
+    loadState(theProductKwl);
+    
+    // Update Sensor and image Id
+    theSensorID = "CSK";
+    theImageID = std::to_string(std::stoi(metadataDataSet["Programmed_Image_ID"]));
+    
+    return true;
   }
-
+  
 //*************************************************************************************************
 // initImageSize
 //*************************************************************************************************
