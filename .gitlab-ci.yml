@@ -161,6 +161,7 @@ macos-superbuild-build:
     - rm -rf otb/sb_branch.txt # sb_branch
     - rm -rf otb/build # binary dir
     - rm -rf superbuild-artifact # sb_artifact folder
+    - pwd
 # This override the previous before_script
     - git checkout $CI_COMMIT_REF_NAME
 # We are now doing the git-lfs install
