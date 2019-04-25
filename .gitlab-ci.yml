@@ -134,7 +134,7 @@ centos-superbuild-prepare:
 ## SuperBuild builds section.
 
 .superbuild-build:
-  only: [merge_requests, changed]
+  only: [merge_requests, changes]
   extends: .common-build
   # dependencies:
   #   - superbuild-prepare
