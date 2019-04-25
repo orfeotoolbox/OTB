@@ -359,15 +359,3 @@ if ( DEBUG )
   message( "push_out = ${push_out}" )
   message( "push_err = ${push_err}" )
 endif()
-
-# MacOS cleanup
-if(APPLE)
-  message("MacOS cleanup")
-  file( REMOVE_RECURSE ${CTEST_INSTALL_DIRECTORY} ) # install dir
-  file( REMOVE "${CI_ROOT_DIR}/${SB_TAR_NAME}" ) # sb tar
-  file( REMOVE "${OTB_SOURCE_DIR}/sb_branch.txt" ) # sb_branch
-  file( REMOVE_RECURSE ${CTEST_BINARY_DIRECTORY} ) # binary dir
-  file( REMOVE_RECURSE ${SB_ARTIFACT_GIT} ) # sb_artifact folder
-else()
-  message("not apple")
-endif()
