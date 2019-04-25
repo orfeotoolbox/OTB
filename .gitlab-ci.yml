@@ -150,7 +150,7 @@ ubuntu-superbuild-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   dependencies:
     - ubuntu-superbuild-prepare
 
@@ -159,7 +159,7 @@ centos-superbuild-build:
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
 
