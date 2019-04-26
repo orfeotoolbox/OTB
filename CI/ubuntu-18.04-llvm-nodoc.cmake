@@ -18,17 +18,15 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Classical indices (NDVI, NDWI,) application.")
+# Configuration options for ubuntu-18.04-llvm-nodoc
 
-otb_module(OTBAppIndices 
-  DEPENDS
-    OTBIndices
-    OTBApplicationEngine
-    OTBFunctor
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-  
-  DESCRIPTION
-    "${DOCUMENTATION}"
-  )
+set(site_option
+"opencv_INCLUDE_DIR:PATH=/usr/include
+CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
+CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
+OTB_USE_SHARK:BOOL=OFF")

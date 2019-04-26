@@ -618,8 +618,6 @@ vegetation had been demonstrated, users tended to also use the NDVI to
 quantify the photosynthetic capacity of plant canopies. This, however,
 can be a rather more complex undertaking if not done properly.
 
-* NDVI. See example :ref:`NDVIRAndNIRVegetationIndexImageFilter.cxx`.
-
 * ARVI. See example :ref:`ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx`.
 
 * AVI. See example :ref:`AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx`.

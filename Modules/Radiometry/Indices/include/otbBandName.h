@@ -27,11 +27,30 @@ namespace BandName
 {
 
 /**
-* Provides a way to identify bands when passing the parameters
-* to the radiometric functors.*
-*/
-enum BandName {BLUE, GREEN, RED, NIR, MIR};
-enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7};
+ * Provides a way to identify bands when passing the parameters
+ * to the radiometric functors.*
+ */
+enum class CommonBandNames
+{
+  BLUE,
+  GREEN,
+  RED,
+  NIR,
+  MIR,
+  MAX
+};
+enum LandsatTMBandNames
+{
+  TM1,
+  TM2,
+  TM3,
+  TM4,
+  TM5,
+  TM60,
+  TM61,
+  TM62,
+  TM7
+};
 
 // Note for landsat equivalence
 // http://landsat.gsfc.nasa.gov/news/news-archive/sci_0017.html
@@ -57,8 +76,8 @@ enum LandsatTMBandNames {TM1, TM2, TM3, TM4, TM5, TM60, TM61, TM62, TM7};
 // 6              10.40-12.50 microm                Thermal IR
 // 7                2.08-2.35 microm                Mid-IR
 
-}
+} // namespace BandName
 
-}
+} // namespace otb
 
 #endif
