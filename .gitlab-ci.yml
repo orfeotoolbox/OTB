@@ -10,6 +10,7 @@
 
 variables:
   BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
