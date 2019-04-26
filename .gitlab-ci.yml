@@ -151,11 +151,11 @@ windows-prepare:
 # This is for debug, we are checking the owner of the ssh key
     #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
     - call ./CI/dev_env.bat x64
-    - start /b clcache-server.exe
+    #~ - start /b clcache-server.exe
   script:
     - ctest -C Release -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-windows-superbuild-base
   after_script:
-    - taskkill /f /im clcache-server.exe
+    #~ - taskkill /f /im clcache-server.exe
   artifacts:
     expire_in: 24 hrs
     when: always
