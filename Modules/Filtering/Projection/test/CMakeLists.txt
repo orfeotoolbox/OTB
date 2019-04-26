@@ -188,6 +188,16 @@ RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
 SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
 )
 
+set(TOLERANCE_RATIO
+0
+0
+0
+0
+0
+0
+0.0002
+)
+
 set(IMG_TYPE
 "pleiades-1"
 "wv2-1"
@@ -303,6 +313,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET RESOL ${IMGNB} current_resol         )
 	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
 	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
+  list(GET TOLERANCE_RATIO ${IMGNB} current_tolerance_ratio)
+
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -313,6 +325,7 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
 		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
+      --tolerance-ratio ${current_tolerance_ratio}
 		  otbOrthoRectificationFilter
 		  LARGEINPUT{${current_img}?&geom=${INPUTDATA}/${current_geomgcp}.geom}
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif

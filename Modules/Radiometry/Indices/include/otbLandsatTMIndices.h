@@ -22,8 +22,8 @@
 #define otbLandsatTMIndices_h
 
 #include "otbMath.h"
-#include "itkVariableLengthVector.h"
 #include "otbBandName.h"
+#include "itkVariableLengthVector.h"
 #include "otbFuzzyVariable.h"
 #include <vector>
 #include <algorithm>
