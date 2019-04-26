@@ -9,7 +9,7 @@
 # GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
 
 variables:
-  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/gbonnefille/otb-build-env
+  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
@@ -44,7 +44,7 @@ fast-build:
   extends: .general
   only: [merge_requests, branches]
   stage: precheck
-  image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout $CI_COMMIT_REF_NAME
