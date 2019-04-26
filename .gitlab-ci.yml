@@ -139,6 +139,7 @@ macos-superbuild-prepare:
   extends: .common-prepare
   stage: prepare
   before_script:
+    - echo $GIT_CLONE_PATH
 # This override the previous before_script
     - git checkout $CI_COMMIT_REF_NAME
   script:
