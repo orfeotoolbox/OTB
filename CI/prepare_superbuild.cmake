@@ -24,12 +24,10 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
-get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
 
 # In GitLab we have :
-#   OTB_SOURCE_DIR=/builds/{project_dir}/otb
-#   CI_PROJ_DIR=/builds/{project_dir}
-#   CI_ROOT_DIR=/builds
+#   OTB_SOURCE_DIR=/builds/otb
+#   CI_PROJ_DIR=/builds
 
 set ( DEBUG "1" )
 
@@ -46,6 +44,12 @@ endif()
 set ( PROJECT_SOURCE_DIR "${SUPERBUILD_SOURCE_DIR}" )
 set ( CTEST_SOURCE_DIRECTORY "${SUPERBUILD_SOURCE_DIR}" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
+# Detect site
+if(NOT DEFINED IMAGE_NAME)
+  if(DEFINED ENV{IMAGE_NAME})
+    set(IMAGE_NAME $ENV{IMAGE_NAME})
+  endif()
+endif()
 set ( CTEST_SITE "${IMAGE_NAME}" )
 
 
@@ -58,7 +62,7 @@ set_dash_build_name()
 # This is platform dependent, and the next step (build) also
 # depends on that, as some paths are hardcoded
 # This can be fixed with a packaging of OTB_DEPENDS
-set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
+set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/xdk/")
 
 # HACK
 # This is needed because when using return() function ctest is trying
@@ -181,7 +185,7 @@ else()
   # TODO right now we rely on ctest_build to know whether there has been an error
   # in build, whereas SuperBuild does not necessarily return an error if something
   # goes wrong
-  set ( SB_ARTIFACT_GIT "${CI_PROJ_DIR}/superbuild-artifact" )
+  set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
   
   # REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
   # different because one is https and one is ssh. Both should be ssh.
@@ -191,7 +195,7 @@ else()
   execute_process(
     COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}"
     "--branch" "master" "--depth" "1" "superbuild-artifact"
-    WORKING_DIRECTORY "${CI_PROJ_DIR}"
+    WORKING_DIRECTORY "${OTB_SOURCE_DIR}"
     )
   
   # setting up the repo
@@ -271,15 +275,11 @@ else()
   # May be for easier maintainability the tar name should be the same as the
   # file inside.
   execute_process(
-    COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}"
+    COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "superbuild-artifact/${SB_TAR_NAME}"
     -- "${CTEST_INSTALL_DIRECTORY}"
-    WORKING_DIRECTORY ${CI_ROOT_DIR}
+    WORKING_DIRECTORY ${OTB_SOURCE_DIR}
     )
-  
-  # We need to copy the tar file, as it is on a different partition in the gitlab
-  # context
-  file ( COPY "${CI_ROOT_DIR}/${SB_TAR_NAME}" DESTINATION "${SB_ARTIFACT_GIT}")
-  
+
   # In a near futur it might be nice to clean up the mess we made...
   
   if ( DEBUG )
