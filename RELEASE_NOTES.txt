@@ -1,3 +1,9 @@
+OTB-v.6.6.2 - Changes since version 6.6.1 (April 26th, 2019)
+------------------------------------------------------------
+
+* Fix for GDAL 2.5 compatibility
+
+
 OTB-v.6.6.1 - Changes since version 6.6.0 (December 12th, 2018)
 -----------------------------------------------------------
 

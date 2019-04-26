@@ -127,7 +127,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 # OTB version number.
 set(OTB_VERSION_MAJOR "6")
 set(OTB_VERSION_MINOR "6")
-set(OTB_VERSION_PATCH "1")
+set(OTB_VERSION_PATCH "2")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 # Monteverdi version number (follows OTB)
