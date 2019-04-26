@@ -135,6 +135,11 @@ windows-prepare:
   tags:
     - windows
   stage: prepare
+  variables:
+    GIT_CLONE_PATH: %CI_BUILDS_DIR%/otb
+    GIT_DEPTH: "3"
+    GIT_CHECKOUT: "false"
+    GIT_STRATEGY: "clone"
   before_script:
 # This override the previous before_script
     - git lfs install
@@ -152,9 +157,11 @@ windows-prepare:
     #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
     - call ./CI/dev_env.bat x64
     #~ - start /b clcache-server.exe
+    - clcache.exe -s
   script:
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-windows-superbuild-base
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
   after_script:
+    - clcache.exe -s
     #~ - taskkill /f /im clcache-server.exe
   artifacts:
     expire_in: 24 hrs
