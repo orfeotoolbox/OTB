@@ -190,7 +190,7 @@ set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
 # -F /dev/null so the agent is not taking a default file ~/.ssh/..
 execute_process(
   COMMAND ${GIT} "config" "core.sshCommand"
-  "ssh -o StrictHostKeyChecking=no -F /dev/null"
+  "ssh -o StrictHostKeyChecking=no"
   WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
   RESULT_VARIABLE ssh_res
   OUTPUT_VARIABLE ssh_out
