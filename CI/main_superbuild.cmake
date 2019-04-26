@@ -17,10 +17,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This script is a prototype for the future CI, it may evolve rapidly in a near future
 
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
-# This script is a prototype for the future CI, it may evolve rapidly in a near future
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 

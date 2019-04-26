@@ -75,7 +75,7 @@ ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 set(CTEST_BUILD_FLAGS "-j16")
 
 set ( SB_CONFIGURE_OPTIONS "")
-include( "${CMAKE_CURRENT_LIST_DIR}/../SuperBuild/CI/configure_options.cmake" )
+include( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${SUPERBUILD_SOURCE_DIR}"
