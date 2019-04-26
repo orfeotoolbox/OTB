@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBIndicesTests
 otbIndicesTestDriver.cxx
 otbRadiometricIndicesTest.cxx
-otbNDVIDataNodeFeatureFunction.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
 otbLandsatTMIndexMIR2Test.cxx
