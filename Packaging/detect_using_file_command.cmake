@@ -112,6 +112,18 @@ function(detect_using_file_command input_file result_type result_dir)
     message(FATAL_ERROR "unknown/untracked file type found: ${input_file}")
   endif() #if("${file_ov_lower}" MATCHES ...)
 
+  # Patch file command returning shared-oject for executable on Linux when -PIE is used.
+  if( LINUX )
+    get_filename_component( input_file_DIR ${input_file} DIRECTORY )
+    get_filename_component( input_file_dIR ${input_file_DIR} NAME )
+    string( TOLOWER "${input_file_DIR}" input_file_DIR )
+    if( ${input_file_DIR} MATCHES "bin" )
+      message( WARNING "${input_file} detected as shared-object." )
+      set(detected_type PROGRAMS)
+      set(detected_dir bin)
+    endif()
+  endif()
+
   #message("detected_type=${detected_type}")
   set(${result_type} "${detected_type}" PARENT_SCOPE)
   set(${result_dir} "${detected_dir}" PARENT_SCOPE)
