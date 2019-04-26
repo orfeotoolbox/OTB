@@ -14,7 +14,7 @@ matching the red band with the red color, etc.
 Some satellites (SPOT 5 is an example) do not acquire all the visible
 spectral bands: the blue can be missing and replaced by some other wavelength of
 interest for a specific application.  In these situations, another mapping has
-to be created. That's why, the vegetation often appears in red in satellite
+to be created. That's why the vegetation often appears in red in satellite
 images.
 
 The band order in the image products can be also quite tricky. It could be in
