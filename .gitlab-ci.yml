@@ -10,12 +10,14 @@
 
 variables:
   BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PROJECT_NAME
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
   GIT_CHECKOUT: "false"
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
+
 
 before_script:
   # make sure LFS hooks are installed
