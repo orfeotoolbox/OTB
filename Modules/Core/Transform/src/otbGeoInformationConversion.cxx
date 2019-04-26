@@ -77,7 +77,9 @@ int GeoInformationConversion::ToEPSG(const std::string &wkt)
 {
   int code = -1;
   OGRSpatialReference srs(wkt.c_str());
+#if GDAL_VERSION_NUM < 2050000
   srs.Fixup();
+#endif
   srs.AutoIdentifyEPSG();
   const char * epsg = nullptr;
   if (srs.IsGeographic())
