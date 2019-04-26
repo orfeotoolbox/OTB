@@ -1,17 +1,19 @@
-.. _FunctorFilter:
+.. _FunctorImageFilter:
 
 FunctorImageFilter
 ==================
 
-In image processing and remote sensing, it is very common to write custom pixel-based or neighborhood-based operations between one or several co-registered images. Starting OTB 7.0, there is now a unique filter ``otb::FunctorImageFilter`` that will handle most cases:
-- Any number of input images, being either ``Image``, ``VectorImage`` or a mix of both,
-- An ``Image`` or ``VectorImage`` output
-- Operation based on pixels, neighborhoods or a mix of both,
-- Functor classes, function, lambdas ...
+In image processing and remote sensing, it is very common to write custom
+pixel-based or neighborhood-based operations between one or several
+co-registered images. Starting OTB 7.0, there is now a unique filter
+:doxygen:`FunctorImageFilter` that will handle most cases:
 
-With ``otb::FunctorImageFilter`` you only need to write the operation you want to perform, and the filter will take care of everything (including multi-threading and streaming).
+* Any number of input images, being either ``Image``, ``VectorImage`` or a mix of both,
+* An ``Image`` or ``VectorImage`` output
+* Operation based on pixels, neighborhoods or a mix of both,
+* Functor classes, function, lambdas.
 
-This section will present how to use this filter and its various features.
+With :doxygen:`FunctorImageFilter` you only need to write the operation you want to perform, and the filter will take care of everything (including multi-threading and streaming).
 
 Quickstart
 ----------
@@ -23,27 +25,29 @@ The operation to perform can be defined as a free function:
 
 .. code-block:: cpp
 
-    double myFreeFunction(const double & int in) {...}
-    
-It can also be defined as a functor (i.e. a class defining operator ``()``:
+    double myFreeFunction(const double& int in) {...}
+
+It can also be defined as a functor (i.e. a class defining ``operator()``:
 
 .. code-block:: cpp
 
     class MyFunctor
     {
     public:
-        double operator()(const double & int in) {...}
+        double operator()(const double& int in) {...}
     };
-    
+
 It can also be defined as a lambda:
 
 .. code-block:: cpp
 
     auto myLambda = [](const double & int in) -> double {...}
-    
-Building an instance of ``FunctorImageFilter``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Once the operation to perform has been implemented, it is very easy to get a fully functionning instance of ``FunctorImageFilter`` from it:
+
+
+Creating a ``FunctorImageFilter``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once the operation to perform has been implemented, it is very easy to get an instance of ``FunctorImageFilter`` from it:
 
 .. code-block:: cpp
 
@@ -54,10 +58,10 @@ Once the operation to perform has been implemented, it is very easy to get a ful
 And you can use it just like any other filter:
 
 .. code-block:: cpp
-    
+
     filterFromLambda->SetInput(upStreamFilter->GetOutput());
     downstreamFilter->SetInput(filterFromLambda->GetOutput());
-    
+
 You can also directly define instances of ``FunctorImageFilter`` with built-in math functions:
 
 .. code-block:: cpp
@@ -69,9 +73,14 @@ Note, the ``static_cast`` trick, which allows to disambguiate between different 
 
 Automatic types deduction
 -------------------------
-You probably notice that, contrary to other filters in ITK and OTB, there is no need to specify input and output image types. This is because ``FunctorImageFilter`` uses advanced C++ concepts to automatically derive the input and output image types from the free function, operator() or lambda, with the following rules.
 
-Let ``R (T1 t1, T2 t2 ..., TN tn)`` be the signature of the free function, operator() or lambda. Note that the filter conversely supports passing by value ``TN tn`` or by const reference ``const TN & tn``.
+You probably notice that, contrary to other filters in ITK and OTB, there is no
+need to specify input and output image types. This is because
+``FunctorImageFilter`` uses C++ metaprogramming to automatically derive the
+input and output image types from the free function, functor or lambda, with
+the following rules.
+
+Let ``R (T1 t1, T2 t2 ..., TN tn)`` be the signature of the free function, ``operator()`` or lambda. Note that the filter conversely supports passing by value ``TN tn`` or by const reference ``const TN & tn``.
 
 First lets define basic types:
 
@@ -82,6 +91,7 @@ First lets define basic types:
 
 Automatic input type deduction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 From the basic types, the following deduction rules apply:
 
 - If ``TN`` is a basic type as defined above, the Nth input will be of type ``otb::Image<TN>``
@@ -93,6 +103,7 @@ Note that this will work for any number of inputs.
 
 Automatic output type deduction
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Rules for output type deduction are simpler:
 - If ``R`` is a basic type, output of the filter will be of type ``otb::Image<R>``
 - If ``R`` is of type ``itk::VariableLengthVector<T>`` with T a basic type as defined above, the output of the filter will be of type ``otb::VectorImage<R>``
@@ -101,6 +112,7 @@ Note that if ``R`` is of type ``itk::VariableLengthVector<T>``, you need extra s
 
 Alternative prototype for performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Automatic type deduction will also work with the following signature:
 ``void (const R&, T1 t1, T2 t2 ..., TN tn)``
 
@@ -113,10 +125,10 @@ Consider the following free function:
 
 .. code-block:: cpp
 
-    itk::VariableLenghtVector<double> myFreeFunction(unsigned char a, 
-                                                     const std::complex<float> & b,
-                                                     const itk::VariableLengthVector<short> &c,
-                                                     const itk::ConstNeighborhoodIterator<otb::Image<double>> & d) {...}
+    itk::VariableLenghtVector<double> myFreeFunction(unsigned char a,
+                                                     const std::complex<float>& b,
+                                                     const itk::VariableLengthVector<short>& c,
+                                                     const itk::ConstNeighborhoodIterator<otb::Image<double>>& d) {...}
 
 When a ``FunctorImageFilter`` is built from this function, the following types will be deduced:
 
@@ -150,7 +162,7 @@ The Nth parameter can be set with the template ``SetInput()`` method:
 .. code-block:: cpp
 
     myFilter->SetInput<N>(imageN);
-    
+
 You can also set all inputs at once with the ``SetInputs()`` method:
 
 .. code-block:: cpp
@@ -163,7 +175,7 @@ If you only have one input, you can simply call:
 
     myFilter->SetInput(image);
 
-Of course, your input types must match the types deducted from the operator(), free function or lambda!
+Of course, input types must match the types deducted from the operator(), free function or lambda!
 
 Accessing the function
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -175,7 +187,7 @@ You can call ``GetFunctor()`` to access a const reference to the functor in orde
 .. code-block:: cpp
 
     auto a = myFilter->GetFunctor().GetParameterA();
-    
+
 If you wish to modify a parameter of the functor, you will have to call ``GetModifiableFunctor()``, which will return a non-const reference to the functor and ensure that the filter will be re-run when updated.
 
 Setting the neighborhood radius
@@ -185,12 +197,13 @@ If you have ``itk::ConstNeighborhoodIterator<otb::Image<T>>`` or ``itk::ConstNei
 .. code-block:: cpp
 
     auto filterFromFunctor = NewFunctorFilter(MyFunctor,{{3,3}});
-    
+
 Advanced use
 ------------
 
 Number of output bands
 ~~~~~~~~~~~~~~~~~~~~~~
+
 .. _NumberOfOutputBands:
 
 If is of type ``itk::VariableLengthVector<T>``, then the functor class should provide an ``OutputSize()`` method as follows.
@@ -203,12 +216,12 @@ If the number of output bands is fixed:
     public:
     ...
     constexpr size_t OutputSize(...) const
-        {
-        // Return the number of output bands
-        return 3;
-        }
+    {
+      // Return the number of output bands
+      return 3;
+    }
     };
-    
+
 If the number of output bands depends on the number of bands in one or more input images:
 
 .. code-block:: cpp
@@ -217,25 +230,24 @@ If the number of output bands depends on the number of bands in one or more inpu
     public:
     ...
     size_t OutputSize(const std::array<size_t,N> & nbBands) const
-        {
-        // N Is the number of inputs
-        // nbBands is an array containing the number of bands for each input
-        ...
-        return outputNumberOfBands;
-        }
+    {
+      // N Is the number of inputs
+      // nbBands is an array containing the number of bands for each input
+      ...
+      return outputNumberOfBands;
+    }
     };
 
-In this case you can use the information provided by the ``nbBands`` parameter which contain the number of bands for each input, to derive and return the output number of bands.
+In this case you can use the information provided by the ``nbBands`` parameter
+which contain the number of bands for each input, to derive and return the
+output number of bands.
 
-If you are using a lambda, a free function or an existing functor which does not offer the ``OutputSize()`` method, you can still use ``FunctorImageFilter`` but you need to provide the number of bands when constructing the filter instance:
+If you are using a lambda, a free function or an existing functor which does not
+offer the ``OutputSize()`` method, you can still use ``FunctorImageFilter`` but
+you need to provide the number of bands when constructing the filter instance:
 
 .. code-block:: cpp
 
     // Specify that the lambda output has 3 bands
     auto filterFromLambda       = NewFunctorFilter(myLambda,3);
-
-
-
-
-
 
