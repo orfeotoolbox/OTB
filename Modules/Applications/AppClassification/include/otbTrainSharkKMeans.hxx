@@ -52,9 +52,10 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkKMeansParams()
 
   // Input centroids
   AddParameter(ParameterType_InputFilename, "classifier.sharkkm.centroids.in", "User definied input centroids");
-  SetParameterDescription("classifier.sharkkm.centroids.in", "Input text file containing centroid posistions used to initialize the algorithm."
-    " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
-    " centroids in this file must match the number of classes (classifier.sharkkm.k).");
+  SetParameterDescription("classifier.sharkkm.centroids.in", "Input text file containing centroid posistions used to initialize the algorithm. "
+                            "Each centroid must be described by p parameters, p being the number of features in "
+                            "the input vector data, and the number of centroids must be equal to the number of classes "
+                            "(one centroid per line with values separated by spaces).");
   MandatoryOff("classifier.sharkkm.centroids");
 
   // Centroid statistics

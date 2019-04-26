@@ -88,9 +88,10 @@ protected:
 
     AddParameter(ParameterType_InputFilename, "centroids.in", "input centroids text file");
     SetParameterDescription("centroids.in",
-                            "Input text file containing centroid posistions used to initialize the algorithm."
-                            " The file must contain one centroid per line, and each centroid value must be separated by a space. The number of"
-                            " centroids in this file must match the number of classes (nc parameter).");
+                            "Input text file containing centroid positions used to initialize the algorithm. "
+                            "Each centroid must be described by p parameters, p being the number of bands in "
+                            "the input image, and the number of centroids must be equal to the number of classes "
+                            "(one centroid per line with values separated by spaces).");
     MandatoryOff("centroids.in");
 
     ShareKMSamplingParameters();
