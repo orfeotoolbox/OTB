@@ -64,8 +64,7 @@ int main(int argc, char* argv[])
   // Filter type is a generic \doxygen{itk}{UnaryFunctorImageFilter} using Formosat2 specific LAI
   //  \doxygen{otb}{LAIFromNDVIFormosat2Functor}.
 
-  typedef otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, InputImageType::InternalPixelType, OutputImageType::PixelType>
-                                                                                                 FunctorType;
+  typedef otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, OutputImageType::PixelType> FunctorType;
   typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> LAIFRomNDVIImageFilterType;
 
   // Instantiating object
@@ -96,8 +95,8 @@ int main(int argc, char* argv[])
   //
   unsigned int redChannel = static_cast<unsigned int>(atoi(argv[5]));
   unsigned int nirChannel = static_cast<unsigned int>(atoi(argv[6]));
-  filter->GetFunctor().SetRedIndex(redChannel);
-  filter->GetFunctor().SetNIRIndex(nirChannel);
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED, redChannel);
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR, nirChannel);
 
   //  The invocation of the \code{Update()} method triggers the
   //  execution of the pipeline.
