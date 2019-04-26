@@ -47,16 +47,16 @@ int main(int argc, char* argv[])
   // The filter can be instantiated using the image types defined above.
   typedef otb::LeeImageFilter<InputImageType, OutputImageType> FilterType;
 
-  //  An ImageFileReader class is also instantiated in order to read
-  //  image data from a file.
+  // An ImageFileReader class is also instantiated in order to read
+  // image data from a file.
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
-  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
+  // An ImageFileWriter is instantiated in order to write the
   // output image to a file.
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  //  Both the filter and the reader are created by invoking their \code{New()}
-  //  methods and assigning the result to SmartPointers.
+  // Both the filter and the reader are created by invoking their New()
+  // methods and assigning the result to SmartPointers.
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
 
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
   writer->SetInput(filter->GetOutput());
   reader->SetFileName(argv[1]);
 
-  //  The image obtained with the reader is passed as input to the
-  //  LeeImageFilter.
+  // The image obtained with the reader is passed as input to the
+  // LeeImageFilter.
   filter->SetInput(reader->GetOutput());
 
   // The method SetRadius() defines the size of the window to
