@@ -23,13 +23,6 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
-get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
-
-# In GitLab we have :
-#   OTB_SOURCE_DIR=/builds/{project_dir}/otb
-#   CI_PROJ_DIR=/builds/{project_dir}
-#   CI_ROOT_DIR=/builds
 
 set ( DEBUG "1" )
 
@@ -52,7 +45,7 @@ set_dash_build_name()
 # This is platform dependent, and the next step (build) also
 # depends on that, as some paths are hardcoded
 # This can be fixed with a packaging of OTB_DEPENDS
-set (CTEST_INSTALL_DIRECTORY "${CI_ROOT_DIR}/xdk/")
+set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/xdk/")
 
 # HACK
 # This is needed because when using return() function ctest is trying
@@ -116,8 +109,7 @@ foreach(sb_file  ${sb_file_list})
   file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
 endforeach(sb_file)
 file(READ "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" CMAKE_ORIG)
-string(REPLACE "${CI_PROJ_DIR}" "" CMAKE_UNIFIED ${CMAKE_ORIG})
-file(APPEND ${SB_TXT} "CMakeCache.txt${CMAKE_UNIFIED}")
+file(APPEND ${SB_TXT} "CMakeCache.txt${CMAKE_ORIG}")
 file ( MD5 "${SB_TXT}" SB_MD5)
 message ( "SB_MD5 = ${SB_MD5}" )
 file (REMOVE ${SB_TXT})
@@ -180,7 +172,6 @@ ctest_submit()
 # TODO right now we rely on ctest_build to know whether there has been an error
 # in build, whereas SuperBuild does not necessarily return an error if something
 # goes wrong
-set ( SB_ARTIFACT_GIT "${CI_PROJ_DIR}/superbuild-artifact" )
 
 # REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
 # different because one is https and one is ssh. Both should be ssh.
@@ -190,8 +181,9 @@ set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-art
 execute_process(
   COMMAND ${GIT} "clone" "${REPOSITORY_GIT_URL}"
   "--branch" "master" "--depth" "1" "superbuild-artifact"
-  WORKING_DIRECTORY "${CI_PROJ_DIR}"
+  WORKING_DIRECTORY "${OTB_SOURCE_DIR}"
   )
+set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
 
 # setting up the repo
 # StrictHostKeyChecking so we don't have to add the host as a known key
@@ -260,24 +252,15 @@ endif()
 
 set ( SB_TAR_NAME "SuperBuild_Install.tar" )
 
-# create the tar
-# We need to create tar in its directory to avoid weird name in file
-# "tar: Removing leading `../../' from member names"
-# WARNING
-# We are creating a tar containing xdk/.., so when extracting the archive in
-# an other environment the output file will be xdk... Obvious isn't it?
-# Well... Not for everyone...
+# Creating the tar
 # May be for easier maintainability the tar name should be the same as the
 # file inside.
 execute_process(
-  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_TAR_NAME}"
+  COMMAND ${CMAKE_COMMAND} "-E" "tar" "cf" "${SB_ARTIFACT_GIT}/${SB_TAR_NAME}"
   -- "${CTEST_INSTALL_DIRECTORY}"
-  WORKING_DIRECTORY ${CI_ROOT_DIR}
+  WORKING_DIRECTORY ${OTB_SOURCE_DIR}
   )
 
-# We need to copy the tar file, as it is on a different partition in the gitlab
-# context
-file ( COPY "${CI_ROOT_DIR}/${SB_TAR_NAME}" DESTINATION "${SB_ARTIFACT_GIT}")
 
 # In a near futur it might be nice to clean up the mess we made...
 
