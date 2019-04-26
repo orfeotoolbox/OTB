@@ -24,15 +24,20 @@ if /I "%1"=="-help" (
 set ARCH=%1
 
 if %2.==. (
-  set TARGET=10.0.17763.0
+  set SHORT_TARGET=10
 ) else (
-  set TARGET=%2
+  set SHORT_TARGET=%2
 )
 
 if %3.==. (
   set VCVER=14.0
 ) else (
   set VCVER=%3
+)
+
+set TARGET=%SHORT_TARGET%
+if "%TARGET%"=="10" (
+  set TARGET=10.0.17763.0
 )
 
 :: Setup Python
@@ -56,6 +61,9 @@ set CXX=clcache
 
 :: if we need to change cache max size: clcache -M <size-in-bytes>
 
+set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
+echo Generated IMAGE_NAME: %IMAGE_NAME%
+
 :: setup path to perl, but add it last ... (there is a libstdc++.dll in that folder...)
 set PATH=%PATH%;C:\tools\perl\perl\bin
 
@@ -65,7 +73,7 @@ goto :eof
 setlocal
 echo "Usage: dev_env.bat <compiler_arch>  [<target-os>  [<vc_version>]]"
 echo "  <compiler_arch> : 'x86' | 'x64'"
-echo "  <target-os>     : '8.1' | '10.0.17763.0' (default)"
+echo "  <target-os>     : '8.1' | '10' (default)"
 echo "  <vc_version>    :"
 echo "    '14.20' (i.e. VS 2019)"
 echo "    '14.16' (i.e. VS 2017)"
