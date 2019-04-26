@@ -104,6 +104,7 @@ ubuntu-llvm:
       - sb_branch.txt
 
 ubuntu-superbuild-prepare:
+  only: [branches]
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
@@ -116,6 +117,7 @@ centos-superbuild-prepare:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
 ubuntu-superbuild-build:
+  only: [branches]
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
