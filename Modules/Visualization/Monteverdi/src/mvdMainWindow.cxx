@@ -1373,56 +1373,6 @@ MainWindow
   assert( e!=NULL );
 
   {
-    //
-    // List OTB-application widgets.
-    typedef QList< mvd::Wrapper::QtWidgetView * > QtWidgetViewList;
-
-    QtWidgetViewList c( findChildren< mvd::Wrapper::QtWidgetView * >() );
-
-    QStringList names;
-
-    //
-    // Find out which OTB-applications are running.
-    for( QtWidgetViewList::iterator it( c.begin() );
-	 it!=c.end();
-	 ++ it )
-      {
-      assert( *it );
-
-      if( !( *it )->IsClosable() )
-	{
-	assert( ( *it )->GetModel()->GetApplication() );
-
-	// qDebug() << "OTB-application:" << ( *it )->GetApplication()->GetDocName();
-
-	names.push_back( ( *it )->GetModel()->GetApplication()->GetDocName() );
-	}
-      }
-
-    //
-    // If some OTB-application is running, display warning, names and
-    // prevent to close.
-    if( !names.isEmpty() )
-      {
-      QMessageBox::warning(
-	this,
-	tr( "Warning!" ),
-	tr(
-	  PROJECT_NAME
-	  " cannot exit while some OTB-application is running!\n\n"
-	  "Please wait for following OTB-applicatio(s) to exit:\n- %1"
-	)
-	.arg( names.join( "\n- " ) )
-      );
-
-      e->ignore();
-
-      return;
-      }
-  }
-
-
-  {
     assert( I18nCoreApplication::Instance()!=NULL );
     assert( I18nCoreApplication::Instance()->GetModel()==
 	    I18nCoreApplication::Instance()->GetModel< StackedLayerModel >() );
