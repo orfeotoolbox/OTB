@@ -22,22 +22,6 @@
 ./BandMathFilterExample Input/qb_RoadExtract.tif Output/RoadExtractBandMath.tif Output/qb_BandMath-pretty.jpg
 */
 
-
-// This filter is based on the mathematical parser library muParser.
-// The built in functions and operators list is available at:
-// http://muparser.sourceforge.net/mup_features.html.
-//
-// In order to use this filter, at least one input image should be
-// set. An associated variable name can be specified or not by using
-// the corresponding SetNthInput method. For the nth input image, if
-// no associated variable name has been specified, a default variable
-// name is given by concatenating the letter "b" (for band) and the
-// corresponding input index.
-//
-// The next step is to set the expression according to the variable
-// names. For example, in the default case with three input images the
-// following expression is valid: ``(b1+b2)*b3``.
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -65,11 +49,10 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  // We start by the typedef needed for reading and
+  // We start by the typedefs needed for reading and
   // writing the images. The BandMathImageFilter class
   // works with Image as input, so we need to define additional
   // filters to extract each layer of the multispectral image.
-
   typedef double                                                           PixelType;
   typedef otb::VectorImage<PixelType, 2>                                   InputImageType;
   typedef otb::Image<PixelType, 2>                                         OutputImageType;
@@ -78,13 +61,12 @@ int main(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType>                             ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
 
-  // We can now define the type for the filter:
+  // We can now define the type for the filter
   typedef otb::BandMathImageFilter<OutputImageType> FilterType;
 
-  // We instantiate the filter, the reader, and the writer:
+  // We instantiate the filter, the reader, and the writer
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
-
   FilterType::Pointer filter = FilterType::New();
 
   writer->SetInput(filter->GetOutput());
@@ -93,9 +75,9 @@ int main(int argc, char* argv[])
 
   reader->UpdateOutputInformation();
 
-  // We now need to extract each band from the input \doxygen{otb}{VectorImage},
-  // it illustrates the use of the \doxygen{otb}{VectorImageToImageList}.
-  // Each extracted layer is an input to the \doxygen{otb}{BandMathImageFilter}:
+  // We now need to extract each band from the input VectorImage,
+  // it illustrates the use of the VectorImageToImageList.
+  // Each extracted layer is an input to the BandMathImageFilter
   VectorImageToImageListType::Pointer imageList = VectorImageToImageListType::New();
   imageList->SetInput(reader->GetOutput());
 
@@ -111,8 +93,8 @@ int main(int argc, char* argv[])
   // Now we can define the mathematical expression to perform on the layers (b1, b2, b3, b4).
   // The filter takes advantage of the parsing capabilities of the muParser library and
   // allows setting the expression as on a digital calculator.
-  //
-  // The expression below returns 255 if the ratio $(NIR-RED)/(NIR+RED)$ is greater than 0.4 and 0 if not.
+
+  // The expression below returns 255 if the ratio (NIR-RED)/(NIR+RED) is greater than 0.4 and 0 if not.
   filter->SetExpression("if((b4-b3)/(b4+b3) > 0.4, 255, 0)");
 
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
@@ -125,19 +107,7 @@ int main(int argc, char* argv[])
   writer->Update();
 
   // The muParser library also provides the possibility to extend existing built-in functions. For example,
-  // you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be
-  // \textit{if($ndvi(b3, b4)>0.4$, 255, 0)}, which would return the same result.
-
-  // Figure~\ref{fig:BandMathImageFilter} shows the result of the threshold applied to the NDVI index
-  // of a Quickbird image.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.45\textwidth]{qb_ExtractRoad_pretty.eps}
-  // \includegraphics[width=0.45\textwidth]{qb_BandMath-pretty.eps}
-  // \itkcaption[Band Math]{From left to right:
-  // Original image, thresholded NDVI index.}
-  // \label{fig:BandMathImageFilter}
-  // \end{figure}
+  // you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be "if(ndvi(b3, b4)>0.4, 255, 0)", which would return the same result.
 
   typedef otb::Image<unsigned char, 2>                                 OutputPrettyImageType;
   typedef otb::ImageFileWriter<OutputPrettyImageType>                  PrettyImageFileWriterType;
@@ -151,6 +121,4 @@ int main(int argc, char* argv[])
   prettyWriter->SetFileName(argv[3]);
 
   prettyWriter->Update();
-
-  return EXIT_SUCCESS;
 }
