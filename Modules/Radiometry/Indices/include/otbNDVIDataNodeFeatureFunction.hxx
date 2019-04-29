@@ -106,8 +106,7 @@ typename NDVIDataNodeFeatureFunction<TImage, TCoordRep, TPrecision>
     if(this->IsInsideBuffer(lineIt.GetIndex()))
       {
       PixelType pixel = this->GetInputImage()->GetPixel(lineIt.GetIndex());
-      if(m_NDVIFunctor(pixel [this->GetREDChannelIndex() - 1],
-                       pixel [this->GetNIRChannelIndex() - 1]) >= this->GetNDVIThreshold())
+      if(m_NDVIFunctor(pixel) >= this->GetNDVIThreshold())
         {
         nbValidPixel += 1;
         }
