@@ -186,6 +186,12 @@ protected:
   void DoUpdateParameters() override;
   void DoExecute() override;
 
+private:
+  /**
+   * Get the field of the input feature corresponding to the input field
+   */
+  inline TOutputValue GetFeatureField(const ogr::Feature & feature, int field);
+
 };
 
 }
