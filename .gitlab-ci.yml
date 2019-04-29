@@ -136,7 +136,7 @@ windows-prepare:
     - windows
   stage: prepare
   variables:
-    GIT_CLONE_PATH: %CI_BUILDS_DIR%/otb
+    GIT_CLONE_PATH: "%CI_BUILDS_DIR%/otb"
     GIT_DEPTH: "3"
     GIT_CHECKOUT: "false"
     GIT_STRATEGY: "clone"
