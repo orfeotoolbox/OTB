@@ -147,10 +147,7 @@ QtWidgetView
 {
   QWidget * widget = otb::Wrapper::QtWidgetView::CreateInputWidgets();
 
-  otb::Wrapper::QtWidgetParameterBase *paramWidget =
-    widget->findChild<otb::Wrapper::QtWidgetParameterBase*>();
-
-  SetupParameterWidgets(paramWidget);
+  SetupParameterWidgets(widget);
 
   return widget;
 }
