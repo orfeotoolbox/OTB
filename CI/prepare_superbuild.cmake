@@ -70,6 +70,13 @@ set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/xdk/")
 ##set (CTEST_COMMAND "echo \"Exit\"") # HACK FIX ME
 set (CMAKE_COMMAND "cmake")
 
+if(WIN32)
+  file(TO_NATIVE_PATH "${CTEST_INSTALL_DIRECTORY}" XDK_INSTALL_DIR_NATIVE)
+  set(ENV{PATH} "${XDK_INSTALL_DIR_NATIVE}\\bin;$ENV{PATH}" )
+  set(ENV{PATH} "$ENV{PATH};${XDK_INSTALL_DIR_NATIVE}\\lib" )
+  # set(ENV{CMAKE_PREFIX_PATH} "${XDK_INSTALL_DIR}" )
+endif()
+
 ########################################################################
 ########################################################################
 # Build process
