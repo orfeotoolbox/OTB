@@ -160,8 +160,9 @@ windows-prepare:
     - clcache.exe -s
   script:
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
-  after_script:
     - clcache.exe -s
+  #~ after_script:
+    #~ - clcache.exe -s
     #~ - taskkill /f /im clcache-server.exe
   artifacts:
     expire_in: 24 hrs
