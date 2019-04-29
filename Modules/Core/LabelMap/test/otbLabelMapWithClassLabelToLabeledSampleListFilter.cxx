@@ -62,7 +62,7 @@ int otbLabelMapWithClassLabelToLabeledSampleListFilter(int argc, char* argv[])
 
    LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
    labelMapFilter->SetInput(lreader->GetOutput());
-   labelMapFilter->SetInputForegroundValue(255);
+   labelMapFilter->SetInputForegroundValue(1);
 
    ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
    shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
