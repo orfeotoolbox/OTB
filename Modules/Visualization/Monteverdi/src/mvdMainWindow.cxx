@@ -1653,9 +1653,9 @@ MainWindow
   // # Step 2 : setup connections
   QObject::connect(
     appWidget,
-    SIGNAL( ApplicationToLaunchSelected(const QString &, const QString &) ),
+    &mvd::ApplicationsToolBox::ApplicationToLaunchSelected,
     this,
-    SLOT( OnApplicationToLaunchSelected(const QString &, const QString &) )
+    &mvd::MainWindow::OnApplicationToLaunchSelected
   );
 
   // # Step 3 : connect close slots
@@ -2124,8 +2124,7 @@ MainWindow
 
 void
 MainWindow
-::OnApplicationToLaunchSelected( const QString & appName,
-                                 const QString & /**docName*/ )
+::OnApplicationToLaunchSelected( const QString & appName )
 {
   assert( Application::ConstInstance()!=NULL );
   assert( Application::ConstInstance()->GetOTBApplicationsModel()!=NULL );

@@ -86,7 +86,6 @@ private:
     SetDescription("Selects samples from a training vector data set.");
 
     // Documentation
-    SetDocName("Sample Selection");
     SetDocLongDescription(
         "The application selects a set of samples from geometries "
         "intended for training (they should have a field giving the associated "

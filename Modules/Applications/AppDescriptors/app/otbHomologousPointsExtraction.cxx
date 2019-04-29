@@ -83,7 +83,6 @@ private:
   void DoInit() override
   {
     SetName("HomologousPointsExtraction");
-    SetDocName("Homologous points extraction");
     SetDescription("Compute homologous points between images using keypoints");
     SetDocLongDescription("This application allows computing homologous points between images using keypoints. "
       " SIFT or SURF keypoints can be used and the band on which keypoints are computed can be set independently for both images."
@@ -101,7 +100,6 @@ private:
       " The vector file is always reprojected to EPSG:4326 to allow display in a GIS."
       " This is done via reprojection or by applying the image sensor models.");
     // Documentation
-    SetDocName("Homologous Points Extraction");
     SetDocLimitations("Full mode does not handle large images.");
     SetDocSeeAlso("RefineSensorModel");
     SetDocAuthors("OTB-Team");

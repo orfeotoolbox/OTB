@@ -81,7 +81,6 @@ private:
     SetDescription("From one-band complex images (each one related to an element of the Sinclair matrix), returns the selected decomposition.");
 
     // Documentation
-    SetDocName("SARDecompositions");
     SetDocLongDescription(
         "From one-band complex images (HH, HV, VH, VV), returns the selected decomposition.\n \n"
         "All the decompositions implemented are intended for the mono-static case (transmitter and receiver are co-located).\n"

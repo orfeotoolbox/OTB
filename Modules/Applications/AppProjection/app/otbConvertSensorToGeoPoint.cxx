@@ -55,7 +55,6 @@ private:
     SetDescription("Sensor to geographic coordinates conversion.");
 
     // Documentation
-    SetDocName("Convert Sensor Point To Geographic Point");
     SetDocLongDescription("This Application converts a sensor point of an input image to a geographic point using the Forward Sensor Model of the input image.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

@@ -60,7 +60,6 @@ private:
     SetDescription("Concatenate a list of images of the same size into a single multi-channel image.");
 
     // Documentation
-    SetDocName("Images Concatenation");
     SetDocLongDescription("Concatenate a list of images of the same size into a single multi-channel image. "
       "It reads the input image list (single or multi-channel) "
       "and generates a single multi-channel image. The channel order is the same as the list.");

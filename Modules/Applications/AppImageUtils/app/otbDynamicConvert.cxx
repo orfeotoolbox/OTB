@@ -73,7 +73,6 @@ private:
     SetName("DynamicConvert");
     SetDescription("Change the pixel type and rescale the image's dynamic");
 
-    SetDocName("Dynamic Conversion");
     SetDocLongDescription(
       "This application performs an image pixel type "
       "conversion (short, ushort, uchar, int, uint, float and double types are "

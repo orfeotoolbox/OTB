@@ -58,7 +58,6 @@ private:
     SetDescription("Concatenate a list of Bursts to provide a whole SAR Deburst Image.");
 
     // Documentation
-    SetDocName("SAR Concatenate Bursts");
     SetDocLongDescription("This application performs a burst concatenation and provides a SAR Deburst Image. "
 			  "It reads the input image list (single bursts) "
 			  "and generates a whole SAR image with deburst operations.");

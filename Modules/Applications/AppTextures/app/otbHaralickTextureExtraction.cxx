@@ -73,7 +73,6 @@ SetName("HaralickTextureExtraction");
 SetDescription("Computes Haralick textural features on the selected channel of the input image");
 
 // Documentation
-SetDocName("Haralick Texture Extraction");
 SetDocLongDescription(
     "This application computes three sets of Haralick features [1][2].\n\n"
 
