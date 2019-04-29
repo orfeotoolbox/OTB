@@ -673,12 +673,31 @@ if(OTB_USE_SHARK)
     -sampler periodic
     -rand 121212
     -nodatalabel 255
-    -outmeans ${TEMP}/apTvClKMeansImageClassificationFilterOutMeans.txt
+    -centroids.out ${TEMP}/apTvClKMeansImageClassificationFilterOutMeans.txt
     -out ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif uint8
     -cleanup 0
     VALID   --compare-image ${NOTOL}
     ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationFilterOutput.tif
     ${TEMP}/apTvClKMeansImageClassificationFilterOutput.tif )
+endif()
+
+if(OTB_USE_SHARK)
+  otb_test_application(NAME apTvClKMeansImageClassification_inputCentroids
+    APP  KMeansClassification
+    OPTIONS -in ${INPUTDATA}/qb_RoadExtract.img
+    -ts 30000
+    -nc 5
+    -maxit 10000
+    -sampler periodic
+    -nodatalabel 255
+    -rand 121212
+    -centroids.in ${INPUTDATA}/Classification/KMeansInputCentroids.txt
+    -out ${TEMP}/apTvClKMeansImageClassificationInputCentroids.tif uint8
+    -cleanup 0
+    
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/apTvClKMeansImageClassificationInputCentroids.tif
+    ${TEMP}/apTvClKMeansImageClassificationInputCentroids.tif )
 endif()
 
 #----------- TrainImagesClassifier TESTS ----------------
