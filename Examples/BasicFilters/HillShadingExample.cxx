@@ -24,18 +24,6 @@
 */
 
 
-// Visualization of digital elevation models (DEM) is often more intuitive by simulating a
-// lighting source and generating the corresponding shadows. This principle is called
-// hill shading.
-//
-// Using a simple functor \doxygen{otb}{HillShadingFunctor} and the DEM image generated
-// using the \doxygen{otb}{DEMToImageGenerator} (refer to \ref{sec:ReadDEM}), you can easily
-// obtain a representation of the DEM. Better yet, using the
-// \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}, combined with the
-// \doxygen{otb}{ReliefColormapFunctor} you can easily generate the classic elevation maps.
-//
-// This example will focus on the shading itself.
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -50,7 +38,6 @@
 
 int main(int argc, char* argv[])
 {
-
   if (argc < 10)
   {
     std::cout << argv[0] << " <output_filename> <output_color_filename> "
@@ -162,21 +149,8 @@ int main(int argc, char* argv[])
 
   writer2->SetInput(multiply->GetOutput());
 
-  try
-  {
-    writer->Update();
-    writer2->Update();
-  }
-  catch (itk::ExceptionObject& excep)
-  {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr << excep << std::endl;
-  }
-  catch (...)
-  {
-    std::cout << "Unknown exception !" << std::endl;
-    return EXIT_FAILURE;
-  }
+  writer->Update();
+  writer2->Update();
 
   otb::WorldFile::Pointer worldFile = otb::WorldFile::New();
   worldFile->SetLonOrigin(origin[0]);
@@ -188,17 +162,4 @@ int main(int argc, char* argv[])
   worldFile->Update();
   worldFile->SetImageFilename(argv[2]);
   worldFile->Update();
-
-  // Figure~\ref{fig:HILL_SHADING} shows the hill shading result from SRTM data.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{HillShadingExample.eps}
-  // \includegraphics[width=0.44\textwidth]{HillShadingColorExample.eps}
-  // \itkcaption[Hill shading]{Hill shading obtained from SRTM data (left) and combined with
-  // the color representation (right)}
-  // \label{fig:HILL_SHADING}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
 }

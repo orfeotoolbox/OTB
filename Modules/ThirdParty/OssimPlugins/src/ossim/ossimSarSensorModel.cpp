@@ -1278,7 +1278,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
       {
          const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-         assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
          std::string prefix(prefix_, pos);
 
          ossimSarSensorModel::CoordinateConversionRecordType coordRecord;
@@ -1311,7 +1310,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
      for (std::size_t idx=0 ; idx!=conversionRecords.size() ; ++idx)
        {
        const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-       assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
        std::string prefix(prefix_, pos);
 
 
