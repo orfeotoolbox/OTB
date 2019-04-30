@@ -52,10 +52,10 @@ protected:
     SetDescription( "Train a regression algorithm based on geometries with "
       "list of features to consider and a predictor." );
 
-    SetDocName( "Train Vector Classifier" );
-    SetDocLongDescription( "This application trains a classifier based on "
-      "labeled geometries and a list of features to consider for "
-      "classification.\nThis application is based on LibSVM, OpenCV Machine "
+    SetDocName( "Train Vector Regression" );
+    SetDocLongDescription( "This application trains a regression algorithm based on "
+      "a predictor geometries and a list of features to consider for "
+      "regression.\nThis application is based on LibSVM, OpenCV Machine "
       "Learning (2.3.1 and later), and Shark ML The output of this application "
       "is a text model file, whose format corresponds to the ML model type "
       "chosen. There is no image nor vector data output.");
