@@ -6,6 +6,12 @@ if %1.==. (
   goto :eof
 )
 
+if %2.==. (
+  echo "No project"
+  call :Help
+  goto :eof
+)
+
 if /I "%1"=="help" (
   call :Help
   goto :eof
@@ -22,17 +28,18 @@ if /I "%1"=="-help" (
 )
 
 set ARCH=%1
-
-if %2.==. (
-  set SHORT_TARGET=10
-) else (
-  set SHORT_TARGET=%2
-)
+set PROJECT=%2
 
 if %3.==. (
+  set SHORT_TARGET=10
+) else (
+  set SHORT_TARGET=%3
+)
+
+if %4.==. (
   set VCVER=14.0
 ) else (
-  set VCVER=%3
+  set VCVER=%4
 )
 
 set TARGET=%SHORT_TARGET%
@@ -48,7 +55,7 @@ set PATH=%PATH%;C:\tools\Python35-%ARCH%\Scripts
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
 :: Setup Clcache
-set CLCACHE_DIR=C:\clcache\%ARCH%-%TARGET%-%VCVER%
+set CLCACHE_DIR=C:\clcache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
 set CLCACHE_HARDLINK=1
 :: set CLCACHE_SERVER=1
 set CLCACHE_CL=
@@ -60,6 +67,9 @@ echo CL path: "%CLCACHE_CL%"
 copy C:\tools\Python35-%ARCH%\Scripts\clcache.exe C:\clcache\cl.exe
 set PATH=C:\clcache;%PATH%
 
+if "%PROJECT%"=="xdk" (
+  call "clcache.exe" -M 3000000000
+)
 :: if we need to change cache max size: clcache -M <size-in-bytes>
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
@@ -72,8 +82,9 @@ goto :eof
 
 :Help
 setlocal
-echo "Usage: dev_env.bat <compiler_arch>  [<target-os>  [<vc_version>]]"
+echo "Usage: dev_env.bat <compiler_arch>  <project>  [<target-os>  [<vc_version>]]"
 echo "  <compiler_arch> : 'x86' | 'x64'"
+echo "  <project>       : 'xdk' | 'otb'"
 echo "  <target-os>     : '8.1' | '10' (default)"
 echo "  <vc_version>    :"
 echo "    '14.20' (i.e. VS 2019)"
