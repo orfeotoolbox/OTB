@@ -66,6 +66,13 @@ protected:
     SetOfficialDocLink();
 
     Superclass::DoInit();
+    
+    AddParameter( ParameterType_Float , "io.mse" , "Mean Square Error" );
+    SetParameterDescription( "io.mse" ,
+      "Mean square error computed with the validation predictors" );
+    SetParameterRole( "io.mse" , Role_Output );
+    this->MandatoryOff( "io.mse" );
+
   }
 
   void DoUpdateParameters() override
@@ -105,6 +112,7 @@ protected:
     auto mse = ComputeMSE(m_ClassificationSamplesWithLabel.labeledListSample.GetPointer(), m_PredictedList.GetPointer() );
 
     otbAppLogINFO("Mean Square Error = "<<mse);
+    this->SetParameterFloat("io.mse",mse);
   }
   
 private:
