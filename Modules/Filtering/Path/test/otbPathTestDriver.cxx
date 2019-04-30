@@ -36,7 +36,6 @@ void RegisterTests()
   REGISTER_TEST(otbOrientationPath);
   REGISTER_TEST(otbPolyLineImageConstIterator);
   REGISTER_TEST(otbRegionImageToRectangularPathListFilter);
-  REGISTER_TEST(otbVectorizationPathListFilter);
   REGISTER_TEST(otbClosePathFunctor);
   REGISTER_TEST(otbPolyLineImageIterator);
 }

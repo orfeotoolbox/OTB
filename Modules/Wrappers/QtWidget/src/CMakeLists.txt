@@ -44,7 +44,6 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetParameterGroup.cxx
   otbWrapperQtWidgetInputFilenameListParameter.cxx
   otbWrapperQtWidgetRAMParameter.cxx
-  otbWrapperQtWidgetProgressReport.cxx
   otbWrapperQtWidgetOutputProcessXMLParameter.cxx
   otbWrapperQtWidgetParameterBase.cxx
   otbWrapperQtWidgetInputImageParameter.cxx
@@ -79,7 +78,6 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetModel.h
   ../include/otbWrapperQtWidgetView.h
   ../include/otbWrapperQtWidgetMainWindow.h
-  ../include/otbWrapperQtWidgetProgressReport.h
   ../include/otbWrapperQtWidgetListViewParameter.h
   ../include/otbQtFileSelectionWidget.h
   ../include/otbQtStringSelectionWidget.h
@@ -101,6 +99,7 @@ set(OTBQtWidget_MOC_HDR
 
 set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
+  appmainwindow.ui
   )
 
 set( OTBQtWidget_RESOURCES
