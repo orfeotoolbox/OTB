@@ -86,14 +86,6 @@ TrainVectorBase<TInputValue, TOutputValue>
     "Only geometries with this field available will be taken into account." );
   this->SetListViewSingleSelectionMode( "cfield", true );
 
-  // Add a new parameter to compute confusion matrix / contingency table
-  this->AddParameter( ParameterType_OutputFilename, "io.confmatout", 
-    "Output confusion matrix or contingency table" );
-  this->SetParameterDescription( "io.confmatout", 
-    "Output file containing the confusion matrix or contingency table (.csv format)."
-    "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
-  this->MandatoryOff( "io.confmatout" );
-
   this->AddParameter(ParameterType_Bool, "v", "Verbose mode");
   this->SetParameterDescription("v", "Verbose mode, display the contingency table result.");
   this->SetParameterInt("v", 1);
