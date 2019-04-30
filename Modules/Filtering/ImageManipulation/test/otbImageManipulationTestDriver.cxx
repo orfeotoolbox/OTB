@@ -51,7 +51,6 @@ void RegisterTests()
   REGISTER_TEST(otbLog10ThresholdedImageFilterTest);
   REGISTER_TEST(otbExtractROIResample);
   REGISTER_TEST(otbLocalGradientVectorImageFilterTest);
-  REGISTER_TEST(otbBinaryImageMinimalBoundingRegionCalculator);
   REGISTER_TEST(otbPerBandVectorImageFilterWithSobelFilter);
   REGISTER_TEST(otbBinaryImageDensityFunction);
   REGISTER_TEST(otbThresholdVectorImageFilterTest);

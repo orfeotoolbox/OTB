@@ -22,10 +22,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbDBOverlapDataNodeFeatureFunction);
   REGISTER_TEST(otbVectorDataExtractROI);
   REGISTER_TEST(otbPolygonCompacityFunctor);
   REGISTER_TEST(otbVectorDataToRandomLineGenerator);
   REGISTER_TEST(otbConcatenateVectorDataFilter);
-  REGISTER_TEST(otbRadiometryHomogenousWithNeighborhoodDataNodeFeatureFunction);
 }

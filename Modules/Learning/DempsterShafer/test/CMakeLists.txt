@@ -24,7 +24,6 @@ set(OTBDempsterShaferTests
 otbDempsterShaferTestDriver.cxx
 otbMassOfBeliefDSApplied.cxx
 otbConfusionMatrixToMassOfBeliefTest.cxx
-otbVectorDataToDSValidatedVectorDataFilter.cxx
 otbDempsterShaferFusionTests.cxx
 otbDSFusionOfClassifiersImageFilterTest.cxx
 otbJointMassOfBeliefFilter.cxx
@@ -84,16 +83,6 @@ otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestKappa COMMAND otbDempster
 otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestRecall COMMAND otbDempsterShaferTestDriver
   otbConfusionMatrixToMassOfBeliefTest
   RECALL)
-
-otb_add_test(NAME fzTvVectorDataToDSValidatedVectorDataFilter COMMAND otbDempsterShaferTestDriver
-  --compare-ogr ${EPSILON_9}
-  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
-  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
-  otbVectorDataToDSValidatedVectorDataFilter
-  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
-  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
-  )
-set_property(TEST fzTvVectorDataToDSValidatedVectorDataFilter PROPERTY DEPENDS fzTvVectorDataToRoadDescriptionFilter)
 
 otb_add_test(NAME fzDSFusionTestConfMatFileVCMTestPrecision COMMAND otbDempsterShaferTestDriver
   otbDempsterShaferFusionConfMatFileTest
