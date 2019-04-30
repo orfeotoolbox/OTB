@@ -991,6 +991,20 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
 
+#----------- TrainVectorRegression TESTS ----------------
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClTrainVectorRegression
+    APP  TrainVectorRegression
+    OPTIONS -io.vd ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+    -feat value_0 value_1 value_2
+    -cfield value_3
+    -classifier rf
+    -io.out ${TEMP}/apTvClTrainVectorRegressionModel.rf
+    VALID   ${ascii_comparison}
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorRegressionModel.rf
+    ${TEMP}/apTvClTrainVectorRegressionModel.rf)
+endif()
+
 #----------- TrainVectorClassifier unsupervised TESTS ----------------
 if(OTB_USE_SHARK)
   otb_test_application(NAME apTvClTrainVectorUnsupervised
