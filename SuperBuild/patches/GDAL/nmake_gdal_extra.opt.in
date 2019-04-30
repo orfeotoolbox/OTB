@@ -110,3 +110,7 @@ NETCDF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\netcdf.lib
 NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
 NETCDF_HAS_NC4 = YES
 NETCDF_HAS_HDF4 = YES
+
+# Binding list. One or several in the following list
+# csharp, java, python
+BINDINGS=python
