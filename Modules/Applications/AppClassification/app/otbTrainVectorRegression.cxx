@@ -61,7 +61,7 @@ protected:
       "chosen. There is no image nor vector data output.");
     SetDocLimitations("None");
     SetDocAuthors( "OTB Team" );
-    SetDocSeeAlso( " " );
+    SetDocSeeAlso( "TrainVectorClassifier" );
 
     SetOfficialDocLink();
 
