@@ -129,7 +129,7 @@ stages:
   #~ dependencies:
     #~ - centos-superbuild-prepare
 
-windows-prepare:
+.windows-prepare:
   extends: .general
   # only: [merge_requests]
   tags:
@@ -142,28 +142,11 @@ windows-prepare:
     GIT_STRATEGY: "clone"
   before_script:
 # This override the previous before_script
-    - git lfs install
     - set GIT_LFS_SKIP_SMUDGE=1
     - git checkout %CI_COMMIT_REF_NAME%
     - set GIT_LFS_SKIP_SMUDGE=0
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-    #~ - set PATH=%PATH%;C:\tools\Git\usr\bin
-    #~ - start-ssh-agent
-    #~ - echo %K8S_SECRET_SSH% > key.txt
-    #~ - ssh-add key.txt
-    #~ - del key.txt
-# This is for debug, we are checking the owner of the ssh key
-    #~ - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-    - call ./CI/dev_env.bat x64
-    #~ - start /b clcache-server.exe
-    - clcache.exe -s
-  script:
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    - clcache.exe -s
-  #~ after_script:
-    #~ - clcache.exe -s
-    #~ - taskkill /f /im clcache-server.exe
+  after_script:
+    - echo No after_script
   artifacts:
     expire_in: 24 hrs
     when: always
@@ -171,3 +154,19 @@ windows-prepare:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
       - sb_branch.txt
+
+windows-10-prepare:
+  extends: .windows-prepare
+  script:
+    - call ./CI/dev_env.bat x64 xdk
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-8-prepare:
+  extends: .windows-prepare
+  script:
+    - call ./CI/dev_env.bat x64 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
