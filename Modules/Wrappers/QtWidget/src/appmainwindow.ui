@@ -171,6 +171,9 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionCopy_command_line"/>
+    <addaction name="actionLoad_from_XML"/>
+    <addaction name="actionSave_to_XML"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -195,31 +198,6 @@
     <string>F1</string>
    </property>
   </action>
-  <action name="actionAboutOTB">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
-  <action name="actionAbout">
-   <property name="text">
-    <string>About</string>
-   </property>
-  </action>
-  <action name="actionView_log">
-   <property name="text">
-    <string>View log</string>
-   </property>
-  </action>
-  <action name="actionLoad_parameters">
-   <property name="text">
-    <string>Load parameters</string>
-   </property>
-  </action>
-  <action name="actionSave_parameters">
-   <property name="text">
-    <string>Save parameters</string>
-   </property>
-  </action>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
@@ -228,14 +206,9 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionReset_parameters">
+  <action name="actionCopy_command_line">
    <property name="text">
-    <string>Reset parameters</string>
-   </property>
-  </action>
-  <action name="actionReset">
-   <property name="text">
-    <string>Reset All</string>
+    <string>Copy command line to clipboard</string>
    </property>
   </action>
   <action name="actionLoad_from_XML">
@@ -246,11 +219,6 @@
   <action name="actionSave_to_XML">
    <property name="text">
     <string>Save to XML</string>
-   </property>
-  </action>
-  <action name="actionCopy_command_line">
-   <property name="text">
-    <string>Copy command line to clipboard</string>
    </property>
   </action>
  </widget>

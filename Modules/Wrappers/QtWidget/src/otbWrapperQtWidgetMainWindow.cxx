@@ -19,11 +19,11 @@
  */
 
 #include "otbWrapperQtWidgetMainWindow.h"
+#include "otbWrapperOutputXML.h"
 
 #include <QtWidgets>
 
 #include "otbWrapperQtWidgetView.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 
 #include "ui_appmainwindow.h"
 
@@ -44,11 +44,13 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   ui->scrollArea->setWidget(gui);
 
   // Connect menu buttons
-  connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
   const auto url = std::string("https://www.orfeo-toolbox.org/CookBook/Applications/app_") + app->GetName() + std::string(".html");
   connect(ui->actionDocumentation, &QAction::triggered, this, [=] { QDesktopServices::openUrl(QUrl(QString::fromStdString(url))); });
 
   connect(ui->actionCopy_command_line, &QAction::triggered, this, &QtMainWindow::CopyCommandLine);
+  connect(ui->actionLoad_from_XML, &QAction::triggered, this, &QtMainWindow::LoadFromXML);
+  connect(ui->actionSave_to_XML, &QAction::triggered, this, &QtMainWindow::SaveToXML);
+  connect(ui->actionQuit, &QAction::triggered, this, &QMainWindow::close);
 
   // Setup execute / cancel button
   ui->executeButton->setDefault(true);
@@ -128,7 +130,7 @@ void QtMainWindow::on_executeButton_clicked()
 void QtMainWindow::CopyCommandLine()
 {
   // Get command line
-  std::string cmdLine = OutputProcessXMLParameter::MakeCommandLine(gui->GetModel()->m_Application);
+  std::string cmdLine = otb::Wrapper::XML::MakeCommandLine(gui->GetModel()->m_Application);
 
   // Copy it to clipboard
   QClipboard* clipboard = QGuiApplication::clipboard();
@@ -136,6 +138,27 @@ void QtMainWindow::CopyCommandLine()
 
   // Also show it in the log
   gui->GetModel()->SendLogINFO(cmdLine);
+}
+
+void QtMainWindow::LoadFromXML()
+{
+  QString filename = QFileDialog::getOpenFileName(this, tr("Load from XML"), "", tr("XML files (*.xml);;All files (*)"));
+
+  if (!filename.isNull())
+  {
+    gui->GetModel()->m_Application->LoadParametersFromXML(filename.toStdString());
+    gui->GetModel()->UpdateGui();
+  }
+}
+
+void QtMainWindow::SaveToXML()
+{
+  QString filename = QFileDialog::getSaveFileName(this, tr("Save to XML"), "", tr("XML files (*.xml);;All files (*)"));
+
+  if (!filename.isNull())
+  {
+    gui->GetModel()->m_Application->SaveParametersToXML(filename.toStdString());
+  }
 }
 
 QtMainWindow::~QtMainWindow()

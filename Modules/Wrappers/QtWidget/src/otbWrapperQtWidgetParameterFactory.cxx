@@ -33,14 +33,12 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
@@ -121,8 +119,6 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(BoolParameter,          QtWidgetBoolParameter)
   CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
   CREATEWIDGET(RAMParameter,            QtWidgetRAMParameter)
-  CREATEWIDGET(OutputProcessXMLParameter,        QtWidgetOutputProcessXMLParameter)
-  CREATEWIDGET(InputProcessXMLParameter,        QtWidgetInputProcessXMLParameter)
 #undef CREATEWIDGET
 
   if (widget)
