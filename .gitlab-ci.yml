@@ -158,15 +158,15 @@ stages:
 windows-10-prepare:
   extends: .windows-prepare
   script:
-    - call ./CI/dev_env.bat x64 xdk
+    - call ./CI/dev_env.bat x64 xdk 10
     - clcache.exe -s
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
-#~ windows-8-prepare:
-  #~ extends: .windows-prepare
-  #~ script:
-    #~ - call ./CI/dev_env.bat x64 xdk 8.1
-    #~ - clcache.exe -s
-    #~ - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    #~ - clcache.exe -s
+windows-8-prepare:
+  extends: .windows-prepare
+  script:
+    - call ./CI/dev_env.bat x64 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
