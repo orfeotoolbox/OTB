@@ -17,16 +17,16 @@ variables:
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
 
-#~ before_script:
-  #~ # make sure LFS hooks are installed
-  #~ - git lfs install
-  #~ # Provision efficiently the local LFS cache before checkout
-  #~ - git lfs fetch origin $CI_COMMIT_SHA
-  #~ # Checkout the expected branch
-  #~ - git checkout $CI_COMMIT_REF_NAME
-#~ 
-#~ after_script:
-  #~ - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+before_script:
+  # make sure LFS hooks are installed
+  - git lfs install
+  # Provision efficiently the local LFS cache before checkout
+  - git lfs fetch origin $CI_COMMIT_SHA
+  # Checkout the expected branch
+  - git checkout $CI_COMMIT_REF_NAME
+
+after_script:
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 stages:
   - precheck
