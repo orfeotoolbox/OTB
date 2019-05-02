@@ -185,55 +185,6 @@ execute_process(
   )
 set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
 
-# setting up the repo
-# StrictHostKeyChecking so we don't have to add the host as a known key
-# -F /dev/null so the agent is not taking a default file ~/.ssh/..
-execute_process(
-  COMMAND ${GIT} "config" "core.sshCommand"
-  "ssh -o StrictHostKeyChecking=no"
-  WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-  RESULT_VARIABLE ssh_res
-  OUTPUT_VARIABLE ssh_out
-  ERROR_VARIABLE ssh_err
-  )
-
-if ( DEBUG )
-  message( "Step 1: ssh")
-  message( "ssh_res = ${ssh_res}" )
-  message( "ssh_out = ${ssh_out}" )
-  message( "ssh_err = ${ssh_err}" )
-endif()
-
-execute_process(
-  COMMAND ${GIT} "config" "user.mail" "otbbot@orfeo-toolbox.org"
-  WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-  RESULT_VARIABLE mail_res
-  OUTPUT_VARIABLE mail_out
-  ERROR_VARIABLE mail_err
-  )
-
-if ( DEBUG )
-  message( "Step 2: mail")
-  message( "mail_res = ${mail_res}" )
-  message( "mail_out = ${mail_out}" )
-  message( "mail_err = ${mail_err}" )
-endif()
-
-execute_process(
-  COMMAND ${GIT} "config" "user.name" "otbbot"
-  WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-  RESULT_VARIABLE name_res
-  OUTPUT_VARIABLE name_out
-  ERROR_VARIABLE name_err
-  )
-
-if ( DEBUG )
-  message( "Step 3: name")
-  message( "name_res = ${name_res}" )
-  message( "name_out = ${name_out}" )
-  message( "name_err = ${name_err}" )
-endif()
-
 # create a branche
 execute_process(
   COMMAND ${GIT} "checkout" "-b" "${BRANCH_NAME}"
@@ -260,9 +211,6 @@ execute_process(
   -- "${CTEST_INSTALL_DIRECTORY}"
   WORKING_DIRECTORY ${OTB_SOURCE_DIR}
   )
-
-
-# In a near futur it might be nice to clean up the mess we made...
 
 if ( DEBUG )
   if (EXISTS "${SB_ARTIFACT_GIT}/${SB_TAR_NAME}")

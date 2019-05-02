@@ -19,8 +19,6 @@ variables:
   GIT_STRATEGY: "clone"
 
 before_script:
-  # make sure LFS hooks are installed
-  - git lfs install
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
@@ -83,17 +81,11 @@ ubuntu-llvm:
   stage: prepare
   before_script:
 # This override the previous before_script
+    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout $CI_COMMIT_REF_NAME
-# We are now doing the git-lfs install
-# This is done after the checkout so we avoid downloading Data
-# But we need it to upload the archive
-    - git-lfs install
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$K8S_SECRET_SSH")
+    - export GIT_LFS_SKIP_SMUDGE=0
 # This is for debug, we are checking the owner of the ssh key
-    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
+    - ssh -T git@gitlab.orfeo-toolbox.org
   after_script:
     - echo "Nothing to do for after_script"
   artifacts:
