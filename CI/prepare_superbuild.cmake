@@ -224,36 +224,36 @@ else()
     message( "ssh_err = ${ssh_err}" )
   endif()
   
-  execute_process(
-    COMMAND ${GIT} "config" "user.mail" "otbbot@orfeo-toolbox.org"
-    WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    RESULT_VARIABLE mail_res
-    OUTPUT_VARIABLE mail_out
-    ERROR_VARIABLE mail_err
-    )
-  
-  if ( DEBUG )
-    message( "Step 2: mail")
-    message( "mail_res = ${mail_res}" )
-    message( "mail_out = ${mail_out}" )
-    message( "mail_err = ${mail_err}" )
-  endif()
-  
-  execute_process(
-    COMMAND ${GIT} "config" "user.name" "otbbot"
-    WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    RESULT_VARIABLE name_res
-    OUTPUT_VARIABLE name_out
-    ERROR_VARIABLE name_err
-    )
-  
-  if ( DEBUG )
-    message( "Step 3: name")
-    message( "name_res = ${name_res}" )
-    message( "name_out = ${name_out}" )
-    message( "name_err = ${name_err}" )
-  endif()
-  
+  #~ execute_process(
+    #~ COMMAND ${GIT} "config" "user.mail" "otbbot@orfeo-toolbox.org"
+    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
+    #~ RESULT_VARIABLE mail_res
+    #~ OUTPUT_VARIABLE mail_out
+    #~ ERROR_VARIABLE mail_err
+    #~ )
+  #~ 
+  #~ if ( DEBUG )
+    #~ message( "Step 2: mail")
+    #~ message( "mail_res = ${mail_res}" )
+    #~ message( "mail_out = ${mail_out}" )
+    #~ message( "mail_err = ${mail_err}" )
+  #~ endif()
+  #~ 
+  #~ execute_process(
+    #~ COMMAND ${GIT} "config" "user.name" "otbbot"
+    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
+    #~ RESULT_VARIABLE name_res
+    #~ OUTPUT_VARIABLE name_out
+    #~ ERROR_VARIABLE name_err
+    #~ )
+  #~ 
+  #~ if ( DEBUG )
+    #~ message( "Step 3: name")
+    #~ message( "name_res = ${name_res}" )
+    #~ message( "name_out = ${name_out}" )
+    #~ message( "name_err = ${name_err}" )
+  #~ endif()
+  #~ 
   # create a branche
   execute_process(
     COMMAND ${GIT} "checkout" "-b" "${BRANCH_NAME}"
