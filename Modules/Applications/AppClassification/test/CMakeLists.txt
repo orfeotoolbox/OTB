@@ -846,9 +846,11 @@ if(OTB_USE_OPENCV)
     -cfield class
     -classifier rf
     -io.out ${TEMP}/apTvClTrainVectorRegressionModel.rf
+    -io.mse ${TEMP}/apTvClTrainVectorRegressionModel.txt
+    TESTENVOPTIONS ${TEMP}/apTvClTrainVectorRegressionModel.txt
     VALID   ${ascii_comparison}
-    ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorRegressionModel.rf
-    ${TEMP}/apTvClTrainVectorRegressionModel.rf)
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorRegressionModel.txt
+    ${TEMP}/apTvClTrainVectorRegressionModel.txt)
 endif()
 
 #----------- TrainVectorClassifier unsupervised TESTS ----------------
