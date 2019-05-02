@@ -78,6 +78,20 @@ echo Generated IMAGE_NAME: %IMAGE_NAME%
 :: setup path to perl, but add it last ... (there is a libstdc++.dll in that folder...)
 set PATH=%PATH%;C:\tools\perl\perl\bin
 
+:: debug section for git
+echo Home dir : %HOMEDRIVE%%HOMEPATH%
+mkdir tmp
+cd tmp
+git clone git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git --branch master --depth 1 sbact
+cd sbact
+git checkout -b test_branch
+echo "v" >foo
+git add foo
+git commit -m "Test commit"
+set GIT_SSH_COMMAND="ssh -vvv"
+git push origin test_branch
+exit /b 1
+
 goto :eof
 
 :Help
