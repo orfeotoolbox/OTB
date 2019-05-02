@@ -243,7 +243,7 @@ inline int
 TrainVectorBase<float, int>
 ::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
 {
-  return(feature.ogr().GetFieldAsInteger( fieldIndex ));
+  return(feature[fieldIndex].GetValue<int>());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -251,7 +251,7 @@ inline TOutputValue
 TrainVectorBase<TInputValue, TOutputValue>
 ::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
 {
-  return(feature.ogr().GetFieldAsDouble( fieldIndex ));
+  return(feature[fieldIndex].GetValue<double>());
 }
 
 template <class TInputValue, class TOutputValue>
@@ -310,7 +310,7 @@ TrainVectorBase<TInputValue, TOutputValue>
         MeasurementType mv;
         mv.SetSize( m_FeaturesInfo.m_NbFeatures );
         for( unsigned int idx = 0; idx < m_FeaturesInfo.m_NbFeatures; ++idx )
-          mv[idx] = feature.ogr().GetFieldAsDouble( featureFieldIndex[idx] );
+          mv[idx] = feature[featureFieldIndex[idx]].GetValue<double>();
 
         input->PushBack( mv );
 
