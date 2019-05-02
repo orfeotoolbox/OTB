@@ -47,9 +47,11 @@ if "%TARGET%"=="10" (
   set TARGET=10.0.17763.0
 )
 
-:: Setup home dir
-set HOMEDRIVE=C:
-set HOMEPATH=\Users\otbbot
+:: Setup home dir (so that ssh configuration works fine)
+if "%USERNAME%"=="otbbot" (
+  set HOMEDRIVE=C:
+  set HOMEPATH=\Users\otbbot
+)
 
 :: Setup Python
 set PATH=%PATH%;C:\tools\Python35-%ARCH%
@@ -71,31 +73,19 @@ echo CL path: "%CLCACHE_CL%"
 copy C:\tools\Python35-%ARCH%\Scripts\clcache.exe C:\clcache\cl.exe
 set PATH=C:\clcache;%PATH%
 
+:: we need to change cache max size: clcache -M <size-in-bytes>
 if "%PROJECT%"=="xdk" (
   call "clcache.exe" -M 3000000000
 )
-:: if we need to change cache max size: clcache -M <size-in-bytes>
+if "%PROJECT%"=="otb" (
+  call "clcache.exe" -M 2000000000
+)
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
 echo Generated IMAGE_NAME: %IMAGE_NAME%
 
 :: setup path to perl, but add it last ... (there is a libstdc++.dll in that folder...)
 set PATH=%PATH%;C:\tools\perl\perl\bin
-
-:: debug section for git
-echo Home dir : %HOMEDRIVE%%HOMEPATH%
-echo User: %USERNAME%
-@echo on
-mkdir tmp
-cd tmp
-git clone git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git --branch master --depth 1 sbact
-cd sbact
-git checkout -b test_branch
-echo "v" >foo
-git add foo
-git commit -m "Test commit"
-git push origin test_branch
-exit /b 1
 
 goto :eof
 
