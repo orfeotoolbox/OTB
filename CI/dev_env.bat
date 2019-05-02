@@ -51,8 +51,8 @@ if "%TARGET%"=="10" (
 if "%USERNAME%"=="otbbot" (
   set HOMEDRIVE=C:
   set HOMEPATH=\Users\otbbot
-  echo Home dir: %HOMEDRIVE%%HOMEPATH%
 )
+echo Home dir: %HOMEDRIVE%%HOMEPATH%
 
 :: Setup Python
 set PATH=%PATH%;C:\tools\Python35-%ARCH%
