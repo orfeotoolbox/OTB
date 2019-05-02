@@ -23,7 +23,7 @@
 #include "otbImageFileWriter.h"
 
 // This example demonstrates the use of the
-// \doxygen{otb}{OrthoRectificationFilter}. This filter is intended to
+// \doxygen{otb}{GenericRSResampleImageFilter}. This filter is intended to
 // orthorectify images which are in a distributor format with the
 // appropriate meta-data describing the sensor model. In this example,
 // we will choose to use an UTM projection for the output image.
@@ -32,7 +32,7 @@
 // proper header files: the one for the ortho-rectification filter and
 // the one defining the different projections available in OTB.
 
-#include "otbOrthoRectificationFilter.h"
+#include "otbGenericRSResampleImageFilter.h"
 #include "otbSpatialReference.h"
 
 int main(int argc, char* argv[])
@@ -66,15 +66,12 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   // We can now proceed to declare the type for the ortho-rectification
-  // filter. The class \doxygen{otb}{OrthoRectificationFilter} is
-  // templated over the input and the output image types as well as over
-  // the cartographic projection. We define therefore the
-  // type of the projection we want, which is an UTM projection for this case.
+  // filter. The class \doxygen{otb}{GenericRSResampleImageFilter} is
+  // templated over the input and the output image types.
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> MapProjectionType;
-  typedef otb::OrthoRectificationFilter<VectorImageType, VectorImageType,
-      MapProjectionType>
+  // Software Guide : BeginCodeSnippet
+
+  typedef otb::GenericRSResampleImageFilter<VectorImageType, VectorImageType>
   OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
@@ -83,10 +80,9 @@ int main(int argc, char* argv[])
   // instantiate the map projection, set the {\em zone} and {\em hemisphere}
   // parameters and pass this projection to the orthorectification filter.
 
-  MapProjectionType::Pointer utmMapProjection = MapProjectionType::New();  
-  utmMapProjection->SetWkt(otb::SpatialReference::FromUTM(atoi(argv[3]),*argv[4]=='N'? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt());
-  std::cout<<utmMapProjection->GetWkt()<<std::endl;
-  orthoRectifFilter->SetMapProjection(utmMapProjection);
+  std::string wkt = otb::SpatialReference::FromUTM(atoi(argv[3]),*argv[4]=='N'? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt();
+  std::cout<<wkt<<std::endl;
+  orthoRectifFilter->SetOutputProjectionRef(wkt);
 
   // We then wire the input image to the orthorectification filter.
 
@@ -128,8 +124,6 @@ int main(int argc, char* argv[])
   // for the writing step.
 
   writer->SetInput(orthoRectifFilter->GetOutput());
-
-  writer->SetAutomaticTiledStreaming();
 
   // Finally, we trigger the pipeline execution by calling the
   // \code{Update()} method on the writer. Please note that the

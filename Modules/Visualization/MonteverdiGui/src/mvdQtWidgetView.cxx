@@ -116,13 +116,6 @@ char const * const
 QtWidgetView
 ::OBJECT_NAME = "mvd::Wrapper::QtWidgetView";
 
-/*****************************************************************************/
-/* STATIC IMPLEMENTATION SECTION                                             */
-
-
-/*****************************************************************************/
-/* CLASS IMPLEMENTATION SECTION                                              */
-/*****************************************************************************/
 QtWidgetView
 ::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
 		QWidget* p,
@@ -131,10 +124,6 @@ QtWidgetView
 {
   setObjectName( QtWidgetView::OBJECT_NAME );
 
-  m_IconPathDone = std::string("<img src=\":/icons/done\" width=\"16\" height=\"16\" />");
-  m_IconPathFailed = std::string("<img src=\":/icons/failed\" width=\"16\" height=\"16\" />");
-
-  //
   // need to be connected to the end of a process
   QObject::connect(
     GetModel(),
@@ -158,10 +147,7 @@ QtWidgetView
 {
   QWidget * widget = otb::Wrapper::QtWidgetView::CreateInputWidgets();
 
-  otb::Wrapper::QtWidgetParameterBase *paramWidget =
-    widget->findChild<otb::Wrapper::QtWidgetParameterBase*>();
-
-  SetupParameterWidgets(paramWidget);
+  SetupParameterWidgets(widget);
 
   return widget;
 }
@@ -211,197 +197,90 @@ QtWidgetView
   initialize( qobject_cast< FileSelectionInitializer::argument_type >( widget ) );
 }
 
-/*******************************************************************************/
-/* SLOTS                                                                       */
-/*******************************************************************************/
-void
-QtWidgetView
-::OnExecButtonClicked()
+bool QtWidgetView::BeforeExecuteButtonClicked()
 {
-  if ( !IsRunning() )
+  assert(GetModel() != NULL);
+  assert(GetModel()->GetApplication() != NULL);
+  assert(I18nCoreApplication::Instance() != NULL);
+
+  // Get layer-stack, if any
+  StackedLayerModel* layerStack = I18nCoreApplication::Instance()->GetModel<StackedLayerModel>();
+
+  otb::Wrapper::Application::Pointer otbApp(GetModel()->GetApplication());
+
+  // Check output parameters of OTB-application
+  StringVector paramKeys(otbApp->GetParametersKeys());
+  QStringList  filenames1;
+
+  KeyLayerAccumulator::KeyLayerPairList layers;
+
+  for (StringVector::const_iterator it(paramKeys.begin()); it != paramKeys.end(); ++it)
+  {
+    if (otbApp->IsParameterEnabled(*it, true) && otbApp->HasValue(*it))
     {
-    assert( GetModel()!=NULL );
-    assert( GetModel()->GetApplication()!=NULL );
-  
-  
-    assert( I18nCoreApplication::Instance()!=NULL );
-  
-    //
-    // Get layer-stack, if any.
-    StackedLayerModel * layerStack =
-      I18nCoreApplication::Instance()->GetModel< StackedLayerModel >();
-  
-    otb::Wrapper::Application::Pointer otbApp( GetModel()->GetApplication() );
-  
-    //
-    // Check output parameters of OTB-application.
-    StringVector paramKeys( otbApp->GetParametersKeys() );
-    QStringList filenames1;
-  
-    KeyLayerAccumulator::KeyLayerPairList layers;
-    QStringList filenames2;
-  
-    for( StringVector::const_iterator it( paramKeys.begin() );
-         it!=paramKeys.end();
-         ++it )
+      otb::Wrapper::Parameter::Pointer param(otbApp->GetParameterByKey(*it));
+      assert(!param.IsNull());
+
+      std::string filename;
+
+      switch (otbApp->GetParameterType(*it))
       {
-      if( otbApp->IsParameterEnabled( *it, true ) &&
-          otbApp->HasValue( *it ) )
-        {
-        otb::Wrapper::Parameter::Pointer param( otbApp->GetParameterByKey( *it ) );
-        assert( !param.IsNull() );
-  
-        // qDebug()
-        // 	<< it->c_str() << ": type" << otbApp->GetParameterType( *it );
-  
-        // const char* filename = NULL;
-        std::string filename;
-  
-        switch( otbApp->GetParameterType( *it ) )
-    {
-    case otb::Wrapper::ParameterType_OutputFilename:
-      filename =
-        otb::DynamicCast< otb::Wrapper::OutputFilenameParameter >( param )
-        ->GetValue();
-      break;
-    //
-    // FILENAME.
-    //
-    // IMAGE.
-    case otb::Wrapper::ParameterType_OutputImage:
-      filename =
-        otb::DynamicCast< otb::Wrapper::OutputImageParameter >( param )
-        ->GetFileName();
-      break;
-    //
-    // VECTOR-DATA.
-    case otb::Wrapper::ParameterType_OutputVectorData:
-      filename =
-        otb::DynamicCast< otb::Wrapper::OutputVectorDataParameter >( param )
-        ->GetFileName();
-      break;
-    //
-    // NONE.
-    default:
-      break;
-    }
-  
-        if( QFileInfo( filename.c_str() ).exists() )
-    filenames1.push_back( filename.c_str() );
-  
-        if( layerStack!=NULL )
-    {
-    KeyLayerAccumulator accumulator(
-      std::for_each(
-        layerStack->Begin(),
-        layerStack->End(), KeyLayerAccumulator( filename, layers )
-      )
-    );
-  
-    if( accumulator.GetCount()>0 )
-      filenames2.push_back( filename.c_str() );
-    }
-        }
+      case otb::Wrapper::ParameterType_OutputFilename:
+        filename = otb::DynamicCast<otb::Wrapper::OutputFilenameParameter>(param)->GetValue();
+        break;
+
+      case otb::Wrapper::ParameterType_OutputImage:
+        filename = otb::DynamicCast<otb::Wrapper::OutputImageParameter>(param)->GetFileName();
+        break;
+
+      case otb::Wrapper::ParameterType_OutputVectorData:
+        filename = otb::DynamicCast<otb::Wrapper::OutputVectorDataParameter>(param)->GetFileName();
+        break;
+
+      default:
+        break;
       }
-  
-    {
-    QString message;
-  
-    if( filenames1.size()==1 )
+
+      if (QFileInfo(filename.c_str()).exists())
+        filenames1.push_back(filename.c_str());
+
+      if (layerStack != NULL)
       {
-      // qDebug()
-      //   << it->c_str() << ":" << QString( filename.c_str() );
-  
-      message =
-        tr( "Are you sure you want to overwrite file '%1'?" )
-        .arg( filenames1.front() );
-      }
-    else if( filenames1.size()>1 )
-      {
-      message =
-        tr( "Following files will be overwritten. Are you sure you want to continue?\n- %1" )
-        .arg( filenames1.join( "\n- " ) );
-      }
-  
-    if( !message.isEmpty() )
-      {
-      QMessageBox::StandardButton button =
-        QMessageBox::question(
-    this,
-    PROJECT_NAME,
-    message,
-    QMessageBox::Yes | QMessageBox::No,
-    QMessageBox::No
-        );
-  
-      if( button==QMessageBox::No )
-        return;
-      }
-    }
-  
-    {
-    QString message;
-  
-    if( filenames2.size()==1 )
-      {
-      // qDebug()
-      //   << it->c_str() << ":" << QString( filename.c_str() );
-  
-      message =
-        tr( "File '%1' is being viewed in " PROJECT_NAME " and will be concurrently overwritten by running this %2. File will be removed from layer-stack before running %2 and reloaded after.\n\nDo you want to continue?" )
-        .arg( filenames2.front() )
-        .arg( otbApp->GetDocName() );
-      }
-    else if( filenames2.size()>1 )
-      {
-      message =
-        tr( "Following files are being viewed in " PROJECT_NAME " and will be concurrently overwritter by running %2. Files will be removed from layer-stack before running %2. Do you want to continue?\n- %1" )
-        .arg( filenames2.join( "\n- " ) )
-        .arg( otbApp->GetDocName() );
-      }
-  
-    if( !message.isEmpty() )
-      {
-      QMessageBox::StandardButton button =
-        QMessageBox::question(
-    this,
-    PROJECT_NAME,
-    message,
-    QMessageBox::Yes | QMessageBox::No,
-    QMessageBox::No
-        );
-  
-      if( button==QMessageBox::No )
-        return;
-  
-      while( !layers.empty() )
-        {
-        layerStack->Delete( layers.front().first );
-  
-        layers.pop_front();
-        }
+        KeyLayerAccumulator accumulator(std::for_each(layerStack->Begin(), layerStack->End(), KeyLayerAccumulator(filename, layers)));
       }
     }
   }
 
-  otb::Wrapper::QtWidgetView::OnExecButtonClicked();
-}
+  {
+    QString message;
 
-/*******************************************************************************/
-void
-QtWidgetView
-::OnExceptionRaised( QString what  )
-{
-  qWarning() << what;
+    if (filenames1.size() == 1)
+    {
+      message = tr("Are you sure you want to overwrite file '%1'?").arg(filenames1.front());
+    }
+    else if (filenames1.size() > 1)
+    {
+      message = tr("Following files will be overwritten. Are you sure you want to continue?\n- %1").arg(filenames1.join("\n- "));
+    }
 
-#if defined( OTB_DEBUG )
-  QMessageBox::warning(
-    this,
-    PROJECT_NAME,
-    what,
-    QMessageBox::Ok
-  );
-#endif
+    if (!message.isEmpty())
+    {
+      QMessageBox::StandardButton button = QMessageBox::question(this, PROJECT_NAME, message, QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+      if (button == QMessageBox::No)
+        return false;
+    }
+  }
+
+  // Delete from layer stack the images that will be overwritten and reloaded
+  while (!layers.empty())
+  {
+    layerStack->Delete(layers.front().first);
+
+    layers.pop_front();
+  }
+
+  return true;
 }
 
 /*******************************************************************************/
@@ -428,18 +307,6 @@ QtWidgetView
 
     return;
     }
-
-  /*
-  // Removed as per MVDX-259.
-  QMessageBox::information(
-    this,
-    PROJECT_NAME,
-    tr( "'%1' has succeeded.\n"
-	"Result(s) will be imported as dataset(s).\n")
-    .arg( otbApp->GetName() ),
-    QMessageBox::Ok
-  );
-  */
 
   CountType count = 0;
 

@@ -194,7 +194,7 @@ protected:
    */
   double Value(BandNameType band, const itk::VariableLengthVector<TInput>& input) const
   {
-    assert(m_RequiredBands[band] && "Retrieving value for a band that is not in the required bands list");
+    assert(m_RequiredBands[static_cast<size_t>(band)] && "Retrieving value for a band that is not in the required bands list");
     return static_cast<double>(input[UncheckedBandIndex(band) - 1]);
   }
 
