@@ -170,3 +170,27 @@ windows-8-prepare:
     - clcache.exe -s
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
+
+windows-10-build:
+  extends: .common-build
+  tags:
+    - windows
+  script:
+    - call ./CI/dev_env.bat x64 otb 10
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+  dependencies:
+    - windows-10-prepare
+
+windows-8-build:
+  extends: .common-build
+  tags:
+    - windows
+  script:
+    - call ./CI/dev_env.bat x64 otb 8.1
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+  dependencies:
+    - windows-8-prepare
