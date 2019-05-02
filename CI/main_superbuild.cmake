@@ -96,8 +96,13 @@ endif()
 ###########################################################################
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )
-set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
-set ( CTEST_BUILD_FLAGS "-j8" )
+set ( CTEST_CMAKE_GENERATOR "Ninja" )
+# Detect site
+if(NOT DEFINED IMAGE_NAME)
+  if(DEFINED ENV{IMAGE_NAME})
+    set(IMAGE_NAME $ENV{IMAGE_NAME})
+  endif()
+endif()
 set ( CTEST_SITE "${IMAGE_NAME}" )
 
 # Find the build name and CI profile
@@ -119,12 +124,24 @@ set ( CONFIGURE_OPTIONS
 set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 
+if(WIN32)
+  file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
+  file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
+  set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
+  set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
+  set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
+  # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
+  set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
+else()
+  set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
+endif()
+
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
 set( PROJ_LIB "${XDK_PATH}/share" )
 set( CTEST_ENVIRONMENT
-"PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}
+"PATH=$ENV{PATH}
 ")
 # It seems that we do not need that
 # GDAL_DATA= GDAL_DATA
