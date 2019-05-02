@@ -47,6 +47,10 @@ if "%TARGET%"=="10" (
   set TARGET=10.0.17763.0
 )
 
+:: Setup home dir
+set HOMEDRIVE=C:
+set HOMEPATH=\Users\otbbot
+
 :: Setup Python
 set PATH=%PATH%;C:\tools\Python35-%ARCH%
 set PATH=%PATH%;C:\tools\Python35-%ARCH%\Scripts
@@ -80,6 +84,8 @@ set PATH=%PATH%;C:\tools\perl\perl\bin
 
 :: debug section for git
 echo Home dir : %HOMEDRIVE%%HOMEPATH%
+echo User: %USERNAME%
+@echo on
 mkdir tmp
 cd tmp
 git clone git@gitlab.orfeo-toolbox.org:gbonnefille/superbuild-artifact.git --branch master --depth 1 sbact
@@ -88,7 +94,6 @@ git checkout -b test_branch
 echo "v" >foo
 git add foo
 git commit -m "Test commit"
-set GIT_SSH_COMMAND="ssh -vvv"
 git push origin test_branch
 exit /b 1
 
