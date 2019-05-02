@@ -10,6 +10,7 @@
 
 variables:
   BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
@@ -20,9 +21,6 @@ variables:
 before_script:
   # make sure LFS hooks are installed
   - git lfs install
-  # Setup user.
-  - git config --global user.email "otbbot@orfeo-toolbox.org"
-  - git config --global user.name "otbbot"
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
@@ -44,28 +42,25 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-# WiP: Disabled to fasten CI packaging development.
-# fast-build:
-#   extends: .general
-#   only: [merge_requests, branches]
-#   stage: precheck
-#   image: $CI_REGISTRY/gpasero/otb/otb-install-ubuntu-native
-#   before_script:
-#     - export GIT_LFS_SKIP_SMUDGE=1
-#     - git checkout $CI_COMMIT_REF_NAME
-#     - python3 CI/check_twin_pipelines.py
-#   script:
-#     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-#     - ccache -s
+fast-build:
+  extends: .general
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout $CI_COMMIT_REF_NAME
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
-
-##
-## Native builds section
 
 .common-build:
   extends: .general
   only: [merge_requests]
   stage: build
+  dependencies: []
 
 debian-build:
   extends: .common-build
@@ -83,11 +78,6 @@ ubuntu-llvm:
       - build/CookBook-*-html.tar.gz
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
-
-
-##
-## SuperBuild XDK build section.
-##
 
 .common-prepare:
   extends: .general
@@ -127,17 +117,9 @@ centos-superbuild-prepare:
   script:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
-# TODO: CTT: Include osx-superbuild-prepare here.
-
-
-##
-## SuperBuild builds section.
-
 .superbuild-build:
   only: [merge_requests, branches]
   extends: .common-build
-  # dependencies:
-  #   - superbuild-prepare
   artifacts:
     expire_in: 1 week
     paths:
@@ -162,5 +144,3 @@ centos-superbuild-build:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
-
-# TODO: CTT: Include osx-superbuild-build here.

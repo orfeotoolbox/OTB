@@ -21,11 +21,115 @@
 #ifndef otbWaterSqrtSpectralAngleImageFilter_h
 #define otbWaterSqrtSpectralAngleImageFilter_h
 
-#include "otbWaterIndicesFunctor.h"
+#include "otbSqrtSpectralAngleFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
 
 namespace otb
 {
+
+namespace Functor
+{
+/** \class WaterSqrtSpectralAngleFunctor
+ *  \brief This functor uses a spectral angle with a particular reference pixel.
+ *
+ *
+ *  \ingroup Functor
+ * \ingroup Radiometry
+ *
+ * \ingroup OTBIndices
+ */
+template <class TInputVectorPixel, class TOutputPixel>
+class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
+{
+public:
+  typedef WaterSqrtSpectralAngleFunctor                             Self;
+  typedef SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
+  typedef TInputVectorPixel                                         InputVectorPixelType;
+  WaterSqrtSpectralAngleFunctor()
+  {
+
+    // Set the channels indices
+    m_BlueIndex  = 0;
+    m_GreenIndex = 1;
+    m_RedIndex   = 2;
+    m_NIRIndex   = 3;
+
+    // Set reference water value
+    InputVectorPixelType reference;
+    reference.SetSize(4);
+    reference[0] = 136.0;
+    reference[1] = 132.0;
+    reference[2] = 47.0;
+    reference[3] = 24.0;
+    this->SetReferenceWaterPixel(reference);
+  }
+  ~WaterSqrtSpectralAngleFunctor() override
+  {
+  }
+
+  /** Set Reference Pixel */
+  void SetReferenceWaterPixel(InputVectorPixelType ref)
+  {
+    if (ref.GetSize() != 4)
+    {
+    }
+    InputVectorPixelType reference;
+    reference.SetSize(4);
+    reference[m_BlueIndex]  = ref[0];
+    reference[m_GreenIndex] = ref[1];
+    reference[m_RedIndex]   = ref[2];
+    reference[m_NIRIndex]   = ref[3];
+    this->SetReferencePixel(reference);
+  }
+
+  /** Getters and setters */
+  void SetBlueChannel(unsigned int channel)
+  {
+    m_BlueIndex = channel;
+  }
+  unsigned int GetBlueChannel() const
+  {
+    return m_BlueIndex;
+  }
+  void SetGreenChannel(unsigned int channel)
+  {
+    m_GreenIndex = channel;
+  }
+  unsigned int GetGreenChannel() const
+  {
+    return m_GreenIndex;
+  }
+  void SetRedChannel(unsigned int channel)
+  {
+    m_RedIndex = channel;
+  }
+  unsigned int GetRedChannel() const
+  {
+    return m_RedIndex;
+  }
+  void SetNIRChannel(unsigned int channel)
+  {
+    m_NIRIndex = channel;
+  }
+  unsigned int GetNIRChannel() const
+  {
+    return m_NIRIndex;
+  }
+
+protected:
+  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const override
+  {
+    return static_cast<TOutputPixel>(Superclass::Evaluate(inPix));
+  }
+
+  /** Channels */
+  int m_BlueIndex;
+  int m_GreenIndex;
+  int m_RedIndex;
+  int m_NIRIndex;
+};
+} // End namespace Functor
+
 
 /** \class WaterSqrtSpectralAngleImageFilter
  *  \brief Compute a radiometric water indice
@@ -46,7 +150,6 @@ namespace otb
  *
  * \ingroup OTBIndices
  */
-
 template <class TInputVectorImage, class TOutputImage,
     class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
         typename TInputVectorImage::PixelType,

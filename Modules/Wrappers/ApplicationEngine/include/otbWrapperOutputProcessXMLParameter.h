@@ -105,6 +105,8 @@ public:
 
   TiXmlElement* ParseApplication(Application::Pointer app);
 
+  static std::string MakeCommandLine(otb::Wrapper::Application::Pointer application);
+
 protected:
 
   OutputProcessXMLParameter();

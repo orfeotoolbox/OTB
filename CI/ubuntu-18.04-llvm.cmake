@@ -49,6 +49,7 @@ OTB_DOXYGEN_ITK_DOXYGEN_URL:STRING=\"https://itk.org/Doxygen413/html\"
   # See otb-devutils/Scripts/tagfile_fix.py
   message(STATUS "Get resources for Doxygen build ...")
   execute_process(COMMAND wget https://www.orfeo-toolbox.org/packages/archives/Doxygen/InsightDoxygenDocTag-4.13.0.gz
-                  COMMAND gzip -d InsightDoxygenDocTag-4.13.0.gz
+                  WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY})
+  execute_process(COMMAND gzip -d InsightDoxygenDocTag-4.13.0.gz
                   WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY})
 endif()

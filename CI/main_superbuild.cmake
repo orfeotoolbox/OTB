@@ -17,14 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This script is a prototype for the future CI, it may evolve rapidly in a near future
 
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
-# This script is a prototype for the future CI, it may evolve rapidly in a near future
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
-get_filename_component(CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY)
 
 set ( DEBUG "1" )
 ###########################################################################
@@ -57,7 +55,7 @@ set( GIT "${CTEST_GIT_COMMAND}" )
 execute_process(
   COMMAND ${GIT} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
   "--depth" "1" "superbuild-artifact"
-  WORKING_DIRECTORY ${CI_PROJ_DIR}
+  WORKING_DIRECTORY ${OTB_SOURCE_DIR}
   RESULT_VARIABLE clone_res
   OUTPUT_VARIABLE clone_out
   ERROR_VARIABLE clone_err
@@ -78,7 +76,7 @@ endif()
 set (CMAKE_COMMAND "cmake")
 execute_process(
   COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
-  "${CI_PROJ_DIR}/superbuild-artifact/SuperBuild_Install.tar"
+  "${OTB_SOURCE_DIR}/superbuild-artifact/SuperBuild_Install.tar"
   RESULT_VARIABLE tar_res
   OUTPUT_VARIABLE tar_out
   ERROR_VARIABLE tar_err
@@ -96,9 +94,9 @@ set( XDK_PATH "${CI_ROOT_DIR}/xdk")
 
 if ( DEBUG )
   if ( EXISTS "${XDK_PATH}")
-    message("Tar file exists at ${XDK_PATH}")
+    message("Xdk folder exists at ${XDK_PATH}")
   else()
-    message("Something went wrong no tar file in ${XDK_PATH}")
+    message("Something went wrong no folder in ${XDK_PATH}")
   endif()
 endif()
 
@@ -125,7 +123,7 @@ set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 set (CONFIGURE_OPTIONS  "")
-include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
+include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # For superbuild we need remote module 
 foreach(remote_module SertitObject Mosaic otbGRM DiapOTBModule OTBTemporalGapFilling)
@@ -137,20 +135,17 @@ endforeach()
 set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
 
-# # Hack because there is no more superbuild available (LIBKML)
-# set ( CONFIGURE_OPTIONS
-#   "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
-
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
 set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
 set( PROJ_LIB "${XDK_PATH}/share" )
 set( CTEST_ENVIRONMENT
 "PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}
-GDAL_DATA= GDAL_DATA
-GEOTIFF_CSV= GEOTIFF_CSV
-PROJ_LIB= PROJ_LIB
 ")
+# It seems that we do not need that
+# GDAL_DATA= GDAL_DATA
+# GEOTIFF_CSV= GEOTIFF_CSV
+# PROJ_LIB= PROJ_LIB
 
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)

@@ -24,7 +24,7 @@ otb_module(OTBAppIndices
   DEPENDS
     OTBIndices
     OTBApplicationEngine
-    OTBObjectList
+    OTBFunctor
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
