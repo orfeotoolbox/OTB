@@ -171,8 +171,17 @@ windows-8-prepare:
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
-windows-10-build:
+.common-windows-build:
   extends: .common-build
+  before_script:
+    - git lfs fetch origin %CI_COMMIT_SHA%
+    - git checkout %CI_COMMIT_REF_NAME%
+  after_script:
+    - call ./CI/dev_env.bat x64 otb
+    - python3 ./CI/cdash_handler.py %CI_COMMIT_SHA% %CI_PROJECT_ID% %CI_PROJECT_DIR% %K8S_SECRET_CDASH%
+
+windows-10-build:
+  extends: .common-windows-build
   tags:
     - windows
   script:
@@ -184,7 +193,7 @@ windows-10-build:
     - windows-10-prepare
 
 windows-8-build:
-  extends: .common-build
+  extends: .common-windows-build
   tags:
     - windows
   script:
