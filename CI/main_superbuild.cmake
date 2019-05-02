@@ -126,6 +126,13 @@ set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
+
+# For superbuild we need remote module 
+foreach(remote_module SertitObject Mosaic otbGRM DiapOTBModule)
+    set ( CONFIGURE_OPTIONS 
+      "${CONFIGURE_OPTIONS}-DModule_${remote_module}:BOOL=ON;")
+endforeach()
+
 # SuperBuild case : one more configure option
 set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
