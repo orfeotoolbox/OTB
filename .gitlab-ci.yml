@@ -9,7 +9,8 @@
 # GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
 
 variables:
-  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/gbonnefille/otb-build-env
+  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
@@ -135,11 +136,6 @@ stages:
   tags:
     - windows
   stage: prepare
-  variables:
-    GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
-    GIT_DEPTH: "3"
-    GIT_CHECKOUT: "false"
-    GIT_STRATEGY: "clone"
   before_script:
 # This override the previous before_script
     - set GIT_LFS_SKIP_SMUDGE=1
@@ -178,7 +174,7 @@ windows-8-prepare:
     - git checkout %CI_COMMIT_REF_NAME%
   after_script:
     - call ./CI/dev_env.bat x64 otb
-    - python3 ./CI/cdash_handler.py %CI_COMMIT_SHA% %CI_PROJECT_ID% %CI_PROJECT_DIR% %K8S_SECRET_CDASH%
+    - python ./CI/cdash_handler.py %CI_COMMIT_SHA% %CI_PROJECT_ID% %CI_PROJECT_DIR% %K8S_SECRET_CDASH%
 
 windows-10-build:
   extends: .common-windows-build
