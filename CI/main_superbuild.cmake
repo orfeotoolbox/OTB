@@ -149,7 +149,7 @@ set( CTEST_ENVIRONMENT
 # PROJ_LIB= PROJ_LIB
 
 # Sources are already checked out : do nothing for update
-set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+set(CTEST_GIT_UPDATE_CUSTOM "${CMAKE_COMMAND}" "-E" "echo" "No update")
 
 ctest_start (Experimental TRACK CI_Build)
 
