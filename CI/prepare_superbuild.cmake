@@ -208,21 +208,21 @@ else()
   # setting up the repo
   # StrictHostKeyChecking so we don't have to add the host as a known key
   # -F /dev/null so the agent is not taking a default file ~/.ssh/..
-  execute_process(
-    COMMAND ${GIT} "config" "core.sshCommand"
-    "ssh -o StrictHostKeyChecking=no -F /dev/null"
-    WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    RESULT_VARIABLE ssh_res
-    OUTPUT_VARIABLE ssh_out
-    ERROR_VARIABLE ssh_err
-    )
-  
-  if ( DEBUG )
-    message( "Step 1: ssh")
-    message( "ssh_res = ${ssh_res}" )
-    message( "ssh_out = ${ssh_out}" )
-    message( "ssh_err = ${ssh_err}" )
-  endif()
+  #~ execute_process(
+    #~ COMMAND ${GIT} "config" "core.sshCommand"
+    #~ "ssh -o StrictHostKeyChecking=no -F /dev/null"
+    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
+    #~ RESULT_VARIABLE ssh_res
+    #~ OUTPUT_VARIABLE ssh_out
+    #~ ERROR_VARIABLE ssh_err
+    #~ )
+  #~ 
+  #~ if ( DEBUG )
+    #~ message( "Step 1: ssh")
+    #~ message( "ssh_res = ${ssh_res}" )
+    #~ message( "ssh_out = ${ssh_out}" )
+    #~ message( "ssh_err = ${ssh_err}" )
+  #~ endif()
   
   #~ execute_process(
     #~ COMMAND ${GIT} "config" "user.mail" "otbbot@orfeo-toolbox.org"
