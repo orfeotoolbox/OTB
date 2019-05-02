@@ -80,18 +80,18 @@ protected:
     Superclass::DoUpdateParameters();
   }
   
-  double ComputeMSE(TargetListSampleType* list1, TargetListSampleType* list2)
+  double ComputeMSE(const TargetListSampleType& list1, const TargetListSampleType& list2)
   {
-    assert(list1->Size() == list2->Size());
+    assert(list1.Size() == list2.Size());
     double mse = 0.;
-    for (TargetListSampleType::InstanceIdentifier i=0; i<list1->Size() ; ++i)
+    for (TargetListSampleType::InstanceIdentifier i=0; i<list1.Size() ; ++i)
     {
-      auto elem1 = list1->GetMeasurementVector(i);
-      auto elem2 = list2->GetMeasurementVector(i);
+      auto elem1 = list1.GetMeasurementVector(i);
+      auto elem2 = list2.GetMeasurementVector(i);
       
       mse += (elem1[0] - elem2[0]) * (elem1[0] - elem2[0]);
     }
-    mse /= static_cast<double>(list1->Size());
+    mse /= static_cast<double>(list1.Size());
     return mse;
   }
   
@@ -109,7 +109,7 @@ protected:
     
     otbAppLogINFO("Computing training performances");
     
-    auto mse = ComputeMSE(m_ClassificationSamplesWithLabel.labeledListSample.GetPointer(), m_PredictedList.GetPointer() );
+    auto mse = ComputeMSE(*m_ClassificationSamplesWithLabel.labeledListSample, *m_PredictedList );
 
     otbAppLogINFO("Mean Square Error = "<<mse);
     this->SetParameterFloat("io.mse",mse);
