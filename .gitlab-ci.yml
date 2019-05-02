@@ -52,12 +52,12 @@ stages:
   #~ script:
     #~ - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     #~ - ccache -s
-#~ 
-#~ .common-build:
-  #~ extends: .general
+
+.common-build:
+  extends: .general
   #~ only: [merge_requests]
-  #~ stage: build
-#~ 
+  stage: build
+
 #~ debian-build:
   #~ extends: .common-build
   #~ image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
