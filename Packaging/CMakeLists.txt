@@ -58,7 +58,6 @@ find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
 find_program(ZIP_EXECUTABLE NAMES 7z 7za)
 
-#install prefix is same as SUPERBUILD_INSTALL_DIR. could be changed later
 if ( NOT CMAKE_INSTALL_PREFIX )
   set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
 endif()
