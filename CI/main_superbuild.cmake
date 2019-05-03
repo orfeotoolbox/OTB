@@ -130,23 +130,26 @@ if(WIN32)
   set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
   set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
   set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
+  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\share\\gdal" )
+  set(ENV{GEOTIFF_CSV} "${XDK_PATH_NATIVE}\\share\\epsg_csv" )
+  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share" )
   # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
   set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
+  set( CTEST_ENVIRONMENT
+"PATH=$ENV{PATH}
+GDAL_DATA=$ENV{GDAL_DATA}
+GEOTIFF_CSV=$ENV{GEOTIFF_CSV}
+PROJ_LIB=$ENV{PROJ_LIB}
+")
 else()
   set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
-endif()
-
-# FIX ME this part might platform dependent
-set( GDAL_DATA "${XDK_PATH}/share/gdal" )
-set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
-set( PROJ_LIB "${XDK_PATH}/share" )
-set( CTEST_ENVIRONMENT
+  #~ set( GDAL_DATA "${XDK_PATH}/share/gdal" )
+  #~ set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
+  #~ set( PROJ_LIB "${XDK_PATH}/share" )
+  set( CTEST_ENVIRONMENT
 "PATH=$ENV{PATH}
 ")
-# It seems that we do not need that
-# GDAL_DATA= GDAL_DATA
-# GEOTIFF_CSV= GEOTIFF_CSV
-# PROJ_LIB= PROJ_LIB
+endif()
 
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM "${CMAKE_COMMAND}" "-E" "echo" "No update")
