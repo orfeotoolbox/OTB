@@ -282,6 +282,11 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
+  if (m_Application->IsDeprecated())
+  {
+    m_Application->GetLogger()->Warning("This application is deprecated and will be removed in a future OTB release.\n");
+  }
+
   return true;
 }
 
@@ -583,6 +588,12 @@ void CommandLineLauncher::DisplayHelp(bool longHelp)
 {
   std::cerr<<std::endl;
   std::cerr << "This is the "<<m_Application->GetDocName() << " ("<<m_Application->GetName()<<") application, version " << OTB_VERSION_STRING <<std::endl<<std::endl;
+
+  if (m_Application->IsDeprecated())
+  {
+    std::cerr << "WARNING: This application is deprecated, it will be removed in a future OTB release." << std::endl;
+    std::cerr << std::endl;
+  }
 
   std::cerr << m_Application->GetDescription() << std::endl;
 
