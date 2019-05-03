@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
+include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
+
 # This script is a prototype for the future CI, it may evolve rapidly in a near future
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 set (ENV{LANG} "C") # Only ascii output
@@ -26,33 +28,49 @@ set (ENV{LANG} "C") # Only ascii output
 set (CTEST_BUILD_CONFIGURATION "Release")
 set (CTEST_CMAKE_GENERATOR "Ninja")
 
-# Find the build name and CI profile
-set(ci_profile wip)
-set(ci_mr_source "$ENV{CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}")
-set(ci_mr_target "$ENV{CI_MERGE_REQUEST_TARGET_BRANCH_NAME}")
-set(ci_mr_iid "$ENV{CI_MERGE_REQUEST_IID}")
-set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
-set (CTEST_BUILD_NAME "$ENV{CI_COMMIT_SHORT_SHA}")
-if(ci_mr_source AND ci_mr_target AND ci_mr_iid)
-  set (CTEST_BUILD_NAME "${ci_mr_source} (MR ${ci_mr_iid})")
-  set(ci_profile mr)
-elseif(ci_ref_name)
-  set (CTEST_BUILD_NAME "${ci_ref_name}")
-  if("${ci_ref_name}" STREQUAL "develop")
-    set(ci_profile develop)
-  elseif("${ci_ref_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
-    set(ci_profile release)
-  endif()
+# detect short sha
+if(NOT DEFINED ENV{CI_COMMIT_SHORT_SHA})
+  execute_process(COMMAND git log -1 --pretty=format:%h
+                  WORKING_DIRECTORY ${OTB_SOURCE_DIR}
+                  OUTPUT_VARIABLE ci_short_sha)
+else()
+  set(ci_short_sha "$ENV{CI_COMMIT_SHORT_SHA}")
 endif()
 
-#Warning, this variable is used in cdash_status.py. If change from 
-# ${IMAGE_NAME} to something else do not forget to change it.
+# Find the build name and CI profile
+set_dash_build_name()
+
+# set pipelines to enable documentation
+set(ci_cookbook_profiles mr develop release)
+set(ci_doxygen_profiles mr develop release)
+list(FIND ci_cookbook_profiles ${ci_profile} ci_do_cookbook)
+list(FIND ci_doxygen_profiles ${ci_profile} ci_do_doxygen)
+
+# Detect site
+if(NOT DEFINED IMAGE_NAME)
+  if(DEFINED ENV{IMAGE_NAME})
+    set(IMAGE_NAME $ENV{IMAGE_NAME})
+  endif()
+endif()
 set (CTEST_SITE "${IMAGE_NAME}")
+
+# Detect "skip testing"
+if(DEFINED ENV{CI_SKIP_TESTING})
+  set(ci_skip_testing 1)
+endif()
 
 # Directory variable
 set (CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}")
-set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
-set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
+if(BUILD_DIR)
+  set (CTEST_BINARY_DIRECTORY "${BUILD_DIR}")
+else()
+  set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
+endif()
+if(INSTALL_DIR)
+  set (CTEST_INSTALL_DIRECTORY "${INSTALL_DIR}")
+else()
+  set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
+endif()
 set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
@@ -64,8 +82,9 @@ set (OTB_LARGEINPUT_ROOT "") # todo
 message(STATUS "CI profile : ${ci_profile}")
 
 #The following file set the CONFIGURE_OPTIONS variable
+set (ENABLE_DOXYGEN OFF)
 set (CONFIGURE_OPTIONS  "")
-include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
+include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)
@@ -76,7 +95,7 @@ find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 # End of configuration
 
 
-ctest_start (Experimental TRACK Experimental)
+ctest_start (Experimental TRACK CI_Build)
 
 ctest_update()
 
@@ -88,6 +107,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     )
 
 if ( NOT _configure_rv EQUAL 0 )
+  # stop processing here
   ctest_submit()
   message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
@@ -98,19 +118,30 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             )
 
 if ( NOT _build_rv EQUAL 0 )
-  ctest_submit()
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
-# Uncomment when ready for test
-# ctest_test(PARALLEL_LEVEL 8
-#            RETURN_VALUE _test_rv
-#            CAPTURE_CMAKE_ERROR _test_error
-#            )
+if(ci_skip_testing)
+  message(STATUS "Skip testing")
+  set(_test_rv 0)
+else()
+  ctest_test(PARALLEL_LEVEL 8
+             RETURN_VALUE _test_rv
+             CAPTURE_CMAKE_ERROR _test_error
+             )
+endif()
 
-# if ( NOT _test_rv EQUAL 0 )
-#   ctest_submit()
-#   message( SEND_ERROR "An error occurs during ctest_test.")
-# endif()
+if ( NOT _test_rv EQUAL 0 )
+  message( SEND_ERROR "An error occurs during ctest_test.")
+endif()
 
 ctest_submit()
+
+if(ENABLE_DOXYGEN)
+  # compile doxygen
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              TARGET Documentation
+              RETURN_VALUE _doxy_rv
+              CAPTURE_CMAKE_ERROR _doxy_error
+              )
+endif()

@@ -44,10 +44,6 @@ class OTBQtWidget_EXPORT QtWidgetView :
 {
   Q_OBJECT
 
-  Q_PROPERTY( bool isClosable
-	      READ IsClosable
-	      WRITE SetClosable );
-
 public:
 
   static char const * const OBJECT_NAME;
@@ -66,12 +62,15 @@ public:
   /** \brief Model Accessor */
   QtWidgetModel* GetModel() const;
 
-  bool IsClosable() const;
+  virtual bool BeforeExecuteButtonClicked()
+  {
+    return true;
+  }
 
-  void UnhandledException(QString message);
+  void Disable();
+  void Enable();
 
 signals:
-  void QuitSignal();
   void ExecuteAndWriteOutput();
   void Stop();
   void OTBApplicationOutputImageChanged( const QString &, const QString &);
@@ -83,24 +82,12 @@ protected:
 
   virtual QWidget* CreateInputWidgets();
 
-  // QWidget overloads.
-  void closeEvent( QCloseEvent * event ) override;
-
-protected:
-
-  /** Html section for 'Done' icon */
-  std::string m_IconPathDone;
-
-  /** Html section for 'Failed' icon */
-  std::string m_IconPathFailed;
-
 protected slots:
 
-  virtual void OnExecButtonClicked();
+  virtual void OnExecButtonClicked()
+  {
+  }
 
-  virtual void OnExceptionRaised( QString what );
-
-// Private methods.
 private:
 
   QtWidgetView(const QtWidgetView&) = delete;
@@ -108,29 +95,10 @@ private:
 
   QWidget* CreateFooter();
 
-// Private attributes.
 private:
-
   otb::Wrapper::QtWidgetModel* m_Model;
 
-  QPushButton* m_ExecButton;
-  QPushButton* m_QuitButton;
-  QShortcut* m_QuitShortcut;
-  QLabel* m_Message;
-  QTextEdit *m_LogText;
-  QTabWidget *m_TabWidget;
-
-  bool m_IsClosable : 1;
   bool m_IsRunning;
-
-private slots:
-  void UpdateMessageAfterExecution(int status);
-  void UpdateMessageAfterApplicationReady(bool val);
-
-  void OnProgressReportBegin();
-  void OnProgressReportEnd( int status );
-  void SetClosable( bool );
-
 };
 
 } // end namespace 'Wrapper'

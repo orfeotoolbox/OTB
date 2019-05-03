@@ -37,6 +37,8 @@
 #include "ossim/projection/ossimRpcProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "ossim/base/ossimTieGptSet.h"
+#include "ossim/projection/ossimRpcSolver.h"
+#include "ossim/imaging/ossimImageGeometry.h"
 
 #pragma GCC diagnostic pop
 #else
@@ -46,6 +48,8 @@
 #include "ossim/projection/ossimRpcProjection.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #include "ossim/base/ossimTieGptSet.h"
+#include "ossim/projection/ossimRpcSolver.h"
+#include "ossim/imaging/ossimImageGeometry.h"
 
 #endif
 
@@ -221,8 +225,36 @@ double SensorModelAdapter::Optimize()
       }
     else if (simpleRpcModel != nullptr)
       {
-      // Call optimize fit
-      precision  = simpleRpcModel->optimizeFit(*m_TiePoints);
+      ossimRefPtr<ossimRpcSolver> rpcSolver = new ossimRpcSolver(false, false);
+
+      std::vector<ossimDpt> imagePoints;
+      std::vector<ossimGpt> groundPoints;
+      m_TiePoints->getSlaveMasterPoints(imagePoints, groundPoints);
+      rpcSolver->solveCoefficients(imagePoints, groundPoints);
+
+#if OTB_OSSIM_VERSION < 20200
+      ossimRefPtr<ossimRpcProjection> rpcProjection = dynamic_cast<ossimRpcProjection*>(rpcSolver->createRpcProjection()->getProjection());
+#else
+      ossimRefPtr<ossimRpcModel> rpcProjection = rpcSolver->getRpcModel();
+#endif
+
+      if (!rpcProjection)
+        {
+        itkExceptionMacro(<< "Optimize(): Failed to solve RPC!");
+        }
+
+      ossimKeywordlist geom;
+      rpcProjection->saveState(geom);
+#if OTB_OSSIM_VERSION < 20200
+      simpleRpcModel->loadState(geom);
+#else
+      // we have to convert simpleRpcModel into an ossimRpcModel
+      delete m_SensorModel;
+      m_SensorModel = new ossimRpcModel;
+      m_SensorModel->loadState(geom);
+#endif
+
+      precision = std::pow(rpcSolver->getRmsError(), 2);
       }
     }
 
@@ -237,6 +269,18 @@ bool SensorModelAdapter::ReadGeomFile(const std::string & infile)
   geom.add(infile.c_str());
 
   m_SensorModel = ossimSensorModelFactory::instance()->createProjection(geom);
+
+  // search for ossimRpcProjection (not in ossimSensorModelFactory since OSSIM 2)
+  const char * typeValue = geom.find(0, "type");
+  if (m_SensorModel == nullptr && strcmp(typeValue, "ossimRpcProjection") == 0)
+    {
+    m_SensorModel = new ossimRpcProjection;
+    if (!m_SensorModel->loadState(geom))
+      {
+      delete m_SensorModel;
+      m_SensorModel = nullptr;
+      }
+    }
 
   if (m_SensorModel == nullptr)
     {

@@ -90,7 +90,7 @@ namespace Wrapper
  */
 template< typename W >
 void
-SetupForFilenameDrop( W* widget, const char* text =NULL );
+SetupForFilenameDrop( W* widget );
 
 /**
  */
@@ -376,7 +376,7 @@ FileSelectionInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -387,7 +387,7 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -409,7 +409,7 @@ InputFilenameInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -431,7 +431,7 @@ InputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -453,7 +453,7 @@ InputProcessXMLInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -494,7 +494,7 @@ OutputImageInitializer
 
   if( m_Prefix.isEmpty() )
     {
-    SetupForFilenameDrop( widget, "You can drop filename here." );
+    SetupForFilenameDrop( widget );
 
     assert( qApp!=NULL );
     assert( !qApp->arguments().empty() );
@@ -518,7 +518,7 @@ OutputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
@@ -534,7 +534,7 @@ OutputFilenameInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
@@ -550,7 +550,7 @@ OutputProcessXMLInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
@@ -592,7 +592,7 @@ ParameterListInitializer
 /*****************************************************************************/
 template< typename W >
 void
-SetupForFilenameDrop( W* widget, const char* text )
+SetupForFilenameDrop( W* widget )
 {
   assert( widget!=NULL );
 
@@ -602,15 +602,12 @@ SetupForFilenameDrop( W* widget, const char* text )
   // Setup widget.
   bool signalsBlocked = lineEdit->blockSignals( true );
   {
-  if( text!=NULL )
-    {
     lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
-        text
+        "You can drop a file here"
       )
     );
-    }
 
   // lineEdit->setReadOnly( true );
 

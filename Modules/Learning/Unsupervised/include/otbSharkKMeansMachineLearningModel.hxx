@@ -35,11 +35,10 @@
 
 #include "otb_shark.h"
 #include "otbSharkUtils.h"
-#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h" //normalize
 #include "shark/Algorithms/KMeans.h" //k-means algorithm
 #include "shark/Models/Clustering/HardClusteringModel.h"
 #include "shark/Models/Clustering/SoftClusteringModel.h"
-#include "shark/Algorithms/Trainers/NormalizeComponentsUnitVariance.h"
+#include <shark/Data/Csv.h> //load the csv file
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -52,7 +51,7 @@ namespace otb
 template<class TInputValue, class TOutputValue>
 SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::SharkKMeansMachineLearningModel() :
-        m_Normalized( false ), m_K(2), m_MaximumNumberOfIterations( 10 )
+        m_K(2), m_MaximumNumberOfIterations( 10 )
 {
   // Default set HardClusteringModel
   this->m_ConfidenceIndex = true;
@@ -77,25 +76,9 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
   otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
   shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
 
-  // Normalized input value if necessary
-  if( m_Normalized )
-    data = NormalizeData( data );
-
   // Use a Hard Clustering Model for classification
   shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
   m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
-}
-
-template<class TInputValue, class TOutputValue>
-template<typename DataType>
-DataType
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::NormalizeData(const DataType &data) const
-{
-  shark::Normalizer<> normalizer;
-  shark::NormalizeComponentsUnitVariance<> normalizingTrainer( true );//zero mean
-  normalizingTrainer.train( normalizer, data );
-  return normalizer( data );
 }
 
 template<class TInputValue, class TOutputValue>
@@ -256,6 +239,14 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
 ::CanWriteFile(const std::string & itkNotUsed( file ))
 {
   return true;
+}
+
+template<class TInputValue, class TOutputValue>
+void
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
+::ExportCentroids(const std::string & filename)
+{
+  shark::exportCSV(m_Centroids.centroids(), filename, ' ');
 }
 
 template<class TInputValue, class TOutputValue>
