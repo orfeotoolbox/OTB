@@ -17,6 +17,7 @@ variables:
   GIT_CHECKOUT: "false"
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
+  CI_DEBUG_TRACE: "true"
 
 before_script:
   # Provision efficiently the local LFS cache before checkout
