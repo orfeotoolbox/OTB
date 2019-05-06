@@ -365,7 +365,7 @@ def render_deprecation_string(app):
 def render_application(appname, allapps):
     "Render app to rst"
 
-    app = otbApplication.Registry.CreateApplication(appname)
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
     # TODO: remove this when bug 440 is fixed
     app.Init()
@@ -388,7 +388,7 @@ def render_application(appname, allapps):
     return output
 
 def GetApplicationTags(appname):
-     app = otbApplication.Registry.CreateApplication(appname)
+     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
      return app.GetDocTags()
 
 def GenerateRstForApplications(rst_dir):
