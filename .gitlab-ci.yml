@@ -85,7 +85,8 @@ ubuntu-llvm:
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
 # This is for debug, we are checking the owner of the ssh key
-    - ssh -T git@gitlab.orfeo-toolbox.org
+    - cat ~/.ssh/known_hosts
+    - ssh -vvv -T git@gitlab.orfeo-toolbox.org
   after_script:
     - echo "Nothing to do for after_script"
   artifacts:
