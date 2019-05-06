@@ -356,6 +356,12 @@ def make_links(text, allapps):
     rep = {appname: ":ref:`{}`".format(appname) for appname in allapps}
     return multireplace(text, rep)
 
+def render_deprecation_string(app):
+    if app.IsDeprecated():
+        return ("This application is deprecated and will be removed in a future release.")
+    else:
+        return("")
+
 def render_application(appname, allapps):
     "Render app to rst"
 
@@ -368,6 +374,7 @@ def render_application(appname, allapps):
 
     output = template_application.format(
         label=appname,
+        deprecation_string=render_deprecation_string(app),
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
