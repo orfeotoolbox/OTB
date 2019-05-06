@@ -17,7 +17,6 @@ variables:
   GIT_CHECKOUT: "false"
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
-  CI_DEBUG_TRACE: "true"
 
 before_script:
   # Provision efficiently the local LFS cache before checkout
@@ -86,7 +85,7 @@ ubuntu-llvm:
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
 # This is for debug, we are checking the owner of the ssh key
-    - ls -al ~/
+    - ls -al "/root"
     - cat ~/.ssh/known_hosts
     - ssh -vvv -T git@gitlab.orfeo-toolbox.org
   after_script:
