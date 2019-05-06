@@ -34,6 +34,13 @@
     <property name="bottomMargin">
      <number>12</number>
     </property>
+    <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+     <widget class="QLabel" name="deprecation">
+      <property name="text">
+       <string>Deprecation status</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
