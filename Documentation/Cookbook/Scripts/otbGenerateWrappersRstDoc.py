@@ -413,13 +413,13 @@ def GenerateRstForApplications(rst_dir):
     for appName in appNames:
 
         # Get application first tag
-        tags = GetApplicationTags(appName)
+        tags = list(GetApplicationTags(appName))
+        if "Deprecated" in tags:
+            tags.remove("Deprecated")
         if not tags or len(tags) == 0:
             raise RuntimeError("No tags for application: " + appName)
-        if "Deprecated" in tags:
-            tag = "Deprecated"
-        else:
-            tag = tags[0]
+
+        tag = tags[0]
         tag_ = tag.replace(" ", "_")
 
         # Add it to the index (i.e. https://www.orfeo-toolbox.org/CookBook/Applications.html)
