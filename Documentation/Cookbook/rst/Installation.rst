@@ -152,3 +152,15 @@ following repositories with these command-lines:
     http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 
 and then add the OTB packages as shown above.
+
+
+Archlinux
+~~~~~~~~~~
+
+Package is in AUR (Arch User Repository).
+You will then need to run (if you use yaourt, you could use trizen instead):
+
+::
+
+    yaourt -S orfeo-toolbox
+
