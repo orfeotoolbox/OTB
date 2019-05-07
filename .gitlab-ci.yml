@@ -91,7 +91,6 @@ ubuntu-llvm:
     - export GIT_LFS_SKIP_SMUDGE=0
 # This is for debug, we are checking the owner of the ssh key
     - ls -al "/root"
-    - cat ~/.ssh/known_hosts
     - ssh -vvv -T git@gitlab.orfeo-toolbox.org
   after_script:
     - echo "Nothing to do for after_script"
