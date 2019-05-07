@@ -47,7 +47,6 @@ fast-build:
   before_script:
     - whoami
     - ls -al "/root"
-    - cat ~/.ssh/known_hosts
     - ssh -vvv -T git@gitlab.orfeo-toolbox.org
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
