@@ -25,8 +25,6 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 set (ENV{LANG} "C") # Only ascii output
 
 get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
-get_filename_component( CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY )
-get_filename_component( CI_ROOT_DIR ${CI_PROJ_DIR} DIRECTORY )
 
 set ( DEBUG "1" )
 
@@ -57,7 +55,7 @@ set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 set ( CONFIGURE_OPTIONS
 "-DCMAKE_INSTALL_PREFIX=${CTEST_INSTALL_DIRECTORY};\
 -DOTB_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
--DSUPERBUILD_INSTALL_DIR=${CI_ROOT_DIR}/xdk;\
+-DSUPERBUILD_INSTALL_DIR=${OTB_SOURCE_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR}/build;" )
 
 # Look for a GIT command-line client.
