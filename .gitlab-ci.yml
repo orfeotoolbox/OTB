@@ -24,7 +24,7 @@ before_script:
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
-  - git checkout $CI_COMMIT_REF_NAME
+  - git checkout -f -q $CI_COMMIT_SHA
 
 after_script:
   - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
@@ -49,7 +49,7 @@ fast-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout $CI_COMMIT_REF_NAME
+    - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
@@ -85,7 +85,7 @@ ubuntu-llvm:
   stage: prepare
   before_script:
 # This override the previous before_script
-    - git checkout $CI_COMMIT_REF_NAME
+    - git checkout -f -q $CI_COMMIT_SHA
 # We are now doing the git-lfs install
 # This is done after the checkout so we avoid downloading Data
 # But we need it to upload the archive
