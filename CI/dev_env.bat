@@ -59,7 +59,7 @@ set PATH=%PATH%;C:\tools\Python35-%ARCH%
 set PATH=%PATH%;C:\tools\Python35-%ARCH%\Scripts
 
 :: Setup GL dlls
-set PATH=%PATH%;C:\tools\GL\%ARCH%
+set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
 
 :: Setup compiler
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
