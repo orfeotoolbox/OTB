@@ -32,18 +32,18 @@ namespace Wrapper
 namespace XML
 {
 
-TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value = "");
+OTBApplicationEngine_EXPORT TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value = "");
 
-std::string pixelTypeToString(ImagePixelType pixType);
+OTBApplicationEngine_EXPORT std::string pixelTypeToString(ImagePixelType pixType);
 
-void Write(const std::string& filename, Application::Pointer application);
+OTBApplicationEngine_EXPORT void Write(const std::string& filename, Application::Pointer application);
 
-TiXmlElement* ParseApplication(Application::Pointer app);
+OTBApplicationEngine_EXPORT TiXmlElement* ParseApplication(Application::Pointer app);
 
-std::string MakeCommandLine(otb::Wrapper::Application::Pointer application);
+OTBApplicationEngine_EXPORT std::string MakeCommandLine(otb::Wrapper::Application::Pointer application);
 
 /** Recursive function to parse a group parameter */
-void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string& group);
+OTBApplicationEngine_EXPORT void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string& group);
 
 } // namespace XML
 } // End namespace Wrapper

@@ -33,12 +33,12 @@ namespace Wrapper
 namespace XML
 {
 
-const std::string GetChildNodeTextOf(TiXmlElement* parentElement, std::string key);
+OTBApplicationEngine_EXPORT const std::string GetChildNodeTextOf(TiXmlElement* parentElement, std::string key);
 
-int Read(const std::string& filename, Application::Pointer application);
+OTBApplicationEngine_EXPORT int Read(const std::string& filename, Application::Pointer application);
 
 /* copied from Utilities/tinyXMLlib/tinyxml.cpp. Must have a FIX inside tinyxml.cpp */
-FILE* TiXmlFOpen(const char* filename, const char* mode);
+OTBApplicationEngine_EXPORT FILE* TiXmlFOpen(const char* filename, const char* mode);
 
 } // namespace XML
 } // End namespace Wrapper
