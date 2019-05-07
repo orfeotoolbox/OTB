@@ -56,9 +56,9 @@ protected:
     SetDocLongDescription( "This application trains a regression algorithm based on "
       "a predictor geometries and a list of features to consider for "
       "regression.\nThis application is based on LibSVM, OpenCV Machine "
-      "Learning (2.3.1 and later), and Shark ML The output of this application "
+      "Learning (2.3.1 and later), and Shark ML. The output of this application "
       "is a text model file, whose format corresponds to the ML model type "
-      "chosen. There is no image nor vector data output.");
+      "chosen. There is no image or vector data output.");
     SetDocLimitations("None");
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( "TrainVectorClassifier" );
