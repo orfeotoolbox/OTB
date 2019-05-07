@@ -358,13 +358,14 @@ def make_links(text, allapps):
 
 def render_deprecation_string(app):
     if app.IsDeprecated():
-        return ("This application is deprecated and will be removed in a future release.")
+        return "This application is deprecated and will be removed in a future release."
     else:
-        return("")
+        return ""
 
 def render_application(appname, allapps):
     "Render app to rst"
 
+    # Create the application without logger to avoid the deprecation warning log
     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
     # TODO: remove this when bug 440 is fixed
@@ -388,8 +389,9 @@ def render_application(appname, allapps):
     return output
 
 def GetApplicationTags(appname):
-     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
-     return app.GetDocTags()
+    # Create the application without logger to avoid the deprecation warning log
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
+    return app.GetDocTags()
 
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
