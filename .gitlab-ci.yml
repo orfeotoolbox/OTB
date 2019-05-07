@@ -81,7 +81,7 @@ ubuntu-llvm:
 
 .common-prepare:
   extends: .general
-  only: [merge_requests, branches]
+  only: [merge_requests]
   stage: prepare
   before_script:
 # This override the previous before_script
@@ -118,7 +118,7 @@ centos-superbuild-prepare:
     - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
 .superbuild-build:
-  only: [merge_requests, branches]
+  only: [merge_requests]
   extends: .common-build
   artifacts:
     expire_in: 1 week
