@@ -74,7 +74,7 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   if (app->IsDeprecated())
   {
     ui->deprecation->setVisible(true);
-    ui->deprecation->setText("<font color='red'>This application is deprecated and will be removed in a future release.</font>");
+    ui->deprecation->setText("<font color='#E65100'>This application is deprecated and will be removed in a future release.</font>");
   }
   else
   {
