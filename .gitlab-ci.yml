@@ -45,6 +45,10 @@ fast-build:
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
+    - whoami
+    - ls -al "/root"
+    - cat ~/.ssh/known_hosts
+    - ssh -vvv -T git@gitlab.orfeo-toolbox.org
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
@@ -81,6 +85,7 @@ ubuntu-llvm:
   stage: prepare
   before_script:
 # This override the previous before_script
+    - whoami
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
