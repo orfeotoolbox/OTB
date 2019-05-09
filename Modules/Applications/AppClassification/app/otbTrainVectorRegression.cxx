@@ -52,7 +52,6 @@ protected:
     SetDescription( "Train a regression algorithm based on geometries with "
       "list of features to consider and a predictor." );
 
-    SetDocName( "Train Vector Regression" );
     SetDocLongDescription( "This application trains a regression algorithm based on "
       "a predictor geometries and a list of features to consider for "
       "regression.\nThis application is based on LibSVM, OpenCV Machine "
