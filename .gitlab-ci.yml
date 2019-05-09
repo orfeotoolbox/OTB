@@ -48,7 +48,7 @@ fast-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout $CI_COMMIT_REF_NAME
+    - git checkout $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
