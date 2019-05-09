@@ -24,7 +24,7 @@ before_script:
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
-  - git checkout $CI_COMMIT_REF_NAME
+  - git checkout -f -q $CI_COMMIT_SHA
 
 after_script:
   - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH

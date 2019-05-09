@@ -59,7 +59,7 @@ private:
                                   "Input minimum and maximum values is automatically computed for all image bands.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("DynamicConvert");
 
     AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);

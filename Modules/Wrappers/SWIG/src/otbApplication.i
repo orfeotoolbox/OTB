@@ -225,6 +225,7 @@ public:
   unsigned long itk::Object::AddObserver(const EventObject & event, 
                                           Command * command);
 
+  bool IsDeprecated();
 
 #if SWIGPYTHON
   %extend 
@@ -901,6 +902,8 @@ public:
         application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
         if application is not None:
             application.SetupLogger()
+            if application.IsDeprecated():
+                application.GetLogger().Warning("This application is deprecated and will be removed in a future OTB release")
         return application
   }
   #else

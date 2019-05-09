@@ -256,6 +256,11 @@ void Application::AddDocTag(const std::string & tag)
     }
 }
 
+bool Application::IsDeprecated()
+{
+  return std::find(m_DocTags.begin(), m_DocTags.end(), Tags::Deprecated) != m_DocTags.end();
+}
+
 DocExampleStructure::Pointer Application::GetDocExample()
 {
   if (!IsInitialized())
