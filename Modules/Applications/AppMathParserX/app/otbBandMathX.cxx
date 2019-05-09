@@ -146,8 +146,8 @@ private:
       "  - mean\n"
       "  - var\n"
       "  - median\n"
-      "  - min\n"
-      "  - max\n"
+      "  - vmin\n"
+      "  - vmax\n"
       "  - etc.\n\n"
 
       "For instance, if ``im1`` represents the pixel of a 3 bands image::\n\n"
