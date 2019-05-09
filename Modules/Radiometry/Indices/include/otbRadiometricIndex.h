@@ -57,6 +57,11 @@ template <typename TInput, typename TOutput>
 class RadiometricIndex
 {
 public:
+  // Necessary to be used as an abstract base class in RadiometricIndices app
+  virtual ~RadiometricIndex()
+  {
+  }
+
   /// Types for input/output
   using InputType  = TInput;
   using PixelType  = itk::VariableLengthVector<InputType>;
