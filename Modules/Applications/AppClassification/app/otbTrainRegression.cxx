@@ -271,8 +271,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
       elem.Fill(0.0);
       for (unsigned int i=0 ; i<nbCols ; ++i)
         {
-        iss.str(words[i]);
-        iss >> elem[i];
+          elem[i] = std::stod(words[i]);
         }
       outputList->PushBack(elem);
       }

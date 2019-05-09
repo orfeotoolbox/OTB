@@ -29,11 +29,11 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainVectorClassifier : public TrainVectorBase
+class TrainVectorClassifier : public TrainVectorBase<float, int>
 {
 public:
   typedef TrainVectorClassifier Self;
-  typedef TrainVectorBase Superclass;
+  typedef TrainVectorBase<float, int> Superclass;
   typedef itk::SmartPointer<Self> Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   itkNewMacro( Self )
@@ -66,13 +66,20 @@ protected:
       "Learning (2.3.1 and later), and Shark ML The output of this application "
       "is a text model file, whose format corresponds to the ML model type "
       "chosen. There is no image nor vector data output.");
-    SetDocLimitations("");
+    SetDocLimitations("None");
     SetDocAuthors( "OTB Team" );
     SetDocSeeAlso( " " );
 
     SetOfficialDocLink();
 
     Superclass::DoInit();
+
+    // Add a new parameter to compute confusion matrix / contingency table
+    this->AddParameter(ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency table");
+    this->SetParameterDescription("io.confmatout",
+                                  "Output file containing the confusion matrix or contingency table (.csv format)."
+                                  "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output.");
+    this->MandatoryOff("io.confmatout");
   }
 
   void DoUpdateParameters() override
