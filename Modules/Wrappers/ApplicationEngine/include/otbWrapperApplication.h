@@ -669,6 +669,9 @@ public:
 
   void AddDocTag(const std::string&);
 
+  /** return wether the application has the "deprecated tag or not */
+  bool IsDeprecated();
+
   DocExampleStructure::Pointer GetDocExample();
   unsigned int GetNumberOfExamples();
   std::string GetExampleComment(unsigned int id);

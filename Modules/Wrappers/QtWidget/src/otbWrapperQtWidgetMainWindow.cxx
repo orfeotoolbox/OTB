@@ -70,6 +70,18 @@ QtMainWindow::QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget*
   // Setup the progress bar to observe the model
   ui->progressBar->SetModel(gui->GetModel());
 
+  // Fill and display the deprecation status label if needed, or hide it.
+  if (app->IsDeprecated())
+  {
+    ui->deprecation->setVisible(true);
+    ui->deprecation->setText("<font color='#E65100'>This application is deprecated and will be removed in a future release.</font>");
+  }
+  else
+  {
+    ui->deprecation->setVisible(false);
+    ui->deprecation->setText("");
+  }
+
   // Connect application progress text to the QLabel
   connect(ui->progressBar, &QtWidgetSimpleProgressReport::SetText, ui->message, &QLabel::setText);
 
