@@ -73,15 +73,13 @@ protected:
     SetOfficialDocLink();
 
     Superclass::DoInit();
-    
-    // Add a new parameter to compute confusion matrix / contingency table
-    this->AddParameter( ParameterType_OutputFilename, "io.confmatout", 
-      "Output confusion matrix or contingency table" );
-    this->SetParameterDescription( "io.confmatout", 
-      "Output file containing the confusion matrix or contingency table (.csv format)."
-      "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output." );
-    this->MandatoryOff( "io.confmatout" );
 
+    // Add a new parameter to compute confusion matrix / contingency table
+    this->AddParameter(ParameterType_OutputFilename, "io.confmatout", "Output confusion matrix or contingency table");
+    this->SetParameterDescription("io.confmatout",
+                                  "Output file containing the confusion matrix or contingency table (.csv format)."
+                                  "The contingency table is output when we unsupervised algorithms is used otherwise the confusion matrix is output.");
+    this->MandatoryOff("io.confmatout");
   }
 
   void DoUpdateParameters() override

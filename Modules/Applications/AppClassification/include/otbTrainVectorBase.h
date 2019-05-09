@@ -62,8 +62,8 @@ public:
   /** Standard macro */
   itkTypeMacro(Self, Superclass);
 
-  typedef typename Superclass::SampleType SampleType;
-  typedef typename Superclass::ListSampleType ListSampleType;
+  typedef typename Superclass::SampleType           SampleType;
+  typedef typename Superclass::ListSampleType       ListSampleType;
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
   typedef double ValueType;
@@ -87,7 +87,7 @@ protected:
   class SamplesWithLabel
   {
   public:
-    typename ListSampleType::Pointer listSample;
+    typename ListSampleType::Pointer       listSample;
     typename TargetListSampleType::Pointer labeledListSample;
     SamplesWithLabel()
     {
@@ -190,8 +190,7 @@ private:
   /**
    * Get the field of the input feature corresponding to the input field
    */
-  inline TOutputValue GetFeatureField(const ogr::Feature & feature, int field);
-
+  inline TOutputValue GetFeatureField(const ogr::Feature& feature, int field);
 };
 
 }
