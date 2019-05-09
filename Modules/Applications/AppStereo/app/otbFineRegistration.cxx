@@ -118,7 +118,6 @@ private:
     SetName("FineRegistration");
     SetDescription("Estimate disparity map between two images.");
 
-    SetDocName("Fine Registration");
     SetDocLongDescription("This application computes a disparity map between "
       "two images that correspond to the same scene. It is intended for case "
       "where small misregistration between images should be estimated and fixed"

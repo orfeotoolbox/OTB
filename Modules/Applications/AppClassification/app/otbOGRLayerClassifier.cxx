@@ -60,7 +60,6 @@ private:
     SetName("OGRLayerClassifier");
     SetDescription("Classify an OGR layer based on a machine learning model and a list of features to consider.");
 
-    SetDocName("OGRLayerClassifier");
     SetDocLongDescription("This application will apply a trained machine learning model on the selected feature to get a classification of each geometry contained in an OGR layer. The list of feature must match the list used for training. The predicted label is written in the user defined field for each geometry.");
     SetDocLimitations("Experimental. Only shapefiles are supported for now.");
     SetDocAuthors("David Youssefi during internship at CNES");

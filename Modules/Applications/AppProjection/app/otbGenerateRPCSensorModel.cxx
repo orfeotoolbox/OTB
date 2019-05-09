@@ -62,7 +62,6 @@ private:
     SetName("GenerateRPCSensorModel");
     SetDescription("Generate a RPC sensor model from a list of Ground Control Points.");
 
-    SetDocName("Generate a RPC sensor model");
     SetDocLongDescription( "This application generates a RPC sensor model from a list of Ground Control Points. "
                                    "At least 20 points are required for estimation without elevation support, "
                                    "and 40 points for estimation with elevation support. "

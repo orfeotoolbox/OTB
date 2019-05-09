@@ -73,7 +73,6 @@ private:
     SetDescription("Compute radiometric indices.");
 
     // Documentation
-    SetDocName("Radiometric Indices");
     SetDocLongDescription("This application computes radiometric indices using the relevant channels of the input image. The output is a multi band image into which each channel is one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

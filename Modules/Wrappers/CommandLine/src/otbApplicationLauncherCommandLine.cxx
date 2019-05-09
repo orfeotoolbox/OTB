@@ -90,9 +90,6 @@ std::string PrepareExpressionFromXML(std::string filename)
 
   std::string doc_Name, doc_Descr, doc_Author, doc_Limitation, doc_SeeAlso;
 
-  doc_Name = this_->GetChildNodeTextOf(n_Doc, "name");
-  AddMetaData("docname", doc_Name);
-
   doc_Descr = this_->GetChildNodeTextOf(n_Doc, "longdescr");
   AddMetaData("doclongdescr", doc_Descr);
 

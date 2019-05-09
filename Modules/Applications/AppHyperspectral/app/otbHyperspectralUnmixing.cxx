@@ -94,7 +94,6 @@ private:
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
 
     // Documentation
-    SetDocName("Hyperspectral data unmixing");
     SetDocLongDescription("The application applies a linear unmixing algorithm "
     "to an hyperspectral data cube. This method supposes that the mixture between "
     "aterials in the scene is macroscopic and simulates a linear mixing model of "
