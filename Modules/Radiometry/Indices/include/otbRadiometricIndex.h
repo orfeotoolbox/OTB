@@ -70,6 +70,11 @@ public:
 
   static constexpr double Epsilon = 0.0000001;
 
+  // Necessary to be used as an abstract base class in RadiometricIndices app
+  virtual ~RadiometricIndex()
+  {
+  }
+
   /**
    * \param requiredBands the set<CommonBandNames> of required bands
    * \throw runtime_error if requiredBands contains CommonBandNames::MAX
