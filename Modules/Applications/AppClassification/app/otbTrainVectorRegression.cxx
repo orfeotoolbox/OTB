@@ -58,7 +58,8 @@ protected:
         "regression.\nThis application is based on LibSVM, OpenCV Machine "
         "Learning (2.3.1 and later), and Shark ML The output of this application "
         "is a text model file, whose format corresponds to the ML model type "
-        "chosen. There is no image nor vector data output.");
+        "chosen. There is no image or vector data output.");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB Team");
     SetDocSeeAlso("TrainVectorClassifier");
