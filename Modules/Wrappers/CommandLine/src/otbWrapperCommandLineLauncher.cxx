@@ -282,12 +282,12 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
-  if (m_Application->IsDeprecated())
-  {
-    m_Application->GetLogger()->Warning("This application is deprecated and will be removed in a future OTB release.\n");
-  }
+    if (m_Application->IsDeprecated())
+    {
+      m_Application->GetLogger()->Warning("This application is deprecated and will be removed in a future OTB release.\n");
+    }
 
-  return true;
+    return true;
 }
 
 bool CommandLineLauncher::LoadPath()

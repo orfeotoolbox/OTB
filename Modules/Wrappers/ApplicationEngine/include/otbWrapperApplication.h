@@ -672,7 +672,7 @@ public:
   virtual std::vector<std::string> GetDocTags() const;
 
   void AddDocTag(const std::string&);
-  
+
   /** return wether the application has the "deprecated tag or not */
   bool IsDeprecated();
 

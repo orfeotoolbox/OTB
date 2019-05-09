@@ -97,13 +97,14 @@ private:
                       " application is not compatible with in-memory connection since it does"
                       " its own internal streaming.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso( "Alternative: SmallRegionsMerging\n"
-                   "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
-                   " mean-shift algorithm and its application to the segmentation of"
-                   " arbitrarily large remote sensing images. IEEE Transactions on"
-                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
-                   "[2] LSMSSegmentation\n"
-                   "[3] LSMSVectorization");
+    SetDocSeeAlso(
+        "Alternative: SmallRegionsMerging\n"
+        "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+        " mean-shift algorithm and its application to the segmentation of"
+        " arbitrarily large remote sensing images. IEEE Transactions on"
+        " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+        "[2] LSMSSegmentation\n"
+        "[3] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Deprecated);
     AddDocTag("LSMS");
