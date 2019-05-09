@@ -57,7 +57,6 @@ private:
   {
     SetName("Quicklook");
     SetDescription("Generates a subsampled version of an image extract");
-    SetDocName("Quick Look");
     SetDocLongDescription("Generates a subsampled version of an extract of an image defined by ROIStart and ROISize.\n"
                           "This extract is subsampled using the ratio OR the output image Size.");
     SetDocLimitations("This application does not provide yet the optimal way to decode coarser level of resolution from JPEG2000 images (like in Monteverdi).\n"

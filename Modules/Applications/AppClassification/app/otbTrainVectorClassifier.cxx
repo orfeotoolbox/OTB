@@ -60,7 +60,6 @@ protected:
     SetDescription( "Train a classifier based on labeled geometries and a "
       "list of features to consider." );
 
-    SetDocName( "Train Vector Classifier" );
     SetDocLongDescription( "This application trains a classifier based on "
       "labeled geometries and a list of features to consider for "
       "classification.\nThis application is based on LibSVM, OpenCV Machine "

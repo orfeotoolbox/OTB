@@ -71,7 +71,6 @@ private:
     SetName("LSMSVectorization");
     SetDescription("This application performs the fourth step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 4");
     SetDocLongDescription("Given a segmentation result (label image), that may come from the"
                           " LSMSSegmentation [2] application (out parameter) or have been"
                           " processed for small regions merging [3] (out parameter), it will"

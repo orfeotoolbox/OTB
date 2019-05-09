@@ -191,17 +191,6 @@ bool Application::GetHaveOutXML() const
   return m_HaveOutXML;
 }
 
-void Application::SetDocName(const std::string& value)
-{
-  m_DocName = value;
-  this->Modified();
-}
-
-const char* Application::GetDocName() const
-{
-  return m_DocName.c_str();
-}
-
 void Application::SetDocLongDescription(const std::string& value)
 {
   m_DocLongDescription = value;
@@ -361,7 +350,6 @@ Application::Application()
     m_Description(""),
     m_Logger(otb::Logger::New()),
     m_ProgressSourceDescription(""),
-    m_DocName(""),
     m_DocLongDescription(""),
     m_DocAuthors(""),
     m_DocLimitations(""),

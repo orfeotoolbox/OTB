@@ -60,7 +60,6 @@ private:
     SetDescription("Perform speckle noise reduction on SAR image.");
 
     // Documentation
-    SetDocName("Despeckle");
     SetDocLongDescription("SAR images are affected by speckle noise that inherently exists in and which"
      " degrades the image quality. It is caused by the coherent nature of"
      " back-scattered waves from multiple distributed targets. It is locally strong"

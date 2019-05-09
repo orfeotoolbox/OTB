@@ -54,7 +54,6 @@ private:
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images.");
 
-    SetDocName("Split Image");
     SetDocLongDescription("This application splits a N-bands image into N mono-band images. "
       "The output images filename will be generated from the output parameter. "
       "Thus, if the input image has 2 channels, and the user has set as output parameter, outimage.tif, "

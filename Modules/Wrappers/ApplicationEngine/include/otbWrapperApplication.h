@@ -652,10 +652,6 @@ public:
 
   std::string GetProgressDescription() const;
 
-  /** Doc element accessors. */
-  virtual void SetDocName(const std::string&);
-  virtual const char* GetDocName() const;
-
   virtual void SetDocLongDescription(const std::string&);
   virtual const char* GetDocLongDescription() const;
 
@@ -896,8 +892,6 @@ private:
 
   std::set<itk::ProcessObject::Pointer> m_Filters;
 
-  /** Long name of the application (that can be displayed...) */
-  std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
   /** Doc example structure. Use GetDocExample() to access it */

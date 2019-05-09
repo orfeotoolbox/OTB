@@ -220,7 +220,6 @@ private:
     SetName("LSMSSegmentation");
     SetDescription("This application performs the second step of the exact Large-Scale Mean-Shift segmentation workflow (LSMS) [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 2");
     SetDocLongDescription("This application will produce a labeled image where neighbor pixels"
                           " whose range distance is below range radius (and optionally spatial"
                           " distance below spatial radius) will be grouped together into the same"
