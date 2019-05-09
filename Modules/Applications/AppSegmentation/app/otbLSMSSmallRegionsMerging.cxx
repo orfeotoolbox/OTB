@@ -78,7 +78,6 @@ private:
     SetName("LSMSSmallRegionsMerging");
     SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
     SetDocLongDescription("Given a segmentation result (can be the out output parameter of the"
                           " LSMSSegmentation application [2]) and the original image, it will"
                           " merge segments whose size in pixels is lower than minsize parameter"

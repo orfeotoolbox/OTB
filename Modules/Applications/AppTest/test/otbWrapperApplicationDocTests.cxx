@@ -105,7 +105,6 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
 
     // Check doc element...
     DocElement name("Name",app->GetName());
-    DocElement docName("Doc Name",app->GetDocName());
     DocElement description("Description",app->GetDescription());
     DocElement longDescription("Long description",app->GetDocLongDescription());
     DocElement authors("DocAuthors",app->GetDocAuthors());
@@ -114,9 +113,6 @@ int otbWrapperApplicationDocTest(int argc, char* argv[])
 
     isOK = CheckNonEmpty(name) && isOK;
     isOK = CheckNoNewline(name) && isOK;
-
-    isOK = CheckNonEmpty(docName) && isOK;
-    isOK = CheckNoNewline(docName) && isOK;
 
     isOK = CheckNonEmpty(description) && isOK;
 

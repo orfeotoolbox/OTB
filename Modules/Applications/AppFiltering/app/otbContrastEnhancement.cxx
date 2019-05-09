@@ -153,7 +153,6 @@ private:
       "also a mode to equalize the luminance of the image.");
 
     // Documentation
-    SetDocName("Contrast Enhancement");
     SetDocLongDescription("This application is the implementation of the "
       "histogram equalization algorithm. The idea of the algorithm is to use "
       "the whole available dynamic. In order to do so it computes a histogram "

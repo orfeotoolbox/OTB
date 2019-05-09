@@ -105,7 +105,6 @@ private:
     SetDescription("Generates two deformation fields to resample in epipolar "
       "geometry, a pair of stereo images up to the sensor model precision");
 
-    SetDocName("Stereo-rectification deformation grid generator");
     SetDocLongDescription(
       "This application generates a pair of deformation "
       "grid to stereo-rectify a pair of stereo images according to sensor "

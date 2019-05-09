@@ -148,7 +148,6 @@ TiXmlElement* ParseApplication(Application::Pointer app)
 
   TiXmlElement *n_AppDoc;
   n_AppDoc = AddChildNodeTo(n_App, "doc");
-  AddChildNodeTo(n_AppDoc, "name", app->GetDocName());
   AddChildNodeTo(n_AppDoc, "longdescr", app->GetDocLongDescription());
   AddChildNodeTo(n_AppDoc, "authors", app->GetDocAuthors());
   AddChildNodeTo(n_AppDoc, "limitations", app->GetDocLimitations());

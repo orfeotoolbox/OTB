@@ -313,8 +313,6 @@ public:
 
   void FreeRessources();
 
-  itkSetStringMacro(DocName);
-  itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
   itkSetStringMacro(DocAuthors);
@@ -575,9 +573,6 @@ class ApplicationProxy(object):
   %pythoncode
     {
 
-		def __str__(self):
-			s  = self.GetDocName()
-
 		def GetParameterTypeAsString(self, parameter_type):
 			return {
 				ParameterType_String : 'ParameterType_String',
@@ -603,7 +598,7 @@ class ApplicationProxy(object):
 			}.get(parameter_type, 'ParameterType_UNKNOWN')
 
 		def __str__(self):
-			s  = self.GetDocName()
+			s  = self.GetName()
 			s += '\n'
 			s += self.GetDocLongDescription()
 			return s

@@ -49,7 +49,6 @@ private:
     SetDescription("Change detection by Multivariate Alteration Detector (MAD) algorithm");
 
     // Documentation
-    SetDocName("Multivariate Alteration Detector");
     SetDocLongDescription("This application performs change detection between two multispectral"
                           " images using the Multivariate Alteration Detector (MAD) [1]"
                           " algorithm.\n\n"

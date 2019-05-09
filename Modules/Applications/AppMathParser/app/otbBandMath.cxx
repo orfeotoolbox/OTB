@@ -62,7 +62,6 @@ private:
       "on several multi-band images."
     );
 
-    SetDocName( "Band Math" );
 
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "

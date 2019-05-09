@@ -55,7 +55,6 @@ private:
     SetDescription("Estimator between 2 images.");
 
     // Documentation
-    SetDocName("Images comparison");
     SetDocLongDescription(
         "Compute MSE (Mean Squared Error), MAE (Mean Absolute Error) and PSNR (Peak Signal to Noise Ratio) between two image bands (reference and measurement). "
         "The user has to set the used channel and can specify a ROI."

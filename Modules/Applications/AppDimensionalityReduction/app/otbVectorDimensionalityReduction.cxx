@@ -86,7 +86,6 @@ private:
     SetName("VectorDimensionalityReduction");
     SetDescription("Performs dimensionality reduction of the input vector data "
       "according to a model file.");
-    SetDocName("Vector Dimensionality Reduction");
     SetDocAuthors("OTB-Team");
     SetDocLongDescription("This application performs a vector data "
       "dimensionality reduction based on a model file produced by the "

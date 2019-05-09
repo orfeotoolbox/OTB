@@ -572,7 +572,7 @@ void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const i
 void CommandLineLauncher::DisplayHelp(bool longHelp)
 {
   std::cerr<<std::endl;
-  std::cerr << "This is the "<<m_Application->GetDocName() << " ("<<m_Application->GetName()<<") application, version " << OTB_VERSION_STRING <<std::endl<<std::endl;
+  std::cerr << "This is the " << m_Application->GetName() << " application, version " << OTB_VERSION_STRING << std::endl << std::endl;
 
   std::cerr << m_Application->GetDescription() << std::endl;
 

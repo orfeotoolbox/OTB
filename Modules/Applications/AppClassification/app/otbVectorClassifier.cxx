@@ -91,7 +91,6 @@ private:
     SetName("VectorClassifier");
     SetDescription("Performs a classification of the input vector data according to a model file.");
 
-    SetDocName("Vector Classification");
     SetDocAuthors("OTB-Team");
     SetDocLongDescription("This application performs a vector data classification "
       "based on a model file produced by the TrainVectorClassifier application."

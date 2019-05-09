@@ -77,7 +77,6 @@ private:
       "classification on an input image channel" );
 
     // Documentation
-    SetDocName( "Morphological Classification" );
     SetDocLongDescription( 
     "This algorithm is based on the following publication:\n"
     "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach "
