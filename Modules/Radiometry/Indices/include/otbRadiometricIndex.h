@@ -71,9 +71,7 @@ public:
   static constexpr double Epsilon = 0.0000001;
 
   // Necessary to be used as an abstract base class
-  virtual ~RadiometricIndex()
-  {
-  }
+  virtual ~RadiometricIndex() = default;
 
   /**
    * \param requiredBands the set<CommonBandNames> of required bands
