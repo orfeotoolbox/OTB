@@ -197,7 +197,7 @@ private:
       "into a unique multiband output image."
     );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n\n"
+    SetDocSeeAlso("[1] https://beltoforion.de/article.php?a=muparserx\n\n"
       "[2] BandMath");
     AddDocTag(Tags::Manip);
 
