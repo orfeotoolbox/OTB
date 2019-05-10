@@ -25,7 +25,7 @@ import argparse
 import re
 
 import otbApplication
-from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_ListView, ParameterType_Group
 
 from otb_warnings import application_documentation_warnings
 
@@ -202,7 +202,6 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_InputImageList: "image1 image2..."})
     values.update({ParameterType_InputVectorDataList: "vectorfile1 vectorfile2..."})
     values.update({ParameterType_InputFilenameList: "filename1 filename2..."})
-    values.update(dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"))
 
     if type in values:
         return values[type]

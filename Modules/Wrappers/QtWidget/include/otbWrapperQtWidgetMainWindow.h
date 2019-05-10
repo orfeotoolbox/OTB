@@ -65,6 +65,8 @@ public slots:
   void UpdateMessageAfterExecution(int status);
   void on_executeButton_clicked();
   void CopyCommandLine();
+  void LoadFromXML();
+  void SaveToXML();
 
 private:
   ::Ui::AppMainWindow* ui;

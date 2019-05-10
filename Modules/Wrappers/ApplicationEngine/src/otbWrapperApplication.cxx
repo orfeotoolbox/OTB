@@ -25,14 +25,14 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
-#include "otbWrapperInputProcessXMLParameter.h"
+#include "otbWrapperInputXML.h"
+#include "otbWrapperOutputXML.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperBoolParameter.h"
@@ -169,28 +169,6 @@ const char* Application::GetDescription() const
   return m_Description.c_str();
 }
 
-void Application::SetHaveInXML(bool haveInXML)
-{
-  m_HaveInXML = haveInXML;
-  this->Modified();
-}
-
-bool Application::GetHaveInXML() const
-{
-  return m_HaveInXML;
-}
-
-void Application::SetHaveOutXML(bool haveOutXML)
-{
-  m_HaveOutXML = haveOutXML;
-  this->Modified();
-}
-
-bool Application::GetHaveOutXML() const
-{
-  return m_HaveOutXML;
-}
-
 void Application::SetDocLongDescription(const std::string& value)
 {
   m_DocLongDescription = value;
@@ -325,11 +303,6 @@ std::string Application::GetHtmlExample()
   return GetDocExample()->GenerateHtmlExample();
 }
 
-void Application::ForceInXMLParseFlag()
-{
-  m_IsInXMLParsed = false;
-}
-
 void Application::SetDocLink(const std::string & link)
 {
   if (m_Doclink.compare(link) != 0)
@@ -361,9 +334,6 @@ Application::Application()
     m_DocSeeAlso(""),
     m_DocTags(),
     m_Doclink(""),
-    m_HaveInXML(true),
-    m_HaveOutXML(true),
-    m_IsInXMLParsed(false),
     m_IsInPrivateDo(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -466,21 +436,9 @@ void Application::Init()
 {
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
-  //reset inXML parse checker in case if reinit-ing
-  m_IsInXMLParsed = false;
   m_IsInPrivateDo = true;
   this->DoInit();
   m_IsInPrivateDo = false;
-
-  //rashad: global parameters. now used only for inxml and outxml
-  if(this->GetHaveInXML())
-    {
-    AddInXMLParameter();
-    }
-  if(this->GetHaveOutXML())
-    {
-    AddOutXMLParameter();
-    }
 }
 
 template <typename T>
@@ -494,25 +452,18 @@ T* downcast_check(Parameter* param)
   return down;
 }
 
+void Application::LoadParametersFromXML(const std::string& filename)
+{
+  otb::Wrapper::XML::Read(filename, this);
+}
+
+void Application::SaveParametersToXML(const std::string& filename)
+{
+  otb::Wrapper::XML::Write(filename, this);
+}
+
 void Application::UpdateParameters()
 {
-  //read application from xml only once m_IsInXMLParsed is in charge of it.
-  std::string inXMLKey = "inxml";
-  if (m_HaveInXML && !m_IsInXMLParsed)
-    {
-    if ( GetParameterType(inXMLKey) == ParameterType_InputProcessXML  &&
-         IsParameterEnabled(inXMLKey) && HasValue(inXMLKey) )
-      {
-      Parameter* param = GetParameterByKey(inXMLKey);
-      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      if(inXMLParam!=nullptr)
-        {
-        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
-        m_IsInXMLParsed = true;
-        inXMLParam->Read(this);
-        }
-      }
-    }
   m_IsInPrivateDo = true;
   this->DoUpdateParameters();
   m_IsInPrivateDo = false;
@@ -849,17 +800,6 @@ int Application::ExecuteAndWriteOutput()
             progressId << "Writing " << outputParam->GetFileName() << "...";
             AddProcess(outputParam->GetWriter(), progressId.str());
             outputParam->Write();
-            }
-          }
-        //xml writer parameter
-        else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          if(outXMLParam!=nullptr)
-            {
-            outXMLParam->Write(this);
             }
           }
         }

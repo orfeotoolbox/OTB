@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "otbWrapperOutputProcessXMLParameter.h"
+#include "otbWrapperOutputXML.h"
 
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
@@ -40,25 +40,10 @@ namespace otb
 {
 namespace Wrapper
 {
-OutputProcessXMLParameter::OutputProcessXMLParameter()
-  : m_Node(nullptr)
-  , m_Appli()
-{
-  this->SetKey("outxml");
-  this->SetName("Save parameters to XML");
-  this->SetDescription("Save application parameters to an XML file.");
-  this->SetMandatory(false);
-  this->SetActive(false);
-  this->SetRole(Role_Output);
-}
-
-OutputProcessXMLParameter::~OutputProcessXMLParameter()
+namespace XML
 {
 
-}
-
-std::string
-OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
+std::string pixelTypeToString(ImagePixelType pixType)
 {
   std::string type;
 
@@ -108,7 +93,7 @@ OutputProcessXMLParameter::pixelTypeToString(ImagePixelType pixType)
   return type;
 }
 
-TiXmlElement* OutputProcessXMLParameter::AddChildNodeTo(TiXmlElement *parent, std::string name, std::string value)
+TiXmlElement* AddChildNodeTo(TiXmlElement* parent, std::string name, std::string value)
 {
   TiXmlElement * n_Node = new TiXmlElement( name.c_str() );
   parent->LinkEndChild( n_Node );
@@ -120,18 +105,16 @@ TiXmlElement* OutputProcessXMLParameter::AddChildNodeTo(TiXmlElement *parent, st
   return n_Node;
 }
 
-void
-OutputProcessXMLParameter::Write(Application::Pointer app)
+void Write(const std::string& filename, Application::Pointer app)
 {
   // Check if the filename is not empty
-  if(m_FileName.empty())
-    itkExceptionMacro("The XML output FileName is empty, please set the filename via the method SetFileName");
+  if (filename.empty())
+    itkGenericExceptionMacro("The XML output FileName is empty, please set the filename via the method SetFileName");
 
   // Check that the right extension is given : expected .xml */
-  if (itksys::SystemTools::GetFilenameLastExtension(m_FileName) != ".xml")
-    {
-    itkExceptionMacro(<<itksys::SystemTools::GetFilenameLastExtension(m_FileName)
-                      <<" is a wrong Extension FileName : Expected .xml");
+  if (itksys::SystemTools::GetFilenameLastExtension(filename) != ".xml")
+  {
+    itkGenericExceptionMacro(<< itksys::SystemTools::GetFilenameLastExtension(filename) << " is a wrong Extension FileName : Expected .xml");
     }
 
   // start creating XML file
@@ -152,15 +135,12 @@ OutputProcessXMLParameter::Write(Application::Pointer app)
   n_OTB->LinkEndChild(n_App);
 
   // Finally, write xml contents to file
-  doc.SaveFile( m_FileName.c_str() );
+  doc.SaveFile(filename.c_str());
 }
 
-TiXmlElement*
-OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
+TiXmlElement* ParseApplication(Application::Pointer app)
 {
-  m_Appli = app;
-  TiXmlElement * n_App = new TiXmlElement("application");
-  m_Node = n_App;
+  TiXmlElement* n_App = new TiXmlElement("application");
 
   AddChildNodeTo(n_App, "name", app->GetName());
   AddChildNodeTo(n_App, "descr", app->GetDescription());
@@ -184,19 +164,14 @@ OutputProcessXMLParameter::ParseApplication(Application::Pointer app)
     }
 
   // recursive call to ParseGroup(), starting with "" (i.e. GetParameterList())
-  this->ParseGroup(std::string(""));
-
-  // reset temporary members
-  m_Appli = nullptr;
-  m_Node = nullptr;
-  return n_App;
+    ParseGroup(app, n_App, std::string(""));
+    return n_App;
 }
 
-void
-OutputProcessXMLParameter::ParseGroup(const std::string& group)
+void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string& group)
 {
   std::string prefix(group);
-  ParameterGroup::Pointer paramGroup = m_Appli->GetParameterList();
+  ParameterGroup::Pointer paramGroup = app->GetParameterList();
   if (!group.empty())
     {
     prefix += '.';
@@ -208,7 +183,7 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
       }
     else
       {
-      itkExceptionMacro("Function ParseGroup() expected a group parameter for key "<<group);
+        itkGenericExceptionMacro("Function ParseGroup() expected a group parameter for key " << group);
       }
     }
 
@@ -220,20 +195,18 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
       std::string key = prefix + *it;
       Parameter *param = paramGroup->GetParameterByKey(*it);
       std::string paramName = param->GetName();
-      ParameterType type = m_Appli->GetParameterType(key);
+      ParameterType type         = app->GetParameterType(key);
       std::string typeAsString = paramGroup->GetParameterTypeAsString(type);
 
       // if param is a Group, inspect this group with a recursive call
       if (type == ParameterType_Group)
         {
-        this->ParseGroup(key);
+          ParseGroup(app, n_App, key);
         }
       else
        {
-       bool paramExists = m_Appli->HasUserValue(key) &&
-                          m_Appli->IsParameterEnabled(key) &&
-                          m_Appli->GetParameterRole(key) == Role_Input;
-       if ( type == ParameterType_OutputProcessXML )
+         bool paramExists = app->HasUserValue(key) && app->IsParameterEnabled(key) && app->GetParameterRole(key) == Role_Input;
+         if (type == ParameterType_OutputProcessXML)
          {
            paramExists = false;
          }
@@ -264,18 +237,18 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
                   type == ParameterType_InputVectorDataList || type == ParameterType_StringList ||
                   type == ParameterType_ListView )
            {
-           values = m_Appli->GetParameterStringList(key);
-           hasValueList = true;
+             values       = app->GetParameterStringList(key);
+             hasValueList = true;
            }
          else if (type == ParameterType_Int || type == ParameterType_Radius || type == ParameterType_RAM )
            {
-           value = m_Appli->GetParameterAsString(key);
+             value = app->GetParameterAsString(key);
            }
          else if(type == ParameterType_Float)
            {
            std::ostringstream oss;
            oss << std::setprecision(std::numeric_limits<float>::digits10+1);
-           oss << m_Appli->GetParameterFloat( key );
+           oss << app->GetParameterFloat(key);
            value = oss.str();
            }
          else if ( type == ParameterType_String || type == ParameterType_InputFilename ||
@@ -284,12 +257,12 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
                    type == ParameterType_OutputVectorData || type == ParameterType_OutputFilename ||
                    type == ParameterType_Bool)
            {
-           value = m_Appli->GetParameterString(key);
+             value = app->GetParameterString(key);
            }
          else if(key == "rand")
            {
            std::ostringstream strm;
-           strm << m_Appli->GetParameterInt("rand");
+           strm << app->GetParameterInt("rand");
            value = strm.str();
            }
          else if (type == ParameterType_InputProcessXML)
@@ -351,24 +324,23 @@ OutputProcessXMLParameter::ParseGroup(const std::string& group)
                 AddChildNodeTo(n_Values, "value",*strIt);
               }
            }
-         m_Node->LinkEndChild(n_Parameter);
+           n_App->LinkEndChild(n_Parameter);
          }
        // dig into Choice parameter
        if (type == ParameterType_Choice)
         {
         std::string choiceGroup(key);
         choiceGroup += '.';
-        choiceGroup += m_Appli->GetParameterString(key);
-        this->ParseGroup(choiceGroup);
+        choiceGroup += app->GetParameterString(key);
+        ParseGroup(app, n_App, choiceGroup);
         }
       }
     }
 }
 
-std::string OutputProcessXMLParameter::MakeCommandLine(Application::Pointer application)
+std::string MakeCommandLine(Application::Pointer application)
 {
-  OutputProcessXMLParameter::Pointer outXMLParam   = OutputProcessXMLParameter::New();
-  TiXmlElement*                      XMLAppElement = outXMLParam->ParseApplication(application);
+  TiXmlElement* XMLAppElement = ParseApplication(application);
 
   // Create command line from the XML document
   TiXmlElement *     pName, *pParam;
@@ -436,6 +408,6 @@ std::string OutputProcessXMLParameter::MakeCommandLine(Application::Pointer appl
 }
 
 
-} //end namespace wrapper
-
+} // namespace XML
+} // namespace Wrapper
 } //end namespace otb
