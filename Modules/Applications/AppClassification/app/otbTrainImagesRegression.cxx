@@ -78,6 +78,29 @@ protected:
     ExecuteInternal( "polystat" );
   }
 
+  void ComputeSamplingRate(const std::vector<std::string> & statisticsFileNames, 
+                           const std::string & outputFileName,
+                           int numberOfSample = 0)
+  {
+    auto samplingRateAppli = GetInternalApplication("rates");
+    
+    samplingRateAppli->SetParameterStringList( "il", statisticsFileNames);
+    samplingRateAppli->SetParameterString("out", outputFileName);
+    
+    if (numberOfSample)
+    {
+      samplingRateAppli->SetParameterString("strategy", "constant");
+      
+      // TODO why nb is a string in MultiImageSamplingRate + MultiImageSamplingRate seems to return nb-1 samples ...
+      samplingRateAppli->SetParameterString("strategy.constant.nb", std::to_string(numberOfSample));
+    }
+    else
+    {
+      samplingRateAppli->SetParameterString("strategy", "all");
+    }
+    
+    ExecuteInternal( "rates");
+  }
 
   void InitIO()
   {
@@ -97,7 +120,15 @@ protected:
   {  
     AddApplication( "VectorDataSetField", "setfield", "Set additional vector field");
     AddApplication( "PolygonClassStatistics", "polystat", "Polygon analysis" );
-    //AddApplication( "MultiImageSamplingRate", "rates", "Sampling rates" );
+    AddApplication( "MultiImageSamplingRate", "rates", "Sampling rates" );
+    
+    AddParameter( ParameterType_Group, "sample", "Sampling parameters" );
+    SetParameterDescription( "sample", "This group of parameters allows setting sampling parameters" );
+
+    AddParameter( ParameterType_Int, "sample.nt", "Number of training samples" );
+    SetParameterDescription( "sample.nt", "Number of training samples." );
+    MandatoryOff( "sample.nt" );
+    
     //AddApplication( "SampleSelection", "select", "Sample selection" );
     //AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
     
@@ -141,6 +172,8 @@ private:
     auto vectorFileNames = GetParameterStringList( "io.vd" );
     FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
     
+    std::vector<std::string> statisticsFileNames;
+    
     for (unsigned int i =0; i < vectorFileNames.size(); i++)
     {
       std::string outfile = "setfield"+ std::to_string(i) +".shp";// TODO io file handler
@@ -148,11 +181,26 @@ private:
       
       std::cout << "Regression field added" << std::endl;
       
-      std::string statfile = "polygonstat"+ std::to_string(i) +".xml";// TODO io file handler
-      ComputePolygonStatistics(outfile, inputImageList->GetNthElement(i), statfile, predictorFieldName);
+      statisticsFileNames.push_back("polygonstat"+ std::to_string(i) +".xml");
+      
+      ComputePolygonStatistics(outfile, inputImageList->GetNthElement(i), statisticsFileNames[i], predictorFieldName);
       
       std::cout << "Polygon class statistic done" << std::endl;
     }
+    
+    //TODO validation set ??
+    
+    std::string samplingRateFileName = "rates.xml";
+    
+    if (HasValue("sample.nt"))
+      ComputeSamplingRate(statisticsFileNames, samplingRateFileName, GetParameterInt("sample.nt"));
+    else
+      ComputeSamplingRate(statisticsFileNames, samplingRateFileName);
+      
+    std::cout << "Sampling rate computation done" << std::endl;
+    
+    
+    
   }
 };
 
