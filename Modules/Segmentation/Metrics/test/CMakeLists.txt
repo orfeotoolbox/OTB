@@ -47,8 +47,8 @@ otb_add_test(NAME obTvHooverMatrixFilter COMMAND otbMetricsTestDriver
   ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
   ${TEMP}/obTvHooverMatrixFilter.txt
   otbHooverMatrixFilter
-  ${INPUTDATA}/Seg1InputForRCC8Graph.tif
-  ${INPUTDATA}/Seg2InputForRCC8Graph.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/obTvHooverMatrixFilter.txt
   )
 

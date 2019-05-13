@@ -158,9 +158,6 @@ parameters:
 -  ``ParameterType_InputVectorDataList`` : parameter storing a list of
    input vector data.
 
--  ``ParameterType_InputProcessXML`` : parameter storing an input XML
-   file name.
-
 -  ``ParameterType_OutputFilename`` : parameter storing an output file
    name.
 
@@ -168,9 +165,6 @@ parameters:
 
 -  ``ParameterType_OutputVectorData`` : parameter storing an output
    vector data.
-
--  ``ParameterType_OutputProcessXML`` : parameter storing an output XML
-   file name.
 
 -  ``ParameterType_RAM`` : parameter storing the maximum amount of RAM
    to be used.

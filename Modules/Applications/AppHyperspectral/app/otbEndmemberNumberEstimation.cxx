@@ -55,7 +55,6 @@ private:
     SetDescription("Estimate the number of endmembers in a hyperspectral image");
 
     // Documentation
-    SetDocName("Endmember Number Estimation");
     SetDocLongDescription("Estimate the number of endmembers "
     "in a hyperspectral image. First, compute statistics on the image and then "
     "apply an endmember number estimation algorithm using these statistics. Two "

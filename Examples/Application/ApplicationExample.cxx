@@ -68,7 +68,6 @@ private:
     // \begin{description}
     // \item[\code{SetName()}] Name of the application.
     // \item[\code{SetDescription()}] Set the short description of the class.
-    // \item[\code{SetDocName()}] Set long name of the application (that can be displayed \dots).
     // \item[\code{SetDocLongDescription()}] This methods is used to describe the class.
     // \item[\code{SetDocLimitations()}] Set known limitations (threading, invalid pixel type \dots) or bugs.
     // \item[\code{SetDocAuthors()}] Set the application Authors. Author List. Format : "John Doe, Winnie the Pooh" \dots
@@ -81,7 +80,6 @@ private:
         "Pay attention, it includes Latex snippets in order to generate "
         "software guide documentation");
 
-    SetDocName("Example");
     SetDocLongDescription(
         "The purpose of this application is "
         "to present parameters types,"

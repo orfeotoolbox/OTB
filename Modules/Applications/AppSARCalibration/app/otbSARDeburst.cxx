@@ -50,7 +50,6 @@ private:
     SetDescription("This application performs deburst of Sentinel1 IW SLC images by removing redundant lines.");
 
     // Documentation
-    SetDocName("SAR Deburst");
     SetDocLongDescription("Sentinel1 IW SLC products are composed of several burst overlapping in"
                           " azimuth time for each subswath, separated by black lines [1]. The deburst"
                           " operation consist in generating a continuous image in terms of azimuth"

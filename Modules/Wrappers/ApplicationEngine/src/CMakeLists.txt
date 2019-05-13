@@ -23,7 +23,8 @@ set( OTBApplicationEngine_SRC
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
   otbWrapperParameterGroup.cxx
-  otbWrapperOutputProcessXMLParameter.cxx
+  otbWrapperInputXML.cxx
+  otbWrapperOutputXML.cxx
   otbWrapperInputImageListParameter.cxx
   otbWrapperElevationParametersHandler.cxx
   otbWrapperInputFilenameListParameter.cxx
@@ -44,7 +45,6 @@ set( OTBApplicationEngine_SRC
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
   otbWrapperOutputVectorDataParameter.cxx
-  otbWrapperInputProcessXMLParameter.cxx
   otbWrapperMapProjectionParametersHandler.cxx
   otbWrapperApplication.cxx
   otbWrapperChoiceParameter.cxx

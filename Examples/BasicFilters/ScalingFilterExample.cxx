@@ -23,13 +23,6 @@
 ./ScalingFilterExample Input/QB_Toulouse_Ortho_PAN.tif Output/QB_Toulouse_Ortho_PAN_rescaled.png Output/QB_Toulouse_Ortho_PAN_casted.png
 */
 
-
-// On one hand, satellite images are commonly coded on more than 8 bits to provide
-// the dynamic range required from shadows to clouds. On the other hand, image formats
-// in use for printing and display are usually limited to 8 bits. We need to convert the value
-// to enable a proper display. This is usually done using linear scaling. Of course, you have
-// to be aware that some information is lost in the process.
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -56,8 +49,7 @@ int main(int argc, char* argv[])
   ReaderType::Pointer                          reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  //  The \doxygen{itk}{RescaleIntensityImageFilter} is used to rescale the value:
-
+  // The RescaleIntensityImageFilter is used to rescale the value
   typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
   RescalerType::Pointer                                                     rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
@@ -75,20 +67,4 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[3]);
   writer->SetInput(caster->GetOutput());
   writer->Update();
-
-  // Figure~\ref{fig:SCALING_FILTER} illustrates the difference between a proper scaling and
-  // a simple truncation of the value and demonstrates why it is
-  // important to keep this in mind.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{QB_Toulouse_Ortho_PAN_casted.eps}
-  // \includegraphics[width=0.44\textwidth]{QB_Toulouse_Ortho_PAN_rescaled.eps}
-  // \itkcaption[Scaling images]{On the left, the image obtained by truncated pixel values
-  // at the dynamic acceptable for a png file (between 0 and 255). On the right,
-  // the same image with
-  // a proper rescaling}
-  // \label{fig:SCALING_FILTER}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
 }

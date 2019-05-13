@@ -102,11 +102,8 @@ public:
   /** Check if the application has been initialized */
   bool IsInitialized() const;
 
-  virtual void SetHaveInXML(bool);
-  virtual bool GetHaveInXML() const;
-
-  virtual void SetHaveOutXML(bool);
-  virtual bool GetHaveOutXML() const;
+  void LoadParametersFromXML(const std::string& filename);
+  void SaveParametersToXML(const std::string& filename);
 
   /** Update the value of parameters for which no user value has been provided */
   void UpdateParameters();
@@ -209,12 +206,6 @@ public:
 
   /* Returns the description of a parameter */
   std::vector<std::string> GetChoiceNames(std::string paramKey);
-
-  /* Is the application ready to be executed : All the mandatory
-   * parameters have to be set
-   */
-  /* Set the Parameter value and Update the UserFlag. used by xml parameter
-   */
 
   /* Set an integer value
    *
@@ -652,10 +643,6 @@ public:
 
   std::string GetProgressDescription() const;
 
-  /** Doc element accessors. */
-  virtual void SetDocName(const std::string&);
-  virtual const char* GetDocName() const;
-
   virtual void SetDocLongDescription(const std::string&);
   virtual const char* GetDocLongDescription() const;
 
@@ -673,6 +660,9 @@ public:
 
   void AddDocTag(const std::string&);
 
+  /** return wether the application has the "deprecated tag or not */
+  bool IsDeprecated();
+
   DocExampleStructure::Pointer GetDocExample();
   unsigned int GetNumberOfExamples();
   std::string GetExampleComment(unsigned int id);
@@ -689,9 +679,6 @@ public:
   * parameter key and its value.
   */
   std::vector< std::pair<std::string, std::string> > GetOutputParametersSumUp();
-
-   /** If need to force readxml more than once in application */
-  void ForceInXMLParseFlag();
 
   double GetLastExecutionTiming() const;
 
@@ -816,16 +803,6 @@ protected:
    * by default seed initialization is based on time value*/
    void AddRANDParameter(std::string paramKey, std::string paramName, unsigned int defaultValue);
 
-   void AddInXMLParameter()
-   {
-     GetParameterList()->AddInXMLParameter();
-   }
-
-   void AddOutXMLParameter()
-   {
-     GetParameterList()->AddOutXMLParameter();
-   }
-
   /** Remove the items added to the ListWidget */
   void ClearChoices(std::string key);
 
@@ -896,8 +873,6 @@ private:
 
   std::set<itk::ProcessObject::Pointer> m_Filters;
 
-  /** Long name of the application (that can be displayed...) */
-  std::string m_DocName;
   /** Long and precise application description . */
   std::string                       m_DocLongDescription;
   /** Doc example structure. Use GetDocExample() to access it */
@@ -915,11 +890,6 @@ private:
 
   /** Chrono to measure execution time */
   otb::Stopwatch m_Chrono;
-
-  //rashad:: controls adding of -xml parameter. set to true by default
-  bool                              m_HaveInXML;
-  bool                              m_HaveOutXML;
-  bool                              m_IsInXMLParsed;
 
   /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
   bool m_IsInPrivateDo;

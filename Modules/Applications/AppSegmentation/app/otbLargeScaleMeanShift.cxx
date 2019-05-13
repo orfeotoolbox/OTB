@@ -56,7 +56,6 @@ private:
     SetDescription("Large-scale segmentation using MeanShift");
 
     // Documentation
-    SetDocName("Large-Scale MeanShift");
     SetDocLongDescription("This application chains together the 4 steps of the "
       "MeanShit framework, that is the MeanShiftSmoothing, the "
       "LSMSSegmentation, the LSMSSmallRegionsMerging and the "
