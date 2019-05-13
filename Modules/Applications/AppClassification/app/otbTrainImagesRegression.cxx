@@ -21,10 +21,14 @@
 #include "otbWrapperCompositeApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbOGRDataToSamplePositionFilter.h"
+
 namespace otb
 {
 namespace Wrapper
 {
+
+  
 
 class TrainImagesRegression : public CompositeApplication
 {
@@ -41,7 +45,53 @@ public:
   /** Standard macro */
   itkTypeMacro( TrainImagesRegression, Superclass );
   
+protected:
+
+  void AddRegressionField(const std::string &inVectorFileName,
+                       const std::string &outVectorFileName,
+                       const std::string &fieldName)
+  {
+    auto setFieldAppli = GetInternalApplication("setfield");
+    setFieldAppli->SetParameterString("in", inVectorFileName);
+    setFieldAppli->SetParameterString("out", outVectorFileName);
+
+    setFieldAppli->SetParameterString("fn", fieldName);
+    
+    setFieldAppli->SetParameterString("fv", "0");
+    setFieldAppli->ExecuteAndWriteOutput();
+    
+  }
+
+  void InitIO()
+  {
+    AddParameter( ParameterType_Group, "io", "Input and output data" );
+    SetParameterDescription( "io", "This group of parameters allows setting input and output data." );
+
+    AddParameter( ParameterType_InputImageList, "io.il", "Input Image List" );
+    SetParameterDescription( "io.il", "A list of input images." );
+    MandatoryOn( "io.il" );
+    
+    AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List" );
+    SetParameterDescription( "io.vd", "A list of vector data to select the training samples." );
+    MandatoryOn( "io.vd" );
+  }
+  
+  void InitSampling()
+  {  
+    AddApplication( "VectorDataSetField", "setfield", "Set additional vector field");
+    //AddApplication( "PolygonClassStatistics", "polystat", "Polygon analysis" );
+    //AddApplication( "MultiImageSamplingRate", "rates", "Sampling rates" );
+    //AddApplication( "SampleSelection", "select", "Sample selection" );
+    //AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
+    
+  }
+  
+  void InitLearning()
+  {
+  }
+
 private:
+
   void DoInit() override
   {
     SetName("TrainImagesRegression");
@@ -55,6 +105,12 @@ private:
     AddDocTag(Tags::Learning);
     
     SetOfficialDocLink();
+    
+    ClearApplications();
+    
+    InitIO();
+    InitSampling();
+    InitLearning();
   }
   
   void DoUpdateParameters() override
@@ -63,7 +119,14 @@ private:
 
   void DoExecute() override
   {
+    std::string predictorFieldName = "predict";
     
+    auto fileNames = GetParameterStringList( "io.vd" );
+    for (auto file: fileNames)
+    {
+      std::string outfile = "tmp.shp";
+      AddRegressionField(file, outfile, predictorFieldName);
+    }
   }
 };
 
