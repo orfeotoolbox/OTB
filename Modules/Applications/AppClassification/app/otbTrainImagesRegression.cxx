@@ -52,15 +52,32 @@ protected:
                        const std::string &fieldName)
   {
     auto setFieldAppli = GetInternalApplication("setfield");
+    
     setFieldAppli->SetParameterString("in", inVectorFileName);
     setFieldAppli->SetParameterString("out", outVectorFileName);
-
     setFieldAppli->SetParameterString("fn", fieldName);
-    
     setFieldAppli->SetParameterString("fv", "0");
-    setFieldAppli->ExecuteAndWriteOutput();
     
+    ExecuteInternal("setfield");
   }
+
+  void ComputePolygonStatistics(const std::string &inVectorFileName,
+                                FloatVectorImageType * inputImage,
+                                const std::string &statisticFileName,
+                                const std::string &fieldName)
+  {
+    auto polygonClassAppli = GetInternalApplication("polystat");
+    
+    polygonClassAppli->SetParameterInputImage( "in", inputImage );
+    polygonClassAppli->SetParameterString( "vec", inVectorFileName);
+    polygonClassAppli->SetParameterString( "out", statisticFileName);
+    
+    polygonClassAppli->UpdateParameters();
+    polygonClassAppli->SetParameterString( "field", fieldName);
+    
+    ExecuteInternal( "polystat" );
+  }
+
 
   void InitIO()
   {
@@ -79,7 +96,7 @@ protected:
   void InitSampling()
   {  
     AddApplication( "VectorDataSetField", "setfield", "Set additional vector field");
-    //AddApplication( "PolygonClassStatistics", "polystat", "Polygon analysis" );
+    AddApplication( "PolygonClassStatistics", "polystat", "Polygon analysis" );
     //AddApplication( "MultiImageSamplingRate", "rates", "Sampling rates" );
     //AddApplication( "SampleSelection", "select", "Sample selection" );
     //AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
@@ -119,13 +136,22 @@ private:
 
   void DoExecute() override
   {
-    std::string predictorFieldName = "predict";
+    std::string predictorFieldName = "regclass";
     
-    auto fileNames = GetParameterStringList( "io.vd" );
-    for (auto file: fileNames)
+    auto vectorFileNames = GetParameterStringList( "io.vd" );
+    FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
+    
+    for (unsigned int i =0; i < vectorFileNames.size(); i++)
     {
-      std::string outfile = "tmp.shp";
-      AddRegressionField(file, outfile, predictorFieldName);
+      std::string outfile = "setfield"+ std::to_string(i) +".shp";// TODO io file handler
+      AddRegressionField(vectorFileNames[i], outfile, predictorFieldName);
+      
+      std::cout << "Regression field added" << std::endl;
+      
+      std::string statfile = "polygonstat"+ std::to_string(i) +".xml";// TODO io file handler
+      ComputePolygonStatistics(outfile, inputImageList->GetNthElement(i), statfile, predictorFieldName);
+      
+      std::cout << "Polygon class statistic done" << std::endl;
     }
   }
 };
