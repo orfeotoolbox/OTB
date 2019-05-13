@@ -22,13 +22,11 @@ otb_module_test()
 
 set(OTBIndicesTests
 otbIndicesTestDriver.cxx
-otbNDVIDataNodeFeatureFunction.cxx
+otbRadiometricIndicesTest.cxx
 otbLandsatTMIndexNDSITest.cxx
 otbLandsatTMIndexBIOTest.cxx
-otbLAIFromReflectancesLinearFunctorTest.cxx
 otbLandsatTMIndexMIR2Test.cxx
 otbLandsatTMIndexNDVITest.cxx
-otbLAIFromNDVILogarithmicFunctorTest.cxx
 otbLandsatTMIndexVisTest.cxx
 otbWaterSqrtSpectralAngleImageFilter.cxx
 otbLandsatTMIndexBrightTest.cxx
@@ -52,31 +50,6 @@ target_link_libraries(otbIndicesTestDriver ${OTBIndices-Test_LIBRARIES})
 otb_module_target_label(otbIndicesTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Polygon COMMAND otbIndicesTestDriver
-  --compare-ogr ${EPSILON_3}
-  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  otbNDVIDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Polygon.shp
-  0
-  )
-
-otb_add_test(NAME bfTvNDVIDataNodeFeatureFunction_Line COMMAND otbIndicesTestDriver
-  --compare-ogr ${EPSILON_9}
-  ${BASELINE_FILES}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  otbNDVIDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvNDVIDataNodeFeatureFunctionOutput_Line.shp
-  0
-  )
-
 
 otb_add_test(NAME raTvLandsatTMIndexNDSITest COMMAND otbIndicesTestDriver
   otbLandsatTMIndexNDSI
@@ -102,14 +75,6 @@ otb_add_test(NAME raTvLandsatTMIndexBIOTest COMMAND otbIndicesTestDriver
   21  #TM7
   )
 
-otb_add_test(NAME raTvLAIFromReflectancesLinearFunctorTest COMMAND otbIndicesTestDriver
-  otbLAIFromReflectancesLinear
-  3   # red
-  4   # nir
-  -18   # red coef
-  13   # nir coef
-  )
-
 otb_add_test(NAME raTvLandsatTMIndexMIR2Test COMMAND otbIndicesTestDriver
   otbLandsatTMIndexMIR2
   3   #TM1
@@ -132,16 +97,6 @@ otb_add_test(NAME raTvLandsatTMIndexNDVITest COMMAND otbIndicesTestDriver
   41  #TM61
   8   #TM62
   21  #TM7
-  )
-
-
-otb_add_test(NAME raTvLAIFromNDVILogarithmicFunctorTest COMMAND otbIndicesTestDriver
-  otbLAIFromNDVILogarithmic
-  3   # red
-  4   # nir
-  0.12   # ndvi soil
-  0.91   # ndvi infinity
-  0.70   # extinction coefficient
   )
 
 otb_add_test(NAME raTvLandsatTMIndexVisTest COMMAND otbIndicesTestDriver
@@ -340,3 +295,21 @@ otb_add_test(NAME raTvLandsatTMThickCloudTest COMMAND otbIndicesTestDriver
   ${TEMP}/raTvLandsatTMThickCloudTest_cloudImage.tif
   )
 
+
+otb_add_test(NAME raTvRadiometricIndexBaseClassTest COMMAND otbIndicesTestDriver
+                  otbRadiometricIndexTest)
+
+otb_add_test(NAME raTvVegetationIndicesTest COMMAND otbIndicesTestDriver
+                  otbVegetationIndicesTest)
+
+otb_add_test(NAME raTvWaterIndicesTest COMMAND otbIndicesTestDriver
+                  otbWaterIndicesTest)
+
+otb_add_test(NAME raTvBuiltUpIndicesTest COMMAND otbIndicesTestDriver
+                  otbBuiltUpIndicesTest)
+
+otb_add_test(NAME raTvSoilIndicesTest COMMAND otbIndicesTestDriver
+                  otbSoilIndicesTest)
+
+otb_add_test(NAME raTvIndicesStackFunctorTest COMMAND otbIndicesTestDriver
+                  otbIndicesStackFunctorTest)

@@ -10,6 +10,7 @@
 
 variables:
   BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
   DOCKER_DRIVER: overlay2
   GIT_DEPTH: "3"
   # Disable automatic checkout to let us fetch LFS before
@@ -23,10 +24,10 @@ before_script:
   # Provision efficiently the local LFS cache before checkout
   - git lfs fetch origin $CI_COMMIT_SHA
   # Checkout the expected branch
-  - git checkout $CI_COMMIT_REF_NAME
+  - git checkout -f -q $CI_COMMIT_SHA
 
 after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_API_TOKEN
 
 stages:
   - precheck
@@ -44,7 +45,7 @@ fast-build:
   extends: .general
   only: [merge_requests, branches]
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout $CI_COMMIT_REF_NAME

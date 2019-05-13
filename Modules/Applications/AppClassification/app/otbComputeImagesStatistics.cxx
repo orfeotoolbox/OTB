@@ -48,7 +48,6 @@ private:
   void DoInit() override
   {
     SetName("ComputeImagesStatistics");
-    SetDocName("Compute Images second order statistics");
     SetDescription("Computes global mean and standard deviation for each band "
       "from a set of images and optionally saves the results in an XML file.");
     SetDocLongDescription("This application computes a global mean and standard deviation "

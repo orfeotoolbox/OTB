@@ -48,6 +48,7 @@
 #include "shark/Models/Clustering/Centroids.h"
 #include "shark/Models/Clustering/ClusteringModel.h"
 #include "shark/Algorithms/KMeans.h"
+#include "shark/Models/Normalizer.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -124,9 +125,14 @@ public:
   /** Set the number of class for the kMeans algorithm.*/
   itkSetMacro( K, unsigned );
 
-  /** If true, normalized input data sample list */
-  itkGetMacro( Normalized, bool );
-  itkSetMacro( Normalized, bool );
+  /** Initialize the centroids for the kmeans algorithm */
+  void SetCentroidsFromData(const shark::Data<shark::RealVector>& data)
+  {
+    m_Centroids.setCentroids(data);
+    this->Modified();
+  }
+
+  void ExportCentroids(const std::string& filename);
 
 protected:
   /** Constructor */
@@ -142,9 +148,6 @@ protected:
   virtual void DoPredictBatch(const InputListSampleType *, const unsigned int &startIndex, const unsigned int &size,
                               TargetListSampleType *, ConfidenceListSampleType * = nullptr, ProbaListSampleType * = nullptr) const override;
 
-  template<typename DataType>
-  DataType NormalizeData(const DataType &data) const;
-
   /** PrintSelf method */
   void PrintSelf(std::ostream &os, itk::Indent indent) const override;
 
@@ -153,15 +156,12 @@ private:
   void operator=(const Self &) = delete;
 
   // Parameters set by the user
-  bool m_Normalized;
   unsigned int m_K;
   unsigned int m_MaximumNumberOfIterations;
   bool m_CanRead;
 
-
   /** Centroids results form kMeans */
   shark::Centroids m_Centroids;
-
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */
   boost::shared_ptr<ClusteringModelType> m_ClusteringModel;

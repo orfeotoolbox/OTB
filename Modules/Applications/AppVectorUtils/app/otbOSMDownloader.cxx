@@ -55,7 +55,6 @@ private:
     SetName("OSMDownloader");
     SetDescription("Download vector data from OSM and store it to file");
     // Documentation
-    SetDocName("Open Street Map layers import");
     SetDocLongDescription("The application connects to Open Street Map server"
       ", downloads the data corresponding to the spatial extent of the support"
       " image, and filters the geometries based on OSM tags to produce a vector"

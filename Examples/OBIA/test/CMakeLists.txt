@@ -42,6 +42,6 @@ set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME trTeLabelMapToVectorData COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:LabelMapToVectorData>
-    ${INPUTDATA}/rcc8_mire1.png
-    ${TEMP}/rcc8_mire2_vectorizer.shp
+    ${INPUTDATA}/labelImage_UnsignedChar.tif
+    ${TEMP}/trTeLabelMapToVectorDataOutput.shp
 )

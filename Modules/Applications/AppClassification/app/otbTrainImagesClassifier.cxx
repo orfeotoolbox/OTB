@@ -41,7 +41,6 @@ public:
     SetDescription( "Train a classifier from multiple pairs of images and training vector data." );
 
     // Documentation
-    SetDocName( "Train a classifier from multiple images" );
     SetDocLongDescription(
         "Train a classifier from multiple pairs of images and training vector data. "
         "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "

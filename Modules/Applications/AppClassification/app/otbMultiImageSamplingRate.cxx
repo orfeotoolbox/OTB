@@ -63,7 +63,6 @@ private:
     SetDescription("Compute sampling rate for an input set of images.");
 
     // Documentation
-    SetDocName("Multi-image sampling rate estimation");
     SetDocLongDescription("The application computes sampling rates for a set of"
       " input images. Before calling this application, each pair of image and "
       "training vectors has to be analysed with the application "

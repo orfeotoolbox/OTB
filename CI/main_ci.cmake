@@ -84,7 +84,7 @@ message(STATUS "CI profile : ${ci_profile}")
 #The following file set the CONFIGURE_OPTIONS variable
 set (ENABLE_DOXYGEN OFF)
 set (CONFIGURE_OPTIONS  "")
-include ( "${CMAKE_CURRENT_LIST_DIR}/configure_option.cmake" )
+include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # Sources are already checked out : do nothing for update
 set(CTEST_GIT_UPDATE_CUSTOM echo No update)

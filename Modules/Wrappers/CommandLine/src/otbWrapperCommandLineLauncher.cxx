@@ -31,7 +31,6 @@
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperListViewParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperAddProcessToWatchEvent.h"
 
 // List value parameter
@@ -137,19 +136,27 @@ bool CommandLineLauncher::Execute()
 
 bool CommandLineLauncher::ExecuteAndWriteOutputNoCatch()
 {
-   if (this->BeforeExecute() == false)
-      {
-      return false;
-      }
-    if( m_Application->ExecuteAndWriteOutput() == 0 )
-      {
-      this->DisplayOutputParameters();
-      }
-    else
-      {
-      return false;
-      }
-    return true;
+  if (this->BeforeExecute() == false)
+  {
+    return false;
+  }
+
+  if (m_Application->ExecuteAndWriteOutput() != 0)
+  {
+    return false;
+  }
+
+  this->DisplayOutputParameters();
+
+  // After execution, write parameters to the xml file if requested
+  const char* attrib = "-outxml";
+  if (m_Parser->IsAttributExists(attrib, m_VExpression))
+  {
+    std::vector<std::string> outXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
+    m_Application->SaveParametersToXML(outXMLValues[0]);
+  }
+
+  return true;
 }
 
 bool CommandLineLauncher::ExecuteAndWriteOutput()
@@ -282,7 +289,12 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
     }
 
-  return true;
+    if (m_Application->IsDeprecated())
+    {
+      m_Application->GetLogger()->Warning("This application is deprecated and will be removed in a future OTB release.\n");
+    }
+
+    return true;
 }
 
 bool CommandLineLauncher::LoadPath()
@@ -358,22 +370,16 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
     itkExceptionMacro("No application loaded");
     }
 
-  /* Check for inxml parameter. If exists Update all Parameters from xml and
-   * check for user defined parameters for overriding those from XML
-   */
-  const char *inXMLKey =  "inxml";
-  const char *attrib   = "-inxml";
-  const bool paramInXMLExists(m_Parser->IsAttributExists(attrib, m_VExpression));
-  if(paramInXMLExists)
+    // Read parameters from xml file if provided
+    const char* attrib = "-inxml";
+    if (m_Parser->IsAttributExists(attrib, m_VExpression))
     {
-    std::vector<std::string> inXMLValues;
-    inXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
-    m_Application->SetParameterString(inXMLKey, inXMLValues[0]);
-    m_Application->UpdateParameters();
+      std::vector<std::string> inXMLValues = m_Parser->GetAttribut(attrib, m_VExpression);
+      m_Application->LoadParametersFromXML(inXMLValues[0]);
     }
 
-  // Check for the progress report parameter
-  if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
+    // Check for the progress report parameter
+    if (m_Parser->IsAttributExists("-progress", m_VExpression) == true)
     {
     std::vector<std::string> val = m_Parser->GetAttribut("-progress", m_VExpression);
     if (val.size() == 1 && (val[0] == "1" || val[0] == "true"))
@@ -429,21 +435,10 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           // Multiple values parameters
           m_Application->SetParameterStringList(paramKey, values);
           }
-        else if (type == ParameterType_Choice ||
-                 type == ParameterType_Float ||
-                 type == ParameterType_Int ||
-                 type == ParameterType_Radius ||
-                 type == ParameterType_Directory ||
-                 type == ParameterType_String ||
-                 type == ParameterType_InputFilename ||
-                 type == ParameterType_OutputFilename ||
-                 type == ParameterType_InputImage ||
-                 type == ParameterType_OutputImage ||
-                 type == ParameterType_InputVectorData ||
-                 type == ParameterType_OutputVectorData ||
-                 type == ParameterType_RAM ||
-                 type == ParameterType_OutputProcessXML ||
-                 type == ParameterType_Bool) // || type == ParameterType_InputProcessXML)
+          else if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius ||
+                   type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_InputFilename ||
+                   type == ParameterType_OutputFilename || type == ParameterType_InputImage || type == ParameterType_OutputImage ||
+                   type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_RAM || type == ParameterType_Bool)
           {
           // Single value parameter
           m_Application->SetParameterString(paramKey, values[0]);
@@ -582,7 +577,13 @@ void CommandLineLauncher::LinkWatchers(itk::Object * itkNotUsed(caller), const i
 void CommandLineLauncher::DisplayHelp(bool longHelp)
 {
   std::cerr<<std::endl;
-  std::cerr << "This is the "<<m_Application->GetDocName() << " ("<<m_Application->GetName()<<") application, version " << OTB_VERSION_STRING <<std::endl<<std::endl;
+  std::cerr << "This is the " << m_Application->GetName() << " application, version " << OTB_VERSION_STRING << std::endl << std::endl;
+
+  if (m_Application->IsDeprecated())
+  {
+    std::cerr << "WARNING: This application is deprecated, it will be removed in a future OTB release." << std::endl;
+    std::cerr << std::endl;
+  }
 
   std::cerr << m_Application->GetDescription() << std::endl;
 
@@ -718,9 +719,9 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer &
     {
     oss << "<float>         ";
     }
-  else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename ||type == ParameterType_Directory || type == ParameterType_InputImage || type == ParameterType_OutputProcessXML || type == ParameterType_InputProcessXML ||
-          type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_String || 
-          type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
+    else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename || type == ParameterType_Directory ||
+             type == ParameterType_InputImage || type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData ||
+             type == ParameterType_String || type == ParameterType_Choice || (type == ParameterType_ListView && singleSelectionForListView))
     {
     oss << "<string>        ";
     }
@@ -894,6 +895,8 @@ bool CommandLineLauncher::CheckKeyValidity(std::string& refKey)
   appKeyList.push_back("progress");
   appKeyList.push_back("testenv");
   appKeyList.push_back("version");
+  appKeyList.push_back("inxml");
+  appKeyList.push_back("outxml");
 
   // Check if each key in the expression exists in the application
   for (unsigned int i = 0; i < expKeyList.size(); i++)

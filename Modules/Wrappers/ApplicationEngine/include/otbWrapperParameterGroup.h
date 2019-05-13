@@ -73,11 +73,6 @@ public:
 
   Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
-  /** rashad: Add xml parameters eg: -inxml -outxml */
-  void AddInXMLParameter();
-
-  void AddOutXMLParameter();
-
   void Clear()
   {
     m_ParameterList.clear();

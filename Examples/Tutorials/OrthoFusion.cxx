@@ -28,8 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbOrthoRectificationFilter.h"
-#include "otbGenericMapProjection.h"
+#include "otbGenericRSResampleImageFilter.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "otbStandardFilterWatcher.h"
@@ -89,12 +88,9 @@ int main(int argc, char* argv[])
   // \item the hemisphere
   // \end{itemize}
 
-  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
-  InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
-  utmMapProjection->SetWkt(
-    otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? 
+  std::string wkt = otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? 
       otb::SpatialReference::hemisphere::north : 
-      otb::SpatialReference::hemisphere::south).ToWkt());
+      otb::SpatialReference::hemisphere::south).ToWkt();
 
   //  We will need to pass several parameters to the orthorectification
   // concerning the desired output region:
@@ -118,10 +114,10 @@ int main(int argc, char* argv[])
   // We declare the orthorectification filter. And provide the different
   // parameters:
 
-  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType, InverseProjectionType> OrthoRectifFilterType;
+  typedef otb::GenericRSResampleImageFilter<ImageType, DoubleImageType> OrthoRectifFilterType;
 
   OrthoRectifFilterType::Pointer orthoRectifPAN = OrthoRectifFilterType::New();
-  orthoRectifPAN->SetMapProjection(utmMapProjection);
+  orthoRectifPAN->SetOutputProjectionRef(wkt);
 
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
 
@@ -133,12 +129,12 @@ int main(int argc, char* argv[])
   // Now we are able to have the orthorectified area from the PAN image. We just
   // have to follow a similar process for the XS image.
 
-  typedef otb::OrthoRectificationFilter<VectorImageType, DoubleVectorImageType, InverseProjectionType> VectorOrthoRectifFilterType;
+  typedef otb::GenericRSResampleImageFilter<VectorImageType, DoubleVectorImageType> VectorOrthoRectifFilterType;
 
 
   VectorOrthoRectifFilterType::Pointer orthoRectifXS = VectorOrthoRectifFilterType::New();
 
-  orthoRectifXS->SetMapProjection(utmMapProjection);
+  orthoRectifXS->SetOutputProjectionRef(wkt);
 
   orthoRectifXS->SetInput(readerXS->GetOutput());
 
@@ -159,8 +155,6 @@ int main(int argc, char* argv[])
   // We trigger the pipeline execution with the \code{Update()} method.
 
   writer->SetInput(fusion->GetOutput());
-
-  writer->SetAutomaticTiledStreaming();
 
   otb::StandardFilterWatcher watcher(writer, "OrthoFusion");
 

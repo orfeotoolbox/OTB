@@ -54,7 +54,6 @@ private:
     SetDescription("Get the value of a pixel.");
 
     // Documentation
-    SetDocName("Pixel Value");
     SetDocLongDescription("This application gives the value of a selected "
       "pixel. There are three ways to designate a pixel, with its index, "
       "its physical coordinate (in the physical space attached to the image), "

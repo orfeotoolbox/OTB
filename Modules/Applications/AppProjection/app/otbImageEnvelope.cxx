@@ -55,7 +55,6 @@ private:
     SetDescription("Extracts an image envelope.");
 
     // Documentation
-    SetDocName("Image Envelope");
     SetDocLongDescription("Build a vector data containing the image envelope polygon. "
       "Useful for some projection, you can set the polygon with more points with the sr parameter. "
       "This filter supports user-specified output projection. "

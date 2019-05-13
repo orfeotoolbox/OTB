@@ -221,7 +221,7 @@ protected slots:
   /**
    */
 #if defined( OTB_USE_QT ) && USE_OTB_APPS
-  void OnApplicationToLaunchSelected( const QString & appName, const QString & docName );
+  void OnApplicationToLaunchSelected( const QString & appName );
 #endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
   /** */
