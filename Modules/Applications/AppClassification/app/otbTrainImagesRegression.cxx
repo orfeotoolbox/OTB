@@ -28,7 +28,55 @@ namespace otb
 namespace Wrapper
 {
 
+class TrainRegressionFileHandler
+{
+public:
+  void AddFileNameList(const std::string& key, const std::vector<std::string> & fileNameList)
+  {
+    fileNameMap[key] = fileNameList;
+  }
   
+  std::vector<std::string> GetFileNameList(const std::string& key)
+  {
+    return fileNameMap[key];
+  }
+  
+  bool Clear()
+  {
+    bool res = true;
+    for (const auto & fileNameList : fileNameMap)
+      for (const auto & fileName : fileNameList.second)
+        res = res && RemoveFile(fileName);
+    
+    fileNameMap.clear();
+    return res;
+  }
+  
+
+private:
+  std::map< std::string, std::vector<std::string>> fileNameMap;
+
+  bool RemoveFile(const std::string & filename)
+  {
+    bool res = true;
+    if( itksys::SystemTools::FileExists( filename ) )
+    {
+      size_t posExt = filename.rfind( '.' );
+      if( posExt != std::string::npos && filename.compare( posExt, std::string::npos, ".shp" ) == 0 )
+      {
+        std::string shxPath = filename.substr( 0, posExt ) + std::string( ".shx" );
+        std::string dbfPath = filename.substr( 0, posExt ) + std::string( ".dbf" );
+        std::string prjPath = filename.substr( 0, posExt ) + std::string( ".prj" );
+        RemoveFile( shxPath );
+        RemoveFile( dbfPath );
+        RemoveFile( prjPath );
+      }
+    res = itksys::SystemTools::RemoveFile( filename );
+    }
+  return res;
+  }
+};
+
 
 class TrainImagesRegression : public CompositeApplication
 {
@@ -102,6 +150,16 @@ protected:
     ExecuteInternal( "rates");
   }
 
+  void PerformSampleSelection()
+  {
+    
+  }
+  
+  void PerformSampleExtraction()
+  {
+    
+  }
+
   void InitIO()
   {
     AddParameter( ParameterType_Group, "io", "Input and output data" );
@@ -129,7 +187,7 @@ protected:
     SetParameterDescription( "sample.nt", "Number of training samples." );
     MandatoryOff( "sample.nt" );
     
-    //AddApplication( "SampleSelection", "select", "Sample selection" );
+    AddApplication( "SampleSelection", "select", "Sample selection" );
     //AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
     
   }
@@ -196,10 +254,14 @@ private:
       ComputeSamplingRate(statisticsFileNames, samplingRateFileName, GetParameterInt("sample.nt"));
     else
       ComputeSamplingRate(statisticsFileNames, samplingRateFileName);
-      
+    
     std::cout << "Sampling rate computation done" << std::endl;
     
-    
+    for (unsigned int i =0; i < vectorFileNames.size(); i++)
+    {
+      PerformSampleSelection();
+      PerformSampleExtraction();
+    }
     
   }
 };
