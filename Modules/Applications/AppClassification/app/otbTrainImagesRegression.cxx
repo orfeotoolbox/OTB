@@ -28,56 +28,6 @@ namespace otb
 namespace Wrapper
 {
 
-class TrainRegressionFileHandler
-{
-public:
-  void AddFileNameList(const std::string& key, const std::vector<std::string> & fileNameList)
-  {
-    fileNameMap[key] = fileNameList;
-  }
-  
-  std::vector<std::string> GetFileNameList(const std::string& key)
-  {
-    return fileNameMap[key];
-  }
-  
-  bool Clear()
-  {
-    bool res = true;
-    for (const auto & fileNameList : fileNameMap)
-      for (const auto & fileName : fileNameList.second)
-        res = res && RemoveFile(fileName);
-    
-    fileNameMap.clear();
-    return res;
-  }
-  
-
-private:
-  std::map< std::string, std::vector<std::string>> fileNameMap;
-
-  bool RemoveFile(const std::string & filename)
-  {
-    bool res = true;
-    if( itksys::SystemTools::FileExists( filename ) )
-    {
-      size_t posExt = filename.rfind( '.' );
-      if( posExt != std::string::npos && filename.compare( posExt, std::string::npos, ".shp" ) == 0 )
-      {
-        std::string shxPath = filename.substr( 0, posExt ) + std::string( ".shx" );
-        std::string dbfPath = filename.substr( 0, posExt ) + std::string( ".dbf" );
-        std::string prjPath = filename.substr( 0, posExt ) + std::string( ".prj" );
-        RemoveFile( shxPath );
-        RemoveFile( dbfPath );
-        RemoveFile( prjPath );
-      }
-    res = itksys::SystemTools::RemoveFile( filename );
-    }
-  return res;
-  }
-};
-
-
 class TrainImagesRegression : public CompositeApplication
 {
 public:
@@ -95,52 +45,65 @@ public:
   
 protected:
 
-  void AddRegressionField(const std::string &inVectorFileName,
-                       const std::string &outVectorFileName,
-                       const std::string &fieldName)
+  void AddRegressionField()
   {
     auto setFieldAppli = GetInternalApplication("setfield");
+    auto inputFileNames = GetParameterStringList( "io.vd" );
+    auto& outputFileNames =  m_FileHandler[ "inputWithClassField" ]; 
     
-    setFieldAppli->SetParameterString("in", inVectorFileName);
-    setFieldAppli->SetParameterString("out", outVectorFileName);
-    setFieldAppli->SetParameterString("fn", fieldName);
+    setFieldAppli->SetParameterString("fn", m_PredictorFieldName);
     setFieldAppli->SetParameterString("fv", "0");
     
-    ExecuteInternal("setfield");
+    for (unsigned int i =0; i < inputFileNames.size(); i++)
+    {
+      outputFileNames.push_back("setfield"+ std::to_string(i) +".shp");// TODO io file handler
+      setFieldAppli->SetParameterString("in", inputFileNames[i]);
+      setFieldAppli->SetParameterString("out", outputFileNames[i]);
+      
+      // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
+      setFieldAppli->ExecuteAndWriteOutput();
+    }
   }
 
-  void ComputePolygonStatistics(const std::string &inVectorFileName,
-                                FloatVectorImageType * inputImage,
-                                const std::string &statisticFileName,
-                                const std::string &fieldName)
+  void ComputePolygonStatistics()
   {
     auto polygonClassAppli = GetInternalApplication("polystat");
+    auto& input = m_FileHandler[ "inputWithClassField" ];
+    auto& output = m_FileHandler[ "statsFiles" ];
+    FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
     
-    polygonClassAppli->SetParameterInputImage( "in", inputImage );
-    polygonClassAppli->SetParameterString( "vec", inVectorFileName);
-    polygonClassAppli->SetParameterString( "out", statisticFileName);
     
-    polygonClassAppli->UpdateParameters();
-    polygonClassAppli->SetParameterString( "field", fieldName);
+    for (unsigned int i =0; i < input.size(); i++)
+    {
+      output.push_back("polygonstat"+ std::to_string(i) +".xml");
+      
+      polygonClassAppli->SetParameterInputImage( "in", inputImageList->GetNthElement(i) );
+      polygonClassAppli->SetParameterString( "vec", input[i]);
+      polygonClassAppli->SetParameterString( "out", output[i]);
+  
+      polygonClassAppli->UpdateParameters();
+      polygonClassAppli->SetParameterString( "field", m_PredictorFieldName);
     
-    ExecuteInternal( "polystat" );
+      ExecuteInternal( "polystat" );
+    }
+    
   }
 
-  void ComputeSamplingRate(const std::vector<std::string> & statisticsFileNames, 
-                           const std::string & outputFileName,
-                           int numberOfSample = 0)
+  void ComputeSamplingRate()
   {
     auto samplingRateAppli = GetInternalApplication("rates");
     
-    samplingRateAppli->SetParameterStringList( "il", statisticsFileNames);
+    samplingRateAppli->SetParameterStringList( "il", m_FileHandler[ "statsFiles" ]);
+    
+    std::string outputFileName = "rates.xml";
     samplingRateAppli->SetParameterString("out", outputFileName);
     
-    if (numberOfSample)
+    if (HasValue("sample.nt"))
     {
       samplingRateAppli->SetParameterString("strategy", "constant");
       
       // TODO why nb is a string in MultiImageSamplingRate + MultiImageSamplingRate seems to return nb-1 samples ...
-      samplingRateAppli->SetParameterString("strategy.constant.nb", std::to_string(numberOfSample));
+      samplingRateAppli->SetParameterString("strategy.constant.nb", std::to_string(GetParameterInt("sample.nt")));
     }
     else
     {
@@ -148,18 +111,26 @@ protected:
     }
     
     ExecuteInternal( "rates");
+    
+    //TODO add the created file (rates_i.xml) to the file handler for cleaning
+    
   }
 
-  void PerformSampleSelection()
+  void SelectSamples()
   {
     
   }
   
-  void PerformSampleExtraction()
+  void ExtractSamples()
   {
     
   }
-
+  
+  void TrainModel()
+  {
+    
+  }
+  
   void InitIO()
   {
     AddParameter( ParameterType_Group, "io", "Input and output data" );
@@ -223,47 +194,62 @@ private:
   {
   }
 
+  bool ClearFileHandler()
+  {
+    bool res = true;
+    for (const auto & fileNameList : m_FileHandler)
+    {
+      for (const auto & filename : fileNameList.second)
+      {
+        res = true;
+        if( itksys::SystemTools::FileExists( filename ) )
+        {
+          size_t posExt = filename.rfind( '.' );
+          if( posExt != std::string::npos && filename.compare( posExt, std::string::npos, ".shp" ) == 0 )
+          {
+            std::string shxPath = filename.substr( 0, posExt ) + std::string( ".shx" );
+            std::string dbfPath = filename.substr( 0, posExt ) + std::string( ".dbf" );
+            std::string prjPath = filename.substr( 0, posExt ) + std::string( ".prj" );
+            itksys::SystemTools::RemoveFile( shxPath );
+            itksys::SystemTools::RemoveFile( dbfPath );
+            itksys::SystemTools::RemoveFile( prjPath );
+          }
+        res = itksys::SystemTools::RemoveFile( filename );
+        }
+      }
+    }
+    m_FileHandler.clear();
+    return res;
+  }
+  
   void DoExecute() override
   {
-    std::string predictorFieldName = "regclass";
-    
-    auto vectorFileNames = GetParameterStringList( "io.vd" );
-    FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
-    
-    std::vector<std::string> statisticsFileNames;
-    
-    for (unsigned int i =0; i < vectorFileNames.size(); i++)
-    {
-      std::string outfile = "setfield"+ std::to_string(i) +".shp";// TODO io file handler
-      AddRegressionField(vectorFileNames[i], outfile, predictorFieldName);
-      
-      std::cout << "Regression field added" << std::endl;
-      
-      statisticsFileNames.push_back("polygonstat"+ std::to_string(i) +".xml");
-      
-      ComputePolygonStatistics(outfile, inputImageList->GetNthElement(i), statisticsFileNames[i], predictorFieldName);
-      
-      std::cout << "Polygon class statistic done" << std::endl;
-    }
-    
     //TODO validation set ??
     
-    std::string samplingRateFileName = "rates.xml";
+    AddRegressionField();
     
-    if (HasValue("sample.nt"))
-      ComputeSamplingRate(statisticsFileNames, samplingRateFileName, GetParameterInt("sample.nt"));
-    else
-      ComputeSamplingRate(statisticsFileNames, samplingRateFileName);
+    std::cout << "Regression field added" << std::endl;
     
+    ComputePolygonStatistics();
+      
+    std::cout << "Polygon class statistic done" << std::endl;
+    
+    ComputeSamplingRate();
+  
     std::cout << "Sampling rate computation done" << std::endl;
     
-    for (unsigned int i =0; i < vectorFileNames.size(); i++)
-    {
-      PerformSampleSelection();
-      PerformSampleExtraction();
-    }
+    SelectSamples();
     
+    ExtractSamples();
+    
+    TrainModel();
+   
+    ClearFileHandler();
   }
+  
+  std::string m_PredictorFieldName = "regclass";
+  std::map< std::string, std::vector<std::string>> m_FileHandler;
+  
 };
 
 } //end namespace Wrapper
