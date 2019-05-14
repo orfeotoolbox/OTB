@@ -112,7 +112,11 @@ protected:
     
     ExecuteInternal( "rates");
     
-    //TODO add the created file (rates_i.xml) to the file handler for cleaning
+    auto& rateFiles = m_FileHandler["rateFiles"];
+    for (unsigned int i = 0; i< m_FileHandler["statsFiles"].size(); i++)
+    {
+      rateFiles.push_back("rates_"+std::to_string(i+1)+".xml");
+    }
     
   }
 
