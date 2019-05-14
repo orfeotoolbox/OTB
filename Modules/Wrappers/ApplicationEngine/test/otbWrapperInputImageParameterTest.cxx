@@ -22,17 +22,35 @@
 #pragma warning ( disable : 4786 )
 #endif
 
+#include "otbImage.h"
 #include "otbWrapperInputImageParameter.h"
 
 
-int otbWrapperInputImageParameterTest1(int itkNotUsed(argc), char* argv[])
+int otbWrapperInputImageParameterTest1(int, char* argv[])
 {
-  typedef otb::Wrapper::InputImageParameter InputImageParameterType;
-  InputImageParameterType::Pointer param = InputImageParameterType::New();
-
+  auto param = otb::Wrapper::InputImageParameter::New();
   param->SetFromFileName(argv[1]);
   param->SetKey(argv[2]);
   param->SetDescription(argv[3]);
+
+  /*
+  Originally reported on gitlab as bug #1899:
+  https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1899
+  */
+  using ImageType = otb::Image<float, 2>;
+  using ImageTypeOutput = otb::Image<unsigned char, 2>;
+
+  auto image = ImageType::New();
+  param->SetImage(image.GetPointer());
+
+  auto output1 = param->GetImage<ImageTypeOutput>();
+  auto output2 = param->GetImage<ImageTypeOutput>();
+
+  if (output1 != output2)
+  {
+      std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
+      return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
