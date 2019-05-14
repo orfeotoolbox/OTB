@@ -122,7 +122,29 @@ protected:
 
   void SelectSamples()
   {
+    auto sampleSelection = GetInternalApplication("select");
     
+    FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
+    auto& inputVectorFiles = m_FileHandler[ "inputWithClassField" ];
+    auto& outputVectorFiles = m_FileHandler[ "selectedSamples" ];
+    auto& rateFiles = m_FileHandler ["rateFiles"];
+    auto& statFiles = m_FileHandler ["statsFiles"];
+    
+    for (unsigned int i =0; i < inputVectorFiles.size(); i++)
+    {
+      outputVectorFiles.push_back("selectedSamples"+std::to_string(i)+".shp");
+      sampleSelection->SetParameterInputImage("in", inputImageList->GetNthElement(i));
+      sampleSelection->SetParameterString("vec", inputVectorFiles[i]);
+      sampleSelection->SetParameterString("instats", statFiles[i]);
+      sampleSelection->SetParameterString("strategy", "byclass");
+      sampleSelection->SetParameterString("strategy.byclass.in", rateFiles[i]);
+      sampleSelection->SetParameterString("out", outputVectorFiles[i]);
+      
+      sampleSelection->UpdateParameters();
+      sampleSelection->SetParameterString("field", m_PredictorFieldName);
+      
+      ExecuteInternal("select");
+    }
   }
   
   void ExtractSamples()
