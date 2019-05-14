@@ -139,8 +139,10 @@ macos-superbuild-prepare:
   extends: .common-prepare
   stage: prepare
   before_script:
-# This override the previous before_script
-    - git checkout $CI_COMMIT_REF_NAME
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   artifacts:
@@ -157,7 +159,10 @@ macos-superbuild-build:
   extends: .general
   stage: build
   before_script:
-    - git checkout $CI_COMMIT_REF_NAME
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
     - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
   after_script:
     - echo "Nothing to do for after_script"
