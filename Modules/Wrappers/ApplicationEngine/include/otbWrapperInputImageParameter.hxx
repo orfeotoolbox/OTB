@@ -158,6 +158,20 @@ InputImageParameter::GetImage()
       {
       return nullptr;
       }
+    // Check if the image type asked here is the same as m_image
+    else if ( dynamic_cast < TImageType* > ( m_Image.GetPointer() ) )
+      {
+      return dynamic_cast < TImageType* > ( m_Image.GetPointer() );
+      }
+    // check if we already done this cast
+    else if ( dynamic_cast < 
+      ClampImageFilter < DoubleVectorImageType , TImageType >* >
+      ( m_OutputCaster.GetPointer() ) )
+      {
+      return dynamic_cast < 
+      ClampImageFilter < DoubleVectorImageType , TImageType >* >
+        ( m_OutputCaster.GetPointer() )->GetOutput();
+      }
     else
       CLAMP_IMAGE_BASE( TImageType, m_Image.GetPointer() );
     }
