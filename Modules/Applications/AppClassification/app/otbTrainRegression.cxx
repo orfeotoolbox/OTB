@@ -1,4 +1,4 @@
-/*
+c/*
  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
@@ -125,7 +125,9 @@ void DoInit() override
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso("OpenCV documentation for machine learning "
     "http://docs.opencv.org/modules/ml/doc/ml.html ");
-
+  
+  AddDocTag(Tags::Deprecated);
+  
   //Group IO
   AddParameter( ParameterType_Group , "io" , "Input and output data" );
   SetParameterDescription("io" , 
