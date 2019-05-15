@@ -86,6 +86,7 @@ if ( DEBUG )
     message("Xdk folder exists at ${XDK_PATH}")
   else()
     message("Something went wrong no folder in ${XDK_PATH}")
+    message("The branch was ${BRANCH_NAME}")
   endif()
 endif()
 
