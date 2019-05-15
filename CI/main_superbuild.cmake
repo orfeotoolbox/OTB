@@ -50,7 +50,7 @@ find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 
 # FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
 set( GIT "${CTEST_GIT_COMMAND}" )
-set( DEBUG 1 )
+
 execute_process(
   COMMAND ${GIT} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
   "--depth" "1" "superbuild-artifact"

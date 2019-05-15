@@ -19,7 +19,7 @@ variables:
   GIT_STRATEGY: "clone"
 
 stages:
-  # - precheck
+  - precheck
   - prepare
   - build
 
@@ -30,19 +30,19 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-# fast-build:
-#   extends: .general
-#   only: [merge_requests, branches]
-#   stage: precheck
-#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
-#   before_script:
-#     - git checkout -f -q $CI_COMMIT_SHA
-#     - python3 CI/check_twin_pipelines.py
-#   after_script:
-#     - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
-#   script:
-#     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-#     - ccache -s
+fast-build:
+  extends: .general
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  before_script:
+    - git checkout -f -q $CI_COMMIT_SHA
+    - python3 CI/check_twin_pipelines.py
+  after_script:
+    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
 .common-build:
   extends: .general
