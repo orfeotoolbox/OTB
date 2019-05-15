@@ -84,13 +84,9 @@ ubuntu-llvm:
     - git lfs install --skip-repo
   artifacts:
     expire_in: 24 hrs
-    when: on_success
+    when: always
     paths:
       - sb_branch.txt
-  artifacts:
-    expire_in: 2 days
-    when : on_failure
-    paths:
       # This recovers logs from superbuild build
       - build/*/*/*/*.log
 
