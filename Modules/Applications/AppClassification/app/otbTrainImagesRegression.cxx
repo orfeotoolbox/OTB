@@ -56,7 +56,7 @@ private:
         
         "The training vector data must contain polygons corresponding to the input sampling positions. This data "
         "is used to extract samples using pixel values in each band of the feature image and the corresponding "
-        "ground truth extracted from the predictor image.\n\n".
+        "ground truth extracted from the predictor image.\n\n"
         
         "At the end of the application, the mean square error between groundtruth and predicted values is computed using "
         "the output model and the validation vector data. Note that if no validation data is given, the training data "
