@@ -51,7 +51,7 @@ protected:
     auto inputFileNames = GetParameterStringList( "io.vd" );
     auto& outputFileNames =  m_FileHandler[ "inputWithClassField" ]; 
     
-    setFieldAppli->SetParameterString("fn", m_PredictorFieldName);
+    setFieldAppli->SetParameterString("fn", m_ClassFieldName);
     setFieldAppli->SetParameterString("fv", "0");
     
     for (unsigned int i =0; i < inputFileNames.size(); i++)
@@ -82,7 +82,7 @@ protected:
       polygonClassAppli->SetParameterString( "out", output[i]);
   
       polygonClassAppli->UpdateParameters();
-      polygonClassAppli->SetParameterString( "field", m_PredictorFieldName);
+      polygonClassAppli->SetParameterString( "field", m_ClassFieldName);
     
       ExecuteInternal( "polystat" );
     }
@@ -126,13 +126,13 @@ protected:
     
     FloatVectorImageListType* inputImageList = GetParameterImageList( "io.il" );
     auto& inputVectorFiles = m_FileHandler[ "inputWithClassField" ];
-    auto& outputVectorFiles = m_FileHandler[ "selectedSamples" ];
+    auto& outputVectorFiles = m_FileHandler[ "samples" ];
     auto& rateFiles = m_FileHandler ["rateFiles"];
     auto& statFiles = m_FileHandler ["statsFiles"];
     
     for (unsigned int i =0; i < inputVectorFiles.size(); i++)
     {
-      outputVectorFiles.push_back("selectedSamples"+std::to_string(i)+".shp");
+      outputVectorFiles.push_back("samples"+std::to_string(i)+".shp");
       sampleSelection->SetParameterInputImage("in", inputImageList->GetNthElement(i));
       sampleSelection->SetParameterString("vec", inputVectorFiles[i]);
       sampleSelection->SetParameterString("instats", statFiles[i]);
@@ -141,7 +141,7 @@ protected:
       sampleSelection->SetParameterString("out", outputVectorFiles[i]);
       
       sampleSelection->UpdateParameters();
-      sampleSelection->SetParameterString("field", m_PredictorFieldName);
+      sampleSelection->SetParameterString("field", m_ClassFieldName);
       
       ExecuteInternal("select");
     }
@@ -149,7 +149,30 @@ protected:
   
   void ExtractSamples()
   {
+    auto sampleExtraction = GetInternalApplication("extraction");
     
+    FloatVectorImageListType* featureImageList = GetParameterImageList( "io.il" );
+    FloatVectorImageListType* predictorImageList = GetParameterImageList("io.ip");
+    auto& vectorFiles = m_FileHandler[ "samples" ];
+ 
+    for (unsigned int i =0; i < vectorFiles.size(); i++)
+    {
+      sampleExtraction->SetParameterString("vec", vectorFiles[i]);
+      sampleExtraction->UpdateParameters();
+      sampleExtraction->SetParameterString("field", m_ClassFieldName);
+      
+      //First Extraction
+      sampleExtraction->SetParameterInputImage("in", featureImageList->GetNthElement(i));
+      sampleExtraction->SetParameterString("outfield", "prefix");
+      sampleExtraction->SetParameterString("outfield.prefix.name", "value_");
+      ExecuteInternal("extraction");
+      
+      //Second Extraction
+      sampleExtraction->SetParameterInputImage("in", predictorImageList->GetNthElement(i));
+      sampleExtraction->SetParameterString("outfield", "list");
+      sampleExtraction->SetParameterStringList("outfield.list.names", {"prediction"});
+      ExecuteInternal("extraction");
+    }
   }
   
   void TrainModel()
@@ -165,6 +188,10 @@ protected:
     AddParameter( ParameterType_InputImageList, "io.il", "Input Image List" );
     SetParameterDescription( "io.il", "A list of input images." );
     MandatoryOn( "io.il" );
+    
+    AddParameter( ParameterType_InputImageList, "io.ip", "Input Predictor Image List" );
+    SetParameterDescription( "io.ip", "A list of input images." );
+    MandatoryOn( "io.ip" );
     
     AddParameter( ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List" );
     SetParameterDescription( "io.vd", "A list of vector data to select the training samples." );
@@ -185,7 +212,7 @@ protected:
     MandatoryOff( "sample.nt" );
     
     AddApplication( "SampleSelection", "select", "Sample selection" );
-    //AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
+    AddApplication( "SampleExtraction", "extraction", "Sample extraction" );
     
   }
   
@@ -270,10 +297,10 @@ private:
     
     TrainModel();
    
-    ClearFileHandler();
+    //ClearFileHandler();
   }
   
-  std::string m_PredictorFieldName = "regclass";
+  std::string m_ClassFieldName = "regclass";
   std::map< std::string, std::vector<std::string>> m_FileHandler;
   
 };
