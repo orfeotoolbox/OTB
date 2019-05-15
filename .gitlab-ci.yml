@@ -18,15 +18,6 @@ variables:
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
 
-before_script:
-  # Provision efficiently the local LFS cache before checkout
-  - git lfs fetch origin $CI_COMMIT_SHA
-  # Checkout the expected branch
-  - git checkout -f -q $CI_COMMIT_SHA
-
-after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
-
 stages:
   - precheck
   - prepare
@@ -48,6 +39,8 @@ fast-build:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
+  after_script:
+    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
@@ -56,6 +49,13 @@ fast-build:
   extends: .general
   only: [merge_requests]
   stage: build
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
+  after_script:
+    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
 
 debian-build:
   extends: .common-build
@@ -79,12 +79,9 @@ ubuntu-llvm:
   only: [merge_requests]
   stage: prepare
   before_script:
-# This override the previous before_script
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
-  after_script:
-    - echo "Nothing to do for after_script"
   artifacts:
     expire_in: 24 hrs
     paths:
