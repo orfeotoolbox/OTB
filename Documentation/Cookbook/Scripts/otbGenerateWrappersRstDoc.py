@@ -25,7 +25,7 @@ import argparse
 import re
 
 import otbApplication
-from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_ListView, ParameterType_Group
 
 from otb_warnings import application_documentation_warnings
 
@@ -202,7 +202,6 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_InputImageList: "image1 image2..."})
     values.update({ParameterType_InputVectorDataList: "vectorfile1 vectorfile2..."})
     values.update({ParameterType_InputFilenameList: "filename1 filename2..."})
-    values.update(dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"))
 
     if type in values:
         return values[type]
@@ -356,10 +355,17 @@ def make_links(text, allapps):
     rep = {appname: ":ref:`{}`".format(appname) for appname in allapps}
     return multireplace(text, rep)
 
+def render_deprecation_string(app):
+    if app.IsDeprecated():
+        return "This application is deprecated and will be removed in a future release."
+    else:
+        return ""
+
 def render_application(appname, allapps):
     "Render app to rst"
 
-    app = otbApplication.Registry.CreateApplication(appname)
+    # Create the application without logger to avoid the deprecation warning log
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
     # TODO: remove this when bug 440 is fixed
     app.Init()
@@ -368,6 +374,7 @@ def render_application(appname, allapps):
 
     output = template_application.format(
         label=appname,
+        deprecation_string=render_deprecation_string(app),
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
@@ -381,8 +388,9 @@ def render_application(appname, allapps):
     return output
 
 def GetApplicationTags(appname):
-     app = otbApplication.Registry.CreateApplication(appname)
-     return app.GetDocTags()
+    # Create the application without logger to avoid the deprecation warning log
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
+    return app.GetDocTags()
 
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
@@ -404,9 +412,12 @@ def GenerateRstForApplications(rst_dir):
     for appName in appNames:
 
         # Get application first tag
-        tags = GetApplicationTags(appName)
+        tags = list(GetApplicationTags(appName))
+        if "Deprecated" in tags:
+            tags.remove("Deprecated")
         if not tags or len(tags) == 0:
             raise RuntimeError("No tags for application: " + appName)
+
         tag = tags[0]
         tag_ = tag.replace(" ", "_")
 

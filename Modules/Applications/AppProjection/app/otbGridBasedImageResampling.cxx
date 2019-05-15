@@ -109,7 +109,6 @@ private:
     SetName("GridBasedImageResampling");
     SetDescription("Resamples an image according to a resampling grid");
 
-    SetDocName("Grid Based Image Resampling");
     SetDocLongDescription("This application allows performing image resampling from an input resampling grid.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

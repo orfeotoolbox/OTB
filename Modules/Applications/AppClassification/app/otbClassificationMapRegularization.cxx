@@ -62,7 +62,6 @@ private:
     SetName("ClassificationMapRegularization");
     SetDescription("Filters the input labeled image using Majority Voting in a ball shaped neighbordhood");
 
-    SetDocName("Classification Map Regularization");
 
     SetDocLongDescription(
         "This application filters the input labeled image (with a maximal class label = 65535) using Majority Voting in a ball shaped neighbordhood."

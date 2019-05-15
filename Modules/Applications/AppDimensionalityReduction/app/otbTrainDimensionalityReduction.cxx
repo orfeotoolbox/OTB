@@ -73,7 +73,6 @@ private:
     SetName("TrainDimensionalityReduction");
     SetDescription("Train a dimensionality reduction model");
 
-    SetDocName("Train Dimensionality Reduction");
     SetDocLongDescription("Trainer for dimensionality reduction algorithms "
       "(autoencoders, PCA, SOM). All input samples are used to compute the "
       "model, like other machine learning models.\n"

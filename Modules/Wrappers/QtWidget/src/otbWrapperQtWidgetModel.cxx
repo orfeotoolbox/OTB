@@ -21,7 +21,7 @@
 #include "otbWrapperQtWidgetModel.h"
 
 //Use to create command line from the application parameters
-#include "otbWrapperOutputProcessXMLParameter.h"
+#include "otbWrapperOutputXML.h"
 
 using std::string;
 

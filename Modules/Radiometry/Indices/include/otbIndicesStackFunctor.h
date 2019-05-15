@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <stdexcept>
+#include "itkVariableLengthVector.h"
 
 namespace otb
 {

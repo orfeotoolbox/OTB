@@ -56,7 +56,6 @@ private:
     SetDescription("Convert cartographic coordinates to geographic ones.");
 
     // Documentation
-    SetDocName("Cartographic to geographic coordinates conversion");
     SetDocLongDescription("This application computes the geographic coordinates from cartographic ones. User has to give the X and Y coordinate and the cartographic projection (see mapproj parameter for details).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

@@ -26,10 +26,10 @@
 #
 
 def test(otb, argv):
-	app = otb.Registry.CreateApplication('BandMath')
+    app = otb.Registry.CreateApplication('BandMath')
 
-	app.SetParameterString("inxml", argv[1])
-	app.UpdateParameters()
+    app.LoadParametersFromXML(argv[1])
+    #app.UpdateParameters()
 
-	app.SetParameterString("out"  , argv[-1])
-	app.ExecuteAndWriteOutput()
+    app.SetParameterString("out"  , argv[-1])
+    app.ExecuteAndWriteOutput()

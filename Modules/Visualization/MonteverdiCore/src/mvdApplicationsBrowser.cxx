@@ -143,10 +143,6 @@ ApplicationsBrowser
   // get tags
   StringVector vtags( application->GetDocTags() );
 
-  //
-  // fill the OTBApps 'docName <-> name' map
-  m_DocNameToNameMap[ application->GetDocName() ] = appName;
-
   return vtags;
 }
 
@@ -155,10 +151,6 @@ void
 ApplicationsBrowser
 ::SearchAvailableApplicationsTags()
 {
-  //
-  // clear previously filled map
-  m_DocNameToNameMap.clear();
-
   //
   // get all the applications in the search path
   StringVector vapp( GetAvailableApplications() );
@@ -216,7 +208,7 @@ ApplicationsBrowser
   //
   // emit a signal with the ApplicationsTagContainer as
   // parameter 
-  emit AvailableApplicationsTagsChanged(outputContainer, m_DocNameToNameMap);
+  emit AvailableApplicationsTagsChanged(outputContainer);
 }
 
 /*******************************************************************************/

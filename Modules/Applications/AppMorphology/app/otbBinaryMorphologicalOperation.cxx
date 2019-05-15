@@ -78,7 +78,6 @@ SetName( "BinaryMorphologicalOperation" );
 SetDescription( "Performs morphological operations on an input image channel" );
 
 // Documentation
-SetDocName( "Binary Morphological Operation" );
 SetDocLongDescription( "This application performs binary morphological "
   "operations on a mono band image or a channel of the input." );
 SetDocLimitations( "None" );

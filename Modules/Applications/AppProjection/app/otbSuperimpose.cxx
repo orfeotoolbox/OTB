@@ -87,7 +87,6 @@ private:
     SetDescription("Using available image metadata, project one image onto another one");
 
     // Documentation
-    SetDocName("Superimpose sensor");
     SetDocLongDescription("This application performs the projection of an image into the geometry of another one.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
