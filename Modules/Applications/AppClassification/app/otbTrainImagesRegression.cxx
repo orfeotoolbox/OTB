@@ -195,6 +195,12 @@ protected:
     trainVectorRegression->UpdateParameters();
     trainVectorRegression->SetParameterString("cfield", m_PredictionFieldName);
     trainVectorRegression->SetParameterStringList("feat", featureNames);
+    
+    if( IsParameterEnabled( "io.valid" ) && HasValue( "io.valid" ) )
+    {
+      trainVectorRegression->SetParameterStringList("valid.vd", m_FileHandler["validsamples"]);
+    }
+    
     ExecuteInternal("training");
   }
   
