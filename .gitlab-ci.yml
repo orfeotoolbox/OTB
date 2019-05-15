@@ -27,7 +27,7 @@ before_script:
   - git checkout -f -q $CI_COMMIT_SHA
 
 after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
+  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_API_TOKEN
 
 stages:
   - precheck
