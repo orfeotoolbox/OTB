@@ -49,7 +49,7 @@ fast-build:
   only: [merge_requests]
   stage: build
   before_script:
-    - git lfs install --skip-repo
+    - git lfs install
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
     # Checkout the expected branch
@@ -80,7 +80,7 @@ ubuntu-llvm:
   stage: prepare
   before_script:
     - git checkout -f -q $CI_COMMIT_SHA
-    - git lfs install --skip-repo
+    - git lfs install
   artifacts:
     expire_in: 24 hrs
     when: always

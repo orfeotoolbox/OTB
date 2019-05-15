@@ -68,7 +68,7 @@ if ( DEBUG )
 endif()
 
 if (clone_res)
-  message( SEND_ERROR "Problem in retreiving the archive of ${BRANCH_NAME}")
+  message( SEND_ERROR "Problem in retreiving the archive")
   return()
 endif()
 
@@ -86,6 +86,7 @@ if ( DEBUG )
     message("Xdk folder exists at ${XDK_PATH}")
   else()
     message("Something went wrong no folder in ${XDK_PATH}")
+    message("The branch was ${BRANCH_NAME}")
   endif()
 endif()
 
