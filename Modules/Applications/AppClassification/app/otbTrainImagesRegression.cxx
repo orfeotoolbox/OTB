@@ -42,6 +42,52 @@ public:
 
   /** Standard macro */
   itkTypeMacro( TrainImagesRegression, Superclass );
+
+private: 
+
+  void DoInit() override
+  {
+    SetName("TrainImagesRegression");
+    SetDescription("Train a regression model from multiple triplets of feature images, predictor images "
+                    "and training vector data.");
+
+    SetDocLongDescription(
+        "Train a classifier from multiple triplets of feature images, predictor images and training vector data. \n\n"
+        
+        "The training vector data must contain polygons corresponding to the input sampling positions. This data "
+        "is used to extract samples using pixel values in each band of the feature image and the corresponding "
+        "ground truth extracted from the predictor image.\n\n".
+        
+        "At the end of the application, the mean square error between groundtruth and predicted values is computed using "
+        "the output model and the validation vector data. Note that if no validation data is given, the training data "
+        "will be used for validation.\n\n"
+        
+        "The number of training and validation samples can be specified with parameters. If no size is given, all samples will "
+        "be used. \n\n"
+        
+        "This application is based on LibSVM, OpenCV Machine Learning, and Shark ML. "
+        "The output of this application is a text model file, whose format corresponds to the "
+        "ML model type chosen. There is no image nor vector data output.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("TrainVectorRegression \n"
+                  "TrainImagesClassifier");
+    
+    AddDocTag(Tags::Learning);
+    
+    SetOfficialDocLink();
+    
+    ClearApplications();
+    
+    InitIO();
+    InitSampling();
+    InitLearning();
+    
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
+    SetParameterDescription( "cleanup",
+                           "If activated, the application will try to clean all temporary files it created" );
+    SetParameterInt( "cleanup", 1);
+  }
   
 protected:
   struct SamplingParameters
@@ -263,32 +309,6 @@ protected:
 
 private:
 
-  void DoInit() override
-  {
-    SetName("TrainImagesRegression");
-    SetDescription(" ");
-
-    SetDocLongDescription(" ");
-    SetDocLimitations(" ");
-    SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
-    
-    AddDocTag(Tags::Learning);
-    
-    SetOfficialDocLink();
-    
-    ClearApplications();
-    
-    InitIO();
-    InitSampling();
-    InitLearning();
-    
-    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
-    SetParameterDescription( "cleanup",
-                           "If activated, the application will try to clean all temporary files it created" );
-    SetParameterInt( "cleanup", 1);
-  }
-  
   void DoUpdateParameters() override
   {
   }
