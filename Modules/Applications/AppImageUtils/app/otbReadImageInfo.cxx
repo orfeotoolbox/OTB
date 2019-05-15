@@ -54,7 +54,6 @@ private:
     SetDescription("Get information about the image");
 
     // Documentation
-    SetDocName("Read image information");
     SetDocLongDescription("Display information about the input image like: image size, origin, spacing, metadata, projections...");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

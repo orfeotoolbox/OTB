@@ -22,7 +22,7 @@ The naming convention “im[x]b[y]” designates the yth band of the xth
 input image.
 
 The *BandMath* application embeds built-in operators and functions
-listed in `muparser documentation <http://muparser.sourceforge.net/mup_features.html#idDef2>`_ thus
+listed in `muparser documentation <https://beltoforion.de/article.php?a=muparser&p=features&s=idDef1#idDef1>`_ thus
 allowing a vast choice of possible operations.
 
 Images with no-data values

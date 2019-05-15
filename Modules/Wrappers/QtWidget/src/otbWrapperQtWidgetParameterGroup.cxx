@@ -62,15 +62,9 @@ void QtWidgetParameterGroup::DoCreateWidget()
       {
       ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
-      OutputProcessXMLParameter* paramAsInXML = dynamic_cast<OutputProcessXMLParameter*>(param);
-      InputProcessXMLParameter* paramAsOutXML = dynamic_cast<InputProcessXMLParameter*>(param);
 
-      bool paramIsXML = false;
-      if(paramAsInXML != nullptr || paramAsOutXML != nullptr)
-        paramIsXML = true;
-
-      if (paramAsGroup == nullptr && paramAsChoice == nullptr && !paramIsXML)
-        {
+      if (paramAsGroup == nullptr && paramAsChoice == nullptr)
+      {
         // Label (col 1)
         QWidget* label = new QtWidgetParameterLabel( rawParam , this);
         gridLayout->addWidget(label, i, 1);

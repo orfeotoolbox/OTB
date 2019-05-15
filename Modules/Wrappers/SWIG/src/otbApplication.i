@@ -95,8 +95,6 @@ namespace Wrapper
     ParameterType_Group,
     ParameterType_ListView,
     ParameterType_RAM,
-    ParameterType_OutputProcessXML,
-    ParameterType_InputProcessXML,
     ParameterType_Bool
   } ParameterType;
 
@@ -219,12 +217,16 @@ public:
   int Execute();
   int ExecuteAndWriteOutput();
 
+  void LoadParametersFromXML(const std::string& filename);
+  void SaveParametersToXML(const std::string& filename);
+
 #if SWIGPYTHON
   Logger* GetLogger();
 #endif
   unsigned long itk::Object::AddObserver(const EventObject & event, 
                                           Command * command);
 
+  bool IsDeprecated();
 
 #if SWIGPYTHON
   %extend 
@@ -312,8 +314,6 @@ public:
 
   void FreeRessources();
 
-  itkSetStringMacro(DocName);
-  itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
   itkSetStringMacro(DocAuthors);
@@ -574,17 +574,12 @@ class ApplicationProxy(object):
   %pythoncode
     {
 
-		def __str__(self):
-			s  = self.GetDocName()
-
 		def GetParameterTypeAsString(self, parameter_type):
 			return {
-				ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
 				ParameterType_String : 'ParameterType_String',
 				ParameterType_InputFilename : 'ParameterType_InputFilename',
 				ParameterType_OutputImage : 'ParameterType_OutputImage',
 				ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
-				ParameterType_OutputProcessXML : 'ParameterType_OutputProcessXML',
 				ParameterType_OutputFilename : 'ParameterType_OutputFilename',
 				ParameterType_Directory : 'ParameterType_Directory',
 				ParameterType_InputImage : 'ParameterType_InputImage',
@@ -604,7 +599,7 @@ class ApplicationProxy(object):
 			}.get(parameter_type, 'ParameterType_UNKNOWN')
 
 		def __str__(self):
-			s  = self.GetDocName()
+			s  = self.GetName()
 			s += '\n'
 			s += self.GetDocLongDescription()
 			return s
@@ -615,10 +610,10 @@ class ApplicationProxy(object):
 
 		def SetParameterValue(self, paramKey, value):
 			paramType = self.GetParameterType(paramKey)
-			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
+			if paramType in [ParameterType_RAM,
 											 ParameterType_String, ParameterType_InputFilename,
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
-											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+											 ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
 											 ParameterType_InputVectorData]:
 			  return self.SetParameterString(paramKey, value)
@@ -649,10 +644,10 @@ class ApplicationProxy(object):
 
 		def GetParameterValue(self, paramKey):
 			paramType = self.GetParameterType(paramKey)
-			if paramType in [ParameterType_InputProcessXML,
+			if paramType in [
 											 ParameterType_String, ParameterType_InputFilename,
 											 ParameterType_OutputImage, ParameterType_OutputVectorData,
-											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
+											 ParameterType_OutputFilename,
 											 ParameterType_Directory, ParameterType_InputImage,
 											 ParameterType_InputVectorData]:
 			  return self.GetParameterString(paramKey)
@@ -906,6 +901,8 @@ public:
         application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
         if application is not None:
             application.SetupLogger()
+            if application.IsDeprecated():
+                application.GetLogger().Warning("This application is deprecated and will be removed in a future OTB release")
         return application
   }
   #else

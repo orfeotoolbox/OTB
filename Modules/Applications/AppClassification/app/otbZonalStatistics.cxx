@@ -148,7 +148,6 @@ public:
     SetDescription("This application computes zonal statistics");
 
     // Documentation
-    SetDocName("ZonalStatistics");
     SetDocLongDescription("This application computes zonal statistics from label image, or vector data. "
                           "The application inputs one input multiband image, and another input for zones definition. "
                           "Zones can be defined with a label image (inzone.labelimage.in) or a vector data layer "

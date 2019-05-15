@@ -240,7 +240,6 @@ private:
     SetName("ColorMapping");
     SetDescription("Map a label image to 8-bits RGB using look-up tables.");
 
-    SetDocName("Color Mapping");
     SetDocLongDescription(
         "Map a label image to a 8-bits RGB image (both ways) using different methods:\n\n"
 

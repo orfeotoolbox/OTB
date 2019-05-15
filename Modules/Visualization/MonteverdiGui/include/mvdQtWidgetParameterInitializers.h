@@ -49,12 +49,10 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetListEditWidget.h"
@@ -226,21 +224,6 @@ public:
 };
 
 /**
- * \class InputProcessXMLInitializer
- *
- * \ingroup OTBMonteverdiGUI
- *
- * \brief WIP.
- */
-class InputProcessXMLInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputProcessXMLParameter *,
-  void >
-{
-public:
-  inline result_type operator () ( argument_type widget ) const;
-};
-
-/**
  * \class OutputImageInitializer
  *
  * \ingroup OTBMonteverdiGUI
@@ -286,22 +269,6 @@ public:
  */
 class OutputFilenameInitializer : public std::unary_function<
   otb::Wrapper::QtWidgetOutputFilenameParameter*,
-  void
-  >
-{
-public:
-  inline result_type operator () ( argument_type widget ) const;
-};
-
-/**
- * \class OutputProcessXMLInitializer
- *
- * \ingroup OTBMonteverdiGUI
- *
- * \brief WIP.
- */
-class OutputProcessXMLInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetOutputProcessXMLParameter *,
   void
   >
 {
@@ -447,17 +414,6 @@ InputVectorDataListInitializer
 
 /*****************************************************************************/
 inline
-InputProcessXMLInitializer::result_type
-InputProcessXMLInitializer
-::operator () ( argument_type widget ) const
-{
-  assert( widget!=NULL );
-
-  SetupForFilenameDrop( widget );
-}
-
-/*****************************************************************************/
-inline
 ToolTipInitializer::result_type
 ToolTipInitializer
 ::operator () ( argument_type otbUseInDebug( widget ) ) const
@@ -540,25 +496,6 @@ OutputFilenameInitializer
   assert( !qApp->arguments().empty() );
 
   SetupOutputFilename( widget );
-}
-
-/*****************************************************************************/
-inline
-OutputProcessXMLInitializer::result_type
-OutputProcessXMLInitializer
-::operator () ( argument_type widget ) const
-{
-  assert( widget!=NULL );
-
-  SetupForFilenameDrop( widget );
-
-  assert( qApp!=NULL );
-  assert( !qApp->arguments().empty() );
-
-  // MANTIS-1103
-  // {
-  // SetupOutputFilename( widget );
-  // }
 }
 
 /*****************************************************************************/
