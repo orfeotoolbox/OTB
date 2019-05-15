@@ -164,7 +164,7 @@ protected:
       //First Extraction
       sampleExtraction->SetParameterInputImage("in", featureImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "prefix");
-      sampleExtraction->SetParameterString("outfield.prefix.name", "value_");
+      sampleExtraction->SetParameterString("outfield.prefix.name", m_FeaturePrefix);
       ExecuteInternal("extraction");
       
       //Second Extraction
@@ -177,7 +177,20 @@ protected:
   
   void TrainModel()
   {
+    auto trainVectorRegression = GetInternalApplication("training");
     
+    auto& sampleFileNameList = m_FileHandler["samples"];
+    std::vector<std::string> featureNames;
+    for (unsigned int i = 0; i<sampleFileNameList.size(); i++)
+    {
+      featureNames.push_back(m_FeaturePrefix+std::to_string(i));
+    }
+    
+    trainVectorRegression->SetParameterStringList("io.vd", sampleFileNameList);
+    trainVectorRegression->UpdateParameters();
+    trainVectorRegression->SetParameterString("cfield", m_PredictionFieldName);
+    trainVectorRegression->SetParameterStringList("feat", featureNames);
+    ExecuteInternal("training");
   }
   
   void InitIO()
@@ -218,8 +231,15 @@ protected:
   
   void InitLearning()
   {
-    AddApplication( "TrainVectorRegression", "trainregression", "Train vector regression"); 
+    AddApplication( "TrainVectorRegression", "training", "Train vector regression"); 
     
+    ShareParameter( "io.imstat", "training.io.stats" );
+    ShareParameter( "io.out", "training.io.out" );
+
+    ShareParameter( "classifier", "training.classifier" );
+    ShareParameter( "rand", "training.rand" );
+
+    ShareParameter( "io.mse", "training.io.mse" );
   }
 
 private:
@@ -314,6 +334,8 @@ private:
   std::string m_ClassFieldName = "regclass";
   
   std::string m_PredictionFieldName = "prediction";
+  
+  std::string m_FeaturePrefix = "value_";
   
   std::map< std::string, std::vector<std::string>> m_FileHandler;
   
