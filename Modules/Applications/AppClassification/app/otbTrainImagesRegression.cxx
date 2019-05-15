@@ -158,7 +158,7 @@ protected:
     {
       samplingRateAppli->SetParameterString("strategy", "constant");
       
-      // TODO why nb is a string in MultiImageSamplingRate + MultiImageSamplingRate seems to return nb-1 samples ...
+      // Convert the integer number to string for the MultiImageSamplingRate application
       samplingRateAppli->SetParameterString("strategy.constant.nb", std::to_string(GetParameterInt("sample.nt")));
     }
     else
