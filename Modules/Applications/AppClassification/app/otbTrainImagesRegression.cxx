@@ -75,8 +75,6 @@ private:
     
     AddDocTag(Tags::Learning);
     
-    SetOfficialDocLink();
-    
     ClearApplications();
     
     InitIO();
@@ -87,6 +85,19 @@ private:
     SetParameterDescription( "cleanup",
                            "If activated, the application will try to clean all temporary files it created" );
     SetParameterInt( "cleanup", 1);
+    
+    // Doc example parameter settings
+    SetDocExampleParameterValue( "io.il", "inputFeatureImage.tif" );
+    SetDocExampleParameterValue( "io.ip", "inputPredictorImage.tif" );
+    SetDocExampleParameterValue( "io.vd", "trainingData.shp" );
+    SetDocExampleParameterValue( "io.valid", "validationData.shp" );
+    SetDocExampleParameterValue( "sample.nt", "500");
+    SetDocExampleParameterValue( "sample.nv", "100");
+    SetDocExampleParameterValue( "io.imstat", "imageStats.xml" );
+    SetDocExampleParameterValue( "classifier", "rf" );
+    SetDocExampleParameterValue( "io.out", "model.txt" );
+    
+    SetOfficialDocLink();
   }
   
 protected:
