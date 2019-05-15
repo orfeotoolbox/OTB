@@ -56,7 +56,7 @@ protected:
     
     for (unsigned int i =0; i < inputFileNames.size(); i++)
     {
-      outputFileNames.push_back("setfield"+ std::to_string(i) +".shp");// TODO io file handler
+      outputFileNames.push_back(GetParameterString("io.out")+"_setfield"+ std::to_string(i) +".shp");
       setFieldAppli->SetParameterString("in", inputFileNames[i]);
       setFieldAppli->SetParameterString("out", outputFileNames[i]);
       
@@ -75,7 +75,7 @@ protected:
     
     for (unsigned int i =0; i < input.size(); i++)
     {
-      output.push_back("polygonstat"+ std::to_string(i) +".xml");
+      output.push_back(GetParameterString("io.out")+"_polygonstat"+ std::to_string(i) +".xml");
       
       polygonClassAppli->SetParameterInputImage( "in", inputImageList->GetNthElement(i) );
       polygonClassAppli->SetParameterString( "vec", input[i]);
@@ -95,7 +95,7 @@ protected:
     
     samplingRateAppli->SetParameterStringList( "il", m_FileHandler[ "statsFiles" ]);
     
-    std::string outputFileName = "rates.csv";
+    std::string outputFileName = GetParameterString("io.out")+"_rates.csv";
     samplingRateAppli->SetParameterString("out", outputFileName);
     
     if (HasValue("sample.nt"))
@@ -115,7 +115,7 @@ protected:
     auto& rateFiles = m_FileHandler["rateFiles"];
     for (unsigned int i = 0; i< m_FileHandler["statsFiles"].size(); i++)
     {
-      rateFiles.push_back("rates_"+std::to_string(i+1)+".csv");
+      rateFiles.push_back(GetParameterString("io.out")+"_rates_"+std::to_string(i+1)+".csv");
     }
     
   }
@@ -132,7 +132,7 @@ protected:
     
     for (unsigned int i =0; i < inputVectorFiles.size(); i++)
     {
-      outputVectorFiles.push_back("samples"+std::to_string(i)+".shp");
+      outputVectorFiles.push_back(GetParameterString("io.out")+"_samples"+std::to_string(i)+".shp");
       sampleSelection->SetParameterInputImage("in", inputImageList->GetNthElement(i));
       sampleSelection->SetParameterString("vec", inputVectorFiles[i]);
       sampleSelection->SetParameterString("instats", statFiles[i]);
