@@ -61,7 +61,6 @@ private:
 
     SetDescription("This application performs mathematical operations on several multiband images.");
 
-    SetDocName( "Band Math X" );
 
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "

@@ -82,7 +82,6 @@ private:
     SetDescription("SOM image classification.");
 
     // Documentation
-    SetDocName("SOM Classification");
     SetDocLongDescription("Unsupervised Self Organizing Map image classification.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

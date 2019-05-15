@@ -5,7 +5,6 @@
         <name>TestApplication</name>
         <descr>This application helps developers to test parameters types</descr>
         <doc>
-            <name>Test</name>
             <longdescr>The purpose of this application is to test parameters types.</longdescr>
             <authors>OTB-Team</authors>
             <limitations>None</limitations>

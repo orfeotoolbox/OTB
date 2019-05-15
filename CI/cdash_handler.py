@@ -245,14 +245,14 @@ TODO :
 
 """
 if __name__ == "__main__":
-  if ( len(sys.argv) < 5 ):
-    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
+  if ( len(sys.argv) < 6 ):
+    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token ref_name")
     sys.exit()
   if trace:
     print (sys.argv)
   handler = Handler()
   build_dir = os.path.join( sys.argv[3] , "build/")
-  # build_dir = sys.argv[3]
+  ref_name = sys.argv[5]
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
@@ -271,7 +271,7 @@ if __name__ == "__main__":
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
-   'target_url' : cdash_url , 'description' : error })
+   'target_url' : cdash_url , 'description' : error , 'ref' : ref_name })
   gitlab_request = urllib.request.Request(gitlab_url)
   gitlab_request.add_header('PRIVATE-TOKEN' , sys.argv[4] )
   res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))

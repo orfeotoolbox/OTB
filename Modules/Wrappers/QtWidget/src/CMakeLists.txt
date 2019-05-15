@@ -24,7 +24,6 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetParameterLabel.cxx
   otbWrapperQtWidgetView.cxx
   otbWrapperQtWidgetMainWindow.cxx
-  otbWrapperQtWidgetInputProcessXMLParameter.cxx
   otbWrapperQtWidgetIntParameter.cxx
   otbWrapperQtWidgetInputVectorDataListParameter.cxx
   otbWrapperQtWidgetSimpleProgressReport.cxx
@@ -44,7 +43,6 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetParameterGroup.cxx
   otbWrapperQtWidgetInputFilenameListParameter.cxx
   otbWrapperQtWidgetRAMParameter.cxx
-  otbWrapperQtWidgetOutputProcessXMLParameter.cxx
   otbWrapperQtWidgetParameterBase.cxx
   otbWrapperQtWidgetInputImageParameter.cxx
   otbWrapperQtWidgetStringListParameter.cxx
@@ -70,8 +68,6 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetInputVectorDataParameter.h
   ../include/otbWrapperQtWidgetOutputImageParameter.h
   ../include/otbWrapperQtWidgetOutputVectorDataParameter.h
-  ../include/otbWrapperQtWidgetOutputProcessXMLParameter.h
-  ../include/otbWrapperQtWidgetInputProcessXMLParameter.h
   ../include/otbWrapperQtWidgetParameterGroup.h
   ../include/otbWrapperQtWidgetParameterLabel.h
   ../include/otbWrapperQtWidgetParameterBase.h

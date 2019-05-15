@@ -25,7 +25,6 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputImageParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperOutputImageParameter.h"
@@ -34,7 +33,6 @@
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
-#include "otbWrapperInputProcessXMLParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperBoolParameter.h"
@@ -161,46 +159,6 @@ ParameterGroup::ClearChoices(std::string paramKey)
     {
     itkExceptionMacro(<<paramKey << " is not a ListView");
     }
-}
-
-void ParameterGroup::AddOutXMLParameter()
-{
-  Parameter::Pointer tmpParam;
-  tmpParam = OutputProcessXMLParameter::New();
-//  const std::string key =   tmpParam->GetKey();
-//  const std::string descr = tmpParam->GetDescription();
-const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
-  tmpParam->SetActive(false);
-  AddParameter(tmpParam);
-
-  tmpParam = nullptr;
-  /*
-  AddParameter(ParameterType_OutputProcessXML,  key,   descr);
-  SetParameterDescription(key, descr);
-  MandatoryOff(key);
-  //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key);
-  */
-}
-
-void ParameterGroup::AddInXMLParameter()
-{
-  Parameter::Pointer tmpParam;
-  tmpParam = InputProcessXMLParameter::New();
-//  const std::string key =   tmpParam->GetKey();
-//  const std::string descr = tmpParam->GetDescription();
-  const std::string defaultXMLFileName = std::string(GetName())  + ".xml";
-  tmpParam->SetActive(false);
-  AddParameter(tmpParam);
-
-  tmpParam = nullptr;
-  /*
-  AddParameter(ParameterType_InputProcessXML,  key,   descr);
-  SetParameterDescription(key, descr);
-  MandatoryOff(key);
-  //SetParameterString(key, defaultXMLFileName);
-  DisableParameter(key);
-*/
 }
 
 /** Get the choices made in the QListWidget */
@@ -367,16 +325,6 @@ ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std::stri
       case ParameterType_RAM:
         {
         newParam = RAMParameter::New();
-        }
-        break;
-      case ParameterType_OutputProcessXML:
-        {
-       newParam = OutputProcessXMLParameter::New();
-        }
-        break;
-      case ParameterType_InputProcessXML:
-        {
-       newParam = InputProcessXMLParameter::New();
         }
         break;
       case ParameterType_Bool:

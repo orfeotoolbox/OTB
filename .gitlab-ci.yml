@@ -18,22 +18,10 @@ variables:
   # The fetch strategy fails with LFS and GitLab
   GIT_STRATEGY: "clone"
 
-before_script:
-  # make sure LFS hooks are installed
-  - git lfs install
-  # Provision efficiently the local LFS cache before checkout
-  - git lfs fetch origin $CI_COMMIT_SHA
-  # Checkout the expected branch
-  - git checkout -f -q $CI_COMMIT_SHA
-
-after_script:
-  - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH
-
 stages:
   - precheck
   - prepare
   - build
-  - package
 
 .general:
   retry:
@@ -48,9 +36,10 @@ fast-build:
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
-    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
+  after_script:
+    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
@@ -60,7 +49,14 @@ fast-build:
   extends: .general
   only: [merge_requests]
   stage: build
-  dependencies: []
+  before_script:
+    - git lfs install --skip-repo
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
+  after_script:
+    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
 
 debian-build:
   extends: .common-build
@@ -84,51 +80,29 @@ ubuntu-llvm:
   only: [merge_requests]
   stage: prepare
   before_script:
-# This override the previous before_script
     - git checkout -f -q $CI_COMMIT_SHA
-# We are now doing the git-lfs install
-# This is done after the checkout so we avoid downloading Data
-# But we need it to upload the archive
-    - git-lfs install
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-    - eval $(ssh-agent -s)
-    - ssh-add <(echo "$K8S_SECRET_SSH")
-# This is for debug, we are checking the owner of the ssh key
-    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-  after_script:
-    - echo "Nothing to do for after_script"
+    - git lfs install --skip-repo
   artifacts:
     expire_in: 24 hrs
+    when: on_success
+    paths:
+      - sb_branch.txt
+  artifacts:
+    expire_in: 2 days
+    when : on_failure
     paths:
       # This recovers logs from superbuild build
-      # - build/*/*/*/*.log
-      - sb_branch.txt
+      - build/*/*/*/*.log
 
+## Ubuntu superbuild
 ubuntu-superbuild-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
-
-centos-superbuild-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - ctest -V -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-
-.superbuild-build:
-  only: [merge_requests]
-  extends: .common-build
-  artifacts:
-    expire_in: 1 week
-    paths:
-      # - build/*/*/*/*.log
-      - build_packages/*/*/*/*.log
-      - build_packages/OTB-*.run
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
 ubuntu-superbuild-build:
-  extends: .superbuild-build
+  extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
@@ -136,8 +110,15 @@ ubuntu-superbuild-build:
   dependencies:
     - ubuntu-superbuild-prepare
 
+## Centos superbuild
+centos-superbuild-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+
 centos-superbuild-build:
-  extends: .superbuild-build
+  extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base

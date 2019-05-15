@@ -48,7 +48,6 @@ private:
     SetDescription("Perform P+XS pansharpening");
 
     // Documentation
-    SetDocName("Bundle to perfect sensor");
     SetDocLongDescription("This application performs P+XS pansharpening. The default mode use Pan and XS sensor models to estimate the transformation to superimpose XS over Pan before the fusion (\"default mode\"). The application provides also a PHR mode for Pleiades images which does not use sensor models as Pan and XS products are already coregistered but only estimate an affine transformation to superimpose XS over the Pan.Note that this option is automatically activated in case Pleiades images are detected as input.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
