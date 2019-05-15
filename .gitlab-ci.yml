@@ -106,7 +106,7 @@ ubuntu-superbuild-build:
   dependencies:
     - ubuntu-superbuild-prepare
 
-## Centos superbuild
+## CentOS superbuild
 centos-superbuild-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
@@ -122,41 +122,26 @@ centos-superbuild-build:
   dependencies:
     - centos-superbuild-prepare
 
+## MacOS superbuild
 macos-superbuild-prepare:
   tags:
     - macos
   only: [merge_requests, branches]
   extends: .common-prepare
-  stage: prepare
   before_script:
-    # Provision efficiently the local LFS cache before checkout
-    - git lfs fetch origin $CI_COMMIT_SHA
+    # No need to install lfs as this machine is persistent
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-  artifacts:
-    expire_in: 24 hrs
-    paths:
-      # This recovers logs from superbuild build
-      - build/*/*/*/*.log
-      - sb_branch.txt
 
 macos-superbuild-build:
   tags:
     - macos
-  only: [merge_requests, branches]
   extends: .general
-  stage: build
-  before_script:
-    # Provision efficiently the local LFS cache before checkout
-    - git lfs fetch origin $CI_COMMIT_SHA
-    # Checkout the expected branch
-    - git checkout -f -q $CI_COMMIT_SHA
-    - ssh -o StrictHostKeyChecking=no -T git@gitlab.orfeo-toolbox.org
-  after_script:
-    - echo "Nothing to do for after_script"
+  only: [merge_requests, branches]
   script:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
