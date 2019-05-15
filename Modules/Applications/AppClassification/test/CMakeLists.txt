@@ -853,6 +853,24 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorRegressionModel.txt)
 endif()
 
+#----------- TrainImagesRegression TESTS ----------------
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClTrainImagesRegression
+    APP  TrainImagesRegression
+    OPTIONS 
+    -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=0,1,2
+    -io.ip ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=3
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+    -sample.nt 50
+    -classifier rf
+    -io.out ${TEMP}/apTvClTrainImagesRegressionModel.rf
+    -io.mse ${TEMP}/apTvClTrainImagesRegressionModel.txt
+    TESTENVOPTIONS ${TEMP}/apTvClTrainImagesRegressionModel.txt
+    VALID   ${ascii_comparison}
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainImagesRegressionModel.txt
+    ${TEMP}/apTvClTrainImagesRegressionModel.txt)
+endif()
+
 #----------- TrainVectorClassifier unsupervised TESTS ----------------
 if(OTB_USE_SHARK)
   otb_test_application(NAME apTvClTrainVectorUnsupervised
