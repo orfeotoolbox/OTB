@@ -170,7 +170,7 @@ protected:
       //Second Extraction
       sampleExtraction->SetParameterInputImage("in", predictorImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "list");
-      sampleExtraction->SetParameterStringList("outfield.list.names", {"prediction"});
+      sampleExtraction->SetParameterStringList("outfield.list.names", {m_PredictionFieldName});
       ExecuteInternal("extraction");
     }
   }
@@ -301,6 +301,9 @@ private:
   }
   
   std::string m_ClassFieldName = "regclass";
+  
+  std::string m_PredictionFieldName = "prediction";
+  
   std::map< std::string, std::vector<std::string>> m_FileHandler;
   
 };
