@@ -24,6 +24,7 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 
+set ( DEBUG "1" )
 ###########################################################################
 ###########################################################################
 # Download xkd
@@ -50,7 +51,7 @@ find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 
 # FIXME: Replace ${GIT} variable with $[CTEST_GIT_COMMAND}"
 set( GIT "${CTEST_GIT_COMMAND}" )
-
+set( DEBUG 1 )
 execute_process(
   COMMAND ${GIT} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
   "--depth" "1" "superbuild-artifact"
@@ -82,8 +83,18 @@ set (CMAKE_COMMAND "cmake")
 execute_process(
   COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
   "${OTB_SOURCE_DIR}/superbuild-artifact/SuperBuild_Install.tar"
+  RESULT_VARIABLE tar_res
+  OUTPUT_VARIABLE tar_out
+  ERROR_VARIABLE tar_err
   WORKING_DIRECTORY ${OTB_SOURCE_DIR}
   )
+
+if ( DEBUG )
+  message( "${CMAKE_COMMAND} -E tar xf ${OTB_SOURCE_DIR}/superbuild-artifact/SuperBuild_Install.tar")
+  message( "tar_res: '${clone_res}'" )
+  message( "tar_out: '${tar_out}'" )
+  message( "tar_err: '${tar_err}'" )
+endif()
 
 set( XDK_PATH "${OTB_SOURCE_DIR}/xdk")
 
@@ -112,18 +123,23 @@ set_dash_build_name()
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
-set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/" )
+# install in same directory as xdk to be able to produce
+# package afterwards
+set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
+
+# For superbuild we need remote module 
+foreach(remote_module SertitObject Mosaic otbGRM DiapOTBModule OTBTemporalGapFilling)
+    set ( CONFIGURE_OPTIONS 
+      "${CONFIGURE_OPTIONS}-DModule_${remote_module}:BOOL=ON;")
+endforeach()
+
 # SuperBuild case : one more configure option
 set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
-
-# Hack because there is no more superbuild available (LIBKML)
-set ( CONFIGURE_OPTIONS
-  "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
@@ -176,3 +192,25 @@ if ( NOT _test_rv EQUAL 0 )
 endif()
 
 ctest_submit()
+
+# We need to install OTB for package purposes
+set ( MAKE_COMMAND "make")
+execute_process(
+  COMMAND ${MAKE_COMMAND} "install"
+  WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY}
+  RESULT_VARIABLE install_res
+  OUTPUT_VARIABLE install_out
+  ERROR_VARIABLE install_err
+  )
+
+if ( DEBUG )
+  message( "Install output")
+  message( "install_res = ${install_res}" )
+  message( "install_out = ${install_out}" )
+  message( "install_err = ${install_err}" )
+endif()
+
+# Artifacts can only be in project dir...
+# file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
+
+# include ( "${CMAKE_CURRENT_LIST_DIR}/main_packages.cmake" )
