@@ -45,9 +45,6 @@ fast-build:
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
-    - whoami
-    - ls -al "/root"
-    - ssh -vvv -T git@gitlab.orfeo-toolbox.org
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
@@ -59,7 +56,6 @@ fast-build:
   extends: .general
   only: [merge_requests]
   stage: build
-  dependencies: []
 
 debian-build:
   extends: .common-build
@@ -84,13 +80,9 @@ ubuntu-llvm:
   stage: prepare
   before_script:
 # This override the previous before_script
-    - whoami
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
-# This is for debug, we are checking the owner of the ssh key
-    - ls -al "/root"
-    - ssh -vvv -T git@gitlab.orfeo-toolbox.org
   after_script:
     - echo "Nothing to do for after_script"
   artifacts:
