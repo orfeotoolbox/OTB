@@ -82,6 +82,8 @@ ubuntu-llvm:
   before_script:
     - git checkout -f -q $CI_COMMIT_SHA
     - git lfs install --skip-repo
+    - git config --global user.email "otbbot@orfeo-toolbox.org"
+    - git config --global user.name "otbbot"
   artifacts:
     expire_in: 24 hrs
     when: always
