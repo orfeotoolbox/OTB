@@ -68,7 +68,7 @@ if ( DEBUG )
 endif()
 
 if (clone_res)
-  message( SEND_ERROR "Problem in retreiving the archive")
+  message( SEND_ERROR "Problem in retreiving the archive of ${BRANCH_NAME}")
   return()
 endif()
 
