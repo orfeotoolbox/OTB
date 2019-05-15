@@ -36,7 +36,6 @@ fast-build:
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
-    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   after_script:
@@ -50,6 +49,7 @@ fast-build:
   only: [merge_requests]
   stage: build
   before_script:
+    - git lfs install --skip-repo
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
     # Checkout the expected branch
@@ -79,9 +79,8 @@ ubuntu-llvm:
   only: [merge_requests]
   stage: prepare
   before_script:
-    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
-    - export GIT_LFS_SKIP_SMUDGE=0
+    - git lfs install --skip-repo
   artifacts:
     expire_in: 24 hrs
     paths:
