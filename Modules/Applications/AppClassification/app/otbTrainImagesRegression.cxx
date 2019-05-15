@@ -218,6 +218,8 @@ protected:
   
   void InitLearning()
   {
+    AddApplication( "TrainVectorRegression", "trainregression", "Train vector regression"); 
+    
   }
 
 private:
@@ -241,6 +243,11 @@ private:
     InitIO();
     InitSampling();
     InitLearning();
+    
+    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
+    SetParameterDescription( "cleanup",
+                           "If activated, the application will try to clean all temporary files it created" );
+    SetParameterInt( "cleanup", 1);
   }
   
   void DoUpdateParameters() override
@@ -297,7 +304,11 @@ private:
     
     TrainModel();
    
-    //ClearFileHandler();
+    if (GetParameterInt("cleanup"))
+    {
+      otbAppLogINFO( "Cleaning temporary files ..." );
+      ClearFileHandler();
+    }
   }
   
   std::string m_ClassFieldName = "regclass";
