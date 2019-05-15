@@ -50,33 +50,33 @@ int main(int argc, char* argv[])
   //  choose to make all computations with floating point precision
   //  and rescale the results between 0 and 255 in order to export PNG images.
 
-  typedef float         InternalPixelType;
-  typedef unsigned char OutputPixelType;
+  using InternalPixelType = float;
+  using OutputPixelType   = unsigned char;
 
   //  The images are defined using the pixel type and the dimension.
 
-  typedef otb::Image<InternalPixelType, 2> InternalImageType;
-  typedef otb::Image<OutputPixelType, 2>   OutputImageType;
+  using InternalImageType = otb::Image<InternalPixelType, 2>;
+  using OutputImageType   = otb::Image<OutputPixelType, 2>;
 
   //  The filter can be instantiated using the image types defined above.
 
-  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InternalImageType, InternalImageType> FilterType;
+  using FilterType = otb::AsymmetricFusionOfLineDetectorImageFilter<InternalImageType, InternalImageType>;
 
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in order to read
   //  image data from a file.
 
-  typedef otb::ImageFileReader<InternalImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InternalImageType>;
 
   // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
   // output image to a file.
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   // The intensity rescaling of the results will be carried out by the
   // \code{itk::RescaleIntensityImageFilter} which is templated by the
   // input and output image types.
 
-  typedef itk::RescaleIntensityImageFilter<InternalImageType, OutputImageType> RescalerType;
+  using RescalerType = itk::RescaleIntensityImageFilter<InternalImageType, OutputImageType>;
 
   //  Both the filter and the reader are created by invoking their \code{New()}
   //  methods and assigning the result to SmartPointers.

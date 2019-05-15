@@ -66,10 +66,10 @@ template <class TImage>
 class ITK_EXPORT ImageUniqueValuesCalculator : public itk::Object
 {
 public:
-  typedef ImageUniqueValuesCalculator<TImage> Self;
-  typedef itk::Object                         Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  using Self         = ImageUniqueValuesCalculator<TImage>;
+  using Superclass   = itk::Object;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   itkNewMacro(Self);
 
@@ -77,14 +77,14 @@ public:
 
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
-  typedef typename TImage::PixelType PixelType;
+  using PixelType = typename TImage::PixelType;
 
-  typedef TImage ImageType;
+  using ImageType = TImage;
 
-  typedef std::vector<PixelType> ArrayType;
+  using ArrayType = std::vector<PixelType>;
 
-  typedef typename ImageType::Pointer      ImagePointer;
-  typedef typename ImageType::ConstPointer ImageConstPointer;
+  using ImagePointer      = typename ImageType::Pointer;
+  using ImageConstPointer = typename ImageType::ConstPointer;
 
   virtual void SetImage(const ImageType* image)
   {
@@ -159,25 +159,25 @@ public:
   // \code{ProsailSimulatorFunctor} functor is defined here.
   //
 
-  typedef TLAI                         LAIPixelType;
-  typedef TLabel                       LabelPixelType;
-  typedef TMask                        MaskPixelType;
-  typedef TOutput                      OutputPixelType;
-  typedef TLabelSpectra                LabelSpectraType;
-  typedef TLabelParameter              LabelParameterType;
-  typedef TAcquistionParameter         AcquistionParameterType;
-  typedef TSatRSR                      SatRSRType;
-  typedef typename SatRSRType::Pointer SatRSRPointerType;
-  typedef typename otb::ProspectModel  ProspectType;
-  typedef typename otb::SailModel      SailType;
+  using LAIPixelType            = TLAI;
+  using LabelPixelType          = TLabel;
+  using MaskPixelType           = TMask;
+  using OutputPixelType         = TOutput;
+  using LabelSpectraType        = TLabelSpectra;
+  using LabelParameterType      = TLabelParameter;
+  using AcquistionParameterType = TAcquistionParameter;
+  using SatRSRType              = TSatRSR;
+  using SatRSRPointerType       = typename SatRSRType::Pointer;
+  using ProspectType            = typename otb::ProspectModel;
+  using SailType                = typename otb::SailModel;
 
-  typedef double                                                PrecisionType;
-  typedef std::pair<PrecisionType, PrecisionType>               PairType;
-  typedef typename std::vector<PairType>                        VectorPairType;
-  typedef otb::SpectralResponse<PrecisionType, PrecisionType>   ResponseType;
-  typedef ResponseType::Pointer                                 ResponsePointerType;
-  typedef otb::ReduceSpectralResponse<ResponseType, SatRSRType> ReduceResponseType;
-  typedef typename ReduceResponseType::Pointer                  ReduceResponseTypePointerType;
+  using PrecisionType                 = double;
+  using PairType                      = std::pair<PrecisionType, PrecisionType>;
+  using VectorPairType                = typename std::vector<PairType>;
+  using ResponseType                  = otb::SpectralResponse<PrecisionType, PrecisionType>;
+  using ResponsePointerType           = ResponseType::Pointer;
+  using ReduceResponseType            = otb::ReduceSpectralResponse<ResponseType, SatRSRType>;
+  using ReduceResponseTypePointerType = typename ReduceResponseType::Pointer;
 
   // In this example spectra are generated form $400$ to $2400nm$. the number of simulated band is set by \code{SimNbBands} value.
   //
@@ -351,10 +351,10 @@ template <class TInputImage1, class TInputImage2, class TInputImage3, class TOut
 class ITK_EXPORT TernaryFunctorImageFilterWithNBands : public itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor>
 {
 public:
-  typedef TernaryFunctorImageFilterWithNBands                                                              Self;
-  typedef itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor> Superclass;
-  typedef itk::SmartPointer<Self>                                                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                                                    ConstPointer;
+  using Self         = TernaryFunctorImageFilterWithNBands<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor>;
+  using Superclass   = itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunctor>;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -422,48 +422,47 @@ int main(int argc, char* argv[])
   //  cloud mask, and \code{integer} label image
   //
 
-  typedef double         LAIPixelType;
-  typedef unsigned short LabelType;
-  typedef unsigned short MaskPixelType;
-  typedef float          OutputPixelType;
+  using LAIPixelType    = double;
+  using LabelType       = unsigned short;
+  using MaskPixelType   = unsigned short;
+  using OutputPixelType = float;
   // Image typedef
-  typedef otb::Image<LAIPixelType, 2>          LAIImageType;
-  typedef otb::Image<LabelType, 2>             LabelImageType;
-  typedef otb::Image<MaskPixelType, 2>         MaskImageType;
-  typedef otb::VectorImage<OutputPixelType, 2> SimulatedImageType;
+  using LAIImageType       = otb::Image<LAIPixelType, 2>;
+  using LabelImageType     = otb::Image<LabelType, 2>;
+  using MaskImageType      = otb::Image<MaskPixelType, 2>;
+  using SimulatedImageType = otb::VectorImage<OutputPixelType, 2>;
 
   // reader typedef
-  typedef otb::ImageFileReader<LAIImageType>   LAIReaderType;
-  typedef otb::ImageFileReader<LabelImageType> LabelReaderType;
-  typedef otb::ImageFileReader<MaskImageType>  MaskReaderType;
+  using LAIReaderType   = otb::ImageFileReader<LAIImageType>;
+  using LabelReaderType = otb::ImageFileReader<LabelImageType>;
+  using MaskReaderType  = otb::ImageFileReader<MaskImageType>;
 
   // Leaf parameters typedef is defined.
 
-  typedef otb::LeafParameters                            LeafParametersType;
-  typedef LeafParametersType::Pointer                    LeafParametersPointerType;
-  typedef std::map<LabelType, LeafParametersPointerType> LabelParameterMapType;
+  using LeafParametersType        = otb::LeafParameters;
+  using LeafParametersPointerType = LeafParametersType::Pointer;
+  using LabelParameterMapType     = std::map<LabelType, LeafParametersPointerType>;
 
   // Sensor spectral response typedef is defined
 
-  typedef double                           PrecisionType;
-  typedef std::vector<PrecisionType>       SpectraType;
-  typedef std::map<LabelType, SpectraType> SpectraParameterType;
+  using PrecisionType        = double;
+  using SpectraType          = std::vector<PrecisionType>;
+  using SpectraParameterType = std::map<LabelType, SpectraType>;
 
   // Acquisition response typedef is defined
 
-  typedef std::map<std::string, double> AcquistionParsType;
+  using AcquistionParsType = std::map<std::string, double>;
 
   // Satellite typedef is defined
 
-  typedef otb::SatelliteRSR<PrecisionType, PrecisionType> SatRSRType;
+  using SatRSRType = otb::SatelliteRSR<PrecisionType, PrecisionType>;
 
 
   // Filter type is the specific \code{TernaryFunctorImageFilterWithNBands} defined below with specific functor.
 
-  typedef otb::Functor::ProsailSimulatorFunctor<LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType, SpectraParameterType,
-                                                LabelParameterMapType, AcquistionParsType, SatRSRType>
-                                                                                                                                     SimuFunctorType;
-  typedef otb::TernaryFunctorImageFilterWithNBands<LAIImageType, LabelImageType, MaskImageType, SimulatedImageType, SimuFunctorType> SimulatorType;
+  using SimuFunctorType = otb::Functor::ProsailSimulatorFunctor<LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType, SpectraParameterType,
+                                                                LabelParameterMapType, AcquistionParsType, SatRSRType>;
+  using SimulatorType   = otb::TernaryFunctorImageFilterWithNBands<LAIImageType, LabelImageType, MaskImageType, SimulatedImageType, SimuFunctorType>;
 
   // Read the acquisition parameter file which is like
   // Angl val
@@ -576,9 +575,9 @@ int main(int argc, char* argv[])
       {
         std::string spectraFilename = rootPath;
         ss >> spectraFilename;
-        spectraFilename = rootPath + spectraFilename;
-        typedef otb::SpectralResponse<PrecisionType, PrecisionType> ResponseType;
-        ResponseType::Pointer                                       resp = ResponseType::New();
+        spectraFilename            = rootPath + spectraFilename;
+        using ResponseType         = otb::SpectralResponse<PrecisionType, PrecisionType>;
+        ResponseType::Pointer resp = ResponseType::New();
 
         // Coefficient 100 since Aster database is given in % reflectance
         resp->Load(spectraFilename, 100.0);
@@ -613,7 +612,7 @@ int main(int argc, char* argv[])
 
   LabelImageType::Pointer labelImage = labelReader->GetOutput();
 
-  typedef otb::ImageUniqueValuesCalculator<LabelImageType> UniqueCalculatorType;
+  using UniqueCalculatorType = otb::ImageUniqueValuesCalculator<LabelImageType>;
 
   UniqueCalculatorType::Pointer uniqueCalculator = UniqueCalculatorType::New();
 
@@ -665,8 +664,8 @@ int main(int argc, char* argv[])
     cmiReader->SetFileName(cmifname);
     cmiReader->UpdateOutputInformation();
 
-    typedef itk::OrImageFilter<MaskImageType, MaskImageType, MaskImageType> OrType;
-    OrType::Pointer                                                         orfilter = OrType::New();
+    using OrType             = itk::OrImageFilter<MaskImageType, MaskImageType, MaskImageType>;
+    OrType::Pointer orfilter = OrType::New();
 
     orfilter->SetInput1(miReader->GetOutput());
     orfilter->SetInput2(cmiReader->GetOutput());
@@ -724,8 +723,8 @@ int main(int argc, char* argv[])
 
   // Write output image to disk
 
-  typedef otb::ImageFileWriter<SimulatedImageType> WriterType;
-  WriterType::Pointer                              writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<SimulatedImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(outfname);
   writer->SetInput(simulator->GetOutput());

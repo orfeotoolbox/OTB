@@ -59,11 +59,11 @@ int main(int argc, char* argv[])
   const char* mapFilename    = argv[2];
   const char* outputFilename = argv[3];
 
-  typedef double        InputPixelType;
-  typedef unsigned char LabelPixelType;
-  const unsigned int    Dimension = 2;
+  using InputPixelType         = double;
+  using LabelPixelType         = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef itk::VariableLengthVector<InputPixelType> PixelType;
+  using PixelType = itk::VariableLengthVector<InputPixelType>;
 
   // As for the SOM learning step, we must define the types for the
   // \code{otb::SOMMap}, and therefore, also for the distance to be
@@ -71,12 +71,12 @@ int main(int argc, char* argv[])
   // actually an \doxygen{otb}{ImageFileReader} which the appropriate
   // image type.
 
-  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
-  typedef otb::SOMMap<PixelType, DistanceType, Dimension>     SOMMapType;
-  typedef otb::ImageFileReader<SOMMapType>                    SOMReaderType;
+  using DistanceType  = itk::Statistics::EuclideanDistanceMetric<PixelType>;
+  using SOMMapType    = otb::SOMMap<PixelType, DistanceType, Dimension>;
+  using SOMReaderType = otb::ImageFileReader<SOMMapType>;
 
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>        ReaderType;
+  using InputImageType = otb::VectorImage<InputPixelType, Dimension>;
+  using ReaderType     = otb::ImageFileReader<InputImageType>;
 
   //  The classification will be performed by the
   //  \doxygen{otb}{SOMClassifier}, which, as most of the
@@ -88,14 +88,14 @@ int main(int argc, char* argv[])
   //  \code{SOMClassifier} is templated over the sample type, the SOMMap
   //  type and the pixel type for the labels.
 
-  typedef itk::Statistics::ListSample<PixelType>                     SampleType;
-  typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType> ClassifierType;
+  using SampleType     = itk::Statistics::ListSample<PixelType>;
+  using ClassifierType = otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType>;
   //
   //  The result of the classification will be stored on an image and
   //  saved to a file. Therefore, we define the types needed for this step.
 
-  typedef otb::Image<LabelPixelType, Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using OutputImageType = otb::Image<LabelPixelType, Dimension>;
+  using WriterType      = otb::ImageFileWriter<OutputImageType>;
   //
   //  We can now start reading the input image and the SOM given as
   //  inputs to the program. We instantiate the readers as usual.
@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
   //  We also declare an \doxygen{itk}{ImageRegionIterator} in order
   //  to fill the output image with the class labels.
 
-  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  using OutputIteratorType = itk::ImageRegionIterator<OutputImageType>;
 
   OutputIteratorType outIt(outputImage, outputImage->GetLargestPossibleRegion());
   //

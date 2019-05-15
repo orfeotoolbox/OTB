@@ -38,22 +38,22 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef unsigned char PixelType;
+  using PixelType = unsigned char;
 
   // The images are defined using the pixel type and the dimension.
-  typedef otb::Image<PixelType, 2> InputImageType;
-  typedef otb::Image<PixelType, 2> OutputImageType;
+  using InputImageType  = otb::Image<PixelType, 2>;
+  using OutputImageType = otb::Image<PixelType, 2>;
 
   // The filter can be instantiated using the image types defined above.
-  typedef otb::LeeImageFilter<InputImageType, OutputImageType> FilterType;
+  using FilterType = otb::LeeImageFilter<InputImageType, OutputImageType>;
 
   // An ImageFileReader class is also instantiated in order to read
   // image data from a file.
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   // An ImageFileWriter is instantiated in order to write the
   // output image to a file.
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   // Both the filter and the reader are created by invoking their New()
   // methods and assigning the result to SmartPointers.

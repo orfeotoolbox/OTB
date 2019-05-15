@@ -49,18 +49,18 @@ int main(int itkNotUsed(argc), char* argv[])
   // As usual, we start by defining the types for the pixel and image
   // types, as well as those for the readers and writers.
 
-  const unsigned int                            Dimension = 2;
-  typedef unsigned char                         InputPixelType;
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>  WriterType;
+  const unsigned int Dimension = 2;
+  using InputPixelType         = unsigned char;
+  using InputImageType         = otb::Image<InputPixelType, Dimension>;
+  using ReaderType             = otb::ImageFileReader<InputImageType>;
+  using WriterType             = otb::ImageFileWriter<InputImageType>;
 
   // We can now define the type for the image list. The
   // \doxygen{otb}{ImageList} class is templated over the type of image
   // contained in it. This means that all images in a list must have the
   // same type.
 
-  typedef otb::ImageList<InputImageType> ImageListType;
+  using ImageListType = otb::ImageList<InputImageType>;
 
   // Let us assume now that we want to read an image from a file and
   // store it in a list. The first thing to do is to instantiate the

@@ -54,10 +54,10 @@ int main(int argc, char* argv[])
   // the number of stream divisions we want to apply when writing the
   // output image, which can be very large.
 
-  typedef otb::Image<int, 2>                    ImageType;
-  typedef otb::VectorImage<int, 2>              VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType> WriterType;
+  using ImageType       = otb::Image<int, 2>;
+  using VectorImageType = otb::VectorImage<int, 2>;
+  using ReaderType      = otb::ImageFileReader<VectorImageType>;
+  using WriterType      = otb::ImageFileWriter<VectorImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -71,8 +71,7 @@ int main(int argc, char* argv[])
 
   // Software Guide : BeginCodeSnippet
 
-  typedef otb::GenericRSResampleImageFilter<VectorImageType, VectorImageType>
-  OrthoRectifFilterType;
+  using OrthoRectifFilterType = otb::GenericRSResampleImageFilter<VectorImageType, VectorImageType>;
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
 
@@ -80,8 +79,10 @@ int main(int argc, char* argv[])
   // instantiate the map projection, set the {\em zone} and {\em hemisphere}
   // parameters and pass this projection to the orthorectification filter.
 
-  std::string wkt = otb::SpatialReference::FromUTM(atoi(argv[3]),*argv[4]=='N'? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt();
-  std::cout<<wkt<<std::endl;
+  std::string wkt =
+      otb::SpatialReference::FromUTM(atoi(argv[3]), *argv[4] == 'N' ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south)
+          .ToWkt();
+  std::cout << wkt << std::endl;
   orthoRectifFilter->SetOutputProjectionRef(wkt);
 
   // We then wire the input image to the orthorectification filter.

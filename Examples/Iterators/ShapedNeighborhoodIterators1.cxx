@@ -57,15 +57,15 @@ int main(int argc, char* argv[])
   // char} pixel type will do.  The image and iterator types are defined using
   // the pixel type.
 
-  typedef unsigned char            PixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
+  using PixelType = unsigned char;
+  using ImageType = otb::Image<PixelType, 2>;
 
-  typedef itk::ConstShapedNeighborhoodIterator<ImageType> ShapedNeighborhoodIteratorType;
+  using ShapedNeighborhoodIteratorType = itk::ConstShapedNeighborhoodIterator<ImageType>;
 
-  typedef itk::ImageRegionIterator<ImageType> IteratorType;
+  using IteratorType = itk::ImageRegionIterator<ImageType>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   try
@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
   // The face calculator object introduced in
   // Section~\ref{sec:NeighborhoodExample3} is created and used as before.
 
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
+  using FaceCalculatorType = itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>;
 
   FaceCalculatorType                         faceCalculator;
   FaceCalculatorType::FaceListType           faceList;
@@ -183,7 +183,7 @@ int main(int argc, char* argv[])
     }
   }
 
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);

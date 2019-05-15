@@ -56,12 +56,12 @@ int main(int itkNotUsed(argc), char* argv[])
   const char* trainingShpFileName = argv[2];
   const char* outputModelFileName = argv[3];
 
-  typedef unsigned int                                InputPixelType;
-  const unsigned int                                  Dimension = 2;
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
-  typedef otb::VectorData<double, 2>                  VectorDataType;
-  typedef otb::ImageFileReader<InputImageType>        InputReaderType;
-  typedef otb::VectorDataFileReader<VectorDataType>   VectorDataReaderType;
+  using InputPixelType         = unsigned int;
+  const unsigned int Dimension = 2;
+  using InputImageType         = otb::VectorImage<InputPixelType, Dimension>;
+  using VectorDataType         = otb::VectorData<double, 2>;
+  using InputReaderType        = otb::ImageFileReader<InputImageType>;
+  using VectorDataReaderType   = otb::VectorDataFileReader<VectorDataType>;
 
   // In this framework, we must transform the input samples store in a vector
   // data into a \subdoxygen{itk}{Statistics}{ListSample} which is the structure
@@ -74,7 +74,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // \doxygen{otb}{ListSampleGenerator} class.
 
   // VectorData projection filter
-  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType> VectorDataReprojectionType;
+  using VectorDataReprojectionType = otb::VectorDataIntoImageProjectionFilter<VectorDataType, InputImageType>;
 
   InputReaderType::Pointer inputReader = InputReaderType::New();
   inputReader->SetFileName(inputImageFileName);
@@ -98,8 +98,8 @@ int main(int itkNotUsed(argc), char* argv[])
 
   vdreproj->Update();
 
-  typedef otb::ListSampleGenerator<InputImageType, VectorDataType> ListSampleGeneratorType;
-  ListSampleGeneratorType::Pointer                                 sampleGenerator;
+  using ListSampleGeneratorType = otb::ListSampleGenerator<InputImageType, VectorDataType>;
+  ListSampleGeneratorType::Pointer sampleGenerator;
   sampleGenerator = ListSampleGeneratorType::New();
 
   sampleGenerator->SetInput(image);
@@ -111,8 +111,8 @@ int main(int itkNotUsed(argc), char* argv[])
 
   // std::cout << "Number of classes: " << sampleGenerator->GetNumberOfClasses() << std::endl;
 
-  // typedef ListSampleGeneratorType::ListSampleType ListSampleType;
-  // typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
+  // using ListSampleType = ListSampleGeneratorType::ListSampleType;
+  // using ShiftScaleFilterType = otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType>;
 
   // // Shift scale the samples
   // ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
@@ -132,7 +132,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // can be used to set classifier parameters. In the case of SVM, we set here the type
   // of the kernel. Other parameters are let with their default values.
 
-  typedef otb::SVMMachineLearningModel<InputImageType::InternalPixelType, ListSampleGeneratorType::ClassLabelType> SVMType;
+  using SVMType = otb::SVMMachineLearningModel<InputImageType::InternalPixelType, ListSampleGeneratorType::ClassLabelType>;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
 

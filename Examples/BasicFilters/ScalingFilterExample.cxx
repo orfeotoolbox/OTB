@@ -40,28 +40,28 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef unsigned short                 InputPixelType;
-  typedef unsigned char                  OutputPixelType;
-  typedef otb::Image<InputPixelType, 2>  InputImageType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  using InputPixelType  = unsigned short;
+  using OutputPixelType = unsigned char;
+  using InputImageType  = otb::Image<InputPixelType, 2>;
+  using OutputImageType = otb::Image<OutputPixelType, 2>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  ReaderType::Pointer                          reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<InputImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   // The RescaleIntensityImageFilter is used to rescale the value
-  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer                                                     rescaler = RescalerType::New();
+  using RescalerType             = itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>;
+  RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer                           writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<OutputImageType>;
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
 
-  typedef itk::CastImageFilter<InputImageType, OutputImageType> CasterType;
-  CasterType::Pointer                                           caster = CasterType::New();
+  using CasterType           = itk::CastImageFilter<InputImageType, OutputImageType>;
+  CasterType::Pointer caster = CasterType::New();
   caster->SetInput(reader->GetOutput());
 
   writer->SetFileName(argv[3]);

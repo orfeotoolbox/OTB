@@ -84,31 +84,31 @@ int main(int argc, char* argv[])
   const unsigned int Dimension = 2;
 
   // Labeled image type
-  typedef unsigned int                                                                   LabelType;
-  typedef unsigned char                                                                  MaskPixelType;
-  typedef double                                                                         PixelType;
-  typedef otb::Image<LabelType, Dimension>                                               LabeledImageType;
-  typedef otb::Image<MaskPixelType, Dimension>                                           MaskImageType;
-  typedef otb::Image<PixelType, Dimension>                                               ImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                                         VectorImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>                                     OutputVectorImageType;
-  typedef otb::ImageFileReader<LabeledImageType>                                         LabeledReaderType;
-  typedef otb::ImageFileReader<ImageType>                                                ReaderType;
-  typedef otb::ImageFileReader<VectorImageType>                                          VectorReaderType;
-  typedef otb::ImageFileWriter<MaskImageType>                                            WriterType;
-  typedef otb::ImageFileWriter<OutputVectorImageType>                                    VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, OutputVectorImageType> VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char, unsigned char>                      ChannelExtractorType;
+  using LabelType             = unsigned int;
+  using MaskPixelType         = unsigned char;
+  using PixelType             = double;
+  using LabeledImageType      = otb::Image<LabelType, Dimension>;
+  using MaskImageType         = otb::Image<MaskPixelType, Dimension>;
+  using ImageType             = otb::Image<PixelType, Dimension>;
+  using VectorImageType       = otb::VectorImage<PixelType, Dimension>;
+  using OutputVectorImageType = otb::VectorImage<unsigned char, Dimension>;
+  using LabeledReaderType     = otb::ImageFileReader<LabeledImageType>;
+  using ReaderType            = otb::ImageFileReader<ImageType>;
+  using VectorReaderType      = otb::ImageFileReader<VectorImageType>;
+  using WriterType            = otb::ImageFileWriter<MaskImageType>;
+  using VectorWriterType      = otb::ImageFileWriter<OutputVectorImageType>;
+  using VectorRescalerType    = otb::VectorRescaleIntensityImageFilter<VectorImageType, OutputVectorImageType>;
+  using ChannelExtractorType  = otb::MultiChannelExtractROI<unsigned char, unsigned char>;
   // Label map typedef
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                 LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                              LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
-  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                            ShapeLabelMapFilterType;
-  typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> RadiometricLabelMapFilterType;
-  typedef otb::AttributesMapOpeningLabelMapFilter<LabelMapType>                       OpeningLabelMapFilterType;
-  typedef itk::LabelMapToBinaryImageFilter<LabelMapType, MaskImageType>               LabelMapToBinaryImageFilterType;
-  typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType, otb::Functor::NDVI<PixelType, PixelType>> NDVIImageFilterType;
-  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>   ImageToVectorImageCastFilterType;
+  using LabelObjectType                  = otb::AttributesMapLabelObject<LabelType, Dimension, double>;
+  using LabelMapType                     = itk::LabelMap<LabelObjectType>;
+  using LabelMapFilterType               = itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>;
+  using ShapeLabelMapFilterType          = otb::ShapeAttributesLabelMapFilter<LabelMapType>;
+  using RadiometricLabelMapFilterType    = otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType>;
+  using OpeningLabelMapFilterType        = otb::AttributesMapOpeningLabelMapFilter<LabelMapType>;
+  using LabelMapToBinaryImageFilterType  = itk::LabelMapToBinaryImageFilter<LabelMapType, MaskImageType>;
+  using NDVIImageFilterType              = itk::UnaryFunctorImageFilter<VectorImageType, ImageType, otb::Functor::NDVI<PixelType, PixelType>>;
+  using ImageToVectorImageCastFilterType = otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(reffname);
@@ -122,8 +122,8 @@ int main(int argc, char* argv[])
   // Firstly, segment the input image by using the Mean Shift algorithm (see \ref{sec:MeanShift} for deeper
   // explanations).
 
-  typedef otb::MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType> FilterType;
-  FilterType::Pointer                                                                          filter = FilterType::New();
+  using FilterType           = otb::MeanShiftSegmentationFilter<VectorImageType, LabeledImageType, VectorImageType>;
+  FilterType::Pointer filter = FilterType::New();
   filter->SetSpatialBandwidth(spatialRadius);
   filter->SetRangeBandwidth(rangeRadius);
   filter->SetMinRegionSize(minRegionSize);

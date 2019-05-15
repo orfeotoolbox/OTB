@@ -49,11 +49,11 @@ int main(int argc, char* argv[])
   unsigned int P((unsigned char)::atoi(argv[2]));
   unsigned int Q((unsigned char)::atoi(argv[3]));
 
-  typedef unsigned char                         InputPixelType;
-  const unsigned int                            Dimension = 2;
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  using InputPixelType         = unsigned char;
+  const unsigned int Dimension = 2;
+  using InputImageType         = otb::Image<InputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -63,8 +63,8 @@ int main(int argc, char* argv[])
   //  input image type and the output complex type value, so we start by
   //  defining:
 
-  typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
-  typedef CMType::OutputType                               OutputType;
+  using CMType     = otb::ComplexMomentsImageFunction<InputImageType>;
+  using OutputType = CMType::OutputType;
 
   CMType::Pointer cmFunction = CMType::New();
 

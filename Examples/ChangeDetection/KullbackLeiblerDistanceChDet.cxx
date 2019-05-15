@@ -99,12 +99,12 @@ int main(int argc, char* argv[])
     char* fileNameOut = argv[3];
     int   winSize     = atoi(argv[4]);
 
-    const unsigned int    Dimension = 2;
-    typedef double        PixelType;
-    typedef unsigned char OutputPixelType;
+    const unsigned int Dimension = 2;
+    using PixelType              = double;
+    using OutputPixelType        = unsigned char;
 
-    typedef otb::Image<PixelType, Dimension>       ImageType;
-    typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+    using ImageType       = otb::Image<PixelType, Dimension>;
+    using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
     //  The \doxygen{otb}{KullbackLeiblerDistanceImageFilter} is templated over
     //  the types of the two input images and the type of the generated change
@@ -113,13 +113,13 @@ int main(int argc, char* argv[])
     //  example to perform a change detection through a distance between
     //  distributions...
 
-    typedef otb::KullbackLeiblerDistanceImageFilter<ImageType, ImageType, ImageType> FilterType;
+    using FilterType = otb::KullbackLeiblerDistanceImageFilter<ImageType, ImageType, ImageType>;
 
     //  The different elements of the pipeline can now be instantiated. Follow the
     //  ratio of means change detector example.
 
-    typedef otb::ImageFileReader<ImageType>       ReaderType;
-    typedef otb::ImageFileWriter<OutputImageType> WriterType;
+    using ReaderType = otb::ImageFileReader<ImageType>;
+    using WriterType = otb::ImageFileWriter<OutputImageType>;
 
     ReaderType::Pointer reader1 = ReaderType::New();
     reader1->SetFileName(fileName1);
@@ -138,8 +138,8 @@ int main(int argc, char* argv[])
     filter->SetInput1(reader1->GetOutput());
     filter->SetInput2(reader2->GetOutput());
 
-    typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescaleFilterType;
-    RescaleFilterType::Pointer                                           rescaler = RescaleFilterType::New();
+    using RescaleFilterType             = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
+    RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
     rescaler->SetInput(filter->GetOutput());
     rescaler->SetOutputMinimum(0);

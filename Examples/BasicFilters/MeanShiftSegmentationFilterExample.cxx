@@ -63,19 +63,19 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef float                        PixelType;
-  typedef unsigned int                 LabelPixelType;
-  typedef itk::RGBPixel<unsigned char> ColorPixelType;
+  using PixelType      = float;
+  using LabelPixelType = unsigned int;
+  using ColorPixelType = itk::RGBPixel<unsigned char>;
 
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::Image<LabelPixelType, Dimension>  LabelImageType;
-  typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
+  using ImageType      = otb::VectorImage<PixelType, Dimension>;
+  using LabelImageType = otb::Image<LabelPixelType, Dimension>;
+  using RGBImageType   = otb::Image<ColorPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<ImageType>      ReaderType;
-  typedef otb::ImageFileWriter<ImageType>      WriterType;
-  typedef otb::ImageFileWriter<LabelImageType> LabelWriterType;
+  using ReaderType      = otb::ImageFileReader<ImageType>;
+  using WriterType      = otb::ImageFileWriter<ImageType>;
+  using LabelWriterType = otb::ImageFileWriter<LabelImageType>;
 
-  typedef otb::MeanShiftSegmentationFilter<ImageType, LabelImageType, ImageType> FilterType;
+  using FilterType = otb::MeanShiftSegmentationFilter<ImageType, LabelImageType, ImageType>;
 
   // We instantiate the filter, the reader, and 2 writers (for the
   // labeled and clustered images).
@@ -118,15 +118,15 @@ int main(int argc, char* argv[])
   writer1->Update();
   writer2->Update();
 
-  typedef otb::PrintableImageFilter<ImageType> PrintableFilterType;
-  PrintableFilterType::Pointer                 printableImageFilter = PrintableFilterType::New();
+  using PrintableFilterType                         = otb::PrintableImageFilter<ImageType>;
+  PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
   printableImageFilter->SetChannel(1);
   printableImageFilter->SetChannel(2);
   printableImageFilter->SetChannel(3);
 
-  typedef PrintableFilterType::OutputImageType  OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> PrettyWriterType;
+  using OutputImageType  = PrintableFilterType::OutputImageType;
+  using PrettyWriterType = otb::ImageFileWriter<OutputImageType>;
 
   PrettyWriterType::Pointer prettyWriter = PrettyWriterType::New();
 
@@ -135,14 +135,14 @@ int main(int argc, char* argv[])
   prettyWriter->SetInput(printableImageFilter->GetOutput());
   prettyWriter->Update();
 
-  typedef otb::ImageFileWriter<RGBImageType> LabelRGBWriterType;
+  using LabelRGBWriterType = otb::ImageFileWriter<RGBImageType>;
 
   LabelRGBWriterType::Pointer labelRGBWriter = LabelRGBWriterType::New();
 
   // Label to RGB image
-  typedef itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>                   FunctorType;
-  typedef itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, FunctorType> ColorLabelFilterType;
-  ColorLabelFilterType::Pointer                                                   labelToRGB = ColorLabelFilterType::New();
+  using FunctorType                        = itk::Functor::ScalarToRGBPixelFunctor<LabelPixelType>;
+  using ColorLabelFilterType               = itk::UnaryFunctorImageFilter<LabelImageType, RGBImageType, FunctorType>;
+  ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
 
   labelToRGB->SetInput(filter->GetLabelOutput());
 

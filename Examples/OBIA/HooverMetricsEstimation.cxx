@@ -74,18 +74,18 @@ int main(int argc, char* argv[])
   // This type of label object allows storing generic attributes. Each region can store
   // a set of attributes: in this case, Hoover instances and metrics will be stored.
 
-  typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                        LabelMapType;
-  typedef otb::HooverMatrixFilter<LabelMapType>                 HooverMatrixFilterType;
-  typedef otb::HooverInstanceFilter<LabelMapType>               InstanceFilterType;
+  using LabelObjectType        = otb::AttributesMapLabelObject<unsigned int, 2, float>;
+  using LabelMapType           = itk::LabelMap<LabelObjectType>;
+  using HooverMatrixFilterType = otb::HooverMatrixFilter<LabelMapType>;
+  using InstanceFilterType     = otb::HooverInstanceFilter<LabelMapType>;
 
-  typedef otb::Image<unsigned int, 2>                              ImageType;
-  typedef itk::LabelImageToLabelMapFilter<ImageType, LabelMapType> ImageToLabelMapFilterType;
+  using ImageType                 = otb::Image<unsigned int, 2>;
+  using ImageToLabelMapFilterType = itk::LabelImageToLabelMapFilter<ImageType, LabelMapType>;
 
-  typedef otb::VectorImage<float, 2>                                         VectorImageType;
-  typedef otb::LabelMapToAttributeImageFilter<LabelMapType, VectorImageType> AttributeImageFilterType;
-  typedef otb::ImageFileReader<ImageType>                                    ImageReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>                              WriterType;
+  using VectorImageType          = otb::VectorImage<float, 2>;
+  using AttributeImageFilterType = otb::LabelMapToAttributeImageFilter<LabelMapType, VectorImageType>;
+  using ImageReaderType          = otb::ImageFileReader<ImageType>;
+  using WriterType               = otb::ImageFileWriter<VectorImageType>;
 
   ImageReaderType::Pointer gt_reader = ImageReaderType::New();
   gt_reader->SetFileName(argv[1]);

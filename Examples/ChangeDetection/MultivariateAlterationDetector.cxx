@@ -80,10 +80,10 @@ int main(int argc, char* argv[])
   // We then define the types for the input images and for the
   // change image.
 
-  typedef unsigned short                               InputPixelType;
-  typedef float                                        OutputPixelType;
-  typedef otb::VectorImage<InputPixelType, Dimension>  InputImageType;
-  typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
+  using InputPixelType  = unsigned short;
+  using OutputPixelType = float;
+  using InputImageType  = otb::VectorImage<InputPixelType, Dimension>;
+  using OutputImageType = otb::VectorImage<OutputPixelType, Dimension>;
 
   //  We can now declare the types for the reader. Since the images
   //  can be vey large, we will force the pipeline to use
@@ -91,21 +91,21 @@ int main(int argc, char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<InputImageType, InputImageType>   InputPrintFilterType;
-  typedef otb::PrintableImageFilter<OutputImageType, OutputImageType> OutputPrintFilterType;
-  typedef InputPrintFilterType::OutputImageType                       VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>                         VisuWriterType;
+  using InputPrintFilterType  = otb::PrintableImageFilter<InputImageType, InputImageType>;
+  using OutputPrintFilterType = otb::PrintableImageFilter<OutputImageType, OutputImageType>;
+  using VisuImageType         = InputPrintFilterType::OutputImageType;
+  using VisuWriterType        = otb::ImageFileWriter<VisuImageType>;
 
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change
   //  image.
 
-  typedef otb::MultivariateAlterationDetectorImageFilter<InputImageType, OutputImageType> MADFilterType;
+  using MADFilterType = otb::MultivariateAlterationDetectorImageFilter<InputImageType, OutputImageType>;
 
   //  The different elements of the pipeline can now be instantiated.
 

@@ -56,25 +56,25 @@ int main(int argc, char* argv[])
   const char* inImageName   = argv[2];
   const char* outVectorName = argv[3];
 
-  typedef double            Type;
-  typedef otb::VectorData<> VectorDataType;
+  using Type           = double;
+  using VectorDataType = otb::VectorData<>;
 
-  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
+  using VectorDataFileReaderType = otb::VectorDataFileReader<VectorDataType>;
+  using VectorDataWriterType     = otb::VectorDataFileWriter<VectorDataType>;
 
-  typedef otb::RemoteSensingRegion<Type> TypedRegion;
+  using TypedRegion = otb::RemoteSensingRegion<Type>;
 
-  typedef otb::Image<unsigned char, 2>    ImageType;
-  typedef otb::ImageFileReader<ImageType> ImageReaderType;
-  ImageReaderType::Pointer                imageReader = ImageReaderType::New();
+  using ImageType                      = otb::Image<unsigned char, 2>;
+  using ImageReaderType                = otb::ImageFileReader<ImageType>;
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(inImageName);
   imageReader->UpdateOutputInformation();
 
   // After the usual declaration (you can check the source file for the details),
   // we can declare the \doxygen{otb}{VectorDataExtractROI}:
 
-  typedef otb::VectorDataExtractROI<VectorDataType> FilterType;
-  FilterType::Pointer                               filter = FilterType::New();
+  using FilterType           = otb::VectorDataExtractROI<VectorDataType>;
+  FilterType::Pointer filter = FilterType::New();
 
   // Then, we need to specify the region to extract. This region is a bit special as
   // it contains also information related to its reference system (cartographic projection

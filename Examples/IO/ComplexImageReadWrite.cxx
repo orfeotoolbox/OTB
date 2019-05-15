@@ -55,14 +55,14 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef std::complex<float>              PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType = std::complex<float>;
+  using ImageType = otb::Image<PixelType, Dimension>;
 
   // The image file reader and writer types are instantiated using the image
   // type. We can then create objects for both of them.
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

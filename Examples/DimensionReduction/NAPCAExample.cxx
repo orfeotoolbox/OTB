@@ -67,7 +67,7 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double     PixelType;
+  using PixelType                          = double;
   const unsigned int Dimension             = 2;
   const char*        inputFileName         = argv[1];
   const char*        outputFilename        = argv[2];
@@ -84,9 +84,9 @@ int main(int itkNotUsed(argc), char* argv[])
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
 
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  using ImageType  = otb::VectorImage<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
   // We instantiate now the image reader and we set the image file name.
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -106,7 +106,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // We define the type of the noise filter.
 
   // SoftwareGuide : BeginCodeSnippet
-  typedef otb::LocalActivityVectorImageFilter<ImageType, ImageType> NoiseFilterType;
+  using NoiseFilterType = otb::LocalActivityVectorImageFilter<ImageType, ImageType>;
   // SoftwareGuide : EndCodeSnippet
 
 
@@ -116,8 +116,8 @@ int main(int itkNotUsed(argc), char* argv[])
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
 
-  typedef otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::FORWARD> NAPCAFilterType;
-  NAPCAFilterType::Pointer                                                                      napcafilter = NAPCAFilterType::New();
+  using NAPCAFilterType                = otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::FORWARD>;
+  NAPCAFilterType::Pointer napcafilter = NAPCAFilterType::New();
 
   // We then set the number of principal
   // components required as output. We can choose to get less PCs than
@@ -152,8 +152,8 @@ int main(int itkNotUsed(argc), char* argv[])
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
 
-  typedef otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::INVERSE> InvNAPCAFilterType;
-  InvNAPCAFilterType::Pointer                                                                   invFilter = InvNAPCAFilterType::New();
+  using InvNAPCAFilterType              = otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::INVERSE>;
+  InvNAPCAFilterType::Pointer invFilter = InvNAPCAFilterType::New();
 
   invFilter->SetMeanValues(napcafilter->GetMeanValues());
   if (normalization)
@@ -184,9 +184,9 @@ int main(int itkNotUsed(argc), char* argv[])
   // \end{figure}
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<ImageType, ImageType> PrintFilterType;
-  typedef PrintFilterType::OutputImageType                VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>             VisuWriterType;
+  using PrintFilterType = otb::PrintableImageFilter<ImageType, ImageType>;
+  using VisuImageType   = PrintFilterType::OutputImageType;
+  using VisuWriterType  = otb::ImageFileWriter<VisuImageType>;
 
   PrintFilterType::Pointer inputPrintFilter        = PrintFilterType::New();
   PrintFilterType::Pointer outputPrintFilter       = PrintFilterType::New();

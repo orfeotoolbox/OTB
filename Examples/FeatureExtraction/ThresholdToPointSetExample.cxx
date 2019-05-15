@@ -54,16 +54,16 @@ int main(int argc, char* argv[])
   //  The next step is to decide which pixel types to use for the input image
   //  and the Point Set as well as their dimension.
 
-  typedef unsigned char PixelType;
-  const unsigned int    Dimension = 2;
+  using PixelType              = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType, Dimension>    ImageType;
-  typedef itk::PointSet<PixelType, Dimension> PointSetType;
+  using ImageType    = otb::Image<PixelType, Dimension>;
+  using PointSetType = itk::PointSet<PixelType, Dimension>;
 
   // A reader is instantiated to read the input image
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
   const char* filenamereader = argv[1];
   reader->SetFileName(filenamereader);
@@ -80,8 +80,8 @@ int main(int argc, char* argv[])
   //  Then we create the ThresholdImageToPointSetFilter and we pass the
   // parameters.
 
-  typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType> FilterThresholdType;
-  FilterThresholdType::Pointer                                         filterThreshold = FilterThresholdType::New();
+  using FilterThresholdType                    = otb::ThresholdImageToPointSetFilter<ImageType, PointSetType>;
+  FilterThresholdType::Pointer filterThreshold = FilterThresholdType::New();
   filterThreshold->SetLowerThreshold(lowerThreshold);
   filterThreshold->SetUpperThreshold(upperThreshold);
   filterThreshold->SetInput(0, reader->GetOutput());
@@ -100,10 +100,10 @@ int main(int argc, char* argv[])
   // To display each point, we create an iterator on the list of points,
   // which is accessible through the method \code{GetPoints()} of the PointSet.
 
-  typedef PointSetType::PointsContainer ContainerType;
-  ContainerType*                        pointsContainer = pointSet->GetPoints();
-  typedef ContainerType::Iterator       IteratorType;
-  IteratorType                          itList = pointsContainer->Begin();
+  using ContainerType            = PointSetType::PointsContainer;
+  ContainerType* pointsContainer = pointSet->GetPoints();
+  using IteratorType             = ContainerType::Iterator;
+  IteratorType itList            = pointsContainer->Begin();
 
   // A while loop enable us to through the list a display the coordinate of
   // each point.
