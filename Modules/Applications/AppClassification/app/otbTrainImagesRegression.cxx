@@ -90,6 +90,8 @@ private:
   }
   
 protected:
+
+  /** Holds sampling parameters specific to training or validation */
   struct SamplingParameters
   {
     std::vector<std::string> inputVectorList;
@@ -97,6 +99,7 @@ protected:
     std::string filePrefix = "";
   };
 
+  /** Adds a class field to the input vectors, this is needed to perform sampling operations */
   void AddRegressionField(const std::vector<std::string> & inputFileNames,
                           const std::string & filePrefix)
   {
@@ -117,6 +120,7 @@ protected:
     }
   }
 
+  /** Prepare and execute polygonClassStatistics on each input vector data file */
   void ComputePolygonStatistics(const std::string & filePrefix)
   {
     auto polygonClassAppli = GetInternalApplication("polystat");
@@ -140,6 +144,7 @@ protected:
     
   }
 
+  /** Compute the sampling rates using the computed statistics */
   void ComputeSamplingRate(const std::string & filePrefix, unsigned int numberOfSamples)
   {
     auto samplingRateAppli = GetInternalApplication("rates");
@@ -171,6 +176,7 @@ protected:
     
   }
 
+  /** Configure and execute Sample Selection on each vector using the computed rates and statistic files. */
   void SelectSamples(const std::string & filePrefix)
   {
     auto sampleSelection = GetInternalApplication("select");
@@ -198,6 +204,9 @@ protected:
     }
   }
   
+  /** Configure and execute sampleExtraction. The application is called twice by input vector 
+   * first values are extracted from the feature image and then the groundtruth is extracted 
+   * from the predictor image.*/
   void ExtractSamples(const std::string & filePrefix)
   {
     auto sampleExtraction = GetInternalApplication("extraction");
@@ -212,13 +221,13 @@ protected:
       sampleExtraction->UpdateParameters();
       sampleExtraction->SetParameterString("field", m_ClassFieldName);
       
-      //First Extraction
+      //First Extraction : Values from the feature image.
       sampleExtraction->SetParameterInputImage("in", featureImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "prefix");
       sampleExtraction->SetParameterString("outfield.prefix.name", m_FeaturePrefix);
       ExecuteInternal("extraction");
       
-      //Second Extraction
+      //Second Extraction : groundtruth from the predictor image.
       sampleExtraction->SetParameterInputImage("in", predictorImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "list");
       sampleExtraction->SetParameterStringList("outfield.list.names", {m_PredictionFieldName});
@@ -226,6 +235,8 @@ protected:
     }
   }
   
+  /** Configure and execute TrainVectorClassifier. Note that many parameters of TrainVectorClassifier
+   * are shared with the main application during initialization. */
   void TrainModel()
   {
     auto trainVectorRegression = GetInternalApplication("training");
@@ -250,6 +261,7 @@ protected:
     ExecuteInternal("training");
   }
   
+  /** Init input/output parameters */
   void InitIO()
   {
     AddParameter( ParameterType_Group, "io", "Input and output data" );
@@ -272,6 +284,7 @@ protected:
     MandatoryOff( "io.valid" );
   }
   
+  /** Init sampling parameters and applications */
   void InitSampling()
   {  
     AddApplication( "VectorDataSetField", "setfield", "Set additional vector field");
@@ -294,6 +307,7 @@ protected:
     
   }
   
+  /** Init Learning applications and share learning parameters */
   void InitLearning()
   {
     AddApplication( "TrainVectorRegression", "training", "Train vector regression"); 
@@ -313,6 +327,8 @@ private:
   {
   }
 
+  /** remove all file in the fileHandler std::map and clear the fileHandler std::map. 
+   * For .shp file, this method also removes .shx, .dbf and .prj associated files.*/
   bool ClearFileHandler()
   {
     bool res = true;
@@ -376,7 +392,6 @@ private:
       PerformSampling(validParams);
     }
 
-    
     otbAppLogINFO( "Sampling Done." );
     
     TrainModel();
@@ -388,12 +403,16 @@ private:
     }
   }
   
+  /** Field used for sampling operations. */
   std::string m_ClassFieldName = "regclass";
   
+  /** field containg the extracted regression groundtruth */
   std::string m_PredictionFieldName = "prediction";
   
+  /** field containing the extracted pixel values for regression */
   std::string m_FeaturePrefix = "value_";
   
+  /** Container containing the list of temporary files created during the execution*/
   std::map< std::string, std::vector<std::string>> m_FileHandler;
   
 };
