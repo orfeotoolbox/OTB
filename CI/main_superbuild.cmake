@@ -133,7 +133,7 @@ set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # For superbuild we need remote module 
-foreach(remote_module SertitObject Mosaic otbGRM DiapOTBModule OTBTemporalGapFilling)
+foreach(remote_module otbGRM DiapOTBModule OTBTemporalGapFilling) #Mosaic # #SertitObject
     set ( CONFIGURE_OPTIONS 
       "${CONFIGURE_OPTIONS}-DModule_${remote_module}:BOOL=ON;")
 endforeach()
@@ -167,6 +167,11 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
+# Configure log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_cmake_error_log.txt" "${_configure_error}")
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
@@ -178,6 +183,14 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             CAPTURE_CMAKE_ERROR _build_error
             )
 
+# Build log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_return_value_log.txt" "${_build_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_cmake_error_log.txt" "${_build_error}")
+
+# SEND_ERROR if build error
+# FATAL_ERROR if build error?
 if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
@@ -187,6 +200,12 @@ ctest_test(PARALLEL_LEVEL 8
            RETURN_VALUE _test_rv
            CAPTURE_CMAKE_ERROR _test_error
            )
+
+# Test log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/test_return_value_log.txt" "${_test_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
 
 if ( NOT _test_rv EQUAL 0 )
   message( WARNING "Some tests have failed.")
@@ -199,7 +218,7 @@ set ( MAKE_COMMAND "make")
 execute_process(
   COMMAND ${MAKE_COMMAND} "install"
   WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY}
-  RESULT_VARIABLE install_res
+  RESULT_VARIABLE install_rv
   OUTPUT_VARIABLE install_out
   ERROR_VARIABLE install_err
   )
@@ -211,7 +230,12 @@ if ( DEBUG )
   message( "install_err = ${install_err}" )
 endif()
 
-# Artifacts can only be in project dir...
-# file ( COPY "${XDK_PATH}" DESTINATION "${OTB_SOURCE_DIR}/install")
+# Install log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/install_out_log.txt" "${install_out}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${install_err}")
 
-# include ( "${CMAKE_CURRENT_LIST_DIR}/main_packages.cmake" )
+if ( NOT install_rv EQUAL 0 )
+  message( SEND_ERROR "Install have failed.")
+endif()
