@@ -1,4 +1,4 @@
-c /*
+/*
   * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
   *
   * This file is part of Orfeo Toolbox
@@ -45,7 +45,7 @@ c /*
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 
-    namespace otb
+namespace otb
 {
 namespace Wrapper
 {
