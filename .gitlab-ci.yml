@@ -62,7 +62,7 @@ fast-build:
     expire_in: 24 hrs
     paths:
       - log/*.txt
-
+      - build/*/*.log
 
 debian-build:
   extends: .common-build
