@@ -127,7 +127,7 @@ set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # For superbuild we need remote module 
-foreach(remote_module SertitObject Mosaic otbGRM DiapOTBModule OTBTemporalGapFilling)
+foreach(remote_module Mosaic otbGRM DiapOTBModule OTBTemporalGapFilling) #SertitObject
     set ( CONFIGURE_OPTIONS 
       "${CONFIGURE_OPTIONS}-DModule_${remote_module}:BOOL=ON;")
 endforeach()
@@ -163,9 +163,9 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     )
 # Configure log
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/configure_return_value_log.txt" "${_configure_rv}")
+  "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/configure_cmake_error_log.txt" "${_configure_error}")
+  "${OTB_SOURCE_DIR}/log/configure_cmake_error_log.txt" "${_configure_error}")
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
@@ -179,9 +179,9 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
 
 # Build log
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/build_return_value_log.txt" "${_build_rv}")
+  "${OTB_SOURCE_DIR}/log/build_return_value_log.txt" "${_build_rv}")
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/build_cmake_error_log.txt" "${_build_error}")
+  "${OTB_SOURCE_DIR}/log/build_cmake_error_log.txt" "${_build_error}")
 
 # SEND_ERROR if build error
 # FATAL_ERROR if build error?
@@ -197,9 +197,9 @@ ctest_test(PARALLEL_LEVEL 8
 
 # Test log
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/test_return_value_log.txt" "${_test_rv}")
+  "${OTB_SOURCE_DIR}/log/test_return_value_log.txt" "${_test_rv}")
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/test_cmake_error_log.txt" "${_test_error}")
+  "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
 
 if ( NOT _test_rv EQUAL 0 )
   message( WARNING "Some tests have failed.")
@@ -226,9 +226,9 @@ endif()
 
 # Install log
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/install_out_log.txt" "${install_out}")
+  "${OTB_SOURCE_DIR}/log/install_out_log.txt" "${install_out}")
 file ( WRITE 
-  "${OTB_SOURCE_DIR}/install_error_log.txt" "${install_err}")
+  "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${install_err}")
 
 if ( NOT install_rv EQUAL 0 )
   message( SEND_ERROR "Install have failed.")

@@ -61,7 +61,7 @@ fast-build:
     when: on_failure
     expire_in: 24 hrs
     paths:
-      - /*log.txt
+      - log/*.txt
 
 
 debian-build:
