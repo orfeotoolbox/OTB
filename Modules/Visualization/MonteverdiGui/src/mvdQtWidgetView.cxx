@@ -163,7 +163,6 @@ QtWidgetView
   //SetupWidget( widget, InputFilenameListInitializer() );
   SetupWidget( widget, InputImageInitializer() );
   //SetupWidget( widget, InputImageListInitializer() );
-  SetupWidget( widget, InputProcessXMLInitializer() );
   SetupWidget( widget, InputVectorDataInitializer() );
   //SetupWidget( widget, InputVectorDataListInitializer() );
   SetupWidget( widget, ParameterListInitializer() );
@@ -172,7 +171,6 @@ QtWidgetView
 #endif
 
   SetupWidget( widget, OutputFilenameInitializer() );
-  SetupWidget( widget, OutputProcessXMLInitializer() );
 
   SetupWidget(
     widget,

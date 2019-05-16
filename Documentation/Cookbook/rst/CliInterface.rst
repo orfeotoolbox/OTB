@@ -123,7 +123,6 @@ example based on the OrthoRectification application:
             -opt.rpc                 <int32>          RPC modeling (points per axis)  (optional, off by default, default value is 10)
             -opt.ram                 <int32>          Available RAM (MB)  (optional, off by default, default value is 128)
             -opt.gridspacing         <float>          Resampling grid spacing  (optional, off by default, default value is 4)
-            -inxml                   <string>         Load parameters from XML  (optional, off by default)
             -progress                <boolean>        Report progress
             -help                    <string list>    Display long help (empty list), or help for given parameters keys
 
@@ -145,11 +144,10 @@ Command-line examples are provided in the chapter :ref:`apprefdoc`.
 Load and save parameters to XML
 -------------------------------
 
-Since OTB 3.20, OTB applications parameters can be export/import to/from
-an XML file using inxml/outxml parameters. Those parameters are
-available in all applications.
-
-An example is worth a thousand words
+OTB application parameters can be saved and loaded to
+an XML file using the special ``-inxml`` and ``-outxml`` parameters.
+Those parameters are available in all applications.
+For example:
 
 ::
 
@@ -176,17 +174,6 @@ time
 
 In this case it will use as mathematical expression “(im1b1 - im2b1)”
 instead of “abs(im1b1 - im2b1)”.
-
-Finally, you can also launch applications directly from the command-line
-launcher executable using the inxml parameter without having to declare
-the application name. Use in this case:
-
-::
-
-    otbApplicationLauncherCommandLine -inxml saved_applications_parameters.xml
-
-It will retrieve the application name and related parameters from the
-input XML file and launch in this case the BandMath applications.
 
 Parallel execution with MPI
 ---------------------------

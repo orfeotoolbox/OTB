@@ -55,7 +55,6 @@ private:
     "Component Analysis algorithm.");
 
     // Documentation
-    SetDocName("Vertex Component Analysis");
     SetDocLongDescription("Apply the Vertex Component Analysis [1] to "
     "an hyperspectral image to extract endmembers. Given a set of mixed "
     "spectral vectors (multispectral or hyperspectral), the application "

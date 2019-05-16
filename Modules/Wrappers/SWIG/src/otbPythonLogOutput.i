@@ -72,6 +72,15 @@ public:
   virtual void AddLogOutput(itkLogOutput *output);
   static Logger * Instance();
   void ResetOutputs();
+
+  // Wrap message methods so we can print stuff from Python
+  void Debug(std::string const & message);
+  void Info(std::string const & message);
+  void Warning(std::string const & message);
+  void Critical(std::string const & message);
+  void Error(std::string const & message);
+  void Fatal(std::string const & message);
+
 protected:
   Logger();
   virtual ~Logger();

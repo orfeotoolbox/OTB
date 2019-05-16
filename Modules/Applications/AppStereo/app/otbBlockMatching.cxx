@@ -130,7 +130,6 @@ private:
     SetDescription("Performs block-matching to estimate pixel-wise disparities"
       " between two images.");
 
-    SetDocName("Pixel-wise Block-Matching");
     SetDocLongDescription(
       "This application allows one to performs "
       "block-matching to estimate pixel-wise disparities for a pair of images "

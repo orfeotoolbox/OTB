@@ -64,7 +64,6 @@ private:
     SetDescription("Build a multi-resolution pyramid of the image.");
 
     // Documentation
-    SetDocName("Multi Resolution Pyramid");
     SetDocLongDescription("This application builds a multi-resolution pyramid of the input image. User can specified the number of levels of the pyramid and the subsampling factor. To speed up the process, you can use the fast scheme option");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

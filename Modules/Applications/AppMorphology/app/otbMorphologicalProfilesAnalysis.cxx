@@ -77,7 +77,6 @@ private:
     SetDescription( "Performs morphological profiles analysis on an input image channel." );
 
     // Documentation
-    SetDocName( "Morphological Profiles Analysis" );
     SetDocLongDescription( "This algorithm is derived from the following publication:\n\n"
 
                                    "Martino Pesaresi and Jon Alti Benediktsson, Member, IEEE: A new approach\n"

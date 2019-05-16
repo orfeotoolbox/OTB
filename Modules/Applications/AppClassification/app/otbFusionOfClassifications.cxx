@@ -97,7 +97,6 @@ private:
   {
     SetName("FusionOfClassifications");
     SetDescription("Fuses several classifications maps of the same image on the basis of class labels.");
-    SetDocName("Fusion of Classifications");
     SetDocLongDescription("This application allows you to fuse several classification maps and produces a single more robust classification map. "
         "Fusion is done either by mean of Majority Voting, or with the Dempster Shafer combination method on class labels.\n\n"
         "  - MAJORITY VOTING: for each pixel, the class with the highest number of votes is selected.\n"

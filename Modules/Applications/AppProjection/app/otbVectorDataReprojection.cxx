@@ -64,7 +64,6 @@ private:
   {
     SetName("VectorDataReprojection");
     SetDescription("Reproject a vector data using support image projection reference, or a user specified map projection");
-    SetDocName("Vector Data reprojection");
 
     SetDocLongDescription(
         "Reproject vector data using a support image as projection reference or to a user given map projection. "

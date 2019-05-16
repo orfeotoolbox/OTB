@@ -54,7 +54,6 @@ private:
     SetDescription("Performs local Rx score computation on an hyperspectral image.");
 
     // Documentation
-    SetDocName("Local Rx Detection");
     SetDocLongDescription("Performs local Rx score computation on an input "
       "hyperspectral image. For each hyperspectral pixel, the Rx score is "
       "computed using statistics computed on a dual neighborhood. The dual "
