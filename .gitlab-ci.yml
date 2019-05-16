@@ -147,7 +147,7 @@ macos-superbuild-prepare:
 macos-superbuild-build:
   tags:
     - macos
-  extends: .general
+  extends: .common-build
   only: [merge_requests, branches]
   script:
     - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
