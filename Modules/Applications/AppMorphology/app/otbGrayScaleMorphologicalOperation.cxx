@@ -77,7 +77,6 @@ SetName("GrayScaleMorphologicalOperation");
 SetDescription("Performs morphological operations on a grayscale input image");
 
 // Documentation
-SetDocName("Grayscale Morphological Operation");
 SetDocLongDescription("This application performs grayscale morphological operations on a mono band image");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");

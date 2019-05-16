@@ -133,7 +133,6 @@ private:
     SetDescription("Compare two segmentations with Hoover metrics");
 
     // Documentation
-    SetDocName("Hoover compare segmentation");
     SetDocLongDescription("This application compares a machine segmentation (MS) with a partial "
                           "ground truth segmentation (GT). The Hoover metrics are used to estimate "
                           "scores for correct detection, over-segmentation, under-segmentation and "

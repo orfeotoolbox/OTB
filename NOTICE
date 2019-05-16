@@ -334,20 +334,6 @@ binaries:
     http://www.boost.org/LICENSE_1_0.txt
 
 
-* CMake/UseJava.cmake
-    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
-    Copyright 2010 Ben Boeckel <ben.boeckel@kitware.com>
-    BSD 3-Clause license
-    https://opensource.org/licenses/BSD-3-Clause
-
-
-* CMake/UseJavaClassFilelist.cmake
-* CMake/UseJavaSymlinks.cmake
-    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
-    BSD 3-Clause license
-    https://opensource.org/licenses/BSD-3-Clause
-
-
 * CMake/UseSWIGLocal.cmake
     Copyright 2004-2009 Kitware, Inc.
     Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>

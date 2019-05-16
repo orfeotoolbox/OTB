@@ -179,12 +179,7 @@ ApplicationLauncher
 }
 
 
-otb::Wrapper::QtMainWindow*
-ApplicationLauncher
-::NewOtbApplicationWindow( const QString & appName,
-			   bool isStandalone,
-			   QWidget* parent,
-			   Qt::WindowFlags flags ) const
+otb::Wrapper::QtMainWindow* ApplicationLauncher ::NewOtbApplicationWindow(const QString& appName, bool isStandalone, QWidget* parent) const
 {
   // Setup the otb application
   auto otbApp = PrepareApplication(appName, isStandalone);
@@ -194,7 +189,7 @@ ApplicationLauncher
   gui->CreateGui();
 
   // Make the application window
-  auto window = new ::otb::Wrapper::QtMainWindow(otbApp, gui, parent, flags | Qt::Window);
+  auto window = new ::otb::Wrapper::QtMainWindow(otbApp, gui, parent);
 
   return window;
 }

@@ -78,6 +78,8 @@ protected:
 
   Parameter * GetParam();
 
+  bool eventFilter(QObject* o, QEvent* e) override;
+
 private:
   QtWidgetParameterBase(const QtWidgetParameterBase&) = delete;
   void operator=(const QtWidgetParameterBase&) = delete;

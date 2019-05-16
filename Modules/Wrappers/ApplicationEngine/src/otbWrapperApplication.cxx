@@ -25,14 +25,14 @@
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperOutputFilenameParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
 #include "otbWrapperInputVectorDataParameter.h"
 #include "otbWrapperInputVectorDataListParameter.h"
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperInputImageListParameter.h"
-#include "otbWrapperInputProcessXMLParameter.h"
+#include "otbWrapperInputXML.h"
+#include "otbWrapperOutputXML.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperBoolParameter.h"
@@ -71,6 +71,80 @@ ExceptionObject(file, line, message, loc)
 namespace Wrapper
 {
 
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8VectorImageType* Application::GetParameterImage<UInt8VectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int16VectorImageType* Application::GetParameterImage<Int16VectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt16VectorImageType* Application::GetParameterImage<UInt16VectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int32VectorImageType* Application::GetParameterImage<Int32VectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt32VectorImageType* Application::GetParameterImage<UInt32VectorImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE FloatVectorImageType* Application::GetParameterImage<FloatVectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE DoubleVectorImageType* Application::GetParameterImage<DoubleVectorImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16VectorImageType* Application::GetParameterImage<ComplexInt16VectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32VectorImageType* Application::GetParameterImage<ComplexInt32VectorImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatVectorImageType* Application::GetParameterImage<ComplexFloatVectorImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleVectorImageType* Application::GetParameterImage<ComplexDoubleVectorImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBImageType* Application::GetParameterImage<UInt8RGBImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBAImageType* Application::GetParameterImage<UInt8RGBAImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8ImageType* Application::GetParameterImage<UInt8ImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int16ImageType* Application::GetParameterImage<Int16ImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt16ImageType* Application::GetParameterImage<UInt16ImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE Int32ImageType* Application::GetParameterImage<Int32ImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt32ImageType* Application::GetParameterImage<UInt32ImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE FloatImageType* Application::GetParameterImage<FloatImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE DoubleImageType* Application::GetParameterImage<DoubleImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16ImageType* Application::GetParameterImage<ComplexInt16ImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32ImageType* Application::GetParameterImage<ComplexInt32ImageType>(std::string);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatImageType* Application::GetParameterImage<ComplexFloatImageType>(std::string);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleImageType* Application::GetParameterImage<ComplexDoubleImageType>(std::string);
+
+//
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8VectorImageType>(std::string, UInt8VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int16VectorImageType>(std::string, Int16VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt16VectorImageType>(std::string, UInt16VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int32VectorImageType>(std::string, Int32VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt32VectorImageType>(std::string, UInt32VectorImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<FloatVectorImageType>(std::string, FloatVectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<DoubleVectorImageType>(std::string, DoubleVectorImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16VectorImageType>(std::string,
+                                                                                                                              ComplexInt16VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32VectorImageType>(std::string,
+                                                                                                                              ComplexInt32VectorImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatVectorImageType>(std::string,
+                                                                                                                              ComplexFloatVectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleVectorImageType>(std::string,
+                                                                                                                               ComplexDoubleVectorImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8RGBImageType>(std::string, UInt8RGBImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8RGBAImageType>(std::string, UInt8RGBAImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8ImageType>(std::string, UInt8ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int16ImageType>(std::string, Int16ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt16ImageType>(std::string, UInt16ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int32ImageType>(std::string, Int32ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt32ImageType>(std::string, UInt32ImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<FloatImageType>(std::string, FloatImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<DoubleImageType>(std::string, DoubleImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16ImageType>(std::string, ComplexInt16ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32ImageType>(std::string, ComplexInt32ImageType*);
+
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatImageType>(std::string, ComplexFloatImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleImageType>(std::string, ComplexDoubleImageType*);
+
+
 void Application::SetName( const std::string & name )
 {
   m_Name = name;
@@ -93,39 +167,6 @@ void Application::SetDescription(const std::string& description)
 const char* Application::GetDescription() const
 {
   return m_Description.c_str();
-}
-
-void Application::SetHaveInXML(bool haveInXML)
-{
-  m_HaveInXML = haveInXML;
-  this->Modified();
-}
-
-bool Application::GetHaveInXML() const
-{
-  return m_HaveInXML;
-}
-
-void Application::SetHaveOutXML(bool haveOutXML)
-{
-  m_HaveOutXML = haveOutXML;
-  this->Modified();
-}
-
-bool Application::GetHaveOutXML() const
-{
-  return m_HaveOutXML;
-}
-
-void Application::SetDocName(const std::string& value)
-{
-  m_DocName = value;
-  this->Modified();
-}
-
-const char* Application::GetDocName() const
-{
-  return m_DocName.c_str();
 }
 
 void Application::SetDocLongDescription(const std::string& value)
@@ -193,6 +234,11 @@ void Application::AddDocTag(const std::string & tag)
     }
 }
 
+bool Application::IsDeprecated()
+{
+  return std::find(m_DocTags.begin(), m_DocTags.end(), Tags::Deprecated) != m_DocTags.end();
+}
+
 DocExampleStructure::Pointer Application::GetDocExample()
 {
   if (!IsInitialized())
@@ -257,11 +303,6 @@ std::string Application::GetHtmlExample()
   return GetDocExample()->GenerateHtmlExample();
 }
 
-void Application::ForceInXMLParseFlag()
-{
-  m_IsInXMLParsed = false;
-}
-
 void Application::SetDocLink(const std::string & link)
 {
   if (m_Doclink.compare(link) != 0)
@@ -287,16 +328,12 @@ Application::Application()
     m_Description(""),
     m_Logger(otb::Logger::New()),
     m_ProgressSourceDescription(""),
-    m_DocName(""),
     m_DocLongDescription(""),
     m_DocAuthors(""),
     m_DocLimitations(""),
     m_DocSeeAlso(""),
     m_DocTags(),
     m_Doclink(""),
-    m_HaveInXML(true),
-    m_HaveOutXML(true),
-    m_IsInXMLParsed(false),
     m_IsInPrivateDo(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
@@ -399,21 +436,9 @@ void Application::Init()
 {
   m_DocExample    = DocExampleStructure::New();
   m_ParameterList = ParameterGroup::New();
-  //reset inXML parse checker in case if reinit-ing
-  m_IsInXMLParsed = false;
   m_IsInPrivateDo = true;
   this->DoInit();
   m_IsInPrivateDo = false;
-
-  //rashad: global parameters. now used only for inxml and outxml
-  if(this->GetHaveInXML())
-    {
-    AddInXMLParameter();
-    }
-  if(this->GetHaveOutXML())
-    {
-    AddOutXMLParameter();
-    }
 }
 
 template <typename T>
@@ -427,25 +452,18 @@ T* downcast_check(Parameter* param)
   return down;
 }
 
+void Application::LoadParametersFromXML(const std::string& filename)
+{
+  otb::Wrapper::XML::Read(filename, this);
+}
+
+void Application::SaveParametersToXML(const std::string& filename)
+{
+  otb::Wrapper::XML::Write(filename, this);
+}
+
 void Application::UpdateParameters()
 {
-  //read application from xml only once m_IsInXMLParsed is in charge of it.
-  std::string inXMLKey = "inxml";
-  if (m_HaveInXML && !m_IsInXMLParsed)
-    {
-    if ( GetParameterType(inXMLKey) == ParameterType_InputProcessXML  &&
-         IsParameterEnabled(inXMLKey) && HasValue(inXMLKey) )
-      {
-      Parameter* param = GetParameterByKey(inXMLKey);
-      InputProcessXMLParameter* inXMLParam = dynamic_cast<InputProcessXMLParameter*>(param);
-      if(inXMLParam!=nullptr)
-        {
-        // switch on 'm_IsInXMLParsed' before Read() to avoid cyclic calls
-        m_IsInXMLParsed = true;
-        inXMLParam->Read(this);
-        }
-      }
-    }
   m_IsInPrivateDo = true;
   this->DoUpdateParameters();
   m_IsInPrivateDo = false;
@@ -466,8 +484,7 @@ Application::RegisterPipeline()
     if ( GetParameterType(key) == ParameterType_OutputImage )
       {
       Parameter* param = GetParameterByKey(key);
-      OutputImageParameter * outP = 
-        dynamic_cast< OutputImageParameter * >( param );
+      OutputImageParameter* outP    = dynamic_cast<OutputImageParameter*>(param);
       itk::ImageBase< 2 > * outData = outP->GetValue();
       if ( outData )
         dataStack.push(outData);
@@ -475,8 +492,7 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_OutputVectorData )
       {
       Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter * outP = 
-        dynamic_cast< OutputVectorDataParameter * >( param );
+      OutputVectorDataParameter* outP    = dynamic_cast<OutputVectorDataParameter*>(param);
       VectorDataType * outData = outP->GetValue();
       if ( outData )
         dataStack.push(outData);
@@ -484,8 +500,7 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_InputImage )
       {
       Parameter* param = GetParameterByKey(key);
-      InputImageParameter * inP = 
-        dynamic_cast< InputImageParameter * >( param );
+      InputImageParameter* inP   = dynamic_cast<InputImageParameter*>(param);
       if ( !inP->HasValue() )
         continue;
       ImageBaseType * inData = inP->GetImage< ImageBaseType >();
@@ -495,13 +510,12 @@ Application::RegisterPipeline()
     else if ( GetParameterType(key) == ParameterType_InputImageList )
       {
       Parameter * param = GetParameterByKey(key);
-      InputImageListParameter * inP = 
-        dynamic_cast< InputImageListParameter * > ( param );
+      InputImageListParameter* inP   = dynamic_cast<InputImageListParameter*>(param);
       if ( !inP->HasValue() )
         continue;
       const FloatVectorImageListType * list = inP->GetImageList();
-      for ( auto it = list->Begin() ; it != list->End() ; ++it ) 
-        {
+      for (auto it = list->Begin(); it != list->End(); ++it)
+      {
         FloatVectorImageType * inData = it.Get().GetPointer();
         if ( inData && !inputData.count(inData) )
           inputData.insert(inData);
@@ -546,10 +560,9 @@ Application::RegisterPipeline()
     // if current is a list push every of its members in datastack
     if ( dynamic_cast< DataObjectListInterface *> (current) )
       {
-      DataObjectListInterface * list = 
-        dynamic_cast< DataObjectListInterface *> (current);
-      int length = list->Size();
-      for ( int i = 0 ; i < length ; i++ )
+        DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(current);
+        int                      length = list->Size();
+        for (int i = 0; i < length; i++)
         {
         itk::DataObject * newData = list->GetNthDataObject(i);
         if ( !current || inputData.count( current ) )
@@ -627,10 +640,9 @@ void Application::FreeRessources()
       // If input is a list
       if ( dynamic_cast< DataObjectListInterface *> (data.GetPointer()) )
         {
-        DataObjectListInterface * list = 
-          dynamic_cast< DataObjectListInterface *> (data.GetPointer());
-        int length = list->Size();
-        for ( int i = 0 ; i < length ; i++ )
+          DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(data.GetPointer());
+          int                      length = list->Size();
+          for (int i = 0; i < length; i++)
           {
           itk::DataObject * newData = list->GetNthDataObject(i);
           if ( !newData || dataSet.count( newData ) )
@@ -693,7 +705,7 @@ int Application::Execute()
   m_IsInPrivateDo = true;
   this->DoExecute();
   m_IsInPrivateDo = false;
-  
+
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
     {
@@ -790,23 +802,12 @@ int Application::ExecuteAndWriteOutput()
             outputParam->Write();
             }
           }
-        //xml writer parameter
-        else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
-                 && IsParameterEnabled(key) && HasValue(key) )
-          {
-          Parameter* param = GetParameterByKey(key);
-          OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-          if(outXMLParam!=nullptr)
-            {
-            outXMLParam->Write(this);
-            }
-          }
         }
     }
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
-  
+
   FreeRessources();
   m_Filters.clear();
   return status;
@@ -1513,7 +1514,7 @@ Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, 
   if (dynamic_cast<InputImageParameter*>(param))
     {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-    paramDown->SetImage<ImageBaseType>(img);
+    paramDown->SetImage(img);
     }
   else if (dynamic_cast<InputImageListParameter*>(param))
     {

@@ -28,8 +28,10 @@ set(OTBGdalAdapters_SRC
   otbOGRDriversInit.cxx
   otbGeometriesToGeometriesFilter.cxx
   otbOGRDataSourceWrapper.cxx
-  otbOGRExtendedFilenameToOptions.cxx
   otbOGRHelpers.cxx
+  otbOGRExtendedFilenameToOptions.cxx
+  otbSpatialReference.cxx
+  otbCoordinateTransformation.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})
@@ -37,7 +39,6 @@ target_link_libraries(OTBGdalAdapters
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
-
   )
 
 otb_module_target(OTBGdalAdapters)

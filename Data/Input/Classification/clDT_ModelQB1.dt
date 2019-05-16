@@ -1,0 +1,57 @@
+%YAML:1.0
+---
+opencv_ml_dtree:
+   format: 3
+   is_classifier: 1
+   var_all: 5
+   var_count: 4
+   ord_var_count: 4
+   cat_var_count: 1
+   training_params:
+      use_surrogates: 0
+      max_categories: 10
+      regression_accuracy: 9.9999997764825821e-03
+      max_depth: 10
+      min_sample_count: 10
+      cross_validation_folds: 0
+   global_var_idx: 1
+   var_idx: [ 0, 1, 2, 3 ]
+   var_type: [ 0, 0, 0, 0, 1 ]
+   cat_ofs: [ 0, 0, 0, 0, 0, 0, 0, 0 ]
+   class_labels: [ 1, 2, 3, 4 ]
+   missing_subst: [ 0., 0., 0., 0., 0. ]
+   nodes:
+      -
+         depth: 0
+         value: 1.
+         norm_class_idx: 0
+         splits:
+            - { var:0, quality:90., le:2.4664748460054398e-02 }
+      -
+         depth: 1
+         value: 1.
+         norm_class_idx: 0
+         splits:
+            - { var:3, quality:90., le:-1.2730357646942139e+00 }
+      -
+         depth: 2
+         value: 1.
+         norm_class_idx: 0
+      -
+         depth: 2
+         value: 3.
+         norm_class_idx: 2
+      -
+         depth: 1
+         value: 2.
+         norm_class_idx: 1
+         splits:
+            - { var:2, quality:90., le:8.2657122611999512e-01 }
+      -
+         depth: 2
+         value: 2.
+         norm_class_idx: 1
+      -
+         depth: 2
+         value: 4.
+         norm_class_idx: 3

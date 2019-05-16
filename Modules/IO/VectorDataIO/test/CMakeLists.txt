@@ -58,12 +58,13 @@ otb_add_test(NAME ioTuVectorDataIOFactory COMMAND otbVectorDataIOTestDriver
   otbVectorDataIOFactory
   ${INPUTDATA}/ToulouseRoad-examples.shp )
 
+# Output is GPKG because SHP format does not handle well muli geometry types
 otb_add_test(NAME ioTvVectorDataFileWriterMultiPolygons COMMAND otbVectorDataIOTestDriver
   --compare-ogr  ${EPSILON_9}
-  ${BASELINE_FILES}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
-  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
+  ${BASELINE_FILES}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
+  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
   otbVectorDataFileWriterMultiPolygons
-  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.shp
+  ${TEMP}/ioTvVectorDataFileWriterMultiPolygonsOutput.gpkg
   )
 
 otb_add_test(NAME ioTvSHPVectorDataFileReader COMMAND otbVectorDataIOTestDriver

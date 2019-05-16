@@ -75,7 +75,6 @@ private:
     SetDescription("Extract a ROI defined by the user.");
 
     // Documentation
-    SetDocName("Extract ROI");
     SetDocLongDescription("This application extracts a Region Of Interest with "
       "user parameters. There are four mode of extraction. The standard mode "
       "allows the user to enter one point (upper left corner of the region to "

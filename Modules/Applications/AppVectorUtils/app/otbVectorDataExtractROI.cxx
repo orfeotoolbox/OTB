@@ -70,7 +70,6 @@ private:
     SetName("VectorDataExtractROI");
     SetDescription("Perform an extract ROI on the input vector data according to the input image extent");
 
-    SetDocName("VectorData Extract ROI");
     SetDocLongDescription("This application extracts the vector data features"
                           " belonging to a region specified by the support "
                           "image envelope. Any features intersecting the "

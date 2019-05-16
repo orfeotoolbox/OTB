@@ -22,6 +22,7 @@
 #include "otbMassOfBelief.h"
 #include "otbJointMassOfBeliefFilter.h"
 #include "otbConfusionMatrixToMassOfBelief.h"
+#include "otbMacro.h"
 #include <fstream>
 
 
@@ -337,11 +338,12 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     // Vector containing the Mass of Belief of the universe for each classifier
     vectorUniverseMOBs.push_back(mobUniverseClk);
 
-    std::cout << "confusion matrix[Cl_" << itClk << "] = " << std::endl;
+    otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
+    std::ostringstream oss;
     for (unsigned int itLabel = 0; itLabel < nbClassesClk; ++itLabel)
       {
       IntLabelPixelType classLabel = mapOfIndicesClk[itLabel];
-      std::cout << "[" << classLabel << "] ";
+      oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
@@ -353,29 +355,26 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
         universe[classLabel] = 1;
         }
       }
-    std::cout << std::endl << confMatClk << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << oss.str());
+    otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
       {
-      std::cout << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second << std::endl;
+      otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
       }
 
-    std::cout << "*******************************************************************************" << std::endl;
+    otbLogMacro(Debug, << "*******************************************************************************");
     }
 
   // Number of classes in the universe
   unsigned int nbClasses = universe.size();
 
-  std::cout << "universe:" << std::endl;
+  otbLogMacro(Info, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
     {
-    std::cout << "Class Label " << itUniverse->first;
-    std::cout << " present in " << itUniverse->second << " classifier(s)" << std::endl;
+    otbLogMacro(Info, << "Class Label " << itUniverse->first
+      << " present in " << itUniverse->second << " classifier(s)");
     }
-  std::cout << std::endl;
-
-
 
   /* ***************************************************************************************** */
   /* ************************ RESULTS OF THE CLASSIFICATION OF PIXEL X *********************** */
@@ -415,9 +414,8 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     mLabelSetClk = vectorMapMOBs[itClk][classLabelk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
-    std::cout << "classifiedPixelX[" << itClk << "] = " << classLabelk;
-    std::cout << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk
+      << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk);
 
     // The first time the label {Ai} is found in classifiedPixelX
     if (mapJointMassesStepI.count(classLabelk) == 0)
@@ -443,9 +441,6 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
     }
 
-  std::cout << "*******************************************************************************" << std::endl;
-  std::cout << std::endl;
-
   /* ***************************************************************************************** */
   /* *************************************** DS STEP #2 ************************************** */
   /* ***************************************************************************************** */
@@ -464,10 +459,9 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     B = B * (1 - mLabelSetClk);
     C = C * mLabelSetClk_;
 
-    std::cout << "****************************************" << std::endl;
-    std::cout << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk << std::endl;
-    std::cout << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_ << std::endl;
-    std::cout << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk << std::endl;
+    otbLogMacro(Debug, << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk);
+    otbLogMacro(Debug, << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_);
+    otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk);
     }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
@@ -483,13 +477,9 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "nbClasses = " << nbClasses << std::endl;
-  std::cout << "nbClassifiers = " << nbClassifiers << std::endl;
-  std::cout << "nbClkGroupsStepI = " << nbClkGroupsStepI << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
+  otbLogMacro(Info, << "nbClasses = " << nbClasses);
+  otbLogMacro(Info, << "nbClassifiers = " << nbClassifiers);
+  otbLogMacro(Info, << "nbClkGroupsStepI = " << nbClkGroupsStepI);
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
   SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
@@ -536,9 +526,6 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     addBelLabelSetClk += belLabelSetClk;
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-
-
   /* ***************************************************************************************** */
   /* ************************************ DECISION PROCESS *********************************** */
   /* ***************************************************************************************** */
@@ -580,9 +567,8 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
       mapBelStepII_[classLabelk] = addBelLabelSetClk;
       }
 
-    std::cout << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk] << std::endl;
-    std::cout << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk] << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Info, << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk]);
+    otbLogMacro(Info, << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk]);
     }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is undefinedValue
@@ -595,19 +581,11 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }
-
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
-
-
 
 
 // OPTIMIZED RECURSIVE DS FUSION
@@ -640,7 +618,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     mapLabelSets[vectorAllLabels[it]] = labelSet;
     }
 
-  std::cout << "universe = " << universe << std::endl;
+  otbLogMacro(Info, << "universe = " << universe);
 
   //**********************************************************************
   //************** RESULTS OF THE CLASSIFICATION OF PIXEL X **************
@@ -691,7 +669,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
     {
-    std::cout << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it] << std::endl;
+    otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
     }
 
   //**********************************************************************
@@ -882,11 +860,9 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     B = B * (1 - mLabelSetClk);
     C = C * mLabelSetClk_;
 
-    std::cout << "****************************************" << std::endl;
-    std::cout << "mapJointMassesStepI[" << labelSetClk << "] = " << mLabelSetClk << std::endl;
-    std::cout << "mapJointMassesStepI_[" << labelSetClk << "] = " << mLabelSetClk_ << std::endl;
-    std::cout << "mapJointMassesUniverseStepI[" << labelSetClk << "] = " << mapJointMassesUniverseStepI[labelSetClk]
-        << std::endl;
+    otbLogMacro(Debug, << "mapJointMassesStepI[" << labelSetClk << "] = " << mLabelSetClk);
+    otbLogMacro(Debug, << "mapJointMassesStepI_[" << labelSetClk << "] = " << mLabelSetClk_);
+    otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << labelSetClk << "] = " << mapJointMassesUniverseStepI[labelSetClk]);
     }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
@@ -902,11 +878,9 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "nbClasses = " << nbClasses << std::endl;
-  std::cout << "nbClassifiers = " << classifiedPixelX .size() << std::endl;
-  std::cout << "nbClkGroupsStepI = " << nbClkGroupsStepI << std::endl;
+  otbLogMacro(Info, << "nbClasses = " << nbClasses);
+  otbLogMacro(Info, << "nbClassifiers = " << classifiedPixelX .size());
+  otbLogMacro(Info, << "nbClkGroupsStepI = " << nbClkGroupsStepI);
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
 
@@ -954,8 +928,6 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     addBelLabelSetClk = addBelLabelSetClk + belLabelSetClk;
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
@@ -992,9 +964,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
       mapBelStepII_[labelSetClk] = addBelLabelSetClk;
       }
 
-    std::cout << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk] << std::endl;
-    std::cout << "Bel(NOT_" << labelSetClk << ") = " << mapBelStepII_[labelSetClk] << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk]);
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = " << mapBelStepII_[labelSetClk]);
     }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is the UNION of all the candidates {Ai}
@@ -1008,10 +979,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }
@@ -1045,7 +1014,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     mapLabelSets[vectorAllLabels[it]] = labelSet;
     }
 
-  std::cout << "universe = " << universe << std::endl;
+  otbLogMacro(Info, << "universe = " << universe);
 
   //**********************************************************************
   //************** RESULTS OF THE CLASSIFICATION OF PIXEL X **************
@@ -1063,7 +1032,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
     {
-    std::cout << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it] << std::endl;
+    otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
     }
 
   //**********************************************************************
@@ -1184,13 +1153,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     itMapJMOBFilters->second->Update();
     mapJMOBFStepI[itMapJMOBFilters->first] = itMapJMOBFilters->second->GetOutput();
 
-    std::cout << "****************************************************************************" << std::endl;
-    std::cout << "jointMassClkFilterStepI[" << itMapJMOBFilters->first << "] = " << itMapJMOBFilters->second
-        << std::endl;
+    otbLogMacro(Debug, << "jointMassClkFilterStepI[" << itMapJMOBFilters->first << "] = " << itMapJMOBFilters->second);
     }
-
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
 
   //**********************************************************************
   //***************************** DS STEP #2 *****************************
@@ -1213,8 +1177,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     B = B * (1 - mLabelSetClk);
     C = C * mLabelSetClk_;
 
-    std::cout << "****************************************************************************" << std::endl;
-    std::cout << "jointMassOfBeliefStepI[" << itMapJMOBF->first << "] = " << itMapJMOBF->second << std::endl;
+    otbLogMacro(Debug, << "jointMassOfBeliefStepI[" << itMapJMOBF->first << "] = " << itMapJMOBF->second);
     }
 
   unsigned int nbClkGroupsStepI = mapJMOBFStepI.size();
@@ -1278,9 +1241,6 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     addBelLabelSetClk = addBelLabelSetClk + belLabelSetClk;
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
@@ -1319,10 +1279,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
       mapBelStepII[labelSetClk_] = addBelLabelSetClk;
       }
 
-    std::cout << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk] << std::endl;
-    std::cout << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = " << mapBelStepII[labelSetClk_]
-        << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk]);
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = " << mapBelStepII[labelSetClk_]);
     }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is the UNION of all the candidates {Ai}
@@ -1336,10 +1294,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }
@@ -1372,7 +1328,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
     mapLabelSets[vectorAllLabels[it]] = labelSet;
     }
 
-  std::cout << "universe = " << universe << std::endl;
+  otbLogMacro(Info, << "universe = " << universe);
 
   //**********************************************************************
   //************** RESULTS OF THE CLASSIFICATION OF PIXEL X **************
@@ -1390,7 +1346,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
     {
-    std::cout << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it] << std::endl;
+    otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
     }
 
   //**********************************************************************
@@ -1490,13 +1446,8 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   jointMassClkFilter->Update();
   MassOfBeliefFunctionType::Pointer jointMass = jointMassClkFilter->GetOutput();
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "jointMassClkFilter = " << jointMassClkFilter << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "jointMassOfBelief = " << jointMass << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
+  otbLogMacro(Debug, << "jointMassClkFilter = " << jointMassClkFilter);
+  otbLogMacro(Debug, << "jointMassOfBelief = " << jointMass);
 
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
@@ -1523,10 +1474,9 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
         }
       }
 
-    std::cout << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk) << std::endl;
-    std::cout << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
-        << jointMass->GetBelief(labelSetClk_) << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk));
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
+        << jointMass->GetBelief(labelSetClk_));
     }
 
   //If the DS VOTED LABEL is NOT unique
@@ -1539,26 +1489,11 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-
-
-
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
 
 
 // OPTIMIZED RECURSIVE DS FUSION FROM CONFUSION MATRIX FILES
@@ -1658,11 +1593,12 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     // Vector containing the Mass of Belief of the universe for each classifier
     vectorUniverseMOBs.push_back(mobUniverseClk);
 
-    std::cout << "confusion matrix[Cl_" << itClk << "] = " << std::endl;
+    otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
+    std::ostringstream oss;
     for (itMapOfClassesClk = mapOfClassesClk.begin(); itMapOfClassesClk != mapOfClassesClk.end(); ++itMapOfClassesClk)
       {
       IntLabelPixelType classLabel = itMapOfClassesClk->first;
-      std::cout << "[" << classLabel << "] ";
+      oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
@@ -1674,29 +1610,24 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
         universe[classLabel] = 1;
         }
       }
-    std::cout << std::endl << confMatClk << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << oss.str());
+    otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
       {
-      std::cout << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second << std::endl;
+      otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
       }
-
-    std::cout << "*******************************************************************************" << std::endl;
     }
 
   // Number of classes in the universe
   unsigned int nbClasses = universe.size();
 
-  std::cout << "universe:" << std::endl;
+  otbLogMacro(Info, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
     {
-    std::cout << "Class Label " << itUniverse->first;
-    std::cout << " present in " << itUniverse->second << " classifier(s)" << std::endl;
+    otbLogMacro(Info, << "Class Label " << itUniverse->first
+      << " present in " << itUniverse->second << " classifier(s)");
     }
-  std::cout << std::endl;
-
-
 
   /* ***************************************************************************************** */
   /* ************************ RESULTS OF THE CLASSIFICATION OF PIXEL X *********************** */
@@ -1740,9 +1671,8 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     mLabelSetClk = vectorMapMOBs[itClk][classLabelk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
-    std::cout << "classifiedPixelX[" << itClk << "] = " << classLabelk;
-    std::cout << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk
+      << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk);
 
     // The first time the label {Ai} is found in classifiedPixelX
     if (mapJointMassesStepI.count(classLabelk) == 0)
@@ -1768,9 +1698,6 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
     }
 
-  std::cout << "*******************************************************************************" << std::endl;
-  std::cout << std::endl;
-
   /* ***************************************************************************************** */
   /* *************************************** DS STEP #2 ************************************** */
   /* ***************************************************************************************** */
@@ -1789,10 +1716,9 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     B = B * (1 - mLabelSetClk);
     C = C * mLabelSetClk_;
 
-    std::cout << "****************************************" << std::endl;
-    std::cout << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk << std::endl;
-    std::cout << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_ << std::endl;
-    std::cout << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk << std::endl;
+    otbLogMacro(Debug, << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk);
+    otbLogMacro(Debug, << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_);
+    otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk);
     }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
@@ -1808,13 +1734,9 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "nbClasses = " << nbClasses << std::endl;
-  std::cout << "nbClassifiers = " << nbClassifiers << std::endl;
-  std::cout << "nbClkGroupsStepI = " << nbClkGroupsStepI << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
+  otbLogMacro(Info, << "nbClasses = " << nbClasses);
+  otbLogMacro(Info, << "nbClassifiers = " << nbClassifiers);
+  otbLogMacro(Info, << "nbClkGroupsStepI = " << nbClkGroupsStepI);
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
   SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
@@ -1861,9 +1783,6 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     addBelLabelSetClk += belLabelSetClk;
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-
-
   /* ***************************************************************************************** */
   /* ************************************ DECISION PROCESS *********************************** */
   /* ***************************************************************************************** */
@@ -1905,9 +1824,8 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
       mapBelStepII_[classLabelk] = addBelLabelSetClk;
       }
 
-    std::cout << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk] << std::endl;
-    std::cout << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk] << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk]);
+    otbLogMacro(Debug, << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk]);
     }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is undefinedValue
@@ -1920,22 +1838,11 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }
-
-
-
-
-// ********************************************************************************************************
-// ********************************************************************************************************
-// ********************************************************************************************************
-
-
 
 
 // NOT OPTIMIZED DS FUSION FROM CONFUSION MATRIX FILES
@@ -2036,11 +1943,12 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
     // Vector containing the Mass of Belief of the universe for each classifier
     vectorUniverseMOBs.push_back(mobUniverseClk);
 
-    std::cout << "confusion matrix[Cl_" << itClk << "] = " << std::endl;
+    otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
+    std::ostringstream oss;
     for (itMapOfClassesClk = mapOfClassesClk.begin(); itMapOfClassesClk != mapOfClassesClk.end(); ++itMapOfClassesClk)
       {
       IntLabelPixelType classLabel = itMapOfClassesClk->first;
-      std::cout << "[" << classLabel << "] ";
+      oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
@@ -2052,15 +1960,13 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
         universe[classLabel] = 1;
         }
       }
-    std::cout << std::endl << confMatClk << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << oss.str());
+    otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
       {
-      std::cout << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second << std::endl;
+      otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
       }
-
-    std::cout << "*******************************************************************************" << std::endl;
     }
 
   // Number of classes in the universe
@@ -2072,19 +1978,16 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   IntLabelSetMapType mapLabelSets;
   IntLabelSetMapType::iterator itMapLabelSets;
 
-  std::cout << "universe:" << std::endl;
+  otbLogMacro(Debug, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
     {
-    std::cout << "Class Label " << itUniverse->first;
-    std::cout << " present in " << itUniverse->second << " classifier(s)" << std::endl;
+    otbLogMacro(Debug, << "Class Label " << itUniverse->first
+      << " present in " << itUniverse->second << " classifier(s)");
     universeSet.insert(itUniverse->first);
     labelSet.clear();
     labelSet.insert(itUniverse->first);
     mapLabelSets[itUniverse->first] = labelSet;
     }
-  std::cout << std::endl;
-
-
 
   // Vector containing the std::maps of masses of ALL the singleton sets for each classifier k
   IntMassMapType mClk;
@@ -2160,13 +2063,8 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   jointMassClkFilter->Update();
   IntMassOfBeliefFunctionType::Pointer jointMass = jointMassClkFilter->GetOutput();
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "jointMassClkFilter = " << jointMassClkFilter << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "jointMassOfBelief = " << jointMass << std::endl;
-  std::cout << "****************************************************************************" << std::endl;
+  otbLogMacro(Debug, << "jointMassClkFilter = " << jointMassClkFilter);
+  otbLogMacro(Debug, << "jointMassOfBelief = " << jointMass);
 
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
@@ -2193,10 +2091,9 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
         }
       }
 
-    std::cout << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk) << std::endl;
-    std::cout << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
-        << jointMass->GetBelief(labelSetClk_) << std::endl;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk));
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
+        << jointMass->GetBelief(labelSetClk_));
     }
 
   //If the DS VOTED LABEL is NOT unique
@@ -2209,10 +2106,8 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
       }
     }
 
-  std::cout << "****************************************************************************" << std::endl;
-  std::cout << "fusedDSLabelSet = " << fusedDSLabelSet << std::endl;
-  std::cout << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk << std::endl;
-  std::cout << std::endl;
+  otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
+  otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
 
   return EXIT_SUCCESS;
 }

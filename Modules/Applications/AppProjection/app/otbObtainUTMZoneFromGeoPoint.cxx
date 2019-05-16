@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbMapProjectionAdapter.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -57,7 +57,6 @@ private:
     SetDescription("UTM zone determination from a geographic point.");
 
     // Documentation
-    SetDocName("Obtain UTM Zone From Geo Point");
     SetDocLongDescription("This application returns the UTM zone of an input geographic point.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -90,8 +89,13 @@ private:
 
   void DoExecute() override
   {
-    int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
-                                                  GetParameterFloat("lat"));
+    unsigned int utmZone = 0;
+    otb::SpatialReference::hemisphere hem;
+
+
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
+                                                     GetParameterFloat("lat"),utmZone,hem);
+
     SetParameterInt("utm",utmZone);
   }
 

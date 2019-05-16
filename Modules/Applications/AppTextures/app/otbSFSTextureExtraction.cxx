@@ -63,7 +63,6 @@ SetDescription("Computes Structural Feature Set textures on every pixel of the "
     "input image selected channel");
 
 // Documentation
-SetDocName("SFS Texture Extraction");
 SetDocLongDescription("Structural Feature Set [1] are based on the histograms of "
     "the pixels in multiple directions of the image. The SFSTextureExtraction application "
     "computes the  6 following features: SFS'Length, SFS'Width, SFS'PSI, SFS'W-Mean, "

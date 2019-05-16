@@ -21,7 +21,6 @@
 #include "otbViewSettings.h"
 #include "otbGenericRSTransform.h"
 #include "otbImageToGenericRSOutputParameters.h"
-#include "otbMapProjections.h"
 
 namespace otb
 {

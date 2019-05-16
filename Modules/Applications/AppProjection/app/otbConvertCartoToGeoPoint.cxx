@@ -56,7 +56,6 @@ private:
     SetDescription("Convert cartographic coordinates to geographic ones.");
 
     // Documentation
-    SetDocName("Cartographic to geographic coordinates conversion");
     SetDocLongDescription("This application computes the geographic coordinates from cartographic ones. User has to give the X and Y coordinate and the cartographic projection (see mapproj parameter for details).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -107,7 +106,8 @@ private:
     // Output : WGS84 corresponding to epsg code 4326
     TransformType::Pointer  transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
-    transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+    // Default to wgs84
+    transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
     transform->InstantiateTransform();
 
     TransformType::InputPointType   cartoPoint;

@@ -52,47 +52,46 @@ namespace otb
  *
  * \ingroup OTBSimulation
  */
-  template <class TReduceSpectralResponse , class TFunction = Functor::NDVI< typename TReduceSpectralResponse::ValuePrecisionType, typename TReduceSpectralResponse::ValuePrecisionType,
-  typename TReduceSpectralResponse::ValuePrecisionType > >
-      class ReduceSpectralResponseClassifierRAndNIR
-  : public itk::DataObject
-      {
-        //friend class
-        public:
-          /** Standard class typedefs */
-          typedef ReduceSpectralResponseClassifierRAndNIR Self;
-          typedef itk::DataObject Superclass;
-          typedef itk::SmartPointer<Self> Pointer;
-          typedef itk::SmartPointer<const Self> ConstPointer;
+template <class TReduceSpectralResponse,
+          class TFunction = Functor::NDVI<typename TReduceSpectralResponse::ValuePrecisionType, typename TReduceSpectralResponse::ValuePrecisionType>>
+class ReduceSpectralResponseClassifierRAndNIR : public itk::DataObject
+{
+  // friend class
+public:
+  /** Standard class typedefs */
+  typedef ReduceSpectralResponseClassifierRAndNIR Self;
+  typedef itk::DataObject                         Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
-          /** Template parameters typedef */
-          typedef TReduceSpectralResponse InputReduceSpectralResponseType;
-          typedef TFunction   FunctorType;
-          typedef typename TReduceSpectralResponse::Pointer InputReduceSpectralResponsePointerType;
-          typedef typename InputReduceSpectralResponseType::ValuePrecisionType ValuePrecisionType;
+  /** Template parameters typedef */
+  typedef TReduceSpectralResponse                                      InputReduceSpectralResponseType;
+  typedef TFunction                                                    FunctorType;
+  typedef typename TReduceSpectralResponse::Pointer                    InputReduceSpectralResponsePointerType;
+  typedef typename InputReduceSpectralResponseType::ValuePrecisionType ValuePrecisionType;
 
 
-          /** Standard macros */
-          itkNewMacro(Self);
-          itkTypeMacro(ReduceSpectralResponseClassifierRAndNIR, DataObject);
+  /** Standard macros */
+  itkNewMacro(Self);
+  itkTypeMacro(ReduceSpectralResponseClassifierRAndNIR, DataObject);
 
-          itkGetConstObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
-          itkSetObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
+  itkGetConstObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
+  itkSetObjectMacro(InputReduceSpectralResponse, InputReduceSpectralResponseType);
 
-          itkGetConstMacro(RBandNumber, unsigned int);
-          itkSetMacro(RBandNumber, unsigned int);
+  itkGetConstMacro(RBandNumber, unsigned int);
+  itkSetMacro(RBandNumber, unsigned int);
 
-          itkGetConstMacro(NIRBandNumber, unsigned int);
-          itkSetMacro(NIRBandNumber, unsigned int);
+  itkGetConstMacro(NIRBandNumber, unsigned int);
+  itkSetMacro(NIRBandNumber, unsigned int);
 
-          /** Get the functor object.  The functor is returned by reference.
-           * (Functors do not have to derive from itk::LightObject, so they do
-           * not necessarily have a reference count. So we cannot return a
-           * SmartPointer.) */
-          FunctorType& GetFunctor()
-          {
-            return m_Functor;
-          };
+  /** Get the functor object.  The functor is returned by reference.
+   * (Functors do not have to derive from itk::LightObject, so they do
+   * not necessarily have a reference count. So we cannot return a
+   * SmartPointer.) */
+  FunctorType& GetFunctor()
+  {
+    return m_Functor;
+  };
 
   /** Set the functor object.  This replaces the current Functor with a
            * copy of the specified Functor. This allows the user to specify a

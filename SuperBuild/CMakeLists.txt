@@ -293,7 +293,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
+option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
@@ -350,7 +350,6 @@ find_path(OTB_DATA_ROOT README-OTB-Data
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
-option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)

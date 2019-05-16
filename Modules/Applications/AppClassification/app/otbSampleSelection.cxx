@@ -63,7 +63,7 @@ public:
     UInt8ImageType,
     otb::RandomSampler>                             RandomSamplerType;
   typedef otb::SamplingRateCalculator               RateCalculatorType;
-  
+
   typedef std::map<std::string, unsigned long>      ClassCountMapType;
   typedef RateCalculatorType::MapRateType           MapRateType;
   typedef itk::VariableLengthVector<float> MeasurementType;
@@ -86,41 +86,41 @@ private:
     SetDescription("Selects samples from a training vector data set.");
 
     // Documentation
-    SetDocName("Sample Selection");
-    SetDocLongDescription("The application selects a set of samples from geometries "
-      "intended for training (they should have a field giving the associated "
-      "class). \n\nFirst of all, the geometries must be analyzed by the PolygonClassStatistics application "
-      "to compute statistics about the geometries, which are summarized in an xml file. "
-      "\nThen, this xml file must be given as input to this application (parameter instats).\n\n"
-      "The input support image and the input training vectors shall be given in "
-      "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
-      "will be read in the input image.\n"
-      "There are several strategies to select samples (parameter strategy) : \n\n"
-      "  - smallest (default) : select the same number of sample in each class" 
-      " so that the smallest one is fully sampled.\n"
-      "  - constant : select the same number of samples N in each class" 
-      " (with N below or equal to the size of the smallest class).\n"
-      "  - byclass : set the required number for each class manually, with an input CSV file"
-      " (first column is class name, second one is the required samples number).\n\n"
-      "  - percent: set a target global percentage of samples to use. Class proportions will be respected. \n\n"
-      "  - total: set a target total number of samples to use. Class proportions will be respected. \n\n"
-      "There is also a choice on the sampling type to performs : \n\n"
-      "  - periodic : select samples uniformly distributed\n"
-      "  - random : select samples randomly distributed\n\n"
-      "Once the strategy and type are selected, the application outputs samples positions"
-      "(parameter out).\n\n"
-      
-      "The other parameters to look at are : \n\n"
-      "  - layer : index specifying from which layer to pick geometries.\n"
-      "  - field : set the field name containing the class.\n"
-      "  - mask : an optional raster mask can be used to discard samples.\n"
-      "  - outrates : allows outputting a CSV file that summarizes the sampling rates for each class.\n"
-      
-      "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
-      "polygons, lines, points. \nThe behavior of this application is different for each type of geometry : \n\n"
-      "  - polygon: select points whose center is inside the polygon\n"
-      "  - lines  : select points intersecting the line\n"
-      "  - points : select closest point to the provided point");
+    SetDocLongDescription(
+        "The application selects a set of samples from geometries "
+        "intended for training (they should have a field giving the associated "
+        "class). \n\nFirst of all, the geometries must be analyzed by the PolygonClassStatistics application "
+        "to compute statistics about the geometries, which are summarized in an xml file. "
+        "\nThen, this xml file must be given as input to this application (parameter instats).\n\n"
+        "The input support image and the input training vectors shall be given in "
+        "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
+        "will be read in the input image.\n"
+        "There are several strategies to select samples (parameter strategy) : \n\n"
+        "  - smallest (default) : select the same number of sample in each class"
+        " so that the smallest one is fully sampled.\n"
+        "  - constant : select the same number of samples N in each class"
+        " (with N below or equal to the size of the smallest class).\n"
+        "  - byclass : set the required number for each class manually, with an input CSV file"
+        " (first column is class name, second one is the required samples number).\n\n"
+        "  - percent: set a target global percentage of samples to use. Class proportions will be respected. \n\n"
+        "  - total: set a target total number of samples to use. Class proportions will be respected. \n\n"
+        "There is also a choice on the sampling type to performs : \n\n"
+        "  - periodic : select samples uniformly distributed\n"
+        "  - random : select samples randomly distributed\n\n"
+        "Once the strategy and type are selected, the application outputs samples positions"
+        "(parameter out).\n\n"
+
+        "The other parameters to look at are : \n\n"
+        "  - layer : index specifying from which layer to pick geometries.\n"
+        "  - field : set the field name containing the class.\n"
+        "  - mask : an optional raster mask can be used to discard samples.\n"
+        "  - outrates : allows outputting a CSV file that summarizes the sampling rates for each class.\n"
+
+        "\nAs with the PolygonClassStatistics application, different types  of geometry are supported : "
+        "polygons, lines, points. \nThe behavior of this application is different for each type of geometry : \n\n"
+        "  - polygon: select points whose center is inside the polygon\n"
+        "  - lines  : select points intersecting the line\n"
+        "  - points : select closest point to the provided point");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -192,7 +192,7 @@ private:
     SetParameterDescription("strategy.total.v","The number of samples to generate");
     SetMinimumParameterIntValue("strategy.total.v",1);
     SetDefaultParameterInt("strategy.total.v",1000);
-    
+
     AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
     SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
 
@@ -238,16 +238,16 @@ private:
       ogr::Feature feature = layer.ogr().GetNextFeature();
 
       ClearChoices("field");
-      
+
       for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
         {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
         key = item;
         std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
         std::transform(key.begin(), end, key.begin(), tolower);
-        
+
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
-        
+
         if(fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
           {
           std::string tmpKey="field."+key.substr(0, end - key.begin());
@@ -266,27 +266,26 @@ private:
 
     // Get field name
     std::vector<int> selectedCFieldIdx = GetSelectedItems("field");
-    
+
     if(selectedCFieldIdx.empty())
       {
       otbAppLogFATAL(<<"No field has been selected for data labelling!");
       }
-    
-    std::vector<std::string> cFieldNames = GetChoiceNames("field");  
-    std::string fieldName = cFieldNames[selectedCFieldIdx.front()];
-    
-    m_ReaderStat->SetFileName(this->GetParameterString("instats"));
-    ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
-    m_RateCalculator->SetClassCount(classCount);
-    
-    switch (this->GetParameterInt("strategy"))
+
+      std::vector<std::string> cFieldNames = GetChoiceNames("field");
+      std::string              fieldName   = cFieldNames[selectedCFieldIdx.front()];
+
+      m_ReaderStat->SetFileName(this->GetParameterString("instats"));
+      ClassCountMapType classCount = m_ReaderStat->GetStatisticMapByName<ClassCountMapType>("samplesPerClass");
+      m_RateCalculator->SetClassCount(classCount);
+
+      switch (this->GetParameterInt("strategy"))
       {
       // byclass
       case 0:
         {
         otbAppLogINFO("Sampling strategy : set number of samples for each class");
-        ClassCountMapType requiredCount = 
-          otb::SamplingRateCalculator::ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
+        ClassCountMapType requiredCount = otb::SamplingRateCalculator::ReadRequiredSamples(this->GetParameterString("strategy.byclass.in"));
         m_RateCalculator->SetNbOfSamplesByClass(requiredCount);
         }
       break;
@@ -330,12 +329,12 @@ private:
         otbAppLogFATAL("Strategy mode unknown :"<<this->GetParameterString("strategy"));
       break;
       }
-      
+
     if (IsParameterEnabled("outrates") && HasValue("outrates"))
       {
       m_RateCalculator->Write(this->GetParameterString("outrates"));
       }
-    
+
     MapRateType rates = m_RateCalculator->GetRatesByClass();
     std::ostringstream oss;
     oss << " className  requiredSamples  totalSamples  rate" << std::endl;
@@ -376,16 +375,14 @@ private:
     ProjectionFilterType::Pointer geometriesProjFilter;
     GeometriesType::Pointer outputGeomSet;
     bool doReproj = true;
-    const OGRSpatialReference imgOGRSref = 
-        OGRSpatialReference( imageProjectionRef.c_str() );
-    const OGRSpatialReference vectorOGRSref = 
-        OGRSpatialReference( vectorProjectionRef.c_str() );
+    const OGRSpatialReference     imgOGRSref    = OGRSpatialReference(imageProjectionRef.c_str());
+    const OGRSpatialReference     vectorOGRSref = OGRSpatialReference(vectorProjectionRef.c_str());
     // don't reproject for these cases
     if (  vectorProjectionRef.empty()
        || ( imgOGRSref.IsSame( &vectorOGRSref ) )
        || ( imageProjectionRef.empty() && imageKwl.GetSize() == 0) )
       doReproj = false;
-  
+
     if (doReproj)
       {
       inputGeomSet = GeometriesType::New(vectors);
@@ -407,7 +404,7 @@ private:
     // Create output dataset for sample positions
     otb::ogr::DataSource::Pointer outputSamples =
       otb::ogr::DataSource::New(this->GetParameterString("out"),otb::ogr::DataSource::Modes::Overwrite);
-    
+
     switch (this->GetParameterInt("sampler"))
       {
       // periodic
@@ -426,7 +423,7 @@ private:
         periodicFilt->SetSamplerParameters(param);
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          periodicFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+            periodicFilt->SetMask(this->GetParameterUInt8Image("mask"));
           }
         periodicFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
         AddProcess(periodicFilt->GetStreamer(),"Selecting positions with periodic sampler...");
@@ -444,7 +441,7 @@ private:
         randomFilt->SetLayerIndex(this->GetParameterInt("layer"));
         if (IsParameterEnabled("mask") && HasValue("mask"))
           {
-          randomFilt->SetMask(this->GetParameterImage<UInt8ImageType>("mask"));
+            randomFilt->SetMask(this->GetParameterUInt8Image("mask"));
           }
         randomFilt->GetStreamer()->SetAutomaticTiledStreaming(this->GetParameterInt("ram"));
         AddProcess(randomFilt->GetStreamer(),"Selecting positions with random sampler...");

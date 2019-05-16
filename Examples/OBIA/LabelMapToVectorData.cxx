@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./LabelMapToVectorData Input/rcc8_mire1.png Output/rcc8_mire2_vectorizer.shp
+./LabelMapToVectorData Input/labelImage_UnsignedChar.tif Output/LabelMapToVectorData.shp
 */
 
 

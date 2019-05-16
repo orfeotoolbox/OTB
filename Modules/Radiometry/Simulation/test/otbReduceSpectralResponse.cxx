@@ -66,14 +66,13 @@ int otbReduceSpectralResponse(int argc, char * argv[])
   myReduceResponse->SetReflectanceMode(reflectanceMode);
   myReduceResponse->CalculateResponse();
   /** Print the Reduce SR*/
-  std::cout << myReduceResponse << std::endl;
+  otbLogMacro(Debug, << myReduceResponse);
   if (argc == 6)
     {
     char * outputName = argv[5];
     std::ofstream outputFile(outputName, std::ios::out);
     outputFile << myReduceResponse << std::endl;
     }
-  else std::cout << myReduceResponse << std::endl;
   return EXIT_SUCCESS;
 }
 
