@@ -61,8 +61,8 @@ fast-build:
     when: on_failure
     expire_in: 24 hrs
     paths:
-      - log/*.txt
-      - build/*/*.log
+      - build/*/*.log #CMake log
+      - log/*.txt # Others
 
 debian-build:
   extends: .common-build
@@ -94,9 +94,8 @@ ubuntu-llvm:
     expire_in: 24 hrs
     when: always
     paths:
-      - sb_branch.txt
-      # This recovers logs from superbuild build
-      - build/*/*/*/*.log
+      - sb_branch.txt # Needed to checkout correct branch in build step
+      - build/*/*/*/*.log # Superbuild log
 
 ## Ubuntu superbuild
 ubuntu-superbuild-prepare:
@@ -134,7 +133,6 @@ centos-superbuild-build:
 macos-superbuild-prepare:
   tags:
     - macos
-  only: [merge_requests, branches]
   extends: .common-prepare
   before_script:
     # No need to install lfs as this machine is persistent
@@ -148,9 +146,8 @@ macos-superbuild-build:
   tags:
     - macos
   extends: .common-build
-  only: [merge_requests, branches]
   script:
-    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
