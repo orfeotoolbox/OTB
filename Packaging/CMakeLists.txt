@@ -204,8 +204,6 @@ install_importlibs()
 
 install_python_bindings()
 
-install_java_bindings()
-
 install_share_dirs()
 
 install_cmake_files()
