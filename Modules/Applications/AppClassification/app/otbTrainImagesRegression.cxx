@@ -52,11 +52,11 @@ private:
         "and training vector data.");
 
     SetDocLongDescription(
-        "Train a classifier from multiple triplets of feature images, predictor images and training vector data. \n\n"
+        "Train a classifier from multiple triplets of predictor images, label images and training vector data. \n\n"
 
         "The training vector data must contain polygons corresponding to the input sampling positions. This data "
-        "is used to extract samples using pixel values in each band of the feature image and the corresponding "
-        "ground truth extracted from the predictor image.\n\n"
+        "is used to extract samples using pixel values in each band of the predictor image and the corresponding "
+        "ground truth extracted from the lagel image.\n\n"
 
         "At the end of the application, the mean square error between groundtruth and predicted values is computed using "
         "the output model and the validation vector data. Note that if no validation data is given, the training data "
@@ -87,8 +87,8 @@ private:
     SetParameterInt("cleanup", 1);
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("io.il", "inputFeatureImage.tif");
-    SetDocExampleParameterValue("io.ip", "inputPredictorImage.tif");
+    SetDocExampleParameterValue("io.il", "inputPredictorImage.tif");
+    SetDocExampleParameterValue("io.ip", "inputLabelImage.tif");
     SetDocExampleParameterValue("io.vd", "trainingData.shp");
     SetDocExampleParameterValue("io.valid", "validationData.shp");
     SetDocExampleParameterValue("sample.nt", "500");
@@ -212,14 +212,14 @@ protected:
   }
 
   /** Configure and execute sampleExtraction. The application is called twice by input vector
-   * first values are extracted from the feature image and then the groundtruth is extracted
-   * from the predictor image.*/
+   * first values are extracted from the predictor image and then the groundtruth is extracted
+   * from the label image.*/
   void ExtractSamples(const std::string& filePrefix)
   {
     auto sampleExtraction = GetInternalApplication("extraction");
 
-    FloatVectorImageListType* featureImageList   = GetParameterImageList("io.il");
-    FloatVectorImageListType* predictorImageList = GetParameterImageList("io.ip");
+    FloatVectorImageListType* predictorImageList   = GetParameterImageList("io.il");
+    FloatVectorImageListType* labelImageList = GetParameterImageList("io.ip");
     auto&                     vectorFiles        = m_FileHandler[filePrefix + "samples"];
 
     for (unsigned int i = 0; i < vectorFiles.size(); i++)
@@ -228,14 +228,14 @@ protected:
       sampleExtraction->UpdateParameters();
       sampleExtraction->SetParameterString("field", m_ClassFieldName);
 
-      // First Extraction : Values from the feature image.
-      sampleExtraction->SetParameterInputImage("in", featureImageList->GetNthElement(i));
+      // First Extraction : Values from the predictor image.
+      sampleExtraction->SetParameterInputImage("in", predictorImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "prefix");
       sampleExtraction->SetParameterString("outfield.prefix.name", m_FeaturePrefix);
       ExecuteInternal("extraction");
 
-      // Second Extraction : groundtruth from the predictor image.
-      sampleExtraction->SetParameterInputImage("in", predictorImageList->GetNthElement(i));
+      // Second Extraction : groundtruth from the label image.
+      sampleExtraction->SetParameterInputImage("in", labelImageList->GetNthElement(i));
       sampleExtraction->SetParameterString("outfield", "list");
       sampleExtraction->SetParameterStringList("outfield.list.names", {m_PredictionFieldName});
       ExecuteInternal("extraction");
@@ -274,12 +274,12 @@ protected:
     AddParameter(ParameterType_Group, "io", "Input and output data");
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
-    AddParameter(ParameterType_InputImageList, "io.il", "Input Image List");
-    SetParameterDescription("io.il", "A list of input images.");
+    AddParameter(ParameterType_InputImageList, "io.il", "Input predictor Image List");
+    SetParameterDescription("io.il", "A list of input predictor images.");
     MandatoryOn("io.il");
 
-    AddParameter(ParameterType_InputImageList, "io.ip", "Input Predictor Image List");
-    SetParameterDescription("io.ip", "A list of input images.");
+    AddParameter(ParameterType_InputImageList, "io.ip", "Input label Image List");
+    SetParameterDescription("io.ip", "A list of input label images.");
     MandatoryOn("io.ip");
 
     AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
