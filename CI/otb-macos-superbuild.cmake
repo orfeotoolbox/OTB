@@ -21,5 +21,5 @@
 # Configuration options for macOS
 
 set(site_option
-"GLUT_glut_LIBRARY=/usr/X11R6/lib/libglut.3.dylib
-GLUT_INCLUDE_DIR=/usr/X11R6/include")
+"OTB_USE_GLUT=OFF
+OTB_USE_GLFW=OFF")
