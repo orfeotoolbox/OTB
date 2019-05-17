@@ -168,7 +168,7 @@ protected:
   void ComputePolygonStatistics(const std::string& filePrefix)
   {
     auto                      polygonClassAppli = GetInternalApplication("polystat");
-    auto&                     input             = m_FileHandler[filePrefix + "inputWithClassField"];
+    const auto&               input             = m_FileHandler[filePrefix + "inputWithClassField"];
     auto&                     output            = m_FileHandler[filePrefix + "statsFiles"];
     FloatVectorImageListType* inputImageList    = GetParameterImageList("io.il");
 
@@ -223,12 +223,12 @@ protected:
   {
     auto sampleSelection = GetInternalApplication("select");
 
-    FloatVectorImageListType* inputImageList    = GetParameterImageList("io.il");
-    auto&                     inputVectorFiles  = m_FileHandler[filePrefix + "inputWithClassField"];
-    auto&                     outputVectorFiles = m_FileHandler[filePrefix + "samples"];
-    auto&                     rateFiles         = m_FileHandler[filePrefix + "rateFiles"];
-    auto&                     statFiles         = m_FileHandler[filePrefix + "statsFiles"];
-
+    FloatVectorImageListType*       inputImageList    = GetParameterImageList("io.il");
+    const auto&                     inputVectorFiles  = m_FileHandler[filePrefix + "inputWithClassField"];
+    const auto&                     rateFiles         = m_FileHandler[filePrefix + "rateFiles"];
+    const auto&                     statFiles         = m_FileHandler[filePrefix + "statsFiles"];
+    auto&                           outputVectorFiles = m_FileHandler[filePrefix + "samples"];
+    
     for (unsigned int i = 0; i < inputVectorFiles.size(); i++)
     {
       outputVectorFiles.push_back(GetParameterString("io.out") + "_" + filePrefix + "samples" + std::to_string(i) + ".shp");
@@ -255,7 +255,7 @@ protected:
 
     FloatVectorImageListType* predictorImageList   = GetParameterImageList("io.il");
     FloatVectorImageListType* labelImageList = GetParameterImageList("io.ip");
-    auto&                     vectorFiles        = m_FileHandler[filePrefix + "samples"];
+    const auto&                     vectorFiles        = m_FileHandler[filePrefix + "samples"];
 
     for (unsigned int i = 0; i < vectorFiles.size(); i++)
     {
@@ -283,7 +283,7 @@ protected:
   {
     auto trainVectorRegression = GetInternalApplication("training");
 
-    auto&                    trainSampleFileNameList = m_FileHandler["trainsamples"];
+    const auto&                    trainSampleFileNameList = m_FileHandler["trainsamples"];
     std::vector<std::string> featureNames;
     for (unsigned int i = 0; i < GetParameterImageList("io.il")->Size(); i++)
     {
