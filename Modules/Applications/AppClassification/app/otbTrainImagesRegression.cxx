@@ -109,6 +109,24 @@ protected:
     std::string              filePrefix      = "";
   };
 
+  /** Compute the imageEnvelope of the first input predictor image, this envelope will be used as a
+   * polygon to perform sampling operations */
+  void ComputeImageEnvelope( const std::string& filePrefix)
+  {
+    auto imageEnvelopeAppli = GetInternalApplication("imageEnvelope");
+    auto& output = m_FileHandler["imageEnvelope"];
+    
+    // For all input images, use the same vector file.
+    for (unsigned int i = 0; i< GetParameterImageList("io.il")->Size();i++)
+      output.push_back(GetParameterString("io.out") + "_" + filePrefix + "ImageEnvelope.shp");
+    
+    imageEnvelopeAppli->SetParameterInputImage("in", GetParameterImageList("io.il")->GetNthElement(0));
+    imageEnvelopeAppli->SetParameterString("out", output[0]);
+    
+    // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
+    imageEnvelopeAppli->ExecuteAndWriteOutput();
+  }
+
   /** Adds a class field to the input vectors, this is needed to perform sampling operations */
   void AddRegressionField(const std::vector<std::string>& inputFileNames, const std::string& filePrefix)
   {
@@ -120,12 +138,27 @@ protected:
 
     for (unsigned int i = 0; i < inputFileNames.size(); i++)
     {
-      outputFileNames.push_back(GetParameterString("io.out") + "_" + filePrefix + "Withfield" + std::to_string(i) + ".shp");
-      setFieldAppli->SetParameterString("in", inputFileNames[i]);
-      setFieldAppli->SetParameterString("out", outputFileNames[i]);
+      // The application is not called if the input file has already be processed (i.e. if the input list contains ) 
+      // the same file multiple times. Instead a link is created in the file handler. We can do this
+      // optimization here because the application only takes a vector Data as input but we cannot do it
+      // for other sampling operations (PolygonClassStatistics and SampleSelection) because the input images
+      // corresponding to one vector file may have different characteristics (resolution, origin, size)
+      auto sameFileName = std::find(inputFileNames.begin(),inputFileNames.begin()+i,inputFileNames[i]);
+      if (sameFileName!=inputFileNames.begin()+i)
+      {
+        // Create a link to the corresponding output
+        outputFileNames.push_back(outputFileNames[sameFileName-inputFileNames.begin()]);
+      }
+      else
+      {
+        outputFileNames.push_back(GetParameterString("io.out") + "_" + filePrefix + "Withfield" + std::to_string(i) + ".shp");
+        setFieldAppli->SetParameterString("in", inputFileNames[i]);
+      
+        setFieldAppli->SetParameterString("out", outputFileNames[i]);
 
-      // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
-      setFieldAppli->ExecuteAndWriteOutput();
+        // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
+        setFieldAppli->ExecuteAndWriteOutput();
+      }
     }
   }
 
@@ -250,7 +283,7 @@ protected:
 
     auto&                    trainSampleFileNameList = m_FileHandler["trainsamples"];
     std::vector<std::string> featureNames;
-    for (unsigned int i = 0; i < GetParameterStringList("io.vd").size(); i++)
+    for (unsigned int i = 0; i < GetParameterImageList("io.il")->Size(); i++)
     {
       featureNames.push_back(m_FeaturePrefix + std::to_string(i));
     }
@@ -284,7 +317,7 @@ protected:
 
     AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
     SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
-    MandatoryOn("io.vd");
+    MandatoryOff("io.vd");
 
     AddParameter(ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List");
     SetParameterDescription("io.valid", "A list of vector data to select the validation samples.");
@@ -294,6 +327,9 @@ protected:
   /** Init sampling parameters and applications */
   void InitSampling()
   {
+    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
+      AddApplication("ImageEnvelope", "imageEnvelope", "Compute the image envelope");
+    
     AddApplication("VectorDataSetField", "setfield", "Set additional vector field");
     AddApplication("PolygonClassStatistics", "polystat", "Polygon analysis");
     AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
@@ -379,11 +415,22 @@ private:
   void DoExecute() override
   {
     SamplingParameters trainParams;
-    trainParams.inputVectorList = GetParameterStringList("io.vd");
     trainParams.filePrefix      = "train";
+    
     if (HasValue("sample.nt"))
       trainParams.numberOfSamples = GetParameterInt("sample.nt");
-
+    
+    if (IsParameterEnabled("io.vd") && HasValue("io.vd"))
+    {
+      trainParams.inputVectorList = GetParameterStringList("io.vd");
+    }
+    else
+    {
+      otbAppLogINFO("No input training vector data: the image envelope will be used.");
+      ComputeImageEnvelope(trainParams.filePrefix);
+      trainParams.inputVectorList = m_FileHandler["imageEnvelope"];
+    }
+    
     PerformSampling(trainParams);
 
     if (IsParameterEnabled("io.valid") && HasValue("io.valid"))
