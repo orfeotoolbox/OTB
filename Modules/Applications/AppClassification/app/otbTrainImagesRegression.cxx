@@ -118,13 +118,15 @@ protected:
     
     // For all input images, use the same vector file.
     for (unsigned int i = 0; i< GetParameterImageList("io.il")->Size();i++)
-      output.push_back(GetParameterString("io.out") + "_" + filePrefix + "ImageEnvelope.shp");
+    {
+      output.push_back(GetParameterString("io.out") + "_" + filePrefix + "ImageEnvelope"+ std::to_string(i) +".shp");
     
-    imageEnvelopeAppli->SetParameterInputImage("in", GetParameterImageList("io.il")->GetNthElement(0));
-    imageEnvelopeAppli->SetParameterString("out", output[0]);
+      imageEnvelopeAppli->SetParameterInputImage("in", GetParameterImageList("io.il")->GetNthElement(i));
+      imageEnvelopeAppli->SetParameterString("out", output[i]);
     
-    // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
-    imageEnvelopeAppli->ExecuteAndWriteOutput();
+      // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
+      imageEnvelopeAppli->ExecuteAndWriteOutput();
+    }
   }
 
   /** Adds a class field to the input vectors, this is needed to perform sampling operations */
