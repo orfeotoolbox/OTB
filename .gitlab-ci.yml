@@ -138,7 +138,9 @@ macos-superbuild-prepare:
     # No need to install lfs as this machine is persistent
     # No need to do git config
     # Checkout the expected branch
+    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
+    - export GIT_LFS_SKIP_SMUDGE=0
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
 
