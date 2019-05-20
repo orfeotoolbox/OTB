@@ -129,8 +129,7 @@ PersistentImageSampleExtractorFilter<TInputImage>
     {
     OGRSpatialReference imgSRS;
     const char *projWktCstr = projectionRefWkt.c_str();
-    char **projWktPointer = const_cast<char**>(&projWktCstr);
-    OGRErr err = imgSRS.importFromWkt( projWktPointer );
+    OGRErr err = imgSRS.importFromWkt( projWktCstr );
     if (err == OGRERR_NONE)
       {
       // get input layer

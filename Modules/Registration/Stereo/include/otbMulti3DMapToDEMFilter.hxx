@@ -335,7 +335,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
   if (!m_ProjectionRef.empty())
     {
     OGRSpatialReference oSRS;
-    char *wkt = const_cast<char *> (m_ProjectionRef.c_str());
+    const char *wkt = m_ProjectionRef.c_str();
     oSRS.importFromWkt(&wkt);
     m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
     }
