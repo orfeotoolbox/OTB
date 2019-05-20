@@ -351,9 +351,13 @@ protected:
     SetParameterDescription("sample.nv", "Number of validation samples.");
     MandatoryOff("sample.nv");
 
+    ShareParameter( "rand", "select.rand" );
+    
     ShareParameter( "ram", "polystat.ram" );
     Connect( "select.ram", "polystat.ram" );
     Connect( "extraction.ram", "polystat.ram" );
+    
+    ShareParameter( "sample.type", "select.sampler");
     
     ShareParameter( "elev", "polystat.elev");
     Connect( "select.elev", "polystat.elev");
@@ -370,8 +374,8 @@ protected:
     ShareParameter("io.out", "training.io.out");
 
     ShareParameter("classifier", "training.classifier");
-    ShareParameter("rand", "training.rand");
-
+    Connect( "training.rand", "select.rand" );
+  
     ShareParameter("io.mse", "training.io.mse");
   }
 
