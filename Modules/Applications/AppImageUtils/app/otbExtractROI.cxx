@@ -591,7 +591,6 @@ private:
       SetParameterInt( "startx", centeri[0] - radiusi[0] );
       SetParameterInt( "starty", centeri[1] - radiusi[1] );
       // Don't forget to compute the offset
-      // FIXME
       FloatVectorImageType::IndexType offset_helper;
       offset_helper[0] = centeri[0]-radiusi[0];
       offset_helper[1] = centeri[1]-radiusi[1];
