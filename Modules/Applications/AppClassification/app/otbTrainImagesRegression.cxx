@@ -354,6 +354,11 @@ protected:
     ShareParameter( "ram", "polystat.ram" );
     Connect( "select.ram", "polystat.ram" );
     Connect( "extraction.ram", "polystat.ram" );
+    
+    ShareParameter( "elev", "polystat.elev");
+    Connect( "select.elev", "polystat.elev");
+    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
+      Connect( "imageEnvelope.elev", "polystat.elev");
   }
 
   /** Init Learning applications and share learning parameters */
