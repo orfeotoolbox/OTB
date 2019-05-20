@@ -110,6 +110,81 @@ protected:
     std::string              filePrefix      = "";
   };
 
+  /** Init input/output parameters */
+  void InitIO()
+  {
+    AddParameter(ParameterType_Group, "io", "Input and output data");
+    SetParameterDescription("io", "This group of parameters allows setting input and output data.");
+
+    AddParameter(ParameterType_InputImageList, "io.il", "Input predictor Image List");
+    SetParameterDescription("io.il", "A list of input predictor images.");
+    MandatoryOn("io.il");
+
+    AddParameter(ParameterType_InputImageList, "io.ip", "Input label Image List");
+    SetParameterDescription("io.ip", "A list of input label images.");
+    MandatoryOn("io.ip");
+
+    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
+    SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
+    MandatoryOff("io.vd");
+
+    AddParameter(ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List");
+    SetParameterDescription("io.valid", "A list of vector data to select the validation samples.");
+    MandatoryOff("io.valid");
+  }
+
+  /** Init sampling parameters and applications */
+  void InitSampling()
+  {
+    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
+      AddApplication("ImageEnvelope", "imageEnvelope", "Compute the image envelope");
+    
+    AddApplication("VectorDataSetField", "setfield", "Set additional vector field");
+    AddApplication("PolygonClassStatistics", "polystat", "Polygon analysis");
+    AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
+
+    AddApplication("SampleSelection", "select", "Sample selection");
+    AddApplication("SampleExtraction", "extraction", "Sample extraction");
+    
+    AddParameter(ParameterType_Group, "sample", "Sampling parameters");
+    SetParameterDescription("sample", "This group of parameters allows setting sampling parameters");
+
+    AddParameter(ParameterType_Int, "sample.nt", "Number of training samples");
+    SetParameterDescription("sample.nt", "Number of training samples.");
+    MandatoryOff("sample.nt");
+
+    AddParameter(ParameterType_Int, "sample.nv", "Number of validation samples");
+    SetParameterDescription("sample.nv", "Number of validation samples.");
+    MandatoryOff("sample.nv");
+
+    ShareParameter( "rand", "select.rand" );
+    
+    ShareParameter( "ram", "polystat.ram" );
+    Connect( "select.ram", "polystat.ram" );
+    Connect( "extraction.ram", "polystat.ram" );
+    
+    ShareParameter( "sample.type", "select.sampler");
+    
+    ShareParameter( "elev", "polystat.elev");
+    Connect( "select.elev", "polystat.elev");
+    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
+      Connect( "imageEnvelope.elev", "polystat.elev");
+  }
+
+  /** Init Learning applications and share learning parameters */
+  void InitLearning()
+  {
+    AddApplication("TrainVectorRegression", "training", "Train vector regression");
+
+    ShareParameter("io.imstat", "training.io.stats");
+    ShareParameter("io.out", "training.io.out");
+
+    ShareParameter("classifier", "training.classifier");
+    Connect( "training.rand", "select.rand" );
+  
+    ShareParameter("io.mse", "training.io.mse");
+  }
+
   /** Compute the imageEnvelope of the first input predictor image, this envelope will be used as a
    * polygon to perform sampling operations */
   void ComputeImageEnvelope( const std::string& filePrefix)
@@ -302,81 +377,6 @@ protected:
     }
 
     ExecuteInternal("training");
-  }
-
-  /** Init input/output parameters */
-  void InitIO()
-  {
-    AddParameter(ParameterType_Group, "io", "Input and output data");
-    SetParameterDescription("io", "This group of parameters allows setting input and output data.");
-
-    AddParameter(ParameterType_InputImageList, "io.il", "Input predictor Image List");
-    SetParameterDescription("io.il", "A list of input predictor images.");
-    MandatoryOn("io.il");
-
-    AddParameter(ParameterType_InputImageList, "io.ip", "Input label Image List");
-    SetParameterDescription("io.ip", "A list of input label images.");
-    MandatoryOn("io.ip");
-
-    AddParameter(ParameterType_InputVectorDataList, "io.vd", "Input Vector Data List");
-    SetParameterDescription("io.vd", "A list of vector data to select the training samples.");
-    MandatoryOff("io.vd");
-
-    AddParameter(ParameterType_InputVectorDataList, "io.valid", "Validation Vector Data List");
-    SetParameterDescription("io.valid", "A list of vector data to select the validation samples.");
-    MandatoryOff("io.valid");
-  }
-
-  /** Init sampling parameters and applications */
-  void InitSampling()
-  {
-    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
-      AddApplication("ImageEnvelope", "imageEnvelope", "Compute the image envelope");
-    
-    AddApplication("VectorDataSetField", "setfield", "Set additional vector field");
-    AddApplication("PolygonClassStatistics", "polystat", "Polygon analysis");
-    AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
-
-    AddApplication("SampleSelection", "select", "Sample selection");
-    AddApplication("SampleExtraction", "extraction", "Sample extraction");
-    
-    AddParameter(ParameterType_Group, "sample", "Sampling parameters");
-    SetParameterDescription("sample", "This group of parameters allows setting sampling parameters");
-
-    AddParameter(ParameterType_Int, "sample.nt", "Number of training samples");
-    SetParameterDescription("sample.nt", "Number of training samples.");
-    MandatoryOff("sample.nt");
-
-    AddParameter(ParameterType_Int, "sample.nv", "Number of validation samples");
-    SetParameterDescription("sample.nv", "Number of validation samples.");
-    MandatoryOff("sample.nv");
-
-    ShareParameter( "rand", "select.rand" );
-    
-    ShareParameter( "ram", "polystat.ram" );
-    Connect( "select.ram", "polystat.ram" );
-    Connect( "extraction.ram", "polystat.ram" );
-    
-    ShareParameter( "sample.type", "select.sampler");
-    
-    ShareParameter( "elev", "polystat.elev");
-    Connect( "select.elev", "polystat.elev");
-    if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
-      Connect( "imageEnvelope.elev", "polystat.elev");
-  }
-
-  /** Init Learning applications and share learning parameters */
-  void InitLearning()
-  {
-    AddApplication("TrainVectorRegression", "training", "Train vector regression");
-
-    ShareParameter("io.imstat", "training.io.stats");
-    ShareParameter("io.out", "training.io.out");
-
-    ShareParameter("classifier", "training.classifier");
-    Connect( "training.rand", "select.rand" );
-  
-    ShareParameter("io.mse", "training.io.mse");
   }
 
 private:
