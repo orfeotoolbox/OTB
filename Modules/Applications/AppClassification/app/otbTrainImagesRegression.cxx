@@ -56,7 +56,8 @@ private:
 
         "The training vector data must contain polygons corresponding to the input sampling positions. This data "
         "is used to extract samples using pixel values in each band of the predictor image and the corresponding "
-        "ground truth extracted from the lagel image.\n\n"
+        "ground truth extracted from the lagel image. If no training vector data is provided, the samples will be "
+        "extracted on the full image extent.\n\n"
 
         "At the end of the application, the mean square error between groundtruth and predicted values is computed using "
         "the output model and the validation vector data. Note that if no validation data is given, the training data "
@@ -336,6 +337,9 @@ protected:
     AddApplication("PolygonClassStatistics", "polystat", "Polygon analysis");
     AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
 
+    AddApplication("SampleSelection", "select", "Sample selection");
+    AddApplication("SampleExtraction", "extraction", "Sample extraction");
+    
     AddParameter(ParameterType_Group, "sample", "Sampling parameters");
     SetParameterDescription("sample", "This group of parameters allows setting sampling parameters");
 
@@ -347,8 +351,9 @@ protected:
     SetParameterDescription("sample.nv", "Number of validation samples.");
     MandatoryOff("sample.nv");
 
-    AddApplication("SampleSelection", "select", "Sample selection");
-    AddApplication("SampleExtraction", "extraction", "Sample extraction");
+    ShareParameter( "ram", "polystat.ram" );
+    Connect( "select.ram", "polystat.ram" );
+    Connect( "extraction.ram", "polystat.ram" );
   }
 
   /** Init Learning applications and share learning parameters */
