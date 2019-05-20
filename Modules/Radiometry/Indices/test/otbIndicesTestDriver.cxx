@@ -22,13 +22,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbNDVIDataNodeFeatureFunction);
   REGISTER_TEST(otbLandsatTMIndexNDSI);
   REGISTER_TEST(otbLandsatTMIndexBIO);
-  REGISTER_TEST(otbLAIFromReflectancesLinear);
   REGISTER_TEST(otbLandsatTMIndexMIR2);
   REGISTER_TEST(otbLandsatTMIndexNDVI);
-  REGISTER_TEST(otbLAIFromNDVILogarithmic);
   REGISTER_TEST(otbLandsatTMIndexVis);
   REGISTER_TEST(otbWaterSqrtSpectralAngleImageFilter);
   REGISTER_TEST(otbLandsatTMIndexBright);
@@ -46,4 +43,10 @@ void RegisterTests()
   REGISTER_TEST(otbLandsatTMKernelSpectralRulesWithImage);
   REGISTER_TEST(otbLandsatTMIndexNDBSI);
   REGISTER_TEST(otbLandsatTMThickCloudTest);
+  REGISTER_TEST(otbVegetationIndicesTest);
+  REGISTER_TEST(otbWaterIndicesTest);
+  REGISTER_TEST(otbBuiltUpIndicesTest);
+  REGISTER_TEST(otbSoilIndicesTest);
+  REGISTER_TEST(otbRadiometricIndexTest);
+  REGISTER_TEST(otbIndicesStackFunctorTest);
 }

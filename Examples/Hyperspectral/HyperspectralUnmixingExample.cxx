@@ -60,18 +60,18 @@ int main(int argc, char* argv[])
   const unsigned int estimateNumberOfEndmembers = atoi(argv[6]);
   const unsigned int Dimension                  = 2;
 
-  typedef double PixelType;
+  using PixelType = double;
   // We start by defining the types for the images and the reader and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
 
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  using ImageType  = otb::VectorImage<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
-  typedef otb::VectorRescaleIntensityImageFilter<ImageType, ImageType> RescalerType;
-  typedef otb::VectorImageToMatrixImageFilter<ImageType>               VectorImageToMatrixImageFilterType;
+  using RescalerType                       = otb::VectorRescaleIntensityImageFilter<ImageType, ImageType>;
+  using VectorImageToMatrixImageFilterType = otb::VectorImageToMatrixImageFilter<ImageType>;
 
   // We set the seed of the random number generator.
 
@@ -106,8 +106,8 @@ int main(int argc, char* argv[])
   // needs to be estimated.
   // We can now the instantiate the filter.
 
-  typedef otb::VCAImageFilter<ImageType> VCAFilterType;
-  VCAFilterType::Pointer                 vca = VCAFilterType::New();
+  using VCAFilterType        = otb::VCAImageFilter<ImageType>;
+  VCAFilterType::Pointer vca = VCAFilterType::New();
 
   vca->SetNumberOfEndmembers(estimateNumberOfEndmembers);
   vca->SetInput(rescaler->GetOutput());
@@ -122,8 +122,8 @@ int main(int argc, char* argv[])
   // We can now procedd to the unmixing algorithm.Parameters
   // needed are the input image and the endmembers matrix.
 
-  typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double> UCLSUnmixingFilterType;
-  UCLSUnmixingFilterType::Pointer                                                unmixer = UCLSUnmixingFilterType::New();
+  using UCLSUnmixingFilterType            = otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, double>;
+  UCLSUnmixingFilterType::Pointer unmixer = UCLSUnmixingFilterType::New();
   unmixer->SetInput(rescaler->GetOutput());
   unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
 
@@ -152,11 +152,11 @@ int main(int argc, char* argv[])
   // \label{fig:UNMIXING_FILTER}
   // \end{figure}
 
-  typedef otb::Image<PixelType, Dimension>                                 MonoImageType;
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>          ExtractROIFilterType;
-  typedef otb::Image<unsigned char, 2>                                     OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<MonoImageType, OutputImageType> PrettyRescalerType;
-  typedef otb::ImageFileWriter<OutputImageType>                            WriterType2;
+  using MonoImageType        = otb::Image<PixelType, Dimension>;
+  using ExtractROIFilterType = otb::MultiToMonoChannelExtractROI<PixelType, PixelType>;
+  using OutputImageType      = otb::Image<unsigned char, 2>;
+  using PrettyRescalerType   = itk::RescaleIntensityImageFilter<MonoImageType, OutputImageType>;
+  using WriterType2          = otb::ImageFileWriter<OutputImageType>;
 
   for (unsigned int cpt = 0; cpt < 3; ++cpt)
   {

@@ -103,19 +103,19 @@ int main(int argc, char* argv[])
   //  dimension. The panchromatic image is defined as an \doxygen{otb}{Image}
   //  and the multispectral one as \doxygen{otb}{VectorImage}.
 
-  typedef double                                         InternalPixelType;
-  const unsigned int                                     Dimension = 2;
-  typedef otb::Image<InternalPixelType, Dimension>       PanchroImageType;
-  typedef otb::VectorImage<InternalPixelType, Dimension> MultiSpecImageType;
+  using InternalPixelType      = double;
+  const unsigned int Dimension = 2;
+  using PanchroImageType       = otb::Image<InternalPixelType, Dimension>;
+  using MultiSpecImageType     = otb::VectorImage<InternalPixelType, Dimension>;
 
-  typedef double                                       OutputPixelType;
-  typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
+  using OutputPixelType = double;
+  using OutputImageType = otb::VectorImage<OutputPixelType, Dimension>;
 
   // We instantiate reader and writer types
   //
-  typedef otb::ImageFileReader<MultiSpecImageType> ReaderVectorType;
-  typedef otb::ImageFileReader<PanchroImageType>   ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>    WriterType;
+  using ReaderVectorType = otb::ImageFileReader<MultiSpecImageType>;
+  using ReaderType       = otb::ImageFileReader<PanchroImageType>;
+  using WriterType       = otb::ImageFileWriter<OutputImageType>;
 
   ReaderVectorType::Pointer multiSpectReader       = ReaderVectorType::New();
   ReaderVectorType::Pointer multiSpectInterpReader = ReaderVectorType::New();
@@ -130,7 +130,7 @@ int main(int argc, char* argv[])
   //  The Bayesian data fusion filter type is instantiated using the images types as
   //  a template parameters.
 
-  typedef otb::BayesianFusionFilter<MultiSpecImageType, MultiSpecImageType, PanchroImageType, OutputImageType> BayesianFusionFilterType;
+  using BayesianFusionFilterType = otb::BayesianFusionFilter<MultiSpecImageType, MultiSpecImageType, PanchroImageType, OutputImageType>;
 
   //  Next the filter is created by invoking the \code{New()} method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.
@@ -168,13 +168,13 @@ int main(int argc, char* argv[])
   }
 
   // Create an 3 band images for the software guide
-  typedef unsigned char                                                                     OutputPixelType2;
-  typedef otb::VectorImage<OutputPixelType2, Dimension>                                     OutputVectorImageType;
-  typedef otb::ImageFileWriter<OutputVectorImageType>                                       VectorWriterType;
-  typedef otb::VectorRescaleIntensityImageFilter<MultiSpecImageType, OutputVectorImageType> VectorRescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<OutputImageType, OutputVectorImageType>    VectorRescalerBayesianType;
-  typedef otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>           CasterType;
-  typedef otb::MultiChannelExtractROI<OutputPixelType2, OutputPixelType2>                   ChannelExtractorType;
+  using OutputPixelType2           = unsigned char;
+  using OutputVectorImageType      = otb::VectorImage<OutputPixelType2, Dimension>;
+  using VectorWriterType           = otb::ImageFileWriter<OutputVectorImageType>;
+  using VectorRescalerType         = otb::VectorRescaleIntensityImageFilter<MultiSpecImageType, OutputVectorImageType>;
+  using VectorRescalerBayesianType = otb::VectorRescaleIntensityImageFilter<OutputImageType, OutputVectorImageType>;
+  using CasterType                 = otb::ImageToVectorImageCastFilter<PanchroImageType, MultiSpecImageType>;
+  using ChannelExtractorType       = otb::MultiChannelExtractROI<OutputPixelType2, OutputPixelType2>;
 
   multiSpectReader->GenerateOutputInformation();
   multiSpectInterpReader->GenerateOutputInformation();

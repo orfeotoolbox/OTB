@@ -64,11 +64,11 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef unsigned char                            LabelledPixelType;
-  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
+  using LabelledPixelType = unsigned char;
+  using LabelledImageType = otb::Image<LabelledPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<LabelledImageType> ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<LabelledImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -80,14 +80,14 @@ int main(int argc, char* argv[])
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter<LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  using MarkovRandomFieldFilterType = otb::MarkovRandomFieldFilter<LabelledImageType, LabelledImageType>;
 
-  typedef otb::MRFSamplerRandom<LabelledImageType, LabelledImageType> SamplerType;
+  using SamplerType = otb::MRFSamplerRandom<LabelledImageType, LabelledImageType>;
 
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
+  using OptimizerType = otb::MRFOptimizerMetropolis;
 
-  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType> EnergyRegularizationType;
-  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType> EnergyFidelityType;
+  using EnergyRegularizationType = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
+  using EnergyFidelityType       = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
 
   MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
@@ -107,8 +107,8 @@ int main(int argc, char* argv[])
   // \doxygen{itk}{LabelStatisticsImageFilter} and more particularly the method
   // \code{GetNumberOfLabels()}.
 
-  typedef itk::LabelStatisticsImageFilter<LabelledImageType, LabelledImageType> LabelledStatType;
-  LabelledStatType::Pointer                                                     labelledStat = LabelledStatType::New();
+  using LabelledStatType                 = itk::LabelStatisticsImageFilter<LabelledImageType, LabelledImageType>;
+  LabelledStatType::Pointer labelledStat = LabelledStatType::New();
   labelledStat->SetInput(reader->GetOutput());
   labelledStat->SetLabelInput(reader->GetOutput());
   labelledStat->Update();
@@ -134,8 +134,8 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
+  using RescaleType                  = itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType>;
+  RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 

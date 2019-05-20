@@ -52,6 +52,7 @@ if(UNIX)
   #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
+    list(APPEND GDAL_SB_CONFIG "LDFLAGS=-headerpad_max_install_names")
   endif()
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath

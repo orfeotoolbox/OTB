@@ -85,7 +85,6 @@ private:
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
     // Documentation
-    SetDocName("Image resampling with a rigid transform");
     SetDocLongDescription("This application performs a parametric transform on the input image. Scaling, translation and rotation with scaling factor are handled."
         " Parameters of the transform is expressed in physical units, thus particular attention must be paid on pixel size (value, and sign). Moreover transform is expressed from input space to output space (on the contrary ITK Transforms are expressed form output space to input space). ");
     SetDocLimitations("None");

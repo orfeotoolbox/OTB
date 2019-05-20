@@ -19,183 +19,124 @@
  */
 
 
-#include "otbGenericRSResampleImageFilter.h"
+
+// iostream is used for general output
+#include <iostream>
+#include <stdlib.h>
+#include <complex>
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbGenericMapProjection.h"
+#include "itkUnaryFunctorImageFilter.h"
 
-#include <ogr_spatialref.h>
+#include "otbDEMHandler.h"
+#include "otbUnaryImageFunctorWithVectorImageFilter.h"
+#include "otbGenericRSResampleImageFilter.h"
+#include "otbComplexToIntensityImageFilter.h"
+#include "otbPerBandVectorImageFilter.h"
 
-// Extract ROI
-#include "otbMultiChannelExtractROI.h"
-
-// Images definition
-const unsigned int Dimension = 2;
-typedef double                                      PixelType;
-typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-typedef ImageType::SizeType                         SizeType;
-
-typedef otb::GenericRSResampleImageFilter<ImageType,
-                                          ImageType> ImageResamplerType;
-typedef ImageResamplerType::OriginType              OriginType;
-typedef ImageResamplerType::SpacingType             SpacingType;
-
-typedef otb::ImageFileReader<ImageType>             ReaderType;
-typedef otb::ImageFileWriter<ImageType>    WriterType;
-
-
-int otbGenericRSResampleImageFilter(int itkNotUsed(argc), char* argv[])
+int otbGenericRSResampleImageFilter(int argc, char* argv[])
 {
+  if (argc != 15)
+    {
+    std::cout << argv[0] <<
+    " <input filename> <output filename> <origin easting> <origin northing>"
+    " <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere>"
+    " <grid_spacing> <mode> <mode.info> <is_complex>"
+              << std::endl;
 
-  // SmartPointer instantiation
-  ImageResamplerType::Pointer resampler = ImageResamplerType::New();
+    return EXIT_FAILURE;
+    }
 
-  const char * infname = argv[1];
-  const char * outfname = argv[6];
-  unsigned int isize    = atoi(argv[2]);
-  double iGridSpacing    = atof(argv[3]);
-  int    useInRpc          = atoi(argv[4]);
-  int    useOutRpc          = atoi(argv[5]);
+  typedef std::complex<double>                                                      ComplexPixelType;
+  typedef otb::VectorImage<ComplexPixelType,2>                                     ComplexVectorImageType;
+  typedef otb::VectorImage<double, 2>                                               VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType>                                     ReaderType;
+  typedef otb::ImageFileReader<ComplexVectorImageType>                              ComplexReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>                                     WriterType;
 
+  // Handling of complex images
+  typedef otb::Image<ComplexPixelType> ComplexImageType;
+  typedef otb::Image<double>           ImageType;
+  typedef otb::ComplexToIntensityImageFilter<ComplexImageType, ImageType> IntensityFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexVectorImageType,VectorImageType,IntensityFilterType> PerBandIntensityFilterType;
+  typedef otb::GenericRSResampleImageFilter<VectorImageType, VectorImageType> OrthoRectifFilterType;
 
-  ReaderType::Pointer         reader    = ReaderType::New();
+  //Allocate pointer
+  ReaderType::Pointer reader = ReaderType::New();
+  ComplexReaderType::Pointer cReader = ComplexReaderType::New();
+  WriterType::Pointer writer = WriterType::New();
+  PerBandIntensityFilterType::Pointer intensityFilter = PerBandIntensityFilterType::New();
+  
+  OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
 
-  // Read the input image
-  reader->SetFileName(infname);
-  reader->UpdateOutputInformation();
+  writer->SetFileName(argv[2]);
+  
+  bool isComplex = atoi(argv[14]);
 
-  // Fill the output size with the user selection
-  SizeType      size;
-  size.Fill(isize);
+  if(isComplex)
+    {
+      cReader->SetFileName(argv[1]);
+      cReader->GenerateOutputInformation();
+      intensityFilter->SetInput(cReader->GetOutput());
+      VectorImageType::PixelType no_data(cReader->GetOutput()->GetNumberOfComponentsPerPixel());
+      no_data.Fill(0);
+      orthoRectifFilter->SetEdgePaddingValue(no_data);
+      orthoRectifFilter->SetInput(intensityFilter->GetOutput());
+    }
+  else
+    {
+      reader->SetFileName(argv[1]);
+      reader->GenerateOutputInformation();
+      VectorImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
+      no_data.Fill(0);
+      orthoRectifFilter->SetEdgePaddingValue(no_data);
+      orthoRectifFilter->SetInput(reader->GetOutput());
+    }
 
-  // Set the origin & the spacing of the output
-  OriginType  origin;
-  origin[0] = 367340;
-  origin[1] = 4.83467e+06;
+  VectorImageType::IndexType start;
+  start[0] = 0;
+  start[1] = 0;
+  orthoRectifFilter->SetOutputStartIndex(start);
 
-  SpacingType  spacing;
-  spacing[0] = 0.6;
-  spacing[1] = -0.6;
+  VectorImageType::SizeType size;
+  size[0] = atoi(argv[5]);      // X size
+  size[1] = atoi(argv[6]);            //Y size
+  orthoRectifFilter->SetOutputSize(size);
 
-  // Build the output projection ref : UTM ref
-  OGRSpatialReference    oSRS;
-  oSRS.SetProjCS("UTM");
-  oSRS.SetUTM(31, true);
-  char * utmRef = nullptr;
-  oSRS.exportToWkt(&utmRef);
+  VectorImageType::SpacingType spacing;
+  spacing[0] = atof(argv[7]);
+  spacing[1] = atof(argv[8]);
+  orthoRectifFilter->SetOutputSpacing(spacing);
+
+  VectorImageType::PointType origin;
+  origin[0] = strtod(argv[3], nullptr);         //Origin easting
+  origin[1] = strtod(argv[4], nullptr);         //Origin northing
+  orthoRectifFilter->SetOutputOrigin(origin);
+
+  std::string wkt = otb::SpatialReference::FromUTM(atoi(argv[9]),atoi(argv[10]) ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south).ToWkt();
+  orthoRectifFilter->SetOutputProjectionRef(wkt);
 
   // Displacement Field spacing
-  SpacingType  gridSpacing;
-  gridSpacing[0] = iGridSpacing;
-  gridSpacing[1] = -iGridSpacing;
+  VectorImageType::SpacingType  gridSpacing;
+  gridSpacing[0] = atof(argv[11]);
+  gridSpacing[1] = -atof(argv[11]);
+  orthoRectifFilter->SetDisplacementFieldSpacing(gridSpacing);
+  
+  // manage demHandler
+  if (atoi(argv[12])==1) //mode = no DEM
+  {
+	  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(135.8);
+  }
+  else if ( (atoi(argv[12])==2) || (atoi(argv[12])==3) ) //mode = DEM SRTM || DEM GTIFF
+  {
+	  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[13]);
+  }
 
-  // Default value builder
-  ImageType::PixelType defaultValue;
-  itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
-
-  // Set the Resampler Parameters
-  resampler->SetInput(reader->GetOutput());
-  resampler->SetDisplacementFieldSpacing(gridSpacing);
-  resampler->SetOutputOrigin(origin);
-  resampler->SetOutputSize(size);
-  resampler->SetOutputSpacing(spacing);
-  resampler->SetOutputProjectionRef(utmRef);
-  resampler->SetEdgePaddingValue(defaultValue);
-  if (useInRpc)
-    {
-    resampler->SetInputRpcGridSize(20);
-    resampler->EstimateInputRpcModelOn();
-    }
-
-  if (useOutRpc)
-    {
-    resampler->SetOutputRpcGridSize(20);
-    resampler->EstimateOutputRpcModelOn();
-    }
-
-
-  // Write the resampled image
-  WriterType::Pointer writer= WriterType::New();
+  writer->SetInput(orthoRectifFilter->GetOutput());
   writer->SetNumberOfDivisionsTiledStreaming(4);
-  writer->SetFileName(outfname);
-  writer->SetInput(resampler->GetOutput());
   writer->Update();
-
-  std::cout << resampler << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-
-int otbGenericRSResampleImageFilterFromMap(int itkNotUsed(argc), char* argv[])
-{
-  typedef otb::MultiChannelExtractROI<PixelType, PixelType>  ExtractROIType;
-
-  // SmartPointer instantiation
-  ExtractROIType::Pointer extractor = ExtractROIType::New();
-  ImageResamplerType::Pointer resampler = ImageResamplerType::New();
-
-  const char * infname   = argv[1];
-  const char * outfname  = argv[4];
-  double iGridSpacing    = atof(argv[2]);
-  int    useInRpc        = atoi(argv[3]);
-
-  // Reader Instantiation
-  ReaderType::Pointer         reader    = ReaderType::New();
-  reader->SetFileName(infname);
-  reader->UpdateOutputInformation();
-
-  SpacingType  spacing;
-  spacing[0] =  2.5;
-  spacing[1] = -2.5;
-
-  // Displacement Field spacing
-  SpacingType  gridSpacing;
-  gridSpacing[0] = iGridSpacing;
-  gridSpacing[1] = -iGridSpacing;
-
-  // Default value builder
-  ImageType::PixelType defaultValue;
-  itk::NumericTraits<ImageType::PixelType>::SetLength(defaultValue, reader->GetOutput()->GetNumberOfComponentsPerPixel());
-
-  // Extract a roi centered on the input center
-  ImageType::RegionType roi;
-  ImageType::IndexType  roiIndex;
-  SizeType              roiSize;
-
-  // Fill the size
-  roiSize.Fill(250);
-
-  // Fill the start index
-  roiIndex[0] = (unsigned int)((reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0] - roiSize[0]) /2);
-  roiIndex[1] = (unsigned int)((reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1] - roiSize[1]) /2);
-
-  roi.SetIndex(roiIndex);
-  roi.SetSize(roiSize);
-
-  extractor->SetExtractionRegion(roi);
-  extractor->SetInput(reader->GetOutput());
-  extractor->UpdateOutputInformation();
-
-  // Set the Resampler Parameters
-  resampler->SetInput(extractor->GetOutput());
-  resampler->SetDisplacementFieldSpacing(gridSpacing);
-  resampler->SetOutputParametersFromMap("UTM", spacing);
-
-  if (useInRpc)
-    {
-    resampler->SetInputRpcGridSize(20);
-    resampler->EstimateInputRpcModelOn();
-    }
-
-  // Write the resampled image
-  WriterType::Pointer writer= WriterType::New();
-  writer->SetAutomaticTiledStreaming();
-  writer->SetFileName(outfname);
-  writer->SetInput(resampler->GetOutput());
-  writer->Update();
-
-  std::cout << resampler << std::endl;
 
   return EXIT_SUCCESS;
 }

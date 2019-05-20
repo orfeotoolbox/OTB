@@ -46,7 +46,7 @@
 
 #include "otbVectorImage.h"
 
-int main(int, char* [])
+int main(int, char*[])
 {
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In
@@ -55,8 +55,8 @@ int main(int, char* [])
   //
   // \index{otb::VectorImage!Instantiation}
 
-  typedef unsigned char                  PixelType;
-  typedef otb::VectorImage<PixelType, 2> ImageType;
+  using PixelType = unsigned char;
+  using ImageType = otb::VectorImage<PixelType, 2>;
 
   // Then the image object can be created
   ImageType::Pointer image = ImageType::New();

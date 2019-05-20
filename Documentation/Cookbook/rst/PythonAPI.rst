@@ -218,10 +218,33 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Load and save parameters to XML
+-------------------------------
+
+As with a the `command line interface` you can save application parameters
+to an xml file:
+
+.. code-block:: python
+
+    # Save application parameters to XML
+    app = otb.Registry.CreateApplication('BandMath')
+    app.SetParameterStringList("il", ["image1.tif", "image2.tif"], True)
+    app.SetParameterString("out", out, True)
+    app.SetParameterString("exp", "cos(im1b1)+im2b1*im1b1", True)
+    app.SaveParametersToXML("parameters.xml")
+
+And load them later for execution:
+
+.. code-block:: python
+
+    # Load application parameters from XML
+    app = otb.Registry.CreateApplication("BandMath")
+    app.LoadParametersFromXML("parameters.xml")
+    app.ExecuteAndWriteOutput()
+
+
 Interactions with OTB pipeline
 ------------------------------
-
-[Since OTB 6.6]
 
 The application framework has been extended in order to provide ways to
 interact with the pipelines inside each application. It applies only to

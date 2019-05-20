@@ -24,9 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
-  REGISTER_TEST(otbOrthoRectificationFilter);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
-  REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
   REGISTER_TEST(otbGeometriesProjectionFilter);
   REGISTER_TEST(otbGenericRSTransformGenericTest);
   REGISTER_TEST(otbVectorDataTransformFilter);
@@ -46,7 +44,6 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSTransformImageAndMNTToWGS84ConversionChecking);
   REGISTER_TEST(otbCompositeTransform);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
-  REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunction);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterCheckRpcModel);
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbTileImageFilterRSTransformTest);

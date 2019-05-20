@@ -78,9 +78,9 @@ int main(int argc, char* argv[])
   //  A typical selection for remote sensing images is illustrated in
   //  the following lines.
 
-  typedef unsigned short                   PixelType;
-  const unsigned int                       Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType              = unsigned short;
+  const unsigned int Dimension = 2;
+  using ImageType              = otb::Image<PixelType, Dimension>;
 
   //  Note that the dimension of the image in memory should match the one of
   //  the image in file. There are a couple of special cases in which this
@@ -94,8 +94,8 @@ int main(int argc, char* argv[])
   //  \index{otb::ImageFileReader!Instantiation}
   //  \index{otb::ImageFileWriter!Instantiation}
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   //  Then, we create one object of each type using the New() method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.

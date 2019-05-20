@@ -58,26 +58,26 @@ int main(int argc, char* argv[])
   // The image type is now defined using pixel type and
   // dimension. The output image is defined as an \doxygen{otb}{Image}.
 
-  char*                                 folderPath = argv[9];
-  char*                                 outputName = argv[1];
-  const unsigned int                    Dimension  = 2;
-  typedef otb::Image<double, Dimension> ImageType;
+  char*              folderPath = argv[9];
+  char*              outputName = argv[1];
+  const unsigned int Dimension  = 2;
+  using ImageType               = otb::Image<double, Dimension>;
 
   // The writer is defined
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   // The DEMToImageGenerator is defined using the image pixel
   // type as a template parameter. After that, the object can be instancied.
 
-  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
+  using DEMToImageGeneratorType = otb::DEMToImageGenerator<ImageType>;
 
   DEMToImageGeneratorType::Pointer object = DEMToImageGeneratorType::New();
 
   // Input parameter types are defined to set the value in the \doxygen{otb}{DEMToImageGenerator}.
 
-  typedef DEMToImageGeneratorType::SizeType    SizeType;
-  typedef DEMToImageGeneratorType::SpacingType SpacingType;
-  typedef DEMToImageGeneratorType::PointType   PointType;
+  using SizeType    = DEMToImageGeneratorType::SizeType;
+  using SpacingType = DEMToImageGeneratorType::SpacingType;
+  using PointType   = DEMToImageGeneratorType::PointType;
 
   // Instantiating writer
   WriterType::Pointer writer = WriterType::New();
@@ -136,10 +136,10 @@ int main(int argc, char* argv[])
   }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, Dimension>                               OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                        WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType> RescalerType;
-  typedef itk::ThresholdImageFilter<ImageType>                               ThresholderType;
+  using OutputPrettyImageType = otb::Image<unsigned char, Dimension>;
+  using WriterPrettyType      = otb::ImageFileWriter<OutputPrettyImageType>;
+  using RescalerType          = itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType>;
+  using ThresholderType       = itk::ThresholdImageFilter<ImageType>;
 
   ThresholderType::Pointer  thresholder  = ThresholderType::New();
   RescalerType::Pointer     rescaler     = RescalerType::New();

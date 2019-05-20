@@ -236,10 +236,6 @@ struct PixelInfo
 
 /**
  */
-typedef std::map< std::string, std::string > ApplicationDocNameToNameMap;
-
-/**
- */
 typedef std::map< std::string, StringVector > ApplicationsTagContainer;
 
 /*******************************************************************************/

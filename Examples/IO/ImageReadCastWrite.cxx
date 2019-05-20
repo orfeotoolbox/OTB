@@ -59,12 +59,12 @@ int main(int argc, char* argv[])
   //  the image stored in the file.  Instead, it is the type that will be
   //  used to store the image as soon as it is read into memory.
 
-  typedef float         InputPixelType;
-  typedef unsigned char OutputPixelType;
-  const unsigned int    Dimension = 2;
+  using InputPixelType         = float;
+  using OutputPixelType        = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputImageType  = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
   //  We can now instantiate the types of the reader and writer. These two
   //  classes are parameterized over the image type.
@@ -72,13 +72,13 @@ int main(int argc, char* argv[])
   //  \index{otb::ImageFileReader!Instantiation}
   //  \index{otb::ImageFileWriter!Instantiation}
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   //  Below we instantiate the RescaleIntensityImageFilter class that will
   //  linearly scale the image intensities.
 
-  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> FilterType;
+  using FilterType = itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>;
 
   //  A filter object is constructed and the minimum and maximum values of
   //  the output are selected using the SetOutputMinimum() and

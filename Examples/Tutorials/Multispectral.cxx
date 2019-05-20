@@ -49,11 +49,11 @@ int main(int argc, char* argv[])
   // reader. As we have done in the previous example we get the filename from
   // the command line.
 
-  typedef unsigned short int             PixelType;
-  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+  using PixelType       = unsigned short;
+  using VectorImageType = otb::VectorImage<PixelType, 2>;
 
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  ReaderType::Pointer                           reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<VectorImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(argv[1]);
 
@@ -61,8 +61,8 @@ int main(int argc, char* argv[])
   // only one of the spectral band we use the
   // \doxygen{otb}{MultiToMonoChannelExtractROI}. The declaration is as usual:
 
-  typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> ExtractChannelType;
-  ExtractChannelType::Pointer                                     extractChannel = ExtractChannelType::New();
+  using ExtractChannelType                   = otb::MultiToMonoChannelExtractROI<PixelType, PixelType>;
+  ExtractChannelType::Pointer extractChannel = ExtractChannelType::New();
   //  We need to pass the parameters to the filter for the extraction. This
   // filter also allow extracting only a spatial subset of the image. However,
   // we will extract the whole channel in this case.
@@ -89,9 +89,9 @@ int main(int argc, char* argv[])
   // \doxygen{otb}{MultiToMonoChannelExtractROI} is a \doxygen{otb}{Image}, we
   // need to template the writer with this type.
 
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer                     writer = WriterType::New();
+  using ImageType            = otb::Image<PixelType, 2>;
+  using WriterType           = otb::ImageFileWriter<ImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(argv[2]);
   writer->SetInput(extractChannel->GetOutput());
@@ -122,8 +122,8 @@ int main(int argc, char* argv[])
   // by declaring the filter on a normal \doxygen{otb}{Image}. Note that we
   // don't need to specify any input for this filter.
 
-  typedef itk::ShiftScaleImageFilter<ImageType, ImageType> ShiftScaleType;
-  ShiftScaleType::Pointer                                  shiftScale = ShiftScaleType::New();
+  using ShiftScaleType               = itk::ShiftScaleImageFilter<ImageType, ImageType>;
+  ShiftScaleType::Pointer shiftScale = ShiftScaleType::New();
   shiftScale->SetScale(0.5);
   shiftScale->SetShift(10);
 
@@ -134,8 +134,8 @@ int main(int argc, char* argv[])
   // The filter is selected using the \code{SetFilter()} method and the input
   // by the usual \code{SetInput()} method.
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, ShiftScaleType> VectorFilterType;
-  VectorFilterType::Pointer                                                               vectorFilter = VectorFilterType::New();
+  using VectorFilterType                 = otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, ShiftScaleType>;
+  VectorFilterType::Pointer vectorFilter = VectorFilterType::New();
   vectorFilter->SetFilter(shiftScale);
 
   vectorFilter->SetInput(reader->GetOutput());
@@ -143,8 +143,8 @@ int main(int argc, char* argv[])
   // Now, we just have to save the image using a writer templated over an
   // \doxygen{otb}{VectorImage}:
 
-  typedef otb::ImageFileWriter<VectorImageType> VectorWriterType;
-  VectorWriterType::Pointer                     writerVector = VectorWriterType::New();
+  using VectorWriterType                 = otb::ImageFileWriter<VectorImageType>;
+  VectorWriterType::Pointer writerVector = VectorWriterType::New();
 
   writerVector->SetFileName(argv[3]);
   writerVector->SetInput(vectorFilter->GetOutput());

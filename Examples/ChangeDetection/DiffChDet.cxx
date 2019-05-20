@@ -70,19 +70,19 @@ int main(int argc, char* argv[])
   // We start by declaring the types for the two input images, the
   // change image and the image to be stored in a file for visualization.
 
-  typedef float                                    InternalPixelType;
-  typedef unsigned char                            OutputPixelType;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
-  typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
-  typedef otb::Image<OutputPixelType, Dimension>   OutputImageType;
+  using InternalPixelType = float;
+  using OutputPixelType   = unsigned char;
+  using InputImageType1   = otb::Image<InternalPixelType, Dimension>;
+  using InputImageType2   = otb::Image<InternalPixelType, Dimension>;
+  using ChangeImageType   = otb::Image<InternalPixelType, Dimension>;
+  using OutputImageType   = otb::Image<OutputPixelType, Dimension>;
 
 
   //  We can now declare the types for the readers and the writer.
 
-  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
-  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType1 = otb::ImageFileReader<InputImageType1>;
+  using ReaderType2 = otb::ImageFileReader<InputImageType2>;
+  using WriterType  = otb::ImageFileWriter<OutputImageType>;
 
   //  The change detector will give positive and negative values
   //  depending on the sign of the difference. We are usually
@@ -92,15 +92,15 @@ int main(int argc, char* argv[])
   //  rescale the results of the change detection in order to use the full range
   //  of values of the output pixel type.
 
-  typedef itk::AbsImageFilter<ChangeImageType, ChangeImageType>              AbsType;
-  typedef itk::RescaleIntensityImageFilter<ChangeImageType, OutputImageType> RescalerType;
+  using AbsType      = itk::AbsImageFilter<ChangeImageType, ChangeImageType>;
+  using RescalerType = itk::RescaleIntensityImageFilter<ChangeImageType, OutputImageType>;
 
 
   //  The \doxygen{otb}{MeanDifferenceImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
 
-  typedef otb::MeanDifferenceImageFilter<InputImageType1, InputImageType2, ChangeImageType> FilterType;
+  using FilterType = otb::MeanDifferenceImageFilter<InputImageType1, InputImageType2, ChangeImageType>;
 
   //  The different elements of the pipeline can now be instantiated.
 
@@ -142,7 +142,7 @@ int main(int argc, char* argv[])
   //  command/observer design pattern. This is easily done by
   //  attaching an observer to the filter.
 
-  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  using CommandType = otb::CommandProgressUpdate<FilterType>;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);

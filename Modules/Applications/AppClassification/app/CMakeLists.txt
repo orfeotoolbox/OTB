@@ -48,11 +48,6 @@ otb_create_application(
   SOURCES        otbFusionOfClassifications.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           ComputePolylineFeatureFromImage
-  SOURCES        otbComputePolylineFeatureFromImage.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
 if(OTB_USE_SHARK)
   otb_create_application(
     NAME           KMeansClassification
@@ -71,13 +66,13 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           PredictRegression
-  SOURCES        otbPredictRegression.cxx
+  NAME           TrainVectorRegression
+  SOURCES        otbTrainVectorRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           DSFuzzyModelEstimation
-  SOURCES        otbDSFuzzyModelEstimation.cxx
+  NAME           PredictRegression
+  SOURCES        otbPredictRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -93,11 +88,6 @@ otb_create_application(
 otb_create_application(
   NAME           ComputeImagesStatistics
   SOURCES        otbComputeImagesStatistics.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           VectorDataDSValidation
-  SOURCES        otbVectorDataDSValidation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(

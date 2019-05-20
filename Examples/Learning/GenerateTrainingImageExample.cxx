@@ -50,16 +50,16 @@ int main(int argc, char* argv[])
   const char* roiFilename    = argv[2];
   const char* outputFilename = argv[3];
 
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
+  using InputPixelType  = unsigned char;
+  using OutputPixelType = unsigned char;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputImageType  = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -73,13 +73,13 @@ int main(int argc, char* argv[])
   OutputImageType::Pointer trainingImage = OutputImageType::New();
 
   // Declare the type of the index to access images
-  typedef itk::Index<Dimension> myIndexType;
+  using myIndexType = itk::Index<Dimension>;
 
   // Declare the type of the size
-  typedef itk::Size<Dimension> mySizeType;
+  using mySizeType = itk::Size<Dimension>;
 
   // Declare the type of the Region
-  typedef itk::ImageRegion<Dimension> myRegionType;
+  using myRegionType = itk::ImageRegion<Dimension>;
 
   // Define their size, and start index
   mySizeType size;
@@ -146,8 +146,8 @@ int main(int argc, char* argv[])
     region.SetIndex(start);
 
     // Iterator creation
-    typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
-    IteratorType                                      it(trainingImage, region);
+    using IteratorType = itk::ImageRegionIterator<OutputImageType>;
+    IteratorType it(trainingImage, region);
 
     it.GoToBegin();
 

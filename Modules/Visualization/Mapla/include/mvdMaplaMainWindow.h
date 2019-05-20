@@ -143,8 +143,7 @@ protected slots:
 
   /**
    */
-  void OnApplicationToLaunchSelected( const QString & name,
-                                      const QString & doc );
+  void OnApplicationToLaunchSelected( const QString & name );
 
   /**
    */

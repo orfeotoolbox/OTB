@@ -63,14 +63,14 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef unsigned char                    PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType = unsigned char;
+  using ImageType = otb::Image<PixelType, Dimension>;
 
-  typedef itk::ImageRegionConstIterator<ImageType> ConstIteratorType;
-  typedef itk::ImageRegionIterator<ImageType>      IteratorType;
+  using ConstIteratorType = itk::ImageRegionConstIterator<ImageType>;
+  using IteratorType      = itk::ImageRegionIterator<ImageType>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   // Information about the subregion to copy is read from the command line. The
   // subregion is defined by an \doxygen{itk}{ImageRegion} object, with a starting
