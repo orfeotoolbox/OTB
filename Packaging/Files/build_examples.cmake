@@ -40,6 +40,8 @@ if(WIN32)
   set(cmake_gen "-GNinja")
 endif()
 
+message( "CMAKE_PREFIX_PATH: '${CMAKE_PREFIX_PATH}'" )
+
 execute_process(
   COMMAND ${CMAKE_COMMAND}
   -DCMAKE_INSTALL_PREFIX=${PKG_DIR}
@@ -93,5 +95,5 @@ if( build_Pipeline_rv )
   message(FATAL_ERROR "Build FAILED. build_Pipeline_ov=${build_Pipeline_ov}")
   return()
 else()
-  message("Build PASSED. build_Pipeline_ov=${build_Pipeline_ov}")  
+  message("Build PASSED. build_Pipeline_ov=${build_Pipeline_ov}")
 endif()

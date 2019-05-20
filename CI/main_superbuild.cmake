@@ -24,6 +24,7 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 
+set ( DEBUG "1" )
 ###########################################################################
 ###########################################################################
 # Download xkd
@@ -69,6 +70,12 @@ endif()
 
 if (clone_res)
   message( SEND_ERROR "Problem in retreiving the archive")
+  message( "Command : COMMAND ${GIT} clone ${REMOTE} --branch ${BRANCH_NAME} \
+    --depth 1 superbuild-artifact")
+  message( "Result :")
+  message( "clone_res = ${clone_res}" )
+  message( "clone_out = ${clone_out}" )
+  message( "clone_err = ${clone_err}" )
   return()
 endif()
 
@@ -76,8 +83,18 @@ set (CMAKE_COMMAND "cmake")
 execute_process(
   COMMAND ${CMAKE_COMMAND} "-E" "tar" "xf"
   "${OTB_SOURCE_DIR}/superbuild-artifact/SuperBuild_Install.tar"
+  RESULT_VARIABLE tar_res
+  OUTPUT_VARIABLE tar_out
+  ERROR_VARIABLE tar_err
   WORKING_DIRECTORY ${OTB_SOURCE_DIR}
   )
+
+if ( DEBUG )
+  message( "${CMAKE_COMMAND} -E tar xf ${OTB_SOURCE_DIR}/superbuild-artifact/SuperBuild_Install.tar")
+  message( "tar_res: '${clone_res}'" )
+  message( "tar_out: '${tar_out}'" )
+  message( "tar_err: '${tar_err}'" )
+endif()
 
 set( XDK_PATH "${OTB_SOURCE_DIR}/xdk")
 
@@ -107,18 +124,23 @@ set_dash_build_name()
 # Directory variable
 set ( CTEST_SOURCE_DIRECTORY "${OTB_SOURCE_DIR}" )
 set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/" )
-set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/" )
+# install in same directory as xdk to be able to produce
+# package afterwards
+set ( CTEST_INSTALL_DIRECTORY "${XDK_PATH}" )
 set ( PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}" )
 
 set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
+
+# For superbuild we need remote module 
+foreach(remote_module DiapOTBModule OTBTemporalGapFilling)#otbGRM #Mosaic # #SertitObject
+    set ( CONFIGURE_OPTIONS 
+      "${CONFIGURE_OPTIONS}-DModule_${remote_module}:BOOL=ON;")
+endforeach()
+
 # SuperBuild case : one more configure option
 set ( CONFIGURE_OPTIONS
   "${CONFIGURE_OPTIONS}-DCMAKE_PREFIX_PATH=${XDK_PATH};")
-
-# Hack because there is no more superbuild available (LIBKML)
-set ( CONFIGURE_OPTIONS
-  "${CONFIGURE_OPTIONS}-DOTB_USE_LIBKML:BOOL=OFF;" )
 
 # FIX ME this part might platform dependent
 set( GDAL_DATA "${XDK_PATH}/share/gdal" )
@@ -145,6 +167,11 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
+# Configure log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_cmake_error_log.txt" "${_configure_error}")
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
@@ -156,6 +183,14 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             CAPTURE_CMAKE_ERROR _build_error
             )
 
+# Build log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_return_value_log.txt" "${_build_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_cmake_error_log.txt" "${_build_error}")
+
+# SEND_ERROR if build error
+# FATAL_ERROR if build error?
 if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
@@ -166,8 +201,41 @@ ctest_test(PARALLEL_LEVEL 8
            CAPTURE_CMAKE_ERROR _test_error
            )
 
+# Test log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/test_return_value_log.txt" "${_test_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
+
 if ( NOT _test_rv EQUAL 0 )
   message( WARNING "Some tests have failed.")
 endif()
 
 ctest_submit()
+
+# We need to install OTB for package purposes
+set ( MAKE_COMMAND "make")
+execute_process(
+  COMMAND ${MAKE_COMMAND} "install"
+  WORKING_DIRECTORY ${CTEST_BINARY_DIRECTORY}
+  RESULT_VARIABLE install_rv
+  OUTPUT_VARIABLE install_out
+  ERROR_VARIABLE install_err
+  )
+
+if ( DEBUG )
+  message( "Install output")
+  message( "install_res = ${install_res}" )
+  message( "install_out = ${install_out}" )
+  message( "install_err = ${install_err}" )
+endif()
+
+# Install log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/install_out_log.txt" "${install_out}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${install_err}")
+
+if ( NOT install_rv EQUAL 0 )
+  message( SEND_ERROR "Install have failed.")
+endif()
