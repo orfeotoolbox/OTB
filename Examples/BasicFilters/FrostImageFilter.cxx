@@ -39,14 +39,14 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef unsigned char PixelType;
-  typedef otb::Image<PixelType, 2> InputImageType;
-  typedef otb::Image<PixelType, 2> OutputImageType;
+  using PixelType       = unsigned char;
+  using InputImageType  = otb::Image<PixelType, 2>;
+  using OutputImageType = otb::Image<PixelType, 2>;
 
   // The filter can be instantiated using the image types defined previously.
-  typedef otb::FrostImageFilter<InputImageType, OutputImageType> FilterType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using FilterType = otb::FrostImageFilter<InputImageType, OutputImageType>;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();

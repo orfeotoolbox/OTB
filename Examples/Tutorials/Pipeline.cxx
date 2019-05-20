@@ -42,19 +42,19 @@ int main(int argc, char* argv[])
   // is declared as an unsigned char (one byte) and the image is specified as
   // having two dimensions.
 
-  typedef otb::Image<unsigned char, 2> ImageType;
+  using ImageType = otb::Image<unsigned char, 2>;
 
   //  To read the image, we need an \doxygen{otb}{ImageFileReader}
   // which is templated with the image type.
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
   // Then, we need an \doxygen{otb}{ImageFileWriter}
   // also templated with the image type.
 
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer                     writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<ImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   // The filenames are passed as arguments to the program. We keep it
   // simple for now and we don't check their validity.

@@ -59,10 +59,10 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  using PathType = itk::PolyLineParametricPath<Dimension>;
 
-  typedef std::complex<double>                                  ComplexType;
-  typedef otb::ComplexMomentPathFunction<PathType, ComplexType> CMType;
+  using ComplexType = std::complex<double>;
+  using CMType      = otb::ComplexMomentPathFunction<PathType, ComplexType>;
 
   CMType::Pointer cmFunction = CMType::New();
 
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
   path->Initialize();
 
-  typedef PathType::ContinuousIndexType ContinuousIndexType;
+  using ContinuousIndexType = PathType::ContinuousIndexType;
 
   ContinuousIndexType cindex;
 

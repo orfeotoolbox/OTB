@@ -42,10 +42,10 @@ public:
   // Class declaration is followed by \code{ITK} public types for the class, the superclass and
   // smart pointers.
 
-  typedef ApplicationExample            Self;
-  typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ApplicationExample;
+  using Superclass   = Application;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   //  Following macros are necessary to respect ITK object factory mechanisms. Please report
   //  to \ref{sec:FilterConventions} for additional information.

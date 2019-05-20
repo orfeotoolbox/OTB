@@ -68,24 +68,24 @@ int main(int argc, char* argv[])
     unsigned int gi          = atoi(argv[7]);
     unsigned int bi          = atoi(argv[8]);
 
-    const unsigned int    Dimension = 2;
-    typedef double        PixelType;
-    typedef unsigned char OutPixelType;
+    const unsigned int Dimension = 2;
+    using PixelType              = double;
+    using OutPixelType           = unsigned char;
 
     //  The \doxygen{otb}{KullbackLeiblerProfileImageFilter} is templated over
     //  the types of the two input images and the type of the generated change
     //  image (which is now of multi-components), in a similar way as the
     //  \doxygen{otb}{KullbackLeiblerDistanceImageFilter}.
 
-    typedef otb::Image<PixelType, Dimension>                                              ImageType;
-    typedef otb::VectorImage<PixelType, Dimension>                                        VectorImageType;
-    typedef otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType> FilterType;
+    using ImageType       = otb::Image<PixelType, Dimension>;
+    using VectorImageType = otb::VectorImage<PixelType, Dimension>;
+    using FilterType      = otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType>;
 
-    typedef otb::VectorImage<OutPixelType, Dimension>                                   OutVectorImageType;
-    typedef otb::ImageFileReader<ImageType>                                             ReaderType;
-    typedef otb::ImageFileWriter<OutVectorImageType>                                    WriterType;
-    typedef otb::MultiChannelExtractROI<PixelType, PixelType>                           ChannelSelecterType;
-    typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, OutVectorImageType> RescalerType;
+    using OutVectorImageType  = otb::VectorImage<OutPixelType, Dimension>;
+    using ReaderType          = otb::ImageFileReader<ImageType>;
+    using WriterType          = otb::ImageFileWriter<OutVectorImageType>;
+    using ChannelSelecterType = otb::MultiChannelExtractROI<PixelType, PixelType>;
+    using RescalerType        = otb::VectorRescaleIntensityImageFilter<VectorImageType, OutVectorImageType>;
 
     ReaderType::Pointer reader1 = ReaderType::New();
     reader1->SetFileName(fileName1);

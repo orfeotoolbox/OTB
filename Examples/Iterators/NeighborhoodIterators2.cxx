@@ -63,12 +63,12 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  typedef float                           PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using PixelType  = float;
+  using ImageType  = otb::Image<PixelType, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
+  using NeighborhoodIteratorType = itk::ConstNeighborhoodIterator<ImageType>;
+  using IteratorType             = itk::ImageRegionIterator<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -130,11 +130,11 @@ int main(int argc, char* argv[])
   // and right of Figure~\ref{fig:NeighborhoodExamples1}. Note that x-direction
   // operator produces the same output image as in the previous example.
 
-  typedef unsigned char                        WritePixelType;
-  typedef otb::Image<WritePixelType, 2>        WriteImageType;
-  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  using WritePixelType = unsigned char;
+  using WriteImageType = otb::Image<WritePixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<WriteImageType>;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter<ImageType, WriteImageType>;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

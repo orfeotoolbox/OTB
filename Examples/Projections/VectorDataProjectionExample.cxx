@@ -51,15 +51,15 @@ int main(int argc, char* argv[])
   // Declare the vector data type that you would like to use in your
   // application.
 
-  typedef otb::VectorData<double> InputVectorDataType;
-  typedef otb::VectorData<double> OutputVectorDataType;
+  using InputVectorDataType  = otb::VectorData<double>;
+  using OutputVectorDataType = otb::VectorData<double>;
 
   // Declare and instantiate the vector data reader:
   // \doxygen{otb}{VectorDataFileReader}. The call to the
   // \code{UpdateOutputInformation()} method fill up the header information.
 
-  typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
-  VectorDataFileReaderType::Pointer                      reader = VectorDataFileReaderType::New();
+  using VectorDataFileReaderType           = otb::VectorDataFileReader<InputVectorDataType>;
+  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
@@ -69,9 +69,9 @@ int main(int argc, char* argv[])
   // pixels won't be read, only the header information using the
   // \code{UpdateOutputInformation()} method.
 
-  typedef otb::Image<unsigned short int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer                  imageReader = ImageReaderType::New();
+  using ImageType                      = otb::Image<unsigned short int, 2>;
+  using ImageReaderType                = otb::ImageFileReader<ImageType>;
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
@@ -80,8 +80,8 @@ int main(int argc, char* argv[])
   // to use it when you design applications reading or saving vector
   // data.
 
-  typedef otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType> VectorDataFilterType;
-  VectorDataFilterType::Pointer                                                      vectorDataProjection = VectorDataFilterType::New();
+  using VectorDataFilterType                         = otb::VectorDataProjectionFilter<InputVectorDataType, OutputVectorDataType>;
+  VectorDataFilterType::Pointer vectorDataProjection = VectorDataFilterType::New();
 
   // Information concerning the original projection of the vector data
   // will be automatically retrieved from the metadata. Nothing else
@@ -99,8 +99,8 @@ int main(int argc, char* argv[])
 
   // Finally, the result is saved into a new vector file.
 
-  typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
-  VectorDataFileWriterType::Pointer                       writer = VectorDataFileWriterType::New();
+  using VectorDataFileWriterType           = otb::VectorDataFileWriter<OutputVectorDataType>;
+  VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());
   writer->Update();

@@ -43,37 +43,37 @@ int main(int argc, char* argv[])
   const char* outputRGBFilename    = argv[2];
   const char* outputScaledFilename = argv[3];
 
-  typedef otb::Image<unsigned long, 2>                ImageType;
-  typedef otb::Image<itk::RGBPixel<unsigned char>, 2> RGBImageType;
+  using ImageType    = otb::Image<unsigned long, 2>;
+  using RGBImageType = otb::Image<itk::RGBPixel<unsigned char>, 2>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
   reader->SetFileName(inputFilename);
 
   // The UnaryFunctorImageFilter is the filter in charge of calling the functor
   // we specify to do the work for each pixel. Here it is the ScalarToRGBPixelFunctor
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                       ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                                        colormapper = ColorMapFilterType::New();
+  using ColorMapFunctorType               = itk::Functor::ScalarToRGBPixelFunctor<unsigned long>;
+  using ColorMapFilterType                = itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(reader->GetOutput());
 
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
-  WriterType::Pointer                        writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<RGBImageType>;
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputRGBFilename);
   writer->SetInput(colormapper->GetOutput());
 
   writer->Update();
 
   // The following is just to produce the input image for the software guide
-  typedef otb::Image<unsigned char, 2>                                 OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer                                                rescaler = RescalerType::New();
+  using OutputImageType          = otb::Image<unsigned char, 2>;
+  using RescalerType             = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
+  RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetInput(reader->GetOutput());
 
-  typedef otb::ImageFileWriter<OutputImageType> UCharWriterType;
-  UCharWriterType::Pointer                      writer2 = UCharWriterType::New();
+  using UCharWriterType            = otb::ImageFileWriter<OutputImageType>;
+  UCharWriterType::Pointer writer2 = UCharWriterType::New();
   writer2->SetFileName(outputScaledFilename);
   writer2->SetInput(rescaler->GetOutput());
   writer2->Update();

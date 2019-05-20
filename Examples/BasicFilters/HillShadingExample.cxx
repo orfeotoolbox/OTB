@@ -48,14 +48,14 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef double                                PixelType;
-  typedef unsigned char                         UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType>         RGBPixelType;
-  typedef otb::Image<PixelType, 2>              ImageType;
-  typedef otb::Image<RGBPixelType, 2>           RGBImageType;
-  typedef otb::Image<UCharPixelType, 2>         ScalarImageType;
-  typedef otb::ImageFileWriter<RGBImageType>    WriterType;
-  typedef otb::ImageFileWriter<ScalarImageType> ScalarWriterType;
+  using PixelType        = double;
+  using UCharPixelType   = unsigned char;
+  using RGBPixelType     = itk::RGBPixel<UCharPixelType>;
+  using ImageType        = otb::Image<PixelType, 2>;
+  using RGBImageType     = otb::Image<RGBPixelType, 2>;
+  using ScalarImageType  = otb::Image<UCharPixelType, 2>;
+  using WriterType       = otb::ImageFileWriter<RGBImageType>;
+  using ScalarWriterType = otb::ImageFileWriter<ScalarImageType>;
 
   ScalarWriterType::Pointer writer = ScalarWriterType::New();
   writer->SetFileName(argv[1]);
@@ -63,13 +63,13 @@ int main(int argc, char* argv[])
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetFileName(argv[2]);
 
-  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
+  using DEMToImageGeneratorType = otb::DEMToImageGenerator<ImageType>;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType    SizeType;
-  typedef DEMToImageGeneratorType::SpacingType SpacingType;
-  typedef DEMToImageGeneratorType::PointType   PointType;
+  using SizeType    = DEMToImageGeneratorType::SizeType;
+  using SpacingType = DEMToImageGeneratorType::SpacingType;
+  using PointType   = DEMToImageGeneratorType::PointType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[9]);
 
@@ -113,35 +113,35 @@ int main(int argc, char* argv[])
   // operations in its neighborhood. A convenient filter called \doxygen{otb}{HillShadingFilter}
   // is defined around this mechanism.
 
-  typedef otb::HillShadingFilter<ImageType, ImageType> HillShadingFilterType;
-  HillShadingFilterType::Pointer                       hillShading = HillShadingFilterType::New();
+  using HillShadingFilterType                = otb::HillShadingFilter<ImageType, ImageType>;
+  HillShadingFilterType::Pointer hillShading = HillShadingFilterType::New();
   hillShading->SetRadius(1);
   hillShading->SetInput(demToImage->GetOutput());
 
   hillShading->GetFunctor().SetXRes(res);
   hillShading->GetFunctor().SetYRes(res);
 
-  typedef itk::ShiftScaleImageFilter<ImageType, ScalarImageType> RescalerType;
-  RescalerType::Pointer                                          rescaler = RescalerType::New();
+  using RescalerType             = itk::ShiftScaleImageFilter<ImageType, ScalarImageType>;
+  RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetScale(255.0);
   rescaler->SetInput(hillShading->GetOutput());
 
   writer->SetInput(rescaler->GetOutput());
 
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                          colormapper = ColorMapFilterType::New();
+  using ColorMapFilterType                = itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
-  typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-  ColorMapFunctorType::Pointer                                         colormap = ColorMapFunctorType::New();
+  using ColorMapFunctorType             = otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType>;
+  ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
   colormap->SetMinimumInputValue(0);
   colormap->SetMaximumInputValue(4000);
   colormapper->SetColormap(colormap);
 
   colormapper->SetInput(demToImage->GetOutput());
 
-  typedef itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType, otb::Functor::HillShadeModulationFunctor<RGBPixelType, PixelType, RGBPixelType>>
-      MultiplyFilterType;
+  using MultiplyFilterType =
+      itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType, otb::Functor::HillShadeModulationFunctor<RGBPixelType, PixelType, RGBPixelType>>;
 
   MultiplyFilterType::Pointer multiply = MultiplyFilterType::New();
   multiply->SetInput1(colormapper->GetOutput());

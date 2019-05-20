@@ -32,10 +32,10 @@ int main(int, char* argv[])
   // Then, the image type should be defined by specifying the
   // type used to represent pixels and the dimensions of the image.
 
-  typedef unsigned char PixelType;
-  const unsigned int    Dimension = 2;
+  using PixelType              = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using ImageType = otb::Image<PixelType, Dimension>;
 
   // Using the image type, it is now possible to instantiate the image reader
   // class. The image type is used as a template parameter to define how the
@@ -51,7 +51,7 @@ int main(int, char* argv[])
   // \index{otb::ImageFileReader!Instantiation}
   // \index{otb::Image!read}
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
   // The reader type can now be used to create one reader object.  A
   // \doxygen{itk}{SmartPointer} (defined by the \code{::Pointer}

@@ -53,16 +53,16 @@ int main(int argc, char* argv[])
   // writing the images. The BandMathImageFilter class
   // works with Image as input, so we need to define additional
   // filters to extract each layer of the multispectral image.
-  typedef double                                                           PixelType;
-  typedef otb::VectorImage<PixelType, 2>                                   InputImageType;
-  typedef otb::Image<PixelType, 2>                                         OutputImageType;
-  typedef otb::ImageList<OutputImageType>                                  ImageListType;
-  typedef otb::VectorImageToImageListFilter<InputImageType, ImageListType> VectorImageToImageListType;
-  typedef otb::ImageFileReader<InputImageType>                             ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
+  using PixelType                  = double;
+  using InputImageType             = otb::VectorImage<PixelType, 2>;
+  using OutputImageType            = otb::Image<PixelType, 2>;
+  using ImageListType              = otb::ImageList<OutputImageType>;
+  using VectorImageToImageListType = otb::VectorImageToImageListFilter<InputImageType, ImageListType>;
+  using ReaderType                 = otb::ImageFileReader<InputImageType>;
+  using WriterType                 = otb::ImageFileWriter<OutputImageType>;
 
   // We can now define the type for the filter
-  typedef otb::BandMathImageFilter<OutputImageType> FilterType;
+  using FilterType = otb::BandMathImageFilter<OutputImageType>;
 
   // We instantiate the filter, the reader, and the writer
   ReaderType::Pointer reader = ReaderType::New();
@@ -107,11 +107,12 @@ int main(int argc, char* argv[])
   writer->Update();
 
   // The muParser library also provides the possibility to extend existing built-in functions. For example,
-  // you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be "if(ndvi(b3, b4)>0.4, 255, 0)", which would return the same result.
+  // you can use the OTB expression "ndvi(b3, b4)" with the filter. In this instance, the mathematical expression would be "if(ndvi(b3, b4)>0.4, 255, 0)", which
+  // would return the same result.
 
-  typedef otb::Image<unsigned char, 2>                                 OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                  PrettyImageFileWriterType;
-  typedef itk::CastImageFilter<OutputImageType, OutputPrettyImageType> CastImageFilterType;
+  using OutputPrettyImageType     = otb::Image<unsigned char, 2>;
+  using PrettyImageFileWriterType = otb::ImageFileWriter<OutputPrettyImageType>;
+  using CastImageFilterType       = itk::CastImageFilter<OutputImageType, OutputPrettyImageType>;
 
   PrettyImageFileWriterType::Pointer prettyWriter = PrettyImageFileWriterType::New();
   CastImageFilterType::Pointer       caster       = CastImageFilterType::New();

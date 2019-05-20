@@ -28,7 +28,7 @@
 
 int main()
 {
-  typedef otb::Image<unsigned short, 2> ImageType;
+  using ImageType = otb::Image<unsigned short, 2>;
 
   ImageType::Pointer image = ImageType::New();
 
