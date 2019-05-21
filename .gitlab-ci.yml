@@ -167,7 +167,7 @@ stages:
   artifacts:
     when: always
     paths:
-      - pakages-*.run
+      - packages-*.run
 
 ub-build:
   extends: .test
