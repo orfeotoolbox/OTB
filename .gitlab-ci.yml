@@ -172,6 +172,9 @@ stages:
 ub-build:
   extends: .test
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+    before_script:
+    - echo "No clone"
+    - mkdir otb
   script:
     - touch packages-ub.run
 
