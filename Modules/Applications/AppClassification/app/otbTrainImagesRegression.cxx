@@ -479,7 +479,7 @@ private:
   std::string m_FeaturePrefix = "value_";
 
   /** Container containing the list of temporary files created during the execution*/
-  std::map<std::string, std::vector<std::string>> m_FileHandler;
+  std::unordered_map<std::string, std::vector<std::string>> m_FileHandler;
 };
 
 } // end namespace Wrapper
