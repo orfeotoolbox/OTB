@@ -46,24 +46,24 @@ stages:
 #     - ccache -s
 
 
-.common-build:
-  extends: .general
-  only: [merge_requests]
-  stage: build
-  before_script:
-    - git lfs install --skip-repo
-    # Provision efficiently the local LFS cache before checkout
-    - git lfs fetch origin $CI_COMMIT_SHA
-    # Checkout the expected branch
-    - git checkout -f -q $CI_COMMIT_SHA
-  after_script:
-    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
-  artifacts:
-    when: on_failure
-    expire_in: 24 hrs
-    paths:
-      - build/*/*.log #CMake log
-      - log/*.txt # Others
+# .common-build:
+#   extends: .general
+#   only: [merge_requests]
+#   stage: build
+#   before_script:
+#     - git lfs install --skip-repo
+#     # Provision efficiently the local LFS cache before checkout
+#     - git lfs fetch origin $CI_COMMIT_SHA
+#     # Checkout the expected branch
+#     - git checkout -f -q $CI_COMMIT_SHA
+#   after_script:
+#     - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
+#   artifacts:
+#     when: on_failure
+#     expire_in: 24 hrs
+#     paths:
+#       - build/*/*.log #CMake log
+#       - log/*.txt # Others
 
 # debian-build:
   # extends: .common-build
@@ -82,21 +82,21 @@ stages:
       # - build/Documentation/Cookbook/latex/CookBook-*.pdf
       # - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
-.common-prepare:
-  extends: .general
-  only: [merge_requests]
-  stage: prepare
-  before_script:
-    - git checkout -f -q $CI_COMMIT_SHA
-    - git lfs install --skip-repo
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
-  artifacts:
-    expire_in: 24 hrs
-    when: always
-    paths:
-      - sb_branch.txt # Needed to checkout correct branch in build step
-      - build/*/*/*/*.log # Superbuild log
+# .common-prepare:
+#   extends: .general
+#   only: [merge_requests]
+#   stage: prepare
+#   before_script:
+#     - git checkout -f -q $CI_COMMIT_SHA
+#     - git lfs install --skip-repo
+#     - git config --global user.email "otbbot@orfeo-toolbox.org"
+#     - git config --global user.name "otbbot"
+#   artifacts:
+#     expire_in: 24 hrs
+#     when: always
+#     paths:
+#       - sb_branch.txt # Needed to checkout correct branch in build step
+#       - build/*/*/*/*.log # Superbuild log
 
 ## Ubuntu superbuild
 # ubuntu-superbuild-prepare:
@@ -158,6 +158,7 @@ stages:
 #Test build for deployement job
 # Ub
 .test:
+  extends: .general
   stage: build
   before_script:
     - echo "No clone"
@@ -185,6 +186,7 @@ deploy:
   tags:
     - deploy
   image: debian:stable-slim
+  stage: deploy
   dependencies:
     - mac-build
     - ub-build
