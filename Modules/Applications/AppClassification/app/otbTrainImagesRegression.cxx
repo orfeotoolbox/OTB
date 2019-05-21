@@ -101,7 +101,6 @@ private:
     SetOfficialDocLink();
   }
 
-protected:
   /** Holds sampling parameters specific to training or validation */
   struct SamplingParameters
   {
@@ -379,7 +378,6 @@ protected:
     ExecuteInternal("training");
   }
 
-private:
   void DoUpdateParameters() override
   {
   }
