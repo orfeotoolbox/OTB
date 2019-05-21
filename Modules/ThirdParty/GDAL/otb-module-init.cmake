@@ -174,7 +174,7 @@ if (GDAL_HAS_JP2OpenJPEG)
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2OpenJPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2OpenJPEG)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
+gdal_try_run_c(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
 if (GDAL_HAS_JP2KAK)
   set(JPEG2000_DRIVER_USED "Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2KAK gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2KAK)
