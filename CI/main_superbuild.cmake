@@ -208,7 +208,7 @@ file ( WRITE
   "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
 
 if ( NOT _test_rv EQUAL 0 )
-  message( WARNING "Some tests have failed.")
+  message( SEND_ERROR "Some tests have failed.")
 endif()
 
 ctest_submit()
