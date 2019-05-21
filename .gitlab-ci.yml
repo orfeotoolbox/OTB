@@ -172,8 +172,6 @@ stages:
 ub-build:
   extends: .test
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  before_script:
-    - git checkout -f -q $CI_COMMIT_SHA
   script:
     - touch packages-ub.run
 
@@ -199,6 +197,5 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
-    - pwd
-    - ls -all
+    - scp -r packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
 
