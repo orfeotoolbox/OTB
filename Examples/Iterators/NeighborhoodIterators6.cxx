@@ -74,16 +74,16 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  typedef float                                PixelType;
-  typedef otb::Image<PixelType, 2>             ImageType;
-  typedef itk::NeighborhoodIterator<ImageType> NeighborhoodIteratorType;
+  using PixelType                = float;
+  using ImageType                = otb::Image<PixelType, 2>;
+  using NeighborhoodIteratorType = itk::NeighborhoodIterator<ImageType>;
 
-  typedef itk::FastMarchingImageFilter<ImageType, ImageType> FastMarchingFilterType;
+  using FastMarchingFilterType = itk::FastMarchingImageFilter<ImageType, ImageType>;
 
   FastMarchingFilterType::Pointer fastMarching = FastMarchingFilterType::New();
 
-  typedef FastMarchingFilterType::NodeContainer NodeContainer;
-  typedef FastMarchingFilterType::NodeType      NodeType;
+  using NodeContainer = FastMarchingFilterType::NodeContainer;
+  using NodeType      = FastMarchingFilterType::NodeType;
 
   NodeContainer::Pointer seeds = NodeContainer::New();
 
@@ -217,11 +217,11 @@ int main(int argc, char* argv[])
   // noise in the image is seen as small perturbations in each path. }
   // \protect\label{fig:NeighborhoodExample6} \end{figure}
 
-  typedef unsigned char                        WritePixelType;
-  typedef otb::Image<WritePixelType, 2>        WriteImageType;
-  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  using WritePixelType = unsigned char;
+  using WriteImageType = otb::Image<WritePixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<WriteImageType>;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter<ImageType, WriteImageType>;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

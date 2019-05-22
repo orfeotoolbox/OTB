@@ -73,12 +73,12 @@ int main(int argc, char* argv[])
   // We start by declaring the types for the two input images, the
   // change image and the image to be stored in a file for visualization.
 
-  typedef float                                    InternalPixelType;
-  typedef unsigned char                            OutputPixelType;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
-  typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
-  typedef otb::Image<OutputPixelType, Dimension>   OutputImageType;
+  using InternalPixelType = float;
+  using OutputPixelType   = unsigned char;
+  using InputImageType1   = otb::Image<InternalPixelType, Dimension>;
+  using InputImageType2   = otb::Image<InternalPixelType, Dimension>;
+  using ChangeImageType   = otb::Image<InternalPixelType, Dimension>;
+  using OutputImageType   = otb::Image<OutputPixelType, Dimension>;
 
   //  We can now declare the types for the readers. Since the images
   //  can be vey large, we will force the pipeline to use
@@ -86,9 +86,9 @@ int main(int argc, char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
-  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType1 = otb::ImageFileReader<InputImageType1>;
+  using ReaderType2 = otb::ImageFileReader<InputImageType2>;
+  using WriterType  = otb::ImageFileWriter<OutputImageType>;
 
 
   //  The change detector will give a normalized result between 0 and
@@ -96,14 +96,14 @@ int main(int argc, char* argv[])
   //  rescale the results of the change detection in order to use all
   //  the output pixel type range of values.
 
-  typedef itk::ShiftScaleImageFilter<ChangeImageType, OutputImageType> RescalerType;
+  using RescalerType = itk::ShiftScaleImageFilter<ChangeImageType, OutputImageType>;
 
 
   //  The \doxygen{otb}{MeanRatioImageFilter} is templated over
   //  the types of the two input images and the type of the generated change
   //  image.
 
-  typedef otb::MeanRatioImageFilter<InputImageType1, InputImageType2, ChangeImageType> FilterType;
+  using FilterType = otb::MeanRatioImageFilter<InputImageType1, InputImageType2, ChangeImageType>;
 
 
   //  The different elements of the pipeline can now be instantiated.
@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
   rescaler->SetInput(filter->GetOutput());
   writer->SetInput(rescaler->GetOutput());
 
-  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  using CommandType = otb::CommandProgressUpdate<FilterType>;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);

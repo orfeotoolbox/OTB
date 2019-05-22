@@ -63,18 +63,18 @@ int main(int argc, char* argv[])
   // scalar image of float pixels. We also define the corresponding
   // image reader.
 
-  typedef float                           RealType;
-  typedef otb::Image<RealType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using RealType   = float;
+  using ImageType  = otb::Image<RealType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
   // The SURF descriptors will be stored in a point set containing the
   // vector of features.
 
-  typedef itk::VariableLengthVector<RealType>      RealVectorType;
-  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
+  using RealVectorType = itk::VariableLengthVector<RealType>;
+  using PointSetType   = itk::PointSet<RealVectorType, Dimension>;
   // The SURF filter itself is templated over the input image and the
   // generated point set.
 
-  typedef otb::ImageToSURFKeyPointSetFilter<ImageType, PointSetType> ImageToFastSURFKeyPointSetFilterType;
+  using ImageToFastSURFKeyPointSetFilterType = otb::ImageToSURFKeyPointSetFilter<ImageType, PointSetType>;
   // We instantiate the reader.
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -94,10 +94,10 @@ int main(int argc, char* argv[])
   // input image. In order to do this, we will create the following RGB
   // image and the corresponding writer:
 
-  typedef unsigned char                         PixelType;
-  typedef itk::RGBPixel<PixelType>              RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>           OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using PixelType       = unsigned char;
+  using RGBPixelType    = itk::RGBPixel<PixelType>;
+  using OutputImageType = otb::Image<RGBPixelType, 2>;
+  using WriterType      = otb::ImageFileWriter<OutputImageType>;
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
   // We set the regions of the image by copying the information from the
@@ -136,8 +136,8 @@ int main(int argc, char* argv[])
   // going to walk through using an iterator. These are the types needed
   // for this task:
 
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
+  using PointsContainerType = PointSetType::PointsContainer;
+  using PointsIteratorType  = PointsContainerType::Iterator;
   // We set the iterator to the beginning of the point set.
 
   PointsIteratorType pIt = filter->GetOutput()->GetPoints()->Begin();

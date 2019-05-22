@@ -63,9 +63,9 @@ int main(int argc, char* argv[])
   //  do:
   //
 
-  typedef unsigned short                         PixelType;
-  const unsigned int                             Dimension = 2;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  using PixelType              = unsigned short;
+  const unsigned int Dimension = 2;
+  using ImageType              = otb::VectorImage<PixelType, Dimension>;
 
   //  We can now instantiate the types of the reader and writer. These two
   //  classes are parameterized over the image type.
@@ -73,8 +73,8 @@ int main(int argc, char* argv[])
   //  \index{otb::ImageFileReader!Instantiation}
   //  \index{otb::ImageFileWriter!Instantiation}
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   //  Then, we create one object of each type using the New() method and
   //  assigning the result to a \doxygen{itk}{SmartPointer}.

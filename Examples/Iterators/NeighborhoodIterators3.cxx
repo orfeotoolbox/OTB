@@ -67,12 +67,12 @@ int main(int argc, char* argv[])
     return -1;
   }
 
-  typedef float                           PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using PixelType  = float;
+  using ImageType  = otb::Image<PixelType, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
+  using NeighborhoodIteratorType = itk::ConstNeighborhoodIterator<ImageType>;
+  using IteratorType             = itk::ImageRegionIterator<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -103,7 +103,7 @@ int main(int argc, char* argv[])
   // created to hold the regions that will later on be returned by the face
   // calculator.
 
-  typedef itk::NeighborhoodAlgorithm ::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
+  using FaceCalculatorType = itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>;
 
   FaceCalculatorType               faceCalculator;
   FaceCalculatorType::FaceListType faceList;
@@ -161,11 +161,11 @@ int main(int argc, char* argv[])
   // face pixels, there is a corresponding increase in efficiency from disabling
   // bounds checking on interior pixels.
 
-  typedef unsigned char                        WritePixelType;
-  typedef otb::Image<WritePixelType, 2>        WriteImageType;
-  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  using WritePixelType = unsigned char;
+  using WriteImageType = otb::Image<WritePixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<WriteImageType>;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter<ImageType, WriteImageType>;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

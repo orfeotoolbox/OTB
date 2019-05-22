@@ -146,8 +146,8 @@ private:
       "  - mean\n"
       "  - var\n"
       "  - median\n"
-      "  - min\n"
-      "  - max\n"
+      "  - vmin\n"
+      "  - vmax\n"
       "  - etc.\n\n"
 
       "For instance, if ``im1`` represents the pixel of a 3 bands image::\n\n"
@@ -197,7 +197,7 @@ private:
       "into a unique multiband output image."
     );
     SetDocAuthors( "OTB-Team" );
-    SetDocSeeAlso("[1] http://articles.beltoforion.de/article.php?a=muparserx\n\n"
+    SetDocSeeAlso("[1] https://beltoforion.de/article.php?a=muparserx\n\n"
       "[2] BandMath");
     AddDocTag(Tags::Manip);
 

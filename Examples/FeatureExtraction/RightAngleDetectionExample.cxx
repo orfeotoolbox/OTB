@@ -53,12 +53,12 @@ int main(int argc, char* argv[])
   double      angleThreshold           = atof(argv[3]);
   double      distanceThreshold        = atof(argv[4]);
 
-  const unsigned int    Dimension = 2;
-  typedef unsigned char PixelType;
-  typedef double        PrecisionType;
+  const unsigned int Dimension = 2;
+  using PixelType              = unsigned char;
+  using PrecisionType          = double;
 
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  using ImageType  = otb::Image<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
   auto reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -70,20 +70,20 @@ int main(int argc, char* argv[])
   // to store the detected lines which will be provided by the line
   // segment detector.
 
-  typedef otb::VectorData<PrecisionType> VectorDataType;
+  using VectorDataType = otb::VectorData<PrecisionType>;
   // The right angle detector's output is a vector data where each point
   // gives the coordinate of the detected angle.
   //
   // Next, We define the type for the line segment detector. A detailed
   // example for this detector can be found in section \ref{sec:LSD}.
 
-  typedef otb::LineSegmentDetector<ImageType, PrecisionType> LsdFilterType;
+  using LsdFilterType = otb::LineSegmentDetector<ImageType, PrecisionType>;
 
   // We can finally define the type for the right angle detection
   // filter. This filter is templated over the input vector data type
   // provided by the line segment detector.
 
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType> RightAngleFilterType;
+  using RightAngleFilterType = otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>;
 
   // We instantiate the line segment detector and the right angle detector.
 
@@ -101,7 +101,7 @@ int main(int argc, char* argv[])
   rightAngleFilter->SetAngleThreshold(angleThreshold);
   rightAngleFilter->SetDistanceThreshold(distanceThreshold);
 
-  typedef otb::VectorDataFileWriter<LsdFilterType::VectorDataType> WriterType;
+  using WriterType = otb::VectorDataFileWriter<LsdFilterType::VectorDataType>;
 
   auto rightAngleWriter = WriterType::New();
 

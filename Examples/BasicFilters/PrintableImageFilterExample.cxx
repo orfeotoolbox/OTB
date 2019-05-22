@@ -50,20 +50,20 @@ int main(int argc, char* argv[])
   int         greenChannelNumber = atoi(argv[4]);
   int         blueChannelNumber  = atoi(argv[5]);
 
-  typedef double     InputPixelType;
+  using InputPixelType         = double;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  using InputImageType = otb::VectorImage<InputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
 
   // To easily convert the image to a printable format, i.e. 3 bands
   // unsigned char value, you can use the PrintableImageFilter.
-  typedef otb::PrintableImageFilter<InputImageType> PrintableFilterType;
-  PrintableFilterType::Pointer                      printableImageFilter = PrintableFilterType::New();
+  using PrintableFilterType                         = otb::PrintableImageFilter<InputImageType>;
+  PrintableFilterType::Pointer printableImageFilter = PrintableFilterType::New();
 
   printableImageFilter->SetInput(reader->GetOutput());
   printableImageFilter->SetChannel(redChannelNumber);
@@ -72,8 +72,8 @@ int main(int argc, char* argv[])
 
   // When you create the writer to plug at the output of the printableImageFilter
   // you may want to use the direct type definition as it is a good way to avoid mismatch:
-  typedef PrintableFilterType::OutputImageType  OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using OutputImageType = PrintableFilterType::OutputImageType;
+  using WriterType      = otb::ImageFileWriter<OutputImageType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);

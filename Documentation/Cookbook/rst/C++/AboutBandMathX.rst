@@ -70,8 +70,6 @@ Variables and their descriptions:
 | im1PhyX and im1PhyY   | spacing of first input in X and Y directions                                         | Scalar   |
 +-----------------------+--------------------------------------------------------------------------------------+----------+
 
-[variables]
-
 In addition, we also have the generic variables idxX and idxY that
 represent the indices of the current pixel (scalars).
 
@@ -82,8 +80,6 @@ the concerned input images, without user intervention.
 For instance, the following formula (addition of two pixels)
 
 .. math:: im1+im2
-
-[firstequation]
 
 is correct only if the two first inputs have the same number of bands.
 In addition, the following formula is not consistent even if im1
@@ -165,7 +161,6 @@ For instance, im1b3N3x5 represents the following neighbourhood:
 | .   | .   | .   |
 +-----+-----+-----+
 
-[correctness]
 
 Fundamentally, a neighbourhood is represented as a matrix inside the
 muParserX framework; so the remark about mathematically well-defined
@@ -188,7 +183,7 @@ BandMathImageFilterX. These ones can be divided into two categories.
 
 Concerning the last category, here is a list of implemented operators or
 functions (they are all implemented in otbParserXPlugins.h/.cxx files
--OTB/Code/Common-):
+`OTB/Modules/Filtering/MathParserX`):
 
 **Operators div and dv** The first operator allows the definition of an
 element-wise division of two vectors (and even matrices), provided that
@@ -230,7 +225,7 @@ produces a vector of 4 components made of band 1, band 2, band 1 and
 band 1 values from the first input. Note that curly brackets must be
 used in order to select the desired band indices.
 
-** Function dotpr ** This function allows the dot product between two
+**Function dotpr** This function allows the dot product between two
 vectors or matrices (actually in our case, a kernel and a neighbourhood
 of pixels):
 
@@ -278,7 +273,7 @@ instance:
 .. math:: maj(im1b1N3x3,im1b2N3x3)
 
 **Function vmin and vmax** These functions calculate the min or
-max value of a given vector or neighborhood (only one input). For
+max value of a given vector or neighborhood (only one input, the output is a 1x1 matrix). For
 instance:
 
 .. math:: (vmax(im3b1N3x5)+vmin(im3b1N3x5)) ~ div ~ \{2.0\}
@@ -365,8 +360,8 @@ Functions and operators summary:
 +----------------+-------------------------------------------------------------------------------+
 | vsqrt          | adapation of an existing function to vectors: one input                       |
 +----------------+-------------------------------------------------------------------------------+
-
-[variables]
+| vect2scal      | one dimensional vector to scalar                                              |
++----------------+-------------------------------------------------------------------------------+
 
 .. _API: 
 
@@ -453,11 +448,6 @@ defines the kernel1, whose elements are given as follows:
 +-------+-------+-------+
 | 1,3   | 1,4   | 1,5   |
 +-------+-------+-------+
-
-Definition of kernel1.
-
-
-[correctness]
 
 ::
 

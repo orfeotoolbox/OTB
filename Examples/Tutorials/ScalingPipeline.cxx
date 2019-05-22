@@ -49,11 +49,11 @@ int main(int argc, char* argv[])
   //  We need to declare two different image types, one for the internal
   // processing and one to output the results:
 
-  typedef double                   PixelType;
-  typedef otb::Image<PixelType, 2> ImageType;
+  using PixelType = double;
+  using ImageType = otb::Image<PixelType, 2>;
 
-  typedef unsigned char                  OutputPixelType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  using OutputPixelType = unsigned char;
+  using OutputImageType = otb::Image<OutputPixelType, 2>;
 
   //  We declare the reader with the image template using the pixel type
   // double. It is worth noticing that this instantiation does not imply
@@ -63,11 +63,11 @@ int main(int argc, char* argv[])
   //  The writer is templated with the unsigned char image to be able to save
   // the result on one byte images (like png for example).
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  WriterType::Pointer                           writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<OutputImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
   // Now we are declaring the edge detection filter which is going to work with
   // double input and output.
 
-  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> FilterType;
-  FilterType::Pointer                                              filter = FilterType::New();
+  using FilterType           = itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>;
+  FilterType::Pointer filter = FilterType::New();
 
   // Here comes the interesting part: we declare the
   // \doxygen{itk}{RescaleIntensityImageFilter}. The input
@@ -91,8 +91,8 @@ int main(int argc, char* argv[])
   // This filter will actually rescale all the pixels of
   // the image but also cast the type of these pixels.
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer                                                rescaler = RescalerType::New();
+  using RescalerType             = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
+  RescalerType::Pointer rescaler = RescalerType::New();
 
   rescaler->SetOutputMinimum(0);
   rescaler->SetOutputMaximum(255);

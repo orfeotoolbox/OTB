@@ -64,26 +64,26 @@ int main(int argc, char** argv)
 
   const unsigned int ImageDimension = 2;
 
-  typedef double                              PixelType;
-  typedef itk::Vector<double, ImageDimension> DisplacementPixelType;
+  using PixelType             = double;
+  using DisplacementPixelType = itk::Vector<double, ImageDimension>;
 
-  typedef unsigned char                               OutputPixelType;
-  typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
+  using OutputPixelType = unsigned char;
+  using OutputImageType = otb::Image<OutputPixelType, ImageDimension>;
 
   // Several type of \doxygen{otb}{Image} are required to represent the reference image (fixed)
   // the image we want to register (moving) and the deformation field.
 
   // Allocate Images
-  typedef otb::Image<PixelType, ImageDimension>             MovingImageType;
-  typedef otb::Image<PixelType, ImageDimension>             FixedImageType;
-  typedef otb::Image<DisplacementPixelType, ImageDimension> DisplacementFieldType;
+  using MovingImageType       = otb::Image<PixelType, ImageDimension>;
+  using FixedImageType        = otb::Image<PixelType, ImageDimension>;
+  using DisplacementFieldType = otb::Image<DisplacementPixelType, ImageDimension>;
 
-  typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
-  FixedReaderType::Pointer                     fReader = FixedReaderType::New();
+  using FixedReaderType            = otb::ImageFileReader<FixedImageType>;
+  FixedReaderType::Pointer fReader = FixedReaderType::New();
   fReader->SetFileName(argv[1]);
 
-  typedef otb::ImageFileReader<MovingImageType> MovingReaderType;
-  MovingReaderType::Pointer                     mReader = MovingReaderType::New();
+  using MovingReaderType            = otb::ImageFileReader<MovingImageType>;
+  MovingReaderType::Pointer mReader = MovingReaderType::New();
   mReader->SetFileName(argv[2]);
 
   // To make the correlation estimation more robust, the first
@@ -91,13 +91,13 @@ int main(int argc, char** argv)
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
 
   // Blur input images
-  typedef itk::RecursiveGaussianImageFilter<FixedImageType, FixedImageType> FixedBlurType;
+  using FixedBlurType = itk::RecursiveGaussianImageFilter<FixedImageType, FixedImageType>;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
   fBlur->SetSigma(std::stof(argv[7]));
 
-  typedef itk::RecursiveGaussianImageFilter<MovingImageType, MovingImageType> MovingBlurType;
+  using MovingBlurType = itk::RecursiveGaussianImageFilter<MovingImageType, MovingImageType>;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
   // Now, we need to instantiate the NCCRegistrationFilter which is going to perform the registration:
 
   // Create the filter
-  typedef otb::NCCRegistrationFilter<FixedImageType, MovingImageType, DisplacementFieldType> RegistrationFilterType;
+  using RegistrationFilterType = otb::NCCRegistrationFilter<FixedImageType, MovingImageType, DisplacementFieldType>;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
@@ -117,7 +117,7 @@ int main(int argc, char** argv)
   // \begin{itemize}
   // \item The area where the search is performed. This area is defined by its radius:
 
-  typedef RegistrationFilterType::RadiusType RadiusType;
+  using RadiusType = RegistrationFilterType::RadiusType;
 
   RadiusType radius;
 
@@ -140,20 +140,20 @@ int main(int argc, char** argv)
   // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType, MovingImageType> ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer                                                       channelExtractor = ChannelExtractionFilterType::New();
+  using ChannelExtractionFilterType                     = otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType, MovingImageType>;
+  ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(registrator->GetOutput());
   channelExtractor->SetChannel(1);
 
-  typedef itk::RescaleIntensityImageFilter<MovingImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer                                                      fieldRescaler = RescalerType::New();
+  using RescalerType                  = itk::RescaleIntensityImageFilter<MovingImageType, OutputImageType>;
+  RescalerType::Pointer fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
 
-  typedef otb::ImageFileWriter<OutputImageType> DFWriterType;
+  using DFWriterType = otb::ImageFileWriter<OutputImageType>;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
@@ -164,8 +164,8 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<MovingImageType, MovingImageType, DisplacementFieldType> WarperType;
-  WarperType::Pointer                                                                   warper = WarperType::New();
+  using WarperType           = itk::WarpImageFilter<MovingImageType, MovingImageType, DisplacementFieldType>;
+  WarperType::Pointer warper = WarperType::New();
 
   MovingImageType::PixelType padValue = 4.0;
 
@@ -173,11 +173,11 @@ int main(int argc, char** argv)
   warper->SetDisplacementField(registrator->GetOutput());
   warper->SetEdgePaddingValue(padValue);
 
-  typedef itk::CastImageFilter<MovingImageType, OutputImageType> CastFilterType;
-  CastFilterType::Pointer                                        caster = CastFilterType::New();
+  using CastFilterType           = itk::CastImageFilter<MovingImageType, OutputImageType>;
+  CastFilterType::Pointer caster = CastFilterType::New();
   caster->SetInput(warper->GetOutput());
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[5]);

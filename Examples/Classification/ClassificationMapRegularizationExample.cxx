@@ -47,14 +47,14 @@ int main(int itkNotUsed(argc), char* argv[])
   // single band input image for which each pixel value is a label coded
   // on 8 bits as an integer between 0 and 255.
 
-  typedef unsigned char IOLabelPixelType; // 8 bits
-  const unsigned int    Dimension = 2;
+  using IOLabelPixelType       = unsigned char; // 8 bits
+  const unsigned int Dimension = 2;
 
   // Thus, both input and output images are single band labeled images,
   // which are composed of the same type of pixels in this example
   // (unsigned char).
 
-  typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
+  using IOLabelImageType = otb::Image<IOLabelPixelType, Dimension>;
 
 
   // We can now define the type for the neighborhood majority voting filter,
@@ -65,7 +65,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // (\doxygen{itk}{BinaryBallStructuringElement}).
 
   // Neighborhood majority voting filter type
-  typedef otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType> NeighborhoodMajorityVotingFilterType;
+  using NeighborhoodMajorityVotingFilterType = otb::NeighborhoodMajorityVotingImageFilter<IOLabelImageType>;
 
 
   // Since the \doxygen{otb}{NeighborhoodMajorityVotingImageFilter} is a
@@ -77,14 +77,14 @@ int main(int itkNotUsed(argc), char* argv[])
   // structuring elements such as ovals.
 
   // Binary ball Structuring Element type
-  typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
-  typedef StructuringType::RadiusType                      RadiusType;
+  using StructuringType = NeighborhoodMajorityVotingFilterType::KernelType;
+  using RadiusType      = StructuringType::RadiusType;
 
 
   // Finally, we define the reader and the writer.
 
-  typedef otb::ImageFileReader<IOLabelImageType> ReaderType;
-  typedef otb::ImageFileWriter<IOLabelImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<IOLabelImageType>;
+  using WriterType = otb::ImageFileWriter<IOLabelImageType>;
 
 
   const char* inputFileName  = argv[1];

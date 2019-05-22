@@ -74,13 +74,13 @@ int main(int argc, char* argv[])
     // considered for the templated \code{MeasurementVectorType}, which
     // will be used in the \code{ListSample} interface.
 
-    typedef double PixelType;
+    using PixelType = double;
 
-    typedef otb::VectorImage<PixelType, 2>  ImageType;
-    typedef otb::ImageFileReader<ImageType> ReaderType;
+    using ImageType  = otb::VectorImage<PixelType, 2>;
+    using ReaderType = otb::ImageFileReader<ImageType>;
 
-    typedef otb::Image<unsigned char, 2>          OutputImageType;
-    typedef otb::ImageFileWriter<OutputImageType> WriterType;
+    using OutputImageType = otb::Image<unsigned char, 2>;
+    using WriterType      = otb::ImageFileWriter<OutputImageType>;
 
     char*  fileNameIn           = argv[1];
     char*  fileNameImgInit      = nullptr;
@@ -97,8 +97,8 @@ int main(int argc, char* argv[])
     // Once the input image is opened, the classifier may be initialised by
     // \code{SmartPointer}.
 
-    typedef otb::SEMClassifier<ImageType, OutputImageType> ClassifType;
-    ClassifType::Pointer                                   classifier = ClassifType::New();
+    using ClassifType               = otb::SEMClassifier<ImageType, OutputImageType>;
+    ClassifType::Pointer classifier = ClassifType::New();
 
     //  Then, it follows, classical initializations of the pipeline.
 
@@ -115,8 +115,8 @@ int main(int argc, char* argv[])
 
     if (fileNameImgInit != nullptr)
     {
-      typedef otb::ImageFileReader<OutputImageType> ImgInitReaderType;
-      ImgInitReaderType::Pointer                    segReader = ImgInitReaderType::New();
+      using ImgInitReaderType              = otb::ImageFileReader<OutputImageType>;
+      ImgInitReaderType::Pointer segReader = ImgInitReaderType::New();
       segReader->SetFileName(fileNameImgInit);
       segReader->Update();
       classifier->SetClassLabels(segReader->GetOutput());
@@ -131,8 +131,8 @@ int main(int argc, char* argv[])
 
     std::cerr << "Explicit component initialization\n";
 
-    typedef ClassifType::ClassSampleType                             ClassSampleType;
-    typedef otb::Statistics::GaussianModelComponent<ClassSampleType> GaussianType;
+    using ClassSampleType = ClassifType::ClassSampleType;
+    using GaussianType    = otb::Statistics::GaussianModelComponent<ClassSampleType>;
 
     for (int i = 0; i < numberOfClasses; ++i)
     {
@@ -164,8 +164,8 @@ int main(int argc, char* argv[])
     // classes before saving it to a file. We will use the
     // \doxygen{itk}{RescaleIntensityImageFilter} for this purpose.
 
-    typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType> RescalerType;
-    RescalerType::Pointer                                                      rescaler = RescalerType::New();
+    using RescalerType             = itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType>;
+    RescalerType::Pointer rescaler = RescalerType::New();
 
     rescaler->SetOutputMinimum(itk::NumericTraits<unsigned char>::min());
     rescaler->SetOutputMaximum(itk::NumericTraits<unsigned char>::max());
