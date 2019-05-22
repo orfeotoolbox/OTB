@@ -175,6 +175,7 @@ ub-build:
   script:
     - pwd
     - ls -al /root/
+    - ls -al /root/.ssh/
     - ssh -vvv -T otbbot@gitlab.orfeo-toolbox.org
     - touch packages-ub.run
 
