@@ -197,5 +197,5 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
-    - scp -r packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
+    - scp -vvv packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
 
