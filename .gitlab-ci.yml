@@ -177,7 +177,7 @@ ub-build:
     - id
     - ls -al /root/
     - ls -al /root/.ssh/
-    - ssh -i /root/.ssh/id_rsa -vvv -T otbbot@gitlab.orfeo-toolbox.org
+    - ssh -i /root/.ssh/id_rsa -v -T git@gitlab.orfeo-toolbox.org
     - touch packages-ub.run
 
 mac-build:
