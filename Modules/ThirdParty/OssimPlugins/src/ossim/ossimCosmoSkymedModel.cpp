@@ -165,6 +165,15 @@ namespace ossimplugins
    bool ossimCosmoSkymedModel::loadState(const ossimKeywordlist& kwl,
                                       const char* prefix)
    {
+     // Specify the looking flag (can be left or right for Cosmo)
+     std::string look_side;
+     get(kwl, SUPPORT_DATA_PREFIX, "look_side", look_side);
+     
+     if (look_side != "RIGHT")
+       {
+	 theRightLookingFlag = false;
+       }
+
      return ossimSarSensorModel::loadState(kwl, prefix);
    }
 
@@ -351,6 +360,18 @@ namespace ossimplugins
 
     add(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", 
 	std::stod(metadataDataSet["S01_PRF"]));
+
+    if (metadataDataSet["Look_Side"] == "RIGHT" || metadataDataSet["Look_Side"] == "LEFT")
+      {
+	add(theProductKwl, SUPPORT_DATA_PREFIX, "look_side", metadataDataSet["Look_Side"]);
+      }
+    else
+      {
+	ossimNotify(ossimNotifyLevel_WARN)
+	  << "Not an expected look side (only RIGHT and LEFT expected)" << "'\n" ;
+	return false;
+
+      }
 
     // Size
     int sizex = dataset->GetRasterXSize();
