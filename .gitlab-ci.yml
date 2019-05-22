@@ -173,7 +173,6 @@ ub-build:
   extends: .test
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ssh -v -T git@gitlab.orfeo-toolbox.org
     - touch packages-ub.run
 
 mac-build:
@@ -198,5 +197,5 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
-    - scp -v packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
+    - scp packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
 
