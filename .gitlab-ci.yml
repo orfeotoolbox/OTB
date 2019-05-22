@@ -173,10 +173,6 @@ ub-build:
   extends: .test
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - pwd
-    - id
-    - ls -al /root/
-    - ls -al /root/.ssh/
     - ssh -i /root/.ssh/id_rsa -v -T git@gitlab.orfeo-toolbox.org
     - touch packages-ub.run
 
@@ -202,6 +198,5 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
-    - ssh -vvv -T otbpush@otb5-vm2.orfeo-toolbox.org
-    - scp -vvv packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
+    - scp -v packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
 
