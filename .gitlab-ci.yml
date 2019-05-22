@@ -173,7 +173,7 @@ ub-build:
   extends: .test
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ssh -vvv -T git@gitlab.orfeo-toolbox.org
+    - ssh -vvv -T otbbot@gitlab.orfeo-toolbox.org
     - touch packages-ub.run
 
 mac-build:
