@@ -185,7 +185,7 @@ mac-build:
 deploy:
   tags:
     - deploy
-  image: debian:stable-slim
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
   dependencies:
     - mac-build
