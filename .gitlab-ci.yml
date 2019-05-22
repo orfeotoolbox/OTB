@@ -185,7 +185,7 @@ mac-build:
 deploy:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  image: registry.orfeo-toolbox.org/orfeotoolbox/otb-build-env/otb-ubuntu-native:18.04
   stage: deploy
   dependencies:
     - mac-build
