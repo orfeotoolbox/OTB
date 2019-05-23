@@ -24,34 +24,13 @@
 */
 
 
-// This example illustrates the class
-// \doxygen{otb}{MeanDifferenceImageFilter} for detecting changes
-// between pairs of images. This filter computes the mean intensity in
-// the neighborhood of each pixel of the pair of images to be compared
-// and uses the difference of means as a change indicator. This
-// example will use the images shown in
-// figure ~\ref{fig:DIFFCHDETINIM}. These correspond to the near
-// infrared band of two Spot acquisitions before and during a flood.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.35\textwidth]{SpotBefore.eps}
-// \includegraphics[width=0.35\textwidth]{SpotAfter.eps}
-// \itkcaption[Spot Images for Change Detection]{Images used for the
-// change detection. Left: Before the flood. Right: during the flood.}
-// \label{fig:DIFFCHDETINIM}
-// \end{figure}
-//
-// We start by including the corresponding header file.
-
 #include "otbMeanDifferenceImageFilter.h"
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkAbsImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
-
 #include "otbCommandProgressUpdate.h"
 
 int main(int argc, char* argv[])
@@ -69,7 +48,6 @@ int main(int argc, char* argv[])
 
   // We start by declaring the types for the two input images, the
   // change image and the image to be stored in a file for visualization.
-
   using InternalPixelType = float;
   using OutputPixelType   = unsigned char;
   using InputImageType1   = otb::Image<InternalPixelType, Dimension>;
@@ -78,32 +56,27 @@ int main(int argc, char* argv[])
   using OutputImageType   = otb::Image<OutputPixelType, Dimension>;
 
 
-  //  We can now declare the types for the readers and the writer.
-
+  // We can now declare the types for the readers and the writer.
   using ReaderType1 = otb::ImageFileReader<InputImageType1>;
   using ReaderType2 = otb::ImageFileReader<InputImageType2>;
   using WriterType  = otb::ImageFileWriter<OutputImageType>;
 
-  //  The change detector will give positive and negative values
-  //  depending on the sign of the difference. We are usually
-  //  interested only in the absolute value of the difference. For
-  //  this purpose, we will use the \doxygen{itk}{AbsImageFilter}. Also, before
-  //  saving the image to a file in, for instance, PNG format, we will
-  //  rescale the results of the change detection in order to use the full range
-  //  of values of the output pixel type.
-
+  // The change detector will give positive and negative values
+  // depending on the sign of the difference. We are usually
+  // interested only in the absolute value of the difference. For
+  // this purpose, we will use the \doxygen{itk}{AbsImageFilter}. Also, before
+  // saving the image to a file in, for instance, PNG format, we will
+  // rescale the results of the change detection in order to use the full range
+  // of values of the output pixel type.
   using AbsType      = itk::AbsImageFilter<ChangeImageType, ChangeImageType>;
   using RescalerType = itk::RescaleIntensityImageFilter<ChangeImageType, OutputImageType>;
 
-
-  //  The \doxygen{otb}{MeanDifferenceImageFilter} is templated over
-  //  the types of the two input images and the type of the generated change
-  //  image.
-
+  // The MeanDifferenceImageFilter is templated over
+  // the types of the two input images and the type of the generated change
+  // image.
   using FilterType = otb::MeanDifferenceImageFilter<InputImageType1, InputImageType2, ChangeImageType>;
 
-  //  The different elements of the pipeline can now be instantiated.
-
+  // The different elements of the pipeline can now be instantiated.
   ReaderType1::Pointer  reader1   = ReaderType1::New();
   ReaderType2::Pointer  reader2   = ReaderType2::New();
   WriterType::Pointer   writer    = WriterType::New();
@@ -115,57 +88,34 @@ int main(int argc, char* argv[])
   const char* inputFilename2 = argv[2];
   const char* outputFilename = argv[3];
 
-  //  We set the parameters of the different elements of the pipeline.
-
+  // We set the parameters of the different elements of the pipeline.
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   writer->SetFileName(outputFilename);
   rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
   rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
 
-  //  The only parameter for this change detector is the radius of
-  //  the window used for computing the mean of the intensities.
+  // The only parameter for this change detector is the radius of
+  // the window used for computing the mean of the intensities.
 
   filter->SetRadius(atoi(argv[4]));
 
-  //  We build the pipeline by plugging all the elements together.
-
+  // We build the pipeline by plugging all the elements together.
   filter->SetInput1(reader1->GetOutput());
   filter->SetInput2(reader2->GetOutput());
   absFilter->SetInput(filter->GetOutput());
   rescaler->SetInput(absFilter->GetOutput());
   writer->SetInput(rescaler->GetOutput());
 
-  //  Since the processing time of large images can be long, it is
-  //  interesting to monitor the evolution of the computation. In
-  //  order to do so, the change detectors can use the
-  //  command/observer design pattern. This is easily done by
-  //  attaching an observer to the filter.
-
+  // Since the processing time of large images can be long, it is
+  // interesting to monitor the evolution of the computation. In
+  // order to do so, the change detectors can use the
+  // command/observer design pattern. This is easily done by
+  // attaching an observer to the filter.
   using CommandType = otb::CommandProgressUpdate<FilterType>;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
 
-  try
-  {
-    writer->Update();
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    std::cout << "ExceptionObject caught !" << std::endl;
-    std::cout << err << std::endl;
-    return -1;
-  }
-  // Figure \ref{fig:RESDIFFCHDET} shows the result of the change
-  // detection by difference of local means.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.35\textwidth]{DiffChDet.eps}
-  // \itkcaption[Difference Change Detection Results]{Result of the mean
-  // difference change detector}
-  // \label{fig:RESDIFFCHDET}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
+  writer->Update();
 }
