@@ -197,10 +197,11 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
+    - printenv
+    - echo $(printenv)
     - ssh otbpush@otb5-vm2.orfeo-toolbox.org mkdir -p /home/otbpush/test/$(date +%F)
     - ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf /home/otbpush/test/latest
     - scp packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/$(date +%F)/
     - ssh otbpush@otb5-vm2.orfeo-toolbox.org ln -s /home/otbpush/test/$(date +%F) /home/otbpush/test/latest
-    - echo $(printenv)
 
  
