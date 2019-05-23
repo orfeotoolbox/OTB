@@ -185,7 +185,7 @@ mac-build:
 deploy:
   tags:
     - deploy
-  image: registry.orfeo-toolbox.org/orfeotoolbox/otb-build-env/otb-ubuntu-native:18.04
+  image: $BUILD_IMAGE_REGISTRY/alpine:3.7
   stage: deploy
   dependencies:
     - mac-build
@@ -197,5 +197,9 @@ deploy:
     #Nothing to do here
     - echo "No clone"
   script:
-    - scp packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/latest/
+    - ssh otbpush@otb5-vm2.orfeo-toolbox.org mkdir -p /home/otbpush/test/$(date +%F)
+    - ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf /home/otbpush/test/latest
+    - scp packages-*.run otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/$(date +%F)/
+    - ssh otbpush@otb5-vm2.orfeo-toolbox.org ln -s /home/otbpush/test/$(date +%F) /home/otbpush/test/latest
 
+ 
