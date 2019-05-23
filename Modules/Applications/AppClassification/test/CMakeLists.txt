@@ -862,6 +862,7 @@ if(OTB_USE_OPENCV)
     -io.ip ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=3
     -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
     -sample.nt 50
+    -sample.ratio 0
     -classifier rf
     -io.out ${TEMP}/apTvClTrainImagesRegressionModel.rf
     -io.mse ${TEMP}/apTvClTrainImagesRegressionModel.txt
@@ -878,6 +879,7 @@ if(OTB_USE_OPENCV)
     -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=0,1,2
     -io.ip ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=3
     -sample.nt 50
+    -sample.ratio 0.5
     -classifier rf
     -io.out ${TEMP}/apTvClTrainImagesRegressionNoVD.rf
     -io.mse ${TEMP}/apTvClTrainImagesRegressionNoVD.txt
