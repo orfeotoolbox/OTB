@@ -532,6 +532,7 @@ private:
     // Split train and validation data
     else if (GetParameterFloat( "sample.ratio" ) >0)
     {
+      otbAppLogINFO("No input validation vector data: the input training vector data will be split.");
       SplitTrainingAndValidationSamples( trainParams.filePrefix);
     }
     else
