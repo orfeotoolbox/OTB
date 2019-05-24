@@ -169,6 +169,9 @@
 <Data_Access>
 <DATA_FILE_ORGANISATION></DATA_FILE_ORGANISATION>
 <DATA_FILE_FORMAT>TIFF</DATA_FILE_FORMAT>
+<Data_File>
+<DATA_FILE_PATH href='IMAGERY.TIF'></DATA_FILE_PATH>
+</Data_File>
 </Data_Access>
 <Image_Display>
 <Band_Display_Order>
