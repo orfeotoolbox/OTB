@@ -16,9 +16,6 @@ to high performance MPI clusters, OTB is available on Windows, Linux and Mac.
 It is community driven, extensible and heavily documented.  Orfeo ToolBox is
 not a black box!
 
-[![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeotoolbox)
-
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
 * [Documentation](https://www.orfeo-toolbox.org/documentation/)
