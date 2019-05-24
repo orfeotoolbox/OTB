@@ -1,0 +1,76 @@
+--- GDAL-orig/port/cpl_vsil_win32.cpp	2017-06-23 14:18:38.000000000 +0200
++++ GDAL/port/cpl_vsil_win32.cpp	2019-05-24 15:42:38.103280616 +0200
+@@ -35,6 +35,8 @@
+ 
+ #include <windows.h>
+ #include <winioctl.h> // for FSCTL_SET_SPARSE
++#include <tchar.h>
++#include <stdio.h>
+ 
+ #include "cpl_string.h"
+ 
+@@ -874,8 +876,8 @@
+ #if (defined(WIN32) && _MSC_VER >= 1310) || __MSVCRT_VERSION__ >= 0x0601
+     if( CPLTestBool( CPLGetConfigOption( "GDAL_FILENAME_IS_UTF8", "YES" ) ) )
+     {
+-        struct _wfinddata_t c_file;
+-        intptr_t hFile;
++        WIN32_FIND_DATAW c_file;
++        HANDLE hFile = INVALID_HANDLE_VALUE;
+         char    *pszFileSpec;
+         CPLStringList oDir;
+ 
+@@ -886,17 +888,17 @@
+         wchar_t *pwszFileSpec =
+             CPLRecodeToWChar( pszFileSpec, CPL_ENC_UTF8, CPL_ENC_UCS2 );
+ 
+-        if ( (hFile = _wfindfirst( pwszFileSpec, &c_file )) != -1L )
++        if ( (hFile = FindFirstFileW( pwszFileSpec, &c_file )) != INVALID_HANDLE_VALUE )
+         {
+             do
+             {
+                 oDir.AddStringDirectly(
+-                    CPLRecodeFromWChar(c_file.name,CPL_ENC_UCS2,CPL_ENC_UTF8));
++                    CPLRecodeFromWChar(c_file.cFileName,CPL_ENC_UCS2,CPL_ENC_UTF8));
+                 if( nMaxFiles > 0 && oDir.Count() > nMaxFiles )
+                     break;
+-            } while( _wfindnext( hFile, &c_file ) == 0 );
++            } while( FindNextFileW( hFile, &c_file ) != 0 );
+ 
+-            _findclose( hFile );
++            FindClose( hFile );
+         }
+         else
+         {
+@@ -913,8 +915,8 @@
+     else
+ #endif
+     {
+-        struct _finddata_t c_file;
+-        intptr_t hFile;
++        WIN32_FIND_DATA c_file;
++        HANDLE hFile = INVALID_HANDLE_VALUE;
+         char    *pszFileSpec;
+         CPLStringList oDir;
+ 
+@@ -923,16 +925,16 @@
+ 
+         pszFileSpec = CPLStrdup(CPLSPrintf("%s\\*.*", pszPath));
+ 
+-        if ( (hFile = _findfirst( pszFileSpec, &c_file )) != -1L )
++        if ( (hFile = FindFirstFile( pszFileSpec, &c_file )) != INVALID_HANDLE_VALUE )
+         {
+             do
+             {
+-                oDir.AddString(c_file.name);
++                oDir.AddString(c_file.cFileName);
+                 if( nMaxFiles > 0 && oDir.Count() > nMaxFiles )
+                     break;
+-            } while( _findnext( hFile, &c_file ) == 0 );
++            } while( FindNextFile( hFile, &c_file ) != 0 );
+ 
+-            _findclose( hFile );
++            FindClose( hFile );
+         }
+         else
+         {
