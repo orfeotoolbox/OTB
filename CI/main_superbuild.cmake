@@ -130,7 +130,7 @@ if(WIN32)
   set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
   set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
   set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
-  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\share\\gdal" )
+  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
   set(ENV{GEOTIFF_CSV} "${XDK_PATH_NATIVE}\\share\\epsg_csv" )
   set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share" )
   # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
