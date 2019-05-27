@@ -156,7 +156,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10 14.0 Debug
     - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -VV -S CI/prepare_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
 windows-8-prepare:
@@ -164,7 +164,7 @@ windows-8-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 8.1 14.0 Debug
     - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -VV -S CI/prepare_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
 .common-windows-build:
