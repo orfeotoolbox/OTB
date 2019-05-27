@@ -111,7 +111,7 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
 
 if ( NOT _configure_rv EQUAL 0 )
   ctest_submit()
-  message( FATAL_ERROR "An error occurs during ctest_configure. Dependencies might be buggy.")
+  message( FATAL_ERROR "An error occurs during ctest_configure. Dependencies might be buggy. ${_configure_error}")
 endif()
 
 ########################################################################
