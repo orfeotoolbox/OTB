@@ -36,10 +36,6 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
     )
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  message(WARNING "The support of debug build in SuperBuild is incomplete, some dependencies such as NetCDF don't support it.")
-endif()
-
 include(ExternalProject)
 
 # Not needed as OTB Superbuild requires c++14 since version 6.2
