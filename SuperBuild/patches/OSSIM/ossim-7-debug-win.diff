@@ -1,0 +1,12 @@
+diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimCommonVariables.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimCommonVariables.cmake
+--- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/OssimCommonVariables.cmake	2019-05-27 11:45:45.536200208 +0200
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/OssimCommonVariables.cmake	2019-05-27 11:46:10.496295909 +0200
+@@ -209,7 +209,7 @@
+    
+    IF(WIN32)
+        IF(NOT DEFINED CMAKE_DEBUG_POSTFIX)
+-          SET(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "Debug variable used to add the postfix to dll's and exe's.  Defaults to 'd' on WIN32 builds and empty on all other platforms" FORCE)
++#          SET(CMAKE_DEBUG_POSTFIX "d" CACHE STRING "Debug variable used to add the postfix to dll's and exe's.  Defaults to 'd' on WIN32 builds and empty on all other platforms" FORCE)
+        ENDIF()
+    ENDIF()
+    IF(NOT CMAKE_BUILD_TYPE)

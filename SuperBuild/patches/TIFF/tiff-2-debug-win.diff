@@ -1,0 +1,12 @@
+diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
+--- tiff-4.0.8.orig/CMakeLists.txt	2019-05-27 11:25:40.799718789 +0200
++++ tiff-4.0.8/CMakeLists.txt	2019-05-27 11:31:29.648986641 +0200
+@@ -181,7 +181,7 @@
+ endforeach(flag ${test_flags})
+ 
+ if(MSVC)
+-    set(CMAKE_DEBUG_POSTFIX "d")
++#    set(CMAKE_DEBUG_POSTFIX "d")
+ endif()
+ 
+ option(ld-version-script "Enable linker version script" ON)

@@ -1,0 +1,12 @@
+diff -burN proj-4.9.3.orig/CMakeLists.txt proj-4.9.3/CMakeLists.txt
+--- proj-4.9.3.orig/CMakeLists.txt	2019-05-27 11:26:02.459796735 +0200
++++ proj-4.9.3/CMakeLists.txt	2019-05-27 11:38:10.998476466 +0200
+@@ -77,7 +77,7 @@
+ if (MSVC OR CMAKE_CONFIGURATION_TYPES)
+   # For multi-config systems and for Visual Studio, the debug version of
+   # the library has _d appended.
+-  set (CMAKE_DEBUG_POSTFIX _d)
++#  set (CMAKE_DEBUG_POSTFIX _d)
+ endif ()
+ 
+ option(PROJ4_TESTS "Enable build of collection of PROJ4 tests" ON)
