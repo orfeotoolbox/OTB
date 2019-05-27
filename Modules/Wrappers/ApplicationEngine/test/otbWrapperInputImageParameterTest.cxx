@@ -55,7 +55,7 @@ int otbWrapperInputImageParameterTest1(int, char* argv[])
 }
 
 // Test image case, expect an exception for two calls with different types
-int otbWrapperInputImageParameterTest2(int, char* argv[])
+int otbWrapperInputImageParameterTest2(int, char* [])
 {
   using ImageType  = otb::Image<float, 2>;
   using ImageTypeA = otb::Image<unsigned char, 2>;
