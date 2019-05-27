@@ -144,9 +144,11 @@ InputImageParameter::GetImage()
           return dynamic_cast<TImageType*> (m_Image.GetPointer());
           }
         else
-          {
-          itkExceptionMacro("Cannot ask a different image type");
-          }
+        {
+          itkExceptionMacro(
+              "GetImage() was already called with a different type, "
+              "probably due to two calls to GetParameter<Type>Image with different types in application code.");
+        }
         }
       }
     }
@@ -173,8 +175,10 @@ InputImageParameter::GetImage()
         ( m_OutputCaster.GetPointer() )->GetOutput();
       }
     else
+    {
       CLAMP_IMAGE_BASE( TImageType, m_Image.GetPointer() );
     }
+  }
 }
 
 /** declare a specialization for ImageBaseType */
