@@ -4,6 +4,9 @@ set INCLUDE=%INCLUDE%;@QT5_INCLUDE_PREFIX_NATIVE@;@QT5_INCLUDE_PREFIX_NATIVE@\fr
 set LIB=%LIB%;@QT5_LIB_PREFIX_NATIVE@
 set PATH=@QT5_SB_SRC_NATIVE@\qtbase\bin;@QT5_SB_SRC_NATIVE@\gnuwin32\bin;%PATH%
 
-@QT5_CONFIGURE_SCRIPT@ @QT5_SB_CONFIG@
+# This change of directory is required because qt created some hidden files in current directory
+# and then later refer to them during qtbase build. Without it, configure fails during build.
+cd "@QT5_SB_SRC_NATIVE@"
+configure.bat @QT5_SB_CONFIG@
 
 endlocal

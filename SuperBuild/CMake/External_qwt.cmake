@@ -25,15 +25,20 @@ SETUP_SUPERBUILD(QWT)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QWT QT5)
 
-set(QWT_SB_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM})
-if(MSVC)
-  set(QWT_SB_MAKE_PROGRAM "nmake")
-endif()
-
 configure_file(${CMAKE_SOURCE_DIR}/patches/QWT/qwtconfig.pri
-  ${CMAKE_BINARY_DIR}/qwtconfig.pri
+  ${CMAKE_BINARY_DIR}/QWT/tmp/qwtconfig.pri
   @ONLY)
-
+  
+ if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  set(OTB_QWT_BUILD_TYPE "debug")
+else()
+  set(OTB_QWT_BUILD_TYPE "release")
+endif()
+configure_file(${CMAKE_SOURCE_DIR}/patches/QWT/qwtbuild.pri
+  ${CMAKE_BINARY_DIR}/QWT/tmp/qwtbuild.pri
+  @ONLY)
+  
+set( OTB_QWT_BUILD_TYPE "debug")
 if(_SB_QT_QMAKE_EXECUTABLE)
   set(QWT_SB_CONFIGURE_PROGRAM ${_SB_QT_QMAKE_EXECUTABLE})
 
@@ -46,29 +51,27 @@ else()
   if( NOT QT_QMAKE_EXECUTABLE )
     set(QT_QMAKE_EXECUTABLE "" CACHE FILEPATH "Path to qmake executable")
     message(FATAL_ERROR "Please set the qmake executable to use (QT_QMAKE_EXECUTABLE)")
-
   else()
     set( QWT_SB_CONFIGURE_PROGRAM ${QT_QMAKE_EXECUTABLE} )
-
   endif()
 endif()
 
 ExternalProject_Add(QWT
   PREFIX QWT
-  URL "http://downloads.sourceforge.net/project/qwt/qwt/6.1.3/qwt-6.1.3.zip"
-  URL_MD5 558911df37aee4c0c3049860e967401c
+  ## MUST change SuperBuild/patches/QWT/qwtbuild.pri and qwtconfig.pri when qwt version is upgraded
+  URL "https://sourceforge.net/projects/qwt/files/qwt/6.1.3/qwt-6.1.3.zip/download"
+  URL_MD5 558911df37aee4c0c3049860e967401c 
   SOURCE_DIR ${QWT_SB_SRC}
   BINARY_DIR ${QWT_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${QWT_DEPENDENCIES}
-  PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/qwtconfig.pri ${QWT_SB_SRC}
+  PATCH_COMMAND 
+	${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/QWT/tmp/qwtbuild.pri ${CMAKE_BINARY_DIR}/QWT/tmp/qwtconfig.pri ${QWT_SB_SRC}
   CONFIGURE_COMMAND ${QWT_SB_CONFIGURE_PROGRAM} ${QWT_SB_SRC}/qwt.pro
-  BUILD_COMMAND ${QWT_SB_MAKE_PROGRAM}
-  INSTALL_COMMAND ${QWT_SB_MAKE_PROGRAM} install
-  LOG_CONFIGURE 0
-  LOG_BUILD 0
-  LOG_INSTALL 0
+  LOG_CONFIGURE 1
+  LOG_BUILD 1
+  LOG_INSTALL 1
   )
 
 SUPERBUILD_PATCH_SOURCE(QWT)

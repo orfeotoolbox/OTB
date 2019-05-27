@@ -1,0 +1,8 @@
+setlocal
+# This update of PATH is required to find zlib1.dll needed during build.
+set PATH=@QT5_INSTALL_PREFIX_NATIVE@\bin;%PATH%
+
+# This change of directory is required so that we can run cmake_make_program 
+cd "@QT5_SB_SRC_NATIVE@"
+@CMAKE_MAKE_PROGRAM@
+endlocal

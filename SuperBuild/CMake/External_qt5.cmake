@@ -110,16 +110,20 @@ if(UNIX AND USE_LOW_KERNEL_VERSION)
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-feature-getentropy -no-feature-renameat2")
 endif()
 
+
 if(WIN32)
   set(QT5_BIN_EXT ".exe")
-  file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.bat QT5_CONFIGURE_SCRIPT)
-  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.bat)
+  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.bat)
   set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.bat.in)
+  set(QT5_BUILD_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/build_qt5.bat.in)
+  set(QT5_BUILD_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/build_qt5.bat)
+  configure_file( ${QT5_BUILD_COMMAND_IN} ${QT5_BUILD_COMMAND} @ONLY )
 else()
   set(QT5_BIN_EXT "")
   file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure QT5_CONFIGURE_SCRIPT)
-  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/configure_qt5.sh)
+  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.sh)
   set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.sh.in)
+  set(QT5_BUILD_COMMAND "${CMAKE_MAKE_PROGRAM}")
 endif()
 
 if(EXISTS "${QT5_CONFIGURE_COMMAND}")
@@ -132,10 +136,12 @@ ExternalProject_Add(QT5
   PREFIX QT5
   URL "http://download.qt.io/official_releases/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
   URL_MD5 7e167b9617e7bd64012daaacb85477af
-  BINARY_DIR ${QT5_SB_BUILD_DIR}
+  SOURCE_DIR ${QT5_SB_SRC}
+  BINARY_DIR ${QT5_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CONFIGURE_COMMAND ${QT5_CONFIGURE_COMMAND}
+  BUILD_COMMAND ${QT5_BUILD_COMMAND}
   DEPENDS ${QT5_DEPENDENCIES}
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1
