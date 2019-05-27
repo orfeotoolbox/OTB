@@ -36,6 +36,7 @@
 // SAR Sensors
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 #include "otbSentinel1ImageMetadataInterfaceFactory.h"
+#include "otbCosmoImageMetadataInterfaceFactory.h"
 #include "otbRadarsat2ImageMetadataInterfaceFactory.h"
 
 #include "itkMutexLock.h"
@@ -116,6 +117,7 @@ ImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(WorldView2ImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(TerraSarImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Sentinel1ImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(CosmoImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Radarsat2ImageMetadataInterfaceFactory::New());
       firstTime = false;
       }
