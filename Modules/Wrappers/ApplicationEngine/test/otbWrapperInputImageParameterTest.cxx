@@ -36,7 +36,7 @@ int otbWrapperInputImageParameterTest1(int, char* argv[])
   Originally reported on gitlab as bug #1899:
   https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1899
   */
-  using ImageType = otb::Image<float, 2>;
+  using ImageType       = otb::Image<float, 2>;
   using ImageTypeOutput = otb::Image<unsigned char, 2>;
 
   auto image = ImageType::New();
@@ -47,8 +47,8 @@ int otbWrapperInputImageParameterTest1(int, char* argv[])
 
   if (output1 != output2)
   {
-      std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
-      return EXIT_FAILURE;
+    std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
+    return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;
@@ -57,7 +57,7 @@ int otbWrapperInputImageParameterTest1(int, char* argv[])
 // Test image case, expect an exception for two calls with different types
 int otbWrapperInputImageParameterTest2(int, char* argv[])
 {
-  using ImageType = otb::Image<float, 2>;
+  using ImageType  = otb::Image<float, 2>;
   using ImageTypeA = otb::Image<unsigned char, 2>;
   using ImageTypeB = otb::Image<double, 2>;
 
@@ -67,19 +67,19 @@ int otbWrapperInputImageParameterTest2(int, char* argv[])
 
   try
   {
-      param->GetImage<ImageTypeA>();
-      param->GetImage<ImageTypeB>();
-      param->GetImage<ImageTypeA>();
+    param->GetImage<ImageTypeA>();
+    param->GetImage<ImageTypeB>();
+    param->GetImage<ImageTypeA>();
   }
-  catch(itk::ExceptionObject&)
+  catch (itk::ExceptionObject&)
   {
-      std::cerr << "Expected exception when calling GetImage() with different types.\n";
-      return EXIT_FAILURE;
+    std::cerr << "Expected exception when calling GetImage() with different types.\n";
+    return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
 }
 
-// Filename case, expect the same pointer for two calls with the same type 
+// Filename case, expect the same pointer for two calls with the same type
 int otbWrapperInputImageParameterTest3(int, char* argv[])
 {
   auto param = otb::Wrapper::InputImageParameter::New();
@@ -94,8 +94,8 @@ int otbWrapperInputImageParameterTest3(int, char* argv[])
 
   if (output1 != output2)
   {
-      std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
-      return EXIT_FAILURE;
+    std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
+    return EXIT_FAILURE;
   }
 
   return EXIT_SUCCESS;
@@ -114,23 +114,20 @@ int otbWrapperInputImageParameterTest4(int, char* argv[])
 
   try
   {
-      param->GetImage<ImageTypeA>();
-      param->GetImage<ImageTypeB>();
-      param->GetImage<ImageTypeA>();
+    param->GetImage<ImageTypeA>();
+    param->GetImage<ImageTypeB>();
+    param->GetImage<ImageTypeA>();
   }
-  catch(itk::ExceptionObject&)
+  catch (itk::ExceptionObject&)
   {
-      std::cerr << "Expected exception when calling GetImage() with different types.\n";
-      return EXIT_FAILURE;
+    std::cerr << "Expected exception when calling GetImage() with different types.\n";
+    return EXIT_FAILURE;
   }
   return EXIT_SUCCESS;
 }
 
 int otbWrapperInputImageParameterTest(int argc, char* argv[])
 {
-    return otbWrapperInputImageParameterTest1(argc, argv)
-           && otbWrapperInputImageParameterTest2(argc, argv)
-           && otbWrapperInputImageParameterTest3(argc, argv)
-           && otbWrapperInputImageParameterTest4(argc, argv);
+  return otbWrapperInputImageParameterTest1(argc, argv) && otbWrapperInputImageParameterTest2(argc, argv) && otbWrapperInputImageParameterTest3(argc, argv) &&
+         otbWrapperInputImageParameterTest4(argc, argv);
 }
-
