@@ -1,0 +1,12 @@
+diff -burN gdal-2.2.1.orig/gcore/gdaljp2metadata.h gdal-2.2.1/gcore/gdaljp2metadata.h
+--- gdal-2.2.1.orig/gcore/gdaljp2metadata.h	2019-05-27 16:33:45.195803243 +0200
++++ gdal-2.2.1/gcore/gdaljp2metadata.h	2019-05-27 16:34:15.988063151 +0200
+@@ -43,7 +43,7 @@
+ /*                              GDALJP2Box                              */
+ /************************************************************************/
+ 
+-class CPL_DLL GDALJP2Box
++class GDALJP2Box
+ {
+ 
+     VSILFILE   *fpVSIL;
