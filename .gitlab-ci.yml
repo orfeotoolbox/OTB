@@ -154,7 +154,7 @@ stages:
 windows-10-prepare:
   extends: .windows-prepare
   script:
-    - call ./CI/dev_env.bat x64 xdk 10 Debug
+    - call ./CI/dev_env.bat x64 xdk 10 14.0 Debug
     - clcache.exe -s
     - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
@@ -162,7 +162,7 @@ windows-10-prepare:
 windows-8-prepare:
   extends: .windows-prepare
   script:
-    - call ./CI/dev_env.bat x64 xdk 8.1 Debug
+    - call ./CI/dev_env.bat x64 xdk 8.1 14.0 Debug
     - clcache.exe -s
     - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
@@ -181,9 +181,9 @@ windows-10-build:
   tags:
     - windows
   script:
-    - call ./CI/dev_env.bat x64 otb 10
+    - call ./CI/dev_env.bat x64 otb 10 14.0 Debug
     - clcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
     - clcache.exe -s
   dependencies:
     - windows-10-prepare
@@ -193,9 +193,9 @@ windows-8-build:
   tags:
     - windows
   script:
-    - call ./CI/dev_env.bat x64 otb 8.1
+    - call ./CI/dev_env.bat x64 otb 8.1 14.0 Debug
     - clcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
     - clcache.exe -s
   dependencies:
     - windows-8-prepare
