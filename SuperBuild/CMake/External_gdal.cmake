@@ -124,14 +124,14 @@ if(UNIX)
 else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
-    ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+    ${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt)
 
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}\r\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt" "${opt_line}\r\n")
   endforeach()
   
   if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES\r\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt" "WIN64=YES\r\n")
   endif()
 
   set(BUILD_DEBUG)
@@ -143,14 +143,14 @@ else(MSVC)
   set(GDAL_BUILD_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc
     MSVC_VER=${MSVC_VERSION}
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
+    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt
 	${BUILD_DEBUG}
 	${WITH_NETCDF}
     )
   set(GDAL_INSTALL_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc devinstall
     MSVC_VER=${MSVC_VERSION}
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
+    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt
 	${BUILD_DEBUG}
 	${WITH_NETCDF}
     )
