@@ -1,0 +1,12 @@
+diff -burN InsightToolkit-4.13.1.orig/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sse.h InsightToolkit-4.13.1/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sse.h
+--- InsightToolkit-4.13.1.orig/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sse.h	2019-05-27 14:15:25.732438299 +0200
++++ InsightToolkit-4.13.1/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sse.h	2019-05-27 14:17:06.185809265 +0200
+@@ -151,7 +151,7 @@
+ 
+ //: Bog standard (no sse) implementation for non sse enabled hardware and any type which doesn't have a template specialisation.
+ template <class T>
+-class VNL_EXPORT vnl_sse
++class vnl_sse
+ {
+  public:
+   static VNL_SSE_FORCE_INLINE void element_product(const T* x, const T* y, T* r, unsigned n)
