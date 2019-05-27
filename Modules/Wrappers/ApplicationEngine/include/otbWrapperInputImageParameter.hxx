@@ -176,6 +176,12 @@ InputImageParameter::GetImage()
       }
     else
     {
+        if (m_OutputCaster.IsNotNull())
+        {
+          itkExceptionMacro(
+              "GetImage() was already called with a different type, "
+              "probably due to two calls to GetParameter<Type>Image with different types in application code.");
+        }
       CLAMP_IMAGE_BASE( TImageType, m_Image.GetPointer() );
     }
   }
