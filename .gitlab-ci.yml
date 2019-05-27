@@ -183,7 +183,7 @@ windows-10-build:
   script:
     - call ./CI/dev_env.bat x64 otb 10 14.0 Debug
     - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -VV -S CI/main_superbuild.cmake
     - clcache.exe -s
   dependencies:
     - windows-10-prepare
@@ -195,7 +195,7 @@ windows-8-build:
   script:
     - call ./CI/dev_env.bat x64 otb 8.1 14.0 Debug
     - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
+    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -VV -S CI/main_superbuild.cmake
     - clcache.exe -s
   dependencies:
     - windows-8-prepare
