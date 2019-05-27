@@ -42,6 +42,12 @@ if %4.==. (
   set VCVER=%4
 )
 
+if %5.==. (
+  set BUILD_TYPE=Release
+) else (
+  set BUILD_TYPE=%5
+)
+
 set TARGET=%SHORT_TARGET%
 if "%TARGET%"=="10" (
   set TARGET=10.0.17763.0
@@ -65,7 +71,7 @@ set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
 :: Setup Clcache
-set CLCACHE_DIR=C:\clcache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
+set CLCACHE_DIR=C:\clcache\%PROJECT%-%BUILD_TYPE%-%ARCH%-%TARGET%-%VCVER%
 set CLCACHE_HARDLINK=1
 :: set CLCACHE_SERVER=1
 set CLCACHE_CL=
@@ -95,7 +101,7 @@ goto :eof
 
 :Help
 setlocal
-echo "Usage: dev_env.bat <compiler_arch>  <project>  [<target-os>  [<vc_version>]]"
+echo "Usage: dev_env.bat <compiler_arch> <project> [<target-os>] [<vc_version>] [<build-type>]"
 echo "  <compiler_arch> : 'x86' | 'x64'"
 echo "  <project>       : 'xdk' | 'otb'"
 echo "  <target-os>     : '8.1' | '10' (default)"
@@ -103,4 +109,5 @@ echo "  <vc_version>    :"
 echo "    '14.20' (i.e. VS 2019)"
 echo "    '14.16' (i.e. VS 2017)"
 echo "    '14.0'  (i.e. VS 2015) (default)"
+echo "  <build-type>    : 'Debug' | 'Release' (default)"
 endlocal
