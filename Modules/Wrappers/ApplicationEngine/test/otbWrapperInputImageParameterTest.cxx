@@ -25,11 +25,10 @@
 #include "otbImage.h"
 #include "otbWrapperInputImageParameter.h"
 
-
+// Test image case, expect the same pointer for two calls with the same type
 int otbWrapperInputImageParameterTest1(int, char* argv[])
 {
   auto param = otb::Wrapper::InputImageParameter::New();
-  param->SetFromFileName(argv[1]);
   param->SetKey(argv[2]);
   param->SetDescription(argv[3]);
 
@@ -54,3 +53,84 @@ int otbWrapperInputImageParameterTest1(int, char* argv[])
 
   return EXIT_SUCCESS;
 }
+
+// Test image case, expect an exception for two calls with different types
+int otbWrapperInputImageParameterTest2(int, char* argv[])
+{
+  using ImageType = otb::Image<float, 2>;
+  using ImageTypeA = otb::Image<unsigned char, 2>;
+  using ImageTypeB = otb::Image<double, 2>;
+
+  auto image = ImageType::New();
+  auto param = otb::Wrapper::InputImageParameter::New();
+  param->SetImage(image.GetPointer());
+
+  try
+  {
+      param->GetImage<ImageTypeA>();
+      param->GetImage<ImageTypeB>();
+      param->GetImage<ImageTypeA>();
+  }
+  catch(itk::ExceptionObject&)
+  {
+      std::cerr << "Expected exception when calling GetImage() with different types.\n";
+      return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
+}
+
+// Filename case, expect the same pointer for two calls with the same type 
+int otbWrapperInputImageParameterTest3(int, char* argv[])
+{
+  auto param = otb::Wrapper::InputImageParameter::New();
+  param->SetFromFileName(argv[1]);
+  param->SetKey(argv[2]);
+  param->SetDescription(argv[3]);
+
+  using ImageTypeOutput = otb::Image<unsigned char, 2>;
+
+  auto output1 = param->GetImage<ImageTypeOutput>();
+  auto output2 = param->GetImage<ImageTypeOutput>();
+
+  if (output1 != output2)
+  {
+      std::cerr << "InputImageParameter calls to ->GetImage<> are not consistent.\n";
+      return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+// Filename case, expect an exception for two calls with different types
+int otbWrapperInputImageParameterTest4(int, char* argv[])
+{
+  using ImageTypeA = otb::Image<unsigned char, 2>;
+  using ImageTypeB = otb::Image<double, 2>;
+
+  auto param = otb::Wrapper::InputImageParameter::New();
+  param->SetFromFileName(argv[1]);
+  param->SetKey(argv[2]);
+  param->SetDescription(argv[3]);
+
+  try
+  {
+      param->GetImage<ImageTypeA>();
+      param->GetImage<ImageTypeB>();
+      param->GetImage<ImageTypeA>();
+  }
+  catch(itk::ExceptionObject&)
+  {
+      std::cerr << "Expected exception when calling GetImage() with different types.\n";
+      return EXIT_FAILURE;
+  }
+  return EXIT_SUCCESS;
+}
+
+int otbWrapperInputImageParameterTest(int argc, char* argv[])
+{
+    return otbWrapperInputImageParameterTest1(argc, argv)
+           && otbWrapperInputImageParameterTest2(argc, argv)
+           && otbWrapperInputImageParameterTest3(argc, argv)
+           && otbWrapperInputImageParameterTest4(argc, argv);
+}
+
