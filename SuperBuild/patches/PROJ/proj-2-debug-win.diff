@@ -1,6 +1,6 @@
 diff -burN proj-4.9.3.orig/CMakeLists.txt proj-4.9.3/CMakeLists.txt
---- proj-4.9.3.orig/CMakeLists.txt	2019-05-27 11:26:02.459796735 +0200
-+++ proj-4.9.3/CMakeLists.txt	2019-05-27 11:38:10.998476466 +0200
+--- proj-4.9.3.orig/CMakeLists.txt	2019-05-27 13:04:36.076640902 +0200
++++ proj-4.9.3/CMakeLists.txt	2019-05-27 13:05:26.417039758 +0200
 @@ -77,7 +77,7 @@
  if (MSVC OR CMAKE_CONFIGURATION_TYPES)
    # For multi-config systems and for Visual Studio, the debug version of
@@ -10,3 +10,15 @@ diff -burN proj-4.9.3.orig/CMakeLists.txt proj-4.9.3/CMakeLists.txt
  endif ()
  
  option(PROJ4_TESTS "Enable build of collection of PROJ4 tests" ON)
+diff -burN proj-4.9.3.orig/src/CMakeLists.txt proj-4.9.3/src/CMakeLists.txt
+--- proj-4.9.3.orig/src/CMakeLists.txt	2019-05-27 13:04:36.072640870 +0200
++++ proj-4.9.3/src/CMakeLists.txt	2019-05-27 13:04:55.072791477 +0200
+@@ -41,6 +41,6 @@
+ 
+ if (MSVC OR CMAKE_CONFIGURATION_TYPES)
+   # Add _d suffix for your debug versions of the tools
+-  set_target_properties (cs2cs binproj geod nad2bin PROPERTIES
+-    DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
++#  set_target_properties (cs2cs binproj geod nad2bin PROPERTIES
++#    DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
+ endif ()
