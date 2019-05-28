@@ -262,7 +262,11 @@ void
 QtWidgetModel
 ::SendLogDEBUG( const std::string & mes )
 {
+#ifndef _DEBUG
   m_Application->GetLogger()->Write( itk::LoggerBase::DEBUG, mes );
+#else
+  m_Application->GetLogger()->Write( itk::LoggerBase::INFO, mes );
+#endif  
 }
 
 }
