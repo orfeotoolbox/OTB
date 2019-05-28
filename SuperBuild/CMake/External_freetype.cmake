@@ -45,9 +45,4 @@ ExternalProject_Add(FREETYPE
   LOG_INSTALL 1
   )
 
-set(_SB_FREETYPE_INCLUDE_DIRS ${SB_INSTALL_PREFIX}/include/freetype2)
-if(WIN32)
-  set(_SB_FREETYPE_LIBRARY ${SB_INSTALL_PREFIX}/lib/freetype.lib)
-elseif(UNIX)
-  set(_SB_FREETYPE_LIBRARY ${SB_INSTALL_PREFIX}/lib/libfreetype${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()
+

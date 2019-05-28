@@ -121,8 +121,6 @@ endforeach()
 
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK ZLIB FFTW)
-ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_INCLUDE_DIR)
-ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_LIBRARY)
 
 # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
 list(APPEND ITK_SB_CONFIG

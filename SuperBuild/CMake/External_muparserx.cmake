@@ -50,5 +50,3 @@ ExternalProject_Add(MUPARSERX
 
 #Patch mpParserMessageProvider.cpp. This patch is integrated upstream but not yet released (last release is 4.0.7)
 SUPERBUILD_PATCH_SOURCE(MUPARSERX)
-
-SUPERBUILD_UPDATE_CMAKE_VARIABLES(MUPARSERX FALSE muparserx muparserx)

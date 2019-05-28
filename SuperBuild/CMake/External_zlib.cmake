@@ -40,24 +40,11 @@ ExternalProject_Add(ZLIB
   )
 
 #patch zlib cmake to disable static build on request
-if(UNIX)
+if(UNIX AND BUILD_SHARED_LIBS)
   ExternalProject_Add_Step(ZLIB remove_static
     COMMAND ${CMAKE_COMMAND} -E remove ${SB_INSTALL_PREFIX}/lib/libz.a
     DEPENDEES install)
 endif()
 
-#check who uses zdll.lib and remove this hack
-if(MSVC)
-  ExternalProject_Add_Step(ZLIB msvc_copy_hell
-    COMMAND ${CMAKE_COMMAND} -E copy ${SB_INSTALL_PREFIX}/lib/zlib.lib ${SB_INSTALL_PREFIX}/lib/zdll.lib
-    DEPENDEES install)
-endif()
-
 SUPERBUILD_PATCH_SOURCE(ZLIB)
 
-set(_SB_ZLIB_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/zdll.lib)
-elseif(UNIX)
-  set(_SB_ZLIB_LIBRARY ${SB_INSTALL_PREFIX}/lib/libz${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()

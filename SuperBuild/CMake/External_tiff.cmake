@@ -66,11 +66,3 @@ ExternalProject_Add(TIFF
   )
     
 SUPERBUILD_PATCH_SOURCE(TIFF)
-
-#do we really need these variables? 
-set(_SB_TIFF_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_TIFF_LIBRARY ${SB_INSTALL_PREFIX}/lib/tiff.lib)
-elseif(UNIX)
-  set(_SB_TIFF_LIBRARY ${SB_INSTALL_PREFIX}/lib/libtiff${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()

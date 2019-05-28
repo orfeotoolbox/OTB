@@ -47,9 +47,4 @@ ExternalProject_Add(GEOS
 # See https://trac.osgeo.org/geos/ticket/753
 SUPERBUILD_PATCH_SOURCE(GEOS)
 
-set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/geos.lib )
-elseif(UNIX)
-  set(_SB_GEOS_LIBRARY ${SB_INSTALL_PREFIX}/lib/libgeos${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()
+

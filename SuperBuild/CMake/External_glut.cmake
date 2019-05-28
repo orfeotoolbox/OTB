@@ -28,19 +28,14 @@ endif()
 SETUP_SUPERBUILD(GLUT)
 
 if(UNIX)
-
   set(GLUT_PATCH_COMMAND)
-
   set(GLUT_CONFIGURE_COMMAND  "${SB_ENV_CONFIGURE_CMD};${GLUT_SB_SRC}/configure" ${SB_CONFIGURE_ARGS})
-
 else(MSVC)
-
   set(GLUT_PATCH_COMMAND ${CMAKE_COMMAND}
   -E copy
   ${CMAKE_SOURCE_DIR}/patches/GLUT/CMakeLists.txt
   ${GLUT_SB_SRC}
   )
-  
   set(GLUT_CONFIGURE_COMMAND ${SB_CMAKE_COMMAND} ${SB_CMAKE_ARGS} ${SB_CMAKE_CACHE_ARGS} ${GLUT_SB_SRC} )
 endif()
 
@@ -59,9 +54,3 @@ ExternalProject_Add(GLUT
   LOG_INSTALL 1
   )
 
-set(_SB_GLUT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_GLUT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libfreeglut.lib)
-elseif(UNIX)
-  set(_SB_GLUT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libfreeglut${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()

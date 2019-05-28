@@ -44,10 +44,3 @@ ExternalProject_Add(PROJ
   )
 
 SUPERBUILD_PATCH_SOURCE(PROJ)
-
-set(_SB_PROJ_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
-if(WIN32)
-  set(_SB_PROJ_LIBRARY ${SB_INSTALL_PREFIX}/lib/proj.lib)
-elseif(UNIX)
-  set(_SB_PROJ_LIBRARY ${SB_INSTALL_PREFIX}/lib/libproj${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif()

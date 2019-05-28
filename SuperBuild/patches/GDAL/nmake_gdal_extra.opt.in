@@ -28,10 +28,19 @@ TIFF_INC = -I@SB_INSTALL_PREFIX_NATIVE@\include
 TIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\tiff.lib
 # uncomment following line, if you have libtiff version >= 4.0 to enable BigTIFF support
 TIFF_OPTS= -DBIGTIFF_SUPPORT
+!IFDEF DEBUG
+TIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\tiffd.lib
+!ELSE
+TIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\tiff.lib
+!ENDIF
 
 # if using an external libgeotiff library
 GEOTIFF_INC = -I@SB_INSTALL_PREFIX_NATIVE@\include
+!IFDEF DEBUG
+GEOTIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\geotiff_d_i.lib
+!ELSE
 GEOTIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\geotiff_i.lib
+!ENDIF
 
 EXPAT_DIR = @SB_INSTALL_PREFIX_NATIVE@
 EXPAT_INCLUDE = -I$(EXPAT_DIR)\include
@@ -45,7 +54,11 @@ SQLITE_HAS_COLUMN_METADATA=yes
 
 # PROJ.4 stuff
 PROJ_INCLUDE = -I@SB_INSTALL_PREFIX_NATIVE@\include
+!IFDEF DEBUG
+PROJ_LIBRARY = @SB_INSTALL_PREFIX_NATIVE@\lib\proj_d.lib
+!ELSE
 PROJ_LIBRARY = @SB_INSTALL_PREFIX_NATIVE@\lib\proj.lib
+!ENDIF
 
 # Uncomment to use libcurl (DLL by default)
 # The cURL library is used for WCS, WMS, GeoJSON, SRS call importFromUrl(), WFS, GFT, CouchDB, /vsicurl/ etc.
@@ -93,16 +106,25 @@ ZLIB_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\zlib.lib
 
 # Uncomment the following and update to enable NCSA HDF Release 4 support.
 HDF4_PLUGIN = NO
-HDF4_DIR =	@SB_INSTALL_PREFIX_NATIVE@
 #HDF4_LIB =	/LIBPATH:$(HDF4_DIR)\lib Ws2_32.lib
-HDF4_LIB =	$(HDF4_DIR)\lib\@HDF4_SB_DF_LIB@.lib $(HDF4_DIR)\lib\@HDF4_SB_MF_LIB@.lib $(JPEG_LIB) $(ZLIB_LIB)
+HDF4_DIR =	@SB_INSTALL_PREFIX_NATIVE@
 HDF4_INCLUDE = $(HDF4_DIR)\include
 HDF4_HAS_MAXOPENFILES = YES
+!IFDEF DEBUG
+HDF4_LIB =	$(HDF4_DIR)\lib\@HDF4_SB_DF_LIB@_D.lib $(HDF4_DIR)\lib\@HDF4_SB_MF_LIB@_D.lib $(JPEG_LIB) $(ZLIB_LIB)
+!ELSE
+HDF4_LIB =	$(HDF4_DIR)\lib\@HDF4_SB_DF_LIB@.lib $(HDF4_DIR)\lib\@HDF4_SB_MF_LIB@.lib $(JPEG_LIB) $(ZLIB_LIB)
+!ENDIF
+
 
 # Uncomment the following and update to enable NCSA HDF Release 5 support.
 HDF5_PLUGIN = NO
 HDF5_DIR =	@SB_INSTALL_PREFIX_NATIVE@
+!IFDEF DEBUG
+HDF5_LIB =	$(HDF5_DIR)\lib\hdf5_D.lib $(ZLIB_LIB)
+!ELSE
 HDF5_LIB =	$(HDF5_DIR)\lib\hdf5.lib $(ZLIB_LIB)
+!ENDIF
 
 !IFDEF WITH_NETCDF
 NETCDF_PLUGIN = NO
