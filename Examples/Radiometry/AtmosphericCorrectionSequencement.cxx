@@ -134,14 +134,14 @@ int main(int argc, char* argv[])
   // the output image is a \doxygen{otb}{VectorImage}. To simplify, input and
   // output image types are the same one.
 
-  const unsigned int                             Dimension = 2;
-  typedef double                                 PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  const unsigned int Dimension = 2;
+  using PixelType              = double;
+  using ImageType              = otb::VectorImage<PixelType, Dimension>;
 
   // We instantiate reader and writer types
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  using WriterType           = otb::ImageFileWriter<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
   // The \code{GenerateOutputInformation()} reader method is called
   // to know the number of component per pixel of the image.  It is
@@ -185,12 +185,12 @@ int main(int argc, char* argv[])
   // \item $\beta_{k}$ is the absolute calibration bias for the channel k.
   // \end{itemize}
 
-  typedef otb::ImageToRadianceImageFilter<ImageType, ImageType> ImageToRadianceImageFilterType;
+  using ImageToRadianceImageFilterType = otb::ImageToRadianceImageFilter<ImageType, ImageType>;
 
-  ImageToRadianceImageFilterType::Pointer            filterImageToRadiance = ImageToRadianceImageFilterType::New();
-  typedef ImageToRadianceImageFilterType::VectorType VectorType;
-  VectorType                                         alpha(nbOfComponent);
-  VectorType                                         beta(nbOfComponent);
+  ImageToRadianceImageFilterType::Pointer filterImageToRadiance = ImageToRadianceImageFilterType::New();
+  using VectorType                                              = ImageToRadianceImageFilterType::VectorType;
+  VectorType alpha(nbOfComponent);
+  VectorType beta(nbOfComponent);
   alpha.Fill(0);
   beta.Fill(0);
   std::ifstream fin;
@@ -234,10 +234,10 @@ int main(int argc, char* argv[])
   // the month and the day of the acquisition.
   // \end{itemize}
 
-  typedef otb::RadianceToReflectanceImageFilter<ImageType, ImageType> RadianceToReflectanceImageFilterType;
-  RadianceToReflectanceImageFilterType::Pointer                       filterRadianceToReflectance = RadianceToReflectanceImageFilterType::New();
+  using RadianceToReflectanceImageFilterType                                = otb::RadianceToReflectanceImageFilter<ImageType, ImageType>;
+  RadianceToReflectanceImageFilterType::Pointer filterRadianceToReflectance = RadianceToReflectanceImageFilterType::New();
 
-  typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
+  using VectorType = RadianceToReflectanceImageFilterType::VectorType;
 
   VectorType solarIllumination(nbOfComponent);
   solarIllumination.Fill(0);
@@ -279,16 +279,16 @@ int main(int argc, char* argv[])
   // \doxygen{otb}{AtmosphericRadiativeTerms}
   // types are defined and instancied.
 
-  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms RadiometryCorrectionParametersToRadiativeTermsType;
+  using RadiometryCorrectionParametersToRadiativeTermsType = otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms;
 
-  typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
+  using AtmosphericCorrectionParametersType = otb::AtmosphericCorrectionParameters;
 
-  typedef otb::ImageMetadataCorrectionParameters AcquisitionCorrectionParametersType;
+  using AcquisitionCorrectionParametersType = otb::ImageMetadataCorrectionParameters;
 
-  typedef otb::AtmosphericRadiativeTerms                        AtmosphericRadiativeTermsType;
-  typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
-  typedef otb::FilterFunctionValues                             FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::ValuesVectorType            ValuesVectorType;
+  using AtmosphericRadiativeTermsType = otb::AtmosphericRadiativeTerms;
+  using AerosolModelType              = AtmosphericCorrectionParametersType::AerosolModelType;
+  using FilterFunctionValuesType      = otb::FilterFunctionValues;
+  using ValuesVectorType              = FilterFunctionValuesType::ValuesVectorType;
 
   AtmosphericCorrectionParametersType::Pointer dataAtmosphericCorrectionParameters = AtmosphericCorrectionParametersType::New();
   AcquisitionCorrectionParametersType::Pointer dataAcquisitionCorrectionParameters = AcquisitionCorrectionParametersType::New();
@@ -412,7 +412,7 @@ int main(int argc, char* argv[])
   // Atmospheric corrections can now start.
   // First, an instance of \doxygen{otb}{ReflectanceToSurfaceReflectanceImageFilter} is created.
 
-  typedef otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType, ImageType> ReflectanceToSurfaceReflectanceImageFilterType;
+  using ReflectanceToSurfaceReflectanceImageFilterType = otb::ReflectanceToSurfaceReflectanceImageFilter<ImageType, ImageType>;
 
   ReflectanceToSurfaceReflectanceImageFilterType::Pointer filterReflectanceToSurfaceReflectanceImageFilter =
       ReflectanceToSurfaceReflectanceImageFilterType::New();
@@ -491,8 +491,8 @@ int main(int argc, char* argv[])
   // terms internally. If the "acquisition" correction parameters are not
   // present, the filter will try to get them from the image metadata.
 
-  typedef otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<ImageType, ImageType> SurfaceAdjacencyEffectCorrectionSchemeFilterType;
-  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer                       filterSurfaceAdjacencyEffectCorrectionSchemeFilter =
+  using SurfaceAdjacencyEffectCorrectionSchemeFilterType = otb::SurfaceAdjacencyEffectCorrectionSchemeFilter<ImageType, ImageType>;
+  SurfaceAdjacencyEffectCorrectionSchemeFilterType::Pointer filterSurfaceAdjacencyEffectCorrectionSchemeFilter =
       SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
 
   // Four inputs are needed to compute the neighborhood contribution:

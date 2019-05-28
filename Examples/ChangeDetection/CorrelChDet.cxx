@@ -24,30 +24,11 @@
 #include "otbImage.h"
 #include "itkShiftScaleImageFilter.h"
 #include "otbCommandProgressUpdate.h"
+#include "otbCorrelationChangeDetector.h"
 
 /* Example usage:
 ./CorrelChDet Input/ERSBefore.png Input/ERSAfter.png Output/CorrChDet.tif 15
 */
-
-
-// This example illustrates the class
-// \doxygen{otb}{CorrelationChangeDetector} for detecting changes
-// between pairs of images. This filter computes the correlation coefficient in
-// the neighborhood of each pixel of the pair of images to be compared. This
-// example will use the images shown in
-// figure ~\ref{fig:CORRCHDETINIM}. These correspond to two ERS acquisitions before and during a flood.
-// \begin{figure}
-// \center
-// \includegraphics[width=0.35\textwidth]{ERSBefore.eps}
-// \includegraphics[width=0.35\textwidth]{ERSAfter.eps}
-// \itkcaption[ERS Images for Change Detection]{Images used for the
-// change detection. Left: Before the flood. Right: during the flood.}
-// \label{fig:CORRCHDETINIM}
-// \end{figure}
-//
-// We start by including the corresponding header file.
-
-#include "otbCorrelationChangeDetector.h"
 
 int main(int argc, char* argv[])
 {
@@ -65,40 +46,34 @@ int main(int argc, char* argv[])
 
   // We start by declaring the types for the two input images, the
   // change image and the image to be stored in a file for visualization.
+  using InternalPixelType = float;
+  using OutputPixelType   = unsigned char;
+  using InputImageType1   = otb::Image<InternalPixelType, Dimension>;
+  using InputImageType2   = otb::Image<InternalPixelType, Dimension>;
+  using ChangeImageType   = otb::Image<InternalPixelType, Dimension>;
+  using OutputImageType   = otb::Image<OutputPixelType, Dimension>;
 
-  typedef float                                    InternalPixelType;
-  typedef unsigned char                            OutputPixelType;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
-  typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
-  typedef otb::Image<OutputPixelType, Dimension>   OutputImageType;
+  // We can now declare the types for the readers. Since the images
+  // can be very large, we will force the pipeline to use
+  // streaming. For this purpose, the file writer will be
+  // streamed.
+  using ReaderType1 = otb::ImageFileReader<InputImageType1>;
+  using ReaderType2 = otb::ImageFileReader<InputImageType2>;
+  using WriterType  = otb::ImageFileWriter<OutputImageType>;
 
-  //  We can now declare the types for the readers. Since the images
-  //  can be vey large, we will force the pipeline to use
-  //  streaming. For this purpose, the file writer will be
-  //  streamed. This is achieved by using the
-  //  \doxygen{otb}{ImageFileWriter} class.
+  // The change detector will give a response which is normalized
+  // between 0 and 1.
+  // Before saving the image to a file in, for instance, PNG format, we will
+  // rescale the results of the change detection in order to use all
+  // the output pixel type range of values.
+  using RescalerType = itk::ShiftScaleImageFilter<ChangeImageType, OutputImageType>;
 
-  typedef otb::ImageFileReader<InputImageType1> ReaderType1;
-  typedef otb::ImageFileReader<InputImageType2> ReaderType2;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  // The CorrelationChangeDetector is templated over
+  // the types of the two input images and the type of the generated change
+  // image.
+  using FilterType = otb::CorrelationChangeDetector<InputImageType1, InputImageType2, ChangeImageType>;
 
-  //  The change detector will give a response which is normalized
-  //  between 0 and 1. Before
-  //  saving the image to a file in, for instance, PNG format, we will
-  //  rescale the results of the change detection in order to use all
-  //  the output pixel type range of values.
-
-  typedef itk::ShiftScaleImageFilter<ChangeImageType, OutputImageType> RescalerType;
-
-  //  The \doxygen{otb}{CorrelationChangeDetector} is templated over
-  //  the types of the two input images and the type of the generated change
-  //  image.
-
-  typedef otb::CorrelationChangeDetector<InputImageType1, InputImageType2, ChangeImageType> FilterType;
-
-  //  The different elements of the pipeline can now be instantiated.
-
+  // The different elements of the pipeline can now be instantiated.
   ReaderType1::Pointer  reader1        = ReaderType1::New();
   ReaderType2::Pointer  reader2        = ReaderType2::New();
   WriterType::Pointer   writer         = WriterType::New();
@@ -107,8 +82,8 @@ int main(int argc, char* argv[])
   const char*           inputFilename1 = argv[1];
   const char*           inputFilename2 = argv[2];
   const char*           outputFilename = argv[3];
-  //  We set the parameters of the different elements of the pipeline.
 
+  // We set the parameters of the different elements of the pipeline.
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
   writer->SetFileName(outputFilename);
@@ -116,49 +91,25 @@ int main(int argc, char* argv[])
   float scale = itk::NumericTraits<OutputPixelType>::max();
   rescaler->SetScale(scale);
 
-  //  The only parameter for this change detector is the radius of
-  //  the window used for computing the correlation coefficient.
-
+  // The only parameter for this change detector is the radius of
+  // the window used for computing the correlation coefficient.
   filter->SetRadius(atoi(argv[4]));
 
-  //  We build the pipeline by plugging all the elements together.
-
+  // We build the pipeline by plugging all the elements together.
   filter->SetInput1(reader1->GetOutput());
   filter->SetInput2(reader2->GetOutput());
   rescaler->SetInput(filter->GetOutput());
   writer->SetInput(rescaler->GetOutput());
 
-  //  Since the processing time of large images can be long, it is
-  //  interesting to monitor the evolution of the computation. In
-  //  order to do so, the change detectors can use the
-  //  command/observer design pattern. This is easily done by
-  //  attaching an observer to the filter.
-
-  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  // Since the processing time of large images can be long, it is
+  // interesting to monitor the evolution of the computation. In
+  // order to do so, the change detectors can use the
+  // command/observer design pattern. This is easily done by
+  // attaching an observer to the filter.
+  using CommandType = otb::CommandProgressUpdate<FilterType>;
 
   CommandType::Pointer observer = CommandType::New();
   filter->AddObserver(itk::ProgressEvent(), observer);
 
-  try
-  {
-    writer->Update();
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    std::cout << "ExceptionObject caught !" << std::endl;
-    std::cout << err << std::endl;
-    return -1;
-  }
-
-  // Figure \ref{fig:RESCORRCHDET} shows the result of the change
-  // detection by local correlation.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.35\textwidth]{CorrChDet.eps}
-  // \itkcaption[Correlation Change Detection Results]{Result of the
-  // correlation change detector}
-  // \label{fig:RESCORRCHDET}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
+  writer->Update();
 }

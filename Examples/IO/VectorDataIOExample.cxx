@@ -64,14 +64,14 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef unsigned short int PixelType;
+  using PixelType = unsigned short;
 
   //  We define the types for the vector data structure and the
   //  corresponding file reader.
 
-  typedef otb::VectorData<PixelType, 2> VectorDataType;
+  using VectorDataType = otb::VectorData<PixelType, 2>;
 
-  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
+  using VectorDataFileReaderType = otb::VectorDataFileReader<VectorDataType>;
   //  We can now instantiate the reader and read the data.
 
   VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
@@ -81,15 +81,15 @@ int main(int argc, char* argv[])
   //  nodes containing the actual objects of the scene. This tree will
   //  be accessed using an \doxygen{itk}{PreOrderTreeIterator}.
 
-  typedef VectorDataType::DataTreeType            DataTreeType;
-  typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
+  using DataTreeType     = VectorDataType::DataTreeType;
+  using TreeIteratorType = itk::PreOrderTreeIterator<DataTreeType>;
   //  In this example we will only read polygon objects from the input
   //  file before writing them to the output file. We define the type
   //  for the polygon object as well as an iterator to the vertices. The
   //  polygons obtained will be stored in an \doxygen{otb}{ObjectList}.
 
-  typedef otb::Polygon<double>         PolygonType;
-  typedef otb::ObjectList<PolygonType> PolygonListType;
+  using PolygonType     = otb::Polygon<double>;
+  using PolygonListType = otb::ObjectList<PolygonType>;
 
   PolygonListType::Pointer polygonList = PolygonListType::New();
   //  We get the data tree and instantiate an iterator to walk through it.
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
 
   VectorDataType::Pointer outVectorData = VectorDataType::New();
 
-  typedef VectorDataType::DataNodeType DataNodeType;
+  using DataNodeType = VectorDataType::DataNodeType;
   //  We fill the data structure with the nodes. The root node is a
   //  document which is composed of folders. A list of polygons can be
   //  seen as a multi polygon object.
@@ -150,7 +150,7 @@ int main(int argc, char* argv[])
   //  And finally we write the vector data to a file using a generic
   //  \doxygen{otb}{VectorDataFileWriter}.
 
-  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  using WriterType = otb::VectorDataFileWriter<VectorDataType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(outVectorData);

@@ -68,23 +68,23 @@ int main(int argc, char* argv[])
   // dimension. The input image is defined as an \doxygen{itk}{Image},
   // the output is a \doxygen{otb}{VectorData}.
 
-  const unsigned int                       Dimension = 2;
-  typedef unsigned short                   LabelType;
-  typedef otb::Image<LabelType, Dimension> LabeledImageType;
-  typedef otb::VectorData<double, 2>       VectorDataType;
+  const unsigned int Dimension = 2;
+  using LabelType              = unsigned short;
+  using LabeledImageType       = otb::Image<LabelType, Dimension>;
+  using VectorDataType         = otb::VectorData<double, 2>;
 
   // We instantiate reader and writer types
-  typedef otb::ImageFileReader<LabeledImageType>    LabeledReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  using LabeledReaderType = otb::ImageFileReader<LabeledImageType>;
+  using WriterType        = otb::VectorDataFileWriter<VectorDataType>;
 
   // Label map typedef
   // The Attribute Label Map is
   // instantiated using the image pixel types as template parameters.
   // The LabelObjectToPolygonFunctor is instantiated with LabelObjectType and PolygonType.
 
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>     LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                  LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+  using LabelObjectType    = otb::AttributesMapLabelObject<LabelType, Dimension, double>;
+  using LabelMapType       = itk::LabelMap<LabelObjectType>;
+  using LabelMapFilterType = itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   WriterType::Pointer        writer  = WriterType::New();
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
   //  Then, the \doxygen{otb}{LabelMapToVectorDataFilter} is instantiated. This is
   // the main filter which performs the vectorization.
 
-  typedef otb::LabelMapToVectorDataFilter<LabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
+  using LabelMapToVectorDataFilterType = otb::LabelMapToVectorDataFilter<LabelMapType, VectorDataType>;
 
   LabelMapToVectorDataFilterType::Pointer MyFilter = LabelMapToVectorDataFilterType::New();
 

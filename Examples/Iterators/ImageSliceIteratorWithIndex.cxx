@@ -117,17 +117,17 @@ int main(int argc, char* argv[])
   // we need two image types, a 3D image for the input, and a 2D image for the
   // intensity projection.
 
-  typedef unsigned short           PixelType;
-  typedef otb::Image<PixelType, 2> ImageType2D;
-  typedef otb::Image<PixelType, 3> ImageType3D;
+  using PixelType   = unsigned short;
+  using ImageType2D = otb::Image<PixelType, 2>;
+  using ImageType3D = otb::Image<PixelType, 3>;
 
   //  A slice iterator type is defined to walk the input image.
 
-  typedef itk::ImageLinearIteratorWithIndex<ImageType2D>     LinearIteratorType;
-  typedef itk::ImageSliceConstIteratorWithIndex<ImageType3D> SliceIteratorType;
+  using LinearIteratorType = itk::ImageLinearIteratorWithIndex<ImageType2D>;
+  using SliceIteratorType  = itk::ImageSliceConstIteratorWithIndex<ImageType3D>;
 
-  typedef otb::ImageFileReader<ImageType3D> ReaderType;
-  typedef otb::ImageFileWriter<ImageType2D> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType3D>;
+  using WriterType = otb::ImageFileWriter<ImageType2D>;
 
   ImageType3D::ConstPointer inputImage;
   ReaderType::Pointer       reader = ReaderType::New();

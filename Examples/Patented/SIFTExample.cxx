@@ -82,24 +82,24 @@ int main(int argc, char* argv[])
   float              threshold = atof(argv[6]);
   float              ratio     = atof(argv[7]);
 
-  typedef float      RealType;
+  using RealType               = float;
   const unsigned int Dimension = 2;
 
   // The \doxygen{otb}{ImageToSIFTKeyPointSetFilter} is templated over
   // its input image type and the output point set type. Therefore, we
   // start by defining the needed types.
-  typedef otb::Image<RealType, Dimension>          ImageType;
-  typedef itk::VariableLengthVector<RealType>      RealVectorType;
-  typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef itk::PointSet<RealVectorType, Dimension> PointSetType;
+  using ImageType      = otb::Image<RealType, Dimension>;
+  using RealVectorType = itk::VariableLengthVector<RealType>;
+  using ReaderType     = otb::ImageFileReader<ImageType>;
+  using PointSetType   = itk::PointSet<RealVectorType, Dimension>;
 
-  typedef otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType> ImageToSIFTKeyPointSetFilterType;
+  using ImageToSIFTKeyPointSetFilterType = otb::ImageToSIFTKeyPointSetFilter<ImageType, PointSetType>;
 
   // Since the SIFT detector produces a point set, we will need
   // iterators for the coordinates of the points and the data associated
   // with them.
-  typedef PointSetType::PointsContainer PointsContainerType;
-  typedef PointsContainerType::Iterator PointsIteratorType;
+  using PointsContainerType = PointSetType::PointsContainer;
+  using PointsIteratorType  = PointsContainerType::Iterator;
 
   // We can now instantiate the reader and the SIFT filter and plug the pipeline.
   ReaderType::Pointer                       reader = ReaderType::New();
@@ -162,10 +162,10 @@ int main(int argc, char* argv[])
   ImageType::OffsetType r = {{1, 0}};
   ImageType::OffsetType l = {{-1, 0}};
 
-  typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>  OutputImageType;
+  using RGBPixelType    = itk::RGBPixel<unsigned char>;
+  using OutputImageType = otb::Image<RGBPixelType, 2>;
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   OutputImageType::Pointer outputImage = OutputImageType::New();
 

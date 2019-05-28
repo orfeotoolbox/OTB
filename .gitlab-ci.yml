@@ -61,8 +61,8 @@ fast-build:
     when: on_failure
     expire_in: 24 hrs
     paths:
-      - log/*.txt
-      - build/*/*.log
+      - build/*/*.log #CMake log
+      - log/*.txt # Others
 
 debian-build:
   extends: .common-build
@@ -94,9 +94,8 @@ ubuntu-llvm:
     expire_in: 24 hrs
     when: always
     paths:
-      - sb_branch.txt
-      # This recovers logs from superbuild build
-      - build/*/*/*/*.log
+      - sb_branch.txt # Needed to checkout correct branch in build step
+      - build/*/*/*/*.log # Superbuild log
 
 ## Ubuntu superbuild
 ubuntu-superbuild-prepare:
@@ -114,7 +113,7 @@ ubuntu-superbuild-build:
   dependencies:
     - ubuntu-superbuild-prepare
 
-## Centos superbuild
+## CentOS superbuild
 centos-superbuild-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
@@ -129,3 +128,28 @@ centos-superbuild-build:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
     - centos-superbuild-prepare
+
+## MacOS superbuild
+macos-superbuild-prepare:
+  tags:
+    - macos
+  extends: .common-prepare
+  before_script:
+    # No need to install lfs as this machine is persistent
+    # No need to do git config
+    # Checkout the expected branch
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - export GIT_LFS_SKIP_SMUDGE=0
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+
+macos-superbuild-build:
+  tags:
+    - macos
+  extends: .common-build
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  dependencies:
+    - macos-superbuild-prepare

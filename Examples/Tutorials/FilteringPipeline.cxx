@@ -47,13 +47,13 @@ int main(int argc, char* argv[])
   //  We declare the image type, the reader and the writer as
   //  before:
 
-  typedef otb::Image<unsigned char, 2> ImageType;
+  using ImageType = otb::Image<unsigned char, 2>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer                     reader = ReaderType::New();
+  using ReaderType           = otb::ImageFileReader<ImageType>;
+  ReaderType::Pointer reader = ReaderType::New();
 
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer                     writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<ImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
@@ -63,8 +63,8 @@ int main(int argc, char* argv[])
   // in OTB. Here we are using the same type for the input and the
   // output images:
 
-  typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
-  FilterType::Pointer                                             filter = FilterType::New();
+  using FilterType           = itk::GradientMagnitudeImageFilter<ImageType, ImageType>;
+  FilterType::Pointer filter = FilterType::New();
 
   // Let's plug the pipeline:
 

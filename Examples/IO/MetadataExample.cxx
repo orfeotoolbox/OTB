@@ -52,12 +52,12 @@ int main(int itkNotUsed(argc), char* argv[])
   //  and writing the metadata to an output ASCII file. As usual we
   //  start by defining the types needed for the image to be read.
 
-  typedef unsigned char InputPixelType;
-  const unsigned int    Dimension = 2;
+  using InputPixelType         = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  using InputImageType = otb::Image<InputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   //  We can now instantiate the reader and get a pointer to the input image.
 

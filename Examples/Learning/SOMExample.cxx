@@ -83,15 +83,15 @@ int main(int itkNotUsed(argc), char* argv[])
   // a 2-dimensional SOM, where the neurons store RGB values with
   // floating point precision.
 
-  const unsigned int                             Dimension = 2;
-  typedef double                                 PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef ImageType::PixelType                   VectorType;
+  const unsigned int Dimension = 2;
+  using PixelType              = double;
+  using ImageType              = otb::VectorImage<PixelType, Dimension>;
+  using VectorType             = ImageType::PixelType;
   // The distance that we want to apply between the RGB values is the
   // Euclidean one. Of course we could choose to use other type of
   // distance, as for instance, a distance defined in any other color space.
 
-  typedef itk::Statistics::EuclideanDistanceMetric<VectorType> DistanceType;
+  using DistanceType = itk::Statistics::EuclideanDistanceMetric<VectorType>;
   //
   // We can now define the type for the map. The \doxygen{otb}{SOMMap}
   // class is templated over the neuron type -- \code{PixelType} here
@@ -99,28 +99,28 @@ int main(int itkNotUsed(argc), char* argv[])
   // number of dimensions of the map could be different from the one of
   // the images to be processed.
 
-  typedef otb::SOMMap<VectorType, DistanceType, Dimension> MapType;
+  using MapType = otb::SOMMap<VectorType, DistanceType, Dimension>;
   //
   // We are going to perform the learning directly on the pixels of the
   // input image. Therefore, the image type is defined using the same
   // pixel type as we used for the map. We also define the type for the
   // imge file reader.
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
   //
   // Since the \doxygen{otb}{SOM} class works on lists of samples, it
   // will need to access the input image through an adaptor. Its type is
   // defined as follows:
 
-  typedef itk::Statistics::ListSample<VectorType> SampleListType;
+  using SampleListType = itk::Statistics::ListSample<VectorType>;
   //
   // We can now define the type for the SOM, which is templated over the
   // input sample list and the type of the map to be produced and the two
   // functors that hold the training behavior.
 
-  typedef otb::Functor::CzihoSOMLearningBehaviorFunctor                                                   LearningBehaviorFunctorType;
-  typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor                                               NeighborhoodBehaviorFunctorType;
-  typedef otb::SOM<SampleListType, MapType, LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
+  using LearningBehaviorFunctorType     = otb::Functor::CzihoSOMLearningBehaviorFunctor;
+  using NeighborhoodBehaviorFunctorType = otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor;
+  using SOMType                         = otb::SOM<SampleListType, MapType, LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType>;
   //
   // As an alternative to standard \code{SOMType}, one can decide to use
   // an \doxygen{otb}{PeriodicSOM}, which behaves like \doxygen{otb}{SOM} but
@@ -199,12 +199,12 @@ int main(int itkNotUsed(argc), char* argv[])
   // \doxygen{otb}{ImageFileWriter}.
 
   // Just for visualization purposes, we zoom the image, and pass it to the printable image filter
-  typedef otb::Image<PixelType, 2>                                              SingleImageType;
-  typedef itk::ExpandImageFilter<SingleImageType, SingleImageType>              ExpandType;
-  typedef otb::PerBandVectorImageFilter<MapType, MapType, ExpandType>           VectorExpandType;
-  typedef itk::NearestNeighborInterpolateImageFunction<SingleImageType, double> InterpolatorType;
-  typedef otb::PrintableImageFilter<MapType>                                    PrintableFilterType;
-  typedef otb::ImageFileWriter<PrintableFilterType::OutputImageType>            PrintableWriterType;
+  using SingleImageType     = otb::Image<PixelType, 2>;
+  using ExpandType          = itk::ExpandImageFilter<SingleImageType, SingleImageType>;
+  using VectorExpandType    = otb::PerBandVectorImageFilter<MapType, MapType, ExpandType>;
+  using InterpolatorType    = itk::NearestNeighborInterpolateImageFunction<SingleImageType, double>;
+  using PrintableFilterType = otb::PrintableImageFilter<MapType>;
+  using PrintableWriterType = otb::ImageFileWriter<PrintableFilterType::OutputImageType>;
 
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
   VectorExpandType::Pointer expand       = VectorExpandType::New();
@@ -259,16 +259,16 @@ int main(int itkNotUsed(argc), char* argv[])
   // for the set of examples given to the map. The activation map is
   // stored as a scalar image and an integer pixel type is usually enough.
 
-  typedef unsigned char OutputPixelType;
+  using OutputPixelType = unsigned char;
 
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>  ActivationWriterType;
+  using OutputImageType      = otb::Image<OutputPixelType, Dimension>;
+  using ActivationWriterType = otb::ImageFileWriter<OutputImageType>;
   // In a similar way to the \doxygen{otb}{SOM} class the
   // \doxygen{otb}{SOMActivationBuilder} is templated over the sample
   // list given as input, the SOM map type and the activation map to be
   // built as output.
 
-  typedef otb::SOMActivationBuilder<SampleListType, MapType, OutputImageType> SOMActivationBuilderType;
+  using SOMActivationBuilderType = otb::SOMActivationBuilder<SampleListType, MapType, OutputImageType>;
   // We instantiate the activation map builder and set as input the SOM
   // map build before and the image (using the adaptor).
 
@@ -287,8 +287,8 @@ int main(int itkNotUsed(argc), char* argv[])
     // map obtained.
 
     // Just for visualization purposes, we zoom the image.
-    typedef itk::ExpandImageFilter<OutputImageType, OutputImageType>              ExpandType2;
-    typedef itk::NearestNeighborInterpolateImageFunction<OutputImageType, double> InterpolatorType2;
+    using ExpandType2       = itk::ExpandImageFilter<OutputImageType, OutputImageType>;
+    using InterpolatorType2 = itk::NearestNeighborInterpolateImageFunction<OutputImageType, double>;
 
     InterpolatorType2::Pointer interpolator2 = InterpolatorType2::New();
     ExpandType2::Pointer       expand2       = ExpandType2::New();

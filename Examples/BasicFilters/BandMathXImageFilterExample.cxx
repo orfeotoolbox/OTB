@@ -67,15 +67,15 @@ int main(int argc, char* argv[])
   //  writing the images. The \doxygen{otb}{BandMathXImageFilter} class
   //  works with \doxygen{otb}{VectorImage}.
 
-  typedef double                          PixelType;
-  typedef otb::VectorImage<PixelType, 2>  ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using PixelType  = double;
+  using ImageType  = otb::VectorImage<PixelType, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
 
   //  We can now define the type for the filter:
 
-  typedef otb::BandMathXImageFilter<ImageType> FilterType;
+  using FilterType = otb::BandMathXImageFilter<ImageType>;
 
   //  We instantiate the filter, the reader, and the writer:
 

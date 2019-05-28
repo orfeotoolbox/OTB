@@ -52,23 +52,23 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef double                             PixelType;
-  typedef unsigned char                      UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType>      RGBPixelType;
-  typedef otb::Image<PixelType, 2>           ImageType;
-  typedef otb::Image<RGBPixelType, 2>        RGBImageType;
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  using PixelType      = double;
+  using UCharPixelType = unsigned char;
+  using RGBPixelType   = itk::RGBPixel<UCharPixelType>;
+  using ImageType      = otb::Image<PixelType, 2>;
+  using RGBImageType   = otb::Image<RGBPixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<RGBImageType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[1]);
 
-  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
+  using DEMToImageGeneratorType = otb::DEMToImageGenerator<ImageType>;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType    SizeType;
-  typedef DEMToImageGeneratorType::SpacingType SpacingType;
-  typedef DEMToImageGeneratorType::PointType   PointType;
+  using SizeType    = DEMToImageGeneratorType::SizeType;
+  using SpacingType = DEMToImageGeneratorType::SpacingType;
+  using PointType   = DEMToImageGeneratorType::PointType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[8]);
 
@@ -94,14 +94,14 @@ int main(int argc, char* argv[])
   // the filter in charge of calling the functor we specify to do the work for
   // each pixel. Here it is the ScalarToRainbowRGBPixelFunctor.
 
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                          colormapper = ColorMapFilterType::New();
+  using ColorMapFilterType                = itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   if (argc == 9)
   {
-    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-    ColorMapFunctorType::Pointer                                                  colormap = ColorMapFunctorType::New();
+    using ColorMapFunctorType             = otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType>;
+    ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
     colormap->SetMinimumInputValue(0);
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
@@ -111,16 +111,16 @@ int main(int argc, char* argv[])
   {
     if (strcmp(argv[9], "hot") == 0)
     {
-      typedef itk::Function::HotColormapFunction<PixelType, RGBPixelType> ColorMapFunctorType;
-      ColorMapFunctorType::Pointer                                        colormap = ColorMapFunctorType::New();
+      using ColorMapFunctorType             = itk::Function::HotColormapFunction<PixelType, RGBPixelType>;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
     }
     else
     {
-      typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-      ColorMapFunctorType::Pointer                                         colormap = ColorMapFunctorType::New();
+      using ColorMapFunctorType             = otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType>;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);

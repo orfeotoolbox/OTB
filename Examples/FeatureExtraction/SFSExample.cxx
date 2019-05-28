@@ -61,7 +61,7 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double     PixelType;
+  using PixelType              = double;
   const unsigned int Dimension = 2;
 
   std::string  inName            = argv[1];
@@ -86,13 +86,13 @@ int main(int itkNotUsed(argc), char* argv[])
   // As with every OTB program, we start by defining the types for the
   // images, the readers and the writers.
 
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
+  using ImageType  = otb::Image<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
   // The we can instantiate the type for the SFS filter, which is
   // templated over the input and output pixel types.
 
-  typedef otb::SFSTexturesImageFilter<ImageType, ImageType> SFSFilterType;
+  using SFSFilterType = otb::SFSTexturesImageFilter<ImageType, ImageType>;
   // After that, we can instantiate the filter. We will also instantiate
   // the reader and one writer for each output image, since the SFS
   // filter generates 6 different features.
@@ -181,9 +181,9 @@ int main(int itkNotUsed(argc), char* argv[])
   // \end{figure}
 
   /************** pretty images for printing *********/
-  typedef otb::Image<unsigned char, 2>                                 OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
-  typedef otb::ImageFileWriter<OutputImageType>                        OutputWriterType;
+  using OutputImageType  = otb::Image<unsigned char, 2>;
+  using RescalerType     = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
+  using OutputWriterType = otb::ImageFileWriter<OutputImageType>;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(0);

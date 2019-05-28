@@ -53,17 +53,17 @@ int main(int argc, char* argv[])
 
   //  Image types are defined below.
 
-  typedef unsigned char                          InputPixelType;
-  typedef unsigned char                          OutputPixelType;
-  const unsigned int                             Dimension = 2;
-  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputPixelType         = unsigned char;
+  using OutputPixelType        = unsigned char;
+  const unsigned int Dimension = 2;
+  using InputImageType         = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType        = otb::Image<OutputPixelType, Dimension>;
 
   //  The types for the \doxygen{otb}{ImageFileReader} and \doxygen{otb}{ImageFileWriter}
   //  are instantiated using the image types.
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   //  The ExtractROI type is instantiated using
   //  the input and output pixel types. Using the pixel types as
@@ -74,7 +74,7 @@ int main(int argc, char* argv[])
   //  \doxygen{otb}{VectorImage}s. A filter object is created with the
   //  New() method and assigned to a \doxygen{itk}{SmartPointer}.
 
-  typedef otb::ExtractROI<InputImageType::PixelType, OutputImageType::PixelType> FilterType;
+  using FilterType = otb::ExtractROI<InputImageType::PixelType, OutputImageType::PixelType>;
 
   FilterType::Pointer filter = FilterType::New();
 

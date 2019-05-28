@@ -45,14 +45,14 @@ int main(int argc, char* argv[])
   const char* infname  = argv[1];
   const char* outfname = argv[2];
 
-  typedef unsigned char InputPixelType;
-  typedef double        PrecisionType;
-  const unsigned int    Dimension = 2;
+  using InputPixelType         = unsigned char;
+  using PrecisionType          = double;
+  const unsigned int Dimension = 2;
 
   // As usual, we start by defining the types for the input image and
   // the image file reader.
-  typedef otb::Image<InputPixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  using ImageType  = otb::Image<InputPixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
   // We instantiate the reader and set the file name for the input image.
   ReaderType::Pointer reader = ReaderType::New();
@@ -64,13 +64,13 @@ int main(int argc, char* argv[])
   // the coordinates of the detected segments will be given. It is
   // recommended to set this precision to a real type. The output of the
   // filter will be a \doxygen{otb}{VectorData}.
-  typedef otb::LineSegmentDetector<ImageType, PrecisionType> LsdFilterType;
+  using LsdFilterType = otb::LineSegmentDetector<ImageType, PrecisionType>;
 
   LsdFilterType::Pointer lsdFilter = LsdFilterType::New();
 
   // We can now define the type for the writer, instantiate it and set
   // the file name for the output vector data.
-  typedef otb::VectorDataFileWriter<LsdFilterType::VectorDataType> WriterType;
+  using WriterType = otb::VectorDataFileWriter<LsdFilterType::VectorDataType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

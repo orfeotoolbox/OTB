@@ -77,6 +77,16 @@ add_test( NAME pyTvBug736
   ${TEMP}/pyTvBug736Output.tif
   )
 
+add_test( NAME pyTvBug1899
+  COMMAND ${TEST_DRIVER}
+  Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  Bug1899
+  ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
+  ${TEMP}/pyTvBug1899Output.tif
+)
+
+
 add_test( NAME pyTvBandMathOutXML
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py

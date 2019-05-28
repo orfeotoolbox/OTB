@@ -53,19 +53,19 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  const unsigned int                            Dimension = 2;
-  typedef otb::VectorImage<double, Dimension>   InputImageType;
-  typedef otb::Image<double, Dimension>         OutputImageType;
-  typedef otb::Image<unsigned char, Dimension>  ImageVisuType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef otb::ImageFileWriter<ImageVisuType>   VisuWriterType;
-  typedef otb::ImageFileWriter<InputImageType>  InWriterType;
+  const unsigned int Dimension = 2;
+  using InputImageType         = otb::VectorImage<double, Dimension>;
+  using OutputImageType        = otb::Image<double, Dimension>;
+  using ImageVisuType          = otb::Image<unsigned char, Dimension>;
+  using ReaderType             = otb::ImageFileReader<InputImageType>;
+  using WriterType             = otb::ImageFileWriter<OutputImageType>;
+  using VisuWriterType         = otb::ImageFileWriter<ImageVisuType>;
+  using InWriterType           = otb::ImageFileWriter<InputImageType>;
   // Filter type is a generic \doxygen{itk}{UnaryFunctorImageFilter} using Formosat2 specific LAI
   //  \doxygen{otb}{LAIFromNDVIFormosat2Functor}.
 
-  typedef otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, OutputImageType::PixelType> FunctorType;
-  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> LAIFRomNDVIImageFilterType;
+  using FunctorType                = otb::Functor::LAIFromNDVIFormosat2Functor<InputImageType::InternalPixelType, OutputImageType::PixelType>;
+  using LAIFRomNDVIImageFilterType = itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType>;
 
   // Instantiating object
 
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 
 
   visuWriter->SetFileName(OutputName3);
-  typedef itk::RescaleIntensityImageFilter<OutputImageType, ImageVisuType> RescalerTypeOut;
+  using RescalerTypeOut = itk::RescaleIntensityImageFilter<OutputImageType, ImageVisuType>;
 
   RescalerTypeOut::Pointer rescaler = RescalerTypeOut::New();
   rescaler->SetInput(filter->GetOutput());
