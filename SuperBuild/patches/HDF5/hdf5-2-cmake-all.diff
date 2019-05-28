@@ -1,0 +1,12 @@
+diff -burN hdf5-1.10.1.orig/CMakeLists.txt hdf5-1.10.1/CMakeLists.txt
+--- hdf5-1.10.1.orig/CMakeLists.txt	2019-05-27 14:52:13.996330163 +0200
++++ hdf5-1.10.1/CMakeLists.txt	2019-05-28 14:34:26.856248493 +0200
+@@ -88,7 +88,7 @@
+ #   add_subdirectory (Utilities/hdf5-1.8)
+ #-----------------------------------------------------------------------------
+ string(TIMESTAMP CONFIG_DATE "%Y-%m-%d")
+-
++cmake_policy(SET CMP0075 OLD)
+ #-----------------------------------------------------------------------------
+ # Allow Visual Studio solution directories
+ #-----------------------------------------------------------------------------
