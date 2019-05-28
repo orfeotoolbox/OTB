@@ -196,6 +196,8 @@ deploy:
     - git lfs fetch origin $CI_COMMIT_SHA
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
+    # Git config for tar.xz compression
+    - git config tar.tar.xz.command "xz -c"
   after_script:
     #Nothing to do here
     - echo "No clone"
