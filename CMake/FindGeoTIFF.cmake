@@ -50,7 +50,7 @@ else()
 endif()
 
 
-set( GEOTIFF_NAMES ${GEOTIFF_NAMES} geotiff_i geotiff libgeotiff_i libgeotiff )
+set( GEOTIFF_NAMES ${GEOTIFF_NAMES} geotiff_d_i geotiff_i geotiff libgeotiff_i libgeotiff )
 find_library( GEOTIFF_LIBRARY NAMES ${GEOTIFF_NAMES} )
 
 mark_as_advanced( GEOTIFF_INCLUDE_DIR GEOTIFF_LIBRARY )

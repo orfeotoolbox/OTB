@@ -86,7 +86,7 @@ endif()
 
 # Look for the library
 find_library(OSSIM_LIBRARY
-             NAMES ossim)
+             NAMES ossim ossimd)
 
 # handle the QUIETLY and REQUIRED arguments and set OSSIM_FOUND to TRUE if
 # all listed variables are TRUE
