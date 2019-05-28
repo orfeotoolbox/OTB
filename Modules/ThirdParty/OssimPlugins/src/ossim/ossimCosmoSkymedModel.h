@@ -30,6 +30,8 @@
 #include <string>
 #include <boost/config.hpp>
 
+#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
+
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -37,7 +39,6 @@
 #include <ossim/base/ossimRefPtr.h>
 
 #include "ossim/ossimSarSensorModel.h"
-#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
 
