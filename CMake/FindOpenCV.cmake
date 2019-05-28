@@ -105,7 +105,8 @@ if (opencv_INCLUDE_DIR)
     "opencv_core${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}d")
     list(APPEND opencv_ml_NAMES
 	"opencv_ml${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}"
-     "opencv_ml${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}d")
+    "opencv_ml${OpenCV_VERSION_MAJOR}${OpenCV_VERSION_MINOR}${OpenCV_VERSION_PATCH}d")
+  endif()
 endif()
 
 if(NOT OPENCV_SEARCH_PATH)
