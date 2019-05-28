@@ -291,4 +291,12 @@ void SpatialReference::UTMFromGeoPoint(double lon, double lat, unsigned int & zo
   // post conditions
   assert(zone<=60);
 }
+
+
+void SpatialReference::SetAxisMappingStrategy(OSRAxisMappingStrategy strategy)
+{
+  m_SR.get()->SetAxisMappingStrategy(strategy);
+};
+
+
 }

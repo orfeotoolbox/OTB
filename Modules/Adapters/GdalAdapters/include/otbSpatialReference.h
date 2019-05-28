@@ -21,6 +21,7 @@
 #define otbSpatialReference_h
 
 #include "OTBGdalAdaptersExport.h"
+#include "ogr_spatialref.h"
 
 #include <memory>
 #include <string>
@@ -149,6 +150,9 @@ public:
    * \returns If no EPSG code was found or the EPSG code
    */
   unsigned int ToEPSG() const;
+
+  void SetAxisMappingStrategy(OSRAxisMappingStrategy strategy);
+
 
   /**
    * Find which UTM zone a given (lat,lon) point falls in.
