@@ -51,7 +51,7 @@ endif()
 set(QT5_SB_CONFIG
   "-prefix ${QT5_INSTALL_PREFIX_NATIVE} -L ${QT5_LIB_PREFIX_NATIVE} \
   -I ${QT5_INCLUDE_PREFIX_NATIVE} -I ${QT5_INCLUDE_FREETYPE_NATIVE} \
-  -opensource -confirm-license -release -shared \
+  -opensource -confirm-license -shared \
   -nomake examples -make tools -no-openssl \
   ${QT5_SB_OPENGL_CONFIG} \
   -skip qtgamepad  \
@@ -92,6 +92,12 @@ set(QT5_SB_CONFIG
   -skip qtx11extras  \
   -skip qtxmlpatterns \
   -system-libpng -system-libjpeg -system-zlib -system-freetype -qt-harfbuzz")
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+	set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -debug")
+else()
+	set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -release")
+endif()
 
 if(UNIX)
   if(APPLE)

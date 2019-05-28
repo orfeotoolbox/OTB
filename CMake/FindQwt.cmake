@@ -98,7 +98,7 @@ endif ()
 
 
 find_library ( QWT_LIBRARY
-  NAMES qwt-qt5 qwt6-qt5 qwt qwt6
+  NAMES qwt-qt5 qwt6-qt5 qwt qwt6 qwtd qwt_debug
 )
 
 set ( QWT_LIBRARIES ${QWT_LIBRARY} )
