@@ -159,13 +159,13 @@ windows-10-prepare:
     - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
-windows-8-prepare:
-  extends: .windows-prepare
-  script:
-    - call ./CI/dev_env.bat x64 xdk 8.1 14.0 Debug
-    - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
-    - clcache.exe -s
+# windows-8-prepare:
+  # extends: .windows-prepare
+  # script:
+    # - call ./CI/dev_env.bat x64 xdk 8.1 14.0 Debug
+    # - clcache.exe -s
+    # - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/prepare_superbuild.cmake
+    # - clcache.exe -s
 
 .common-windows-build:
   extends: .common-build
@@ -176,26 +176,26 @@ windows-8-prepare:
     - call ./CI/dev_env.bat x64 otb
     - python ./CI/cdash_handler.py %CI_COMMIT_SHA% %CI_PROJECT_ID% %CI_PROJECT_DIR% %K8S_SECRET_CDASH%
 
-windows-10-build:
-  extends: .common-windows-build
-  tags:
-    - windows
-  script:
-    - call ./CI/dev_env.bat x64 otb 10 14.0 Debug
-    - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
-    - clcache.exe -s
-  dependencies:
-    - windows-10-prepare
+# windows-10-build:
+  # extends: .common-windows-build
+  # tags:
+    # - windows
+  # script:
+    # - call ./CI/dev_env.bat x64 otb 10 14.0 Debug
+    # - clcache.exe -s
+    # - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
+    # - clcache.exe -s
+  # dependencies:
+    # - windows-10-prepare
 
-windows-8-build:
-  extends: .common-windows-build
-  tags:
-    - windows
-  script:
-    - call ./CI/dev_env.bat x64 otb 8.1 14.0 Debug
-    - clcache.exe -s
-    - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
-    - clcache.exe -s
-  dependencies:
-    - windows-8-prepare
+# windows-8-build:
+  # extends: .common-windows-build
+  # tags:
+    # - windows
+  # script:
+    # - call ./CI/dev_env.bat x64 otb 8.1 14.0 Debug
+    # - clcache.exe -s
+    # - ctest -DCTEST_BUILD_CONFIGURATION=Debug -V -S CI/main_superbuild.cmake
+    # - clcache.exe -s
+  # dependencies:
+    # - windows-8-prepare
