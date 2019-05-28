@@ -42,11 +42,11 @@ public:
 
   /** Standard macro */
   itkTypeMacro(TrainImagesRegression, Superclass);
-  
+
   /** filters typedefs*/
   typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType, UInt8ImageType, otb::PeriodicSampler> PeriodicSamplerType;
   typedef otb::SamplingRateCalculator::MapRateType MapRateType;
-  
+
 private:
   void DoInit() override
   {
@@ -141,14 +141,14 @@ private:
   {
     if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
       AddApplication("ImageEnvelope", "imageEnvelope", "Compute the image envelope");
-    
+
     AddApplication("VectorDataSetField", "setfield", "Set additional vector field");
     AddApplication("PolygonClassStatistics", "polystat", "Polygon analysis");
     AddApplication("MultiImageSamplingRate", "rates", "Sampling rates");
 
     AddApplication("SampleSelection", "select", "Sample selection");
     AddApplication("SampleExtraction", "extraction", "Sample extraction");
-    
+
     AddParameter(ParameterType_Group, "sample", "Sampling parameters");
     SetParameterDescription("sample", "This group of parameters allows setting sampling parameters");
 
@@ -164,18 +164,18 @@ private:
     SetParameterDescription("sample.ratio", "Ratio between training and validation samples.");
     SetDefaultParameterFloat("sample.ratio", 0.5);
 
-    ShareParameter( "rand", "select.rand" );
-    
-    ShareParameter( "ram", "polystat.ram" );
-    Connect( "select.ram", "polystat.ram" );
-    Connect( "extraction.ram", "polystat.ram" );
-    
-    ShareParameter( "sample.type", "select.sampler");
-    
-    ShareParameter( "elev", "polystat.elev");
-    Connect( "select.elev", "polystat.elev");
+    ShareParameter("rand", "select.rand");
+
+    ShareParameter("ram", "polystat.ram");
+    Connect("select.ram", "polystat.ram");
+    Connect("extraction.ram", "polystat.ram");
+
+    ShareParameter("sample.type", "select.sampler");
+
+    ShareParameter("elev", "polystat.elev");
+    Connect("select.elev", "polystat.elev");
     if (!IsParameterEnabled("io.vd") || !HasValue("io.vd"))
-      Connect( "imageEnvelope.elev", "polystat.elev");
+      Connect("imageEnvelope.elev", "polystat.elev");
   }
 
   /** Init Learning applications and share learning parameters */
@@ -187,26 +187,26 @@ private:
     ShareParameter("io.out", "training.io.out");
 
     ShareParameter("classifier", "training.classifier");
-    Connect( "training.rand", "select.rand" );
-  
+    Connect("training.rand", "select.rand");
+
     ShareParameter("io.mse", "training.io.mse");
   }
 
   /** Compute the imageEnvelope of the first input predictor image, this envelope will be used as a
    * polygon to perform sampling operations */
-  void ComputeImageEnvelope( const std::string& filePrefix)
+  void ComputeImageEnvelope(const std::string& filePrefix)
   {
-    auto imageEnvelopeAppli = GetInternalApplication("imageEnvelope");
-    auto& output = m_FileHandler["imageEnvelope"];
-    
+    auto  imageEnvelopeAppli = GetInternalApplication("imageEnvelope");
+    auto& output             = m_FileHandler["imageEnvelope"];
+
     // For all input images, use the same vector file.
-    for (unsigned int i = 0; i< GetParameterImageList("io.il")->Size();i++)
+    for (unsigned int i = 0; i < GetParameterImageList("io.il")->Size(); i++)
     {
-      output.push_back(GetParameterString("io.out") + "_" + filePrefix + "ImageEnvelope"+ std::to_string(i) +".shp");
-    
+      output.push_back(GetParameterString("io.out") + "_" + filePrefix + "ImageEnvelope" + std::to_string(i) + ".shp");
+
       imageEnvelopeAppli->SetParameterInputImage("in", GetParameterImageList("io.il")->GetNthElement(i));
       imageEnvelopeAppli->SetParameterString("out", output[i]);
-    
+
       // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
       imageEnvelopeAppli->ExecuteAndWriteOutput();
     }
@@ -223,22 +223,22 @@ private:
 
     for (unsigned int i = 0; i < inputFileNames.size(); i++)
     {
-      // The application is not called if the input file has already be processed (i.e. if the input list contains ) 
+      // The application is not called if the input file has already be processed (i.e. if the input list contains )
       // the same file multiple times. Instead a link is created in the file handler. We can do this
       // optimization here because the application only takes a vector Data as input but we cannot do it
       // for other sampling operations (PolygonClassStatistics and SampleSelection) because the input images
       // corresponding to one vector file may have different characteristics (resolution, origin, size)
-      auto sameFileName = std::find(inputFileNames.begin(),inputFileNames.begin()+i,inputFileNames[i]);
-      if (sameFileName!=inputFileNames.begin()+i)
+      auto sameFileName = std::find(inputFileNames.begin(), inputFileNames.begin() + i, inputFileNames[i]);
+      if (sameFileName != inputFileNames.begin() + i)
       {
         // Create a link to the corresponding output
-        outputFileNames.push_back(outputFileNames[sameFileName-inputFileNames.begin()]);
+        outputFileNames.push_back(outputFileNames[sameFileName - inputFileNames.begin()]);
       }
       else
       {
         outputFileNames.push_back(GetParameterString("io.out") + "_" + filePrefix + "Withfield" + std::to_string(i) + ".shp");
         setFieldAppli->SetParameterString("in", inputFileNames[i]);
-      
+
         setFieldAppli->SetParameterString("out", outputFileNames[i]);
 
         // Call ExecuteAndWriteOutput because VectorDataSetField's ExecuteInternal() does not write vector data.
@@ -306,12 +306,12 @@ private:
   {
     auto sampleSelection = GetInternalApplication("select");
 
-    FloatVectorImageListType*       inputImageList    = GetParameterImageList("io.il");
-    const auto&                     inputVectorFiles  = m_FileHandler[filePrefix + "inputWithClassField"];
-    const auto&                     rateFiles         = m_FileHandler[filePrefix + "rateFiles"];
-    const auto&                     statFiles         = m_FileHandler[filePrefix + "statsFiles"];
-    auto&                           outputVectorFiles = m_FileHandler[filePrefix + "samples"];
-    
+    FloatVectorImageListType* inputImageList    = GetParameterImageList("io.il");
+    const auto&               inputVectorFiles  = m_FileHandler[filePrefix + "inputWithClassField"];
+    const auto&               rateFiles         = m_FileHandler[filePrefix + "rateFiles"];
+    const auto&               statFiles         = m_FileHandler[filePrefix + "statsFiles"];
+    auto&                     outputVectorFiles = m_FileHandler[filePrefix + "samples"];
+
     for (unsigned int i = 0; i < inputVectorFiles.size(); i++)
     {
       outputVectorFiles.push_back(GetParameterString("io.out") + "_" + filePrefix + "samples" + std::to_string(i) + ".shp");
@@ -336,9 +336,9 @@ private:
   {
     auto sampleExtraction = GetInternalApplication("extraction");
 
-    FloatVectorImageListType* predictorImageList   = GetParameterImageList("io.il");
-    FloatVectorImageListType* labelImageList = GetParameterImageList("io.ip");
-    const auto&                     vectorFiles        = m_FileHandler[filePrefix + "samples"];
+    FloatVectorImageListType* predictorImageList = GetParameterImageList("io.il");
+    FloatVectorImageListType* labelImageList     = GetParameterImageList("io.ip");
+    const auto&               vectorFiles        = m_FileHandler[filePrefix + "samples"];
 
     for (unsigned int i = 0; i < vectorFiles.size(); i++)
     {
@@ -359,64 +359,64 @@ private:
       ExecuteInternal("extraction");
     }
   }
-  
-  void SplitTrainingAndValidationSamples(const std::string & inputSampleFilePrefix)
+
+  void SplitTrainingAndValidationSamples(const std::string& inputSampleFilePrefix)
   {
-    auto ImageList =  GetParameterImageList("io.il");
+    auto        ImageList        = GetParameterImageList("io.il");
     const auto& inputSampleFiles = m_FileHandler[inputSampleFilePrefix + "samples"];
-    auto& trainSampleFiles = m_FileHandler["trainsamples"];
-    auto& validSampleFiles = m_FileHandler["validsamples"];
-    const auto&          rateFiles         = m_FileHandler[inputSampleFilePrefix + "rateFiles"];
-    
+    auto&       trainSampleFiles = m_FileHandler["trainsamples"];
+    auto&       validSampleFiles = m_FileHandler["validsamples"];
+    const auto& rateFiles        = m_FileHandler[inputSampleFilePrefix + "rateFiles"];
+
     for (unsigned int i = 0; i < ImageList->Size(); i++)
     {
       trainSampleFiles.push_back(GetParameterString("io.out") + "_trainsamples" + std::to_string(i) + ".shp");
       validSampleFiles.push_back(GetParameterString("io.out") + "_validsamples" + std::to_string(i) + ".shp");
-      
+
       // Split between training and validation
-      auto image = ImageList->GetNthElement(i);
-      ogr::DataSource::Pointer source = ogr::DataSource::New( inputSampleFiles[i], ogr::DataSource::Modes::Read );
-      ogr::DataSource::Pointer destTrain = ogr::DataSource::New( trainSampleFiles[i], ogr::DataSource::Modes::Overwrite );
-      ogr::DataSource::Pointer destValid = ogr::DataSource::New( validSampleFiles[i], ogr::DataSource::Modes::Overwrite );
+      auto                     image     = ImageList->GetNthElement(i);
+      ogr::DataSource::Pointer source    = ogr::DataSource::New(inputSampleFiles[i], ogr::DataSource::Modes::Read);
+      ogr::DataSource::Pointer destTrain = ogr::DataSource::New(trainSampleFiles[i], ogr::DataSource::Modes::Overwrite);
+      ogr::DataSource::Pointer destValid = ogr::DataSource::New(validSampleFiles[i], ogr::DataSource::Modes::Overwrite);
       // read sampling rates from ratesTrainOutputs
       SamplingRateCalculator::Pointer rateCalculator = SamplingRateCalculator::New();
-      rateCalculator->Read( rateFiles[i] );
+      rateCalculator->Read(rateFiles[i]);
       // Compute sampling rates for train and valid
-      const otb::SamplingRateCalculator::MapRateType &inputRates = rateCalculator->GetRatesByClass();
-      otb::SamplingRateCalculator::MapRateType trainRates;
-      otb::SamplingRateCalculator::MapRateType validRates;
-      otb::SamplingRateCalculator::TripletType tpt;
-      for( MapRateType::const_iterator it = inputRates.begin(); it != inputRates.end(); ++it )
+      const otb::SamplingRateCalculator::MapRateType& inputRates = rateCalculator->GetRatesByClass();
+      otb::SamplingRateCalculator::MapRateType        trainRates;
+      otb::SamplingRateCalculator::MapRateType        validRates;
+      otb::SamplingRateCalculator::TripletType        tpt;
+      for (MapRateType::const_iterator it = inputRates.begin(); it != inputRates.end(); ++it)
       {
-        double vtr = GetParameterFloat( "sample.ratio" );
-        unsigned long total = std::min( it->second.Required, it->second.Tot );
-        unsigned long neededValid = static_cast<unsigned long>(( double ) total * vtr );
+        double        vtr         = GetParameterFloat("sample.ratio");
+        unsigned long total       = std::min(it->second.Required, it->second.Tot);
+        unsigned long neededValid = static_cast<unsigned long>((double)total * vtr);
         unsigned long neededTrain = total - neededValid;
-        tpt.Tot = total;
-        tpt.Required = neededTrain;
-        tpt.Rate = ( 1.0 - vtr );
-        trainRates[it->first] = tpt;
-        tpt.Tot = neededValid;
-        tpt.Required = neededValid;
-        tpt.Rate = 1.0;
-        validRates[it->first] = tpt;
+        tpt.Tot                   = total;
+        tpt.Required              = neededTrain;
+        tpt.Rate                  = (1.0 - vtr);
+        trainRates[it->first]     = tpt;
+        tpt.Tot                   = neededValid;
+        tpt.Required              = neededValid;
+        tpt.Rate                  = 1.0;
+        validRates[it->first]     = tpt;
       }
 
       // Use an otb::OGRDataToSamplePositionFilter with 2 outputs
       PeriodicSamplerType::SamplerParameterType param;
-      param.Offset = 0;
-      param.MaxJitter = 0;
+      param.Offset                          = 0;
+      param.MaxJitter                       = 0;
       PeriodicSamplerType::Pointer splitter = PeriodicSamplerType::New();
-      splitter->SetInput( image );
-      splitter->SetOGRData( source );
-      splitter->SetOutputPositionContainerAndRates( destTrain, trainRates, 0 );
-      splitter->SetOutputPositionContainerAndRates( destValid, validRates, 1 );
-      splitter->SetFieldName( m_ClassFieldName );
-      splitter->SetLayerIndex( 0 );
-      splitter->SetOriginFieldName( std::string( "" ) );
-      splitter->SetSamplerParameters( param );
-      splitter->GetStreamer()->SetAutomaticTiledStreaming( static_cast<unsigned int>(this->GetParameterInt( "ram" )) );
-      AddProcess( splitter->GetStreamer(), "Split samples between training and validation..." );
+      splitter->SetInput(image);
+      splitter->SetOGRData(source);
+      splitter->SetOutputPositionContainerAndRates(destTrain, trainRates, 0);
+      splitter->SetOutputPositionContainerAndRates(destValid, validRates, 1);
+      splitter->SetFieldName(m_ClassFieldName);
+      splitter->SetLayerIndex(0);
+      splitter->SetOriginFieldName(std::string(""));
+      splitter->SetSamplerParameters(param);
+      splitter->GetStreamer()->SetAutomaticTiledStreaming(static_cast<unsigned int>(this->GetParameterInt("ram")));
+      AddProcess(splitter->GetStreamer(), "Split samples between training and validation...");
       splitter->Update();
     }
   }
@@ -427,19 +427,19 @@ private:
   {
     auto trainVectorRegression = GetInternalApplication("training");
 
-    const auto&                    trainSampleFileNameList = m_FileHandler["trainsamples"];
+    const auto&              trainSampleFileNameList = m_FileHandler["trainsamples"];
     std::vector<std::string> featureNames;
     for (unsigned int i = 0; i < GetParameterImageList("io.il")->Size(); i++)
     {
       featureNames.push_back(m_FeaturePrefix + std::to_string(i));
     }
-    
+
     trainVectorRegression->SetParameterStringList("io.vd", trainSampleFileNameList);
     trainVectorRegression->UpdateParameters();
     trainVectorRegression->SetParameterString("cfield", m_PredictionFieldName);
     trainVectorRegression->SetParameterStringList("feat", featureNames);
 
-    if ((IsParameterEnabled("io.valid") && HasValue("io.valid")) || GetParameterFloat( "sample.ratio" ) >0)
+    if ((IsParameterEnabled("io.valid") && HasValue("io.valid")) || GetParameterFloat("sample.ratio") > 0)
     {
       trainVectorRegression->SetParameterStringList("valid.vd", m_FileHandler["validsamples"]);
     }
@@ -498,11 +498,11 @@ private:
   void DoExecute() override
   {
     SamplingParameters trainParams;
-    trainParams.filePrefix      = "vd";
-    
+    trainParams.filePrefix = "vd";
+
     if (HasValue("sample.nt"))
       trainParams.numberOfSamples = GetParameterInt("sample.nt");
-    
+
     if (IsParameterEnabled("io.vd") && HasValue("io.vd"))
     {
       trainParams.inputVectorList = GetParameterStringList("io.vd");
@@ -513,33 +513,33 @@ private:
       ComputeImageEnvelope(trainParams.filePrefix);
       trainParams.inputVectorList = m_FileHandler["imageEnvelope"];
     }
-    
+
     PerformSampling(trainParams);
 
     // User validation data
     if (IsParameterEnabled("io.valid") && HasValue("io.valid"))
     {
       m_FileHandler["trainsamples"] = m_FileHandler[trainParams.filePrefix + "samples"];
-      
+
       SamplingParameters validParams;
       validParams.inputVectorList = GetParameterStringList("io.valid");
       validParams.filePrefix      = "valid";
       if (HasValue("sample.nv"))
         validParams.numberOfSamples = GetParameterInt("sample.nv");
-      
+
       PerformSampling(validParams);
     }
     // Split train and validation data
-    else if (GetParameterFloat( "sample.ratio" ) >0)
+    else if (GetParameterFloat("sample.ratio") > 0)
     {
       otbAppLogINFO("No input validation vector data: the input training vector data will be split.");
-      SplitTrainingAndValidationSamples( trainParams.filePrefix);
+      SplitTrainingAndValidationSamples(trainParams.filePrefix);
     }
     else
     {
       m_FileHandler["trainsamples"] = m_FileHandler[trainParams.filePrefix + "samples"];
     }
-    
+
     otbAppLogINFO("Sampling Done.");
 
     TrainModel();
