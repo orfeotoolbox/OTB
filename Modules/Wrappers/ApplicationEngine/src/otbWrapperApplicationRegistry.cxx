@@ -162,12 +162,12 @@ ApplicationRegistry::AddApplicationPath(std::string newpath)
   const char pathSeparator = ':';
 #endif
 
-  putEnvPath << newpath << pathSeparator;
-
   if (currentEnv)
     {
-    putEnvPath << currentEnv;
+    putEnvPath << currentEnv << pathSeparator;
     }
+
+	putEnvPath << newpath;
 
   // do NOT use putenv() directly, since the string memory must be managed carefully
   itksys::SystemTools::PutEnv(putEnvPath.str());
