@@ -151,8 +151,13 @@ public:
    */
   unsigned int ToEPSG() const;
 
+#if GDAL_VERSION_NUM >= 3000000
+  /** Set the Axis mapping strategy
+   * proxy to the eponym ogr spatial reference method
+   * \param strategy Axis mapping stategy
+   */
   void SetAxisMappingStrategy(OSRAxisMappingStrategy strategy);
-
+#endif
 
   /**
    * Find which UTM zone a given (lat,lon) point falls in.
