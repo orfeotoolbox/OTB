@@ -99,6 +99,7 @@ ctest_start (Experimental TRACK CI_Build)
 
 ctest_update()
 
+# --------------------------- Configure ----------------------------------------
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${OTB_SOURCE_DIR}"
     OPTIONS "${CONFIGURE_OPTIONS}"
@@ -117,6 +118,7 @@ if ( NOT _configure_rv EQUAL 0 )
   message( FATAL_ERROR "An error occurs during ctest_configure.")
 endif()
 
+# ------------------------------ Build -----------------------------------------
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             RETURN_VALUE _build_rv
             CAPTURE_CMAKE_ERROR _build_error
@@ -132,6 +134,7 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
+# ----------------------------- Test -------------------------------------------
 if(ci_skip_testing)
   message(STATUS "Skip testing")
   set(_test_rv 0)
@@ -151,10 +154,14 @@ if ( NOT _test_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_test.")
 endif()
 
+# ----------------------------- Submit -----------------------------------------
 ctest_submit()
 
-# Install
-if(NOT ci_skip_install)
+# --------------------------- Install ----------------------------------------
+if(ci_skip_install)
+  message(STATUS "Skip install")
+  set(_install_rv 0)
+else()
   ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
               TARGET install
               RETURN_VALUE _install_rv
@@ -171,14 +178,14 @@ if(NOT ci_skip_install)
     "${OTB_SOURCE_DIR}/log/install_return_value_log.txt" "${_install_rv}")
   file ( WRITE 
     "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${_install_error}")
-
-  if ( NOT install_rv EQUAL 0 )
-    message( SEND_ERROR "Install have failed.")
-  endif()
 endif()
 
+if ( NOT install_rv EQUAL 0 )
+  message( SEND_ERROR "Install has failed.")
+endif()
+
+# ---------------------------- Doxygen -----------------------------------------
 if(ENABLE_DOXYGEN)
-  # compile doxygen
   ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
               TARGET Documentation
               RETURN_VALUE _doxy_rv
