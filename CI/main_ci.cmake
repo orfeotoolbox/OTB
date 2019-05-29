@@ -87,7 +87,7 @@ set (CONFIGURE_OPTIONS  "")
 include ( "${CMAKE_CURRENT_LIST_DIR}/configure_options.cmake" )
 
 # Sources are already checked out : do nothing for update
-set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+set(CTEST_GIT_UPDATE_CUSTOM "${CMAKE_COMMAND}" "-E" "echo" "No update")
 
 # Look for a GIT command-line client.
 find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
@@ -105,6 +105,11 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
+# Configure log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/configure_cmake_error_log.txt" "${_configure_error}")
 
 if ( NOT _configure_rv EQUAL 0 )
   # stop processing here
@@ -116,6 +121,12 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             RETURN_VALUE _build_rv
             CAPTURE_CMAKE_ERROR _build_error
             )
+
+# Build log
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_return_value_log.txt" "${_build_rv}")
+file ( WRITE 
+  "${OTB_SOURCE_DIR}/log/build_cmake_error_log.txt" "${_build_error}")
 
 if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
@@ -129,6 +140,11 @@ else()
              RETURN_VALUE _test_rv
              CAPTURE_CMAKE_ERROR _test_error
              )
+  # Test log
+  file ( WRITE 
+    "${OTB_SOURCE_DIR}/log/test_return_value_log.txt" "${_test_rv}")
+  file ( WRITE 
+    "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
 endif()
 
 if ( NOT _test_rv EQUAL 0 )
@@ -136,6 +152,30 @@ if ( NOT _test_rv EQUAL 0 )
 endif()
 
 ctest_submit()
+
+# Install
+if(NOT ci_skip_install)
+  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
+              TARGET install
+              RETURN_VALUE _install_rv
+              CAPTURE_CMAKE_ERROR _install_error
+              )
+  if ( DEBUG )
+    message( "Install output")
+    message( "install_return_value = ${_install_rv}" )
+    message( "install_error = ${_install_error}" )
+  endif()
+
+  # Install log
+  file ( WRITE 
+    "${OTB_SOURCE_DIR}/log/install_return_value_log.txt" "${_install_rv}")
+  file ( WRITE 
+    "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${_install_error}")
+
+  if ( NOT install_rv EQUAL 0 )
+    message( SEND_ERROR "Install have failed.")
+  endif()
+endif()
 
 if(ENABLE_DOXYGEN)
   # compile doxygen

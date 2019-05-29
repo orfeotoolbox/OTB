@@ -65,6 +65,18 @@ set (cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
+# extra options for XDK builds
+if(XDK_PATH)
+set(cmake_configure_option
+"${cmake_configure_option}
+CMAKE_PREFIX_PATH=${XDK_PATH}")
+foreach(remote_module DiapOTBModule OTBTemporalGapFilling Mosaic SertitObject)#otbGRM #Mosaic # #SertitObject
+  set(cmake_configure_option
+"${cmake_configure_option}
+Module_${remote_module}:BOOL=ON")
+endforeach()
+endif()
+
 if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
   # will set its output in 'site_option'
   include("${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
