@@ -50,12 +50,13 @@ protected:
     SetName("TrainVectorRegression");
     SetDescription(
         "Train a regression algorithm based on geometries with "
-        "list of features to consider and a predictor.");
+        "list of predictor to consider and a label (dependent variable).");
 
     SetDocLongDescription(
         "This application trains a regression algorithm based on "
-        "a predictor geometries and a list of features to consider for "
-        "regression.\nThis application is based on LibSVM, OpenCV Machine "
+        "geometries containing list of predictors to consider for "
+        "regression as well as groundtruth labels.\n"
+        "This application is based on LibSVM, OpenCV Machine "
         "Learning (2.3.1 and later), and Shark ML The output of this application "
         "is a text model file, whose format corresponds to the ML model type "
         "chosen. There is no image or vector data output.");
@@ -69,7 +70,7 @@ protected:
     Superclass::DoInit();
 
     AddParameter(ParameterType_Float, "io.mse", "Mean Square Error");
-    SetParameterDescription("io.mse", "Mean square error computed with the validation predictors");
+    SetParameterDescription("io.mse", "Mean square error computed using the validation dataset");
     SetParameterRole("io.mse", Role_Output);
     this->MandatoryOff("io.mse");
   }

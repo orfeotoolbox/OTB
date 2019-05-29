@@ -853,6 +853,42 @@ if(OTB_USE_OPENCV)
     ${TEMP}/apTvClTrainVectorRegressionModel.txt)
 endif()
 
+#----------- TrainImagesRegression TESTS ----------------
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClTrainImagesRegression
+    APP  TrainImagesRegression
+    OPTIONS 
+    -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=0,1,2
+    -io.ip ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=3
+    -io.vd ${INPUTDATA}/Classification/VectorData_QB1_utm31n.sqlite
+    -sample.nt 50
+    -sample.ratio 0
+    -classifier rf
+    -io.out ${TEMP}/apTvClTrainImagesRegressionModel.rf
+    -io.mse ${TEMP}/apTvClTrainImagesRegressionModel.txt
+    TESTENVOPTIONS ${TEMP}/apTvClTrainImagesRegressionModel.txt
+    VALID   ${ascii_comparison}
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainImagesRegressionModel.txt
+    ${TEMP}/apTvClTrainImagesRegressionModel.txt)
+endif()
+
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClTrainImagesRegressionNoVD
+    APP  TrainImagesRegression
+    OPTIONS 
+    -io.il ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=0,1,2
+    -io.ip ${INPUTDATA}/Classification/QB_1_ortho.tif?&bands=3
+    -sample.nt 50
+    -sample.ratio 0.5
+    -classifier rf
+    -io.out ${TEMP}/apTvClTrainImagesRegressionNoVD.rf
+    -io.mse ${TEMP}/apTvClTrainImagesRegressionNoVD.txt
+    TESTENVOPTIONS ${TEMP}/apTvClTrainImagesRegressionNoVD.txt
+    VALID   ${ascii_comparison}
+    ${OTBAPP_BASELINE_FILES}/apTvClTrainImagesRegressionNoVD.txt
+    ${TEMP}/apTvClTrainImagesRegressionNoVD.txt)
+endif()
+
 #----------- TrainVectorClassifier unsupervised TESTS ----------------
 if(OTB_USE_SHARK)
   otb_test_application(NAME apTvClTrainVectorUnsupervised
