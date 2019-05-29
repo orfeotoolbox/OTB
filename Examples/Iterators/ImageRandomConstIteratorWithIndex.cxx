@@ -60,11 +60,11 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef unsigned short                                    PixelType;
-  typedef otb::Image<PixelType, Dimension>                  ImageType;
-  typedef itk::ImageRandomConstIteratorWithIndex<ImageType> ConstIteratorType;
+  using PixelType         = unsigned short;
+  using ImageType         = otb::Image<PixelType, Dimension>;
+  using ConstIteratorType = itk::ImageRandomConstIteratorWithIndex<ImageType>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
   ImageType::ConstPointer inputImage;
   ReaderType::Pointer     reader = ReaderType::New();

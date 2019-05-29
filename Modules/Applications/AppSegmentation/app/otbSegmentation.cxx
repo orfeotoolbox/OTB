@@ -144,7 +144,6 @@ private:
     SetDescription("Performs segmentation of an image, and output either a raster or a vector file. In vector mode, large input datasets are supported.");
 
     // Documentation
-    SetDocName("Segmentation");
     SetDocLongDescription(
         "This application allows one to perform various segmentation algorithms on a multispectral image."
         " Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"

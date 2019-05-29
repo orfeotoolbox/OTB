@@ -28,8 +28,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbOrthoRectificationFilter.h"
-#include "otbGenericMapProjection.h"
+#include "otbGenericRSResampleImageFilter.h"
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 #include "otbStandardFilterWatcher.h"
@@ -66,13 +65,13 @@ int main(int argc, char* argv[])
 
   // We declare the different images, readers and writer:
 
-  typedef otb::Image<unsigned int, 2>           ImageType;
-  typedef otb::VectorImage<unsigned int, 2>     VectorImageType;
-  typedef otb::Image<double, 2>                 DoubleImageType;
-  typedef otb::VectorImage<double, 2>           DoubleVectorImageType;
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
-  typedef otb::ImageFileReader<VectorImageType> VectorReaderType;
-  typedef otb::ImageFileWriter<VectorImageType> WriterType;
+  using ImageType             = otb::Image<unsigned int, 2>;
+  using VectorImageType       = otb::VectorImage<unsigned int, 2>;
+  using DoubleImageType       = otb::Image<double, 2>;
+  using DoubleVectorImageType = otb::VectorImage<double, 2>;
+  using ReaderType            = otb::ImageFileReader<ImageType>;
+  using VectorReaderType      = otb::ImageFileReader<VectorImageType>;
+  using WriterType            = otb::ImageFileWriter<VectorImageType>;
 
   ReaderType::Pointer       readerPAN = ReaderType::New();
   VectorReaderType::Pointer readerXS  = VectorReaderType::New();
@@ -89,12 +88,9 @@ int main(int argc, char* argv[])
   // \item the hemisphere
   // \end{itemize}
 
-  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> InverseProjectionType;
-  InverseProjectionType::Pointer utmMapProjection = InverseProjectionType::New();
-  utmMapProjection->SetWkt(
-    otb::SpatialReference::FromUTM(atoi(argv[4]),argv[5][0]=='N' ? 
-      otb::SpatialReference::hemisphere::north : 
-      otb::SpatialReference::hemisphere::south).ToWkt());
+  std::string wkt =
+      otb::SpatialReference::FromUTM(atoi(argv[4]), argv[5][0] == 'N' ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south)
+          .ToWkt();
 
   //  We will need to pass several parameters to the orthorectification
   // concerning the desired output region:
@@ -118,10 +114,10 @@ int main(int argc, char* argv[])
   // We declare the orthorectification filter. And provide the different
   // parameters:
 
-  typedef otb::OrthoRectificationFilter<ImageType, DoubleImageType, InverseProjectionType> OrthoRectifFilterType;
+  using OrthoRectifFilterType = otb::GenericRSResampleImageFilter<ImageType, DoubleImageType>;
 
   OrthoRectifFilterType::Pointer orthoRectifPAN = OrthoRectifFilterType::New();
-  orthoRectifPAN->SetMapProjection(utmMapProjection);
+  orthoRectifPAN->SetOutputProjectionRef(wkt);
 
   orthoRectifPAN->SetInput(readerPAN->GetOutput());
 
@@ -133,12 +129,12 @@ int main(int argc, char* argv[])
   // Now we are able to have the orthorectified area from the PAN image. We just
   // have to follow a similar process for the XS image.
 
-  typedef otb::OrthoRectificationFilter<VectorImageType, DoubleVectorImageType, InverseProjectionType> VectorOrthoRectifFilterType;
+  using VectorOrthoRectifFilterType = otb::GenericRSResampleImageFilter<VectorImageType, DoubleVectorImageType>;
 
 
   VectorOrthoRectifFilterType::Pointer orthoRectifXS = VectorOrthoRectifFilterType::New();
 
-  orthoRectifXS->SetMapProjection(utmMapProjection);
+  orthoRectifXS->SetOutputProjectionRef(wkt);
 
   orthoRectifXS->SetInput(readerXS->GetOutput());
 
@@ -149,8 +145,8 @@ int main(int argc, char* argv[])
 
   //  It's time to declare the fusion filter and set its inputs:
 
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter<DoubleImageType, DoubleVectorImageType, VectorImageType> FusionFilterType;
-  FusionFilterType::Pointer                                                                                     fusion = FusionFilterType::New();
+  using FusionFilterType           = otb::SimpleRcsPanSharpeningFusionImageFilter<DoubleImageType, DoubleVectorImageType, VectorImageType>;
+  FusionFilterType::Pointer fusion = FusionFilterType::New();
   fusion->SetPanInput(orthoRectifPAN->GetOutput());
   fusion->SetXsInput(orthoRectifXS->GetOutput());
 
@@ -159,8 +155,6 @@ int main(int argc, char* argv[])
   // We trigger the pipeline execution with the \code{Update()} method.
 
   writer->SetInput(fusion->GetOutput());
-
-  writer->SetAutomaticTiledStreaming();
 
   otb::StandardFilterWatcher watcher(writer, "OrthoFusion");
 

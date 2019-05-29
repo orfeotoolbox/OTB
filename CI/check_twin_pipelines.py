@@ -64,25 +64,29 @@ if __name__ == "__main__":
   sha1 = env['CI_COMMIT_SHA']
   # are we in a merge_request pipeline ?
   if 'CI_MERGE_REQUEST_IID' in env.keys():
-    if not CheckEnvParameters(['K8S_SECRET_TWIN_PIPELINE','CI_PROJECT_ID','CI_PIPELINE_ID']):
+    if not CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
+      print("Make sure you have set a valid acces token for Gitlab API")
+      print("The K8S_SECRET_API_TOKEN environment variable should be set in 'Settings -> CI/CD -> Variables'")
       sys.exit(1)
-    mrInfo = GitlabRequest('merge_requests/'+env['CI_MERGE_REQUEST_IID'],token=env['K8S_SECRET_TWIN_PIPELINE'])
+    if not CheckEnvParameters(['CI_PROJECT_ID','CI_PIPELINE_ID']):
+      sys.exit(1)
+    mrInfo = GitlabRequest('merge_requests/'+env['CI_MERGE_REQUEST_IID'],token=env['K8S_SECRET_API_TOKEN'])
     wip_regex = re.compile("^[Ww][Ii][Pp]:")
     # is it a "WIP" merge request ?
     if wip_regex.search(mrInfo["title"]):
       # Yes: cancel the current pipeline
       print("Cancel current pipeline "+env['CI_PIPELINE_ID'])
       GitlabRequest('pipelines/'+env['CI_PIPELINE_ID']+'/cancel', data={}, \
-        project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_TWIN_PIPELINE'])
+        project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_API_TOKEN'])
       time.sleep(180)
       print("Error: this pipeline should have been canceled")
       sys.exit(1)
     else:
       # No: cancel any previous "normal" pipeline on the same SHA1
-      jres = GitlabRequest('pipelines?sha='+sha1, project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_TWIN_PIPELINE'])
+      jres = GitlabRequest('pipelines?sha='+sha1, project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_API_TOKEN'])
       for item in jres:
         if item["id"] < int(env['CI_PIPELINE_ID']) and item["status"] == "running":
           print("Cancel pipeline "+str(item["id"]))
           jres2 = GitlabRequest('pipelines/'+str(item["id"])+'/cancel', data={}, \
-            project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_TWIN_PIPELINE'])
+            project=env['CI_PROJECT_ID'], token=env['K8S_SECRET_API_TOKEN'])
 

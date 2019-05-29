@@ -22,7 +22,7 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbWrapperInputImageParameterTest1);
+  REGISTER_TEST(otbWrapperInputImageParameterTest);
   REGISTER_TEST(otbWrapperFloatParameterTest);
   REGISTER_TEST(otbWrapperIntParameterTest);
   REGISTER_TEST(otbWrapperRAMParameterTest);

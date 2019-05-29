@@ -23,384 +23,558 @@
  */
 
 
-#include <cmath>
-#include <cstdio>
+#include "ossimCosmoSkymedModel.h"
+#include "ossim/ossimTraceHelpers.h"
+#include "ossim/ossimKeyWordListUtilities.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
+#include <ossim/base/ossimDirectory.h>
+#include <ossim/base/ossimString.h>
+#include <iostream>
+#include <cassert>
 
-#include <ossimCosmoSkymedModel.h>
+#include "otbStringUtils.h"
 
-#include <otb/GalileanEphemeris.h>
-#include <otb/GeographicEphemeris.h>
-#include <otb/GMSTDateTime.h>
+/* GDAL Libraries */
+#include "gdal.h"
+#include <gdal_priv.h>
 
-#include <otb/PlatformPosition.h>
-#include <otb/SensorParams.h>
-#include <otb/RefPoint.h>
-#include <otb/SarSensor.h>
+// otbSystem.h
+#include "otbSystem.h"
+#include "itksys/SystemTools.hxx"
+
+#if defined(_MSC_VER)
+#include "ossimWin32FindFileHandle.h"
+#endif
+
+#if defined(USE_BOOST_TIME)
+            using boost::posix_time::microseconds;
+            using boost::posix_time::seconds;
+#else
+            using ossimplugins::time::microseconds;
+            using ossimplugins::time::seconds;
+#endif
+namespace {// Anonymous namespace
+   ossimTrace traceExec  ("ossimCosmoSkymedModel:exec");
+   ossimTrace traceDebug ("ossimCosmoSkymedModel:debug");
+   const ossimString attAdsHeader        = "adsHeader";
+   const ossimString attAzimuthTime      = "azimuthTime";
+   const ossimString attFirstValidSample = "firstValidSample";
+   const ossimString attLastValidSample   = "lastValidSample";
+   const ossimString attGr0              = "gr0";
+   const ossimString attGrsrCoefficients = "grsrCoefficients";
+   const ossimString attHeight           = "height";
+   const ossimString attLatitude         = "latitude";
+   const ossimString attLine             = "line";
+   const ossimString attLongitude        = "longitude";
+   const ossimString attPixel            = "pixel";
+   const ossimString attPosition         = "position";
+   const ossimString attSlantRangeTime   = "slantRangeTime";
+   const ossimString attSr0              = "sr0";
+   const ossimString attSrgrCoefficients = "srgrCoefficients";
+   const ossimString attTime             = "time";
+   const ossimString attVelocity         = "velocity";
+   const ossimString attX                = "x";
+   const ossimString attY                = "y";
+   const ossimString attZ                = "z";
+
+   // const char LOAD_FROM_PRODUCT_FILE_KW[] = "load_from_product_file_flag";
+   // const char PRODUCT_XML_FILE_KW[] = "product_xml_filename";
+}// Anonymous namespace
 
 namespace ossimplugins
 {
+   RTTI_DEF1(ossimCosmoSkymedModel, "ossimCosmoSkymedModel", ossimSarSensorModel);
 
-RTTI_DEF1(ossimCosmoSkymedModel, "ossimCosmoSkymedModel", ossimGeometricSarSensorModel);
+//*************************************************************************************************
+// Constructor
+//*************************************************************************************************
+   ossimCosmoSkymedModel::ossimCosmoSkymedModel()
+      : ossimSarSensorModel()
+      , theSLC(false)
+      , theTOPSAR(false)
+   {
+      // theManifestDoc = new ossimXmlDocument();
+   }
 
-ossimCosmoSkymedModel::ossimCosmoSkymedModel():
-  _nbCol(0),
-  _SrGr_R0(0),
-  _sceneCenterRangeTime(0),
-  _pixel_spacing(0)
-{
-}
+   void ossimCosmoSkymedModel::clearFields()
+   {
+      theSLC    = false;
+      theTOPSAR = false;
+      theProductKwl.clear();
+   }
 
-ossimCosmoSkymedModel::~ossimCosmoSkymedModel()
-{
-}
+//*************************************************************************************************
+// Infamous DUP
+//*************************************************************************************************
+   ossimObject* ossimCosmoSkymedModel::dup() const
+   {
+      return new ossimCosmoSkymedModel(*this);
+   }
 
-double ossimCosmoSkymedModel::getSlantRangeFromGeoreferenced(double col) const
-{
-  // in the case of Georeferenced images, _refPoint->get_distance() contains the ground range
-  double relativeGroundRange = _refPoint->get_distance() + _sensor->get_col_direction() * (col-_refPoint->get_pix_col())* _pixel_spacing ;
+//*************************************************************************************************
+// Print
+//*************************************************************************************************
+   std::ostream& ossimCosmoSkymedModel::print(std::ostream& out) const
+   {
+      // Capture stream flags since we are going to mess with them.
+      std::ios_base::fmtflags f = out.flags();
 
-  double slantRange = _SrGr_coeffs[0]
-              + _SrGr_coeffs[1]*(relativeGroundRange-_SrGr_R0)
-              + _SrGr_coeffs[2]*(pow(relativeGroundRange,2)-_SrGr_R0)
-              + _SrGr_coeffs[3]*(pow(relativeGroundRange,3)-_SrGr_R0)
-              + _SrGr_coeffs[4]*(pow(relativeGroundRange,4)-_SrGr_R0)
-              + _SrGr_coeffs[5]*(pow(relativeGroundRange,5)-_SrGr_R0);
+      out << "\nDump of ossimCosmoSkymedModel at address " << hex << this
+          << dec
+          << "\n------------------------------------------------"
+          << "\n  theImageID            = " << theImageID
+          << "\n  theImageSize          = " << theImageSize
 
-  return  slantRange ;
-}
+          << "\n------------------------------------------------"
+          << "\n  " << endl;
 
-bool ossimCosmoSkymedModel::InitSensorParams(const ossimKeywordlist &kwl, const char *prefix)
-{
-  const char* central_freq_str = kwl.find(prefix,"central_freq");
-  double central_freq = atof(central_freq_str);
-  const char* fr_str = kwl.find(prefix,"fr");
-  double fr = atof(fr_str);
-  const char* fa_str = kwl.find(prefix,"fa");
-  double fa = atof(fa_str);
+      // Set the flags back.
+      out.flags(f);
+      return ossimSarSensorModel::print(out);
+   }
 
-  //number of different looks
-  const char* n_azilok_str = kwl.find(prefix,"n_azilok");
-  double n_azilok = atof(n_azilok_str);
-  const char* n_rnglok_str = kwl.find(prefix,"n_rnglok");
-  double n_rnglok = atof(n_rnglok_str);
+//*************************************************************************************************
+// Save State
+//*************************************************************************************************
+   bool ossimCosmoSkymedModel::saveState(ossimKeywordlist& kwl,
+                                      const char* prefix) const
+   {
+      static const char MODULE[] = "ossimplugins::ossimCosmoSkymedModel::saveState";
+      SCOPED_LOG(traceDebug, MODULE);
 
-  //ellipsoid parameters
-  const char* ellip_maj_str = kwl.find(prefix,"ellip_maj");
-  double ellip_maj = atof(ellip_maj_str) * 1000.0;  // km -> m
-  const char* ellip_min_str = kwl.find(prefix,"ellip_min");
-  double ellip_min = atof(ellip_min_str) * 1000.0;  // km -> m
+      kwl.add(prefix,
+              ossimKeywordNames::TYPE_KW,
+              "ossimCosmoSkymedModel",
+              true);
 
-  if(_sensor != NULL)
+   
+      kwl.add("support_data.",
+              "calibration_lookup_flag",
+              "false",
+              false);
+
+      kwl.addList(theProductKwl,  true);
+      
+      return ossimSarSensorModel::saveState(kwl, prefix);
+   }
+
+
+//*************************************************************************************************
+// Load State
+//*************************************************************************************************
+   bool ossimCosmoSkymedModel::loadState(const ossimKeywordlist& kwl,
+                                      const char* prefix)
+   {
+     // Specify the looking flag (can be left or right for Cosmo)
+     std::string look_side;
+     get(kwl, SUPPORT_DATA_PREFIX, "look_side", look_side);
+     
+     if (look_side != "RIGHT")
+       {
+	 theRightLookingFlag = false;
+       }
+
+     return ossimSarSensorModel::loadState(kwl, prefix);
+   }
+
+//*************************************************************************************************
+// open
+//*************************************************************************************************
+   bool ossimCosmoSkymedModel::open(const ossimFilename& file)
+   {
+     // Check extension (hdf5 expected)
+     const ossimString ext = file.ext().downcase();
+     if ( !file.exists() || (ext != "h5"))
+       {
+         return false;
+       }
+       
+     // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
+     bool withSBI = false;
+     GDALDataset * dataset_Global = static_cast<GDALDataset*>(GDALOpen(file.c_str(), GA_ReadOnly));
+
+     char** papszMetadataG;
+     papszMetadataG = dataset_Global->GetMetadata("SUBDATASETS");
+
+     // Have we find some dataSet ?
+     // This feature is supported only hdf5 file
+     if ( (CSLCount(papszMetadataG) > 0) &&
+	  (strcmp(dataset_Global->GetDriver()->GetDescription(),"HDF5") == 0))
+       {
+	 for (int cpt = 0; papszMetadataG[cpt] != nullptr; ++cpt)
+	   {
+	     std::string key, name;
+	     if (otb::System::ParseHdfSubsetName(papszMetadataG[cpt], key, name))
+	       {
+		 // check if this is a dataset name
+		 if (key.find("_NAME") != std::string::npos) 
+		   {
+		     std::size_t found = name.find("//S01/SBI");
+		     if (found!=std::string::npos)
+		       {
+			 withSBI = true;
+		       }
+		   }
+	       }
+	   }
+       }
+     
+     GDALClose(static_cast<GDALDatasetH>(dataset_Global));
+
+     if (! withSBI)
+       {
+	 ossimNotify(ossimNotifyLevel_WARN) << 
+	   "HDF5 file does not contain the expected subdataset (//S01/SBI)!\n";
+	 return false;
+       }
+
+     // Read the expected Subdataset : ://S01/SBI
+     std::string file_SBI = "HDF5:" + file + "://S01/SBI";
+
+     bool ret = readSBI(file_SBI);
+     
+     if (!ret)
+       {
+	 ossimNotify(ossimNotifyLevel_WARN) << 
+	   "Probleme with metadata extraction!\n";
+	 return false;
+       }
+    
+      return true;
+   }
+
+//*************************************************************************************************
+// readSBI
+//*************************************************************************************************
+  bool ossimCosmoSkymedModel::readSBI(std::string fileSBI)
   {
-    delete _sensor;
+    static const char MODULE[] = "ossimplugins::ossimCosmoSkymedModel::open";
+    SCOPED_LOG(traceDebug, MODULE);
+    
+    // Create GDALImageIO to retrieve all metadata (from .h5 input file) 
+    std::map<std::string, std::string> metadataDataSet;
+    std::vector<std::map<std::string, std::string> > metadataBands;
+    
+    GDALDataset * dataset = static_cast<GDALDataset*>(GDALOpen(fileSBI.c_str(), GA_ReadOnly));
+
+    // Metadata for dataset
+    char** papszMetadata = dataset->GetMetadata(nullptr);
+    for (int cpt = 0; papszMetadata[cpt] != nullptr; ++cpt)
+      {
+	std::string key, value;
+	if (otb::System::ParseHdfSubsetName(papszMetadata[cpt], key, value))
+	  {
+	    metadataDataSet[key] = value;
+	  }
+      }
+
+    int nbRasterCount = dataset->GetRasterCount();
+
+    // Metadata for each Band
+    for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+      {
+	std::map<std::string, std::string> mapCurrentBand;
+
+	GDALRasterBand * Band = dataset->GetRasterBand(iBand + 1);
+
+	papszMetadata = Band->GetMetadata(nullptr);
+	for (int cpt = 0; papszMetadata[cpt] != nullptr; ++cpt)
+	  {
+	    std::string key, value;
+	    if (otb::System::ParseHdfSubsetName(papszMetadata[cpt], key, value))
+	      {
+		mapCurrentBand[key] = value;
+	      }
+	  }
+      
+	metadataBands.push_back(mapCurrentBand);
+      }
+
+    GDALClose(static_cast<GDALDatasetH>(dataset));
+
+    // Check Mission Id, acquisition mode and porduct type
+    if(! (metadataDataSet["Mission_ID"] == "CSK" )) 
+      {
+	ossimNotify(ossimNotifyLevel_WARN)
+	  << "Not a valid missionId : '"
+	  << metadataDataSet["Mission_ID"] << "'\n" ;
+	return false;
+      }
+    
+    if( (metadataDataSet["Acquisition_Mode"] != "HIMAGE") &&
+        (metadataDataSet["Acquisition_Mode"] != "SPOTLIGHT") && 
+	(metadataDataSet["Acquisition_Mode"] != "ENHANCED SPOTLIGHT")) 
+      {
+	ossimNotify(ossimNotifyLevel_WARN)
+	  << "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << "'\n" ;
+	return false;
+      }
+
+    if( (metadataDataSet["Product_Type"] != "SCS_B")) 
+      {
+	ossimNotify(ossimNotifyLevel_WARN)
+	  << "Not an expected product type (only SCS_B expected)" << "'\n" ;
+	return false;
+      }
+
+    ////////////////// Add General Parameters ////////////////
+    add(theProductKwl, "sensor", "CSK"); 
+    add(theProductKwl, "sample_type", "COMPLEX");
+
+    add(theProductKwl, HEADER_PREFIX, "polarisation", metadataDataSet["S01_Polarisation"]);
+    add(theProductKwl, HEADER_PREFIX, "annotation");
+    add(theProductKwl, HEADER_PREFIX, "swath", "S1");
+    add(theProductKwl, HEADER_PREFIX, "image_id", std::stoi(metadataDataSet["Programmed_Image_ID"]));
+    add(theProductKwl, HEADER_PREFIX, "meters_per_pixel_x", 
+	std::stod(metadataBands[0]["S01_SBI_Column_Spacing"]));
+    add(theProductKwl, HEADER_PREFIX, "meters_per_pixel_y",  
+	std::stod(metadataBands[0]["S01_SBI_Line_Spacing"]));
+    add(theProductKwl, HEADER_PREFIX, "version", thePluginVersion);
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "product_type", metadataDataSet["Product_Type"]);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "swath", "S1");
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "slice_num", "1");
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_pass", metadataDataSet["Orbit_Direction"]);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "abs_orbit", std::stoi(metadataDataSet["Orbit_Number"]));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "acquisition_mode", metadataDataSet["Acquisition_Mode"]);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_bandwidth", 
+	std::stod(metadataDataSet["S01_Azimuth_Focusing_Bandwidth"]));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_bandwidth",
+	std::stod(metadataDataSet["S01_Range_Focusing_Bandwidth"]));
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "mds1_tx_rx_polar", metadataDataSet["S01_Polarisation"]);
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "line_time_interval", 
+    std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"]));
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spacing", 
+	std::stod(metadataBands[0]["S01_SBI_Column_Spacing"]));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", 
+	std::stod(metadataBands[0]["S01_SBI_Line_Spacing"]));
+ 
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate", 
+	std::stod(metadataDataSet["S01_Sampling_Rate"]));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",  std::stod(metadataDataSet["Radar_Frequency"]));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", 
+	std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]));
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", 
+	std::stod(metadataDataSet["S01_PRF"]));
+
+    if (metadataDataSet["Look_Side"] == "RIGHT" || metadataDataSet["Look_Side"] == "LEFT")
+      {
+	add(theProductKwl, SUPPORT_DATA_PREFIX, "look_side", metadataDataSet["Look_Side"]);
+      }
+    else
+      {
+	ossimNotify(ossimNotifyLevel_WARN)
+	  << "Not an expected look side (only RIGHT and LEFT expected)" << "'\n" ;
+	return false;
+
+      }
+
+    // Size
+    int sizex = dataset->GetRasterXSize();
+    int sizey = dataset->GetRasterYSize();
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "number_samples", sizex);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "number_lines", sizey);
+    
+    add(theProductKwl,"number_samples", sizex);
+    add(theProductKwl, "number_lines", sizey);
+    
+    // Time
+    int pos = metadataDataSet["Reference_UTC"].find(" ");
+    std::string reference_UTC = metadataDataSet["Reference_UTC"].substr(0, pos);
+ 
+    double total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_First_Time"]);
+    int hour = static_cast<int> (total_seconds/3600.0);
+    int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+    double seconds = total_seconds - hour*3600 - minutes*60;
+
+    std::string first_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    
+    total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_Last_Time"]);
+    hour = static_cast<int> (total_seconds/3600.0);
+    minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+    seconds = total_seconds - hour*3600 - minutes*60;
+
+    std::string last_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+    add(theProductKwl, HEADER_PREFIX, "first_line_time", first_line_time);
+    add(theProductKwl, HEADER_PREFIX, "last_line_time",  last_line_time);
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", first_line_time);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time",  last_line_time);
+
+    std::string reference = reference_UTC  + "T00:00:00.0000";
+    
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "date", reference);
+
+    ////////////////// Add Orbit List ////////////////
+    // Get elements
+    int stateVectorList_size = std::stoi(metadataDataSet["Number_of_State_Vectors"]);
+    std::string state_times = metadataDataSet["State_Vectors_Times"];
+    std::string ecef_satellite_pos = metadataDataSet["ECEF_Satellite_Position"];
+    std::string ecef_satellite_vel = metadataDataSet["ECEF_Satellite_Velocity"];
+
+    // Convert std::string to vector
+    std::vector<std::string> vTimes;
+    otb::Utils::ConvertStringToVector(state_times, vTimes, "State_Vectors_Times", " ");
+    
+    std::vector<std::string> vECEF_sat_pos;
+    otb::Utils::ConvertStringToVector(ecef_satellite_pos, vECEF_sat_pos, "ECEF_Satellite_Position", " ");
+
+    std::vector<std::string> vECEF_sat_vel;
+    otb::Utils::ConvertStringToVector(ecef_satellite_vel, vECEF_sat_vel, "ECEF_Satellite_Velocity", " ");
+    
+
+    char orbit_prefix_[256];
+    for (int i = 0; i != stateVectorList_size ; ++i)
+      {
+	//orbit_state_vectors
+	const int pos = s_printf(orbit_prefix_, "orbitList.orbit[%d].", int(i));
+	assert(pos > 0 && pos < 256);
+	const std::string orbit_prefix(orbit_prefix_, pos);
+	
+	total_seconds = std::stod(vTimes[i]);
+	hour = static_cast<int> (total_seconds/3600.0);
+	minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+	seconds = total_seconds - hour*3600 - minutes*60;
+
+
+	std::string time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+	add(theProductKwl, orbit_prefix + keyTime, time);
+        
+	add(theProductKwl, orbit_prefix + keyPosX, vECEF_sat_pos[i*3 + 0]);
+	add(theProductKwl, orbit_prefix + keyPosY, vECEF_sat_pos[i*3 + 1]);
+	add(theProductKwl, orbit_prefix + keyPosZ, vECEF_sat_pos[i*3 + 2]);
+
+	add(theProductKwl, orbit_prefix + keyVelX, vECEF_sat_vel[i*3 + 0]);
+	add(theProductKwl, orbit_prefix + keyVelY, vECEF_sat_vel[i*3 + 1]);
+	add(theProductKwl, orbit_prefix + keyVelZ, vECEF_sat_vel[i*3 + 2]);
+      }
+
+    add(theProductKwl,"orbitList.nb_orbits", stateVectorList_size);
+
+
+    ////////////////// Add Burst Records : one for the moment ////////////////
+    add(theProductKwl, BURST_NUMBER_KEY,                       ossimString("1"));
+    BurstRecordType burstRecord;
+    burstRecord.startLine        = add(theProductKwl, BURST_PREFIX, "[0].start_line", 0);
+    burstRecord.endLine          = add(theProductKwl, BURST_PREFIX, "[0].end_line", sizey-1);
+
+    burstRecord.startSample = add(theProductKwl, BURST_PREFIX, "[0].start_sample", 0);
+    burstRecord.endSample   = add(theProductKwl, BURST_PREFIX, "[0].end_sample",  sizex-1);
+
+    burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", 
+				       ossimplugins::time::toModifiedJulianDate(first_line_time));
+    burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
+				       ossimplugins::time::toModifiedJulianDate(last_line_time));
+
+    theBurstRecords.push_back(burstRecord);
+    
+    const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
+    add(theProductKwl, BURST_NUMBER_LINES_KEY, sizey);
+
+    const std::string BURST_NUMBER_SAMPLES_KEY    = "support_data.geom.bursts.number_samples_per_burst";
+    add(theProductKwl, BURST_NUMBER_SAMPLES_KEY, sizex);
+
+
+    //////////////// Add GCPs one for the moment ////////////////
+    
+    // Get the borders
+    std::string geoCoor_TL = metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_TL;
+    otb::Utils::ConvertStringToVector(geoCoor_TL, vGeoCoor_TL, "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
+
+    std::string geoCoor_TR = metadataBands[0]["S01_SBI_Top_Right_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_TR;
+    otb::Utils::ConvertStringToVector(geoCoor_TR, vGeoCoor_TR, "S01_SBI_Top_Right_Geodetic_Coordinates", " ");
+    
+    std::string geoCoor_BL = metadataBands[0]["S01_SBI_Bottom_Left_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_BL;
+    otb::Utils::ConvertStringToVector(geoCoor_BL, vGeoCoor_BL, "S01_SBI_Bottom_Left_Geodetic_Coordinates", " ");
+    
+    std::string geoCoor_BR = metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"];
+    std::vector<std::string> vGeoCoor_BR;
+    otb::Utils::ConvertStringToVector(geoCoor_BR, vGeoCoor_BR, "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+    
+    // Mean
+    std::vector<double> vGeoCoor_Mean;
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[0]) + std::stod(vGeoCoor_TR[0]) + std::stod(vGeoCoor_BL[0]) +
+			     std::stod(vGeoCoor_BR[0]))/4.);
+
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[1]) + std::stod(vGeoCoor_TR[1]) + std::stod(vGeoCoor_BL[1]) +
+			     std::stod(vGeoCoor_BR[1]))/4.);
+
+    vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[2]) + std::stod(vGeoCoor_TR[2]) + std::stod(vGeoCoor_BL[2]) +
+			     std::stod(vGeoCoor_BR[2]))/4.);
+
+    ossimGpt gptPt;
+    gptPt.lat = vGeoCoor_Mean[0];
+    gptPt.lon = vGeoCoor_Mean[1];
+    gptPt.hgt = vGeoCoor_Mean[2];
+
+    ossimDpt estimatedImPt;
+    TimeType estimatedAzimuthTime;
+    double   estimatedRangeTime;
+    
+    // Inverse model for the middle point
+    loadState(theProductKwl); // Load the kwl to make the inverse projection
+    ossimEcefPoint sensorPos;
+    ossimEcefVector sensorVel;
+    const bool s1 = this->worldToAzimuthRangeTime(gptPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos,
+						  sensorVel);
+    this->worldToLineSample(gptPt,estimatedImPt);
+    
+    // Add the GCP to kwl
+    add(theProductKwl, GCP_NUMBER_KEY, ossimString("1"));
+    char prefix[1024];
+    pos = s_printf(prefix, "%s[%d].", GCP_PREFIX.c_str(), 0);
+    
+    add(theProductKwl, prefix, attAzimuthTime, estimatedAzimuthTime);
+    add(theProductKwl, prefix, keySlantRangeTime, 
+	estimatedRangeTime);
+    
+    add(theProductKwl, prefix, keyImPtX, estimatedImPt.x);
+    add(theProductKwl, prefix, keyImPtY, estimatedImPt.y);
+    add(theProductKwl, prefix, keyWorldPtLat, vGeoCoor_Mean[0]);
+    add(theProductKwl, prefix, keyWorldPtLon,  vGeoCoor_Mean[1]);
+    add(theProductKwl, prefix, keyWorldPtHgt, vGeoCoor_Mean[2]);
+    
+    ////////////////// (Re) Load the kwl ////////////////
+    loadState(theProductKwl);
+    
+    // Update Sensor and image Id
+    theSensorID = "CSK";
+    theImageID = std::to_string(std::stoi(metadataDataSet["Programmed_Image_ID"]));
+    
+    return true;
   }
-
-  _sensor = new SensorParams();
-
-
-  /**
-  * @todo : see on real products (for example DESCENDING and ASCENDING)
-  */
-  const char* orbitDirection_str = kwl.find(prefix,"orbitDirection");
-  std::string orbitDirection(orbitDirection_str) ;
-  int orbitDirectionSign ;
-  if (orbitDirection=="DESCENDING") orbitDirectionSign = 1 ;
-  else orbitDirectionSign = - 1 ;
-
-  const char* lookDirection_str = kwl.find(prefix,"lookDirection");
-  std::string lookDirection(lookDirection_str) ;
-  if ((lookDirection == "Right")||(lookDirection == "RIGHT")) _sensor->set_sightDirection(SensorParams::Right) ;
-  else _sensor->set_sightDirection(SensorParams::Left) ;
-
-  const char* colsOrder_str = kwl.find(prefix,"colsOrder");
-  std::string colsOrder(colsOrder_str) ;
-  const char* linsOrder_str = kwl.find(prefix,"linsOrder");
-  std::string linsOrder(linsOrder_str) ;
-  if (colsOrder=="NEAR-FAR")
-    _sensor->set_col_direction(orbitDirectionSign);
-  else _sensor->set_col_direction(-orbitDirectionSign);
-  if (linsOrder=="NEAR-FAR")
-    _sensor->set_lin_direction(orbitDirectionSign);
-  else _sensor->set_lin_direction(-orbitDirectionSign);
-
-  _sensor->set_sf(fr);
-  const double CLUM        = 2.99792458e+8 ;
-  double wave_length = CLUM / central_freq ;
-  _sensor->set_rwl(wave_length);
-  _sensor->set_nAzimuthLook(n_azilok);
-  _sensor->set_nRangeLook(n_rnglok);
-
-  // fa is the processing PRF
-  _sensor->set_prf(fa * n_azilok);
-
-  _sensor->set_semiMajorAxis(ellip_maj) ;
-  _sensor->set_semiMinorAxis(ellip_min) ;
-
-  return true;
-}
-
-bool ossimCosmoSkymedModel::InitPlatformPosition(const ossimKeywordlist &kwl, const char *prefix)
-{
-  /*
-   * Retrieval of ephemerisis number
-   */
-  const char* neph_str = kwl.find(prefix,"neph");
-  int neph = atoi(neph_str);
-
-  Ephemeris** ephemeris = new Ephemeris*[neph];
-
-  /*
-   * Retrieval of reference date
-   */
-  const char* referenceUTC_str = kwl.find(prefix,"referenceUTC");
-  std::string referenceUTC(referenceUTC_str) ;
-  CivilDateTime ref_civil_date;
-  if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) return false;
-
-  /*
-   * Retrieval of ephemerisis
-   */
-  for (int i=0;i<neph;i++)
-  {
-    double pos[3];
-    double vit[3];
-    char name[64];
-
-    sprintf(name,"eph%i_date",i);
-    const char* date_str = kwl.find(prefix,name);
-    float relative_date = atof(date_str);
-
-    sprintf(name,"eph%i_posX",i);
-    const char* px_str = kwl.find(prefix,name);
-    pos[0] = atof(px_str);
-
-    sprintf(name,"eph%i_posY",i);
-    const char* py_str = kwl.find(prefix,name);
-    pos[1] = atof(py_str);
-
-    sprintf(name,"eph%i_posZ",i);
-    const char* pz_str = kwl.find(prefix,name);
-    pos[2] = atof(pz_str);
-
-    sprintf(name,"eph%i_velX",i);
-    const char* vx_str = kwl.find(prefix,name);
-    vit[0] = atof(vx_str) ;
-
-    sprintf(name,"eph%i_velY",i);
-    const char* vy_str = kwl.find(prefix,name);
-    vit[1] = atof(vy_str) ;
-
-    sprintf(name,"eph%i_velZ",i);
-    const char* vz_str = kwl.find(prefix,name);
-    vit[2] = atof(vz_str) ;
-    /*
-     * Conversion to JSD Date
-     */
-    int second = (int) relative_date ;
-    double decimal = relative_date - second ;
-    CivilDateTime eph_civil_date(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
-    JSDDateTime eph_jsd_date(eph_civil_date);
-
-    GeographicEphemeris* eph = new GeographicEphemeris(eph_jsd_date,pos,vit);
-
-    ephemeris[i] = eph;
-  }
-
-  /*
-   * Creation of the platform position interpolator
-   */
-  if (_platformPosition != NULL)
-  {
-    delete _platformPosition;
-  }
-  _platformPosition = new PlatformPosition(ephemeris,neph);
-
-  /*
-   * Free of memory used by ephemerisis list : the constructor copies the ephemerisis
-   */
-  for (int i=0;i<neph;i++)
-  {
-    delete ephemeris[i];
-  }
-  delete[] ephemeris;
-
-  return true;
-}
-
-bool ossimCosmoSkymedModel::InitRefPoint(const ossimKeywordlist &kwl, const char *prefix)
-{
-  const char* sc_lin_str = kwl.find(prefix,"sc_lin");
-  double sc_lin = atof(sc_lin_str);
-
-  const char* sc_pix_str = kwl.find(prefix,"sc_pix");
-  double sc_pix = atof(sc_pix_str);
-
-  // const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing");
-  // double pixel_spacing = atof(pixel_spacing_str);
-
-  const char* azimuthStartTime_str = kwl.find(prefix,"azimuthStartTime");
-  double azimuthStartTime = atof(azimuthStartTime_str);
-
-  const char* rng_gate_str = kwl.find(prefix,"rng_gate");
-  double rng_gate = atof(rng_gate_str);
-
-  const char* referenceUTC_str = kwl.find(prefix,"referenceUTC");
-  std::string referenceUTC(referenceUTC_str) ;
-  CivilDateTime ref_civil_date;
-  if (! UtcDateTimeStringToCivilDate(referenceUTC, ref_civil_date)) return false;
-
-  if(_refPoint == NULL)
-  {
-    _refPoint = new RefPoint();
-  }
-
-  _refPoint->set_pix_col(sc_pix);
-  _refPoint->set_pix_line(sc_lin);
-
-  double relative_date = (azimuthStartTime + sc_lin/_sensor->get_prf());
-  int second = (int) relative_date ;
-  double decimal = relative_date - second ;
-  CivilDateTime * date = new CivilDateTime(ref_civil_date.get_year(), ref_civil_date.get_month(), ref_civil_date.get_day(), second, decimal);
-
-  if(_platformPosition != NULL)
-  {
-    Ephemeris * ephemeris = _platformPosition->Interpolate((JSDDateTime)*date);
-    if (ephemeris == NULL) return false ;
-
-    _refPoint->set_ephemeris(ephemeris);
-
-    delete ephemeris;
-  }
-  else
-  {
-    return false;
-  }
-
-  double c = 2.99792458e+8;
-  double distance = (rng_gate + sc_pix*_sensor->get_nRangeLook()/_sensor->get_sf()) * (c/2.0);
-
-  // in the case of Georeferenced images, the "relative" ground range is stored in place of the slant range
-  // (used for SlantRange computation relative to reference point, necessary for optimization)
-  // here, the pixelDirection is ignored since the CSKS reference point is always at the scene centre
-  if (_isProductGeoreferenced) {
-    distance = _refPoint->get_pix_col() * _pixel_spacing ;
-  }
-
-  _refPoint->set_distance(distance);
-
-
-  // in order to use ossimSensorModel::lineSampleToWorld
-  const char* nbCol_str = kwl.find(prefix,"nbCol");
-  const char* nbLin_str = kwl.find(prefix,"nbLin");
-  theImageSize.x      = atoi(nbCol_str);
-   theImageSize.y      = atoi(nbLin_str);
-   theImageClipRect    = ossimDrect(0, 0, theImageSize.x-1, theImageSize.y-1);
-
-
-  // Ground Control Points extracted from the model : scene center and corners
-  std::list<ossimGpt> groundGcpCoordinates ;
-  std::list<ossimDpt> imageGcpCoordinates ;
-  char name[64];
-  for (int k=0 ; k<5 ; k++) {
-    sprintf(name,"cornersCol%i",k);
-    const char* i_str = kwl.find(name);
-    int i = atoi(i_str);
-    sprintf(name,"cornersLin%i",k);
-    const char* j_str = kwl.find(name);
-    int j = atoi(j_str);
-    sprintf(name,"cornersLon%i",k);
-    const char* lon_str = kwl.find(name);
-    double lon = atof(lon_str);
-    sprintf(name,"cornersLat%i",k);
-    const char* lat_str = kwl.find(name);
-    double lat = atof(lat_str);
-    sprintf(name,"cornersHeight%i",k);
-    const char* height_str = kwl.find(name);
-    double height = atof(height_str) ;
-
-    ossimDpt imageGCP(i,j);
-    ossimGpt groundGCP(lat, lon, height);
-    groundGcpCoordinates.push_back(groundGCP) ;
-    imageGcpCoordinates.push_back(imageGCP) ;
-  }
-
-  // Default optimization
-  optimizeModel(groundGcpCoordinates, imageGcpCoordinates) ;
-
-  return true;
-}
-
-bool ossimCosmoSkymedModel::InitSRGR(const ossimKeywordlist &kwl, const char *prefix)
-{
-  const char* rangeProjectionType_str = kwl.find(prefix,"rangeProjectionType");
-  std::string rangeProjectionType(rangeProjectionType_str);
-
-  const char* pixel_spacing_str = kwl.find(prefix,"pixel_spacing");
-  _pixel_spacing= atof(pixel_spacing_str);
-
-  _isProductGeoreferenced = (rangeProjectionType=="GROUNDRANGE") ;
-
-  // Number of columns
-  const char* nbCol_str = kwl.find(prefix,"nbCol");
-  _nbCol = atoi(nbCol_str);
-
-  // SRGR polynomial reference
-  const char* SrGr_R0_str = kwl.find(prefix,"SrGr_R0");
-  _SrGr_R0 = atof(SrGr_R0_str);
-
-  // SRGR coefficients
-  char name[64];
-  double coeff ;
-  for(int i=0;i<6;i++)
-  {
-    sprintf(name,"SrToGr_coeffs_%i",i);
-    const char* coeff_str = kwl.find(prefix,name);
-    coeff = atof(coeff_str);
-    _SrGr_coeffs.push_back(coeff);
-  }
-
-  return true;
-}
-
-
-bool ossimCosmoSkymedModel::UtcDateTimeStringToCivilDate(const std::string &utcString, CivilDateTime &outputDate) {
-  // conversion :
-  // try with date format yyyymmdd
-
-  if (utcString.size() < 8) return false ;
-  const char* stringUTCDate =  utcString.c_str() ;
-
-   char year_str[5];
-  for (int i=0;i<4;i++)
-  {
-    year_str[i] = stringUTCDate[i];
-  }
-  year_str[4] = '\0';
-
-  char month_str[3];
-  for (int i=4;i<6;i++)
-  {
-    month_str[i-4] = stringUTCDate[i];
-  }
-  month_str[2] = '\0';
-
-  char day_str[3];
-  for (int i=6;i<8;i++)
-  {
-    day_str[i-6] = stringUTCDate[i];
-  }
-  day_str[2] = '\0';
-
-  outputDate.set_year(atoi(year_str));
-  outputDate.set_month(atoi(month_str));
-  outputDate.set_day(atoi(day_str));
-  outputDate.set_second(0);
-  outputDate.set_decimal(0.0);
-
-  return true ;
-}
-
-
-}
-
-
+  
+//*************************************************************************************************
+// initImageSize
+//*************************************************************************************************
+   bool ossimCosmoSkymedModel::initImageSize(ossimIpt& imageSize) const
+   {
+      std::string const& samples_cstr = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_SAMPLES_KW);
+      std::string const& lines_cstr   = theProductKwl.findKey(SUPPORT_DATA_PREFIX, ossimKeywordNames::NUMBER_LINES_KW);
+
+      imageSize.samp = to<int>(samples_cstr, "decoding sample number from KWL");
+      imageSize.line = to<int>(lines_cstr, "decoding line number from KWL");
+
+      return true;
+   }
+ 
+//*************************************************************************************************
+// imagingRay
+//*************************************************************************************************
+   void ossimCosmoSkymedModel::imagingRay(const ossimDpt& image_point, ossimEcefRay&   image_ray) const
+   {
+      // NOT YET IMPLEMENTED
+      setErrorStatus();
+   }
+
+} //end namespace

@@ -317,7 +317,6 @@ private:
     SetName("StereoFramework");
     SetDescription("Compute the ground elevation based on one or multiple stereo pair(s)");
 
-    SetDocName("Stereo Framework");
     SetDocLongDescription(
       "Compute the ground elevation with a stereo block matching algorithm "
       "between one or multiple stereo pair in sensor geometry. The output is "

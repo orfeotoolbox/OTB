@@ -62,14 +62,14 @@ int main(int argc, char* argv[])
 
 
   // Input related typedefs
-  typedef float                                        InputValueType;
-  typedef itk::VariableLengthVector<InputValueType>    InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType> InputListSampleType;
+  using InputValueType      = float;
+  using InputSampleType     = itk::VariableLengthVector<InputValueType>;
+  using InputListSampleType = itk::Statistics::ListSample<InputSampleType>;
 
   // Target related typedefs
-  typedef int                                           TargetValueType;
-  typedef itk::FixedArray<TargetValueType, 1>           TargetSampleType;
-  typedef itk::Statistics::ListSample<TargetSampleType> TargetListSampleType;
+  using TargetValueType      = int;
+  using TargetSampleType     = itk::FixedArray<TargetValueType, 1>;
+  using TargetListSampleType = itk::Statistics::ListSample<TargetSampleType>;
 
   InputListSampleType::Pointer  InputListSample  = InputListSampleType::New();
   TargetListSampleType::Pointer TargetListSample = TargetListSampleType::New();
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
   // OpenCV library (\cite{opencv_library}) which handles other classifiers than
   // the SVM.
 
-  typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
+  using SVMType = otb::SVMMachineLearningModel<InputValueType, TargetValueType>;
 
   SVMType::Pointer SVMClassifier = SVMType::New();
 

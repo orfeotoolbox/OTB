@@ -58,16 +58,16 @@ int main(int argc, char* argv[])
   // assume that the external block of memory uses the same data type to
   // represent the pixels.
   //
-  typedef unsigned char                    PixelType;
-  const unsigned int                       Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType              = unsigned char;
+  const unsigned int Dimension = 2;
+  using ImageType              = otb::Image<PixelType, Dimension>;
 
   // The type of the ImportImageFilter is instantiated in the
   // following line.
   //
   // \index{otb::ImportImageFilter!Instantiation}
 
-  typedef otb::ImportImageFilter<ImageType> ImportFilterType;
+  using ImportFilterType = otb::ImportImageFilter<ImageType>;
 
   //  A filter object created using the \code{New()} method is then
   //  assigned to a \code{SmartPointer}.
@@ -174,8 +174,8 @@ int main(int argc, char* argv[])
   //  Finally, we can connect the output of this filter to a pipeline.
   //  For simplicity we just use a writer here, but it could be any other filter.
 
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer                     writer = WriterType::New();
+  using WriterType           = otb::ImageFileWriter<ImageType>;
+  WriterType::Pointer writer = WriterType::New();
 
   writer->SetFileName(argv[1]);
 

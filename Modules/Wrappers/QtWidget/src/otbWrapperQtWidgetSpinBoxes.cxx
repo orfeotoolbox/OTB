@@ -103,7 +103,8 @@ void QtWidgetSpinBox::SetValueNoSignal(int value)
 int QtWidgetSpinBox::valueFromText(const QString &text) const
 {
   bool ok;
-  int result = QLocale::system().toInt(text, &ok);
+  // Force C locale because OTB gui is not i18n
+  int result = QLocale::c().toInt(text, &ok);
   if (ok)
   {
     return result;
@@ -162,7 +163,8 @@ void QtWidgetDoubleSpinBox::SetValueNoSignal(double value)
 double QtWidgetDoubleSpinBox::valueFromText(const QString &text) const
 {
   bool ok;
-  double result = QLocale::system().toDouble(text, &ok);
+  // Force C locale because OTB gui is not i18n
+  double result = QLocale::c().toDouble(text, &ok);
   if (ok)
   {
     return result;
@@ -180,7 +182,9 @@ QString QtWidgetDoubleSpinBox::textFromValue(double value) const
   // which leads to ugly trailing zeros for small values (e.g 1.50000)
   // We use std::ostringstream because QString::arg formatting support is too limited
   std::ostringstream oss;
-  oss.imbue(std::locale("")); // use system's locale for formatting
+
+  // Force C locale because OTB gui is not i18n
+  oss.imbue(std::locale::classic());
 
   // Set precision to the number of decimal digits that can be represented without change.
   // Use float precision because OTB parameter is float
@@ -190,9 +194,8 @@ QString QtWidgetDoubleSpinBox::textFromValue(double value) const
 
   // Add a trailing dot if the number is integer,
   // so that int and float parameters are more visually different.
-  // For now this is done for all locales, even though not all locales use this
-  // convention for formatting decimals...
-  const char dot = std::use_facet<std::numpunct<char>>(std::locale("")).decimal_point();
+  // This is an ok convention as long as we stay in C or english locale
+  const char dot = std::use_facet<std::numpunct<char>>(std::locale::classic()).decimal_point();
   if (oss.str().find(dot) == std::string::npos)
   {
       oss << dot;

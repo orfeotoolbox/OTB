@@ -62,7 +62,7 @@ int main(int itkNotUsed(argc), char* argv[])
   /*--*/
 
   const unsigned int Dimension = 2;
-  typedef float      PixelType;
+  using PixelType              = float;
 
   /** Variables for the canny detector*/
   const PixelType upperThreshold = static_cast<PixelType>(atof(argv[5]));
@@ -73,25 +73,25 @@ int main(int itkNotUsed(argc), char* argv[])
   // As usual, we start by defining the types for the images, the reader
   // and the writer.
 
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
+  using ImageType  = otb::Image<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
   // We define now the type for the function which will be used by the
   // edge density filter to estimate this density. Here we choose a
   // function which counts the number of non null pixels per area. The
   // function takes as template the type of the image to be processed.
 
-  typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
+  using CountFunctionType = otb::BinaryImageDensityFunction<ImageType>;
   // These {\em non null pixels} will be the result of an edge
   // detector. We use here the classical Canny edge detector, which is
   // templated over the input and output image types.
 
-  typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> CannyDetectorType;
+  using CannyDetectorType = itk::CannyEdgeDetectionImageFilter<ImageType, ImageType>;
   // Finally, we can define the type for the edge density filter which
   // takes as template the input and output image types, the edge
   // detector type, and the count function type..
 
-  typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType, CountFunctionType> EdgeDensityFilterType;
+  using EdgeDensityFilterType = otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType, CountFunctionType>;
   // We can now instantiate the different processing objects of the
   // pipeline using the \code{New()} method.
 
@@ -137,9 +137,9 @@ int main(int itkNotUsed(argc), char* argv[])
 
   /************* Image for printing **************/
 
-  typedef otb::Image<unsigned char, 2> OutputImageType;
+  using OutputImageType = otb::Image<unsigned char, 2>;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputImageType> RescalerType;
+  using RescalerType = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
 
   RescalerType::Pointer rescaler = RescalerType::New();
 
@@ -148,8 +148,8 @@ int main(int itkNotUsed(argc), char* argv[])
 
   rescaler->SetInput(filter->GetOutput());
 
-  typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
-  OutputWriterType::Pointer                     outwriter = OutputWriterType::New();
+  using OutputWriterType              = otb::ImageFileWriter<OutputImageType>;
+  OutputWriterType::Pointer outwriter = OutputWriterType::New();
 
   outwriter->SetFileName(prettyfilename);
   outwriter->SetInput(rescaler->GetOutput());

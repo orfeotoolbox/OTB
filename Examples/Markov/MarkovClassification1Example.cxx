@@ -69,17 +69,17 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef double                                   InternalPixelType;
-  typedef unsigned char                            LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
+  using InternalPixelType = double;
+  using LabelledPixelType = unsigned char;
+  using InputImageType    = otb::Image<InternalPixelType, Dimension>;
+  using LabelledImageType = otb::Image<LabelledPixelType, Dimension>;
 
   //  We define a reader for the image to be classified, an initialization for the
   //  classification (which could be random) and a writer for the final
   //  classification.
 
-  typedef otb::ImageFileReader<InputImageType>    ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -94,7 +94,7 @@ int main(int argc, char* argv[])
   //  A \doxygen{otb}{MarkovRandomFieldFilter} is instantiated, this is the
   // main class which connect the other to do the Markov classification.
 
-  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  using MarkovRandomFieldFilterType = otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType>;
 
   //  An \doxygen{otb}{MRFSamplerRandomMAP}, which derives from the
   // \doxygen{otb}{MRFSampler}, is instantiated. The sampler is in charge of
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
   // \doxygen{otb}{MRFSamplerRandomMAP}, randomly pick one possible value
   // according to the MAP probability.
 
-  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType> SamplerType;
+  using SamplerType = otb::MRFSamplerRandom<InputImageType, LabelledImageType>;
 
   //  An \doxygen{otb}{MRFOptimizerMetropoli}, which derives from the
   // \doxygen{otb}{MRFOptimizer}, is instantiated. The optimizer is in charge
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
   // \doxygen{otb}{MRFSamplerRandomMAP}, accept the proposal according to the
   // variation of energy it causes and a temperature parameter.
 
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
+  using OptimizerType = otb::MRFOptimizerMetropolis;
 
   // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instantiated. One energy
   // is required for the regularization, taking into account the relashionship between neighborhing pixels
@@ -120,8 +120,8 @@ int main(int argc, char* argv[])
   // The second energy is for the fidelity to the original data. Here it is done with an
   // \doxygen{otb}{MRFEnergyGaussianClassification} class, which defines a gaussian model for the data.
 
-  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
+  using EnergyRegularizationType = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
+  using EnergyFidelityType       = otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType>;
 
   // The different filters composing our pipeline are created by invoking their
   // \code{New()} methods, assigning the results to smart pointers.
@@ -179,8 +179,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
+  using RescaleType                  = itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType>;
+  RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 

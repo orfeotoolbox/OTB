@@ -150,11 +150,6 @@ private:
   //  */
   // ApplicationsTagContainer m_AppTags;
 
-  // /**
-  //  * \brief map storing applications docName and appName association
-  //  */
-  // ApplicationDocNameToNameMap m_AppsDocNameToNameMap;
-
   /**
    * \brief text to search in the widget tree
    */

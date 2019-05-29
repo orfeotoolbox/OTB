@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
   //  We declare the image type based on a particular pixel type and
   //  dimension. In this case the \code{float} type is used for the pixels.
 
-  typedef otb::Image<float, 2>            ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using ImageType  = otb::Image<float, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
-  typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
+  using GCPsToSensorModelFilterType = otb::GCPsToRPCSensorModelImageFilter<ImageType>;
 
-  typedef GCPsToSensorModelFilterType::Point2DType Point2DType;
-  typedef GCPsToSensorModelFilterType::Point3DType Point3DType;
+  using Point2DType = GCPsToSensorModelFilterType::Point2DType;
+  using Point3DType = GCPsToSensorModelFilterType::Point3DType;
 
   // We instantiate reader and writer types
   ReaderType::Pointer reader = ReaderType::New();

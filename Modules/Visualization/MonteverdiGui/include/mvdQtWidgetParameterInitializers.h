@@ -49,12 +49,10 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperQtWidgetListEditWidget.h"
@@ -90,7 +88,7 @@ namespace Wrapper
  */
 template< typename W >
 void
-SetupForFilenameDrop( W* widget, const char* text =NULL );
+SetupForFilenameDrop( W* widget );
 
 /**
  */
@@ -226,21 +224,6 @@ public:
 };
 
 /**
- * \class InputProcessXMLInitializer
- *
- * \ingroup OTBMonteverdiGUI
- *
- * \brief WIP.
- */
-class InputProcessXMLInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputProcessXMLParameter *,
-  void >
-{
-public:
-  inline result_type operator () ( argument_type widget ) const;
-};
-
-/**
  * \class OutputImageInitializer
  *
  * \ingroup OTBMonteverdiGUI
@@ -286,22 +269,6 @@ public:
  */
 class OutputFilenameInitializer : public std::unary_function<
   otb::Wrapper::QtWidgetOutputFilenameParameter*,
-  void
-  >
-{
-public:
-  inline result_type operator () ( argument_type widget ) const;
-};
-
-/**
- * \class OutputProcessXMLInitializer
- *
- * \ingroup OTBMonteverdiGUI
- *
- * \brief WIP.
- */
-class OutputProcessXMLInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetOutputProcessXMLParameter *,
   void
   >
 {
@@ -376,7 +343,7 @@ FileSelectionInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -387,7 +354,7 @@ InputImageInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -409,7 +376,7 @@ InputFilenameInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -431,7 +398,7 @@ InputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 }
 
 /*****************************************************************************/
@@ -443,17 +410,6 @@ InputVectorDataListInitializer
   // assert( widget!=NULL );
 
   // Drop support is done by ParameterListInitializer
-}
-
-/*****************************************************************************/
-inline
-InputProcessXMLInitializer::result_type
-InputProcessXMLInitializer
-::operator () ( argument_type widget ) const
-{
-  assert( widget!=NULL );
-
-  SetupForFilenameDrop( widget, "You can drop filename here." );
 }
 
 /*****************************************************************************/
@@ -494,7 +450,7 @@ OutputImageInitializer
 
   if( m_Prefix.isEmpty() )
     {
-    SetupForFilenameDrop( widget, "You can drop filename here." );
+    SetupForFilenameDrop( widget );
 
     assert( qApp!=NULL );
     assert( !qApp->arguments().empty() );
@@ -518,7 +474,7 @@ OutputVectorDataInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
@@ -534,31 +490,12 @@ OutputFilenameInitializer
 {
   assert( widget!=NULL );
 
-  SetupForFilenameDrop( widget, "You can drop filename here." );
+  SetupForFilenameDrop( widget );
 
   assert( qApp!=NULL );
   assert( !qApp->arguments().empty() );
 
   SetupOutputFilename( widget );
-}
-
-/*****************************************************************************/
-inline
-OutputProcessXMLInitializer::result_type
-OutputProcessXMLInitializer
-::operator () ( argument_type widget ) const
-{
-  assert( widget!=NULL );
-
-  SetupForFilenameDrop( widget, "You can drop filename here." );
-
-  assert( qApp!=NULL );
-  assert( !qApp->arguments().empty() );
-
-  // MANTIS-1103
-  // {
-  // SetupOutputFilename( widget );
-  // }
 }
 
 /*****************************************************************************/
@@ -592,7 +529,7 @@ ParameterListInitializer
 /*****************************************************************************/
 template< typename W >
 void
-SetupForFilenameDrop( W* widget, const char* text )
+SetupForFilenameDrop( W* widget )
 {
   assert( widget!=NULL );
 
@@ -602,15 +539,12 @@ SetupForFilenameDrop( W* widget, const char* text )
   // Setup widget.
   bool signalsBlocked = lineEdit->blockSignals( true );
   {
-  if( text!=NULL )
-    {
     lineEdit->setPlaceholderText(
       QCoreApplication::translate(
         "mvd::Wrapper::QtWidgetView",
-        text
+        "You can drop a file here"
       )
     );
-    }
 
   // lineEdit->setReadOnly( true );
 

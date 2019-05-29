@@ -65,7 +65,6 @@ private:
     SetDescription("This application merges small regions of a segmentation "
       "result.");
 
-    SetDocName("Small Region Merging");
     SetDocLongDescription("Given a segmentation result and the original image,"
                           " it will merge segments whose size in pixels is"
                           " lower than minsize parameter with the adjacent"

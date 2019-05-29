@@ -65,19 +65,19 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef otb::Image<float, 2>       FloatImageType;
-  typedef otb::VectorImage<float, 2> FloatVectorImageType;
+  using FloatImageType       = otb::Image<float, 2>;
+  using FloatVectorImageType = otb::VectorImage<float, 2>;
 
-  typedef otb::ImageFileReader<FloatImageType> ImageReaderType;
+  using ImageReaderType = otb::ImageFileReader<FloatImageType>;
 
-  typedef otb::ImageFileWriter<FloatImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<FloatImageType>;
 
-  typedef unsigned char                  OutputPixelType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  using OutputPixelType = unsigned char;
+  using OutputImageType = otb::Image<OutputPixelType, 2>;
 
-  typedef itk::RescaleIntensityImageFilter<FloatImageType, OutputImageType> RescalerType;
+  using RescalerType = itk::RescaleIntensityImageFilter<FloatImageType, OutputImageType>;
 
-  typedef otb::ImageFileWriter<OutputImageType> OutputWriterType;
+  using OutputWriterType = otb::ImageFileWriter<OutputImageType>;
   // This example demonstrates the use of the following filters :
   // \begin{itemize}
   // \item \doxygen{otb}{StereorectificationDisplacementFieldSource}
@@ -88,30 +88,30 @@ int main(int argc, char* argv[])
   // \item \doxygen{otb}{DisparityMapToDEMFilter}
   // \end{itemize}
 
-  typedef otb::StereorectificationDisplacementFieldSource<FloatImageType, FloatVectorImageType> DisplacementFieldSourceType;
+  using DisplacementFieldSourceType = otb::StereorectificationDisplacementFieldSource<FloatImageType, FloatVectorImageType>;
 
-  typedef itk::Vector<double, 2>       DisplacementType;
-  typedef otb::Image<DisplacementType> DisplacementFieldType;
+  using DisplacementType      = itk::Vector<double, 2>;
+  using DisplacementFieldType = otb::Image<DisplacementType>;
 
-  typedef itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType> DisplacementFieldCastFilterType;
+  using DisplacementFieldCastFilterType = itk::VectorCastImageFilter<FloatVectorImageType, DisplacementFieldType>;
 
-  typedef otb::StreamingWarpImageFilter<FloatImageType, FloatImageType, DisplacementFieldType> WarpFilterType;
+  using WarpFilterType = otb::StreamingWarpImageFilter<FloatImageType, FloatImageType, DisplacementFieldType>;
 
-  typedef otb::BCOInterpolateImageFunction<FloatImageType> BCOInterpolationType;
+  using BCOInterpolationType = otb::BCOInterpolateImageFunction<FloatImageType>;
 
-  typedef otb::Functor::NCCBlockMatching<FloatImageType, FloatImageType> NCCBlockMatchingFunctorType;
+  using NCCBlockMatchingFunctorType = otb::Functor::NCCBlockMatching<FloatImageType, FloatImageType>;
 
-  typedef otb::PixelWiseBlockMatchingImageFilter<FloatImageType, FloatImageType, FloatImageType, FloatImageType, NCCBlockMatchingFunctorType>
-      NCCBlockMatchingFilterType;
+  using NCCBlockMatchingFilterType =
+      otb::PixelWiseBlockMatchingImageFilter<FloatImageType, FloatImageType, FloatImageType, FloatImageType, NCCBlockMatchingFunctorType>;
 
-  typedef otb::BandMathImageFilter<FloatImageType> BandMathFilterType;
+  using BandMathFilterType = otb::BandMathImageFilter<FloatImageType>;
 
-  typedef otb::SubPixelDisparityImageFilter<FloatImageType, FloatImageType, FloatImageType, FloatImageType, NCCBlockMatchingFunctorType>
-      NCCSubPixelDisparityFilterType;
+  using NCCSubPixelDisparityFilterType =
+      otb::SubPixelDisparityImageFilter<FloatImageType, FloatImageType, FloatImageType, FloatImageType, NCCBlockMatchingFunctorType>;
 
-  typedef otb::DisparityMapMedianFilter<FloatImageType, FloatImageType, FloatImageType> MedianFilterType;
+  using MedianFilterType = otb::DisparityMapMedianFilter<FloatImageType, FloatImageType, FloatImageType>;
 
-  typedef otb::DisparityMapToDEMFilter<FloatImageType, FloatImageType, FloatImageType, FloatVectorImageType, FloatImageType> DisparityToElevationFilterType;
+  using DisparityToElevationFilterType = otb::DisparityMapToDEMFilter<FloatImageType, FloatImageType, FloatImageType, FloatVectorImageType, FloatImageType>;
 
   double avgElevation = atof(argv[5]);
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElevation);

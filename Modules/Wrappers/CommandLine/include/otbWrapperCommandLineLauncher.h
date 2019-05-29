@@ -112,9 +112,6 @@ public:
   /** Create and display the help of the application */
   void DisplayHelp(bool longHelp=false);
 
-   /** Create and display the long help of the application */
-  void DisplayLongHelp();
-
   /** Performs specific action for testing environment */
   void LoadTestEnv();
 

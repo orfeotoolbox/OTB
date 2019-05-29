@@ -66,10 +66,10 @@ int main(int argc, char* argv[])
   //  The input and output image types are now defined using their respective
   //  pixel type and dimension.
 
-  typedef unsigned char                  InputPixelType;
-  typedef unsigned short                 OutputPixelType;
-  typedef otb::Image<InputPixelType, 2>  InputImageType;
-  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  using InputPixelType  = unsigned char;
+  using OutputPixelType = unsigned short;
+  using InputImageType  = otb::Image<InputPixelType, 2>;
+  using OutputImageType = otb::Image<OutputPixelType, 2>;
 
   //  The filter type can be instantiated using the input and output image
   //  types defined above. A filter object is created with the \code{New()}
@@ -79,20 +79,20 @@ int main(int argc, char* argv[])
   //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!New()}
   //  \index{itk::Danielsson\-Distance\-Map\-Image\-Filter!Pointer}
 
-  typedef itk::ConnectedComponentImageFilter<InputImageType, InputImageType> ConnectedType;
-  ConnectedType::Pointer                                                     connectedComponents = ConnectedType::New();
+  using ConnectedType                        = itk::ConnectedComponentImageFilter<InputImageType, InputImageType>;
+  ConnectedType::Pointer connectedComponents = ConnectedType::New();
 
-  typedef itk::DanielssonDistanceMapImageFilter<InputImageType, OutputImageType, OutputImageType> FilterType;
-  FilterType::Pointer                                                                             filter = FilterType::New();
+  using FilterType           = itk::DanielssonDistanceMapImageFilter<InputImageType, OutputImageType, OutputImageType>;
+  FilterType::Pointer filter = FilterType::New();
 
-  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType> RescalerType;
-  RescalerType::Pointer                                                      scaler = RescalerType::New();
+  using RescalerType           = itk::RescaleIntensityImageFilter<OutputImageType, OutputImageType>;
+  RescalerType::Pointer scaler = RescalerType::New();
 
   //
   // Reader and Writer types are instantiated.
   //
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

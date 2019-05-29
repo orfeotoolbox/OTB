@@ -105,7 +105,6 @@ void DoInit() override
     "Train a classifier from multiple images to perform regression.");
 
   // Documentation
-  SetDocName("Train a regression model");
   SetDocLongDescription(
     "This application trains a classifier from multiple input images or a csv "
     "file, in order to perform regression. Predictors are composed of pixel "
@@ -272,8 +271,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
       elem.Fill(0.0);
       for (unsigned int i=0 ; i<nbCols ; ++i)
         {
-        iss.str(words[i]);
-        iss >> elem[i];
+          elem[i] = std::stod(words[i]);
         }
       outputList->PushBack(elem);
       }

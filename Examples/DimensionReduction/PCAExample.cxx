@@ -46,7 +46,7 @@
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double     PixelType;
+  using PixelType                          = double;
   const unsigned int Dimension             = 2;
   const char*        inputFileName         = argv[1];
   const char*        outputFilename        = argv[2];
@@ -62,9 +62,9 @@ int main(int itkNotUsed(argc), char* argv[])
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
 
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  using ImageType  = otb::VectorImage<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
   // We instantiate now the image reader and we set the image file name.
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -74,8 +74,8 @@ int main(int itkNotUsed(argc), char* argv[])
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
 
-  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> PCAFilterType;
-  PCAFilterType::Pointer                                                     pcafilter = PCAFilterType::New();
+  using PCAFilterType              = otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD>;
+  PCAFilterType::Pointer pcafilter = PCAFilterType::New();
   // The only parameter needed for the PCA is the number of principal
   // components required as output. Principal components are linear combination of input components
   // (here the input image  bands),
@@ -102,8 +102,8 @@ int main(int itkNotUsed(argc), char* argv[])
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
 
-  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::INVERSE> InvPCAFilterType;
-  InvPCAFilterType::Pointer                                                  invFilter = InvPCAFilterType::New();
+  using InvPCAFilterType              = otb::PCAImageFilter<ImageType, ImageType, otb::Transform::INVERSE>;
+  InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
 
   invFilter->SetInput(pcafilter->GetOutput());
   invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
@@ -131,9 +131,9 @@ int main(int itkNotUsed(argc), char* argv[])
   // \end{figure}
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<ImageType, ImageType> PrintFilterType;
-  typedef PrintFilterType::OutputImageType                VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>             VisuWriterType;
+  using PrintFilterType = otb::PrintableImageFilter<ImageType, ImageType>;
+  using VisuImageType   = PrintFilterType::OutputImageType;
+  using VisuWriterType  = otb::ImageFileWriter<VisuImageType>;
 
   PrintFilterType::Pointer inputPrintFilter        = PrintFilterType::New();
   PrintFilterType::Pointer outputPrintFilter       = PrintFilterType::New();
