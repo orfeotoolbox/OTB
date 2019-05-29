@@ -39,7 +39,7 @@ fast-build:
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   after_script:
-    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
+    - python3 CI/cdash_handler.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
@@ -56,7 +56,7 @@ fast-build:
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
-    - python3 CI/cdash_handler.py $CI_COMMIT_SHA $CI_PROJECT_ID $CI_PROJECT_DIR $K8S_SECRET_CDASH $CI_MERGE_REQUEST_REF_PATH
+    - python3 CI/cdash_handler.py
   artifacts:
     when: on_failure
     expire_in: 24 hrs
