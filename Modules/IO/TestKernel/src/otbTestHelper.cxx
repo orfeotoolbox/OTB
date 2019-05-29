@@ -2613,26 +2613,37 @@ void TestHelper::ogrReportOnLayer(OGRLayer * ref_poLayer,
     CheckValueTolerance("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors, epsilon);
     CheckValueTolerance("Extent: MaxY", ref_oExt.MaxY, test_oExt.MaxY, nbdiff, m_ReportErrors, epsilon);
     }
+  
+  
+  /// Spatial reference comparison :
+  /// We use the IsSame GDAL method to determine if the spatial references are equivalent,
+  /// if they're not, a wkt string comparison is done for error reporting.
+  /// Note that two spatial references might be equivalent without having the same
+  /// wkt representation.
+  if ((ref_poLayer->GetSpatialRef() == nullptr) || 
+      (test_poLayer->GetSpatialRef() == nullptr) || 
+      ( ! ref_poLayer->GetSpatialRef()->IsSame( test_poLayer->GetSpatialRef() ) ))
+  {
+    char *ref_pszWKT;
+    char *test_pszWKT;
 
-  char *ref_pszWKT;
-  char *test_pszWKT;
+    if (ref_poLayer->GetSpatialRef() == nullptr) ref_pszWKT = CPLStrdup("(unknown)");
+    else
+      {
+      ref_poLayer->GetSpatialRef()->exportToPrettyWkt(&ref_pszWKT);
+      }
+    if (test_poLayer->GetSpatialRef() == nullptr) test_pszWKT = CPLStrdup("(unknown)");
+    else
+      {
+      test_poLayer->GetSpatialRef()->exportToPrettyWkt(&test_pszWKT);
+      }
+  
+    otbCheckStringValue("Layer SRS WKT", ref_pszWKT, test_pszWKT, nbdiff, m_ReportErrors);
 
-  if (ref_poLayer->GetSpatialRef() == nullptr) ref_pszWKT = CPLStrdup("(unknown)");
-  else
-    {
-    ref_poLayer->GetSpatialRef()->exportToPrettyWkt(&ref_pszWKT);
-    }
-  if (test_poLayer->GetSpatialRef() == nullptr) test_pszWKT = CPLStrdup("(unknown)");
-  else
-    {
-    test_poLayer->GetSpatialRef()->exportToPrettyWkt(&test_pszWKT);
-    }
-
-  otbCheckStringValue("Layer SRS WKT", ref_pszWKT, test_pszWKT, nbdiff, m_ReportErrors);
-
-  CPLFree(ref_pszWKT);
-  CPLFree(test_pszWKT);
-
+    CPLFree(ref_pszWKT);
+    CPLFree(test_pszWKT);
+  }
+  
   otbCheckStringValue("FID Column", ref_poLayer->GetFIDColumn(), test_poLayer->GetFIDColumn(), nbdiff, m_ReportErrors);
   otbCheckStringValue("Geometry Column", ref_poLayer->GetGeometryColumn(),
                       test_poLayer->GetGeometryColumn(), nbdiff, m_ReportErrors);
