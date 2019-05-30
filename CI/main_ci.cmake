@@ -180,7 +180,7 @@ else()
     "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${_install_error}")
 endif()
 
-if ( NOT install_rv EQUAL 0 )
+if ( NOT _install_rv EQUAL 0 )
   message( SEND_ERROR "Install has failed.")
 endif()
 
