@@ -131,15 +131,14 @@ set ( CONFIGURE_OPTIONS
 if(WIN32)
   file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
   file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
-  set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
-  set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
-  set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
-  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
-  set(ENV{GEOTIFF_CSV} "${XDK_PATH_NATIVE}\\share\\epsg_csv" )
-  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share" )
+  set(OTB_ENV_PATH "${OTB_BUILD_BIN_DIR_NATIVE};${XDK_PATH_NATIVE}\\bin;${XDK_PATH_NATIVE}\\lib;$ENV{PATH}")
+  set(ENV{PATH} "${OTB_ENV_PATH};$ENV{PATH}")
+  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data")
+  set(ENV{GEOTIFF_CSV} "${XDK_PATH_NATIVE}\\share\\epsg_csv")
+  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share")
   # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
   set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
-  set( CTEST_ENVIRONMENT
+  set(CTEST_ENVIRONMENT
 "PATH=$ENV{PATH}
 GDAL_DATA=$ENV{GDAL_DATA}
 GEOTIFF_CSV=$ENV{GEOTIFF_CSV}
