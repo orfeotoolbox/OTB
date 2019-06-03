@@ -23,7 +23,7 @@
 #include <iomanip>
 
 #include "otbGenericMapProjection.h"
-
+#include "ogr_spatialref.h"
 int otbGenericMapProjection(int itkNotUsed(argc), char* argv[])
 {
   const char *  outFileName = argv[1];
@@ -35,11 +35,19 @@ int otbGenericMapProjection(int itkNotUsed(argc), char* argv[])
   /** Test the ability to instantiate a projection from a string*/
   std::string projectionRefWkt =
     "PROJCS[\"UTM Zone 31, Northern Hemisphere\", GEOGCS[\"WGS 84\", DATUM[\"WGS_1984\", SPHEROID[\"WGS 84\", 6378137, 298.257223563, AUTHORITY[\"EPSG\",\"7030\"]], TOWGS84[0, 0, 0, 0, 0, 0, 0], AUTHORITY[\"EPSG\",\"6326\"]], PRIMEM[\"Greenwich\", 0, AUTHORITY[\"EPSG\",\"8901\"]], UNIT[\"degree\", 0.0174532925199433, AUTHORITY[\"EPSG\",\"9108\"]], AXIS[\"Lat\", NORTH], AXIS[\"Long\", EAST], AUTHORITY[\"EPSG\",\"4326\"]], PROJECTION[\"Transverse_Mercator\"], PARAMETER[\"latitude_of_origin\", 0], PARAMETER[\"central_meridian\", 3], PARAMETER[\"scale_factor\", 0.9996], PARAMETER[\"false_easting\", 500000], PARAMETER[\"false_northing\", 0], UNIT[\"Meter\", 1]]";
-
+  auto baselineSpatialReference = otb::SpatialReference::FromDescription(projectionRefWkt);
+  
   typedef otb::GenericMapProjection<otb::TransformDirection::FORWARD> GenericMapProjection;
   GenericMapProjection::Pointer genericMapProjection = GenericMapProjection::New();
   genericMapProjection->SetWkt(projectionRefWkt);
-  file << genericMapProjection->GetWkt() << std::endl << std::endl;
+
+  auto testSpatialReferenceForward = otb::SpatialReference::FromDescription(genericMapProjection->GetWkt());
+
+  if (testSpatialReferenceForward!=baselineSpatialReference)
+  {
+    std::cerr << "The spatial reference used in the forward test is different from the input spatial reference" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   itk::Point<double, 2> point;
   point[0] = 1.44;
@@ -52,7 +60,14 @@ int otbGenericMapProjection(int itkNotUsed(argc), char* argv[])
   typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> GenericMapProjectionInverse;
   GenericMapProjectionInverse::Pointer genericMapProjectionInverse = GenericMapProjectionInverse::New();
   genericMapProjectionInverse->SetWkt(projectionRefWkt);
-  file << genericMapProjectionInverse->GetWkt() << std::endl << std::endl;
+
+  auto testSpatialReferenceReverse = otb::SpatialReference::FromDescription(genericMapProjectionInverse->GetWkt());
+
+  if (testSpatialReferenceForward!=baselineSpatialReference)
+  {
+    std::cerr << "The spatial reference used in the reverse test is different from the input spatial reference" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   point[0] = 374100.8;
   point[1] = 4829184.8;
