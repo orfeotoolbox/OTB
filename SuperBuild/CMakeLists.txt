@@ -166,7 +166,18 @@ if(MSVC)
   if(MSVC_VERSION GREATER 1310)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zi" CACHE STRING "Flags used by the CXX compiler during DEBUG builds (OTB)." FORCE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi" CACHE STRING "Flags used by the C compiler during DEBUG builds (OTB)." FORCE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /OPT:REF /OPT:ICF"  CACHE STRING "Flags used by the linker (OTB)." FORCE)
 endif()
+
+# if(MSVC)
+  # # string(REPLACE "/Ob0" "/Ob2" CMAKE_CXX_FLAGS_DEBUG_NO_OPTIM "${CMAKE_CXX_FLAGS_DEBUG}")
+  # # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG_NO_OPTIM}" CACHE STRING "Flags used by the CXX compiler during DEBUG builds (OTB)." FORCE)
+  # # string(REPLACE "/Ob0" "/Ob2" CMAKE_C_FLAGS_DEBUG_NO_OPTIM "${CMAKE_C_FLAGS_DEBUG}")
+  # # set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG_NO_OPTIM}" CACHE STRING "Flags used by the C compiler during DEBUG builds (OTB)." FORCE)
+# endif()
+
 
 if(DEFINED ENV{CMAKE_PREFIX_PATH})
   set(SB_CMAKE_PREFIX_PATH "$ENV{CMAKE_PREFIX_PATH};${SB_INSTALL_PREFIX}")
@@ -193,9 +204,10 @@ if(UNIX)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_RPATH:PATH=${CMAKE_INSTALL_RPATH}")
 endif()
 
+
 foreach(cmake_var
     CMAKE_C_FLAGS
-    CMAKE_CXX_FLAGS
+	CMAKE_CXX_FLAGS
     CMAKE_EXE_LINKER_FLAGS
     CMAKE_SHARED_LINKER_FLAGS
     CMAKE_MODULE_LINKER_FLAGS
@@ -241,10 +253,10 @@ else()
 endif()
 
 if(CMAKE_C_FLAGS)
-  list(APPEND SB_ENV_CONFIGURE_CMD "CFLAGS=${CMAKE_C_FLAGS}")
+	list(APPEND SB_ENV_CONFIGURE_CMD "CFLAGS=${CMAKE_C_FLAGS}")
 endif()
 if(CMAKE_CXX_FLAGS)
-  list(APPEND SB_ENV_CONFIGURE_CMD "CXXFLAGS=${CMAKE_CXX_FLAGS}")
+	list(APPEND SB_ENV_CONFIGURE_CMD "CXXFLAGS=${CMAKE_CXX_FLAGS}")
 endif()
 if(CMAKE_EXE_LINKER_FLAGS)
   list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_EXE_LINKER_FLAGS}")
@@ -352,26 +364,6 @@ option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)"
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
-
-# do a system checkup
-if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/CMake/SystemCheckup
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMake/SystemCheckup
-                OUTPUT_QUIET
-                ERROR_QUIET)
-file(STRINGS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup/SystemCheckupResult.txt" _SYSTEM_CHECKUP_CONTENT)
-message(STATUS "|----------------------------------------------------------")
-message(STATUS "|----------------- System checkup results -----------------")
-message(STATUS "| The following libraries have been found on your system.")
-message(STATUS "| You can choose to use them (instead of superbuild versions)")
-message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
-message(STATUS "|----------------------------------------------------------")
-foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
-  message(STATUS "| ${lib}")
-  message(STATUS "|----------------------------------------------------------")
-endforeach()
 
 # Python
 # This should set the following variables (and more):
