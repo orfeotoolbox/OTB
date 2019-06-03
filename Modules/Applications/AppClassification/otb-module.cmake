@@ -36,7 +36,6 @@ otb_module(OTBAppClassification
     OTBUnsupervised
     OTBApplicationEngine
     OTBIndices
-    OTBMathParser
     OTBITK
     OTBDempsterShafer
     OTBGdalAdapters
