@@ -88,7 +88,7 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
 
 if(MSVC)
   configure_file(${CMAKE_SOURCE_DIR}/patches/BOOST/project-config.jam.in
-    ${CMAKE_BINARY_DIR}/BOOST/tmp/project-config.jam)
+    ${CMAKE_BINARY_DIR}/BOOST/src/BOOST-stamp/project-config.jam)
 endif()
 
 #NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
@@ -111,7 +111,7 @@ ExternalProject_Add(BOOST
 if(MSVC)
   ExternalProject_Add_Step(BOOST add_project_jam_config
 	COMMAND ${CMAKE_COMMAND} -E copy
-	${CMAKE_BINARY_DIR}/BOOST/tmp/project-config.jam
+	${CMAKE_BINARY_DIR}/BOOST/src/BOOST-stamp/project-config.jam
 	${BOOST_SB_SRC}
 	DEPENDEES patch
 	DEPENDERS configure)

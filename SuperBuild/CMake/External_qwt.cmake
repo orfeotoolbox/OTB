@@ -26,7 +26,7 @@ SETUP_SUPERBUILD(QWT)
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(QWT QT5)
 
 configure_file(${CMAKE_SOURCE_DIR}/patches/QWT/qwtconfig.pri
-  ${CMAKE_BINARY_DIR}/QWT/tmp/qwtconfig.pri
+  ${CMAKE_BINARY_DIR}/QWT/src/QWT-stamp/qwtconfig.pri
   @ONLY)
   
  if(CMAKE_BUILD_TYPE MATCHES "Debug")
@@ -35,7 +35,7 @@ else()
   set(OTB_QWT_BUILD_TYPE "release")
 endif()
 configure_file(${CMAKE_SOURCE_DIR}/patches/QWT/qwtbuild.pri
-  ${CMAKE_BINARY_DIR}/QWT/tmp/qwtbuild.pri
+  ${CMAKE_BINARY_DIR}/QWT/src/QWT-stamp/qwtbuild.pri
   @ONLY)
   
 set( OTB_QWT_BUILD_TYPE "debug")
@@ -67,7 +67,7 @@ ExternalProject_Add(QWT
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   DEPENDS ${QWT_DEPENDENCIES}
   PATCH_COMMAND 
-	${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/QWT/tmp/qwtbuild.pri ${CMAKE_BINARY_DIR}/QWT/tmp/qwtconfig.pri ${QWT_SB_SRC}
+	${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/QWT/src/QWT-stamp/qwtbuild.pri ${CMAKE_BINARY_DIR}/QWT/src/QWT-stamp/qwtconfig.pri ${QWT_SB_SRC}
   CONFIGURE_COMMAND ${QWT_SB_CONFIGURE_PROGRAM} ${QWT_SB_SRC}/qwt.pro
   LOG_CONFIGURE 1
   LOG_BUILD 1

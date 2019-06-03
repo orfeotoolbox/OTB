@@ -124,7 +124,7 @@ if(UNIX)
 else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
-    ${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local)
+    ${CMAKE_BINARY_DIR}/GDAL/src/GDAL-stamp/nmake.local)
 
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
     file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "${opt_line}\r\n")
@@ -163,7 +163,7 @@ SUPERBUILD_PATCH_SOURCE(GDAL)
 if(MSVC)
   ExternalProject_Add_Step(GDAL add_nmake_local
 	COMMAND ${CMAKE_COMMAND} -E copy
-	${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local
+	${CMAKE_BINARY_DIR}/GDAL/src/GDAL-stamp/nmake.local
 	${GDAL_SB_SRC}/nmake.local
 	DEPENDEES patch
 	DEPENDERS configure)
