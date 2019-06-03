@@ -24,7 +24,6 @@ INCLUDE_ONCE_MACRO(SHARK)
 # This single dependency has cost us more than all the others combined interms of build v. debug time spent!
 if(MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
   message(STATUS "SHARK deactivated on debug builds")
-  set(OTB_USE_SHARK OFF CACHE BOOL "Enable module Shark in OTB" FORCE)
   return()
 endif()
 
