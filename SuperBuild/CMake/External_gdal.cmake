@@ -38,11 +38,11 @@ ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOS_ROOT     --with-geos "/bin/geos-config")
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL HDF5_ROOT     --with-hdf5)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL HDF4_ROOT     --with-hdf4)
 
-set(WITH_NETCDF "")
+set(GDAL_WITH_NETCDF "0")
  if(TARGET NETCDF)
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL NETCDF)
   ADD_SUPERBUILD_CONFIGURE_VAR(GDAL NETCDF_ROOT   --with-netcdf)
-  set(WITH_NETCDF "WITH_NETCDF=1")
+  set(GDAL_WITH_NETCDF "1")
  endif()
 
 set(GDAL_CONFIGURE_COMMAND)
@@ -124,36 +124,19 @@ if(UNIX)
 else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
-    ${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt)
+    ${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local)
 
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
-    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt" "${opt_line}\r\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "${opt_line}\r\n")
   endforeach()
   
-  if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt" "WIN64=YES\r\n")
-  endif()
-
-  set(BUILD_DEBUG)
-  if(CMAKE_BUILD_TYPE MATCHES "Debug")
-	set(BUILD_DEBUG "DEBUG=1")
-  endif()
+if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
+file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "WIN64=YES\r\n")
+endif()
 
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
-  set(GDAL_BUILD_COMMAND nmake
-    /f ${GDAL_SB_SRC}/makefile.vc
-    MSVC_VER=${MSVC_VERSION}
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt
-	${BUILD_DEBUG}
-	${WITH_NETCDF}
-    )
-  set(GDAL_INSTALL_COMMAND nmake
-    /f ${GDAL_SB_SRC}/makefile.vc devinstall
-    MSVC_VER=${MSVC_VERSION}
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/GDAL/tmp/nmake_gdal_extra.opt
-	${BUILD_DEBUG}
-	${WITH_NETCDF}
-    )
+  set(GDAL_BUILD_COMMAND nmake /f ${GDAL_SB_SRC}/makefile.vc)
+  set(GDAL_INSTALL_COMMAND nmake /f ${GDAL_SB_SRC}/makefile.vc devinstall)
 
 endif()
 
@@ -176,6 +159,15 @@ ExternalProject_Add(GDAL
   )
 
 SUPERBUILD_PATCH_SOURCE(GDAL)
+
+if(MSVC)
+  ExternalProject_Add_Step(GDAL add_nmake_local
+	COMMAND ${CMAKE_COMMAND} -E copy
+	${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local
+	${GDAL_SB_SRC}/nmake.local
+	DEPENDEES patch
+	DEPENDERS configure)
+endif()
 
 set(_SB_GDAL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
