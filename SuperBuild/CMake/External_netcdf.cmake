@@ -19,6 +19,10 @@
 #
 
 INCLUDE_ONCE_MACRO(NETCDF)
+if(MSVC AND CMAKE_BUILD_TYPE MATCHES "Debug")
+  message(STATUS "NETCDF deactivated on debug builds")
+  return()
+endif()
 
 SETUP_SUPERBUILD(NETCDF)
 
