@@ -1,0 +1,2 @@
+import option ; 
+using msvc : 14.1 : "@CMAKE_C_COMPILER@"; 
