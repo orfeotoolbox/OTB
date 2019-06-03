@@ -144,7 +144,7 @@ LabelImageToVectorDataFilter<TInputImage, TPrecision>
     // integer make us pointing to an non allowed memory block => Crash.
     std::ostringstream stream;
     stream << "MEM:::"
-           <<  "DATAPOINTER=" << (unsigned long)(GUIntBig)(this->GetInput()->GetBufferPointer()) << ","
+           <<  "DATAPOINTER=0x" << this->GetInput()->GetBufferPointer() << ","
            <<  "PIXELS=" << size[0] << ","
            <<  "LINES=" << size[1] << ","
            <<  "BANDS=" << nbBands << ","
