@@ -268,7 +268,7 @@ namespace ossimplugins
 	  }
       }
 
-    int nbRasterCount = dataset->GetRasterCount();
+    int nbRasterCout = dataset->GetRasterCount();
 
     // Metadata for each Band
     for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
@@ -310,12 +310,13 @@ namespace ossimplugins
 	return false;
       }
 
-    if( (metadataDataSet["Product_Type"] != "SCS_B")) 
+    if( (metadataDataSet["Product_Type"] != "SCS_B") && metadataDataSet["Product_Type"] != "SCS_U") 
       {
 	ossimNotify(ossimNotifyLevel_WARN)
-	  << "Not an expected product type (only SCS_B expected)" << "'\n" ;
+	  << "Not an expected product type (only SCS_B and SCS_U expected)" << "'\n" ;
 	return false;
       }
+
 
     ////////////////// Add General Parameters ////////////////
     add(theProductKwl, "sensor", "CSK"); 
@@ -483,7 +484,6 @@ namespace ossimplugins
 
 
     //////////////// Add GCPs one for the moment ////////////////
-    
     // Get the borders
     std::string geoCoor_TL = metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"];
     std::vector<std::string> vGeoCoor_TL;
@@ -500,6 +500,7 @@ namespace ossimplugins
     std::string geoCoor_BR = metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"];
     std::vector<std::string> vGeoCoor_BR;
     otb::Utils::ConvertStringToVector(geoCoor_BR, vGeoCoor_BR, "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+   
     
     // Mean
     std::vector<double> vGeoCoor_Mean;
@@ -523,6 +524,7 @@ namespace ossimplugins
     
     // Inverse model for the middle point
     loadState(theProductKwl); // Load the kwl to make the inverse projection
+    
     ossimEcefPoint sensorPos;
     ossimEcefVector sensorVel;
     const bool s1 = this->worldToAzimuthRangeTime(gptPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos,
