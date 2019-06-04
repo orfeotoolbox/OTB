@@ -119,6 +119,13 @@ if ( NOT _configure_rv EQUAL 0 )
 endif()
 
 # ------------------------------ Build -----------------------------------------
+if(ci_skip_install)
+  message(STATUS "Skip install")
+  set(CTEST_BUILD_TARGET)
+else()
+  set(CTEST_BUILD_TARGET install)
+endif()
+
 ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             RETURN_VALUE _build_rv
             CAPTURE_CMAKE_ERROR _build_error
@@ -156,33 +163,6 @@ endif()
 
 # ----------------------------- Submit -----------------------------------------
 ctest_submit()
-
-# --------------------------- Install ----------------------------------------
-if(ci_skip_install)
-  message(STATUS "Skip install")
-  set(_install_rv 0)
-else()
-  ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
-              TARGET install
-              RETURN_VALUE _install_rv
-              CAPTURE_CMAKE_ERROR _install_error
-              )
-  if ( DEBUG )
-    message( "Install output")
-    message( "install_return_value = ${_install_rv}" )
-    message( "install_error = ${_install_error}" )
-  endif()
-
-  # Install log
-  file ( WRITE 
-    "${OTB_SOURCE_DIR}/log/install_return_value_log.txt" "${_install_rv}")
-  file ( WRITE 
-    "${OTB_SOURCE_DIR}/log/install_error_log.txt" "${_install_error}")
-endif()
-
-if ( NOT _install_rv EQUAL 0 )
-  message( SEND_ERROR "Install has failed.")
-endif()
 
 # ---------------------------- Doxygen -----------------------------------------
 if(ENABLE_DOXYGEN)
