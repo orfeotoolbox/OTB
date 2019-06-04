@@ -215,7 +215,7 @@ deploy:
     # Create zip, tar.gz and tar.xy source and push on otb5-vm2
     - git archive --format=zip -o OTB-develop-$CI_COMMIT_SHORT_SHA.zip HEAD
     - git archive --format=tgz -o OTB-develop-$CI_COMMIT_SHORT_SHA.tar.gz HEAD
-    - git archive --format=tar.xz -o OTB-develop-$CI_COMMIT_SHORT_SHA.tar.xy HEAD
+    - git archive --format=tar.xz -o OTB-develop-$CI_COMMIT_SHORT_SHA.tar.xz HEAD
     - scp OTB-develop-$CI_COMMIT_SHORT_SHA.* otbpush@otb5-vm2.orfeo-toolbox.org:/home/otbpush/test/$(date +%F)/
 
  
