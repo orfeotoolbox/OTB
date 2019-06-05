@@ -181,6 +181,7 @@ endif()
 
 # Uncomment when ready for test
 ctest_test(PARALLEL_LEVEL 8
+		   INCLUDE_LABEL "OTBConversion"
            RETURN_VALUE _test_rv
            CAPTURE_CMAKE_ERROR _test_error
            )
