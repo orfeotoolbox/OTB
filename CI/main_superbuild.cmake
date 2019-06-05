@@ -95,7 +95,7 @@ endif()
 ###########################################################################
 ###########################################################################
 
-set ( CTEST_BUILD_CONFIGURATION "Release" )
+set ( CTEST_BUILD_CONFIGURATION "RelWithDebInfo" )
 set ( CTEST_CMAKE_GENERATOR "Ninja" )
 # Detect site
 if(NOT DEFINED IMAGE_NAME)

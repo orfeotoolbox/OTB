@@ -319,11 +319,11 @@ endif()
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
-option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_QT "Enable module QT5 in OTB" ON)
+option(OTB_USE_OPENCV "Enable module OpenCV in OTB" OFF)
+option(OTB_USE_QT "Enable module QT5 in OTB" OFF)
 option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
-option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
+option(OTB_USE_OPENGL "Enable module OpenGL in OTB" OFF)
+option(OTB_USE_GLEW "Enable module GLEW in OTB" OFF)
 
 #Cannot activate GLUT on OSX. See Mantis issue #1194")
 # do not activate GLFW by default on osx. see failing test
@@ -332,14 +332,14 @@ if(APPLE)
   option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
   option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 else()
-  option(OTB_USE_GLUT "Enable module GLUT in OTB" ON)
-  option(OTB_USE_GLFW "Enable module GLFW in OTB" ON)
+  option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
+  option(OTB_USE_GLFW "Enable module GLFW in OTB" OFF)
 endif()
 
-option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
+option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
 include (CMakeDependentOption)
 CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
-option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+option(OTB_USE_GSL "Enable module GSL in OTB" OFF)
 
 option(OTB_USE_MPI "Enable MPI in OTB" OFF)
 option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
@@ -351,7 +351,7 @@ find_path(OTB_DATA_ROOT README-OTB-Data
   ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
 
 # SWIG Wrapping
-option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" OFF)
 option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in

@@ -23,7 +23,7 @@ INCLUDE_ONCE_MACRO(GDAL)
 SETUP_SUPERBUILD(GDAL)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT) # HDF5 NETCDF HDF4)
 
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
@@ -118,25 +118,27 @@ if(UNIX)
 else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
-    ${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt)
+    ${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local)
 
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}\r\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "${opt_line}\r\n")
   endforeach()
   
   if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-    file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES\r\n")
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "WIN64=YES\r\n")
   endif()
   
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
   set(GDAL_BUILD_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc
     MSVC_VER=${MSVC_VERSION}
+	WITH_PDB=1
     EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
   set(GDAL_INSTALL_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc devinstall
     MSVC_VER=${MSVC_VERSION}
+	WITH_PDB=1
     EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
     )
 
@@ -159,6 +161,16 @@ ExternalProject_Add(GDAL
   LOG_BUILD 1
   LOG_INSTALL 1
   )
+
+if(MSVC)
+  ExternalProject_Add_Step(GDAL add_nmake_local
+	COMMAND ${CMAKE_COMMAND} -E copy
+	${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local
+	${GDAL_SB_SRC}/nmake.local
+	DEPENDEES patch
+	DEPENDERS configure)
+endif()
+
 
 SUPERBUILD_PATCH_SOURCE(GDAL)
 

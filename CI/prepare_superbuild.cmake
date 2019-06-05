@@ -33,7 +33,7 @@ set ( DEBUG "1" )
 
 set ( SUPERBUILD_SOURCE_DIR "${OTB_SOURCE_DIR}/SuperBuild" )
 
-set ( CTEST_BUILD_CONFIGURATION "Release" )
+set ( CTEST_BUILD_CONFIGURATION "RelWithDebInfo" )
 if(WIN32)
   set ( CTEST_CMAKE_GENERATOR "NMake Makefiles JOM" )
   set ( CTEST_BUILD_FLAGS "/S" )
