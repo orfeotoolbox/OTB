@@ -129,19 +129,8 @@ else(MSVC)
   endif()
   
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
-  set(GDAL_BUILD_COMMAND nmake
-    /f ${GDAL_SB_SRC}/makefile.vc
-    MSVC_VER=${MSVC_VERSION}
-	WITH_PDB=1
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
-    )
-  set(GDAL_INSTALL_COMMAND nmake
-    /f ${GDAL_SB_SRC}/makefile.vc devinstall
-    MSVC_VER=${MSVC_VERSION}
-	WITH_PDB=1
-    EXT_NMAKE_OPT=${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt
-    )
-
+  set(GDAL_BUILD_COMMAND nmake /f makefile.vc)
+  set(GDAL_INSTALL_COMMAND nmake /f makefile.vc devinstall)
 endif()
 
 ExternalProject_Add(GDAL

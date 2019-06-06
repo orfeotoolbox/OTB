@@ -11,7 +11,17 @@ JPEG_SUPPORTED = 1
 # This will enable 12bit libjpeg - use only with internal jpeg builds.
 #JPEG12_SUPPORTED = 1
 
-GDAL_HOME="@SB_INSTALL_PREFIX_NATIVE@"
+MSVC_VER=@MSVC_VERSION@
+
+!IF "@CMAKE_BUILD_TYPE@" == "RelWithDebInfo"
+WITH_PDB=1
+!ENDIF
+
+!IF "@CMAKE_BUILD_TYPE@" == "Debug"
+DEBUG=1
+!ENDIF
+
+GDAL_HOME=@SB_INSTALL_PREFIX_NATIVE@
 
 #if using an external jpeg library uncomment the follwing lines
 JPEG_EXTERNAL_LIB = 1
