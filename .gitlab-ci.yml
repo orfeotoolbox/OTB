@@ -64,11 +64,11 @@ fast-build:
       - build/*/*.log #CMake log
       - log/*.txt # Others
 
-debian-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+#~ debian-build:
+  #~ extends: .common-build
+  #~ image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  #~ script:
+    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 .common-prepare:
   extends: .general
@@ -108,42 +108,42 @@ ubuntu-superbuild-build:
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 ## CentOS superbuild
-centos-superbuild-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-
-centos-superbuild-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-  dependencies:
-    - centos-superbuild-prepare
+#~ centos-superbuild-prepare:
+  #~ extends: .common-prepare
+  #~ image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  #~ script:
+    #~ - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+#~ 
+#~ centos-superbuild-build:
+  #~ extends: .common-build
+  #~ image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  #~ script:
+    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+  #~ dependencies:
+    #~ - centos-superbuild-prepare
 
 ## MacOS superbuild
-macos-superbuild-prepare:
-  tags:
-    - macos
-  extends: .common-prepare
-  before_script:
-    # No need to install lfs as this machine is persistent
-    # No need to do git config
-    # Checkout the expected branch
-    - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q $CI_COMMIT_SHA
-    - export GIT_LFS_SKIP_SMUDGE=0
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-
-macos-superbuild-build:
-  tags:
-    - macos
-  extends: .common-build
-  script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-  dependencies:
-    - macos-superbuild-prepare
+#~ macos-superbuild-prepare:
+  #~ tags:
+    #~ - macos
+  #~ extends: .common-prepare
+  #~ before_script:
+    #~ # No need to install lfs as this machine is persistent
+    #~ # No need to do git config
+    #~ # Checkout the expected branch
+    #~ - export GIT_LFS_SKIP_SMUDGE=1
+    #~ - git checkout -f -q $CI_COMMIT_SHA
+    #~ - export GIT_LFS_SKIP_SMUDGE=0
+  #~ script:
+    #~ - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+#~ 
+#~ macos-superbuild-build:
+  #~ tags:
+    #~ - macos
+  #~ extends: .common-build
+  #~ script:
+    #~ - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    #~ - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  #~ dependencies:
+    #~ - macos-superbuild-prepare
