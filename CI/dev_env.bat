@@ -48,10 +48,10 @@ if "%TARGET%"=="10" (
 )
 
 :: Setup home dir (so that ssh configuration works fine)
-if "%USERNAME%"=="otbbot" (
+::if "%USERNAME%"=="otbbot" (
   set HOMEDRIVE=C:
   set HOMEPATH=\Users\otbbot
-)
+::)
 echo Home dir: %HOMEDRIVE%%HOMEPATH%
 
 :: Setup Python
