@@ -57,7 +57,7 @@ macro(get_xdk)
   # How to get md5sum:
   # * concatenate all source files in one
   # * add configure result from previous job ${OTB_SOURCE_DIR}/build/CMakeCache.txt
-  file(READ "${OTB_SOURCE_DIR}/sb_branch.txt" BRANCH_NAME)
+  file(STRINGS "${OTB_SOURCE_DIR}/sb_branch.txt" BRANCH_NAME LIMIT_COUNT 1 REGEX "^([A-Za-z0-9]|/|-|_|\\.)+" )
 
   # Look for a GIT command-line client.
   find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
