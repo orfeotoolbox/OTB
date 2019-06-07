@@ -33,3 +33,5 @@ OTB_USE_SHARK:BOOL=OFF
 BUILD_EXAMPLES:BOOL=OFF")
 
 set(ci_skip_testing ON)
+
+set(ci_skip_install ON)

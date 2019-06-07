@@ -51,8 +51,9 @@ OTB_USE_QWT:BOOL=ON
 OTB_USE_SHARK:BOOL=ON
 OTB_USE_SIFTFAST:BOOL=ON
 OTB_USE_SPTW:BOOL=ON
-OTB_USE_SSE_FLAGS:BOOL=ON
-OTB_MPIEXEC_OPT:STRING=--allow-run-as-root")
+OTB_USE_SSE_FLAGS:BOOL=ON")
+
+# Usefull if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
 
 set (otb_wrap_option
 "OTB_WRAP_PYTHON:BOOL=ON")
@@ -64,6 +65,19 @@ OTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_LARGEINPUT_ROOT}")
 set (cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
+
+# extra options for XDK builds
+if(XDK_PATH)
+set(cmake_configure_option
+"${cmake_configure_option}
+CMAKE_PREFIX_PATH=${XDK_PATH}")
+# DiapOTBModule disabled until documentation can build it
+foreach(remote_module OTBTemporalGapFilling Mosaic SertitObject)#otbGRM #Mosaic # #SertitObject #DiapOTBModule
+  set(cmake_configure_option
+"${cmake_configure_option}
+Module_${remote_module}:BOOL=ON")
+endforeach()
+endif()
 
 if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
   # will set its output in 'site_option'
