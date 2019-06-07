@@ -34,7 +34,7 @@ otb_add_test(NAME  trTeTutorialsPipelineTest COMMAND ${OTB_TEST_DRIVER}
     ${TEMP}/TutorialsPipelineOutput.png
 )
 
-otb_add_test(NAME  trTeTutorialsPipelineTestDirect COMMAND Pipeline
+otb_add_test(NAME  trTeTutorialsPipelineTestDirect COMMAND $<TARGET_FILE:Pipeline>
     ${INPUTDATA}/QB_Suburb.png
     ${TEMP}/TutorialsPipelineOutput.png
 )
