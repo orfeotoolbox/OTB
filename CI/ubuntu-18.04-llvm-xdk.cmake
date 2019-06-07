@@ -41,7 +41,7 @@ BUILD_DOCUMENTATION:BOOL=ON
 OTB_DOXYGEN_ITK_TAGFILE:FILEPATH=${CTEST_BINARY_DIRECTORY}/InsightDoxygenDocTag-4.13.0
 OTB_DOXYGEN_ITK_DOXYGEN_URL:STRING=\"https://itk.org/Doxygen413/html\"
 ")
-  # set (ENABLE_DOXYGEN ON)
+  set (ENABLE_DOXYGEN ON)
   # The ITK doxygen tag file needs to be patched before being used for OTB
   # See otb-devutils/Scripts/tagfile_fix.py
   message(STATUS "Get resources for Doxygen build ...")
