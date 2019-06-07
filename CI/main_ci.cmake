@@ -147,7 +147,6 @@ if(ci_skip_testing)
   set(_test_rv 0)
 else()
   ctest_test(PARALLEL_LEVEL 8
-             INCLUDE_LABEL OTBModular
              RETURN_VALUE _test_rv
              CAPTURE_CMAKE_ERROR _test_error
              )
