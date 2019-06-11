@@ -133,8 +133,6 @@ stages:
 .windows-prepare:
   extends: .general
   # only: [merge_requests]
-  tags:
-    - windows
   stage: prepare
   before_script:
 # This override the previous before_script
@@ -153,6 +151,8 @@ stages:
 
 windows-10-prepare:
   extends: .windows-prepare
+  tags:
+    - windows10
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - clcache.exe -s
@@ -161,6 +161,8 @@ windows-10-prepare:
 
 windows-8-prepare:
   extends: .windows-prepare
+  tags:
+    - windows8
   script:
     - call ./CI/dev_env.bat x64 xdk 8.1
     - clcache.exe -s
@@ -179,7 +181,7 @@ windows-8-prepare:
 windows-10-build:
   extends: .common-windows-build
   tags:
-    - windows
+    - windows10
   script:
     - call ./CI/dev_env.bat x64 otb 10
     - clcache.exe -s
@@ -191,7 +193,7 @@ windows-10-build:
 windows-8-build:
   extends: .common-windows-build
   tags:
-    - windows
+    - windows8
   script:
     - call ./CI/dev_env.bat x64 otb 8.1
     - clcache.exe -s
