@@ -176,7 +176,7 @@ windows-8-prepare:
     - git checkout %CI_COMMIT_REF_NAME%
   after_script:
     - call ./CI/dev_env.bat x64 otb
-    - python ./CI/cdash_handler.py %CI_COMMIT_SHA% %CI_PROJECT_ID% %CI_PROJECT_DIR% %K8S_SECRET_CDASH%
+    - python ./CI/cdash_handler.py
 
 windows-10-build:
   extends: .common-windows-build
