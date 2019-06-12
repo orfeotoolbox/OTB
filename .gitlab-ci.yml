@@ -106,6 +106,7 @@ ubuntu-superbuild-build:
       - build/CookBook-*-html.tar.gz
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
+      - build/share/otb
 
 ## CentOS superbuild
 centos-superbuild-prepare:
