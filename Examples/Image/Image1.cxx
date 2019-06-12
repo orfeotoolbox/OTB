@@ -31,7 +31,7 @@
 
 #include "otbImage.h"
 
-int main(int, char* [])
+int main(int, char*[])
 {
   // Then we must decide with what type to represent the pixels
   // and what the dimension of the image will be. With these two
@@ -39,7 +39,7 @@ int main(int, char* [])
   // a 2D image, which is what we often use in remote sensing
   // applications, anyway, with \code{unsigned short} pixel data.
   //
-  typedef otb::Image<unsigned short, 2> ImageType;
+  using ImageType = otb::Image<unsigned short, 2>;
 
   // The image can then be created by invoking the \code{New()} operator
   // from the corresponding image type and assigning the result

@@ -34,7 +34,7 @@
 
 #include "otbSailModel.h"
 #include "otbProspectModel.h"
-
+#include "otbMacro.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
   char* OutputName = argv[15];
   //  We now define leaf parameters, which characterize vegetation composition.
 
-  typedef otb::LeafParameters LeafParametersType;
+  using LeafParametersType = otb::LeafParameters;
 
 
   //  Next the parameters variable is created by invoking the \code{New()}~method and
@@ -86,8 +86,8 @@ int main(int argc, char* argv[])
 
   //  Leaf parameters are used as prospect input
 
-  typedef otb::ProspectModel ProspectType;
-  ProspectType::Pointer      prospect = ProspectType::New();
+  using ProspectType             = otb::ProspectModel;
+  ProspectType::Pointer prospect = ProspectType::New();
 
   prospect->SetInput(leafParams);
 
@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
   double TTO   = static_cast<double>(atof(argv[13]));
   double PSI   = static_cast<double>(atof(argv[14]));
 
-  typedef otb::SailModel SailType;
+  using SailType = otb::SailModel;
 
   SailType::Pointer sail = SailType::New();
 
@@ -151,13 +151,9 @@ int main(int argc, char* argv[])
 
   for (unsigned int i = 0; i < sail->GetViewingReflectance()->Size(); ++i)
   {
-    std::cout << "wavelength  : ";
-    std::cout << sail->GetViewingReflectance()->GetResponse()[i].first;
-    std::cout << ". Viewing reflectance ";
-    std::cout << sail->GetViewingReflectance()->GetResponse()[i].second;
-    std::cout << ". Hemispherical reflectance ";
-    std::cout << sail->GetHemisphericalReflectance()->GetResponse()[i].second;
-    std::cout << std::endl;
+    otbLogMacro(Debug, << "wavelength  : " << sail->GetViewingReflectance()->GetResponse()[i].first << ". Viewing reflectance "
+                       << sail->GetViewingReflectance()->GetResponse()[i].second << ". Hemispherical reflectance "
+                       << sail->GetHemisphericalReflectance()->GetResponse()[i].second);
   }
 
   std::ofstream outputFile(OutputName, std::ios::out);

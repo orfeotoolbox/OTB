@@ -113,14 +113,14 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef itk::RGBPixel<unsigned char>        RGBPixelType;
-  typedef otb::Image<RGBPixelType, Dimension> ImageType;
+  using RGBPixelType = itk::RGBPixel<unsigned char>;
+  using ImageType    = otb::Image<RGBPixelType, Dimension>;
 
-  typedef itk::ImageLinearIteratorWithIndex<ImageType>      IteratorType;
-  typedef itk::ImageLinearConstIteratorWithIndex<ImageType> ConstIteratorType;
+  using IteratorType      = itk::ImageLinearIteratorWithIndex<ImageType>;
+  using ConstIteratorType = itk::ImageLinearConstIteratorWithIndex<ImageType>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   ImageType::ConstPointer inputImage;
   ReaderType::Pointer     reader = ReaderType::New();

@@ -25,8 +25,8 @@
 int otbSharkNormalizeLabels(int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {
   std::vector<unsigned int> inLabels = {2, 2, 3, 20, 1};
-  std::vector<unsigned int> expectedDictionary = {2, 3, 20, 1};
-  std::vector<unsigned int> expectedLabels = {0, 0, 1, 2, 3};
+  std::vector<unsigned int> expectedDictionary = {1, 2, 3, 20};
+  std::vector<unsigned int> expectedLabels = {1, 1, 2, 3, 0};
 
   auto newLabels = inLabels;
   std::vector<unsigned int> labelDict;

@@ -32,10 +32,10 @@
 
 #include "otbImage.h"
 
-int main(int, char* [])
+int main(int, char*[])
 {
   // First the image type should be declared
-  typedef otb::Image<unsigned short, 2> ImageType;
+  using ImageType = otb::Image<unsigned short, 2>;
 
   // Then the image object can be created
   ImageType::Pointer image = ImageType::New();

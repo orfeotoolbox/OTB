@@ -18,6 +18,7 @@
 # limitations under the License.
 #
 
+import os
 import os.path
 import urllib.request
 import urllib.parse
@@ -26,9 +27,20 @@ import re
 import unittest
 import sys
 import json
+import time
 
 
 trace = False
+
+"""
+Check needed environment parameters
+"""
+def CheckEnvParameters(params):
+  for p in params:
+    if not p in os.environ.keys():
+      print("Missing environment variable '"+p+"'")
+      return False
+  return True
 
 class Handler:
 # project
@@ -168,7 +180,7 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Not enougth argument given for buildid request \
+      print( "Missing argument for buildid request \
 site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       return
     buildid_api = "/api/v1/getbuildid.php?"
@@ -176,11 +188,18 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    response = urllib.request.urlopen(full_url).read().decode()
-    if trace:
-      print ( "response: " + response )
+    nb_try = 6
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
-    buildid = build_id_regex.search( response )
+    while nb_try:
+      response = urllib.request.urlopen(full_url).read().decode()
+      if trace:
+        print ( "response: " + response )
+      buildid = build_id_regex.search( response )
+      nb_try -= 1
+      if buildid or (nb_try == 0):
+        break
+      print("No build id, retry ...")
+      time.sleep(60)
     if buildid:
       self.buildid = buildid.group(1)
       if trace:
@@ -198,7 +217,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     if ( buildid == "" ):
       buildid = self.buildid
     if ( buildid == "" ):
-      print( "Not enougth argument given to build url")
+      print( "Missing argument to build url")
       return
     build_url = self.url
     build_url +="/buildSummary.php?"
@@ -212,7 +231,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     if ( buildid == "" ):
       buildid = self.buildid
     if ( buildid == "" ):
-      print( "Not enougth argument given to build Status")
+      print( "Missing argument to build Status")
       return
     full_url = self.url + "/api/v1/buildSummary.php?buildid=" + buildid
     response = urllib.request.urlopen(full_url).read().decode()
@@ -231,38 +250,63 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     return ( state , errors)
 
 """
-TODO :
- documentation, header, test if it is possible.
- the script aims only at recovering the build url
-
+  This script aims only at recovering the build url
+  It uses environment variables setup by Gitlab Runner as default:
+    CI_COMMIT_SHA             -> Commit SHA1
+    CI_PROJECT_ID             -> Project ID
+    CI_PROJECT_DIR            -> Project source directory
+    K8S_SECRET_API_TOKEN      -> Token for Gitlab API
+    CI_MERGE_REQUEST_REF_PATH -> Ref name to push the status (only for merge request pipeline)
+    CI_COMMIT_REF_NAME        -> Ref name to push the status
+  They can be overriden by a full command line :
+    cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
 if __name__ == "__main__":
-  if ( len(sys.argv) < 5 ):
-    print("Usage : "+sys.argv[0]+" commit_sha1 project_id build_directory token")
-    sys.exit()
+  if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
+    print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
+    sys.exit(1)
   if trace:
     print (sys.argv)
+  if ( len(sys.argv) >= 6):
+    sha1 = sys.argv[1]
+    proj = sys.argv[2]
+    pdir = sys.argv[3]
+    token = sys.argv[4]
+    refn = sys.argv[5]
+  else:
+    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'K8S_SECRET_API_TOKEN', 'CI_COMMIT_REF_NAME']):
+      sys.exit(1)
+    sha1 = os.environ['CI_COMMIT_SHA']
+    proj = os.environ['CI_PROJECT_ID']
+    pdir = os.environ['CI_PROJECT_DIR']
+    token = os.environ['K8S_SECRET_API_TOKEN']
+    if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
+      refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
+    else:
+      refn = os.environ['CI_COMMIT_REF_NAME']
   handler = Handler()
-  build_dir = os.path.join( sys.argv[3] , "build/")
-  # build_dir = sys.argv[3]
+  build_dir = os.path.join( pdir , "build/")
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
   handler.GetSite()
   handler.GetName()
   handler.GetStamp()
-  handler.GetBuildId()
-  # handler.buildid="1"
-  cdash_url = handler.GetBuildUrl()
-  ( state , error ) = handler.GetBuildStatus()
+  if handler.GetBuildId() is None:
+    cdash_url = "https://cdash.orfeo-toolbox.org"
+    state = 'failed'
+    error = "Failed to get build id"
+  else:
+    cdash_url = handler.GetBuildUrl()
+    ( state , error ) = handler.GetBuildStatus()
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
-  gitlab_url += sys.argv[2] + "/statuses/" + sys.argv[1]
+  gitlab_url += proj + "/statuses/" + sha1
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
-   'target_url' : cdash_url , 'description' : error })
+   'target_url' : cdash_url , 'description' : error , 'ref' : refn })
   gitlab_request = urllib.request.Request(gitlab_url)
-  gitlab_request.add_header('PRIVATE-TOKEN' , sys.argv[4] )
+  gitlab_request.add_header('PRIVATE-TOKEN' , token )
   res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
   if trace:
     print ("gitlab_request.url: " + gitlab_request.full_url)

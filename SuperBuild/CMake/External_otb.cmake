@@ -79,7 +79,7 @@ if(OTB_USE_MUPARSERX)
   ADD_SUPERBUILD_CMAKE_VAR(OTB MUPARSERX_LIBRARY)
 endif()
 
-if(OTB_WRAP_PYTHON OR OTB_WRAP_JAVA)
+if(OTB_WRAP_PYTHON)
   ADD_SUPERBUILD_CMAKE_VAR(OTB SWIG_EXECUTABLE)
   ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(OTB SWIG)
 endif()
@@ -164,6 +164,18 @@ add_custom_command(OUTPUT otb_depends_done.txt
   DEPENDS ${OTB_DEPENDENCIES}
   )
 
+add_custom_target( EMBED_COPYRIGHT
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/LICENSE ${CMAKE_INSTALL_PREFIX}/share/copyright/LICENSE
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+  ${OTB_SB_SRC}/NOTICE ${CMAKE_INSTALL_PREFIX}/share/copyright/NOTICE
+
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CMAKE_SOURCE_DIR}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
+  )
+
 add_custom_target(OTB_DEPENDS
   DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/otb_depends_done.txt
   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -171,6 +183,9 @@ add_custom_target(OTB_DEPENDS
   VERBATIM
   )
 
+add_dependencies( OTB_DEPENDS
+  EMBED_COPYRIGHT
+  )
 
 ExternalProject_Add(OTB
   DEPENDS ${OTB_DEPENDENCIES}
@@ -207,7 +222,6 @@ ExternalProject_Add(OTB
   -DOTB_USE_OPENMP:BOOL=${OTB_USE_OPENMP}
   -DOTB_USE_GSL:BOOL=${OTB_USE_GSL}
   -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
-  -DOTB_WRAP_JAVA:BOOL=${OTB_WRAP_JAVA}
   -DOTB_USE_MPI:BOOL=${OTB_USE_MPI}
   -DOTB_USE_SPTW:BOOL=${OTB_USE_SPTW}
   -DPYTHON_EXECUTABLE:PATH=${PYTHON_EXECUTABLE}
@@ -220,14 +234,10 @@ ExternalProject_Add(OTB
 
 ExternalProject_Add_Step(
   OTB install_copyright
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${OTB_SB_SRC}/LICENSE ${CMAKE_INSTALL_PREFIX}/share/copyright/LICENSE
-
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${OTB_SB_SRC}/NOTICE ${CMAKE_INSTALL_PREFIX}/share/copyright/NOTICE
-
-  COMMAND ${CMAKE_COMMAND}
-  -E copy_directory
-  ${CMAKE_SOURCE_DIR}/Copyright ${CMAKE_INSTALL_PREFIX}/share/copyright
   DEPENDEES install
+  )
+
+ExternalProject_Add_StepDependencies(
+  OTB install_copyright
+  EMBED_COPYRIGHT
   )

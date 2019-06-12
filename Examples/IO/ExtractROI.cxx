@@ -70,8 +70,8 @@ int main(int argc, char* argv[])
 
   //  As usual, we define the input and output pixel types.
 
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
+  using InputPixelType  = unsigned char;
+  using OutputPixelType = unsigned char;
 
   //  First of all, we extract the multiband part by using the
   //  \doxygen{otb}{MultiChannelExtractROI} class, which is templated
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   //  templated over the images types in order to force these images
   //  to be of \doxygen{otb}{VectorImage} type.
 
-  typedef otb::MultiChannelExtractROI<InputPixelType, OutputPixelType> ExtractROIFilterType;
+  using ExtractROIFilterType = otb::MultiChannelExtractROI<InputPixelType, OutputPixelType>;
 
   //  We create the extractor filter by using the \code{New} method of
   //  the class and we set its parameters.
@@ -101,8 +101,8 @@ int main(int argc, char* argv[])
 
   //  We will use the OTB readers and writers for file access.
 
-  typedef otb::ImageFileReader<ExtractROIFilterType::InputImageType> ReaderType;
-  typedef otb::ImageFileWriter<ExtractROIFilterType::InputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ExtractROIFilterType::InputImageType>;
+  using WriterType = otb::ImageFileWriter<ExtractROIFilterType::InputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
   //  memory usage point of view.
   //  This class is also templated over the pixel types.
 
-  typedef otb::MultiToMonoChannelExtractROI<InputPixelType, OutputPixelType> ExtractROIMonoFilterType;
+  using ExtractROIMonoFilterType = otb::MultiToMonoChannelExtractROI<InputPixelType, OutputPixelType>;
 
   ExtractROIMonoFilterType::Pointer extractROIMonoFilter = ExtractROIMonoFilterType::New();
 
@@ -154,10 +154,10 @@ int main(int argc, char* argv[])
 
   extractROIMonoFilter->SetChannel(4);
 
-  typedef otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>  monoReaderType;
-  typedef otb::ImageFileWriter<ExtractROIMonoFilterType::OutputImageType> monoWriterType;
-  monoReaderType::Pointer                                                 monoReader = monoReaderType::New();
-  monoWriterType::Pointer                                                 monoWriter = monoWriterType::New();
+  using monoReaderType               = otb::ImageFileReader<ExtractROIMonoFilterType::InputImageType>;
+  using monoWriterType               = otb::ImageFileWriter<ExtractROIMonoFilterType::OutputImageType>;
+  monoReaderType::Pointer monoReader = monoReaderType::New();
+  monoWriterType::Pointer monoWriter = monoWriterType::New();
 
   monoReader->SetFileName(inputFilename);
   monoReader->Update(); // Needed to know the number of channels in the image

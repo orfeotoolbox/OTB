@@ -38,25 +38,25 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef unsigned char PixelType;
+  using PixelType = unsigned char;
 
   // The images are defined using the pixel type and the dimension.
-  typedef otb::Image<PixelType, 2> InputImageType;
-  typedef otb::Image<PixelType, 2> OutputImageType;
+  using InputImageType  = otb::Image<PixelType, 2>;
+  using OutputImageType = otb::Image<PixelType, 2>;
 
   // The filter can be instantiated using the image types defined above.
-  typedef otb::LeeImageFilter<InputImageType, OutputImageType> FilterType;
+  using FilterType = otb::LeeImageFilter<InputImageType, OutputImageType>;
 
-  //  An ImageFileReader class is also instantiated in order to read
-  //  image data from a file.
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  // An ImageFileReader class is also instantiated in order to read
+  // image data from a file.
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
-  // An \doxygen{otb}{ImageFileWriter} is instantiated in order to write the
+  // An ImageFileWriter is instantiated in order to write the
   // output image to a file.
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
-  //  Both the filter and the reader are created by invoking their \code{New()}
-  //  methods and assigning the result to SmartPointers.
+  // Both the filter and the reader are created by invoking their New()
+  // methods and assigning the result to SmartPointers.
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
 
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
   writer->SetInput(filter->GetOutput());
   reader->SetFileName(argv[1]);
 
-  //  The image obtained with the reader is passed as input to the
-  //  LeeImageFilter.
+  // The image obtained with the reader is passed as input to the
+  // LeeImageFilter.
   filter->SetInput(reader->GetOutput());
 
   // The method SetRadius() defines the size of the window to

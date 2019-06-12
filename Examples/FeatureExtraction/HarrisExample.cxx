@@ -19,7 +19,7 @@
  */
 
 
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
@@ -53,23 +53,23 @@ int main(int argc, char* argv[])
   double SigmaI((double)::atof(argv[4]));
   double Alpha((double)::atof(argv[5]));
 
-  typedef float         InputPixelType;
-  const unsigned int    Dimension = 2;
-  typedef unsigned char OutputPixelType;
+  using InputPixelType         = float;
+  const unsigned int Dimension = 2;
+  using OutputPixelType        = unsigned char;
 
-  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputImageType  = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   //  The \doxygen{otb}{HarrisImageFilter} is templated over the
   //  input and output image types, so we start by
   //  defining:
 
-  typedef otb::HarrisImageFilter<InputImageType, InputImageType>            HarrisFilterType;
-  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType> RescalerType;
+  using HarrisFilterType = otb::HarrisImageFilter<InputImageType, InputImageType>;
+  using RescalerType     = itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>;
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer       reader   = ReaderType::New();
   WriterType::Pointer       writer   = WriterType::New();
@@ -127,10 +127,10 @@ int main(int argc, char* argv[])
   // templated over the input image type, the output being a
   // \doxygen{itk}{PointSet} with pixel type equal to the image pixel type.
 
-  typedef otb::HarrisImageToPointSetFilter<InputImageType> FunctionType;
+  using FunctionType = otb::HarrisImageToPointSetFilter<InputImageType>;
 
   //  We declare now the filter and a pointer to the output point set.
-  typedef FunctionType::OutputPointSetType OutputPointSetType;
+  using OutputPointSetType = FunctionType::OutputPointSetType;
 
   FunctionType::Pointer       harrisPoints = FunctionType::New();
   OutputPointSetType::Pointer pointSet     = OutputPointSetType::New();
@@ -155,18 +155,18 @@ int main(int argc, char* argv[])
   //  information on using \doxygen{itk}{PointSet}s) and declaring
   //  an iterator to it.
 
-  typedef OutputPointSetType::PointsContainer ContainerType;
-  ContainerType*                              pointsContainer = pointSet->GetPoints();
-  typedef ContainerType::Iterator             IteratorType;
-  IteratorType                                itList = pointsContainer->Begin();
+  using ContainerType            = OutputPointSetType::PointsContainer;
+  ContainerType* pointsContainer = pointSet->GetPoints();
+  using IteratorType             = ContainerType::Iterator;
+  IteratorType itList            = pointsContainer->Begin();
 
   //  And we get the points coordinates
 
   while (itList != pointsContainer->End())
   {
-    typedef OutputPointSetType::PointType OutputPointType;
-    OutputPointType                       pCoordinate = (itList.Value());
-    std::cout << pCoordinate << std::endl;
+    using OutputPointType       = OutputPointSetType::PointType;
+    OutputPointType pCoordinate = (itList.Value());
+    otbLogMacro(Debug, << pCoordinate);
     ++itList;
   }
 

@@ -59,7 +59,6 @@ private:
     SetDescription("Extracts samples values from an image.");
 
     // Documentation
-    SetDocName("Sample Extraction");
     SetDocLongDescription("The application extracts samples values from an"
       "image using positions contained in a vector data file. ");
     SetDocLimitations("None");

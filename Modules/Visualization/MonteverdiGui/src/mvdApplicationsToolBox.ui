@@ -23,7 +23,16 @@
    <locale language="C" country="AnyCountry"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>3</number>
+   </property>
+   <property name="topMargin">
+    <number>3</number>
+   </property>
+   <property name="rightMargin">
+    <number>3</number>
+   </property>
+   <property name="bottomMargin">
     <number>3</number>
    </property>
    <property name="spacing">
@@ -40,6 +49,9 @@
      <property name="headerHidden">
       <bool>false</bool>
      </property>
+     <property name="columnCount">
+      <number>1</number>
+     </property>
      <attribute name="headerVisible">
       <bool>true</bool>
      </attribute>
@@ -49,11 +61,6 @@
      <column>
       <property name="text">
        <string>Name</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Title</string>
       </property>
      </column>
     </widget>

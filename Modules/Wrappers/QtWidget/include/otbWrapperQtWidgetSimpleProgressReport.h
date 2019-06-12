@@ -39,14 +39,14 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public QWidget
+class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public itk::QtProgressBar
 {
   Q_OBJECT
 public:
-  QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent);
+  QtWidgetSimpleProgressReport(QWidget* parent);
   ~QtWidgetSimpleProgressReport() override;
 
-  void SetApplication(Application::Pointer app);
+  void SetModel(QtWidgetModel* model);
 
   typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
 
@@ -56,25 +56,17 @@ public slots:
   void Init();
   void ReportProcess();
 
-  signals:
+signals:
   void AddNewProcessToReport();
+  void SetText(QString);
 
 private:
   QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
-  void operator=(const QtWidgetSimpleProgressReport&); //purposely not
-                                                       //implemented
-
-  Application::Pointer              m_Application;
-  QtWidgetModel *                   m_Model;
-  QVBoxLayout *                     m_Layout;
+  void operator=(const QtWidgetSimpleProgressReport&) = delete;
 
   AddProcessCommandType::Pointer    m_AddProcessCommand;
   itk::ProcessObject*               m_CurrentProcess;
   std::string                       m_CurrentDescription;
-
-  itk::QtProgressBar * m_Bar;
-  QLabel * m_Label;
-
 };
 
 }

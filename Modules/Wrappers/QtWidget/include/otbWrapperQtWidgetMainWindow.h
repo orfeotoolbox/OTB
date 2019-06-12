@@ -22,12 +22,19 @@
 #define otbWrapperQtWidgetMainWindow_h
 
 #include <QMainWindow>
+
 #include "OTBQtWidgetExport.h"
 
 #include "otbWrapperApplication.h"
 
+namespace Ui
+{
+class AppMainWindow;
+}
+
 class QAction;
 class QMenu;
+class QPlainTextEdit;
 
 namespace otb
 {
@@ -41,16 +48,28 @@ class OTBQtWidget_EXPORT QtMainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
+  QtMainWindow(Application::Pointer app, QtWidgetView* gui, QWidget* parent = nullptr);
+  ~QtMainWindow();
 
-  QtWidgetView* Gui() const;
+  otb::Wrapper::QtWidgetView* Gui() const;
+
+  void closeEvent(QCloseEvent* event) override;
+
+signals:
+  void ExecuteAndWriteOutput();
+  void Stop();
 
 public slots:
   void UnhandledException(QString message);
+  void UpdateMessageAfterApplicationReady(bool val);
+  void UpdateMessageAfterExecution(int status);
+  void on_executeButton_clicked();
+  void CopyCommandLine();
+  void LoadFromXML();
+  void SaveToXML();
 
 private:
-  QMenu*   helpMenu;
-  QAction* helpAction;
+  ::Ui::AppMainWindow* ui;
 
   QtWidgetView* gui;
 };

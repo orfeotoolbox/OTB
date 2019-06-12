@@ -23,6 +23,7 @@ set(DOCUMENTATION "This module provides Ossim Plugins")
 otb_module(OTBOssimPlugins
   DEPENDS
     OTBBoost
+    OTBCommon
     OTBGeoTIFF
     OTBGDAL
     OTBOssim

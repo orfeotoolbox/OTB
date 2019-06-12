@@ -1,22 +1,22 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- *
- * This file is part of Orfeo Toolbox
- *
- *     https://www.orfeo-toolbox.org/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+  *
+  * This file is part of Orfeo Toolbox
+  *
+  *     https://www.orfeo-toolbox.org/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *     http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 #include "otbLearningApplicationBase.h"
 #include "otbWrapperApplicationFactory.h"
@@ -105,7 +105,6 @@ void DoInit() override
     "Train a classifier from multiple images to perform regression.");
 
   // Documentation
-  SetDocName("Train a regression model");
   SetDocLongDescription(
     "This application trains a classifier from multiple input images or a csv "
     "file, in order to perform regression. Predictors are composed of pixel "
@@ -126,6 +125,8 @@ void DoInit() override
   SetDocAuthors("OTB-Team");
   SetDocSeeAlso("OpenCV documentation for machine learning "
     "http://docs.opencv.org/modules/ml/doc/ml.html ");
+
+  AddDocTag(Tags::Deprecated);
 
   //Group IO
   AddParameter( ParameterType_Group , "io" , "Input and output data" );
@@ -272,8 +273,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
       elem.Fill(0.0);
       for (unsigned int i=0 ; i<nbCols ; ++i)
         {
-        iss.str(words[i]);
-        iss >> elem[i];
+          elem[i] = std::stod(words[i]);
         }
       outputList->PushBack(elem);
       }

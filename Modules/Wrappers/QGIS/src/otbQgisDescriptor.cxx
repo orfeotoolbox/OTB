@@ -131,13 +131,10 @@ int main(int argc, char* argv[])
     const ParameterType type = appli->GetParameterType(name);
     const std::string description = appli->GetParameterName(name);
     if (  type == ParameterType_Group  ||
-          type == ParameterType_OutputProcessXML  ||
-          type == ParameterType_InputProcessXML  ||
           type == ParameterType_RAM ||
           param->GetRole() == Role_Output )
       {
       // group parameter cannot have any value.
-      // outxml and inxml parameters are not relevant for QGIS and is considered a bit noisy
       // ram is added by qgis-otb processing provider plugin as an advanced parameter for all apps
       // parameter role cannot be of type Role_Output
       continue;

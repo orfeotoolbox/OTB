@@ -76,21 +76,21 @@ int main(int itkNotUsed(argc), char* argv[])
   //  input image will be an RGB image, we can read it as a 3 component
   //  vector image. This simplifies the interfacing with OTB's SVM
   //  framework.
-  typedef unsigned short InputPixelType;
-  const unsigned int     Dimension = 2;
+  using InputPixelType         = unsigned short;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  using InputImageType = otb::VectorImage<InputPixelType, Dimension>;
 
-  typedef otb::Image<InputPixelType, Dimension> TrainingImageType;
+  using TrainingImageType = otb::Image<InputPixelType, Dimension>;
 
   //  The \doxygen{otb}{LibSVMMachineLearningModel} class is templated over
   //  the input (features) and the training (labels) values.
-  typedef otb::LibSVMMachineLearningModel<InputPixelType, InputPixelType> ModelType;
+  using ModelType = otb::LibSVMMachineLearningModel<InputPixelType, InputPixelType>;
 
 
   //  As usual, we define the readers for the images.
-  typedef otb::ImageFileReader<InputImageType>    InputReaderType;
-  typedef otb::ImageFileReader<TrainingImageType> TrainingReaderType;
+  using InputReaderType    = otb::ImageFileReader<InputImageType>;
+  using TrainingReaderType = otb::ImageFileReader<TrainingImageType>;
 
   InputReaderType::Pointer    inputReader    = InputReaderType::New();
   TrainingReaderType::Pointer trainingReader = TrainingReaderType::New();
@@ -112,15 +112,15 @@ int main(int itkNotUsed(argc), char* argv[])
   //  ListSamples.
 
 
-  typedef itk::BinaryThresholdImageFilter<TrainingImageType, TrainingImageType> ThresholdFilterType;
-  ThresholdFilterType::Pointer                                                  thresholder = ThresholdFilterType::New();
+  using ThresholdFilterType                = itk::BinaryThresholdImageFilter<TrainingImageType, TrainingImageType>;
+  ThresholdFilterType::Pointer thresholder = ThresholdFilterType::New();
   thresholder->SetInput(trainingReader->GetOutput());
   thresholder->SetLowerThreshold(1);
   thresholder->SetOutsideValue(0);
   thresholder->SetInsideValue(1);
 
-  typedef itk::Statistics::ImageToListSampleFilter<InputImageType, TrainingImageType>    ImageToListSample;
-  typedef itk::Statistics::ImageToListSampleFilter<TrainingImageType, TrainingImageType> ImageToTargetListSample;
+  using ImageToListSample       = itk::Statistics::ImageToListSampleFilter<InputImageType, TrainingImageType>;
+  using ImageToTargetListSample = itk::Statistics::ImageToListSampleFilter<TrainingImageType, TrainingImageType>;
 
   ImageToListSample::Pointer imToList = ImageToListSample::New();
   imToList->SetInput(inputReader->GetOutput());
@@ -150,7 +150,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // is templated over the sample type (the type of the data to be
   // classified) and the label type (the type of the output of the classifier).
 
-  typedef otb::ImageClassificationFilter<InputImageType, TrainingImageType> ClassifierType;
+  using ClassifierType = otb::ImageClassificationFilter<InputImageType, TrainingImageType>;
 
   ClassifierType::Pointer classifier = ClassifierType::New();
 
@@ -181,7 +181,7 @@ int main(int itkNotUsed(argc), char* argv[])
   // values to the output image.
 
 
-  typedef otb::ImageFileWriter<TrainingImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<TrainingImageType>;
 
   WriterType::Pointer writer = WriterType::New();
 
@@ -198,17 +198,17 @@ int main(int itkNotUsed(argc), char* argv[])
   // \doxygen{itk}{UnaryFunctorImageFilter} creates an image filter for that
   // converts scalar images to RGB images.
 
-  typedef itk::RGBPixel<unsigned char>                                                       RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>                                                        RGBImageType;
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long>                               ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<TrainingImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                                                colormapper = ColorMapFilterType::New();
+  using RGBPixelType                      = itk::RGBPixel<unsigned char>;
+  using RGBImageType                      = otb::Image<RGBPixelType, 2>;
+  using ColorMapFunctorType               = itk::Functor::ScalarToRGBPixelFunctor<unsigned long>;
+  using ColorMapFilterType                = itk::UnaryFunctorImageFilter<TrainingImageType, RGBImageType, ColorMapFunctorType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(classifier->GetOutput());
 
   // We can now create an image file writer and save the image.
 
-  typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
+  using WriterRescaledType = otb::ImageFileWriter<RGBImageType>;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 

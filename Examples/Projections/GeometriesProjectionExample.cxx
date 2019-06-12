@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
   // is a single type for any kind of geometries set (OGR data source, or OGR
   // layer).
 
-  typedef otb::GeometriesSet InputGeometriesType;
-  typedef otb::GeometriesSet OutputGeometriesType;
+  using InputGeometriesType  = otb::GeometriesSet;
+  using OutputGeometriesType = otb::GeometriesSet;
 
   // First, declare and instantiate the data source
   // \subdoxygen{otb}{ogr}{DataSource}. Then, encapsulate this data source into
@@ -60,9 +60,9 @@ int main(int argc, char* argv[])
   // pixels won't be read, only the header information using the
   // \code{UpdateOutputInformation()} method.
 
-  typedef otb::Image<unsigned short int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer                  imageReader = ImageReaderType::New();
+  using ImageType                      = otb::Image<unsigned short int, 2>;
+  using ImageReaderType                = otb::ImageFileReader<ImageType>;
+  ImageReaderType::Pointer imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
@@ -71,8 +71,8 @@ int main(int argc, char* argv[])
   // to use it when you design applications reading or saving vector
   // data.
 
-  typedef otb::GeometriesProjectionFilter GeometriesFilterType;
-  GeometriesFilterType::Pointer           filter = GeometriesFilterType::New();
+  using GeometriesFilterType           = otb::GeometriesProjectionFilter;
+  GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
 
   // Information concerning the original projection of the vector data
   // will be automatically retrieved from the metadata. Nothing else

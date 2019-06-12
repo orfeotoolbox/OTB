@@ -98,7 +98,7 @@ namespace {// Anonymous namespace
    ossimTrace traceDebug ("ossimSarSensorModel:debug");
 
    typedef char const* const* strings_iterator;
-   static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC" };
+  static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC", "SCS_B" };
 }// Anonymous namespace
 
 namespace ossimplugins
@@ -1058,29 +1058,39 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 
       theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
 
-      // Then, fix the range time
-      count=0;
+      // Patch_locS1 : do not fix the range time
+      // This fix takes GCPs as inputs to calculate an offset in range dimension. 
+      // However for recent S1 products (after March 2017 with IPF >= 2.82), GCPs contain wrong values 
+      // for lat/lon coordinates => the range time offset is wrong and shift the localization.
+      // To avoid wrong offset, fixRangeTimeWithGCPs is always set to false
+      bool fixRangeTimeWithGCPs = false;
 
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
-      {
-         ossimDpt estimatedImPt;
-         TimeType estimatedAzimuthTime;
-         double   estimatedRangeTime;
+      if (fixRangeTimeWithGCPs)
+	{
+	  // Then, fix the range time
+	  count=0;
 
-         ossimEcefPoint sensorPos;
-         ossimEcefVector sensorVel;
+	  for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+	  {
+	     ossimDpt estimatedImPt;
+	     TimeType estimatedAzimuthTime;
+	     double   estimatedRangeTime;
 
-         // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+	     ossimEcefPoint sensorPos;
+	     ossimEcefVector sensorVel;
 
-         if(s1)
-         {
-            cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
-            ++count;
-         }
-      }
+	     // Estimate times
+	     const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
-      theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
+	     if(s1)
+	     {
+	        cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
+	        ++count;
+	     }
+	  }
+
+	  theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
+	}
    }
 
    void get(
@@ -1268,7 +1278,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
       {
          const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-         assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
          std::string prefix(prefix_, pos);
 
          ossimSarSensorModel::CoordinateConversionRecordType coordRecord;
@@ -1301,7 +1310,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
      for (std::size_t idx=0 ; idx!=conversionRecords.size() ; ++idx)
        {
        const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-       assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
        std::string prefix(prefix_, pos);
 
 

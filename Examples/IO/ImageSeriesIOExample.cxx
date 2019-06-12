@@ -52,19 +52,19 @@ int main(int argc, char** argv)
   //  We will start by defining the types for the input images and the
   //  associated readers.
 
-  typedef unsigned short int PixelType;
-  const unsigned int         Dimension = 2;
+  using PixelType              = unsigned short;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType, Dimension> InputImageType;
+  using InputImageType = otb::Image<PixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ImageReaderType;
+  using ImageReaderType = otb::ImageFileReader<InputImageType>;
 
   //  We will use a list of image file readers in order to open all the
   //  input images at once. For this, we use the
   //  \doxygen{otb}{ObjectList} object and we template it over the type
   //  of the readers.
 
-  typedef otb::ObjectList<ImageReaderType> ReaderListType;
+  using ReaderListType = otb::ObjectList<ImageReaderType>;
 
   ReaderListType::Pointer readerList = ReaderListType::New();
 
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
   //  us to build a pipeline without really reading the images and using
   //  lots of RAM. The \doxygen{otb}{ImageList} object will be used.
 
-  typedef otb::ImageList<InputImageType> ImageListType;
+  using ImageListType = otb::ImageList<InputImageType>;
 
   ImageListType::Pointer imageList = ImageListType::New();
 
@@ -101,9 +101,9 @@ int main(int argc, char** argv)
   //  \doxygen{otb}{ImageListToVectorImageFilter} which is templated
   //  over the input image list type and the output vector image type.
 
-  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  using VectorImageType = otb::VectorImage<PixelType, Dimension>;
 
-  typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> ImageListToVectorImageFilterType;
+  using ImageListToVectorImageFilterType = otb::ImageListToVectorImageFilter<ImageListType, VectorImageType>;
 
   ImageListToVectorImageFilterType::Pointer iL2VI = ImageListToVectorImageFilterType::New();
 
@@ -114,7 +114,7 @@ int main(int argc, char** argv)
 
   iL2VI->SetInput(imageList);
 
-  typedef otb::ImageFileWriter<VectorImageType> ImageWriterType;
+  using ImageWriterType = otb::ImageFileWriter<VectorImageType>;
 
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
 

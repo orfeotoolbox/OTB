@@ -50,7 +50,7 @@ public:
   /** Filters typedef */
   typedef otb::ImageToNoDataMaskFilter<FloatVectorImageType,UInt8ImageType> FilterType;
   typedef otb::ChangeNoDataValueFilter<FloatVectorImageType,FloatVectorImageType> ChangeNoDataFilterType;
-  
+
   typedef otb::ImageList<FloatImageType> ImageListType;
   typedef otb::VectorImageToImageListFilter<FloatVectorImageType,ImageListType> VectorToListFilterType;
   typedef otb::ImageListToVectorImageFilter<ImageListType,FloatVectorImageType> ListToVectorFilterType;
@@ -63,7 +63,6 @@ private:
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
     // Documentation
-    SetDocName("No Data management");
     SetDocLongDescription("This application has two modes. The first allows building a mask of no-data pixels from the no-data flags read from the image file. The second allows updating the change the no-data value of an image (pixels value and metadata). This last mode also allows replacing NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -81,12 +80,12 @@ private:
 
     AddParameter(ParameterType_Bool,"usenan", "Consider NaN as no-data");
     SetParameterDescription("usenan","If active, the application will consider NaN as no-data values as well");
-   
+
     AddParameter(ParameterType_Choice,"mode","No-data handling mode");
     SetParameterDescription("mode","Allows choosing between different no-data handling options");
 
     AddChoice("mode.buildmask","Build a no-data Mask");
-    
+
     AddParameter(ParameterType_Float,"mode.buildmask.inv","Inside Value");
     SetParameterDescription("mode.buildmask.inv","Value given in the output mask to pixels that are not no data pixels");
     SetDefaultParameterInt("mode.buildmask.inv",1);
@@ -132,7 +131,7 @@ private:
  void DoExecute() override
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
-    
+
     m_Filter = FilterType::New();
     m_Filter->SetInsideValue(this->GetParameterFloat("mode.buildmask.inv"));
     m_Filter->SetOutsideValue(this->GetParameterFloat("mode.buildmask.outv"));
@@ -146,7 +145,7 @@ private:
     std::vector<double> newNoData(inputPtr->GetNumberOfComponentsPerPixel(),GetParameterFloat("mode.changevalue.newv"));
 
     m_ChangeNoDataFilter->SetNewNoDataValues(newNoData);
-    
+
     if(GetParameterString("mode") == "buildmask")
       {
       SetParameterOutputImage("out",m_Filter->GetOutput());
@@ -158,7 +157,7 @@ private:
     else if (GetParameterString("mode") == "apply")
       {
       m_MaskFilters.clear();
-      UInt8ImageType::Pointer maskPtr = this->GetParameterImage<UInt8ImageType>("mode.apply.mask");
+      UInt8ImageType::Pointer  maskPtr = this->GetParameterUInt8Image("mode.apply.mask");
       unsigned int nbBands = inputPtr->GetNumberOfComponentsPerPixel();
       itk::MetaDataDictionary &dict = inputPtr->GetMetaDataDictionary();
       std::vector<bool> flags;
@@ -221,4 +220,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::ManageNoData)
-

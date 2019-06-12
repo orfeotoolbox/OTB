@@ -618,8 +618,6 @@ vegetation had been demonstrated, users tended to also use the NDVI to
 quantify the photosynthetic capacity of plant canopies. This, however,
 can be a rather more complex undertaking if not done properly.
 
-* NDVI. See example :ref:`NDVIRAndNIRVegetationIndexImageFilter.cxx`.
-
 * ARVI. See example :ref:`ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter.cxx`.
 
 * AVI. See example :ref:`AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx`.
@@ -707,7 +705,6 @@ Interest Points
   See example :ref:`RatioLineDetectorExample.cxx`.
   See example :ref:`CorrelationLineDetectorExample.cxx`.
   See example :ref:`AsymmetricFusionOfLineDetectorExample.cxx`.
-  See example :ref:`ParallelLineDetectionExample.cxx`.
 
 * Segment Extraction. See example :ref:`LineSegmentDetectorExample.cxx`.
 
@@ -787,25 +784,8 @@ following expressions:
 
 * Flusser Moments for Images. See example :ref:`FlusserMomentsImageFunctionExample.cxx`.
 
-Road and cloud extraction
+Cloud extraction
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Road extraction is a critical feature for an efficient use of high
-resolution satellite images. There are many applications of road
-extraction: update of GIS database, reference for image registration,
-help for identification algorithms and rapid mapping for example. Road
-network can be used to register an optical image with a map or an
-optical image with a radar image for example. Road network extraction
-can help for other algorithms: isolated building detection, bridge
-detection. In these cases, a rough extraction can be sufficient. In the
-context of response to crisis, a fast mapping is necessary: within
-6 hours, infrastructures for the designated area are required. Within
-this timeframe, a manual extraction is inconceivable and an automatic
-help is necessary.
-
-* Road extraction filter. See example :ref:`ExtractRoadExample.cxx`.
-
-* Step by step road extraction. See example :ref:`ExtractRoadByStepsExample.cxx`.
 
 * Cloud Detection. See example :ref:`CloudDetectionExample.cxx`.
 

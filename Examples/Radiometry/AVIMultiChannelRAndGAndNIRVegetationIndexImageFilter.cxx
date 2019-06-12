@@ -26,10 +26,7 @@
                                                        Output/pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png \
                                                        3 \
                                                        2 \
-                                                       4 \
-                                                       660 \
-                                                       560 \
-                                                       830
+                                                       4
 */
 
 
@@ -76,12 +73,11 @@
 
 int main(int argc, char* argv[])
 {
-  if (argc < 11)
+  if (argc < 8)
   {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
-    std::cerr << " lambdaR, lambdaG, lambdaNIR " << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ," << std::endl;
     return 1;
   }
 
@@ -89,27 +85,27 @@ int main(int argc, char* argv[])
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
 
-  const unsigned int                                  Dimension = 2;
-  typedef double                                      InputPixelType;
-  typedef float                                       OutputPixelType;
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
+  const unsigned int Dimension = 2;
+  using InputPixelType         = double;
+  using OutputPixelType        = float;
+  using InputImageType         = otb::VectorImage<InputPixelType, Dimension>;
+  using OutputImageType        = otb::Image<OutputPixelType, Dimension>;
 
   // We instantiate reader and writer types
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
 
-  typedef otb::Functor::AVI<InputPixelType, InputPixelType, InputPixelType, OutputPixelType> FunctorType;
+  using FunctorType = otb::Functor::AVI<InputPixelType, OutputPixelType>;
 
   // The
   // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
 
-  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType> AVIImageFilterTypeType;
+  using AVIImageFilterTypeType = itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType>;
 
   AVIImageFilterTypeType::Pointer filter = AVIImageFilterTypeType::New();
 
@@ -123,18 +119,9 @@ int main(int argc, char* argv[])
 
   // The three used index bands (red, green and NIR) are declared.
 
-  filter->GetFunctor().SetRedIndex(::atoi(argv[5]));
-  filter->GetFunctor().SetGreenIndex(::atoi(argv[6]));
-  filter->GetFunctor().SetNIRIndex(::atoi(argv[7]));
-
-  // The $\lambda$ R, G and NIR parameters are set. The
-  // \doxygen{otb::Functor}{AVI}
-  // class sets the default values of $\lambda$ to $660$, $560$ and
-  // $830$.
-
-  filter->GetFunctor().SetLambdaR(::atof(argv[8]));
-  filter->GetFunctor().SetLambdaG(::atof(argv[9]));
-  filter->GetFunctor().SetLambdaNir(::atof(argv[10]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED, ::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::GREEN, ::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR, ::atoi(argv[7]));
 
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.
@@ -163,13 +150,13 @@ int main(int argc, char* argv[])
   }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char, Dimension>                                                OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>                                          OutputVectorPrettyImageType;
-  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>                                   WriterVectorPrettyType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                         WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>            RescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputVectorPrettyImageType> VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char, unsigned char>                           ChannelExtractorType;
+  using OutputPrettyImageType       = otb::Image<unsigned char, Dimension>;
+  using OutputVectorPrettyImageType = otb::VectorImage<unsigned char, Dimension>;
+  using WriterVectorPrettyType      = otb::ImageFileWriter<OutputVectorPrettyImageType>;
+  using WriterPrettyType            = otb::ImageFileWriter<OutputPrettyImageType>;
+  using RescalerType                = itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>;
+  using VectorRescalerType          = otb::VectorRescaleIntensityImageFilter<InputImageType, OutputVectorPrettyImageType>;
+  using ChannelExtractorType        = otb::MultiChannelExtractROI<unsigned char, unsigned char>;
 
   VectorRescalerType::Pointer     vectRescaler     = VectorRescalerType::New();
   ChannelExtractorType::Pointer   selecter         = ChannelExtractorType::New();
@@ -193,7 +180,7 @@ int main(int argc, char* argv[])
   vectPrettyWriter->SetFileName(argv[3]);
   vectPrettyWriter->SetInput(selecter->GetOutput());
 
-  typedef itk::ThresholdImageFilter<OutputImageType> ThresholderType;
+  using ThresholderType = itk::ThresholdImageFilter<OutputImageType>;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
   thresholder->SetInput(filter->GetOutput());

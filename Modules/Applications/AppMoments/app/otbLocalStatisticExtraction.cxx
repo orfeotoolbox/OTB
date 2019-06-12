@@ -59,7 +59,6 @@ SetName("LocalStatisticExtraction");
 SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
 
 // Documentation
-SetDocName("Local Statistic Extraction");
 SetDocLongDescription("This application computes the 4 local statistical moments on every pixel in the selected channel of the input image, over a specified neighborhood. The output image is multi band with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");

@@ -772,7 +772,9 @@ unsigned int OGRIOHelper
           if (std::string(key) != "FID")
             {
             // Edit the value of the field and add it to the current feature
-            ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+            int fIndex = ogrFeature->GetFieldIndex(key);
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
             }
           }
 
@@ -826,7 +828,13 @@ unsigned int OGRIOHelper
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          
+          if (std::string(key) != "FID")
+          {
+            int fIndex = ogrFeature->GetFieldIndex(key);
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
+          }
           }
 
 //        ogrFeature->SetField("Name", dataNode->GetNodeId());
@@ -911,9 +919,14 @@ unsigned int OGRIOHelper
           // Get the key of the Nth OGRFieldRefn
           const char * key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+          int fIndex = ogrFeature->GetFieldIndex(key);
+          
+          if (std::string(key) != "FID")
+          {
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
           }
-
+          }
         ogrFeature->SetGeometry(ogrPolygon);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
@@ -1043,7 +1056,6 @@ std::vector<OGRLayer*> OGRIOHelper
                     GDT_Unknown,
                     0);
     }
-
   std::vector<OGRLayer*>  ogrLayerVector;
   //unsigned int kept = 0;
   bool fieldsAddedToOGRLayer = false;
@@ -1182,7 +1194,12 @@ std::vector<OGRLayer*> OGRIOHelper
         // Get the key of the Nth OGRFieldRefn
         const char * key = kwl.GetNthField(i).first->GetNameRef();
         // Edit the value of the field and add it to the current feature
-        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        
+        if (std::string(key) != "FID")
+        {
+          // Edit the value of the field and add it to the current feature
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        }
         }
       ogrFeature->SetGeometry(&ogrLine);
 
@@ -1253,8 +1270,11 @@ std::vector<OGRLayer*> OGRIOHelper
         {
         // Get the key of the Nth OGRFieldRefn
         const char * key = kwl.GetNthField(i).first->GetNameRef();
-        // Edit the value of the field and add it to the current feature
-        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        if (std::string(key) != "FID")
+        {
+          // Edit the value of the field and add it to the current feature
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        }
         }
 
       ogrFeature->SetGeometry(ogrPolygon);

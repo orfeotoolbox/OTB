@@ -57,10 +57,10 @@ public:
   //  Next we have the standard declarations, used for object creation with
   //  the object factory:
 
-  typedef CompositeExampleImageFilter                     Self;
-  typedef itk::ImageToImageFilter<TImageType, TImageType> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  using Self         = CompositeExampleImageFilter<TImageType>;
+  using Superclass   = itk::ImageToImageFilter<TImageType, TImageType>;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through object factory */
   itkNewMacro(Self);
@@ -75,7 +75,7 @@ public:
   //  which determines the type of the threshold value.  We then use the
   //  convenience macros to define the Get and Set methods for this parameter.
 
-  typedef typename TImageType::PixelType PixelType;
+  using PixelType = typename TImageType::PixelType;
 
   itkGetMacro(Threshold, PixelType);
   itkSetMacro(Threshold, PixelType);
@@ -88,9 +88,9 @@ protected:
   //  enclosing image type:
 
 protected:
-  typedef itk::ThresholdImageFilter<TImageType>                     ThresholdType;
-  typedef itk::GradientMagnitudeImageFilter<TImageType, TImageType> GradientType;
-  typedef itk::RescaleIntensityImageFilter<TImageType, TImageType>  RescalerType;
+  using ThresholdType = itk::ThresholdImageFilter<TImageType>;
+  using GradientType  = itk::GradientMagnitudeImageFilter<TImageType, TImageType>;
+  using RescalerType  = itk::RescaleIntensityImageFilter<TImageType, TImageType>;
 
   void GenerateData() override;
 
@@ -187,11 +187,11 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef otb::Image<short, 2>            ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ImageType  = otb::Image<short, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
-  typedef otb::CompositeExampleImageFilter<ImageType> FilterType;
+  using FilterType = otb::CompositeExampleImageFilter<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

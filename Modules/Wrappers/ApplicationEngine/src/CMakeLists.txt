@@ -1,3 +1,4 @@
+
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
@@ -22,7 +23,8 @@ set( OTBApplicationEngine_SRC
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
   otbWrapperParameterGroup.cxx
-  otbWrapperOutputProcessXMLParameter.cxx
+  otbWrapperInputXML.cxx
+  otbWrapperOutputXML.cxx
   otbWrapperInputImageListParameter.cxx
   otbWrapperElevationParametersHandler.cxx
   otbWrapperInputFilenameListParameter.cxx
@@ -43,7 +45,6 @@ set( OTBApplicationEngine_SRC
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
   otbWrapperOutputVectorDataParameter.cxx
-  otbWrapperInputProcessXMLParameter.cxx
   otbWrapperMapProjectionParametersHandler.cxx
   otbWrapperApplication.cxx
   otbWrapperChoiceParameter.cxx
@@ -57,6 +58,7 @@ set( OTBApplicationEngine_SRC
   otbWrapperBoolParameter.cxx
   otbWrapperMetaDataHelper.cxx
   otbWrapperParameter.cxx
+  otbWrapperCastImage.cxx
   otbWrapperTypes.cxx
   )
 

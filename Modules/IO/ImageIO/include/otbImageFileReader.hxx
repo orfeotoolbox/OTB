@@ -445,7 +445,7 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>
           }
         if (otb_kwl.Empty())
           {
-          otbLogMacro(Info,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
+          otbLogMacro(Debug,<< "No kwl metadata found in file "<<lFileNameOssimKeywordlist);
           }
         }
       }

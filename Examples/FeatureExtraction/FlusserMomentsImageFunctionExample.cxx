@@ -47,12 +47,12 @@ int main(int argc, char* argv[])
   const char*        inputFilename = argv[1];
   const unsigned int radius        = atoi(argv[2]);
 
-  typedef unsigned char InputPixelType;
-  const unsigned int    Dimension = 2;
+  using InputPixelType         = unsigned char;
+  const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  using InputImageType = otb::Image<InputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -62,8 +62,8 @@ int main(int argc, char* argv[])
   //  input image type and the output (real) type value, so we start by
   //  defining:
 
-  typedef otb::FlusserMomentsImageFunction<InputImageType> FlusserType;
-  typedef FlusserType::OutputType                          MomentType;
+  using FlusserType = otb::FlusserMomentsImageFunction<InputImageType>;
+  using MomentType  = FlusserType::OutputType;
 
   FlusserType::Pointer fmFunction = FlusserType::New();
 

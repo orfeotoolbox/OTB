@@ -71,19 +71,19 @@ int main(int argc, char* argv[])
   //  The labeled image is of type unsigned char which allows up to 256 different
   //  classes.
 
-  const unsigned int    Dimension = 2;
-  typedef double        InternalPixelType;
-  typedef unsigned char LabelledPixelType;
+  const unsigned int Dimension = 2;
+  using InternalPixelType      = double;
+  using LabelledPixelType      = unsigned char;
 
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
+  using InputImageType    = otb::Image<InternalPixelType, Dimension>;
+  using LabelledImageType = otb::Image<LabelledPixelType, Dimension>;
 
   //  We define a reader for the image to be classified, an initialization for the
   //  classification (which could be random) and a writer for the final
   //  classification.
 
-  typedef otb::ImageFileReader<InputImageType>    ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
   //  A MarkovRandomFieldFilter is instantiated, this is the
   // main class which connect the other to do the Markov classification.
 
-  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  using MarkovRandomFieldFilterType = otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType>;
 
   //  An MRFSamplerRandomMAP, which derives from the
   //  MRFSampler, is instantiated. The sampler is in charge of
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
   // MRFSamplerRandomMAP, randomly pick one possible value
   // according to the MAP probability.
 
-  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType> SamplerType;
+  using SamplerType = otb::MRFSamplerRandom<InputImageType, LabelledImageType>;
 
   //  An MRFOptimizerMetropolis, which derives from the
   // MRFOptimizer, is instantiated. The optimizer is in charge
@@ -115,7 +115,7 @@ int main(int argc, char* argv[])
   // MRFSamplerRandomMAP, accept the proposal according to the
   // variation of energy it causes and a temperature parameter.
 
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
+  using OptimizerType = otb::MRFOptimizerMetropolis;
 
   // Two energy, deriving from the MRFEnergy class need to be instantiated. One energy
   // is required for the regularization, taking into account the relationship between neighboring pixels
@@ -125,8 +125,8 @@ int main(int argc, char* argv[])
   // The second energy is used for the fidelity to the original data. Here it is done with a
   // MRFEnergyFisherClassification class, which defines a Fisher distribution to model the data.
 
-  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>             EnergyRegularizationType;
-  typedef otb::MRFEnergyFisherClassification<InputImageType, LabelledImageType> EnergyFidelityType;
+  using EnergyRegularizationType = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
+  using EnergyFidelityType       = otb::MRFEnergyFisherClassification<InputImageType, LabelledImageType>;
 
   // The different filters composing our pipeline are created by invoking their
   // New() methods, assigning the results to smart pointers.
@@ -194,8 +194,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
+  using RescaleType                  = itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType>;
+  RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 
@@ -205,17 +205,17 @@ int main(int argc, char* argv[])
   writer->Update();
 
   // convert output image to color
-  typedef itk::RGBPixel<unsigned char>                         RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>                          RGBImageType;
-  typedef itk::Functor::ScalarToRGBPixelFunctor<unsigned long> ColorMapFunctorType;
+  using RGBPixelType        = itk::RGBPixel<unsigned char>;
+  using RGBImageType        = otb::Image<RGBPixelType, 2>;
+  using ColorMapFunctorType = itk::Functor::ScalarToRGBPixelFunctor<unsigned long>;
 
-  typedef itk::UnaryFunctorImageFilter<LabelledImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                                                colormapper = ColorMapFilterType::New();
+  using ColorMapFilterType                = itk::UnaryFunctorImageFilter<LabelledImageType, RGBImageType, ColorMapFunctorType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
 
   colormapper->SetInput(rescaleFilter->GetOutput());
   // We can now create an image file writer and save the image.
 
-  typedef otb::ImageFileWriter<RGBImageType> WriterRescaledType;
+  using WriterRescaledType = otb::ImageFileWriter<RGBImageType>;
 
   WriterRescaledType::Pointer writerRescaled = WriterRescaledType::New();
 

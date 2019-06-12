@@ -64,18 +64,10 @@ namespace Wrapper
 class OTBMonteverdiGUI_EXPORT QtWidgetView :
     public otb::Wrapper::QtWidgetView
 {
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
-
   Q_OBJECT
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public methods.
 public:
 
-  /**
-   */
   static char const * const OBJECT_NAME;
 
   /** \brief Constructor. */
@@ -86,30 +78,18 @@ public:
   /** \brief Destructor. */
   ~QtWidgetView() override;
 
+  bool BeforeExecuteButtonClicked() override;
+
 protected:
-
   QWidget* CreateInputWidgets() override;
-
-protected slots:
-
-  /** extend the behaviour of base class OnExecButtonClicked */
-  void OnExecButtonClicked() override;
-
-  /** modify the behaviour of base class OnExceptionRaised
-   */
-  void OnExceptionRaised( QString what ) override;
 
 private:
 
   QtWidgetView(const QtWidgetView&) = delete;
   void operator=(const QtWidgetView&) = delete;
 
-  /**
-   */
   void SetupParameterWidgets( QWidget* widget );
 
-  /**
-   */
   void SetupFileSelectionWidget( QWidget * );
 
 private slots:
@@ -119,12 +99,8 @@ private slots:
   // image filename{s} set by the user in this OTB application (if any).
   void OnApplicationExecutionDone( int );
 
-  /**
-   */
   inline void OnFileSelectionWidgetAdded0( QWidget * );
 
-  /**
-   */
   inline void OnFileSelectionWidgetAdded1( QWidget * );
 };
 
@@ -132,16 +108,12 @@ private slots:
 
 } // end namespace 'mvd'
 
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
 namespace mvd
 {
 
 namespace Wrapper
 {
 
-/*******************************************************************************/
 inline
 void
 QtWidgetView
@@ -150,7 +122,6 @@ QtWidgetView
   SetupFileSelectionWidget( widget );
 }
 
-/*******************************************************************************/
 inline
 void
 QtWidgetView

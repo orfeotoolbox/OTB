@@ -27,6 +27,7 @@
 #include "otbImageFileWriter.h"
 #include <string>
 
+
 namespace otb
 {
 namespace Wrapper
@@ -126,36 +127,34 @@ protected:
   /** Destructor */
   ~OutputImageParameter() override;
 
-  template <class TInput>
-    int SwitchInput(TInput *img);
-
-  //FloatVectorImageType::Pointer m_Image;
-  ImageBaseType::Pointer m_Image;
-  std::string            m_FileName;
-  ImagePixelType         m_PixelType;
-  ImagePixelType         m_DefaultPixelType;
-
 private:
   OutputImageParameter(const Parameter &) = delete;
   void operator =(const Parameter&) = delete;
 
-  unsigned int                  m_RAMValue;
+  /** Switch TInputImage according to expected output type. */
+  template <typename TInputImage>
+  void SwitchInput(TInputImage*);
 
-  itk::ProcessObject::Pointer m_Caster;
+  /** */
+  template <typename TOutputImage, typename TInputImage>
+  void ClampAndWriteVectorImage(TInputImage*);
+
+  // FloatVectorImageType::Pointer m_Image;
+  ImageBaseType::Pointer m_Image;
+
+  itk::ProcessObject::Pointer m_InputCaster;
+  itk::ProcessObject::Pointer m_OutputCaster;
 
   itk::ProcessObject::Pointer m_Writer;
 
+  std::string m_FileName;
+
+  ImagePixelType m_PixelType;
+  ImagePixelType m_DefaultPixelType;
+
+  unsigned int m_RAMValue;
+
 }; // End class OutputImage Parameter
-
-// Declare specialisation for UInt8RGBAImageType
-template <>
-int
-OutputImageParameter::SwitchInput(UInt8RGBAImageType *img);
-
-// Declare specialisation for UInt8RGBImageType
-template <>
-int
-OutputImageParameter::SwitchInput(UInt8RGBImageType *img);
 
 } // End namespace Wrapper
 } // End namespace otb
