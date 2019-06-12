@@ -175,7 +175,6 @@ windows-8-prepare:
     - git lfs fetch origin %CI_COMMIT_SHA%
     - git checkout %CI_COMMIT_REF_NAME%
   after_script:
-    - call ./CI/dev_env.bat x64 otb
     - python ./CI/cdash_handler.py
 
 windows-10-build:
