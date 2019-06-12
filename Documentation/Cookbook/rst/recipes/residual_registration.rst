@@ -29,7 +29,7 @@ register two images. This process can be easily extended to perform
 image series registration.
 
 The aim of this example is to describe how to register a Level 1
-QuickBird image over an orthorectify Pleiades image over the area of
+QuickBird image over an orthorectified Pleiades image over the area of
 Toulouse, France.
 
 |image1| |image2| 
@@ -40,35 +40,30 @@ Extract metadata from the image reference
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We first dump geometry metadata of the image we want to refine in a text
-file. In OTB, we use the extension *.geom* for this type of file. As you
-will see the application which will estimate a refine geometry only
+file. In OTB, we use the extension *.geom* for this type of file.
+The application to estimate a refined geometry only
 needs as input this metadata and a set of homologous points. The
 refinement application will create a new *.geom* file containing refined
 geometry parameters which can be used after for reprojection for
 example.
 
-The use of external *.geom* file is available in OTB since release
-:math:`3.16`. See
-`here <http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName>`__ for
-more information.
+External *.geom* files can also be used with :ref:`extended filenames<extended-filenames>`.
 
 ::
 
-
-    otbcli_ReadImageInfo   -in slave_image
-                           -outkwl TheGeom.geom
+    otbcli_ReadImageInfo -in slave_image
+                         -outkwl TheGeom.geom
 
 Extract homologous points from images
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The main idea of the residual registration is to estimate an second
+The main idea of the residual registration is to estimate a second
 transformation (after the application of sensors model).
+The homologous point application uses an interest point detection method to
+get a set of points with matches in both images.
 
-The homologous point application use interest point detection method to
-get a set of point which match in both images.
-
-The basic idea is to use this set of homologous points and estimate with
-them a residual transformation between the two images.
+The basic idea is to use this set of homologous points to estimate 
+a residual transformation between the two images.
 
 There is a wide variety of keypoint detectors in the literature, and they 
 allow for the detection and description of local features in images. These algorithms
