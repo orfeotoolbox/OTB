@@ -70,6 +70,11 @@ GenericMapProjection<TDirectionOfMapping, TScalarType, NInputDimensions, NOutput
   SpatialReference wgs84 = SpatialReference::FromWGS84();
   SpatialReference wktSpatialReference = SpatialReference::FromDescription(projectionRefWkt);
 
+#if GDAL_VERSION_NUM >= 3000000
+  wgs84.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+  wktSpatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
+  
   if(DirectionOfMapping == TransformDirection::INVERSE)
     {
     std::unique_ptr<CoordinateTransformation> newMapProjection(new CoordinateTransformation(wktSpatialReference,wgs84));
