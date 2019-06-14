@@ -95,7 +95,6 @@ if(UNIX)
     --with-pcraster=no
     --with-pcre=no
     --with-perl=no
-    --with-php=no
     --with-python=no
     --with-qhull=internal
     --with-sde=no
