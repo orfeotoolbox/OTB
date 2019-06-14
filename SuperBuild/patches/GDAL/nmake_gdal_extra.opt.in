@@ -60,10 +60,9 @@ GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
 GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
 
 # Uncomment for OpenJpeg support
-HAVE_OPENJPEG = YES
 OPENJPEG_ENABLED = YES
 OPENJPEG_VERSION = 20200
-OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include
+OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include\openjpeg-2.2
 OPENJPEG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\openjp2.lib
 
 
