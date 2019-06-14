@@ -136,6 +136,7 @@ stages:
   stage: prepare
   before_script:
 # This override the previous before_script
+    - git clean -ffxd
     - set GIT_LFS_SKIP_SMUDGE=1
     - git checkout %CI_COMMIT_REF_NAME%
     - set GIT_LFS_SKIP_SMUDGE=0
@@ -172,6 +173,7 @@ windows-8-prepare:
 .common-windows-build:
   extends: .common-build
   before_script:
+    - git clean -ffxd
     - git lfs fetch origin %CI_COMMIT_SHA%
     - git checkout %CI_COMMIT_REF_NAME%
   after_script:
