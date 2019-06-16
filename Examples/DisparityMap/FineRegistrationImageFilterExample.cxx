@@ -19,27 +19,39 @@
  */
 
 
+/* Example usage:
+./FineRegistrationImageFilterExample Input/StereoFixed.png \
+                                     Input/StereoMoving.png \
+                                     Output/fcDisplacementFieldOutput-horizontal.png \
+                                     Output/fcDisplacementFieldOutput-vertical.png \
+                                     Output/fcCorrelFieldOutput.png \
+                                     Output/fcDResampledOutput2.png \
+                                     1.0 \
+                                     5 \
+                                     3 \
+                                     0.1
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcDisplacementFieldOutput-horizontal.png}, {fcDisplacementFieldOutput-vertical.png}, {fcCorrelFieldOutput.png}, {fcDResampledOutput2.png}
-//    1.0 5 3 0.1
-//  Software Guide : EndCommandLineArgs
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {StereoFixed.png}, {StereoMoving.png}
-//    OUTPUTS: {fcMRSDDisplacementFieldOutput-horizontal.png}, {fcMRSDDisplacementFieldOutput-vertical.png}, {fcMRSDCorrelFieldOutput.png}, {fcMRSDDResampledOutput2.png}
-//    1.0 5 3 0.1 mrsd
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./FineRegistrationImageFilterExample Input/StereoFixed.png \
+                                     Input/StereoMoving.png \
+                                     Output/fcMRSDDisplacementFieldOutput-horizontal.png \
+                                     Output/fcMRSDDisplacementFieldOutput-vertical.png \
+                                     Output/fcMRSDCorrelFieldOutput.png \
+                                     Output/fcMRSDDResampledOutput2.png \
+                                     1.0 \
+                                     5 \
+                                     3 \
+                                     0.1 \
+                                     mrsd
+*/
 
-// Software Guide : BeginLatex
-//
+
 // This example demonstrates the use of the \doxygen{otb}{FineRegistrationImageFilter}. This filter performs deformation estimation
 // using the classical extrema of image-to-image metric look-up in a search window.
 //
 // The first step toward the use of these filters is to include the proper header files.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
@@ -48,9 +60,7 @@
 #include "itkWarpImageFilter.h"
 #include "itkMeanReciprocalSquareDifferenceImageToImageMetric.h"
 
-// Software Guide : BeginCodeSnippet
 #include "otbFineRegistrationImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 #include "otbImageOfVectorsToMonoChannelExtractROI.h"
 #include "itkRescaleIntensityImageFilter.h"
@@ -62,57 +72,43 @@ int main(int argc, char** argv)
 {
 
   if (argc < 11)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldMetric warped ";
+    std::cerr << " fixedFileName movingFileName fieldOutNameHorizontal fieldOutNameVertical fieldMetric warped ";
     std::cerr << "smoothingSigma metricRadius explorationRadius subpixelPrecision";
 
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int ImageDimension = 2;
 
-  typedef double                              PixelType;
-  typedef itk::Vector<double, ImageDimension> DisplacementPixelType;
+  using PixelType             = double;
+  using DisplacementPixelType = itk::Vector<double, ImageDimension>;
 
-  typedef unsigned char                               OutputPixelType;
-  typedef otb::Image<OutputPixelType, ImageDimension> OutputImageType;
+  using OutputPixelType = unsigned char;
+  using OutputImageType = otb::Image<OutputPixelType, ImageDimension>;
 
-  // Software Guide : BeginLatex
-  //
   // Several type of \doxygen{otb}{Image} are required to represent the input image, the metric field,
   // and the deformation field.
-  //
-  // Software Guide : EndLatex
 
-  //Allocate Images
-  // Software Guide : BeginCodeSnippet
-  typedef otb::Image<PixelType, ImageDimension> InputImageType;
-  typedef otb::Image<PixelType, ImageDimension> MetricImageType;
-  typedef otb::Image<DisplacementPixelType,
-      ImageDimension>                           DisplacementFieldType;
-  // Software Guide : EndCodeSnippet
+  // Allocate Images
+  using InputImageType        = otb::Image<PixelType, ImageDimension>;
+  using MetricImageType       = otb::Image<PixelType, ImageDimension>;
+  using DisplacementFieldType = otb::Image<DisplacementPixelType, ImageDimension>;
 
-  typedef otb::ImageFileReader<InputImageType> InputReaderType;
+  using InputReaderType            = otb::ImageFileReader<InputImageType>;
   InputReaderType::Pointer fReader = InputReaderType::New();
   fReader->SetFileName(argv[1]);
 
   InputReaderType::Pointer mReader = InputReaderType::New();
   mReader->SetFileName(argv[2]);
 
-  // Software Guide : BeginLatex
-  //
   // To make the metric estimation more robust, the first
   // required step is to blur the input images. This is done using the
   // \doxygen{itk}{RecursiveGaussianImageFilter}:
-  //
-  // Software Guide : EndLatex
 
-  //Blur input images
-  // Software Guide : BeginCodeSnippet
-  typedef itk::RecursiveGaussianImageFilter<InputImageType,
-      InputImageType> InputBlurType;
+  // Blur input images
+  using InputBlurType = itk::RecursiveGaussianImageFilter<InputImageType, InputImageType>;
 
   InputBlurType::Pointer fBlur = InputBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
@@ -121,37 +117,22 @@ int main(int argc, char** argv)
   InputBlurType::Pointer mBlur = InputBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
   mBlur->SetSigma(atof(argv[7]));
-// Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Now, we declare and instantiate the \doxygen{otb}{FineRegistrationImageFilter} which is going to perform the registration:
-  //
-  // Software Guide : EndLatex
 
-  //Create the filter
-  // Software Guide : BeginCodeSnippet
-  typedef otb::FineRegistrationImageFilter<InputImageType,
-      MetricImageType,
-      DisplacementFieldType>
-  RegistrationFilterType;
+  // Create the filter
+  using RegistrationFilterType = otb::FineRegistrationImageFilter<InputImageType, MetricImageType, DisplacementFieldType>;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
   registrator->SetMovingInput(mBlur->GetOutput());
   registrator->SetFixedInput(fBlur->GetOutput());
-// Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // Some parameters need to be specified to the filter:
   // \begin{itemize}
   // \item The area where the search is performed. This area is defined by its radius:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef RegistrationFilterType::SizeType RadiusType;
+  using RadiusType = RegistrationFilterType::SizeType;
 
   RadiusType searchRadius;
 
@@ -159,92 +140,60 @@ int main(int argc, char** argv)
   searchRadius[1] = atoi(argv[8]);
 
   registrator->SetSearchRadius(searchRadius);
-// Software Guide : EndCodeSnippet
 
   std::cout << "Exploration radius " << registrator->GetSearchRadius() << std::endl;
 
-  // Software Guide : BeginLatex
-  //
   // \item The window used to compute the local metric. This window is also defined by its radius:
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   RadiusType metricRadius;
   metricRadius[0] = atoi(argv[9]);
   metricRadius[1] = atoi(argv[9]);
 
   registrator->SetRadius(metricRadius);
-// Software Guide : EndCodeSnippet
 
   std::cout << "Metric radius " << registrator->GetRadius() << std::endl;
 
-  // Software Guide : BeginLatex
-  //
   // We need to set the sub-pixel accuracy we want to obtain:
-  //
-  // Software Guide : EndLatex
   registrator->SetConvergenceAccuracy(atof(argv[10]));
 
-  // Software Guide : BeginLatex
-  //
   // The default matching metric used by the \doxygen{otb}{FineRegistrationImageFilter} is standard correlation.
   // However, we may also use any other image-to-image metric provided by ITK. For instance, here is how we
   // would use the \doxygen{itk}{MutualInformationImageToImageMetric} (do not forget to include the proper header).
-  //
-  // Software Guide : EndLatex
 
-  if(argc > 11)
-      {
-      // Software Guide : BeginCodeSnippet
-      typedef itk::MeanReciprocalSquareDifferenceImageToImageMetric
-        <InputImageType, InputImageType> MRSDMetricType;
-      MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
-      registrator->SetMetric(mrsdMetric);
-      // Software Guide : EndCodeSnippet
+  if (argc > 11)
+  {
+    using MRSDMetricType               = itk::MeanReciprocalSquareDifferenceImageToImageMetric<InputImageType, InputImageType>;
+    MRSDMetricType::Pointer mrsdMetric = MRSDMetricType::New();
+    registrator->SetMetric(mrsdMetric);
 
-      // Software Guide : BeginLatex
-      //
-      // The \doxygen{itk}{MutualInformationImageToImageMetric} produces low value for poor matches, therefore, the filter has
-      // to maximize the metric :
-      //
-      // Software Guide : EndLatex
+    // The \doxygen{itk}{MutualInformationImageToImageMetric} produces low value for poor matches, therefore, the filter has
+    // to maximize the metric :
 
-      // Software Guide : BeginCodeSnippet
-      registrator->MinimizeOff();
-      // Software Guide : EndCodeSnippet
-      }
+    registrator->MinimizeOff();
+  }
 
 
-  // Software Guide : BeginLatex
-  //
   // \end{itemize}
   // The execution of the \doxygen{otb}{FineRegistrationImageFilter} will be triggered by
   // the \code{Update()} call on the writer at the end of the
   // pipeline. Make sure to use a
   // \doxygen{otb}{ImageFileWriter} if you want to benefit
   // from the streaming features.
-  //
-  // Software Guide : EndLatex
 
-  typedef otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType,
-      InputImageType>
-  ChannelExtractionFilterType;
-  ChannelExtractionFilterType::Pointer channelExtractor =
-    ChannelExtractionFilterType::New();
+  using ChannelExtractionFilterType                     = otb::ImageOfVectorsToMonoChannelExtractROI<DisplacementFieldType, InputImageType>;
+  ChannelExtractionFilterType::Pointer channelExtractor = ChannelExtractionFilterType::New();
 
   channelExtractor->SetInput(registrator->GetOutputDisplacementField());
   channelExtractor->SetChannel(1);
 
-  typedef itk::RescaleIntensityImageFilter<InputImageType,
-      OutputImageType> RescalerType;
+  using RescalerType                  = itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>;
   RescalerType::Pointer fieldRescaler = RescalerType::New();
 
   fieldRescaler->SetInput(channelExtractor->GetOutput());
   fieldRescaler->SetOutputMaximum(255);
   fieldRescaler->SetOutputMinimum(0);
 
-  typedef otb::ImageFileWriter<OutputImageType> DFWriterType;
+  using DFWriterType = otb::ImageFileWriter<OutputImageType>;
 
   DFWriterType::Pointer dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
@@ -255,8 +204,7 @@ int main(int argc, char** argv)
   dfWriter->SetFileName(argv[4]);
   dfWriter->Update();
 
-  typedef itk::WarpImageFilter<InputImageType, InputImageType,
-      DisplacementFieldType> WarperType;
+  using WarperType           = itk::WarpImageFilter<InputImageType, InputImageType, DisplacementFieldType>;
   WarperType::Pointer warper = WarperType::New();
 
   InputImageType::PixelType padValue = 4.0;
@@ -265,23 +213,22 @@ int main(int argc, char** argv)
   warper->SetDisplacementField(registrator->GetOutputDisplacementField());
   warper->SetEdgePaddingValue(padValue);
 
-  typedef itk::RescaleIntensityImageFilter<MetricImageType,
-        OutputImageType> MetricRescalerType;
+  using MetricRescalerType = itk::RescaleIntensityImageFilter<MetricImageType, OutputImageType>;
 
   MetricRescalerType::Pointer metricRescaler = MetricRescalerType::New();
   metricRescaler->SetInput(registrator->GetOutput());
   metricRescaler->SetOutputMinimum(0);
   metricRescaler->SetOutputMaximum(255);
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   WriterType::Pointer writer1 = WriterType::New();
   writer1->SetInput(metricRescaler->GetOutput());
   writer1->SetFileName(argv[5]);
   writer1->Update();
 
-  typedef itk::CastImageFilter<InputImageType, OutputImageType> CastFilterType;
-  CastFilterType::Pointer caster =  CastFilterType::New();
+  using CastFilterType           = itk::CastImageFilter<InputImageType, OutputImageType>;
+  CastFilterType::Pointer caster = CastFilterType::New();
   caster->SetInput(warper->GetOutput());
 
 
@@ -290,8 +237,6 @@ int main(int argc, char** argv)
   writer2->SetInput(caster->GetOutput());
   writer2->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:FineCorrelationImageFilterOUTPUT} shows the result of
   // applying the \doxygen{otb}{FineRegistrationImageFilter}.
   //
@@ -314,9 +259,6 @@ int main(int argc, char** argv)
   // }
   // \label{fig:FineCorrelationImageFilterOUTPUT}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
-
 }

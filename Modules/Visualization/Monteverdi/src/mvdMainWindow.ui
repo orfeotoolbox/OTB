@@ -23,7 +23,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -39,6 +39,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="action_About"/>
+    <addaction name="action_Documentation"/>
     <addaction name="action_Keymap"/>
    </widget>
    <widget class="QMenu" name="menu_View">
@@ -294,6 +295,14 @@
    </property>
    <property name="text">
     <string>Use OpenGL Shading Language (GLSL)</string>
+   </property>
+  </action>
+  <action name="action_Documentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
  </widget>

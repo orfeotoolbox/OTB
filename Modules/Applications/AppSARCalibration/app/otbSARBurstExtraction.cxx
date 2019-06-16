@@ -50,7 +50,6 @@ private:
     SetDescription("This application performs a burst extraction by keeping only lines and samples of a required burst.");
 
     // Documentation
-    SetDocName("SAR Burst Extraction");
     SetDocLongDescription("Sentinel1 IW SLC products are composed of several burst overlapping in"
                           " azimuth time for each subswath, separated by black lines [1]. The burst"
                           " extraction consist in extracting a single burst, by selecting only lines" 

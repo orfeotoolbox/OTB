@@ -42,7 +42,7 @@
 #include "otbConfigure.h"
 #include "otbGDALDriverManagerWrapper.h"
 #include "otbStandardOneLineFilterWatcher.h"
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 #include "otbCoordinateToName.h"
 #include "otbDEMHandler.h"
 #include "otbGroundSpacingImageFunction.h"
@@ -134,7 +134,7 @@ VectorImageModel
   // Setup GenericRSTransform
   m_ToWgs84 = otb::GenericRSTransform<>::New();
   m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
-  m_ToWgs84->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  m_ToWgs84->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   m_ToWgs84->InstantiateTransform();
 
   //Compute estimated spacing here
@@ -260,7 +260,7 @@ VectorImageModel
 
   try
     {
-    otb::StandardOneLineFilterWatcher watcher(
+    otb::StandardOneLineFilterWatcher<> watcher(
       filter,
       ToStdString( tr( "Overviews creation: " ) )
     );

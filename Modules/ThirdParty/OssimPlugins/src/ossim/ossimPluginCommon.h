@@ -28,6 +28,7 @@
 
 #include <string>
 #include <vector>
+#include <ossimPluginConstants.h>
 #include <ossim/base/ossimRefPtr.h>
 
 class ossimString;

@@ -123,18 +123,18 @@ private:
 
   std::string m_inImageName;
   bool m_currentEnabledStateOfFluxParam;
+  bool m_currentEnabledStateOfSolarDistanceParam;
 
   void DoInit() override
   {
     SetName("OpticalCalibration");
     SetDescription("Perform optical calibration TOA/TOC (Top Of Atmosphere/Top Of Canopy). Supported sensors: QuickBird, Ikonos, WorldView2, Formosat, Spot5, Pleiades, Spot6, Spot7. For other sensors the application also allows providing calibration parameters manually.");
     // Documentation
-    SetDocName("Optical calibration");
     SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
 "\n--------------------------\n\n"
 "If the sensor is not supported by the metadata interface factory of OTB, users still have the possibility to give the needed parameters to the application.\n"
 "For TOA conversion, these parameters are: \n"
-"- day and month of acquisition, or flux normalization coefficient;\n"
+"- day and month of acquisition, or flux normalization coefficient, or solar distance (in AU);\n"
 "- sun elevation angle;\n"
 "- gains and biases, one pair of values for each band (passed by a file);\n"
 "- solar illuminations, one value for each band (passed by a file).\n\n"
@@ -160,7 +160,7 @@ private:
 "Note also that ESUN(b) not only depends on the band b, but also on the spectral sensitivity of the sensor in this particular band. "
 "In other words, the influence of spectral sensitivities is included within the ESUN different values.\n"
 "These values are provided by the user thanks to a txt file following the same convention as before.\n"
-"Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient 'fn'. "
+"Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient or a solar distance (in AU) 'fn'. "
 "The formula used instead will be the following : \n\n"
 "(3) \tR(b) = (pi*L(b)) / (ESUN(b)*fn*fn*cos(θ)) \n\n"
 "Whatever the formula used (2 or 3), the user should pay attention to the interpretation of the parameters he will provide to the application, "
@@ -241,6 +241,12 @@ private:
     SetParameterDescription("acqui.fluxnormcoeff", "Flux Normalization Coefficient");
     SetMinimumParameterFloatValue("acqui.fluxnormcoeff", 0.);
     MandatoryOff("acqui.fluxnormcoeff");
+    //Solar distance
+    AddParameter(ParameterType_Float, "acqui.solardistance", "Solar distance");
+    SetParameterDescription("acqui.solardistance", "Solar distance (in AU)");
+    SetMinimumParameterFloatValue("acqui.solardistance", 0.);
+    SetMaximumParameterFloatValue("acqui.solardistance", 2.);
+    MandatoryOff("acqui.solardistance");
 
     AddParameter(ParameterType_Group,"acqui.sun","Sun angles");
     SetParameterDescription("acqui.sun","This group contains the sun angles");
@@ -273,12 +279,12 @@ private:
     SetDefaultParameterFloat("acqui.view.azim",0.0);
 
     //Gain & bias
-    AddParameter(ParameterType_InputFilename, "acqui.gainbias",   "Gains or biases");
+    AddParameter(ParameterType_InputFilename, "acqui.gainbias", "Gains or biases");
     SetParameterDescription("acqui.gainbias", "Gains or biases");
     MandatoryOff("acqui.gainbias");
     //Solar illuminations
-    AddParameter(ParameterType_InputFilename, "acqui.solarilluminations",   "Solar illuminations");
-    SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band)");
+    AddParameter(ParameterType_InputFilename, "acqui.solarilluminations", "Solar illuminations");
+    SetParameterDescription("acqui.solarilluminations", "Solar illuminations (one value per band, in W/m^2/micron)");
     MandatoryOff("acqui.solarilluminations");
 
     //Atmospheric parameters (TOC)
@@ -291,17 +297,17 @@ private:
     AddChoice("atmo.aerosol.urban",       "Urban");
     AddChoice("atmo.aerosol.desertic",    "Desertic");
 
-    AddParameter(ParameterType_Float, "atmo.oz",   "Ozone Amount");
-    SetParameterDescription("atmo.oz", "Ozone Amount");
+    AddParameter(ParameterType_Float, "atmo.oz", "Ozone Amount (cm-atm)");
+    SetParameterDescription("atmo.oz", "Stratospheric ozone layer content (in cm-atm)");
 
-    AddParameter(ParameterType_Float, "atmo.wa",   "Water Vapor Amount");
-    SetParameterDescription("atmo.wa", "Water Vapor Amount (in saturation fraction of water)");
+    AddParameter(ParameterType_Float, "atmo.wa", "Water Vapor Amount (g/cm2)");
+    SetParameterDescription("atmo.wa", "Total water vapor content over vertical atmospheric column (in g/cm2)");
 
-    AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure");
+    AddParameter(ParameterType_Float, "atmo.pressure", "Atmospheric Pressure (hPa)");
     SetParameterDescription("atmo.pressure", "Atmospheric Pressure (in hPa)");
 
     AddParameter(ParameterType_Float, "atmo.opt",  "Aerosol Optical Thickness");
-    SetParameterDescription("atmo.opt", "Aerosol Optical Thickness");
+    SetParameterDescription("atmo.opt", "Aerosol Optical Thickness (unitless)");
 
     SetDefaultParameterFloat("atmo.oz", 0.);
     SetDefaultParameterFloat("atmo.wa",  2.5);
@@ -335,7 +341,8 @@ private:
 
     // Pixel spacing
     AddParameter(ParameterType_Float, "atmo.pixsize", "Pixel size (in km)");
-    SetParameterDescription("atmo.pixsize", "Pixel size (in km )used to"
+    SetParameterDescription("atmo.pixsize",
+                            "Pixel size (in km) used to"
                             "compute adjacency effects, it doesn't have to"
                             "match the image spacing");
     SetMinimumParameterFloatValue("atmo.pixsize",0.0);
@@ -354,6 +361,7 @@ private:
 
     m_inImageName = "";
     m_currentEnabledStateOfFluxParam=false;
+    m_currentEnabledStateOfSolarDistanceParam=false;
   }
 
   void DoUpdateParameters() override
@@ -441,7 +449,7 @@ private:
            else
            {
              SetParameterInt("acqui.day",lImageMetadataInterface->GetDay());
-             if (IsParameterEnabled("acqui.fluxnormcoeff"))
+             if (IsParameterEnabled("acqui.fluxnormcoeff") || IsParameterEnabled("acqui.solardistance"))
                DisableParameter("acqui.day");
            }
 
@@ -450,7 +458,7 @@ private:
            else
            {
              SetParameterInt("acqui.month",lImageMetadataInterface->GetMonth());
-             if (IsParameterEnabled("acqui.fluxnormcoeff"))
+             if (IsParameterEnabled("acqui.fluxnormcoeff") || IsParameterEnabled("acqui.solardistance"))
                DisableParameter("acqui.month");
            }
 
@@ -538,10 +546,13 @@ private:
         ossOutput << std::endl << "Flux Normalization Coefficient will be used" << std::endl;
         DisableParameter("acqui.day");
         DisableParameter("acqui.month");
+        DisableParameter("acqui.solardistance");
         MandatoryOff("acqui.day");
         MandatoryOff("acqui.month");
+        MandatoryOff("acqui.solardistance");
         MandatoryOn("acqui.fluxnormcoeff");
         m_currentEnabledStateOfFluxParam = true;
+        m_currentEnabledStateOfSolarDistanceParam = false;
       }
       else
       {
@@ -552,6 +563,34 @@ private:
         MandatoryOn("acqui.month");
         MandatoryOff("acqui.fluxnormcoeff");
         m_currentEnabledStateOfFluxParam = false;
+      }
+    }
+
+    // Manage the case where solardistance is modified by user
+    if (m_currentEnabledStateOfSolarDistanceParam != IsParameterEnabled("acqui.solardistance"))
+    {
+      if (IsParameterEnabled("acqui.solardistance"))
+      {
+        ossOutput << std::endl << "Solar distance Coefficient will be used" << std::endl;
+        DisableParameter("acqui.day");
+        DisableParameter("acqui.month");
+        DisableParameter("acqui.fluxnormcoeff");
+        MandatoryOff("acqui.day");
+        MandatoryOff("acqui.month");
+        MandatoryOff("acqui.fluxnormcoeff");
+        MandatoryOn("acqui.solardistance");
+        m_currentEnabledStateOfFluxParam = false;
+        m_currentEnabledStateOfSolarDistanceParam = true;
+      }
+      else
+      {
+        ossOutput << std::endl << "Day and Month will be used" << std::endl;
+        EnableParameter("acqui.day");
+        EnableParameter("acqui.month");
+        MandatoryOn("acqui.day");
+        MandatoryOn("acqui.month");
+        MandatoryOff("acqui.solardistance");
+        m_currentEnabledStateOfSolarDistanceParam = false;
       }
     }
 
@@ -584,20 +623,24 @@ private:
     std::string IMIName( lImageMetadataInterface->GetNameOfClass() );
     std::string IMIOptDfltName("OpticalDefaultImageMetadataInterface");
 
-    // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters
-    if ( !IsParameterEnabled("acqui.fluxnormcoeff") )
+    // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters OR solardistance
+    if ( IsParameterEnabled("acqui.fluxnormcoeff") )
     {
+      m_RadianceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
+
+      m_ReflectanceToRadianceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
+    }
+    else if(IsParameterEnabled("acqui.solardistance")){
+      m_RadianceToReflectanceFilter->SetSolarDistance(GetParameterFloat("acqui.solardistance"));
+
+      m_ReflectanceToRadianceFilter->SetSolarDistance(GetParameterFloat("acqui.solardistance"));
+    }
+    else{
       m_RadianceToReflectanceFilter->SetDay(GetParameterInt("acqui.day"));
       m_RadianceToReflectanceFilter->SetMonth(GetParameterInt("acqui.month"));
 
       m_ReflectanceToRadianceFilter->SetDay(GetParameterInt("acqui.day"));
       m_ReflectanceToRadianceFilter->SetMonth(GetParameterInt("acqui.month"));
-    }
-    else
-    {
-      m_RadianceToReflectanceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
-
-      m_ReflectanceToRadianceFilter->SetFluxNormalizationCoefficient(GetParameterFloat("acqui.fluxnormcoeff"));
     }
 
     // Set Sun Elevation Angle to corresponding filters

@@ -1,0 +1,5 @@
+# Lines beginning with a # are ignored
+64 0 0 255
+128 150 150 150
+191 0 255 0
+255 255 0 0

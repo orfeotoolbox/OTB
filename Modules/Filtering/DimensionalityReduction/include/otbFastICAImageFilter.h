@@ -24,15 +24,21 @@
 #include "itkImageToImageFilter.h"
 #include "otbPCAImageFilter.h"
 #include "otbFastICAInternalOptimizerVectorImageFilter.h"
+#include <functional>
 
 namespace otb
 {
 /** \class FastICAImageFilter
- * \brief Performs a Independent Component Analysis
+ * \brief Performs a Independent Component Analysis (ICA)
  *
- * The internal structure of this filter is a filter-to-filter like structure.
- * The estimation of the covariance matrix has persistent capabilities...
- *
+ * This filter is an implementation of the stabilized fixed-point FastICA
+ * algorithm described in [1] with a symetric decorrelation at each step.
+ * 
+ * The contrast function and its derivative can be supplied to the filter as 
+ * lambda functions.
+ * 
+ * [1] Fast and robust fixed-point algorithms for independent component analysis
+ * 
  * \sa PCAImageFilter
  *
  * \ingroup OTBDimensionalityReduction
@@ -85,7 +91,7 @@ public:
   typedef StreamingStatisticsVectorImageFilter< InputImageType > MeanEstimatorFilterType;
   typedef typename MeanEstimatorFilterType::Pointer MeanEstimatorFilterPointerType;
 
-  typedef double (*ContrastFunctionType) ( double );
+  typedef std::function<double(double)> NonLinearityType;
 
   /**
    * Set/Get the number of required largest principal components.
@@ -142,7 +148,16 @@ public:
   itkGetMacro(ConvergenceThreshold, double);
   itkSetMacro(ConvergenceThreshold, double);
 
-  itkGetMacro(ContrastFunction, ContrastFunctionType);
+  void SetNonLinearity(NonLinearityType NonLinearity,
+                            NonLinearityType NonLinearityDerivative)
+  {
+    m_NonLinearity = NonLinearity;
+    m_NonLinearityDerivative = NonLinearityDerivative;
+    this->Modified();
+  }
+  
+  itkGetMacro(NonLinearity, NonLinearityType);
+  itkGetMacro(NonLinearityDerivative, NonLinearityType);
 
   itkGetMacro(Mu, double);
   itkSetMacro(Mu, double);
@@ -185,7 +200,8 @@ protected:
   /** FastICA parameters */
   unsigned int m_NumberOfIterations; // def is 50
   double m_ConvergenceThreshold; // def is 1e-4
-  ContrastFunctionType m_ContrastFunction; // see g() function in the biblio. Def is tanh
+  NonLinearityType m_NonLinearity; // see g() function in the biblio. Def is tanh
+  NonLinearityType m_NonLinearityDerivative; // derivative of g().
   double m_Mu; // def is 1. in [0, 1]
 
   PCAFilterPointerType m_PCAFilter;

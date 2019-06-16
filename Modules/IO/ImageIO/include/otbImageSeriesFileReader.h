@@ -30,6 +30,7 @@
 #include "otbExtractROI.h"
 #include "otbMultiChannelExtractROI.h"
 #include "otbMultiToMonoChannelExtractROI.h"
+#include "OTBImageIOExport.h"
 
 namespace otb {
 
@@ -47,7 +48,7 @@ namespace otb {
  * \ingroup OTBImageIO
  */
 template <class TImage, class TInternalImage = TImage>
-class ITK_EXPORT ImageSeriesFileReader
+class OTBImageIO_EXPORT_TEMPLATE ImageSeriesFileReader
   : public ImageSeriesFileReaderBase<TImage, TInternalImage>
 {
 public:

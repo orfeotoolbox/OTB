@@ -73,7 +73,6 @@ private:
     SetName("TrainDimensionalityReduction");
     SetDescription("Train a dimensionality reduction model");
 
-    SetDocName("Train Dimensionality Reduction");
     SetDocLongDescription("Trainer for dimensionality reduction algorithms "
       "(autoencoders, PCA, SOM). All input samples are used to compute the "
       "model, like other machine learning models.\n"
@@ -106,9 +105,14 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.vd", "cuprite_samples.sqlite");
-    SetDocExampleParameterValue("io.out", "mode.ae");
-    SetDocExampleParameterValue("algorithm", "pca");
-    SetDocExampleParameterValue("algorithm.pca.dim", "8");
+    SetDocExampleParameterValue("io.out", "model.som");
+    SetDocExampleParameterValue("algorithm", "som");
+    SetDocExampleParameterValue("algorithm.som.s", "10 10");
+    SetDocExampleParameterValue("algorithm.som.n", "3 3");
+    SetDocExampleParameterValue("algorithm.som.ni", "5");
+    SetDocExampleParameterValue("algorithm.som.bi", "1");
+    SetDocExampleParameterValue("algorithm.som.bf", "0.1");
+    SetDocExampleParameterValue("algorithm.som.iv", "10");
     SetDocExampleParameterValue("feat","value_0 value_1 value_2 value_3 value_4"
       " value_5 value_6 value_7 value_8 value_9");
   }

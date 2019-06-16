@@ -1,0 +1,119 @@
+%YAML:1.0
+my_tree: !!opencv-ml-tree
+   is_classifier: 1
+   var_all: 4
+   var_count: 4
+   ord_var_count: 4
+   cat_var_count: 0
+   training_params:
+      use_surrogates: 1
+      max_categories: 10
+      max_depth: 25
+      min_sample_count: 10
+      cross_validation_folds: 10
+      use_1se_rule: 1
+      truncate_pruned_tree: 1
+      priors: !!opencv-matrix
+         rows: 1
+         cols: 4
+         dt: d
+         data: [ 1., 1., 1., 1. ]
+   var_type: [ 0, 0, 0, 0 ]
+   cat_count: !!opencv-matrix
+      rows: 1
+      cols: 1
+      dt: i
+      data: [ 4 ]
+   cat_map: !!opencv-matrix
+      rows: 1
+      cols: 4
+      dt: i
+      data: [ 1, 2, 3, 4 ]
+   best_tree_idx: 0
+   nodes:
+      -
+         depth: 0
+         sample_count: 190
+         value: 3.
+         norm_class_idx: 2
+         Tn: 2
+         complexity: 4
+         alpha: 41.
+         node_risk: 142.
+         tree_risk: 3.
+         tree_error: 1.
+         splits:
+            - { var:1, quality:9.5338027954101562e+01,
+                le:4.1874265670776367e-01 }
+      -
+         depth: 1
+         sample_count: 142
+         value: 3.
+         norm_class_idx: 2
+         Tn: 1
+         complexity: 3
+         alpha: 4.2500000000000000e+01
+         node_risk: 94.
+         tree_risk: 3.
+         tree_error: 1.
+         splits:
+            - { var:3, quality:9.2062500000000000e+01,
+                le:-1.1355226486921310e-01 }
+      -
+         depth: 2
+         sample_count: 96
+         value: 1.
+         norm_class_idx: 0
+         Tn: 2147483647
+         complexity: 2
+         alpha: 43.
+         node_risk: 49.
+         tree_risk: 3.
+         tree_error: 1.
+         splits:
+            - { var:1, quality:8.8470588684082031e+01,
+                le:-4.6542203426361084e-01 }
+      -
+         depth: 3
+         sample_count: 51
+         value: 1.
+         norm_class_idx: 0
+         Tn: 0
+         complexity: 1
+         alpha: 2.
+         node_risk: 4.
+         tree_risk: 3.
+         tree_error: 1.
+      -
+         depth: 3
+         sample_count: 45
+         value: 2.
+         norm_class_idx: 1
+         Tn: 2147483647
+         complexity: 1
+         alpha: 0.
+         node_risk: 0.
+         tree_risk: 0.
+         tree_error: 0.
+      -
+         depth: 2
+         sample_count: 46
+         value: 3.
+         norm_class_idx: 2
+         Tn: 2147483647
+         complexity: 1
+         alpha: 0.
+         node_risk: 0.
+         tree_risk: 0.
+         tree_error: 0.
+      -
+         depth: 1
+         sample_count: 48
+         value: 4.
+         norm_class_idx: 3
+         Tn: 2147483647
+         complexity: 1
+         alpha: 0.
+         node_risk: 0.
+         tree_risk: 0.
+         tree_error: 0.

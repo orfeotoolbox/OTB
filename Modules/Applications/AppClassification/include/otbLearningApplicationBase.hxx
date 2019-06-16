@@ -102,7 +102,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
     InitBoostParams();  // Regression not supported
     }
   InitDecisionTreeParams();
-  InitGradientBoostedTreeParams();
   InitNeuralNetworkParams();
   if (!m_RegressionFlag)
     {
@@ -123,7 +122,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
 ::InitUnsupervisedClassifierParams()
 {
 #ifdef OTB_USE_SHARK
-  InitSharkKMeansParams();
+  if (!m_RegressionFlag)
+  {
+    InitSharkKMeansParams(); // Regression not supported
+  }
 #endif
 }
 
@@ -224,14 +226,6 @@ LearningApplicationBase<TInputValue,TOutputValue>
     {
 	#ifdef OTB_USE_OPENCV
     TrainDecisionTree(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
-    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
-  else if (modelName == "gbt")
-    {
-	#ifdef OTB_USE_OPENCV
-    TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample, modelPath);
     #else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
     #endif

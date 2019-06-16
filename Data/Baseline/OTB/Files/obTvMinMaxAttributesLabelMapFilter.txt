@@ -1,0 +1,30 @@
+Minimum : 
+  SHAPE::Elongation : 1.01202
+  SHAPE::Flusser01 : 0.163746
+  SHAPE::Flusser02 : 2.22948e-07
+  SHAPE::Flusser03 : -0.0281619
+  SHAPE::Flusser04 : -0.0531164
+  SHAPE::Flusser05 : -0.00263181
+  SHAPE::Flusser06 : -0.0359859
+  SHAPE::Flusser07 : 0.0368588
+  SHAPE::Flusser08 : -0.0150614
+  SHAPE::Flusser09 : -0.111729
+  SHAPE::Flusser10 : -0.00529758
+  SHAPE::Flusser11 : -0.00824917
+  SHAPE::PhysicalSize : 101
+
+Maximum : 
+  SHAPE::Elongation : 10.1343
+  SHAPE::Flusser01 : 1.3459
+  SHAPE::Flusser02 : 0.130748
+  SHAPE::Flusser03 : 0.0422215
+  SHAPE::Flusser04 : 0.014891
+  SHAPE::Flusser05 : 0.00991062
+  SHAPE::Flusser06 : 0.00251668
+  SHAPE::Flusser07 : 3.25683
+  SHAPE::Flusser08 : 0.0606132
+  SHAPE::Flusser09 : 0.0255647
+  SHAPE::Flusser10 : 0.00354394
+  SHAPE::Flusser11 : 0.00122879
+  SHAPE::PhysicalSize : 7656
+

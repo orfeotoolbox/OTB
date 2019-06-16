@@ -38,7 +38,7 @@ int otbStandardOneLineFilterWatcherTest(int itkNotUsed(argc), char * argv[])
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer gradient = FilterType::New();
 
-  typedef otb::StandardOneLineFilterWatcher WatcherType;
+  typedef otb::StandardOneLineFilterWatcher<> WatcherType;
   WatcherType watcher1(gradient, "Gradient");
 
   gradient->SetInput(reader->GetOutput());

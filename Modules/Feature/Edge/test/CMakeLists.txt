@@ -68,8 +68,8 @@ otb_add_test(NAME bfTvHorizontalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvHorizontalSobelVectorImageFilter.tif
   ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif
   otbHorizontalSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvHorizontalSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvAsymmetricFusionOfLineDetector COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/feFiltreAsymmetricFusion_amst_2_3.tif
@@ -120,7 +120,7 @@ otb_add_test(NAME bfTvPersistentVectorizationImageFilter COMMAND otbEdgeTestDriv
   ${BASELINE_FILES}/bfTvPersistentVectorizationImageFilterOutput.txt
   ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
   otbPersistentVectorizationFilter
-  ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
   )
 
@@ -148,8 +148,8 @@ otb_add_test(NAME bfTvSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvSobelVectorImageFilter.tif
   ${TEMP}/bfTvSobelVectorImageFilter.tif
   otbSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvHoughTransform2DLinesImage COMMAND otbEdgeTestDriver
   --compare-image ${EPSILON_8}
@@ -208,8 +208,8 @@ otb_add_test(NAME bfTvVerticalSobelVectorImageFilter COMMAND otbEdgeTestDriver
   ${BASELINE}/bfTvVerticalSobelVectorImageFilter.tif
   ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif
   otbVerticalSobelVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvVerticalSobelVectorImageFilter.tif)
 
 otb_add_test(NAME feTvStreamingLineSegmentDetector10 COMMAND otbEdgeTestDriver
   --compare-ogr  ${EPSILON_8}
@@ -246,7 +246,7 @@ otb_add_test(NAME feTvLineRatioLinearAmsters1 COMMAND otbEdgeTestDriver
   ${BASELINE}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   ${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   otbLineRatioDetectorLinear
-  ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.hdr
+  ${INPUTDATA}/amst_ers1.ima.extrait.419_187_70_66.raw.hdr
   ${TEMP}/feFiltreLineRatioLinear_amst_ers1_ima_extrait.tif
   ${TEMP}/feFiltreLineRatioLinear_amst_dir_ers1_ima_extrait.tif
   1 2)

@@ -52,6 +52,7 @@ if(UNIX)
   #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
+    list(APPEND GDAL_SB_CONFIG "LDFLAGS=-headerpad_max_install_names")
   endif()
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
@@ -102,11 +103,18 @@ if(UNIX)
     --with-webp=no
     --with-threads=yes
     --with-freexl=no
+    --with-libjson-c=internal
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
-  #set(GDAL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
-  #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
+
+  # For now gdal is built if Superbuild has find python... And only on UNIX 
+  # That might be a problem
+  # User will not be able to override this...
+  if ( OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
+    list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
+  endif()
+
 
 else(MSVC)
   configure_file(

@@ -51,7 +51,6 @@ private:
     SetDescription("Fusion of an image made of several tile files.");
 
     // Documentation
-    SetDocName("Image Tile Fusion");
     SetDocLongDescription("Automatically mosaic a set of non overlapping tile files into a single image. Images must have a matching number of bands and they must be listed in lexicographic order.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

@@ -26,9 +26,6 @@ target_link_libraries(FineRegistrationImageFilterExample ${OTB_LIBRARIES})
 add_executable(NCCRegistrationFilterExample NCCRegistrationFilterExample.cxx)
 target_link_libraries(NCCRegistrationFilterExample ${OTB_LIBRARIES})
 
-add_executable(SimpleDisparityMapEstimationExample SimpleDisparityMapEstimationExample.cxx)
-target_link_libraries(SimpleDisparityMapEstimationExample ${OTB_LIBRARIES})
-
 #StereoReconstructionExample depends OTBMathParser. But OTB_USE_MUPARSER is OFF
 if(OTBMathParser_LOADED)
 add_executable(StereoReconstructionExample StereoReconstructionExample.cxx)

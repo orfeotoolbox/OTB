@@ -1,0 +1,67 @@
+ImageRegionAdaptativeSplitter (0x1bf8ef0)
+  RTTI typeinfo:   otb::ImageRegionAdaptativeSplitter<2u>
+  Reference Count: 2
+  Modified Time: 89
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  IsUpToDate: true
+  ImageRegion: ImageRegion (0x1bf8f30)
+  Dimension: 2
+  Index: [1000, 1000]
+  Size: [4000, 4000]
+
+  Tile hint: [2000, 2000]
+  Requested number of splits: 10
+  Actual number of splits: 12
+
+Split map: 
+Split 0: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [1000, 1000]
+  Size: [1000, 1000]
+Split 1: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [2000, 1000]
+  Size: [2000, 1000]
+Split 2: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [4000, 1000]
+  Size: [1000, 1000]
+Split 3: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [1000, 2000]
+  Size: [1000, 1000]
+Split 4: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [1000, 3000]
+  Size: [1000, 1000]
+Split 5: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [2000, 2000]
+  Size: [2000, 1000]
+Split 6: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [2000, 3000]
+  Size: [2000, 1000]
+Split 7: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [4000, 2000]
+  Size: [1000, 1000]
+Split 8: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [4000, 3000]
+  Size: [1000, 1000]
+Split 9: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [1000, 4000]
+  Size: [1000, 1000]
+Split 10: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [2000, 4000]
+  Size: [2000, 1000]
+Split 11: ImageRegion (0x7ffe257f9080)
+  Dimension: 2
+  Index: [4000, 4000]
+  Size: [1000, 1000]

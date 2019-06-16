@@ -24,7 +24,7 @@
 #include <algorithm>
 #include <iomanip>
 
-
+#include "OTBImageBaseExport.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 #include <string>
@@ -56,7 +56,7 @@ namespace otb
  */
 
 template <class TType>
-class ITK_EXPORT RemoteSensingRegion : public itk::Region
+class OTBImageBase_EXPORT_TEMPLATE RemoteSensingRegion : public itk::Region
 {
 public:
   /** Standard class typedefs. */

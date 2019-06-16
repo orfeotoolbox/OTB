@@ -1,7 +1,7 @@
 Feature extraction
 ==================
 
-As described in the OTB Software Guide, the term *Feature Extraction*
+The term *Feature Extraction*
 refers to techniques aiming at extracting added value information from
 images. These extracted items named *features* can be local statistical
 moments, edges, radiometric indices, morphological and textural
@@ -111,37 +111,62 @@ The *RadiometricIndices* application has the following input parameters:
    (default value is 1)
 
 -``-list`` the list of available radiometric indices (default value is
-   Vegetation:NDVI)
+   ``Vegetation:NDVI``)
 
-The available radiometric indices to be listed into -list with their
+Note that band numbering starts at 1.
+
+The available radiometric indices to be listed into ``-list`` with their
 relevant channels in brackets are:
 
-::
-
-    Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)
-    Vegetation:TNDVI - Transformed normalized difference vegetation index (Red, NIR)
-    Vegetation:RVI - Ratio vegetation index (Red, NIR)
-    Vegetation:SAVI - Soil adjusted vegetation index (Red, NIR)
-    Vegetation:TSAVI - Transformed soil adjusted vegetation index (Red, NIR)
-    Vegetation:MSAVI - Modified soil adjusted vegetation index (Red, NIR)
-    Vegetation:MSAVI2 - Modified soil adjusted vegetation index 2 (Red, NIR)
-    Vegetation:GEMI - Global environment monitoring index (Red, NIR)
-    Vegetation:IPVI - Infrared percentage vegetation index (Red, NIR)
-
-    Water:NDWI - Normalized difference water index (Gao 1996) (NIR, MIR)
-    Water:NDWI2 - Normalized difference water index (Mc Feeters 1996) (Green, NIR)
-    Water:MNDWI - Modified normalized difference water index (Xu 2006) (Green, MIR)
-    Water:NDPI - Normalized difference pond index (Lacaux et al.) (MIR, Green)
-    Water:NDTI - Normalized difference turbidity index (Lacaux et al.) (Red, Green)
-
-    Soil:RI - Redness index (Red, Green)
-    Soil:CI - Color index (Red, Green)
-    Soil:BI - Brightness index (Red, Green)
-    Soil:BI2 - Brightness index 2 (NIR, Red, Green)
++------------------------------+----------------------------------------------------------+---------------+
+|Index                         |Description                                               |Required bands |
++==============================+==========================================================+===============+
+|Vegetation:NDVI               |Normalized difference vegetation index                    |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:TNDVI              |Transformed normalized difference vegetation index        |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:RVI                |Ratio vegetation index                                    |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:SAVI               |Soil adjusted vegetation index                            |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:TSAVI              |Transformed soil adjusted vegetation index                |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:MSAVI              |Modified soil adjusted vegetation index                   |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:MSAVI2             |Modified soil adjusted vegetation index 2                 |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:GEMI               |Global environment monitoring index                       |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:IPVI               |Infrared percentage vegetation index                      |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation:LAIFromNDVILog     |Leaf Area Index from log NDVI                             |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation::LAIFromReflLinear |Leaf Area Index from reflectances with linear combination |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Vegetation::LAIFromNDVIFormo  |Leaf Area Index from Formosat 2  TOC                      |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Water:NDWI                    |Normalized difference water index (Gao 1996)              |NIR, MIR       |
++------------------------------+----------------------------------------------------------+---------------+
+|Water:NDWI2                   |Normalized difference water index (Mc Feeters 1996)       |Green, NIR     |
++------------------------------+----------------------------------------------------------+---------------+
+|Water:MNDWI                   |Modified normalized difference water index (Xu 2006)      |Green, MIR     |
++------------------------------+----------------------------------------------------------+---------------+
+|Water:NDTI                    |Normalized difference turbidity index (Lacaux et al.)     |Green, Red     |
++------------------------------+----------------------------------------------------------+---------------+
+|Soil:RI                       |Redness index                                             |Green, Red     |
++------------------------------+----------------------------------------------------------+---------------+
+|Soil:CI                       |Color index                                               |Green, Red     |
++------------------------------+----------------------------------------------------------+---------------+
+|Soil:BI                       |Brightness index                                          |Green, Red     |
++------------------------------+----------------------------------------------------------+---------------+
+|Soil:BI2                      |Brightness index 2                                        |Green, Red, NIR|
++------------------------------+----------------------------------------------------------+---------------+
+|BuiltUp:ISU                   |Built Surfaces Index                                      |Red, NIR       |
++------------------------------+----------------------------------------------------------+---------------+
 
 The application can be used as follows, which would produce an output image
-containing 3 bands, respectively with the Vegetation:NDVI, Vegetation:RVI and
-Vegetation:IPVI radiometric indices in this exact order:
+containing 3 bands, respectively with the ``Vegetation:NDVI``, ``Vegetation:RVI`` and
+``Vegetation:IPVI`` radiometric indices in this exact order:
 
 ::
 
@@ -154,7 +179,7 @@ Vegetation:IPVI radiometric indices in this exact order:
                                               Vegetation:IPVI 
 
 or as follows, which would produce a single band output image with the
-Water:NDWI2 radiometric index:
+``Water:NDWI2`` radiometric index:
 
 ::
 

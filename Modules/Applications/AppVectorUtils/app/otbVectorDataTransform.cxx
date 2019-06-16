@@ -59,7 +59,6 @@ private:
     SetName("VectorDataTransform");
     SetDescription("Apply a transform to each vertex of the input VectorData");
 
-    SetDocName("Vector Data Transformation");
     SetDocLongDescription("This application iterates over each vertex in the "
       "input vector data file and performs a transformation on this vertex.\n\n"
       "It is the equivalent of [1] that transforms images. For instance, if you"

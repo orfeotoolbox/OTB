@@ -58,7 +58,7 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
    ossimKeywordlist geom;
    image_kwl.convertToOSSIMKeywordlist(geom);
 
-   
+
    m_SensorModel.reset(dynamic_cast<ossimplugins::ossimSarSensorModel* >(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(geom)));
 
    return IsValidSensorModel();
@@ -66,7 +66,7 @@ bool SarSensorModelAdapter::LoadState(const ImageKeywordlist& image_kwl)
 
 bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
 {
-  if(m_SensorModel.get() != nullptr)
+  if(m_SensorModel)
     {
     ossimKeywordlist geom;
 
@@ -76,36 +76,36 @@ bool SarSensorModelAdapter::SaveState(ImageKeywordlist & image_kwl)
       {
       image_kwl.Clear();
       image_kwl.SetKeywordlist(geom);
-      
+
       }
     return success;
     }
 
-  return false;  
+  return false;
 }
 
 bool SarSensorModelAdapter::IsValidSensorModel() const
 {
-  return m_SensorModel.get() != nullptr;
+  return m_SensorModel != nullptr;
 }
 
 bool SarSensorModelAdapter::Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
-				      std::pair<unsigned long,unsigned long> & samples, 
-				      bool onlyValidSample)
+              std::pair<unsigned long,unsigned long> & samples,
+              bool onlyValidSample)
 {
-  if(m_SensorModel.get() != nullptr)
+  if(m_SensorModel)
     {
       return m_SensorModel->deburst(lines, samples, onlyValidSample);
     }
-  
+
   return false;
 }
 
-bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index, 
-					    std::pair<unsigned long,unsigned long> & lines, 
-					    std::pair<unsigned long,unsigned long> & samples, bool allPixels)
+bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index,
+              std::pair<unsigned long,unsigned long> & lines,
+              std::pair<unsigned long,unsigned long> & samples, bool allPixels)
 {
-   if(m_SensorModel.get())
+   if(m_SensorModel)
     {
       return m_SensorModel->burstExtraction(burst_index, lines, samples, allPixels);
     }
@@ -113,17 +113,37 @@ bool SarSensorModelAdapter::BurstExtraction(const unsigned int burst_index,
    return false;
 }
 
-bool 
+bool
 SarSensorModelAdapter::DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
-					     std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+               std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+               unsigned int & linesOffset, unsigned int first_burstInd,
+               bool inputWithInvalidPixels)
 {
-  if(m_SensorModel.get())
+  if(m_SensorModel)
     {
-      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts);
+      return m_SensorModel->deburstAndConcatenate(linesBursts, samplesBursts, linesOffset, first_burstInd,
+              inputWithInvalidPixels);
     }
-  
+
   return false;
 }
+
+bool
+SarSensorModelAdapter::Overlap(std::pair<unsigned long,unsigned long> & linesUp,
+    std::pair<unsigned long,unsigned long> & linesLow,
+    std::pair<unsigned long,unsigned long> & samplesUp,
+    std::pair<unsigned long,unsigned long> & samplesLow,
+    unsigned int burstIndUp,
+    bool inputWithInvalidPixels)
+  {
+    if(m_SensorModel)
+    {
+      return m_SensorModel->overlap(linesUp, linesLow, samplesUp, samplesLow, burstIndUp,
+            inputWithInvalidPixels);
+    }
+
+    return false;
+  }
 
 bool SarSensorModelAdapter::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine)
 {
@@ -137,7 +157,7 @@ void SarSensorModelAdapter::DeburstLineToImageLine(const std::vector<std::pair<u
 
 bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const
 {
-  if(m_SensorModel.get() == nullptr)
+  if(! m_SensorModel)
     {
     return false;
     }
@@ -165,7 +185,7 @@ bool SarSensorModelAdapter::WorldToLineSampleYZ(const Point3DType & inGeoPoint, 
 
 bool SarSensorModelAdapter::WorldToLineSample(const Point3DType & inGeoPoint, Point2DType & cr) const
 {
-  if(m_SensorModel.get() == nullptr)
+  if(! m_SensorModel)
     {
     return false;
     }
@@ -196,7 +216,7 @@ bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Poi
   inGpt.hgt = inGeoPoint[2];
 
   ossimEcefPoint outCartesien(inGpt);
-  
+
   if(outCartesien.isNan())
     return false;
 
@@ -206,12 +226,12 @@ bool SarSensorModelAdapter::WorldToCartesian(const Point3DType & inGeoPoint, Poi
 
   return true;
 }
-  
-bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, 
-							  Point3DType & satellitePosition, 
-							  Point3DType & satelliteVelocity) const
+
+bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint,
+                Point3DType & satellitePosition,
+                Point3DType & satelliteVelocity) const
 {
-  if(m_SensorModel.get() == nullptr)
+  if(! m_SensorModel)
     {
       return false;
     }
@@ -220,14 +240,14 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
   inGpt.lon = inGeoPoint[0];
   inGpt.lat = inGeoPoint[1];
   inGpt.hgt = inGeoPoint[2];
-  
+
   ossimplugins::ossimSarSensorModel::TimeType azimuthTime;
   double rangeTime;
   ossimEcefPoint sensorPos;
   ossimEcefVector sensorVel;
 
   const bool success = m_SensorModel->worldToAzimuthRangeTime(inGpt, azimuthTime, rangeTime,sensorPos,sensorVel);
-  
+
   if(sensorPos.isNan() || !success)
     return false;
 
@@ -237,15 +257,15 @@ bool SarSensorModelAdapter::WorldToSatPositionAndVelocity(const Point3DType & in
 
   satelliteVelocity[0] = sensorVel.x();
   satelliteVelocity[1] = sensorVel.y();
-  satelliteVelocity[2] = sensorVel.z();    
+  satelliteVelocity[2] = sensorVel.z();
 
   return true;
 }
 
-bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double line, Point3DType & satellitePosition,  
-							 Point3DType & satelliteVelocity) const
+bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double line, Point3DType & satellitePosition,
+               Point3DType & satelliteVelocity) const
 {
-  if(!m_SensorModel.get())
+  if(!m_SensorModel)
     {
       return false;
     }
@@ -266,7 +286,7 @@ bool SarSensorModelAdapter::LineToSatPositionAndVelocity(const double line, Poin
 
   satelliteVelocity[0] = sensorVel.x();
   satelliteVelocity[1] = sensorVel.y();
-  satelliteVelocity[2] = sensorVel.z();    
+  satelliteVelocity[2] = sensorVel.z();
 
   return true;
 }

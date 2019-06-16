@@ -84,7 +84,6 @@ private:
     SetDescription("This applications allows converting classical polarimetric matrices to each other.");
 
     // Documentation
-    SetDocName("SARPolarMatrixConvert");
     SetDocLongDescription(
 
         "This application allows converting classical polarimetric matrices to each other.\n"

@@ -69,6 +69,7 @@ public:
   typedef typename ImageType::Pointer             ImagePointerType;
   typedef typename ImageType::SizeType            SizeType;
   typedef typename ImageType::RegionType          RegionType;
+  typedef typename ImageType::PointType           PointType;
 
   typedef std::pair<unsigned long, unsigned long> RecordType;
   typedef std::vector<RecordType>            LinesRecordVectorType;
@@ -82,7 +83,8 @@ public:
   // Setter
   void SetSLCImageKeyWorList(ImageKeywordlist sarImageKWL);
 
-  bool getDeburstLinesAndSamples(LinesRecordVectorType & linesRecord, LinesRecordVectorType & samplesRecord);
+  bool getDeburstLinesAndSamples(LinesRecordVectorType & linesRecord, LinesRecordVectorType & samplesRecord,
+				 unsigned int first_burstInd, bool inputWithInvalidPixels);
 
 protected:
   /** Constructor */
@@ -104,6 +106,8 @@ private:
 
   // Deburst SLC KeywordList
   ImageKeywordlist m_DeburstSLCImageKWL;
+
+  unsigned int m_Offset_OriginL;
 };
 
 } // end namespace itk

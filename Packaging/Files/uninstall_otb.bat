@@ -37,8 +37,6 @@ rd /S /Q lib\otb
 
 del /S /Q lib\otb*
 del /S /Q lib\python\*otbApplication.* || exit 1
-del /S /Q lib\python3\*otbApplication.* || exit 1
-del /S /Q lib\java\org.otb.application.jar || exit 1
 del /S /Q bin\otb* || exit 1
 del /S /Q bin\monteverdi.exe || exit 1
 del /S /Q bin\mapla.exe || exit 1

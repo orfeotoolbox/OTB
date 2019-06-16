@@ -196,7 +196,6 @@ private:
     SetDescription("Download or list SRTM tiles");
 
     // Documentation
-    SetDocName("Download or list SRTM tiles related to a set of images");
     SetDocLongDescription("This application allows selecting the appropriate SRTM tiles that covers a list of images. It builds a list of the required tiles. Two modes are available: the first one download those tiles from the USGS SRTM3 website (http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/), the second one list those tiles in a local directory. In both cases, you need to indicate the directory in which directory  tiles will be download or the location of local SRTM files.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -286,7 +285,7 @@ private:
       auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
-      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::SpatialReference::FromWGS84().ToWkt()));
       rsTransformToWGS84->InstantiateTransform();
 
       const SizeType size = inImage->GetLargestPossibleRegion().GetSize();
@@ -350,7 +349,7 @@ private:
 
       auto rsTransformToWGS84 = RSTransformType::New();
       rsTransformToWGS84->SetInputProjectionRef(currentWkt);
-      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::GeoInformationConversion::ToWKT(4326)));
+      rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string> (otb::SpatialReference::FromWGS84().ToWkt()));
       rsTransformToWGS84->InstantiateTransform();
       PointType tmpPoint;
       tmpPoint[0] = envelope.MinX;

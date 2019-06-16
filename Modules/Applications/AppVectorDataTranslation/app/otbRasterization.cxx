@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 
 #include "otbOGRDataSourceToLabelImageFilter.h"
 #include "otbGenericRSTransform.h"
@@ -65,7 +65,6 @@ private:
     SetName("Rasterization");
     SetDescription("Reproject and rasterize a vector dataset");
 
-    SetDocName("Rasterization");
     SetDocLongDescription(
         "Reproject and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by "
         "setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other "
@@ -248,7 +247,7 @@ private:
       if (HasValue("epsg"))
         {
         unsigned int RSID = GetParameterInt("epsg");
-        outputProjectionRef = otb::GeoInformationConversion::ToWKT(RSID);
+        outputProjectionRef = otb::SpatialReference::FromEPSG(RSID).ToWkt();
         }
       else
         {

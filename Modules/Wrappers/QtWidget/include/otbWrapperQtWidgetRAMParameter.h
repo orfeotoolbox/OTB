@@ -22,7 +22,7 @@
 #define otbWrapperQtWidgetRAMParameter_h
 
 #include <QtWidgets>
-#include "otbWrapperRAMParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 

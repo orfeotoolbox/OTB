@@ -1,0 +1,17 @@
+1
+test.shp
+Open option :
+openoption=OPTION
+Create option :
+BLOCKYSIZE=1024
+QUALITY=75
+TILED=YES
+Layer option :
+layeroption=OPTION
+End of classic helper.
+0
+1
+Layer option from layer helper:
+TOTO=second
+TiTi=option
+layeroption=OPTION

@@ -91,7 +91,6 @@ private:
     SetName("VectorClassifier");
     SetDescription("Performs a classification of the input vector data according to a model file.");
 
-    SetDocName("Vector Classification");
     SetDocAuthors("OTB-Team");
     SetDocLongDescription("This application performs a vector data classification "
       "based on a model file produced by the TrainVectorClassifier application."
@@ -135,7 +134,6 @@ private:
       "* LibSVM: difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
       "* Boost: sum of votes\n"
       "* DecisionTree: (not supported)\n"
-      "* GradientBoostedTree: (not supported)\n"
       "* KNearestNeighbors: number of neighbors with the same label\n"
       "* NeuralNetwork: difference between the two highest responses\n"
       "* NormalBayes: (not supported)\n"

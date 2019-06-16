@@ -117,6 +117,13 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
+# Special setting for low kernel versions
+if(UNIX)
+  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
+endif()
+
+
+# Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
   set (CMAKE_INSTALL_PREFIX
@@ -286,7 +293,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
+option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
@@ -343,8 +350,6 @@ find_path(OTB_DATA_ROOT README-OTB-Data
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
-option(OTB_WRAP_PYTHON3 "Enable python 3 wrappers for OTB applications (requires SWIG)" OFF)
-option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -368,6 +373,22 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "| ${lib}")
   message(STATUS "|----------------------------------------------------------")
 endforeach()
+
+# Python
+# This should set the following variables (and more):
+#   -PYTHON_EXECUTABLE
+#   -PYTHON_INCLUDE_DIR
+#   -PYTHON_LIBRARY
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
 
 include(External_otb)
 

@@ -1,10 +1,32 @@
-.wy-nav-content {
-    max-width: 800px;
+/* Style of the toctree captions
+ * inspired from sphinx-rtd-theme docs
+ */
+.wy-menu-vertical header, .wy-menu-vertical p.caption {
+    color: #2980b9; /* sphinx blue */
+    line-height: 32px;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: .8em;
 }
+
+/* Small fix for the last section of the menu */
+.wy-menu-vertical {
+    margin-bottom: 1em;
+};
 
 /* Reduce the effect of the p bottom margin before lists
  * Very useful for choice parameters in app doc for example
  */
-p + ul {
+.wy-nav-content .document p + ul {
     margin-top: -18px;
+}
+
+/* Custom colors for the logo background */
+.wy-side-nav-search, .wy-nav-top {
+    background: #1e1f22; /* otb black */
+}
+
+.wy-side-nav-search input[type="text"] {
+    border-color: #1e1f22; /* otb black */
 }

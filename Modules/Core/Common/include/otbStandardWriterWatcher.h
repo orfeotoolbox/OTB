@@ -115,6 +115,10 @@ private:
 
   /** Stars coutning */
   unsigned int m_StarsCount;
+
+  bool m_CoutIsConsole;
+
+  std::string m_Buffer;
 };
 
 } // end namespace otb

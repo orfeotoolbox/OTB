@@ -58,10 +58,10 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_vd
                      APP  EndmemberNumberEstimation
                      OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
                              -algo vd
-                             -algo.vd.far 0.001
+                             -algo.vd.far 0.2
                      TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
                      VALID --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_vd.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
 )
 
@@ -71,6 +71,18 @@ otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
                              -algo elm
                      TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
                      VALID --compare-ascii ${EPSILON_7}
-                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation.txt
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_elm.txt
                        ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+)
+
+#----------- LocalRxDetection TESTS ------------------------
+otb_test_application(NAME  apTvHyLocalRxDetection
+                     APP  LocalRxDetection
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif?&bands=1:10
+                             -out ${TEMP}/apTvHyLocalRxDetection.tif double
+                             -ir 1
+                             -er 3
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyLocalRxDetection.tif
+                              ${TEMP}/apTvHyLocalRxDetection.tif
 )

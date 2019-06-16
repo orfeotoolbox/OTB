@@ -19,6 +19,7 @@
  */
 
 
+#include "otbWrapperQtWidgetMainWindow.h"
 #include "mvdMaplaMainWindow.h"
 #include "ui_mvdMaplaMainWindow.h"
 
@@ -152,10 +153,10 @@ MaplaMainWindow
 
   QObject::connect(
     m_ApplicationsToolBoxController->GetWidget(),
-    SIGNAL( ApplicationToLaunchSelected( const QString &, const QString & ) ),
+    SIGNAL( ApplicationToLaunchSelected( const QString & ) ),
     // to:
     this,
-    SLOT( OnApplicationToLaunchSelected(const QString &, const QString & ) )
+    SLOT( OnApplicationToLaunchSelected(const QString & ) )
   );
 
 #endif
@@ -214,8 +215,7 @@ MaplaMainWindow
 /*****************************************************************************/
 void
 MaplaMainWindow
-::OnApplicationToLaunchSelected( const QString & appName,
-				 const QString & )
+::OnApplicationToLaunchSelected( const QString & appName )
 {
 #ifdef OTB_USE_QT
 
@@ -231,7 +231,7 @@ MaplaMainWindow
     ->GetLauncher()!=NULL
   );
 
-  QWidget * appWindow =
+  otb::Wrapper::QtMainWindow* appWindow =
     MaplaApplication::ConstInstance()
     ->GetModel< OTBApplicationsModel >()
     ->GetLauncher()

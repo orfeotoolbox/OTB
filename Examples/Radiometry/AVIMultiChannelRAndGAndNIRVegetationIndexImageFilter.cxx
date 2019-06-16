@@ -19,23 +19,23 @@
  */
 
 
+/* Example usage:
+./AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter Input/verySmallFSATSW.tif \
+                                                       Output/AVIMultiChannelRAndGAndNIRVegetationIndex.tif \
+                                                       Output/pretty_FSATSW.png \
+                                                       Output/pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png \
+                                                       3 \
+                                                       2 \
+                                                       4
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//  INPUTS: {verySmallFSATSW.tif}
-//  OUTPUTS: {AVIMultiChannelRAndGAndNIRVegetationIndex.tif} , {pretty_FSATSW.png} , {pretty_AVIMultiChannelRAndGAndNIRVegetationIndex.png}
-//  3 2 4 660 560 830
-//  Software Guide : EndCommandLineArgs
 
-// Software Guide : BeginLatex
-//
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter}
-// \index{otb::MultiChannelRAndGAndNIRIndexImageFilter!header}
 // \index{otb::VegetationIndex}
 // \index{otb::VegetationIndex!header}
 //
 //
 // The following example illustrates the use of the
-// otb::MultiChannelRAndGAndNIR VegetationIndexImageFilter with the
+// itk::UnaryFunctorImageFilter with the
 // use of the Angular Vegetation Index (AVI).
 // The equation for the Angular Vegetation Index involves the gren, red
 // and near infra-red bands. $\lambda_1$, $\lambda_2$ and $\lambda_3$ are the mid-band
@@ -56,20 +56,12 @@
 //
 // For more details, refer to Plummer work \cite{AVI}.
 //
-// With the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class the input has to be a multi channel image and the user has to
-// specify the channel index of the red, green and NIR channel.
 //
 // Let's look at the minimal code required to use this
-// algorithm. First, the following header defining the
-// \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-// class must be included.
-// Software Guide : EndLatex
+// algorithm.
 
-// Software Guide : BeginCodeSnippet
-#include "otbMultiChannelRAndGAndNIRIndexImageFilter.h"
-// Software Guide : EndCodeSnippet
+#include "otbVegetationIndicesFunctor.h"
+#include "itkUnaryFunctorImageFilter.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -79,174 +71,96 @@
 #include "otbMultiChannelExtractROI.h"
 #include "itkThresholdImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-  if (argc < 11)
-    {
+  if (argc < 8)
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ,";
-    std::cerr << " lambdaR, lambdaG, lambdaNIR " << std::endl;
+    std::cerr << " inputImage , outputImage , prettyInput , prettyOutput , redChannel , greenChannel , nirChannel ," << std::endl;
     return 1;
-    }
+  }
 
-  //  Software Guide : BeginLatex
-  //
   // The image types are now defined using pixel types and
   // dimension. The input image is defined as an \doxygen{otb}{VectorImage},
   // the output is a \doxygen{otb}{Image}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   const unsigned int Dimension = 2;
-  typedef double                                      InputPixelType;
-  typedef float                                       OutputPixelType;
-  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
-  // Software Guide : EndCodeSnippet
+  using InputPixelType         = double;
+  using OutputPixelType        = float;
+  using InputImageType         = otb::VectorImage<InputPixelType, Dimension>;
+  using OutputImageType        = otb::Image<OutputPixelType, Dimension>;
 
   // We instantiate reader and writer types
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
-  //  Software Guide : BeginLatex
-  //
   // The AVI (Angular Vegetation Index) is
   // instantiated using the image pixel types as template parameters.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef  otb::Functor::AVI<InputPixelType, InputPixelType,
-      InputPixelType,  OutputPixelType> FunctorType;
-  // Software Guide : EndCodeSnippet
+  using FunctorType = otb::Functor::AVI<InputPixelType, OutputPixelType>;
 
-  //  Software Guide : BeginLatex
-  //
   // The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
+  // \doxygen{itk}{UnaryFunctorImageFilter}
   // type is defined using the image types and the AVI functor as
   // template parameters. We then instantiate the filter itself.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::MultiChannelRAndGAndNIRIndexImageFilter
-  <InputImageType, OutputImageType, FunctorType>
-  MultiChannelRAndGAndNIRIndexImageFilterType;
+  using AVIImageFilterTypeType = itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, FunctorType>;
 
-  MultiChannelRAndGAndNIRIndexImageFilterType::Pointer
-    filter = MultiChannelRAndGAndNIRIndexImageFilterType::New();
-  // Software Guide : EndCodeSnippet
+  AVIImageFilterTypeType::Pointer filter = AVIImageFilterTypeType::New();
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  //  Software Guide : BeginLatex
-  //
   //  Now the input image is set and a name is given to the output image.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   // The three used index bands (red, green and NIR) are declared.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  filter->SetRedIndex(::atoi(argv[5]));
-  filter->SetGreenIndex(::atoi(argv[6]));
-  filter->SetNIRIndex(::atoi(argv[7]));
-  // Software Guide : EndCodeSnippet
+  filter->GetFunctor().SetBandIndex(CommonBandNames::RED, ::atoi(argv[5]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::GREEN, ::atoi(argv[6]));
+  filter->GetFunctor().SetBandIndex(CommonBandNames::NIR, ::atoi(argv[7]));
 
-  //  Software Guide : BeginLatex
-  //
-  // The $\lambda$ R, G and NIR parameters are set. The
-  // \doxygen{otb}{MultiChannelRAndGAndNIRIndexImageFilter}
-  // class sets the default values of $\lambda$ to $660$, $560$ and
-  // $830$.
-  //
-  //  Software Guide : EndLatex
-
-  // Software Guide : BeginCodeSnippet
-  filter->GetFunctor().SetLambdaR(::atof(argv[8]));
-  filter->GetFunctor().SetLambdaG(::atof(argv[9]));
-  filter->GetFunctor().SetLambdaNir(::atof(argv[10]));
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  //
   // The filter input is linked to the reader output and
   // the filter output is linked to the writer input.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
 
   writer->SetInput(filter->GetOutput());
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
-  //
   //  The invocation of the \code{Update()} method on the writer triggers the
   //  execution of the pipeline.  It is recommended to place update calls in a
   //  \code{try/catch} block in case errors occur and exceptions are thrown.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
-  // Software Guide : EndCodeSnippet
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Pretty image creation for the printing
-  typedef otb::Image<unsigned char,
-      Dimension>
-  OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char,
-      Dimension>
-  OutputVectorPrettyImageType;
-  typedef otb::ImageFileWriter<OutputVectorPrettyImageType>
-  WriterVectorPrettyType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>
-  WriterPrettyType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType,
-      OutputPrettyImageType>
-  RescalerType;
-  typedef otb::VectorRescaleIntensityImageFilter<InputImageType,
-      OutputVectorPrettyImageType>
-  VectorRescalerType;
-  typedef otb::MultiChannelExtractROI<unsigned char,
-      unsigned char>
-  ChannelExtractorType;
+  using OutputPrettyImageType       = otb::Image<unsigned char, Dimension>;
+  using OutputVectorPrettyImageType = otb::VectorImage<unsigned char, Dimension>;
+  using WriterVectorPrettyType      = otb::ImageFileWriter<OutputVectorPrettyImageType>;
+  using WriterPrettyType            = otb::ImageFileWriter<OutputPrettyImageType>;
+  using RescalerType                = itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>;
+  using VectorRescalerType          = otb::VectorRescaleIntensityImageFilter<InputImageType, OutputVectorPrettyImageType>;
+  using ChannelExtractorType        = otb::MultiChannelExtractROI<unsigned char, unsigned char>;
 
-  VectorRescalerType::Pointer vectRescaler         =
-    VectorRescalerType::New();
-  ChannelExtractorType::Pointer selecter           =
-    ChannelExtractorType::New();
-  WriterVectorPrettyType::Pointer vectPrettyWriter =
-    WriterVectorPrettyType::New();
+  VectorRescalerType::Pointer     vectRescaler     = VectorRescalerType::New();
+  ChannelExtractorType::Pointer   selecter         = ChannelExtractorType::New();
+  WriterVectorPrettyType::Pointer vectPrettyWriter = WriterVectorPrettyType::New();
 
   OutputVectorPrettyImageType::PixelType minimum, maximum;
   minimum.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
@@ -255,7 +169,7 @@ int main(int argc, char *argv[])
   maximum.Fill(255);
   vectRescaler->SetOutputMinimum(minimum);
   vectRescaler->SetOutputMaximum(maximum);
-//  vectRescaler->SetClampThreshold(1);
+  //  vectRescaler->SetClampThreshold(1);
   vectRescaler->SetInput(reader->GetOutput());
 
   selecter->SetInput(vectRescaler->GetOutput());
@@ -266,7 +180,7 @@ int main(int argc, char *argv[])
   vectPrettyWriter->SetFileName(argv[3]);
   vectPrettyWriter->SetInput(selecter->GetOutput());
 
-  typedef itk::ThresholdImageFilter<OutputImageType> ThresholderType;
+  using ThresholderType = itk::ThresholdImageFilter<OutputImageType>;
 
   ThresholderType::Pointer thresholder = ThresholderType::New();
   thresholder->SetInput(filter->GetOutput());
@@ -283,25 +197,23 @@ int main(int argc, char *argv[])
   prettyWriter->SetInput(rescaler->GetOutput());
 
   try
-    {
+  {
     prettyWriter->Update();
     vectPrettyWriter->Update();
-    }
+  }
   catch (itk::ExceptionObject& excep)
-    {
+  {
     std::cerr << "Exception caught !" << std::endl;
     std::cerr << excep << std::endl;
-    }
+  }
   catch (...)
-    {
+  {
     std::cout << "Unknown exception !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 
-  // Software Guide : BeginLatex
-  //
   // Let's now run this example using as input the image
   // \code{verySmallFSATSW.tif} provided in the
   // directory \code{Examples/Data}.
@@ -313,7 +225,4 @@ int main(int argc, char *argv[])
   // \itkcaption[AVI Example]{AVI result on the right with the left image in input.}
   // \label{fig:AVIMultiChannelRAndGAndNIRIndexImageFilter}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
-
 }

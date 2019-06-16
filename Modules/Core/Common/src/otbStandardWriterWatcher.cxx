@@ -23,6 +23,7 @@
 
 #include "otbStandardWriterWatcher.h"
 #include "otbStopwatch.h"
+#include "otbSystem.h"
 
 namespace otb
 {
@@ -31,39 +32,44 @@ StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
                         const char *comment)
   : WriterWatcherBase(process, comment)
+  , m_StarsCount(50)
+  , m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const char *comment)
   : WriterWatcherBase(process, source, comment)
+  , m_StarsCount(50)
+  , m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process,
                         const std::string& comment)
   : WriterWatcherBase(process, comment.c_str())
+  , m_StarsCount(50)
+  , m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
 ::StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
                         const std::string& comment)
   : WriterWatcherBase(process, source, comment.c_str())
+  , m_StarsCount(50)
+  , m_CoutIsConsole( System::IsInteractive(1) )
 {
-  m_StarsCount = 50;
 }
 
 StandardWriterWatcher
-::StandardWriterWatcher(const StandardWriterWatcher& watch)  : WriterWatcherBase(watch)
+::StandardWriterWatcher(const StandardWriterWatcher& watch)
+  : WriterWatcherBase(watch)
+  , m_StarsCount(watch.m_StarsCount)
+  , m_CoutIsConsole( System::IsInteractive(1) )
 {
-  // Initialize state
-  m_StarsCount = watch.m_StarsCount;
 }
 
 void
@@ -95,7 +101,6 @@ StandardWriterWatcher
 {
   std::ostringstream oss;
   oss.str("");
-  oss << "\r";
 
   if (m_SourceProcess)
     {
@@ -141,9 +146,17 @@ StandardWriterWatcher
       {
       oss << " ";
       }
-    oss << progressPercent << "% [" << stars << blanks << "]" << std::flush;
+    oss << progressPercent << "% [" << stars << blanks << "]";
     }
-  std::cout << oss.str();
+
+  if (m_CoutIsConsole)
+    {
+    std::cout << "\r" << oss.str() << std::flush;
+    }
+  else
+    {
+    m_Buffer = oss.str();
+    }
 }
 
 void
@@ -162,6 +175,11 @@ StandardWriterWatcher
 ::EndWriter()
 {
   m_Stopwatch.Stop();
+  if (!m_CoutIsConsole)
+    {
+    std::cout << m_Buffer;
+    m_Buffer = std::string("");
+    }
   std::cout << std::endl << "Writing task took ";
   m_Stopwatch.GetElapsedHumanReadableTime(std::cout);
   std::cout << std::endl;

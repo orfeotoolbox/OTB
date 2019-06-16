@@ -31,6 +31,7 @@
 #endif
 
 #include "otbImageMetadataInterfaceBase.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -85,7 +86,7 @@ namespace otb
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>
-class ITK_EXPORT Image : public itk::Image<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE  Image : public itk::Image<TPixel, VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -273,5 +274,26 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImage.hxx"
 #endif
+
+#include <complex>
+
+namespace otb {
+
+// Prevent implicit instanciation of common types to improve build performance
+// Explicit instanciations are provided in the .cxx
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<int, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<char, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<short, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<float, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<double, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<int> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<short> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<float> , 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double> , 2>;
+
+}
 
 #endif

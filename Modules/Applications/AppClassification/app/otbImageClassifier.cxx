@@ -80,7 +80,6 @@ private:
     SetDescription("Performs a classification of the input image according to a model file.");
 
     // Documentation
-    SetDocName("Image Classification");
     SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. By default, the remaining of pixels will be given the label 0 in the output image.");
 
     SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
@@ -122,7 +121,6 @@ private:
       "* LibSVM: difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
       "* Boost: sum of votes\n"
       "* DecisionTree: (not supported)\n"
-      "* GradientBoostedTree: (not supported)\n"
       "* KNearestNeighbors: number of neighbors with the same label\n"
       "* NeuralNetwork: difference between the two highest responses\n"
       "* NormalBayes: (not supported)\n"

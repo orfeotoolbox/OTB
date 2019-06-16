@@ -30,6 +30,7 @@
 #include "otbStringUtils.h"
 
 #include "otbMetaDataKey.h"
+#include "OTBTestKernelExport.h"
 
 class OGRFeature;
 class OGRGeometry;
@@ -43,7 +44,7 @@ namespace otb
  *
  * \ingroup OTBTestKernel
  */
-class ITK_ABI_EXPORT TestHelper : public itk::Object
+class OTBTestKernel_EXPORT TestHelper : public itk::Object
 {
 public:
 
@@ -59,48 +60,45 @@ public:
   typedef std::vector<std::string> StringList;
   typedef StringList::const_iterator StringListIt;
 
-  TestHelper() :
-    m_ToleranceDiffValue(0),
-    m_Epsilon(0),
-    m_EpsilonBoundaryChecking(1.0e-30),
-    m_ReportErrors(false),
-    m_IgnoreLineOrder(false),
-    m_MaxArea(1024*1024)
-  {
-    m_SpecialTokens.push_back(std::pair<std::string,std::string>(
-      std::string("Integer"),std::string("Integer64")));
-  }
+  typedef std::vector<double> EpsilonList;
+  typedef EpsilonList::const_iterator EpsilonListIt;
 
-  ~TestHelper() override{}
+  TestHelper();
+
+  ~TestHelper() override;
 
   int RegressionTestAllImages(const StringList& baselineFilenamesImage,
-                              const StringList& testFilenamesImage);
+                              const StringList& testFilenamesImage,
+                              const EpsilonList& epsilons);
 
   int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
-                                const StringList& testFilenamesMetaData);
+                                const StringList& testFilenamesMetaData,
+                                const EpsilonList& epsilons);
 
   int RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
                              const StringList& testFilenamesAscii,
+                             const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
   int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
                              const StringList& testFilenamesAscii,
+                             const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
   int RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
                               const StringList& testFilenamesBinary);
 
   int RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
-                           const StringList& testFilenamesOgr);
+                           const StringList& testFilenamesOgr,
+                           const EpsilonList& epsilons);
 
   itkSetMacro(ReportErrors, bool);
   itkBooleanMacro(ReportErrors);
   itkSetMacro(IgnoreLineOrder, bool);
   itkBooleanMacro(IgnoreLineOrder);
 
-  itkSetMacro(ToleranceDiffValue, double);
-  itkSetMacro(Epsilon, double);
   itkSetMacro(EpsilonBoundaryChecking, double);
+  itkSetMacro(ToleranceRatio, double);
 
 private:
 
@@ -161,19 +159,20 @@ private:
   void
   ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
                    OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
-                   int& nbdiff) const;
+                   int& nbdiff, double epsilon) const;
 
   static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
   static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = nullptr);
 
-  double m_ToleranceDiffValue;
-  double m_Epsilon;
+  double m_ToleranceRatio;
   double m_EpsilonBoundaryChecking;
   bool   m_ReportErrors;
   bool   m_IgnoreLineOrder;
   const unsigned int m_MaxArea;
 
   void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+
+  void CheckValueTolerance(const char *Comment, double ref, double test, int &count, bool report, double epsilon) const;
 
   std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
 };

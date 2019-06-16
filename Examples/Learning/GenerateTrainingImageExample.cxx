@@ -19,18 +19,13 @@
  */
 
 
+/* Example usage:
+./GenerateTrainingImageExample Input/ROI_QB_MUL_4.tif Input/LearningROIs.txt Output/ROI_QB_MUL_4_training.png
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_4.tif}, {LearningROIs.txt}
-//    OUTPUTS: {ROI_QB_MUL_4_training.png}
-//  Software Guide : EndCommandLineArgs
 
-// Software Guide : BeginLatex
-//
 // This example illustrates how to generate a training image for an
 // image supervised classification.
-//
-// Software Guide : EndLatex
 
 #include "itkNumericTraits.h"
 #include "otbImage.h"
@@ -42,31 +37,29 @@
 #include <iostream>
 #include <fstream>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
 
-    std::cout << "Usage : " << argv[0] <<
-    " inputImage roiFile outputTrainingImage" << std::endl;
+    std::cout << "Usage : " << argv[0] << " inputImage roiFile outputTrainingImage" << std::endl;
     return EXIT_FAILURE;
+  }
 
-    }
+  const char* imageFilename  = argv[1];
+  const char* roiFilename    = argv[2];
+  const char* outputFilename = argv[3];
 
-  const char * imageFilename  = argv[1];
-  const char * roiFilename  = argv[2];
-  const char * outputFilename = argv[3];
-
-  typedef unsigned char InputPixelType;
-  typedef unsigned char OutputPixelType;
+  using InputPixelType  = unsigned char;
+  using OutputPixelType = unsigned char;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputImageType  = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -80,13 +73,13 @@ int main(int argc, char *argv[])
   OutputImageType::Pointer trainingImage = OutputImageType::New();
 
   // Declare the type of the index to access images
-  typedef itk::Index<Dimension> myIndexType;
+  using myIndexType = itk::Index<Dimension>;
 
   // Declare the type of the size
-  typedef itk::Size<Dimension> mySizeType;
+  using mySizeType = itk::Size<Dimension>;
 
   // Declare the type of the Region
-  typedef itk::ImageRegion<Dimension> myRegionType;
+  using myRegionType = itk::ImageRegion<Dimension>;
 
   // Define their size, and start index
   mySizeType size;
@@ -123,7 +116,7 @@ int main(int argc, char *argv[])
   std::cout << "Nb of ROIS " << int(nbRois) << std::endl;
 
   while (!roisFile.fail() && (nbRois > 0))
-    {
+  {
 
     --nbRois;
     OutputPixelType label = 0;
@@ -146,31 +139,29 @@ int main(int argc, char *argv[])
     start[0] = xUL;
     start[1] = yUL;
 
-    size[0]  = xBR - xUL;
-    size[1]  = yBR - yUL;
+    size[0] = xBR - xUL;
+    size[1] = yBR - yUL;
 
     region.SetSize(size);
     region.SetIndex(start);
 
     // Iterator creation
-    typedef itk::ImageRegionIterator<OutputImageType> IteratorType;
+    using IteratorType = itk::ImageRegionIterator<OutputImageType>;
     IteratorType it(trainingImage, region);
 
     it.GoToBegin();
 
     // Iteration and pixel value assignment
     while (!it.IsAtEnd())
-      {
+    {
 
       it.Set(static_cast<OutputPixelType>(label));
 
-      //std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
-      //std::cout << (int)it.Get() << std::endl;
+      // std::cout << (int)static_cast<OutputPixelType>(label) << " -- ";
+      // std::cout << (int)it.Get() << std::endl;
       ++it;
-
-      }
-
     }
+  }
 
   writer->SetInput(trainingImage);
 

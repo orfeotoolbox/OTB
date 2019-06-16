@@ -77,7 +77,6 @@ private:
     SetDescription("Perform P+XS pansharpening");
 
     // Documentation
-    SetDocName("Pansharpening");
     SetDocLongDescription("This application performs P+XS pansharpening. Pansharpening is a process of merging high-resolution panchromatic and lower resolution multispectral imagery to create a single high-resolution color image. Algorithms available in the applications are: RCS, bayesian fusion and Local Mean and Variance Matching(LMVM).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

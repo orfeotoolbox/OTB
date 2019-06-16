@@ -25,6 +25,7 @@ to instantiate it and another one which uses the class. The output of each test
 the result hasn't changed.")
 
 otb_module(OTBTestKernel
+  ENABLE_SHARED
   DEPENDS
     OTBGdalAdapters
     OTBImageIO

@@ -19,15 +19,11 @@
  */
 
 
+/* Example usage:
+./MarkovRegularizationExample Input/ROI_QB_MUL_1_SVN_CLASS_MULTI.png Output/MarkovRegularization.png Output/MarkovRegularization-scaled.png 0.2 20 0.0 1
+*/
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROI_QB_MUL_1_SVN_CLASS_MULTI.png}
-//    OUTPUTS: {MarkovRegularization.png}, {MarkovRegularization-scaled.png}
-//    0.2 20 0.0 1
-//  Software Guide : EndCommandLineArgs
 
-// Software Guide : BeginLatex
-//
 // This example illustrates the use of the \doxygen{otb}{MarkovRandomFieldFilter}.
 // to regularize a classification obtained previously by another classifier. Here
 // we will apply the regularization to the output of an SVM classifier presented
@@ -41,8 +37,6 @@
 // program structure to use the MRF framework, we are not going to repeat the entire
 // example. However, remember you can find the full source code for this example
 // in your OTB source directory.
-//
-// Software Guide : EndLatex
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -60,81 +54,66 @@ int main(int argc, char* argv[])
 {
 
   if (argc != 8)
-    {
+  {
     std::cerr << "Missing Parameters " << std::endl;
     std::cerr << "Usage: " << argv[0];
-    std::cerr <<
-    " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature "
-              << std::endl;
+    std::cerr << " inputClassificationImage outputClassification outputClassificationScaled lambda iterations temperature " << std::endl;
     std::cerr << " useRandomValue" << std::endl;
     return 1;
-    }
+  }
 
   const unsigned int Dimension = 2;
 
-  typedef unsigned char                            LabelledPixelType;
-  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
+  using LabelledPixelType = unsigned char;
+  using LabelledImageType = otb::Image<LabelledPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<LabelledImageType> ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<LabelledImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  const char * outputScaledFilename = argv[3];
+  const char* inputFilename        = argv[1];
+  const char* outputFilename       = argv[2];
+  const char* outputScaledFilename = argv[3];
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter
-  <LabelledImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  using MarkovRandomFieldFilterType = otb::MarkovRandomFieldFilter<LabelledImageType, LabelledImageType>;
 
-  typedef otb::MRFSamplerRandom<LabelledImageType,
-      LabelledImageType> SamplerType;
+  using SamplerType = otb::MRFSamplerRandom<LabelledImageType, LabelledImageType>;
 
-  typedef otb::MRFOptimizerMetropolis OptimizerType;
+  using OptimizerType = otb::MRFOptimizerMetropolis;
 
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyRegularizationType;
-  typedef otb::MRFEnergyPotts
-  <LabelledImageType, LabelledImageType>  EnergyFidelityType;
+  using EnergyRegularizationType = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
+  using EnergyFidelityType       = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
 
-  MarkovRandomFieldFilterType::Pointer markovFilter
-    = MarkovRandomFieldFilterType::New();
-  EnergyRegularizationType::Pointer energyRegularization
-    = EnergyRegularizationType::New();
-  EnergyFidelityType::Pointer energyFidelity = EnergyFidelityType::New();
-  OptimizerType::Pointer      optimizer = OptimizerType::New();
-  SamplerType::Pointer        sampler = SamplerType::New();
+  MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
+  EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
+  EnergyFidelityType::Pointer          energyFidelity       = EnergyFidelityType::New();
+  OptimizerType::Pointer               optimizer            = OptimizerType::New();
+  SamplerType::Pointer                 sampler              = SamplerType::New();
 
-  if ((bool) (atoi(argv[7])) == true)
-    {
+  if ((bool)(atoi(argv[7])) == true)
+  {
     // Overpass random calculation(for test only):
     sampler->InitializeSeed(0);
     optimizer->InitializeSeed(1);
     markovFilter->InitializeSeed(2);
-    }
+  }
 
-  // Software Guide : BeginLatex
-  //
   // To find the number of classes available in the original image we use the
   // \doxygen{itk}{LabelStatisticsImageFilter} and more particularly the method
   // \code{GetNumberOfLabels()}.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef itk::LabelStatisticsImageFilter
-  <LabelledImageType, LabelledImageType> LabelledStatType;
+  using LabelledStatType                 = itk::LabelStatisticsImageFilter<LabelledImageType, LabelledImageType>;
   LabelledStatType::Pointer labelledStat = LabelledStatType::New();
   labelledStat->SetInput(reader->GetOutput());
   labelledStat->SetLabelInput(reader->GetOutput());
   labelledStat->Update();
 
   unsigned int nClass = labelledStat->GetNumberOfLabels();
-  // Software Guide : EndCodeSnippet
 
   optimizer->SetSingleParameter(0.0);
   markovFilter->SetNumberOfClasses(nClass);
@@ -155,8 +134,7 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
+  using RescaleType                  = itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType>;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
@@ -169,8 +147,6 @@ int main(int argc, char* argv[])
 
   writer->Update();
 
-  // Software Guide : BeginLatex
-  //
   // Figure~\ref{fig:MRF_REGULARIZATION} shows the output of the Markov Random
   // Field regularization on the classification output of another method.
   //
@@ -184,9 +160,6 @@ int main(int argc, char* argv[])
   // classification}
   // \label{fig:MRF_REGULARIZATION}
   // \end{figure}
-  //
-  // Software Guide : EndLatex
 
   return EXIT_SUCCESS;
-
 }

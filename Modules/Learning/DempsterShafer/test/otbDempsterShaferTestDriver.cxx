@@ -24,7 +24,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbMassOfBeliefDSApplied);
   REGISTER_TEST(otbConfusionMatrixToMassOfBeliefTest);
-  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilter);
   REGISTER_TEST(otbDempsterShaferFusionOptRecConfMatTest);
   REGISTER_TEST(otbDempsterShaferFusionOptRecTest);
   REGISTER_TEST(otbDempsterShaferFusionOptTest);

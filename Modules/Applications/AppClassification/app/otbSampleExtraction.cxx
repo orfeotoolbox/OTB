@@ -59,7 +59,6 @@ private:
     SetDescription("Extracts samples values from an image.");
 
     // Documentation
-    SetDocName("Sample Extraction");
     SetDocLongDescription("The application extracts samples values from an"
       "image using positions contained in a vector data file. ");
     SetDocLimitations("None");
@@ -128,6 +127,11 @@ private:
         ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
       ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
       ogr::Feature feature = layer.ogr().GetNextFeature();
+
+      if(!feature.addr())
+        {
+        otbAppLogFATAL(<<"No features found in "<<vectorFile);
+        }
 
       ClearChoices("field");
       

@@ -47,7 +47,7 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
 
   // The ugly cast in all ITK filters
   T * nonConstImg = const_cast<T*>(img);
-  
+
   if(currentRegion.Crop(img->GetLargestPossibleRegion()))
     {
     nonConstImg->SetRequestedRegion(currentRegion);
@@ -56,7 +56,7 @@ template<class T> int SetInputRequestedRegion(const T * img, const itk::ImageReg
   else
     {
     nonConstImg->SetRequestedRegion(currentRegion);
-        
+
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation("::SetInputRequestedRegion<>()");
@@ -138,7 +138,7 @@ template <typename T> struct GetProxy<itk::ConstNeighborhoodIterator<T> >
 {
   static decltype(auto) Get(const itk::ConstNeighborhoodIterator<T> & t)
 {
-  return t.GetNeighborhood();
+  return t;
 }
 };
 
@@ -281,9 +281,17 @@ void
 FunctorImageFilter<TFunction, TNameMap>
 ::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
+  const auto &regionSize = outputRegionForThread.GetSize();
+
+  if( regionSize[0] == 0 )
+  {
+    return;
+  }
+  const auto numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
+  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
+
   // Build output iterator
   itk::ImageScanlineIterator<OutputImageType> outIt(this->GetOutput(),outputRegionForThread);
-  itk::ProgressReporter p(this,threadId,outputRegionForThread.GetNumberOfPixels());
 
   // This will build a tuple of iterators to be used
   auto inputIterators = functor_filter_details::MakeIterators(this->GetInputs(),outputRegionForThread, m_Radius,InputHasNeighborhood{});
@@ -291,21 +299,20 @@ FunctorImageFilter<TFunction, TNameMap>
   // Build a default value
   typename OutputImageType::PixelType outputValueHolder;
   itk::NumericTraits<typename OutputImageType::PixelType>::SetLength(outputValueHolder,this->GetOutput()->GetNumberOfComponentsPerPixel());
-  
+
   while(!outIt.IsAtEnd())
-    {
+  {
     // MoveIterartors will ++ all iterators in the tuple
     for(;!outIt.IsAtEndOfLine();++outIt,functor_filter_details::MoveIterators(inputIterators))
-      {
+    {
       // This will call the operator with inputIterators Get() results
       // and fill outputValueHolder with the result.
       functor_filter_details::CallOperator(outputValueHolder,m_Functor,inputIterators);
       outIt.Set(outputValueHolder);
-      // Update progress
-      p.CompletedPixel();
-      }
-    outIt.NextLine();
     }
+    outIt.NextLine();
+    p.CompletedPixel(); // may throw
+  }
 }
 
 } // end namespace otb

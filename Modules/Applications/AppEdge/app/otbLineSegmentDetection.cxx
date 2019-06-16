@@ -59,7 +59,6 @@ private:
     SetDescription("Detect line segments in raster");
 
     // Documentation
-    SetDocName("Line segment detection");
     SetDocLongDescription(
       "This application detects locally straight contours in a image."
       " It is based on Burns, Hanson, and Riseman method and use an a contrario "

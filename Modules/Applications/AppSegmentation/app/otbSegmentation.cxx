@@ -38,11 +38,12 @@
 // Fusion filter
 #include "otbOGRLayerStreamStitchingFilter.h"
 
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 #include "otbClampImageFilter.h"
 
 //Utils
 #include "itksys/SystemTools.hxx"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -143,7 +144,6 @@ private:
     SetDescription("Performs segmentation of an image, and output either a raster or a vector file. In vector mode, large input datasets are supported.");
 
     // Documentation
-    SetDocName("Segmentation");
     SetDocLongDescription(
         "This application allows one to perform various segmentation algorithms on a multispectral image."
         " Available segmentation algorithms are two different versions of Mean-Shift segmentation algorithm (one being multi-threaded),"
@@ -165,10 +165,11 @@ private:
 
     SetDocLimitations("In raster mode, the application can not handle large input images. Stitching step of vector mode might become slow with very large input images."
                      " \nMeanShift filter results depends on the number of threads used. \nWatershed and multiscale geodesic morphology segmentation will be performed on the amplitude "
-                     " of the input image.");
+                     " of the input image. \nThis application does not handle no data values. No data pixels will be treated as regular pixels,"
+                     " This may lead to unexpected segmentation results and crashes.");
 
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("MeanShiftSegmentation");
+    SetDocSeeAlso("LargeScaleMeanShift");
 
     AddDocTag(Tags::Segmentation);
 
@@ -375,7 +376,7 @@ private:
     if (segModeType == "vector" && HasValue("mode.vector.inmask"))
       {
       streamingVectorizedFilter->SetInputMask(m_ClampFilter->GetOutput());
-      otbAppLogINFO(<<"Use a mask as input." << std::endl);
+      otbAppLogINFO("Use a mask as input.");
       }
     streamingVectorizedFilter->SetOGRLayer(layer);
 
@@ -390,13 +391,13 @@ private:
 
     if (use8connected)
       {
-      otbAppLogINFO(<<"Use 8 connected neighborhood."<<std::endl);
+      otbAppLogINFO("Use 8 connected neighborhood.");
       }
     streamingVectorizedFilter->SetUse8Connected(use8connected);
 
     if (minSize > 1)
       {
-      otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed."<<std::endl);
+      otbAppLogINFO(<<"Object with size under "<< minSize <<" will be suppressed.");
       streamingVectorizedFilter->SetFilterSmallObject(true);
       streamingVectorizedFilter->SetMinimumObjectSize(minSize);
       }
@@ -413,7 +414,7 @@ private:
       {
       streamingVectorizedFilter->SetSimplify(true);
       streamingVectorizedFilter->SetSimplificationTolerance(GetParameterFloat("mode.vector.simplify"));
-      otbAppLogINFO(<<"Simplify the geometry." << std::endl);
+      otbAppLogINFO("Simplify the geometry.");
       }
     else
       {
@@ -422,7 +423,7 @@ private:
 
     if (segModeType == "vector")
       {
-      otbAppLogINFO(<<"Large scale segmentation mode which output vector data" << std::endl);
+      otbAppLogINFO("Large scale segmentation mode which output vector data");
 
       DisableParameter("mode.raster.out");
       EnableParameter("mode.vector.out");
@@ -436,7 +437,7 @@ private:
       }
     else if (segModeType == "raster")
       {
-      otbAppLogINFO(<<"Segmentation mode which output label image" << std::endl);
+      otbAppLogINFO("Segmentation mode which output label image.");
 
       DisableParameter("mode.vector.out");
       EnableParameter("mode.raster.out");
@@ -467,6 +468,17 @@ private:
 
     std::string projRef = GetParameterFloatVectorImage("in")->GetProjectionRef();
 
+    std::vector<bool> noDataFlags;
+    std::vector<double> noDataValues;
+    itk::MetaDataDictionary &dict = GetParameterFloatVectorImage("in")->GetMetaDataDictionary();
+    bool ret = otb::ReadNoDataFlags(dict,noDataFlags,noDataValues);
+    
+    if (ret)
+    {
+      otbAppLogWARNING("The input image has no data values but this application does not handle no-data. No-data pixels"
+        " will be treated as regular pixels.");
+    }
+
     OGRSpatialReference oSRS(projRef.c_str());
 
     if (segModeType == "vector")
@@ -477,7 +489,7 @@ private:
       //projection ref conversion to ESRI need to be tested in case of .shp
       if ((dataSourceName.find(".shp") != std::string::npos) && (!projRef.empty()))
         {
-        if (!(otb::GeoInformationConversion::IsESRIValidWKT(projRef)))
+        if (!(otb::SpatialReference::FromDescription(projRef).NormalizeESRI()))
           {
           otbAppLogFATAL(<<"Image projection reference "<<std::endl<< projRef);
           itkExceptionMacro(<<"Image spatial reference can't be converted to ESRI. Use another output format (kml,SQLite,...) to overcome .shp limitation ");
@@ -562,7 +574,7 @@ private:
 
     if (segType == "cc")
       {
-      otbAppLogINFO(<<"Use connected component segmentation."<<std::endl);
+      otbAppLogINFO("Use connected component segmentation.");
       ConnectedComponentStreamingVectorizedSegmentationOGRType::Pointer
         ccVectorizationFilter = ConnectedComponentStreamingVectorizedSegmentationOGRType::New();
 
@@ -581,7 +593,7 @@ private:
       }
     else if (segType == "meanshift")
       {
-      otbAppLogINFO(<<"Use threaded Mean-shift segmentation."<<std::endl);
+      otbAppLogINFO("Use threaded Mean-shift segmentation.");
 
       MeanShiftVectorizedSegmentationOGRType::Pointer
           meanShiftVectorizationFilter = MeanShiftVectorizedSegmentationOGRType::New();
@@ -611,7 +623,7 @@ private:
       }
     else if (segType == "watershed")
       {
-      otbAppLogINFO(<<"Using watershed segmentation."<<std::endl);
+      otbAppLogINFO("Using watershed segmentation.");
 
       AmplitudeFilterType::Pointer amplitudeFilter = AmplitudeFilterType::New();
 
@@ -635,7 +647,7 @@ private:
       }
     else if (segType == "mprofiles")
       {
-      otbAppLogINFO(<<"Using multiscale geodesic morphology segmentation."<<std::endl);
+      otbAppLogINFO("Using multiscale geodesic morphology segmentation.");
 
       unsigned int profileSize = GetParameterInt("filter.mprofiles.size");
       unsigned int initialValue = GetParameterInt("filter.mprofiles.start");
@@ -661,7 +673,7 @@ private:
       }
     else
       {
-      otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter")<<std::endl);
+      otbAppLogFATAL(<<"non defined filtering method "<<GetParameterInt("filter"));
       }
 
     if (segModeType == "vector")
@@ -692,7 +704,7 @@ private:
         std::string driverName(ogrDS->ogr().GetDriverName());
         if ( driverName.find("ESRI Shapefile") != std::string::npos)
           {
-          otbAppLogINFO(<<"REPACK the Shapefile ..."<<std::endl);
+          otbAppLogINFO("REPACK the Shapefile ...");
           //In Shapefile format, the name of the DaaSource is also the name of the Layer.
           std::string shpLayerName = itksys::SystemTools::GetFilenameWithoutExtension(GetParameterString("mode.vector.out"));
           std::string repack("REPACK ");

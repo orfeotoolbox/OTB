@@ -289,6 +289,9 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   if (projectionInformationAvailable)
     {
     oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+    #if GDAL_VERSION_NUM >= 3000000
+    oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    #endif
     }
 
   // Retrieving root node
@@ -349,16 +352,9 @@ OGRVectorDataIO::GetOGRDriverName(std::string name) const
   else
     {
     extension = itksys::SystemTools::GetFilenameLastExtension(upperName);
-    if (extension == ".SHP") driverOGR = "ESRI Shapefile";
-    else if ((extension == ".TAB")) driverOGR = "MapInfo File";
-    else if (extension == ".GML") driverOGR = "GML";
-    else if (extension == ".GPX") driverOGR = "GPX";
-    else if (extension == ".SQLITE") driverOGR = "SQLite";
-    else if (extension==".KML") driverOGR="KML";
-    else if (extension == ".GMT") driverOGR = "OGR_GMT";
+    if(m_OGRExtensionsToDrivers.count(extension)==1) driverOGR = m_OGRExtensionsToDrivers.at(extension);
     else driverOGR = "NOT-FOUND";
     }
-  //std::cout << name << " " << driverOGR <<" "<<upperName<< " "<< upperName.substr(0, 3) << std::endl;
   return driverOGR;
 }
 

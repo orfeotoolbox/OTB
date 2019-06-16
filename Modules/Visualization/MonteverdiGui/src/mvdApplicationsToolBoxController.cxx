@@ -92,14 +92,10 @@ ApplicationsToolBoxController
   //
   // connections
   QObject::connect(
-    appModel->GetBrowser(), 
-    SIGNAL(
-      AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
-                                        const ApplicationDocNameToNameMap& ) ),
+    appModel->GetBrowser(),
+    SIGNAL( AvailableApplicationsTagsChanged( const ApplicationsTagContainer&) ),
     widget,
-    SLOT(
-      OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
-                                          const ApplicationDocNameToNameMap& ) )
+    SLOT( OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& ) )
   );
 }
 
@@ -121,14 +117,9 @@ ApplicationsToolBoxController
   // disconnect app browser
   QObject::disconnect(
     appModel->GetBrowser(),
-    SIGNAL(
-      AvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
-                                        const ApplicationDocNameToNameMap& ) ),
+    SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer&) ),
     widget,
-    SLOT(
-      OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer&, 
-                                          const ApplicationDocNameToNameMap& ) )
-    );
+    SLOT( OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& ) ));
 }
 
 /*******************************************************************************/
