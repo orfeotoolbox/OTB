@@ -80,16 +80,17 @@ set (CMAKE_COMMAND "cmake")
 if ( OTB_DATA_USE_LARGEINPUT )
   find_path( OTB_DATA_LARGEINPUT_ROOT
       NAMES OTBData.readme
-      HINTS ${CTEST_SOURCE_DIRECTORY}/../../OTB-LargeInput ${OTB_LARGEINPUT_ROOT}
+      HINTS ${CTEST_SOURCE_DIRECTORY}/../../OTB-LargeInput
     )
 # For the CI the directory should be in 
 # ${CTEST_SOURCE_DIRECTORY}/../../OTB-LargeInput
-  if( ${OTB_DATA_LARGEINPUT_ROOT} STREQUAL "${OTB_DATA_LARGEINPUT_ROOT}-NOTFOUND" )
+  if( NOT OTB_DATA_LARGEINPUT_ROOT )
     message( WARNING "Option -DOTB_DATA_USE_LARGEINPUT=ON is used but we \
 could not found the OTBData.readme file. Make sure you set the \
 OTB_DATA_LARGEINPUT_ROOT variable correctly. 
 OTB_DATA_USE_LARGEINPUT will be set to OFF.")
-  set( OTB_DATA_USE_LARGEINPUT "OFF")
+    set( OTB_DATA_USE_LARGEINPUT "OFF")
+  endif()
 endif()
 
 message(STATUS "CI profile : ${ci_profile}")
