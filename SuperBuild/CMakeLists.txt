@@ -345,7 +345,7 @@ option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS ${SuperBuild_SOURCE_DIR}/../Data $ENV{OTB_DATA_ROOT}
+  HINTS ${OTB-SuperBuild_SOURCE_DIR}/../Data
   )
 
 # SWIG Wrapping
