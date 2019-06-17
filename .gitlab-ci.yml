@@ -22,6 +22,7 @@ stages:
   - precheck
   - prepare
   - build
+  - qa
 
 .general:
   retry:
@@ -30,20 +31,19 @@ stages:
       - runner_system_failure
       - stuck_or_timeout_failure
 
-fast-build:
-  extends: .general
-  only: [merge_requests, branches]
-  stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
-  before_script:
-    - git checkout -f -q $CI_COMMIT_SHA
-    - python3 CI/check_twin_pipelines.py
-  after_script:
-    - python3 CI/cdash_handler.py
-  script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-    - ccache -s
-
+# fast-build:
+#   extends: .general
+#   only: [merge_requests, branches]
+#   stage: precheck
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+#   before_script:
+#     - git checkout -f -q $CI_COMMIT_SHA
+#     - python3 CI/check_twin_pipelines.py
+#   after_script:
+#     - python3 CI/cdash_handler.py
+#   script:
+#     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+#     - ccache -s
 
 .common-build:
   extends: .general
@@ -64,11 +64,11 @@ fast-build:
       - build/*/*.log #CMake log
       - log/*.txt # Others
 
-debian-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+# debian-build:
+#   extends: .common-build
+#   image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+#   script:
+#     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 .common-prepare:
   extends: .general
@@ -107,43 +107,52 @@ ubuntu-superbuild-build:
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
-## CentOS superbuild
-centos-superbuild-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+# ## CentOS superbuild
+# centos-superbuild-prepare:
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
-centos-superbuild-build:
+# centos-superbuild-build:
+#   extends: .common-build
+#   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+#   script:
+#     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+#     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+#   dependencies:
+#     - centos-superbuild-prepare
+
+# ## MacOS superbuild
+# macos-superbuild-prepare:
+#   tags:
+#     - macos
+#   extends: .common-prepare
+#   before_script:
+#     # No need to install lfs as this machine is persistent
+#     # No need to do git config
+#     # Checkout the expected branch
+#     - export GIT_LFS_SKIP_SMUDGE=1
+#     - git checkout -f -q $CI_COMMIT_SHA
+#     - export GIT_LFS_SKIP_SMUDGE=0
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+
+# macos-superbuild-build:
+#   tags:
+#     - macos
+#   extends: .common-build
+#   script:
+#     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+#     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+#   dependencies:
+#     - macos-superbuild-prepare
+
+ubuntu-superbuild-qa:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_qa.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+  after_script: []
   dependencies:
-    - centos-superbuild-prepare
-
-## MacOS superbuild
-macos-superbuild-prepare:
-  tags:
-    - macos
-  extends: .common-prepare
-  before_script:
-    # No need to install lfs as this machine is persistent
-    # No need to do git config
-    # Checkout the expected branch
-    - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q $CI_COMMIT_SHA
-    - export GIT_LFS_SKIP_SMUDGE=0
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-
-macos-superbuild-build:
-  tags:
-    - macos
-  extends: .common-build
-  script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-  dependencies:
-    - macos-superbuild-prepare
+    - ubuntu-superbuild-prepare
