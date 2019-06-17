@@ -155,7 +155,6 @@ large-input-build:
   extends: .common-build
   only : [ branches ]
   script:
-    - ctest -V -S CI/main_superbuild.cmake \
-      -DIMAGE_NAME:string=otb-macos-superbuild -DOTB_DATA_USE_LARGEINPUT:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild -DOTB_DATA_USE_LARGEINPUT:BOOL=ON
   dependencies:
     - macos-superbuild-prepare
