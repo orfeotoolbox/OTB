@@ -61,17 +61,17 @@ int main(int argc, char* argv[])
   const char* inprettyfname  = argv[3];
   const char* outprettyfname = argv[4];
 
-  typedef double                           PixelType;
-  const int                                Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType     = double;
+  const int Dimension = 2;
+  using ImageType     = otb::Image<PixelType, Dimension>;
 
   // After defining the types for the pixels and the images used in the
   // example, we define the type for the PanTex filter. It is
   // templated by the input and output image types.
 
-  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
-  typedef otb::ImageFileReader<ImageType>                             ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                             WriterType;
+  using PanTexTextureFilterType = otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType>;
+  using ReaderType              = otb::ImageFileReader<ImageType>;
+  using WriterType              = otb::ImageFileWriter<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -119,9 +119,9 @@ int main(int argc, char* argv[])
 
   // Pretty image creation for printing
 
-  typedef otb::Image<unsigned char, Dimension>                               OutputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                        WriterPrettyOutputType;
-  typedef itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType> RescalerOutputType;
+  using OutputPrettyImageType  = otb::Image<unsigned char, Dimension>;
+  using WriterPrettyOutputType = otb::ImageFileWriter<OutputPrettyImageType>;
+  using RescalerOutputType     = itk::RescaleIntensityImageFilter<ImageType, OutputPrettyImageType>;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
   WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();

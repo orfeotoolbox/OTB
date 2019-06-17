@@ -63,7 +63,6 @@ private:
     SetName("ManageNoData");
     SetDescription("Manage No-Data");
     // Documentation
-    SetDocName("No Data management");
     SetDocLongDescription("This application has two modes. The first allows building a mask of no-data pixels from the no-data flags read from the image file. The second allows updating the change the no-data value of an image (pixels value and metadata). This last mode also allows replacing NaN in images with a proper no-data value. To do so, one should activate the NaN is no-data option.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");

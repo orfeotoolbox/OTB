@@ -59,7 +59,6 @@ namespace mvd
 enum COLUMN
 {
   COLUMN_NAME = 0,
-  COLUMN_TITLE,
   //
   COLUMN_COUNT,
 };
@@ -86,7 +85,6 @@ ApplicationsToolBox
   QWidget( p, flags ),
   m_UI( new mvd::Ui::ApplicationsToolBox() ),
   m_AppTags(),
-  m_AppsDocNameToNameMap(),
   m_SearchText()
 {
   m_UI->setupUi( this );
@@ -201,17 +199,10 @@ ApplicationsToolBox
 	// get current app name
 	QString  name( itApps->c_str() );
 
-	//  get current app DocName
-	QString title(
-	  GetApplicationDocNameByApplicationName( name )
-	);
-
 	assert( !name.isEmpty() );
-	assert( !title.isEmpty() );
 
-	// does the current algorithm DocName match the search text
+	// does the current algorithm name match the search text
 	if ( m_SearchText.isEmpty() ||
-	     title.contains( search, Qt::CaseInsensitive ) ||
 	     name.contains( search, Qt::CaseInsensitive ) )
 	  {
 	  // 
@@ -220,10 +211,6 @@ ApplicationsToolBox
 	    new QTreeWidgetItem( cmainItem, ITEM_TYPE_APPLICATION );
 
 	  secItem->setText( COLUMN_NAME, name );
-	  secItem->setText( COLUMN_TITLE, title );
-
-	  secItem->setToolTip( COLUMN_NAME, title );
-
 	  secItem->setIcon( COLUMN_NAME, QIcon( ":/icons/process" ) );
 	  }
 	}
@@ -234,7 +221,6 @@ ApplicationsToolBox
   m_UI->m_AlgorithmsTree->expandAll();
 
   m_UI->m_AlgorithmsTree->resizeColumnToContents( COLUMN_NAME );
-  m_UI->m_AlgorithmsTree->resizeColumnToContents( COLUMN_TITLE );
 }
 
 /*******************************************************************************/
@@ -258,10 +244,10 @@ ApplicationsToolBox
     {
     QString name( FromStdString( *itApps ) );
 
-    if( name.contains( search, Qt::CaseInsensitive ) ||
-	GetApplicationDocNameByApplicationName( name )
-	.contains( search, Qt::CaseInsensitive ) )
+    if( name.contains( search, Qt::CaseInsensitive ) )
+    {
       return true;
+    }
     }
 
   return false;
@@ -274,36 +260,7 @@ ApplicationsToolBox
 {
   assert( !appName.isEmpty() );
 
-  emit ApplicationToLaunchSelected(
-    appName,
-    GetApplicationDocNameByApplicationName( appName )
-  );
-}
-
-/*******************************************************************************/
-QString
-ApplicationsToolBox
-::GetApplicationDocNameByApplicationName( const QString & appName )
-{
-  QString docName("");
-
-  // find the pair corresponding to the tagName
-  ApplicationDocNameToNameMap::const_iterator itDocNames = m_AppsDocNameToNameMap.begin();
-
-  while( itDocNames != m_AppsDocNameToNameMap.end() )
-    {
-    // retrieve the appName in the map
-    if ( appName == QString( (*itDocNames).second.c_str() ) )
-      {
-      //
-      // return the relative docName
-      return QString ( (*itDocNames).first.c_str() );
-      }
-
-    ++itDocNames;
-    }
-
-  return docName;
+  emit ApplicationToLaunchSelected(appName);
 }
 
 /*******************************************************************************/
@@ -311,14 +268,10 @@ ApplicationsToolBox
 /*******************************************************************************/
 void
 ApplicationsToolBox
-::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags, 
-                                     const ApplicationDocNameToNameMap& docNameToNameMap)
+::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags)
 {
   // rememeber the map
   m_AppTags = appsTags;
-
-  // remember the OTB applications  docName <-> Name association
-  m_AppsDocNameToNameMap = docNameToNameMap;
 
   // fill the tree with the application
   FillTreeUsingTags();  
@@ -342,8 +295,6 @@ void
 ApplicationsToolBox
 ::OnAlgorithmTreeDoubleClick( QTreeWidgetItem * item , int column )
 {
-  // qDebug() << item << column;
-
   if( item->type()!=ITEM_TYPE_APPLICATION )
     return;
 
@@ -351,32 +302,6 @@ ApplicationsToolBox
 
   if( text.isEmpty() )
     return;
-
-  switch( column )
-    {
-    case COLUMN_NAME:
-      break;
-
-    case COLUMN_TITLE:
-      {
-      ApplicationDocNameToNameMap::const_iterator it(
-	m_AppsDocNameToNameMap.find(
-	  ToStdString( text )
-	)
-      );
-
-      assert( it!=m_AppsDocNameToNameMap.end() );
-
-      assert( it->second.empty() );
-
-      text = FromStdString( it->second );
-      }
-      break;
-
-    default:
-      assert( false && "Unexpected enum value." );
-      break;
-    }
 
   LaunchApplication( text );
 }

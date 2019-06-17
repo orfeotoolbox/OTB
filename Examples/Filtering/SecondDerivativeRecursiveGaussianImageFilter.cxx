@@ -43,20 +43,20 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef float PixelType;
-  typedef float OutputPixelType;
+  using PixelType       = float;
+  using OutputPixelType = float;
 
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<PixelType, Dimension>       ImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using ImageType       = otb::Image<PixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
-  typedef itk::ImageDuplicator<OutputImageType> DuplicatorType;
+  using DuplicatorType = itk::ImageDuplicator<OutputImageType>;
 
-  typedef itk::RecursiveGaussianImageFilter<ImageType, ImageType> FilterType;
+  using FilterType = itk::RecursiveGaussianImageFilter<ImageType, ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

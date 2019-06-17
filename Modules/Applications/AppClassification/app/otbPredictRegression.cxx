@@ -119,7 +119,6 @@ private:
     SetDescription("Performs a prediction of the input image according to a regression model file.");
 
     // Documentation
-    SetDocName("Predict Regression");
     SetDocLongDescription("This application predict output values from an input"
                           " image, based on a regression model file produced by"
                           " the TrainRegression application. Pixels of the "

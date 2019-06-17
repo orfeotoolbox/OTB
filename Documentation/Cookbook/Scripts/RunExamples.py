@@ -33,7 +33,7 @@ blacklist = [
         "LAIAndPROSAILToSensorResponse" # does not run, wrong arguments
     ]
 
-def run_example(otb_root, otb_data, name, dry_run):
+def run_example(otb_root, name, dry_run):
     """
     Run an example by name
     Assumes the current working directory is an OTB build
@@ -71,6 +71,7 @@ def run_example(otb_root, otb_data, name, dry_run):
         print("$ " + binary + " " + " ".join(example_args))
 
         if not dry_run:
+            otb_data = join(otb_root, "Data")
             # Make sure Output dir exists
             os.makedirs(join(otb_data, "Output"), exist_ok=True)
 
@@ -81,19 +82,18 @@ def run_example(otb_root, otb_data, name, dry_run):
 def main():
     parser = argparse.ArgumentParser(usage="Run one or all OTB cxx examples")
     parser.add_argument("otb_root", help="Path to otb repository")
-    parser.add_argument("otb_data", help="Path to otb-data repository")
     parser.add_argument("--name", type=str, help="Run only one example with then given name")
     parser.add_argument("-n", "--dry-run", action='store_true', help="Dry run, only print commands")
     parser.add_argument("-k", "--keep-going", action='store_true', help="Keep going after failing examples")
     args = parser.parse_args()
 
     if args.name:
-        run_example(args.otb_root, args.otb_data, args.name, dry_run=args.dry_run)
+        run_example(args.otb_root, args.name, dry_run=args.dry_run)
     else:
         list_of_examples =[os.path.splitext(os.path.basename(f))[0] for f in glob.glob(join(args.otb_root, "Examples/*/*.cxx"))]
         for name in list_of_examples:
             try:
-                run_example(args.otb_root, args.otb_data, name, dry_run=args.dry_run)
+                run_example(args.otb_root, name, dry_run=args.dry_run)
             except Exception as e:
                 if args.keep_going:
                     print("Warning:", e)

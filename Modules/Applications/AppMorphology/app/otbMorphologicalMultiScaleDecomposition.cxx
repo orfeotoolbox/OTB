@@ -71,7 +71,6 @@ private:
     SetDescription( "Perform a geodesic morphology based image analysis on an input image channel" );
 
     // Documentation
-    SetDocName( "Morphological Multi Scale Decomposition" );
     SetDocLongDescription(
             "This application recursively apply geodesic decomposition. \n"
                     "\n"

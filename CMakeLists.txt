@@ -165,9 +165,6 @@ endif()
 if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
 endif()
-if(NOT OTB_INSTALL_JAVA_DIR)
-  set(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/java")
-endif()
 if(NOT OTB_INSTALL_DATA_DIR)
   set(OTB_INSTALL_DATA_DIR "share/otb")
 endif()
@@ -533,7 +530,6 @@ foreach(otb_option
     CMAKE_CXX_FLAGS
     ${option_list}
     OTB_WRAP_PYTHON
-    OTB_WRAP_JAVA
     OTB_DATA_ROOT
     OTB_USE_OPENMP
     OTB_USE_SSE_FLAGS

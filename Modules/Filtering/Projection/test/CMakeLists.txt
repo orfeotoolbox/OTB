@@ -24,7 +24,6 @@ set(OTBProjectionTests
 otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
-otbOrthoRectificationFilter.cxx
 otbGenericRSResampleImageFilter.cxx
 otbGeometriesProjectionFilter.cxx
 otbGenericRSTransformGenericTest.cxx
@@ -44,7 +43,6 @@ otbVectorDataProjectionFilterFromMapToImage.cxx
 otbGenericRSTransformFromImage.cxx
 otbCompositeTransform.cxx
 otbLeastSquareAffineTransformEstimator.cxx
-otbSpectralAngleDataNodeFeatureFunction.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
@@ -188,6 +186,16 @@ RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
 SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
 )
 
+set(TOLERANCE_RATIO
+0
+0
+0
+0
+0
+0
+0.0002
+)
+
 set(IMG_TYPE
 "pleiades-1"
 "wv2-1"
@@ -303,6 +311,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET RESOL ${IMGNB} current_resol         )
 	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
 	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
+  list(GET TOLERANCE_RATIO ${IMGNB} current_tolerance_ratio)
+
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -313,7 +323,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
 		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
-		  otbOrthoRectificationFilter
+                  --tolerance-ratio ${current_tolerance_ratio}
+		  otbGenericRSResampleImageFilter
 		  LARGEINPUT{${current_img}?&geom=${INPUTDATA}/${current_geomgcp}.geom}
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${current_originx}
@@ -335,19 +346,6 @@ endforeach()
 #------------------------------------------------------------------------
 #----------------- OrthoRectification tests (end) -----------------------
 #------------------------------------------------------------------------
-
-otb_add_test(NAME prTvotbGenericRSResampleImageFilter COMMAND otbProjectionTestDriver
-  --compare-image ${EPSILON_4}
-  ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  otbGenericRSResampleImageFilter
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  1000
-  15
-  0
-  1
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterLines COMMAND otbProjectionTestDriver
   --compare-ogr ${EPSILON_9}
@@ -581,29 +579,6 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   771 526 769 8268 10335 12402
   400 891 283 5955 7530 9105
   352 807 919 10023 12102 14181
-  )
-
-otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Polygon COMMAND otbProjectionTestDriver
-  --compare-ogr ${EPSILON_3}
-  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  otbSpectralAngleDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  0 )
-
-otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProjectionTestDriver
-  --compare-ogr ${EPSILON_9}
-  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  otbSpectralAngleDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  0
   )
 
 set(VALID_CONDITION err=12)
@@ -1209,28 +1184,3 @@ set(GenericConversionChecking_INPUTS
       #${INPUTDATA}/DEM/srtm_directory
       #3 )
   #endforeach()
-
-
-
-  set(SENSOR_TYPES
-    "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
-    "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
-    "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
-    )
-
-  foreach( file ${SENSOR_TYPES})
-    # Get the sensor name
-    set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-    string(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
-    # Tests
-    otb_add_test(NAME prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} COMMAND otbProjectionTestDriver
-      --compare-image ${EPSILON_4}
-      ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      otbGenericRSResampleImageFilterFromMap
-      LARGEINPUT{${file}}
-      15
-      0
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      )
-  endforeach()

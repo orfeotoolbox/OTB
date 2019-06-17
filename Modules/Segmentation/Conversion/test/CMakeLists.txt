@@ -195,19 +195,11 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriv
   #4 25 0.1 100
   #)
 
-otb_add_test(NAME obTvLabelMapToVectorDataFilter2 COMMAND otbConversionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
-  ${TEMP}/obTvLabelMapToVectorDataFilter2.shp
-  otbLabelMapToVectorDataFilter
-  ${INPUTDATA}/rcc8_mire5.png
-  ${TEMP}/obTvLabelMapToVectorDataFilter2.shp)
-
 otb_add_test(NAME obTvLabelMapToVectorDataFilter COMMAND otbConversionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp
   otbLabelMapToVectorDataFilter
-  ${INPUTDATA}/rcc8_mire1.png
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp)
 

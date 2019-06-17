@@ -72,7 +72,6 @@ private:
     SetDescription("Computes statistics on a training polygon set.");
 
     // Documentation
-    SetDocName("Polygon Class Statistics");
     SetDocLongDescription("Process a set of geometries intended for training (they should have a field giving the associated "
       "class). The geometries are analyzed against a support image to compute statistics:\n\n"
       "* Number of samples per class\n"

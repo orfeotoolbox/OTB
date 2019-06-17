@@ -33,19 +33,6 @@
 ./DEMToRainbowExample Output/DEMToReliefImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm relief
 */
 
-
-// In some situation, it is desirable to represent a gray scale image in color for easier
-// interpretation. This is particularly the case if pixel values in the image are used
-// to represent some data such as elevation, deformation map,
-// interferogram. In this case, it is important to ensure that similar
-// values will get similar colors. You can notice how this requirement
-// differs from the previous case.
-//
-// The following example illustrates the use of the \doxygen{otb}{DEMToImageGenerator} class
-// combined with the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}. You can refer to the
-// source code or to section \ref{sec:ReadDEM} for the DEM conversion to image,
-// we will focus on the color conversion part here.
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -65,23 +52,23 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef double                             PixelType;
-  typedef unsigned char                      UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType>      RGBPixelType;
-  typedef otb::Image<PixelType, 2>           ImageType;
-  typedef otb::Image<RGBPixelType, 2>        RGBImageType;
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  using PixelType      = double;
+  using UCharPixelType = unsigned char;
+  using RGBPixelType   = itk::RGBPixel<UCharPixelType>;
+  using ImageType      = otb::Image<PixelType, 2>;
+  using RGBImageType   = otb::Image<RGBPixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<RGBImageType>;
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[1]);
 
-  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
+  using DEMToImageGeneratorType = otb::DEMToImageGenerator<ImageType>;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType    SizeType;
-  typedef DEMToImageGeneratorType::SpacingType SpacingType;
-  typedef DEMToImageGeneratorType::PointType   PointType;
+  using SizeType    = DEMToImageGeneratorType::SizeType;
+  using SpacingType = DEMToImageGeneratorType::SpacingType;
+  using PointType   = DEMToImageGeneratorType::PointType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[8]);
 
@@ -103,18 +90,18 @@ int main(int argc, char* argv[])
 
   demToImage->SetOutputSpacing(spacing);
 
-  // As in the previous example, the \doxygen{itk}{ScalarToRGBColormapImageFilter} is
+  // The ScalarToRGBColormapImageFilter is
   // the filter in charge of calling the functor we specify to do the work for
-  // each pixel. Here it is the \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}.
+  // each pixel. Here it is the ScalarToRainbowRGBPixelFunctor.
 
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                          colormapper = ColorMapFilterType::New();
+  using ColorMapFilterType                = itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
   if (argc == 9)
   {
-    typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-    ColorMapFunctorType::Pointer                                                  colormap = ColorMapFunctorType::New();
+    using ColorMapFunctorType             = otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType, RGBPixelType>;
+    ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
     colormap->SetMinimumInputValue(0);
     colormap->SetMaximumInputValue(4000);
     colormapper->SetColormap(colormap);
@@ -124,16 +111,16 @@ int main(int argc, char* argv[])
   {
     if (strcmp(argv[9], "hot") == 0)
     {
-      typedef itk::Function::HotColormapFunction<PixelType, RGBPixelType> ColorMapFunctorType;
-      ColorMapFunctorType::Pointer                                        colormap = ColorMapFunctorType::New();
+      using ColorMapFunctorType             = itk::Function::HotColormapFunction<PixelType, RGBPixelType>;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
     }
     else
     {
-      typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-      ColorMapFunctorType::Pointer                                         colormap = ColorMapFunctorType::New();
+      using ColorMapFunctorType             = otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType>;
+      ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
       colormap->SetMinimumInputValue(0);
       colormap->SetMaximumInputValue(4000);
       colormapper->SetColormap(colormap);
@@ -146,34 +133,5 @@ int main(int argc, char* argv[])
 
   writer->SetInput(colormapper->GetOutput());
 
-  try
-  {
-    writer->Update();
-  }
-  catch (itk::ExceptionObject& excep)
-  {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr << excep << std::endl;
-  }
-  catch (...)
-  {
-    std::cout << "Unknown exception !" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  // Figure~\ref{fig:RAINBOW_FILTER} shows the effect of applying the filter to
-  // a gray scale image.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{pretty_DEMToImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToRainbowImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToHotImageGenerator.eps}
-  // \includegraphics[width=0.44\textwidth]{DEMToReliefImageGenerator.eps}
-  // \itkcaption[Grayscale to color]{The gray level DEM extracted from SRTM
-  // data (top-left) and the same area represented in color.}
-  // \label{fig:RAINBOW_FILTER}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
+  writer->Update();
 }

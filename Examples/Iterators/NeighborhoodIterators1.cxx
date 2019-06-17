@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
   // the boundary condition, has been omitted because the default condition is
   // appropriate for this algorithm.
 
-  typedef float                           PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using PixelType  = float;
+  using ImageType  = otb::Image<PixelType, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
+  using NeighborhoodIteratorType = itk::ConstNeighborhoodIterator<ImageType>;
+  using IteratorType             = itk::ImageRegionIterator<ImageType>;
 
   // The following code creates and executes the OTB image reader.
   // The \code{Update}
@@ -154,11 +154,11 @@ int main(int argc, char* argv[])
   // is rescaled to intensity range $[0, 255]$ and cast to unsigned char so that
   // it can be saved and visualized as a PNG image.
 
-  typedef unsigned char                        WritePixelType;
-  typedef otb::Image<WritePixelType, 2>        WriteImageType;
-  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  using WritePixelType = unsigned char;
+  using WriteImageType = otb::Image<WritePixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<WriteImageType>;
 
-  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter<ImageType, WriteImageType>;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 

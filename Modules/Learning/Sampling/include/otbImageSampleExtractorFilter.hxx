@@ -128,9 +128,16 @@ PersistentImageSampleExtractorFilter<TInputImage>
   if(projectionInformationAvailable)
     {
     OGRSpatialReference imgSRS;
+    
+    #if GDAL_VERSION_NUM >= 3000000 // importFromWkt is const-correct in GDAL 3
+    const char *projWktCstr = projectionRefWkt.c_str();
+    OGRErr err = imgSRS.importFromWkt( &projWktCstr );
+    #else
     const char *projWktCstr = projectionRefWkt.c_str();
     char **projWktPointer = const_cast<char**>(&projWktCstr);
     OGRErr err = imgSRS.importFromWkt( projWktPointer );
+    #endif
+    
     if (err == OGRERR_NONE)
       {
       // get input layer

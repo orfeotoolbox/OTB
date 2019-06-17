@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
 
   const unsigned int Dimension = 2;
 
-  typedef double                                   InternalPixelType;
-  typedef unsigned char                            LabelledPixelType;
-  typedef otb::Image<InternalPixelType, Dimension> InputImageType;
-  typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
+  using InternalPixelType = double;
+  using LabelledPixelType = unsigned char;
+  using InputImageType    = otb::Image<InternalPixelType, Dimension>;
+  using LabelledImageType = otb::Image<LabelledPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType>    ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<LabelledImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -77,17 +77,17 @@ int main(int argc, char* argv[])
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  using MarkovRandomFieldFilterType = otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType>;
 
   //  And to declare these new type:
 
-  typedef otb::MRFSamplerRandomMAP<InputImageType, LabelledImageType> SamplerType;
-  //   typedef otb::MRFSamplerRandom< InputImageType, LabelledImageType> SamplerType;
+  using SamplerType = otb::MRFSamplerRandomMAP<InputImageType, LabelledImageType>;
+  //   using SamplerType = otb::MRFSamplerRandom< InputImageType, LabelledImageType>;
 
-  typedef otb::MRFOptimizerICM OptimizerType;
+  using OptimizerType = otb::MRFOptimizerICM;
 
-  typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
-  typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
+  using EnergyRegularizationType = otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>;
+  using EnergyFidelityType       = otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType>;
 
   MarkovRandomFieldFilterType::Pointer markovFilter         = MarkovRandomFieldFilterType::New();
   EnergyRegularizationType::Pointer    energyRegularization = EnergyRegularizationType::New();
@@ -132,8 +132,8 @@ int main(int argc, char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
-  RescaleType::Pointer                                                           rescaleFilter = RescaleType::New();
+  using RescaleType                  = itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType>;
+  RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
 

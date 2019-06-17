@@ -49,30 +49,30 @@ int main(int itkNotUsed(argc), char* argv[])
   // We will assume double precision input images and will also define
   // the type for the labeled pixels.
 
-  const unsigned int     Dimension = 2;
-  typedef double         PixelType;
-  typedef unsigned short LabeledPixelType;
+  const unsigned int Dimension = 2;
+  using PixelType              = double;
+  using LabeledPixelType       = unsigned short;
   // Our classifier is generic enough to be able to process images
   // with any number of bands. We read the input image as a
   // \doxygen{otb}{VectorImage}. The labeled image will be a scalar image.
-  typedef otb::VectorImage<PixelType, Dimension>  ImageType;
-  typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
+  using ImageType        = otb::VectorImage<PixelType, Dimension>;
+  using LabeledImageType = otb::Image<LabeledPixelType, Dimension>;
 
   // We can now define the type for the classifier filter, which is
   // templated over its input and output image types.
-  typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
-  typedef ClassificationFilterType::ModelType                         ModelType;
+  using ClassificationFilterType = otb::ImageClassificationFilter<ImageType, LabeledImageType>;
+  using ModelType                = ClassificationFilterType::ModelType;
 
   // Moreover, it is necessary to define a \doxygen{otb}{MachineLearningModelFactory}
   // which is templated over its input and output pixel types. This factory is used
   // to parse the input model file and to define which classification method to use.
-  typedef otb::MachineLearningModelFactory<PixelType, LabeledPixelType> MachineLearningModelFactoryType;
+  using MachineLearningModelFactoryType = otb::MachineLearningModelFactory<PixelType, LabeledPixelType>;
 
   // And finally, we define the reader and the writer. Since the images
   // to classify can be very big, we will use a streamed writer which
   // will trigger the streaming ability of the classifier.
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<LabeledImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<LabeledImageType>;
 
   // We instantiate the classifier and the reader objects and we set
   // the existing model obtained in a previous training step.

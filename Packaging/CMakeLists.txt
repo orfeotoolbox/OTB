@@ -39,8 +39,11 @@ set(SUPERBUILD_BINARY_DIR "" CACHE PATH "path to superbuild binary directory")
 set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
 set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 
-#variables based on above user-defined variables 
-set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
+#variables based on above user-defined variables
+message( "OTB_BINARY_DIR=${OTB_BINARY_DIR}" )
+if ( NOT OTB_BINARY_DIR )
+  set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
+endif()
 set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
 get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
 set(SUPERBUILD_SOURCE_DIR     "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
@@ -55,8 +58,9 @@ find_program(FILE_COMMAND NAMES  "file")
 find_program(READLINK NAMES "readlink")
 find_program(ZIP_EXECUTABLE NAMES 7z 7za)
 
-#install prefix is same as SUPERBUILD_INSTALL_DIR. could be changed later
-set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
+if ( NOT CMAKE_INSTALL_PREFIX )
+  set(CMAKE_INSTALL_PREFIX "${SUPERBUILD_INSTALL_DIR}")
+endif()
 
 #set CMAKE_MODULE_PATH to be the current source directory.
 # This will allow including all cmake files without full path and .cmake extension!
@@ -136,7 +140,6 @@ include(cleanup_package)
 include(install_include_dirs)
 include(install_importlibs)
 include(install_python_bindings)
-include(install_java_bindings)
 include(install_share_dirs)
 include(install_cmake_files)
 include(install_qtdev_files)
@@ -200,8 +203,6 @@ install_include_dirs()
 install_importlibs()
 
 install_python_bindings()
-
-install_java_bindings()
 
 install_share_dirs()
 

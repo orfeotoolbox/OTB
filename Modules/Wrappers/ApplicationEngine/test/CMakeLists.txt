@@ -46,7 +46,7 @@ otb_module_target_label(otbApplicationEngineTestDriver)
 # Tests Declaration
 
 otb_add_test(NAME owTvInputImageParameter COMMAND otbApplicationEngineTestDriver
-  otbWrapperInputImageParameterTest1
+  otbWrapperInputImageParameterTest
   ${INPUTDATA}/poupees.tif
   "mykey"
   "my description"

@@ -120,7 +120,7 @@ otb_add_test(NAME bfTvPersistentVectorizationImageFilter COMMAND otbEdgeTestDriv
   ${BASELINE_FILES}/bfTvPersistentVectorizationImageFilterOutput.txt
   ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
   otbPersistentVectorizationFilter
-  ${INPUTDATA}/Seg1InputForRCC8Graph.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/bfTvPersistentVectorizationImageFilterOutput.txt
   )
 

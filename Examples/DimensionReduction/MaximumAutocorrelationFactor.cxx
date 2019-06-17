@@ -54,8 +54,8 @@ int main(int itkNotUsed(argc), char* argv[])
   //  We then define the types for the input image and the
   //  output image.
 
-  typedef otb::VectorImage<unsigned short, 2> InputImageType;
-  typedef otb::VectorImage<double, 2>         OutputImageType;
+  using InputImageType  = otb::VectorImage<unsigned short, 2>;
+  using OutputImageType = otb::VectorImage<double, 2>;
 
 
   //  We can now declare the types for the reader. Since the images
@@ -64,14 +64,14 @@ int main(int itkNotUsed(argc), char* argv[])
   //  streamed. This is achieved by using the
   //  \doxygen{otb}{ImageFileWriter} class.
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   //  The \doxygen{otb}{MultivariateAlterationDetectorImageFilter} is templated over
   //  the type of the input images and the type of the generated change
   //  image.
 
-  typedef otb::MaximumAutocorrelationFactorImageFilter<InputImageType, OutputImageType> FilterType;
+  using FilterType = otb::MaximumAutocorrelationFactorImageFilter<InputImageType, OutputImageType>;
 
 
   //  The different elements of the pipeline can now be instantiated.
@@ -95,10 +95,10 @@ int main(int itkNotUsed(argc), char* argv[])
   writer->Update();
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<InputImageType, InputImageType>   InputPrintFilterType;
-  typedef otb::PrintableImageFilter<OutputImageType, OutputImageType> OutputPrintFilterType;
-  typedef InputPrintFilterType::OutputImageType                       VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>                         VisuWriterType;
+  using InputPrintFilterType  = otb::PrintableImageFilter<InputImageType, InputImageType>;
+  using OutputPrintFilterType = otb::PrintableImageFilter<OutputImageType, OutputImageType>;
+  using VisuImageType         = InputPrintFilterType::OutputImageType;
+  using VisuWriterType        = otb::ImageFileWriter<VisuImageType>;
 
   InputPrintFilterType::Pointer  inputPrintFilter  = InputPrintFilterType::New();
   OutputPrintFilterType::Pointer outputPrintFilter = OutputPrintFilterType::New();

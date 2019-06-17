@@ -24,18 +24,6 @@
 */
 
 
-// Visualization of digital elevation models (DEM) is often more intuitive by simulating a
-// lighting source and generating the corresponding shadows. This principle is called
-// hill shading.
-//
-// Using a simple functor \doxygen{otb}{HillShadingFunctor} and the DEM image generated
-// using the \doxygen{otb}{DEMToImageGenerator} (refer to \ref{sec:ReadDEM}), you can easily
-// obtain a representation of the DEM. Better yet, using the
-// \doxygen{otb}{ScalarToRainbowRGBPixelFunctor}, combined with the
-// \doxygen{otb}{ReliefColormapFunctor} you can easily generate the classic elevation maps.
-//
-// This example will focus on the shading itself.
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
@@ -50,7 +38,6 @@
 
 int main(int argc, char* argv[])
 {
-
   if (argc < 10)
   {
     std::cout << argv[0] << " <output_filename> <output_color_filename> "
@@ -61,14 +48,14 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef double                                PixelType;
-  typedef unsigned char                         UCharPixelType;
-  typedef itk::RGBPixel<UCharPixelType>         RGBPixelType;
-  typedef otb::Image<PixelType, 2>              ImageType;
-  typedef otb::Image<RGBPixelType, 2>           RGBImageType;
-  typedef otb::Image<UCharPixelType, 2>         ScalarImageType;
-  typedef otb::ImageFileWriter<RGBImageType>    WriterType;
-  typedef otb::ImageFileWriter<ScalarImageType> ScalarWriterType;
+  using PixelType        = double;
+  using UCharPixelType   = unsigned char;
+  using RGBPixelType     = itk::RGBPixel<UCharPixelType>;
+  using ImageType        = otb::Image<PixelType, 2>;
+  using RGBImageType     = otb::Image<RGBPixelType, 2>;
+  using ScalarImageType  = otb::Image<UCharPixelType, 2>;
+  using WriterType       = otb::ImageFileWriter<RGBImageType>;
+  using ScalarWriterType = otb::ImageFileWriter<ScalarImageType>;
 
   ScalarWriterType::Pointer writer = ScalarWriterType::New();
   writer->SetFileName(argv[1]);
@@ -76,13 +63,13 @@ int main(int argc, char* argv[])
   WriterType::Pointer writer2 = WriterType::New();
   writer2->SetFileName(argv[2]);
 
-  typedef otb::DEMToImageGenerator<ImageType> DEMToImageGeneratorType;
+  using DEMToImageGeneratorType = otb::DEMToImageGenerator<ImageType>;
 
   DEMToImageGeneratorType::Pointer demToImage = DEMToImageGeneratorType::New();
 
-  typedef DEMToImageGeneratorType::SizeType    SizeType;
-  typedef DEMToImageGeneratorType::SpacingType SpacingType;
-  typedef DEMToImageGeneratorType::PointType   PointType;
+  using SizeType    = DEMToImageGeneratorType::SizeType;
+  using SpacingType = DEMToImageGeneratorType::SpacingType;
+  using PointType   = DEMToImageGeneratorType::PointType;
 
   otb::DEMHandler::Instance()->OpenDEMDirectory(argv[9]);
 
@@ -126,35 +113,35 @@ int main(int argc, char* argv[])
   // operations in its neighborhood. A convenient filter called \doxygen{otb}{HillShadingFilter}
   // is defined around this mechanism.
 
-  typedef otb::HillShadingFilter<ImageType, ImageType> HillShadingFilterType;
-  HillShadingFilterType::Pointer                       hillShading = HillShadingFilterType::New();
+  using HillShadingFilterType                = otb::HillShadingFilter<ImageType, ImageType>;
+  HillShadingFilterType::Pointer hillShading = HillShadingFilterType::New();
   hillShading->SetRadius(1);
   hillShading->SetInput(demToImage->GetOutput());
 
   hillShading->GetFunctor().SetXRes(res);
   hillShading->GetFunctor().SetYRes(res);
 
-  typedef itk::ShiftScaleImageFilter<ImageType, ScalarImageType> RescalerType;
-  RescalerType::Pointer                                          rescaler = RescalerType::New();
+  using RescalerType             = itk::ShiftScaleImageFilter<ImageType, ScalarImageType>;
+  RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetScale(255.0);
   rescaler->SetInput(hillShading->GetOutput());
 
   writer->SetInput(rescaler->GetOutput());
 
-  typedef itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType> ColorMapFilterType;
-  ColorMapFilterType::Pointer                                          colormapper = ColorMapFilterType::New();
+  using ColorMapFilterType                = itk::ScalarToRGBColormapImageFilter<ImageType, RGBImageType>;
+  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->UseInputImageExtremaForScalingOff();
 
-  typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType> ColorMapFunctorType;
-  ColorMapFunctorType::Pointer                                         colormap = ColorMapFunctorType::New();
+  using ColorMapFunctorType             = otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType>;
+  ColorMapFunctorType::Pointer colormap = ColorMapFunctorType::New();
   colormap->SetMinimumInputValue(0);
   colormap->SetMaximumInputValue(4000);
   colormapper->SetColormap(colormap);
 
   colormapper->SetInput(demToImage->GetOutput());
 
-  typedef itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType, otb::Functor::HillShadeModulationFunctor<RGBPixelType, PixelType, RGBPixelType>>
-      MultiplyFilterType;
+  using MultiplyFilterType =
+      itk::BinaryFunctorImageFilter<RGBImageType, ImageType, RGBImageType, otb::Functor::HillShadeModulationFunctor<RGBPixelType, PixelType, RGBPixelType>>;
 
   MultiplyFilterType::Pointer multiply = MultiplyFilterType::New();
   multiply->SetInput1(colormapper->GetOutput());
@@ -162,21 +149,8 @@ int main(int argc, char* argv[])
 
   writer2->SetInput(multiply->GetOutput());
 
-  try
-  {
-    writer->Update();
-    writer2->Update();
-  }
-  catch (itk::ExceptionObject& excep)
-  {
-    std::cerr << "Exception caught !" << std::endl;
-    std::cerr << excep << std::endl;
-  }
-  catch (...)
-  {
-    std::cout << "Unknown exception !" << std::endl;
-    return EXIT_FAILURE;
-  }
+  writer->Update();
+  writer2->Update();
 
   otb::WorldFile::Pointer worldFile = otb::WorldFile::New();
   worldFile->SetLonOrigin(origin[0]);
@@ -188,17 +162,4 @@ int main(int argc, char* argv[])
   worldFile->Update();
   worldFile->SetImageFilename(argv[2]);
   worldFile->Update();
-
-  // Figure~\ref{fig:HILL_SHADING} shows the hill shading result from SRTM data.
-  //
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.44\textwidth]{HillShadingExample.eps}
-  // \includegraphics[width=0.44\textwidth]{HillShadingColorExample.eps}
-  // \itkcaption[Hill shading]{Hill shading obtained from SRTM data (left) and combined with
-  // the color representation (right)}
-  // \label{fig:HILL_SHADING}
-  // \end{figure}
-
-  return EXIT_SUCCESS;
 }

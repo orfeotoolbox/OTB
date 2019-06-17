@@ -64,7 +64,6 @@ private:
         "selected channel");
 
     // Documentation
-    SetDocName("Edge Feature Extraction");
     SetDocLongDescription(
         "This application computes edge features on a selected channel of the input."
         "It uses different filter such as gradient, Sobel and Touzi");

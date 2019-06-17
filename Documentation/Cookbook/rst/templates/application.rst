@@ -1,6 +1,9 @@
 .. _{label}:
 
 {heading}
+
+{deprecation_string}
+
 {description}
 
 Description

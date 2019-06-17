@@ -54,16 +54,16 @@ int main(int argc, char* argv[])
   const unsigned int xOffset = static_cast<unsigned int>(atoi(argv[5]));
   const unsigned int yOffset = static_cast<unsigned int>(atoi(argv[6]));
 
-  typedef double                           PixelType;
-  const int                                Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using PixelType     = double;
+  const int Dimension = 2;
+  using ImageType     = otb::Image<PixelType, Dimension>;
 
   // After defining the types for the pixels and the images used in the
   // example, we define the types for the textures filter. It is
   // templated by the input and output image types.
-  typedef otb::ScalarImageToTexturesFilter<ImageType, ImageType> TexturesFilterType;
-  typedef otb::ImageFileReader<ImageType>                        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                        WriterType;
+  using TexturesFilterType = otb::ScalarImageToTexturesFilter<ImageType, ImageType>;
+  using ReaderType         = otb::ImageFileReader<ImageType>;
+  using WriterType         = otb::ImageFileWriter<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -87,14 +87,14 @@ int main(int argc, char* argv[])
   // The offset is always an array of N values, where N is the number of
   // dimensions of the image.
 
-  typedef ImageType::SizeType SizeType;
-  SizeType                    sradius;
+  using SizeType = ImageType::SizeType;
+  SizeType sradius;
   sradius.Fill(radius);
 
   texturesFilter->SetRadius(sradius);
 
-  typedef ImageType::OffsetType OffsetType;
-  OffsetType                    offset;
+  using OffsetType = ImageType::OffsetType;
+  OffsetType offset;
   offset[0] = xOffset;
   offset[1] = yOffset;
 
@@ -117,12 +117,12 @@ int main(int argc, char* argv[])
   writer->Update();
 
   // Pretty image creation for printing
-  typedef otb::VectorImage<double, 2>                 VectorImageType;
-  typedef otb::VectorImage<unsigned char, 2>          PrettyVectorImageType;
-  typedef otb::ImageFileWriter<PrettyVectorImageType> WriterPrettyOutputType;
+  using VectorImageType        = otb::VectorImage<double, 2>;
+  using PrettyVectorImageType  = otb::VectorImage<unsigned char, 2>;
+  using WriterPrettyOutputType = otb::ImageFileWriter<PrettyVectorImageType>;
 
-  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>                  VectorCastFilterType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, PrettyVectorImageType> RescalerOutputType;
+  using VectorCastFilterType = otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>;
+  using RescalerOutputType   = otb::VectorRescaleIntensityImageFilter<VectorImageType, PrettyVectorImageType>;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
   WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();

@@ -47,11 +47,11 @@
 // into masses of belief for each class label.
 
 
-typedef unsigned short                                                          LabelPixelType;
-typedef unsigned long                                                           ConfusionMatrixEltType;
-typedef itk::VariableSizeMatrix<ConfusionMatrixEltType>                         ConfusionMatrixType;
-typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelPixelType> ConfusionMatrixToMassOfBeliefType;
-typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType                     MapOfClassesType;
+using LabelPixelType                    = unsigned short;
+using ConfusionMatrixEltType            = unsigned long;
+using ConfusionMatrixType               = itk::VariableSizeMatrix<ConfusionMatrixEltType>;
+using ConfusionMatrixToMassOfBeliefType = otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, LabelPixelType>;
+using MapOfClassesType                  = ConfusionMatrixToMassOfBeliefType::MapOfClassesType;
 
 
 int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType& mapOfClassesRefClX, ConfusionMatrixType& confusionMatrixClX)
@@ -163,9 +163,9 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType& m
 int main(int argc, char* argv[])
 {
   // The input labeled images to be fused are expected to be scalar images.
-  const unsigned int                                  Dimension = 2;
-  typedef otb::Image<LabelPixelType, Dimension>       LabelImageType;
-  typedef otb::VectorImage<LabelPixelType, Dimension> VectorImageType;
+  const unsigned int Dimension = 2;
+  using LabelImageType         = otb::Image<LabelPixelType, Dimension>;
+  using VectorImageType        = otb::VectorImage<LabelPixelType, Dimension>;
 
   LabelPixelType nodataLabel    = atoi(argv[argc - 3]);
   LabelPixelType undecidedLabel = atoi(argv[argc - 2]);
@@ -178,23 +178,23 @@ int main(int argc, char* argv[])
   // input classification maps to be fused as a single VectorImage for which each
   // band is a classification map. This VectorImage will then be the input of the
   // Dempster Shafer fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter}.
-  typedef otb::ImageList<LabelImageType>                                         LabelImageListType;
-  typedef otb::ImageListToVectorImageFilter<LabelImageListType, VectorImageType> ImageListToVectorImageFilterType;
+  using LabelImageListType               = otb::ImageList<LabelImageType>;
+  using ImageListToVectorImageFilterType = otb::ImageListToVectorImageFilter<LabelImageListType, VectorImageType>;
 
-  typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
+  using MassOfBeliefDefinitionMethod = ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod;
 
 
   // The Dempster Shafer fusion filter \doxygen{otb}{DSFusionOfClassifiersImageFilter} is declared.
   // Dempster Shafer
-  typedef otb::DSFusionOfClassifiersImageFilter<VectorImageType, LabelImageType> DSFusionOfClassifiersImageFilterType;
+  using DSFusionOfClassifiersImageFilterType = otb::DSFusionOfClassifiersImageFilter<VectorImageType, LabelImageType>;
 
-  typedef DSFusionOfClassifiersImageFilterType::VectorOfMapOfMassesOfBeliefType VectorOfMapOfMassesOfBeliefType;
+  using VectorOfMapOfMassesOfBeliefType = DSFusionOfClassifiersImageFilterType::VectorOfMapOfMassesOfBeliefType;
 
   // Both reader and writer are defined. Since the images
   // to classify can be very big, we will use a streamed writer which
   // will trigger the streaming ability of the fusion filter.
-  typedef otb::ImageFileReader<LabelImageType> ReaderType;
-  typedef otb::ImageFileWriter<LabelImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<LabelImageType>;
+  using WriterType = otb::ImageFileWriter<LabelImageType>;
 
 
   // The image list of input classification maps is filled. Moreover, the input

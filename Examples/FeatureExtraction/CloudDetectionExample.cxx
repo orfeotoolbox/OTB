@@ -75,8 +75,8 @@ int main(int argc, char* argv[])
   // Then we must decide what pixel type to use for the images. We choose to do
   // all the computations in double precision.
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  using InputPixelType  = double;
+  using OutputPixelType = double;
 
   //  The images are defined using the pixel type and the
   //  dimension. Please note that the
@@ -84,28 +84,28 @@ int main(int argc, char* argv[])
   //  \doxygen{otb}{VectorImage} as input to handle multispectral
   //  images.
 
-  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
-  typedef VectorImageType::PixelType                  VectorPixelType;
-  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
+  using VectorImageType = otb::VectorImage<InputPixelType, Dimension>;
+  using VectorPixelType = VectorImageType::PixelType;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
   // We define the functor type that the filter will use. We use the
   // \doxygen{otb}{CloudDetectionFunctor}.
 
-  typedef otb::Functor::CloudDetectionFunctor<VectorPixelType, OutputPixelType> FunctorType;
+  using FunctorType = otb::Functor::CloudDetectionFunctor<VectorPixelType, OutputPixelType>;
 
   // Now we can define the \doxygen{otb}{CloudDetectionFilter} that
   // takes a multi-spectral image as input and produces a binary
   // image.
 
-  typedef otb::CloudDetectionFilter<VectorImageType, OutputImageType, FunctorType> CloudDetectionFilterType;
+  using CloudDetectionFilterType = otb::CloudDetectionFilter<VectorImageType, OutputImageType, FunctorType>;
 
   //  An \doxygen{otb}{ImageFileReader} class is also instantiated in
   //  order to read image data from a file. Then, an
   //  \doxygen{otb}{ImageFileWriter} is instantiated in order to write
   //  the output image to a file.
 
-  typedef otb::ImageFileReader<VectorImageType> ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<VectorImageType>;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   // The different filters composing our pipeline are created by invoking their
   // \code{New()} methods, assigning the results to smart pointers.
@@ -157,13 +157,13 @@ int main(int argc, char* argv[])
   // \end{figure}
 
   // Pretty image creation for printing
-  typedef otb::Image<unsigned char, Dimension>                                          OutputPrettyImageType;
-  typedef otb::VectorImage<unsigned char, Dimension>                                    InputPrettyImageType;
-  typedef otb::ImageFileWriter<OutputPrettyImageType>                                   WriterPrettyOutputType;
-  typedef otb::ImageFileWriter<InputPrettyImageType>                                    WriterPrettyInputType;
-  typedef itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>      RescalerOutputType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, InputPrettyImageType> RescalerInputType;
-  typedef otb::MultiChannelExtractROI<InputPixelType, InputPixelType>                   ChannelExtractorType;
+  using OutputPrettyImageType  = otb::Image<unsigned char, Dimension>;
+  using InputPrettyImageType   = otb::VectorImage<unsigned char, Dimension>;
+  using WriterPrettyOutputType = otb::ImageFileWriter<OutputPrettyImageType>;
+  using WriterPrettyInputType  = otb::ImageFileWriter<InputPrettyImageType>;
+  using RescalerOutputType     = itk::RescaleIntensityImageFilter<OutputImageType, OutputPrettyImageType>;
+  using RescalerInputType      = otb::VectorRescaleIntensityImageFilter<VectorImageType, InputPrettyImageType>;
+  using ChannelExtractorType   = otb::MultiChannelExtractROI<InputPixelType, InputPixelType>;
 
   ChannelExtractorType::Pointer  selecter          = ChannelExtractorType::New();
   RescalerInputType::Pointer     inputRescaler     = RescalerInputType::New();

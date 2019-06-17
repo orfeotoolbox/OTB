@@ -46,12 +46,12 @@ int main(int argc, char* argv[])
 
   // First we declare the types of the images
 
-  typedef unsigned char            PixelType;
-  typedef otb::Image<PixelType, 3> Image3DType;
-  typedef otb::Image<PixelType, 4> Image4DType;
+  using PixelType   = unsigned char;
+  using Image3DType = otb::Image<PixelType, 3>;
+  using Image4DType = otb::Image<PixelType, 4>;
 
-  typedef otb::ImageFileReader<Image4DType> Reader4DType;
-  typedef otb::ImageFileWriter<Image3DType> Writer3DType;
+  using Reader4DType = otb::ImageFileReader<Image4DType>;
+  using Writer3DType = otb::ImageFileWriter<Image3DType>;
 
   Reader4DType::Pointer reader4D = Reader4DType::New();
   reader4D->SetFileName(argv[1]);
@@ -69,17 +69,17 @@ int main(int argc, char* argv[])
 
   Image4DType::ConstPointer image4D = reader4D->GetOutput();
 
-  Image3DType::Pointer             image3D = Image3DType::New();
-  typedef Image3DType::IndexType   Index3DType;
-  typedef Image3DType::SizeType    Size3DType;
-  typedef Image3DType::RegionType  Region3DType;
-  typedef Image3DType::SpacingType Spacing3DType;
-  typedef Image3DType::PointType   Origin3DType;
+  Image3DType::Pointer image3D = Image3DType::New();
+  using Index3DType            = Image3DType::IndexType;
+  using Size3DType             = Image3DType::SizeType;
+  using Region3DType           = Image3DType::RegionType;
+  using Spacing3DType          = Image3DType::SpacingType;
+  using Origin3DType           = Image3DType::PointType;
 
-  typedef Image4DType::IndexType   Index4DType;
-  typedef Image4DType::SizeType    Size4DType;
-  typedef Image4DType::SpacingType Spacing4DType;
-  typedef Image4DType::PointType   Origin4DType;
+  using Index4DType   = Image4DType::IndexType;
+  using Size4DType    = Image4DType::SizeType;
+  using Spacing4DType = Image4DType::SpacingType;
+  using Origin4DType  = Image4DType::PointType;
 
   Index3DType   index3D;
   Size3DType    size3D;
@@ -111,12 +111,12 @@ int main(int argc, char* argv[])
   image3D->SetRegions(region3D);
   image3D->Allocate();
 
-  typedef itk::NumericTraits<PixelType>::AccumulateType SumType;
-  typedef itk::NumericTraits<SumType>::RealType         MeanType;
+  using SumType  = itk::NumericTraits<PixelType>::AccumulateType;
+  using MeanType = itk::NumericTraits<SumType>::RealType;
 
   const unsigned int timeLength = region4D.GetSize()[3];
 
-  typedef itk::ImageLinearConstIteratorWithIndex<Image4DType> IteratorType;
+  using IteratorType = itk::ImageLinearConstIteratorWithIndex<Image4DType>;
 
   IteratorType it(image4D, region4D);
   it.SetDirection(3); // Walk along time dimension

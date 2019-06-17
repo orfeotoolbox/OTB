@@ -40,6 +40,7 @@
 #include "ossimTileMapModel.h"
 #include "ossimSpot6Model.h"
 #include "ossimSentinel1Model.h"
+#include "ossimCosmoSkymedModel.h"
 
 #include "ossim/ossimStringUtilities.h"
 #include "ossim/ossimTraceHelpers.h"
@@ -47,7 +48,6 @@
 #include <ossim/base/ossimKeywordNames.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/projection/ossimProjection.h>
-//#include <ossim/projection/ossimCosmoSkymedModel.h>
 //***
 // Define Trace flags for use within this file:
 //***
@@ -166,6 +166,12 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
 #endif
 
    // TODO: use a type-list to simplify this chain factory.
+
+     // Cosmo
+   if ( !projection )
+   {
+     projection = doBuildProjection<ossimCosmoSkymedModel>(abs_file_name);
+   }
 
    // Sentinel1
    if ( !projection )
@@ -343,10 +349,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
                    << MODULE << " DEBUG: Entering ...." << std::endl;
    }
 
-   // else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
-   // {
-   //    return new ossimCosmoSkymedModel;
-   // }
+
    // TOTO: use type list/map
    if (name == STATIC_TYPE_NAME(ossimRadarSat2Model))
    {
@@ -391,6 +394,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    else if (name == STATIC_TYPE_NAME(ossimSentinel1Model))
    {
      return new ossimSentinel1Model;
+   }
+   else if (name == STATIC_TYPE_NAME(ossimCosmoSkymedModel))
+   {
+     return new ossimCosmoSkymedModel;
    }
    else if(name == STATIC_TYPE_NAME(ossimSarSensorModel))
    {
@@ -470,6 +477,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       {
          result = new ossimSentinel1Model();
       }
+      else if (type == "ossimCosmoSkymedModel")
+      {
+         result = new ossimCosmoSkymedModel();
+      }
 
       else if (type == "ossimSarSensorModel")
       {
@@ -513,7 +524,6 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
    typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
-//   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
@@ -521,6 +531,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
    typeList.push_back(STATIC_TYPE_NAME(ossimTileMapModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimPleiadesModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSentinel1Model));
+   typeList.push_back(STATIC_TYPE_NAME(ossimCosmoSkymedModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSarSensorModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimSpot6Model));
 

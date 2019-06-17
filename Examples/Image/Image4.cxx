@@ -61,9 +61,9 @@
 #include "otbImage.h"
 #include "itkPoint.h"
 
-int main(int, char* [])
+int main(int, char*[])
 {
-  typedef otb::Image<unsigned short, 2> ImageType;
+  using ImageType = otb::Image<unsigned short, 2>;
 
   ImageType::Pointer image = ImageType::New();
 
@@ -164,7 +164,7 @@ int main(int, char* [])
   // dimension of the space. In this particular case, the dimension of the
   // point must match the dimension of the image.
 
-  typedef itk::Point<double, ImageType::ImageDimension> PointType;
+  using PointType = itk::Point<double, ImageType::ImageDimension>;
 
   // The Point class, like an \doxygen{itk}{Index}, is a relatively small and
   // simple object.  For this reason, it is not reference-counted like the

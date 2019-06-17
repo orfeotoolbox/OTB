@@ -50,8 +50,7 @@ void QtWidgetParameterGroup::DoCreateWidget()
 {
   // a GridLayout with two columns : parameter label / parameter widget
   QGridLayout *gridLayout = new QGridLayout;
-  gridLayout->setSpacing(1);
-  gridLayout->setContentsMargins(0, 0, 0, 0);
+  this->setLayout(gridLayout);
 
   unsigned int nbParams = m_ParamList->GetNumberOfParameters();
   for (unsigned int i = 0; i < nbParams; ++i)
@@ -63,15 +62,9 @@ void QtWidgetParameterGroup::DoCreateWidget()
       {
       ParameterGroup* paramAsGroup = dynamic_cast<ParameterGroup*>(param);
       ChoiceParameter* paramAsChoice = dynamic_cast<ChoiceParameter*>(param);
-      OutputProcessXMLParameter* paramAsInXML = dynamic_cast<OutputProcessXMLParameter*>(param);
-      InputProcessXMLParameter* paramAsOutXML = dynamic_cast<InputProcessXMLParameter*>(param);
 
-      bool paramIsXML = false;
-      if(paramAsInXML != nullptr || paramAsOutXML != nullptr)
-        paramIsXML = true;
-
-      if (paramAsGroup == nullptr && paramAsChoice == nullptr && !paramIsXML)
-        {
+      if (paramAsGroup == nullptr && paramAsChoice == nullptr)
+      {
         // Label (col 1)
         QWidget* label = new QtWidgetParameterLabel( rawParam , this);
         gridLayout->addWidget(label, i, 1);
@@ -139,8 +132,6 @@ void QtWidgetParameterGroup::DoCreateWidget()
         }
       }
     }
-
-  this->setLayout(gridLayout);
 }
 
 

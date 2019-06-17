@@ -52,7 +52,6 @@ private:
     SetDescription("This application smooths an image using the MeanShift algorithm.");
 
     // Documentation
-    SetDocName("MeanShift Smoothing");
     SetDocLongDescription("MeanShift [1,2,3] is an iterative edge-preserving image smoothing"
                           " algorithm often used in image processing and as a first step for"
                           " image segmentation. The MeanShift algorithm can be applied to"

@@ -23,13 +23,6 @@ include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
-get_filename_component(CI_PROJ_DIR ${OTB_SOURCE_DIR} DIRECTORY)
-
-# In GitLab we have :
-#   OTB_SOURCE_DIR=/builds/otb
-#   CI_PROJ_DIR=/builds
-
-set ( DEBUG "1" )
 
 set ( SUPERBUILD_SOURCE_DIR "${OTB_SOURCE_DIR}/SuperBuild" )
 
@@ -97,7 +90,7 @@ ctest_start (Experimental TRACK CI_Prepare)
 ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 
 set ( SB_CONFIGURE_OPTIONS "")
-include( "${CMAKE_CURRENT_LIST_DIR}/../SuperBuild/CI/configure_options.cmake" )
+include( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )
 
 ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     SOURCE "${SUPERBUILD_SOURCE_DIR}"
@@ -130,8 +123,7 @@ foreach(sb_file  ${sb_file_list})
   file(APPEND ${SB_TXT} "${sb_file}${CONTENTS}")
 endforeach(sb_file)
 file(READ "${CTEST_BINARY_DIRECTORY}/CMakeCache.txt" CMAKE_ORIG)
-string(REPLACE "${CI_PROJ_DIR}" "" CMAKE_UNIFIED ${CMAKE_ORIG})
-file(APPEND ${SB_TXT} "CMakeCache.txt${CMAKE_UNIFIED}")
+file(APPEND ${SB_TXT} "CMakeCache.txt${CMAKE_ORIG}")
 file ( MD5 "${SB_TXT}" SB_MD5)
 message ( "SB_MD5 = ${SB_MD5}" )
 file (REMOVE ${SB_TXT})
@@ -204,56 +196,7 @@ else()
     "--branch" "master" "--depth" "1" "superbuild-artifact"
     WORKING_DIRECTORY "${OTB_SOURCE_DIR}"
     )
-  
-  # setting up the repo
-  # StrictHostKeyChecking so we don't have to add the host as a known key
-  # -F /dev/null so the agent is not taking a default file ~/.ssh/..
-  #~ execute_process(
-    #~ COMMAND ${GIT} "config" "core.sshCommand"
-    #~ "ssh -o StrictHostKeyChecking=no -F /dev/null"
-    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    #~ RESULT_VARIABLE ssh_res
-    #~ OUTPUT_VARIABLE ssh_out
-    #~ ERROR_VARIABLE ssh_err
-    #~ )
-  #~ 
-  #~ if ( DEBUG )
-    #~ message( "Step 1: ssh")
-    #~ message( "ssh_res = ${ssh_res}" )
-    #~ message( "ssh_out = ${ssh_out}" )
-    #~ message( "ssh_err = ${ssh_err}" )
-  #~ endif()
-  
-  #~ execute_process(
-    #~ COMMAND ${GIT} "config" "user.mail" "otbbot@orfeo-toolbox.org"
-    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    #~ RESULT_VARIABLE mail_res
-    #~ OUTPUT_VARIABLE mail_out
-    #~ ERROR_VARIABLE mail_err
-    #~ )
-  #~ 
-  #~ if ( DEBUG )
-    #~ message( "Step 2: mail")
-    #~ message( "mail_res = ${mail_res}" )
-    #~ message( "mail_out = ${mail_out}" )
-    #~ message( "mail_err = ${mail_err}" )
-  #~ endif()
-  #~ 
-  #~ execute_process(
-    #~ COMMAND ${GIT} "config" "user.name" "otbbot"
-    #~ WORKING_DIRECTORY ${SB_ARTIFACT_GIT}
-    #~ RESULT_VARIABLE name_res
-    #~ OUTPUT_VARIABLE name_out
-    #~ ERROR_VARIABLE name_err
-    #~ )
-  #~ 
-  #~ if ( DEBUG )
-    #~ message( "Step 3: name")
-    #~ message( "name_res = ${name_res}" )
-    #~ message( "name_out = ${name_out}" )
-    #~ message( "name_err = ${name_err}" )
-  #~ endif()
-  #~ 
+
   # create a branche
   execute_process(
     COMMAND ${GIT} "checkout" "-b" "${BRANCH_NAME}"
@@ -288,7 +231,7 @@ else()
     )
 
   # In a near futur it might be nice to clean up the mess we made...
-  
+
   if ( DEBUG )
     if (EXISTS "${SB_ARTIFACT_GIT}/${SB_TAR_NAME}")
       message("Tar file exists in superbuild_artefact at: ${SB_ARTIFACT_GIT}/${SB_TAR_NAME}")
@@ -305,15 +248,14 @@ else()
     OUTPUT_VARIABLE add_out
     ERROR_VARIABLE add_err
     )
-  
+
   if ( DEBUG )
     message( "Step 5: add")
     message( "add_res = ${add_res}" )
     message( "add_out = ${add_out}" )
     message( "add_err = ${add_err}" )
   endif()
-  
-  
+
   # commit
   # We need the author because otherwise the mail is wrong
   # In our case if toto is deploying a key in superbuild-artifact repo
@@ -326,15 +268,14 @@ else()
     OUTPUT_VARIABLE com_out
     ERROR_VARIABLE com_err
     )
-  
+
   if ( DEBUG )
     message( "Step 6: com")
     message( "com_res = ${com_res}" )
     message( "com_out = ${com_out}" )
     message( "com_err = ${com_err}" )
   endif()
-  
-  
+
   # This part is just for debug
   if ( DEBUG )
     execute_process(
@@ -344,13 +285,13 @@ else()
       OUTPUT_VARIABLE log_out
       ERROR_VARIABLE log_err
       )
-  
+
     message( "Step 6bis: log")
     message( "log_res = ${log_res}" )
     message( "log_out = ${log_out}" )
     message( "log_err = ${log_err}" )
   endif()
-  
+
   # push
   # we should be able to do a simple : git push origin $BRANCH_NAME
   execute_process(
@@ -360,7 +301,7 @@ else()
     OUTPUT_VARIABLE push_out
     ERROR_VARIABLE push_err
     )
-  
+
   if ( DEBUG )
     message( "Step 7: push")
     message( "push_res = ${push_res}" )
