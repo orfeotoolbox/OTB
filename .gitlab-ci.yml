@@ -128,6 +128,7 @@ macos-superbuild-prepare:
   tags:
     - macos
   extends: .common-prepare
+  only : [ branches ]
   before_script:
     # No need to install lfs as this machine is persistent
     # No need to do git config
