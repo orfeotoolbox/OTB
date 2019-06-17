@@ -346,10 +346,10 @@ option(OTB_USE_MPI "Enable MPI in OTB" OFF)
 option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data
-  PATHS
-  $ENV{OTB_DATA_ROOT}
-  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS ${OTB-SuperBuild_SOURCE_DIR}/../Data
+  )
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
