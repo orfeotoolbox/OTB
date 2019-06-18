@@ -168,14 +168,14 @@ ubuntu-superbuild-qa:
                ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
                      -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
-    - ls -l
-    - ls -l build
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-    - sonar-scanner -Dproject.settings=CI/sonar-project.properties
-                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
-                    -Dsonar.login=$SONAR_OTB_TOKEN
+    - ls -l
+    - ls -l build
+    # - sonar-scanner -Dproject.settings=CI/sonar-project.properties
+    #                 -Dsonar.host.url=https://sonar.orfeo-toolbox.org
+    #                 -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
   dependencies:
     - ubuntu-superbuild-prepare
