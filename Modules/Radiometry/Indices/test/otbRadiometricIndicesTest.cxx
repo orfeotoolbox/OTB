@@ -210,7 +210,7 @@ int otbRadiometricIndexTest(int, char ** const)
     std::cerr << "Calling SetBandIndices with ::MAX should raise a runtime_error exception." << std::endl;
     success = false;
   }
-  catch (const std::runtime_error& e)
+  catch (const std::runtime_error& /*e*/)
   {
   }
 
