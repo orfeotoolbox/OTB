@@ -167,7 +167,9 @@ ubuntu-superbuild-qa:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
                ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-                     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+                     -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON
+    - ls -l
+    - ls -l build
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
@@ -182,4 +184,4 @@ ubuntu-superbuild-qa:
     when: always
     paths:
       - build/ctest_report.xml
-      - compile_commands.json
+      - build/compile_commands.json
