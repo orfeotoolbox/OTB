@@ -158,13 +158,19 @@ ubuntu-superbuild-prepare:
 
 ubuntu-superbuild-qa:
   extends: .common
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: qa
   only:
     - develop
     - new_ci
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_qa.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - cd build
+    - curl -L -o ctest2junit.xsl https://raw.githubusercontent.com/manticoresoftware/manticoresearch/master/misc/junit/ctest2junit.xsl
+    - saxon-xslt -o ctest_report.xml Testing/$(head -n 1 Testing/TAG)/Test.xml ctest2junit.xsl
   after_script: []
   dependencies:
     - ubuntu-superbuild-prepare
+  artifacts:
+    paths:
+      - build/ctest_report.xml
