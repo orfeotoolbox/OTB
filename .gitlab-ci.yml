@@ -149,6 +149,7 @@ stages:
   #~ dependencies:
     #~ - macos-superbuild-prepare
 
+## Windows
 .windows-prepare:
   extends: .general
   # only: [merge_requests]
@@ -158,8 +159,6 @@ stages:
     - set GIT_LFS_SKIP_SMUDGE=1
     - git checkout %CI_COMMIT_REF_NAME%
     - set GIT_LFS_SKIP_SMUDGE=0
-  after_script:
-    - echo No after_script
   artifacts:
     expire_in: 24 hrs
     when: always
@@ -167,7 +166,15 @@ stages:
       - sb_branch.txt # Needed to checkout correct branch in build step
       - build/*/*/*/*.log # Superbuild log
 
+.common-windows-build:
+  extends: .common-build
+  before_script:
+    - git lfs fetch origin %CI_COMMIT_SHA%
+    - git checkout %CI_COMMIT_REF_NAME%
+  after_script:
+    - python ./CI/cdash_handler.py
 
+# - Win10
 windows-10-prepare:
   extends: .windows-prepare
   tags:
@@ -178,26 +185,6 @@ windows-10-prepare:
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
 
-windows-8-prepare:
-  extends: .windows-prepare
-  tags:
-    - windows8
-  script:
-    - call ./CI/dev_env.bat x64 xdk 8.1
-    - clcache.exe -s
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    - clcache.exe -s
-
-.common-windows-build:
-  extends: .common-build
-  before_script:
-    - git lfs fetch origin %CI_COMMIT_SHA%
-    - git checkout %CI_COMMIT_REF_NAME%
-  after_script:
-    - echo %PATH%
-    - call ./CI/dev_env.bat x64 otb
-    - python ./CI/cdash_handler.py
-
 windows-10-build:
   extends: .common-windows-build
   tags:
@@ -207,20 +194,31 @@ windows-10-build:
     - clcache.exe -s
     - ctest -V -S CI/main_superbuild.cmake
     - clcache.exe -s
-    - ctest -VV -S CI/main_packages.cmake
+    - ctest -V -S CI/main_packages.cmake
   dependencies:
     - windows-10-prepare
+
+# - Win8.1
+windows-8-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
 
 windows-8-build:
   extends: .common-windows-build
   tags:
     - windows8
   script:
-    - call ./CI/dev_env.bat x64 otb 8.1
+    - call ./CI/dev_env.bat x86 otb 8.1
     - clcache.exe -s
     - ctest -V -S CI/main_superbuild.cmake
     - clcache.exe -s
-    - ctest -VV -S CI/main_packages.cmake
+    - ctest -V -S CI/main_packages.cmake
   dependencies:
     - windows-8-prepare
 
