@@ -162,7 +162,7 @@ ubuntu-superbuild-qa:
   stage: qa
   only:
     - develop
-    - new_ci
+    - new-ci
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_qa.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
     - cd build
