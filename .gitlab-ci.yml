@@ -174,5 +174,7 @@ ubuntu-superbuild-qa:
   dependencies:
     - ubuntu-superbuild-prepare
   artifacts:
+    expire_in: 24 hrs
+    when: always
     paths:
       - build/ctest_report.xml
