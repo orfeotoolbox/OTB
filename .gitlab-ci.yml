@@ -169,7 +169,7 @@ ubuntu-superbuild-qa:
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
                      -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - saxon-xslt -o build/ctest_report.xml
-                 build/Testing/`head -n 1 Testing/TAG`/Test.xml
+                 build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
     - sonar-scanner -Dproject.settings=CI/sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
@@ -182,4 +182,4 @@ ubuntu-superbuild-qa:
     when: always
     paths:
       - build/ctest_report.xml
-      - build/compile_commands.json
+      - compile_commands.json
