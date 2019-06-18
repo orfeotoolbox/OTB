@@ -164,9 +164,16 @@ ubuntu-superbuild-qa:
     - develop
     - new-ci
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_qa.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-    - cd build
-    - saxon-xslt -o ctest_report.xml Testing/`head -n 1 Testing/TAG`/Test.xml ../CI/ctest2junit.xsl
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
+               ctest -V -S CI/main_qa.cmake
+                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+                     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - saxon-xslt -o build/ctest_report.xml
+                 build/Testing/`head -n 1 Testing/TAG`/Test.xml
+                 CI/ctest2junit.xsl
+    - sonar-scanner -Dproject.settings=CI/sonar-project.properties
+                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
+                    -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
   dependencies:
     - ubuntu-superbuild-prepare
@@ -175,3 +182,4 @@ ubuntu-superbuild-qa:
     when: always
     paths:
       - build/ctest_report.xml
+      - build/compile_commands.json
