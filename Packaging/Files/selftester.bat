@@ -193,7 +193,7 @@ goto :eof
 :parse_cli_output
 setlocal
 set /a ret=1
-findstr /n /r /c:"^This is the *.*(%app%) application, version " tmp.log  > results.txt
+findstr /n /r /c:"^This is the %app% application, version " tmp.log  > results.txt
 if %errorlevel%==1 (
   set /a ret=0
   echo "findstr failed 1st regex in parse_cli_output"
