@@ -89,6 +89,7 @@ stages:
 ## Ubuntu superbuild
 ubuntu-superbuild-prepare:
   extends: .common-prepare
+  only: [new-ci]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
@@ -152,6 +153,7 @@ ubuntu-superbuild-qa:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   stage: qa
+  only: [new-ci]
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_qa.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
   after_script:
