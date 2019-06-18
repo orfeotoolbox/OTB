@@ -20,11 +20,12 @@
 
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
-set (ENV{LANG} "C") # Only ascii output
-get_filename_component(OTB_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY)
+set( ENV{LANG} "C" ) # Only ascii output
+get_filename_component( OTB_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY )
 
-set ( DEBUG "1" )
-set (CMAKE_COMMAND "cmake")
+set( DEBUG "1" )
+set( CMAKE_COMMAND "cmake" )
+set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 # retrieve XDK
 get_xdk()
@@ -37,7 +38,7 @@ set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
 set( PROJ_LIB "${XDK_PATH}/share" )
 set( CTEST_ENVIRONMENT "PATH=${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
 
-set ( ci_do_cookbook -1 )
-set ( ci_do_doxygen -1 )
+set( ci_do_cookbook -1 )
+set( ci_do_doxygen -1 )
 
 include( "${CMAKE_CURRENT_LIST_DIR}/main_ci.cmake" )
