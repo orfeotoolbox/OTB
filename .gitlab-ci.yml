@@ -187,3 +187,4 @@ ubuntu-superbuild-qa:
     paths:
       - build/ctest_report.xml
       - build/compile_commands.json
+      - build/cppcheck_report.xml
