@@ -171,8 +171,10 @@ ubuntu-superbuild-qa:
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-    - grep CMAKE_EXPORT_COMPILE_COMMANDS build/CMakeCache.txt
-    - find . -name compile_commands.json
+    - cppcheck --xml --xml-version=2 --enable=all
+               --language=c++ --std=c++14 --platform=unix64
+               --project=build/compile_commands.json
+               2> build/cppcheck_report.xml
     - sonar-scanner -Dproject.settings=CI/sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
