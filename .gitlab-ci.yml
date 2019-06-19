@@ -144,17 +144,7 @@ macos-superbuild-build:
     - macos
   extends: .common-build
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-  dependencies:
-    - macos-superbuild-prepare
-
-large-input-build:
-  tags:
-    - macos
-  extends: .common-build
-  only : [ branches ]
-  script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild -DOTB_DATA_USE_LARGEINPUT:BOOL=ON
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
