@@ -172,6 +172,7 @@ ubuntu-superbuild-qa:
                  CI/ctest2junit.xsl
     - ls -l
     - ls -l build
+    - grep CMAKE_EXPORT_COMPILE_COMMANDS CMakeCache.txt
     # - sonar-scanner -Dproject.settings=CI/sonar-project.properties
     #                 -Dsonar.host.url=https://sonar.orfeo-toolbox.org
     #                 -Dsonar.login=$SONAR_OTB_TOKEN
