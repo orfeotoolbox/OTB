@@ -47,7 +47,10 @@ fast-build:
 
 .common-build:
   extends: .general
-  only: [merge_requests]
+  only:
+    - merge_requests
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
   stage: build
   before_script:
     - git lfs install --skip-repo
@@ -72,7 +75,10 @@ debian-build:
 
 .common-prepare:
   extends: .general
-  only: [merge_requests]
+  only:
+    - merge_requests
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
   stage: prepare
   before_script:
     - git checkout -f -q $CI_COMMIT_SHA
