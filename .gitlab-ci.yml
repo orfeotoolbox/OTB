@@ -178,7 +178,6 @@ ubuntu-superbuild-qa:
     - sonar-scanner -Dproject.settings=CI/sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
-                    -X -Dsonar.verbose=true
   after_script: []
   dependencies:
     - ubuntu-superbuild-prepare
