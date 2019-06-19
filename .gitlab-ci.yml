@@ -22,6 +22,7 @@ stages:
   - precheck
   - prepare
   - build
+  - deploy
 
 .general:
   retry:
@@ -153,3 +154,27 @@ macos-superbuild-build:
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
+
+# Deploy job
+
+deploy:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
+  before_script:
+    - git lfs install --skip-repo
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./CI/deploy.sh 
+  dependencies:
+    - ubuntu-superbuild-build 
+    - centos-superbuild-build
+    - macos-superbuild-build
