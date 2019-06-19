@@ -62,11 +62,12 @@ fast-build:
   after_script:
     - python3 CI/cdash_handler.py
   artifacts:
-    when: on_failure
+    when: always
     expire_in: 24 hrs
     paths:
       - build/*/*.log #CMake log
       - log/*.txt # Others
+      - packages-*.run # binary packages
 
 debian-build:
   extends: .common-build
@@ -113,6 +114,7 @@ ubuntu-superbuild-build:
       - build/CookBook-*-html.tar.gz
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
+      - build_packages/OTB-*.run
 
 ## CentOS superbuild
 centos-superbuild-prepare:
