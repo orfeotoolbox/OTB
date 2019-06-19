@@ -67,7 +67,7 @@ fast-build:
     paths:
       - build/*/*.log #CMake log
       - log/*.txt # Others
-      - packages-*.run # binary packages
+      - build_packages/OTB-*.run # binary packages
 
 debian-build:
   extends: .common-build
