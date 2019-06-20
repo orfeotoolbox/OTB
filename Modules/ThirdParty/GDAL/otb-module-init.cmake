@@ -51,13 +51,51 @@ macro(error_message m)
   message(FATAL_ERROR "${m}")
 endmacro(error_message)
 
+#------------------- C version ---------------------
+macro(gdal_try_run_c msg_type var source_file)
+message(STATUS "Performing Test ${var}")
+set(${var})
+try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
+${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+COMPILE_DEFINITIONS "-w"
+COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
+RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
+ARGS ${ARGN}
+)
+
+if(NOT COMPILE_${var})
+  error_message("Compiling Test ${var} - Failed \n
+COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
+endif()
+if(RUN_${var})
+  set(${var} FALSE)
+  #if msg_type is STATUS (ie "okay" if test is failing),
+  #then we don't need to give an run-output and exit status.
+  if("${msg_type}" STREQUAL "STATUS")
+    message(${msg_type} "Performing Test ${var} - Failed")
+  else()
+    error_message("Performing Test ${var} - Failed \n
+            Exit status: '${RUN_${var}}' \n
+            RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+  endif()
+else()
+  set(${var} TRUE)
+  message(STATUS "Performing Test ${var} - Success")
+endif()
+unset(RUN_OUTPUT_${var})
+unset(COMPILE_OUTPUT_${var})
+unset(COMPILE_${var})
+endmacro()
+
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
 message(STATUS "Performing Test ${var}")
 set(${var})
 try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+COMPILE_DEFINITIONS "-std=c++14" "-w"
 COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
 RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
 ARGS ${ARGN}
@@ -104,7 +142,8 @@ endif()
 #gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
 try_compile(COMPILE_GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+COMPILE_DEFINITIONS "-std=c++14" "-w"
 OUTPUT_VARIABLE COMPILE_OUTPUT_GDAL_HAS_OGR
 )
 if(NOT COMPILE_GDAL_HAS_OGR)
@@ -116,11 +155,11 @@ endif()
 # check formats TIFF, GeoTIFF, JPEG, JPEG2000, HDF5
 # Note : exact format names can be found here http://www.gdal.org/formats_list.html
 
-gdal_try_run(STATUS GDAL_FORMATS_LIST gdalFormatsListTest.c ${TEMP}/gdalFormatsList.csv)
+gdal_try_run_c(STATUS GDAL_FORMATS_LIST gdalFormatsListTest.c ${TEMP}/gdalFormatsList.csv)
 
-gdal_try_run(FATAL_ERROR GDAL_HAS_JPEG gdalFormatsTest.c JPEG)
+gdal_try_run_c(FATAL_ERROR GDAL_HAS_JPEG gdalFormatsTest.c JPEG)
 
-gdal_try_run(FATAL_ERROR GDAL_HAS_GTiff gdalFormatsTest.c GTiff)
+gdal_try_run_c(FATAL_ERROR GDAL_HAS_GTiff gdalFormatsTest.c GTiff)
 
 gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_GTiff gdalCreateTest.cxx GTiff ${TEMP}/testImage.gtif )
 
@@ -129,39 +168,39 @@ gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_GTiff_BIGTIFF gdalCreateCopyTest.cxx ${
 gdal_try_run(FATAL_ERROR GDAL_CAN_CREATE_JPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.jpeg JPEG)
 
 set(JPEG2000_DRIVER_USED)
-gdal_try_run(STATUS GDAL_HAS_JP2OpenJPEG gdalFormatsTest.c JP2OpenJPEG)
+gdal_try_run_c(STATUS GDAL_HAS_JP2OpenJPEG gdalFormatsTest.c JP2OpenJPEG)
 if (GDAL_HAS_JP2OpenJPEG)
   set(JPEG2000_DRIVER_USED "OpenJPEG")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2OpenJPEG gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2OpenJPEG)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
+gdal_try_run_c(STATUS GDAL_HAS_JP2KAK gdalFormatsTest.c JP2KAK)
 if (GDAL_HAS_JP2KAK)
   set(JPEG2000_DRIVER_USED "Kakadu")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2KAK gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2KAK)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JP2ECW gdalFormatsTest.c JP2ECW)
+gdal_try_run_c(STATUS GDAL_HAS_JP2ECW gdalFormatsTest.c JP2ECW)
 if (GDAL_HAS_JP2ECW)
   set(JPEG2000_DRIVER_USED "ECW")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JP2ECW gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JP2ECW)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
+gdal_try_run_c(STATUS GDAL_HAS_JPEG2000 gdalFormatsTest.c JPEG2000)
 if (GDAL_HAS_JPEG2000)
     set(JPEG2000_DRIVER_USED "JPEG2000")
   gdal_try_run(STATUS GDAL_CAN_CREATE_JPEG2000 gdalCreateCopyTest.cxx ${TEMP}/testImage.gtif ${TEMP}/testImage.j2k JPEG2000)
 endif()
 
-gdal_try_run(STATUS GDAL_HAS_HDF5 gdalFormatsTest.c HDF5)
-gdal_try_run(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
+gdal_try_run_c(STATUS GDAL_HAS_HDF5 gdalFormatsTest.c HDF5)
+gdal_try_run_c(STATUS GDAL_HAS_HDF4 gdalFormatsTest.c HDF4)
 
 #check some vector formats
 #TODO: fix gdalFormatsTest.c to work with gdal 1.x and 2.x
-# gdal_try_run(FATAL_ERROR GDAL_HAS_SQLite gdalFormatsTest.c SQLite)
-# gdal_try_run(FATAL_ERROR GDAL_HAS_VRT gdalFormatsTest.c VRT)
-# gdal_try_run(FATAL_ERROR GDAL_HAS_KML gdalFormatsTest.c KML)
-# gdal_try_run(STATUS GDAL_HAS_LIBKML gdalFormatsTest.c LIBKML)
+# gdal_try_run_c(FATAL_ERROR GDAL_HAS_SQLite gdalFormatsTest.c SQLite)
+# gdal_try_run_c(FATAL_ERROR GDAL_HAS_VRT gdalFormatsTest.c VRT)
+# gdal_try_run_c(FATAL_ERROR GDAL_HAS_KML gdalFormatsTest.c KML)
+# gdal_try_run_c(STATUS GDAL_HAS_LIBKML gdalFormatsTest.c LIBKML)
 
 #------------------- TESTS (END)---------------------
 
