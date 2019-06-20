@@ -39,7 +39,7 @@ stages:
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
-    - python CI/cdash_handler.py
+    - python3 CI/cdash_handler.py
   artifacts:
     when: on_failure
     expire_in: 24 hrs
@@ -55,7 +55,7 @@ fast-build:
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
-    - python CI/check_twin_pipelines.py
+    - python3 CI/check_twin_pipelines.py
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
