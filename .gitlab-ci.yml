@@ -188,6 +188,6 @@ ubuntu-superbuild-qa:
     expire_in: 24 hrs
     when: always
     paths:
-      - build/ctest_report.xml
+      - ctest_report.xml
       - build/compile_commands.json
-      - build/cppcheck_report.xml
+      - cppcheck_report.xml
