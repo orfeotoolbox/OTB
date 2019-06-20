@@ -170,14 +170,15 @@ ubuntu-superbuild-qa:
                ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
                      -DQA:BOOL=ON
-    - saxon-xslt -o build/ctest_report.xml
+    - saxon-xslt -o ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
     - cppcheck -j 4 --xml --xml-version=2 --enable=all
                --language=c++ --std=c++14 --platform=unix64
                -i Modules/ThirdParty Modules
-               2> build/cppcheck_report.xml
-    - sonar-scanner -Dproject.settings=CI/sonar-project.properties
+               2> cppcheck_report.xml
+    - cd build
+    - sonar-scanner -Dproject.settings=../CI/sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
