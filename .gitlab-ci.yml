@@ -93,20 +93,20 @@ debian-build:
       - build/*/*/*/*.log # Superbuild log
 
 ## Ubuntu superbuild
-ubuntu-superbuild-prepare:
+ubuntu-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
-ubuntu-superbuild-build:
+ubuntu-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
   dependencies:
-    - ubuntu-superbuild-prepare
+    - ubuntu-xdk-prepare
   artifacts:
     paths:
       - build/CookBook-*-html.tar.gz
@@ -114,23 +114,23 @@ ubuntu-superbuild-build:
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 ## CentOS superbuild
-centos-superbuild-prepare:
+centos-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
-centos-superbuild-build:
+centos-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
   dependencies:
-    - centos-superbuild-prepare
+    - centos-xdk-prepare
 
 ## MacOS superbuild
-macos-superbuild-prepare:
+macos-xdk-prepare:
   tags:
     - macos
   extends: .common-prepare
@@ -144,7 +144,7 @@ macos-superbuild-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
 
-macos-superbuild-build:
+macos-xdk-build:
   tags:
     - macos
   extends: .common-build
@@ -152,4 +152,4 @@ macos-superbuild-build:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
-    - macos-superbuild-prepare
+    - macos-xdk-prepare
