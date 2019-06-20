@@ -177,7 +177,7 @@ ubuntu-superbuild-qa:
                --language=c++ --std=c++14 --platform=unix64
                -i Modules/ThirdParty Modules
                2> build/cppcheck_report.xml
-    - sonar-scanner -Dproject.settings=CI/sonar-project.properties
+    - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
