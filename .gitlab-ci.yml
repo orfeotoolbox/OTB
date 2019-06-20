@@ -173,11 +173,10 @@ ubuntu-superbuild-qa:
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-    - find Modules -name '*.h' -o -name '*.hxx' |
+    - find Modules -type f \( -name '*.h' -o -name '*.hxx' \) -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
-          xargs dirname |
           sort -u > header_directories
-    - cppcheck -j 8 --xml --xml-version=2 --enable=all
+    - cppcheck -q -j 8 --xml --xml-version=2 --enable=all
                --language=c++ --std=c++14 --platform=unix64
                --includes-file=header_directories
                -i Modules/ThirdParty Modules
