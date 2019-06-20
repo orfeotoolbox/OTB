@@ -159,7 +159,7 @@ ubuntu-superbuild-prepare:
 ubuntu-superbuild-qa:
   extends: .common
   variables:
-    GIT_DEPTH: "1000"
+    GIT_DEPTH: ""
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: qa
   only:
