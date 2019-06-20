@@ -148,8 +148,10 @@ macos-superbuild-build:
   tags:
     - macos
   extends: .common-build
+  variables:
+    - OTB_DATA_LARGEINPUT_ROOT: "/Users/otbbot/OTB-LargeInput"
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild -DOTB_DATA_USE_LARGEINPUT:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-superbuild-prepare
