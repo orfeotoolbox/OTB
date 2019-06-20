@@ -169,7 +169,7 @@ macos-superbuild-build:
   extends: .common-build
   before_script:
     - git lfs fetch origin %CI_COMMIT_SHA%
-    - git checkout %CI_COMMIT_REF_NAME%
+    - git checkout -f -q %CI_COMMIT_SHA%
 
 # - Win10
 windows-10-prepare:
