@@ -175,7 +175,7 @@ deploy:
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ./CI/deploy.sh 
+    - ./CI/deploy.sh $CI_COMMIT_REF_NAME
   dependencies:
     - ubuntu-superbuild-build 
     - centos-superbuild-build
