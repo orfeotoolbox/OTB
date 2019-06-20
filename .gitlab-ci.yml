@@ -165,7 +165,7 @@ macos-superbuild-build:
     - git checkout -f -q %CI_COMMIT_SHA%
     - set GIT_LFS_SKIP_SMUDGE=0
 
-.common-windows-build:
+.windows-build:
   extends: .common-build
   before_script:
     - git lfs fetch origin %CI_COMMIT_SHA%
@@ -183,7 +183,7 @@ windows-10-prepare:
     - clcache.exe -s
 
 windows-10-build:
-  extends: .common-windows-build
+  extends: .windows-build
   tags:
     - windows10
   script:
@@ -207,7 +207,7 @@ windows-8-prepare:
     - clcache.exe -s
 
 windows-8-build:
-  extends: .common-windows-build
+  extends: .windows-build
   tags:
     - windows8
   script:
