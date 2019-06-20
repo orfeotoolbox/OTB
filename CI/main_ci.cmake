@@ -25,7 +25,12 @@ get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 set (ENV{LANG} "C") # Only ascii output
 
 # Build Configuration : Release, Debug..
-set (CTEST_BUILD_CONFIGURATION "Release")
+if(ci_build_type)
+  set (CTEST_BUILD_CONFIGURATION ${ci_build_type})
+else()
+  set (CTEST_BUILD_CONFIGURATION "Release")
+endif()
+
 set (CTEST_CMAKE_GENERATOR "Ninja")
 
 # detect short sha
@@ -121,7 +126,12 @@ endif()
 # ------------------------------ Build -----------------------------------------
 if(ci_skip_install)
   message(STATUS "Skip install")
-  set(CTEST_BUILD_TARGET)
+  if (ci_build_target)
+    message(STATUS "Building target: ${ci_build_target}")
+    set(CTEST_BUILD_TARGET ${ci_build_target})
+  else()
+    set(CTEST_BUILD_TARGET)
+  endif()
 else()
   set(CTEST_BUILD_TARGET install)
 endif()
@@ -162,7 +172,11 @@ if ( NOT _test_rv EQUAL 0 )
 endif()
 
 # ----------------------------- Submit -----------------------------------------
-ctest_submit()
+if(ci_skip_submit)
+  message(STATUS "Skip submit")
+else()
+  ctest_submit()
+endif()
 
 # ---------------------------- Doxygen -----------------------------------------
 if(ENABLE_DOXYGEN)
