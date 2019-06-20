@@ -173,8 +173,13 @@ ubuntu-superbuild-qa:
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-    - cppcheck -j 4 --xml --xml-version=2 --enable=all
+    - find Modules -name '*.h' -o -name '*.hxx' |
+          grep -vE '^Modules/ThirdParty/' |
+          xargs dirname |
+          sort -u > header_directories
+    - cppcheck -j 8 --xml --xml-version=2 --enable=all
                --language=c++ --std=c++14 --platform=unix64
+               --includes-file=header_directories
                -i Modules/ThirdParty Modules
                2> build/cppcheck_report.xml
     - sonar-scanner -Dproject.settings=sonar-project.properties
