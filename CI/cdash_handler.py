@@ -250,7 +250,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     return ( state , errors)
 
   def GetReturnValue(self, logfile):
-    fd = open(configure_rv)
+    fd = open(logfile)
     content = fd.readlines()[0]
     fd.close()
     return int(content.strip("\n"))
