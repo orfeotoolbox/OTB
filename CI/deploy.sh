@@ -2,13 +2,13 @@
 # Configure git for tar.xz
 git config tar.tar.xz.command "xz -c"
 
-if [ $1 = "develop" ] # check if the branch name is develop or not
 pack_suffix=""
+if [ $1 = "develop" ] # check if the branch name is develop or not
 then # we are on develop
   jobs_directory=/home/otbpush/test/$(date +%F)
 else # we are on a release branch
   jobs_directory=/home/otbpush/test/staging
-  if [ \( "$#" -eq 2 \) && \( echo "$2" | grep "rc[0-9]*" \) ]
+  if [ "$#" -eq 2 ]
     then # there is a rc tag, we need a suffix for packages
     pack_suffix=$(echo "$2" | grep -o "rc[0-9]*") # this retrieve the rc number
   fi
@@ -43,7 +43,7 @@ find build_packages/. -name "*.run" \
 
 # TO REMOVE
 ###########
-ls -all
+ls -all build_packages/
 ###########
 
 echo "Pushing binary packages"
