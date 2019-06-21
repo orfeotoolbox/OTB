@@ -497,7 +497,7 @@ bool CommandLineLauncher::CheckOutputPathsValidity(const std::string & paramKey)
       type == ParameterType_OutputFilename)
     {
     std::string filename = m_Application->GetParameterString(paramKey);
-    itksys::String path = itksys::SystemTools::GetFilenamePath(filename);
+    auto path = itksys::SystemTools::GetFilenamePath(filename);
     if (path!="" && !itksys::SystemTools::FileIsDirectory(path))
       {
       std::cerr <<"ERROR: Directory doesn't exist : "<< path << std::endl;

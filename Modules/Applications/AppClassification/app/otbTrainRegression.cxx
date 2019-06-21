@@ -238,7 +238,7 @@ void ParseCSVPredictors(std::string path, ListSampleType* outputList)
     // Avoid commented lines or too short ones
     if (!line.empty() && line[0] != '#')
       {
-      std::vector<itksys::String> words = itksys::SystemTools::SplitString(line,sep);
+      auto words = itksys::SystemTools::SplitString(line,sep);
       if (nbCols == 0)
         {
         // detect separator and feature size

@@ -24,8 +24,13 @@
 #include "itksys/SystemTools.hxx"
 #include "itkDynamicLoader.h"
 #include "itkDirectory.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
+#else
+#include <mutex>
+#endif
 
 #include <iterator>
 
@@ -50,7 +55,11 @@ public:
     if (app && handle)
       {
       // mutex lock to ensure thread safety
+      #if ITK_VERSION_MAJOR < 5
       itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+      #else
+      std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+      #endif
       pair.first = app;
       pair.second = handle;
       m_Container.push_back(pair);
@@ -65,7 +74,11 @@ public:
     if (app)
       {
       // mutex lock to ensure thread safety
+      #if ITK_VERSION_MAJOR < 5
       itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+      #else
+      std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+      #endif
       AppHandleContainerType::iterator it = m_Container.begin();
       while (it != m_Container.end())
         {
@@ -81,7 +94,11 @@ public:
   /** Release the library handles from applications already deleted */
   void ReleaseUnusedHandle()
     {
+    #if ITK_VERSION_MAJOR < 5
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Mutex);
+    #else
+    std::lock_guard<std::mutex> mutexHolder(m_Mutex);
+    #endif
     AppHandleContainerType::iterator it;
     for (it = m_Container.begin() ; it != m_Container.end() ; ++it)
       {
@@ -111,8 +128,12 @@ public:
 
 private:
   AppHandleContainerType m_Container;
-
-  itk::SimpleMutexLock m_Mutex;
+  
+  #if ITK_VERSION_MAJOR < 5
+  static itk::SimpleMutexLock m_Mutex;
+  #else
+  std::mutex m_Mutex;
+  #endif
 };
 // static finalizer to close opened libraries
 static ApplicationPrivateRegistry m_ApplicationPrivateRegistryGlobal;
@@ -244,27 +265,27 @@ ApplicationRegistry::CreateApplicationFaster(const std::string& name)
 #endif
 
   std::string otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+
   if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
-    }
-  for (unsigned int i=0 ; i<pathList.size() ; ++i)
-    {
-    std::string possiblePath = pathList[i];
-    if ( !possiblePath.empty() && possiblePath[possiblePath.size() - 1] != sep )
+    auto pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    
+    for (unsigned int i=0 ; i<pathList.size() ; ++i)
       {
-      possiblePath += sep;
-      }
-    possiblePath += appLibName.str();
+      std::string possiblePath = pathList[i];
+      if ( !possiblePath.empty() && possiblePath[possiblePath.size() - 1] != sep )
+        {
+        possiblePath += sep;
+        }
+      possiblePath += appLibName.str();
 
-    appli = LoadApplicationFromPath(possiblePath,name);
-    if (appli.IsNotNull())
-      {
-      break;
+      appli = LoadApplicationFromPath(possiblePath,name);
+      if (appli.IsNotNull())
+        {
+        break;
+        }
       }
     }
-
   return appli;
 }
 
@@ -293,46 +314,46 @@ ApplicationRegistry::GetAvailableApplications(bool useFactory)
 #endif
 
   std::string otbAppPath = GetApplicationPath();
-  std::vector<itksys::String> pathList;
+  
   if (!otbAppPath.empty())
     {
-    pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
-    }
-  for (unsigned int k=0 ; k<pathList.size() ; ++k)
-    {
-    itk::Directory::Pointer dir = itk::Directory::New();
-    if (!dir->Load(pathList[k].c_str()))
+    auto pathList = itksys::SystemTools::SplitString(otbAppPath,pathSeparator,false);
+    
+    for (unsigned int k=0 ; k<pathList.size() ; ++k)
       {
-      continue;
-      }
-    for (unsigned int i = 0; i < dir->GetNumberOfFiles(); i++)
-      {
-      const char *filename = dir->GetFile(i);
-      std::string sfilename(filename);
-      std::string::size_type extPos = sfilename.rfind(appExtension);
-      std::string::size_type prefixPos = sfilename.find(appPrefix);
-
-      // Check if current file is a shared lib with the right pattern
-      if (extPos + appExtension.size() == sfilename.size() &&
-          prefixPos == 0)
+      itk::Directory::Pointer dir = itk::Directory::New();
+      if (!dir->Load(pathList[k].c_str()))
         {
-        std::string name = sfilename.substr(appPrefix.size(),extPos-appPrefix.size());
-        std::string fullpath = pathList[k];
-        if (!fullpath.empty() && fullpath[fullpath.size() - 1] != sep)
+        continue;
+        }
+      for (unsigned int i = 0; i < dir->GetNumberOfFiles(); i++)
+        {
+        const char *filename = dir->GetFile(i);
+        std::string sfilename(filename);
+        std::string::size_type extPos = sfilename.rfind(appExtension);
+        std::string::size_type prefixPos = sfilename.find(appPrefix);
+
+        // Check if current file is a shared lib with the right pattern
+        if (extPos + appExtension.size() == sfilename.size() &&
+            prefixPos == 0)
           {
-          fullpath.push_back(sep);
+          std::string name = sfilename.substr(appPrefix.size(),extPos-appPrefix.size());
+          std::string fullpath = pathList[k];
+          if (!fullpath.empty() && fullpath[fullpath.size() - 1] != sep)
+            {
+            fullpath.push_back(sep);
+            }
+          fullpath.append(sfilename);
+          appli = LoadApplicationFromPath(fullpath,name);
+          if (appli.IsNotNull())
+            {
+            appSet.insert(name);
+            }
+          appli = nullptr;
           }
-        fullpath.append(sfilename);
-        appli = LoadApplicationFromPath(fullpath,name);
-        if (appli.IsNotNull())
-          {
-          appSet.insert(name);
-          }
-        appli = nullptr;
         }
       }
     }
-
   if (useFactory)
     {
     std::list<LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbWrapperApplication");

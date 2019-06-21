@@ -1703,8 +1703,7 @@ bool GDALImageIO::GetOriginFromGMLBox(std::vector<double> &origin)
     return false;
     }
 
-  std::vector<itksys::String> originValues;
-  originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
+  auto originValues = itksys::SystemTools::SplitString(originTag->GetText(),' ', false);
 
   // Compute origin in GDAL convention (the half-pixel shift is applied later)
   std::istringstream ss0 (originValues[0]);

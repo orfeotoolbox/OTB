@@ -153,8 +153,7 @@ CommandLineParser::GetPaths( std::vector<std::string> & paths, const std::string
 
   if( tempModPath.size() > 0 )
     {
-    std::vector<itksys::String> pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
-
+    auto pathAttribut = itksys::SystemTools::SplitString(tempModPath, ' ', false);
 
     // Remove " " string element
     for(unsigned int i=0; i<pathAttribut.size(); i++)
@@ -216,7 +215,7 @@ CommandLineParser::GetModuleName( std::string & modName, const std::vector<std::
 CommandLineParser::ParseResultType
 CommandLineParser::GetModuleName( std::string & modName, const std::string & exp )
 {
-  std::vector<itksys::String> spaceSplitExp = itksys::SystemTools::SplitString(exp, ' ', false);
+  auto spaceSplitExp = itksys::SystemTools::SplitString(exp, ' ', false);
   // if the chain is "  module", SplitString will return: [ ], [module]
   for(unsigned int i=0; i<spaceSplitExp.size(); i++)
     {
@@ -360,7 +359,7 @@ CommandLineParser::GetAttribut( const std::string & key, const std::string & exp
   // Only if the key has values associated
   if( tempModKey.size() > 0 )
     {
-    std::vector<itksys::String> spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()), ' ', false);
+    auto spaceSplit = itksys::SystemTools::SplitString(tempModKey.substr(0, tempModKey.size()), ' ', false);
 
     // Remove " " string element
     for(unsigned int i=0; i<spaceSplit.size(); i++)
