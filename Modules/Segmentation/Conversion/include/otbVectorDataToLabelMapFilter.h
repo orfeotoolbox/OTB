@@ -24,7 +24,7 @@
 
 #include "itkLabelObject.h"
 #include "itkProgressReporter.h"
-#include "itkBarrier.h"
+//#include "itkBarrier.h"
 #include "itkConceptChecking.h"
 #include "itkContinuousIndex.h"
 //#include "itkDataObject.h"
