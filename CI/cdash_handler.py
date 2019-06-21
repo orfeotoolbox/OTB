@@ -263,17 +263,17 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     build_rv = os.path.join(logdir, "build_return_value_log.txt")
     test_rv = os.path.join(logdir, "test_return_value_log.txt")
     if os.path.exists( configure_rv ):
-      if (GetReturnValue(configure_rv) != 0):
+      if (self.GetReturnValue(configure_rv) != 0):
         return ( 'failed' , 'Configure failed')
     else:
       return ( 'failed' , 'Configure not run')
     if os.path.exists( build_rv ):
-      if (GetReturnValue(build_rv) != 0):
+      if (self.GetReturnValue(build_rv) != 0):
         return ( 'failed' , 'Build failed')
     else:
       return ( 'failed' , 'Build not run')
     if os.path.exists( test_rv ):
-      if (GetReturnValue(test_rv) != 0):
+      if (self.GetReturnValue(test_rv) != 0):
         return ( 'failed' , 'Tests failed')
     return ('success', '')
 
