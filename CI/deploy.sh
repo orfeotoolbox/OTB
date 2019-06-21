@@ -10,7 +10,7 @@ else # we are on a release branch
   jobs_directory=/home/otbpush/test/staging
   if [ "$#" -eq 2 ]
     then # there is a rc tag, we need a suffix for packages
-    pack_suffix=$(echo "$2" | grep -o "rc[0-9]*") # this retrieve the rc number
+    pack_suffix=-$(echo "$2" | grep -o "rc[0-9]*") # this retrieve the rc number
   fi
 fi
 
