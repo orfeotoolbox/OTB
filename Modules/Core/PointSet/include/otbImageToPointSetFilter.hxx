@@ -22,8 +22,13 @@
 #define otbImageToPointSetFilter_hxx
 
 #include "otbImageToPointSetFilter.h"
-#include "itkMultiThreader.h" //itk5 - itk4 compat
+//#include "itkMultiThreader.h" //itk5 - itk4 compat
 
+#if ITK_VERSION_MAJOR < 5
+#include "itkMultiThreader.h"
+#else
+#include "itkMultiThreaderBase.h"
+#endif
 namespace otb
 {
 
@@ -272,7 +277,11 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
 }
 
 template <class TInputImage, class TOutputPointSet>
+#if ITK_VERSION_MAJOR >= 5
+itk::ITK_THREAD_RETURN_TYPE
+#else
 ITK_THREAD_RETURN_TYPE
+#endif
 ImageToPointSetFilter<TInputImage, TOutputPointSet>
 ::ThreaderCallback(void *arg)
 {
@@ -280,9 +289,15 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   unsigned int           total, threadCount;
   itk::ThreadIdType      threadId;
 
+#if ITK_VERSION_MAJOR < 5
   threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
   threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
   str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
+#else
+  threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->UserData);
+#endif
 
   // execute the actual method with appropriate output region
   // first find out how many pieces extent can be split into.
@@ -301,7 +316,11 @@ ImageToPointSetFilter<TInputImage, TOutputPointSet>
   //   few threads idle.
   //   }
 
+#if ITK_VERSION_MAJOR >= 5
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
+#else
   return ITK_THREAD_RETURN_VALUE;
+#endif
 }
 
 template <class TInputImage, class TOutputPointSet>

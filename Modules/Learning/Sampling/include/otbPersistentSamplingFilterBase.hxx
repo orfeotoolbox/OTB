@@ -28,7 +28,12 @@
 #include "otbMacro.h"
 #include "otbStopwatch.h"
 #include "itkProgressReporter.h"
-#include "itkMultiThreader.h" //itk5 - itk4 compat
+
+#if ITK_VERSION_MAJOR < 5
+#include "itkMultiThreader.h"
+#else
+#include "itkMultiThreaderBase.h"
+#endif
 
 namespace otb
 {
@@ -879,14 +884,23 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 }
 
 template<class TInputImage, class TMaskImage>
+#if ITK_VERSION_MAJOR < 5
 ITK_THREAD_RETURN_TYPE
+#else
+itk::ITK_THREAD_RETURN_TYPE
+#endif
 PersistentSamplingFilterBase<TInputImage,TMaskImage>
 ::VectorThreaderCallback(void *arg)
 {
+#if ITK_VERSION_MAJOR < 5
   VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
-
   int threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
   int threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+#else
+  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->UserData);
+  int threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *)(arg))->NumberOfThreads;
+#endif
 
   ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);
 
@@ -894,8 +908,12 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
     {
     str->Filter->ThreadedGenerateVectorData(layer,threadId);
     }
-
+    
+#if ITK_VERSION_MAJOR >= 5
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
+#else
   return ITK_THREAD_RETURN_VALUE;
+#endif
 }
 
 template<class TInputImage, class TMaskImage>

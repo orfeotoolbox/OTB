@@ -91,13 +91,21 @@ bool CoordinateToName::Evaluate()
   return true;
 }
 
-ITK_THREAD_RETURN_TYPE
+itk::ITK_THREAD_RETURN_TYPE
 CoordinateToName::ThreadFunction(void *arg)
 {
+#if ITK_VERSION_MAJOR < 5
   struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (arg);
+#else
+  struct itk::MultiThreaderBase::ThreadInfoStruct * pInfo = (itk::MultiThreaderBase::ThreadInfoStruct *) (arg);
+#endif
   CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
   lThis->DoEvaluate();
+#if ITK_VERSION_MAJOR >= 5
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
+#else
   return ITK_THREAD_RETURN_VALUE;
+#endif
 }
 
 void CoordinateToName::DoEvaluate()

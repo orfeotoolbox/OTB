@@ -27,7 +27,12 @@
 #include <map>
 #include <string>
 
+#if ITK_VERSION_MAJOR < 5
 #include "itkMultiThreader.h"
+#else
+#include "itkMultiThreaderBase.h"
+#endif
+
 #include "otbMacro.h"
 
 #include "otbOGRDriversInit.h"
@@ -154,13 +159,21 @@ int main(int ac, char* av[])
       if (CheckOption(av[1],"--with-threads", ac, 2))
         {
         int numThreads = atoi(av[2]);
+        #if ITK_VERSION_MAJOR < 5
         itk::MultiThreader::SetGlobalDefaultNumberOfThreads(numThreads);
+        #else
+        itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads(numThreads);
+        #endif
         av += 2;
         ac -= 2;
         }
       else if (CheckOption(av[1], "--without-threads",ac, 1))
         {
+        #if ITK_VERSION_MAJOR < 5
         itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
+        #else
+        itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads(1);
+        #endif
         av += 1;
         ac -= 1;
         }

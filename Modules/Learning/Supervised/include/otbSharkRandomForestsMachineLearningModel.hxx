@@ -70,8 +70,12 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
 ::Train()
 {
 #ifdef _OPENMP
+#if ITK_VERSION_MAJOR < 5
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
-#endif
+#else
+  omp_set_num_threads(itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads());
+#endif // ITK_VERSION_MAJOR
+#endif // _OPENMP
   
   std::vector<shark::RealVector> features;
   std::vector<unsigned int> class_labels;
@@ -185,9 +189,13 @@ SharkRandomForestsMachineLearningModel<TInputValue,TOutputValue>
   shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
 
 #ifdef _OPENMP
+#if ITK_VERSION_MAJOR < 5
   omp_set_num_threads(itk::MultiThreader::GetGlobalDefaultNumberOfThreads());
+#else
+  omp_set_num_threads(itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads());
+#endif // ITK_VERSION_MAJOR
+#endif // _OPENMP
 
-  #endif
   if( proba !=nullptr || quality != nullptr)
   {
     shark::Data<shark::RealVector> probas = m_RFModel.decisionFunction()(inputSamples);

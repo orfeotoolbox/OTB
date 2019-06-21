@@ -146,7 +146,11 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
 }
 
 template <class TInputList, class TOutputList>
+#if ITK_VERSION_MAJOR >= 5
+itk::ITK_THREAD_RETURN_TYPE
+#else
 ITK_THREAD_RETURN_TYPE
+#endif
 ObjectListToObjectListFilter<TInputList, TOutputList>
 ::ThreaderCallback(void *arg)
 {
@@ -155,9 +159,15 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   unsigned int  total, start, stop;
   unsigned int  requestedElements;
 
+#if ITK_VERSION_MAJOR < 5
   threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
   threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
   str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
+#else
+  threadId = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->ThreadID;
+  threadCount = ((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->NumberOfThreads;
+  str = (ThreadStruct *) (((itk::MultiThreaderBase::ThreadInfoStruct *) (arg))->UserData);
+#endif
 
   requestedElements = str->Filter->GetInput()->Size();
   total = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);
@@ -179,7 +189,11 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   //   few threads idle.
   //   }
 
+#if ITK_VERSION_MAJOR >= 5
+  return itk::ITK_THREAD_RETURN_DEFAULT_VALUE;
+#else
   return ITK_THREAD_RETURN_VALUE;
+#endif
 }
 
 /**

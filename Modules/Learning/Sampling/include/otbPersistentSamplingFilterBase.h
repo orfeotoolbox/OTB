@@ -193,7 +193,11 @@ protected:
   const std::vector<SimpleFieldDefn>& GetAdditionalFields();
 
   /** Callback function to launch VectorThreadedGenerateData in each thread */
+#if ITK_VERSION_MAJOR < 5
   static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
+#else
+  static itk::ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
+#endif
 
   /** basically the same struct as itk::ImageSource::ThreadStruct */
   struct VectorThreadStruct

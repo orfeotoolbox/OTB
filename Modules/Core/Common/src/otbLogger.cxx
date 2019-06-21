@@ -24,7 +24,12 @@
 #include "itkStdStreamLogOutput.h"
 #include <iostream>
 #include "gdal.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkMultiThreader.h"
+#else
+#include "itkMultiThreaderBase.h"
+#endif
 
 #include <type_traits>
 #include <cassert>
@@ -93,10 +98,17 @@ void Logger::LogSetupInformation()
     this->Info(oss.str());
     oss.str("");
     oss.clear();
-
+    
+#if ITK_VERSION_MAJOR < 5
     oss<<"OTB will use at most "<<
       itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<
       " threads"<<std::endl;
+#else
+    oss<<"OTB will use at most "<<
+      itk::MultiThreaderBase::GetGlobalDefaultNumberOfThreads()<<
+      " threads"<<std::endl;
+#endif //ITK_VERSION_MAJOR
+
     this->Info(oss.str());
     oss.str("");
     oss.clear();
