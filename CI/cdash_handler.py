@@ -30,7 +30,7 @@ import json
 import time
 
 
-trace = False
+trace = True
 
 """
 Check needed environment parameters
