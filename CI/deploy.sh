@@ -38,9 +38,12 @@ fi
 
 # Push package
 echo "Renaming binary packages"
-find build_packages/. -name "*.run" \
--exec sh -c 'mv "$1" "${1%.run}${pack_suffix}.run"' _ {} \;
-
+# find build_packages/. -name "*.run" \
+# -exec sh -c 'mv "$1" "${1%.run}${pack_suffix}.run"' _ {} \;
+for name in $(find build_packages/. -name "*.run")
+  do 
+  mv "$name" "${name%.run}${pack_suffix}.run"
+done
 # TO REMOVE
 ###########
 ls -all build_packages/
