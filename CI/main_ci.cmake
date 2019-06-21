@@ -81,9 +81,6 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 # Ctest command value
 set (CMAKE_COMMAND "cmake")
 
-# Data directory setting
-set (OTB_LARGEINPUT_ROOT "") # todo
-
 message(STATUS "CI profile : ${ci_profile}")
 
 #The following file set the CONFIGURE_OPTIONS variable
