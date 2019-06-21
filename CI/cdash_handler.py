@@ -249,6 +249,34 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       errors = "Errors occur during tests"
     return ( state , errors)
 
+  def GetReturnValue(self, logfile):
+    fd = open(configure_rv)
+    content = fd.readlines()[0]
+    fd.close()
+    return int(content.strip("\n"))
+
+  def GetLogStatus(self, logdir):
+    """
+    This function returns the log status of a build as a pair 'state' + 'errors'
+    """
+    configure_rv = os.path.join(logdir, "configure_return_value_log.txt")
+    build_rv = os.path.join(logdir, "build_return_value_log.txt")
+    test_rv = os.path.join(logdir, "test_return_value_log.txt")
+    if os.path.exists( configure_rv ):
+      if (GetReturnValue(configure_rv) != 0):
+        return ( 'failed' , 'Configure failed')
+    else:
+      return ( 'failed' , 'Configure not run')
+    if os.path.exists( build_rv ):
+      if (GetReturnValue(build_rv) != 0):
+        return ( 'failed' , 'Build failed')
+    else:
+      return ( 'failed' , 'Build not run')
+    if os.path.exists( test_rv ):
+      if (GetReturnValue(test_rv) != 0):
+        return ( 'failed' , 'Tests failed')
+    return ('success', '')
+
 """
   This script aims only at recovering the build url
   It uses environment variables setup by Gitlab Runner as default:
@@ -298,7 +326,7 @@ if __name__ == "__main__":
     error = "Failed to get build id"
   else:
     cdash_url = handler.GetBuildUrl()
-    ( state , error ) = handler.GetBuildStatus()
+    ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
   if trace:
     print ( "cdash_url is: " + cdash_url )
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
