@@ -53,6 +53,7 @@ fast-build:
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
   before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
@@ -66,6 +67,7 @@ fast-build:
     - develop
     - /^release-[0-9]+\.[0-9]+$/
   stage: build
+
 
 debian-build:
   extends: .common-build
@@ -153,3 +155,66 @@ macos-xdk-build:
     - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-xdk-prepare
+
+## Windows
+.windows-prepare:
+  extends: .common-prepare
+  before_script:
+# This override the previous before_script
+    - set GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q %CI_COMMIT_SHA%
+    - set GIT_LFS_SKIP_SMUDGE=0
+
+.windows-build:
+  extends: .common-build
+  before_script:
+    - git lfs fetch origin %CI_COMMIT_SHA%
+    - git checkout -f -q %CI_COMMIT_SHA%
+
+# - Win10
+windows-10-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 xdk 10
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-10-build:
+  extends: .windows-build
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 otb 10
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-10-prepare
+
+# - Win8.1
+windows-8-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-8-build:
+  extends: .windows-build
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 otb 8.1
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-8-prepare
