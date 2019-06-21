@@ -23,6 +23,10 @@
 namespace otb
 {
 
+#if ITK_VERSION_MAJOR < 5
 itk::SimpleMutexLock MachineLearningModelFactoryBase::mutex;
+#else
+std::mutex MachineLearningModelFactoryBase::mutex;
+#endif
 } // end namespace otb
 

@@ -18,11 +18,6 @@
  * limitations under the License.
  */
 
-
-
-#include "itkMutexLock.h"
-#include "itkMutexLockHolder.h"
-
 #include "otbImageIOFactory.h"
 #include "otbConfigure.h"
 
@@ -32,6 +27,13 @@
 #include "otbLUMImageIOFactory.h"
 #include "otbBSQImageIOFactory.h"
 #include "otbRADImageIOFactory.h"
+
+#if ITK_VERSION_MAJOR < 5
+#include "itkMutexLock.h"
+#include "itkMutexLockHolder.h"
+#else
+#include <mutex>
+#endif
 
 namespace otb
 {
@@ -83,11 +85,19 @@ ImageIOFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
 
+  #if ITK_VERSION_MAJOR < 5
   static itk::SimpleMutexLock mutex;
+  #else
+  static std::mutex mutex;
+  #endif
     {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
+    #if ITK_VERSION_MAJOR < 5
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
+    #else
+    std::lock_guard<std::mutex> mutexHolder(mutex);
+    #endif
     if (firstTime)
       {
       itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());

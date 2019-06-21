@@ -24,7 +24,12 @@
 #include "itkMacro.h"
 #include "itkImageToImageFilter.h"
 #include "otbStreamingManager.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkFastMutexLock.h"
+#else
+#include <mutex>
+#endif
 
 namespace otb
 {
@@ -194,7 +199,11 @@ private:
   unsigned long m_ObserverID;
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+  #if ITK_VERSION_MAJOR < 5
   itk::SimpleFastMutexLock m_Lock;
+  #else
+  mutable std::mutex m_Lock;
+  #endif
 };
 
 } // end namespace otb

@@ -21,7 +21,14 @@
 #ifndef otbMachineLearningModelFactoryBase_h
 #define otbMachineLearningModelFactoryBase_h
 
+#include "itkObject.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkMutexLock.h"
+#else
+#include <mutex>
+#endif
+
 #include "OTBLearningBaseExport.h"
 
 namespace otb
@@ -50,7 +57,11 @@ protected:
   MachineLearningModelFactoryBase();
   ~MachineLearningModelFactoryBase() override;
 
+  #if ITK_VERSION_MAJOR < 5
   static itk::SimpleMutexLock mutex;
+  #else
+  static std::mutex mutex;
+  #endif
 
 private:
   MachineLearningModelFactoryBase(const Self &) = delete;
