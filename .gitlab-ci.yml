@@ -40,12 +40,6 @@ stages:
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
     - python3 CI/cdash_handler.py
-  artifacts:
-    when: on_failure
-    expire_in: 24 hrs
-    paths:
-      - build/*/*.log #CMake log
-      - log/*.txt # Others
 
 fast-build:
   extends: .common
@@ -67,7 +61,15 @@ fast-build:
     - develop
     - /^release-[0-9]+\.[0-9]+$/
   stage: build
-
+  artifacts:
+    when: always
+    expire_in: 24 hrs
+    paths:
+      - build/*/*.log #CMake log
+      - log/*.txt # Others
+      - build/CookBook-*-html.tar.gz
+      - build/Documentation/Cookbook/latex/CookBook-*.pdf
+      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 debian-build:
   extends: .common-build
@@ -83,10 +85,10 @@ debian-build:
     - /^release-[0-9]+\.[0-9]+$/
   stage: prepare
   before_script:
-    - git checkout -f -q $CI_COMMIT_SHA
     - git lfs install --skip-repo
-    - git config --global user.email "otbbot@orfeo-toolbox.org"
-    - git config --global user.name "otbbot"
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - export GIT_LFS_SKIP_SMUDGE=0
   artifacts:
     expire_in: 24 hrs
     when: always
@@ -138,8 +140,6 @@ macos-xdk-prepare:
   extends: .common-prepare
   before_script:
     # No need to install lfs as this machine is persistent
-    # No need to do git config
-    # Checkout the expected branch
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
