@@ -238,6 +238,8 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   dependencies:
-    - ubuntu-superbuild-build 
-    - centos-superbuild-build
-    - macos-superbuild-build
+    - ubuntu-xdk-build 
+    - centos-xdk-build
+    - macos-xdk-build
+    - windows-8-build
+    - windows-10-build

@@ -37,12 +37,15 @@ else # On release
 fi
 
 # Push package
+ls -all build_packages/
 echo "Renaming binary packages"
 # find build_packages/. -name "*.run" \
 # -exec sh -c 'mv "$1" "${1%.run}${pack_suffix}.run"' _ {} \;
-for name in $(find build_packages/. -name "*.run")
+for name in $(find build_packages/. -name "OTB-*.*")
   do 
-  mv "$name" "${name%.run}${pack_suffix}.run"
+  len=(${#name})
+  echo $len
+  mv "$name" "${name:0:$len-4}${pack_suffix}${name:$len-4}"
 done
 # TO REMOVE
 ###########
