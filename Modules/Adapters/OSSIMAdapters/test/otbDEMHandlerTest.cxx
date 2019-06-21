@@ -22,6 +22,10 @@
 #include "itkMacro.h"
 #include "otbDEMHandler.h"
 
+#if ITK_VERSION_MAJOR >= 5
+#include "vcl_legacy_aliases.h" // ITK v5 compatibility
+#endif
+
 int otbDEMHandlerTest(int argc, char * argv[])
 {
   if(argc!=9)

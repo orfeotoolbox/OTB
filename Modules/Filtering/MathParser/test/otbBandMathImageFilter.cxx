@@ -29,6 +29,9 @@
 #include "otbBandMathImageFilter.h"
 #include "otbImageFileWriter.h"
 
+#if ITK_VERSION_MAJOR >= 5
+#include "vcl_legacy_aliases.h" // ITK v5 compatibility
+#endif
 
 int otbBandMathImageFilter( int itkNotUsed(argc), char* itkNotUsed(argv) [])
 {

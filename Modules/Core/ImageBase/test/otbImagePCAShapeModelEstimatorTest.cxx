@@ -33,6 +33,10 @@
 
 #include "itkImagePCAShapeModelEstimator.h"
 
+#if ITK_VERSION_MAJOR >= 5
+#include "vcl_legacy_aliases.h" // ITK v5 compatibility
+#endif
+
 //Data definitions
 #define   IMGWIDTH            2
 #define   IMGHEIGHT           2

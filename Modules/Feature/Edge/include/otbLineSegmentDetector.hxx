@@ -37,6 +37,10 @@
 #include "itkMatrix.h"
 #include "itkSymmetricEigenAnalysis.h"
 
+#if ITK_VERSION_MAJOR >= 5
+#include "vcl_legacy_aliases.h" // ITK v5 compatibility
+#endif
+
 
 extern "C" double dlngam_(double *x);
 extern "C" double dbetai_(double *x, double *a, double *b);
