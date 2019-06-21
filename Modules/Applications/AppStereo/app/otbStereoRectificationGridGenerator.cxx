@@ -25,7 +25,13 @@
 // Elevation handler
 #include "otbWrapperElevationParametersHandler.h"
 #include "itkInverseDisplacementFieldImageFilter.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkVectorCastImageFilter.h"
+#else
+#include "otbCastImageFilter.h"
+#endif
+
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbImageList.h"
 #include "otbImageListToVectorImageFilter.h"
@@ -52,9 +58,15 @@ public:
   typedef itk::Vector<double,2>               DisplacementType;
   typedef otb::Image<DisplacementType>         DisplacementFieldType;
 
+#if ITK_VERSION_MAJOR < 5
   typedef itk::VectorCastImageFilter
   <FloatVectorImageType,
-   DisplacementFieldType>                      DisplacementFieldCastFilterType;
+   DisplacementFieldType>                DisplacementFieldCastFilterType;
+#else
+  typedef otb::CastImageFilter
+  <FloatVectorImageType,
+   DisplacementFieldType>                DisplacementFieldCastFilterType;
+#endif
 
   typedef itk::InverseDisplacementFieldImageFilter
   <DisplacementFieldType,DisplacementFieldType> InverseDisplacementFieldFilterType;
