@@ -65,7 +65,12 @@ public:
 
   typedef LineSpatialObjectList                  LinesListType;
   typedef LinesListType::LineType                LineType;
+  
+#if ITK_VERSION_MAJOR < 5
   typedef LineType::PointListType                PointListType;
+#else
+  typedef LineType::LinePointListType            PointListType;
+#endif
   typedef typename LinesListType::const_iterator LineListIterator;
 
   typedef itk::ProcessObject ProcessObjectType;

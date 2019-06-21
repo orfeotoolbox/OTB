@@ -28,7 +28,11 @@ int otbLineSpatialObjectList(int itkNotUsed(argc), char * itkNotUsed(argv) [])
 {
   typedef otb::LineSpatialObjectList                         LineSpatialObjectListType;
   typedef LineSpatialObjectListType::LineType                LineSpatialObjecType;
-  typedef LineSpatialObjectListType::LineType::PointListType PointListType;
+#if ITK_VERSION_MAJOR < 5
+  typedef LineSpatialObjectListType::LineType::PointListType                PointListType;
+#else
+  typedef LineSpatialObjectListType::LineType::LinePointListType            PointListType;
+#endif
   typedef LineSpatialObjectListType::const_iterator          LineSpatialObjectListConstIterator;
 
   LineSpatialObjectListType::Pointer listLines = LineSpatialObjectListType::New();

@@ -62,7 +62,12 @@ int otbFillGapsFilter(int itkNotUsed(argc), char * argv[])
   LinesListType::Pointer linesListBeforeFillGaps = LinesListType::New();
   const LinesListType *  linesListAfterFillGaps;
 
+#if ITK_VERSION_MAJOR < 5
   LineType::PointListType pointList;
+#else
+  LineType::LinePointListType pointList;
+#endif
+
   LineType::LinePointType point;
 
   // Definition of the first line
@@ -71,11 +76,18 @@ int otbFillGapsFilter(int itkNotUsed(argc), char * argv[])
   Uy = 10.;
   Vx = 10.;
   Vy = 20.;
-
+  
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
@@ -92,11 +104,18 @@ int otbFillGapsFilter(int itkNotUsed(argc), char * argv[])
   Uy = 30.;
   Vx = 10.;
   Vy = 50.;
-
+  
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line2 = LineType::New();
   line2->SetId(0);
@@ -114,10 +133,17 @@ int otbFillGapsFilter(int itkNotUsed(argc), char * argv[])
   Vx = 50.;
   Vy = 50.;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line3 = LineType::New();
   line3->SetId(0);

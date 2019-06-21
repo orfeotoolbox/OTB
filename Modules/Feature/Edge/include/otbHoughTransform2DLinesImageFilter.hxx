@@ -317,7 +317,11 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
       if (it_input.Get() == max)
         {
         // Create the line
+#if ITK_VERSION_MAJOR < 5
         LineType::PointListType list; // insert two points per line
+#else
+        LineType::LinePointListType list; // insert two points per line
+#endif
 
         double radius = this->GetDistanceValue(it_input.GetIndex()[0]);
         double teta   = this->GetAngleValue(it_input.GetIndex()[1]);
@@ -336,18 +340,32 @@ HoughTransform2DLinesImageFilter<TInputPixelType, TOutputPixelType>
             }
 
           LinePointType p;
+#if ITK_VERSION_MAJOR < 5
           p.SetPosition(Vx, Vy);
           list.push_back(p);
           p.SetPosition(Vx - VyNorm * 5, Vy + VxNorm * 5);
           list.push_back(p);
+#else
+          p.SetPositionInObjectSpace(Vx, Vy);
+          list.push_back(p);
+          p.SetPositionInObjectSpace(Vx - VyNorm * 5, Vy + VxNorm * 5);
+          list.push_back(p);
+#endif
           }
         else // if teta>0
           {
           LinePointType p;
+#if ITK_VERSION_MAJOR < 5
           p.SetPosition(Vx, Vy);
           list.push_back(p);
           p.SetPosition(Vx - VyNorm * 5, Vy + VxNorm * 5);
           list.push_back(p);
+#else
+          p.SetPositionInObjectSpace(Vx, Vy);
+          list.push_back(p);
+          p.SetPositionInObjectSpace(Vx - VyNorm * 5, Vy + VxNorm * 5);
+          list.push_back(p);
+#endif
           } // end if(teta>0)
 
         // Create a Line Spatial Object

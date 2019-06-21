@@ -69,8 +69,12 @@ public:
   typedef typename LinesListType::LineType LineType;
   typedef typename LineType::Pointer       LinePointer;
 
-  typedef typename LineType::PointListType PointListType;
   typedef typename LineType::LinePointType LinePointType;
+#if ITK_VERSION_MAJOR < 5
+  typedef typename LineType::PointListType PointListType;
+#else
+  typedef typename LineType::LinePointListType PointListType;
+#endif
 
   /**   Extract dimensions as well of the images of entry of exit. */
   itkStaticConstMacro(InputImageDimension,

@@ -22,7 +22,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbSpatialObjectToImageDrawingFilter);
   REGISTER_TEST(otbDrawLineSpatialObject);
   REGISTER_TEST(otbLineSpatialObjectList);
   REGISTER_TEST(otbDrawLineSpatialObjectList);

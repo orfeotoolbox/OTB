@@ -60,8 +60,13 @@ int otbDrawLineSpatialObjectList(int itkNotUsed(argc), char * argv[])
   typedef otb::LineSpatialObjectList LinesListType;
   typedef LinesListType::LineType    LineType;
   LinesListType::Pointer list = LinesListType::New();
-
+  
+#if ITK_VERSION_MAJOR < 5
   LineType::PointListType pointList;
+#else
+  LineType::LinePointListType pointList;
+#endif
+  
   LineType::LinePointType point;
 
   // Definition of the first line
@@ -71,10 +76,17 @@ int otbDrawLineSpatialObjectList(int itkNotUsed(argc), char * argv[])
   Vx = 35.;
   Vy = 29.;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
@@ -91,10 +103,17 @@ int otbDrawLineSpatialObjectList(int itkNotUsed(argc), char * argv[])
   Vx = 8.;
   Vy = 46.;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line2 = LineType::New();
   line2->SetId(0);
@@ -111,10 +130,17 @@ int otbDrawLineSpatialObjectList(int itkNotUsed(argc), char * argv[])
   Vx = 22.;
   Vy = 38.;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line3 = LineType::New();
   line3->SetId(0);

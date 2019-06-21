@@ -58,14 +58,22 @@ PersistentVectorizationImageFilter<TInputImage, TOutputPath>
 {
   // Compute the min max and handle mini-pipeline
   m_MinMaxFilter->SetInput(this->GetInput());
+#if ITK_VERSION_MAJOR < 5
   m_MinMaxFilter->GraftOutput(this->GetOutput());
   m_MinMaxFilter->Update();
   this->GraftOutput(m_MinMaxFilter->GetOutput());
+#else // MinMaxFilter does not produce an output in ITK5
+  m_MinMaxFilter->Update();
+#endif
 
   for (PixelType label = m_MinMaxFilter->GetMinimum() + 1; label <= m_MinMaxFilter->GetMaximum(); ++label)
     {
     ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();
+#if ITK_VERSION_MAJOR < 5
     edgeFilter->SetInput(m_MinMaxFilter->GetOutput());
+#else // MinMaxFilter does not produce an output in ITK5
+    edgeFilter->SetInput(this->GetInput());
+#endif
     edgeFilter->SetForegroundValue(label);
     edgeFilter->Update();
     m_PathList->PushBack(edgeFilter->GetOutput());

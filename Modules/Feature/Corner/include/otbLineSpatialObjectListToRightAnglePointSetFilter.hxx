@@ -150,6 +150,7 @@ double
 LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
 ::ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line)
 {
+#if ITK_VERSION_MAJOR < 5
   /** Extract Indexes from the Dst line to instantiate the line iterator*/
   typename LineType::PointListType&                pointsListDst = line->GetPoints();
   typename LineType::PointListType::const_iterator itPointsDst = pointsListDst.begin();
@@ -158,7 +159,16 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   ++itPointsDst;
   double X2 = (*itPointsDst).GetPosition()[0];  //xq2
   double Y2 = (*itPointsDst).GetPosition()[1];  //yq2
-
+#else
+  /** Extract Indexes from the Dst line to instantiate the line iterator*/
+  typename LineType::LinePointListType&                pointsListDst = line->GetPoints();
+  typename LineType::LinePointListType::const_iterator itPointsDst = pointsListDst.begin();
+  double                                           X1 = (*itPointsDst).GetPositionInObjectSpace()[0]; //xq1
+  double                                           Y1 = (*itPointsDst).GetPositionInObjectSpace()[1]; //yq1
+  ++itPointsDst;
+  double X2 = (*itPointsDst).GetPositionInObjectSpace()[0];  //xq2
+  double Y2 = (*itPointsDst).GetPositionInObjectSpace()[1];  //yq2
+#endif
   double dist1 = std::sqrt((X1 - rAngle[0]) * (X1 - rAngle[0]) + (Y1 - rAngle[1]) * (Y1 - rAngle[1]));
   double dist2 = std::sqrt((X2 - rAngle[0]) * (X2 - rAngle[0]) + (Y2 - rAngle[1]) * (Y2 - rAngle[1]));
 
@@ -188,6 +198,7 @@ double
 LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
 ::ComputeOrientation(LineType * line)
 {
+#if ITK_VERSION_MAJOR < 5
   typename LineType::PointListType&                pointsList = line->GetPoints();
   typename LineType::PointListType::const_iterator itPoints = pointsList.begin();
   double                                           Xp1 = (*itPoints).GetPosition()[0];
@@ -196,7 +207,16 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   ++itPoints;
   double Xp2 = (*itPoints).GetPosition()[0];
   double Yp2 = (*itPoints).GetPosition()[1];
+#else
+  typename LineType::LinePointListType&                pointsList = line->GetPoints();
+  typename LineType::LinePointListType::const_iterator itPoints = pointsList.begin();
+  double                                           Xp1 = (*itPoints).GetPositionInObjectSpace()[0];
+  double                                           Yp1 = (*itPoints).GetPositionInObjectSpace()[1];
 
+  ++itPoints;
+  double Xp2 = (*itPoints).GetPositionInObjectSpace()[0];
+  double Yp2 = (*itPoints).GetPositionInObjectSpace()[1];
+#endif
   //Compute the orientation
   double dx = Xp1 - Xp2;
   double dy = Yp1 - Yp2;
@@ -217,6 +237,8 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
 {
   PointType P;
 
+
+#if ITK_VERSION_MAJOR < 5
   /** ----- */
   typename LineType::PointListType&                pointsList = lineSrc->GetPoints();
   typename LineType::PointListType::const_iterator itPoints = pointsList.begin();
@@ -236,6 +258,27 @@ LineSpatialObjectListToRightAnglePointSetFilter<TImage, TLinesList, TPointSet>
   ++itPointsDst;
   double Xq2 = (*itPointsDst).GetPosition()[0];  //xq2
   double Yq2 = (*itPointsDst).GetPosition()[1];  //yq2
+#else
+  /** ----- */
+  typename LineType::LinePointListType&                pointsList = lineSrc->GetPoints();
+  typename LineType::LinePointListType::const_iterator itPoints = pointsList.begin();
+
+  double Xp1 = (*itPoints).GetPositionInObjectSpace()[0];
+  double Yp1 = (*itPoints).GetPositionInObjectSpace()[1];
+  ++itPoints;
+  double Xp2 = (*itPoints).GetPositionInObjectSpace()[0];
+  double Yp2 = (*itPoints).GetPositionInObjectSpace()[1];
+
+  /** Extract Indexes from the Dst line to instantiate the line iterator*/
+  typename LineType::LinePointListType&                pointsListDst = lineDst->GetPoints();
+  typename LineType::LinePointListType::const_iterator itPointsDst = pointsListDst.begin();
+
+  double Xq1 = (*itPointsDst).GetPositionInObjectSpace()[0];  //xq1
+  double Yq1 = (*itPointsDst).GetPositionInObjectSpace()[1];  //yq1
+  ++itPointsDst;
+  double Xq2 = (*itPointsDst).GetPositionInObjectSpace()[0];  //xq2
+  double Yq2 = (*itPointsDst).GetPositionInObjectSpace()[1];  //yq2
+#endif
 
   /** Compute the equation of the lines A and B  which are support of the segments Src & Dst*/
   // - Line 1 : slope and origin

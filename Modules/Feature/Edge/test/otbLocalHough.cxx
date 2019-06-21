@@ -75,11 +75,15 @@ int otbLocalHough(int itkNotUsed(argc), char* argv[])
 
   std::ofstream outfile(outfname);
   outfile << "size of the Line list " << list->size() << std::endl;
-
+#if ITK_VERSION_MAJOR < 5
   for (itList = list->begin(); itList != list->end(); itList++)
     outfile << (*itList)->GetPoints()[0].GetPosition()  << " \t" << (*itList)->GetPoints()[1].GetPosition()   <<
     std::endl;
-
+#else
+  for (itList = list->begin(); itList != list->end(); itList++)
+    outfile << (*itList)->GetPoints()[0].GetPositionInObjectSpace()  << " \t" << (*itList)->GetPoints()[1].GetPositionInObjectSpace()   <<
+    std::endl;
+#endif
   outfile.close();
 
   return EXIT_SUCCESS;

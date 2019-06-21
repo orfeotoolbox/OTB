@@ -53,7 +53,13 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int itk
 
 /** Creation of  lines */
   LinesListType::Pointer  list = LinesListType::New();
+
+#if ITK_VERSION_MAJOR < 5
   LineType::PointListType pointList;
+#else
+  LineType::LinePointListType pointList;
+#endif
+
   LineType::LinePointType point;
 
   // Definition of the first line
@@ -63,10 +69,17 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int itk
   Vx = 31.7;
   Vy = 25.1;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);
@@ -83,10 +96,17 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int itk
   Vx = 30.1;
   Vy = 10.6;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line2 = LineType::New();
   line2->SetId(0);
@@ -103,10 +123,17 @@ int otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii(int itk
   Vx = 40.5;
   Vy = 17.1;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   pointList.push_back(point);
   point.SetPosition(Vx, Vy);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  pointList.push_back(point);
+#endif
 
   LineType::Pointer line3 = LineType::New();
   line3->SetId(0);

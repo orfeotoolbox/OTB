@@ -53,8 +53,13 @@ public:
   typedef LineSpatialObjectList                LineSpatialObjectListType;
   typedef LineSpatialObjectListType::Pointer   LineSpatialObjectListPointer;
   typedef LineSpatialObjectListType::LineType  LineSpatialObjectType;
-  typedef LineSpatialObjectType::PointListType PointListType;
   typedef LineSpatialObjectType::LinePointType PointType;
+#if ITK_VERSION_MAJOR < 5
+  typedef LineSpatialObjectType::PointListType PointListType;
+#else
+  typedef LineSpatialObjectType::LinePointListType PointListType;
+#endif
+
 
   typedef itk::ProcessObject ProcessObjectType;
 

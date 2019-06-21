@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBSpatialObjectsTests
 otbSpatialObjectsTestDriver.cxx
-otbSpatialObjectToImageDrawingFilter.cxx
 otbDrawLineSpatialObject.cxx
 otbLineSpatialObjectList.cxx
 otbDrawLineSpatialObjectList.cxx
@@ -31,17 +30,6 @@ otbDrawLineSpatialObjectList.cxx
 add_executable(otbSpatialObjectsTestDriver ${OTBSpatialObjectsTests})
 target_link_libraries(otbSpatialObjectsTestDriver ${OTBSpatialObjects-Test_LIBRARIES})
 otb_module_target_label(otbSpatialObjectsTestDriver)
-
-# Tests Declaration
-otb_add_test(NAME bfTvSpatialObjectToImageDrawingFilterWithoutInputImage COMMAND otbSpatialObjectsTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/bfTvSpatialObjectDrawingNoInput.png
-  ${TEMP}/bfTvSpatialObjectDrawingNoInput.png
-  otbSpatialObjectToImageDrawingFilter
-  ${TEMP}/bfTvSpatialObjectDrawingNoInput.png
-  100
-  50
-  )
 
 
 otb_add_test(NAME coTuDrawLineSpatialObject COMMAND otbSpatialObjectsTestDriver

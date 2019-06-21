@@ -52,6 +52,7 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
   PointListType&                         pointsList = (*itLines)->GetPoints();
   typename PointListType::const_iterator itPoints = pointsList.begin();
 
+#if ITK_VERSION_MAJOR < 5
   double u[2];
   u[0] = (*itPoints).GetPosition()[0];
   u[1] = (*itPoints).GetPosition()[1];
@@ -59,7 +60,16 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
   double v[2];
   v[0] = u[0] - (*itPoints).GetPosition()[0];
   v[1] = u[1] - (*itPoints).GetPosition()[1];
-
+#else
+  double u[2];
+  u[0] = (*itPoints).GetPositionInObjectSpace()[0];
+  u[1] = (*itPoints).GetPositionInObjectSpace()[1];
+  ++itPoints;
+  double v[2];
+  v[0] = u[0] - (*itPoints).GetPositionInObjectSpace()[0];
+  v[1] = u[1] - (*itPoints).GetPositionInObjectSpace()[1];
+#endif
+  
   double norm = std::sqrt(v[0] * v[0] + v[1] * v[1]);
   v[0] /= norm;
   v[1] /= norm;
@@ -99,7 +109,11 @@ LinePointResearch(LineIterator itLines, InputImageType *image, IndexType origin)
         ((region.IsInside(localIndex)) && (!region.IsInside(nextIndex))))
       {
 
+#if ITK_VERSION_MAJOR < 5
       point.SetPosition(localIndex[0] + origin[0], localIndex[1] + origin[1]);
+#else
+      point.SetPositionInObjectSpace(localIndex[0] + origin[0], localIndex[1] + origin[1]);
+#endif
       ptList.push_back(point);
 
       }

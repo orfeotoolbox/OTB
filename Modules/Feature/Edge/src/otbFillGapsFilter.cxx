@@ -104,20 +104,37 @@ FillGapsFilter
     PointListType& pointsList = (*itLineListA)->GetPoints();
     itPoints = pointsList.begin();
 
+#if ITK_VERSION_MAJOR < 5
     x1 = (*itPoints).GetPosition()[0];
     y1 = (*itPoints).GetPosition()[1];
+#else
+    x1 = (*itPoints).GetPositionInObjectSpace()[0];
+    y1 = (*itPoints).GetPositionInObjectSpace()[1];
+#endif
 
     ++itPoints;
+#if ITK_VERSION_MAJOR < 5
     x2 = (*itPoints).GetPosition()[0];
     y2 = (*itPoints).GetPosition()[1];
+#else
+    x2 = (*itPoints).GetPositionInObjectSpace()[0];
+    y2 = (*itPoints).GetPositionInObjectSpace()[1];
+#endif
 
     PointType     point;
     PointListType pointList;
 
+#if ITK_VERSION_MAJOR < 5
     point.SetPosition(x1, y1);
     pointList.push_back(point);
     point.SetPosition(x2, y2);
     pointList.push_back(point);
+#else
+    point.SetPositionInObjectSpace(x1, y1);
+    pointList.push_back(point);
+    point.SetPositionInObjectSpace(x2, y2);
+    pointList.push_back(point);
+#endif
 
     LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
     line->SetId(0);
@@ -131,13 +148,21 @@ FillGapsFilter
       pointsList = (*itLineListB)->GetPoints();
       itPoints = pointsList.begin();
 
+#if ITK_VERSION_MAJOR < 5
       x3 = (*itPoints).GetPosition()[0];
       y3 = (*itPoints).GetPosition()[1];
 
       ++itPoints;
       x4 = (*itPoints).GetPosition()[0];
       y4 = (*itPoints).GetPosition()[1];
+#else
+      x3 = (*itPoints).GetPositionInObjectSpace()[0];
+      y3 = (*itPoints).GetPositionInObjectSpace()[1];
 
+      ++itPoints;
+      x4 = (*itPoints).GetPositionInObjectSpace()[0];
+      y4 = (*itPoints).GetPositionInObjectSpace()[1];
+#endif
       // Calculate the radius for each point of each line
 
       R13 = std::sqrt((x1 - x3) * (x1 - x3) + (y1 - y3) * (y1 - y3));
@@ -215,10 +240,17 @@ FillGapsFilter
           PointType     ppoint;
           PointListType ppointList;
 
+#if ITK_VERSION_MAJOR < 5
           ppoint.SetPosition(x2, y2);
           ppointList.push_back(ppoint);
           ppoint.SetPosition(x3, y3);
           ppointList.push_back(ppoint);
+#else
+          ppoint.SetPositionInObjectSpace(x2, y2);
+          ppointList.push_back(ppoint);
+          ppoint.SetPositionInObjectSpace(x3, y3);
+          ppointList.push_back(ppoint);
+#endif
 
           LineSpatialObjectType::Pointer lline = LineSpatialObjectType::New();
           lline->SetId(0);
@@ -241,10 +273,17 @@ FillGapsFilter
   PointType     point;
   PointListType pointList;
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(x3, y3);
   pointList.push_back(point);
   point.SetPosition(x4, y4);
   pointList.push_back(point);
+#else
+  point.SetPositionInObjectSpace(x3, y3);
+  pointList.push_back(point);
+  point.SetPositionInObjectSpace(x4, y4);
+  pointList.push_back(point);
+#endif
 
   LineSpatialObjectType::Pointer line = LineSpatialObjectType::New();
   line->SetId(0);

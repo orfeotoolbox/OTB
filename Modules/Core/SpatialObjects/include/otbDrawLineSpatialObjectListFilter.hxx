@@ -101,13 +101,23 @@ DrawLineSpatialObjectListFilter<TInputImage, TOutputImage>
     PointListType&                         pointsList = (*itList)->GetPoints();
     typename PointListType::const_iterator itPoints = pointsList.begin();
 
+#if ITK_VERSION_MAJOR < 5
     indexBeginLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[0]);
     indexBeginLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[1]);
+#else
+    indexBeginLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPositionInObjectSpace()[0]);
+    indexBeginLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPositionInObjectSpace()[1]);
+#endif
 
     ++itPoints;    //Get the second extremity of the segment
 
+#if ITK_VERSION_MAJOR < 5
     indexEndLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[0]);
     indexEndLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPosition()[1]);
+#else
+    indexBeginLine[0] = static_cast<OutputIndexValueType>((*itPoints).GetPositionInObjectSpace()[0]);
+    indexBeginLine[1] = static_cast<OutputIndexValueType>((*itPoints).GetPositionInObjectSpace()[1]);
+#endif
 
     /** Crop the segment if it is outside the region in the left*/
 

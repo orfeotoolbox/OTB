@@ -65,13 +65,24 @@ int otbDrawLineSpatialObject(int itkNotUsed(argc), char * argv[])
 
   // Definition of the line
   typedef itk::LineSpatialObject<2> LineType;
-  LineType::PointListType list;
   LineType::LinePointType point;
+#if ITK_VERSION_MAJOR < 5
+  LineType::PointListType list;
+#else
+  LineType::LinePointListType list;
+#endif
 
+#if ITK_VERSION_MAJOR < 5
   point.SetPosition(Ux, Uy);
   list.push_back(point);
   point.SetPosition(Vx, Vy);
   list.push_back(point);
+#else
+  point.SetPositionInObjectSpace(Ux, Uy);
+  list.push_back(point);
+  point.SetPositionInObjectSpace(Vx, Vy);
+  list.push_back(point);
+#endif
 
   LineType::Pointer line = LineType::New();
   line->SetId(0);

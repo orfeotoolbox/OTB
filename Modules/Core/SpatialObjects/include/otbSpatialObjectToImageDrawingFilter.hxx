@@ -263,7 +263,11 @@ void
 SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
 ::GenerateOutputInformation()
 {
+#if ITK_VERSION_MAJOR < 5
   const InputSpatialObjectType * InputObject  = this->GetInput();
+#else
+  auto InputObject = const_cast<InputSpatialObjectType *>(this->GetInput());
+#endif
   OutputImagePointer             OutputImage = this->GetOutput();
 
   unsigned int i;
@@ -283,7 +287,11 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
     (*iter)->ComputeBoundingBox();
     for (i = 0; i < ObjectDimension; ++i)
       {
+#if ITK_VERSION_MAJOR < 5
       minimum[i] = (*iter)->GetBoundingBox()->GetMinimum()[i];
+#else
+      minimum[i] = (*iter)->GetMyBoundingBoxInObjectSpace()->GetMinimum()[i];
+#endif
       }
 
     while (iter != end)
@@ -291,32 +299,54 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
       (*iter)->ComputeBoundingBox();
       for (i = 0; i < ObjectDimension; ++i)
         {
+#if ITK_VERSION_MAJOR < 5
         if ((*iter)->GetBoundingBox()->GetMinimum()[i] < minimum[i])
           {
           minimum[i] = (*iter)->GetBoundingBox()->GetMinimum()[i];
           }
+#else
+        if ((*iter)->GetMyBoundingBoxInObjectSpace()->GetMinimum()[i] < minimum[i])
+          {
+          minimum[i] = (*iter)->GetMyBoundingBoxInObjectSpace()->GetMinimum()[i];
+          }
+#endif
         }
       ++iter;
       }
 
     for (i = 0; i < ObjectDimension; ++i)
       {
+#if ITK_VERSION_MAJOR < 5
       size[i] = (long unsigned int) (InputObject->GetBoundingBox()->GetMaximum()[i] - minimum[i]) + 1;
+#else
+      size[i] = (long unsigned int) (InputObject->GetMyBoundingBoxInObjectSpace()->GetMaximum()[i] - minimum[i]) + 1;
+#endif
       origine[i] = (long int) minimum[i];
       originspecified = true;
       }
 
+#if ITK_VERSION_MAJOR < 5
     itkDebugMacro(
       << "minx= " << minimum[0] << ", miny= " << minimum[0] << ", maxx= " <<
       InputObject->GetBoundingBox()->GetMaximum()[0] << ", maxy= " << InputObject->GetBoundingBox()->GetMaximum()[1]);
+#else
+    itkDebugMacro(
+      << "minx= " << minimum[0] << ", miny= " << minimum[0] << ", maxx= " <<
+      InputObject->GetMyBoundingBoxInObjectSpace()->GetMaximum()[0] << ", maxy= " << InputObject->GetMyBoundingBoxInObjectSpace()->GetMaximum()[1]);
+#endif
     }
   else
     {
 
     for (i = 0; i < ObjectDimension; ++i)
       {
+#if ITK_VERSION_MAJOR < 5
       size[i] = (long int) (InputObject->GetBoundingBox()->GetMaximum()[i]
                             - InputObject->GetBoundingBox()->GetMinimum()[i]);
+#else
+      size[i] = (long int) (InputObject->GetMyBoundingBoxInObjectSpace()->GetMaximum()[i]
+                            - InputObject->GetMyBoundingBoxInObjectSpace()->GetMinimum()[i]);
+#endif
       }
     }
 
@@ -366,9 +396,13 @@ SpatialObjectToImageDrawingFilter<TInputSpatialObject, TOutputImage>
     }
   else
     {
+#if ITK_VERSION_MAJOR < 5
     OutputImage->SetSignedSpacing(InputObject->GetIndexToObjectTransform()->GetScaleComponent());     // set spacing
     m_Spacing[0] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[0];
     m_Spacing[1] = InputObject->GetIndexToObjectTransform()->GetScaleComponent()[1];
+#else //SpatialObjects exist purely in physical space coordinates
+    OutputImage->SetSignedSpacing(this->m_Spacing);           // set spacing
+#endif
     }
 
   if (originspecified)
