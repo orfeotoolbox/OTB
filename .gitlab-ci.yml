@@ -23,6 +23,7 @@ stages:
   - prepare
   #- build # FIXME: uncomment
   - qa
+  - report
 
 .general:
   retry:
@@ -156,10 +157,9 @@ ubuntu-superbuild-prepare:
 #   dependencies:
 #     - macos-superbuild-prepare
 
-ubuntu-superbuild-qa:
+
+ubuntu-superbuild-qa-code-coverage:
   extends: .common
-  variables:
-    GIT_DEPTH: ""
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: qa
   only:
@@ -173,6 +173,25 @@ ubuntu-superbuild-qa:
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
+  after_script: []
+  dependencies:
+    - ubuntu-superbuild-prepare
+  artifacts:
+    expire_in: 24 hrs
+    when: always
+    paths:
+      - build/compile_commands.json
+      - build/ctest_report.xml
+
+
+ubuntu-superbuild-qa-static-analysis:
+  extends: .common
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  stage: qa
+  only:
+    - develop
+    - new-ci
+  script:
     - find Modules -type f \( -name '*.h' -o -name '*.hxx' \) -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
           sort -u > header_directories
@@ -181,9 +200,6 @@ ubuntu-superbuild-qa:
                --includes-file=header_directories
                -i Modules/ThirdParty Modules
                2> build/cppcheck_report.xml
-    - sonar-scanner -Dproject.settings=sonar-project.properties
-                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
-                    -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
   dependencies:
     - ubuntu-superbuild-prepare
@@ -191,6 +207,23 @@ ubuntu-superbuild-qa:
     expire_in: 24 hrs
     when: always
     paths:
-      - build/ctest_report.xml
-      - build/compile_commands.json
       - build/cppcheck_report.xml
+
+
+ubuntu-superbuild-report:
+  extends: .common
+  variables:
+    GIT_DEPTH: ""
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  stage: report
+  only:
+    - develop
+    - new-ci
+  script:
+    - sonar-scanner -Dproject.settings=sonar-project.properties
+                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
+                    -Dsonar.login=$SONAR_OTB_TOKEN
+  after_script: []
+  dependencies:
+    - ubuntu-superbuild-qa-code-coverage
+    - ubuntu-superbuild-qa-static-analysis
