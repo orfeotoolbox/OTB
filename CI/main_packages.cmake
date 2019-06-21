@@ -29,9 +29,20 @@ get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
 set ( DEBUG "1" )
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )
-set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
-set ( CTEST_BUILD_FLAGS "-j1" )
+if(WIN32)
+  set ( CTEST_CMAKE_GENERATOR "NMake Makefiles JOM" )
+  set ( CTEST_BUILD_FLAGS "/S" )
+else()
+  set ( CTEST_CMAKE_GENERATOR "Unix Makefiles" )
+  set ( CTEST_BUILD_FLAGS "-j1")
+endif()
 set ( CTEST_BUILD_NAME "Packages" )
+# Detect site
+if(NOT DEFINED IMAGE_NAME)
+  if(DEFINED ENV{IMAGE_NAME})
+    set(IMAGE_NAME $ENV{IMAGE_NAME})
+  endif()
+endif()
 set ( CTEST_SITE "${IMAGE_NAME}" )
 
 # Find the build name and CI profile
@@ -63,7 +74,7 @@ set ( CONFIGURE_OPTIONS
 find_program(CTEST_GIT_COMMAND NAMES git git.cmd)
 
 # Sources are already checked out : do nothing for update
-set(CTEST_GIT_UPDATE_CUSTOM echo No update)
+set(CTEST_GIT_UPDATE_CUSTOM "${CMAKE_COMMAND}" "-E" "echo" "No update")
 
 
 ctest_start( Experimental TRACK CI_Package )

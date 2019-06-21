@@ -18,12 +18,8 @@
 # limitations under the License.
 #
 
-# Configuration options for macOS
+# Configuration options for windows-8.1-x86-vc14.0.cmake
 
 set(site_option
-"OTB_USE_GLUT=OFF
-OTB_USE_GLFW=OFF
-CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
-CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
-OTB_DATA_USE_LARGEINPUT:BOOL=ON") 
-# Large input path are in an environment variable on macOS
+"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+")

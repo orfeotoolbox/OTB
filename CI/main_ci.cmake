@@ -47,7 +47,7 @@ set_dash_build_name()
 
 # set pipelines to enable documentation
 set(ci_cookbook_profiles mr develop release)
-set(ci_doxygen_profiles mr develop release)
+set(ci_doxygen_profiles develop release)
 list(FIND ci_cookbook_profiles ${ci_profile} ci_do_cookbook)
 list(FIND ci_doxygen_profiles ${ci_profile} ci_do_doxygen)
 
@@ -80,9 +80,6 @@ set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
 set (CMAKE_COMMAND "cmake")
-
-# Data directory setting
-set (OTB_LARGEINPUT_ROOT "") # todo
 
 message(STATUS "CI profile : ${ci_profile}")
 
