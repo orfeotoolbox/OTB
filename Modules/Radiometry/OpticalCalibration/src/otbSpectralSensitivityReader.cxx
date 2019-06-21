@@ -40,7 +40,6 @@ SpectralSensitivityReader
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, WavelengthSpectralBandVectorType::New().GetPointer());
   m_Image = ImageType::New();
-  aaa = 0;
 }
 
 SpectralSensitivityReader
