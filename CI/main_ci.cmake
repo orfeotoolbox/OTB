@@ -112,9 +112,9 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     CAPTURE_CMAKE_ERROR _configure_error
     )
 # Configure log
-file ( WRITE 
+file ( WRITE
   "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
-file ( WRITE 
+file ( WRITE
   "${OTB_SOURCE_DIR}/log/configure_cmake_error_log.txt" "${_configure_error}")
 
 if ( NOT _configure_rv EQUAL 0 )
@@ -142,9 +142,9 @@ ctest_build(BUILD "${CTEST_BINARY_DIRECTORY}"
             )
 
 # Build log
-file ( WRITE 
+file ( WRITE
   "${OTB_SOURCE_DIR}/log/build_return_value_log.txt" "${_build_rv}")
-file ( WRITE 
+file ( WRITE
   "${OTB_SOURCE_DIR}/log/build_cmake_error_log.txt" "${_build_error}")
 
 if ( NOT _build_rv EQUAL 0 )
@@ -161,9 +161,9 @@ else()
              CAPTURE_CMAKE_ERROR _test_error
              )
   # Test log
-  file ( WRITE 
+  file ( WRITE
     "${OTB_SOURCE_DIR}/log/test_return_value_log.txt" "${_test_rv}")
-  file ( WRITE 
+  file ( WRITE
     "${OTB_SOURCE_DIR}/log/test_cmake_error_log.txt" "${_test_error}")
 endif()
 
