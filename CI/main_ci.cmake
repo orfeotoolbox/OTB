@@ -151,6 +151,10 @@ if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
 endif()
 
+if (QA)
+  return()
+endif()
+
 # ----------------------------- Test -------------------------------------------
 if(ci_skip_testing)
   message(STATUS "Skip testing")
