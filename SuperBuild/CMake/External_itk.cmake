@@ -146,8 +146,8 @@ set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v5.0b01.tar.gz"
-  URL_MD5 7b4f2259160e4708ec30b385973f9eca
+  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v5.0.0.tar.gz"
+  URL_MD5 5bc86a7daf30eb30d78f878f00a29920
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
