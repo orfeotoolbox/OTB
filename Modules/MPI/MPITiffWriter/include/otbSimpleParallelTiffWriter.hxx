@@ -842,9 +842,17 @@ const bool &
 SimpleParallelTiffWriter<TInputImage>
 ::GetAbortGenerateData() const
 {
+#if ITK_VERSION_MAJOR < 5
   m_Lock.Lock();
+#else
+  m_Lock.lock();
+#endif
   bool ret = Superclass::GetAbortGenerateData();
+#if ITK_VERSION_MAJOR < 5
   m_Lock.Unlock();
+#else
+  m_Lock.unlock();
+#endif
   if (ret) return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;
 }
@@ -854,9 +862,17 @@ void
 SimpleParallelTiffWriter<TInputImage>
 ::SetAbortGenerateData(bool val)
 {
+#if ITK_VERSION_MAJOR < 5
   m_Lock.Lock();
+#else
+  m_Lock.lock();
+#endif
   Superclass::SetAbortGenerateData(val);
+#if ITK_VERSION_MAJOR < 5
   m_Lock.Unlock();
+#else
+  m_Lock.unlock();
+#endif
 }
 
 }

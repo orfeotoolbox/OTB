@@ -31,7 +31,13 @@
 #include "itkImageFileWriter.h"
 
 #include "itkObjectFactoryBase.h"
+
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkFastMutexLock.h"
+#else
+#include <mutex>
+#endif
 
 #include "itkImageRegionMultidimensionalSplitter.h"
 #include "otbImageIOFactory.h"
@@ -332,7 +338,12 @@ private:
   bool m_TiffTiledMode;
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
+#if ITK_VERSION_MAJOR < 5
   itk::SimpleFastMutexLock m_Lock;
+#else
+  mutable std::mutex m_Lock;
+#endif
+
 };
 
 

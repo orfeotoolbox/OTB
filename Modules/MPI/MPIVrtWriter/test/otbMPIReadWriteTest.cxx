@@ -25,7 +25,13 @@
 #include "otbImageFileReader.h"
 #include "otbMPIConfig.h"
 #include "otbMPIVrtWriter.h"
+
+#if ITK_VERSION_MAJOR < 5
 #include "itkMultiThreader.h"
+#else
+#include "itkMultiThreaderBase.h"
+#endif
+
 #include <cstdlib>
 #include <iostream>
 
@@ -34,9 +40,14 @@ int otbMPIReadWriteTest(int argc, char * argv[])
 {
 
   // Mono-thread execution
+#if ITK_VERSION_MAJOR < 5
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-  
+#else
+  itk::MultiThreaderBase::SetGlobalMaximumNumberOfThreads(1);
+  itk::MultiThreaderBase::SetGlobalDefaultNumberOfThreads(1);
+#endif
+
   // MPI Initialization
   typedef otb::MPIConfig    MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();

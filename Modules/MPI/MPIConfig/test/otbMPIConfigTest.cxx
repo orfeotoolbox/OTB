@@ -21,7 +21,7 @@
 
 #include "otbMPIConfig.h"
 #include <iostream>
-#include "itkMultiThreader.h"
+//#include "itkMultiThreader.h"
 
 int otbMPIConfigTest(int argc, char* argv[]) {
 
