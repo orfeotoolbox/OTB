@@ -44,7 +44,6 @@ echo "Renaming binary packages"
 for name in $(find build_packages/. -name "OTB-*.*")
   do 
   len=(${#name})
-  echo $len
   mv "$name" "${name:0:$len-4}${pack_suffix}${name:$len-4}"
 done
 # TO REMOVE
@@ -53,7 +52,7 @@ ls -all build_packages/
 ###########
 
 echo "Pushing binary packages"
-scp build_packages/*.run otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp build_packages/OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 # Push doc
 echo "Pushing documentation"
 scp build/{CookBook-*-html.tar.gz,\
