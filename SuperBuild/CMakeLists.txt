@@ -250,6 +250,9 @@ if(CMAKE_MODULE_LINKER_FLAGS)
   list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_MODULE_LINKER_FLAGS}")
 endif()
 
+# This is needed for gdal 2.4 in order to find OpenJPEG
+list(APPEND SB_ENV_CONFIGURE_CMD "PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+
 list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
@@ -335,10 +338,10 @@ option(OTB_USE_MPI "Enable MPI in OTB" OFF)
 option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data
-  PATHS
-  $ENV{OTB_DATA_ROOT}
-  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS ${OTB-SuperBuild_SOURCE_DIR}/../Data
+  )
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)

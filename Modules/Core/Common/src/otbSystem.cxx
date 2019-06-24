@@ -29,6 +29,8 @@
                    WIN32 / MSVC++ implementation
  *====================================================================*/
 #include <Windows.h>
+#include <tchar.h>
+#include <stdio.h>
 #ifndef WIN32CE
 #  include <io.h>
 #else
@@ -73,8 +75,8 @@ System::GetRootName(const std::string& filename)
 
 std::vector<std::string> System::Readdir(const std::string&  pszPath)
 {
-  struct _finddata_t       c_file;
-  long                     hFile;
+  WIN32_FIND_DATA          c_file;
+  HANDLE                   hFile = INVALID_HANDLE_VALUE;
   std::vector<std::string> listFileFind;
   std::string              pszFileSpec;
   std::string              path(pszPath);
@@ -83,15 +85,15 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
 
   pszFileSpec = path + "\\*.*";
 
-  if ((hFile = _findfirst(pszFileSpec.c_str(), &c_file)) != -1L)
+  if ((hFile = FindFirstFile(pszFileSpec.c_str(), &c_file)) != INVALID_HANDLE_VALUE)
     {
     do
       {
-      listFileFind.push_back(c_file.name);
+      listFileFind.push_back(c_file.cFileName);
       }
-    while (_findnext(hFile, &c_file) == 0);
+    while (FindNextFile(hFile, &c_file) != 0);
 
-    _findclose(hFile);
+    FindClose(hFile);
     }
 
   return listFileFind;

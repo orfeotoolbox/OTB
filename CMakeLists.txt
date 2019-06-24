@@ -117,7 +117,7 @@ find_package ( PythonLibs )
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS ${OTB_SOURCE_DIR}/Data $ENV{OTB_DATA_ROOT}
+  HINTS ${OTB_SOURCE_DIR}/Data
   )
 #mark_as_advanced(OTB_DATA_ROOT)
 
