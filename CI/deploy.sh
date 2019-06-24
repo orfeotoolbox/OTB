@@ -56,8 +56,7 @@ scp build_packages/OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_dir
 # Push doc
 echo "Pushing documentation"
 scp build/{CookBook-*-html.tar.gz,\
-/Documentation/{Cookbook/latex/CookBook-*.pdf,\
-Documentation/Doxygen/OTB-Doxygen-*.tar.bz2}} \
+/Documentation/{Cookbook/latex/CookBook-*.pdf,Doxygen/OTB-Doxygen-*.tar.bz2}} \
 otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 # Create zip, tar.gz and tar.xy source
