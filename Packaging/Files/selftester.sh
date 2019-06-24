@@ -81,9 +81,9 @@ for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
       echo_and_report "$LDD_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q -i -e ': Mach-O .*shared library' -e ': Mach-O .*bundle' -e ': Mach-O .*executable'; then
-    DL_ERRORS=$(dltest "$name" | grep -i 'ERROR')
+    DL_ERRORS=$(./tools/otb_loader "$name")
     if [ -n "$DL_ERRORS" ]; then
-      echo_and_report "dltest $name"
+      echo_and_report "otb_loader $name"
       echo_and_report "$DL_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q ': symbolic link'; then
