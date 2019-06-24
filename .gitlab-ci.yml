@@ -22,6 +22,7 @@ stages:
   - precheck
   - prepare
   - build
+  - deploy
 
 .general:
   retry:
@@ -70,6 +71,8 @@ fast-build:
       - build/CookBook-*-html.tar.gz
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
+      - build_packages/OTB-*.run
+      - build_packages/OTB-*.zip
 
 debian-build:
   extends: .common-build
@@ -108,14 +111,9 @@ ubuntu-xdk-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
   dependencies:
     - ubuntu-xdk-prepare
-  artifacts:
-    paths:
-      - build/CookBook-*-html.tar.gz
-      - build/Documentation/Cookbook/latex/CookBook-*.pdf
-      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
 
 ## CentOS superbuild
 centos-xdk-prepare:
@@ -218,3 +216,30 @@ windows-8-build:
     - ctest -V -S CI/main_packages.cmake
   dependencies:
     - windows-8-prepare
+
+    
+# Deploy job
+
+deploy:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
+  before_script:
+    - git lfs install --skip-repo
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    # Checkout the expected branch
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+  dependencies:
+    - ubuntu-xdk-build 
+    - centos-xdk-build
+    - macos-xdk-build
+    - windows-8-build
+    - windows-10-build
