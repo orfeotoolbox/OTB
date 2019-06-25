@@ -851,7 +851,7 @@ ImageFileWriter<TInputImage>
 ::GetAbortGenerateData() const
 {
 #if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
 #else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
 #endif
@@ -867,7 +867,7 @@ ImageFileWriter<TInputImage>
 ::SetAbortGenerateData(bool val)
 {
 #if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
 #else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
 #endif

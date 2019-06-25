@@ -42,7 +42,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 
   // Check if we need to compute split map agagin
 #if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
 #else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
 #endif
@@ -66,7 +66,7 @@ ImageRegionAdaptativeSplitter<VImageDimension>
 
   // Check if we need to compute split map agagin
 #if ITK_VERSION_MAJOR < 5
-  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+  itk::MutexLockHolder<itk::SimpleFastMutexLock> mutexHolder(m_Lock);
 #else
   std::lock_guard<std::mutex> mutexHolder(m_Lock);
 #endif
