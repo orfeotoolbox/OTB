@@ -31,7 +31,7 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = False
+trace = True
 
 """
 Check needed environment parameters
@@ -76,10 +76,10 @@ class Handler:
     if os.path.exists( configure_xml ):
       if trace:
         print ( configure_xml )
-        configure_file = open( configure_xml, "r" )
-        content = configure_file.read()
-        configure_file.close()
-        print( content )
+        #~ configure_file = open( configure_xml, "r" )
+        #~ content = configure_file.read()
+        #~ configure_file.close()
+        #~ print( content )
       self.configure_path = configure_xml
       return self.configure_path
     print("Could not find the Configure.xml produced by ctest")
@@ -99,6 +99,8 @@ class Handler:
       content = content[:(startLog+5)]+content[endLog:]
     # parse XML
     root = ET.fromstring(content)
+    if trace:
+      print( root.attrib )
     if not 'Name' in root.keys():
       print("Can't find site name in Configure.XML")
       sys.exit(1)
@@ -131,9 +133,10 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Missing argument for buildid request \
-site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
+      print( "Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       sys.exit(1)
+    elif trace:
+      print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     buildid_api = "/api/v1/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
