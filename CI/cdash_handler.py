@@ -244,11 +244,11 @@ class Handler:
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
 if __name__ == "__main__":
+  if trace:
+    print(sys.argv)
   if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
     sys.exit(1)
-  if trace:
-    print (sys.argv)
   if ( len(sys.argv) >= 6):
     sha1 = sys.argv[1]
     proj = sys.argv[2]
