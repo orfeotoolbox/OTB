@@ -43,11 +43,10 @@ def CheckEnvParameters(params):
       return False
   return True
 
+"""
+Handler class to retrieve build informations
+"""
 class Handler:
-# project
-# site
-# stamp
-# name
   def __init__ (self):
     self.build_dir = ""
     self.configure_path = ""
@@ -243,6 +242,7 @@ class Handler:
   They can be overriden by a full command line :
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
+print("cdash_handler main")
 if __name__ == "__main__":
   if trace:
     print(sys.argv)
