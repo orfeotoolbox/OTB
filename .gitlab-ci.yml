@@ -247,6 +247,8 @@ deploy:
 deploy-prod:
   tags:
     - deploy
+  only:
+    - tags
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
   when: manual
