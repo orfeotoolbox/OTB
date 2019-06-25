@@ -35,7 +35,7 @@ ComputeGainLutFilter < TInputImage , TOutputImage >
 ::ComputeGainLutFilter()
 {
   OTB_DISABLE_DYNAMIC_MT;
-    m_NbBin = 256;
+  m_NbBin = 256;
   m_NbPixel = 0;
   m_Min = std::numeric_limits< double >::quiet_NaN();
   m_Max = std::numeric_limits< double >::quiet_NaN();
