@@ -28,6 +28,7 @@ import unittest
 import sys
 import json
 import time
+import xml.etree.ElementTree as ET
 
 
 trace = False
@@ -82,84 +83,34 @@ class Handler:
       self.configure_path = configure_xml
       return self.configure_path
     print("Could not find the Configure.xml produced by ctest")
-    return
+    sys.exit(1)
 
-  def GetSite (self , build_dir="" ):
+  def ParseConfigureFile(self):
     """
-    Site is corresponding to the Name field in the xml.
+    Parse the configuration file to get Name, Site and BuildStamp
     """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetSite function, could not find Configure.xml")
-      return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    site_regex = re.compile( "\\bName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)")
-    site = site_regex.search( content )
-    if trace:
-      print (site_regex)
-      print(site)
-    if site:
-      if trace:
-        print("site value \n" , site.group(1))
-      self.site = site.group(1)
-      return self.site
-    print("Could not retreive site value")
-    return
-    return 
-
-  def GetName (self , build_dir = ""):
-    """
-    This function is looking for the name information in the build tree: 
-    which is BuildName
-    """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetName function, could not find Configure.xml")
-      return
-    configure_file = open( self.configure_path, "r" )
-    content = configure_file.read()
-    configure_file.close()
-    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
-    name = name_regex.search( content )
-    if trace:
-      print (name_regex)
-      print( name)
-    if name:
-      if trace:
-        print("name value \n" , name.group(1))
-      self.name = name.group(1)
-      return self.name
-    print("Could not retreive name value")
-    return
-
-  def GetStamp (self , build_dir = "" ):
-    """
-    This function is looking for the stamp information in the build tree
-    """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetStamp function, could not find Configure.xml")
-      return
-    configure_file = open( self.configure_path, "r" )
-    content = configure_file.read()
-    configure_file.close()
-    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
-    stamp = stamp_regex.search( content )
-    if trace:
-      print( stamp_regex )
-      print( stamp )
-    if stamp:
-      if trace:
-        print("Stamp value \n" , stamp.group(1))
-      self.stamp = stamp.group(1)
-      return self.stamp
-    print("Could not retreive stamp value")
-    return
+    # strip the Log section as it can mess up the XML parser
+    startLog=content.find('<Log>')
+    endLog=content.rfind('</Log>')
+    if startLog > 0 and endLog > startLog:
+      content = content[:(startLog+5)]+content[endLog:]
+    # parse XML
+    root = ET.fromstring(content)
+    if not 'Name' in root.keys():
+      print("Can't find site name in Configure.XML")
+      sys.exit(1)
+    if not 'BuildName' in root.keys():
+      print("Can't find build name in Configure.XML")
+      sys.exit(1)
+    if not 'BuildStamp' in root.keys():
+      print("Can't find build stamp in Configure.XML")
+      sys.exit(1)
+    self.site = root.get('Name')
+    self.name = root.get('BuildName')
+    self.stamp = root.get('BuildStamp')
 
   def GetBuildId (self, **kwargs):
     """
@@ -182,7 +133,7 @@ class Handler:
     if ( site == "" or stamp == "" or name == "" or project == ""):
       print( "Missing argument for buildid request \
 site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-      return
+      sys.exit(1)
     buildid_api = "/api/v1/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
@@ -207,7 +158,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       return buildid.group(1)
     else:
       print("Error in recovering buildid")
-      return
+      sys.exit(1)
 
   def GetBuildUrl (self , buildid = "" ):
     """
@@ -317,9 +268,8 @@ if __name__ == "__main__":
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
-  handler.GetSite()
-  handler.GetName()
-  handler.GetStamp()
+  handler.GetConfigureFile()
+  handler.ParseConfigureFile()
   if handler.GetBuildId() is None:
     cdash_url = "https://cdash.orfeo-toolbox.org"
     state = 'failed'
