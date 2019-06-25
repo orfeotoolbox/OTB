@@ -111,7 +111,7 @@ ubuntu-xdk-build:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
   dependencies:
     - ubuntu-xdk-prepare
 
