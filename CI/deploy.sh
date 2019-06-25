@@ -1,28 +1,24 @@
 #!/bin/bash
+# This script aims at pushing on otb5-VM2 sources, packages, documentation
+
 # Configure git for tar.xz
 git config tar.tar.xz.command "xz -c"
 
-pack_suffix=""
-if [ $1 = "develop" ] # check if the branch name is develop or not
+if [ $CI_COMMIT_REF_NAME = "develop" ] # check if the branch name is develop or not
 then # we are on develop
   jobs_directory=/home/otbpush/test/$(date +%F)
 else # we are on a release branch
   jobs_directory=/home/otbpush/test/staging
-  if [ "$#" -eq 2 ]
-    then # there is a rc tag, we need a suffix for packages
-    pack_suffix=-$(echo "$2" | grep -o "rc[0-9]*") # this retrieve the rc number
-  fi
 fi
 
 echo "jobs_directory=${jobs_directory}"
-echo "pack_suffix=${pack_suffix}"
 
 # Create today's directory on serveur otb5-vm2
 echo "Creating today's directory"
 ssh otbpush@otb5-vm2.orfeo-toolbox.org mkdir -p ${jobs_directory}
 # Delete latest
 echo "Deleting latest directory"
-if [ $1 = "develop" ]
+if [ $CI_COMMIT_REF_NAME = "develop" ]
 then # On develop
   ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf /home/otbpush/test/latest
   # Create symilink
@@ -37,20 +33,6 @@ else # On release
 fi
 
 # Push package
-ls -all build_packages/
-echo "Renaming binary packages"
-# find build_packages/. -name "*.run" \
-# -exec sh -c 'mv "$1" "${1%.run}${pack_suffix}.run"' _ {} \;
-for name in $(find build_packages/. -name "OTB-*.*")
-  do 
-  len=(${#name})
-  mv "$name" "${name:0:$len-4}${pack_suffix}${name:$len-4}"
-done
-# TO REMOVE
-###########
-ls -all build_packages/
-###########
-
 echo "Pushing binary packages"
 scp build_packages/OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 # Push doc
@@ -75,4 +57,7 @@ echo "Pushing new sources"
 scp OTB-sources-$CI_COMMIT_SHORT_SHA.* \
 otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
 
+echo ${CI_COMMIT_SHA} > ref.sha
+echo "Pushing ref.sha"
+scp ref.sha otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
  

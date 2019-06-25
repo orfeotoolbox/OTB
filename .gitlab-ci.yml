@@ -218,7 +218,7 @@ windows-8-build:
     - windows-8-prepare
 
     
-# Deploy job
+# Deploy jobs
 
 deploy:
   tags:
@@ -236,10 +236,19 @@ deploy:
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+    - ./CI/deploy.sh
   dependencies:
     - ubuntu-xdk-build 
     - centos-xdk-build
     - macos-xdk-build
     - windows-8-build
     - windows-10-build
+
+deploy-prod:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  when: manual
+  script:
+    - ./CI/deploy-prod.sh
