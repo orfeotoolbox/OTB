@@ -27,6 +27,7 @@
 
 #if ITK_VERSION_MAJOR < 5
 #include "itkFastMutexLock.h"
+#include "itkMutexLockHolder.h"
 #else
 #include <mutex>
 #endif
@@ -199,11 +200,11 @@ private:
   unsigned long m_ObserverID;
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
-  #if ITK_VERSION_MAJOR < 5
+#if ITK_VERSION_MAJOR < 5
   itk::SimpleFastMutexLock m_Lock;
-  #else
-  mutable std::mutex m_Lock;
-  #endif
+#else
+  std::mutex m_Lock;
+#endif
 };
 
 } // end namespace otb

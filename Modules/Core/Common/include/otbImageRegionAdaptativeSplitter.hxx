@@ -41,21 +41,16 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   this->SetRequestedNumberOfSplits(requestedNumber);
 
   // Check if we need to compute split map agagin
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Lock();
-  #else
-  m_Lock.lock();
-  #endif
+#if ITK_VERSION_MAJOR < 5
+  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+#else
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
+#endif
   if(!m_IsUpToDate)
     {
     // Do so if we need to
     this->EstimateSplitMap();
     }
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Unlock();
-  #else
-  m_Lock.unlock();
-  #endif
 
   // Return the size of the split map
   return m_StreamVector.size();
@@ -70,21 +65,16 @@ ImageRegionAdaptativeSplitter<VImageDimension>
   this->SetImageRegion(region);
 
   // Check if we need to compute split map agagin
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Lock();
-  #else
-  m_Lock.lock();
-  #endif
+#if ITK_VERSION_MAJOR < 5
+  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+#else
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
+#endif
   if(!m_IsUpToDate)
     {
     // Do so if we need to
     this->EstimateSplitMap();
     }
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Unlock();
-  #else
-  m_Lock.unlock();
-  #endif
 
   // Return the requested split
   return m_StreamVector.at(i);

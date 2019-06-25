@@ -35,6 +35,7 @@
 
 #if ITK_VERSION_MAJOR < 5
 #include "itkFastMutexLock.h"
+#include "itkMutexLockHolder.h"
 #else
 #include <mutex>
 #endif

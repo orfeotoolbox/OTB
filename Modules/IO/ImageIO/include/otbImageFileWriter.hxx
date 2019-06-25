@@ -850,18 +850,13 @@ const bool &
 ImageFileWriter<TInputImage>
 ::GetAbortGenerateData() const
 {
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Lock();
-  #else
-  m_Lock.lock();
-  #endif
+#if ITK_VERSION_MAJOR < 5
+  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+#else
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
+#endif
   // protected read here
   bool ret = Superclass::GetAbortGenerateData();
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Unlock();
-  #else
-  m_Lock.unlock();
-  #endif
   if (ret) return otb::Utils::TrueConstant;
   return otb::Utils::FalseConstant;
 }
@@ -871,17 +866,12 @@ void
 ImageFileWriter<TInputImage>
 ::SetAbortGenerateData(bool val)
 {
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Lock();
-  #else
-  m_Lock.lock();
-  #endif
+#if ITK_VERSION_MAJOR < 5
+  itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(m_Lock);
+#else
+  std::lock_guard<std::mutex> mutexHolder(m_Lock);
+#endif
   Superclass::SetAbortGenerateData(val);
-  #if ITK_VERSION_MAJOR < 5
-  m_Lock.Unlock();
-  #else
-  m_Lock.unlock();
-  #endif
 }
 
 } // end namespace otb
