@@ -73,7 +73,7 @@ CastImageFilter< TInputImage, TOutputImage >
       }
 
     // Set the output image largest possible region.  Use a RegionCopier
-    // so that the input and output images can be different dimensions.
+    // so that the input and output images can have different dimensions.
     OutputImageRegionType outputLargestPossibleRegion;
     this->CallCopyInputRegionToOutputRegion( outputLargestPossibleRegion,
                                              inputPtr->GetLargestPossibleRegion() );
