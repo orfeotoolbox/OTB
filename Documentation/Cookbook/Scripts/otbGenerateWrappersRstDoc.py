@@ -88,7 +88,7 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             else:
                 output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+EncloseString(value)+")"
         if paramtype == ParameterType_Group:
-            break
+            pass
         if paramtype ==  ParameterType_Choice:
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
