@@ -243,3 +243,12 @@ deploy:
     - macos-xdk-build
     - windows-8-build
     - windows-10-build
+
+
+rc-deploy:
+  stage: deploy
+  only: [tags]
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  when: manual
+  script:
+    - echo RC for $CI_COMMIT_TAG
