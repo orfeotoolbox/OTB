@@ -252,5 +252,8 @@ deploy-prod:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
   when: manual
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ./CI/deploy-prod.sh
