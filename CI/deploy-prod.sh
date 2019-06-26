@@ -7,7 +7,7 @@ prod_area=/home/otbpush/test/prod
 #check if we are dealing with the right packages
 server_name="otbpush@otb5-vm2.orfeo-toolbox.org"
 pack_sha=`ssh ${server_name} head ${staging_area}/ref.sha`
-if [ ${pack_sha} != ${CI_COMMIT_SHA} ]
+if [[ "${pack_sha}" != "${CI_COMMIT_SHA}" ]]
   then
   echo "Wrong sha1"
   exit 1
