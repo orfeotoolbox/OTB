@@ -58,9 +58,10 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
-Feature branches are tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://cdash.orfeo-toolbox.org/)). They appear in the FeatureBranches section. 
+Feature branches are tested on multiple platforms on the OTB
+[CI infrastructure](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/pipelines). 
 
-Caveat: even if the Dashboard build on develop branch is broken, it is not
+Caveat: even if the CI build on develop branch is broken, it is not
 allowed to push fixes directly on develop. The developer trying to fix the
 build should create a merge request and submit it for review. Direct push to
 develop without review must be avoided.
@@ -100,33 +101,64 @@ OTB team.
 * Merge requests **must receive at least 2 positives votes from core developers** (members of Main Repositories group in Gitlab with at least "Developer" level; this includes PSC members) before being merged
 * The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
-* Merge requests can be merged once the dashboard is proven green for this branch.
-  This condition is mandatory unless reviewers and authors explicitely agree that
-  it can be skipped (for instance in case of documentation merges or compilation
-  fixes on develop). Branches of that sort can be identified with the ~patch label, 
-  which tells the reviewer that the author would like to merge without dashboard testing.
+* Merge requests can be merged once the CI pipeline passes successfully. See
+  next section for details on the CI pipelines.
 
-Branches can be registered for dashboard testing by adding one line in `Config/feature_branches.txt` in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
 
-For branches in the main repository, the syntax is the following:
+### Using the CI platform
 
-```
-branch_name [otb-data_branch_name]
+The role of the Continuous Integration platform is to validate the different
+commits pushed to OTB repository. When commits are pushed, either on the main
+repository or on a fork, the platform triggers a pipeline with several jobs to
+build and test OTB on different configurations.
 
-```
-The second branch name is optional. It can be set if you need to modify [otb-data](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git) according to your changes.
+If you use a fork, you will need a few settings to trigger properly the CI pipelines:
 
-For branches in forks, the syntax is the following:
-```
-user/branch_name [user/otb-data_branch_name]
-```
-Again, the second branch name is optional.
+* You must create a
+  [personal access token](https://docs.gitlab.com/ce/user/profile/personal_access_tokens.html)
+  (choose the scope API) and add it as a secret variable: on the project page of
+  your fork, go to Settings -> CI/CD -> Variables, add the variable `K8S_SECRET_API_TOKEN`
+  with your token as value (you should mask this variable for security reasons).
+* You must add Runners for your fork: the best way is to ask access to the
+  runners from main repository when doing your first MR. Someone from CI admins
+  will assign the runners to your fork. 
 
-For users without push access to [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git), the modification can be asked through a merge requests to this repository.
+Depending on where your commit was pushed, different pipelines are created:
 
-Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://cdash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nightly basis).
+* push on a feature branch -> `wip` pipeline
+* push on a feature branch with a merge request (not in WIP) -> `mr` pipeline
+* push on `develop` branch -> `develop` pipeline
+* push on a release branch `release_X.Y` -> `release` pipeline
 
-Do not forget to remove the feature branch for testing once it has been merged.
+The `wip` pipeline is the fastest, with only one build job on Linux. The `mr`,
+ `develop` and `release` pipeline are more exhaustive and build on several platforms.
+
+The different pipeline stages are:
+
+* `precheck` : fast build on Linux, no test
+* `prepare` : for configuration using a XDK, update it if SuperBuild has changed
+* `build` : compile, test and package OTB on various platforms
+* `qa` : analyse code quality
+* `report` : send quality reports to SonarQube
+* `deploy` : upload generated binaries and documentation to OTB website
+* `external` : contains the links to CDash submissions
+
+When a pipeline ends, there are two cases:
+
+* if all the jobs succeed, you see a green pipeline, which means no problem was
+  found on your commit.
+* if one job fails, you see a red pipeline, which means something is broken in
+  your commit. The pipeline widget on Gitlab will tell you which job failed. You
+  will also find special jobs "cdash:..." in the stage `external` that provide
+  a link to the [Dashboard](https://cdash.orfeo-toolbox.org/index.php?project=OTB)
+  where you can look more in details into compilation errors and failed tests.
+
+Failed jobs can be retried if you think the failure was not bound to your commit.
+
+What about baseline files? They are now stored in the main OTB repository, and
+tracked with Git LFS. You can update them with a plain commit on your feature
+branch.
+
 
 ### Contribution license agreement
 
