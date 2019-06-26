@@ -341,6 +341,7 @@ Here is a small example of what can be done:
 .. code-block:: python
 
   import otbApplication as otb
+  from sys import argv
   
   # Create a smoothing application
   app = otb.Registry.CreateApplication("Smoothing")
@@ -354,7 +355,8 @@ Here is a small example of what can be done:
   myRegion = otb.itkRegion()
   myRegion['size'][0] = 20
   myRegion['size'][1] = 25
-  myRegion['index'].Fill(10)
+  myRegion['index'][0] = 10
+  myRegion['index'][1] = 10
   ram = app.PropagateRequestedRegion("out",myRegion)
   
   # Check the requested region on the input image
