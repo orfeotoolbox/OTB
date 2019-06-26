@@ -227,8 +227,11 @@ deploy:
   stage: deploy
   extends: .general
   only:
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+    refs:
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $CI_PROJECT_NAMESPACE == "orfeotoolbox"
   before_script:
     - git lfs install --skip-repo
     # Provision efficiently the local LFS cache before checkout
