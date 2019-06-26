@@ -24,6 +24,7 @@ import urllib.parse
 import json
 import re
 import time
+import sys
 
 """
 Send a request to Gitlab and return the answer
