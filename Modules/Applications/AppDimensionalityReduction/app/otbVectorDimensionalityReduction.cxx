@@ -412,7 +412,23 @@ private:
 
       for (std::size_t i=0; i<outFields.size(); ++i)
         {
-        dstFeature[outFields[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
+        switch (dstFeature[outFields[i]].GetType())
+        {
+        case OFTInteger:
+          dstFeature[outFields[i]].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTInteger64:
+          dstFeature[outFields[i]].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTReal:
+          dstFeature[outFields[i]].SetValue<double>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTString:
+          dstFeature[outFields[i]].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << dstFeature[outFields[i]].GetType() << ".");
+        }
         }
       if (updateMode)
         {

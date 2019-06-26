@@ -383,7 +383,23 @@ private:
       ogr::Feature dstFeature(outLayer.GetLayerDefn());
       dstFeature.SetFrom( *it , TRUE);
       dstFeature.SetFID(it->GetFID());
-      dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+      switch (dstFeature[classfieldname].GetType())
+        {
+        case OFTInteger:
+          dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTInteger64:
+          dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTReal:
+          dstFeature[classfieldname].SetValue<double>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTString:
+          dstFeature[classfieldname].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << dstFeature[classfieldname].GetType() << ".");
+        }
       if (computeConfidenceMap)
         dstFeature[confFieldName].SetValue<double>(quality->GetMeasurementVector(count)[0]);
       if (updateMode)
