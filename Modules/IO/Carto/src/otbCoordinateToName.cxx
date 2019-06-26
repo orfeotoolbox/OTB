@@ -91,7 +91,12 @@ bool CoordinateToName::Evaluate()
   return true;
 }
 
+
+#if ITK_VERSION_MAJOR >= 5
 itk::ITK_THREAD_RETURN_TYPE
+#else
+ITK_THREAD_RETURN_TYPE
+#endif
 CoordinateToName::ThreadFunction(void *arg)
 {
 #if ITK_VERSION_MAJOR < 5

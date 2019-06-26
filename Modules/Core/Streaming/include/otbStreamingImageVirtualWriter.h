@@ -201,9 +201,9 @@ private:
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
 #if ITK_VERSION_MAJOR < 5
-  itk::SimpleFastMutexLock m_Lock;
+  mutable itk::SimpleFastMutexLock m_Lock;
 #else
-  std::mutex m_Lock;
+  mutable std::mutex m_Lock;
 #endif
 };
 

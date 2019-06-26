@@ -130,7 +130,7 @@ private:
   AppHandleContainerType m_Container;
   
   #if ITK_VERSION_MAJOR < 5
-  static itk::SimpleMutexLock m_Mutex;
+  itk::SimpleMutexLock m_Mutex;
   #else
   std::mutex m_Mutex;
   #endif
