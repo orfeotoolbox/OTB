@@ -302,16 +302,19 @@ if __name__ == "__main__":
     token = sys.argv[4]
     refn = sys.argv[5]
   else:
-    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'K8S_SECRET_API_TOKEN', 'CI_COMMIT_REF_NAME']):
+    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
-    token = os.environ['K8S_SECRET_API_TOKEN']
     if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
       refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
     else:
       refn = os.environ['CI_COMMIT_REF_NAME']
+    if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
+      token = os.environ['K8S_SECRET_API_TOKEN']
+    else:
+      token = None
   handler = Handler()
   build_dir = os.path.join( pdir , "build/")
   if trace:
@@ -327,8 +330,9 @@ if __name__ == "__main__":
   else:
     cdash_url = handler.GetBuildUrl()
     ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
-  if trace:
-    print ( "cdash_url is: " + cdash_url )
+  print("CDash build URL : "+cdash_url)
+  if token is None:
+    sys.exit(0)
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += proj + "/statuses/" + sha1
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
