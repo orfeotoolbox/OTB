@@ -215,8 +215,22 @@ private:
         // Beware that itemIndex differs from ogr layer field index
         unsigned int itemIndex = GetSelectedItems("feat")[idx];
         std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
+        switch ((*it)[fieldName].GetType())
+        {
+        case OFTInteger:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<int>());
+          break;
+        case OFTInteger64:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<int>());
+          break;
+        case OFTReal:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << (*it)[fieldName].GetType() << ".");
+        }
         
-        mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
+        
         }
       input->PushBack(mv);
       }

@@ -221,7 +221,20 @@ private:
       
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = static_cast<float>( (*it)[inputIndexes[idx]].GetValue<double>() );
+        switch ((*it)[inputIndexes[idx]].GetType())
+        {
+          case OFTInteger:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTInteger64:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTReal:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<double>());
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << (*it)[inputIndexes[idx]].GetType() << ".");
+        }
         }
       input->PushBack(mv);
       }
