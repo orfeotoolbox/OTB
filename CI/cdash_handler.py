@@ -75,10 +75,6 @@ class Handler:
     if os.path.exists( configure_xml ):
       if trace:
         print ( configure_xml )
-        #~ configure_file = open( configure_xml, "r" )
-        #~ content = configure_file.read()
-        #~ configure_file.close()
-        #~ print( content )
       self.configure_path = configure_xml
       return self.configure_path
     print("Could not find the Configure.xml produced by ctest")
@@ -141,7 +137,8 @@ class Handler:
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    nb_try = 30
+    max_retry = 15
+    nb_try = max_retry
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
       response = urllib.request.urlopen(full_url).read().decode()
@@ -151,7 +148,7 @@ class Handler:
       nb_try -= 1
       if buildid or (nb_try == 0):
         break
-      print("No build id, retry "+str(30-nb_try)+"/30 ...")
+      print("No build id, retry "+str(max_retry-nb_try)+"/"+str(max_retry)+" ...")
       time.sleep(60)
     if buildid:
       self.buildid = buildid.group(1)
