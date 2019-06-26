@@ -40,9 +40,7 @@ stages:
     # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
-    - ls -lh build/Testing/2019*/*.xml
     - python3 -u CI/cdash_handler.py
-    - echo cdash_handler done
 
 fast-build:
   extends: .common
