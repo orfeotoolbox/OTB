@@ -141,7 +141,7 @@ class Handler:
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    nb_try = 6
+    nb_try = 30
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
       response = urllib.request.urlopen(full_url).read().decode()
@@ -151,7 +151,7 @@ class Handler:
       nb_try -= 1
       if buildid or (nb_try == 0):
         break
-      print("No build id, retry ...")
+      print("No build id, retry "+str(30-nb_try)+"/30 ...")
       time.sleep(60)
     if buildid:
       self.buildid = buildid.group(1)
