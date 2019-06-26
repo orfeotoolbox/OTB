@@ -237,23 +237,6 @@ TrainVectorBase<TInputValue, TOutputValue>
   return measurement;
 }
 
-// Template specialization for the integer case (i.e.classification), to avoid a cast from double to integer
-template <>
-inline int
-TrainVectorBase<float, int>
-::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
-{
-  return(feature[fieldIndex].GetValue<int>());
-}
-
-template <class TInputValue, class TOutputValue>
-inline TOutputValue
-TrainVectorBase<TInputValue, TOutputValue>
-::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
-{
-  return(feature[fieldIndex].GetValue<double>());
-}
-
 template <class TInputValue, class TOutputValue>
 typename TrainVectorBase<TInputValue, TOutputValue>::SamplesWithLabel
 TrainVectorBase<TInputValue, TOutputValue>
