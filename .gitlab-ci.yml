@@ -219,11 +219,8 @@ deploy:
   stage: deploy
   extends: .general
   only:
-    refs:
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $CI_PROJECT_NAMESPACE == "orfeotoolbox"
+    - develop@orfeotoolbox/otb
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
   before_script:
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
