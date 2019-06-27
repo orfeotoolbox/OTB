@@ -31,7 +31,7 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = True
+trace = False
 
 """
 Check needed environment parameters
@@ -137,7 +137,7 @@ class Handler:
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    max_retry = 15
+    max_retry = 11
     nb_try = max_retry
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
@@ -149,7 +149,7 @@ class Handler:
       if buildid or (nb_try == 0):
         break
       print("No build id, retry "+str(max_retry-nb_try)+"/"+str(max_retry)+" ...")
-      time.sleep(60)
+      time.sleep(30)
     if buildid:
       self.buildid = buildid.group(1)
       if trace:
@@ -239,7 +239,6 @@ class Handler:
   They can be overriden by a full command line :
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
-print("cdash_handler main")
 if __name__ == "__main__":
   if trace:
     print(sys.argv)
