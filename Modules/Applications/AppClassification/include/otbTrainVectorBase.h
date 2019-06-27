@@ -65,7 +65,6 @@ public:
   typedef typename Superclass::SampleType           SampleType;
   typedef typename Superclass::ListSampleType       ListSampleType;
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
-  typedef typename Superclass::ClassifierCategory   ClassifierCategory;
   
   typedef double ValueType;
   typedef itk::VariableLengthVector <ValueType> MeasurementType;
@@ -128,7 +127,10 @@ protected:
     {
       m_SelectedCFieldIdx = selectedCFieldIdx;
       // Handle only one class field name, if several are provided only the first one is used.
-      m_SelectedCFieldName = selectedCFieldIdx.empty() ? cFieldNames.front() : cFieldNames[selectedCFieldIdx.front()];
+      if (selectedCFieldIdx.empty())
+        m_SelectedCFieldName.clear();
+      else
+        m_SelectedCFieldName = cFieldNames[selectedCFieldIdx.front()];
     }
   };
 
