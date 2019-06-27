@@ -233,3 +233,15 @@ deploy:
     - macos-xdk-build
     - windows-8-build
     - windows-10-build
+
+release-container:
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    refs:
+      - tags@orfeotoolbox/otb
+    variables:
+      - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
+  script:
+    - "curl --request POST --form token=$K8S_SECRET_RELEASE --form ref=master --form variables[OTB_TAG]=$CI_COMMIT_TAG https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline"
