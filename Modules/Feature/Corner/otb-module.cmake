@@ -27,7 +27,6 @@ otb_module(OTBCorner
     OTBVectorDataBase
     OTBITK
     OTBDescriptors
-    OTBSpatialObjects
     OTBVectorDataManipulation
     OTBPointSet
     OTBImageManipulation

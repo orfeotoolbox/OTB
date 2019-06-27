@@ -32,7 +32,6 @@ otb_module(OTBEdge
     OTBObjectList
     OTBPath
     OTBProjection
-    OTBSpatialObjects
     OTBStreaming
     OTBVectorDataBase
 
