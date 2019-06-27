@@ -107,43 +107,19 @@ OTB team.
 
 ### Using the CI platform
 
-The role of the Continuous Integration platform is to validate the different
-commits pushed to OTB repository. When commits are pushed, either on the main
-repository or on a fork, the platform triggers a pipeline with several jobs to
-build and test OTB on different configurations.
+The CI pipelines are triggered automatically when pushing commits. If you push
+to a fork, you will need a few settings to trigger properly the CI pipelines:
 
-If you use a fork, you will need a few settings to trigger properly the CI pipelines:
-
-* You must create a
+* You must add Runners for your fork: the best way is to ask access to the
+  runners from main repository when doing your first MR. During code review,
+  someone from CI admins will assign the runners to your fork.
+* [Optional] You can create a
   [personal access token](https://docs.gitlab.com/ce/user/profile/personal_access_tokens.html)
   (choose the scope API) and add it as a secret variable: on the project page of
   your fork, go to Settings -> CI/CD -> Variables, add the variable `K8S_SECRET_API_TOKEN`
   with your token as value (you should mask this variable for security reasons).
-* You must add Runners for your fork: the best way is to ask access to the
-  runners from main repository when doing your first MR. Someone from CI admins
-  will assign the runners to your fork. 
 
-Depending on where your commit was pushed, different pipelines are created:
-
-* push on a feature branch -> `wip` pipeline
-* push on a feature branch with a merge request (not in WIP) -> `mr` pipeline
-* push on `develop` branch -> `develop` pipeline
-* push on a release branch `release_X.Y` -> `release` pipeline
-
-The `wip` pipeline is the fastest, with only one build job on Linux. The `mr`,
- `develop` and `release` pipeline are more exhaustive and build on several platforms.
-
-The different pipeline stages are:
-
-* `precheck` : fast build on Linux, no test
-* `prepare` : for configuration using a XDK, update it if SuperBuild has changed
-* `build` : compile, test and package OTB on various platforms
-* `qa` : analyse code quality
-* `report` : send quality reports to SonarQube
-* `deploy` : upload generated binaries and documentation to OTB website
-* `external` : contains the links to CDash submissions
-
-When a pipeline ends, there are two cases:
+When your pipeline ends, there are two cases:
 
 * if all the jobs succeed, you see a green pipeline, which means no problem was
   found on your commit.
@@ -153,12 +129,8 @@ When a pipeline ends, there are two cases:
   a link to the [Dashboard](https://cdash.orfeo-toolbox.org/index.php?project=OTB)
   where you can look more in details into compilation errors and failed tests.
 
-Failed jobs can be retried if you think the failure was not bound to your commit.
-
-What about baseline files? They are now stored in the main OTB repository, and
-tracked with Git LFS. You can update them with a plain commit on your feature
-branch.
-
+More details on the CI platform can be found
+[here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/OTB-Continuous-Integration-platform).
 
 ### Contribution license agreement
 
