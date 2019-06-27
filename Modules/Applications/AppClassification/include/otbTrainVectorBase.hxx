@@ -312,7 +312,7 @@ TrainVectorBase<TInputValue, TOutputValue>
 
         input->PushBack( mv );
 
-        if(cFieldIndex>=0 && ogr::Field(feature,cFieldIndex).HasBeenSet())
+        if(cFieldIndex>=0 && ogr::Field(feature,cFieldIndex).HasBeenSet() && !(this->GetClassifierCategory() == ClassifierCategory::Unsupervised))
         {
           switch (feature[cFieldIndex].GetType())
           {

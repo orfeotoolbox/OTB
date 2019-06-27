@@ -65,7 +65,8 @@ public:
   typedef typename Superclass::SampleType           SampleType;
   typedef typename Superclass::ListSampleType       ListSampleType;
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
-
+  typedef typename Superclass::ClassifierCategory   ClassifierCategory;
+  
   typedef double ValueType;
   typedef itk::VariableLengthVector <ValueType> MeasurementType;
 
