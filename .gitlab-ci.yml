@@ -34,26 +34,11 @@ stages:
 .common:
   extends: .general
   before_script:
-    - git lfs install --skip-repo
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
-    # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
     - python3 -u CI/cdash_handler.py
-
-fast-build:
-  extends: .common
-  only: [merge_requests, branches]
-  stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
-  before_script:
-    - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q $CI_COMMIT_SHA
-    - python3 CI/check_twin_pipelines.py
-  script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-    - ccache -s
 
 .common-build:
   extends: .common
@@ -74,12 +59,6 @@ fast-build:
       - build_packages/OTB-*.run
       - build_packages/OTB-*.zip
 
-debian-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
-
 .common-prepare:
   extends: .general
   only:
@@ -88,7 +67,6 @@ debian-build:
     - /^release-[0-9]+\.[0-9]+$/
   stage: prepare
   before_script:
-    - git lfs install --skip-repo
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - export GIT_LFS_SKIP_SMUDGE=0
@@ -98,6 +76,27 @@ debian-build:
     paths:
       - sb_branch.txt # Needed to checkout correct branch in build step
       - build/*/*/*/*.log # Superbuild log
+
+#-------------------------- precheck job ---------------------------------------
+fast-build:
+  extends: .common
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
+
+#------------------------- prepare & build jobs --------------------------------
+debian-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
 
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
@@ -133,14 +132,9 @@ centos-xdk-build:
 
 ## MacOS superbuild
 macos-xdk-prepare:
+  extends: .common-prepare
   tags:
     - macos
-  extends: .common-prepare
-  before_script:
-    # No need to install lfs as this machine is persistent
-    - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q $CI_COMMIT_SHA
-    - export GIT_LFS_SKIP_SMUDGE=0
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
 
@@ -150,7 +144,7 @@ macos-xdk-build:
   extends: .common-build
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
   dependencies:
     - macos-xdk-prepare
 
@@ -217,9 +211,7 @@ windows-8-build:
   dependencies:
     - windows-8-prepare
 
-    
-# Deploy job
-
+#---------------------------- Deploy job ---------------------------------------
 deploy:
   tags:
     - deploy
@@ -230,10 +222,8 @@ deploy:
     - develop
     - /^release-[0-9]+\.[0-9]+$/
   before_script:
-    - git lfs install --skip-repo
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
-    # Checkout the expected branch
     - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
