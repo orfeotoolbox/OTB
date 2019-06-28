@@ -60,6 +60,9 @@ stages:
       - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
       - build_packages/OTB-*.run
       - build_packages/OTB-*.zip
+      - build/compile_commands.json
+      - build/ctest_report.xml
+      - build/cppcheck_report.xml
 
 .common-prepare:
   extends: .general
@@ -216,12 +219,8 @@ windows-8-build:
 
 #------------------------- QA related jobs -------------------------------------
 ubuntu-xdk-qa-code-coverage:
-  extends: .common
+  extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  stage: build
-  only:
-    - develop
-    - new-ci
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
                ctest -V -S CI/main_qa.cmake
@@ -233,20 +232,10 @@ ubuntu-xdk-qa-code-coverage:
   after_script: []
   dependencies:
     - ubuntu-xdk-prepare
-  artifacts:
-    expire_in: 24 hrs
-    when: always
-    paths:
-      - build/compile_commands.json
-      - build/ctest_report.xml
 
 ubuntu-xdk-qa-static-analysis:
-  extends: .common
+  extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  stage: build
-  only:
-    - develop
-    - new-ci
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -259,11 +248,6 @@ ubuntu-xdk-qa-static-analysis:
   after_script: []
   dependencies:
     - ubuntu-xdk-prepare
-  artifacts:
-    expire_in: 24 hrs
-    when: always
-    paths:
-      - build/cppcheck_report.xml
 
 ubuntu-xdk-report:
   extends: .common
@@ -272,7 +256,9 @@ ubuntu-xdk-report:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: report
   only:
+    - merge_requests
     - develop
+    - /^release-[0-9]+\.[0-9]+$/
     - new-ci
   script:
     - sonar-scanner -Dproject.settings=sonar-project.properties
