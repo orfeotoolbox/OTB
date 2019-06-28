@@ -254,7 +254,7 @@ ubuntu-xdk-qa-static-analysis:
     - develop
     - new-ci
   script:
-    - find Modules -type f \( -name '*.h' -o -name '*.hxx' \) -exec dirname '{}' \; |
+    - find Modules -type f -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
           sort -u > header_directories
     - cppcheck -j 8 -q --xml --xml-version=2 --enable=all
