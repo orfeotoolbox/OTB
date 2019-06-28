@@ -221,7 +221,7 @@ windows-8-build:
     - windows-8-prepare
 
 #------------------------- QA related jobs -------------------------------------
-ubuntu-superbuild-qa-code-coverage:
+ubuntu-xdk-qa-code-coverage:
   extends: .common
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: build
@@ -238,7 +238,7 @@ ubuntu-superbuild-qa-code-coverage:
                  CI/ctest2junit.xsl
   after_script: []
   dependencies:
-    - ubuntu-superbuild-prepare
+    - ubuntu-xdk-prepare
   artifacts:
     expire_in: 24 hrs
     when: always
@@ -246,7 +246,7 @@ ubuntu-superbuild-qa-code-coverage:
       - build/compile_commands.json
       - build/ctest_report.xml
 
-ubuntu-superbuild-qa-static-analysis:
+ubuntu-xdk-qa-static-analysis:
   extends: .common
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: build
@@ -264,14 +264,14 @@ ubuntu-superbuild-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   dependencies:
-    - ubuntu-superbuild-prepare
+    - ubuntu-xdk-prepare
   artifacts:
     expire_in: 24 hrs
     when: always
     paths:
       - build/cppcheck_report.xml
 
-ubuntu-superbuild-report:
+ubuntu-xdk-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
@@ -286,8 +286,8 @@ ubuntu-superbuild-report:
                     -Dsonar.login=$SONAR_OTB_TOKEN
   after_script: []
   dependencies:
-    - ubuntu-superbuild-qa-code-coverage
-    - ubuntu-superbuild-qa-static-analysis
+    - ubuntu-xdk-qa-code-coverage
+    - ubuntu-xdk-qa-static-analysis
 
 #---------------------------- Deploy job ---------------------------------------
 deploy:
