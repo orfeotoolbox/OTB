@@ -106,7 +106,7 @@ void DoInit() override
 
   // Documentation
   SetDocLongDescription(
-    "This application trains a classifier from multiple input images or a csv "
+    "This application trains a classifier from multiple input images or a CSV "
     "file, in order to perform regression. Predictors are composed of pixel "
     "values in each band optionally centered and reduced using an XML "
     "statistics file produced by the ComputeImagesStatistics application.\n\n"
@@ -131,7 +131,7 @@ void DoInit() override
   //Group IO
   AddParameter( ParameterType_Group , "io" , "Input and output data" );
   SetParameterDescription("io" , 
-    "This group of parameters allows setting input and output data." );
+    "This group of parameters set the input and output data." );
   AddParameter( ParameterType_InputImageList , "io.il", "Input Image List" );
   SetParameterDescription( "io.il" , 
     "A list of input images. First (n-1) bands should contain the predictor. "
@@ -163,7 +163,7 @@ void DoInit() override
   AddParameter( ParameterType_Group , "sample" , 
     "Training and validation samples parameters" );
   SetParameterDescription( "sample" ,
-    "This group of parameters allows you to set training and validation sample "
+    "This group of parameters allows one to set training and validation sample "
     "lists parameters." );
 
   AddParameter( ParameterType_Int , "sample.mt" , 
