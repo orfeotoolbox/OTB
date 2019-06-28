@@ -47,6 +47,7 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+    - new-ci
   stage: build
   artifacts:
     when: always
