@@ -21,8 +21,7 @@ variables:
 stages:
   - precheck
   - prepare
-  #- build # FIXME: uncomment
-  - qa
+  - build
   - report
 
 .general:
@@ -161,7 +160,7 @@ ubuntu-superbuild-prepare:
 ubuntu-superbuild-qa-code-coverage:
   extends: .common
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  stage: qa
+  stage: build
   only:
     - develop
     - new-ci
@@ -187,7 +186,7 @@ ubuntu-superbuild-qa-code-coverage:
 ubuntu-superbuild-qa-static-analysis:
   extends: .common
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  stage: qa
+  stage: build
   only:
     - develop
     - new-ci
