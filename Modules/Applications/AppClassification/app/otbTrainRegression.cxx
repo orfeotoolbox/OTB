@@ -1,22 +1,22 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- *
- * This file is part of Orfeo Toolbox
- *
- *     https://www.orfeo-toolbox.org/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+  *
+  * This file is part of Orfeo Toolbox
+  *
+  *     https://www.orfeo-toolbox.org/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *     http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 #include "otbLearningApplicationBase.h"
 #include "otbWrapperApplicationFactory.h"
@@ -130,10 +130,10 @@ void DoInit() override
 
   //Group IO
   AddParameter( ParameterType_Group , "io" , "Input and output data" );
-  SetParameterDescription("io" ,
+  SetParameterDescription("io" , 
     "This group of parameters allows setting input and output data." );
   AddParameter( ParameterType_InputImageList , "io.il", "Input Image List" );
-  SetParameterDescription( "io.il" ,
+  SetParameterDescription( "io.il" , 
     "A list of input images. First (n-1) bands should contain the predictor. "
     "The last band should contain the output value to predict." );
   AddParameter( ParameterType_InputFilename , "io.csv" , "Input CSV file" );
@@ -142,7 +142,7 @@ void DoInit() override
     "column. Only used when no input image is given" );
   MandatoryOff( "io.csv" );
 
-  AddParameter( ParameterType_InputFilename , "io.imstat" ,
+  AddParameter( ParameterType_InputFilename , "io.imstat" , 
     "Input XML image statistics file" );
   MandatoryOff( "io.imstat" );
   SetParameterDescription( "io.imstat",
@@ -150,7 +150,7 @@ void DoInit() override
     "input images." );
   AddParameter( ParameterType_OutputFilename , "io.out" ,
     "Output regression model" );
-  SetParameterDescription( "io.out" ,
+  SetParameterDescription( "io.out" , 
     "Output file containing the model estimated (.txt format)." );
 
   AddParameter( ParameterType_Float , "io.mse" , "Mean Square Error" );
@@ -160,28 +160,28 @@ void DoInit() override
   DisableParameter( "io.mse" );
 
   //Group Sample list
-  AddParameter( ParameterType_Group , "sample" ,
+  AddParameter( ParameterType_Group , "sample" , 
     "Training and validation samples parameters" );
   SetParameterDescription( "sample" ,
     "This group of parameters allows you to set training and validation sample "
     "lists parameters." );
 
-  AddParameter( ParameterType_Int , "sample.mt" ,
+  AddParameter( ParameterType_Int , "sample.mt" , 
     "Maximum training predictors");
   //MandatoryOff("mt");
   SetDefaultParameterInt( "sample.mt" , 1000 );
-  SetParameterDescription( "sample.mt" ,
+  SetParameterDescription( "sample.mt" , 
     "Maximum number of training predictors (default = 1000) (no limit = -1).");
 
-  AddParameter( ParameterType_Int , "sample.mv" ,
+  AddParameter( ParameterType_Int , "sample.mv" , 
     "Maximum validation predictors");
   // MandatoryOff("mv");
   SetDefaultParameterInt( "sample.mv" , 1000 );
-  SetParameterDescription( "sample.mv" ,
+  SetParameterDescription( "sample.mv" , 
     "Maximum number of validation predictors (default = 1000) "
     "(no limit = -1).");
 
-  AddParameter( ParameterType_Float , "sample.vtr" ,
+  AddParameter( ParameterType_Float , "sample.vtr" , 
     "Training and validation sample ratio");
   SetParameterDescription( "sample.vtr" ,
     "Ratio between training and validation samples (0.0 = all training, "
