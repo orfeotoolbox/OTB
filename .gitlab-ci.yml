@@ -39,13 +39,7 @@ stages:
     - git lfs fetch origin $CI_COMMIT_SHA
     - git checkout -f -q $CI_COMMIT_SHA
   after_script:
-    - python3 CI/cdash_handler.py
-  artifacts:
-    when: on_failure
-    expire_in: 24 hrs
-    paths:
-      - build/*/*.log #CMake log
-      - log/*.txt # Others
+    - python3 -u CI/cdash_handler.py
 
 .common-build:
   extends: .common
@@ -108,7 +102,6 @@ debian-build:
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
   extends: .common-prepare
-  only: [new-ci]
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
