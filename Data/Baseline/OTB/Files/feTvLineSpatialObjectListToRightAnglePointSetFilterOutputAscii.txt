@@ -1,2 +1,0 @@
-Number of right angles detected  1
- Right Angle found in point : [30.5626, 10.5977]

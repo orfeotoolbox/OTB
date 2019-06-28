@@ -33,7 +33,6 @@ ENABLE_SHARED
     OTBObjectList
     OTBPath
     OTBProjection
-    OTBSpatialObjects
     OTBStreaming
     OTBVectorDataBase
 
