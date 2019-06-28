@@ -28,6 +28,7 @@ import unittest
 import sys
 import json
 import time
+import xml.etree.ElementTree as ET
 
 
 trace = False
@@ -42,11 +43,10 @@ def CheckEnvParameters(params):
       return False
   return True
 
+"""
+Handler class to retrieve build informations
+"""
 class Handler:
-# project
-# site
-# stamp
-# name
   def __init__ (self):
     self.build_dir = ""
     self.configure_path = ""
@@ -75,91 +75,39 @@ class Handler:
     if os.path.exists( configure_xml ):
       if trace:
         print ( configure_xml )
-        configure_file = open( configure_xml, "r" )
-        content = configure_file.read()
-        configure_file.close()
-        print( content )
       self.configure_path = configure_xml
       return self.configure_path
     print("Could not find the Configure.xml produced by ctest")
-    return
+    sys.exit(1)
 
-  def GetSite (self , build_dir="" ):
+  def ParseConfigureFile(self):
     """
-    Site is corresponding to the Name field in the xml.
+    Parse the configuration file to get Name, Site and BuildStamp
     """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetSite function, could not find Configure.xml")
-      return
     configure_file = open( self.configure_path, "r" )
     content = configure_file.read()
     configure_file.close()
-    site_regex = re.compile( "\\bName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)")
-    site = site_regex.search( content )
+    # strip the Log section as it can mess up the XML parser
+    startLog=content.find('<Log>')
+    endLog=content.rfind('</Log>')
+    if startLog > 0 and endLog > startLog:
+      content = content[:(startLog+5)]+content[endLog:]
+    # parse XML
+    root = ET.fromstring(content)
     if trace:
-      print (site_regex)
-      print(site)
-    if site:
-      if trace:
-        print("site value \n" , site.group(1))
-      self.site = site.group(1)
-      return self.site
-    print("Could not retreive site value")
-    return
-    return 
-
-  def GetName (self , build_dir = ""):
-    """
-    This function is looking for the name information in the build tree: 
-    which is BuildName
-    """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetName function, could not find Configure.xml")
-      return
-    configure_file = open( self.configure_path, "r" )
-    content = configure_file.read()
-    configure_file.close()
-    name_regex = re.compile( "\\bBuildName\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
-    name = name_regex.search( content )
-    if trace:
-      print (name_regex)
-      print( name)
-    if name:
-      if trace:
-        print("name value \n" , name.group(1))
-      self.name = name.group(1)
-      return self.name
-    print("Could not retreive name value")
-    return
-
-  def GetStamp (self , build_dir = "" ):
-    """
-    This function is looking for the stamp information in the build tree
-    """
-    if ( build_dir == ""):
-      build_dir = self.build_dir
-    if self.configure_path == "" and not self.GetConfigureFile( build_dir ):
-      print ("Error in GetStamp function, could not find Configure.xml")
-      return
-    configure_file = open( self.configure_path, "r" )
-    content = configure_file.read()
-    configure_file.close()
-    stamp_regex = re.compile( "\\bBuildStamp\\b=\"([0-9,\\s,\(,\),\-,\.,_,A-Z,a-z]+)\"")
-    stamp = stamp_regex.search( content )
-    if trace:
-      print( stamp_regex )
-      print( stamp )
-    if stamp:
-      if trace:
-        print("Stamp value \n" , stamp.group(1))
-      self.stamp = stamp.group(1)
-      return self.stamp
-    print("Could not retreive stamp value")
-    return
+      print( root.attrib )
+    if not 'Name' in root.keys():
+      print("Can't find site name in Configure.XML")
+      sys.exit(1)
+    if not 'BuildName' in root.keys():
+      print("Can't find build name in Configure.XML")
+      sys.exit(1)
+    if not 'BuildStamp' in root.keys():
+      print("Can't find build stamp in Configure.XML")
+      sys.exit(1)
+    self.site = root.get('Name')
+    self.name = root.get('BuildName')
+    self.stamp = root.get('BuildStamp')
 
   def GetBuildId (self, **kwargs):
     """
@@ -180,15 +128,17 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Missing argument for buildid request \
-site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-      return
+      print( "Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
+      sys.exit(1)
+    elif trace:
+      print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     buildid_api = "/api/v1/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
     if trace:
       print("full_url: "+full_url)
-    nb_try = 6
+    max_retry = 11
+    nb_try = max_retry
     build_id_regex = re.compile( "<buildid>([0-9]+)</buildid>" )
     while nb_try:
       response = urllib.request.urlopen(full_url).read().decode()
@@ -198,8 +148,8 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       nb_try -= 1
       if buildid or (nb_try == 0):
         break
-      print("No build id, retry ...")
-      time.sleep(60)
+      print("No build id, retry "+str(max_retry-nb_try)+"/"+str(max_retry)+" ...")
+      time.sleep(30)
     if buildid:
       self.buildid = buildid.group(1)
       if trace:
@@ -207,7 +157,7 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       return buildid.group(1)
     else:
       print("Error in recovering buildid")
-      return
+      sys.exit(1)
 
   def GetBuildUrl (self , buildid = "" ):
     """
@@ -249,6 +199,34 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
       errors = "Errors occur during tests"
     return ( state , errors)
 
+  def GetReturnValue(self, logfile):
+    fd = open(logfile)
+    content = fd.readlines()[0]
+    fd.close()
+    return int(content.strip("\n"))
+
+  def GetLogStatus(self, logdir):
+    """
+    This function returns the log status of a build as a pair 'state' + 'errors'
+    """
+    configure_rv = os.path.join(logdir, "configure_return_value_log.txt")
+    build_rv = os.path.join(logdir, "build_return_value_log.txt")
+    test_rv = os.path.join(logdir, "test_return_value_log.txt")
+    if os.path.exists( configure_rv ):
+      if (self.GetReturnValue(configure_rv) != 0):
+        return ( 'failed' , 'Configure failed')
+    else:
+      return ( 'failed' , 'Configure not run')
+    if os.path.exists( build_rv ):
+      if (self.GetReturnValue(build_rv) != 0):
+        return ( 'failed' , 'Build failed')
+    else:
+      return ( 'failed' , 'Build not run')
+    if os.path.exists( test_rv ):
+      if (self.GetReturnValue(test_rv) != 0):
+        return ( 'failed' , 'Tests failed')
+    return ('success', '')
+
 """
   This script aims only at recovering the build url
   It uses environment variables setup by Gitlab Runner as default:
@@ -262,11 +240,11 @@ site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
 if __name__ == "__main__":
+  if trace:
+    print(sys.argv)
   if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
     sys.exit(1)
-  if trace:
-    print (sys.argv)
   if ( len(sys.argv) >= 6):
     sha1 = sys.argv[1]
     proj = sys.argv[2]
@@ -274,33 +252,36 @@ if __name__ == "__main__":
     token = sys.argv[4]
     refn = sys.argv[5]
   else:
-    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'K8S_SECRET_API_TOKEN', 'CI_COMMIT_REF_NAME']):
+    if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
-    token = os.environ['K8S_SECRET_API_TOKEN']
     if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
       refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
     else:
       refn = os.environ['CI_COMMIT_REF_NAME']
+    if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
+      token = os.environ['K8S_SECRET_API_TOKEN']
+    else:
+      token = None
   handler = Handler()
   build_dir = os.path.join( pdir , "build/")
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
-  handler.GetSite()
-  handler.GetName()
-  handler.GetStamp()
+  handler.GetConfigureFile()
+  handler.ParseConfigureFile()
   if handler.GetBuildId() is None:
     cdash_url = "https://cdash.orfeo-toolbox.org"
     state = 'failed'
     error = "Failed to get build id"
   else:
     cdash_url = handler.GetBuildUrl()
-    ( state , error ) = handler.GetBuildStatus()
-  if trace:
-    print ( "cdash_url is: " + cdash_url )
+    ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
+  print("CDash build URL : "+cdash_url)
+  if token is None:
+    sys.exit(0)
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += proj + "/statuses/" + sha1
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\

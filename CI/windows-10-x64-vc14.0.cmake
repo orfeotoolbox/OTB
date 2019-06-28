@@ -18,6 +18,8 @@
 # limitations under the License.
 #
 
-project(OTBSpatialObjects)
+# Configuration options for windows-10-x64-vc14.0.cmake
 
-otb_module_impl()
+set(site_option
+"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+")

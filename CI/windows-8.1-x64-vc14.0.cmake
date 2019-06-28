@@ -18,26 +18,8 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes that implement classical corner
-detection algorithms (Harris for instance). It also contains classes to detect
-right angle by exploiting the output of a line detection algorithm.")
+# Configuration options for windows-8.1-x64-vc14.0.cmake
 
-otb_module(OTBCorner
-  DEPENDS
-    OTBVectorDataBase
-    OTBITK
-    OTBDescriptors
-    OTBVectorDataManipulation
-    OTBPointSet
-    OTBImageManipulation
-    OTBCommon
-
-  TEST_DEPENDS
-    OTBVectorDataIO
-    OTBTestKernel
-    OTBImageIO
-    OTBImageBase
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+set(site_option
+"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+")

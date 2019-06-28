@@ -25,16 +25,12 @@ void RegisterTests()
   REGISTER_TEST(otbEdgeDetectorImageFilter);
   REGISTER_TEST(otbHorizontalSobelVectorImageFilterTest);
   REGISTER_TEST(otbAsymmetricFusionOfLineDetector);
-  REGISTER_TEST(otbLocalHoughDraw);
   REGISTER_TEST(otbAssociativeSymmetricalSum);
   REGISTER_TEST(otbPersistentVectorizationFilter);
   REGISTER_TEST(otbEdgeDensityImageFilter);
   REGISTER_TEST(otbLineCorrelationDetector);
   REGISTER_TEST(otbSobelVectorImageFilterTest);
-  REGISTER_TEST(otbHoughTransform2DLinesImageTest);
   REGISTER_TEST(otbPixelSuppressionByDirection);
-  REGISTER_TEST(otbLocalHough);
-  REGISTER_TEST(otbExtractSegments);
   REGISTER_TEST(otbLineRatioDetector);
   REGISTER_TEST(otbTouziEdgeDetectorDirection);
   REGISTER_TEST(otbVerticalSobelVectorImageFilterTest);
@@ -44,5 +40,4 @@ void RegisterTests()
   REGISTER_TEST(otbLineSegmentDetector);
   REGISTER_TEST(otbLineSegmentDetector_8b_16b_compare);
   REGISTER_TEST(otbLineCorrelationDetectorLinear);
-  REGISTER_TEST(otbFillGapsFilter);
 }

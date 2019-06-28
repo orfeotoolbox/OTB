@@ -18,24 +18,8 @@
 # limitations under the License.
 #
 
-set(OTBEdge_SRC
-  otbFillGapsFilter.cxx
-  )
+# Configuration options for windows-8.1-x86-vc14.0.cmake
 
-add_library(OTBEdge ${OTBEdge_SRC})
-target_link_libraries(OTBEdge
-  ${OTBCommon_LIBRARIES}
-  ${OTBConversion_LIBRARIES}
-  ${OTBITK_LIBRARIES}
-  ${OTBITKPendingPatches_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBObjectList_LIBRARIES}
-  ${OTBPath_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBSpatialObjects_LIBRARIES}
-  ${OTBStreaming_LIBRARIES}
-  ${OTBVectorDataBase_LIBRARIES}
-)
-
-otb_module_target(OTBEdge)
+set(site_option
+"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
+")
