@@ -66,6 +66,7 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+    - new-ci
   stage: prepare
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
