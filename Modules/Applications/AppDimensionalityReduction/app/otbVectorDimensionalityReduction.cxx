@@ -98,7 +98,7 @@ private:
     SetParameterDescription("in","The input vector data to reduce.");
 
     AddParameter(ParameterType_InputFilename, "instat", "Statistics file");
-    SetParameterDescription("instat", "A XML file containing mean and standard "
+    SetParameterDescription("instat", "An XML file containing mean and standard "
       "deviation to center and reduce samples before dimensionality reduction "
       "(produced by ComputeImagesStatistics application).");
     MandatoryOff("instat");
