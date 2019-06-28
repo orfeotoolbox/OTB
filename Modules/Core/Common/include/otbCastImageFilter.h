@@ -59,6 +59,7 @@ namespace otb
  * If you need to perform a dimensionaly reduction, you may want
  * to use the ExtractImageFilter instead of the CastImageFilter.
  *
+ * \ingroup OTBCommon
  */
 template< typename TInputImage, typename TOutputImage >
 class ITK_TEMPLATE_EXPORT CastImageFilter:
