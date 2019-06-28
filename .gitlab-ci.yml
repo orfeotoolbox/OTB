@@ -194,7 +194,7 @@ ubuntu-superbuild-qa-static-analysis:
     - find Modules -type f \( -name '*.h' -o -name '*.hxx' \) -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
           sort -u > header_directories
-    - cppcheck -q -j 8 --xml --xml-version=2 --enable=all
+    - cppcheck -q --xml --xml-version=2 --enable=all
                --language=c++ --std=c++14 --platform=unix64
                --includes-file=header_directories
                -i Modules/ThirdParty Modules
