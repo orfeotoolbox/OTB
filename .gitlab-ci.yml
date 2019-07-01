@@ -274,40 +274,40 @@ ubuntu-xdk-report:
     - ubuntu-xdk-qa-static-analysis
 
 #---------------------------- Deploy job ---------------------------------------
-deploy:
-  tags:
-    - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  stage: deploy
-  extends: .general
-  only:
-    - develop@orfeotoolbox/otb
-    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-  before_script:
-    # Provision efficiently the local LFS cache before checkout
-    - git lfs fetch origin $CI_COMMIT_SHA
-    - git checkout -f -q $CI_COMMIT_SHA
-  script:
-    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
-  dependencies:
-    - ubuntu-xdk-build
-    - centos-xdk-build
-    - macos-xdk-build
-    - windows-8-build
-    - windows-10-build
-
-release-container:
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  stage: deploy
-  extends: .general
-  only:
-    refs:
-      - tags@orfeotoolbox/otb
-    variables:
-      - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
-  script:
-    - curl --request POST
-           --form token=$K8S_SECRET_RELEASE
-           --form ref=master
-           --form variables[OTB_TAG]=$CI_COMMIT_TAG
-           https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
+#~ deploy:
+  #~ tags:
+    #~ - deploy
+  #~ image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  #~ stage: deploy
+  #~ extends: .general
+  #~ only:
+    #~ - develop@orfeotoolbox/otb
+    #~ - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  #~ before_script:
+    #~ # Provision efficiently the local LFS cache before checkout
+    #~ - git lfs fetch origin $CI_COMMIT_SHA
+    #~ - git checkout -f -q $CI_COMMIT_SHA
+  #~ script:
+    #~ - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+  #~ dependencies:
+    #~ - ubuntu-xdk-build
+    #~ - centos-xdk-build
+    #~ - macos-xdk-build
+    #~ - windows-8-build
+    #~ - windows-10-build
+#~ 
+#~ release-container:
+  #~ image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  #~ stage: deploy
+  #~ extends: .general
+  #~ only:
+    #~ refs:
+      #~ - tags@orfeotoolbox/otb
+    #~ variables:
+      #~ - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
+  #~ script:
+    #~ - curl --request POST
+           #~ --form token=$K8S_SECRET_RELEASE
+           #~ --form ref=master
+           #~ --form variables[OTB_TAG]=$CI_COMMIT_TAG
+           #~ https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
