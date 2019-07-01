@@ -63,6 +63,7 @@ stages:
       - build/compile_commands.json
       - build/ctest_report.xml
       - build/cppcheck_report.xml
+      - build/coverage_report.xml
 
 .common-prepare:
   extends: .general
@@ -226,10 +227,11 @@ ubuntu-xdk-qa-code-coverage:
                ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
                      -DQA:BOOL=ON
+    - gcovr -x -o build/coverage_report.xml build/cov_data
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-  after_script: []
+  #~ after_script: []
   dependencies:
     - ubuntu-xdk-prepare
 
