@@ -39,7 +39,7 @@ Stopwatch
 {
   if (!this->m_IsRunning)
     {
-    this->m_IsRunning = true
+    this->m_IsRunning = true;
     this->m_StartTime = this->GetTimestamp();
     }
 }
