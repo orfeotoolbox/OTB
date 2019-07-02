@@ -89,7 +89,7 @@ private:
   {
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
-    SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available. It is also possible to compute the inverse transform to reconstruct the image. It is also possible to optionally export the transformation matrix to a text file.");
+    SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available. It is also possible to compute the inverse transform to reconstruct the image and to optionally export the transformation matrix to a text file.");
     SetDocLimitations("This application does not provide the inverse transform and the transformation matrix export for the MAF.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(

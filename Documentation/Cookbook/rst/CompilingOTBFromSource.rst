@@ -196,6 +196,12 @@ of all our dependencies on `the Orfeo ToolBox website
 <https://www.orfeo-toolbox.org/packages>`_ (pick the ’SuperBuild-archives’
 corresponding to the OTB version you want to build).
 
+**Notes about GDAL:** Since OTB 7.0, SuperBuild's GDAL version is 2.4.1. This version needs pkg-config to correctly find OpenJPEG (needed to read and write images with formats such as .jp2, .j2k), the minimal version is 0.21 for GDAL 2.4.1. You can install it with:
+
+::
+
+    apt-get install pkg-config
+
 **Notes about Qt:** Unlike other dependencies, building Qt5 on all platforms is
 not a trivial task but OTB SuperBuild does its best to facilitate this for the
 user. So there is still some additional package installation, one has to do as a

@@ -335,7 +335,11 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
   if (!m_ProjectionRef.empty())
     {
     OGRSpatialReference oSRS;
+    #if GDAL_VERSION_NUM >= 3000000 // importFromWkt is const-correct in GDAL 3
+    const char *wkt = m_ProjectionRef.c_str();
+    #else
     char *wkt = const_cast<char *> (m_ProjectionRef.c_str());
+    #endif
     oSRS.importFromWkt(&wkt);
     m_IsGeographic = oSRS.IsGeographic(); // TODO check if this test is valid for all projection systems
     }

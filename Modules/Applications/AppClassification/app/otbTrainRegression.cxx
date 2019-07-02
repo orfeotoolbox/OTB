@@ -1,22 +1,22 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- *
- * This file is part of Orfeo Toolbox
- *
- *     https://www.orfeo-toolbox.org/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+  *
+  * This file is part of Orfeo Toolbox
+  *
+  *     https://www.orfeo-toolbox.org/
+  *
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  *     http://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
 
 #include "otbLearningApplicationBase.h"
 #include "otbWrapperApplicationFactory.h"
@@ -106,7 +106,7 @@ void DoInit() override
 
   // Documentation
   SetDocLongDescription(
-    "This application trains a classifier from multiple input images or a csv "
+    "This application trains a classifier from multiple input images or a CSV "
     "file, in order to perform regression. Predictors are composed of pixel "
     "values in each band optionally centered and reduced using an XML "
     "statistics file produced by the ComputeImagesStatistics application.\n\n"
@@ -126,10 +126,12 @@ void DoInit() override
   SetDocSeeAlso("OpenCV documentation for machine learning "
     "http://docs.opencv.org/modules/ml/doc/ml.html ");
 
+  AddDocTag(Tags::Deprecated);
+
   //Group IO
   AddParameter( ParameterType_Group , "io" , "Input and output data" );
   SetParameterDescription("io" , 
-    "This group of parameters allows setting input and output data." );
+    "This group of parameters set the input and output data." );
   AddParameter( ParameterType_InputImageList , "io.il", "Input Image List" );
   SetParameterDescription( "io.il" , 
     "A list of input images. First (n-1) bands should contain the predictor. "
@@ -161,7 +163,7 @@ void DoInit() override
   AddParameter( ParameterType_Group , "sample" , 
     "Training and validation samples parameters" );
   SetParameterDescription( "sample" ,
-    "This group of parameters allows you to set training and validation sample "
+    "This group of parameters allows one to set training and validation sample "
     "lists parameters." );
 
   AddParameter( ParameterType_Int , "sample.mt" , 
