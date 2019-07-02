@@ -23,5 +23,6 @@ get_filename_component( OTB_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}" DIRECTORY )
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 set( ci_build_type "Debug" )
+set( CTEST_TEST_TIMEOUT 1500)
 
 include( "${CMAKE_CURRENT_LIST_DIR}/main_superbuild.cmake" )
