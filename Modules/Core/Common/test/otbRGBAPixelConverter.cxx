@@ -51,7 +51,7 @@ int otbRGBAPixelConverter(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   pixel0[3] = 0;
   ConverterType0::OutputPixelType outputPixel0 = converter0->Convert(pixel0);
   std::cout << "outputPixel0: " << outputPixel0 << std::endl;
-  if(outputPixel0 != 112)
+  if(outputPixel0 != 114)
     {
     itkGenericExceptionMacro(<< "RGBA<unsigned int> 2 unsigned int Failed");
     }
