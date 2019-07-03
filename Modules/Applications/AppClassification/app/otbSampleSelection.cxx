@@ -90,13 +90,13 @@ private:
         "The application selects a set of samples from geometries "
         "intended for training (they should have a field giving the associated "
         "class). \n\nFirst of all, the geometries must be analyzed by the PolygonClassStatistics application "
-        "to compute statistics about the geometries, which are summarized in an xml file. "
-        "\nThen, this xml file must be given as input to this application (parameter instats).\n\n"
+        "to compute statistics about the geometries, which are summarized in an XML file. "
+        "\nThen, this XML file must be given as an input to this application (parameter instats).\n\n"
         "The input support image and the input training vectors shall be given in "
         "parameters 'in' and 'vec' respectively. Only the sampling grid (origin, size, spacing)"
         "will be read in the input image.\n"
         "There are several strategies to select samples (parameter strategy) : \n\n"
-        "  - smallest (default) : select the same number of sample in each class"
+        "  - smallest (default) : select the same number of samples in each class"
         " so that the smallest one is fully sampled.\n"
         "  - constant : select the same number of samples N in each class"
         " (with N below or equal to the size of the smallest class).\n"
@@ -104,13 +104,13 @@ private:
         " (first column is class name, second one is the required samples number).\n\n"
         "  - percent: set a target global percentage of samples to use. Class proportions will be respected. \n\n"
         "  - total: set a target total number of samples to use. Class proportions will be respected. \n\n"
-        "There is also a choice on the sampling type to performs : \n\n"
+        "There is also a choice of the sampling type to perform: \n\n"
         "  - periodic : select samples uniformly distributed\n"
         "  - random : select samples randomly distributed\n\n"
         "Once the strategy and type are selected, the application outputs samples positions"
         "(parameter out).\n\n"
 
-        "The other parameters to look at are : \n\n"
+        "The other parameters to consider are: \n\n"
         "  - layer : index specifying from which layer to pick geometries.\n"
         "  - field : set the field name containing the class.\n"
         "  - mask : an optional raster mask can be used to discard samples.\n"
@@ -193,11 +193,11 @@ private:
     SetMinimumParameterIntValue("strategy.total.v",1);
     SetDefaultParameterInt("strategy.total.v",1000);
 
-    AddChoice("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
-    SetParameterDescription("strategy.smallest","Set same number of samples for all classes, with the smallest class fully sampled");
+    AddChoice("strategy.smallest","Set the same number of samples for all classes, with the smallest class fully sampled");
+    SetParameterDescription("strategy.smallest","Set the same number of samples for all classes, with the smallest class fully sampled");
 
-    AddChoice("strategy.all","Take all samples");
-    SetParameterDescription("strategy.all","Take all samples");
+    AddChoice("strategy.all","Use all samples");
+    SetParameterDescription("strategy.all","Use all samples");
 
     // Default strategy : smallest
     SetParameterString("strategy","smallest");
@@ -306,7 +306,7 @@ private:
       // total
       case 3:
       {
-      otbAppLogINFO("Sampling strategy: set the total number of samples to generate, use classes proportions.");
+      otbAppLogINFO("Sampling strategy: set the total number of samples to generate, use class proportions.");
       m_RateCalculator->SetTotalNumberOfSamples(this->GetParameterInt("strategy.total.v"));
       }
       break;
@@ -321,7 +321,7 @@ private:
       // all samples
       case 5:
         {
-        otbAppLogINFO("Sampling strategy : take all samples");
+        otbAppLogINFO("Sampling strategy : use all samples");
         m_RateCalculator->SetAllSamples();
         }
       break;

@@ -98,12 +98,12 @@ private:
       "(maximal class label = 65535). \n"
       "There are two modes: \n"
         "1) Update mode: add of the 'cfield' field containing the predicted class in the input file. \n"
-        "2) Write mode: copies the existing fields of the input file in the output file "
+        "2) Write mode: copies the existing fields of the input file to the output file "
            " and add the 'cfield' field containing the predicted class. \n"
       "If you have declared the output file, the write mode applies. "
       "Otherwise, the input file update mode will be applied.");
 
-    SetDocLimitations("Shapefiles are supported. But the SQLite format is only supported in update mode.");
+    SetDocLimitations("Shapefiles are supported, but the SQLite format is only supported in update mode.");
     SetDocSeeAlso("TrainVectorClassifier");
     AddDocTag(Tags::Learning);
 
