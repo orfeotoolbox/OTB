@@ -34,9 +34,8 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::EstimateInnerProductPCAImageFilter()
+::EstimateInnerProductPCAImageFilter(): m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
 {
-  m_NumberOfPrincipalComponentsRequired = 1;
 }
 
 /**
