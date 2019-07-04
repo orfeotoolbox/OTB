@@ -260,7 +260,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
       InputIt.SetLocation(outputIt.GetIndex());
       for (unsigned int i=0; i<InputIt.Size(); i++)
         {
-        if (!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetPixel(i) != 0))
+        if (!inputmaskPtr || (MaskInputIt.GetPixel(i) != 0))
           {
           p++;
           pixels.push_back(InputIt.GetPixel(i));
@@ -347,7 +347,7 @@ DisparityMapMedianFilter< TInputImage, TOutputImage, TMask>
         MaskInputIt.SetLocation(outputIt.GetIndex());
         }
 
-      if ((!inputmaskPtr || (inputmaskPtr && MaskInputIt.GetCenterPixel() != 0)) &&
+      if ((!inputmaskPtr || (MaskInputIt.GetCenterPixel() != 0)) &&
           std::fabs(InputIt.GetCenterPixel() - MedianIt.Get())>m_IncoherenceThreshold)
         {
         outputDisparityMapIt.Set(0.0); //Remove pixel from disparity map//
