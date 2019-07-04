@@ -23,8 +23,8 @@
 set(site_option
 "CMAKE_C_COMPILER:STRING=clang
 CMAKE_CXX_COMPILER:STRING=clang++
-CMAKE_C_FLAGS:STRING=--coverage -fprofile-exclude-files="^/usr/include/.*$;.*/xdk/include/.*$"
-CMAKE_CXX_FLAGS:STRING=--coverage -fprofile-exclude-files="^/usr/include/.*$;.*/xdk/include/.*$"
+CMAKE_C_FLAGS:STRING=--coverage -fprofile-exclude-files=\"^/usr/include/.*\$;.*/xdk/include/.*\$\"
+CMAKE_CXX_FLAGS:STRING=--coverage -fprofile-exclude-files=\"^/usr/include/.*\$;.*/xdk/include/.*\$\"
 CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
