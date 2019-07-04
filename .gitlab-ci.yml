@@ -262,6 +262,7 @@ ubuntu-xdk-report:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+    - ci_coverage
   script:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
