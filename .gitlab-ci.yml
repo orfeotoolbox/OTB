@@ -227,8 +227,7 @@ ubuntu-xdk-qa-code-coverage:
                ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
                      -DQA:BOOL=ON
-    - ls -lh build/cov_data
-    - gcovr -x -o build/coverage_report.xml build/cov_data
+    - gcovr -x -o build/coverage_report.xml -r . --gcov-executable="llvm-cov gcov" build
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl

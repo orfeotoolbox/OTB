@@ -23,20 +23,9 @@
 set(site_option
 "CMAKE_C_COMPILER:STRING=clang
 CMAKE_CXX_COMPILER:STRING=clang++
-CMAKE_C_FLAGS:STRING=--coverage
-CMAKE_CXX_FLAGS:STRING=--coverage
+CMAKE_C_FLAGS:STRING=--coverage -fprofile-exclude-files="^/usr/include/.*$;.*/xdk/include/.*$"
+CMAKE_CXX_FLAGS:STRING=--coverage -fprofile-exclude-files="^/usr/include/.*$;.*/xdk/include/.*$"
 CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
 ")
-
-# handle gcov setup
-set(COVERAGE_OUTPUT_DIR "${CTEST_BINARY_DIRECTORY}/cov_data")
-file(MAKE_DIRECTORY "${COVERAGE_OUTPUT_DIR}")
-string(REGEX MATCHALL "/[^/]" _slash_matches "${COVERAGE_OUTPUT_DIR}")
-list(LENGTH _slash_matches COVERAGE_PREFIX_STRIP)
-set(ENV{GCOV_PREFIX} "${COVERAGE_OUTPUT_DIR}")
-set(ENV{GCOV_PREFIX_STRIP} "${COVERAGE_PREFIX_STRIP}")
-message("GCOV_PREFIX : $ENV{GCOV_PREFIX}")
-message("GCOV_PREFIX_STRIP : $ENV{GCOV_PREFIX_STRIP}")
-
