@@ -59,10 +59,12 @@ class SpatialRangeJointDomainTransform
 public:
   typedef double RealType;
 
-  SpatialRangeJointDomainTransform()
+  SpatialRangeJointDomainTransform():
+      m_ImageDimension(0),
+      m_NumberOfComponentsPerPixel(0),
+      m_OutputSize(0)
   {
   }
-  // ~SpatialRangeJointDomainTransform() {}
 
   typename TOutputJointImage::PixelType operator()(const typename TInputImage::PixelType & inputPixel,
                                                    const typename TInputImage::IndexType & index) const
