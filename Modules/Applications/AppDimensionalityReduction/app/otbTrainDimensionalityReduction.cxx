@@ -129,7 +129,9 @@ private:
       otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = source->GetLayer(0);
     ListSampleType::Pointer input = ListSampleType::New();
-    const int nbFeatures = GetParameterStringList("feat").size();
+    
+    const auto inputIndexes = GetParameterStringList("feat");
+    const int nbFeatures = inputIndexes.size();
 
     input->SetMeasurementVectorSize(nbFeatures);
     otb::ogr::Layer::const_iterator it = layer.cbegin();
@@ -140,7 +142,20 @@ private:
       mv.SetSize(nbFeatures);
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = (*it)[GetParameterStringList("feat")[idx]].GetValue<double>();
+        switch ((*it)[inputIndexes[idx]].GetType())
+        {
+          case OFTInteger:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTInteger64:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTReal:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<double>());
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << (*it)[inputIndexes[idx]].GetType() << ".");
+        }
         }
       input->PushBack(mv);
       }

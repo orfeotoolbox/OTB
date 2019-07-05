@@ -237,23 +237,6 @@ TrainVectorBase<TInputValue, TOutputValue>
   return measurement;
 }
 
-// Template specialization for the integer case (i.e.classification), to avoid a cast from double to integer
-template <>
-inline int
-TrainVectorBase<float, int>
-::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
-{
-  return(feature[fieldIndex].GetValue<int>());
-}
-
-template <class TInputValue, class TOutputValue>
-inline TOutputValue
-TrainVectorBase<TInputValue, TOutputValue>
-::GetFeatureField(const ogr::Feature & feature, int fieldIndex)
-{
-  return(feature[fieldIndex].GetValue<double>());
-}
-
 template <class TInputValue, class TOutputValue>
 typename TrainVectorBase<TInputValue, TOutputValue>::SamplesWithLabel
 TrainVectorBase<TInputValue, TOutputValue>
@@ -310,12 +293,45 @@ TrainVectorBase<TInputValue, TOutputValue>
         MeasurementType mv;
         mv.SetSize( m_FeaturesInfo.m_NbFeatures );
         for( unsigned int idx = 0; idx < m_FeaturesInfo.m_NbFeatures; ++idx )
-          mv[idx] = feature[featureFieldIndex[idx]].GetValue<double>();
+        {
+          switch (feature[featureFieldIndex[idx]].GetType())
+          {
+          case OFTInteger:
+            mv[idx] = static_cast<ValueType>(feature[featureFieldIndex[idx]].GetValue<int>());
+            break;
+          case OFTInteger64:
+            mv[idx] = static_cast<ValueType>(feature[featureFieldIndex[idx]].GetValue<int>());
+            break;
+          case OFTReal:
+            mv[idx] = static_cast<ValueType>(feature[featureFieldIndex[idx]].GetValue<double>());
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << feature[featureFieldIndex[idx]].GetType() << ".");
+          }
+        }
 
         input->PushBack( mv );
 
         if(cFieldIndex>=0 && ogr::Field(feature,cFieldIndex).HasBeenSet())
-          target->PushBack(GetFeatureField(feature,cFieldIndex));
+        {
+          switch (feature[cFieldIndex].GetType())
+          {
+          case OFTInteger:
+            target->PushBack(static_cast<ValueType>(feature[cFieldIndex].GetValue<int>()));
+            break;
+          case OFTInteger64:
+            target->PushBack(static_cast<ValueType>(feature[cFieldIndex].GetValue<int>()));
+            break;
+          case OFTReal:
+            target->PushBack(static_cast<ValueType>(feature[cFieldIndex].GetValue<double>()));
+            break;
+          case OFTString:
+            target->PushBack(static_cast<ValueType>(std::stod(feature[cFieldIndex].GetValue<std::string>())));
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << feature[featureFieldIndex[cFieldIndex]].GetType() << ".");
+          }
+        }
         else
           target->PushBack( 0. );
 
