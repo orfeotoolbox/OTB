@@ -180,15 +180,6 @@ endif()
 #convert path to native for reconfiguring otbcli.bat.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
 
-# Override CMake's built-in add_* commands: assign LABELS to tests and targets
-# automatically. Depends on the CMake variable otb-module being set to the
-# "current" module when add_* is called.
-macro(verify_otb_module_is_set)
-  if("" STREQUAL "${otb-module}")
-    message(FATAL_ERROR "CMake variable otb-module is not set")
-  endif()
-endmacro()
-
 #-----------------------------------------------------------------------------
 # Set a default build type if none was specified
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
