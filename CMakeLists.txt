@@ -21,11 +21,6 @@
 cmake_minimum_required(VERSION 3.10.2)
 
 foreach(p
-    CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0
-    CMP0046 # CMake 3.0
-    CMP0054 # CMake 3.1
-    CMP0058 # CMake 3.3
     CMP0072 # CMake 3.11
     )
   if(POLICY ${p})
