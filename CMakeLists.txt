@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 foreach(p
     CMP0025 # CMake 3.0
