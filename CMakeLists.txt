@@ -265,10 +265,6 @@ endif()
 set(OTB_MODULES_DIR "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
 
 #-----------------------------------------------------------------------------
-# OTB uses KWStyle for checking the coding style
-#include(${OTB_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
-
-#-----------------------------------------------------------------------------
 # By default, OTB does not build the Examples that are illustrated in the Software Guide
 option(BUILD_EXAMPLES "Build the Examples directory." OFF)
 
