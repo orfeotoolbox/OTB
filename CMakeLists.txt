@@ -54,6 +54,10 @@ include(ExternalProject)
 
 #mantis: 1193
 if(APPLE)
+  # https://cmake.org/cmake/help/v3.10/variable/CMAKE_SYSTEM_FRAMEWORK_PATH.html
+  # By default it contains the standard directories for the current system. It 
+  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH 
+  # for this.
   set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
 endif()
 
@@ -105,6 +109,8 @@ if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
 endif()
+# Now that we have a python version the addditional versions should only
+# contain the version we have to get the corresponding libs
 set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 find_package ( PythonLibs )
 
@@ -212,10 +218,13 @@ endmacro()
 
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
 
 if(MSVC)
   option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
+  mark_as_advanced(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS})
 else()
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
@@ -230,6 +239,7 @@ endif()
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
+mark_as_advanced(OTB_USE_SSE_FLAGS)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
