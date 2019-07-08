@@ -87,7 +87,7 @@ mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
-include (SourceStatus)
+include(SourceStatus)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
@@ -486,18 +486,6 @@ configure_file(
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
 
-# #-----------------------------------------------------------------------------
-# # Packaging options for Windows packages
-# if(WIN32 OR CMAKE_CROSSCOMPILING)
-#   option(GENERATE_PACKAGE "Generate OTB package" OFF)
-#   option(GENERATE_XDK "Generate XDK for OTB development" OFF)
-#   if(GENERATE_PACKAGE OR GENERATE_XDK)
-#     set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
-#     set(PACKAGE_OTB_SRC_DIR ${OTB_SOURCE_DIR})
-#     add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
-#   endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
-# endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
-
 #-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
 macro(get_white_spaces var res)
@@ -543,18 +531,8 @@ foreach(otb_option
   message("${otb_option} ${spaces} = ${${otb_option}}")
 endforeach()
 
-# set(modules_list_for_summary "${OTB_MODULES_ENABLED}")
-# list(SORT modules_list_for_summary)
-# string(REPLACE ";" " " modules_list_for_summary "${modules_list_for_summary}")
-# message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
-# unset(modules_list_for_summary)
-
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
-foreach(item ${option_list})
-  if(NOT ${item})
-    list(REMOVE_ITEM option_list "${item}" )
-  endif()
-endforeach()
+# Cleaning option_list as we are using a new one now
+unset(option_list)
 
 #To report non-optional dependencies inside summary
 list(APPEND option_list Boost)
