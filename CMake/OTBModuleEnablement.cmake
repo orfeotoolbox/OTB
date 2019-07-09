@@ -220,28 +220,6 @@ list(SORT OTB_MODULES_DISABLED) # Deterministic order.
 include(CMake/TopologicalSort.cmake)
 topological_sort(OTB_MODULES_ENABLED OTB_MODULE_ _DEPENDS_FOR_SORT)
 
-# TODO : shall we set up CPack ?
-# #
-# # Set up CPack support
-# #
-# set(OTB_MODULES_DISABLED_CPACK )
-# foreach(m ${OTB_MODULES_DISABLED})
-#   list(APPEND OTB_MODULES_DISABLED_CPACK "/${m}/")
-# endforeach()
-# set(CPACK_SOURCE_IGNORE_FILES
-#   "${OTB_MODULES_DISABLED_CPACK};/\\\\.git")
-# 
-# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit version ${OTB_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VENDOR "ISC")
-# set(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
-# set(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
-# set(CPACK_PACKAGE_INSTALL_DIRECTORY "OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-# set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-# 
-# include(CPack)
-
 # Report what will be built.
 set(_enabled_modules "${OTB_MODULES_ENABLED}")
 list(SORT _enabled_modules)
