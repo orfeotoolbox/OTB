@@ -35,7 +35,7 @@
 # GLEW_LIBRARY
 #
 
-*# This whole file could be deleted. Find Packages GLEW can be used now
+# This whole file could be deleted. Find Packages GLEW can be used now
 find_path(
   GLEW_INCLUDE_DIR GL/glew.h
   DOC "The directory where GL/glew.h resides"
