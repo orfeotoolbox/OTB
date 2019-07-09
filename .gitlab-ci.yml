@@ -64,6 +64,7 @@ stages:
       - build/ctest_report.xml
       - build/cppcheck_report.xml
       - build/coverage_report.xml
+      - build/cov_filter/*.gcov
 
 .common-prepare:
   extends: .general

@@ -8,6 +8,8 @@ if [ -z "$BUILD_DIR" ]; then
 BUILD_DIR=${OTB_DIR}/build
 fi
 
+ls -lh $BUILD_DIR/Modules/Core/Common/src/CMakeFiles/OTBCommon.dir/otbLogger.cxx.gcda
+
 cd $BUILD_DIR
 mkdir cov_filter
 
@@ -18,7 +20,10 @@ rm *.gcov
 cd $OTB_DIR
 
 echo Filtered $(ls $BUILD_DIR/cov_filter | wc -l) gcov reports
+du -sh cov_filter
 
 echo Generating $BUILD_DIR/coverage_report.xml ...
 
-gcovr -r $OTB_DIR -x -g --object-directory=$BUILD_DIR/cov_filter > $BUILD_DIR/coverage_report.xml
+gcovr -r $OTB_DIR -x -g -k --object-directory=$BUILD_DIR/cov_filter > $BUILD_DIR/coverage_report.xml
+
+ls -lh $BUILD_DIR/coverage_report.xml
