@@ -40,9 +40,6 @@ endif()
 
 include(ExternalProject)
 
-# Not needed as OTB Superbuild requires c++14 since version 6.2
-# include(OTBCheckCpp11Keywords)
-
 include(OTBCheckTargetSystemArch)
 
 set(LINUX FALSE)
