@@ -8,22 +8,11 @@ if [ -z "$BUILD_DIR" ]; then
 BUILD_DIR=${OTB_DIR}/build
 fi
 
-ls -lh $BUILD_DIR/Modules/Core/Common/src/CMakeFiles/OTBCommon.dir/otbLogger.cxx.gcda
-
-cd $BUILD_DIR
-mkdir cov_filter
-
 echo Generating gcov reports in $BUILD_DIR ...
-find $BUILD_DIR -name "*.gcda" -exec llvm-cov gcov -p '{}' > /dev/null \; 
-find . -maxdepth 1 -regex '.*#Modules#[a-zA-Z0-9]+#[a-zA-Z0-9]+#\(include\|src\|app\)#.*\.gcov' -exec mv '{}' cov_filter \;
-rm *.gcov
-cd $OTB_DIR
+cd $BUILD_DIR
+find $BUILD_DIR -name "*.gcda" -exec llvm-cov gcov -p '{}' > /dev/null \;
+ls *.gcov | grep -E -v '#Modules#[a-zA-Z0-9]+#[a-zA-Z0-9]+#(include|src|app)#' | xargs -L 1 rm
+echo Filtered $(ls $BUILD_DIR/*.gcov | wc -l) gcov reports
 
-echo Filtered $(ls $BUILD_DIR/cov_filter | wc -l) gcov reports
-du -sh cov_filter
-
-echo Generating $BUILD_DIR/coverage_report.xml ...
-
-gcovr -r $OTB_DIR -x -g -k --object-directory=$BUILD_DIR/cov_filter > $BUILD_DIR/coverage_report.xml
-
-ls -lh $BUILD_DIR/coverage_report.xml
+gcovr -r $OTB_DIR -x -g --object-directory=$BUILD_DIR > $BUILD_DIR/coverage_report.xml
+echo Generated $BUILD_DIR/coverage_report.xml with $(grep -c '<class ' $BUILD_DIR/coverage_report.xml) classes
