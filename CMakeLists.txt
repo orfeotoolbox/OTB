@@ -210,6 +210,9 @@ endmacro()
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 mark_as_advanced(BUILD_SHARED_LIBS)
+
+# The following variable can be deleted and replace by BUILD_SHARED_LIBS
+# in otbConfigure.h.in
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 
