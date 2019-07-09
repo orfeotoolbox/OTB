@@ -124,13 +124,6 @@ option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." ON)
 option(OTB_BUILD_ALL_MODULES_FOR_TESTS "Build the tests of module dependencies." OFF)
 mark_as_advanced(OTB_BUILD_ALL_MODULES_FOR_TESTS)
 
-# To maintain backward compatibility
-if(DEFINED OTB_BUILD_ALL_MODULES)
-  message(WARNING "OTB_BUILD_ALL_MODULES is deprecated, please remove this entry from the CMake "
-                  "cache (edit the CMakeCache.txt file located in the top level of the OTB build "
-                  "tree directly or via the CMake GUI), and use OTB_BUILD_DEFAULT_MODULES instead.")
-  set(OTB_BUILD_DEFAULT_MODULES ${OTB_BUILD_ALL_MODULES} CACHE BOOL "Build the default OTB modules." FORCE)
-endif()
 # Provide module selections by groups
 include(${OTB_SOURCE_DIR}/CMake/OTBGroups.cmake)
 
