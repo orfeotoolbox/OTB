@@ -289,8 +289,8 @@ deploy:
     - ubuntu-xdk-build
     - centos-xdk-build
     - macos-xdk-build
-    - windows-8-build
-    - windows-10-build
+#    - windows-8-build
+#    - windows-10-build
 
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
