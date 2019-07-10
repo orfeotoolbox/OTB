@@ -17,6 +17,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+# Two things can replace this whole function :
+# This test if it is a symlink
+# if(IS_SYMLINK file_name)
+  # This resolve the link
+  # get_filename_component(real_name file_name
+                       # REALPATH )
+# endif()
+# We can also just do 
+# get_filename_component(real_name file_name
+                       # REALPATH )
+# and resolve the symlink
 function(isfile_symlink file result_var1 result_var2)
   #
   # A file is not executable until proven otherwise:
