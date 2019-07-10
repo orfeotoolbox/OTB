@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(OTBPackaging)
 
@@ -31,7 +31,7 @@ include(CTest)
 set(PKG_DEBUG OFF)
 #set( PKG_DEBUG 1)
 
-set(CMAKE_BUILD_TYPE    Release)
+set(CMAKE_BUILD_TYPE Release)
 
 #user-defined variables and option
 option(OTB_WRAP_PYTHON "include python bindings in package" ON)
@@ -40,13 +40,12 @@ set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
 set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 
 #variables based on above user-defined variables
-message( "OTB_BINARY_DIR=${OTB_BINARY_DIR}" )
 if ( NOT OTB_BINARY_DIR )
-  set(OTB_BINARY_DIR            "${SUPERBUILD_BINARY_DIR}/OTB/build")
+  set(OTB_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/OTB/build")
 endif()
-set(QT_TRANSLATIONS_DIR       "${SUPERBUILD_INSTALL_DIR}/translations")
+set(QT_TRANSLATIONS_DIR "${SUPERBUILD_INSTALL_DIR}/translations")
 get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
-set(SUPERBUILD_SOURCE_DIR     "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
+set(SUPERBUILD_SOURCE_DIR "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
 
 
 set(LINUX FALSE)
@@ -70,6 +69,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
 
 #include superbuild_macro for OTB_TARGET_SYSTEM_ARCH_IS_X64 value
+# This maybe deleted as it might be done with cmake_host_system_information
+# https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
 include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
 
 # get itk version from External_itk.cmake if not on mingw
@@ -220,16 +221,3 @@ if(BUILD_TESTING)
   enable_testing()
   include(testing.cmake)
 endif()
-
-
-
-
-#TODO: dummy targets. to be removed after merge
-add_custom_target(
-    PACKAGE-OTB
-    COMMAND
-    "${CMAKE_COMMAND}" --build . --target install
-    WORKING_DIRECTORY
-    "${CMAKE_BINARY_DIR}"
-    COMMENT "dummy target PACKAGE-OTB"
-    )
