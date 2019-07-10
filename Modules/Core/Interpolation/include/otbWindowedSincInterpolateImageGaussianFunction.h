@@ -41,6 +41,7 @@ template<class TInput = double, class TOutput = double>
 class GaussianWindowFunction
 {
 public:
+  GaussianWindowFunction(): m_Radius(1), m_Factor(-2.0 / CONST_PI) {} // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
@@ -63,8 +64,8 @@ public:
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
-  double       m_Factor;
   unsigned int m_Radius;
+  double       m_Factor;
 };
 
 } //namespace Function

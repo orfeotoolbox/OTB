@@ -37,15 +37,19 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 MultiChannelsPolarimetricSynthesisFilter<TInputImage, TOutputImage, TFunction>
-::MultiChannelsPolarimetricSynthesisFilter()
+::MultiChannelsPolarimetricSynthesisFilter():
+    m_PsiI(0.0),
+    m_KhiI(0.0),
+    m_PsiR(0.0),
+    m_KhiR(0.0),
+    m_Gain(1.0),
+    m_Mode(0),
+    m_EmissionH(false),
+    m_EmissionV(false)
 {
   OTB_DISABLE_DYNAMIC_MT;
   this->SetNumberOfRequiredInputs(1);
   this->InPlaceOff();
-  SetEmissionH(false);
-  SetEmissionV(false);
-  SetGain(1);
-  SetMode(0);
   m_ArchitectureType = PolarimetricData::New();
 }
 

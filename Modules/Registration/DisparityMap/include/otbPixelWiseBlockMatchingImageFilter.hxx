@@ -672,9 +672,9 @@ TOutputDisparityImage,TMaskImage,TBlockMatchingFunctor>
           ((tmpIndex[1] - this->m_GridIndex[1] + this->m_Step) % this->m_Step == 0))
         {
         // If the mask is present and valid
-        if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        if(!inLeftMaskPtr || (inLeftMaskIt.Get() > 0) )
           {
-          if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
+          if(!inRightMaskPtr || (inRightMaskIt.Get() > 0) )
             {
             int estimatedMinHDisp = m_MinimumHorizontalDisparity;
             int estimatedMinVDisp = m_MinimumVerticalDisparity;

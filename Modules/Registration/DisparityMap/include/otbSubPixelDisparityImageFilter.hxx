@@ -764,9 +764,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           inRightMaskIt.SetIndex(curRightPos);
           }
         // check that the current positions are not masked
-        if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        if(!inLeftMaskPtr || (inLeftMaskIt.Get() > 0) )
           {
-          if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
+          if(!inRightMaskPtr || (inRightMaskIt.Get() > 0) )
             {
             RegionType smallRightRegion;
             smallRightRegion.SetIndex(0,curRightPos[0]-1);
@@ -1197,9 +1197,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           inRightMaskIt.SetIndex(curRightPos);
           }
         // check that the current positions are not masked
-        if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        if(!inLeftMaskPtr || (inLeftMaskIt.Get() > 0) )
           {
-          if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
+          if(!inRightMaskPtr || (inRightMaskIt.Get() > 0) )
             {
             RegionType smallRightRegion;
             smallRightRegion.SetIndex(0,curRightPos[0]-1);
@@ -1698,9 +1698,9 @@ TDisparityImage,TMaskImage,TBlockMatchingFunctor>
           inRightMaskIt.SetIndex(curRightPos);
           }
         // check that the current positions are not masked
-        if(!inLeftMaskPtr || (inLeftMaskPtr && inLeftMaskIt.Get() > 0) )
+        if(!inLeftMaskPtr || (inLeftMaskIt.Get() > 0) )
           {
-          if(!inRightMaskPtr || (inRightMaskPtr && inRightMaskIt.Get() > 0) )
+          if(!inRightMaskPtr || (inRightMaskIt.Get() > 0) )
             {
             RegionType smallRightRegion;
             smallRightRegion.SetIndex(0,curRightPos[0]-1);

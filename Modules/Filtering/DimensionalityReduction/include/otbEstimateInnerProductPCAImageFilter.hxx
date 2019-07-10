@@ -35,10 +35,8 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::EstimateInnerProductPCAImageFilter()
+::EstimateInnerProductPCAImageFilter(): m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
 {
-  OTB_DISABLE_DYNAMIC_MT;
-  m_NumberOfPrincipalComponentsRequired = 1;
 }
 
 /**

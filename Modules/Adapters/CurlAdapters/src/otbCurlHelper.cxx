@@ -185,7 +185,7 @@ public:
   }
 
 protected:
-  CurlFileDescriptorResource(){}
+  CurlFileDescriptorResource(): m_File(nullptr) {}
 
   ~CurlFileDescriptorResource() override
   {
@@ -195,9 +195,9 @@ protected:
 private:
   FILE *      m_File;
 
-  // prevent copying and assignment; not implemented
-  CurlFileDescriptorResource (const CurlFileDescriptorResource &);
-  CurlFileDescriptorResource & operator= (const CurlFileDescriptorResource &);
+  // prevent copying and assignment
+  CurlFileDescriptorResource (const CurlFileDescriptorResource &) = delete;
+  CurlFileDescriptorResource & operator= (const CurlFileDescriptorResource &) = delete;
 }; //end of class FileResource
 
 #endif // OTB_USE_CURL

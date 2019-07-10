@@ -123,7 +123,7 @@ public:
                               const RegionType& region) override;
 
 protected:
-  ImageRegionTileMapSplitter() : m_AlignStep(256){}
+  ImageRegionTileMapSplitter() : m_SplitsPerDimension{0}, m_AlignStep(256) {}
   ~ImageRegionTileMapSplitter() override {}
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
