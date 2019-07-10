@@ -221,3 +221,9 @@ if(BUILD_TESTING)
   enable_testing()
   include(testing.cmake)
 endif()
+
+add_custom_target( PACKAGE-OTB
+      COMMAND "${CMAKE_COMMAND}" --build . --target install
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      COMMENT "PACKAGE-OTB"
+      )
