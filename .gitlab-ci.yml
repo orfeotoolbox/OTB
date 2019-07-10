@@ -47,7 +47,6 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-    - ci_coverage
   stage: build
   artifacts:
     when: always
@@ -71,7 +70,6 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-    - ci_coverage
   stage: prepare
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
@@ -85,25 +83,26 @@ stages:
       - build/*/*/*/*.log # Superbuild log
 
 #-------------------------- precheck job ---------------------------------------
-#~ fast-build:
-  #~ extends: .common
-  #~ only: [merge_requests, branches]
-  #~ stage: precheck
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
-  #~ before_script:
-    #~ - export GIT_LFS_SKIP_SMUDGE=1
-    #~ - git checkout -f -q $CI_COMMIT_SHA
-    #~ - python3 CI/check_twin_pipelines.py
-  #~ script:
-    #~ - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-    #~ - ccache -s
+fast-build:
+  extends: .common
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
 
 #------------------------- prepare & build jobs --------------------------------
-#~ debian-build:
-  #~ extends: .common-build
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
-  #~ script:
-    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+debian-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+  dependencies: []
 
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
@@ -112,115 +111,122 @@ ubuntu-xdk-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
-#~ ubuntu-xdk-build:
-  #~ extends: .common-build
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  #~ script:
-    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
-  #~ dependencies:
-    #~ - ubuntu-xdk-prepare
+ubuntu-xdk-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
+  dependencies:
+    - ubuntu-xdk-prepare
 
 ## CentOS superbuild
-#~ centos-xdk-prepare:
-  #~ extends: .common-prepare
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  #~ script:
-    #~ - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+centos-xdk-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
 
-#~ centos-xdk-build:
-  #~ extends: .common-build
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  #~ script:
-    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    #~ - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-  #~ dependencies:
-    #~ - centos-xdk-prepare
+centos-xdk-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+  dependencies:
+    - centos-xdk-prepare
 
 ## MacOS superbuild
-#~ macos-xdk-prepare:
-  #~ extends: .common-prepare
-  #~ tags:
-    #~ - macos
-  #~ script:
-    #~ - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+macos-xdk-prepare:
+  extends: .common-prepare
+  tags:
+    - macos
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
 
-#~ macos-xdk-build:
-  #~ tags:
-    #~ - macos
-  #~ extends: .common-build
-  #~ script:
-    #~ - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    #~ - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-  #~ dependencies:
-    #~ - macos-xdk-prepare
+macos-xdk-build:
+  tags:
+    - macos
+  extends: .common-build
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  dependencies:
+    - macos-xdk-prepare
 
 ## Windows
-#~ .windows-prepare:
-  #~ extends: .common-prepare
-  #~ before_script:
-#~ # This override the previous before_script
-    #~ - set GIT_LFS_SKIP_SMUDGE=1
-    #~ - git checkout -f -q %CI_COMMIT_SHA%
-    #~ - set GIT_LFS_SKIP_SMUDGE=0
-#~ 
-#~ .windows-build:
-  #~ extends: .common-build
-  #~ before_script:
-    #~ - git lfs fetch origin %CI_COMMIT_SHA%
-    #~ - git checkout -f -q %CI_COMMIT_SHA%
+.windows-prepare:
+  extends: .common-prepare
+  before_script:
+# This override the previous before_script
+    - set GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q %CI_COMMIT_SHA%
+    - set GIT_LFS_SKIP_SMUDGE=0
+
+.windows-build:
+  extends: .common-build
+  before_script:
+    - git lfs fetch origin %CI_COMMIT_SHA%
+    - git checkout -f -q %CI_COMMIT_SHA%
 
 # - Win10
-#~ windows-10-prepare:
-  #~ extends: .windows-prepare
-  #~ tags:
-    #~ - windows10
-  #~ script:
-    #~ - call ./CI/dev_env.bat x64 xdk 10
-    #~ - clcache.exe -s
-    #~ - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    #~ - clcache.exe -s
-#~ 
-#~ windows-10-build:
-  #~ extends: .windows-build
-  #~ tags:
-    #~ - windows10
-  #~ script:
-    #~ - call ./CI/dev_env.bat x64 otb 10
-    #~ - clcache.exe -s
-    #~ - ctest -V -S CI/main_superbuild.cmake
-    #~ - clcache.exe -s
-    #~ - ctest -V -S CI/main_packages.cmake
-  #~ dependencies:
-    #~ - windows-10-prepare
+windows-10-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 xdk 10
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-10-build:
+  extends: .windows-build
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 otb 10
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-10-prepare
 
 # - Win8.1
-#~ windows-8-prepare:
-  #~ extends: .windows-prepare
-  #~ tags:
-    #~ - windows8
-  #~ script:
-    #~ - call ./CI/dev_env.bat x86 xdk 8.1
-    #~ - clcache.exe -s
-    #~ - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    #~ - clcache.exe -s
-#~ 
-#~ windows-8-build:
-  #~ extends: .windows-build
-  #~ tags:
-    #~ - windows8
-  #~ script:
-    #~ - call ./CI/dev_env.bat x86 otb 8.1
-    #~ - clcache.exe -s
-    #~ - ctest -V -S CI/main_superbuild.cmake
-    #~ - clcache.exe -s
-    #~ - ctest -V -S CI/main_packages.cmake
-  #~ dependencies:
-    #~ - windows-8-prepare
+windows-8-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-8-build:
+  extends: .windows-build
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 otb 8.1
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-8-prepare
 
 #------------------------- QA related jobs -------------------------------------
 ubuntu-xdk-qa-code-coverage:
   extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
@@ -231,12 +237,18 @@ ubuntu-xdk-qa-code-coverage:
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-  #~ after_script: []
   dependencies:
     - ubuntu-xdk-prepare
 
 ubuntu-xdk-qa-static-analysis:
   extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
@@ -258,10 +270,12 @@ ubuntu-xdk-report:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: report
   only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
-    - ci_coverage
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   script:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
@@ -275,40 +289,40 @@ ubuntu-xdk-report:
     - ubuntu-xdk-qa-static-analysis
 
 #---------------------------- Deploy job ---------------------------------------
-#~ deploy:
-  #~ tags:
-    #~ - deploy
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  #~ stage: deploy
-  #~ extends: .general
-  #~ only:
-    #~ - develop@orfeotoolbox/otb
-    #~ - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-  #~ before_script:
-    #~ # Provision efficiently the local LFS cache before checkout
-    #~ - git lfs fetch origin $CI_COMMIT_SHA
-    #~ - git checkout -f -q $CI_COMMIT_SHA
-  #~ script:
-    #~ - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
-  #~ dependencies:
-    #~ - ubuntu-xdk-build
-    #~ - centos-xdk-build
-    #~ - macos-xdk-build
-    #~ - windows-8-build
-    #~ - windows-10-build
-#~ 
-#~ release-container:
-  #~ image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  #~ stage: deploy
-  #~ extends: .general
-  #~ only:
-    #~ refs:
-      #~ - tags@orfeotoolbox/otb
-    #~ variables:
-      #~ - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
-  #~ script:
-    #~ - curl --request POST
-           #~ --form token=$K8S_SECRET_RELEASE
-           #~ --form ref=master
-           #~ --form variables[OTB_TAG]=$CI_COMMIT_TAG
-           #~ https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
+deploy:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    - develop@orfeotoolbox/otb
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+  dependencies:
+    - ubuntu-xdk-build
+    - centos-xdk-build
+    - macos-xdk-build
+    - windows-8-build
+    - windows-10-build
+
+release-container:
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    refs:
+      - tags@orfeotoolbox/otb
+    variables:
+      - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
+  script:
+    - curl --request POST
+           --form token=$K8S_SECRET_RELEASE
+           --form ref=master
+           --form variables[OTB_TAG]=$CI_COMMIT_TAG
+           https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
