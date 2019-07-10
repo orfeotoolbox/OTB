@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
@@ -47,17 +47,18 @@ if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(LINUX TRUE)
 endif()
 
-option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
+option(BUILD_SHARED_LIBS "Build Superbuild with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
+option(BUILD_GEOS_STATIC_LIBS "Build GEOS with static libraries." OFF)
+mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with "
+  "the syntax (semi-colon used as a separator): "
+  "-D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
 if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
@@ -117,6 +118,7 @@ message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 # Special setting for low kernel versions
 if(UNIX)
   option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
+  mark_as_advanced(USE_LOW_KERNEL_VERSION)
 endif()
 
 
