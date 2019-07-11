@@ -28,7 +28,7 @@ set ( temporary_option
 
 if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/sb_${CTEST_SITE}.cmake")
   # will set its output in 'site_option'
-  include("${CMAKE_CURRENT_LIST_DIR}/${CTEST_SITE}.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/sb_${CTEST_SITE}.cmake")
 endif()
 
 set(concat_options
