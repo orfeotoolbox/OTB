@@ -353,8 +353,10 @@ namespace ossimplugins
     add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", 
 	std::stod(metadataBands[0]["S01_SBI_Line_Spacing"]));
  
-    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate", 
-	std::stod(metadataDataSet["S01_Sampling_Rate"]));
+
+    double samplingRate = 1./std::stod(metadataBands[0]["S01_SBI_Column_Time_Interval"]);
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate", samplingRate);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",  std::stod(metadataDataSet["Radar_Frequency"]));
     add(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", 
 	std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]));
