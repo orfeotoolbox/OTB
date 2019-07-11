@@ -62,6 +62,7 @@ stages:
       - build/compile_commands.json
       - build/ctest_report.xml
       - build/cppcheck_report.xml
+      - build/coverage_report.xml
 
 .common-prepare:
   extends: .general
@@ -101,6 +102,7 @@ debian-build:
   image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+  dependencies: []
 
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
@@ -218,21 +220,35 @@ windows-8-build:
 #------------------------- QA related jobs -------------------------------------
 ubuntu-xdk-qa-code-coverage:
   extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
                ctest -V -S CI/main_qa.cmake
-                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
                      -DQA:BOOL=ON
+    - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
-  after_script: []
   dependencies:
     - ubuntu-xdk-prepare
 
 ubuntu-xdk-qa-static-analysis:
   extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
@@ -254,9 +270,12 @@ ubuntu-xdk-report:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: report
   only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
   script:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org

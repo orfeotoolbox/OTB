@@ -34,13 +34,13 @@ otb_module_target_label(otbMeanShiftTestDriver)
 
 otb_add_test(NAME obTuMeanShiftConnectedComponentSegmentationFilter COMMAND otbMeanShiftTestDriver
   otbMeanShiftConnectedComponentSegmentationFilter
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.png
-  9
-  9
-  0.01
-  "distance<0.2"
-  50)
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+  ${TEMP}/obTuMeanShiftConnectedComponentSegmentationImage.tif
+  6
+  50
+  0.1
+  "distance<20"
+  5)
 
 otb_add_test(NAME obTuMeanShiftSegmentationFilterPruning COMMAND otbMeanShiftTestDriver
   otbMeanShiftSegmentationFilter
