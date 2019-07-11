@@ -909,36 +909,6 @@ void Application::WriteOutput()
         outputParam->Write();
         }
       }
-    else if (GetParameterType(key) == ParameterType_ComplexOutputImage
-             && IsParameterEnabled(key) && HasValue(key) )
-      {
-      Parameter* param = GetParameterByKey(key);
-      ComplexOutputImageParameter* outputParam = dynamic_cast<ComplexOutputImageParameter*>(param);
-
-      if(outputParam!=nullptr)
-        {
-        outputParam->InitializeWriters();
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      }
-    //xml writer parameter
-    else if (m_HaveOutXML && GetParameterType(key) == ParameterType_OutputProcessXML
-             && IsParameterEnabled(key) && HasValue(key) )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputProcessXMLParameter* outXMLParam = dynamic_cast<OutputProcessXMLParameter*>(param);
-      if(outXMLParam!=nullptr)
-        {
-        outXMLParam->Write(this);
-        }
-      }
     }
 }
 
