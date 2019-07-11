@@ -188,9 +188,8 @@ int main(int ac, char* av[])
 }
 
 // This is a dummy main to be registered as a test for the otbTestMain
-int Execute(int argc, char * argv[])
+int Execute(int, char * argv[])
 {
-  argc -= 1;
   argv += 1;
   // Create the appropriate itk process
   itksysProcess * process = itksysProcess_New();

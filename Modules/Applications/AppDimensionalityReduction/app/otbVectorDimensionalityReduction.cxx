@@ -221,7 +221,20 @@ private:
       
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = static_cast<float>( (*it)[inputIndexes[idx]].GetValue<double>() );
+        switch ((*it)[inputIndexes[idx]].GetType())
+        {
+          case OFTInteger:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTInteger64:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTReal:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<double>());
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << (*it)[inputIndexes[idx]].GetType() << ".");
+        }
         }
       input->PushBack(mv);
       }
@@ -399,7 +412,23 @@ private:
 
       for (std::size_t i=0; i<outFields.size(); ++i)
         {
-        dstFeature[outFields[i]].SetValue<double>(target->GetMeasurementVector(count)[i]);
+        switch (dstFeature[outFields[i]].GetType())
+        {
+        case OFTInteger:
+          dstFeature[outFields[i]].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTInteger64:
+          dstFeature[outFields[i]].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTReal:
+          dstFeature[outFields[i]].SetValue<double>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTString:
+          dstFeature[outFields[i]].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << dstFeature[outFields[i]].GetType() << ".");
+        }
         }
       if (updateMode)
         {

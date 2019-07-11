@@ -243,11 +243,6 @@ void
 MarkovRandomFieldFilter<TInputImage, TClassifiedImage>
 ::Allocate()
 {
-  if (m_NumberOfClasses <= 0)
-    {
-    throw itk::ExceptionObject(__FILE__, __LINE__, "NumberOfClasses <= 0.", ITK_LOCATION);
-    }
-
   //Set the output labelled and allocate the memory
   LabelledImagePointer outputPtr = this->GetOutput();
 
