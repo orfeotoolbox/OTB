@@ -20,30 +20,11 @@
 
 #include "mvdApplicationLauncher.h"
 
-
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperApplication.h"
- 
-//
-// Monteverdi includes (sorted by alphabetic order)
+#include "otbWrapperQtWidgetMainWindow.h"
+
 #include "mvdAlgorithm.h"
 #include "mvdI18nCoreApplication.h"
-//#include "mvdTextStream.h"
 #include "mvdQtWidgetView.h"
 
 namespace mvd
@@ -82,12 +63,9 @@ ApplicationLauncher
 }
 
 /*******************************************************************************/
-Wrapper::QtWidgetView *
+otb::Wrapper::Application::Pointer
 ApplicationLauncher
-::NewOtbApplicationWidget( const QString & appName,
-			   bool isStandalone,
-			   QWidget * p,
-			   Qt::WindowFlags flags ) const
+::PrepareApplication(const QString& appName, bool isStandalone) const
 {
   // Create module
   otb::Wrapper::Application::Pointer otbApp(
@@ -196,83 +174,24 @@ ApplicationLauncher
       }
     }
 
-  // Create GUI based on module
-  Wrapper::QtWidgetView * gui =
-    new Wrapper::QtWidgetView( otbApp, p, flags );
+  return otbApp;
 
+}
+
+
+otb::Wrapper::QtMainWindow* ApplicationLauncher ::NewOtbApplicationWindow(const QString& appName, bool isStandalone, QWidget* parent) const
+{
+  // Setup the otb application
+  auto otbApp = PrepareApplication(appName, isStandalone);
+
+  // Create main application widget
+  auto gui = new ::mvd::Wrapper::QtWidgetView(otbApp);
   gui->CreateGui();
 
-  return gui;
+  // Make the application window
+  auto window = new ::otb::Wrapper::QtMainWindow(otbApp, gui, parent);
+
+  return window;
 }
-/*******************************************************************************/
-QWidget * 
-ApplicationLauncher
-::NewOtbApplicationWindow( const QString & appName,
-			   bool isStandalone,
-			   QWidget * p,
-			   Qt::WindowFlags flags  ) const
-{
-#if 0
-  Wrapper::QtWidgetView * appWidget =
-    ApplicationLauncher::NewOtbApplicationWidget( appName, isStandalone );
-
-  assert( appWidget!=NULL );
-  assert( appWidget->GetModel()->GetApplication() );
-
-  QMainWindow * mainWindow = new QMainWindow( p, flags );
-
-  mainWindow->setWindowTitle(
-    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
-  );
-
-  mainWindow->setWindowIcon( QIcon( ":/otb_small.png" ) );
- 
-  mainWindow->setCentralWidget( appWidget );
-
-  // Connect OTB-app widget quit signal, to the mainWindow close slot.
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    mainWindow,
-    SLOT( close() )
-  );
-
-  return mainWindow;
-
-#else
-  Wrapper::QtWidgetView * appWidget =
-    ApplicationLauncher::NewOtbApplicationWidget(
-      appName,
-      isStandalone,
-      p,
-      flags | Qt::Window
-    );
-
-  assert( appWidget!=NULL );
-  assert( appWidget->GetModel()->GetApplication() );
-
-  appWidget->setWindowTitle(
-    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
-  );
-
-  appWidget->setWindowIcon( QIcon( ":/icons/process" ) );
- 
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    appWidget,
-    SLOT( close() )
-  );
-
-  return appWidget;
-#endif
-}
-
-/*******************************************************************************/
-/* SLOTS                                                                       */
 
 } // end namespace 'mvd'

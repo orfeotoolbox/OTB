@@ -78,7 +78,6 @@ private:
     SetName("LSMSSmallRegionsMerging");
     SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
     SetDocLongDescription("Given a segmentation result (can be the out output parameter of the"
                           " LSMSSegmentation application [2]) and the original image, it will"
                           " merge segments whose size in pixels is lower than minsize parameter"
@@ -97,12 +96,14 @@ private:
                       " application is not compatible with in-memory connection since it does"
                       " its own internal streaming.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
-                   " mean-shift algorithm and its application to the segmentation of"
-                   " arbitrarily large remote sensing images. IEEE Transactions on"
-                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
-                   "[2] LSMSegmentation\n"
-                   "[3] LSMSVectorization");
+    SetDocSeeAlso(
+        "Alternative: SmallRegionsMerging\n"
+        "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+        " mean-shift algorithm and its application to the segmentation of"
+        " arbitrarily large remote sensing images. IEEE Transactions on"
+        " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+        "[2] LSMSSegmentation\n"
+        "[3] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
     AddDocTag(Tags::Deprecated);
     AddDocTag("LSMS");

@@ -25,41 +25,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbCommandProgressUpdate.h"
-#include "otbCommandLineArgumentParser.h"
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
+int otbAngularProjectionBinaryImageFilterTest ( int , char * argv[] )
 {
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-
-  parser->AddOption( "--InputImages", "Input Images", "-in", 2, true );
-  parser->AddOption( "--OutputImages", "Generic name for output Images (_#.hdr will be added)", "-out", 1, true );
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-  {
-    parser->ParseCommandLine( argc, argv, parseResult );
-  }
-  catch( itk::ExceptionObject & err )
-  {
-    std::cerr << argv[0] << " performs angular projection on 2 images\n";
-    std::string descriptionException = err.GetDescription();
-    if ( descriptionException.find("ParseCommandLine(): Help Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    if(descriptionException.find("ParseCommandLine(): Version Parser")
-        != std::string::npos )
-      return EXIT_SUCCESS;
-    return EXIT_FAILURE;
-  }
-
-  std::string inputImageName1(parseResult->GetParameterString("--InputImages", 0));
-  std::string inputImageName2(parseResult->GetParameterString("--InputImages", 1));
-  std::string outputImageName(parseResult->GetParameterString("--OutputImages"));
+  std::string inputImageName1(argv[1]);
+  std::string inputImageName2(argv[2]);
+  std::string outputImageName1(argv[3]);
+  std::string outputImageName2(argv[4]);
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -83,7 +57,7 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
 
   std::vector< PixelType > angle;
   angle.push_back( otb::CONST_PI_2 );
-  angle.push_back( 0. );
+  angle.push_back( 0 );
 
   filter->SetAngleSet( angle );
 
@@ -94,18 +68,15 @@ int otbAngularProjectionBinaryImageFilterTest ( int argc, char * argv[] )
   filter->Update();
 
   typedef otb::ImageFileWriter< ImageType > WriterType;
-  std::vector< WriterType::Pointer > writers;
-  writers.resize( filter->GetNumberOfOutputs() );
+  auto writer1 = WriterType::New();
+  writer1->SetFileName(outputImageName1);
+  writer1->SetInput( filter->GetOutput(0) );
+  writer1->Update();
+  
+  auto writer2 = WriterType::New();
+  writer2->SetFileName(outputImageName2);
+  writer2->SetInput( filter->GetOutput(1) );
+  writer2->Update();
 
-  for ( unsigned int i = 0; i < filter->GetNumberOfOutputs(); ++i )
-  {
-    std::stringstream title;
-    title << outputImageName << "_" << i << ".hdr";
-
-    writers[i] = WriterType::New();
-    writers[i]->SetFileName( title.str() );
-    writers[i]->SetInput( filter->GetOutput(i) );
-    writers[i]->Update();
-  }
   return EXIT_SUCCESS;
 }

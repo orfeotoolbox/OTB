@@ -138,7 +138,7 @@ ParameterList< T >
 
   typename T::Pointer p( T::New() );
 
-  FromString( p, filename );
+  p->FromString(filename);
 
   m_Parameters.push_back( p );
 
@@ -157,7 +157,7 @@ ParameterList< T >
 {
   typename T::Pointer p( T::New() );
 
-  FromString( p, filename );
+  p->FromString(filename);
 
   InsertElement(p, index);
 }
@@ -187,8 +187,7 @@ ParameterList< T >
   assert( i<m_Parameters.size() );
   assert( !m_Parameters[ i ].IsNull() );
 
-  // Should throw exception when failed.
-  FromString( m_Parameters[ i ], filename );
+  m_Parameters[i]->FromString(filename);
 
   SetActive( true );
 
@@ -210,9 +209,11 @@ ParameterList< T >
       strings.begin(),
       strings.end(),
       std::back_inserter( m_Parameters ),
-      [ this ]( auto s ) -> auto
+      []( auto s ) -> auto
       {
-        return this->FromString( s );
+        typename T::Pointer parameter(T::New());
+        parameter->FromString(s);
+        return parameter;
       }
     );
 
@@ -232,9 +233,9 @@ ParameterList< T >
     begin(),
     end(),
     std::back_inserter( strings ),
-    [ this ]( auto p ) -> auto
+    []( auto p ) -> auto
     {
-      return this->ToString( p );
+      return p->ToString();
     }
   );
 
@@ -256,13 +257,13 @@ ParameterList< T >
 
 /*****************************************************************************/
 template< typename T >
-const std::string &
+std::string
 ParameterList< T >
 ::GetNthFileName( std::size_t i ) const
 {
   assert( i<m_Parameters.size() );
 
-  return ToString( m_Parameters[ i ] );
+  return m_Parameters[i]->ToString();
 }
 
 /*****************************************************************************/
@@ -474,15 +475,33 @@ ParameterList< T >
   return parameter;
 }
 
-/*****************************************************************************/
-template< typename T >
-typename T::Pointer
-ParameterList< T >
-::FromString( const std::string & s ) const
+template <typename T>
+std::vector<std::string> ParameterList<T>::ToStringList() const
 {
-  typename T::Pointer parameter( T::New() );
+  return GetFileNameList();
+}
 
-  return FromString( parameter, s );
+template <typename T>
+void ParameterList<T>::FromStringList(const std::vector<std::string>& value)
+{
+  SetStrings(value);
+}
+
+template <typename T>
+std::string ParameterList<T>::ToString() const
+{
+  std::ostringstream oss;
+  oss << std::setprecision(10);
+  auto strList = GetFileNameList();
+  for (size_t i = 0; i < strList.size(); i++)
+  {
+    if (i != 0)
+    {
+      oss << " ";
+    }
+    oss << strList[i];
+  }
+  return oss.str();
 }
 
 template< typename T >

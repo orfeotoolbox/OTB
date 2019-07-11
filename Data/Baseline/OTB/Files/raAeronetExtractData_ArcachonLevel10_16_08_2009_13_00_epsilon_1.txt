@@ -1,0 +1,20 @@
+Aeronet data extracted:
+Input file name: 080101_091231_Arcachon.lev10
+Inputs user parameters:
+    Day:                       16
+    Month:                     8
+    Year:                      2009
+    Hour:                      13
+    Minute:                    0
+Outputs results:
+
+    AerosolOpticalThickness:   0.390233967391304
+    AngstromCoefficient:       0.959106875
+    Water:                     3.0863155
+    CloudEstimation:           0
+    SolarZenithAngle:          33.79852125
+ Statisctics:
+    Date:                      (hh/mm/yyyy hh:mm:ss) 16/8/2009 13:0:00
+    Epsilon date:              1
+    Number Of date used:       8
+    StdDev Aero. Optical Thic.:0.00179118129881704

@@ -41,7 +41,8 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   m_Beta = 0.;
   m_Den = 0.;
 
-  m_ContrastFunction = &std::tanh;
+  m_NonLinearity = [](double x) {return std::tanh(x);};
+  m_NonLinearityDerivative = [](double x) {return 1-std::pow( std::tanh(x), 2. );};
 
   m_TransformFilter = TransformFilterType::New();
 }
@@ -60,17 +61,21 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::BeforeThreadedGenerateData ()
-{
+::Reset()
+{ 
   if ( m_W.empty() )
   {
     throw itk::ExceptionObject( __FILE__, __LINE__,
       "Give the initial W matrix", ITK_LOCATION );
   }
-
+  
   m_BetaVector.resize( this->GetNumberOfThreads() );
   m_DenVector.resize( this->GetNumberOfThreads() );
   m_NbSamples.resize( this->GetNumberOfThreads() );
+  
+  std::fill(m_BetaVector.begin(), m_BetaVector.end(), 0.);
+  std::fill(m_DenVector.begin(), m_DenVector.end(), 0.);
+  std::fill(m_NbSamples.begin(), m_NbSamples.end(), 0.);
 }
 
 template <class TInputImage, class TOutputImage>
@@ -100,12 +105,12 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   while ( !input0It.IsAtEnd() && !input1It.IsAtEnd() && !outputIt.IsAtEnd() )
   {
     double x = static_cast<double>( input1It.Get()[GetCurrentBandForLoop()] );
-    double g_x = (*m_ContrastFunction)(x);
+    double g_x = m_NonLinearity(x);
 
     double x_g_x = x * g_x;
     beta += x_g_x;
 
-    double gp = 1. - std::pow( g_x, 2. );
+    double gp = m_NonLinearityDerivative(x);
     den += gp;
 
     nbSample += 1.;
@@ -120,15 +125,15 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
     ++outputIt;
   } // end while loop
 
-  m_BetaVector[threadId] = beta;
-  m_DenVector[threadId] = den;
-  m_NbSamples[threadId] = nbSample;
+  m_BetaVector[threadId] += beta;
+  m_DenVector[threadId] += den;
+  m_NbSamples[threadId] += nbSample;
 }
 
 template <class TInputImage, class TOutputImage>
 void
 FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::AfterThreadedGenerateData ()
+::Synthetize()
 {
   double beta = 0;
   double den = 0.;

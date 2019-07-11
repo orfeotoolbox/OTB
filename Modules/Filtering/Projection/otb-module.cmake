@@ -40,9 +40,9 @@ ENABLE_SHARED
     OTBTransform
     OTBVectorDataBase
     OTBVectorDataManipulation
+    OTBFunctor
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
     OTBVectorDataIO

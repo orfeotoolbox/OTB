@@ -101,7 +101,7 @@ endmacro()
 function(otb_add_test_mpi)
    set( _OPTIONS_ARGS )
    set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
-   set( _MULTI_VALUE_ARGS )
+   set( _MULTI_VALUE_ARGS EXTRA_OPT)
    cmake_parse_arguments( TEST_MPI "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
 
    # Test nb procs
@@ -112,7 +112,7 @@ function(otb_add_test_mpi)
    foreach(arg IN LISTS TEST_MPI_UNPARSED_ARGUMENTS)
      list(APPEND ARGS ${arg})
    endforeach()
-   set (test_parameters -np ${TEST_MPI_NBPROCS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
+   set (test_parameters -n ${TEST_MPI_NBPROCS} ${OTB_MPIEXEC_OPT} ${TEST_MPI_EXTRA_OPT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
    otb_add_test(NAME ${TEST_MPI_NAME} COMMAND ${MPIEXEC} ${test_parameters})
 endfunction()
 
@@ -251,21 +251,20 @@ macro(otb_module_impl)
 
   find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB-Data)
+  HINTS $ENV{OTB_DATA_ROOT} ${CMAKE_CURRENT_SOURCE_DIR}/../OTB/Data)
   mark_as_advanced(OTB_DATA_ROOT)
 
   set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
   set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
   set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
   set(TEMP           ${CMAKE_BINARY_DIR}/Testing/Temporary)
-  set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
-  
+
   if(BUILD_TESTING)
     enable_testing()
   endif()
-  
+
   include(otb-module.cmake) # Load module meta-data
   set(${otb-module}_INSTALL_RUNTIME_DIR ${CMAKE_INSTALL_PREFIX}/bin)
   set(${otb-module}_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_PREFIX}/lib)
@@ -274,7 +273,7 @@ macro(otb_module_impl)
 
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-  
+
   # Collect all sources and headers for IDE projects.
   set(_srcs "")
   if("${CMAKE_GENERATOR}" MATCHES "Xcode|Visual Studio|KDevelop"
@@ -362,7 +361,7 @@ macro(otb_module_impl)
   endif()
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/app/CMakeLists.txt AND NOT ${otb-module}_NO_SRC)
-    add_subdirectory(app) 
+    add_subdirectory(app)
   endif()
 
   if(BUILD_TESTING AND EXISTS ${${otb-module}_SOURCE_DIR}/test/CMakeLists.txt)
@@ -419,4 +418,3 @@ macro(otb_module_impl)
   set(otb-module-INCLUDE_DIRS "${otb-module-INCLUDE_DIRS-build}")
   set(otb-module-EXPORT_CODE "${otb-module-EXPORT_CODE-build}")
 endmacro()
-

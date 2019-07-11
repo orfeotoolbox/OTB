@@ -51,7 +51,6 @@ otbVectorRescaleIntensityImageFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
 otbExtractROIResample.cxx
 otbLocalGradientVectorImageFilter.cxx
-otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbBinaryImageDensityFunction.cxx
 otbThresholdVectorImageFilter.cxx
@@ -101,7 +100,7 @@ otb_add_test(NAME coTvImageToVectorImageCastFilter COMMAND otbImageManipulationT
   ${BASELINE}/coImageToVectorImageCastFilterOutput.tif
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   otbImageToVectorImageCastFilter
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   )
 
@@ -448,21 +447,9 @@ otb_add_test(NAME bfTvLocalGradientVectorImageFilter COMMAND otbImageManipulatio
   ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
   ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
   otbLocalGradientVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
 
-otb_add_test(NAME bfTvBoundingRegionCalculator COMMAND otbImageManipulationTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/bfBoundingRegionCalculatorOutput.txt
-  ${TEMP}/bfBoundingRegionCalculatorOutput.txt
-  otbBinaryImageMinimalBoundingRegionCalculator
-  4
-  ${TEMP}/bfBoundingRegionCalculatorOutput.txt
-  ${INPUTDATA}/rcc8_mire1.png
-  ${INPUTDATA}/rcc8_mire2.png
-  ${INPUTDATA}/rcc8_mire3.png
-  ${INPUTDATA}/rcc8_mire4.png
-  )
 
 otb_add_test(NAME bfTvPerBandVectorImageFilterWithSobelFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}

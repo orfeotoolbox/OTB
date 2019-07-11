@@ -36,10 +36,8 @@ Once all blocking issues are closed, and the previous steps are done:
     * [ ] Software Guide
     * [ ] Cookbook
     * [ ] Doxygen
-    * [ ] Application online documentation
     * [ ] WordPress page "Home" and "Download" pages
 * [ ] Upload OTB source archive to [Zenodo](https://zenodo.org/) to create a unique Digital Object Identifier (DOI)
-* [ ] Update OTB-Data-Examples.tgz on orfeo-toolbox (packages)
 * [ ] Send email to mailing list to announce the release
 * [ ] Release announcement on the blog
 * [ ] Announcement on social networks (twitter, google+)

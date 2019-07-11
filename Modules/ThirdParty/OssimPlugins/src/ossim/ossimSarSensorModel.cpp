@@ -98,7 +98,7 @@ namespace {// Anonymous namespace
    ossimTrace traceDebug ("ossimSarSensorModel:debug");
 
    typedef char const* const* strings_iterator;
-   static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC" };
+  static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC", "SCS_B" };
 }// Anonymous namespace
 
 namespace ossimplugins
@@ -1058,29 +1058,39 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 
       theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
 
-      // Then, fix the range time
-      count=0;
+      // Patch_locS1 : do not fix the range time
+      // This fix takes GCPs as inputs to calculate an offset in range dimension. 
+      // However for recent S1 products (after March 2017 with IPF >= 2.82), GCPs contain wrong values 
+      // for lat/lon coordinates => the range time offset is wrong and shift the localization.
+      // To avoid wrong offset, fixRangeTimeWithGCPs is always set to false
+      bool fixRangeTimeWithGCPs = false;
 
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
-      {
-         ossimDpt estimatedImPt;
-         TimeType estimatedAzimuthTime;
-         double   estimatedRangeTime;
+      if (fixRangeTimeWithGCPs)
+	{
+	  // Then, fix the range time
+	  count=0;
 
-         ossimEcefPoint sensorPos;
-         ossimEcefVector sensorVel;
+	  for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+	  {
+	     ossimDpt estimatedImPt;
+	     TimeType estimatedAzimuthTime;
+	     double   estimatedRangeTime;
 
-         // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+	     ossimEcefPoint sensorPos;
+	     ossimEcefVector sensorVel;
 
-         if(s1)
-         {
-            cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
-            ++count;
-         }
-      }
+	     // Estimate times
+	     const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
 
-      theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
+	     if(s1)
+	     {
+	        cumulRangeTime+=-estimatedRangeTime+gcpIt->slantRangeTime;
+	        ++count;
+	     }
+	  }
+
+	  theRangeTimeOffset = count > 0 ? cumulRangeTime/count : 0;
+	}
    }
 
    void get(
@@ -1268,7 +1278,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
       for (std::size_t idx=0 ; idx!=nbCoords ; ++idx)
       {
          const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-         assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
          std::string prefix(prefix_, pos);
 
          ossimSarSensorModel::CoordinateConversionRecordType coordRecord;
@@ -1301,7 +1310,6 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
      for (std::size_t idx=0 ; idx!=conversionRecords.size() ; ++idx)
        {
        const int pos = s_printf(prefix_, "%s[%d].", sr_gr_prefix.c_str(), idx);
-       assert(pos >= sizeof(SR_PREFIX)+4 && pos < sizeof(prefix_));
        std::string prefix(prefix_, pos);
 
 
@@ -1728,7 +1736,9 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
 
 bool 
 ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
-					   std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts)
+					   std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+					   unsigned int & linesOffset, unsigned int first_burstInd,
+					   bool inputWithInvalidPixels)
 {
    if(theBurstRecords.empty())
     return false;
@@ -1865,22 +1875,45 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    for(; itBursts!= theBurstRecords.end() ;++itBursts)
      {       
        unsigned long currentStart_L = halfLineOverlapBegin[counter];
+
+       if (inputWithInvalidPixels)
+	 {
+	   currentStart_L += itBursts->startLine - counter*theNumberOfLinesPerBurst;
+	 }
+
        unsigned long currentStop_L = itBursts->endLine - itBursts->startLine - halfLineOverlapEnd[counter];
+
+       if (inputWithInvalidPixels)
+	 {
+	   currentStop_L = itBursts->endLine - counter*theNumberOfLinesPerBurst - halfLineOverlapEnd[counter];
+	 }
+
        linesBursts.push_back(std::make_pair(currentStart_L, currentStop_L));
 
        unsigned long currentStart_S = 0;
        unsigned long currentStop_S = samples.second-samples.first;
 
-       if (itBursts->startSample < samples.first)
+       if (inputWithInvalidPixels)
 	 {
-	   currentStart_S = samples.first - itBursts->startSample;
+	   currentStart_S = samples.first;
 	 }
+       else
+	 {
+	   if (itBursts->startSample < samples.first)
+	     {
+	       currentStart_S = samples.first - itBursts->startSample;
+	     }
+	 }
+              
        currentStop_S += currentStart_S;
 
        samplesBursts.push_back(std::make_pair(currentStart_S, currentStop_S));
 
        ++counter;
      }
+
+   // Define linesOffset
+   linesOffset = (theBurstRecords[first_burstInd].azimuthStartTime - theBurstRecords[0].azimuthStartTime)/theAzimuthTimeInterval;
 
    // Clear the previous burst records
    theBurstRecords.clear();
@@ -1906,6 +1939,86 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    // Free Memory
    delete [] halfLineOverlapBegin;
    delete [] halfLineOverlapEnd;
+
+   return true;
+}
+
+
+bool ossimSarSensorModel::overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels)
+{
+  if(theBurstRecords.empty())
+    return false;
+  
+   // Check the single burst record case or < to burstIndUp + 1
+   if(theBurstRecords.size() == 1 || theBurstRecords.size() <= ( burstIndUp + 1))
+     {       
+       return false;
+     }
+
+   BurstRecordType burstUp = theBurstRecords[burstIndUp];
+   BurstRecordType burstLow = theBurstRecords[burstIndUp+1];
+   
+   // Overlap for samples (valid samples)
+   std::pair<unsigned long,unsigned long> samples;
+   samples = std::make_pair(burstUp.startSample, burstUp.endSample);
+
+   if (burstLow.startSample > samples.first)
+     {
+       samples.first = burstLow.startSample;
+     }
+   if (burstLow.endSample < samples.second)
+     {
+       samples.second = burstLow.endSample;
+     }
+   
+   unsigned long currentStartUp_S = 0;
+   unsigned long currentStartLow_S = 0;
+   unsigned long currentStopUp_S = samples.second-samples.first;
+   unsigned long currentStopLow_S = samples.second-samples.first;
+
+   if (inputWithInvalidPixels)
+     {
+       currentStartUp_S = samples.first;
+       currentStartLow_S = samples.first;
+     }
+   else
+     {
+       if (burstUp.startSample < samples.first)
+	 {
+	   currentStartUp_S = samples.first - burstUp.startSample;
+	 }
+       if (burstLow.startSample < samples.first)
+	 {
+	   currentStartLow_S = samples.first - burstLow.startSample;
+	 }
+     }
+
+   currentStopUp_S += currentStartUp_S;
+   currentStopLow_S += currentStartLow_S;
+
+   samplesUp = std::make_pair(currentStartUp_S, currentStopUp_S);
+   samplesLow = std::make_pair(currentStartLow_S, currentStopLow_S);
+
+   // Overlap for lines (valid + overlap IW)
+   DurationType timeOverlapEnd = (burstUp.azimuthStopTime - burstLow.azimuthStartTime);
+   unsigned long overlapLength = timeOverlapEnd/theAzimuthTimeInterval;
+
+   unsigned long lastValidBurstUp = burstUp.endLine - burstUp.startLine;
+   unsigned long firstValidBurstLow = 0;
+   
+   if (inputWithInvalidPixels)
+     {
+       lastValidBurstUp = burstUp.endLine - burstIndUp*theNumberOfLinesPerBurst;
+       firstValidBurstLow = burstLow.startLine - (burstIndUp+1)*theNumberOfLinesPerBurst;
+     }
+
+   linesUp = std::make_pair(lastValidBurstUp - overlapLength, lastValidBurstUp);
+   linesLow = std::make_pair(firstValidBurstLow, firstValidBurstLow + overlapLength);
 
    return true;
 }

@@ -91,7 +91,6 @@ private:
     SetName("VectorClassifier");
     SetDescription("Performs a classification of the input vector data according to a model file.");
 
-    SetDocName("Vector Classification");
     SetDocAuthors("OTB-Team");
     SetDocLongDescription("This application performs a vector data classification "
       "based on a model file produced by the TrainVectorClassifier application."
@@ -99,12 +98,12 @@ private:
       "(maximal class label = 65535). \n"
       "There are two modes: \n"
         "1) Update mode: add of the 'cfield' field containing the predicted class in the input file. \n"
-        "2) Write mode: copies the existing fields of the input file in the output file "
+        "2) Write mode: copies the existing fields of the input file to the output file "
            " and add the 'cfield' field containing the predicted class. \n"
       "If you have declared the output file, the write mode applies. "
       "Otherwise, the input file update mode will be applied.");
 
-    SetDocLimitations("Shapefiles are supported. But the SQLite format is only supported in update mode.");
+    SetDocLimitations("Shapefiles are supported, but the SQLite format is only supported in update mode.");
     SetDocSeeAlso("TrainVectorClassifier");
     AddDocTag(Tags::Learning);
 
@@ -135,7 +134,6 @@ private:
       "* LibSVM: difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
       "* Boost: sum of votes\n"
       "* DecisionTree: (not supported)\n"
-      "* GradientBoostedTree: (not supported)\n"
       "* KNearestNeighbors: number of neighbors with the same label\n"
       "* NeuralNetwork: difference between the two highest responses\n"
       "* NormalBayes: (not supported)\n"
@@ -217,8 +215,22 @@ private:
         // Beware that itemIndex differs from ogr layer field index
         unsigned int itemIndex = GetSelectedItems("feat")[idx];
         std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
+        switch ((*it)[fieldName].GetType())
+        {
+        case OFTInteger:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<int>());
+          break;
+        case OFTInteger64:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<int>());
+          break;
+        case OFTReal:
+          mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << (*it)[fieldName].GetType() << ".");
+        }
         
-        mv[idx] = static_cast<ValueType>((*it)[fieldName].GetValue<double>());
+        
         }
       input->PushBack(mv);
       }
@@ -371,7 +383,23 @@ private:
       ogr::Feature dstFeature(outLayer.GetLayerDefn());
       dstFeature.SetFrom( *it , TRUE);
       dstFeature.SetFID(it->GetFID());
-      dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+      switch (dstFeature[classfieldname].GetType())
+        {
+        case OFTInteger:
+          dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTInteger64:
+          dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTReal:
+          dstFeature[classfieldname].SetValue<double>(target->GetMeasurementVector(count)[0]);
+          break;
+        case OFTString:
+          dstFeature[classfieldname].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << dstFeature[classfieldname].GetType() << ".");
+        }
       if (computeConfidenceMap)
         dstFeature[confFieldName].SetValue<double>(quality->GetMeasurementVector(count)[0]);
       if (updateMode)

@@ -19,77 +19,61 @@
  */
 
 
-
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "otbImage.h"
 
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ROISpot5.png}
-//    OUTPUTS: {ROISpot5Harris.png}
-//    1.5 2 0.1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./HarrisExample Input/ROISpot5.png Output/ROISpot5Harris.png 1.5 2 0.1
+*/
 
-// Software Guide : BeginLatex
-//
+
 // This example illustrates the use of the \doxygen{otb}{HarrisImageFilter}.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
-// Software Guide : EndCodeSnippet
 #include "otbHarrisImageToPointSetFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc != 6)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " inputImageFile ";
     std::cerr << " outputHarrisImageFile sigmaD sigmaI alpha" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  double SigmaD((double) ::atof(argv[3]));
-  double SigmaI((double) ::atof(argv[4]));
-  double Alpha((double) ::atof(argv[5]));
+  double SigmaD((double)::atof(argv[3]));
+  double SigmaI((double)::atof(argv[4]));
+  double Alpha((double)::atof(argv[5]));
 
-  typedef float InputPixelType;
+  using InputPixelType         = float;
   const unsigned int Dimension = 2;
-  typedef unsigned char OutputPixelType;
+  using OutputPixelType        = unsigned char;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  using InputImageType  = otb::Image<InputPixelType, Dimension>;
+  using OutputImageType = otb::Image<OutputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
-  //  Software Guide : BeginLatex
-  //
   //  The \doxygen{otb}{HarrisImageFilter} is templated over the
   //  input and output image types, so we start by
   //  defining:
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::HarrisImageFilter<InputImageType,
-      InputImageType>   HarrisFilterType;
-  // Software Guide : EndCodeSnippet
-  typedef itk::RescaleIntensityImageFilter
-  <InputImageType, OutputImageType> RescalerType;
+  using HarrisFilterType = otb::HarrisImageFilter<InputImageType, InputImageType>;
+  using RescalerType     = itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>;
 
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  using WriterType = otb::ImageFileWriter<OutputImageType>;
 
   ReaderType::Pointer       reader   = ReaderType::New();
   WriterType::Pointer       writer   = WriterType::New();
-  HarrisFilterType::Pointer harris = HarrisFilterType::New();
+  HarrisFilterType::Pointer harris   = HarrisFilterType::New();
   RescalerType::Pointer     rescaler = RescalerType::New();
 
   reader->SetFileName(inputFilename);
@@ -97,8 +81,6 @@ int main(int argc, char *argv[])
 
   harris->SetInput(reader->GetOutput());
 
-  //  Software Guide : BeginLatex
-  //
   // The \doxygen{otb}{HarrisImageFilter} needs some parameters to
   // operate. The derivative computation is performed by a
   // convolution with the derivative of a Gaussian kernel of
@@ -113,14 +95,10 @@ int main(int argc, char *argv[])
   // L_y^2(\mathbf{x},\sigma_D) \end{array}\right]
   // \end{equation}
   // The output of the detector is $$det(\mu) - \alpha trace^2(\mu).$$
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   harris->SetSigmaD(SigmaD);
   harris->SetSigmaI(SigmaI);
   harris->SetAlpha(Alpha);
-  // Software Guide : EndCodeSnippet
 
   rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());
   rescaler->SetOutputMaximum(itk::NumericTraits<OutputPixelType>::max());
@@ -129,7 +107,6 @@ int main(int argc, char *argv[])
   writer->SetInput(rescaler->GetOutput());
   writer->Update();
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:Harris} shows the result of applying the interest
   // point detector to a small patch extracted from a Spot 5 image.
   // \begin{figure}
@@ -149,76 +126,49 @@ int main(int argc, char *argv[])
   // \doxygen{otb}{HarrisImageToPointSetFilter}. This filter is only
   // templated over the input image type, the output being a
   // \doxygen{itk}{PointSet} with pixel type equal to the image pixel type.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::HarrisImageToPointSetFilter<InputImageType> FunctionType;
-  // Software Guide : EndCodeSnippet
+  using FunctionType = otb::HarrisImageToPointSetFilter<InputImageType>;
 
-  //  Software Guide : BeginLatex
-  //
   //  We declare now the filter and a pointer to the output point set.
-  //  Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
-  typedef FunctionType::OutputPointSetType OutputPointSetType;
+  using OutputPointSetType = FunctionType::OutputPointSetType;
 
-  FunctionType::Pointer       harrisPoints    = FunctionType::New();
-  OutputPointSetType::Pointer pointSet = OutputPointSetType::New();
-  // Software Guide : EndCodeSnippet
+  FunctionType::Pointer       harrisPoints = FunctionType::New();
+  OutputPointSetType::Pointer pointSet     = OutputPointSetType::New();
 
-  //  Software Guide : BeginLatex
-  //
   //  The \doxygen{otb}{HarrisImageToPointSetFilter} takes the same
   // parameters as the \doxygen{otb}{HarrisImageFilter} and an
   // additional parameter : the threshold for the point selection.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   harrisPoints->SetInput(0, reader->GetOutput());
   harrisPoints->SetSigmaD(SigmaD);
   harrisPoints->SetSigmaI(SigmaI);
   harrisPoints->SetAlpha(Alpha);
   harrisPoints->SetLowerThreshold(10);
   pointSet = harrisPoints->GetOutput();
-  // Software Guide : EndCodeSnippet
 
   harrisPoints->Update();
 
-  //  Software Guide : BeginLatex
-  //
   //  We can now iterate through the obtained pointset and access
   //  the coordinates of the points. We start by accessing the
   //  container of the points which is encapsulated into the point
   //  set (see section \ref{sec:PointSetSection} for more
   //  information on using \doxygen{itk}{PointSet}s) and declaring
   //  an iterator to it.
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef OutputPointSetType::PointsContainer ContainerType;
+  using ContainerType            = OutputPointSetType::PointsContainer;
   ContainerType* pointsContainer = pointSet->GetPoints();
-  typedef ContainerType::Iterator IteratorType;
-  IteratorType itList = pointsContainer->Begin();
-  // Software Guide : EndCodeSnippet
+  using IteratorType             = ContainerType::Iterator;
+  IteratorType itList            = pointsContainer->Begin();
 
-  //  Software Guide : BeginLatex
-  //
   //  And we get the points coordinates
-  //
-  //  Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   while (itList != pointsContainer->End())
-    {
-    typedef OutputPointSetType::PointType OutputPointType;
+  {
+    using OutputPointType       = OutputPointSetType::PointType;
     OutputPointType pCoordinate = (itList.Value());
-    std::cout << pCoordinate << std::endl;
+    otbLogMacro(Debug, << pCoordinate);
     ++itList;
-    }
-  // Software Guide : EndCodeSnippet
+  }
 
   return EXIT_SUCCESS;
 }

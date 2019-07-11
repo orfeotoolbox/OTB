@@ -106,6 +106,10 @@ elseif(MSVC)
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -mp")
 endif()
 
+if(UNIX AND USE_LOW_KERNEL_VERSION)
+  set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-feature-getentropy -no-feature-renameat2")
+endif()
+
 if(WIN32)
   set(QT5_BIN_EXT ".exe")
   file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure.bat QT5_CONFIGURE_SCRIPT)
@@ -126,7 +130,7 @@ configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
 ExternalProject_Add(QT5
   PREFIX QT5
-  URL "http://download.qt.io/official_releases/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
+  URL "https://download.qt.io/archive/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
   URL_MD5 7e167b9617e7bd64012daaacb85477af
   BINARY_DIR ${QT5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

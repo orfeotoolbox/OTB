@@ -1,0 +1,16 @@
+<PAMDataset>
+  <SRS>GEOGCS[&quot;unknown&quot;,
+    DATUM[&quot;unknown&quot;,
+        SPHEROID[&quot;unretrievable - using WGS84&quot;,6378137,298.257223563]],
+    PRIMEM[&quot;Greenwich&quot;,0],
+    UNIT[&quot;metre&quot;,1]]</SRS>
+  <GeoTransform>  2.3957150620708800e+00,  3.5468073200000003e-05,  0.0000000000000000e+00,  4.8813901970760220e+01,  0.0000000000000000e+00, -2.4505752140000001e-05</GeoTransform>
+  <Metadata domain="IMAGE_STRUCTURE">
+    <MDI key="INTERLEAVE">PIXEL</MDI>
+  </Metadata>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+    <MDI key="TIFFTAG_XRESOLUTION">100</MDI>
+    <MDI key="TIFFTAG_YRESOLUTION">100</MDI>
+  </Metadata>
+</PAMDataset>

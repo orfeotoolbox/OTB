@@ -1,0 +1,205 @@
+Image (0x1a6f470)
+  RTTI typeinfo:   otb::Image<float, 2u>
+  Reference Count: 2
+  Modified Time: 141
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (0x1a6f820) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 138
+  UpdateMTime: 0
+  RealTimeStamp: 0.0000000000 seconds 
+  LargestPossibleRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [3000, 3000]
+  BufferedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  RequestedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [3000, 3000]
+  Spacing: [1.0000000000, 1.0000000000]
+  Origin: [0.5000000000, 0.5000000000]
+  Direction: 
+1.0000000000 0.0000000000
+0.0000000000 1.0000000000
+
+  IndexToPointMatrix: 
+1.0000000000 0.0000000000
+0.0000000000 1.0000000000
+
+  PointToIndexMatrix: 
+1.0000000000 0.0000000000
+0.0000000000 1.0000000000
+
+  Inverse Direction: 
+1.0000000000 0.0000000000
+0.0000000000 1.0000000000
+
+  PixelContainer: 
+    ImportImageContainer (0x1a6f650)
+      RTTI typeinfo:   itk::ImportImageContainer<unsigned long, float>
+      Reference Count: 1
+      Modified Time: 18
+      Debug: Off
+      Object Name: 
+      Observers: 
+        none
+      Pointer: 0
+      Container manages memory: true
+      Size: 0
+      Capacity: 0
+  ---> DataType = 0
+  ---> DriverLongName = CEOS Image
+  ---> DriverShortName = CEOS
+  ---> LowerLeftCorner[0] = 0.0000000000
+  ---> LowerLeftCorner[1] = 3000.0000000000
+  ---> LowerRightCorner[0] = 3000.0000000000
+  ---> LowerRightCorner[1] = 3000.0000000000
+  ---> OSSIMKeywordlist
+   Ossim Keyword list:
+  adjustment_0.adj_param_0.center:  0
+adjustment_0.adj_param_0.description:  intrack_offset
+adjustment_0.adj_param_0.lock_flag:  0
+adjustment_0.adj_param_0.parameter:  0
+adjustment_0.adj_param_0.sigma:  50
+adjustment_0.adj_param_0.units:  pixel
+adjustment_0.adj_param_1.center:  0
+adjustment_0.adj_param_1.description:  crtrack_offset
+adjustment_0.adj_param_1.lock_flag:  0
+adjustment_0.adj_param_1.parameter:  0
+adjustment_0.adj_param_1.sigma:  50
+adjustment_0.adj_param_1.units:  pixel
+adjustment_0.adj_param_2.center:  0
+adjustment_0.adj_param_2.description:  intrack_scale
+adjustment_0.adj_param_2.lock_flag:  0
+adjustment_0.adj_param_2.parameter:  0
+adjustment_0.adj_param_2.sigma:  50
+adjustment_0.adj_param_2.units:  unknown
+adjustment_0.adj_param_3.center:  0
+adjustment_0.adj_param_3.description:  crtrack_scale
+adjustment_0.adj_param_3.lock_flag:  0
+adjustment_0.adj_param_3.parameter:  0
+adjustment_0.adj_param_3.sigma:  50
+adjustment_0.adj_param_3.units:  unknown
+adjustment_0.adj_param_4.center:  0
+adjustment_0.adj_param_4.description:  map_rotation
+adjustment_0.adj_param_4.lock_flag:  0
+adjustment_0.adj_param_4.parameter:  0
+adjustment_0.adj_param_4.sigma:  0.1
+adjustment_0.adj_param_4.units:  degrees
+adjustment_0.description:  Initial adjustment
+adjustment_0.dirty_flag:  0
+adjustment_0.number_of_params:  5
+current_adjustment:  0
+height_off:  0
+height_scale:  4.5035996273705e+15
+lat_off:  -43.13823715
+lat_scale:  1
+line_den_coeff_0:  1
+line_den_coeff_1:  2.43189701059228
+line_den_coeff_10:  0
+line_den_coeff_11:  0.427993733624612
+line_den_coeff_12:  0.211112963392964
+line_den_coeff_13:  0
+line_den_coeff_14:  0.367481099808053
+line_den_coeff_15:  -0.393242099048278
+line_den_coeff_16:  0
+line_den_coeff_17:  0
+line_den_coeff_18:  0
+line_den_coeff_19:  0
+line_den_coeff_2:  4.20166177009252
+line_den_coeff_3:  0
+line_den_coeff_4:  -0.160493581744926
+line_den_coeff_5:  0
+line_den_coeff_6:  0
+line_den_coeff_7:  -0.269037030636058
+line_den_coeff_8:  -0.667969530867681
+line_den_coeff_9:  0
+line_num_coeff_0:  0.240525444509033
+line_num_coeff_1:  -3.13682519152775
+line_num_coeff_10:  5.05780223817459e-15
+line_num_coeff_11:  0.695793592435728
+line_num_coeff_12:  2.82251754264863
+line_num_coeff_13:  1.34538684327756e-15
+line_num_coeff_14:  0.463079410620594
+line_num_coeff_15:  0.222379206138169
+line_num_coeff_16:  -3.76392327824494e-39
+line_num_coeff_17:  -2.98517180447189e-40
+line_num_coeff_18:  -1.34473504680247e-40
+line_num_coeff_19:  0
+line_num_coeff_2:  0.346548655180022
+line_num_coeff_3:  -3.6731478667714e-15
+line_num_coeff_4:  -17.3762105306822
+line_num_coeff_5:  -1.18563642519605e-12
+line_num_coeff_6:  -4.59667104442646e-13
+line_num_coeff_7:  -9.24949285654521
+line_num_coeff_8:  -2.94080878691262
+line_num_coeff_9:  9.75220202913922e-14
+line_off:  1500.5
+line_scale:  1454.5
+long_off:  -22.88265985
+long_scale:  1
+number_of_adjustments:  1
+polynomial_format:  B
+samp_den_coeff_0:  1
+samp_den_coeff_1:  10.2569493509116
+samp_den_coeff_10:  0
+samp_den_coeff_11:  1.5540812085977
+samp_den_coeff_12:  1.0328092004279
+samp_den_coeff_13:  0
+samp_den_coeff_14:  -1.32560471731861
+samp_den_coeff_15:  -0.109971870820347
+samp_den_coeff_16:  0
+samp_den_coeff_17:  0
+samp_den_coeff_18:  0
+samp_den_coeff_19:  0
+samp_den_coeff_2:  -0.673329431520661
+samp_den_coeff_3:  0
+samp_den_coeff_4:  -0.0898098294659881
+samp_den_coeff_5:  0
+samp_den_coeff_6:  0
+samp_den_coeff_7:  -1.01273131687892
+samp_den_coeff_8:  1.63658544331894
+samp_den_coeff_9:  0
+samp_num_coeff_0:  -0.0293896997028787
+samp_num_coeff_1:  -1.06364616725089
+samp_num_coeff_10:  2.51292516596346e-13
+samp_num_coeff_11:  -0.130988460347871
+samp_num_coeff_12:  0.715080909979046
+samp_num_coeff_13:  -5.44410980146769e-15
+samp_num_coeff_14:  -3.40023401886119
+samp_num_coeff_15:  4.06427430084709
+samp_num_coeff_16:  3.7210399260609e-16
+samp_num_coeff_17:  -8.27988733245361e-26
+samp_num_coeff_18:  0
+samp_num_coeff_19:  0
+samp_num_coeff_2:  2.74938094322821
+samp_num_coeff_3:  -5.80757287997929e-10
+samp_num_coeff_4:  28.4971056225152
+samp_num_coeff_5:  -9.75802000107915e-11
+samp_num_coeff_6:  5.79346199894214e-11
+samp_num_coeff_7:  -8.00166234441079
+samp_num_coeff_8:  -1.68546715570593
+samp_num_coeff_9:  -1.50596504636281e-13
+samp_off:  1477.5
+samp_scale:  1406.5
+type:  ossimRpcProjection
+  ---> ResolutionFactor = 0
+  ---> SubDatasetIndex = 0
+  ---> TileHintX = 3000
+  ---> TileHintY = 1
+  ---> UpperLeftCorner[0] = 0.0000000000
+  ---> UpperLeftCorner[1] = 0.0000000000
+  ---> UpperRightCorner[0] = 3000.0000000000
+  ---> UpperRightCorner[1] = 0.0000000000
+
+Residual ground error: 2.8481201293

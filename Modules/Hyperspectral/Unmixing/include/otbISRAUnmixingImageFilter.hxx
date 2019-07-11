@@ -39,33 +39,11 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
 }
 
 template <class TInput, class TOutput, class TPrecision>
+size_t
 ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::~ISRAUnmixingFunctor()
-{
-}
-
-template <class TInput, class TOutput, class TPrecision>
-unsigned int
-ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::GetOutputSize() const
+::OutputSize(const std::array<size_t,1> & ) const
 {
   return m_OutputSize;
-}
-
-template <class TInput, class TOutput, class TPrecision>
-bool
-ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator != (const Self& itkNotUsed(other)) const
-{
-  return true;
-}
-
-template <class TInput, class TOutput, class TPrecision>
-bool
-ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
-::operator == (const Self& itkNotUsed(other)) const
-{
-  return false;
 }
 
 template <class TInput, class TOutput, class TPrecision>
@@ -145,45 +123,7 @@ ISRAUnmixingFunctor<TInput, TOutput, TPrecision>
   return out;
 }
 
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::ISRAUnmixingImageFilter()
-{
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::~ISRAUnmixingImageFilter()
-{
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::SetEndmembersMatrix(const MatrixType& m)
-{
-  this->GetFunctor().SetEndmembersMatrix(m);
-  this->Modified();
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-const typename ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>::MatrixType&
-ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::GetEndmembersMatrix() const
-{
-  return this->GetFunctor().GetEndmembersMatrix();
-}
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-ISRAUnmixingImageFilter<TInputImage, TOutputImage, TPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
-{
-  Superclass::PrintSelf(os, indent);
-}
-
-} // end namespace
+} // end namespace functor
+} // end namespace otb
 
 #endif

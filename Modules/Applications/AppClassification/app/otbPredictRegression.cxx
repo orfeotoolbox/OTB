@@ -119,7 +119,6 @@ private:
     SetDescription("Performs a prediction of the input image according to a regression model file.");
 
     // Documentation
-    SetDocName("Predict Regression");
     SetDocLongDescription("This application predict output values from an input"
                           " image, based on a regression model file produced by"
                           " the TrainRegression application. Pixels of the "
@@ -151,7 +150,7 @@ private:
     // TODO : use CSV input/output ?
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
-    SetParameterDescription( "mask", "The mask allow restricting "
+    SetParameterDescription( "mask", "The mask restrict the "
       "classification of the input image to the area where mask pixel values "
       "are greater than 0.");
     MandatoryOff("mask");
@@ -161,10 +160,10 @@ private:
       "TrainRegression application).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
-    SetParameterDescription("imstat", "A XML file containing mean and standard"
+    SetParameterDescription("imstat", "An XML file containing mean and standard"
       " deviation to center and reduce samples before prediction "
       "(produced by ComputeImagesStatistics application). If this file contains"
-      "one more band than the sample size, the last stat of last band will be"
+      "one more band than the sample size, the last stat of the last band will be"
       "applied to expand the output predicted value");
     MandatoryOff("imstat");
 

@@ -63,7 +63,6 @@ private:
     SetDescription("Compute sampling rate for an input set of images.");
 
     // Documentation
-    SetDocName("Multi-image sampling rate estimation");
     SetDocLongDescription("The application computes sampling rates for a set of"
       " input images. Before calling this application, each pair of image and "
       "training vectors has to be analysed with the application "
@@ -80,9 +79,9 @@ private:
       "input CSV file (first column is class name, second one is the required "
       "samples number).\n\n"
       "The multi-image modes (mim) are proportional, equal and custom. The custom "
-      "mode lets the users choose the distribution of samples among the "
+      "mode lets the user choose the distribution of samples among the "
       "images. The different behaviours are described below. Ti(c) and Ni(c) "
-      " refers resp. to the total number and needed number of samples in "
+      " refers respectively to the total number and needed number of samples in "
       "image i for class c. Let's call L the total number of images.\n\n"
       "* strategy = all\n\n"
       "    - Same behaviour for all modes: take all samples\n\n"
@@ -161,8 +160,8 @@ private:
     AddParameter(ParameterType_String,"strategy.total.v","The number of samples to generate");
     SetParameterDescription("strategy.total.v","The number of samples to generate" "In the case of the custom multi-image mode, several values can be given for each image.");
  
-    AddChoice("strategy.all","Take all samples");
-    SetParameterDescription("strategy.all","Take all samples");
+    AddChoice("strategy.all","Use all samples");
+    SetParameterDescription("strategy.all","Use all samples");
 
     // Default strategy : smallest
     SetParameterString("strategy","smallest");
@@ -170,13 +169,13 @@ private:
     AddParameter(ParameterType_Choice, "mim", "Multi-Image Mode");
 
     AddChoice("mim.proportional", "Proportional");
-    SetParameterDescription("mim.proportional","Split proportionally the required number of samples");
+    SetParameterDescription("mim.proportional","Split the required number of samples proportionally");
 
     AddChoice("mim.equal", "equal");
-    SetParameterDescription("mim.equal","Split equally the required number of samples");
+    SetParameterDescription("mim.equal","Equal split of the required number of samples");
 
     AddChoice("mim.custom", "Custom");
-    SetParameterDescription("mim.custom","Split the required number of samples following user choice.");
+    SetParameterDescription("mim.custom","Split the number of samples based on the user's choice.");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "stats_1.xml stats_2.xml");

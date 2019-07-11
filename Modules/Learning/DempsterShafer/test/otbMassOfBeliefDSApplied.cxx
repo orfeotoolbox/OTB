@@ -24,6 +24,7 @@
 
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
+#include "otbMacro.h"
 
 
 typedef float                           PrecisionType;
@@ -90,27 +91,23 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   jointMassFilter->Update();
   jointMass = jointMassFilter->GetOutput();
 
-  std::cout<<mass1<<std::endl;
+  otbLogMacro(Debug,<< "Mass 1:" <<mass1);
 
-  std::cout<<mass2<<std::endl;
+  otbLogMacro(Debug,<< "Mass 2:"<<mass2);
 
-  std::cout << jointMass << std::endl;
+  otbLogMacro(Debug,<< "Joint mass :" << jointMass);
+
+  std::ostringstream oss;
+  MassOfBeliefFunctionType::PrintLabelSet(oss, Hyp);
+  otbLogMacro(Info, << "Considered Hypothesis : " << oss.str());
   
-  std::cout << "Considered Hypothesis : ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, Hyp);
-  std::cout << std::endl;
-  
-  std::cout << "Belief(Hyp) : "
-            << jointMass->GetBelief(Hyp)
-            << "  -  Plausibility(Hyp) : "
-            << jointMass->GetPlausibility(Hyp)
-            << "  -  Score(Hyp) : "
-            << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp))/2.0
-            << std::endl;
+  otbLogMacro(Info, << "Belief(Hyp) : " << jointMass->GetBelief(Hyp));
+  otbLogMacro(Info, << "Plausibility(Hyp) : " << jointMass->GetPlausibility(Hyp));
+  otbLogMacro(Info, << "Score(Hyp) : " << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp))/2.0);
 
   if (jointMass->GetBelief(Hyp) > jointMass->GetPlausibility(Hyp))
     {
-    std::cout << "Belief > Plausibility" << std::endl;
+    otbLogMacro(Warning, << "Belief > Plausibility");
     return EXIT_FAILURE;
     }
   else

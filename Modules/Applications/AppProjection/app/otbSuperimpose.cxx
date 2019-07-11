@@ -87,7 +87,6 @@ private:
     SetDescription("Using available image metadata, project one image onto another one");
 
     // Documentation
-    SetDocName("Superimpose sensor");
     SetDocLongDescription("This application performs the projection of an image into the geometry of another one.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -283,7 +282,7 @@ private:
       
       m_BasicResampler->SetOutputSpacing(xsSpacing);
       m_BasicResampler->SetOutputSize(size);
-      m_Resampler->SetOutputStartIndex(start);
+      m_BasicResampler->SetOutputStartIndex(start);
       m_BasicResampler->SetEdgePaddingValue(defaultValue);
 
       m_GeoImport->SetInput(m_BasicResampler->GetOutput());

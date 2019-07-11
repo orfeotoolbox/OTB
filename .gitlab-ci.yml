@@ -1,0 +1,328 @@
+# WARNING!
+# OTB uses Git-LFS to store the (large) tests data.
+# Git-LFS is mostly transparent for the user and recent versions
+# are able to use Git-LFS quite efficiently.
+# But Git fails to manage efficiently numerous LFS data.
+# We have to use directly git-lfs wrapping commands to have an
+# efficient cloning step.
+# Furthermore, Git-LFS and Gitlab sufer a bug preventing usage of
+# GIT_STRATEGY=fetch (https://gitlab.com/gitlab-org/gitlab-runner/issues/3318)
+
+variables:
+  BUILD_IMAGE_REGISTRY: $CI_REGISTRY/orfeotoolbox/otb-build-env
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/otb
+  DOCKER_DRIVER: overlay2
+  GIT_DEPTH: "3"
+  # Disable automatic checkout to let us fetch LFS before
+  GIT_CHECKOUT: "false"
+  # The fetch strategy fails with LFS and GitLab
+  GIT_STRATEGY: "clone"
+
+stages:
+  - precheck
+  - prepare
+  - build
+  - report
+  - deploy
+
+.general:
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+
+.common:
+  extends: .general
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  after_script:
+    - python3 -u CI/cdash_handler.py
+
+.common-build:
+  extends: .common
+  only:
+    - merge_requests
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
+  stage: build
+  artifacts:
+    when: always
+    expire_in: 24 hrs
+    paths:
+      - build/*/*.log #CMake log
+      - log/*.txt # Others
+      - build/CookBook-*-html.tar.gz
+      - build/Documentation/Cookbook/latex/CookBook-*.pdf
+      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
+      - build_packages/OTB-*.run
+      - build_packages/OTB-*.zip
+      - build/compile_commands.json
+      - build/ctest_report.xml
+      - build/cppcheck_report.xml
+      - build/coverage_report.xml
+
+.common-prepare:
+  extends: .general
+  only:
+    - merge_requests
+    - develop
+    - /^release-[0-9]+\.[0-9]+$/
+  stage: prepare
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - export GIT_LFS_SKIP_SMUDGE=0
+  artifacts:
+    expire_in: 24 hrs
+    when: always
+    paths:
+      - sb_branch.txt # Needed to checkout correct branch in build step
+      - build/*/*/*/*.log # Superbuild log
+
+#-------------------------- precheck job ---------------------------------------
+fast-build:
+  extends: .common
+  only: [merge_requests, branches]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  before_script:
+    - export GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q $CI_COMMIT_SHA
+    - python3 CI/check_twin_pipelines.py
+  script:
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ccache -s
+
+#------------------------- prepare & build jobs --------------------------------
+debian-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+  dependencies: []
+
+## Ubuntu superbuild
+ubuntu-xdk-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+
+ubuntu-xdk-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
+  dependencies:
+    - ubuntu-xdk-prepare
+
+## CentOS superbuild
+centos-xdk-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+
+centos-xdk-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+  dependencies:
+    - centos-xdk-prepare
+
+## MacOS superbuild
+macos-xdk-prepare:
+  extends: .common-prepare
+  tags:
+    - macos
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+
+macos-xdk-build:
+  tags:
+    - macos
+  extends: .common-build
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+  dependencies:
+    - macos-xdk-prepare
+
+## Windows
+.windows-prepare:
+  extends: .common-prepare
+  before_script:
+# This override the previous before_script
+    - set GIT_LFS_SKIP_SMUDGE=1
+    - git checkout -f -q %CI_COMMIT_SHA%
+    - set GIT_LFS_SKIP_SMUDGE=0
+
+.windows-build:
+  extends: .common-build
+  before_script:
+    - git lfs fetch origin %CI_COMMIT_SHA%
+    - git checkout -f -q %CI_COMMIT_SHA%
+
+# - Win10
+windows-10-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 xdk 10
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-10-build:
+  extends: .windows-build
+  tags:
+    - windows10
+  script:
+    - call ./CI/dev_env.bat x64 otb 10
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-10-prepare
+
+# - Win8.1
+windows-8-prepare:
+  extends: .windows-prepare
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 xdk 8.1
+    - clcache.exe -s
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - clcache.exe -s
+
+windows-8-build:
+  extends: .windows-build
+  tags:
+    - windows8
+  script:
+    - call ./CI/dev_env.bat x86 otb 8.1
+    - clcache.exe -s
+    - ctest -V -S CI/main_superbuild.cmake
+    - clcache.exe -s
+    - ctest -V -S CI/main_packages.cmake
+  dependencies:
+    - windows-8-prepare
+
+#------------------------- QA related jobs -------------------------------------
+ubuntu-xdk-qa-code-coverage:
+  extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  script:
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
+               ctest -V -S CI/main_qa.cmake
+                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
+                     -DQA:BOOL=ON
+    - ./CI/otb_coverage.sh
+    - saxon-xslt -o build/ctest_report.xml
+                 build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
+                 CI/ctest2junit.xsl
+  dependencies:
+    - ubuntu-xdk-prepare
+
+ubuntu-xdk-qa-static-analysis:
+  extends: .common-build
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  script:
+    - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
+          grep -vE '^Modules/ThirdParty/' |
+          sort -u > header_directories
+    - cppcheck -j 8 -q --xml --xml-version=2 --enable=all
+               --language=c++ --std=c++14 --platform=unix64
+               --includes-file=header_directories
+               -i Modules/ThirdParty Modules
+               2> build/cppcheck_report.xml
+  after_script: []
+  dependencies:
+    - ubuntu-xdk-prepare
+
+ubuntu-xdk-report:
+  extends: .common
+  variables:
+    GIT_DEPTH: ""
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  stage: report
+  only:
+    refs:
+      - merge_requests
+      - develop
+      - /^release-[0-9]+\.[0-9]+$/
+    variables:
+      - $SONAR_OTB_TOKEN
+  script:
+    - sonar-scanner -Dproject.settings=sonar-project.properties
+                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
+                    -Dsonar.login=$SONAR_OTB_TOKEN
+                    `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
+                    -Dsonar.branch.name=$CI_COMMIT_REF_NAME
+
+  after_script: []
+  dependencies:
+    - ubuntu-xdk-qa-code-coverage
+    - ubuntu-xdk-qa-static-analysis
+
+#---------------------------- Deploy job ---------------------------------------
+deploy:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    - develop@orfeotoolbox/otb
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+  dependencies:
+    - ubuntu-xdk-build
+    - centos-xdk-build
+    - macos-xdk-build
+    - windows-8-build
+    - windows-10-build
+
+release-container:
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  stage: deploy
+  extends: .general
+  only:
+    refs:
+      - tags@orfeotoolbox/otb
+    variables:
+      - $CI_COMMIT_TAG =~ /^[0-9]+\.[0-9]+\.[0-9]+$/
+  script:
+    - curl --request POST
+           --form token=$K8S_SECRET_RELEASE
+           --form ref=master
+           --form variables[OTB_TAG]=$CI_COMMIT_TAG
+           https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline

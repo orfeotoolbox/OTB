@@ -1,0 +1,76 @@
+VectorImage (0x28ecfb0)
+  RTTI typeinfo:   otb::VectorImage<double, 2u>
+  Reference Count: 3
+  Modified Time: 105
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (0x28ed7c0) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 22
+  UpdateMTime: 0
+  RealTimeStamp: 0 seconds 
+  LargestPossibleRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [2592, 1944]
+  BufferedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  RequestedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  Spacing: [1, 1]
+  Origin: [0.5, 0.5]
+  Direction: 
+1 0
+0 1
+
+  IndexToPointMatrix: 
+1 0
+0 1
+
+  PointToIndexMatrix: 
+1 0
+0 1
+
+  Inverse Direction: 
+1 0
+0 1
+
+  VectorLength: 3
+  PixelContainer: 
+    ImportImageContainer (0x28ed3e0)
+      RTTI typeinfo:   itk::ImportImageContainer<unsigned long, double>
+      Reference Count: 1
+      Modified Time: 13
+      Debug: Off
+      Object Name: 
+      Observers: 
+        none
+      Pointer: 0
+      Container manages memory: true
+      Size: 0
+      Capacity: 0
+  ---> CacheSizeInBytes = 412002099
+  ---> DataType = 0
+  ---> DriverLongName = JPEG-2000 driver based on OpenJPEG library
+  ---> DriverShortName = JP2OpenJPEG
+  ---> LowerLeftCorner[0] = 0
+  ---> LowerLeftCorner[1] = 1944
+  ---> LowerRightCorner[0] = 2592
+  ---> LowerRightCorner[1] = 1944
+  ---> ResolutionFactor = 0
+  ---> SubDatasetIndex = 0
+  ---> TileHintX = 640
+  ---> TileHintY = 480
+  ---> UpperLeftCorner[0] = 0
+  ---> UpperLeftCorner[1] = 0
+  ---> UpperRightCorner[0] = 2592
+  ---> UpperRightCorner[1] = 0

@@ -19,9 +19,6 @@
  */
 
 
-
-// Software Guide : BeginLatex
-//
 // The \doxygen{itk}{ImageLinearIteratorWithIndex} is designed for line-by-line
 // processing of an image.  It walks a linear path along a selected image
 // direction parallel to one of the coordinate axes of the image. This
@@ -92,142 +89,108 @@
 // \index{itk::ImageLinearIteratorWithIndex!example of using|(}
 //
 // Headers for both the const and non-const versions are needed.
-//
-// Software Guide : EndLatex
 
 #include "otbImage.h"
 #include "itkRGBPixel.h"
-// Software Guide : BeginCodeSnippet
 #include "itkImageLinearIteratorWithIndex.h"
-// Software Guide : EndCodeSnippet
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   // Verify the number of parameters on the command line.
   if (argc < 3)
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0]
-              << " inputImageFile outputImageFile"
-              << std::endl;
+    std::cerr << argv[0] << " inputImageFile outputImageFile" << std::endl;
     return -1;
-    }
+  }
 
-// Software Guide : BeginLatex
-//
-// The RGB image and pixel types are defined as in the previous example.  The
-// ImageLinearIteratorWithIndex class and its const version each have
-// single template parameters, the image type.
-//
-// Software Guide : EndLatex
+  // The RGB image and pixel types are defined as in the previous example.  The
+  // ImageLinearIteratorWithIndex class and its const version each have
+  // single template parameters, the image type.
 
   const unsigned int Dimension = 2;
 
-  typedef itk::RGBPixel<unsigned char>        RGBPixelType;
-  typedef otb::Image<RGBPixelType, Dimension> ImageType;
+  using RGBPixelType = itk::RGBPixel<unsigned char>;
+  using ImageType    = otb::Image<RGBPixelType, Dimension>;
 
-// Software Guide : BeginCodeSnippet
-  typedef itk::ImageLinearIteratorWithIndex<ImageType>      IteratorType;
-  typedef itk::ImageLinearConstIteratorWithIndex<ImageType> ConstIteratorType;
-// Software Guide : EndCodeSnippet
+  using IteratorType      = itk::ImageLinearIteratorWithIndex<ImageType>;
+  using ConstIteratorType = itk::ImageLinearConstIteratorWithIndex<ImageType>;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
 
   ImageType::ConstPointer inputImage;
   ReaderType::Pointer     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   try
-    {
+  {
     reader->Update();
     inputImage = reader->GetOutput();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught a !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// Software Guide : BeginLatex
-//
-// After reading the input image, we allocate an output image that of the same
-// size, spacing, and origin.
-//
-// Software Guide : EndLatex
+  // After reading the input image, we allocate an output image that of the same
+  // size, spacing, and origin.
 
-// Software Guide : BeginCodeSnippet
   ImageType::Pointer outputImage = ImageType::New();
   outputImage->SetRegions(inputImage->GetRequestedRegion());
   outputImage->CopyInformation(inputImage);
   outputImage->Allocate();
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
-// Next we create the two iterators.  The const iterator walks the input image,
-// and the non-const iterator walks the output image.  The iterators are
-// initialized over the same region.  The direction of iteration is set to 0,
-// the $x$ dimension.
-//
-// Software Guide : EndLatex
+  // Next we create the two iterators.  The const iterator walks the input image,
+  // and the non-const iterator walks the output image.  The iterators are
+  // initialized over the same region.  The direction of iteration is set to 0,
+  // the $x$ dimension.
 
-// Software Guide : BeginCodeSnippet
   ConstIteratorType inputIt(inputImage, inputImage->GetRequestedRegion());
   IteratorType      outputIt(outputImage, inputImage->GetRequestedRegion());
 
   inputIt.SetDirection(0);
   outputIt.SetDirection(0);
-// Software Guide : EndCodeSnippet
 
-// Software Guide: BeginLatex
-//
-// Each line in the input is copied to the output.  The input iterator moves
-// forward across columns while the output iterator moves backwards.
-//
-// Software Guide : EndLatex
+  // Each line in the input is copied to the output.  The input iterator moves
+  // forward across columns while the output iterator moves backwards.
 
-// Software Guide : BeginCodeSnippet
-  for (inputIt.GoToBegin(),  outputIt.GoToBegin(); !inputIt.IsAtEnd();
-       outputIt.NextLine(),  inputIt.NextLine())
-    {
+  for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); outputIt.NextLine(), inputIt.NextLine())
+  {
     inputIt.GoToBeginOfLine();
     outputIt.GoToEndOfLine();
     --outputIt;
     while (!inputIt.IsAtEndOfLine())
-      {
+    {
       outputIt.Set(inputIt.Get());
       ++inputIt;
       --outputIt;
-      }
     }
-// Software Guide : EndCodeSnippet
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[2]);
   writer->SetInput(outputImage);
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
-// Software Guide : BeginLatex
-//
-// Running this example on \code{ROI\_QB\_MUL\_1.tif} produces
-// the same output image shown in
-// Figure~\ref{fig:ImageRegionIteratorWithIndexExample}.
-//
-// \index{itk::ImageLinearIteratorWithIndex!example of using|)}
-// Software Guide : EndLatex
+  // Running this example on \code{ROI\_QB\_MUL\_1.tif} produces
+  // the same output image shown in
+  // Figure~\ref{fig:ImageRegionIteratorWithIndexExample}.
+  //
+  // \index{itk::ImageLinearIteratorWithIndex!example of using|)}
 
   return EXIT_SUCCESS;
 }

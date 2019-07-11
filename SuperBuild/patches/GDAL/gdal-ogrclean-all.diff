@@ -1,0 +1,11 @@
+--- gdal-2.4.1_orig/ogr/ogrsf_frmts/generic/ogrsfdriverregistrar.cpp
++++ gdal-2.4.1/ogr/ogrsf_frmts/generic/ogrsfdriverregistrar.cpp
+@@ -83,7 +83,7 @@ int OGRwillNeverBeTrue = FALSE;
+ void OGRCleanupAll()
+ 
+ {
+-    GDALDestroyDriverManager();
++    GDALDestroy();
+ #if defined(WIN32) && defined(_MSC_VER)
+ // Horrible hack: for some reason MSVC doesn't export those classes&symbols
+ // if they are not referenced from the DLL itself

@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 function(detect_using_file_command input_file result_type result_dir)
-  
+
   execute_process(COMMAND "${FILE_COMMAND}" "${input_file}"
     RESULT_VARIABLE file_rv
     OUTPUT_VARIABLE file_ov
@@ -29,9 +29,16 @@ function(detect_using_file_command input_file result_type result_dir)
     message(FATAL_ERROR "${FILE_COMMAND} failed: ${file_rv}\n${file_ev}\n${file_ov}")
   endif()
 
+  # message( "file_ov: '${file_ov}'" )
+
   get_filename_component(input_file_NAME ${input_file} NAME)
   string(REPLACE "${input_file}" " _file_full_ " file_ov "${file_ov}")
   string(TOLOWER "${file_ov}" file_ov_lower)
+
+  # message( "input_file: '${input_file}'" )
+  # message( "input_file_NAME: '${input_file_NAME}'" )
+  # message( "file_ov: '${file_ov}'" )
+  # message( "file_ov_lower: '${file_ov_lower}'" )
 
   set(detected_type)
   set(detected_dir)
@@ -85,9 +92,9 @@ function(detect_using_file_command input_file result_type result_dir)
 
     set(is_this_a_symbolic_link FALSE)
     set(target_file)
-    isfile_symlink("${input_file}" is_this_a_symbolic_link target_file)    
+    isfile_symlink("${input_file}" is_this_a_symbolic_link target_file)
     if(is_this_a_symbolic_link)
-      
+
       if(target_file)
 	set(libdir "lib")
 	setif_value_in_list(is_gtk_lib "${input_file_NAME}" GTK_LIB_LIST_1)
@@ -104,6 +111,18 @@ function(detect_using_file_command input_file result_type result_dir)
     #we are out of options at this point. throw error!
     message(FATAL_ERROR "unknown/untracked file type found: ${input_file}")
   endif() #if("${file_ov_lower}" MATCHES ...)
+
+  # Patch file command returning shared-oject for executable on Linux when -PIE is used.
+  if( LINUX )
+    get_filename_component( input_file_DIR ${input_file} DIRECTORY )
+    get_filename_component( dir_name ${input_file_DIR} NAME )
+    string( TOLOWER "${dir_name}" dir_name_l )
+    if( "${dir_name_l}" STREQUAL "bin" )
+      message( STATUS "${input_file} detected as shared-object, but processed as executable" )
+      set(detected_type PROGRAMS)
+      set(detected_dir bin)
+    endif()
+  endif()
 
   #message("detected_type=${detected_type}")
   set(${result_type} "${detected_type}" PARENT_SCOPE)

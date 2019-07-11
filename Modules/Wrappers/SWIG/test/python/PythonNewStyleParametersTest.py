@@ -67,8 +67,8 @@ def test(otb, argv):
 	cm_assert(app.MAP, 'epsg')
 
 	# 6 - int type 2nd level sub parameters of choice parameter set
-	app.MAP.EPSG.CODE = 32768
-	cm_assert(32768, app.GetParameterInt('map.epsg.code'))
+	app.MAP.EPSG.CODE = 2154
+	cm_assert(2154, app.GetParameterInt('map.epsg.code'))
 
 	# 7 - another choice with sub parameters set
 	app.MAP = 'utm'
@@ -97,14 +97,6 @@ def test(otb, argv):
 	#13 - simple choice parameter get
 	app.SetParameterString('outputs.mode', 'orthofit')
 	cm_assert(app.OUTPUTS.MODE, 'orthofit')
-
-	#14 - inputxml parameter set
-	app.INXML = argv[3]
-	cm_assert(app.GetParameterString('inxml'), argv[3])
-
-	#15 - outputxml parameter get
-	app.SetParameterString('outxml', 'output.xml')
-	cm_assert("output.xml", app.OUTXML)
 
 	#16 - parameter float get
 	app.SetParameterFloat('elev.default', 5.0)

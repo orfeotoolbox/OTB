@@ -109,9 +109,8 @@ private:
   SetDescription("Computes the confusion matrix of a classification");
 
   // Documentation
-  SetDocName("Confusion matrix Computation");
   SetDocLongDescription("This application computes the confusion matrix of a classification map relative to a ground truth dataset. "
-      "This ground truth can be given as a raster or a vector data. Only reference and produced pixels with values different "
+      "The ground truth can be provided as either a raster or a vector data. Only reference and produced pixels with values different "
       "from NoData are handled in the calculation of the confusion matrix. The confusion matrix is organized the following way: "
       "rows = reference labels, columns = produced labels. In the header of the output file, the reference and produced class labels "
       "are ordered according to the rows/columns of the confusion matrix.");
@@ -150,21 +149,21 @@ private:
   SetParameterDescription("ref.vector.field","Field name containing the label values");
   SetListViewSingleSelectionMode("ref.vector.field",true);
   
-  AddParameter(ParameterType_Int,"ref.raster.nodata","Value for nodata pixels in ref raster");
+  AddParameter(ParameterType_Int,"ref.raster.nodata","Value for nodata pixels in the reference raster");
   SetDefaultParameterInt("ref.raster.nodata",0);
-  SetParameterDescription("ref.raster.nodata","Label to be treated as no data in ref raster.");
+  SetParameterDescription("ref.raster.nodata","Label to be treated as nodata in the reference raster.");
   MandatoryOff("ref.raster.nodata");
   DisableParameter("ref.raster.nodata");
 
-  AddParameter(ParameterType_Int,"ref.vector.nodata","Value for nodata pixels in ref vector");
+  AddParameter(ParameterType_Int,"ref.vector.nodata","Value for nodata pixels in the reference vector");
   SetDefaultParameterInt("ref.vector.nodata",0);
-  SetParameterDescription("ref.vector.nodata","Label to be treated as no data in ref vector. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
+  SetParameterDescription("ref.vector.nodata","Label to be treated as nodata in the reference vector. Please note that this value is always used in vector mode, to generate default values. Please set it to a value that does not correspond to a class label.");
   MandatoryOff("ref.vector.nodata");
   DisableParameter("ref.vector.nodata");
 
 
-  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels in input image");
-  SetParameterDescription("nodatalabel","Label to be treated as no data in input image");
+  AddParameter(ParameterType_Int,"nodatalabel","Value for nodata pixels in the input image");
+  SetParameterDescription("nodatalabel","Label to be treated as nodata in the input image");
   SetDefaultParameterInt("nodatalabel",0);
   
   MandatoryOff("nodatalabel");

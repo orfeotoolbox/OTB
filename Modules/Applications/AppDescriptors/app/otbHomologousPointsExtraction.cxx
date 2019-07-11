@@ -83,9 +83,8 @@ private:
   void DoInit() override
   {
     SetName("HomologousPointsExtraction");
-    SetDocName("Homologous points extraction");
     SetDescription("Compute homologous points between images using keypoints");
-    SetDocLongDescription("This application allows computing homologous points between images using keypoints. "
+    SetDocLongDescription("This application computes homologous points between images using keypoints. "
       " SIFT or SURF keypoints can be used and the band on which keypoints are computed can be set independently for both images."
       " The application offers two modes:"
       " the first is the full mode where keypoints are extracted from the full extent of both images"
@@ -98,10 +97,9 @@ private:
       "The elevation parameters are to deal more precisely with sensor modelling in case of sensor geometry data. "
       "The outvector option allows creating a vector file with segments corresponding to the localisation error between the matches."
       " It can be useful to assess the precision of a registration for instance."
-      " The vector file is always reprojected to EPSG:4326 to allow display in a GIS."
+      " The vector file is always reprojected to EPSG:4326 so that it can be displayed in a GIS."
       " This is done via reprojection or by applying the image sensor models.");
     // Documentation
-    SetDocName("Homologous Points Extraction");
     SetDocLimitations("Full mode does not handle large images.");
     SetDocSeeAlso("RefineSensorModel");
     SetDocAuthors("OTB-Team");
@@ -152,7 +150,7 @@ private:
     SetParameterDescription("mode.full","Extract and match all keypoints, loading both images entirely into memory");
 
     AddChoice("mode.geobins","Search keypoints in small spatial bins regularly spread across first image");
-    SetParameterDescription("mode.geobins","This method allows retrieving a set of tie points regulary spread across image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrunk by the margin parameter for both in1 and in2 images.");
+    SetParameterDescription("mode.geobins","This method retrieves a set of tie points regulary spread across image 1. Corresponding bins in image 2 are retrieved using sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are cropped to the largest image region shrunk by the margin parameter for both in1 and in2 images.");
 
     AddParameter(ParameterType_Int,"mode.geobins.binsize","Size of bin");
     SetParameterDescription("mode.geobins.binsize","Radius of the spatial bin in pixels");

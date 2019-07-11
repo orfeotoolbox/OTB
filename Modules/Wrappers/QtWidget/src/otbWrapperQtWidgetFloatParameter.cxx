@@ -138,16 +138,5 @@ void QtWidgetFloatParameter::OnEditingFinished()
   this->GetModel()->NotifyUpdate();
 }
 
-// Filter mouse wheel events to avoid scrolling issues in parent QScrollArea
-bool QtWidgetFloatParameter::eventFilter(QObject * o, QEvent * e)
-{
-  if ( e->type() == QEvent::Wheel && qobject_cast<QAbstractSpinBox*>( o ) )
-  {
-    e->ignore();
-    return true;
-  }
-  return QWidget::eventFilter( o, e );
-}
-
 }
 }

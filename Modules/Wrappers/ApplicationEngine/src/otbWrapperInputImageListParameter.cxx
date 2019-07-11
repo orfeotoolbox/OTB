@@ -223,31 +223,6 @@ InputImageListParameter
   return IMAGES_FILTER;
 }
 
-
-/*****************************************************************************/
-const std::string &
-InputImageListParameter
-::ToString( const ParameterType::Pointer & p ) const
-{
-  assert( !p.IsNull() );
-
-  return p->GetFileName();
-}
-
-/*****************************************************************************/
-const InputImageListParameter::ParameterType::Pointer &
-InputImageListParameter
-::FromString( const ParameterType::Pointer & p,
-	      const std::string & s ) const
-{
-  assert( !p.IsNull() );
-
-  p->SetFromFileName( s );
-
-  return p;
-}
-
-
 }
 
 }

@@ -32,7 +32,7 @@ namespace otb
  */
 template <class TInputPointSet, class TOutputPointSet>
 PointSetExtractROI<TInputPointSet, TOutputPointSet>
-::PointSetExtractROI()
+::PointSetExtractROI() : m_StartX(0), m_StartY(0), m_SizeX(0), m_SizeY(0)
 {
 }
 

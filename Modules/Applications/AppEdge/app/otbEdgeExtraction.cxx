@@ -64,10 +64,9 @@ private:
         "selected channel");
 
     // Documentation
-    SetDocName("Edge Feature Extraction");
     SetDocLongDescription(
         "This application computes edge features on a selected channel of the input."
-        "It uses different filter such as gradient, Sobel and Touzi");
+        "It uses different filters such as gradient, Sobel and Touzi");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -103,9 +102,9 @@ private:
     // Touzi Section
     AddChoice("filter.touzi", "Touzi");
     SetParameterDescription("filter.touzi",
-                            "This filter is more suited for radar images. It has a spatial parameter "
+                            "This filter is more suited to radar images. It has a spatial parameter "
                             "to avoid speckle noise perturbations. The larger the radius is, "
-                            "less sensible to the speckle noise the filter is, but micro edge will be missed.");
+                            "the less sensitive the filter is to the speckle noise, but micro edge will be missed.");
     AddParameter(ParameterType_Int, "filter.touzi.xradius", "X radius of the neighborhood");
     SetDefaultParameterInt("filter.touzi.xradius", 1);
     AddParameter(ParameterType_Int, "filter.touzi.yradius", "Y radius of the neighborhood");

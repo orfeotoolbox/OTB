@@ -126,10 +126,9 @@ private:
   {
     SetName("ImageDimensionalityReduction");
     SetDescription("Performs dimensionality reduction of the input image "
-      "according to a dimensionality reduction model file.");
+      "based on a dimensionality reduction model file.");
 
     // Documentation
-    SetDocName("Image Dimensionality Reduction");
     SetDocLongDescription("This application reduces the dimension of an input"
                           " image, based on a machine learning model file produced by"
                           " the TrainDimensionalityReduction application. Pixels of the "
@@ -163,7 +162,7 @@ private:
                             "TrainRegression application).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
-    SetParameterDescription("imstat", "A XML file containing mean and standard"
+    SetParameterDescription("imstat", "An XML file containing mean and standard"
       " deviation to center and reduce samples before prediction "
       "(produced by ComputeImagesStatistics application). If this file contains"
                             "one more bands than the sample size, the last stat of last band will be"

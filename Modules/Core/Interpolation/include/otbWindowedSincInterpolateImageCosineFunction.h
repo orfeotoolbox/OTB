@@ -41,6 +41,7 @@ template<class TInput = double, class TOutput = double>
 class CosineWindowFunction
 {
 public:
+  CosineWindowFunction(): m_Radius(1), m_Factor(CONST_PI / 2.0) {} // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
@@ -63,9 +64,9 @@ public:
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
 private:
+  unsigned int m_Radius;
   // Equal to \f$ \frac{\pi}{2 m} \f$
   double       m_Factor;
-  unsigned int m_Radius;
 };
 } //namespace Function
 

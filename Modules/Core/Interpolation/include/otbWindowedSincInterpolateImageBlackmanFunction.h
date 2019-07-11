@@ -41,6 +41,7 @@ template<class TInput = double, class TOutput = double>
 class BlackmanWindowFunction
 {
 public:
+  BlackmanWindowFunction(): m_Radius(1), m_Factor1(CONST_PI), m_Factor2(2.0 * CONST_PI) {} // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
@@ -95,8 +96,7 @@ template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCond
       double, class TInputInterpolator = double, class TOutputInterpolator = double>
 class ITK_EXPORT WindowedSincInterpolateImageBlackmanFunction :
   public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::BlackmanWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
+      typename Function::BlackmanWindowFunction<TInputInterpolator, TOutputInterpolator>,
       TBoundaryCondition,
       TCoordRep>
 {

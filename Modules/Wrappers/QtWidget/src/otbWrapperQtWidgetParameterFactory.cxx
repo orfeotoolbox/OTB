@@ -26,8 +26,6 @@
 #include "otbWrapperStringListParameter.h"
 
 #include "otbWrapperQtWidgetChoiceParameter.h"
-#include "otbWrapperQtWidgetComplexInputImageParameter.h"
-#include "otbWrapperQtWidgetComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetDirectoryParameter.h"
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetIntParameter.h"
@@ -35,14 +33,12 @@
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
@@ -114,8 +110,6 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(ChoiceParameter,         QtWidgetChoiceParameter)
   CREATEWIDGET(ListViewParameter,       QtWidgetListViewParameter)
   CREATEWIDGET(InputImageParameter,     QtWidgetInputImageParameter)
-  CREATEWIDGET(ComplexInputImageParameter,     QtWidgetComplexInputImageParameter)
-  CREATEWIDGET(ComplexOutputImageParameter,     QtWidgetComplexOutputImageParameter)
   CREATEWIDGET(InputImageListParameter, QtWidgetInputImageListParameter)
   CREATEWIDGET(InputFilenameListParameter, QtWidgetInputFilenameListParameter)
   CREATEWIDGET(InputVectorDataListParameter, QtWidgetInputVectorDataListParameter)
@@ -125,8 +119,6 @@ QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model
   CREATEWIDGET(BoolParameter,          QtWidgetBoolParameter)
   CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
   CREATEWIDGET(RAMParameter,            QtWidgetRAMParameter)
-  CREATEWIDGET(OutputProcessXMLParameter,        QtWidgetOutputProcessXMLParameter)
-  CREATEWIDGET(InputProcessXMLParameter,        QtWidgetInputProcessXMLParameter)
 #undef CREATEWIDGET
 
   if (widget)

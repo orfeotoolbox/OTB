@@ -73,7 +73,6 @@ private:
     SetName("TrainDimensionalityReduction");
     SetDescription("Train a dimensionality reduction model");
 
-    SetDocName("Train Dimensionality Reduction");
     SetDocLongDescription("Trainer for dimensionality reduction algorithms "
       "(autoencoders, PCA, SOM). All input samples are used to compute the "
       "model, like other machine learning models.\n"
@@ -106,9 +105,14 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.vd", "cuprite_samples.sqlite");
-    SetDocExampleParameterValue("io.out", "mode.ae");
-    SetDocExampleParameterValue("algorithm", "pca");
-    SetDocExampleParameterValue("algorithm.pca.dim", "8");
+    SetDocExampleParameterValue("io.out", "model.som");
+    SetDocExampleParameterValue("algorithm", "som");
+    SetDocExampleParameterValue("algorithm.som.s", "10 10");
+    SetDocExampleParameterValue("algorithm.som.n", "3 3");
+    SetDocExampleParameterValue("algorithm.som.ni", "5");
+    SetDocExampleParameterValue("algorithm.som.bi", "1");
+    SetDocExampleParameterValue("algorithm.som.bf", "0.1");
+    SetDocExampleParameterValue("algorithm.som.iv", "10");
     SetDocExampleParameterValue("feat","value_0 value_1 value_2 value_3 value_4"
       " value_5 value_6 value_7 value_8 value_9");
   }
@@ -125,7 +129,9 @@ private:
       otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = source->GetLayer(0);
     ListSampleType::Pointer input = ListSampleType::New();
-    const int nbFeatures = GetParameterStringList("feat").size();
+    
+    const auto inputIndexes = GetParameterStringList("feat");
+    const int nbFeatures = inputIndexes.size();
 
     input->SetMeasurementVectorSize(nbFeatures);
     otb::ogr::Layer::const_iterator it = layer.cbegin();
@@ -136,7 +142,20 @@ private:
       mv.SetSize(nbFeatures);
       for(int idx=0; idx < nbFeatures; ++idx)
         {
-        mv[idx] = (*it)[GetParameterStringList("feat")[idx]].GetValue<double>();
+        switch ((*it)[inputIndexes[idx]].GetType())
+        {
+          case OFTInteger:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTInteger64:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+            break;
+          case OFTReal:
+            mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<double>());
+            break;
+          default:
+            itkExceptionMacro(<< "incorrect field type: " << (*it)[inputIndexes[idx]].GetType() << ".");
+        }
         }
       input->PushBack(mv);
       }

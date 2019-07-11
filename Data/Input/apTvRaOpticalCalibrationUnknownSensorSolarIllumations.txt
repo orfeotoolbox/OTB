@@ -1,0 +1,3 @@
+# Solar illumination values in watt/m2/micron ("micron" means actually "for each band").
+# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.
+1924.59 : 1843.08 : 1574.77 : 1113.71

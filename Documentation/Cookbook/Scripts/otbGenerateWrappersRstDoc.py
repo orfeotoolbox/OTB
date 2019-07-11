@@ -25,9 +25,11 @@ import argparse
 import re
 
 import otbApplication
-from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_ComplexInputImage, ParameterType_OutputImage, ParameterType_ComplexOutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_InputProcessXML, ParameterType_OutputProcessXML, ParameterType_ListView, ParameterType_Group
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_ListView, ParameterType_Group
 
 from otb_warnings import application_documentation_warnings
+
+from rst_utils import rst_section, RstPageHeading
 
 linesep = os.linesep
 
@@ -69,7 +71,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
     output = ""
 
     output += ".. code-block:: python\n\n"
-
     # Render example comment
     if len(app.GetExampleComment(idx)) > 0:
         output += "\t# {}\n".format(app.GetExampleComment(idx))
@@ -82,9 +83,12 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         paramtype = app.GetParameterType(param)
         paramrole = app.GetParameterRole(param)
         if paramtype == ParameterType_ListView:
-            break # TODO
+            if app.GetListViewSingleSelectionMode(param):
+                output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
+            else:
+                output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+EncloseString(value)+")"
         if paramtype == ParameterType_Group:
-            break # TODO
+            pass
         if paramtype ==  ParameterType_Choice:
             #app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString(" + EncloseString(param) + "," + EncloseString(value) + ")"
@@ -117,9 +121,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         if paramtype == ParameterType_InputImage :
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
-        if paramtype == ParameterType_ComplexInputImage:
-            # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
-            output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
         if paramtype == ParameterType_InputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,inputpath,expand)))
             output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(ExpandPath(value,inputpath,expand))+")"
@@ -131,10 +132,6 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
                 output += "\t" + appname + ".SetParameterOutputImagePixelType("+EncloseString(param)+", "+str(foundcode)+")"
             else:
                 output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
-        if paramtype == ParameterType_ComplexOutputImage :
-            # TODO: handle complex type properly
-            # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
-            output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
         if paramtype == ParameterType_OutputVectorData:
             # app.SetParameterString(param,EncloseString(ExpandPath(value,outputpath,expand)))
             output += "\t" + appname +".SetParameterString("+EncloseString(param)+", "+ EncloseString(ExpandPath(value,outputpath,expand)) + ")"
@@ -180,17 +177,6 @@ def render_choice(app, key):
         choices=choice_entries,
     )
 
-def rst_section(text, delimiter, ref=None):
-    "Make a rst section title"
-
-    output = ""
-
-    if ref is not None:
-        output += ".. _" + ref + ":\n\n"
-
-    output += text + "\n" + delimiter * len(text) + "\n\n"
-    return output
-
 def rst_parameter_value(app, key):
     "Render a parameter value to rst"
 
@@ -211,15 +197,14 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_String: "string"})
     values.update({ParameterType_StringList: "string1 string2..."})
     values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"))
-    values.update(dict.fromkeys([ParameterType_InputImage, ParameterType_ComplexInputImage], "image"))
-    values.update(dict.fromkeys([ParameterType_OutputImage, ParameterType_ComplexOutputImage], "image [dtype]"))
+    values.update({ParameterType_InputImage: "image"})
+    values.update({ParameterType_OutputImage: "image [dtype]"})
     values.update(dict.fromkeys([ParameterType_InputVectorData, ParameterType_OutputVectorData], "vectorfile"))
     values.update({ParameterType_Directory: "directory"})
     values.update({ParameterType_Choice: "choice"})
     values.update({ParameterType_InputImageList: "image1 image2..."})
     values.update({ParameterType_InputVectorDataList: "vectorfile1 vectorfile2..."})
     values.update({ParameterType_InputFilenameList: "filename1 filename2..."})
-    values.update(dict.fromkeys([ParameterType_InputProcessXML, ParameterType_OutputProcessXML], "filename.xml"))
 
     if type in values:
         return values[type]
@@ -370,13 +355,20 @@ def multireplace(string, replacements):
 def make_links(text, allapps):
     "Replace name of applications by internal rst links"
 
-    rep = {appname: ":ref:`{}`".format("app-" + appname) for appname in allapps}
+    rep = {appname: ":ref:`{}`".format(appname) for appname in allapps}
     return multireplace(text, rep)
+
+def render_deprecation_string(app):
+    if app.IsDeprecated():
+        return "This application is deprecated and will be removed in a future release."
+    else:
+        return ""
 
 def render_application(appname, allapps):
     "Render app to rst"
 
-    app = otbApplication.Registry.CreateApplication(appname)
+    # Create the application without logger to avoid the deprecation warning log
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
     # TODO: remove this when bug 440 is fixed
     app.Init()
@@ -384,7 +376,8 @@ def render_application(appname, allapps):
     application_documentation_warnings(app)
 
     output = template_application.format(
-        label="app-" + appname,
+        label=appname,
+        deprecation_string=render_deprecation_string(app),
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
@@ -398,15 +391,9 @@ def render_application(appname, allapps):
     return output
 
 def GetApplicationTags(appname):
-     app = otbApplication.Registry.CreateApplication(appname)
-     return app.GetDocTags()
-
-def RstPageHeading(text, maxdepth, ref=None):
-    output = rst_section(text, "=", ref=ref)
-    output += ".. toctree::" + linesep
-    output += "\t:maxdepth: " + maxdepth + linesep
-    output += linesep + linesep
-    return output
+    # Create the application without logger to avoid the deprecation warning log
+    app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
+    return app.GetDocTags()
 
 def GenerateRstForApplications(rst_dir):
     "Generate .rst files for all applications"
@@ -421,16 +408,19 @@ def GenerateRstForApplications(rst_dir):
     appNames = [app for app in allApps if app not in blackList]
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("Applications", "2", ref="apprefdoc"))
+    appIndexFile.write(RstPageHeading("All Applications", "2", ref="apprefdoc"))
 
     print("Generating rst for {} applications".format(len(appNames)))
 
     for appName in appNames:
 
         # Get application first tag
-        tags = GetApplicationTags(appName)
+        tags = list(GetApplicationTags(appName))
+        if "Deprecated" in tags:
+            tags.remove("Deprecated")
         if not tags or len(tags) == 0:
             raise RuntimeError("No tags for application: " + appName)
+
         tag = tags[0]
         tag_ = tag.replace(" ", "_")
 
@@ -450,7 +440,7 @@ def GenerateRstForApplications(rst_dir):
                 tagFile.write("\tapp_" + appName + "\n")
 
         # Write application rst
-        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w') as appFile:
+        with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
             appFile.write(render_application(appName, appNames))
 
 if __name__ == "__main__":

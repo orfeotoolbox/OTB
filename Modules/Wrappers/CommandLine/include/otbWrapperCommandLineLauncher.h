@@ -76,7 +76,7 @@ public:
                  INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
 
   /** Filter watcher list type */
-  typedef std::vector<StandardOneLineFilterWatcher *> WatcherListType;
+  typedef std::vector<StandardOneLineFilterWatcher<> *> WatcherListType;
 
   /** Command Member */
   typedef itk::MemberCommand< Self >        AddProcessCommandType;
@@ -111,9 +111,6 @@ public:
 
   /** Create and display the help of the application */
   void DisplayHelp(bool longHelp=false);
-
-   /** Create and display the long help of the application */
-  void DisplayLongHelp();
 
   /** Performs specific action for testing environment */
   void LoadTestEnv();

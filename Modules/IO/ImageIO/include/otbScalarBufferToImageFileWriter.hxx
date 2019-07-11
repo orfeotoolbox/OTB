@@ -43,7 +43,7 @@ void
 ScalarBufferToImageFileWriter<TBufferType, TOutputPixelType>::GenerateData()
 {
   // Check image parameters
-  if( (m_ImageSize[0]==0) || (m_ImageSize[0]==0) )
+  if( (m_ImageSize[0]==0) || (m_ImageSize[1]==0) )
     {
       itkExceptionMacro("Invalid output image size, Size can't be null.");
     }

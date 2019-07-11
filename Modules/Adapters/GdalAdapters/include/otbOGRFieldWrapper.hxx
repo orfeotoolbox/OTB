@@ -232,7 +232,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType = std::vector<T>
   , bool Is_contiguous = boost::is_contiguous<ActualParamType>::value
   > class TagDispatchMemberContainerSetterPtr;
@@ -241,7 +245,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType
   > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, true>
     {
@@ -257,7 +265,11 @@ template
  */
 template
   < typename T
+#if GDAL_VERSION_NUM >= 2030000
+  , void ( OGRFeature::*ptr_to_function )(int, int, const T*)
+#else
   , void ( OGRFeature::*ptr_to_function )(int, int, T*) // not const-correct
+#endif
   , typename ActualParamType
   > class TagDispatchMemberContainerSetterPtr<T, ptr_to_function, ActualParamType, false>
     {
@@ -439,7 +451,6 @@ T otb::ogr::Field::GetValue() const
   typedef typename boost::mpl::at<internal::FieldType_Map, T>::type Kind;
   //const int VALUE = Kind::value;
   BOOST_STATIC_ASSERT(!(boost::is_same<Kind, boost::mpl::void_>::value));
-  assert(m_Definition.GetType() == Kind::value && "OGR field type mismatches the type of requested field value");
   typedef typename boost::mpl::at<internal::FieldGetters_Map, Kind>::type GetterType;
   // If you experience a static assertion failure in the line below, it means
   // the field cannot be extracted into the type requested.

@@ -30,12 +30,20 @@ endif()
 message(STATUS "")
 message(STATUS "Configuring Cookbook...")
 
-# here we could add
-# find_package (Python3 COMPONENTS Interpreter)
-# but it requires cmake 3.12+
+# Check we have python bindings with python 3+
+if (NOT OTB_WRAP_PYTHON OR ${PYTHONLIBS_VERSION_STRING} STRLESS "3.0.0")
+    message(FATAL_ERROR "CookBook build requires Python 3 wrappers. Try setting OTB_WRAP_PYTHON=ON in the CMake configuration, or disable the CookBook with BUILD_COOKBOOK=OFF.")
+endif()
 
 find_program(SH_INTERP sh)
 mark_as_advanced(SH_INTERP)
+
+# Note: we do not use either:
+# - find_program(SPHINX_BUILD NAMES sphinx-build)
+# - find_packages(PythonInterp)
+# because they don't work with python virtualenv (in CMake < 3.13.0),
+# so in calls to add_custom_target() below, we call them directly.
+# See CMake bug: https://gitlab.kitware.com/cmake/cmake/issues/18302
 
 find_program(LATEX_COMMAND NAMES latex)
 mark_as_advanced(LATEX_COMMAND)
@@ -43,36 +51,23 @@ mark_as_advanced(LATEX_COMMAND)
 find_program(TAR_COMMAND NAMES tar)
 mark_as_advanced(TAR_COMMAND)
 
-find_program(SPHINX_BUILD NAMES sphinx-build)
-mark_as_advanced(SPHINX_BUILD)
-
 find_program(PDFLATEX_COMMAND NAMES pdflatex )
 mark_as_advanced(PDFLATEX_COMMAND)
+
+find_program(MAKEINDEX_COMMAND NAMES makeindex )
+mark_as_advanced(MAKEINDEX_COMMAND)
 
 # Check that we found everything we need
 foreach(cmd
     LATEX_COMMAND
     TAR_COMMAND
     PDFLATEX_COMMAND
-    SPHINX_BUILD
+    MAKEINDEX_COMMAND
     SH_INTERP)
   if(NOT ${cmd})
     message(FATAL_ERROR "Error while configuring Cookbook, ${cmd} not set. Cannot continue")
   endif()
 endforeach()
-
-# We need to set PYTHONPATH for the script otbGenerateWrappersRstDoc.py, depending on how the Python3 module was built
-if (OTB_WRAP_PYTHON3)
-    set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python3")
-elseif (OTB_WRAP_PYTHON)
-    # Cookbook only supports Python3
-    # But OTB_WRAP_PYTHON can wrap both python2 and python3
-    if (${PYTHONLIBS_VERSION_STRING} STRGREATER "3.0.0")
-        set(PYTHONPATH_COOKBOOK "${CMAKE_BINARY_DIR}/lib/otb/python")
-    else()
-        message(FATAL_ERROR "Must wrap OTB with python lib 3+ to build the cookbook, but found version ${PYTHONLIBS_VERSION_STRING}")
-    endif()
-endif()
 
 set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
@@ -84,7 +79,6 @@ message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
 message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
 message(STATUS "LATEX_DIR = ${LATEX_DIR}")
 message(STATUS "HTML_DIR = ${HTML_DIR}")
-message(STATUS "PYTHONPATH_COOKBOOK = ${PYTHONPATH_COOKBOOK}")
 
 # Clean any existing build
 macro(remove_and_make_directories)
@@ -113,10 +107,15 @@ file(COPY ${RST_SOURCE_DIR}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Art DESTINATION  ${RST_BINARY_DIR})
 
+# Create symlinks to otb-data/Output and otb-data/Input in the rst build directory
+# Used for including figures and images in the CookBook
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Output" "${RST_BINARY_DIR}/Output")
+execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${OTB_DATA_ROOT}/Input" "${RST_BINARY_DIR}/Input")
+
 set(SPHINX_CONF_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
 string(TIMESTAMP OTB_COPYRIGHT_YEAR  "%Y")
-set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES.The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA)")
+set(OTB_COPYRIGHT_TEXT "${OTB_COPYRIGHT_YEAR} CNES. The OTB CookBook is licensed under a Creative Commons Attribution-ShareAlike 4.0 International license (CC-BY-SA).")
 
 configure_file(${RST_SOURCE_DIR}/conf.py.in ${SPHINX_CONF_DIR}/conf.py @ONLY)
 
@@ -126,21 +125,29 @@ add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
-  COMMENT "Auto-generating Application Reference Documentation in RST"
+  COMMENT "Auto-generating Application Documentation in RST"
+  DEPENDS OTBSWIGWrapper-all
+  )
+
+add_custom_target(generate_examples_rst
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/Scripts/otbGenerateExamplesRstDoc.py
+  ${RST_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${RST_BINARY_DIR}
+  COMMENT "Auto-generating Examples in RST"
   DEPENDS OTBSWIGWrapper-all
   )
 
 # Add all applications as dependencies to rst generation
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
-list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
 foreach(app_name ${app_names})
   add_dependencies(generate_otbapps_rst otbapp_${app_name})
 endforeach()
 
 add_custom_target(CookBookHTML
-  COMMAND ${SPHINX_BUILD}
+  COMMAND sphinx-build
   -b html
   ${RST_BINARY_DIR}
   ${HTML_DIR}
@@ -148,6 +155,7 @@ add_custom_target(CookBookHTML
   -c ${SPHINX_CONF_DIR}
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   DEPENDS generate_otbapps_rst
+  DEPENDS generate_examples_rst
   COMMENT "Building RST documentation in html")
 
 add_custom_target(CookBookArchive
@@ -160,7 +168,7 @@ add_custom_target(CookBookArchive
   COMMENT "Creating archive for html CookBook")
 
  add_custom_target(CookBookTexFromRST
-   COMMAND ${SPHINX_BUILD}
+   COMMAND sphinx-build
    -b latex
    ${RST_BINARY_DIR}
    ${LATEX_DIR}
@@ -171,9 +179,16 @@ add_custom_target(CookBookArchive
    COMMENT "Generating Tex files from rst"
    VERBATIM)
 
+set(COOKBOOK_TEX CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
+
  add_custom_target(CookBookPDF
    ALL
-   COMMAND ${CMAKE_MAKE_PROGRAM} all-pdf
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${MAKEINDEX_COMMAND} -s python.ist "${COOKBOOK_TEX}.idx" || true
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
+   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
    WORKING_DIRECTORY ${LATEX_DIR}
    DEPENDS CookBookTexFromRST
    COMMENT "Building RST documentation in pdf")

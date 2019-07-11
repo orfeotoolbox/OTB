@@ -28,6 +28,9 @@
 /*=====================================================================
                    WIN32 / MSVC++ implementation
  *====================================================================*/
+#include <Windows.h>
+#include <tchar.h>
+#include <stdio.h>
 #ifndef WIN32CE
 #  include <io.h>
 #else
@@ -37,6 +40,7 @@
 /*=====================================================================
                       POSIX (Unix) implementation
  *====================================================================*/
+#include <unistd.h>
 #include <sys/types.h>
 #include <dirent.h>
 #endif
@@ -71,8 +75,8 @@ System::GetRootName(const std::string& filename)
 
 std::vector<std::string> System::Readdir(const std::string&  pszPath)
 {
-  struct _finddata_t       c_file;
-  long                     hFile;
+  WIN32_FIND_DATA          c_file;
+  HANDLE                   hFile = INVALID_HANDLE_VALUE;
   std::vector<std::string> listFileFind;
   std::string              pszFileSpec;
   std::string              path(pszPath);
@@ -81,15 +85,15 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
 
   pszFileSpec = path + "\\*.*";
 
-  if ((hFile = _findfirst(pszFileSpec.c_str(), &c_file)) != -1L)
+  if ((hFile = FindFirstFile(pszFileSpec.c_str(), &c_file)) != INVALID_HANDLE_VALUE)
     {
     do
       {
-      listFileFind.push_back(c_file.name);
+      listFileFind.push_back(c_file.cFileName);
       }
-    while (_findnext(hFile, &c_file) == 0);
+    while (FindNextFile(hFile, &c_file) != 0);
 
-    _findclose(hFile);
+    FindClose(hFile);
     }
 
   return listFileFind;
@@ -200,6 +204,39 @@ bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& 
     }
   file = id.substr(0, pos);
   return true;
+}
+
+bool System::IsInteractive(int fd)
+{
+#if (defined(WIN32) || defined(WIN32CE)) && !defined(__CYGWIN__) && !defined(__MINGW32__)
+  // Windows implementation
+  HANDLE hcon;
+
+  /* get OS handle of the file descriptor */
+  hcon = (HANDLE) _get_osfhandle(fd);
+  if (hcon == INVALID_HANDLE_VALUE)
+    return false;
+
+  /* check if its a device (i.e. console, printer, serial port) */
+  if (GetFileType(hcon) != FILE_TYPE_CHAR)
+    return false;
+
+  /* check if its a handle to a console output screen buffer */
+  CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
+  DWORD mode;
+  if (!fd)
+    {
+    if (!GetConsoleMode(hcon, &mode))
+      return false;
+    }
+  else if (!GetConsoleScreenBufferInfo(hcon, &screenBufferInfo))
+    return false;
+
+  return true;
+#else
+  // Unix implementation
+  return isatty(fd);
+#endif
 }
 
 }

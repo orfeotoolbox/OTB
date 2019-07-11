@@ -59,7 +59,7 @@ protected:
     InitKMClassification();
 
     // init at the end cleanup
-    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
+    AddParameter( ParameterType_Bool, "cleanup", "Clean-up of temporary files" );
     SetParameterDescription( "cleanup",
                            "If activated, the application will try to clean all temporary files it created" );
     SetParameterInt("cleanup", 1);
@@ -77,13 +77,22 @@ protected:
     MandatoryOff("ts");
 
     AddParameter(ParameterType_Int, "maxit", "Maximum number of iterations");
-    SetParameterDescription("maxit", "Maximum number of iterations for the learning step.");
+    SetParameterDescription("maxit",
+                            "Maximum number of iterations for the learning step."
+                            " If this parameter is set to 0, the KMeans algorithm will not stop until convergence");
     SetDefaultParameterInt("maxit", 1000);
     MandatoryOff("maxit");
 
-    AddParameter(ParameterType_OutputFilename, "outmeans", "Centroid filename");
-    SetParameterDescription("outmeans", "Output text file containing centroid positions");
-    MandatoryOff("outmeans");
+    AddParameter(ParameterType_Group, "centroids", "Centroids IO parameters");
+    SetParameterDescription("centroids", "Group of parameters for centroids IO.");
+
+    AddParameter(ParameterType_InputFilename, "centroids.in", "input centroids text file");
+    SetParameterDescription("centroids.in",
+                            "Input text file containing centroid positions used to initialize the algorithm. "
+                            "Each centroid must be described by p parameters, p being the number of bands in "
+                            "the input image, and the number of centroids must be equal to the number of classes "
+                            "(one centroid per line with values separated by spaces).");
+    MandatoryOff("centroids.in");
 
     ShareKMSamplingParameters();
     ConnectKMSamplingParams();
@@ -99,6 +108,7 @@ protected:
   {
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
+    ShareParameter("centroids.out", "training.classifier.sharkkm.centroids.out");
     ShareParameter("vm", "polystats.mask", "Validity Mask",
       "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
@@ -109,7 +119,7 @@ protected:
       "By default, hidden pixels will have the assigned label 0 in the output image. "
       "It's possible to define the label mask by another value, "
       "but be careful to not take a label from another class. "
-      "This application initialize the labels from 0 to N-1, "
+      "This application initializes the labels from 0 to N-1, "
       "N is the number of class (defined by 'nc' parameter).");
   }
 
@@ -248,6 +258,14 @@ protected:
                                                         GetParameterInt("maxit"));
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
                                                         GetParameterInt("nc"));
+    if (IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
+    {
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in", GetParameterString("centroids.in"));
+
+      GetInternalApplication("training")
+          ->SetParameterString("classifier.sharkkm.centroids.stats", GetInternalApplication("imgstats")->GetParameterString("out"));
+    }
+
 
     if( IsParameterEnabled("rand"))
       GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));
@@ -274,55 +292,6 @@ protected:
   void KMeansClassif()
   {
     ExecuteInternal( "classif" );
-  }
-
-  void CreateOutMeansFile(FloatVectorImageType *image,
-                          const std::string &modelFileName,
-                          unsigned int nbClasses)
-  {
-    if (IsParameterEnabled("outmeans"))
-    {
-      unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
-      unsigned int nbElements = nbClasses * nbBands;
-      // get the line in model file that contains the centroids positions
-      std::ifstream infile(modelFileName);
-      if(!infile)
-      {
-        itkExceptionMacro(<< "File: " << modelFileName << " couldn't be opened");
-      }
-
-      // get the line with the centroids (starts with "2 ")
-      std::string line, centroidLine;
-      while(std::getline(infile,line))
-      {
-        if (line.size() > 2 && line[0] == '2' && line[1] == ' ')
-          {
-          centroidLine = line;
-          break;
-          }
-      }
-
-      std::vector<std::string> centroidElm;
-      boost::split(centroidElm,centroidLine,boost::is_any_of(" "));
-
-      // remove the first elements, not the centroids positions
-      int nbWord = centroidElm.size();
-      int beginCentroid = nbWord-nbElements;
-      centroidElm.erase(centroidElm.begin(), centroidElm.begin()+beginCentroid);
-
-      // write in the output file
-      std::ofstream outfile;
-      outfile.open(GetParameterString("outmeans"));
-
-      for (unsigned int i = 0; i < nbClasses; i++)
-      {
-        for (unsigned int j = 0; j < nbBands; j++)
-        {
-          outfile << std::setw(8) << centroidElm[i * nbBands + j] << " ";
-        }
-        outfile << std::endl;
-      }
-    }
   }
 
   class KMeansFileNamesHandler
@@ -402,7 +371,6 @@ private:
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
 
-    SetDocName("Unsupervised KMeans image classification");
     SetDocLongDescription("Unsupervised KMeans image classification. "
       "This is a composite application, using existing training and classification applications. "
       "The SharkKMeans model is used.\n\n"
@@ -419,12 +387,12 @@ private:
         "6) TrainVectorClassifier: train the SharkKMeans model,\n"
         "7) ImageClassifier: perform the classification of the input image "
             "according to a model file.\n\n"
-        "It's possible to choice random/periodic modes of the SampleSelection application.\n"
-        "If you want keep the temporary files (sample selected, model file, ...), "
+        "It is possible to choose random/periodic modes of the SampleSelection application.\n"
+        "If you do not want to keep the temporary files (sample selected, model file, ...), "
         "initialize cleanup parameter.\n"
         "For more information on shark KMeans algorithm [1].");
 
-    SetDocLimitations("The application doesn't support NaN in the input image");
+    SetDocLimitations("The application does not support NaN in the input image");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageEnvelope, PolygonClassStatistics, SampleSelection, SampleExtraction, "
       "PolygonClassStatistics, TrainVectorClassifier, ImageClassifier.\n\n"
@@ -494,9 +462,6 @@ private:
 
     // Compute a classification of the input image according to a model file
     Superclass::KMeansClassif();
-
-    // Create the output text file containing centroids positions
-    Superclass::CreateOutMeansFile(GetParameterImage("in"), fileNames.modelFile, GetParameterInt("nc"));
 
     // Remove all tempory files
     if( GetParameterInt( "cleanup" ) )

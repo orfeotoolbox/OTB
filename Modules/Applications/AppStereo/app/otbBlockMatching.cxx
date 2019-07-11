@@ -130,7 +130,6 @@ private:
     SetDescription("Performs block-matching to estimate pixel-wise disparities"
       " between two images.");
 
-    SetDocName("Pixel-wise Block-Matching");
     SetDocLongDescription(
       "This application allows one to performs "
       "block-matching to estimate pixel-wise disparities for a pair of images "
@@ -316,7 +315,9 @@ private:
     SetParameterDescription("bm.step", "Location step between computed "
       "disparities. Disparities will be computed every 'step' pixels in the "
       "left image (step for both rows and columns). For instance, a value of 1 "
-      "corresponds to the classic dense disparity map.");
+      "corresponds to the classic dense disparity map."
+      "To enforce consistency with its spacing, output disparity map values are "
+      " divided by the step value.");
     SetDefaultParameterInt("bm.step",1);
     SetMinimumParameterIntValue("bm.step",1);
     MandatoryOff("bm.step");

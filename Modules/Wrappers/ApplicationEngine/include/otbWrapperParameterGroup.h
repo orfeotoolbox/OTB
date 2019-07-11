@@ -73,11 +73,6 @@ public:
 
   Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
 
-  /** rashad: Add xml parameters eg: -inxml -outxml */
-  void AddInXMLParameter();
-
-  void AddOutXMLParameter();
-
   void Clear()
   {
     m_ParameterList.clear();
@@ -89,7 +84,7 @@ public:
   std::string GetParameterTypeAsString(ParameterType paramType);
 
   /* Get the parameter type from its string version of ParameterType enum */
-  ParameterType GetParameterTypeFromString(std::string paramType);
+  ParameterType GetParameterTypeFromString(const std::string& paramType);
 
   unsigned int GetNumberOfParameters();
 
@@ -104,6 +99,11 @@ public:
   /** Resolve potential proxy parameters by following their targets until
    *  a non-proxy parameter. It will detect cycles and report an error */
   static Parameter* ResolveParameter(Parameter *param);
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_Group;
+  }
 
 protected:
   ParameterGroup();

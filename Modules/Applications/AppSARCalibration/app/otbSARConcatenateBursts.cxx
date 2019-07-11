@@ -58,7 +58,6 @@ private:
     SetDescription("Concatenate a list of Bursts to provide a whole SAR Deburst Image.");
 
     // Documentation
-    SetDocName("SAR Concatenate Bursts");
     SetDocLongDescription("This application performs a burst concatenation and provides a SAR Deburst Image. "
 			  "It reads the input image list (single bursts) "
 			  "and generates a whole SAR image with deburst operations.");
@@ -79,6 +78,11 @@ private:
     AddParameter(ParameterType_OutputImage, "out",  "Output Image");
     SetParameterDescription("out", "The concatenated and debursted output image.");
 
+    AddParameter(ParameterType_Int,  "burstindex", "Index of the first Burst");
+    SetParameterDescription("burstindex", "Index for the first required Burst");
+    MandatoryOff("burstindex");
+    SetDefaultParameterInt("burstindex", 0);
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -94,6 +98,9 @@ private:
 
   void DoExecute() override
   {
+    // Get the first Burst index 
+    int burst_index = GetParameterInt("burstindex");
+
     // Instanciate filters
     ExtractROIFilterListType::Pointer m_ExtractorList = ExtractROIFilterListType::New();
     ImageListType::Pointer m_ImageList = ImageListType::New();
@@ -117,7 +124,7 @@ private:
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to retrieve bursts.number value from .geom file.");
+	otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
       }
 
     nbBursts = inList->Size();
@@ -129,13 +136,33 @@ private:
 
     // Coniguration for fusion filter
     fusionFilter->SetSLCImageKeyWorList(in->GetImageKeywordlist());
-    fusionFilter->getDeburstLinesAndSamples(lines, samples);
+    // Get Invalid pixel Key (from Image 0) 
+    FloatVectorImageType::Pointer Im0 = inList->GetNthElement(0);
+    Im0->UpdateOutputInformation();
+    
+    auto const& kwl = Im0->GetImageKeywordlist();
+
+    const bool inputWithInvalidPixels = kwl.HasKey("support_data.invalid_pixels")
+      && kwl.GetMetadataByKey("support_data.invalid_pixels") == "yes";
+ 
+
+    fusionFilter->getDeburstLinesAndSamples(lines, samples, burst_index, inputWithInvalidPixels);
        
     // Split each input burst to keep only interested region
     for( unsigned int i=0; i<inList->Size(); i++ )
       {
 	FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
 	vectIm->UpdateOutputInformation();
+
+	// Check invalid Pixel Key
+	const bool inputWithInvalidPixels_loop = vectIm->GetImageKeywordlist().HasKey("support_data.invalid_pixels")
+	  && vectIm->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes";
+
+	if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
+	  {
+	    // Throw an execption
+	    otbAppLogFATAL(<< "Incoherency between input images (for support_data.invalid_pixels key).");
+	  }
 
 	unsigned long originOffset_samples = static_cast<long>(vectIm->GetOrigin()[0]-0.5);
 	unsigned long originOffset_lines = static_cast<long>(vectIm->GetOrigin()[1]-0.5);

@@ -26,7 +26,6 @@
 
 # This does not force the developer to install python to be able to build OTB.
 # The tests will simply not be run if python is unavailable.
-find_package(PythonInterp)
 
 # The maximum number of headers in a test.  This helps limit memory issues,
 # and the cppcheck tests.  However, if this is not unity, there is a slight
@@ -46,7 +45,7 @@ if(NOT OTB_USE_OPENCV)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbDecisionTreeMachineLearningModelFactory.h otbDecisionTreeMachineLearningModel.h otbKNearestNeighborsMachineLearningModelFactory.h otbKNearestNeighborsMachineLearningModel.h otbRandomForestsMachineLearningModelFactory.h otbRandomForestsMachineLearningModel.h otbSVMMachineLearningModelFactory.h otbSVMMachineLearningModel.h otbGradientBoostedTreeMachineLearningModelFactory.h otbGradientBoostedTreeMachineLearningModel.h otbBoostMachineLearningModelFactory.h otbBoostMachineLearningModel.h otbNeuralNetworkMachineLearningModelFactory.h otbNeuralNetworkMachineLearningModel.h otbNormalBayesMachineLearningModelFactory.h otbNormalBayesMachineLearningModel.h otbRequiresOpenCVCheck.h otbOpenCVUtils.h otbCvRTreesWrapper.h")
 endif()
 if(NOT OTB_USE_SHARK)
-  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.hxx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h  otbSharkKMeansMachineLearningModel.h otbSharkKMeansMachineLearningModel.hxx otbSharkKMeansMachineLearningModelFactory.h otbSharkKMeansMachineLearningModelFactory.hxx")
+  SET(BANNED_HEADERS "${BANNED_HEADERS} otbSharkRandomForestsMachineLearningModel.h otbSharkRandomForestsMachineLearningModel.hxx otbSharkUtils.h otbRequiresSharkCheck.h otbSharkRandomForestsMachineLearningModelFactory.h  otbSharkKMeansMachineLearningModel.h otbSharkKMeansMachineLearningModel.hxx otbSharkKMeansMachineLearningModelFactory.h otbSharkKMeansMachineLearningModelFactory.hxx otbPCAModel.h otbPCAModel.hxx otbPCAModelFactory.h otbPCAModelFactory.hxx otbAutoencoderModel.h otbAutoencoderModel.hxx otbAutoencoderModelFactory.h otbAutoencoderModelFactory.hxx")
 endif()
 if(NOT OTB_USE_LIBSVM)
 	SET(BANNED_HEADERS "${BANNED_HEADERS} otbLibSVMMachineLearningModel.h otbLibSVMMachineLearningModelFactory.h")

@@ -1,0 +1,10 @@
+#                    [fichier en-tete produit par les routines de otb (Orfeo ToolBox) ]
+# Nom du look :
+Look.dat= 	/home1/patrick/ORFEO-TOOLBOX/otb/otb-build/OTB/Testing/Temporary/ioImageFileReaderONERAComplexWrite.dat
+
+# Structure du fichier et codage des pixels :
+# 4 octets precedent la premiere ligne : ils correspondent a un nombre magique [I4= 33554433] 
+# [dans ordre LSBfirst = big-endian]
+Format_valeurs_look=    	cmplx_real_4
+Nb_case_par_ligne_look= 	100
+Nb_ligne_look=          	100 + 1 ligne en-tete en binaire (entiers 16 bit) 

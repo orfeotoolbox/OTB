@@ -60,9 +60,8 @@ private:
     SetName( "Smoothing" );
     SetDescription( "Apply a smoothing filter to an image" );
 
-    SetDocName( "Smoothing" );
     SetDocLongDescription( "This application applies a smoothing filter to an "
-      "image. Three methodes can be used: a gaussian filter , a mean filter "
+      "image. Three methods can be used: a gaussian filter , a mean filter "
       ", or an anisotropic diffusion using the Perona-Malik algorithm." );
     SetDocLimitations( "None") ;
     SetDocAuthors( "OTB-Team" );

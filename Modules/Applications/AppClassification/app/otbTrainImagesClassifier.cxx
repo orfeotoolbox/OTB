@@ -41,7 +41,6 @@ public:
     SetDescription( "Train a classifier from multiple pairs of images and training vector data." );
 
     // Documentation
-    SetDocName( "Train a classifier from multiple images" );
     SetDocLongDescription(
         "Train a classifier from multiple pairs of images and training vector data. "
         "Samples are composed of pixel values in each band optionally centered and reduced using an XML statistics file produced by "
@@ -50,8 +49,8 @@ public:
         "The training vector data must contain polygons with a positive integer field "
         "representing the class label. The name of this field can be set using the *Class label field* parameter.\n\n"
 
-        "Training and validation sample lists are built such that each class is equally represented in both lists. One parameter allows controlling the ratio "
-        "between the number of samples in training and validation sets. Two parameters allow managing the size of the training and "
+        "Training and validation sample lists are built such that each class is equally represented in both lists. One parameter controlls the ratio "
+        "between the number of samples in training and validation sets. Two parameters manage the size of the training and "
         "validation sets per class and per image.\n\n"
 
         "In the validation process, the confusion matrix is organized the following way:\n\n"
@@ -63,7 +62,7 @@ public:
 
         "This application is based on LibSVM, OpenCV Machine Learning, and Shark ML. "
         "The output of this application is a text model file, whose format corresponds to the "
-        "ML model type chosen. There is no image nor vector data output.");
+        "ML model type chosen. There is no image or vector data output.");
     SetDocLimitations( "None" );
     SetDocAuthors( "OTB-Team" );
     SetDocSeeAlso( "OpenCV documentation for machine learning http://docs.opencv.org/modules/ml/doc/ml.html " );

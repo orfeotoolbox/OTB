@@ -1,0 +1,421 @@
+%YAML:1.0
+my_random_trees: !!opencv-ml-random-trees
+   nclasses: 4
+   nsamples: 190
+   nactive_vars: 2
+   oob_error: 0.
+   ntrees: 3
+   is_classifier: 1
+   var_all: 4
+   var_count: 4
+   ord_var_count: 4
+   cat_var_count: 0
+   training_params:
+      use_surrogates: 0
+      max_categories: 10
+      max_depth: 5
+      min_sample_count: 10
+      cross_validation_folds: 0
+      priors: !!opencv-matrix
+         rows: 1
+         cols: 4
+         dt: d
+         data: [ 1., 1., 1., 1. ]
+   var_type: [ 0, 0, 0, 0 ]
+   cat_count: !!opencv-matrix
+      rows: 1
+      cols: 1
+      dt: i
+      data: [ 4 ]
+   cat_map: !!opencv-matrix
+      rows: 1
+      cols: 4
+      dt: i
+      data: [ 1, 2, 3, 4 ]
+   trees:
+      -
+         best_tree_idx: -1
+         nodes:
+            -
+               depth: 0
+               sample_count: 190
+               value: 4.
+               norm_class_idx: 3
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 137.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:0, quality:9.4967643737792969e+01,
+                      le:-6.3053756952285767e-02 }
+            -
+               depth: 1
+               sample_count: 94
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 43.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:1, quality:6.8233329772949219e+01,
+                      le:-5.5508971214294434e-01 }
+            -
+               depth: 2
+               sample_count: 60
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 18.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:0, quality:5.6315788269042969e+01,
+                      le:-6.1391782760620117e-01 }
+            -
+               depth: 3
+               sample_count: 19
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 2.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:3, quality:18., le:-1.3028824329376221e+00 }
+            -
+               depth: 4
+               sample_count: 2
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 1.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 4
+               sample_count: 17
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 3
+               sample_count: 41
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 2
+               sample_count: 34
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 1
+               sample_count: 96
+               value: 4.
+               norm_class_idx: 3
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 43.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:2, quality:96., le:8.9234179258346558e-01 }
+            -
+               depth: 2
+               sample_count: 43
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 2
+               sample_count: 53
+               value: 4.
+               norm_class_idx: 3
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+      -
+         best_tree_idx: -1
+         nodes:
+            -
+               depth: 0
+               sample_count: 190
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 132.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:1, quality:9.6760566711425781e+01,
+                      le:3.8550674915313721e-01 }
+            -
+               depth: 1
+               sample_count: 142
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 84.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:3, quality:1.0038095092773438e+02,
+                      le:-1.1355226486921310e-01 }
+            -
+               depth: 2
+               sample_count: 84
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 38.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:1, quality:8.2051284790039062e+01,
+                      le:-4.6542203426361084e-01 }
+            -
+               depth: 3
+               sample_count: 39
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 1.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:0, quality:39., le:-8.5690033435821533e-01 }
+            -
+               depth: 4
+               sample_count: 1
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 4
+               sample_count: 38
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 3
+               sample_count: 45
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 2
+               sample_count: 58
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 1
+               sample_count: 48
+               value: 4.
+               norm_class_idx: 3
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+      -
+         best_tree_idx: -1
+         nodes:
+            -
+               depth: 0
+               sample_count: 190
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 134.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:3, quality:1.0059147644042969e+02,
+                      le:-1.4463677406311035e+00 }
+            -
+               depth: 1
+               sample_count: 57
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 1.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:1, quality:57., le:-1.0320512056350708e+00 }
+            -
+               depth: 2
+               sample_count: 1
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 2
+               sample_count: 56
+               value: 1.
+               norm_class_idx: 0
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 1
+               sample_count: 133
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 80.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:3, quality:8.6198532104492188e+01,
+                      le:-3.1305208802223206e-01 }
+            -
+               depth: 2
+               sample_count: 48
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 3.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:0, quality:48., le:-5.3054082393646240e-01 }
+            -
+               depth: 3
+               sample_count: 3
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 3
+               sample_count: 45
+               value: 2.
+               norm_class_idx: 1
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 2
+               sample_count: 85
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 35.
+               tree_risk: 0.
+               tree_error: 0.
+               splits:
+                  - { var:1, quality:85., le:2.3447670042514801e-01 }
+            -
+               depth: 3
+               sample_count: 50
+               value: 3.
+               norm_class_idx: 2
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.
+            -
+               depth: 3
+               sample_count: 35
+               value: 4.
+               norm_class_idx: 3
+               Tn: 0
+               complexity: 0
+               alpha: 0.
+               node_risk: 0.
+               tree_risk: 0.
+               tree_error: 0.

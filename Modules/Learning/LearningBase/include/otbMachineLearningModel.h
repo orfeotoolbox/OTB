@@ -56,7 +56,6 @@ namespace otb
  * \sa KNearestNeighborsMachineLearningModel
  * \sa DecisionTreeMachineLearningModel
  * \sa RandomForestsMachineLearningModel
- * \sa GradientBoostedTreeMachineLearningModel
  * \sa NormalBayesMachineLearningModel
  * \sa NeuralNetworkMachineLearningModel
  * \sa SharkRandomForestsMachineLearningModel

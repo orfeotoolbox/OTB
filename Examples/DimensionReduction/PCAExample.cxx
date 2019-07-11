@@ -23,14 +23,17 @@
 #include "otbImageFileWriter.h"
 #include "otbPrintableImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {wv2_cannes_8bands.tif}
-//    OUTPUTS: {PCAOutput.tif}, {InversePCAOutput.tif}, {input-pretty.png}, {output-pretty.png}, {invoutput-pretty.png}
-//    8
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./PCAExample Input/wv2_cannes_8bands.tif \
+             Output/PCAOutput.tif \
+             Output/InversePCAOutput.tif \
+             Output/input-pretty.png \
+             Output/output-pretty.png \
+             Output/invoutput-pretty.png \
+             8
+*/
 
-// Software Guide : BeginLatex
-//
+
 // This example illustrates the use of the
 // \doxygen{otb}{PCAImageFilter}.
 // This filter computes a Principal Component Analysis using an
@@ -38,129 +41,79 @@
 // covariance matrix.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbPCAImageFilter.h"
-// Software Guide : EndCodeSnippet
 
 int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double PixelType;
-  const unsigned int Dimension = 2;
-  const char *       inputFileName = argv[1];
-  const char *       outputFilename = argv[2];
-  const char *       outputInverseFilename = argv[3];
+  using PixelType                          = double;
+  const unsigned int Dimension             = 2;
+  const char*        inputFileName         = argv[1];
+  const char*        outputFilename        = argv[2];
+  const char*        outputInverseFilename = argv[3];
   const unsigned int numberOfPrincipalComponentsRequired(atoi(argv[7]));
-  const char *       inpretty = argv[4];
-  const char *       outpretty = argv[5];
-  const char *       invoutpretty = argv[6];
+  const char*        inpretty     = argv[4];
+  const char*        outpretty    = argv[5];
+  const char*        invoutpretty = argv[6];
 
 
-  // Software Guide : BeginLatex
-  //
   // We start by defining the types for the images and the reader and
   // the writer. We choose to work with a \doxygen{otb}{VectorImage},
   // since we will produce a multi-channel image (the principal
   // components) from a multi-channel input image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
+  using ImageType  = otb::VectorImage<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
   // We instantiate now the image reader and we set the image file name.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  ReaderType::Pointer reader     = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We define the type for the filter. It is templated over the input
   // and the output image types and also the transformation direction. The
   // internal structure of this filter is a filter-to-filter like structure.
   // We can now the instantiate the filter.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter<ImageType, ImageType,
-                              otb::Transform::FORWARD> PCAFilterType;
-  PCAFilterType::Pointer pcafilter     = PCAFilterType::New();
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
+  using PCAFilterType              = otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD>;
+  PCAFilterType::Pointer pcafilter = PCAFilterType::New();
   // The only parameter needed for the PCA is the number of principal
   // components required as output. Principal components are linear combination of input components
   // (here the input image  bands),
   // which are selected using Singular Value Decomposition eigen vectors sorted by eigen value.
   // We can choose to get less Principal Components than
   // the number of input bands.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  pcafilter->SetNumberOfPrincipalComponentsRequired(
-    numberOfPrincipalComponentsRequired);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
+  pcafilter->SetNumberOfPrincipalComponentsRequired(numberOfPrincipalComponentsRequired);
   // We now instantiate the writer and set the file name for the
   // output image.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  WriterType::Pointer writer     = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);
-  // Software Guide : EndCodeSnippet
-  // Software Guide : BeginLatex
-  //
   // We finally plug the pipeline and trigger the PCA computation with
   // the method \code{Update()} of the writer.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
   pcafilter->SetInput(reader->GetOutput());
   writer->SetInput(pcafilter->GetOutput());
 
   writer->Update();
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // \doxygen{otb}{PCAImageFilter} allows also to compute inverse
   // transformation from PCA coefficients. In reverse mode, the
   // covariance matrix or the transformation matrix
   // (which may not be square) has to be given.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::PCAImageFilter< ImageType, ImageType,
-                               otb::Transform::INVERSE > InvPCAFilterType;
+  using InvPCAFilterType              = otb::PCAImageFilter<ImageType, ImageType, otb::Transform::INVERSE>;
   InvPCAFilterType::Pointer invFilter = InvPCAFilterType::New();
 
   invFilter->SetInput(pcafilter->GetOutput());
   invFilter->SetTransformationMatrix(pcafilter->GetTransformationMatrix());
 
   WriterType::Pointer invWriter = WriterType::New();
-  invWriter->SetFileName(outputInverseFilename );
-  invWriter->SetInput(invFilter->GetOutput() );
+  invWriter->SetFileName(outputInverseFilename);
+  invWriter->SetInput(invFilter->GetOutput());
 
   invWriter->Update();
-  // Software Guide : EndCodeSnippet
 
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:PCA_FILTER} shows the result of applying forward
   // and reverse PCA transformation to a 8 bands Worldview2 image.
   // \begin{figure}
@@ -176,20 +129,18 @@ int main(int itkNotUsed(argc), char* argv[])
   // inverse mode (the input RGB image).}
   // \label{fig:PCA_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   // This is for rendering in software guide
-  typedef otb::PrintableImageFilter<ImageType,ImageType> PrintFilterType;
-  typedef PrintFilterType::OutputImageType               VisuImageType;
-  typedef otb::ImageFileWriter<VisuImageType>            VisuWriterType;
+  using PrintFilterType = otb::PrintableImageFilter<ImageType, ImageType>;
+  using VisuImageType   = PrintFilterType::OutputImageType;
+  using VisuWriterType  = otb::ImageFileWriter<VisuImageType>;
 
-  PrintFilterType::Pointer inputPrintFilter = PrintFilterType::New();
-  PrintFilterType::Pointer outputPrintFilter = PrintFilterType::New();
+  PrintFilterType::Pointer inputPrintFilter        = PrintFilterType::New();
+  PrintFilterType::Pointer outputPrintFilter       = PrintFilterType::New();
   PrintFilterType::Pointer invertOutputPrintFilter = PrintFilterType::New();
-  VisuWriterType::Pointer inputVisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer outputVisuWriter = VisuWriterType::New();
-  VisuWriterType::Pointer invertOutputVisuWriter = VisuWriterType::New();
+  VisuWriterType::Pointer  inputVisuWriter         = VisuWriterType::New();
+  VisuWriterType::Pointer  outputVisuWriter        = VisuWriterType::New();
+  VisuWriterType::Pointer  invertOutputVisuWriter  = VisuWriterType::New();
 
   inputPrintFilter->SetInput(reader->GetOutput());
   inputPrintFilter->SetChannel(5);

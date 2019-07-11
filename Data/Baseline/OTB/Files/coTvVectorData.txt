@@ -1,0 +1,24 @@
+VectorData (0x15c2930)
+  RTTI typeinfo:   otb::VectorData<double, 2u, double>
+  Reference Count: 2
+  Modified Time: 3
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (none)
+  Source output name: (none)
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 0
+  UpdateMTime: 0
+  RealTimeStamp: 0 seconds 
+
++Root (Root)
+  +Document (DOCUMENT)
+    +Folder (FOLDER)
+      +Point (FEATURE_POINT) [5, 5]
+      +Line (FEATURE_LINE) 0 points
+      +Polygon (FEATURE_POLYGON) 0 points, 0 interior rings
+

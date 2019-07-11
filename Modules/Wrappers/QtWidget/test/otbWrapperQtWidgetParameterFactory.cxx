@@ -25,6 +25,7 @@
 #include "otbWrapperQtWidgetParameterFactory.h"
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperChoiceParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 
 #include "otbWrapperQtWidgetParameterGroup.h"

@@ -38,27 +38,6 @@ target_link_libraries(CorrelationLineDetectorExample ${OTB_LIBRARIES})
 add_executable(EdgeDensityExample EdgeDensityExample.cxx)
 target_link_libraries(EdgeDensityExample ${OTB_LIBRARIES})
 
-#OTBRoadExtraction depends OTBMathParser. But OTB_USE_MUPARSER is OFF
-if(OTBMathParser_LOADED)
-add_executable(ExtractRoadByStepsExample ExtractRoadByStepsExample.cxx)
-target_link_libraries(ExtractRoadByStepsExample ${OTB_LIBRARIES})
-
-add_executable(ExtractRoadExample ExtractRoadExample.cxx)
-target_link_libraries(ExtractRoadExample ${OTB_LIBRARIES})
-
-add_executable(ParallelLineDetectionExample ParallelLineDetectionExample.cxx)
-target_link_libraries(ParallelLineDetectionExample ${OTB_LIBRARIES})
-
-add_executable(AlignmentsExample AlignmentsExample.cxx)
-target_link_libraries(AlignmentsExample ${OTB_LIBRARIES})
-endif()
-
-add_executable(ExtractSegmentsByStepsExample ExtractSegmentsByStepsExample.cxx)
-target_link_libraries(ExtractSegmentsByStepsExample ${OTB_LIBRARIES})
-
-add_executable(ExtractSegmentsExample ExtractSegmentsExample.cxx)
-target_link_libraries(ExtractSegmentsExample ${OTB_LIBRARIES})
-
 add_executable(FlusserMomentsImageFunctionExample FlusserMomentsImageFunctionExample.cxx)
 target_link_libraries(FlusserMomentsImageFunctionExample ${OTB_LIBRARIES})
 
@@ -74,20 +53,11 @@ target_link_libraries(LineSegmentDetectorExample ${OTB_LIBRARIES})
 add_executable(RightAngleDetectionExample RightAngleDetectionExample.cxx)
 target_link_libraries(RightAngleDetectionExample ${OTB_LIBRARIES})
 
-add_executable(LocalHoughExample LocalHoughExample.cxx)
-target_link_libraries(LocalHoughExample ${OTB_LIBRARIES})
-
 add_executable(PanTexExample PanTexExample.cxx)
 target_link_libraries(PanTexExample ${OTB_LIBRARIES})
 
 add_executable(RatioLineDetectorExample RatioLineDetectorExample.cxx)
 target_link_libraries(RatioLineDetectorExample ${OTB_LIBRARIES})
-
-add_executable(SeamCarvingExample SeamCarvingExample.cxx)
-target_link_libraries(SeamCarvingExample ${OTB_LIBRARIES})
-
-add_executable(SeamCarvingOtherExample SeamCarvingOtherExample.cxx)
-target_link_libraries(SeamCarvingOtherExample ${OTB_LIBRARIES})
 
 add_executable(SFSExample SFSExample.cxx)
 target_link_libraries(SFSExample ${OTB_LIBRARIES})

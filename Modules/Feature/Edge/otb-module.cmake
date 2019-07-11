@@ -32,12 +32,10 @@ otb_module(OTBEdge
     OTBObjectList
     OTBPath
     OTBProjection
-    OTBSpatialObjects
     OTBStreaming
     OTBVectorDataBase
 
   TEST_DEPENDS
-    OTBCommandLineParser
     OTBImageIO
     OTBTestKernel
     OTBVectorDataIO

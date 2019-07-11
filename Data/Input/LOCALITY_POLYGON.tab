@@ -1,0 +1,17 @@
+!table
+!version 300
+!charset Neutral
+
+Definition Table
+  Type NATIVE Charset "Neutral"
+  Fields 10
+    PFI Char (10) ;
+    LOCALITY_NAME Char (46) ;
+    GAZETTED_LOCALITY_NAME Char (40) ;
+    GAZETTAL_REGISTRATION Char (15) ;
+    FEATURE_TYPE Char (6) ;
+    FEATURE_QUALITY_ID Char (20) ;
+    PFI_CREATED Date ;
+    UFI Decimal (12,0) ;
+    UFI_CREATED Date ;
+    UFI_OLD Decimal (12,0) ;

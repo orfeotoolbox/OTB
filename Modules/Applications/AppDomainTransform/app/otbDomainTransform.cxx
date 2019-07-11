@@ -84,7 +84,6 @@ private:
     SetDescription("Domain Transform application for wavelet and fourier");
 
     // Documentation
-    SetDocName("DomainTransform");
     SetDocLongDescription("Domain Transform application for wavelet and fourier.");
     SetDocLimitations("This application is not streamed, check your system resources when processing large images");
     SetDocAuthors("OTB-Team");
@@ -95,8 +94,8 @@ private:
     AddParameter(ParameterType_InputImage, "in",  "Input Image");
     SetParameterDescription("in", "This will take an input image to be transformed"
       " image. For FFT inverse transform, it expects a complex image as two-band"
-      " image in which first band represent real part and second band represent"
-      " imaginary part.");
+      " image in which the first band represents the real part and second band represents"
+      " the imaginary part.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "This parameter holds the output file name to"

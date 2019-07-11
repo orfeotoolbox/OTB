@@ -39,8 +39,7 @@ namespace otb
  * of composition of the two basic morphological operation, the filtered details are dark
  * on a brighter background.
  *
- * \sa ClosingOpeningMorphologicalFilter,
- * MorphologicalPyramidAnalysisFilter
+ * \sa ClosingOpeningMorphologicalFilter
  *
  * \ingroup OTBMorphologicalProfiles
  */

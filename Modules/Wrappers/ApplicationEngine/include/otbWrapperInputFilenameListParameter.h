@@ -71,24 +71,17 @@ public:
   /** */
   const std::string & GetFilenameFilter() const override;
 
+  ParameterType GetType() const override;
 
-//
-// Protected methods.
+
+  //
+  // Protected methods.
 protected:
   /** Constructor */
   InputFilenameListParameter();
 
   /** Destructor */
   ~InputFilenameListParameter() override;
-
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
 
 //
 // Private methods.

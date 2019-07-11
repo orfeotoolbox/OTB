@@ -100,12 +100,25 @@ reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
+# Find python stuff
+# Version 3 is prefered before 2
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
+
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
-)
+  HINTS ${OTB_SOURCE_DIR}/Data
+  )
 #mark_as_advanced(OTB_DATA_ROOT)
 
 if(OTB_DATA_ROOT)
@@ -151,12 +164,6 @@ if(NOT OTB_INSTALL_APP_DIR)
 endif()
 if(NOT OTB_INSTALL_PYTHON_DIR)
   set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
-endif()
-if(NOT OTB_INSTALL_PYTHON3_DIR)
-  set(OTB_INSTALL_PYTHON3_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python3")
-endif()
-if(NOT OTB_INSTALL_JAVA_DIR)
-  set(OTB_INSTALL_JAVA_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/java")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
   set(OTB_INSTALL_DATA_DIR "share/otb")
@@ -302,7 +309,6 @@ set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
 set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
-set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
@@ -340,6 +346,7 @@ set(OTB_CONFIG_CODE "
 set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")")
 set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
 set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
+
 if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
@@ -367,10 +374,12 @@ set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_MODULES_DIR \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
 set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake")
 set(OTB_CONFIG_CMAKE_DIR "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
+
 if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
+
 set(OTB_CONFIG_APPLICATION_PATH "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION "")
 set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
@@ -419,7 +428,7 @@ install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} )
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 
@@ -521,7 +530,6 @@ foreach(otb_option
     CMAKE_CXX_FLAGS
     ${option_list}
     OTB_WRAP_PYTHON
-    OTB_WRAP_JAVA
     OTB_DATA_ROOT
     OTB_USE_OPENMP
     OTB_USE_SSE_FLAGS

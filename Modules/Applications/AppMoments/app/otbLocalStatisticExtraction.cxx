@@ -59,8 +59,10 @@ SetName("LocalStatisticExtraction");
 SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
 
 // Documentation
-SetDocName("Local Statistic Extraction");
-SetDocLongDescription("This application computes the 4 local statistical moments on every pixel in the selected channel of the input image, over a specified neighborhood. The output image is multi band with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
+SetDocLongDescription("This application computes the 4 local statistical moments on every pixel in the "
+    "selected channel of the input image, over a specified neighborhood. The output image is multi band "
+    "with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the "
+    "Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
 SetDocLimitations("None");
 SetDocAuthors("OTB-Team");
 SetDocSeeAlso("otbRadiometricMomentsImageFunction class");
@@ -75,7 +77,7 @@ AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
 SetParameterDescription("out", "Output image containing the local statistical moments.");
 
 AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
-SetParameterDescription("channel", "The selected channel index");
+SetParameterDescription("channel", "The selected channel index (1 based)");
 SetDefaultParameterInt("channel", 1);
 SetMinimumParameterIntValue("channel", 1);
 
@@ -103,7 +105,6 @@ void DoUpdateParameters() override
 void DoExecute() override
 {
   FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-  inImage->UpdateOutputInformation();
   int nbChan = inImage->GetNumberOfComponentsPerPixel();
 
   if( GetParameterInt("channel") > nbChan )
@@ -119,12 +120,10 @@ void DoExecute() override
   m_ExtractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
   m_ExtractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
   m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
-  m_ExtractorFilter->UpdateOutputInformation();
 
   m_Filter = FilterType::New();
   m_Filter->SetInput(m_ExtractorFilter->GetOutput());
   m_Filter->SetRadius(GetParameterInt("radius"));
-  m_Filter->UpdateOutputInformation();
 
   SetParameterOutputImage("out", m_Filter->GetOutput());
 

@@ -62,7 +62,6 @@ private:
       "on several multi-band images."
     );
 
-    SetDocName( "Band Math" );
 
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "
@@ -127,7 +126,7 @@ private:
       "apTvUtBandMathOutput.tif"
     );
     SetDocExampleParameterValue(
-      "exp", "'cos( im1b1 ) > cos( im2b1 ) ? im3b1 : im3b2'"
+      "exp", "\"cos( im1b1 ) > cos( im2b1 ) ? im3b1 : im3b2\""
     );
 
     SetOfficialDocLink();

@@ -57,7 +57,7 @@ public:
   }
 
   // Get Value
-  otbGetObjectMemberMacro(StringParam, Value , std::string);
+  otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Set Value
   virtual void SetValue(const std::string value)
@@ -72,6 +72,21 @@ public:
   void ClearValue() override
   {
     m_StringParam->ClearValue();
+  }
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_InputFilename;
+  }
+
+  std::string ToString() const override
+  {
+    return GetValue();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
   }
 
 protected:
@@ -90,8 +105,7 @@ protected:
 
 private:
   InputFilenameParameter(const InputFilenameParameter &) = delete;
-  void operator =(const InputFilenameParameter&); //purposely not
-                                                  //implemented
+  void operator=(const InputFilenameParameter&) = delete;
 
   StringParameter::Pointer m_StringParam;
 

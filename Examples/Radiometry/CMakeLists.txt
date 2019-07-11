@@ -27,14 +27,15 @@ target_link_libraries(ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter ${OT
 if(OTB6S_LOADED)
 add_executable(AtmosphericCorrectionSequencement AtmosphericCorrectionSequencement.cxx)
 target_link_libraries(AtmosphericCorrectionSequencement ${OTB_LIBRARIES})
+if(MSVC)
+  set_target_properties(AtmosphericCorrectionSequencement PROPERTIES LINK_FLAGS "/STACK:10000000")
+elseif(MINGW)
+  set_target_properties(AtmosphericCorrectionSequencement PROPERTIES LINK_FLAGS "-Wl,--stack,10000000")
+endif()
 endif()
 
 add_executable(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter.cxx)
 target_link_libraries(AVIMultiChannelRAndGAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
-
-add_executable(NDVIRAndNIRVegetationIndexImageFilter NDVIRAndNIRVegetationIndexImageFilter.cxx)
-target_link_libraries(NDVIRAndNIRVegetationIndexImageFilter ${OTB_LIBRARIES})
-
 
 if(BUILD_TESTING)
   add_subdirectory(test)

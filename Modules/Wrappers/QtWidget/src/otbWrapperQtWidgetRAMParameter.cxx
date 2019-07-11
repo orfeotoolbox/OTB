@@ -59,6 +59,11 @@ void QtWidgetRAMParameter::DoCreateWidget()
   m_QSpinBox->setRange(itk::NumericTraits<int>::Zero,
                        itk::NumericTraits<int>::max());
 
+  // Block mouse wheel events to the QSpinBox
+  // this is to avoid grabbing focus when scrolling the parent QScrollArea
+  m_QSpinBox->setFocusPolicy(Qt::StrongFocus);
+  m_QSpinBox->installEventFilter(this);
+
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
 

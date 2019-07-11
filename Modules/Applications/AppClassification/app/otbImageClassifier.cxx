@@ -80,10 +80,9 @@ private:
     SetDescription("Performs a classification of the input image according to a model file.");
 
     // Documentation
-    SetDocName("Image Classification");
-    SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. By default, the remaining of pixels will be given the label 0 in the output image.");
+    SetDocLongDescription("This application performs an image classification based on a model file produced by the TrainImagesClassifier application. Pixels of the output image will contain the class labels decided by the classifier (maximal class label = 65535). The input pixels can be optionally centered and reduced according to the statistics file produced by the ComputeImagesStatistics application. An optional input mask can be provided, in which case only input image pixels whose corresponding mask value is greater than 0 will be classified. By default, the remaining pixels will be given the label 0 in the output image.");
 
-    SetDocLimitations("The input image must have the same type, order and number of bands than the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
+    SetDocLimitations("The input image must have the same type, order and number of bands as the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("TrainImagesClassifier, ValidateImagesClassifier, ComputeImagesStatistics");
 
@@ -93,21 +92,21 @@ private:
     SetParameterDescription( "in", "The input image to classify.");
 
     AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
-    SetParameterDescription( "mask", "The mask allows restricting classification of the input image to the area where mask pixel values are greater than 0.");
+    SetParameterDescription( "mask", "The mask restricts the classification of the input image to the area where mask pixel values are greater than 0.");
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
     SetParameterDescription("model", "A model file (produced by TrainImagesClassifier application, maximal class label = 65535).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
-    SetParameterDescription("imstat", "A XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
+    SetParameterDescription("imstat", "An XML file containing mean and standard deviation to center and reduce samples before classification (produced by ComputeImagesStatistics application).");
     MandatoryOff("imstat");
 
     AddParameter(ParameterType_Int, "nodatalabel", "Label mask value");
     SetParameterDescription("nodatalabel", "By default, "
       "hidden pixels will have the assigned label 0 in the output image. "
-      "It's possible to define the label mask by another value, "
-      "but be careful to not take a label from another class (max. 65535).");
+      "It is possible to define the label mask by another value, "
+      "but be careful not to use a label from another class (max. 65535).");
 
     SetDefaultParameterInt("nodatalabel", 0);
     MandatoryOff("nodatalabel");
@@ -122,7 +121,6 @@ private:
       "* LibSVM: difference between the two highest probabilities (needs a model with probability estimates, so that classes probabilities can be computed for each sample)\n"
       "* Boost: sum of votes\n"
       "* DecisionTree: (not supported)\n"
-      "* GradientBoostedTree: (not supported)\n"
       "* KNearestNeighbors: number of neighbors with the same label\n"
       "* NeuralNetwork: difference between the two highest responses\n"
       "* NormalBayes: (not supported)\n"
@@ -139,7 +137,7 @@ private:
 
     AddParameter(ParameterType_Int, "nbclasses", "Number of classes in the model");
     SetDefaultParameterInt("nbclasses", 20);
-    SetParameterDescription("nbclasses","The number of classes is needed for the probamap output in order to set the number of output bands.");
+    SetParameterDescription("nbclasses","The number of classes is required by the output of the probability map in order to set the number of output bands.");
    
    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_1_ortho.tif");

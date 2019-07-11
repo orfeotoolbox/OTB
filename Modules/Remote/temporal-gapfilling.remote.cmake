@@ -26,6 +26,5 @@ A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
-  # Commit on develop branch which includes patches for Windows support
-  GIT_TAG 9d97764f0411de1a32dd5e0a90bdcdd8adfa049f
+  GIT_TAG master
 )
