@@ -53,6 +53,7 @@ stages:
     expire_in: 24 hrs
     paths:
       - build/*/*.log #CMake log
+      - build/*/*/*.log #CMake log
       - log/*.txt # Others
       - build/CookBook-*-html.tar.gz
       - build/Documentation/Cookbook/latex/CookBook-*.pdf
