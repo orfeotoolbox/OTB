@@ -54,11 +54,11 @@ stages:
     paths:
       - build/*/*.log #CMake log
       - log/*.txt # Others
-      - build/CookBook-*-html.tar.gz
-      - build/Documentation/Cookbook/latex/CookBook-*.pdf
-      - build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2
-      - build_packages/OTB-*.run
-      - build_packages/OTB-*.zip
+      - CookBook-*-html.tar.gz
+      - CookBook-*.pdf
+      - OTB-Doxygen-*.tar.bz2
+      - OTB-*.run
+      - OTB-*.zip
       - build/compile_commands.json
       - build/ctest_report.xml
       - build/cppcheck_report.xml
@@ -111,12 +111,16 @@ ubuntu-xdk-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
 
-ubuntu-xdk-build:
+ubuntu-xdk-build-doc:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - mv build/CookBook-*-html.tar.gz . || true
+    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
+    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
+    - mv build_packages/OTB-*.run . || true
   dependencies:
     - ubuntu-xdk-prepare
 
@@ -133,6 +137,7 @@ centos-xdk-build:
   script:
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
     - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - mv build_packages/OTB-*.run . || true
   dependencies:
     - centos-xdk-prepare
 
@@ -151,6 +156,7 @@ macos-xdk-build:
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - mv build_packages/OTB-*.run . || true
   dependencies:
     - macos-xdk-prepare
 
@@ -190,6 +196,7 @@ windows-10-build:
     - ctest -V -S CI/main_superbuild.cmake
     - clcache.exe -s
     - ctest -V -S CI/main_packages.cmake
+    - mv build_packages/OTB-*.zip . || true
   dependencies:
     - windows-10-prepare
 
@@ -214,6 +221,7 @@ windows-8-build:
     - ctest -V -S CI/main_superbuild.cmake
     - clcache.exe -s
     - ctest -V -S CI/main_packages.cmake
+    - mv build_packages/OTB-*.zip . || true
   dependencies:
     - windows-8-prepare
 
@@ -305,7 +313,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   dependencies:
-    - ubuntu-xdk-build
+    - ubuntu-xdk-build-doc
     - centos-xdk-build
     - macos-xdk-build
     - windows-8-build
