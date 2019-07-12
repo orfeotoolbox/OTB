@@ -63,10 +63,10 @@ otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter C
   ${TEMP}/bfTvCompareConvolutionOutput.tif
   ${TEMP}/bfTvCompareOSConvolutionoutput.tif
   otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/bfTvCompareConvolutionOutput.tif
   ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  64 64 #Radius
+  32 32 #Radius
   0.02 0.025 # a b
   -45 # theta
   0.0125 0.0125 #u0 v0

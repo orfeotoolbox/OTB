@@ -244,7 +244,10 @@ public:
   void Init();
   void UpdateParameters();
   int Execute();
+  void WriteOutput();
   int ExecuteAndWriteOutput();
+  bool ConnectImage(std::string in, Application* app, std::string out);
+  void PropagateConnectMode(bool isMem);
 
   void LoadParametersFromXML(const std::string& filename);
   void SaveParametersToXML(const std::string& filename);

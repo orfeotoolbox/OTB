@@ -69,8 +69,7 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
   typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxType;
   MinMaxType::Pointer mm = MinMaxType::New();
   mm->SetImage(pointSetReader->GetOutput());
-  mm->ComputeMinimum();
-  mm->ComputeMaximum();
+  mm->Compute();
   std::cout << "min: " << (int) mm->GetMinimum() << " max: " << (int) mm->GetMaximum() << std::endl;
 
   PointSetSourceType::Pointer pointSetSource = PointSetSourceType::New();
@@ -96,7 +95,7 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
 
   // For gradient descent
   optimizer->SetLearningRate(5.0);
-  optimizer->SetNumberOfIterations(600);
+  optimizer->SetNumberOfIterations(100);
   DMEstimationType::ParametersType initialParameters(transform->GetNumberOfParameters());
   initialParameters[0] = 0.0;  // Initial offset in mm along X
   initialParameters[1] = 0.0;  // Initial offset in mm along Y
