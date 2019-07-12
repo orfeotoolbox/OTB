@@ -67,8 +67,8 @@ def test(otb, argv):
 	cm_assert(app.MAP, 'epsg')
 
 	# 6 - int type 2nd level sub parameters of choice parameter set
-	app.MAP.EPSG.CODE = 32768
-	cm_assert(32768, app.GetParameterInt('map.epsg.code'))
+	app.MAP.EPSG.CODE = 2154
+	cm_assert(2154, app.GetParameterInt('map.epsg.code'))
 
 	# 7 - another choice with sub parameters set
 	app.MAP = 'utm'

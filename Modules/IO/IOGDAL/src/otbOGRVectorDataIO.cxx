@@ -289,6 +289,9 @@ void OGRVectorDataIO::Write(const itk::DataObject* datag, char ** /** unused */)
   if (projectionInformationAvailable)
     {
     oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+    #if GDAL_VERSION_NUM >= 3000000
+    oSRS->SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+    #endif
     }
 
   // Retrieving root node

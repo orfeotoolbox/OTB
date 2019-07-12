@@ -36,10 +36,10 @@ The application can be used like this:
 
 ::
 
-    otbcli_LocalStatisticExtraction  -in        InputImage
+    otbcli_LocalStatisticExtraction  -in        InputImage.tif
                                      -channel   1
                                      -radius    3
-                                     -out       OutputImage
+                                     -out       OutputImage.tif
 
 Edge extraction
 ---------------

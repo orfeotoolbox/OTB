@@ -69,7 +69,7 @@ std::string StandardShader::GetSource() const
     shader_source+="#version 130 \n";
     }
 
-  shader_source = 
+  shader_source +=
     "uniform sampler2D src;\n"                                          \
     "uniform vec4 shader_a;\n"                                          \
     "uniform vec4 shader_b;\n"                                          \

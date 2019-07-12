@@ -31,6 +31,9 @@ BUILD_EXAMPLES:BOOL=ON
 BUILD_SHARED_LIBS:BOOL=ON
 BUILD_TESTING:BOOL=ON")
 
+set (otb_qa_option
+"CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
+
 set (otb_use_option
 "OTB_USE_6S:BOOL=ON
 OTB_USE_CURL:BOOL=ON
@@ -57,10 +60,6 @@ OTB_USE_SSE_FLAGS:BOOL=ON")
 
 set (otb_wrap_option
 "OTB_WRAP_PYTHON:BOOL=ON")
-
-set (otb_data_option
-"OTB_DATA_USE_LARGEINPUT:BOOL=OFF
-OTB_DATA_LARGEINPUT_ROOT:PATH=${OTB_LARGEINPUT_ROOT}")
 
 set (cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
@@ -91,6 +90,13 @@ ${otb_data_option}
 ${cmake_configure_option}
 ${site_option}
 ")
+
+if (QA)
+  set(concat_options
+"${concat_options}
+${otb_qa_option}
+")
+endif()
 
 #Transform the previous string in list
 string (REPLACE "\n" ";" otb_options ${concat_options})

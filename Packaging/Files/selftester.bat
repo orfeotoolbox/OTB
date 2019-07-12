@@ -180,7 +180,7 @@ goto :eof
 :check_python_wrapping
 setlocal
 type NUL > tmp.log
-python3 -c "import otbApplication" > tmp.log 2>&1
+python -c "import otbApplication" > tmp.log 2>&1
 call :nb_tmp_lines
 if %nb_tmp_lines_out% gtr 0 (
   echo ERROR : failed to run python wrapping
@@ -193,7 +193,7 @@ goto :eof
 :parse_cli_output
 setlocal
 set /a ret=1
-findstr /n /r /c:"^This is the *.*(%app%) application, version " tmp.log  > results.txt
+findstr /n /r /c:"^This is the %app% application, version " tmp.log  > results.txt
 if %errorlevel%==1 (
   set /a ret=0
   echo "findstr failed 1st regex in parse_cli_output"

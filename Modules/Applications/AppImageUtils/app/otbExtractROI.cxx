@@ -374,18 +374,7 @@ private:
   bool CropRegionOfInterest()
   {
     FloatVectorImageType::RegionType region;
-    if ( !HasUserValue("sizex") )
-      SetParameterInt( "sizex" , 
-        GetDefaultParameterInt( "sizex" ) );
-    if ( !HasUserValue("sizey") )
-      SetParameterInt( "sizey" , 
-        GetDefaultParameterInt( "sizey" ) );
-    if ( !HasUserValue("startx") )
-      SetParameterInt( "startx" , 
-        GetDefaultParameterInt( "startx" ) );
-    if ( !HasUserValue("starty") )
-      SetParameterInt( "starty" , 
-        GetDefaultParameterInt( "starty" ) );
+
     region.SetSize(0,  GetParameterInt("sizex"));
     region.SetSize(1,  GetParameterInt("sizey"));
     region.SetIndex(0, GetParameterInt("startx"));
