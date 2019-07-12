@@ -159,8 +159,17 @@ ParameterList< T >
 
   p->FromString(filename);
 
-  m_Parameters.insert( m_Parameters.begin() + index, p );
+  InsertElement(p, index);
+}
 
+/*****************************************************************************/
+template< typename T >
+void
+ParameterList< T >
+::InsertElement(typename T::Pointer p, std::size_t index)
+{
+  m_Parameters.insert( m_Parameters.begin() + index, p );
+  
   assert( !m_Parameters.back().IsNull() );
 
   SetActive( true );
@@ -443,9 +452,9 @@ ParameterList< T >
 {
   assert( data!=nullptr );
 
-  typename T::Pointer p;
+  typename T::Pointer p( T::New() );
 
-  return From( p, data, set, description );
+  return FromData( p, data, set, description );
 }
 
 /*****************************************************************************/
@@ -459,8 +468,6 @@ ParameterList< T >
 	    const std::string & description )
 {
   assert( data!=nullptr );
-
-  parameter = T::New();
 
   set( parameter, data );
   parameter->SetDescription( description );
@@ -495,6 +502,14 @@ std::string ParameterList<T>::ToString() const
     oss << strList[i];
   }
   return oss.str();
+}
+
+template< typename T >
+typename T::Pointer
+ParameterList< T >
+::GetNthElement(std::size_t i)
+{
+  return m_Parameters[i];
 }
 
 } // End namespace Wrapper

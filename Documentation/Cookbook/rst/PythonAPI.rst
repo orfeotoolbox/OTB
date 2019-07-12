@@ -218,6 +218,68 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Mixed in-memory / on-disk connection
+------------------------------------
+
+As an extension to the connection of OTB Applications (described in previous
+section), a mixed mode is also available to easily switch between:
+
+- **in-memory**: if you want to avoid unecessary I/O between applications
+- **on-disk**: if you want intermediate outputs on disk
+
+This mixed mode is based on the ``Application::ConnectImage()`` function. This
+is how you use it:
+
+.. code-block:: python
+
+    # for in-memory mode
+    app1 = otb.Registry.CreateApplication("Smoothing")
+    app2 = otb.Registry.CreateApplication("Smoothing")
+    
+    app1.IN = input_image
+    
+    app2.ConnectImage("in", app1, "out")
+    app2.OUT = output_image
+    app2.ExecuteAndWriteOutput()
+
+Comparing with the standard in-memory connection, you can notice that:
+
+- the syntax to do the connection is simpler
+- you don't need to call ``Execute()`` on upstream applications anymore,
+  this is done recursively by calling ``ExecuteAndWriteOutput()`` on the latest
+  application
+
+The on-disk version of this code is very similar:
+
+.. code-block:: python
+
+    # for on-disk mode
+    app1 = otb.Registry.CreateApplication("Smoothing")
+    app2 = otb.Registry.CreateApplication("Smoothing")
+    
+    app1.IN = input_image
+    app1.OUT = temp_image
+    
+    app2.ConnectImage("in", app1, "out")
+    app2.OUT = output_image
+    app2.PropagateConnectMode(False)
+    app2.ExecuteAndWriteOutput()
+
+The function ``PropagateConnectMode()`` is applied recursively in the upstream
+applications. It allows to change between the 2 modes:
+
+- ``True`` : means in-memory mode (this is the default)
+- ``False`` : means on-disk mode
+
+When you want to use the on-disk mode, you have to specify the path to
+the intermediate image in the **output** image parameter of the upstream
+application (``app1.OUT`` in the previous example). If this path is empty, the
+in-memory mode is used as fallback.
+
+This feature also works for ``InputImageList``. Calling the function
+``ConnectImage("il", app1, "out")``, with ``il`` being an input image list, will
+append a new image to the list, and connect it to output parameter ``out``.
+
 Load and save parameters to XML
 -------------------------------
 
