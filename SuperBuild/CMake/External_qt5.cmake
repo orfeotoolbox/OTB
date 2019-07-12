@@ -91,7 +91,7 @@ set(QT5_SB_CONFIG
   -skip qtwinextras  \
   -skip qtx11extras  \
   -skip qtxmlpatterns \
-  -system-libpng -system-libjpeg -system-zlib -system-freetype -qt-harfbuzz")
+  -system-libpng -system-libjpeg -system-freetype -qt-harfbuzz")
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
 	set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -debug")
@@ -118,25 +118,20 @@ endif()
 
 
 if(WIN32)
-  set(QT5_BIN_EXT ".exe")
-  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.bat)
-  set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.bat.in)
-  set(QT5_BUILD_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/build_qt5.bat.in)
-  set(QT5_BUILD_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/build_qt5.bat)
-  configure_file( ${QT5_BUILD_COMMAND_IN} ${QT5_BUILD_COMMAND} @ONLY )
+  set(QT5_SCRIPT_EXT "bat")
 else()
-  set(QT5_BIN_EXT "")
-  file(TO_NATIVE_PATH ${QT5_SB_SRC}/configure QT5_CONFIGURE_SCRIPT)
-  set(QT5_CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.sh)
-  set(QT5_CONFIGURE_COMMAND_IN ${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.sh.in)
-  set(QT5_BUILD_COMMAND "${CMAKE_MAKE_PROGRAM}")
+  set(QT5_SCRIPT_EXT "sh")
 endif()
 
-if(EXISTS "${QT5_CONFIGURE_COMMAND}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E remove -f "${QT5_CONFIGURE_COMMAND}")
-endif()
+configure_file(
+${CMAKE_SOURCE_DIR}/patches/QT5/configure_qt5.${QT5_SCRIPT_EXT}.in
+${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.${QT5_SCRIPT_EXT}
+@ONLY)
 
-configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
+configure_file(
+${CMAKE_SOURCE_DIR}/patches/QT5/build_qt5.${QT5_SCRIPT_EXT}.in
+${CMAKE_BINARY_DIR}/QT5/tmp/build_qt5.${QT5_SCRIPT_EXT}
+@ONLY)
 
 ExternalProject_Add(QT5
   PREFIX QT5
@@ -146,12 +141,12 @@ ExternalProject_Add(QT5
   BINARY_DIR ${QT5_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
-  CONFIGURE_COMMAND ${QT5_CONFIGURE_COMMAND}
-  BUILD_COMMAND ${QT5_BUILD_COMMAND}
+  CONFIGURE_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/configure_qt5.${QT5_SCRIPT_EXT}
+  BUILD_COMMAND ${CMAKE_BINARY_DIR}/QT5/tmp/build_qt5.${QT5_SCRIPT_EXT}
   DEPENDS ${QT5_DEPENDENCIES}
   LOG_DOWNLOAD 1
-  LOG_CONFIGURE 1
-  LOG_BUILD 1
+  LOG_CONFIGURE 0
+  LOG_BUILD 0
   LOG_INSTALL 1
   )
 

@@ -1,0 +1,10 @@
+--- qt-everywhere-src-5.10.1.orig/qtbase/src/corelib/global/qrandom.cpp	Thu Feb  8 19:24:48 2018
++++ t-everywhere-src-5.10.1/qtbase/src/corelib/global/qrandom.cpp	Fri Jun 14 16:14:37 2019
+@@ -403,3 +403,7 @@
+     SystemGenerator sys;
++	#if _MSC_VER >= 1915
++    Q_DECL_ALIGN(64) std::aligned_storage<sizeof(QRandomGenerator64)>::type global_;
++	#else
+     Q_DECL_ALIGN(64) std::aligned_storage<sizeof(QRandomGenerator64), 64>::type global_;
++	#endif	
+ 

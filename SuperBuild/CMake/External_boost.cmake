@@ -29,9 +29,13 @@ if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
   set(BOOST_SB_CONFIG address-model=64)
 endif()
 
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
+set(BOOST_SB_CONFIG ${BOOST_SB_CONFIG} variant=debug)
+else()
+set(BOOST_SB_CONFIG ${BOOST_SB_CONFIG} variant=release)
+endif()
 set(BOOST_SB_CONFIG
   ${BOOST_SB_CONFIG}
-  variant=release
   link=shared
   threading=multi
   runtime-link=shared
@@ -47,6 +51,7 @@ set(BOOST_SB_CONFIG
   --with-thread
   )
 
+ 
 set(BOOST_BOOTSTRAP_OPTIONS "")
 
 if(UNIX)
@@ -79,24 +84,24 @@ set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
 #NOTE: update _SB_Boost_INCLUDE_DIR below when you change version number
 ExternalProject_Add(BOOST
   PREFIX BOOST
-  URL "http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_60_0.tar.bz2"
-  URL_MD5 65a840e1a0b13a558ff19eeb2c4f0cbe
+  URL "https://dl.bintray.com/boostorg/release/1.70.0/source/boost_1_70_0.tar.bz2"
+  URL_MD5 242ecc63507711d6706b9b0c0d0c7d4f
   BINARY_DIR ${BOOST_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   CONFIGURE_COMMAND ${BOOST_CONFIGURE_COMMAND}
   BUILD_COMMAND ${BOOST_BUILD_COMMAND}
   INSTALL_COMMAND ""
-  LOG_DOWNLOAD 1
-  LOG_CONFIGURE 1
-  LOG_BUILD 1
+  LOG_DOWNLOAD 0
+  LOG_CONFIGURE 0
+  LOG_BUILD 0
   LOG_INSTALL 1  
 )
 
 #HINT: avoid all uses of  _SB_* in External_<project>.cmake
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(MSVC)
-  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_60)
+  set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_70)
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()

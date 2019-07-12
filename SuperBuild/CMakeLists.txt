@@ -231,14 +231,7 @@ else()
   list(APPEND SB_CONFIGURE_ARGS "--enable-debug=no")
 endif()
 
-if(UNIX)
-  set(SB_CMAKE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
-  set(SB_ENV_CONFIGURE_CMD env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
-  message(STATUS "Environment setup for Configure (SB_ENV_CONFIGURE_CMD): ${SB_ENV_CONFIGURE_CMD}")
-else()
-  #windows
-  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
-endif()
+
 
 if(CMAKE_C_FLAGS)
   list(APPEND SB_ENV_CONFIGURE_CMD "CFLAGS=${CMAKE_C_FLAGS}")
@@ -258,7 +251,15 @@ endif()
 
 list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
-message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
+if(UNIX)
+  set(SB_CMAKE_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} ${CMAKE_COMMAND} ${SB_CMAKE_ARGS})
+  set(SB_ENV_CONFIGURE_CMD env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER})
+  message(STATUS "Environment setup for Configure (SB_ENV_CONFIGURE_CMD): ${SB_ENV_CONFIGURE_CMD}")
+  message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
+else()
+  #windows
+  set(SB_CMAKE_COMMAND ${CMAKE_COMMAND})
+endif()
 
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
@@ -353,25 +354,6 @@ option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)"
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
 
-# do a system checkup
-if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/CMake/SystemCheckup
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMake/SystemCheckup
-                OUTPUT_QUIET
-                ERROR_QUIET)
-file(STRINGS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup/SystemCheckupResult.txt" _SYSTEM_CHECKUP_CONTENT)
-message(STATUS "|----------------------------------------------------------")
-message(STATUS "|----------------- System checkup results -----------------")
-message(STATUS "| The following libraries have been found on your system.")
-message(STATUS "| You can choose to use them (instead of superbuild versions)")
-message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
-message(STATUS "|----------------------------------------------------------")
-foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
-  message(STATUS "| ${lib}")
-  message(STATUS "|----------------------------------------------------------")
-endforeach()
 
 # Python
 # This should set the following variables (and more):

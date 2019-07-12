@@ -55,6 +55,7 @@ ExternalProject_Add(HDF5
   LOG_INSTALL 1
   )
 
+
 # this should not be needed but see Mantis-1457
 if(UNIX)
   set(_SB_HDF5_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

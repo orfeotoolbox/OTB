@@ -1,0 +1,13 @@
+--- qt-everywhere-src-5.10.1.orig/qtbase/configure.json	Thu Feb  8 19:24:48 2018
++++ qt-everywhere-src-5.10.1/qtbase/configure.json	Fri Jun 14 17:32:18 2019
+@@ -159,3 +159,9 @@
+             "sources": [
+-                { "libs": "-lzdll", "condition": "config.msvc" },
++                { "libs": "",
++                    "builds": {
++                        "debug": "-lzlibd",
++                        "release": "-lzlib"
++                    },
++                    "condition": "config.msvc"
++                },
+                 { "libs": "-lz", "condition": "!config.msvc" }

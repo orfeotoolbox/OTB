@@ -1,0 +1,10 @@
+--- Shark-67990bcd2c4a90a27be97d933b3740931e9da141.orig/include/shark/LinAlg/BLAS/kernels/default/mgemm.hpp	Fri May  4 10:47:18 2018
++++ Shark-67990bcd2c4a90a27be97d933b3740931e9da141/include/shark/LinAlg/BLAS/kernels/default/mgemm.hpp	Fri Jun 14 15:15:14 2019
+@@ -63,3 +63,7 @@
+ #else
++	#if _MSC_VER >= 1915
++	typename std::aligned_storage<sizeof(vx[block_size::mr*vecNR])>::type Pa;
++	#else
+ 	typename std::aligned_storage<sizeof(vx[block_size::mr*vecNR]),block_size::block::align>::type Pa;
++	#endif
+ 	T* P = reinterpret_cast<T*>(&Pa);

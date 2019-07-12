@@ -1,0 +1,73 @@
+diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindFreetype.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindFreetype.cmake
+--- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindFreetype.cmake	2019-06-17 15:00:29.578810886 +0200
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindFreetype.cmake	2019-06-17 15:07:49.678227622 +0200
+@@ -42,42 +42,15 @@
+ # I'm going to attempt to cut out the middleman and hope 
+ # everything still works.
+ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h 
+-  HINTS
+-  $ENV{FREETYPE_DIR}
+-  PATH_SUFFIXES include
+-  PATHS
+-  /usr/local/X11R6/include
+-  /usr/local/X11/include
+-  /usr/X11/include
+-  /sw/include
+-  /opt/local/include
+-  /usr/freeware/include
++  PATH_SUFFIXES include include/freetype2
+ )
+ 
+-FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h 
+-  HINTS
+-  $ENV{FREETYPE_DIR}/include/freetype2
+-  PATHS
+-  /usr/local/X11R6/include
+-  /usr/local/X11/include
+-  /usr/X11/include
+-  /sw/include
+-  /opt/local/include
+-  /usr/freeware/include
+-  PATH_SUFFIXES freetype2
++FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 config/ftheader.h 
++  PATH_SUFFIXES include include/freetype2
+ )
+ 
+ FIND_LIBRARY(FREETYPE_LIBRARY
+   NAMES freetype libfreetype freetype219 freetype239
+-  HINTS
+-  $ENV{FREETYPE_DIR}
+-  PATH_SUFFIXES lib64 lib
+-  PATHS
+-  /usr/local/X11R6
+-  /usr/local/X11
+-  /usr/X11
+-  /sw
+-  /usr/freeware
+ )
+ 
+ # set the user variables
+diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindGEOTIFF.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindGEOTIFF.cmake
+--- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindGEOTIFF.cmake	2019-06-17 15:00:29.578810886 +0200
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindGEOTIFF.cmake	2019-06-17 15:01:11.883140086 +0200
+@@ -15,7 +15,7 @@
+           /usr/local/include/libgeotiff 
+           /usr/local/include/geotiff)
+ 
+-SET(GEOTIFF_NAMES ${GEOTIFF_NAMES} geotiff_i geotiff libgeotiff_i libgeotiff)
++SET(GEOTIFF_NAMES ${GEOTIFF_NAMES} geotiff_d_i geotiff_i geotiff libgeotiff_i libgeotiff)
+ FIND_LIBRARY(GEOTIFF_LIBRARY 
+              NAMES ${GEOTIFF_NAMES}
+              PATHS 
+diff -burN ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindTIFF.cmake ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindTIFF.cmake
+--- ossim-1.8.20-3.orig/ossim_package_support/cmake/CMakeModules/FindTIFF.cmake	2019-06-17 15:00:29.578810886 +0200
++++ ossim-1.8.20-3/ossim_package_support/cmake/CMakeModules/FindTIFF.cmake	2019-06-17 15:01:24.843240856 +0200
+@@ -29,7 +29,7 @@
+           /usr/include/tiff)
+ 
+ 
+-SET(TIFF_NAMES ${TIFF_NAMES} tiff libtiff_i libtiff tiff3 libtiff3)
++SET(TIFF_NAMES ${TIFF_NAMES} tiffd tiff libtiff_i libtiff tiff3 libtiff3)
+ 
+ # Added x86_64-linux-gnu path for Ubuntu install
+ FIND_LIBRARY(TIFF_LIBRARY 

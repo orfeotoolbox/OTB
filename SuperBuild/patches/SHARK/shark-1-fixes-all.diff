@@ -1,0 +1,78 @@
+--- Shark-67990bcd2c4a90a27be97d933b3740931e9da141.orig/CMakeLists.txt	Fri May  4 10:47:18 2018
++++ Shark-67990bcd2c4a90a27be97d933b3740931e9da141/CMakeLists.txt	Fri Jun 14 15:11:44 2019
+@@ -163,8 +163,12 @@
+ link_directories( ${Boost_LIBRARY_DIR} )
+ 
+ # Set the libraries needed by Shark
+-list(APPEND LINK_LIBRARIES ${Boost_LIBRARIES})
+-
++if(Boost_LIBRARIES)
++	list(APPEND LINK_LIBRARIES ${Boost_LIBRARIES})
++else()
++	list(APPEND LINK_LIBRARIES Boost::serialization)
++	list(APPEND LINK_LIBRARIES Boost::filesystem)
++endif()
+ message( STATUS "Using boost from " ${Boost_LIBRARY_DIR} )
+ 
+ #####################################################################
+@@ -194,28 +198,30 @@
+ #####################################################################
+ #           HDF5 configuration
+ #####################################################################
+-find_package(HDF5 COMPONENTS C CXX HL QUIET)
+-mark_as_advanced(HDF5_DIR)
+-if(HDF5_FOUND)
+-	if(HDF5_C_COMPILER_EXECUTABLE AND HDF5_CXX_COMPILER_EXECUTABLE)
+-		message(STATUS "Checking HDF5 installation: HDF5 installation seems ok.")
+-		include_directories( ${HDF5_INCLUDE_DIRS} )
+-		list(APPEND LINK_LIBRARIES ${HDF5_LIBRARIES} ${HDF5_HL_LIBRARIES})
+-	else()
+-		message(STATUS "Checking HDF5 installation:HDF5 package might be broken.")
+-		if(NOT( HDF5_C_COMPILER_EXECUTABLE))
+-			message(STATUS "  C Compiler Extension not found.")
+-		endif()
+-		if(NOT( HDF5_CXX_COMPILER_EXECUTABLE))
+-			message(STATUS "  CXX Compiler Extension not found.")
++option(ENABLE_HDF5 "Use HDF5" ON)
++if(ENABLE_HDF5)
++	find_package(HDF5 COMPONENTS C CXX HL QUIET)
++	mark_as_advanced(HDF5_DIR)
++	if(HDF5_FOUND)
++		if(HDF5_C_COMPILER_EXECUTABLE AND HDF5_CXX_COMPILER_EXECUTABLE)
++			message(STATUS "Checking HDF5 installation: HDF5 installation seems ok.")
++			include_directories( ${HDF5_INCLUDE_DIRS} )
++			list(APPEND LINK_LIBRARIES ${HDF5_LIBRARIES} ${HDF5_HL_LIBRARIES})
++		else()
++			message(STATUS "Checking HDF5 installation:HDF5 package might be broken.")
++			if(NOT( HDF5_C_COMPILER_EXECUTABLE))
++				message(STATUS "  C Compiler Extension not found.")
++			endif()
++			if(NOT( HDF5_CXX_COMPILER_EXECUTABLE))
++				message(STATUS "  CXX Compiler Extension not found.")
++			endif()
++				message(STATUS "Disabling HDF5.")
++			unset( HDF5_FOUND )
+ 		endif()
+-			message(STATUS "Disabling HDF5.")
+-		unset( HDF5_FOUND )
++	else()
++		message(STATUS "HDF5 not found, skip")
+ 	endif()
+-else()
+-	message(STATUS "HDF5 not found, skip")
+-endif()
+-
++endif() # ENABLE_HDF5
+ #####################################################################
+ #           BLAS configuration
+ #####################################################################
+@@ -419,6 +425,9 @@
+ #####################################################################
+ #                       General Path settings
+ #####################################################################
++if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
++	add_definitions(-fext-numeric-literals)
++endif()
+ include_directories( ${shark_SOURCE_DIR}/include )
+ include_directories( ${shark_BINARY_DIR}/include )
+ add_subdirectory( include )

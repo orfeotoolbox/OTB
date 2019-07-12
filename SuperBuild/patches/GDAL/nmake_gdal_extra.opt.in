@@ -11,7 +11,17 @@ JPEG_SUPPORTED = 1
 # This will enable 12bit libjpeg - use only with internal jpeg builds.
 #JPEG12_SUPPORTED = 1
 
-GDAL_HOME="@SB_INSTALL_PREFIX_NATIVE@"
+MSVC_VER=@MSVC_VERSION@
+
+!IF "@CMAKE_BUILD_TYPE@" == "Debug"
+DEBUG=1
+!ENDIF
+
+!IF "@CMAKE_BUILD_TYPE@" == "RelWithDebInfo"
+WITH_PDB=1
+!ENDIF
+
+GDAL_HOME=@SB_INSTALL_PREFIX_NATIVE@
 
 #if using an external jpeg library uncomment the follwing lines
 JPEG_EXTERNAL_LIB = 1
@@ -80,29 +90,14 @@ OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include
 OPENJPEG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\openjp2.lib
 
 
-##################################################################
-################# TO be enabled for OTB ##########################
-
-# Uncomment out the following lines to enable LibKML support.
-#LIBKML_DIR = C:/Dev/libkml
-#LIBKML_INCLUDE = -I$(LIBKML_DIR)/src -I$(LIBKML_DIR)/third_party/boost_1_34_1
-#LIBKML_LIBRARY = $(LIBKML_DIR)/msvc/Release
-#LIBKML_LIBS =	$(LIBKML_LIBRARY)/libkmlbase.lib \
-#		$(LIBKML_LIBRARY)/libkmlconvenience.lib \
-#		$(LIBKML_LIBRARY)/libkmldom.lib \
-#		$(LIBKML_LIBRARY)/libkmlengine.lib \
-#		$(LIBKML_LIBRARY)/libkmlregionator.lib \
-#		$(LIBKML_LIBRARY)/libkmlxsd.lib \
-#		$(LIBKML_LIBRARY)/minizip_static.lib \
-#		$(LIBKML_DIR)/third_party\expat.win32/libexpat.lib \
-#		$(LIBKML_DIR)/third_party\uriparser-0.7.5.win32/release/uriparser.lib \
-#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/minizip.lib \
-#		$(LIBKML_DIR)/third_party\zlib-1.2.3.win32/lib/zlib.lib
-
 #we use external zlib on windows
 ZLIB_EXTERNAL_LIB = 1
 ZLIB_INC = -I@SB_INSTALL_PREFIX_NATIVE@\include
+!IFDEF DEBUG
+ZLIB_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\zlibd.lib
+!ELSE
 ZLIB_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\zlib.lib
+!ENDIF
 
 # Uncomment the following and update to enable NCSA HDF Release 4 support.
 HDF4_PLUGIN = NO
@@ -116,7 +111,6 @@ HDF4_LIB =	$(HDF4_DIR)\lib\@HDF4_SB_DF_LIB@_D.lib $(HDF4_DIR)\lib\@HDF4_SB_MF_LI
 HDF4_LIB =	$(HDF4_DIR)\lib\@HDF4_SB_DF_LIB@.lib $(HDF4_DIR)\lib\@HDF4_SB_MF_LIB@.lib $(JPEG_LIB) $(ZLIB_LIB)
 !ENDIF
 
-
 # Uncomment the following and update to enable NCSA HDF Release 5 support.
 HDF5_PLUGIN = NO
 HDF5_DIR =	@SB_INSTALL_PREFIX_NATIVE@
@@ -126,11 +120,10 @@ HDF5_LIB =	$(HDF5_DIR)\lib\hdf5_D.lib $(ZLIB_LIB)
 HDF5_LIB =	$(HDF5_DIR)\lib\hdf5.lib $(ZLIB_LIB)
 !ENDIF
 
-!IFDEF WITH_NETCDF
 NETCDF_PLUGIN = NO
 NETCDF_SETTING = YES
 NETCDF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\netcdf.lib
 NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
 NETCDF_HAS_NC4 = YES
 NETCDF_HAS_HDF4 = YES
-!ENDIF
+
