@@ -98,7 +98,7 @@ namespace {// Anonymous namespace
    ossimTrace traceDebug ("ossimSarSensorModel:debug");
 
    typedef char const* const* strings_iterator;
-  static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC", "SCS_B" };
+  static char const* const PRODUCTTYPE_STRINGS[] = { "SLC", "GRD", "MGD", "GEC", "EEC", "SCS_B", "SCS_U" };
 }// Anonymous namespace
 
 namespace ossimplugins
