@@ -47,7 +47,7 @@ InputImageListParameter
 {
   assert( image!=nullptr );
 
-  InputImageParameter::Pointer p;
+  InputImageParameter::Pointer p( InputImageParameter::New() );
 
   return FromImage( p, image );
 }

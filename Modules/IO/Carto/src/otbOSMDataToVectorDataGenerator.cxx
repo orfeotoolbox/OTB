@@ -39,7 +39,7 @@ OSMDataToVectorDataGenerator::OSMDataToVectorDataGenerator():m_North(43.62811),
   this->SetNumberOfRequiredOutputs(1);
 
   // Initialize the url
-  m_Url = "http://www.openstreetmap.org/api/0.6/map?";
+  m_Url = "https://www.openstreetmap.org/api/0.6/map?";
 
   m_Curl = CurlHelper::New();
 
