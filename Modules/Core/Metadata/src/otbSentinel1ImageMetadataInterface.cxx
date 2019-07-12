@@ -25,7 +25,14 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "ossim/ossimTimeUtilities.h"
+#pragma GCC diagnostic pop
+#else
+#include "ossim/ossimTimeUtilities.h"
+#endif
 
 //useful constants
 #include <otbMath.h>
