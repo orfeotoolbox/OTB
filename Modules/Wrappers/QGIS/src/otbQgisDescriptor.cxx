@@ -123,6 +123,15 @@ int main(int argc, char* argv[])
   
   dFile << appli->GetDescription() << std::endl;
   dFile << group << std::endl;
+
+  /*
+  From here onwards each line appended to dFile is passed to QgsProcessingParameter* class constructor.
+  dFile is nothing but a csv (with a .txt) with "|" as delimiter character.
+  First field is the name of Qgis parameter class and rest of it are extracted as list and passed to class constructor.
+  Parsing and calling of paramater classes are done by python.
+  source available : qgis/python/plugins/processing/core/parameters.py
+  source code of qgis parameter is available at: qgis/src/core/processing/qgsprocessingparameters.cpp
+  */
   
   for ( unsigned int i = 0; i < nbOfParam; i++ )
     {
@@ -250,11 +259,15 @@ int main(int argc, char* argv[])
       // setting default_value this way is an exception for ParameterType_StringList and ParameterType_String
       default_value = "None|True";
       }
-    else if (type == ParameterType_InputImage
-          || type == ParameterType_OutputImage
-          || type == ParameterType_OutputFilename)
+    else if (type == ParameterType_InputImage || type == ParameterType_OutputImage)
       {
       // default is None and nothing to add to dFile
+      }
+    else if (type == ParameterType_OutputFilename)
+      {
+      // fileFilter and defaultValue is None
+      // OTB does not have any implementation for file extension.
+	default_value = "None|None";
       }
     else if(type == ParameterType_ListView)
       {
