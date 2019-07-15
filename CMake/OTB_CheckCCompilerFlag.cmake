@@ -22,6 +22,8 @@
 
 include(CheckCSourceCompiles)
 
+# This could be replaced by a simple check_c_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCCompilerFlag.html?highlight=flags
 macro (OTB_CHECK_C_COMPILER_FLAG _FLAG _RESULT)
    set(SAFE_CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS}")
    set(CMAKE_REQUIRED_DEFINITIONS "${_FLAG}")

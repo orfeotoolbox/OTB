@@ -139,7 +139,7 @@ else()
 endif()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Shark
+find_package_handle_standard_args(Shark
   REQUIRED_VARS SHARK_LIBRARY SHARK_INCLUDE_DIR ${REQUIRED_CBLAS_LIB}
   VERSION_VAR SHARK_VERSION_STRING)
 
