@@ -35,6 +35,7 @@ option( OTB_I18N_MERGE_TS
   "Create/merge .ts source translation files. WARNING: If ON, 'make clean' will delete the .ts files from source directory!"
   OFF
   )
+mark_as_advanced( OTB_I18N_MERGE_TS )
 
 #----------------------------------------------------------------------------
 if( OTBQt_ENABLED )

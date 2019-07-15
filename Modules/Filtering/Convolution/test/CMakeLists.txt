@@ -46,7 +46,7 @@ otb_add_test(NAME bfTvConvolutionImageFilter COMMAND otbConvolutionTestDriver
 if(ITK_USE_FFTWD)
 
 if(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL "4"))
-  message(WARNING "Disable bfTvOverlapSaveConvolutionImageFilter")
+  message(WARNING "Disable OverlapSaveConvolution tests")
 else()
 otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTestDriver
   --compare-image ${EPSILON_7}
@@ -56,7 +56,6 @@ otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTe
   ${INPUTDATA}/QB_Suburb.png
   ${TEMP}/bfTvOverlapSaveConvolutionImageFilter.tif
   )
-endif()
 
 otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter COMMAND otbConvolutionTestDriver
   --compare-image ${EPSILON_7}
@@ -72,6 +71,8 @@ otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter C
   0.0125 0.0125 #u0 v0
   0
   )
+endif()
+
 endif()
 
 otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver

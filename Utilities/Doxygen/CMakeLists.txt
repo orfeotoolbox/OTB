@@ -21,9 +21,8 @@
 #
 # Build the documentation
 #
+# This file provides the advanced variable BUILD_DOCUMENTATION
 include (${CMAKE_ROOT}/Modules/Documentation.cmake)
-
-mark_as_advanced(BUILD_DOCUMENTATION)
 
 # -------------------------------------------------------------
 #

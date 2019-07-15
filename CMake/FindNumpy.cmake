@@ -37,7 +37,7 @@ else()
 endif()
 
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( Numpy DEFAULT_MSG NUMPY_INCLUDE_DIR )
+find_package_handle_standard_args( Numpy DEFAULT_MSG NUMPY_INCLUDE_DIR )
 
 mark_as_advanced( NUMPY_INCLUDE_DIR )
 
