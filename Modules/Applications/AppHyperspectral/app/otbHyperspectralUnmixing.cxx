@@ -23,7 +23,7 @@
 
 #include "otbUnConstrainedLeastSquareImageFilter.h"
 #include "otbISRAUnmixingImageFilter.h"
-#include "otbNCLSUnmixingImageFilter.h"
+// #include "otbNCLSUnmixingImageFilter.h"
 //#include "otbFCLSUnmixingImageFilter.h"
 #include "otbMDMDNMFImageFilter.h"
 
@@ -34,7 +34,7 @@ namespace Wrapper
 {
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
-typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
+// typedef otb::NCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             NCLSUnmixingFilterType;
 //typedef otb::FCLSUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             FCLSUnmixingFilterType;
 typedef otb::MDMDNMFImageFilter<DoubleVectorImageType, DoubleVectorImageType>                          MDMDNMFUnmixingFilterType;
 
@@ -65,12 +65,12 @@ enum UnMixingMethod
 {
   UnMixingMethod_UCLS,
   //UnMixingMethod_FCLS,
-  UnMixingMethod_NCLS,
+  // UnMixingMethod_NCLS,
   UnMixingMethod_ISRA,
   UnMixingMethod_MDMDNMF,
 };
 
-const char* UnMixingMethodNames [] = { "UCLS", "FCLS", "NCLS", "ISRA", "MDMDNMF", };
+const char* UnMixingMethodNames [] = { "UCLS", "ISRA", "MDMDNMF", };
 
 
 class HyperspectralUnmixing : public Application
@@ -106,7 +106,7 @@ private:
     "* Unconstrained Least Square (ucls)\n"
 //  "* Fully Constrained Least Square (fcls)\n"
     "* Image Space Reconstruction Algorithm (isra)\n"
-    "* Non-negative constrained\n"
+    // "* Non-negative constrained\n"
     "* Least Square (ncls)\n"
     "* Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF)."
     );
@@ -138,8 +138,8 @@ private:
 //    AddChoice("ua.fcls", "FCLS");
 //    SetParameterDescription("ua.fcls", "Fully constrained Least Square");
 
-    AddChoice("ua.ncls", "NCLS");
-    SetParameterDescription("ua.ncls", "Non-negative constrained Least Square");
+    // AddChoice("ua.ncls", "NCLS");
+    // SetParameterDescription("ua.ncls", "Non-negative constrained Least Square");
 
     AddChoice("ua.isra", "ISRA");
     SetParameterDescription("ua.isra", "Image Space Reconstruction Algorithm");
@@ -217,6 +217,7 @@ private:
 
       }
       break;
+    /*
     case UnMixingMethod_NCLS:
       {
       otbAppLogINFO("NCLS Unmixing");
@@ -231,7 +232,6 @@ private:
 
       }
       break;
-      /*
     case UnMixingMethod_FCLS:
       {
       otbAppLogINFO("FCLS Unmixing");

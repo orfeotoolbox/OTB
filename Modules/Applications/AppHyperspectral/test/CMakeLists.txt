@@ -30,15 +30,15 @@ otb_test_application(NAME  apTvHyHyperspectralUnmixing_UCLS
                               ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
                   			  ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif)
 
-otb_test_application(NAME  apTvHyHyperspectralUnmixing_NCLS
-                     APP  HyperspectralUnmixing
-                     OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 			 -out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
-                 			 -ua ncls
-                     VALID   --compare-image ${EPSILON_9}
-                              ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
-                  			  ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif)
+# otb_test_application(NAME  apTvHyHyperspectralUnmixing_NCLS
+#                      APP  HyperspectralUnmixing
+#                      OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
+#                 			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+#                  			 -out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
+#                  			 -ua ncls
+#                      VALID   --compare-image ${EPSILON_9}
+#                               ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
+#                   			  ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif)
 
 
 #----------- VertexComponentAnalysis TESTS ----------------
