@@ -66,7 +66,7 @@ find_library( MUPARSER_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set MUPARSER_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( MuParser DEFAULT_MSG MUPARSER_LIBRARY MUPARSER_INCLUDE_DIR )
+find_package_handle_standard_args( MuParser DEFAULT_MSG MUPARSER_LIBRARY MUPARSER_INCLUDE_DIR )
 
 mark_as_advanced( MUPARSER_INCLUDE_DIR MUPARSER_LIBRARY )
 

@@ -27,11 +27,8 @@ include(${_OTBModuleMacros_DIR}/OTBModuleDoxygen.cmake)
 include(${_OTBModuleMacros_DIR}/OTBModuleHeaderTest.cmake)
 include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 
-# With Apple's GGC <=4.2 and LLVM-GCC <=4.2 visibility of template
-# don't work. Set the option to off and hide it.
-if(APPLE AND CMAKE_COMPILER_IS_GNUCXX AND CMAKE_CXX_COMPILER_VERSION  VERSION_LESS "4.3")
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-elseif(APPLE)
+# TODO check if this is still the case:
+if(APPLE)
   #RK:  compiler visibility nor woking on osx with appleclang xcode.
   #gcc is a symlink to clang
   set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
@@ -368,9 +365,4 @@ macro(otb_module_target _name)
   if(_install)
     otb_module_target_install(${_name})
   endif()
-endmacro()
-
-macro(otb_module_requires_cxx11)
-  message(WARNING "otb_module_requires_cxx11 is deprecated since OTB version 6.2 which build with c++14 by default. You can safely remove the call to this macro.")
-  set(OTB_MODULE_${otb-module}_REQUIRES_CXX11 1)
 endmacro()

@@ -36,7 +36,7 @@ find_path( AGG_INCLUDE_DIR agg_pixfmt_rgba.h
 # handle the QUIETLY and REQUIRED arguments and set AGG_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( Agg DEFAULT_MSG AGG_INCLUDE_DIR )
+find_package_handle_standard_args( Agg DEFAULT_MSG AGG_INCLUDE_DIR )
 
 mark_as_advanced( AGG_INCLUDE_DIR )
 

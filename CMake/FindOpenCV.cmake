@@ -139,6 +139,6 @@ if( OPENCV_INCLUDE_DIRS AND OPENCV_LIBRARIES )
 endif()
 
 include(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(OpenCV
+find_package_handle_standard_args(OpenCV
   REQUIRED_VARS OPENCV_core_LIBRARY OPENCV_INCLUDE_DIRS
   VERSION_VAR OpenCV_VERSION)
