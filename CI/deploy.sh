@@ -37,27 +37,17 @@ else # On release
 fi
 
 # Push package
-ls -all build_packages/
 echo "Renaming binary packages"
-# find build_packages/. -name "*.run" \
-# -exec sh -c 'mv "$1" "${1%.run}${pack_suffix}.run"' _ {} \;
-for name in $(find build_packages/. -name "OTB-*.*")
-  do 
+for name in $(find . -regex "./OTB-.*\(run\|zip\)"); do
   len=(${#name})
   mv "$name" "${name:0:$len-4}${pack_suffix}${name:$len-4}"
 done
-# TO REMOVE
-###########
-ls -all build_packages/
-###########
 
 echo "Pushing binary packages"
-scp build_packages/OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 # Push doc
 echo "Pushing documentation"
-scp build/{CookBook-*-html.tar.gz,\
-/Documentation/{Cookbook/latex/CookBook-*.pdf,Doxygen/OTB-Doxygen-*.tar.bz2}} \
-otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp {CookBook-*-html.tar.gz,CookBook-*.pdf,OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 # Create zip, tar.gz and tar.xy source
 echo "Creating source tarball and zip"
