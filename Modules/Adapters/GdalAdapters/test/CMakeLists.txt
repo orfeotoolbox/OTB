@@ -25,7 +25,10 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   target_link_libraries(
     otbOGRTests
     ${OTBGdalAdapters-Test_LIBRARIES}
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_TIMER_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
+    ${Boost_CHRONO_LIBRARY} )
   
   add_test(NAME coTuOGRDataSourceWrapperNew
            COMMAND otbOGRTests coTuOGRDataSourceWrapperNew
