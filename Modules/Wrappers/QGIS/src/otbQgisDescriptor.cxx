@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
   std::string output_file = module + ".txt";
   std::string  algs_txt = "algs.txt";
-  if (argc > 3)
+  if ( argc > 3 )
     {
     output_file = std::string(argv[3]) + module + ".txt";
     algs_txt = std::string(argv[3])  +  "algs.txt";
@@ -102,12 +102,12 @@ int main(int argc, char* argv[])
   std::string output_parameter_name;
   bool hasRasterOutput = false;
   {
-  for (unsigned int i = 0; i < nbOfParam; i++)
+  for ( unsigned int i = 0; i < nbOfParam; i++ )
     {
-    Parameter::Pointer param = appli->GetParameterByKey(appKeyList[i]);
-    if (param->GetMandatory())
+    Parameter::Pointer param = appli->GetParameterByKey( appKeyList[i] );
+    if ( param->GetMandatory() )
       {
-	if (appli->GetParameterType(appKeyList[i]) == ParameterType_OutputImage)
+	if ( appli->GetParameterType( appKeyList[i] ) == ParameterType_OutputImage )
 	  {
 	    output_parameter_name = appKeyList[i];
 	    hasRasterOutput = true;
@@ -116,15 +116,24 @@ int main(int argc, char* argv[])
     }
   }
 
-  if(output_parameter_name.empty())
+  if( output_parameter_name.empty() )
     dFile << module << std::endl;
   else
     dFile << module << "|" <<  output_parameter_name << std::endl;
   
   dFile << appli->GetDescription() << std::endl;
   dFile << group << std::endl;
+
+  /*
+  From here onwards each line appended to dFile is passed to QgsProcessingParameter* class constructor.
+  dFile is nothing but a csv (with a .txt) with "|" as delimiter character.
+  First field is the name of Qgis parameter class and rest of it are extracted as list and passed to class constructor.
+  Parsing and calling of paramater classes are done by python.
+  source available : qgis/python/plugins/processing/core/parameters.py
+  source code of qgis parameter is available at: qgis/src/core/processing/qgsprocessingparameters.cpp
+  */
   
-  for (unsigned int i = 0; i < nbOfParam; i++)
+  for ( unsigned int i = 0; i < nbOfParam; i++ )
     {
     const std::string name = appKeyList[i];
     const Parameter::Pointer param = appli->GetParameterByKey(name);
@@ -166,15 +175,14 @@ int main(int argc, char* argv[])
 	}
 #endif
 
-    bool isDestination = false;
     bool isEpsgCode = false;
 
     // use QgsProcessingParameterCrs if required.
     // TODO: do a regex on name to match ==epsg || *\.epsg.\*
     if ( name == "epsg"
-	      || name == "map.epsg.code"
-	      || name == "mapproj.epsg.code"
-	      || name == "mode.epsg.code")
+	    || name == "map.epsg.code"
+	    || name == "mapproj.epsg.code"
+	    || name == "mode.epsg.code" )
         {
         qgis_type = "QgsProcessingParameterCrs";
         isEpsgCode = true;
@@ -183,9 +191,9 @@ int main(int argc, char* argv[])
     dFile << qgis_type << "|" << name << "|" << description;
 
       std::string default_value = "None";
-    if (type == ParameterType_Int)
+    if ( type == ParameterType_Int )
       {
-      if (isEpsgCode)
+      if ( isEpsgCode )
         {
           if (param->HasValue() && appli->GetParameterInt(name) < 1)
     	default_value =  "EPSG: " + appli->GetParameterAsString(name);
@@ -198,43 +206,41 @@ int main(int argc, char* argv[])
         default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
         }
       }
-    else if (type == ParameterType_Float)
+    else if ( type == ParameterType_Float )
       {	
       dFile << "|QgsProcessingParameterNumber.Double";
       default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
       }
-    else if (type == ParameterType_Radius)
+    else if ( type == ParameterType_Radius )
       {	
       dFile << "|QgsProcessingParameterNumber.Integer";
       default_value = param->HasValue() ? appli->GetParameterAsString(name): "0";
       }
-    else if(type == ParameterType_InputFilename)
+    else if ( type == ParameterType_InputFilename )
       {
       // TODO: if parameter InputFilename can give supported extensions
       // we can use it gitlab #1559
       dFile << "|QgsProcessingParameterFile.File|None";
       }
-    else if(type == ParameterType_Directory)
+    else if( type == ParameterType_Directory )
       {
       dFile << "|QgsProcessingParameterFile.Folder|False";
       }      
-    else if (type == ParameterType_InputImageList)
+    else if ( type == ParameterType_InputImageList )
       {
       dFile << "|3"; //QgsProcessing.TypeRaster
       }
-    else if (type == ParameterType_InputVectorDataList)
+    else if ( type == ParameterType_InputVectorDataList
+           || type == ParameterType_InputVectorData
+           || type == ParameterType_OutputVectorData )
       {
       dFile << "|-1"; //QgsProcessing.TypeVectorAnyGeometry
       }
-    else if (type == ParameterType_InputVectorData)
-      {
-      dFile << "|-1"; //QgsProcessing.TypeVectorAnyGeometry
-      }
-    else if(type == ParameterType_InputFilenameList)
+    else if ( type == ParameterType_InputFilenameList )
       {
       dFile << "|4"; //QgsProcessing.TypeFile"
       }
-    else if(type == ParameterType_String)
+    else if ( type == ParameterType_String )
       {
       // Below line is interpreted in qgis processing as
       // 1. default_value = None
@@ -253,9 +259,15 @@ int main(int argc, char* argv[])
       // setting default_value this way is an exception for ParameterType_StringList and ParameterType_String
       default_value = "None|True";
       }
-    else if (type == ParameterType_InputImage)
+    else if (type == ParameterType_InputImage || type == ParameterType_OutputImage)
       {
       // default is None and nothing to add to dFile
+      }
+    else if (type == ParameterType_OutputFilename)
+      {
+      // fileFilter and defaultValue is None
+      // OTB does not have any implementation for file extension.
+	default_value = "None|None";
       }
     else if(type == ParameterType_ListView)
       {
@@ -277,38 +289,27 @@ int main(int argc, char* argv[])
   	  ChoiceParameter *cparam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
   	  default_value = std::to_string(cparam->GetValue());	  
       }
-    else if(type == ParameterType_OutputVectorData ||
-	          type == ParameterType_OutputImage ||
-	          type == ParameterType_OutputFilename)
-      {
-      // No need for default_value, optional and extra fields in dFile.
-      // If parameter is a destination type. qgis_type|name|description is enough.
-      // So we simply set isDestination to true and skip to end to append a new line.
-      isDestination =  true;
-      }
     else
       {
       std::cout << "ERROR: default_value is empty for '" << name << "' type='" << qgis_type << "'" << std::endl;
       return EXIT_FAILURE;	  
       }
 
-    if (!isDestination)
+    std::string optional;
+    if ( param->GetMandatory() )
       {
-      std::string optional;
-      if (param->GetMandatory())
-        {
-        // TODO: avoid workaround for stringlist types (fix appengine)
-        // type == ParameterType_StringList check is needed because:
-        // If parameter is mandatory it can have no value
-        // It is accepted in OTB that, string list could be generated dynamically
-        // qgis has no such option to handle dynamic values yet..
-        // So mandatory parameters whose type is StringList is considered optional
-        optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
-        }
-      else
-        {
-        optional = "True";
-        }
+      // TODO: avoid workaround for stringlist types (fix appengine)
+      // type == ParameterType_StringList check is needed because:
+      // If parameter is  mandatory it can have no value
+      // It is accepted in OTB that, string list could be generated dynamically
+      // qgis has no such option to handle dynamic values yet..
+      // So mandatory parameters whose type is StringList is considered optional
+      optional = param->HasValue() || type == ParameterType_StringList  ? "True" : "False";
+      }
+    else
+      {
+      optional = "True";
+      }
               #if 0
     	  std::cerr << name;
     	  std::cerr << " mandatory=" << param->GetMandatory();
@@ -316,8 +317,7 @@ int main(int argc, char* argv[])
     	  std::cerr << " qgis_type=" << qgis_type;
     	  std::cerr << " optional=" << optional << std::endl;
               #endif
-    	dFile << "|" << default_value << "|" << optional;
-      }
+    dFile << "|" << default_value << "|" << optional;
     dFile << std::endl;
     }
 
