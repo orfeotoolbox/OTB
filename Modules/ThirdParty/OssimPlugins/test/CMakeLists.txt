@@ -26,26 +26,20 @@ otb_module_test()
 #==== UT for utilities
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   #this test is failing on osx due to a bug in AppleClang stdc++ (Luc Hermitte)
-  if(NOT APPLE)
-    add_executable(OTBossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
-    target_link_libraries(OTBossimStringUtilitiesTest
-      otbossimplugins
-      ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-      ${Boost_TIMER_LIBRARY}
-      ${Boost_SYSTEM_LIBRARY}
-      ${Boost_CHRONO_LIBRARY} )
-    otb_module_target_label(OTBossimStringUtilitiesTest)
-    otb_add_test(NAME TuossimStringUtilitiesTest COMMAND OTBossimStringUtilitiesTest )
-  endif()
+ if(NOT APPLE)
+   add_executable(OTBossimStringUtilitiesTest ossimStringUtilitiesTest.cpp)
+   target_link_libraries(OTBossimStringUtilitiesTest
+     otbossimplugins
+     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+   otb_module_target_label(OTBossimStringUtilitiesTest)
+   otb_add_test(NAME TuossimStringUtilitiesTest COMMAND OTBossimStringUtilitiesTest )
+ endif()
 
   add_executable(OTBossimTimeUtilitiesTest ossimTimeUtilitiesTest.cpp)
   target_link_libraries(OTBossimTimeUtilitiesTest
     # ${OTBOssim_LIBRARIES}
     otbossimplugins
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-    ${Boost_TIMER_LIBRARY}
-    ${Boost_SYSTEM_LIBRARY}
-    ${Boost_CHRONO_LIBRARY} )
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
   otb_module_target_label(OTBossimTimeUtilitiesTest)
   otb_add_test(NAME TuossimTimeUtilitiesTest COMMAND OTBossimTimeUtilitiesTest )
 else()
