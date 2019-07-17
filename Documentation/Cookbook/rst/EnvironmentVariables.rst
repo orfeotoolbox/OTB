@@ -24,8 +24,22 @@ In addition to OTB specific environment variables, the following
 environment variables are parsed by third party libraries and also
 affect how OTB works:
 
-* ``GDAL_CACHEMAX``: GDAL has an internal cache mechanism to avoid reading or decoding again image chunks. This environment variable controls the amount of memory that GDAL can use for caching. By default, GDAL can use up to 5 percent of the system's available RAM, which may be a lot. In addition, caching is only needed if the processing chain is likely to request the same chunk several times, which is unlikely to happen for a standard pixel based OTB pipeline. Setting a lower value facilitates the allocation of more memory to OTB itself (using applications ``-ram`` parameter or ``OTB_MAX_RAM_HINT`` environment variable). If the value is small, i.e. less than 100 000, it is assumed to be in megabytes, otherwise, it is assumed to be in bytes.
-* ``GDAL_NUM_THREADS``: GDAL can take advantage of multi-threading to decode some formats. This variable controls the number of threads GDAL is allowed to use.
-* ``OPJ_NUM_THREADS``: OpenJpeg can take advantage of multi-threading when decoding images. This variable controls the number of threads OpenJpeg is allowed to use.
-* ``ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS``: This variable controls the number of threads used by ITK for processing. 
+* ``GDAL_CACHEMAX``: GDAL has an internal cache mechanism to avoid reading or
+  decoding again image chunks. This environment variable controls the amount
+  of memory that GDAL can use for caching. By default, GDAL can use up to 5
+  percent of the system's available RAM, which may be a lot. In addition,
+  caching is only needed if the processing chain is likely to request the same
+  chunk several times, which is unlikely to happen for a standard pixel based
+  OTB pipeline. Setting a lower value facilitates the allocation of more memory
+  to OTB itself (using applications ``-ram`` parameter or ``OTB_MAX_RAM_HINT``
+  environment variable). If the value is small, i.e. less than 100 000, it is
+  assumed to be in megabytes, otherwise, it is assumed to be in bytes.
+* ``GDAL_NUM_THREADS``: GDAL can take advantage of multi-threading to decode
+  some formats. This variable controls the number of threads GDAL is allowed to
+  use.
+* ``OPJ_NUM_THREADS``: OpenJpeg can take advantage of multi-threading when
+  decoding images. This variable controls the number of threads OpenJpeg is
+  allowed to use.
+* ``ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS``: This variable controls the number
+  of threads used by ITK for processing.
 
