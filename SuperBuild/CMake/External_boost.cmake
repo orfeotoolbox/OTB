@@ -22,9 +22,37 @@ INCLUDE_ONCE_MACRO(BOOST)
 
 SETUP_SUPERBUILD(BOOST)
 
-set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
+# set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
+# Libraries we need from boost
+set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
+
+# add libraries to bootstrap option
+set(BOOST_BOOTSTRAP_OPTIONS "--with-libraries=")
+foreach(lib ${boost_libraries_to_build})
+  set(BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS}${lib},")
+endforeach(lib)
+
+if(UNIX)
+  set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
+  set(BOOST_B2_EXE "./b2")
+  if(NOT APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS} --with-toolset=clang")
+  endif()
+else()
+  set(BOOST_BOOTSTRAP_FILE "bootstrap.bat")
+  set(BOOST_B2_EXE "b2.exe")
+endif()
+
+set( BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS} --prefix=${SB_INSTALL_PREFIX}")
+
+set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
+  -E chdir ${BOOST_SB_SRC}
+  ${BOOST_BOOTSTRAP_FILE} ${BOOST_BOOTSTRAP_OPTIONS}
+  )
 
 set(BOOST_SB_CONFIG)
+
+# I think that this is already handled by boost.
 if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
   set(BOOST_SB_CONFIG address-model=64)
 endif()
@@ -36,38 +64,10 @@ set(BOOST_SB_CONFIG
   threading=multi
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
-  --includedir=${SB_INSTALL_PREFIX}/include
-  --libdir=${_SB_BOOST_LIBRARYDIR}
-  --with-system
-  --with-serialization
-  --with-filesystem
-  --with-test
-  --with-date_time
-  --with-program_options
-  --with-thread
   )
+  # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
+  # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
 
-set(BOOST_BOOTSTRAP_OPTIONS "")
-
-if(UNIX)
-  set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
-  set(BOOST_B2_EXE "./b2")
-  if(NOT APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(BOOST_SB_CONFIG
-        ${BOOST_SB_CONFIG}
-        toolset=clang)
-    set(BOOST_BOOTSTRAP_OPTIONS "--with-toolset=clang")
-  endif()
-else()
-  set(BOOST_BOOTSTRAP_FILE "bootstrap.bat")
-  set(BOOST_B2_EXE "b2.exe")
-endif()
-
-set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
-  -E chdir ${BOOST_SB_SRC}
-  ${BOOST_BOOTSTRAP_FILE} ${BOOST_BOOTSTRAP_OPTIONS}
-  --prefix=${SB_INSTALL_PREFIX}
-  )
 
 set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
