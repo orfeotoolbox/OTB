@@ -68,6 +68,7 @@ Table of Contents
     recipes/featextract.rst
     recipes/stereo.rst
     recipes/hyperspectral.rst
+    recipes/bandmathX.rst
 
 .. toctree::
     :maxdepth: 1
