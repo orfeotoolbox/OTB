@@ -23,7 +23,7 @@ INCLUDE_ONCE_MACRO(GDAL)
 SETUP_SUPERBUILD(GDAL)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 HDF4 NETCDF)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 HDF4 NETCDF POPPLER)
 
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
@@ -103,6 +103,7 @@ if(UNIX)
     --with-threads=yes
     --with-freexl=no
     --with-libjson-c=internal
+	--with-geopdf=yes
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
@@ -110,11 +111,11 @@ if(UNIX)
   # For now gdal is built if Superbuild has find python... And only on UNIX 
   # That might be a problem
   # User will not be able to override this...
-  if ( OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
-    list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
-  endif()
 
-
+    if (OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
+      list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
+    endif()
+	
 else(MSVC)
   configure_file(
     ${CMAKE_SOURCE_DIR}/patches/GDAL/nmake_gdal_extra.opt.in
@@ -128,16 +129,20 @@ else(MSVC)
     file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "WIN64=YES\r\n")
   endif()
 
+  if (OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
+    get_filename_component(PYDIR ${PYTHON_INCLUDE_DIR} DIRECTORY)
+    file(APPEND "${CMAKE_BINARY_DIR}/GDAL/tmp/nmake.local" "PYDIR=\"${PYDIR}\"\r\n")    
+  endif()
 
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
-  set(GDAL_BUILD_COMMAND nmake /f makefile.vc)
-  set(GDAL_INSTALL_COMMAND nmake /f makefile.vc devinstall)
+  set(GDAL_BUILD_COMMAND nmake /f makefile.vc EXT_NMAKE_OPT=nmake.local)
+  set(GDAL_INSTALL_COMMAND nmake /f makefile.vc devinstall EXT_NMAKE_OPT=nmake.local)
 
 endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
+  URL "http://download.osgeo.org/gdal/1.11.5/gdal-1.11.5.tar.gz"
   URL_MD5 785acf2b0cbf9d56d37c9044d0ee2505
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
