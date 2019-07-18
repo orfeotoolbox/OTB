@@ -255,12 +255,12 @@ if __name__ == "__main__":
     if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
+    refn = os.environ['CI_COMMIT_REF_NAME']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
     if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
       refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
-    else:
-      refn = os.environ['CI_COMMIT_REF_NAME']
+      proj = os.environ['CI_MERGE_REQUEST_PROJECT_ID']
     if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
       token = os.environ['K8S_SECRET_API_TOKEN']
     else:
