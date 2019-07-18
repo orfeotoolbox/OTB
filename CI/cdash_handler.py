@@ -31,7 +31,7 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = False
+trace = True
 
 """
 Check needed environment parameters
