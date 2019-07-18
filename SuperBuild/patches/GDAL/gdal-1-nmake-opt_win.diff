@@ -1,0 +1,19 @@
+--- gdal-1.11.5.orig/nmake.opt	Fri Jul  1 10:55:03 2016
++++ gdal-1.11.5/nmake.opt	Thu Jul 18 14:20:02 2019
+@@ -132 +132 @@
+-OPTFLAGS= $(CXX_ANALYZE_FLAGS) $(CXX_PDB_FLAGS) /nologo /MD /EHsc /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /DDEBUG
++OPTFLAGS= $(CXX_ANALYZE_FLAGS) $(CXX_PDB_FLAGS) /nologo /MDd /EHsc /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /DDEBUG
+@@ -138 +138 @@
+-OPTFLAGS= $(CXX_PDB_FLAGS) /nologo /MD /EHsc /GR /DDEBUG
++OPTFLAGS= $(CXX_PDB_FLAGS) /nologo /MDd /EHsc /GR /DDEBUG
+@@ -223,3 +222,0 @@
+-# This will enable 12bit libjpeg - use only with internal jpeg builds.
+-JPEG12_SUPPORTED = 1
+-
+@@ -630 +627,5 @@
+-ODBCLIB = odbc32.lib odbccp32.lib user32.lib
++!IF $(MSVC_VER) < 1900  
++ODBCLIB = odbc32.lib odbccp32.lib user32.lib  
++!ELSE  
++ODBCLIB = legacy_stdio_definitions.lib odbc32.lib odbccp32.lib user32.lib  
++!ENDIF

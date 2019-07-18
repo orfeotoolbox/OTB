@@ -1,0 +1,28 @@
+--- gdal-1.11.5-orig/frmts/ecw/makefile.vc	Fri Jul  1 10:55:06 2016
++++ gdal-1.11.5/frmts/ecw/makefile.vc	Wed Jul 17 16:33:26 2019
+@@ -0,0 +1,5 @@
++!IFNDEF DEBUG
++MD_FLAG =/MD
++!ELSE
++MD_FLAG =/MDd
++!ENDIF
+@@ -34 +39 @@
+-	$(CC) /Zi /MD $(EXTRAFLAGS) testecw.cpp $(ECWLIB)
++	$(CC) /Zi $(MD_FLAG) $(EXTRAFLAGS) testecw.cpp $(ECWLIB)
+@@ -37 +42 @@
+-	$(CC) /MD $(EXTRAFLAGS) ecw_example1.c $(ECWLIB)
++	$(CC) $(MD_FLAG) $(EXTRAFLAGS) ecw_example1.c $(ECWLIB)
+--- gdal-1.11.5-orig/frmts/pcidsk/sdk/Makefile.vc	Fri Jul  1 10:55:06 2016
++++ gdal-1.11.5/frmts/pcidsk/sdk/Makefile.vc	Wed Jul 17 16:34:39 2019
+@@ -5,0 +6,10 @@
++!IFDEF WITH_PDB
++set OPTFLAGS = /Ox /zi
++!ENDIF
++
++!IFNDEF DEBUG
++CXXFLAGS = /nologo /MD /GR /EHsc $(OPTFLAGS) /W3 /I. /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
++!ELSE
++CXXFLAGS = /nologo /MDd /GR /EHsc $(OPTFLAGS) /W3 /I. /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
++!ENDIF
++
+
