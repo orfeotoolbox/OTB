@@ -56,14 +56,6 @@ public:
   bool readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 
   bool open(const ossimFilename& file);
-
-protected:
-  /*
-  std::string theProductType;
-  std::string theMode;
-  std::string theSwath;
-  std::string thePolarisation;
-  */
 };
 
 } // end namespace
