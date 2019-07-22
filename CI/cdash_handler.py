@@ -36,10 +36,11 @@ trace = False
 """
 Check needed environment parameters
 """
-def CheckEnvParameters(params):
+def CheckEnvParameters(params, verbose=True):
   for p in params:
     if not p in os.environ.keys():
-      print("Missing environment variable '"+p+"'")
+      if verbose:
+        print("Missing environment variable '"+p+"'")
       return False
   return True
 
@@ -255,12 +256,13 @@ if __name__ == "__main__":
     if not CheckEnvParameters(['CI_COMMIT_SHA', 'CI_PROJECT_ID', 'CI_PROJECT_DIR', 'CI_COMMIT_REF_NAME']):
       sys.exit(1)
     sha1 = os.environ['CI_COMMIT_SHA']
+    refn = os.environ['CI_COMMIT_REF_NAME']
     proj = os.environ['CI_PROJECT_ID']
     pdir = os.environ['CI_PROJECT_DIR']
-    if 'CI_MERGE_REQUEST_REF_PATH' in os.environ.keys():
-      refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
-    else:
-      refn = os.environ['CI_COMMIT_REF_NAME']
+    if CheckEnvParameters(['CI_MERGE_REQUEST_REF_PATH', 'CI_MERGE_REQUEST_PROJECT_ID'], verbose=False):
+      targetProj = os.environ['CI_MERGE_REQUEST_PROJECT_ID']
+      if proj == targetProj:
+        refn = os.environ['CI_MERGE_REQUEST_REF_PATH']
     if CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
       token = os.environ['K8S_SECRET_API_TOKEN']
     else:
@@ -288,7 +290,8 @@ if __name__ == "__main__":
    'target_url' : cdash_url , 'description' : error , 'ref' : refn })
   gitlab_request = urllib.request.Request(gitlab_url)
   gitlab_request.add_header('PRIVATE-TOKEN' , token )
-  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
   if trace:
     print ("gitlab_request.url: " + gitlab_request.full_url)
+  res = urllib.request.urlopen(gitlab_request, data=params.encode('ascii'))
+  if trace:
     print ("gitlab_request.text: " + res.read().decode())
