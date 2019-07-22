@@ -105,6 +105,7 @@ if(UNIX)
     --with-webp=no
     --with-threads=yes
     --with-freexl=no
+    --with-static-proj4=yes
     --with-libjson-c=internal
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
