@@ -22,21 +22,14 @@ INCLUDE_ONCE_MACRO(BOOST)
 
 SETUP_SUPERBUILD(BOOST)
 
-# set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
-# Libraries we need from boost
-set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
 
-# add libraries to bootstrap option
-set(BOOST_BOOTSTRAP_OPTIONS "--with-libraries=")
-foreach(lib ${boost_libraries_to_build})
-  set(BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS}${lib},")
-endforeach(lib)
 
 if(UNIX)
   set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
   set(BOOST_B2_EXE "./b2")
   if(NOT APPLE AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS} --with-toolset=clang")
+    set(BOOST_SB_CONFIG toolset=clang)
   endif()
 else()
   set(BOOST_BOOTSTRAP_FILE "bootstrap.bat")
@@ -50,8 +43,18 @@ set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
   ${BOOST_BOOTSTRAP_FILE} ${BOOST_BOOTSTRAP_OPTIONS}
   )
 
-set(BOOST_SB_CONFIG)
+# We cannot configure and bootstrap boost properly. Every configuration stuff
+# must be passed to b2. Why? Windows... That is why...
+# Libraries we need from boost
+set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
 
+# add libraries to bootstrap option
+set(BOOST_SB_CONFIG)
+foreach(lib ${boost_libraries_to_build})
+  set(BOOST_BOOTSTRAP_OPTIONS 
+    ${BOOST_BOOTSTRAP_OPTIONS}
+    --with-${lib})
+endforeach(lib)
 # I think that this is already handled by boost.
 if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
   set(BOOST_SB_CONFIG address-model=64)
@@ -65,6 +68,7 @@ set(BOOST_SB_CONFIG
   runtime-link=shared
   --prefix=${SB_INSTALL_PREFIX}
   )
+  # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
   # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
   # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
 
