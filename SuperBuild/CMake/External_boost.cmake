@@ -22,8 +22,6 @@ INCLUDE_ONCE_MACRO(BOOST)
 
 SETUP_SUPERBUILD(BOOST)
 
-
-
 if(UNIX)
   set(BOOST_BOOTSTRAP_FILE "./bootstrap.sh")
   set(BOOST_B2_EXE "./b2")
@@ -48,11 +46,11 @@ set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
 # Libraries we need from boost
 set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
 
-# add libraries to bootstrap option
+# add libraries to b2 option
 set(BOOST_SB_CONFIG)
 foreach(lib ${boost_libraries_to_build})
-  set(BOOST_BOOTSTRAP_OPTIONS 
-    ${BOOST_BOOTSTRAP_OPTIONS}
+  set(BOOST_SB_CONFIG 
+    ${BOOST_SB_CONFIG}
     --with-${lib})
 endforeach(lib)
 # I think that this is already handled by boost.
