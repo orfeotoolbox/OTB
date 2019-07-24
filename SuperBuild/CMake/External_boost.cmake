@@ -34,8 +34,6 @@ else()
   set(BOOST_B2_EXE "b2.exe")
 endif()
 
-set( BOOST_BOOTSTRAP_OPTIONS "${BOOST_BOOTSTRAP_OPTIONS} --prefix=${SB_INSTALL_PREFIX}")
-
 set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
   ${BOOST_BOOTSTRAP_FILE} ${BOOST_BOOTSTRAP_OPTIONS}
@@ -45,7 +43,6 @@ set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
 # must be passed to b2. Why? Windows... That is why...
 # Libraries we need from boost
 set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
-message( "boost_libraries_to_build = ${boost_libraries_to_build}")
 # add libraries to b2 option
 set(BOOST_SB_CONFIG)
 foreach(lib ${boost_libraries_to_build})
