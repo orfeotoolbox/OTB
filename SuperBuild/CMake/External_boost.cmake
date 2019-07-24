@@ -45,7 +45,7 @@ set(BOOST_CONFIGURE_COMMAND ${CMAKE_COMMAND}
 # must be passed to b2. Why? Windows... That is why...
 # Libraries we need from boost
 set( boost_libraries_to_build "system;serialization;filesystem;test;date_time;program_options;thread")
-
+message( "boost_libraries_to_build = ${boost_libraries_to_build}")
 # add libraries to b2 option
 set(BOOST_SB_CONFIG)
 foreach(lib ${boost_libraries_to_build})
@@ -53,9 +53,12 @@ foreach(lib ${boost_libraries_to_build})
     ${BOOST_SB_CONFIG}
     --with-${lib})
 endforeach(lib)
+
 # I think that this is already handled by boost.
 if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
-  set(BOOST_SB_CONFIG address-model=64)
+  set(BOOST_SB_CONFIG 
+    ${BOOST_SB_CONFIG}
+    address-model=64)
 endif()
 
 set(BOOST_SB_CONFIG
@@ -69,7 +72,6 @@ set(BOOST_SB_CONFIG
   # set(_SB_BOOST_LIBRARYDIR ${SB_INSTALL_PREFIX}/lib)
   # --includedir=${SB_INSTALL_PREFIX}/include #This is the default in boost
   # --libdir=${_SB_BOOST_LIBRARYDIR} # same here
-
 
 set(BOOST_BUILD_COMMAND ${CMAKE_COMMAND}
   -E chdir ${BOOST_SB_SRC}
