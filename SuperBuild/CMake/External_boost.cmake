@@ -52,10 +52,20 @@ foreach(lib ${boost_libraries_to_build})
 endforeach(lib)
 
 # I think that this is already handled by boost.
-if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
+# if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
+#   set(BOOST_SB_CONFIG 
+#     ${BOOST_SB_CONFIG}
+#     address-model=64)
+# endif()
+
+# This is needed because otherwise boost is building both x32 and x64 lib,
+# and during packages on win32 we are installing all libs.
+# See Packaging/install_importlibs.cmake
+
+if ( WIN32 )
   set(BOOST_SB_CONFIG 
     ${BOOST_SB_CONFIG}
-    address-model=64)
+    address-model=32)
 endif()
 
 set(BOOST_SB_CONFIG
