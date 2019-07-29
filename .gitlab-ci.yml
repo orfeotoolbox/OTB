@@ -81,6 +81,7 @@ stages:
     paths:
       - sb_branch.txt # Needed to checkout correct branch in build step
       - build/*/*/*/*.log # Superbuild log
+      - build/*/*/*/*.cmake
 
 #-------------------------- precheck job ---------------------------------------
 fast-build:
