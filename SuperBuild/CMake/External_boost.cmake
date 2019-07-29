@@ -60,7 +60,7 @@ if ( WIN32 )
     set(BOOST_SB_CONFIG 
       ${BOOST_SB_CONFIG}
       address-model=64)
-  elseif()()
+  else()
     set(BOOST_SB_CONFIG 
       ${BOOST_SB_CONFIG}
       address-model=32)
