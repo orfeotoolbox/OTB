@@ -236,7 +236,10 @@ For instance:
 .. math:: dotpr(kernel1,im1b1N3x5)
 
 is correct provided that kernel1 and im1b1N3x5 have the same dimensions.
-The function can take as many neighbourhoods as needed in inputs.
+The function can take as many neighbourhoods as needed in inputs, the product is
+distributed and will give a band for each new input.
+
+.. math:: dotpr(a,b,c) = \{ dotpr(a,b) , dotpr(a,c) \}
 
 **Function mean** This function allows to compute the mean value of a
 given vector or neighborhood (the function can take as many inputs as

@@ -1,11 +1,5 @@
 BandMathX Application
 =====================
-intro
-Syntax presentation
-Build-in function
-Application: snow detection, vegetation detection, using threshold, ndvi and expression.
-Use of matrix? band-pass filter?
-Threshold
 
 Syntax: first elements
 ----------------------
@@ -198,7 +192,6 @@ For instance:
 .. math:: dotpr(kernel1,im1b1N3x5)
 
 is correct provided that kernel1 and im1b1N3x5 have the same dimensions.
-The function can take as many neighbourhoods as needed in inputs.
 
 **Function mean** This function allows to compute the mean value of a
 given vector or neighborhood (the function can take as many inputs as
@@ -323,3 +316,22 @@ Functions and operators summary:
 +----------------+-------------------------------------------------------------------------------+
 | vect2scal      | one dimensional vector to scalar                                              |
 +----------------+-------------------------------------------------------------------------------+
+
+Context and Constant
+--------------------
+
+Thanks to the `-incontext` one can pass constant value to the application in 
+order to use it in the expression. For the definition
+of constants, the following pattern must be observed: #type name value.
+For instance:
+
+#F expo 1.1 #M kernel1 { 0.1 , 0.2 , 0.3 ; 0.4 , 0.5 , 0.6 ; 0.7 , 0.8 ,
+0.9 ; 1 , 1.1 , 1.2 ; 1.3 , 1.4 , 1.5 }
+
+As we can see, #I/#F allows the definition of an integer/float constant,
+whereas #M allows the definition of a vector/matrix. It is also possible
+to define expressions within the same txt file, with the pattern #E
+expr. For instance:
+
+#F expo 1.1 #M kernel1 { 0.1 , 0.2 , 0.3 ; 0.4 , 0.5 , 0.6 ; 0.7 , 0.8 ,
+0.9 ; 1 , 1.1 , 1.2 ; 1.3 , 1.4 , 1.5 } #E dotpr(kernel1,im1b1N3x5)
