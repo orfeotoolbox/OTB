@@ -306,7 +306,7 @@ private:
       }
     try
       {
-      math_filter->Update();
+      math_filter->UpdateOutputInformation();
       SetParameterDescription("exp", "Valid expression");
       }
     catch(itk::ExceptionObject& err)
@@ -315,10 +315,14 @@ private:
       // parser errors in the tooltip
       SetParameterDescription("exp", err.GetDescription());
       // std::string error_string(err.GetDescription());
-      // otbAppLogINFO("There was an error while parsing the expression giving "
+      // otbAppLogINFO("There was an error while parsing the expression given "
       //   "its input:" + error_string );
       }
+    catch(...)
+    {
+      SetParameterDescription("exp", "Other exception catched");
     }
+  }
 
   void DoExecute() override
   {
