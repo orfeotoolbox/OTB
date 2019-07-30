@@ -112,8 +112,8 @@ public:
   /** Set an expression to be parsed */
   void SetExpression(const std::string& expression);
 
-  /** Return the nth expression to be parsed */
-  std::string GetExpression(int) const;
+  /** Return the nth expression to be parsed*/
+  std::string GetExpression(unsigned int IDExpression) const;
 
   /** Set a matrix (or a vector) */
   void SetMatrix(const std::string& name, const std::string& definition);
@@ -127,9 +127,15 @@ public:
   /** Import constants and expressions from a given filename */
   void ImportContext(const std::string& filename);
 
+  /** Clear all previously set expression*/
+  void ClearExpression();
   /** Return the variable and constant names */
   std::vector<std::string> GetVarNames() const;
 
+  bool GlobalStatsDetected() const
+  {
+    return !m_StatsVarDetected.empty();
+  }
 
 protected :
   BandMathXImageFilter();
@@ -144,11 +150,6 @@ protected :
   void AfterThreadedGenerateData() override;
 
 private :
-
-  bool globalStatsDetected() const
-  {
-    return (m_StatsVarDetected.size()>0);
-  }
 
   typedef struct {
       std::string name;

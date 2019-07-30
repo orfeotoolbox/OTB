@@ -261,7 +261,13 @@ void BandMathXImageFilter<TImage>
   this->Modified();
 }
 
-
+template< typename TImage >
+void BandMathXImageFilter<TImage>
+::ClearExpression()
+{
+  m_Expression.clear();
+  this->Modified();
+}
 template< typename TImage >
 void BandMathXImageFilter<TImage>
 ::SetMatrix(const std::string& name, const std::string& definition)
@@ -517,9 +523,11 @@ void BandMathXImageFilter<TImage>
 
 template< typename TImage >
 std::string BandMathXImageFilter<TImage>
-::GetExpression(int IDExpression) const
+::GetExpression(unsigned int IDExpression) const
 {
-  return m_Expression[IDExpression];
+  if ( IDExpression < m_Expression.size() )
+    return m_Expression[IDExpression];
+  return "";
 }
 
 
@@ -913,7 +921,7 @@ void BandMathXImageFilter< TImage >
 
   CheckImageDimensions();
   PrepareParsers();
-  if (globalStatsDetected())
+  if (GlobalStatsDetected())
     PrepareParsersGlobStats();
   OutputsDimensions();
 
