@@ -194,6 +194,10 @@ private:
     }
   }
 
+  /** Create the prediction field in the output layer, this template method should be specialized
+   * to create the right type of field (e.g. OGRInteger or OGRReal) */ 
+  void CreatePredictionField(OGRFeatureDefn & layerDefn, otb::ogr::Layer & outLayer);
+
   void DoExecute() override
   {
     clock_t tic = clock();
@@ -275,6 +279,8 @@ private:
       otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model") << " : unsupported model type");
       }
 
+    m_Model->SetRegressionMode(RegressionMode);
+
     m_Model->Load(GetParameterString("model"));
     otbAppLogINFO("Model loaded");
 
@@ -342,26 +348,16 @@ private:
       itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
       }
 
-    // Add the field of prediction in the output layer if field not exist
     OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
-    int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
-    if (idx >= 0)
-      {
-      if (layerDefn.GetFieldDefn(idx)->GetType() != OFTInteger)
-        itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
-      }
-    else
-      {
-      OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTInteger);
-      ogr::FieldDefn predictedFieldDef(predictedField);
-      outLayer.CreateField(predictedFieldDef);
-      }
+
+    // Add the field of prediction in the output layer if field not exist
+    CreatePredictionField(layerDefn, outLayer);
 
     // Add confidence field in the output layer
     std::string confFieldName("confidence");
     if (computeConfidenceMap)
       {
-      idx = layerDefn.GetFieldIndex(confFieldName.c_str());
+      int idx = layerDefn.GetFieldIndex(confFieldName.c_str());
       if (idx >= 0)
         {
         if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
@@ -434,9 +430,6 @@ private:
 
   ModelPointerType m_Model;
 };
-
-typedef VectorPrediction<false, float, unsigned int> VectorClassifier;
-typedef VectorPrediction<true, float, float>         VectorRegression;
 
 }
 }

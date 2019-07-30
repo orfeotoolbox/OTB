@@ -25,7 +25,26 @@ namespace otb
 namespace Wrapper
 {
 
-typedef VectorPrediction<false, float, unsigned int> VectorClassifier;
+using VectorClassifier = VectorPrediction<false, float, unsigned int>;
+
+template<>
+void
+VectorClassifier
+::CreatePredictionField(OGRFeatureDefn & layerDefn, otb::ogr::Layer & outLayer)
+{
+  int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
+  if (idx >= 0)
+  {
+    if (layerDefn.GetFieldDefn(idx)->GetType() != OFTInteger)
+      itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
+  }
+  else
+  {
+    OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTInteger);
+    ogr::FieldDefn predictedFieldDef(predictedField);
+    outLayer.CreateField(predictedFieldDef);
+  }
+}
 
 }
 }
