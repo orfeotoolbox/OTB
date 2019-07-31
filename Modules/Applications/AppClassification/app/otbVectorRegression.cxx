@@ -90,25 +90,6 @@ VectorRegression
   SetOfficialDocLink();
 }
 
-template<>
-void
-VectorRegression
-::CreatePredictionField(OGRFeatureDefn & layerDefn, otb::ogr::Layer & outLayer)
-{
-  int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
-  if (idx >= 0)
-  {
-    if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
-      itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
-  }
-  else
-  {
-    OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), OFTReal);
-    ogr::FieldDefn predictedFieldDef(predictedField);
-    outLayer.CreateField(predictedFieldDef);
-  }
-}
-
 }
 }
 

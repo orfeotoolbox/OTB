@@ -229,13 +229,31 @@ VectorPrediction <RegressionMode>
   OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
 
   // Add the field of prediction in the output layer if field not exist
-  CreatePredictionField(layerDefn, outLayer);
-
+  
+  OGRFieldType labelType;
+  if (RegressionMode==true)
+    labelType = OFTReal;
+  else
+    labelType = OFTInteger;
+  
+  int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
+  if (idx >= 0)
+  {
+    if (layerDefn.GetFieldDefn(idx)->GetType() != labelType)
+      itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
+  }
+  else
+  {
+    OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), labelType);
+    ogr::FieldDefn predictedFieldDef(predictedField);
+    outLayer.CreateField(predictedFieldDef);
+  }
+  
   // Add confidence field in the output layer
   std::string confFieldName("confidence");
   if (computeConfidenceMap)
     {
-    int idx = layerDefn.GetFieldIndex(confFieldName.c_str());
+    idx = layerDefn.GetFieldIndex(confFieldName.c_str());
     if (idx >= 0)
       {
       if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)

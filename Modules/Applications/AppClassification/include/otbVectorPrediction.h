@@ -98,10 +98,6 @@ private:
 
   void DoUpdateParameters() override;
 
-  /** Create the prediction field in the output layer, this template method should be specialized
-   * to create the right type of field (e.g. OGRInteger or OGRReal) */ 
-  void CreatePredictionField(OGRFeatureDefn & layerDefn, otb::ogr::Layer & outLayer);
-
   void DoExecute() override;
 
   ModelPointerType m_Model;
