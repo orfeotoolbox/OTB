@@ -25,7 +25,7 @@
 #   NUMPY_INCLUDE_DIR   - where to find numpy/arrayobject.h, etc.
 
 EXEC_PROGRAM ("${PYTHON_EXECUTABLE}"
-  ARGS "${CMAKE_SOURCE_DIR}/CMake/otbTestNumpy.py"
+  ARGS "-c" "'import numpy; print(numpy.get_include());'"
   OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
   RETURN_VALUE NUMPY_NOT_FOUND)
 
