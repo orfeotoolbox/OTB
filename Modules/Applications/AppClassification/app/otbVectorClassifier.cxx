@@ -25,7 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-using VectorClassifier = VectorPrediction<false, float, unsigned int>;
+using VectorClassifier = VectorPrediction<false>;
 
 template<>
 void

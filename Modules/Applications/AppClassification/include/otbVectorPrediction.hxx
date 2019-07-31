@@ -26,18 +26,18 @@ namespace otb
 namespace Wrapper
 {
 
-template <bool RegressionMode, class ValueType, class LabelType>
+template <bool RegressionMode>
 void
-VectorPrediction <RegressionMode, ValueType, LabelType>
+VectorPrediction <RegressionMode>
 ::DoInit()
 {
   DoInitSpecialization();
   //TODO add assert to check that parameters has been correctly defined
 }
 
-template <bool RegressionMode, class ValueType, class LabelType>
+template <bool RegressionMode>
 void
-VectorPrediction <RegressionMode, ValueType, LabelType>
+VectorPrediction <RegressionMode>
 ::DoUpdateParameters()
 {
   if ( HasValue("in") )
@@ -72,9 +72,9 @@ VectorPrediction <RegressionMode, ValueType, LabelType>
   }
 }
 
-template <bool RegressionMode, class ValueType, class LabelType>
+template <bool RegressionMode>
 void
-VectorPrediction <RegressionMode, ValueType, LabelType>
+VectorPrediction <RegressionMode>
 ::DoExecute()
 {
   clock_t tic = clock();
@@ -161,7 +161,7 @@ VectorPrediction <RegressionMode, ValueType, LabelType>
   m_Model->Load(GetParameterString("model"));
   otbAppLogINFO("Model loaded");
 
-  typename ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
+  ListSampleType::Pointer listSample = trainingShiftScaleFilter->GetOutput();
 
   typename ConfidenceListSampleType::Pointer quality;
 

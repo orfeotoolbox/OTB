@@ -44,7 +44,7 @@ namespace otb
 namespace Wrapper
 {
 
-template <bool RegressionMode, class ValueType, class LabelType>
+template <bool RegressionMode>
 class VectorPrediction : public Application
 {
 public:
@@ -60,8 +60,10 @@ public:
   itkTypeMacro(Self, Application)
 
   /** Filters typedef */
-  //typedef float                                         ValueType;
-  //typedef unsigned int                                  LabelType;
+  typedef float                                                         ValueType;
+  // Label type is float for regression and unsigned int for classification 
+  typedef typename std::conditional<RegressionMode, float, unsigned int>::type   LabelType;
+  
   typedef itk::FixedArray<LabelType,1>                  LabelSampleType;
   typedef itk::Statistics::ListSample<LabelSampleType>  LabelListSampleType;
 

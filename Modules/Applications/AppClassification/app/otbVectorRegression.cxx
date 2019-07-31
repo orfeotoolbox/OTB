@@ -25,7 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-using VectorRegression = VectorPrediction<true, float, float>;
+using VectorRegression = VectorPrediction<true>;
 
 template<>
 void
