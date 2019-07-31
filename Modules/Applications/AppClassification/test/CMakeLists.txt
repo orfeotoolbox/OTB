@@ -721,6 +721,20 @@ if(OTB_USE_OPENCV)
             ${TEMP}/apTvClSVMLabeledVector.shp)
 endif()
 
+#----------- VectorRegression TESTS ----------------
+if(OTB_USE_OPENCV)
+  otb_test_application(NAME apTvClDTVectorRegression
+    APP  VectorRegression
+    OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
+            -model ${OTBAPP_BASELINE_FILES}/apTvClModelRegression.dt
+            -out ${TEMP}/apTvClDTVectorRegression.shp
+            -feat value_0 value_1 value_2 value_3
+            -cfield predicted
+    VALID   --compare-ogr 0.0
+            ${OTBAPP_BASELINE_FILES}/apTvClDTVectorRegression.shp
+            ${TEMP}/apTvClDTVectorRegression.shp)
+endif()
+
 #----------- ComputeImagesStatistics TESTS ----------------
 otb_test_application(NAME apTvClComputeImagesStatisticsQB1
   APP  ComputeImagesStatistics

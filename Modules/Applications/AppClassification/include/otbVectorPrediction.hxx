@@ -21,6 +21,8 @@
 #ifndef otbVectorPrediction_hxx
 #define otbVectorPrediction_hxx
 
+#include "otbVectorPrediction.h"
+
 namespace otb
 {
 namespace Wrapper
