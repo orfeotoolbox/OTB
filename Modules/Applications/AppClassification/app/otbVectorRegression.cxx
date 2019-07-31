@@ -90,6 +90,7 @@ VectorRegression
   SetOfficialDocLink();
 }
 
+// Confidence map computation is not support for regression.
 template<>
 bool
 VectorRegression

@@ -34,7 +34,14 @@ VectorPrediction <RegressionMode>
 ::DoInit()
 {
   DoInitSpecialization();
-  //TODO add assert to check that parameters has been correctly defined
+  
+  // Assert that the all needed parameters have ben definied in DoInitSpecialization
+  assert(GetParameterByKey("in") != nullptr);
+  assert(GetParameterByKey("instat") != nullptr);
+  assert(GetParameterByKey("model") != nullptr);
+  assert(GetParameterByKey("cfield") != nullptr);
+  assert(GetParameterByKey("feat") != nullptr);
+  assert(GetParameterByKey("out") != nullptr);
 }
 
 template <bool RegressionMode>
@@ -316,7 +323,6 @@ VectorPrediction <RegressionMode>
 
   clock_t toc = clock();
   otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
-
 }
 
 } //end namespace wrapper
