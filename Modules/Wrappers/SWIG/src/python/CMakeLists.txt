@@ -87,3 +87,20 @@ if(PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
 else()
   # TODO : pyc file is in a subfolder.
 endif()
+
+configure_file(StandaloneWrapper.in CMakeLists.txt @ONLY)
+
+install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx
+               ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.h
+               itkPyCommand.cxx
+               itkPyCommand.h
+               otbPythonLogOutput.cxx
+               otbPythonLogOutput.h
+               otbSwigPrintCallback.h
+               otbProgressReporterManager.cxx
+               otbProgressReporterManager.h
+               ../itkBase.includes
+               ../otbWrapperSWIGIncludes.h
+               ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt
+         DESTINATION ${OTB_INSTALL_DATA_DIR}/swig
+         COMPONENT Resources )

@@ -24,6 +24,9 @@ function(install_python_bindings)
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
       )
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
+      DESTINATION ${PKG_STAGE_DIR}/share/otb
+      )
   endif()
   # Handle GDAL python bindings
   file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/bin/gdal*.py")
