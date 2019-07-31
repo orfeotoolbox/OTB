@@ -100,6 +100,22 @@ VectorClassifier
   SetOfficialDocLink();
 }
 
+template<>
+bool
+VectorClassifier
+::shouldComputeConfidenceMap()
+{
+  bool computeConfidenceMap(GetParameterInt("confmap") && m_Model->HasConfidenceIndex() );
+
+  if (!m_Model->HasConfidenceIndex() && GetParameterInt("confmap"))
+    {
+    otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
+    }
+  
+  return computeConfidenceMap;
+}
+
+
 }
 }
 

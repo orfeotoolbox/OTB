@@ -167,12 +167,7 @@ VectorPrediction <RegressionMode>
 
   typename ConfidenceListSampleType::Pointer quality;
 
-  bool computeConfidenceMap(!m_Model->GetRegressionMode() && GetParameterInt("confmap") && m_Model->HasConfidenceIndex() );
-
-  if (!m_Model->GetRegressionMode() && !m_Model->HasConfidenceIndex() && GetParameterInt("confmap"))
-    {
-    otbAppLogWARNING("Confidence map requested but the classifier doesn't support it!");
-    }
+  bool computeConfidenceMap = shouldComputeConfidenceMap();
 
   typename LabelListSampleType::Pointer target;
   if (computeConfidenceMap)

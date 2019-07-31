@@ -90,6 +90,14 @@ VectorRegression
   SetOfficialDocLink();
 }
 
+template<>
+bool
+VectorRegression
+::shouldComputeConfidenceMap()
+{
+  return false;
+}
+
 }
 }
 
