@@ -59,52 +59,53 @@ public:
 
   itkTypeMacro(Self, Application)
 
-  /** Filters typedef */
-  typedef float                                                         ValueType;
-  // Label type is float for regression and unsigned int for classification 
-  typedef typename std::conditional<RegressionMode, float, unsigned int>::type   LabelType;
-  
-  typedef itk::FixedArray<LabelType,1>                  LabelSampleType;
-  typedef itk::Statistics::ListSample<LabelSampleType>  LabelListSampleType;
+      /** Filters typedef */
+      typedef float ValueType;
+  // Label type is float for regression and unsigned int for classification
+  typedef typename std::conditional<RegressionMode, float, unsigned int>::type LabelType;
 
-  typedef otb::MachineLearningModel<ValueType,LabelType>          MachineLearningModelType;
-  typedef otb::MachineLearningModelFactory<ValueType, LabelType>  MachineLearningModelFactoryType;
-  typedef typename MachineLearningModelType::Pointer                       ModelPointerType;
-  typedef typename MachineLearningModelType::ConfidenceListSampleType      ConfidenceListSampleType;
+  typedef itk::FixedArray<LabelType, 1> LabelSampleType;
+  typedef itk::Statistics::ListSample<LabelSampleType> LabelListSampleType;
+
+  typedef otb::MachineLearningModel<ValueType, LabelType>        MachineLearningModelType;
+  typedef otb::MachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
+  typedef typename MachineLearningModelType::Pointer                  ModelPointerType;
+  typedef typename MachineLearningModelType::ConfidenceListSampleType ConfidenceListSampleType;
 
   /** Statistics Filters typedef */
-  typedef itk::VariableLengthVector<ValueType>                    MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType>           StatisticsReader;
+  typedef itk::VariableLengthVector<ValueType>          MeasurementType;
+  typedef otb::StatisticsXMLFileReader<MeasurementType> StatisticsReader;
 
-  typedef itk::VariableLengthVector<ValueType>                    InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType>            ListSampleType;
+  typedef itk::VariableLengthVector<ValueType>         InputSampleType;
+  typedef itk::Statistics::ListSample<InputSampleType> ListSampleType;
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
   ~VectorPrediction() override
-    {
+  {
     MachineLearningModelFactoryType::CleanFactories();
-    }
+  }
 
 private:
   /** Utility function to negate std::isalnum */
   static bool IsNotAlphaNum(char c)
   {
-  return !std::isalnum(c);
+    return !std::isalnum(c);
   }
-  
+
   void DoInit() override;
 
+  /** Method defining the parameters used in the application and their documentation, specialized for RegressionMode=1 and RegrssionMode=0 */
   void DoInitSpecialization();
 
   void DoUpdateParameters() override;
 
   void DoExecute() override;
 
+  /** Method returning whether the confidence map should be computed, depending on the regression mode and input parameters */
   bool shouldComputeConfidenceMap() const;
 
   ModelPointerType m_Model;
 };
-
 }
 }
 

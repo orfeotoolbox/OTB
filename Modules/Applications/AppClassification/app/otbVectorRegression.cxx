@@ -27,56 +27,59 @@ namespace Wrapper
 
 using VectorRegression = VectorPrediction<true>;
 
-template<>
-void
-VectorRegression
-::DoInitSpecialization()
+template <>
+void VectorRegression::DoInitSpecialization()
 {
   SetName("VectorRegression");
   SetDescription("Performs regression on the input vector data according to a model file.");
 
   SetDocAuthors("OTB-Team");
-  SetDocLongDescription("This application performs a vector data regression "
-    "based on a model file produced by the TrainVectorRegression application."
-    "Features of the vector data output will contain the values predicted by the classifier. \n"
-    "There are two modes: \n"
+  SetDocLongDescription(
+      "This application performs a vector data regression "
+      "based on a model file produced by the TrainVectorRegression application."
+      "Features of the vector data output will contain the values predicted by the classifier. \n"
+      "There are two modes: \n"
       "1) Update mode: add of the 'cfield' field containing the predicted value in the input file. \n"
       "2) Write mode: copies the existing fields of the input file to the output file "
-         " and add the 'cfield' field containing the predicted value. \n"
-    "If you have declared the output file, the write mode applies. "
-    "Otherwise, the input file update mode will be applied.");
+      " and add the 'cfield' field containing the predicted value. \n"
+      "If you have declared the output file, the write mode applies. "
+      "Otherwise, the input file update mode will be applied.");
 
   SetDocLimitations("Shapefiles are supported, but the SQLite format is only supported in update mode.");
   SetDocSeeAlso("TrainVectorRegression");
   AddDocTag(Tags::Learning);
 
   AddParameter(ParameterType_InputFilename, "in", "Name of the input vector data");
-  SetParameterDescription("in","The input vector data file to classify.");
+  SetParameterDescription("in", "The input vector data file to classify.");
 
   AddParameter(ParameterType_InputFilename, "instat", "Statistics file");
-  SetParameterDescription("instat", "A XML file containing mean and standard deviation to center"
-    "and reduce samples before classification, produced by ComputeImagesStatistics application.");
+  SetParameterDescription("instat",
+                          "A XML file containing mean and standard deviation to center"
+                          "and reduce samples before classification, produced by ComputeImagesStatistics application.");
   MandatoryOff("instat");
 
   AddParameter(ParameterType_InputFilename, "model", "Model file");
   SetParameterDescription("model", "Model file produced by TrainVectorRegression application.");
 
-  AddParameter(ParameterType_String,"cfield","Output field");
-  SetParameterDescription("cfield","Field containing the predicted value."
-    "Only geometries with this field available will be taken into account.\n"
-    "The field is added either in the input file (if 'out' off) or in the output file.\n"
-    "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
-  SetParameterString("cfield","predicted");
-  
+  AddParameter(ParameterType_String, "cfield", "Output field");
+  SetParameterDescription("cfield",
+                          "Field containing the predicted value."
+                          "Only geometries with this field available will be taken into account.\n"
+                          "The field is added either in the input file (if 'out' off) or in the output file.\n"
+                          "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
+  SetParameterString("cfield", "predicted");
+
   AddParameter(ParameterType_ListView, "feat", "Field names to be calculated");
-  SetParameterDescription("feat","List of field names in the input vector data used as features for training. "
-    "Put the same field names as the TrainVectorRegression application.");
+  SetParameterDescription("feat",
+                          "List of field names in the input vector data used as features for training. "
+                          "Put the same field names as the TrainVectorRegression application.");
 
   AddParameter(ParameterType_OutputFilename, "out", "Output vector data file");
   MandatoryOff("out");
 
-  SetParameterDescription("out","Output vector data file storing sample values (OGR format)."
-    "If not given, the input vector data file is updated.");
+  SetParameterDescription("out",
+                          "Output vector data file storing sample values (OGR format)."
+                          "If not given, the input vector data file is updated.");
   MandatoryOff("out");
 
   // Doc example parameter settings
@@ -91,14 +94,11 @@ VectorRegression
 }
 
 // Confidence map computation is not support for regression.
-template<>
-bool
-VectorRegression
-::shouldComputeConfidenceMap() const
+template <>
+bool VectorRegression::shouldComputeConfidenceMap() const
 {
   return false;
 }
-
 }
 }
 

@@ -29,12 +29,10 @@ namespace Wrapper
 {
 
 template <bool RegressionMode>
-void
-VectorPrediction <RegressionMode>
-::DoInit()
+void           VectorPrediction<RegressionMode>::DoInit()
 {
   DoInitSpecialization();
-  
+
   // Assert that the all needed parameters have ben definied in DoInitSpecialization
   assert(GetParameterByKey("in") != nullptr);
   assert(GetParameterByKey("instat") != nullptr);
@@ -45,67 +43,63 @@ VectorPrediction <RegressionMode>
 }
 
 template <bool RegressionMode>
-void
-VectorPrediction <RegressionMode>
-::DoUpdateParameters()
+void           VectorPrediction<RegressionMode>::DoUpdateParameters()
 {
-  if ( HasValue("in") )
+  if (HasValue("in"))
   {
     std::string shapefile = GetParameterString("in");
 
     otb::ogr::DataSource::Pointer ogrDS;
 
-    ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-    otb::ogr::Layer layer = ogrDS->GetLayer(0);
-    OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
+    ogrDS                     = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+    otb::ogr::Layer layer     = ogrDS->GetLayer(0);
+    OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
 
     ClearChoices("feat");
 
-    for(int iField=0; iField< layerDefn.GetFieldCount(); iField++)
+    for (int iField = 0; iField < layerDefn.GetFieldCount(); iField++)
     {
       std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
       std::string key(item);
-      key.erase( std::remove_if(key.begin(),key.end(),IsNotAlphaNum), key.end());
+      key.erase(std::remove_if(key.begin(), key.end(), IsNotAlphaNum), key.end());
       std::transform(key.begin(), key.end(), key.begin(), tolower);
 
       OGRFieldType fieldType = layerDefn.GetFieldDefn(iField)->GetType();
-      if(fieldType == OFTInteger ||  fieldType == OFTInteger64 || fieldType == OFTReal)
-        {
-        std::string tmpKey="feat."+key;
-        AddChoice(tmpKey,item);
-        }
+      if (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
+      {
+        std::string tmpKey = "feat." + key;
+        AddChoice(tmpKey, item);
+      }
     }
   }
 }
 
 template <bool RegressionMode>
-void
-VectorPrediction <RegressionMode>
-::DoExecute()
+void           VectorPrediction<RegressionMode>::DoExecute()
 {
   clock_t tic = clock();
 
   std::string shapefile = GetParameterString("in");
 
   otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-  otb::ogr::Layer layer = source->GetLayer(0);
+  otb::ogr::Layer               layer  = source->GetLayer(0);
 
   typename ListSampleType::Pointer input = ListSampleType::New();
 
   const int nbFeatures = GetSelectedItems("feat").size();
   input->SetMeasurementVectorSize(nbFeatures);
 
-  otb::ogr::Layer::const_iterator it = layer.cbegin();
+  otb::ogr::Layer::const_iterator it    = layer.cbegin();
   otb::ogr::Layer::const_iterator itEnd = layer.cend();
-  for( ; it!=itEnd ; ++it)
-    {
+  for (; it != itEnd; ++it)
+  {
     MeasurementType mv;
     mv.SetSize(nbFeatures);
-    for(int idx=0; idx < nbFeatures; ++idx)
-      {
+    for (int idx = 0; idx < nbFeatures; ++idx)
+    {
       // Beware that itemIndex differs from ogr layer field index
       unsigned int itemIndex = GetSelectedItems("feat")[idx];
-      std::string fieldName = GetChoiceNames( "feat" )[itemIndex];
+      std::string  fieldName = GetChoiceNames("feat")[itemIndex];
       switch ((*it)[fieldName].GetType())
       {
       case OFTInteger:
@@ -120,30 +114,28 @@ VectorPrediction <RegressionMode>
       default:
         itkExceptionMacro(<< "incorrect field type: " << (*it)[fieldName].GetType() << ".");
       }
-      
-      
-      }
-    input->PushBack(mv);
     }
+    input->PushBack(mv);
+  }
 
   // Statistics for shift/scale
   MeasurementType meanMeasurementVector;
   MeasurementType stddevMeasurementVector;
   if (HasValue("instat") && IsParameterEnabled("instat"))
-    {
+  {
     typename StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
-    std::string XMLfile = GetParameterString("instat");
+    std::string                        XMLfile          = GetParameterString("instat");
     statisticsReader->SetFileName(XMLfile);
-    meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
+    meanMeasurementVector   = statisticsReader->GetStatisticVectorByName("mean");
     stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
-    }
+  }
   else
-    {
+  {
     meanMeasurementVector.SetSize(nbFeatures);
     meanMeasurementVector.Fill(0.);
     stddevMeasurementVector.SetSize(nbFeatures);
     stddevMeasurementVector.Fill(1.);
-    }
+  }
 
   typename ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
   trainingShiftScaleFilter->SetInput(input);
@@ -154,13 +146,12 @@ VectorPrediction <RegressionMode>
   otbAppLogINFO("standard deviation used: " << stddevMeasurementVector);
 
   otbAppLogINFO("Loading model");
-  m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"),
-                                              MachineLearningModelFactoryType::ReadMode);
+  m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"), MachineLearningModelFactoryType::ReadMode);
 
   if (m_Model.IsNull())
-    {
+  {
     otbAppLogFATAL(<< "Error when loading model " << GetParameterString("model") << " : unsupported model type");
-    }
+  }
 
   m_Model->SetRegressionMode(RegressionMode);
 
@@ -175,154 +166,151 @@ VectorPrediction <RegressionMode>
 
   typename LabelListSampleType::Pointer target;
   if (computeConfidenceMap)
-    {
+  {
     quality = ConfidenceListSampleType::New();
-    target = m_Model->PredictBatch(listSample, quality);
-    }
-    else
-    {
+    target  = m_Model->PredictBatch(listSample, quality);
+  }
+  else
+  {
     target = m_Model->PredictBatch(listSample);
-    }
+  }
 
   ogr::DataSource::Pointer output;
-  ogr::DataSource::Pointer buffer = ogr::DataSource::New();
-  bool updateMode = false;
+  ogr::DataSource::Pointer buffer     = ogr::DataSource::New();
+  bool                     updateMode = false;
   if (IsParameterEnabled("out") && HasValue("out"))
-    {
+  {
     // Create new OGRDataSource
-    output = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-    otb::ogr::Layer newLayer = output->CreateLayer(
-      GetParameterString("out"),
-      const_cast<OGRSpatialReference*>(layer.GetSpatialRef()),
-      layer.GetGeomType());
+    output                   = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+    otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"), const_cast<OGRSpatialReference*>(layer.GetSpatialRef()), layer.GetGeomType());
     // Copy existing fields
-    OGRFeatureDefn &inLayerDefn = layer.GetLayerDefn();
-    for (int k=0 ; k<inLayerDefn.GetFieldCount() ; k++)
-      {
+    OGRFeatureDefn& inLayerDefn = layer.GetLayerDefn();
+    for (int k = 0; k < inLayerDefn.GetFieldCount(); k++)
+    {
       OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
       newLayer.CreateField(fieldDefn);
-      }
     }
+  }
   else
-    {
+  {
     // Update mode
     updateMode = true;
     otbAppLogINFO("Update input vector data.");
     // fill temporary buffer for the transfer
     otb::ogr::Layer inputLayer = layer;
-    layer = buffer->CopyLayer(inputLayer, std::string("Buffer"));
+    layer                      = buffer->CopyLayer(inputLayer, std::string("Buffer"));
     // close input data source
     source->Clear();
     // Re-open input data source in update mode
     output = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Update_LayerUpdate);
-    }
+  }
 
   otb::ogr::Layer outLayer = output->GetLayer(0);
 
   OGRErr errStart = outLayer.ogr().StartTransaction();
   if (errStart != OGRERR_NONE)
-    {
+  {
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-    }
+  }
 
-  OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
+  OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
 
   // Add the field of prediction in the output layer if field not exist
-  
+
   OGRFieldType labelType;
-  if (RegressionMode==true)
+  if (RegressionMode == true)
     labelType = OFTReal;
   else
     labelType = OFTInteger;
-  
+
   int idx = layerDefn.GetFieldIndex(GetParameterString("cfield").c_str());
   if (idx >= 0)
   {
     if (layerDefn.GetFieldDefn(idx)->GetType() != labelType)
-      itkExceptionMacro("Field name "<< GetParameterString("cfield") << " already exists with a different type!");
+      itkExceptionMacro("Field name " << GetParameterString("cfield") << " already exists with a different type!");
   }
   else
   {
-    OGRFieldDefn predictedField(GetParameterString("cfield").c_str(), labelType);
+    OGRFieldDefn   predictedField(GetParameterString("cfield").c_str(), labelType);
     ogr::FieldDefn predictedFieldDef(predictedField);
     outLayer.CreateField(predictedFieldDef);
   }
-  
+
   // Add confidence field in the output layer
   std::string confFieldName("confidence");
   if (computeConfidenceMap)
-    {
+  {
     idx = layerDefn.GetFieldIndex(confFieldName.c_str());
     if (idx >= 0)
-      {
+    {
       if (layerDefn.GetFieldDefn(idx)->GetType() != OFTReal)
-        itkExceptionMacro("Field name "<< confFieldName << " already exists with a different type!");
-      }
+        itkExceptionMacro("Field name " << confFieldName << " already exists with a different type!");
+    }
     else
-      {
+    {
       OGRFieldDefn confidenceField(confFieldName.c_str(), OFTReal);
       confidenceField.SetWidth(confidenceField.GetWidth());
       confidenceField.SetPrecision(confidenceField.GetPrecision());
       ogr::FieldDefn confFieldDefn(confidenceField);
       outLayer.CreateField(confFieldDefn);
-      }
     }
+  }
 
   // Fill output layer
-  unsigned int count=0;
-  std::string classfieldname = GetParameterString("cfield");
-  it = layer.cbegin();
-  itEnd = layer.cend();
-  for( ; it!=itEnd ; ++it, ++count)
-    {
+  unsigned int count          = 0;
+  std::string  classfieldname = GetParameterString("cfield");
+  it                          = layer.cbegin();
+  itEnd                       = layer.cend();
+  for (; it != itEnd; ++it, ++count)
+  {
     ogr::Feature dstFeature(outLayer.GetLayerDefn());
-    dstFeature.SetFrom( *it , TRUE);
+    dstFeature.SetFrom(*it, TRUE);
     dstFeature.SetFID(it->GetFID());
     switch (dstFeature[classfieldname].GetType())
-      {
-      case OFTInteger:
-        dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
-        break;
-      case OFTInteger64:
-        dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
-        break;
-      case OFTReal:
-        dstFeature[classfieldname].SetValue<double>(target->GetMeasurementVector(count)[0]);
-        break;
-      case OFTString:
-        dstFeature[classfieldname].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
-        break;
-      default:
-        itkExceptionMacro(<< "incorrect field type: " << dstFeature[classfieldname].GetType() << ".");
-      }
+    {
+    case OFTInteger:
+      dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+      break;
+    case OFTInteger64:
+      dstFeature[classfieldname].SetValue<int>(target->GetMeasurementVector(count)[0]);
+      break;
+    case OFTReal:
+      dstFeature[classfieldname].SetValue<double>(target->GetMeasurementVector(count)[0]);
+      break;
+    case OFTString:
+      dstFeature[classfieldname].SetValue<std::string>(std::to_string(target->GetMeasurementVector(count)[0]));
+      break;
+    default:
+      itkExceptionMacro(<< "incorrect field type: " << dstFeature[classfieldname].GetType() << ".");
+    }
     if (computeConfidenceMap)
       dstFeature[confFieldName].SetValue<double>(quality->GetMeasurementVector(count)[0]);
     if (updateMode)
-      {
-      outLayer.SetFeature(dstFeature);
-      }
-    else
-      {
-      outLayer.CreateFeature(dstFeature);
-      }
-    }
-
-  if(outLayer.ogr().TestCapability("Transactions"))
     {
+      outLayer.SetFeature(dstFeature);
+    }
+    else
+    {
+      outLayer.CreateFeature(dstFeature);
+    }
+  }
+
+  if (outLayer.ogr().TestCapability("Transactions"))
+  {
     const OGRErr errCommitX = outLayer.ogr().CommitTransaction();
     if (errCommitX != OGRERR_NONE)
-      {
+    {
       itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-      }
     }
+  }
 
   output->SyncToDisk();
 
   clock_t toc = clock();
-  otbAppLogINFO( "Elapsed: "<< ((double)(toc - tic) / CLOCKS_PER_SEC)<<" seconds.");
+  otbAppLogINFO("Elapsed: " << ((double)(toc - tic) / CLOCKS_PER_SEC) << " seconds.");
 }
 
-} //end namespace wrapper
-} //end namespace otb
+} // end namespace wrapper
+} // end namespace otb
 
 #endif
