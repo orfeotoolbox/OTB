@@ -726,13 +726,13 @@ if(OTB_USE_OPENCV)
   otb_test_application(NAME apTvClDTVectorRegression
     APP  VectorRegression
     OPTIONS -in ${INPUTDATA}/Classification/apTvClSampleExtractionOut.sqlite
-            -model ${OTBAPP_BASELINE_FILES}/apTvClModelRegression.dt
-            -out ${TEMP}/apTvClDTVectorRegression.shp
+            -model ${INPUTDATA}/Classification/apTvClDTVectorRegression.dt
+            -out ${TEMP}/apTvClDTVectorRegression.sqlite
             -feat value_0 value_1 value_2 value_3
             -cfield predicted
     VALID   --compare-ogr 0.0
-            ${OTBAPP_BASELINE_FILES}/apTvClDTVectorRegression.shp
-            ${TEMP}/apTvClDTVectorRegression.shp)
+            ${OTBAPP_BASELINE_FILES}/apTvClDTVectorRegression.sqlite
+            ${TEMP}/apTvClDTVectorRegression.sqlite)
 endif()
 
 #----------- ComputeImagesStatistics TESTS ----------------

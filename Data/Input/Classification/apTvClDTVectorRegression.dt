@@ -10,22 +10,20 @@ my_tree: !!opencv-ml-tree
       regression_accuracy: 9.9999997764825821e-03
       max_depth: 25
       min_sample_count: 10
-      cross_validation_folds: 10
-      use_1se_rule: 1
-      truncate_pruned_tree: 1
+      cross_validation_folds: 0
    var_type: [ 0, 0, 0, 0 ]
-   best_tree_idx: 0
+   best_tree_idx: -1
    nodes:
       -
          depth: 0
          sample_count: 1185
          value: 2.1434599156118144e+00
-         Tn: 3
-         complexity: 2
-         alpha: 1.0428486268774041e+03
+         Tn: 0
+         complexity: 0
+         alpha: 0.
          node_risk: 1.3156118143459917e+03
-         tree_risk: 1.5363497199794813e+02
-         tree_error: 2.2322315115631071e+01
+         tree_risk: 0.
+         tree_error: 0.
          splits:
             - { var:3, quality:6.5841166992187500e+03,
                 le:2.3381726074218750e+02 }
@@ -33,12 +31,12 @@ my_tree: !!opencv-ml-tree
          depth: 1
          sample_count: 593
          value: 1.1635750421585160e+00
-         Tn: 2
-         complexity: 1
-         alpha: 7.2124429620364594e+01
+         Tn: 0
+         complexity: 0
+         alpha: 0.
          node_risk: 8.9133220910623891e+01
-         tree_risk: 7.4075046904315172e+01
-         tree_error: 1.5094741436662460e+01
+         tree_risk: 0.
+         tree_error: 0.
          splits:
             - { var:3, quality:8.8817205810546875e+02,
                 le:1.6510346984863281e+02 }
@@ -46,8 +44,8 @@ my_tree: !!opencv-ml-tree
          depth: 2
          sample_count: 500
          value: 1.
-         Tn: 2147483647
-         complexity: 1
+         Tn: 0
+         complexity: 0
          alpha: 0.
          node_risk: 0.
          tree_risk: 0.
@@ -57,21 +55,43 @@ my_tree: !!opencv-ml-tree
          sample_count: 93
          value: 2.0430107526881720e+00
          Tn: 0
-         complexity: 1
-         alpha: 1.9506172839505780e+00
+         complexity: 0
+         alpha: 0.
          node_risk: 3.8279569892472978e+00
-         tree_risk: 1.9506172839505780e+00
-         tree_error: 1.9085505258344853e+00
+         tree_risk: 0.
+         tree_error: 0.
+         splits:
+            - { var:0, quality:392., le:2.1638174438476562e+02 }
+      -
+         depth: 3
+         sample_count: 4
+         value: 3.
+         Tn: 0
+         complexity: 0
+         alpha: 0.
+         node_risk: 0.
+         tree_risk: 0.
+         tree_error: 0.
+      -
+         depth: 3
+         sample_count: 89
+         value: 2.
+         Tn: 0
+         complexity: 0
+         alpha: 0.
+         node_risk: 0.
+         tree_risk: 0.
+         tree_error: 0.
       -
          depth: 1
          sample_count: 592
          value: 3.1250000000000000e+00
-         Tn: 1
-         complexity: 1
-         alpha: 7.0738339190549596e+01
+         Tn: 0
+         complexity: 0
+         alpha: 0.
          node_risk: 8.6750000000000000e+01
-         tree_risk: 7.9559925093632955e+01
-         tree_error: 7.2275736789686107e+00
+         tree_risk: 0.
+         tree_error: 0.
          splits:
             - { var:1, quality:5.8572387695312500e+03,
                 le:3.6126699829101562e+02 }
@@ -79,18 +99,18 @@ my_tree: !!opencv-ml-tree
          depth: 2
          sample_count: 507
          value: 2.9783037475345169e+00
-         Tn: 2147483647
-         complexity: 1
+         Tn: 0
+         complexity: 0
          alpha: 0.
          node_risk: 1.0761341222879309e+01
-         tree_risk: 8.8215859030833599e+00
-         tree_error: 1.9415329232083423e+00
+         tree_risk: 0.
+         tree_error: 0.
       -
          depth: 2
          sample_count: 85
          value: 4.
-         Tn: 2147483647
-         complexity: 1
+         Tn: 0
+         complexity: 0
          alpha: 0.
          node_risk: 0.
          tree_risk: 0.
