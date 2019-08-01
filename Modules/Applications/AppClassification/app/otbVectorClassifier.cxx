@@ -51,7 +51,7 @@ VectorClassifier
   SetDocSeeAlso("TrainVectorClassifier");
   AddDocTag(Tags::Learning);
   
-  AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
+  AddParameter(ParameterType_InputFilename, "in", "Name of the input vector data");
   SetParameterDescription("in","The input vector data file to classify.");
 
   AddParameter(ParameterType_InputFilename, "instat", "Statistics file");
