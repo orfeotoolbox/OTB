@@ -55,9 +55,6 @@ VectorPrediction <RegressionMode>
 
     otb::ogr::DataSource::Pointer ogrDS;
 
-    OGRSpatialReference oSRS("");
-    std::vector<std::string> options;
-
     ogrDS = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
     otb::ogr::Layer layer = ogrDS->GetLayer(0);
     OGRFeatureDefn &layerDefn = layer.GetLayerDefn();
