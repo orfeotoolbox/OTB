@@ -103,7 +103,7 @@ VectorClassifier
 template<>
 bool
 VectorClassifier
-::shouldComputeConfidenceMap()
+::shouldComputeConfidenceMap() const
 {
   bool computeConfidenceMap(GetParameterInt("confmap") && m_Model->HasConfidenceIndex() );
 

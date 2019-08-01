@@ -420,14 +420,14 @@ public:
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
-  int GetParameterInt(std::string parameter);
+  int GetParameterInt(std::string parameter) const;
 
   /* Get a floating parameter value
    *
    * Can be called for types :
    * \li ParameterType_Float
    */
-  float GetParameterFloat(std::string parameter);
+  float GetParameterFloat(std::string parameter) const;
 
   /* Get a string parameter value
    *
@@ -441,7 +441,7 @@ public:
    * \li ParameterType_OutputImage
    * \li ParameterType_OutputVectorData
    */
-  std::string GetParameterString(std::string parameter);
+  std::string GetParameterString(std::string parameter) const;
 
   /* Get a string list parameter value
    *

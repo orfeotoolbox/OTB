@@ -1234,17 +1234,17 @@ void Application::SetParameterDescription(std::string parameter, std::string des
   param->SetDescription(desc);
 }
 
-int Application::GetParameterInt(std::string key)
+int Application::GetParameterInt(std::string key) const
 {
   return GetParameterByKey(key)->ToInt();
 }
 
-float Application::GetParameterFloat(std::string key)
+float Application::GetParameterFloat(std::string key) const
 {
   return GetParameterByKey(key)->ToFloat();
 }
 
-std::string Application::GetParameterString(std::string key)
+std::string Application::GetParameterString(std::string key) const
 {
   return GetParameterByKey(key)->ToString();
 }

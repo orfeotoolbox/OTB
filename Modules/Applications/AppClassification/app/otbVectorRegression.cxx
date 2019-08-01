@@ -94,7 +94,7 @@ VectorRegression
 template<>
 bool
 VectorRegression
-::shouldComputeConfidenceMap()
+::shouldComputeConfidenceMap() const
 {
   return false;
 }

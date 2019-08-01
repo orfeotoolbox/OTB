@@ -100,7 +100,7 @@ private:
 
   void DoExecute() override;
 
-  bool shouldComputeConfidenceMap();
+  bool shouldComputeConfidenceMap() const;
 
   ModelPointerType m_Model;
 };
