@@ -27,6 +27,11 @@ function(install_python_bindings)
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
       DESTINATION ${PKG_STAGE_DIR}/share/otb
       )
+    install(FILES Files/build_wrapping.cmake
+            DESTINATION ${PKG_STAGE_DIR}/share/otb/swig)
+    install(FILES Files/build_wrapping.md
+            DESTINATION ${PKG_STAGE_DIR}/share/otb/swig
+            RENAME README.md)
   endif()
   # Handle GDAL python bindings
   file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/bin/gdal*.py")
