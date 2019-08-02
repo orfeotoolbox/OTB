@@ -1,0 +1,77 @@
+#
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+cmake_minimum_required(VERSION 3.10.1)
+project(OTBPythonWrappers)
+
+get_filename_component(PKG_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}" PATH)
+get_filename_component(PKG_PREFIX "${PKG_PREFIX}" PATH)
+get_filename_component(PKG_PREFIX "${PKG_PREFIX}" PATH)
+
+find_package(OTB REQUIRED HINTS ${PKG_PREFIX}/@OTB_INSTALL_PACKAGE_DIR@)
+list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
+include(${OTB_USE_FILE})
+
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+# Now that we have a python version the addditional versions should only
+# contain the version we have to get the corresponding libs
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
+include_directories(${PYTHON_INCLUDE_DIR})
+
+find_package(Numpy)
+if ( NUMPY_FOUND )
+  include_directories(${NUMPY_INCLUDE_DIRS})
+else()
+  message( WARNING 
+    "OTB wrappers will be done without support for NumPy (not found).")
+endif()
+
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+
+file(GLOB OTBPythonWrappers_SOURCES "*.cxx")
+
+# declare the python wrapper library
+add_library(PythonWrapperLib MODULE ${OTBPythonWrappers_SOURCES})
+target_link_libraries(PythonWrapperLib ${PYTHON_LIBRARIES} OTBApplicationEngine)
+
+set_target_properties(PythonWrapperLib PROPERTIES
+  OUTPUT_NAME   "_otbApplication"
+  NO_SONAME     ON
+  PREFIX        "")
+
+if(WIN32 AND NOT CYGWIN)
+  set_target_properties(PythonWrapperLib PROPERTIES SUFFIX ".pyd")
+endif()
+
+if(NUMPY_FOUND)
+  add_definitions(-DOTB_SWIGNUMPY=1)
+endif()
+
+install(TARGETS PythonWrapperLib
+        DESTINATION lib/python
+        COMPONENT RuntimeLibraries )
