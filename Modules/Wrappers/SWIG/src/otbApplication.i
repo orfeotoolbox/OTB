@@ -271,8 +271,10 @@ public:
           logger = self.GetLogger()
           logger.AddLogOutput(_libraryLogOutput.GetPointer())
           
+          self.progressReportManager = ProgressReporterManager_New()
+          self.progressReportManager.SetLogOutputCallback(_libraryLogCallback)
           self.AddObserver(AddProcessToWatchEvent(),
-                           _libraryProgressReportManager.GetAddProcessCommand()
+                           self.progressReportManager.GetAddProcessCommand()
                           )
       }
     }
@@ -743,6 +745,8 @@ class ApplicationProxy(object):
 			key_list = [k.upper() for k in self.GetParametersKeys(True)]
 			if name in key_list:
 				self.SetParameterValue(name.lower(), value)
+			if (name == "progressReportManager"):
+				super().__setattr__(name, value)
 			else:
 				raise AttributeError("You cannot add attributes to %s" % self)
 
