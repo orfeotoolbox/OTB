@@ -93,7 +93,7 @@ void VectorRegression::DoInitSpecialization()
   SetOfficialDocLink();
 }
 
-// Confidence map computation is not support for regression.
+// Confidence map computation is not supported for regression.
 template <>
 bool VectorRegression::shouldComputeConfidenceMap() const
 {

@@ -49,36 +49,36 @@ class VectorPrediction : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorPrediction              Self;
-  typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self = VectorPrediction;
+  using Superclass = Application;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Standard macro */
   itkNewMacro(Self);
 
   itkTypeMacro(Self, Application)
 
-      /** Filters typedef */
-      typedef float ValueType;
+  /** Filters typedef */
+  using ValueType = float;
   // Label type is float for regression and unsigned int for classification
-  typedef typename std::conditional<RegressionMode, float, unsigned int>::type LabelType;
+  using LabelType = typename std::conditional<RegressionMode, float, unsigned int>::type;
 
-  typedef itk::FixedArray<LabelType, 1> LabelSampleType;
-  typedef itk::Statistics::ListSample<LabelSampleType> LabelListSampleType;
+  using LabelSampleType = itk::FixedArray<LabelType, 1>;
+  using LabelListSampleType = itk::Statistics::ListSample<LabelSampleType>;
 
-  typedef otb::MachineLearningModel<ValueType, LabelType>        MachineLearningModelType;
-  typedef otb::MachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
-  typedef typename MachineLearningModelType::Pointer                  ModelPointerType;
-  typedef typename MachineLearningModelType::ConfidenceListSampleType ConfidenceListSampleType;
+  using MachineLearningModelType = otb::MachineLearningModel<ValueType, LabelType>;
+  using MachineLearningModelFactoryType = otb::MachineLearningModelFactory<ValueType, LabelType>;
+  using ModelPointerType = typename MachineLearningModelType::Pointer;
+  using ConfidenceListSampleType = typename MachineLearningModelType::ConfidenceListSampleType;
 
   /** Statistics Filters typedef */
-  typedef itk::VariableLengthVector<ValueType>          MeasurementType;
-  typedef otb::StatisticsXMLFileReader<MeasurementType> StatisticsReader;
+  using MeasurementType = itk::VariableLengthVector<ValueType>;
+  using StatisticsReader = otb::StatisticsXMLFileReader<MeasurementType>;
 
-  typedef itk::VariableLengthVector<ValueType>         InputSampleType;
-  typedef itk::Statistics::ListSample<InputSampleType> ListSampleType;
-  typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
+  using InputSampleType = itk::VariableLengthVector<ValueType>;
+  using ListSampleType = itk::Statistics::ListSample<InputSampleType>;
+  using ShiftScaleFilterType = otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType>;
 
   ~VectorPrediction() override
   {
