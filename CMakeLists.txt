@@ -401,6 +401,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBStandaloneModuleMacros.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
+              CMake/GenerateExportHeaderCustom.cmake
+              CMake/exportheader.cmake.in
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
