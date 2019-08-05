@@ -69,6 +69,7 @@ int main(int , char * argv[] )
   VectorImageType::IndexType index;
   index.Fill(3); // Center of the images
   std::cout<<"Create application"<<std::endl;
+  otb::Wrapper::ApplicationRegistry::SetApplicationPath(argv[1]);
   auto app = otb::Wrapper::ApplicationRegistry::CreateApplication("BandMathX");
   app->AddImageToParameterInputImageList("il", img1);
   app->UpdateParameters();
@@ -113,8 +114,7 @@ int main(int , char * argv[] )
     return_val++;
   }
 
-  std::string context_path(argv[1]);
-  app->SetParameterString("incontext",argv[1]);
+  app->SetParameterString("incontext",argv[2]);
   // val is set in the context to 1
   app->UpdateParameters();
   desc = app->GetParameterDescription("exp");

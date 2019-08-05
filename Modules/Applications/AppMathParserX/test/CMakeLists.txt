@@ -29,5 +29,6 @@ target_link_libraries(OTBBandMathXAppTest ${OTBAppMathParserX-Test_LIBRARIES})
 otb_module_target_label(OTBBandMathXAppTest)
 
 otb_add_test(NAME apTvUtBandMathX COMMAND OTBBandMathXAppTest
+  $<TARGET_FILE_DIR:otbapp_BandMathX>
   ${INPUTDATA}/apTvUtExportBandMathX.txt
   )
