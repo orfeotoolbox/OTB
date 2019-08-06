@@ -99,7 +99,8 @@ void           VectorPrediction<RegressionMode>::DoExecute()
       auto field = feature[fieldName];
       switch (field.GetType())
       {
-      case OFTInteger || OFTInteger64:
+      case OFTInteger:
+      case OFTInteger64:
         mv[idx] = static_cast<ValueType>(field.template GetValue<int>());
         break;
       case OFTReal:
@@ -257,7 +258,8 @@ void           VectorPrediction<RegressionMode>::DoExecute()
     auto field = dstFeature[classfieldname];
     switch (field.GetType())
     {
-    case OFTInteger || OFTInteger64:
+    case OFTInteger64:
+    case OFTInteger:
       field.template SetValue<int>(target->GetMeasurementVector(count)[0]);
       break;
     case OFTReal:
