@@ -16,7 +16,7 @@
 :: WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 :: See the License for the specific language governing permissions and
 :: limitations under the License.
-
+@echo off
 :: Setup environment for OTB package
 set CURRENT_SCRIPT_DIR=%~dp0
 
@@ -36,7 +36,11 @@ setlocal enabledelayedexpansion
 set output=%~2
 set var=%1
 set content=
-if defined %var% ( set content=!%var%! )
-if not "%content%" == "" ( set output=%output%;%content% )
+if not defined %var% ( goto :prefix_path_testcontent )
+set content=!%var%!
+:prefix_path_testcontent
+if "%content%" == "" ( goto :prefix_path_end )
+set output=%output%;%content%
+:prefix_path_end
 endlocal & set %1=%output%
 goto :eof
