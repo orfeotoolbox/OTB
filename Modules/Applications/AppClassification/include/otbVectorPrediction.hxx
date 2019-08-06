@@ -87,8 +87,7 @@ void           VectorPrediction<RegressionMode>::DoExecute()
 
   for (auto const& feature : layer)
   {
-    MeasurementType mv;
-    mv.SetSize(nbFeatures);
+    MeasurementType mv(nbFeatures);
     for (int idx = 0; idx < nbFeatures; ++idx)
     {
       // Beware that itemIndex differs from ogr layer field index
