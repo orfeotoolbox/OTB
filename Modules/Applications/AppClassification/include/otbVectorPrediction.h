@@ -86,12 +86,6 @@ public:
   }
 
 private:
-  /** Utility function to negate std::isalnum */
-  static bool IsNotAlphaNum(char c)
-  {
-    return !std::isalnum(c);
-  }
-
   void DoInit() override;
 
   /** Method defining the parameters used in the application and their documentation, specialized for RegressionMode=1 and RegrssionMode=0 */

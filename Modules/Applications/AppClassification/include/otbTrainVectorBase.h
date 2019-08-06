@@ -43,12 +43,6 @@ namespace otb
 namespace Wrapper
 {
 
-/** Utility function to negate std::isalnum */
-bool IsNotAlphaNum(char c)
-{
-  return !std::isalnum( c );
-}
-
 template <class TInputValue, class TOutputValue>
 class TrainVectorBase : public LearningApplicationBase<TInputValue, TOutputValue>
 {

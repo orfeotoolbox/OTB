@@ -60,9 +60,8 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
       auto fieldDefn = layerDefn.GetFieldDefn(iField);
       std::string item = fieldDefn->GetNameRef();
       std::string key(item);
-      key.erase(std::remove_if(key.begin(), key.end(), IsNotAlphaNum), key.end());
+      key.erase(std::remove_if(key.begin(), key.end(), [](char c){return !std::isalnum(c);}), key.end());
       std::transform(key.begin(), key.end(), key.begin(), tolower);
-
       auto fieldType = fieldDefn->GetType();
       if (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
       {
