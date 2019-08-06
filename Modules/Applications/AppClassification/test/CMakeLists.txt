@@ -716,7 +716,7 @@ if(OTB_USE_OPENCV)
             -out ${TEMP}/apTvClSVMLabeledVector.shp
             -feat meanB0 meanB1 meanB2 meanB3 varB0 varB1 varB2 varB3
             -cfield class
-    VALID   --compare-ogr 0.0
+    VALID   --compare-ogr ${NOTOL}
             ${OTBAPP_BASELINE_FILES}/apTvClSVMLabeledVector.shp
             ${TEMP}/apTvClSVMLabeledVector.shp)
 endif()
@@ -730,7 +730,7 @@ if(OTB_USE_OPENCV)
             -out ${TEMP}/apTvClDTVectorRegression.sqlite
             -feat value_0 value_1 value_2 value_3
             -cfield predicted
-    VALID   --compare-ogr 0.0
+    VALID   --compare-ogr ${NOTOL}
             ${OTBAPP_BASELINE_FILES}/apTvClDTVectorRegression.sqlite
             ${TEMP}/apTvClDTVectorRegression.sqlite)
 endif()
