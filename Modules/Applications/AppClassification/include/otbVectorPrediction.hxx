@@ -280,6 +280,7 @@ void           VectorPrediction<RegressionMode>::DoExecute()
     {
       outLayer.CreateFeature(dstFeature);
     }
+    count++;
   }
 
   if (outLayer.ogr().TestCapability("Transactions"))
