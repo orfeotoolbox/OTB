@@ -25,7 +25,7 @@ cat_path()
   if [ $# -eq 1 ]; then echo "$1"; exit 0; fi
   cur="$1"
   shift 1
-  next="$(cat_path $@)"
+  next=$(cat_path "$@")
   if [ -z "$cur" ]; then
     echo "$next"
   elif [ -z "$next" ]; then
