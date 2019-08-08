@@ -98,7 +98,37 @@ private:
   /** Method returning whether the confidence map should be computed, depending on the regression mode and input parameters */
   bool shouldComputeConfidenceMap() const;
 
+  /** Method returning the input list sample from the input layer */
+  typename ListSampleType::Pointer ReadInputListSample(otb::ogr::Layer const& layer);
+
+  /** Normalize a list sample using the statistic file given  */
+  typename ListSampleType::Pointer NormalizeListSample(ListSampleType::Pointer input);
+
+  /** Create the output DataSource, in update mode the input layer is buffered and the input
+   * data source is re opened in update mode. */
+  otb::ogr::DataSource::Pointer CreateOutputDataSource(otb::ogr::DataSource::Pointer source,
+                                                        otb::ogr::Layer & layer,
+                                                        bool updateMode);
+
+  /** Add a prediction field in the output layer if it does not exist.
+   * If computeConfidenceMap evaluates to true a confidence field will be
+   * added. */
+  void AddPredictionField(otb::ogr::Layer & outLayer,
+                          otb::ogr::Layer const& layer,
+                          bool computeConfidenceMap);
+
+  /** Fill the output layer with the predicted values and optionnaly the confidence */
+  void FillOutputLayer(otb::ogr::Layer & outLayer,
+                          otb::ogr::Layer const& layer,
+                          typename LabelListSampleType::Pointer target,
+                          typename ConfidenceListSampleType::Pointer quality,
+                          bool updateMode,
+                          bool computeConfidenceMap);
+
   ModelPointerType m_Model;
+  
+  /** Name used for the confidence field */
+  std::string confFieldName = "confidence";
 };
 }
 }
