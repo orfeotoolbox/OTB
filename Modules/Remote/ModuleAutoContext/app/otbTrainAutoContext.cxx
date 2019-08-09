@@ -232,8 +232,8 @@ namespace otb
 	}
 	layer.ogr().CommitTransaction();
 	// selectedSP->SyncToDisk();
-    
-	auto outSamples = fullSampleSelection(lreader->GetOutput(),selectedSP, tmpdir, ram);  
+    unsigned int threadsNumber = 12;
+	auto outSamples = fullSampleSelection(lreader->GetOutput(),selectedSP, tmpdir, ram, threadsNumber);  
 
 	//Rasterize ref data
 	auto rasterFilter = OGRDataSourceToMapFilterType::New();
@@ -501,7 +501,7 @@ namespace otb
 	return output;
       }
 
-      otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm, otb::ogr::DataSource::Pointer vectorData, std::string tmpdir, unsigned ram){
+      otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm, otb::ogr::DataSource::Pointer vectorData, std::string tmpdir, unsigned ram, unsigned int threadsNumber=1){
 
 	std::cout << "Calculate Rates" << "\n";
 	std::string tempName = tmpdir + "fullSampleExtraction.shp";
@@ -509,7 +509,7 @@ namespace otb
 	otb::ogr::DataSource::Pointer outputSamples = otb::ogr::DataSource::New(tempName,otb::ogr::DataSource::Modes::Overwrite);
 
 	ClassStatFilterType::Pointer classStatFilter = ClassStatFilterType::New();
-
+    classStatFilter->SetNumberOfThreads(threadsNumber);
 	classStatFilter->SetInput(inputIm);
 	classStatFilter->SetOGRData(vectorData);
 	auto fieldName = std::string("label");
@@ -522,6 +522,7 @@ namespace otb
 	m_RateCalculator->SetAllSamples();
     
 	RandomSamplerType::Pointer randomFilt = RandomSamplerType::New();
+    randomFilt->SetNumberOfThreads(threadsNumber);
 	randomFilt->SetInput(inputIm);
 	randomFilt->SetOGRData(vectorData);
 	randomFilt->SetOutputPositionContainerAndRates(outputSamples, m_RateCalculator->GetRatesByClass());
