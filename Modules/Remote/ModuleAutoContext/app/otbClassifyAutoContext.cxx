@@ -116,7 +116,6 @@ namespace otb
 	SetName("ClassifyAutoContext");
 	SetDescription("");
 
-	SetDocName(" ");
 	SetDocLongDescription(" ");
 	SetDocLimitations(" ");
 	SetDocAuthors(" ");

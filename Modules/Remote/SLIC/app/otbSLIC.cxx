@@ -78,7 +78,6 @@ namespace otb
 	SetName("SLIC");
 	SetDescription("");
 
-	SetDocName("");
 	SetDocLongDescription("");
 	SetDocLimitations("");
 	SetDocAuthors("");

@@ -96,7 +96,6 @@ namespace otb
 	SetName("TrainAutoContext");
 	SetDescription("");
 
-	SetDocName(" ");
 	SetDocLongDescription(" ");
 	SetDocLimitations(" ");
 	SetDocAuthors(" ");
