@@ -259,7 +259,7 @@ VectorPrediction<RegressionMode>
       itkExceptionMacro(<< "incorrect field type: " << field.GetType() << ".");
     }
     if (computeConfidenceMap)
-      dstFeature[confFieldName].SetValue<double>(quality->GetMeasurementVector(count)[0]);
+      dstFeature[confFieldName].template SetValue<double>(quality->GetMeasurementVector(count)[0]);
     if (updateMode)
     {
       outLayer.SetFeature(dstFeature);
