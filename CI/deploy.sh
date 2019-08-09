@@ -34,12 +34,12 @@ fi
 
 # Push package
 echo "Pushing binary packages"
-scp build_packages/OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 # Push doc
 echo "Pushing documentation"
-scp build/{CookBook-*-html.tar.gz,\
-/Documentation/{Cookbook/latex/CookBook-*.pdf,Doxygen/OTB-Doxygen-*.tar.bz2}} \
-otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp {CookBook-*-html.tar.gz,\
+CookBook-*.pdf,\
+OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 # Create zip, tar.gz and tar.xy source
 echo "Creating source tarball and zip"
