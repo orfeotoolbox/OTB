@@ -36,6 +36,7 @@ InnerProductPCAImageFilter<TInputImage, TOutputImage>
   this->SetNthOutput(0, OutputImageType::New());
   m_EstimatePCAFilter  = EstimatePCAFilterType::New();
   m_NormalizePCAFilter  = NormalizePCAFilterType::New();
+  m_NumberOfPrincipalComponentsRequired = 1;
   m_CenterData = true;
   m_GenerateMeanComponent = false;
   m_MeanFilter = MeanFilterType::New();

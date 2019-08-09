@@ -121,6 +121,12 @@ public:
    */
   int Execute();
 
+  /** write all of the output to disk
+   * if they have an associated filename.
+   * This is a helper function for wrappers without pipeline support.
+   */
+  void WriteOutput();
+
   /** Run the application, then write all of the output to disk
    * if they have an associated filename.
    * This is a helper function for wrappers without pipeline support.
@@ -129,6 +135,12 @@ public:
    */
   int ExecuteAndWriteOutput();
 
+  /** Connect input image to an output image in app */
+  bool ConnectImage(std::string in, Application* app, std::string out);
+
+  /** Propagate the connection mode : */
+  void PropagateConnectMode(bool isMem);
+  
   /** Request the application to stop its processing */
   void Stop();
 
@@ -772,6 +784,8 @@ public:
   */
   void FreeRessources();
 
+  bool IsExecuteDone();
+
 protected:
   /** Constructor */
   Application();
@@ -893,6 +907,9 @@ private:
 
   /** Flag is true when executing DoInit, DoUpdateParameters or DoExecute */
   bool m_IsInPrivateDo;
+
+  /** Flag to check if Execute has already been called */
+  bool m_ExecuteDone;
 
   /**
     * Declare the class

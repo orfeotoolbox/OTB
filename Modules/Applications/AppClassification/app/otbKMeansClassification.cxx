@@ -59,7 +59,7 @@ protected:
     InitKMClassification();
 
     // init at the end cleanup
-    AddParameter( ParameterType_Bool, "cleanup", "Temporary files cleaning" );
+    AddParameter( ParameterType_Bool, "cleanup", "Clean-up of temporary files" );
     SetParameterDescription( "cleanup",
                            "If activated, the application will try to clean all temporary files it created" );
     SetParameterInt("cleanup", 1);
@@ -119,7 +119,7 @@ protected:
       "By default, hidden pixels will have the assigned label 0 in the output image. "
       "It's possible to define the label mask by another value, "
       "but be careful to not take a label from another class. "
-      "This application initialize the labels from 0 to N-1, "
+      "This application initializes the labels from 0 to N-1, "
       "N is the number of class (defined by 'nc' parameter).");
   }
 
@@ -387,12 +387,12 @@ private:
         "6) TrainVectorClassifier: train the SharkKMeans model,\n"
         "7) ImageClassifier: perform the classification of the input image "
             "according to a model file.\n\n"
-        "It's possible to choice random/periodic modes of the SampleSelection application.\n"
-        "If you want keep the temporary files (sample selected, model file, ...), "
+        "It is possible to choose random/periodic modes of the SampleSelection application.\n"
+        "If you do not want to keep the temporary files (sample selected, model file, ...), "
         "initialize cleanup parameter.\n"
         "For more information on shark KMeans algorithm [1].");
 
-    SetDocLimitations("The application doesn't support NaN in the input image");
+    SetDocLimitations("The application does not support NaN in the input image");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageEnvelope, PolygonClassStatistics, SampleSelection, SampleExtraction, "
       "PolygonClassStatistics, TrainVectorClassifier, ImageClassifier.\n\n"

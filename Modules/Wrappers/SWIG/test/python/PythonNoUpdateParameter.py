@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
@@ -18,6 +19,14 @@
 # limitations under the License.
 #
 
-project(OTBSpatialObjects)
+def test(otb, argv):
+    """
+    The purpose of this test is to check that we don't need UpdateParameter()
+    from the PythonAPI, especially in the case of ListView parameters
+    See gitlab issue #1842
+    """
+    app = otb.Registry.CreateApplication("TrainImagesClassifier")
+    app.SetParameterStringList("io.il", [argv[1]])
+    app.SetParameterStringList("io.vd",[argv[2]])
+    app.SetParameterStringList("sample.vfn",["CODE"])
 
-otb_module_impl()

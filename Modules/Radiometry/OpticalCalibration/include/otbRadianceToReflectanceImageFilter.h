@@ -108,7 +108,7 @@ public:
 private:
   double m_SolarIllumination;
   double m_IlluminationCorrectionCoefficient;
-  double m_UseClamp;
+  bool m_UseClamp;
 };
 }
 

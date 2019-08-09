@@ -155,11 +155,6 @@ GDALOverviewsBuilder
   if( factor<=1 )
     return 0;
 
-  assert( minSize>0 );
-
-  if( minSize<=0 )
-    return 0;
-
   assert( !m_GDALDataset.IsNull() );
 
   // unsigned int minSize = static_cast< unsigned int >( pow( factor, n ) );

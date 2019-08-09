@@ -148,7 +148,7 @@ private:
     SetDescription("This application is the implementation of the histogram "
       "equalization algorithm. It can be used to enhance contrast in an image "
       "or to reduce the dynamic of the image without losing too much contrast. "
-      "It offers several options as a no data value, "
+      "It offers several options as a nodata value, "
       "a contrast limitation factor, a local version of the algorithm and "
       "also a mode to equalize the luminance of the image.");
 
@@ -162,7 +162,7 @@ private:
       "image.\n\n"
       "The application proposes several options to allow a finer result:\n\n"
       "* There is an option to limit contrast. We choose to limit the contrast "
-      "by modifying the original histogram. To do so we clip the histogram at a "
+      "by modifying the original histogram. To do so, we clip the histogram at a "
       "given height and redistribute equally among the bins the clipped population. "
       "Then we add a local version of the algorithm.\n"
       "* It is possible to apply the algorithm on tiles of the image, instead "

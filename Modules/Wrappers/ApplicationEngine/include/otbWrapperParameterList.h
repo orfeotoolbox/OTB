@@ -86,6 +86,8 @@ public:
   /** */
   void Insert( const std::string &, std::size_t = -1 ) override;
 
+  void InsertElement(typename T::Pointer, std::size_t = -1);
+
   /** Set one specific stored filename. */
   void SetNthFileName( std::size_t, const std::string & ) override;
 
@@ -116,6 +118,8 @@ public:
 
   /** */
   void Swap( std::size_t, std::size_t ) override;
+
+  typename T::Pointer GetNthElement(std::size_t);
 
   std::vector<std::string> ToStringList() const override;
   void FromStringList(const std::vector<std::string>& value) override;

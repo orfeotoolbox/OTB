@@ -19,7 +19,7 @@
 #
 
 # Script to analyse the OTB dependencies already present
-cmake_minimum_required(VERSION 2.8.7)
+cmake_minimum_required(VERSION 3.10.2)
 project(SystemCheckup)
 
 if (EXISTS ${CMAKE_SOURCE_DIR}/../../../CMake)

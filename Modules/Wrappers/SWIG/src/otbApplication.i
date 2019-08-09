@@ -203,6 +203,35 @@ public:
 #endif
 
 
+#if SWIGPYTHON
+
+// We want all SetParameterXXX functions to call UpdateParameters automaticaly
+// so that using it is not required from the Python API
+// for more discussion about this see gitlab issue #1842
+
+%pythonappend Application::SetParameterInt %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterFloat %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterString %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterStringList %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterOutputImagePixelType %{
+    self.UpdateParameters()
+%}
+
+#endif
+
+
 class Application: public itkObject
 {
 public:
@@ -215,7 +244,10 @@ public:
   void Init();
   void UpdateParameters();
   int Execute();
+  void WriteOutput();
   int ExecuteAndWriteOutput();
+  bool ConnectImage(std::string in, Application* app, std::string out);
+  void PropagateConnectMode(bool isMem);
 
   void LoadParametersFromXML(const std::string& filename);
   void SaveParametersToXML(const std::string& filename);
@@ -510,7 +542,6 @@ private:
   Application(const Application &);
   void operator =(const Application&);
 };
-
 
 DECLARE_REF_COUNT_CLASS( Application )
 

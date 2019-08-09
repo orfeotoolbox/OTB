@@ -18,6 +18,9 @@
 # limitations under the License.
 #
 
+# This maybe deleted as it might be done with cmake_host_system_information
+# https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
+
 macro(OTB_CHECK_TARGET_SYSTEM_ARCH _RESULT1 _RESULT2)
   set(${_RESULT1} "x64")
   set(${_RESULT2} TRUE)

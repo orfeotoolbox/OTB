@@ -18,24 +18,14 @@
 # limitations under the License.
 #
 
-set(OTBEdge_SRC
-  otbFillGapsFilter.cxx
-  )
+# Configuration options for ubuntu-18.04-llvm-qa
 
-add_library(OTBEdge ${OTBEdge_SRC})
-target_link_libraries(OTBEdge
-  ${OTBCommon_LIBRARIES}
-  ${OTBConversion_LIBRARIES}
-  ${OTBITK_LIBRARIES}
-  ${OTBITKPendingPatches_LIBRARIES}
-  ${OTBImageBase_LIBRARIES}
-  ${OTBImageManipulation_LIBRARIES}
-  ${OTBObjectList_LIBRARIES}
-  ${OTBPath_LIBRARIES}
-  ${OTBProjection_LIBRARIES}
-  ${OTBSpatialObjects_LIBRARIES}
-  ${OTBStreaming_LIBRARIES}
-  ${OTBVectorDataBase_LIBRARIES}
-)
-
-otb_module_target(OTBEdge)
+set(site_option
+"CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_C_FLAGS:STRING=--coverage
+CMAKE_CXX_FLAGS:STRING=--coverage
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+")

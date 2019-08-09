@@ -74,13 +74,13 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterNonOptim COMMAND otbSmoothing
   2 10 0.1 10 0
   )
 
-otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterROIQBMul4 COMMAND otbSmoothingTestDriver
+otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterROIQB COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilter
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_ROIQBMul4.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_ROIQBMul4.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_ROIQBMul4.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_ROIQBMul4.tif
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_ROIQB.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_ROIQB.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_ROIQB.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterLabelOutput_ROIQB.tif
   4 50 0.1 100
   )
 
@@ -133,19 +133,19 @@ otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterQBRoad COMMAND otbSmoothingTe
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSpatialStability COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilterSpatialStability
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
-  4 50 0.1 40
-  100 100 512 512
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+  2 50 0.1 10
+  10 10 80 80
   )
 
 
 otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSmoothingTestDriver
   --compare-image ${EPSILON_7}
-  ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterSingleThread.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterMultiThread.tif
   otbMeanShiftSmoothingImageFilterThreading
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilter2SingleThreading_SPOT5.tif
-  ${TEMP}/bfMeanShiftSmoothingImageFilter2MultiThreading_SPOT5.tif
-  4 10 0
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterSingleThread.tif
+  ${TEMP}/bfMeanShiftSmoothingImageFilterMultiThread.tif
+  4 50 0
   )

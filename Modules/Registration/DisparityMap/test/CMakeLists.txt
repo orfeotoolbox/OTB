@@ -41,7 +41,7 @@ otb_module_target_label(otbDisparityMapTestDriver)
 # Tests Declaration
 
 otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDriver
-  --compare-ascii ${NOTOL}
+  --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/dmDisparityMapEstimationOutput1.txt
   ${TEMP}/dmDisparityMapEstimationOutput1.txt
   otbDisparityMapEstimationMethod
@@ -49,7 +49,7 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   ${INPUTDATA}/moving.png
   ${INPUTDATA}/pointSet.png
   ${TEMP}/dmDisparityMapEstimationOutput1.txt
-  20 20
+  10 10
   )
 
 #otb_add_test(NAME dmTvDisparityMapToDEMFilter COMMAND otbDisparityMapTestDriver
