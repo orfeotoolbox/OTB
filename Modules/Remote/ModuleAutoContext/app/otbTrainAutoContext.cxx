@@ -188,7 +188,7 @@ namespace otb
 	std::cout << "\n";
 	const unsigned labelListSize=labelList.size();
 
-	std::string tempName = tmpdir+ "featExtract.shp";
+	std::string tempName = tmpdir+ "/featExtract.shp";
 	
 	otb::ogr::DataSource::Pointer inter = extractFeatures<LabelVectorImageType>(castFilter->GetOutput(), refLabelDataSource , tempName, "SPID", field, 1000);
 
@@ -202,7 +202,7 @@ namespace otb
 	  }
 	}
 
-	std::string sptempname =  tmpdir + "selectedSP.shp";
+	std::string sptempname =  tmpdir + "/selectedSP.shp";
 	otb::ogr::DataSource::Pointer selectedSP = otb::ogr::DataSource::New(sptempname, otb::ogr::DataSource::Modes::Overwrite);
 
 
@@ -257,7 +257,7 @@ namespace otb
 	concatImRefData->SetInput2(refRasterCast->GetOutput());
 
 	//Extract features only on labeled samples for training
-	const std::string initTrainSamples_s = tmpdir+"initTrainSamples.shp";
+	const std::string initTrainSamples_s = tmpdir+"/initTrainSamples.shp";
 	
 	auto initTrainSamples = extractFeatures<LabelVectorImageType>(imageIn, inter, initTrainSamples_s, "feature",field, 1000);
 	initTrainSamples->SyncToDisk();
@@ -424,7 +424,7 @@ namespace otb
 	std::vector<std::string> options;
 
 	std::stringstream shapefile;
-	shapefile << tmpdir << "tempShapeFile.shp";
+	shapefile << tmpdir << "/tempShapeFile.shp";
   
 	ogrDS = otb::ogr::DataSource::New(shapefile.str(), otb::ogr::DataSource::Modes::Overwrite);
 	std::string layername = itksys::SystemTools::GetFilenameName(shapefile.str().c_str());
@@ -504,7 +504,7 @@ namespace otb
       otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm, otb::ogr::DataSource::Pointer vectorData, std::string tmpdir, unsigned ram, unsigned int threadsNumber=1){
 
 	std::cout << "Calculate Rates" << "\n";
-	std::string tempName = tmpdir + "fullSampleExtraction.shp";
+	std::string tempName = tmpdir + "/fullSampleExtraction.shp";
     
 	otb::ogr::DataSource::Pointer outputSamples = otb::ogr::DataSource::New(tempName,otb::ogr::DataSource::Modes::Overwrite);
 
