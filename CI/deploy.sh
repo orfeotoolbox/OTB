@@ -65,7 +65,7 @@ scp ref.sha otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
 if [ $CI_COMMIT_REF_NAME = "develop" ]
 then
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  tar -xf "${jobs_directory}/CookBook-*-html.tar.gz"
+  tar -xf ${jobs_directory}/CookBook-*-html.tar.gz
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
   rm -rf /home/otbpush/test/CookBook/*
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
