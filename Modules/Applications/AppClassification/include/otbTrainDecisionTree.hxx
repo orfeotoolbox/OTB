@@ -75,17 +75,15 @@ LearningApplicationBase<TInputValue,TOutputValue>
       "Cluster possible values of a categorical variable into K <= cat clusters to find a "
       "suboptimal split.");
 
-  //CVFolds
+
+  //CVFolds: only exposed for OPENCV 2 because it crashes in OpenCV 3
+#ifndef OTB_OPENCV_3
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
-#ifdef OTB_OPENCV_3
-  // disable cross validation by default (crash in opencv 3.2)
-  SetParameterInt("classifier.dt.f",0);
-#else
   SetParameterInt("classifier.dt.f",10);
-#endif
   SetParameterDescription("classifier.dt.f",
     "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K "
     "is equal to cv_folds.");
+#endif
 
   //Use1seRule
   AddParameter(ParameterType_Bool, "classifier.dt.r", "Set Use1seRule flag to false");
@@ -118,7 +116,10 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->SetMinSampleCount(GetParameterInt("classifier.dt.min"));
   classifier->SetRegressionAccuracy(GetParameterFloat("classifier.dt.ra"));
   classifier->SetMaxCategories(GetParameterInt("classifier.dt.cat"));
+  //CVFolds is only exposed for OPENCV 2 because it crashes in OpenCV 3
+#ifndef OTB_OPENCV_3
   classifier->SetCVFolds(GetParameterInt("classifier.dt.f"));
+#endif
   if (GetParameterInt("classifier.dt.r"))
     {
     classifier->SetUse1seRule(false);
