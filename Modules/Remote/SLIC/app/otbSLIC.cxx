@@ -147,7 +147,6 @@ namespace otb
 
 	
 	typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
-	const unsigned int myRank = mpiConfig->GetMyRank();
 
 	VectorImageType::Pointer imageIn = GetParameterImage("in");
 	const std::string inputName = GetParameterString("in");
