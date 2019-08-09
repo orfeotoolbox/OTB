@@ -27,6 +27,8 @@
 #include <limits>
 #include <unordered_set>
 
+#include <chrono>
+#include <ctime>
 
 namespace otb
 {
@@ -285,6 +287,8 @@ namespace otb
 	//   auto initValidSamples = extractFeatures<LabelVectorImageType>(imageIn, interValid, initValidSamples_s, "feature","CODE", 1000);
 	//   VectorTrainer->SetParameterStringList("valid.vd",{initValidSamples_s});	  
 	// }
+    
+    //~ use sharkrf could improve results and computational time
 	UpdateInternalParameters("train");
 	VectorTrainer->SetParameterStringList("feat",featureList);
 	UpdateInternalParameters("train");
@@ -372,6 +376,7 @@ namespace otb
 	  VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
 	  // VectorTrainer->SetParameterString("io.confmatout","/disk2/DATA/temp/confMatTest");
 	  
+      //~ use sharkrf could improve results and computational time
 	  UpdateInternalParameters("train");
 	  VectorTrainer->SetParameterStringList("feat",featureList);
 	  UpdateInternalParameters("train");
@@ -504,6 +509,8 @@ namespace otb
       otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm, otb::ogr::DataSource::Pointer vectorData, std::string tmpdir, unsigned ram, unsigned int threadsNumber=1){
 
 	std::cout << "Calculate Rates" << "\n";
+    //~ fullSampleExtraction.shp will contains all points in all segmentation's 
+    //~ segments intersecting one reference data.
 	std::string tempName = tmpdir + "/fullSampleExtraction.shp";
     
 	otb::ogr::DataSource::Pointer outputSamples = otb::ogr::DataSource::New(tempName,otb::ogr::DataSource::Modes::Overwrite);
@@ -520,7 +527,8 @@ namespace otb
 	RateCalculatorType::Pointer m_RateCalculator = RateCalculatorType::New();
 	m_RateCalculator->SetClassCount(classStatFilter->GetClassCountOutput()->Get());
 	m_RateCalculator->SetAllSamples();
-    
+    std::cout << "Calculate Rates : done" << "\n";
+    std::cout << "Start 100% SampleSelection" << "\n";
 	RandomSamplerType::Pointer randomFilt = RandomSamplerType::New();
     randomFilt->SetNumberOfThreads(threadsNumber);
 	randomFilt->SetInput(inputIm);
@@ -531,6 +539,7 @@ namespace otb
 	randomFilt->SetLayerIndex(0);
 	randomFilt->GetStreamer()->SetAutomaticTiledStreaming(ram);
 	randomFilt->Update();
+    std::cout << "SampleSelection : done" << "\n";
 	// outputSamples->SyncToDisk();
 	return outputSamples;
       }
