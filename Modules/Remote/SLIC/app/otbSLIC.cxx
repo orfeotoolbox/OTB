@@ -148,6 +148,15 @@ namespace otb
 	
 	typename otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
 
+    // ugly...
+    int argc;
+    char no_args1[1]={'?'};
+    char* no_args2[1]={no_args1};
+    char** no_args3[1]={no_args2};
+    
+    argc=0;
+    mpiConfig->Init(argc, *no_args3);
+    
 	VectorImageType::Pointer imageIn = GetParameterImage("in");
 	const std::string inputName = GetParameterString("in");
 	imageIn->UpdateOutputInformation();
