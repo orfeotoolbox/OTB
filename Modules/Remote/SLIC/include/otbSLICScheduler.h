@@ -101,9 +101,6 @@ namespace otb{
 
     //Prefix for file writing
     itkSetMacro(Prefix,std::string);
-
-    //Name of the input for writing temp files
-    itkSetMacro(InputName,std::string);
     
     //Calculate a list of regions of the input image with the appropriate margins
     static std::vector<ProcessingTile> SplitOTBImage(const TInputImage * imagePtr, // input image
@@ -135,7 +132,6 @@ namespace otb{
     unsigned int m_MaxIterationNumber;
     RealType m_Threshold;
     std::string m_Prefix;
-    std::string m_InputName;
     ListSampleType m_SeedMeans;
     unsigned int m_NbTilesX;
     unsigned int m_NbTilesY;

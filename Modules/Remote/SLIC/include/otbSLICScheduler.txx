@@ -96,14 +96,10 @@ namespace otb{
     }
     //First process the black tiles (no margins)
     for (otb::ProcessingTile const& t : tilesToWrite)
-      {
-	typename ReaderType::Pointer reader = ReaderType::New();
-	reader->SetFileName(m_InputName);
-        reader->SetReleaseDataFlag(true);
-	
+      {	
 	typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 	extractFilter->SetReleaseDataFlag(true);
-	extractFilter->SetInput(reader->GetOutput());
+	extractFilter->SetInput(m_InputImage);
 	extractFilter->SetExtractionRegion(t.region);
 
 	typename SLICFilter::Pointer filter = SLICFilter::New();
@@ -155,9 +151,6 @@ namespace otb{
 	//Process tiles
 	for (otb::ProcessingTile t : tilesToWrite)
 	  {
-	    typename ReaderType::Pointer reader = ReaderType::New();
-	    reader->SetFileName(m_InputName);
-	    reader->SetReleaseDataFlag(true);
 	    typename SLICFilter::Pointer filter = SLICFilter::New();
 	    filter->SetSpatialWidth(m_SpatialWidth);
 	    filter->SetSpatialDistanceWeight(m_SpatialDistanceWeight);
@@ -167,7 +160,7 @@ namespace otb{
 	    filter->SetMargin(m_Margin);
 	    typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
 	    extractFilter->SetReleaseDataFlag(true);
-	    extractFilter->SetInput(reader->GetOutput());
+	    extractFilter->SetInput(m_InputImage);//m_InputImage.GetLargestPossibleRegion() ?
 	    //Extract main region
 	    extractFilter->SetExtractionRegion(t.region);
 	    filter->SetTile(t);

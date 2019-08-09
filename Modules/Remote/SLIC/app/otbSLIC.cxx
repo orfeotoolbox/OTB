@@ -158,7 +158,6 @@ namespace otb
     mpiConfig->Init(argc, *no_args3);
     
 	VectorImageType::Pointer imageIn = GetParameterImage("in");
-	const std::string inputName = GetParameterString("in");
 	imageIn->UpdateOutputInformation();
 	const std::string outputName = GetParameterString("out");
 	const unsigned int spatialWidth = GetParameterFloat("spw");
@@ -218,7 +217,6 @@ namespace otb
 	std::cout << "Starting segmentation" << "\n";
 	SLICSchedulerType::Pointer slicScheduler = SLICSchedulerType::New();
 	slicScheduler->SetInputImage(imageIn);
-	slicScheduler->SetInputName(inputName); 
 	slicScheduler->SetPrefix(prefix);
 	slicScheduler->SetSpatialWidth(spatialWidth);
 	slicScheduler->SetSpatialDistanceWeight(distanceWeight);
