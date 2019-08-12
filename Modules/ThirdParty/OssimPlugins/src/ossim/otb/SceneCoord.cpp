@@ -152,7 +152,7 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& SceneCoord::print(std::ostream& out) const
 {
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\n SceneCoord class data members:\n";
 
    const char* prefix = 0;

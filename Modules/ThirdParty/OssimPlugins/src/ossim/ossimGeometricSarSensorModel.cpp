@@ -133,7 +133,7 @@ namespace ossimplugins
       return time;
    }
 
-   bool ossimGeometricSarSensorModel::getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed)
+   bool ossimGeometricSarSensorModel::getPlatformPositionAtLine(double line, std::vector<double>& position, std::vector<double>& speed)
    {
       JSDDateTime time = getTime(line);
       return _platformPosition->getPlatformPositionAtTime(time,position,speed);
@@ -532,13 +532,13 @@ namespace ossimplugins
 //    if (result)
 //    {
 //       ossimNotify(ossimNotifyLevel_DEBUG)
-//          << "calling saveState to verify loadState..." << endl;
+//          << "calling saveState to verify loadState..." << std::endl;
 
 //       ossimKeywordlist kwl2;
 //       saveState(kwl2, 0);
 
 //       ossimNotify(ossimNotifyLevel_DEBUG)
-//          << "saveState result after loadState:"  << kwl2 << endl;
+//          << "saveState result after loadState:"  << kwl2 << std::endl;
 //    }
 
       if (traceDebug())
@@ -574,7 +574,7 @@ namespace ossimplugins
 
 std::ostream& ossimGeometricSarSensorModel::print(std::ostream& out) const
 {
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\nossimGeometricSarSensorModel class data members:\n";
 
    const char* prefix = 0;
@@ -631,7 +631,7 @@ bool ossimGeometricSarSensorModel::createReplacementOCG()
    
    if (traceDebug())
    {
-      ossimNotify(ossimNotifyLevel_NOTICE)<<"\nComputing coarse grid..."<<endl;
+      ossimNotify(ossimNotifyLevel_NOTICE)<<"\nComputing coarse grid..."<<std::endl;
    }
    _replacementOcgModel->buildGrid(theImageClipRect, this, 500.00, true, false);
 

@@ -856,7 +856,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
    
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\nossimTerraSarModelclass data members:\n"
        << SR_GR_R0_KW << _SrToGr_R0 << "\n";
 
@@ -1546,7 +1546,7 @@ bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "result for  tsDoc.initSensorParams " << result << endl;
+         << "result for  tsDoc.initSensorParams " << result << std::endl;
    }
 
    if (!result)
@@ -2436,7 +2436,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
 }
 
 
-void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
+void ossimplugins::ossimTerraSarModel::printInfo(std::ostream& os) const
 {
    os << "\n----------------- General Info on TSX-1 Image -------------------"
       << "\n  "
