@@ -107,8 +107,8 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimSpot6Model at address " << (hex) << this
-          << (dec)
+      out << "\nDump of ossimSpot6Model at address " << (std::hex) << this
+          << (std::dec)
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
@@ -116,7 +116,7 @@ namespace ossimplugins
           << "\n  theRefImgPt           = " << theRefImgPt
           << "\n  theProcessingLevel    = " << theSupportData->getProcessingLevel()
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);

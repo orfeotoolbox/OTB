@@ -217,7 +217,7 @@ namespace ossimplugins
             /*
              * Leader file data reading
              */
-            std::ifstream leaderFile(leaFilename.c_str(), ios::in | ios::binary);
+            std::ifstream leaderFile(leaFilename.c_str(), std::ios::in | std::ios::binary);
             leaderFile >> *theAlosPalsarLeader;
             leaderFile.close();
 
@@ -241,7 +241,7 @@ namespace ossimplugins
                /*
                 * Read header of data file for image size info
                 */
-               std::ifstream dataFile(datFilename.c_str(), ios::in | ios::binary);
+               std::ifstream dataFile(datFilename.c_str(), std::ios::in | std::ios::binary);
                dataFile >> *theAlosPalsarData;
                dataFile.close();
 
@@ -682,7 +682,7 @@ namespace ossimplugins
 
    bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
    {
-      std::ifstream candidate(file.c_str(), ios::in | ios::binary);
+      std::ifstream candidate(file.c_str(), std::ios::in | std::ios::binary);
       char alosFileName[16];
 
       candidate.seekg(48);
@@ -745,7 +745,7 @@ namespace ossimplugins
 
    bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
    {
-      std::ifstream candidate(file.c_str(), ios::in | ios::binary);
+      std::ifstream candidate(file.c_str(), std::ios::in | std::ios::binary);
       char alosFileName[16];
 
       candidate.seekg(48);
