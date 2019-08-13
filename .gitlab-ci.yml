@@ -320,14 +320,16 @@ deploy:
     - windows-8-build
     - windows-10-build
 
-deploy-prod:
-  tags:
-    - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  stage: deploy
-  when: manual
-  script:
-    - ./CI/deploy-prod.sh
+# deploy-prod:
+#   tags:
+#     - deploy
+#   only:
+#     - tag
+#   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+#   stage: deploy
+#   when: manual
+#   script:
+#     - ./CI/deploy-prod.sh
     
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
