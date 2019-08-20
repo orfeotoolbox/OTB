@@ -19,9 +19,6 @@
  */
 
 #include "otbImageSettings.h"
-#include "otbFragmentShaderRegistry.h"
-#include "otbGlVersionChecker.h"
-#include <GL/glew.h>
 
 namespace otb
 {

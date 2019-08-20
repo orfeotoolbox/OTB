@@ -18,35 +18,35 @@
  * limitations under the License.
  */
 
-#include "otbFragmentShaderRegistry.h"
+#include "otbShaderRegistry.h"
 #include <GL/glew.h>
 
 namespace otb
 {
 
-FragmentShaderRegistry::Pointer FragmentShaderRegistry::m_Instance;
+ShaderRegistry::Pointer ShaderRegistry::m_Instance;
 
-FragmentShaderRegistry::FragmentShaderRegistry()
+ShaderRegistry::ShaderRegistry()
   : m_ShaderMap()
 {}
 
-FragmentShaderRegistry::~FragmentShaderRegistry()
+ShaderRegistry::~ShaderRegistry()
 {
   this->ClearShaders();
 }
 
-FragmentShaderRegistry::Pointer  FragmentShaderRegistry::Instance()
+ShaderRegistry::Pointer  ShaderRegistry::Instance()
 {
   if(m_Instance.IsNull())
     {
-    m_Instance = FragmentShaderRegistry::New();
+    m_Instance = ShaderRegistry::New();
     glewInit();
     }
 
   return m_Instance;
 }
 
-void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::string& source)
+void ShaderRegistry::RegisterShader(const std::string& name, const std::string& source)
 {
   if(m_ShaderMap.count(name) != 0)
     {
@@ -97,7 +97,7 @@ void FragmentShaderRegistry::RegisterShader(const std::string& name, const std::
   m_ShaderMap[name] = std::make_pair(program,shader);
 }
 
-bool FragmentShaderRegistry::UnregisterShader(const std::string& name)
+bool ShaderRegistry::UnregisterShader(const std::string& name)
 {
   if(m_ShaderMap.count(name) != 0)
     {
@@ -109,12 +109,12 @@ bool FragmentShaderRegistry::UnregisterShader(const std::string& name)
   return false;
 }
 
-bool FragmentShaderRegistry::IsShaderRegistered(const std::string& name) const
+bool ShaderRegistry::IsShaderRegistered(const std::string& name) const
 {
   return (m_ShaderMap.count(name) != 0);
 }
 
-bool FragmentShaderRegistry::LoadShader(const std::string& name)
+bool ShaderRegistry::LoadShader(const std::string& name)
 {
   if(!IsShaderRegistered(name))
     {
@@ -124,12 +124,12 @@ bool FragmentShaderRegistry::LoadShader(const std::string& name)
   return true;
 }
 
-void FragmentShaderRegistry::UnloadShader()
+void ShaderRegistry::UnloadShader()
 {
   glUseProgramObjectARB(0);
 }
 
-void FragmentShaderRegistry::ClearShaders()
+void ShaderRegistry::ClearShaders()
 {
   std::vector<std::string> keys;
 
@@ -148,7 +148,7 @@ void FragmentShaderRegistry::ClearShaders()
   m_ShaderMap.clear();
 }
 
-unsigned int FragmentShaderRegistry::GetShaderProgram(const std::string& name)
+unsigned int ShaderRegistry::GetShaderProgram(const std::string& name)
 {
   if(m_ShaderMap.count(name) == 0)
     {

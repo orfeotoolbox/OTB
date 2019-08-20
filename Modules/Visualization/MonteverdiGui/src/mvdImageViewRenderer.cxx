@@ -720,16 +720,16 @@ ImageViewRenderer
         //
         // Must use local variable to cast from T* to T::Pointer because
         // of ITK set/get macros...
-        otb::FragmentShader::Pointer fragmentShader( imageActor->GetShader() );
+        otb::Shader::Pointer imageShader( imageActor->GetShader() );
 
-	if( !fragmentShader.IsNull() )
+	if( !imageShader.IsNull() )
 	  {
-	  // If this point is reached, shader is not null which means
+	  // If this point is reached, imageShader is not null which means
 	  // that isGLSLEnabled() is true.
 	  assert( IsGLSLEnabled() );
 
 	  otb::StandardShader::Pointer shader(
-	    otb::DynamicCast< otb::StandardShader >( fragmentShader )
+	    otb::DynamicCast< otb::StandardShader >( imageShader )
 	  );
 
 	  assert( !shader.IsNull() );
@@ -1249,13 +1249,13 @@ ImageViewRenderer
 
       //
       // Get shader.
-      otb::FragmentShader::Pointer fshader( glImageActor->GetShader() );
+      otb::Shader::Pointer ishader( glImageActor->GetShader() );
 
-      if( !fshader.IsNull() )
+      if( !ishader.IsNull() )
 	{
 	otb::StandardShader::Pointer shader(
 	  otb::DynamicCast< otb::StandardShader >(
-	    fshader
+	    ishader
 	  )
 	);
 

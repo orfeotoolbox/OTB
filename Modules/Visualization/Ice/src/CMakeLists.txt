@@ -19,8 +19,8 @@
 #
 
 set(OTBICE_SRCS
-  otbFragmentShader.cxx
-  otbFragmentShaderRegistry.cxx
+  otbShader.cxx
+  otbShaderRegistry.cxx
   otbGeoInterface.cxx
   otbGlActor.cxx
   otbGlImageActor.cxx

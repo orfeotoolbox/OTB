@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otb_FragmentShader_h
-#define otb_FragmentShader_h
+#ifndef otb_Shader_h
+#define otb_Shader_h
 
 #include "OTBIceExport.h"
 
@@ -29,11 +29,11 @@
 namespace otb
 {
 
-class OTBIce_EXPORT FragmentShader
+class OTBIce_EXPORT Shader
   : public itk::Object
 {
 public:
-  typedef FragmentShader                                  Self;
+  typedef Shader                                  Self;
   typedef itk::Object                                     Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -56,9 +56,9 @@ public:
   itkGetConstReferenceMacro(LR,PointType);
 
 protected:
-  FragmentShader();
+  Shader();
 
-  ~FragmentShader() override;
+  ~Shader() override;
 
   void BuildShader();
 
@@ -68,7 +68,7 @@ protected:
 
 private:
   // prevent implementation
-  FragmentShader(const Self&);
+  Shader(const Self&);
   void operator=(const Self&);
 
   PointType m_UL;
@@ -76,7 +76,7 @@ private:
   PointType m_LL;
   PointType m_LR;
 
-}; // End class FragmentShader
+}; // End class Shader
 
 } // End namespace otb
 

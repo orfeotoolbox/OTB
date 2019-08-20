@@ -22,7 +22,7 @@
 #define otb_StandardShader_h
 
 #include <itkObjectFactory.h>
-#include "otbFragmentShader.h"
+#include "otbShader.h"
 #include "otbImageSettings.h"
 #include <string>
 
@@ -52,11 +52,11 @@ typedef enum
 
 
 class OTBIce_EXPORT StandardShader
-  : public FragmentShader
+  : public Shader
 {
 public:
   typedef StandardShader                                  Self;
-  typedef FragmentShader                                  Superclass;
+  typedef Shader                                  Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 

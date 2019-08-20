@@ -24,7 +24,6 @@
 #include "otbGlActor.h"
 
 #include "otbGenericRSTransform.h"
-#include "otbFragmentShader.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 #include "itkVector.h"

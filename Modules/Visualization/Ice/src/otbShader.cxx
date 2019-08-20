@@ -18,18 +18,18 @@
  * limitations under the License.
  */
 
-#include "otbFragmentShader.h"
-#include "otbFragmentShaderRegistry.h"
+#include "otbShader.h"
+#include "otbShaderRegistry.h"
 
 namespace otb
 {
-FragmentShader::FragmentShader()
+Shader::Shader()
 {}
 
-FragmentShader::~FragmentShader()
+Shader::~Shader()
 {}
 
-void FragmentShader::BuildShader()
+void Shader::BuildShader()
 {
   std::string source = this->GetSource();
   std::string name = this->GetName();
@@ -37,9 +37,9 @@ void FragmentShader::BuildShader()
   try
     {
     // Assumption here is that each shader has its unique name
-    if(!otb::FragmentShaderRegistry::Instance()->IsShaderRegistered(name))
+    if(!otb::ShaderRegistry::Instance()->IsShaderRegistered(name))
       {
-      otb::FragmentShaderRegistry::Instance()->RegisterShader(name,source);
+      otb::ShaderRegistry::Instance()->RegisterShader(name,source);
       }
     }
   catch(itk::ExceptionObject& err)
@@ -49,29 +49,29 @@ void FragmentShader::BuildShader()
     }
 }
 
-void FragmentShader::LoadShader()
+void Shader::LoadShader()
 {
-  otb::FragmentShaderRegistry::Instance()->LoadShader(GetName());
+  otb::ShaderRegistry::Instance()->LoadShader(GetName());
 }
 
-void FragmentShader::UnloadShader()
+void Shader::UnloadShader()
 {
-  otb::FragmentShaderRegistry::Instance()->UnloadShader();
+  otb::ShaderRegistry::Instance()->UnloadShader();
 }
 
-void FragmentShader::SetupShader()
+void Shader::SetupShader()
 {
   // // Default always report corners
-  // GLint shader_ul = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ul");
+  // GLint shader_ul = glGetUniformLocation(otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ul");
 
   // glUniform2f(shader_ul,m_UL[0],m_UL[1]);
-  // GLint shader_ur = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ur");
+  // GLint shader_ur = glGetUniformLocation(otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ur");
   // glUniform2f(shader_ur,m_UR[0],m_UR[1]);
 
-  // GLint shader_ll = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ll");
+  // GLint shader_ll = glGetUniformLocation(otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_ll");
   // glUniform2f(shader_ll,m_LL[0],m_LL[1]);
 
-  // GLint shader_lr = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_lr");
+  // GLint shader_lr = glGetUniformLocation(otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_lr");
   // glUniform2f(shader_lr,m_LR[0],m_LR[1]);
 }
 

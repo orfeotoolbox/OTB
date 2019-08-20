@@ -26,7 +26,7 @@
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include "otbFragmentShader.h"
+#include "otbShader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeoInterface.h"
 #include "otbGlActor.h"
@@ -181,8 +181,8 @@ public:
 
   bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
 
-  itkGetObjectMacro(Shader,FragmentShader);
-  itkSetObjectMacro(Shader,FragmentShader);
+  itkGetObjectMacro(Shader,Shader);
+  itkSetObjectMacro(Shader,Shader);
 
   itkGetObjectMacro( ImageSettings, ImageSettings );
 
@@ -308,7 +308,7 @@ private:
   unsigned int m_NumberOfComponents;
 
   ImageSettings::Pointer m_ImageSettings;
-  FragmentShader::Pointer m_Shader;
+  Shader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;

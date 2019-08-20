@@ -23,7 +23,7 @@
 #include <cassert>
 #include <GL/glew.h>
 
-#include "otbFragmentShaderRegistry.h"
+#include "otbShaderRegistry.h"
 #include "otbGlVersionChecker.h"
 
 namespace otb
@@ -315,7 +315,7 @@ void StandardShader::SetupShader()
 
   double gamma = m_ImageSettings->GetGamma();
 
-  int program = otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader");
+  int program = otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader");
 
   GLint shader_a = glGetUniformLocation(program, "shader_a");
   glUniform4f(shader_a,scr,scg,scb,1.);
