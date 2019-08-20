@@ -25,6 +25,8 @@ namespace otb
 {
 Shader::Shader()
   : m_Program(0)
+  , m_ProjMatrix(nullptr)
+  , m_ModelViewMatrix(nullptr)
 {}
 
 Shader::~Shader()

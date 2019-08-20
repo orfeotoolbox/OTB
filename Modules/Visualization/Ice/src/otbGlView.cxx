@@ -43,9 +43,19 @@ namespace otb
 {
 
 GlView::GlView()
-  : m_Settings(ViewSettings::New()),
-    m_Actors(),
-    m_RenderingOrder()
+  : m_Settings(ViewSettings::New())
+  , m_Actors()
+  , m_RenderingOrder()
+  , m_ProjMatrix{
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0}
+  , m_ModelViewMatrix{
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0}
 {}
 
 GlView::~GlView()
@@ -500,5 +510,11 @@ GlView
   // delete[] itkBuffer;
   // itkBuffer = NULL;
 }
+
+
+  //~ m_Settings->m_VertexShader = vShader;
+  //~ m_Settings->m_TextureCoordIdx = glGetAttribLocation(m_VertexProgram , "in_coord");
+
+
 
 }

@@ -294,6 +294,10 @@ private:
 
   StringVectorType      m_RenderingOrder;
 
+  float m_ProjMatrix[16];
+
+  float m_ModelViewMatrix[16];
+
 }; // End class GlView
 
 

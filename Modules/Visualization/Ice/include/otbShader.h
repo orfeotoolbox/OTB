@@ -29,9 +29,12 @@
 namespace otb
 {
 
+class GlView;
+
 class OTBIce_EXPORT Shader
   : public itk::Object
 {
+friend class GlView;
 public:
   typedef Shader                                  Self;
   typedef itk::Object                                     Superclass;
@@ -46,14 +49,14 @@ public:
 
   void UnloadShader();
 
-  itkSetMacro(UL,PointType);
-  itkSetMacro(UR,PointType);
-  itkSetMacro(LL,PointType);
-  itkSetMacro(LR,PointType);
-  itkGetConstReferenceMacro(UL,PointType);
-  itkGetConstReferenceMacro(UR,PointType);
-  itkGetConstReferenceMacro(LL,PointType);
-  itkGetConstReferenceMacro(LR,PointType);
+  //~ itkSetMacro(UL,PointType);
+  //~ itkSetMacro(UR,PointType);
+  //~ itkSetMacro(LL,PointType);
+  //~ itkSetMacro(LR,PointType);
+  //~ itkGetConstReferenceMacro(UL,PointType);
+  //~ itkGetConstReferenceMacro(UR,PointType);
+  //~ itkGetConstReferenceMacro(LL,PointType);
+  //~ itkGetConstReferenceMacro(LR,PointType);
 
 protected:
   Shader();
@@ -72,15 +75,21 @@ protected:
   /** Program object in which the shader is compiled and linked (0 if no program) */
   unsigned int m_Program;
 
+  /** Projection matrix */
+  float * m_ProjMatrix;
+
+  /** ModelView matrix */
+  float * m_ModelViewMatrix;
+
 private:
   // prevent implementation
   Shader(const Self&);
   void operator=(const Self&);
 
-  PointType m_UL;
-  PointType m_UR;
-  PointType m_LL;
-  PointType m_LR;
+  //~ PointType m_UL;
+  //~ PointType m_UR;
+  //~ PointType m_LL;
+  //~ PointType m_LR;
 
 }; // End class Shader
 
