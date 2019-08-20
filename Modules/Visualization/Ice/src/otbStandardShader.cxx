@@ -41,26 +41,75 @@ StandardShader::StandardShader() :
 {
   m_Center.Fill( 0 );
 
-  BuildShader();
-}
-
-StandardShader::~StandardShader()
-{}
-
-std::string StandardShader::GetSource() const
-{
   const char * glVersion = nullptr;
   const char * glslVersion = nullptr;
   if(!otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion))
     {
     itkExceptionMacro(<<" Required GL and GLSL versions were not found (GL version is "<<glVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GL_VERSION<<", GLSL version is "<<glslVersion<<", should be at least "<<otb::GlVersionChecker::REQUIRED_GLSL_VERSION<<")");
     }
+  m_HasGLSL140 = otb::GlVersionChecker::VerCmp(glslVersion,"1.40")>=0;
 
-  bool isGLSLS140Available  = otb::GlVersionChecker::VerCmp(glslVersion,"1.40")>=0;
+  // Register the shader in the ShaderRegistry
+  BuildShader();
 
+  // Reserve variable locations
+  //  - for vertex shader
+  m_Loc.proj = glGetUniformLocation(m_Program, "in_proj");
+  m_Loc.modelview = glGetUniformLocation(m_Program, "in_mv");
+  //  - for fragment shader
+  m_Loc.a = glGetUniformLocation(m_Program, "shader_a");
+  m_Loc.b = glGetUniformLocation(m_Program, "shader_b");
+  m_Loc.use_no_data = glGetUniformLocation(m_Program, "shader_use_no_data");
+  m_Loc.no_data = glGetUniformLocation(m_Program, "shader_no_data");
+  m_Loc.gamma = glGetUniformLocation(m_Program, "shader_gamma");
+  m_Loc.alpha = glGetUniformLocation(m_Program, "shader_alpha");
+  m_Loc.radius = glGetUniformLocation(m_Program, "shader_radius");
+  m_Loc.center = glGetUniformLocation(m_Program, "shader_center");
+  m_Loc.type = glGetUniformLocation(m_Program, "shader_type");
+  m_Loc.current = glGetUniformLocation(m_Program, "shader_current");
+  m_Loc.localc_range = glGetUniformLocation(m_Program, "shader_localc_range");
+  m_Loc.spectral_angle_range = glGetUniformLocation(m_Program, "shader_spectral_angle_range");
+  m_Loc.chessboard_size = glGetUniformLocation(m_Program, "shader_chessboard_size");
+  m_Loc.slider_pos = glGetUniformLocation(m_Program, "shader_slider_pos");
+  m_Loc.vertical_slider_flag = glGetUniformLocation(m_Program, "shader_vertical_slider_flag");
+
+  // TODO setup texture coordinate index
+  //m_TextureCoordIdx = glGetAttribLocation(m_VertexProgram , "in_coord");
+}
+
+StandardShader::~StandardShader()
+{}
+
+std::string StandardShader::GetVertexSource() const
+{
+  std::string shader_source = "";
+  if(m_HasGLSL140)
+    {
+    shader_source+="#version 140 \n";
+    }
+  else
+    {
+    shader_source+="#version 130 \n";
+    }
+  shader_source +=
+    "in vec2 in_coord;\n"                                       \
+    "out vec2 tex_coord;\n"                                     \
+    "uniform mat4 in_proj;\n"                                   \
+    "uniform mat4 in_mv;\n"                                     \
+    "void main()\n"                                             \
+    "{\n"                                                       \
+    "tex_coord = in_coord;\n"                                   \
+    "gl_Position = in_proj * in_mv * gl_Vertex;\n" \
+    "}";
+
+  return shader_source;
+}
+
+std::string StandardShader::GetFragmentSource() const
+{
   std::string shader_source = "";
 
-  if(isGLSLS140Available)
+  if(m_HasGLSL140)
     {
     shader_source+="#version 140 \n";
     }
@@ -270,7 +319,7 @@ std::string StandardShader::GetSource() const
     "}\n"                                                               \
     "}\n";
   
-  if(isGLSLS140Available)
+  if(m_HasGLSL140)
     {
     shader_source+=
     "else if(shader_type == 6)\n"                                       \
@@ -302,6 +351,9 @@ void StandardShader::SetupShader()
 {
   assert( !m_ImageSettings.IsNull() );
 
+  glUniformMatrix4fv(m_Loc.proj,1, GL_FALSE, m_ProjMatrix);
+  glUniformMatrix4fv(m_Loc.modelview,1, GL_FALSE, m_ModelViewMatrix);
+
   //
   // Compute shifts.
   double shr = -m_ImageSettings->GetMinRed();
@@ -315,65 +367,27 @@ void StandardShader::SetupShader()
 
   double gamma = m_ImageSettings->GetGamma();
 
-  int program = otb::ShaderRegistry::Instance()->GetShaderProgram("StandardShader");
-
-  GLint shader_a = glGetUniformLocation(program, "shader_a");
-  glUniform4f(shader_a,scr,scg,scb,1.);
-
-  GLint shader_b = glGetUniformLocation(program, "shader_b");
-  glUniform4f(shader_b,shr,shg,shb,0);
-
-  GLint shader_use_no_data = glGetUniformLocation(program, "shader_use_no_data");
-  glUniform1i(shader_use_no_data, m_ImageSettings->GetUseNoData()  );
-
-  GLint shader_no_data = glGetUniformLocation(program, "shader_no_data");
-  glUniform1f( shader_no_data, m_ImageSettings->GetNoData() );
-
-  GLint shader_gamma = glGetUniformLocation(program, "shader_gamma");
-  glUniform4f( shader_gamma, gamma, gamma, gamma, gamma );
-
-  GLint shader_alpha = glGetUniformLocation(program, "shader_alpha");
-  glUniform1f( shader_alpha, m_ImageSettings->GetAlpha() );
-
-  GLint shader_radius = glGetUniformLocation(program, "shader_radius");
-  glUniform1f(shader_radius,m_Radius);
-
-  GLint shader_center = glGetUniformLocation(program, "shader_center");
-  glUniform2f(shader_center,m_Center[0],m_Center[1]);
-  
-  GLint shader_type = glGetUniformLocation(program, "shader_type");
-  glUniform1i(shader_type,m_ShaderType);
-
-  // std::cout
-  //   << "r: " << m_ImageSettings->GetCurrentRed()
-  //   << " g: " << m_ImageSettings->GetCurrentGreen()
-  //   << " b: " << m_ImageSettings->GetCurrentBlue()
-  //   << std::endl;
-
-  GLint shader_current = glGetUniformLocation(program, "shader_current");
+  glUniform4f(m_Loc.a,scr,scg,scb,1.);
+  glUniform4f(m_Loc.b,shr,shg,shb,0);
+  glUniform1i(m_Loc.use_no_data, m_ImageSettings->GetUseNoData()  );
+  glUniform1f( m_Loc.no_data, m_ImageSettings->GetNoData() );
+  glUniform4f( m_Loc.gamma, gamma, gamma, gamma, gamma );
+  glUniform1f( m_Loc.alpha, m_ImageSettings->GetAlpha() );
+  glUniform1f(m_Loc.radius,m_Radius);
+  glUniform2f(m_Loc.center,m_Center[0],m_Center[1]);
+  glUniform1i(m_Loc.type,m_ShaderType);
   glUniform3f(
-    shader_current,
+    m_Loc.current,
     m_ImageSettings->GetCurrentRed(),
     m_ImageSettings->GetCurrentGreen(),
     m_ImageSettings->GetCurrentBlue()
   );
-
-  GLint shader_localc_range = glGetUniformLocation(program, "shader_localc_range");
-  glUniform1f(shader_localc_range,m_LocalContrastRange);
-
-  GLint shader_spectral_angle_range = glGetUniformLocation(program, "shader_spectral_angle_range");
-  glUniform1f(shader_spectral_angle_range,m_SpectralAngleRange);
-
-  GLint shader_chessboard_size = glGetUniformLocation(program, "shader_chessboard_size");
-  glUniform1f(shader_chessboard_size,m_ChessboardSize);
-
-  GLint shader_slider_pos = glGetUniformLocation(program, "shader_slider_pos");
-  glUniform1f(shader_slider_pos,m_SliderPosition);
-
-  GLint shader_vertical_slider_flag = glGetUniformLocation(program, "shader_vertical_slider_flag");
-  glUniform1i(shader_vertical_slider_flag,m_VerticalSlider);
+  glUniform1f(m_Loc.localc_range,m_LocalContrastRange);
+  glUniform1f(m_Loc.spectral_angle_range,m_SpectralAngleRange);
+  glUniform1f(m_Loc.chessboard_size,m_ChessboardSize);
+  glUniform1f(m_Loc.slider_pos,m_SliderPosition);
+  glUniform1i(m_Loc.vertical_slider_flag,m_VerticalSlider);
 }
-
 
 } // End namespace otb
 
