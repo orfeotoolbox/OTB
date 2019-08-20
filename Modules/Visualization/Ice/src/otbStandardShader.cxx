@@ -86,8 +86,9 @@ std::string StandardShader::GetSource() const
     "uniform float shader_chessboard_size;\n"                           \
     "uniform float shader_slider_pos;\n"                                \
     "uniform int shader_vertical_slider_flag;\n"                        \
+    "in vec2 tex_coord;\n"                                              \
     "void main (void) {\n"                                              \
-    "vec4 p = texture2D(src, gl_TexCoord[0].xy);\n"                     \
+    "vec4 p = texture(src, tex_coord);\n"                     \
     "vec4 colors = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
     "gl_FragColor = colors;\n"                                          \
     "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
@@ -277,9 +278,9 @@ std::string StandardShader::GetSource() const
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
     "vec2 size = vec2(textureSize(src,0));\n"                           \
-    "vec2 dx = vec2(gl_TexCoord[0].xy);\n"                              \
+    "vec2 dx = tex_coord;\n"                              \
     "dx[0]+=1.0/size[0];\n"                                             \
-    "vec2 dy = vec2(gl_TexCoord[0].xy);\n"                              \
+    "vec2 dy = tex_coord;\n"                              \
     "dy[1]+=1.0/size[1];\n"                                             \
     "vec4 pdx = texture2D(src, dx);\n"                                  \
     "vec4 pdy = texture2D(src, dy);\n"                                  \
@@ -314,31 +315,33 @@ void StandardShader::SetupShader()
 
   double gamma = m_ImageSettings->GetGamma();
 
-  GLint shader_a = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_a");
+  int program = otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader");
+
+  GLint shader_a = glGetUniformLocation(program, "shader_a");
   glUniform4f(shader_a,scr,scg,scb,1.);
 
-  GLint shader_b = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_b");
+  GLint shader_b = glGetUniformLocation(program, "shader_b");
   glUniform4f(shader_b,shr,shg,shb,0);
 
-  GLint shader_use_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_use_no_data");
+  GLint shader_use_no_data = glGetUniformLocation(program, "shader_use_no_data");
   glUniform1i(shader_use_no_data, m_ImageSettings->GetUseNoData()  );
 
-  GLint shader_no_data = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_no_data");
+  GLint shader_no_data = glGetUniformLocation(program, "shader_no_data");
   glUniform1f( shader_no_data, m_ImageSettings->GetNoData() );
 
-  GLint shader_gamma = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_gamma");
+  GLint shader_gamma = glGetUniformLocation(program, "shader_gamma");
   glUniform4f( shader_gamma, gamma, gamma, gamma, gamma );
 
-  GLint shader_alpha = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_alpha");
+  GLint shader_alpha = glGetUniformLocation(program, "shader_alpha");
   glUniform1f( shader_alpha, m_ImageSettings->GetAlpha() );
 
-  GLint shader_radius = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_radius");
+  GLint shader_radius = glGetUniformLocation(program, "shader_radius");
   glUniform1f(shader_radius,m_Radius);
 
-  GLint shader_center = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_center");
+  GLint shader_center = glGetUniformLocation(program, "shader_center");
   glUniform2f(shader_center,m_Center[0],m_Center[1]);
   
-  GLint shader_type = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_type");
+  GLint shader_type = glGetUniformLocation(program, "shader_type");
   glUniform1i(shader_type,m_ShaderType);
 
   // std::cout
@@ -347,7 +350,7 @@ void StandardShader::SetupShader()
   //   << " b: " << m_ImageSettings->GetCurrentBlue()
   //   << std::endl;
 
-  GLint shader_current = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_current");
+  GLint shader_current = glGetUniformLocation(program, "shader_current");
   glUniform3f(
     shader_current,
     m_ImageSettings->GetCurrentRed(),
@@ -355,21 +358,20 @@ void StandardShader::SetupShader()
     m_ImageSettings->GetCurrentBlue()
   );
 
-  GLint shader_localc_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_localc_range");
+  GLint shader_localc_range = glGetUniformLocation(program, "shader_localc_range");
   glUniform1f(shader_localc_range,m_LocalContrastRange);
 
-  GLint shader_spectral_angle_range = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_spectral_angle_range");
+  GLint shader_spectral_angle_range = glGetUniformLocation(program, "shader_spectral_angle_range");
   glUniform1f(shader_spectral_angle_range,m_SpectralAngleRange);
 
-  GLint shader_chessboard_size = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_chessboard_size");
+  GLint shader_chessboard_size = glGetUniformLocation(program, "shader_chessboard_size");
   glUniform1f(shader_chessboard_size,m_ChessboardSize);
 
-  GLint shader_slider_pos = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_slider_pos");
+  GLint shader_slider_pos = glGetUniformLocation(program, "shader_slider_pos");
   glUniform1f(shader_slider_pos,m_SliderPosition);
 
-  GLint shader_vertical_slider_flag = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_vertical_slider_flag");
+  GLint shader_vertical_slider_flag = glGetUniformLocation(program, "shader_vertical_slider_flag");
   glUniform1i(shader_vertical_slider_flag,m_VerticalSlider);
-
 }
 
 
