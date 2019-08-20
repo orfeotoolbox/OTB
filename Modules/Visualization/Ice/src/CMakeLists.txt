@@ -31,6 +31,7 @@ set(OTBICE_SRCS
   otbImageSettings.cxx
   otbStandardShader.cxx
   otbViewSettings.cxx
+  otbMinimalShader.cxx
   )
 
 add_library(OTBIce ${OTBICE_SRCS})
