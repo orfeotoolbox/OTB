@@ -24,6 +24,7 @@
 namespace otb
 {
 Shader::Shader()
+  : m_Program(0)
 {}
 
 Shader::~Shader()
@@ -31,7 +32,8 @@ Shader::~Shader()
 
 void Shader::BuildShader()
 {
-  std::string source = this->GetSource();
+  std::string vSource = this->GetVertexSource();
+  std::string fSource = this->GetFragmentSource();
   std::string name = this->GetName();
   
   try
@@ -39,8 +41,9 @@ void Shader::BuildShader()
     // Assumption here is that each shader has its unique name
     if(!otb::ShaderRegistry::Instance()->IsShaderRegistered(name))
       {
-      otb::ShaderRegistry::Instance()->RegisterShader(name,source);
+      otb::ShaderRegistry::Instance()->RegisterShader(name,vSource,fSource);
       }
+    m_Program = otb::ShaderRegistry::Instance()->GetShaderProgram(name);
     }
   catch(itk::ExceptionObject& err)
     {

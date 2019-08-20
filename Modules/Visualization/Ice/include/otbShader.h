@@ -60,11 +60,17 @@ protected:
 
   ~Shader() override;
 
+  /** Build the shader sources and fills m_Program */
   void BuildShader();
 
-  virtual std::string GetSource() const = 0;
+  virtual std::string GetVertexSource() const = 0;
+
+  virtual std::string GetFragmentSource() const = 0;
 
   virtual std::string GetName() const = 0;
+
+  /** Program object in which the shader is compiled and linked (0 if no program) */
+  unsigned int m_Program;
 
 private:
   // prevent implementation
