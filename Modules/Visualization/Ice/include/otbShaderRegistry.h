@@ -38,7 +38,7 @@ public:
 
   static Pointer Instance();
 
-  void RegisterShader(const std::string& name, const std::string& source);
+  void RegisterShader(const std::string& name, const std::string& vSource, const std::string& fSource);
 
   bool UnregisterShader(const std::string& name);
 
@@ -58,13 +58,15 @@ protected:
   ~ShaderRegistry() override;
 
 private:
-  typedef std::map<std::string, std::pair<unsigned int, unsigned int> > ShaderMapType;
+  typedef std::map<std::string, unsigned int > ShaderMapType;
 
   itkNewMacro(Self);
 
   // prevent implementation
   ShaderRegistry(const Self&);
   void operator=(const Self&);
+
+  unsigned int CompileShader(int stype, const std::string& name, const std::string& src);
 
   static Pointer m_Instance;
 

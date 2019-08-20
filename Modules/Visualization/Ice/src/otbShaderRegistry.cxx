@@ -46,63 +46,55 @@ ShaderRegistry::Pointer  ShaderRegistry::Instance()
   return m_Instance;
 }
 
-void ShaderRegistry::RegisterShader(const std::string& name, const std::string& source)
+void ShaderRegistry::RegisterShader(const std::string& name, const std::string& vSource, const std::string& fSource)
 {
   if(m_ShaderMap.count(name) != 0)
     {
     itkExceptionMacro(<<"A shader with name "<<name<<" has already been registered!");
     }
 
-  GLuint program = glCreateProgram();
-
-  GLuint shader  = glCreateShader(GL_FRAGMENT_SHADER);
-  
-  const char * source_cstr = source.c_str();
-  
-  glShaderSource(shader, 1, &source_cstr,nullptr);
-  glCompileShader(shader);
-
-  GLint compiled;
-  
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-  
-  if(!compiled)
-    {    
-    int length;
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH , &length);
-    
-    char * logs = new char[length];
-    glGetShaderInfoLog(shader,1000,&length,logs);
-
-    std::string slogs = logs;
-    
-    delete [] logs;
-    // For safety!
-    logs = nullptr;
-    
-    // Shader must be destroyed here!
-    glDeleteShader( shader );
-    shader = 0;
-
-    // Program must be destroyed here!
-    glDeleteProgram( program );
-    program = 0;
-    
-    itkExceptionMacro(<<"Shader "<<name<<" with sources "<<source<<" failed to compile: "<<slogs);
+  if(vSource.empty() && fSource.empty())
+    {
+    itkExceptionMacro(<<"No shader sources supplied!");
     }
 
-  glAttachShader(program,shader);
+  GLuint vShader = 0;
+  if(!vSource.empty())
+    {
+    vShader = CompileShader(GL_VERTEX_SHADER, name, vSource);
+    }
+
+  GLuint fShader = 0;
+  if(!fSource.empty())
+    {
+    fShader = CompileShader(GL_FRAGMENT_SHADER, name, fSource);
+    }
+
+  // create a new program for these shader objects
+  GLuint program = glCreateProgram();
+
+  // attach the shader objects to the current program, and flag them for
+  // deletion, they will be actually destroyed when the program is deleted.
+  if(vShader)
+    {
+    glAttachShader(program,vShader);
+    glDeleteShader(vShader);
+    }
+  if(fShader)
+    {
+    glAttachShader(program,fShader);
+    glDeleteShader(fShader);
+    }
   glLinkProgram(program);
 
-  m_ShaderMap[name] = std::make_pair(program,shader);
+  m_ShaderMap[name] = program;
 }
 
 bool ShaderRegistry::UnregisterShader(const std::string& name)
 {
   if(m_ShaderMap.count(name) != 0)
     {
-    glDeleteProgram(m_ShaderMap[name].first);
-    glDeleteShader(m_ShaderMap[name].second);
+    glDeleteProgram(m_ShaderMap[name]);
     m_ShaderMap.erase(name);
     return true;
     }
@@ -120,13 +112,13 @@ bool ShaderRegistry::LoadShader(const std::string& name)
     {
     return false;
     }
-  glUseProgramObjectARB(m_ShaderMap[name].first);
+  glUseProgram(m_ShaderMap[name]);
   return true;
 }
 
 void ShaderRegistry::UnloadShader()
 {
-  glUseProgramObjectARB(0);
+  glUseProgram(0);
 }
 
 void ShaderRegistry::ClearShaders()
@@ -154,7 +146,38 @@ unsigned int ShaderRegistry::GetShaderProgram(const std::string& name)
     {
     itkExceptionMacro(<<"No shader with name "<<name<<" has been registered.");
     }
-  return m_ShaderMap[name].first;
+  return m_ShaderMap[name];
+}
+
+unsigned int ShaderRegistry::CompileShader(int stype, const std::string& name, const std::string& src)
+{
+  GLuint shader  = glCreateShader(stype);
+
+  // compile the sources
+  const char * source_cstr = src.c_str();
+  glShaderSource(shader, 1, &source_cstr,nullptr);
+  glCompileShader(shader);
+
+  GLint compiled;
+  glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+  if(!compiled)
+    {
+    // get the logs
+    int length;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH , &length);
+    char * logs = new char[length];
+    glGetShaderInfoLog(shader,1000,&length,logs);
+    std::string slogs = logs;
+    delete [] logs;
+    logs = nullptr;
+
+    // Shader must be destroyed here!
+    glDeleteShader( shader );
+    shader = 0;
+
+    itkExceptionMacro(<<"Shader "<<name<<" with sources "<<src<<" failed to compile: "<<slogs);
+    }
+  return shader;
 }
 
 }
