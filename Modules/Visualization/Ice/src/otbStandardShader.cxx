@@ -73,8 +73,7 @@ StandardShader::StandardShader() :
   m_Loc.slider_pos = glGetUniformLocation(m_Program, "shader_slider_pos");
   m_Loc.vertical_slider_flag = glGetUniformLocation(m_Program, "shader_vertical_slider_flag");
 
-  // TODO setup texture coordinate index
-  //m_TextureCoordIdx = glGetAttribLocation(m_VertexProgram , "in_coord");
+  m_TextureCoordIdx = glGetAttribLocation(m_Program , "in_coord");
 }
 
 StandardShader::~StandardShader()
@@ -136,40 +135,41 @@ std::string StandardShader::GetFragmentSource() const
     "uniform float shader_slider_pos;\n"                                \
     "uniform int shader_vertical_slider_flag;\n"                        \
     "in vec2 tex_coord;\n"                                              \
+    "out vec4 out_color;\n"                                             \
     "void main (void) {\n"                                              \
     "vec4 p = texture(src, tex_coord);\n"                     \
     "vec4 colors = pow( clamp( ( p+shader_b ) * shader_a, 0.0, 1.0 ), shader_gamma );\n" \
-    "gl_FragColor = colors;\n"                                          \
-    "gl_FragColor[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
+    "out_color = colors;\n"                                          \
+    "out_color[3] = clamp(shader_alpha,0.0,1.0);\n"                  \
     "if(shader_use_no_data > 0 && vec3(p) == vec3(shader_no_data)){\n"  \
-    "gl_FragColor[3] = 0.;\n"                                           \
+    "out_color[3] = 0.;\n"                                           \
     "}\n"                                                               \
-    "float alpha = gl_FragColor[3];\n"                                  \
+    "float alpha = out_color[3];\n"                                  \
     "float dist = distance(gl_FragCoord.xy,shader_center);\n" \
     "if(shader_type == 1)\n"                                            \
     "{\n"                                                               \
     "if(dist < shader_radius)\n"                                        \
     "{\n"                                                               \
     "vec3 tmp = clamp((vec3(p)-vec3(shader_current)+vec3(shader_localc_range))/(2.*vec3(shader_localc_range)),0.0,1.0);\n" \
-    "gl_FragColor[0] = tmp[0];\n"                                       \
-    "gl_FragColor[1] = tmp[1];\n"                                       \
-    "gl_FragColor[2] = tmp[2];\n"                                       \
-    "gl_FragColor[3] = alpha;\n"                                        \
+    "out_color[0] = tmp[0];\n"                                       \
+    "out_color[1] = tmp[1];\n"                                       \
+    "out_color[2] = tmp[2];\n"                                       \
+    "out_color[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
     "else if(shader_type == 2)"                                         \
     "{\n"                                                               \
-    "gl_FragColor[3] = dist > shader_radius ? 1.0 : 0.0; \n"            \
+    "out_color[3] = dist > shader_radius ? 1.0 : 0.0; \n"            \
     "}\n"                                                               \
     "else if(shader_type == 3)\n"                                       \
     "{\n"                                                               \
     "float alpha = (mod(floor(gl_FragCoord.x / shader_chessboard_size), 2.0) == 0.) != (mod(floor(gl_FragCoord.y / shader_chessboard_size), 2.0) == 1.) ? shader_alpha : 0.0;\n" \
-    "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
+    "out_color[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
     "else if(shader_type == 4)\n"                                       \
     "{\n"                                                               \
     "float alpha = (shader_vertical_slider_flag == 0 && gl_FragCoord.x > shader_slider_pos) || (shader_vertical_slider_flag == 1 && gl_FragCoord.y > shader_slider_pos) ? 1.0 : 0.0;\n" \
-    "gl_FragColor[3] = clamp(alpha,0.0,1.0);\n"                         \
+    "out_color[3] = clamp(alpha,0.0,1.0);\n"                         \
     "}\n"                                                               \
     "else if(shader_type == 5)\n"                                       \
     "{\n"                                                               \
@@ -177,10 +177,10 @@ std::string StandardShader::GetFragmentSource() const
     "{\n"                                                               \
     "float angle = acos(clamp(dot(vec3(p),shader_current)/(length(vec3(p))*length(shader_current)),-1.0,1.0));\n" \
     "vec3 tmp = clamp(vec3(1.-shader_spectral_angle_range*abs(angle)/3.142),0.0,1.0);\n" \
-    "gl_FragColor[0] = tmp[0];\n"                                       \
-    "gl_FragColor[1] = tmp[1];\n"                                       \
-    "gl_FragColor[2] = tmp[2];\n"                                       \
-    "gl_FragColor[3] = alpha;\n"                                        \
+    "out_color[0] = tmp[0];\n"                                       \
+    "out_color[1] = tmp[1];\n"                                       \
+    "out_color[2] = tmp[2];\n"                                       \
+    "out_color[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n"                                                               \
     "else if(shader_type == 7)\n"                                       \
@@ -191,9 +191,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = -abs( 3.95 * (color - 0.492)) + 1.5;\n"               \
     "mapped[2] = -abs( 3.95 * (color - 0.2385)) + 1.5;\n"              \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
   "else if(shader_type == 8)\n"                                         \
     "{\n"                                                               \
@@ -205,9 +205,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = -abs( 3.95 * (color - 0.492)) + 1.5;\n"               \
     "mapped[2] = -abs( 3.95 * (color - 0.2385)) + 1.5;\n"              \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n"                                                               \
   "else if(shader_type == 9)\n"                                         \
@@ -218,9 +218,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 63.0 / 26.0 * color - 11.0 / 13.0;\n"                  \
     "mapped[2] = 4.5 * color - 3.5;\n"                                  \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
   "else if(shader_type == 10)\n"                                         \
     "{\n"                                                               \
@@ -232,9 +232,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 63.0 / 26.0 * color - 11.0 / 13.0;\n"                  \
     "mapped[2] = 4.5 * color - 3.5;\n"                                  \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n"                                                               \
   "else if(shader_type == 11)\n"                                         \
@@ -245,9 +245,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = color;\n"                                              \
     "mapped[2] = 1.0 - 0.5 * color;\n"                                  \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "else if(shader_type == 12)\n"                                      \
     "{\n"                                                               \
@@ -259,9 +259,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = color;\n"                                              \
     "mapped[2] = 1.0 - 0.5 * color;\n"                                  \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n"                                                               \
   "else if(shader_type == 13)\n"                                        \
@@ -272,9 +272,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 0.5*color+0.5;\n"                                      \
     "mapped[2] = 0.4;\n"                                                \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "else if(shader_type == 14)\n"                                      \
     "{\n"                                                               \
@@ -286,9 +286,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 0.5*color+0.5;\n"                                      \
     "mapped[2] = 0.4;\n"                                                \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n"                                                               \
   "else if(shader_type == 15)\n"                                        \
@@ -299,9 +299,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 1.0-color;\n"                                          \
     "mapped[2] = 1.0;\n"                                                \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "else if(shader_type == 16)\n"                                      \
     "{\n"                                                               \
@@ -313,9 +313,9 @@ std::string StandardShader::GetFragmentSource() const
     "mapped[1] = 1.0-color;\n"                                          \
     "mapped[2] = 1.0;\n"                                                \
     "mapped = clamp(mapped,0.0,1.0);\n"                                 \
-    "gl_FragColor[0] = mapped[0];\n"                                    \
-    "gl_FragColor[1] = mapped[1];\n"                                    \
-    "gl_FragColor[2] = mapped[2];\n"                                    \
+    "out_color[0] = mapped[0];\n"                                    \
+    "out_color[1] = mapped[1];\n"                                    \
+    "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n";
   
@@ -333,8 +333,8 @@ std::string StandardShader::GetFragmentSource() const
     "dy[1]+=1.0/size[1];\n"                                             \
     "vec4 pdx = texture2D(src, dx);\n"                                  \
     "vec4 pdy = texture2D(src, dy);\n"                                  \
-    "gl_FragColor = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
-    "gl_FragColor[3] = alpha;\n"                                        \
+    "out_color = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
+    "out_color[3] = alpha;\n"                                        \
     "}\n"                                                               \
     "}\n";                   
     }

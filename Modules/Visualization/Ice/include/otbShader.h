@@ -76,10 +76,10 @@ protected:
   unsigned int m_Program;
 
   /** Projection matrix */
-  float * m_ProjMatrix;
+  const float * m_ProjMatrix;
 
   /** ModelView matrix */
-  float * m_ModelViewMatrix;
+  const float * m_ModelViewMatrix;
 
 private:
   // prevent implementation

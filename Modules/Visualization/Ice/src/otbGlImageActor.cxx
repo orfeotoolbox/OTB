@@ -30,6 +30,7 @@
 
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
+#include "otbCast.h"
 
 namespace otb
 {
@@ -48,7 +49,6 @@ GlImageActor::GlImageActor()
     m_Spacing(),
     m_NumberOfComponents(0),
     m_ImageSettings( ImageSettings::New() ),
-    m_Shader(),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
@@ -452,6 +452,10 @@ void GlImageActor::Render()
       }
     }
 
+  otb::StandardShader::Pointer shader =
+    otb::DynamicCast< otb::StandardShader >(m_Shader);
+  int texCoord = shader->GetTextureCoordIdx();
+
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
     {
@@ -471,15 +475,15 @@ void GlImageActor::Render()
       {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       }
-  
+
     // Reset color before rendering
     glColor4d(1.0f,1.0f,1.0f, m_ImageSettings->GetAlpha());
-  
+
     glBegin (GL_QUADS);
-    glTexCoord2f (0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
-    glTexCoord2f (1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
-    glTexCoord2f (1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
-    glTexCoord2f (0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
+    glVertexAttrib2f(texCoord, 0.0, 1.0); glVertex2f(it->m_LL[0], it->m_LL[1]);
+    glVertexAttrib2f(texCoord, 1.0, 1.0); glVertex2f(it->m_LR[0], it->m_LR[1]);
+    glVertexAttrib2f(texCoord, 1.0, 0.0); glVertex2f(it->m_UR[0], it->m_UR[1]);
+    glVertexAttrib2f(texCoord, 0.0, 0.0); glVertex2f(it->m_UL[0], it->m_UL[1]);
     glEnd ();
   
     glDisable(GL_TEXTURE_2D);

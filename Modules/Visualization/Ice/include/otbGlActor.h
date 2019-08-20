@@ -24,6 +24,7 @@
 #include <itkObject.h>
 
 #include "otbViewSettings.h"
+#include "otbShader.h"
 #include "OTBIceExport.h"
 #include <string>
 
@@ -58,6 +59,9 @@ public:
   itkGetMacro( Overlay, bool );
   itkBooleanMacro( Overlay );
 
+  itkGetObjectMacro(Shader,Shader);
+  itkSetObjectMacro(Shader,Shader);
+
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
 
@@ -70,10 +74,15 @@ public:
   // Gl rendering of current state
   virtual void Render() = 0;
 
+  /** create the shader (no shader created by default) */
+  virtual void CreateShader();
+
 protected:
   GlActor();
 
   ~GlActor() override;
+
+  Shader::Pointer m_Shader;
 
 private:
   // prevent implementation

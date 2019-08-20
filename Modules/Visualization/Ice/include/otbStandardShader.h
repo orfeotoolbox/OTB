@@ -94,6 +94,8 @@ public:
 
   itkNewMacro(Self);
 
+  itkGetMacro(TextureCoordIdx,int);
+
 protected:
   StandardShader();
 
@@ -151,6 +153,8 @@ private:
     };
 
   UniformLocs m_Loc;
+
+  int m_TextureCoordIdx;
 }; // End class StandardShader
 
 } // End namespace otb

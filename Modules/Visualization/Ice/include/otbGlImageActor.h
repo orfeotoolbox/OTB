@@ -26,7 +26,6 @@
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include "otbShader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeoInterface.h"
 #include "otbGlActor.h"
@@ -129,7 +128,7 @@ public:
   itkSetMacro(SoftwareRendering, bool );
   itkGetMacro(SoftwareRendering, bool );
 
-  void CreateShader();
+  void CreateShader() override;
 
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
@@ -180,9 +179,6 @@ public:
 			     IndexType & index ) const;
 
   bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
-
-  itkGetObjectMacro(Shader,Shader);
-  itkSetObjectMacro(Shader,Shader);
 
   itkGetObjectMacro( ImageSettings, ImageSettings );
 
@@ -308,7 +304,6 @@ private:
   unsigned int m_NumberOfComponents;
 
   ImageSettings::Pointer m_ImageSettings;
-  Shader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;
@@ -319,7 +314,6 @@ private:
   ResolutionAlgorithm::type m_ResolutionAlgorithm;
 
   bool m_SoftwareRendering;
-
 }; // End class GlImageActor
 
 } // End namespace otb
