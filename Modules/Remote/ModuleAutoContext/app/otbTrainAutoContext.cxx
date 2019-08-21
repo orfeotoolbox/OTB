@@ -214,37 +214,9 @@ namespace otb
 	    interSet.insert((*fi)["SPID0"].GetValue<double>());
 	  }
 	}
-    //~ otbAppLogINFO("Generate SuperPixel of interest (select only ones intersecting input reference)");
-	std::string sptempname =  tmpdir + "/selectedSP.shp";
-	otb::ogr::DataSource::Pointer selectedSP = otb::ogr::DataSource::New(sptempname, otb::ogr::DataSource::Modes::Overwrite);
-	auto projRef = lreader->GetOutput()->GetProjectionRef();
-	otb::ogr::Layer layer(ITK_NULLPTR, false);
 
-	OGRSpatialReference oSRS(projRef.c_str());
-	std::vector<std::string> options;
-
-	std::string layername = itksys::SystemTools::GetFilenameName(sptempname.c_str());
-	std::string extension = itksys::SystemTools::GetFilenameLastExtension(sptempname.c_str());
-	layername = layername.substr(0,layername.size()-(extension.size()));
-	layer = selectedSP->CreateLayer(layername, &oSRS, wkbMultiPolygon, options);
-	OGRFieldDefn labelField("label", OFTInteger);
-	layer.CreateField(labelField, true);
-    
-	otb::ogr::Layer::feature_iter<otb::ogr::Feature> SPit;
-	for (SPit=SPLayer.begin(); SPit != SPLayer.end(); ++SPit) {
-
-	  if(interSet.find((*SPit)["label"].GetValue<int>()) != interSet.end()){
-	    //Insert feature into selectedSP layer
-	    layer.CreateFeature(*SPit);
-	  }
-	}
-
-	layer.ogr().CommitTransaction();
-	selectedSP->SyncToDisk();
-    otbAppLogINFO("Generate SuperPixels of interest : Done");
     otbAppLogINFO("Start sampling SuperPixels at 100% rate");
-    
-	auto outSamples = fullSampleSelection(lreader->GetOutput(), selectedSP,
+	auto outSamples = fullSampleSelection(lreader->GetOutput(),
                                           tmpdir, ram, interSet, streamingManager,
                                           threadsNumber);
     otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
@@ -478,7 +450,6 @@ namespace otb
       }
 
     otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm,
-                                                      otb::ogr::DataSource::Pointer vectorData,
                                                       std::string tmpdir,
                                                       unsigned ram,
                                                       const std::unordered_set<int> & SP_id,
