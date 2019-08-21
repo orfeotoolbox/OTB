@@ -86,6 +86,8 @@ namespace otb
 
       typedef std::unordered_map<LabelType,std::vector<double> > LabeledVectorMapType;
       typedef std::unordered_map<LabelType,LabelType> LabeledIntMapType;
+      typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType> RAMDrivenAdaptativeStreamingManagerType;
+      typedef FloatVectorImageType::RegionType RegionType;
 
       itkNewMacro(Self);
       itkTypeMacro(Merging, otb::CompositeApplication);
@@ -154,6 +156,17 @@ namespace otb
 	lreader->UpdateOutputInformation();
 	LabelImageType::Pointer imageSeg = lreader->GetOutput();
 
+    //~ About streaming 
+    RegionType largestRegion = imageSeg->GetLargestPossibleRegion();
+    
+    RAMDrivenAdaptativeStreamingManagerType::Pointer
+              streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+    int availableRAM = GetParameterInt("ram");
+    streamingManager->SetAvailableRAMInMB(availableRAM);
+    float bias = 2.0; // empiric value;
+    streamingManager->SetBias(bias);
+    streamingManager->PrepareStreaming(imageSeg, largestRegion);
+    
 	CastFilterType::Pointer castFilter = CastFilterType::New();
 	castFilter->SetInput(imageSeg);
 	castFilter->UpdateOutputInformation();
@@ -201,7 +214,7 @@ namespace otb
 	    interSet.insert((*fi)["SPID0"].GetValue<double>());
 	  }
 	}
-    otbAppLogINFO("Generate SuperPixel of interest (select only ones intersecting input reference)");
+    //~ otbAppLogINFO("Generate SuperPixel of interest (select only ones intersecting input reference)");
 	std::string sptempname =  tmpdir + "/selectedSP.shp";
 	otb::ogr::DataSource::Pointer selectedSP = otb::ogr::DataSource::New(sptempname, otb::ogr::DataSource::Modes::Overwrite);
 	auto projRef = lreader->GetOutput()->GetProjectionRef();
@@ -230,9 +243,10 @@ namespace otb
 	selectedSP->SyncToDisk();
     otbAppLogINFO("Generate SuperPixels of interest : Done");
     otbAppLogINFO("Start sampling SuperPixels at 100% rate");
-    //~ std::unordered_set<int> interSet;
     
-	auto outSamples = fullSampleSelection(lreader->GetOutput(),selectedSP, tmpdir, ram, interSet, threadsNumber);
+	auto outSamples = fullSampleSelection(lreader->GetOutput(), selectedSP,
+                                          tmpdir, ram, interSet, streamingManager,
+                                          threadsNumber);
     otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
 	//Rasterize ref data
 	auto rasterFilter = OGRDataSourceToMapFilterType::New();
@@ -344,10 +358,6 @@ namespace otb
 	      counts.insert(std::pair<LabelType,unsigned int>(spLabel,0));
 	    }
 	  }
-	  // for (const auto e : histos.begin()->second){
-	  //   std::cout << e << " ";
-	  // }
-	  // std::cout << "\n";
       otbAppLogINFO("Write histograms init : first iteration");
 	  //For immediate training of the new model
 	  writeHistograms(initTrainSamples, labelList, histos, counts,"SPID0", (it > 1));
@@ -467,25 +477,39 @@ namespace otb
 	return output;
       }
 
-    otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm, otb::ogr::DataSource::Pointer vectorData, std::string tmpdir, unsigned ram, const std::unordered_set<int> & SP_id, unsigned int threadsNumber=1 ){
+    otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm,
+                                                      otb::ogr::DataSource::Pointer vectorData,
+                                                      std::string tmpdir,
+                                                      unsigned ram,
+                                                      const std::unordered_set<int> & SP_id,
+                                                      RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager,
+                                                      unsigned int threadsNumber=1){
 
     auto slic_geo = inputIm->GetGeoTransform();
-    LabelImageIterator in(inputIm, inputIm->GetRequestedRegion());
+    unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
     std::vector<std::tuple<int, float, float>> pixels_of_interest;
-
-    //~ get all super pixels of interest geo coordinates
-    for (in.GoToBegin(); !in.IsAtEnd(); ++in)
-      {
-        auto SP_value = in.Get();
-        if (SP_id.find(SP_value) != SP_id.end())
-        {
-            auto coords = in.GetIndex();
-            float x_geo_coord = slic_geo[0] + slic_geo[1] / 2.0 + slic_geo[1] * coords[0];
-            float y_geo_coord = slic_geo[3] + slic_geo[5] / 2.0 + slic_geo[5] * coords[1];
-            pixels_of_interest.push_back(std::tuple<int, float, float>{SP_value, x_geo_coord, y_geo_coord});
-        }
-      }
-
+    
+    //~ start streaming by piece
+    for(size_t piece=0;piece<numberOfStreamDivisions;++piece){
+        RegionType streamingRegion = streamingManager->GetSplit(piece);
+        inputIm->SetRequestedRegion(streamingRegion);
+        inputIm->PropagateRequestedRegion();
+        inputIm->UpdateOutputData();
+        //~ otbAppLogINFO("Processing region: "<<streamingRegion);
+        LabelImageIterator in(inputIm, inputIm->GetRequestedRegion());
+        //~ get all super pixels of interest geo coordinates
+        for (in.GoToBegin(); !in.IsAtEnd(); ++in)
+          {
+            auto SP_value = in.Get();
+            if (SP_id.find(SP_value) != SP_id.end())
+            {
+                auto coords = in.GetIndex();
+                float x_geo_coord = slic_geo[0] + slic_geo[1] / 2.0 + slic_geo[1] * coords[0];
+                float y_geo_coord = slic_geo[3] + slic_geo[5] / 2.0 + slic_geo[5] * coords[1];
+                pixels_of_interest.push_back(std::tuple<int, float, float>{SP_value, x_geo_coord, y_geo_coord});
+            }
+          }
+    }
 	std::stringstream tempName;
     tempName << tmpdir << "/fullSampleExtraction.shp";
     
@@ -500,7 +524,7 @@ namespace otb
     
     layername = layername.substr(0,layername.size() - (extension.size()));
     layer = outputSamples->CreateLayer(layername, &oSRS, wkbPoint, options);
-    OGRFieldDefn labelField("label", OFTInteger);
+    OGRFieldDefn labelField("label", OFTInteger64);
 	layer.CreateField(labelField, true);
 
     for (auto&& i : pixels_of_interest)
