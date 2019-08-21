@@ -458,8 +458,12 @@ namespace otb
 
     auto slic_geo = inputIm->GetGeoTransform();
     unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
-    std::vector<std::tuple<int, float, float>> pixels_of_interest;
+    std::vector<std::tuple<int, double, double>> pixels_of_interest;
     
+    //~ std::cout<< "Ox : " << double(slic_geo[0]);
+    //~ std::cout<< "Oy :" << double(slic_geo[3]);
+    //~ char input;
+    //~ std::cin >> input;
     //~ start streaming by piece
     for(size_t piece=0;piece<numberOfStreamDivisions;++piece){
         RegionType streamingRegion = streamingManager->GetSplit(piece);
@@ -475,9 +479,10 @@ namespace otb
             if (SP_id.find(SP_value) != SP_id.end())
             {
                 auto coords = in.GetIndex();
-                float x_geo_coord = slic_geo[0] + slic_geo[1] / 2.0 + slic_geo[1] * coords[0];
-                float y_geo_coord = slic_geo[3] + slic_geo[5] / 2.0 + slic_geo[5] * coords[1];
-                pixels_of_interest.push_back(std::tuple<int, float, float>{SP_value, x_geo_coord, y_geo_coord});
+                double x_geo_coord = double(slic_geo[0]) + double(slic_geo[1]) / double(2.0) + double(slic_geo[1]) * double(coords[0]);
+                double y_geo_coord = double(slic_geo[3]) + double(slic_geo[5]) / double(2.0) + double(slic_geo[5]) * double(coords[1]);
+                //~ double y_geo_coord = double(slic_geo[3]) + slic_geo[5] / 2.0 + slic_geo[5] * coords[1];
+                pixels_of_interest.push_back(std::tuple<int, double, double>{SP_value, x_geo_coord, y_geo_coord});
             }
           }
     }
@@ -501,8 +506,8 @@ namespace otb
     for (auto&& i : pixels_of_interest)
     {
         int SP_val = std::get<0>(i);
-        float coord_x = std::get<1>(i);
-        float coord_y = std::get<2>(i);
+        double coord_x = std::get<1>(i);
+        double coord_y = std::get<2>(i);
         
         OGRFeature *poFeature;
         poFeature = OGRFeature::CreateFeature(&layer.GetLayerDefn());
