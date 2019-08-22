@@ -93,8 +93,8 @@ namespace otb
 	SetDocAuthors(" ");
 	SetDocSeeAlso(" ");
 
-	AddParameter(ParameterType_InputImage,  "in",    "Input image");
-	SetParameterDescription( "in", "The input image." );
+	AddParameter(ParameterType_InputImageList,  "il",    "Input image");
+	SetParameterDescription( "il", "Image-list representing features" );
    
 	AddParameter(ParameterType_String, "inseg", "Input segmentation");
 	SetParameterDescription( "inseg", "Input raster containing the segment label IDs" );
@@ -132,14 +132,11 @@ namespace otb
       void DoExecute()
       {
     otbAppLogINFO("Start Training AutoContext");
-    unsigned int threadsNumber = 12;
-	//~ LabelVectorReaderType::Pointer vreader = LabelVectorReaderType::New();
-	//~ vreader->SetFileName(GetParameterString("in"));
-	//~ vreader->UpdateOutputInformation();
-	//~ auto imageIn = vreader->GetOutput();
-	VectorImageType::Pointer imageIn = GetParameterImage("in");
-    imageIn->UpdateOutputInformation();
+    unsigned int threadsNumber = 12;    
+    FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
+    VectorImageType::Pointer imageIn = inList->GetNthElement(0);
 
+    imageIn->UpdateOutputInformation();
 	LabelReaderType::Pointer lreader = LabelReaderType::New();
 	lreader->SetFileName(GetParameterString("inseg"));
 	lreader->UpdateOutputInformation();
