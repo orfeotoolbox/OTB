@@ -176,6 +176,8 @@ void IceViewer::AddVector(const std::string & fname, const std::string & key, co
     m_ColorMapIterator = m_ColorMap.begin();
     }
 
+  actor->CreateShader();
+
   m_View->AddActor(actor,key);
 
   // Add other layers if the dataset contains some

@@ -82,6 +82,8 @@ public:
   // Gl rendering of current state
   void Render() override;
 
+  void CreateShader() override;
+
   PointType ViewportToVectorTransform(const PointType & point) const;
 
   itkSetMacro(Color,ColorType);
@@ -179,6 +181,8 @@ private:
 
   RigidTransformType::Pointer m_ViewportForwardRotationTransform;
   RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
+
+  int m_ColorIdx;
 
 }; // End class GlVectorActor
 

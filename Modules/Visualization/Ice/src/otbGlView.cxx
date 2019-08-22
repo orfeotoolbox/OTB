@@ -105,17 +105,12 @@ void GlView::BeforeRendering()
   glClear( GL_COLOR_BUFFER_BIT );
 
   // Setup projection according to view settings
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  
   double ulx = -1.0;
   double uly = -1.0;
   double lrx = 1.0;
   double lry = 1.0;
   
   m_Settings->GetViewportExtent(ulx,uly,lrx,lry);
-
-  glOrtho(ulx, lrx, lry, uly, -1, 1);
 
   m_ProjMatrix[0] = 2.0/(lrx-ulx);
   m_ProjMatrix[1] = 0.0;
@@ -133,22 +128,6 @@ void GlView::BeforeRendering()
   m_ProjMatrix[13] = -(uly+lry)/(uly-lry);
   m_ProjMatrix[14] = 0.0;
   m_ProjMatrix[15] = 1.0;
-
-  // std::cout
-  //   << "glOrtho( "
-  //   << ulx << ", " << lrx << ", "
-  //   << lry << ", " << uly
-  //   << ", -1, 1 )"
-  //   << std::endl;
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
-  glPushMatrix();
-  
-  glTranslatef(m_Settings->GetRotationCenter()[0],m_Settings->GetRotationCenter()[1],0);
-  glRotatef(-m_Settings->GetRotationAngle()*180/M_PI,0,0,1);
-  glTranslatef(-m_Settings->GetRotationCenter()[0],-m_Settings->GetRotationCenter()[1],0);
 
   double ra = -m_Settings->GetRotationAngle();
   if(ra == 0.0)
