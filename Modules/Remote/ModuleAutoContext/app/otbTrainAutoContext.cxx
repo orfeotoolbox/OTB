@@ -244,7 +244,6 @@ namespace otb
 	
 	VectorTrainer->SetParameterString("io.out",modelName);
 	VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
-	// VectorTrainer->SetParameterString("io.confmatout","/disk2/DATA/temp/confMatTest");
 	std::vector<std::string> featureList;
 	for (unsigned i = 0; i < imageIn->GetNumberOfComponentsPerPixel(); i++) {
 	  std::stringstream s;
@@ -265,6 +264,13 @@ namespace otb
 
 	auto trainSamples = otb::ogr::DataSource::New();
 	//Extract and classify features for all samples
+    
+    //~ Dans le cas où N images sont en entrés, il faut que 'outSamples' contienne 
+    //~ les points à extraire pour toutes les images (a vérifier si ca fonctionne) ? 
+    //~    -> Non car l'appli fait les extractions que pour les samples utilisée pour l'histo 
+    //~       cette extration est faite IT fois pour IT itérations
+    
+    
 	std::vector<std::string> histoNames = std::vector<std::string>();
 	for (int it = 1; it <= this->GetParameterInt("nit"); it++) {
       otbAppLogINFO("Start iteration " << it);
@@ -335,9 +341,10 @@ namespace otb
 	  VectorTrainer->SetParameterString("rand","0");
 	  UpdateInternalParameters("train");
 	  ExecuteInternal("train");
-	}
+	}// iterations
+    
 	//TODO cleanup temp dir
-      }
+    }
 
       typename otb::ogr::DataSource::Pointer vectorizeNoStreaming(typename LabelImageType::Pointer labelIn, std::string tmpdir){
 	labelIn->UpdateOutputInformation();
