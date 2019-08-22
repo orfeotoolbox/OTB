@@ -105,7 +105,7 @@ namespace otb
 	SetDocAuthors(" ");
 	SetDocSeeAlso(" ");
 
-	AddParameter(ParameterType_String,  "in",    "Input image");
+	AddParameter(ParameterType_InputImage,  "in",    "Input image");
 	SetParameterDescription( "in", "The input image." );
    
 	AddParameter(ParameterType_String, "inseg", "Input segmentation");
