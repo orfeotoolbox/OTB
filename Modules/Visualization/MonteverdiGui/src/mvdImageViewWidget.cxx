@@ -239,6 +239,8 @@ ImageViewWidget
   // Set projection parameters of manipulator from layer data.
   OnSetProjectionRequired();
 
+  makeCurrent();
+
   // Insert image-models into image-view renderer.
   m_Renderer->SetLayerStack( stackedLayerModel );
 
