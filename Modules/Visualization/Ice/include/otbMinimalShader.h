@@ -43,6 +43,8 @@ public:
 
   itkNewMacro(Self);
 
+  itkGetMacro(ColorIdx, int);
+
 protected:
   MinimalShader();
 
@@ -66,6 +68,8 @@ private:
     };
 
   UniformLocs m_Loc;
+
+  int m_ColorIdx;
 }; // End class MinimalShader
 
 } // End namespace otb

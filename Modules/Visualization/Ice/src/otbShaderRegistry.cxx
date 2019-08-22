@@ -40,7 +40,11 @@ ShaderRegistry::Pointer  ShaderRegistry::Instance()
   if(m_Instance.IsNull())
     {
     m_Instance = ShaderRegistry::New();
-    glewInit();
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+      {
+      itkGenericExceptionMacro(<< "Failed to initialize GLEW: "<< glewGetErrorString(err));
+      }
     }
 
   return m_Instance;
@@ -151,7 +155,7 @@ unsigned int ShaderRegistry::GetShaderProgram(const std::string& name)
 
 unsigned int ShaderRegistry::CompileShader(int stype, const std::string& name, const std::string& src)
 {
-  GLuint shader  = glCreateShader(stype);
+  GLuint shader = glCreateShader(stype);
 
   // compile the sources
   const char * source_cstr = src.c_str();

@@ -163,6 +163,8 @@ QuicklookViewRenderer
   return;
 #endif
 
+  m_GlRoiActor->CreateShader();
+
   std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
   m_GlRoiActor->SetVisible( true );

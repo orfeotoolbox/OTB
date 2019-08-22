@@ -60,6 +60,8 @@ public:
   // Gl rendering of current state
   void Render() override;
 
+  void CreateShader() override;
+
   void SetUL( const PointType & );
 
   itkGetConstReferenceMacro(UL,PointType);

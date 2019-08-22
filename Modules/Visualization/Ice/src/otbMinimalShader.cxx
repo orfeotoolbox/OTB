@@ -39,6 +39,7 @@ MinimalShader::MinimalShader()
   m_Loc.modelview = glGetUniformLocation(m_Program, "in_mv");
   //  - for fragment shader
 
+  m_ColorIdx = glGetAttribLocation(m_Program , "in_color");
 }
 
 MinimalShader::~MinimalShader()

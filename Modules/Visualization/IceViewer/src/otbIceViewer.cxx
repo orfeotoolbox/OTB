@@ -1223,6 +1223,8 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
 
       roiActor->SetFill(true);
       roiActor->SetAlpha(0.2);
+
+      roiActor->CreateShader();
        
       m_View->AddActor(roiActor,tmpKey);
       m_View->MoveActorToEndOfRenderingOrder(tmpKey,true);

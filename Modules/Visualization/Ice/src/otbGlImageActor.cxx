@@ -73,11 +73,12 @@ void
 GlImageActor
 ::CreateShader()
 {
-  StandardShader::Pointer shader( StandardShader::New() );
-
-  shader->SetImageSettings( m_ImageSettings );
-
-  m_Shader = shader;
+  if (m_Shader.IsNull())
+    {
+    StandardShader::Pointer shader( StandardShader::New() );
+    shader->SetImageSettings( m_ImageSettings );
+    m_Shader = shader;
+    }
 }
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const

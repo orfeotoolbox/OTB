@@ -20,6 +20,8 @@
 
 #include "otbGlROIActor.h"
 #include "otbViewSettings.h"
+#include "otbMinimalShader.h"
+#include "otbCast.h"
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -135,9 +137,15 @@ void GlROIActor::UpdateData()
 
 void GlROIActor::Render()
 {
-  glColor3d(m_Color[0],m_Color[1],m_Color[2]);
+  m_Shader->LoadShader();
+  m_Shader->SetupShader();
+
+  otb::MinimalShader::Pointer shader =
+    otb::DynamicCast< otb::MinimalShader >(m_Shader);
+  int colorIdx = shader->GetColorIdx();
 
   glBegin(GL_LINE_LOOP);
+  glVertexAttrib4f(colorIdx, m_Color[0],m_Color[1],m_Color[2], 1.0);
   glVertex2d(m_VpUL[0],m_VpUL[1]);
   glVertex2d(m_VpUR[0],m_VpUR[1]);
   glVertex2d(m_VpLR[0],m_VpLR[1]);
@@ -148,8 +156,8 @@ void GlROIActor::Render()
     {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-    glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
     glBegin(GL_QUADS);
+    glVertexAttrib4f(colorIdx, m_Color[0],m_Color[1],m_Color[2], m_Alpha);
     glVertex2d(m_VpUL[0],m_VpUL[1]);
     glVertex2d(m_VpUR[0],m_VpUR[1]);
     glVertex2d(m_VpLR[0],m_VpLR[1]);
@@ -157,8 +165,18 @@ void GlROIActor::Render()
     glEnd();
     glDisable(GL_BLEND);
     }
+
+  m_Shader->UnloadShader();
 }
 
+void GlROIActor::CreateShader()
+{
+  if (m_Shader.IsNull())
+    {
+    MinimalShader::Pointer shader( MinimalShader::New() );
+    m_Shader = shader;
+    }
+}
 
 void GlROIActor::UpdateTransforms()
 {

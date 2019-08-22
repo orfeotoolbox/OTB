@@ -87,6 +87,12 @@ void GlView::BeforeRendering()
     if(it->second->GetVisible())
       {
       it->second->ProcessViewSettings();
+      Shader* shader = it->second->GetShader();
+      if (shader)
+        {
+        shader->m_ProjMatrix = m_ProjMatrix;
+        shader->m_ModelViewMatrix = m_ModelViewMatrix;
+        }
       }
     }
 
@@ -111,6 +117,23 @@ void GlView::BeforeRendering()
 
   glOrtho(ulx, lrx, lry, uly, -1, 1);
 
+  m_ProjMatrix[0] = 2.0/(lrx-ulx);
+  m_ProjMatrix[1] = 0.0;
+  m_ProjMatrix[2] = 0.0;
+  m_ProjMatrix[3] = 0.0;
+  m_ProjMatrix[4] = 0.0;
+  m_ProjMatrix[5] = 2.0/(uly-lry);
+  m_ProjMatrix[6] = 0.0;
+  m_ProjMatrix[7] = 0.0;
+  m_ProjMatrix[8] = 0.0;
+  m_ProjMatrix[9] = 0.0;
+  m_ProjMatrix[10] = -1.0;
+  m_ProjMatrix[11] = 0.0;
+  m_ProjMatrix[12] = -(lrx+ulx)/(lrx-ulx);
+  m_ProjMatrix[13] = -(uly+lry)/(uly-lry);
+  m_ProjMatrix[14] = 0.0;
+  m_ProjMatrix[15] = 1.0;
+
   // std::cout
   //   << "glOrtho( "
   //   << ulx << ", " << lrx << ", "
@@ -126,6 +149,50 @@ void GlView::BeforeRendering()
   glTranslatef(m_Settings->GetRotationCenter()[0],m_Settings->GetRotationCenter()[1],0);
   glRotatef(-m_Settings->GetRotationAngle()*180/M_PI,0,0,1);
   glTranslatef(-m_Settings->GetRotationCenter()[0],-m_Settings->GetRotationCenter()[1],0);
+
+  double ra = -m_Settings->GetRotationAngle();
+  if(ra == 0.0)
+    {
+    m_ModelViewMatrix[0] = 1.0;
+    m_ModelViewMatrix[1] = 0.0;
+    m_ModelViewMatrix[2] = 0.0;
+    m_ModelViewMatrix[3] = 0.0;
+    m_ModelViewMatrix[4] = 0.0;
+    m_ModelViewMatrix[5] = 1.0;
+    m_ModelViewMatrix[6] = 0.0;
+    m_ModelViewMatrix[7] = 0.0;
+    m_ModelViewMatrix[8] = 0.0;
+    m_ModelViewMatrix[9] = 0.0;
+    m_ModelViewMatrix[10] = 1.0;
+    m_ModelViewMatrix[11] = 0.0;
+    m_ModelViewMatrix[12] = 0.0;
+    m_ModelViewMatrix[13] = 0.0;
+    m_ModelViewMatrix[14] = 0.0;
+    m_ModelViewMatrix[15] = 1.0;
+    }
+  else
+    {
+    double rcx = m_Settings->GetRotationCenter()[0];
+    double rcy = m_Settings->GetRotationCenter()[1];
+    double cos_a = cos(ra);
+    double sin_a = sin(ra);
+    m_ModelViewMatrix[0] = cos_a;
+    m_ModelViewMatrix[1] = sin_a;
+    m_ModelViewMatrix[2] = 0.0;
+    m_ModelViewMatrix[3] = 0.0;
+    m_ModelViewMatrix[4] = -sin_a;
+    m_ModelViewMatrix[5] = cos_a;
+    m_ModelViewMatrix[6] = 0.0;
+    m_ModelViewMatrix[7] = 0.0;
+    m_ModelViewMatrix[8] = 0.0;
+    m_ModelViewMatrix[9] = 0.0;
+    m_ModelViewMatrix[10] = 1.0;
+    m_ModelViewMatrix[11] = 0.0;
+    m_ModelViewMatrix[12] = rcx * (1.0 - cos_a) + rcy * sin_a;
+    m_ModelViewMatrix[13] = -rcx * sin_a + rcy * (1.0 - cos_a);
+    m_ModelViewMatrix[14] = 0.0;
+    m_ModelViewMatrix[15] = 1.0;
+    }
 
   // glScalef(m_Settings->GetSpacing()[0],m_Settings->GetSpacing()[1],1);
 }
