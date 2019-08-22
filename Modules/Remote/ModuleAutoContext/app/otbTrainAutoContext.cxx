@@ -145,7 +145,6 @@ namespace otb
       {
     otbAppLogINFO("Start Training AutoContext");
     unsigned int threadsNumber = 12;
-    //~ std::cout << "Nombre de threads : " << threadsNumber << std::endl;
 	LabelVectorReaderType::Pointer vreader = LabelVectorReaderType::New();
 	vreader->SetFileName(GetParameterString("in"));
 	vreader->UpdateOutputInformation();
@@ -290,13 +289,8 @@ namespace otb
 	      featureList.push_back(s.str());
 	      histoNames.push_back(s.str());
 	    }
-	    // trainSamples = otb::ogr::DataSource::New(trainSamples_s,otb::ogr::DataSource::Modes::Update_LayerUpdate);
 	  }
 	  else{
-	    //Use "trainSamples" which contains histogram fields
-	    // trainSamples = otb::ogr::DataSource::New(trainSamples_s,otb::ogr::DataSource::Modes::Read);
-	  //   std::stringstream testName;
-	  // testName << "/disk2/DATA/temp/trainSamples"<< it <<".shp" ;
       otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
 	  otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
 	  extractFeaturesAndClassify<LabelVectorImageType>(imageIn, trainSamples, trainSamplesNew, modelName, "predicted", histoNames, "label", 1000);
@@ -307,12 +301,7 @@ namespace otb
       otbAppLogINFO("Calculate histograms");
 	  LabeledVectorMapType histos;
 	  LabeledIntMapType counts;
-	  //Reread from memory
-	  // trainSamples = otb::ogr::DataSource::New(trainSamples_s,otb::ogr::DataSource::Modes::Read);
 	  
-	  // otb::ogr::Layer a =trainSamples->GetLayerChecked(0);
-	  // trainSamples2->CopyLayer(a,"layer");
-	  // trainSamples2->SyncToDisk();
 	  auto classifiedPointsLayer = trainSamples->GetLayerChecked(0);
 	  otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
 	  for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++) {
@@ -347,7 +336,6 @@ namespace otb
 	  modelName=modelName_s.str();
 	  VectorTrainer->SetParameterString("io.out",modelName);
 	  VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
-	  // VectorTrainer->SetParameterString("io.confmatout","/disk2/DATA/temp/confMatTest");
 	  
       //~ use sharkrf could improve results and computational time
 	  UpdateInternalParameters("train");
@@ -409,8 +397,6 @@ namespace otb
 
       template<typename TInputImageType>
       void extractFeaturesAndClassify(typename TInputImageType::Pointer im, otb::ogr::DataSource::Pointer const& inputDS, otb::ogr::DataSource::Pointer &outputDS, std::string modelName, std::string classField, std::vector<std::string> extraFieldNames, std::string randomFieldName = "label", unsigned ram=512){
-	// std::cout << "extract features " << outputName << std::endl;
-	// otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputName,otb::ogr::DataSource::Modes::Update_LayerUpdate);
 	typedef otb::ExtractClassifyFilter<TInputImageType, LabelType> ExtractClassifyFilterType;
 	typename ExtractClassifyFilterType::Pointer filter = ExtractClassifyFilterType::New();
 	filter->SetSamplePositions(inputDS);
@@ -459,11 +445,7 @@ namespace otb
     auto slic_geo = inputIm->GetGeoTransform();
     unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
     std::vector<std::tuple<int, double, double>> pixels_of_interest;
-    
-    //~ std::cout<< "Ox : " << double(slic_geo[0]);
-    //~ std::cout<< "Oy :" << double(slic_geo[3]);
-    //~ char input;
-    //~ std::cin >> input;
+
     //~ start streaming by piece
     for(size_t piece=0;piece<numberOfStreamDivisions;++piece){
         RegionType streamingRegion = streamingManager->GetSplit(piece);
@@ -481,7 +463,6 @@ namespace otb
                 auto coords = in.GetIndex();
                 double x_geo_coord = double(slic_geo[0]) + double(slic_geo[1]) / double(2.0) + double(slic_geo[1]) * double(coords[0]);
                 double y_geo_coord = double(slic_geo[3]) + double(slic_geo[5]) / double(2.0) + double(slic_geo[5]) * double(coords[1]);
-                //~ double y_geo_coord = double(slic_geo[3]) + slic_geo[5] / 2.0 + slic_geo[5] * coords[1];
                 pixels_of_interest.push_back(std::tuple<int, double, double>{SP_value, x_geo_coord, y_geo_coord});
             }
           }
