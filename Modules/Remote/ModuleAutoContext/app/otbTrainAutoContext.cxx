@@ -68,9 +68,10 @@ namespace otb
       typedef std::map<std::string, unsigned long>                                      ClassCountMapType;
       typedef RateCalculatorType::MapRateType                                           MapRateType;
       typedef otb::OGRDataToClassStatisticsFilter<LabelImageType,LabelImageType>        ClassStatFilterType;
-      typedef otb::ConcatenateVectorImageFilter< LabelVectorImageType, LabelVectorImageType, LabelVectorImageType > ConcatenateImageFilter;
+      typedef otb::ConcatenateVectorImageFilter< VectorImageType, VectorImageType, LabelVectorImageType > ConcatenateImageFilter;
+      //~ typedef otb::ConcatenateVectorImageFilter< LabelVectorImageType, LabelVectorImageType, LabelVectorImageType > ConcatenateImageFilter;
 
-      typedef otb::ImageToVectorImageCastFilter< LabelImageType, LabelVectorImageType > CastFilterType;
+      typedef otb::ImageToVectorImageCastFilter< LabelImageType, VectorImageType >      CastFilterType;
       typedef std::unordered_map<LabelType,std::vector<double> >                        LabeledVectorMapType;
       typedef std::unordered_map<LabelType,LabelType>                                   LabeledIntMapType;
       typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType>                 RAMDrivenAdaptativeStreamingManagerType;
@@ -136,7 +137,7 @@ namespace otb
 	//~ vreader->SetFileName(GetParameterString("in"));
 	//~ vreader->UpdateOutputInformation();
 	//~ auto imageIn = vreader->GetOutput();
-	VectorImageType::Pointer imageIn = GetParameterString("in");
+	VectorImageType::Pointer imageIn = GetParameterImage("in");
     imageIn->UpdateOutputInformation();
 
 	LabelReaderType::Pointer lreader = LabelReaderType::New();
@@ -190,7 +191,7 @@ namespace otb
 
 	std::string tempName = tmpdir+ "/featExtract.shp";
 	
-	otb::ogr::DataSource::Pointer inter = extractFeatures<LabelVectorImageType>(castFilter->GetOutput(), refLabelDataSource , tempName, "SPID", field, ram, threadsNumber);
+	otb::ogr::DataSource::Pointer inter = extractFeatures<VectorImageType>(castFilter->GetOutput(), refLabelDataSource , tempName, "SPID", field, ram, threadsNumber);
 
     otbAppLogINFO("Add SuperPixel ID to reference : Done");
 	//Store labels of intersection
@@ -232,7 +233,7 @@ namespace otb
 	//Extract features only on labeled samples for training
 	const std::string initTrainSamples_s = tmpdir+"/initTrainSamples.shp";
     otbAppLogINFO("Start sample Extraction : initialize training sample-set");
-	auto initTrainSamples = extractFeatures<LabelVectorImageType>(imageIn, inter, initTrainSamples_s, "feature",field, 1000);
+	auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter, initTrainSamples_s, "feature",field, 1000);
 	initTrainSamples->SyncToDisk();
     otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
 
@@ -251,7 +252,7 @@ namespace otb
 	  featureList.push_back(s.str());
 	}
     
-    //~ use sharkrf could improve results and computational time
+    //~ //use sharkrf could improve results and computational time
 	UpdateInternalParameters("train");
 	VectorTrainer->SetParameterStringList("feat",featureList);
 	UpdateInternalParameters("train");
@@ -261,8 +262,7 @@ namespace otb
 	UpdateInternalParameters("train");
 	VectorTrainer->ExecuteAndWriteOutput();
     otbAppLogINFO("Training firts iteration : DONE");
-    
-	// const std::string trainSamples_s("/disk2/DATA/temp/trainSamples.shp");
+
 	auto trainSamples = otb::ogr::DataSource::New();
 	//Extract and classify features for all samples
 	std::vector<std::string> histoNames = std::vector<std::string>();
@@ -270,7 +270,7 @@ namespace otb
       otbAppLogINFO("Start iteration " << it);
 	  if(it==1){
 	    //Use "outSamples" which doesn't contain histogram fields
-	    extractFeaturesAndClassify<LabelVectorImageType>(imageIn, outSamples, trainSamples, modelName, "predicted", histoNames, "label", 1000);
+	    extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples, trainSamples, modelName, "predicted", histoNames, "label", 1000);
 
 	    for (unsigned i = 0; i < labelListSize; i++) {
 	      std::stringstream s;
@@ -282,7 +282,7 @@ namespace otb
 	  else{
       otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
 	  otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
-	  extractFeaturesAndClassify<LabelVectorImageType>(imageIn, trainSamples, trainSamplesNew, modelName, "predicted", histoNames, "label", 1000);
+	  extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples, trainSamplesNew, modelName, "predicted", histoNames, "label", 1000);
       otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
 	  trainSamples=trainSamplesNew;
 	  }
@@ -326,7 +326,7 @@ namespace otb
 	  VectorTrainer->SetParameterString("io.out",modelName);
 	  VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
 	  
-      //~ use sharkrf could improve results and computational time
+      //~ //use sharkrf could improve results and computational time
 	  UpdateInternalParameters("train");
 	  VectorTrainer->SetParameterStringList("feat",featureList);
 	  UpdateInternalParameters("train");
@@ -384,45 +384,61 @@ namespace otb
 	return ogrDS;
       }
 
-      template<typename TInputImageType>
-      void extractFeaturesAndClassify(typename TInputImageType::Pointer im, otb::ogr::DataSource::Pointer const& inputDS, otb::ogr::DataSource::Pointer &outputDS, std::string modelName, std::string classField, std::vector<std::string> extraFieldNames, std::string randomFieldName = "label", unsigned ram=512){
-	typedef otb::ExtractClassifyFilter<TInputImageType, LabelType> ExtractClassifyFilterType;
-	typename ExtractClassifyFilterType::Pointer filter = ExtractClassifyFilterType::New();
-	filter->SetSamplePositions(inputDS);
-	filter->SetInput(im);
-	filter->SetOutputSamples(outputDS);
-	filter->SetLayerIndex(0);
-	filter->SetLabelFieldName(classField);
-	filter->SetModelString(modelName);
-	// Remove when field name issue is resolved
-	filter->SetFieldName(randomFieldName);
-	if (!extraFieldNames.empty()){
-	  filter->SetExtraFields(extraFieldNames);
-	}
-	filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
-	filter->Update();
-	// outputDS->SyncToDisk();
-      }
+    template<typename TInputImageType>
+    void extractFeaturesAndClassify(typename TInputImageType::Pointer im,
+                                    otb::ogr::DataSource::Pointer const& inputDS,
+                                    otb::ogr::DataSource::Pointer &outputDS,
+                                    std::string modelName,
+                                    std::string classField,
+                                    std::vector<std::string> extraFieldNames,
+                                    std::string randomFieldName="label",
+                                    unsigned ram=512)
+    {
+        typedef otb::ExtractClassifyFilter<TInputImageType, LabelType> ExtractClassifyFilterType;
+        typename ExtractClassifyFilterType::Pointer filter = ExtractClassifyFilterType::New();
+        filter->SetSamplePositions(inputDS);
+        filter->SetInput(im);
+        filter->SetOutputSamples(outputDS);
+        filter->SetLayerIndex(0);
+        filter->SetLabelFieldName(classField);
+        filter->SetModelString(modelName);
+        // Remove when field name issue is resolved
+        filter->SetFieldName(randomFieldName);
+        if (!extraFieldNames.empty()){
+          filter->SetExtraFields(extraFieldNames);
+        }
+        filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
+        filter->Update();
+        // outputDS->SyncToDisk();
+    }
 
-      template<typename TInputImageType>
-      otb::ogr::DataSource::Pointer extractFeatures(typename TInputImageType::Pointer im, otb::ogr::DataSource::Pointer positions, std::string outputName, std::string outputPrefix, std::string randomFieldName, unsigned ram=512, unsigned int threadsNumber=1){
-	otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputName,otb::ogr::DataSource::Modes::Overwrite);
-	typedef otb::ImageSampleExtractorFilter<TInputImageType> ExtractionFilterType;
-	typename ExtractionFilterType::Pointer filter = ExtractionFilterType::New();
-    filter->SetNumberOfThreads(threadsNumber);
-	filter->SetInput(im);
-	filter->SetLayerIndex(0);
-	filter->SetSamplePositions(positions);
-	filter->SetOutputSamples(output);
-	filter->SetClassFieldName(randomFieldName);
-	filter->SetOutputFieldPrefix(outputPrefix);
-	std::vector<std::string> nameList;
-	filter->SetOutputFieldNames(nameList);
-	filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
-	filter->Update();
-	output->SyncToDisk();
-	return output;
-      }
+//~ otb::ogr::DataSource::Pointer extractFeatures(typename TInputImageType::Pointer im,
+    template<typename TInputImageType>
+    otb::ogr::DataSource::Pointer extractFeatures(typename TInputImageType::Pointer im,
+                                                  otb::ogr::DataSource::Pointer positions,
+                                                  std::string outputName,
+                                                  std::string outputPrefix,
+                                                  std::string randomFieldName,
+                                                  unsigned ram=512,
+                                                  unsigned int threadsNumber=1)
+    {
+        otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(outputName,otb::ogr::DataSource::Modes::Overwrite);
+        typedef otb::ImageSampleExtractorFilter<TInputImageType> ExtractionFilterType;
+        typename ExtractionFilterType::Pointer filter = ExtractionFilterType::New();
+        filter->SetNumberOfThreads(threadsNumber);
+        filter->SetInput(im);
+        filter->SetLayerIndex(0);
+        filter->SetSamplePositions(positions);
+        filter->SetOutputSamples(output);
+        filter->SetClassFieldName(randomFieldName);
+        filter->SetOutputFieldPrefix(outputPrefix);
+        std::vector<std::string> nameList;
+        filter->SetOutputFieldNames(nameList);
+        filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
+        filter->Update();
+        output->SyncToDisk();
+        return output;
+    }
 
     otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm,
                                                       std::string tmpdir,
