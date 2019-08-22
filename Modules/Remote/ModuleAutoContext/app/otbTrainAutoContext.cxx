@@ -37,57 +37,44 @@ namespace otb
     class TrainAutoContext : public CompositeApplication
     {
     public:
-      typedef TrainAutoContext Self;
-      typedef Application Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
-
-      typedef unsigned int                                                        LabelType;
-      typedef otb::Image<LabelType>                                                LabelImageType;
-      typedef otb::ImageFileReader<LabelImageType>                                 LabelReaderType;
-      typedef otb::ImageFileWriter<LabelImageType>                                 LabelWriterType;
-
-      typedef otb::VectorImage<LabelType>                                          LabelVectorImageType;
-      typedef otb::VectorImage<LabelType>::PixelType                               LabelVectorImagePixelType;
-      typedef otb::ImageFileWriter<LabelVectorImageType>                           LabelVectorWriterType;
-      typedef otb::ImageFileReader<LabelVectorImageType>                           LabelVectorReaderType;
-
-      typedef float                                                                ComponentType;
-      typedef otb::VectorImage<ComponentType>                                      FloatVectorImageType;
-      typedef otb::ImageFileReader<FloatVectorImageType>                           FloatVectorImageReaderType;
-      typedef otb::ImageFileWriter<FloatVectorImageType>                           FloatVectorImageWriterType;
-      typedef typename FloatVectorImageType::PixelType                             SampleType;
-
-
-      typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
-      typedef otb::ExtractROI<LabelType,LabelType> ExtractROIFilterType;
-      typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-
-      typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType> LabelImageToOGRDataSourceFilterType;
-
-      typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
-
+      typedef TrainAutoContext                                                         Self;
+      typedef Application                                                              Superclass;
+      typedef itk::SmartPointer<Self>                                                  Pointer;
+      typedef itk::SmartPointer<const Self>                                            ConstPointer;
+      
+      typedef unsigned int                                                             LabelType;
+      typedef otb::Image<LabelType>                                                    LabelImageType;
+      typedef otb::ImageFileReader<LabelImageType>                                     LabelReaderType;
+      typedef otb::ImageFileWriter<LabelImageType>                                     LabelWriterType;
+      typedef otb::VectorImage<LabelType>                                              LabelVectorImageType;
+      typedef otb::VectorImage<LabelType>::PixelType                                   LabelVectorImagePixelType;
+      typedef otb::ImageFileWriter<LabelVectorImageType>                               LabelVectorWriterType;
+      typedef otb::ImageFileReader<LabelVectorImageType>                               LabelVectorReaderType;
+      typedef float                                                                    ComponentType;
+      typedef otb::VectorImage<ComponentType>                                          FloatVectorImageType;
+      typedef otb::ImageFileReader<FloatVectorImageType>                               FloatVectorImageReaderType;
+      typedef otb::ImageFileWriter<FloatVectorImageType>                               FloatVectorImageWriterType;
+      typedef typename FloatVectorImageType::PixelType                                 SampleType;
+      typedef otb::StreamingStatisticsImageFilter<LabelImageType>                      StatisticsImageFilterType;
+      typedef otb::ExtractROI<LabelType,LabelType>                                     ExtractROIFilterType;
+      typedef itk::ImageRegionConstIterator<LabelImageType>                            LabelImageIterator;
+      typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>                     LabelImageToOGRDataSourceFilterType;
+      typedef otb::VectorDataFileWriter<VectorDataType>                                VectorDataFileWriterType;
       typedef otb::OGRDataToSamplePositionFilter<LabelImageType, LabelImageType,otb::RandomSampler> RandomSamplerType;
 
-      typedef otb::SamplingRateCalculator               RateCalculatorType;
-
-      typedef otb::OGRDataSourceToLabelImageFilter<LabelImageType> OGRDataSourceToMapFilterType;
-
-
-
-      typedef std::map<std::string, unsigned long>      ClassCountMapType;
-      typedef RateCalculatorType::MapRateType           MapRateType;
-
-      typedef otb::OGRDataToClassStatisticsFilter<LabelImageType,LabelImageType> ClassStatFilterType;
-
+      typedef otb::SamplingRateCalculator                                               RateCalculatorType;
+      typedef otb::OGRDataSourceToLabelImageFilter<LabelImageType>                      OGRDataSourceToMapFilterType;
+      typedef otb::VectorImage<float>                                                   VectorImageType;
+      typedef std::map<std::string, unsigned long>                                      ClassCountMapType;
+      typedef RateCalculatorType::MapRateType                                           MapRateType;
+      typedef otb::OGRDataToClassStatisticsFilter<LabelImageType,LabelImageType>        ClassStatFilterType;
       typedef otb::ConcatenateVectorImageFilter< LabelVectorImageType, LabelVectorImageType, LabelVectorImageType > ConcatenateImageFilter;
 
       typedef otb::ImageToVectorImageCastFilter< LabelImageType, LabelVectorImageType > CastFilterType;
-
-      typedef std::unordered_map<LabelType,std::vector<double> > LabeledVectorMapType;
-      typedef std::unordered_map<LabelType,LabelType> LabeledIntMapType;
-      typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType> RAMDrivenAdaptativeStreamingManagerType;
-      typedef FloatVectorImageType::RegionType RegionType;
+      typedef std::unordered_map<LabelType,std::vector<double> >                        LabeledVectorMapType;
+      typedef std::unordered_map<LabelType,LabelType>                                   LabeledIntMapType;
+      typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType>                 RAMDrivenAdaptativeStreamingManagerType;
+      typedef FloatVectorImageType::RegionType                                          RegionType;
 
       itkNewMacro(Self);
       itkTypeMacro(Merging, otb::CompositeApplication);
@@ -145,10 +132,12 @@ namespace otb
       {
     otbAppLogINFO("Start Training AutoContext");
     unsigned int threadsNumber = 12;
-	LabelVectorReaderType::Pointer vreader = LabelVectorReaderType::New();
-	vreader->SetFileName(GetParameterString("in"));
-	vreader->UpdateOutputInformation();
-	auto imageIn = vreader->GetOutput();
+	//~ LabelVectorReaderType::Pointer vreader = LabelVectorReaderType::New();
+	//~ vreader->SetFileName(GetParameterString("in"));
+	//~ vreader->UpdateOutputInformation();
+	//~ auto imageIn = vreader->GetOutput();
+	VectorImageType::Pointer imageIn = GetParameterString("in");
+    imageIn->UpdateOutputInformation();
 
 	LabelReaderType::Pointer lreader = LabelReaderType::New();
 	lreader->SetFileName(GetParameterString("inseg"));
