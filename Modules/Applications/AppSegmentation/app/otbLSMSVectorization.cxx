@@ -292,7 +292,7 @@ private:
 
       //Creation of a multipolygon where are stored the geometries to be merged
       OGRMultiPolygon geomToMerge;
-      geomToMerge.addGeometry(firstFeature.GetGeometry());
+      AddValidGeometry(geomToMerge, firstFeature.GetGeometry());
       bool merging = true;
       otb::ogr::Feature nextFeature(nullptr);
       bool haveMerged=false;
@@ -309,7 +309,7 @@ private:
           //Storing of the new geometry if labels are identical
           if(merging)
             {
-            geomToMerge.addGeometry(nextFeature.GetGeometry());
+            AddValidGeometry(geomToMerge, nextFeature.GetGeometry());
             layer.DeleteFeature(nextFeature.GetFID());
             haveMerged=true;
             }
@@ -376,6 +376,18 @@ private:
     clock_t toc = clock();
 
     otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
+  }
+
+  void AddValidGeometry(OGRMultiPolygon &multi, OGRGeometry const * g)
+  {
+    if (g->IsValid())
+      {
+      multi.addGeometry(g);
+      }
+    else
+      {
+      multi.addGeometryDirectly( g->Simplify(0.0) );
+      }
   }
 
 };
