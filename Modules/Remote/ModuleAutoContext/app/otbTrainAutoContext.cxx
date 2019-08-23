@@ -238,14 +238,14 @@ namespace otb
 	rasterFilter->SetOutputProjectionRef(lreader->GetOutput()->GetProjectionRef());
 	rasterFilter->UpdateOutputInformation();
   
-	auto refRasterCast = CastFilterType::New();
-	refRasterCast->SetInput(rasterFilter->GetOutput());
-	refRasterCast->UpdateOutputInformation();
+	//~ auto refRasterCast = CastFilterType::New();
+	//~ refRasterCast->SetInput(rasterFilter->GetOutput());
+	//~ refRasterCast->UpdateOutputInformation();
 
-	//Set up image concatenation
-	ConcatenateImageFilter::Pointer concatImRefData = ConcatenateImageFilter::New();
-	concatImRefData->SetInput1(imageIn);
-	concatImRefData->SetInput2(refRasterCast->GetOutput());
+	//~ //Set up image concatenation
+	//~ ConcatenateImageFilter::Pointer concatImRefData = ConcatenateImageFilter::New();
+	//~ concatImRefData->SetInput1(imageIn);
+	//~ concatImRefData->SetInput2(refRasterCast->GetOutput());
 
    
     
