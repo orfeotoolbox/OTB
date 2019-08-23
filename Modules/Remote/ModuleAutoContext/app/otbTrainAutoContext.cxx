@@ -41,7 +41,7 @@ namespace otb
       typedef Application                                                              Superclass;
       typedef itk::SmartPointer<Self>                                                  Pointer;
       typedef itk::SmartPointer<const Self>                                            ConstPointer;
-      
+
       typedef unsigned int                                                             LabelType;
       typedef otb::Image<LabelType>                                                    LabelImageType;
       typedef otb::ImageFileReader<LabelImageType>                                     LabelReaderType;
@@ -76,7 +76,7 @@ namespace otb
       typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType>                 RAMDrivenAdaptativeStreamingManagerType;
       typedef FloatVectorImageType::RegionType                                          RegionType;
       typedef otb::ObjectList<FloatVectorImageType> FloaVectorImageListType;
-      
+
       itkNewMacro(Self);
       itkTypeMacro(Merging, otb::CompositeApplication);
 
@@ -95,7 +95,7 @@ namespace otb
 
 	AddParameter(ParameterType_InputImageList,  "il",    "Input image list");
 	SetParameterDescription( "il", "Image-list representing features" );
-   
+
 	AddParameter(ParameterType_StringList, "inseg", "Input segmentation list");
 	SetParameterDescription( "inseg", "Input raster containing the segment label IDs" );
 
@@ -103,26 +103,26 @@ namespace otb
 
     AddParameter(ParameterType_StringList, "refdata", "Reference data list");
 	SetParameterDescription( "refdata", "Shapefile containing labeled points for training." );
-	
+
 	AddParameter(ParameterType_String, "field", "Label field");
 	SetParameterDescription( "field", "Field in reference data containing the training labels." );
 
 	AddParameter(ParameterType_String, "out", "output path");
 	SetParameterDescription( "out", "Path for storing results" );
-		
+
 	AddParameter(ParameterType_Int, "nit", "number of iterations");
 	SetParameterDescription( "nit", "Number of iterations for AutoContext" );
 	SetDefaultParameterInt("nit",3);
 	SetMinimumParameterIntValue("nit",1);
-	
+
 	AddRAMParameter();
-	
+
 	GDALSetCacheMax(0);
-	
+
 	ClearApplications();
 	AddApplication("TrainVectorClassifier", "train", "train vector classifier");
 	AddApplication("VectorClassifier","classifier","Vector Classifier");
-	
+
       }
 
       void DoUpdateParameters()
@@ -131,11 +131,15 @@ namespace otb
 
       void DoExecute()
       {
-    unsigned int threadsNumber = 12;    
+    unsigned int threadsNumber = 12;
     FloatVectorImageListType::Pointer in_img_list = GetParameterImageList("il");
     const std::vector<std::string> in_seg_list = GetParameterStringList("inseg");
     const std::vector<std::string> in_ref_list = GetParameterStringList("refdata");
-    
+
+    const std::string tmpdir = GetParameterString("tmpdir");
+    const unsigned ram = GetParameterInt("ram");
+    const std::string field = GetParameterString("field");
+
     //~ Some checks
     const unsigned int nbImages = in_img_list->Size();
     const unsigned int nbSeg = in_seg_list.size();
@@ -149,128 +153,135 @@ namespace otb
     {
         itkExceptionMacro("number of input image, segmentation, reference must be the same");
     }
-    
-    //~ inputs to iterate
-    size_t index = 0;
-    VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
-    imageIn->UpdateOutputInformation();
-    
-    std::string in_seg = in_seg_list[index];
-	LabelReaderType::Pointer lreader = LabelReaderType::New();
-	lreader->SetFileName(in_seg);
-	lreader->UpdateOutputInformation();
-	LabelImageType::Pointer imageSeg = lreader->GetOutput();
+    //~ TODO : check if every input image get the same number of bands
 
-    std::string in_ref = in_ref_list[index];
-    
-    //~ About streaming 
-    RegionType largestRegion = imageSeg->GetLargestPossibleRegion();
-    RAMDrivenAdaptativeStreamingManagerType::Pointer
-              streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
-    int availableRAM = GetParameterInt("ram");
-    streamingManager->SetAvailableRAMInMB(availableRAM);
-    float bias = 2.0; // empiric value;
-    streamingManager->SetBias(bias);
-    streamingManager->PrepareStreaming(imageSeg, largestRegion);
-    
-	CastFilterType::Pointer castFilter = CastFilterType::New();
-	castFilter->SetInput(imageSeg);
-	castFilter->UpdateOutputInformation();
-	
-	const std::string tmpdir = GetParameterString("tmpdir");
-	const unsigned ram = GetParameterInt("ram");
-	const std::string field = GetParameterString("field");
-    otbAppLogINFO("Preparing data");
-	// Vectorize segmentation
-	otb::ogr::DataSource::Pointer SPDataSource = vectorizeNoStreaming(imageSeg,tmpdir);
-	otb::ogr::Layer SPLayer = SPDataSource->GetLayerChecked(0);
 
-	//Intersection with reference data samples
-	otb::ogr::DataSource::Pointer refLabelDataSource = otb::ogr::DataSource::New(in_ref, otb::ogr::DataSource::Modes::Read);
+    std::vector<otb::ogr::DataSource::Pointer> vectors_to_merge;
 
-	//Create list of labels
-	std::vector<LabelType> labelList;
-	auto refLabelLayer = refLabelDataSource->GetLayerChecked(0);
-	otb::ogr::Layer::feature_iter<otb::ogr::Feature> refLabelIt;
-	for (refLabelIt=refLabelLayer.begin();refLabelIt!=refLabelLayer.end(); refLabelIt++) {
-	  //std::set will sort and only insert if unique
-	  labelList.push_back((*refLabelIt)[field].GetValue<long long>());
-	}
-	std::sort(labelList.begin(),labelList.end());
-	auto last = std::unique(labelList.begin(),labelList.end());
-	labelList.erase(last,labelList.end());
-	std::cout << "Labels found : ";
-	for (auto e : labelList) {
-	  std::cout << e << " ";
-	}
-	std::cout << "\n";
-	const unsigned labelListSize=labelList.size();
+    //~ iterate over inputs
+    for (size_t index = 0; index < nbImages; ++index)
+    {
+        VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
+        imageIn->UpdateOutputInformation();
 
-	std::string tempName = tmpdir+ "/featExtract.shp";
-	
-	otb::ogr::DataSource::Pointer inter = extractFeatures<VectorImageType>(castFilter->GetOutput(), refLabelDataSource , tempName, "SPID", field, ram, threadsNumber);
+        std::string in_seg = in_seg_list[index];
+        LabelReaderType::Pointer lreader = LabelReaderType::New();
+        lreader->SetFileName(in_seg);
+        lreader->UpdateOutputInformation();
+        LabelImageType::Pointer imageSeg = lreader->GetOutput();
 
-    otbAppLogINFO("Add SuperPixel ID to reference : Done");
-	//Store labels of intersection
-	std::unordered_set<int> interSet;
-	auto l = inter->GetLayerChecked(0);
-	otb::ogr::Layer::feature_iter<otb::ogr::Feature> fi;
-	for (fi=l.begin();fi!=l.end(); fi++) {
-	  for (int i = 0; i < fi->GetSize(); i++) {
-	    interSet.insert((*fi)["SPID0"].GetValue<double>());
-	  }
-	}
+        std::string in_ref = in_ref_list[index];
 
-    otbAppLogINFO("Start sampling SuperPixels at 100% rate");
-	auto outSamples = fullSampleSelection(lreader->GetOutput(),
-                                          tmpdir, ram, interSet, streamingManager,
-                                          threadsNumber);
-    otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
-	//Rasterize ref data
-	auto rasterFilter = OGRDataSourceToMapFilterType::New();
-	rasterFilter->AddOGRDataSource(refLabelDataSource);
-	rasterFilter->SetOutputSize(lreader->GetOutput()->GetLargestPossibleRegion().GetSize());
-	rasterFilter->SetOutputOrigin(lreader->GetOutput()->GetOrigin());
-	rasterFilter->SetOutputSpacing(lreader->GetOutput()->GetSignedSpacing());
-	rasterFilter->SetBackgroundValue(0);
-	rasterFilter->SetBurnAttributeMode(true);
-	rasterFilter->SetBurnAttribute(field);
-	rasterFilter->SetOutputProjectionRef(lreader->GetOutput()->GetProjectionRef());
-	rasterFilter->UpdateOutputInformation();
-  
-	//~ auto refRasterCast = CastFilterType::New();
-	//~ refRasterCast->SetInput(rasterFilter->GetOutput());
-	//~ refRasterCast->UpdateOutputInformation();
+        //~ About streaming
+        RegionType largestRegion = imageSeg->GetLargestPossibleRegion();
+        RAMDrivenAdaptativeStreamingManagerType::Pointer
+                  streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+        int availableRAM = GetParameterInt("ram");
+        streamingManager->SetAvailableRAMInMB(availableRAM);
+        float bias = 2.0; // empiric value;
+        streamingManager->SetBias(bias);
+        streamingManager->PrepareStreaming(imageSeg, largestRegion);
 
-	//~ //Set up image concatenation
-	//~ ConcatenateImageFilter::Pointer concatImRefData = ConcatenateImageFilter::New();
-	//~ concatImRefData->SetInput1(imageIn);
-	//~ concatImRefData->SetInput2(refRasterCast->GetOutput());
+        CastFilterType::Pointer castFilter = CastFilterType::New();
+        castFilter->SetInput(imageSeg);
+        castFilter->UpdateOutputInformation();
 
-   
-    
-	//Extract features only on labeled samples for training
-	const std::string initTrainSamples_s = tmpdir+"/initTrainSamples.shp";
-    otbAppLogINFO("Start sample Extraction : initialize training sample-set");
-	auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter, initTrainSamples_s, "feature", field, availableRAM);
-	initTrainSamples->SyncToDisk();
-    otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
+        otbAppLogINFO("Preparing data");
+        // Vectorize segmentation
+        otb::ogr::DataSource::Pointer SPDataSource = vectorizeNoStreaming(imageSeg,tmpdir);
+        otb::ogr::Layer SPLayer = SPDataSource->GetLayerChecked(0);
 
-	//Setup first iteration of training
-    otbAppLogINFO("Start training firts iteration");
-	auto VectorTrainer = GetInternalApplication("train");
-	std::string modelName = GetParameterString("out") + "model_it_0.rf";
-	
-	VectorTrainer->SetParameterString("io.out",modelName);
-	VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
+        //Intersection with reference data samples
+        otb::ogr::DataSource::Pointer refLabelDataSource = otb::ogr::DataSource::New(in_ref, otb::ogr::DataSource::Modes::Read);
+
+        //Create list of labels
+        std::vector<LabelType> labelList;
+        auto refLabelLayer = refLabelDataSource->GetLayerChecked(0);
+        otb::ogr::Layer::feature_iter<otb::ogr::Feature> refLabelIt;
+        for (refLabelIt=refLabelLayer.begin();refLabelIt!=refLabelLayer.end(); refLabelIt++) {
+          //std::set will sort and only insert if unique
+          labelList.push_back((*refLabelIt)[field].GetValue<long long>());
+        }
+        std::sort(labelList.begin(),labelList.end());
+        auto last = std::unique(labelList.begin(),labelList.end());
+        labelList.erase(last,labelList.end());
+        std::cout << "Labels found : ";
+        for (auto e : labelList) {
+          std::cout << e << " ";
+        }
+        std::cout << "\n";
+        const unsigned labelListSize=labelList.size();
+
+        std::string tempName = tmpdir+ "/featExtract.shp";
+
+        otb::ogr::DataSource::Pointer inter = extractFeatures<VectorImageType>(castFilter->GetOutput(), refLabelDataSource , tempName, "SPID", field, ram, threadsNumber);
+
+        otbAppLogINFO("Add SuperPixel ID to reference : Done");
+        //Store labels of intersection
+        std::unordered_set<int> interSet;
+        auto l = inter->GetLayerChecked(0);
+        otb::ogr::Layer::feature_iter<otb::ogr::Feature> fi;
+        for (fi=l.begin();fi!=l.end(); fi++) {
+          for (int i = 0; i < fi->GetSize(); i++) {
+            interSet.insert((*fi)["SPID0"].GetValue<double>());
+          }
+        }
+
+        otbAppLogINFO("Start sampling SuperPixels at 100% rate");
+        auto outSamples = fullSampleSelection(lreader->GetOutput(),
+                                              tmpdir, ram, interSet, streamingManager,
+                                              threadsNumber);
+        otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
+        //Rasterize ref data
+        auto rasterFilter = OGRDataSourceToMapFilterType::New();
+        rasterFilter->AddOGRDataSource(refLabelDataSource);
+        rasterFilter->SetOutputSize(lreader->GetOutput()->GetLargestPossibleRegion().GetSize());
+        rasterFilter->SetOutputOrigin(lreader->GetOutput()->GetOrigin());
+        rasterFilter->SetOutputSpacing(lreader->GetOutput()->GetSignedSpacing());
+        rasterFilter->SetBackgroundValue(0);
+        rasterFilter->SetBurnAttributeMode(true);
+        rasterFilter->SetBurnAttribute(field);
+        rasterFilter->SetOutputProjectionRef(lreader->GetOutput()->GetProjectionRef());
+        rasterFilter->UpdateOutputInformation();
+
+        //~ auto refRasterCast = CastFilterType::New();
+        //~ refRasterCast->SetInput(rasterFilter->GetOutput());
+        //~ refRasterCast->UpdateOutputInformation();
+
+        //~ //Set up image concatenation
+        //~ ConcatenateImageFilter::Pointer concatImRefData = ConcatenateImageFilter::New();
+        //~ concatImRefData->SetInput1(imageIn);
+        //~ concatImRefData->SetInput2(refRasterCast->GetOutput());
+
+        //Extract features only on labeled samples for training
+        auto index_string = std::to_string(index);
+        const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_"+index_string+".shp";
+        otbAppLogINFO("Start sample Extraction : initialize training sample-set");
+        auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter,
+                                                                 initTrainSamples_s,
+                                                                 "feature",
+                                                                 field, availableRAM);
+        vectors_to_merge.push_back(initTrainSamples);
+        otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
+    }//for
+
+    const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.shp";
+    auto init_train_sample_full = merge_vectors(vectors_to_merge, initTrainSamples_s);
+
 	std::vector<std::string> featureList;
-	for (unsigned i = 0; i < imageIn->GetNumberOfComponentsPerPixel(); i++) {
+	for (unsigned i = 0; i < in_img_list->GetNthElement(0)->GetNumberOfComponentsPerPixel(); i++) {
 	  std::stringstream s;
 	  s << "feature" << i;
 	  featureList.push_back(s.str());
 	}
-    
-    //~ //use sharkrf could improve results and computational time
+
+    //Setup first iteration of training
+    otbAppLogINFO("Start training firts iteration");
+    auto VectorTrainer = GetInternalApplication("train");
+    std::string modelName = GetParameterString("out") + "model_it_0.rf";
+
+    VectorTrainer->SetParameterString("io.out",modelName);
+    VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
 	UpdateInternalParameters("train");
 	VectorTrainer->SetParameterStringList("feat",featureList);
 	UpdateInternalParameters("train");
@@ -281,88 +292,134 @@ namespace otb
 	VectorTrainer->ExecuteAndWriteOutput();
     otbAppLogINFO("Training firts iteration : DONE");
 
-	auto trainSamples = otb::ogr::DataSource::New();
-	//Extract and classify features for all samples
-        
-	std::vector<std::string> histoNames = std::vector<std::string>();
-	for (int it = 1; it <= this->GetParameterInt("nit"); it++) {
-      otbAppLogINFO("Start iteration " << it);
-	  if(it==1){
-	    //Use "outSamples" which doesn't contain histogram fields
-	    extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples,
-                                                    trainSamples, modelName,
-                                                    "predicted", histoNames,
-                                                    "label", availableRAM);
-	    for (unsigned i = 0; i < labelListSize; i++) {
-	      std::stringstream s;
-	      s << "histo" << labelList[i];
-	      featureList.push_back(s.str());
-	      histoNames.push_back(s.str());
-	    }
-	  }
-	  else{
-      otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
-	  otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
-	  extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples,
-                                                  trainSamplesNew, modelName,
-                                                  "predicted", histoNames,
-                                                  "label", availableRAM);
-      otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
-	  trainSamples=trainSamplesNew;
-	  }
-	  //Create histograms
-      otbAppLogINFO("Calculate histograms");
-	  LabeledVectorMapType histos;
-	  LabeledIntMapType counts;
-	  
-	  auto classifiedPointsLayer = trainSamples->GetLayerChecked(0);
-	  otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
-	  for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++) {
-	    const int predictedLabel=(*classifiedPointsIt)["predicted"].GetValue<int>();
-	    const int spLabel=(*classifiedPointsIt)["label"].GetValue<int>();
-	    auto histoIt = histos.find(spLabel);
-	    if (histoIt != histos.end()) {
-	      //Add to exisiting histogram
-	      histoIt->second[std::find(labelList.begin(),labelList.end(),predictedLabel)-labelList.begin()]++;
-	      counts.find(spLabel)->second++;
-	    }
-	    else{
-	      //Create new histogram
-	      histos.insert(std::pair<int,std::vector<double> >(spLabel,std::vector<double>(labelList.size(),0.0)));
-	      counts.insert(std::pair<LabelType,unsigned int>(spLabel,0));
-	    }
-	  }
-      otbAppLogINFO("Write histograms init : first iteration");
-	  //For immediate training of the new model
-	  writeHistograms(initTrainSamples, labelList, histos, counts,"SPID0", (it > 1));
-	  initTrainSamples->SyncToDisk();
+	//~ auto trainSamples = otb::ogr::DataSource::New();
+	//~ //Extract and classify features for all samples
 
-      otbAppLogINFO("Write histograms all");
-	  //For next iteration, avoid doing on last iteration
-	  if (it < this->GetParameterInt("nit")) {
-	    writeHistograms(trainSamples, labelList, histos, counts,"label",(it > 1));
-	  }
-	  //Update model name
-      otbAppLogINFO("Restart training");
-	  std::stringstream modelName_s;
-	  modelName_s << GetParameterString("out") << "model_it_" << it << ".rf";
-	  modelName=modelName_s.str();
-	  VectorTrainer->SetParameterString("io.out",modelName);
-	  VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
-	  
-      //~ //use sharkrf could improve results and computational time
-	  UpdateInternalParameters("train");
-	  VectorTrainer->SetParameterStringList("feat",featureList);
-	  UpdateInternalParameters("train");
-	  VectorTrainer->SetParameterStringList("cfield",{field});
-	  VectorTrainer->SetParameterString("classifier","rf");
-	  VectorTrainer->SetParameterString("rand","0");
-	  UpdateInternalParameters("train");
-	  ExecuteInternal("train");
-	}// iterations
-    
+	//~ std::vector<std::string> histoNames = std::vector<std::string>();
+	//~ for (int it = 1; it <= this->GetParameterInt("nit"); it++) {
+      //~ otbAppLogINFO("Start iteration " << it);
+	  //~ if(it==1){
+	    //~ //Use "outSamples" which doesn't contain histogram fields
+	    //~ extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples,
+                                                    //~ trainSamples, modelName,
+                                                    //~ "predicted", histoNames,
+                                                    //~ "label", availableRAM);
+	    //~ for (unsigned i = 0; i < labelListSize; i++) {
+	      //~ std::stringstream s;
+	      //~ s << "histo" << labelList[i];
+	      //~ featureList.push_back(s.str());
+	      //~ histoNames.push_back(s.str());
+	    //~ }
+	  //~ }
+	  //~ else{
+      //~ otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
+	  //~ otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
+	  //~ extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples,
+                                                  //~ trainSamplesNew, modelName,
+                                                  //~ "predicted", histoNames,
+                                                  //~ "label", availableRAM);
+      //~ otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
+	  //~ trainSamples=trainSamplesNew;
+	  //~ }
+	  //~ //Create histograms
+      //~ otbAppLogINFO("Calculate histograms");
+	  //~ LabeledVectorMapType histos;
+	  //~ LabeledIntMapType counts;
+
+	  //~ auto classifiedPointsLayer = trainSamples->GetLayerChecked(0);
+	  //~ otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
+	  //~ for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++) {
+	    //~ const int predictedLabel=(*classifiedPointsIt)["predicted"].GetValue<int>();
+	    //~ const int spLabel=(*classifiedPointsIt)["label"].GetValue<int>();
+	    //~ auto histoIt = histos.find(spLabel);
+	    //~ if (histoIt != histos.end()) {
+	      //~ //Add to exisiting histogram
+	      //~ histoIt->second[std::find(labelList.begin(),labelList.end(),predictedLabel)-labelList.begin()]++;
+	      //~ counts.find(spLabel)->second++;
+	    //~ }
+	    //~ else{
+	      //~ //Create new histogram
+	      //~ histos.insert(std::pair<int,std::vector<double> >(spLabel,std::vector<double>(labelList.size(),0.0)));
+	      //~ counts.insert(std::pair<LabelType,unsigned int>(spLabel,0));
+	    //~ }
+	  //~ }
+      //~ otbAppLogINFO("Write histograms init : first iteration");
+	  //~ //For immediate training of the new model
+	  //~ writeHistograms(initTrainSamples, labelList, histos, counts,"SPID0", (it > 1));
+	  //~ initTrainSamples->SyncToDisk();
+
+      //~ otbAppLogINFO("Write histograms all");
+	  //~ //For next iteration, avoid doing on last iteration
+	  //~ if (it < this->GetParameterInt("nit")) {
+	    //~ writeHistograms(trainSamples, labelList, histos, counts,"label",(it > 1));
+	  //~ }
+	  //~ //Update model name
+      //~ otbAppLogINFO("Restart training");
+	  //~ std::stringstream modelName_s;
+	  //~ modelName_s << GetParameterString("out") << "model_it_" << it << ".rf";
+	  //~ modelName=modelName_s.str();
+	  //~ VectorTrainer->SetParameterString("io.out",modelName);
+	  //~ VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
+
+      //use sharkrf could improve results and computational time
+	  //~ UpdateInternalParameters("train");
+	  //~ VectorTrainer->SetParameterStringList("feat",featureList);
+	  //~ UpdateInternalParameters("train");
+	  //~ VectorTrainer->SetParameterStringList("cfield",{field});
+	  //~ VectorTrainer->SetParameterString("classifier","rf");
+	  //~ VectorTrainer->SetParameterString("rand","0");
+	  //~ UpdateInternalParameters("train");
+	  //~ ExecuteInternal("train");
+	//~ }// iterations
+
 	//TODO cleanup temp dir
     }
+
+    otb::ogr::DataSource::Pointer merge_vectors(std::vector<otb::ogr::DataSource::Pointer> vectors_to_merge,
+                                                std::string output_path)
+    {
+        // TODO pass vectors_to_merge by ref
+        
+        //~ Create output vector
+        std::string layername = itksys::SystemTools::GetFilenameName(output_path.c_str());
+        std::string extension = itksys::SystemTools::GetFilenameLastExtension(output_path.c_str());
+
+        auto proj_ref = vectors_to_merge[0]->GetLayer(0).GetSpatialRef();
+        OGRSpatialReference oSRS(*proj_ref);
+        std::vector<std::string> options;
+        
+        otb::ogr::DataSource::Pointer output_ds = otb::ogr::DataSource::New(output_path,
+                                                                            otb::ogr::DataSource::Modes::Overwrite);
+        layername = layername.substr(0, layername.size() - (extension.size()));
+        otb::ogr::Layer layer_out(ITK_NULLPTR, false);
+        layer_out = output_ds->CreateLayer(layername, &oSRS, wkbPoint, options);
+        
+        //~ Create output fields
+        //~ auto Layer = vectors_to_merge[0]->GetLayer(0);
+        OGRFeatureDefn &poFDefn =  vectors_to_merge[0]->GetLayer(0).GetLayerDefn();
+        for( int iField=0; iField < poFDefn.GetFieldCount(); iField++ )
+        {
+            OGRFieldDefn fieldDefn(poFDefn.GetFieldDefn(iField));
+            layer_out.CreateField(fieldDefn);
+        }
+
+        //~ read input and fill output vector
+        for (size_t ind=0; ind < vectors_to_merge.size(); ++ind)
+        {
+            auto layer = vectors_to_merge[ind]->GetLayer(0);
+            otb::ogr::Layer::const_iterator featIt = layer.begin();
+            for(; featIt!=layer.end(); ++featIt)
+            {
+                otb::ogr::Feature dstFeature(layer_out.GetLayerDefn());
+                dstFeature.SetFrom( *featIt, TRUE );
+                layer_out.CreateFeature( dstFeature );
+            }
+
+            layer_out.ogr().CommitTransaction();
+        }
+        output_ds->SyncToDisk();
+        return output_ds;
+    }   
 
     typename otb::ogr::DataSource::Pointer
     vectorizeNoStreaming(typename LabelImageType::Pointer labelIn, std::string tmpdir){
@@ -377,7 +434,7 @@ namespace otb
 
         std::stringstream shapefile;
         shapefile << tmpdir << "/tempShapeFile.shp";
-      
+
         ogrDS = otb::ogr::DataSource::New(shapefile.str(), otb::ogr::DataSource::Modes::Overwrite);
         std::string layername = itksys::SystemTools::GetFilenameName(shapefile.str().c_str());
         std::string extension = itksys::SystemTools::GetFilenameLastExtension(shapefile.str().c_str());
@@ -499,16 +556,16 @@ namespace otb
     }
 	std::stringstream tempName;
     tempName << tmpdir << "/fullSampleExtraction.shp";
-    
+
 	otb::ogr::DataSource::Pointer outputSamples = otb::ogr::DataSource::New(tempName.str(), otb::ogr::DataSource::Modes::Overwrite);
     std::string layername = itksys::SystemTools::GetFilenameName(tempName.str().c_str());
     std::string extension = itksys::SystemTools::GetFilenameLastExtension(tempName.str().c_str());
-    
+
     otb::ogr::Layer layer(ITK_NULLPTR, false);
     auto projRef = inputIm->GetProjectionRef();
 	OGRSpatialReference oSRS(projRef.c_str());
 	std::vector<std::string> options;
-    
+
     layername = layername.substr(0,layername.size() - (extension.size()));
     layer = outputSamples->CreateLayer(layername, &oSRS, wkbPoint, options);
     OGRFieldDefn labelField("label", OFTInteger64);
@@ -519,11 +576,11 @@ namespace otb
         int SP_val = std::get<0>(i);
         double coord_x = std::get<1>(i);
         double coord_y = std::get<2>(i);
-        
+
         OGRFeature *poFeature;
         poFeature = OGRFeature::CreateFeature(&layer.GetLayerDefn());
         poFeature->SetField("label", SP_val);
-        
+
         OGRPoint pt;
         pt.setX(coord_x);
         pt.setY(coord_y);
