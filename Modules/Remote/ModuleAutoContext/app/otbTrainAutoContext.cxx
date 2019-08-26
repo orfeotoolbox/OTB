@@ -407,9 +407,6 @@ namespace otb
             UpdateInternalParameters("train");
             ExecuteInternal("train");
             
-            std::cout<<" APRES APPRENTISSAGE !"<<std::endl;
-            char input;
-            std::cin>>input;
         }// iterations
 
         //TODO cleanup temp dir
