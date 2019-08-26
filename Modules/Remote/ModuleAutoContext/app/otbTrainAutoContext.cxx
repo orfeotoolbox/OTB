@@ -153,8 +153,11 @@ namespace otb
         }
         //~ TODO : check if every input image get the same number of bands
 
-        std::vector<otb::ogr::DataSource::Pointer> ref_extracted_to_merge;
-
+        std::vector<otb::ogr::DataSource::Pointer> ref_extracted;
+        std::vector<std::string> ref_paths;
+        std::vector<otb::ogr::DataSource::Pointer> SP_points;
+        
+        std::vector<LabelType> labelList;
         //~ iterate over inputs
         for (size_t index = 0; index < nbImages; ++index)
         {
@@ -192,23 +195,23 @@ namespace otb
             otb::ogr::DataSource::Pointer refLabelDataSource = otb::ogr::DataSource::New(in_ref, otb::ogr::DataSource::Modes::Read);
 
             //Create list of labels
-            std::vector<LabelType> labelList;
-            auto refLabelLayer = refLabelDataSource->GetLayerChecked(0);
-            otb::ogr::Layer::feature_iter<otb::ogr::Feature> refLabelIt;
-            for (refLabelIt=refLabelLayer.begin();refLabelIt!=refLabelLayer.end(); refLabelIt++) {
-              //std::set will sort and only insert if unique
-              labelList.push_back((*refLabelIt)[field].GetValue<long long>());
+            if (index==0)
+            {
+                auto refLabelLayer = refLabelDataSource->GetLayerChecked(0);
+                otb::ogr::Layer::feature_iter<otb::ogr::Feature> refLabelIt;
+                for (refLabelIt=refLabelLayer.begin();refLabelIt!=refLabelLayer.end(); refLabelIt++) {
+                  //std::set will sort and only insert if unique
+                  labelList.push_back((*refLabelIt)[field].GetValue<long long>());
+                }
+                std::sort(labelList.begin(),labelList.end());
+                auto last = std::unique(labelList.begin(),labelList.end());
+                labelList.erase(last,labelList.end());
+                std::cout << "Labels found : ";
+                for (auto e : labelList) {
+                  std::cout << e << " ";
+                }
+                std::cout << "\n";
             }
-            std::sort(labelList.begin(),labelList.end());
-            auto last = std::unique(labelList.begin(),labelList.end());
-            labelList.erase(last,labelList.end());
-            std::cout << "Labels found : ";
-            for (auto e : labelList) {
-              std::cout << e << " ";
-            }
-            std::cout << "\n";
-            const unsigned labelListSize=labelList.size();
-
             std::string tempName = tmpdir+ "/featExtract.shp";
 
             otb::ogr::DataSource::Pointer inter = extractFeatures<VectorImageType>(castFilter->GetOutput(),
@@ -232,6 +235,7 @@ namespace otb
             auto outSamples = fullSampleSelection(lreader->GetOutput(),
                                                   tmpdir, ram, interSet, streamingManager,
                                                   threadsNumber);
+            SP_points.push_back(outSamples);
             otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
             //Rasterize ref data
             auto rasterFilter = OGRDataSourceToMapFilterType::New();
@@ -257,18 +261,19 @@ namespace otb
             //Extract features only on labeled samples for training
             auto index_string = std::to_string(index);
             const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_"+index_string+".shp";
+            ref_paths.push_back(initTrainSamples_s);
             otbAppLogINFO("Start sample Extraction : initialize training sample-set");
             auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter,
                                                                      initTrainSamples_s,
                                                                      "feature",
                                                                      field, availableRAM);
-            ref_extracted_to_merge.push_back(initTrainSamples);
+            ref_extracted.push_back(initTrainSamples);
             otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
-        }//for
+        }//for iterate over inputs
 
         otbAppLogINFO("Merge refererence");
         const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.shp";
-        auto init_train_sample_full = merge_vectors(ref_extracted_to_merge, initTrainSamples_s);
+        auto init_train_sample_full = merge_vectors(ref_extracted, initTrainSamples_s);
 
 
         std::vector<std::string> featureList;
@@ -296,92 +301,115 @@ namespace otb
         otbAppLogINFO("Training firts iteration : DONE");
 
         //Extract and classify features for all samples
-        
-        //~ for (size_t index = 0; index < nbImages; ++index)
-                
-        auto trainSamples = otb::ogr::DataSource::New();
-        std::vector<std::string> histoNames = std::vector<std::string>();
-        for (int it = 1; it <= this->GetParameterInt("nit"); it++)
+        //~ auto trainSamples = otb::ogr::DataSource::New();
+        std::vector<otb::ogr::DataSource::Pointer> trainSamples_tiles;
+        std::vector<std::vector<std::string>> histoNames_tiles;
+        //initialize trainSamples_tiles
+        for (size_t index=0; index < nbImages; ++index)
+        {
+            trainSamples_tiles.push_back(otb::ogr::DataSource::New());
+            histoNames_tiles.push_back(std::vector<std::string>());
+        }
+
+        for (int it=1; it <= this->GetParameterInt("nit"); it++)
         {
             otbAppLogINFO("Start iteration " << it);
-            if(it==1)
+            const unsigned labelListSize=labelList.size();
+            for (size_t index=0; index < nbImages; ++index)
             {
-                //Use "outSamples" which doesn't contain histogram fields
-                extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples,
-                                                            trainSamples, modelName,
-                                                            "predicted", histoNames,
-                                                            "label", availableRAM);
-                for (unsigned i = 0; i < labelListSize; i++){
-                    std::stringstream s;
-                    s << "histo" << labelList[i];
-                    featureList.push_back(s.str());
-                    histoNames.push_back(s.str());
-                }
-            }
-            else
-            {
-                otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
-                otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
-                extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples,
-                                                            trainSamplesNew, modelName,
-                                                            "predicted", histoNames,
-                                                            "label", availableRAM);
-                otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
-                trainSamples=trainSamplesNew;
-            }
-            //Create histograms
-            otbAppLogINFO("Calculate histograms");
-            LabeledVectorMapType histos;
-            LabeledIntMapType counts;
+                auto histoNames = histoNames_tiles[index];
+                //~ std::vector<std::string> histoNames;
+                VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
+                imageIn->UpdateOutputInformation();
+                
+                auto outSamples = SP_points[index];
+                auto ref_samples = ref_extracted[index];
 
-            auto classifiedPointsLayer = trainSamples->GetLayerChecked(0);
-            otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
-            for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++)
-            {
-                const int predictedLabel=(*classifiedPointsIt)["predicted"].GetValue<int>();
-                const int spLabel=(*classifiedPointsIt)["label"].GetValue<int>();
-                auto histoIt = histos.find(spLabel);
-                if (histoIt != histos.end())
+                if(it==1)
                 {
-                    //Add to exisiting histogram
-                    histoIt->second[std::find(labelList.begin(),labelList.end(),predictedLabel)-labelList.begin()]++;
-                    counts.find(spLabel)->second++;
+                    //Use "outSamples" which doesn't contain histogram fields
+                    extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples,
+                                                                trainSamples_tiles[index], modelName,
+                                                                "predicted", histoNames,
+                                                                "label", this->GetParameterInt("ram"));
+                    for (unsigned i = 0; i < labelListSize; i++){
+                        std::stringstream s;
+                        s << "histo" << labelList[i];
+                        featureList.push_back(s.str());
+                        histoNames.push_back(s.str());
+                    }
                 }
                 else
                 {
-                    //Create new histogram
-                    histos.insert(std::pair<int,std::vector<double> >(spLabel,std::vector<double>(labelList.size(),0.0)));
-                    counts.insert(std::pair<LabelType,unsigned int>(spLabel,0));
+                    //Use "trainSamples" which contains histogram fields
+                    otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
+                    otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
+                    extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples_tiles[index],
+                                                                trainSamplesNew, modelName,
+                                                                "predicted", histoNames,
+                                                                "label", this->GetParameterInt("ram"));
+                    otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
+                    trainSamples_tiles[index]=trainSamplesNew;
                 }
-            }
-            otbAppLogINFO("Write histograms init : first iteration");
-            //For immediate training of the new model
-            writeHistograms(initTrainSamples, labelList, histos, counts,"SPID0", (it > 1));
-            initTrainSamples->SyncToDisk();
+                //Create histograms
+                otbAppLogINFO("Calculate histograms");
+                LabeledVectorMapType histos;
+                LabeledIntMapType counts;
 
-            otbAppLogINFO("Write histograms all");
-            //For next iteration, avoid doing on last iteration
-            if (it < this->GetParameterInt("nit"))
-            {
-                writeHistograms(trainSamples, labelList, histos, counts,"label",(it > 1));
-            }
+                auto classifiedPointsLayer = trainSamples_tiles[index]->GetLayerChecked(0);
+                otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
+                for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++)
+                {
+                    const int predictedLabel=(*classifiedPointsIt)["predicted"].GetValue<int>();
+                    const int spLabel=(*classifiedPointsIt)["label"].GetValue<int>();
+                    auto histoIt = histos.find(spLabel);
+                    if (histoIt != histos.end())
+                    {
+                        //Add to exisiting histogram
+                        histoIt->second[std::find(labelList.begin(),labelList.end(),predictedLabel)-labelList.begin()]++;
+                        counts.find(spLabel)->second++;
+                    }
+                    else
+                    {
+                        //Create new histogram
+                        histos.insert(std::pair<int,std::vector<double> >(spLabel,std::vector<double>(labelList.size(),0.0)));
+                        counts.insert(std::pair<LabelType,unsigned int>(spLabel,0));
+                    }
+                }
+                otbAppLogINFO("Write histograms init : first iteration");
+                //For immediate training of the new model
+                writeHistograms(ref_samples, labelList, histos, counts,"SPID0", (it > 1));
+                ref_samples->SyncToDisk();
+                
+                otbAppLogINFO("Write histograms all");
+                //For next iteration, avoid doing on last iteration
+                if (it < this->GetParameterInt("nit"))
+                {
+                    writeHistograms(trainSamples_tiles[index], labelList, histos, counts, "label", (it > 1));
+                }
+            }//for iterate over inputs
+            
             //Update model name
             otbAppLogINFO("Restart training");
             std::stringstream modelName_s;
             modelName_s << GetParameterString("out") << "model_it_" << it << ".rf";
             modelName=modelName_s.str();
             VectorTrainer->SetParameterString("io.out",modelName);
-            VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
+            VectorTrainer->SetParameterStringList("io.vd", ref_paths);//contains new histo features
 
             //~ //use sharkrf could improve results and computational time
             UpdateInternalParameters("train");
-            VectorTrainer->SetParameterStringList("feat",featureList);
+            VectorTrainer->SetParameterStringList("feat", featureList);
             UpdateInternalParameters("train");
             VectorTrainer->SetParameterStringList("cfield",{field});
             VectorTrainer->SetParameterString("classifier","rf");
             VectorTrainer->SetParameterString("rand","0");
             UpdateInternalParameters("train");
             ExecuteInternal("train");
+            
+            std::cout<<" APRES APPRENTISSAGE !"<<std::endl;
+            char input;
+            std::cin>>input;
         }// iterations
 
         //TODO cleanup temp dir
@@ -604,7 +632,7 @@ namespace otb
 	return outputSamples;
       }
 
-    void writeHistograms(otb::ogr::DataSource::Pointer &classifiedPoints,
+    void writeHistograms(otb::ogr::DataSource::Pointer & classifiedPoints,
                          std::vector<LabelType> labelList,
                          LabeledVectorMapType & histos,
                          LabeledIntMapType & counts,
