@@ -116,6 +116,11 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           VectorRegression
+  SOURCES        otbVectorRegression.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           SampleAugmentation
   SOURCES        otbSampleAugmentation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

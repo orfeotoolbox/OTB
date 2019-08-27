@@ -36,7 +36,7 @@ namespace Wrapper
 template <class TImageType>
 TImageType*
 Application
-::GetParameterImage(std::string parameter)
+::GetParameterImage(std::string const& parameter)
 
 {
   typename TImageType::Pointer ret;
@@ -57,7 +57,7 @@ Application
 template <class TImageType>
 void
 Application
-::SetParameterOutputImage(std::string parameter, TImageType* value)
+::SetParameterOutputImage(std::string const& parameter, TImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
