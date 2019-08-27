@@ -19,7 +19,7 @@
 #
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
+    --add-before-env PYTHONPATH        ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}
     --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
 if(WIN32)

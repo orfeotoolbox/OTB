@@ -24,10 +24,10 @@
 #   NUMPY_FOUND        - True if Numpy headers are found.
 #   NUMPY_INCLUDE_DIR   - where to find numpy/arrayobject.h, etc.
 
-EXEC_PROGRAM ("${PYTHON_EXECUTABLE}"
-  ARGS "${CMAKE_SOURCE_DIR}/CMake/otbTestNumpy.py"
+execute_process(
+  COMMAND "${PYTHON_EXECUTABLE}" -c "import sys, numpy; sys.stdout.write(numpy.get_include())"
   OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
-  RETURN_VALUE NUMPY_NOT_FOUND)
+  RESULT_VARIABLE NUMPY_NOT_FOUND)
 
 if( NUMPY_INCLUDE_DIR MATCHES "Traceback" )
 # Did not successfully include numpy

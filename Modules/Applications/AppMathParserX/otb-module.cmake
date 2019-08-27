@@ -26,6 +26,9 @@ otb_module(OTBAppMathParserX
     OTBMathParserX
     OTBObjectList
 
+  TEST_DEPENDS
+    OTBTestKernel
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

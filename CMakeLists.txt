@@ -22,6 +22,8 @@ cmake_minimum_required(VERSION 3.10.2)
 
 foreach(p
     CMP0072 # CMake 3.11
+    CMP0078 # CMake 3.13
+    CMP0086 # CMake 3.14
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -105,7 +107,7 @@ set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
 endif()
@@ -399,6 +401,8 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBStandaloneModuleMacros.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
+              CMake/GenerateExportHeaderCustom.cmake
+              CMake/exportheader.cmake.in
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
