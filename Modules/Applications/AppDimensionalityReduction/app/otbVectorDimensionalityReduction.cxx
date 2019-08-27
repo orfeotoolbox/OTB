@@ -32,13 +32,6 @@ namespace otb
 {
 namespace Wrapper
 {
-  
-/** Utility function to negate std::isalnum */
-bool IsNotAlphaNum(char c)
-{
-return !std::isalnum(c);
-}
-
 /**
  * \class VectorDimensionalityReduction
  *
@@ -180,7 +173,7 @@ private:
         {
         std::string item = layerDefn.GetFieldDefn(iField)->GetNameRef();
         std::string key(item);
-        std::string::iterator end = std::remove_if( key.begin(), key.end(), IsNotAlphaNum );
+        std::string::iterator end = std::remove_if( key.begin(), key.end(), [](char c){return !std::isalnum(c);});
         std::transform( key.begin(), end, key.begin(), tolower );
         std::string tmpKey = "feat." + key.substr( 0, static_cast<unsigned long>( end - key.begin() ) );
         AddChoice(tmpKey,item);
