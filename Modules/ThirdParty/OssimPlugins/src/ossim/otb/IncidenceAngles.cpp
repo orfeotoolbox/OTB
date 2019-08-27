@@ -148,7 +148,7 @@ bool IncidenceAngles::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& IncidenceAngles::print(std::ostream& out) const
 {
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\n IncidentAngles class data members:\n";
 
    const char* prefix = 0;

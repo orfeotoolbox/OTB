@@ -246,54 +246,42 @@ private:
   void DoUpdateParameters() override
   {
     // check if input context should be used
-    bool useContext = this->ContextCheck();
+    bool context_exists = this->ContextCheck();
     // Check if the expression is correctly set
-    if (HasValue("il") && HasValue("exp"))
-      {
-      this->LiveCheck(useContext);
-      }
+    BandMathImageFilterType::Pointer math_filter = BandMathImageFilterType::New();
+    math_filter->SetManyExpressions(false);
+    // first thing, load context if there is one
+    if (context_exists)
+      math_filter->ImportContext(GetParameterString("incontext"));
+    // Only one expression is allowed '-exp'>'-incontext'
+    if ( !HasValue("exp") ) 
+      SetParameterString("exp", math_filter->GetExpression(0));
+    if ( HasValue("il") && HasValue("exp") )
+    {
+      math_filter->ClearExpression(); // remove expression set by context
+      math_filter->SetExpression(GetParameterString("exp")); //set expression
+      LiveCheck(math_filter);
+    }
   }
 
+  // Check if the given filename is valid
   bool ContextCheck(void)
-    {
-    bool useContext = false;
+  {
+    bool context_exists = false;
     if (IsParameterEnabled("incontext") && HasValue("incontext"))
-      {
+    {
       std::string contextPath = GetParameterString("incontext");
       // check that file exists
       if (itksys::SystemTools::FileExists(contextPath,true))
-        {
-        BandMathImageFilterType::Pointer dummyFilter =
-          BandMathImageFilterType::New();
-        dummyFilter->SetManyExpressions(false);
-        try
-          {
-          dummyFilter->ImportContext(contextPath);
-          useContext = true;
-          }
-        catch(itk::ExceptionObject& err)
-          {
-          //trick to prevent unreferenced local variable warning on MSVC
-          (void)err;
-          // silent catch
-          useContext = false;
-          }
-        if (useContext)
-          {
-          // only set the first expression, 'ManyExpression' is disabled.
-          this->SetParameterString("exp",dummyFilter->GetExpression(0));
-          }
-        }
+      {
+        context_exists = true;
       }
-    return useContext;
     }
+    return context_exists;
+  }
 
-  void LiveCheck(bool useContext=false)
+  void LiveCheck( BandMathImageFilterType::Pointer math_filter )
     {
-    BandMathImageFilterType::Pointer dummyFilter =
-      BandMathImageFilterType::New();
-    dummyFilter->SetManyExpressions(false);
-
     std::vector<MultiChannelExtractorType::Pointer> extractors;
     FloatVectorImageListType::Pointer inList = GetParameterImageList("il");
     for (unsigned int i = 0; i < inList->Size(); i++)
@@ -314,19 +302,11 @@ private:
         {
         extract->SetChannel(j+1);
         }
-      dummyFilter->SetNthInput(i,extract->GetOutput());
-      }
-    if (useContext)
-      {
-      dummyFilter->ImportContext(GetParameterString("incontext"));
-      }
-    else
-      {
-      dummyFilter->SetExpression(GetParameterString("exp"));
+      math_filter->SetNthInput(i,extract->GetOutput());
       }
     try
       {
-      dummyFilter->UpdateOutputInformation();
+      math_filter->UpdateOutputInformation();
       SetParameterDescription("exp", "Valid expression");
       }
     catch(itk::ExceptionObject& err)
@@ -334,8 +314,15 @@ private:
       // Change the parameter description to be able to have the
       // parser errors in the tooltip
       SetParameterDescription("exp", err.GetDescription());
+      // std::string error_string(err.GetDescription());
+      // otbAppLogINFO("There was an error while parsing the expression given "
+      //   "its input:" + error_string );
       }
+    catch(...)
+    {
+      SetParameterDescription("exp", "Other exception catched");
     }
+  }
 
   void DoExecute() override
   {
@@ -352,11 +339,11 @@ private:
 
     if ( (!IsParameterEnabled("exp")) && (!IsParameterEnabled("incontext")) )
     {
-     itkExceptionMacro("No expression set...; please set and enable at least one one expression");
+     itkExceptionMacro("No expression set...; please set and enable at least one expression");
     }
 
-    m_Filter               = BandMathImageFilterType::New();
-    m_Filter->SetManyExpressions(false);
+    BandMathImageFilterType::Pointer  math_filter = BandMathImageFilterType::New();
+    math_filter->SetManyExpressions(false);
 
     for (unsigned int i = 0; i < nbImages; i++)
       {
@@ -367,31 +354,33 @@ private:
                        << currentImage->GetNumberOfComponentsPerPixel()
                        << " components");
 
-        m_Filter->SetNthInput(i,currentImage);
+        math_filter->SetNthInput(i,currentImage);
 
       }
 
-    bool useContext = this->ContextCheck();
+    bool context_exists = this->ContextCheck();    
+    // first thing, load context if there is one
+    if (context_exists)
+    {
+      std::string context_string = GetParameterString("incontext");
+      math_filter->ImportContext(context_string);
+      otbAppLogINFO("Using Context: " << context_string
+      << " for variables (and expression if no parameter -exp has been given)." );
+    }
+    // Only one expression is allowed '-exp'>'-incontext'
+    math_filter->ClearExpression(); // remove expression set by context
     std::string expStr = GetParameterString("exp");
-    if (useContext)
-      {
-      otbAppLogINFO("Using input context: " << expStr );
-      m_Filter->ImportContext(GetParameterString("incontext"));
-      }
-    else
-      {
-      otbAppLogINFO("Using expression: " << expStr );
-      m_Filter->SetExpression(expStr);
-      }
+    otbAppLogINFO("Using expression: " << expStr );
+    math_filter->SetExpression(expStr);
 
     if ( IsParameterEnabled("outcontext") && HasValue("outcontext") )
-      m_Filter->ExportContext(GetParameterString("outcontext"));
+      math_filter->ExportContext(GetParameterString("outcontext"));
 
     // Set the output image
-    SetParameterOutputImage("out", m_Filter->GetOutput());
+    SetParameterOutputImage("out", math_filter->GetOutput());
+    RegisterPipeline();
   }
 
-  BandMathImageFilterType::Pointer  m_Filter;
 };
 
 } // namespace Wrapper

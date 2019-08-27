@@ -119,14 +119,14 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimCosmoSkymedModel at address " << hex << this
-          << dec
+      out << "\nDump of ossimCosmoSkymedModel at address " << std::hex << this
+          << std::dec
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
 
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);

@@ -38,11 +38,6 @@ ProgressReporterManager::~ProgressReporterManager()
 
 void ProgressReporterManager::DeleteWatcherList()
 {
-  //Delete all stored progress reporter
-  for (auto watcher: m_WatcherList)
-  {
-    delete watcher;
-  }
   m_WatcherList.clear();
 }
 
@@ -52,9 +47,9 @@ void ProgressReporterManager::LinkWatchers(itk::Object* itkNotUsed(caller), cons
   {
     const Wrapper::AddProcessToWatchEvent* eventToWatch = dynamic_cast<const Wrapper::AddProcessToWatchEvent*>(&event);
 
-    auto watch = new WatcherType(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
+    auto watch = std::make_unique< WatcherType>(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
     watch->SetCallback(m_Callback);
-    m_WatcherList.push_back(watch);
+    m_WatcherList.push_back(std::move(watch));
   }
 }
 }
