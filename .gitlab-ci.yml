@@ -97,6 +97,18 @@ fast-build:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
 
+check-contibutors:
+  extends: .common
+  only: [merge_requests]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-base:latest
+  variables:
+    GIT_DEPTH: ""
+  allow_failure: true
+  script:
+    - ./CI/identify_unknown_contributors.sh
+  after_script: []
+
 #------------------------- prepare & build jobs --------------------------------
 debian-build:
   extends: .common-build
