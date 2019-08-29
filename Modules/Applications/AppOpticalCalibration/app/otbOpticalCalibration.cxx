@@ -133,7 +133,7 @@ private:
     SetDocLongDescription("The application allows converting pixel values from DN (for Digital Numbers) to reflectance. Calibrated values are called surface reflectivity and its values lie in the range [0, 1].\nThe first level is called Top Of Atmosphere (TOA) reflectivity. It takes into account the sensor gain, sensor spectral response and the solar illuminations.\nThe second level is called Top Of Canopy (TOC) reflectivity. In addition to sensor gain and solar illuminations, it takes into account the optical thickness of the atmosphere, the atmospheric pressure, the water vapor amount, the ozone amount, as well as the composition and amount of aerosol gasses.\nIt is also possible to indicate an AERONET file which contains atmospheric parameters (version 1 and version 2 of Aeronet file are supported. Note that computing TOC reflectivity will internally compute first TOA and then TOC reflectance. \n"
 "\n--------------------------\n\n"
 "If the sensor is not supported by the metadata interface factory of OTB, users still have the possibility to give the needed parameters to the application.\n"
-"For TOA conversion, these parameters are: \n"
+"For TOA conversion, these parameters are: \n\n"
 "- day and month of acquisition, or flux normalization coefficient, or solar distance (in AU);\n"
 "- sun elevation angle;\n"
 "- gains and biases, one pair of values for each band (passed by a file);\n"
