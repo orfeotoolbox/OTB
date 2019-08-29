@@ -84,17 +84,6 @@ SetDocLongDescription(
       "this new functionality the 'batch mode' (performing the same operation "
       "in a band-to-band fashion).\n\n"
 
-      "Operations involving bit manipulation\n"
-      "--------------------------------------------\n\n"
-      "In order to manipulate bit, one need to convert its data into integer. "
-      "To do so, muParserX has a type conversions operator: (int). Prefixing "
-      "your images with it will allow you to perform such operations.\n\n"
-
-      "Example:\n"
-      " *``(int)im1b1 & 0b00000001`` (bitwise and)"
-      " *``(int)im1b1 >> 1`` (right shift operator)"
-
-
       "Operations involving neighborhoods of pixels\n"
       "--------------------------------------------\n\n"
 

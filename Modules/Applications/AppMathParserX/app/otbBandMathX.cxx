@@ -61,7 +61,7 @@ private:
 
     SetDescription("This application performs mathematical operations on several multiband images.");
 
-// As the doc for this application is quiet long the SetDocLongDescription() is 
+// As the doc for this application is quite long the SetDocLongDescription() is 
 // called in the following file.
     #include "otbBandMathXdoc.h"
 
