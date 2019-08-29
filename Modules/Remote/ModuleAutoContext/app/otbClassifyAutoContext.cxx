@@ -173,8 +173,7 @@ namespace otb
 	LabelImageType::Pointer prevImage;
 
 	for (unsigned i = 0; i < modelList.size(); i++) {
-	  std::cout << "Starting iteration " << i << "\n";
-
+      otbAppLogINFO("Starting iteration " << i);
 	  std::stringstream clname;
 	  clname << "classifier" << i;
 	  
@@ -193,7 +192,7 @@ namespace otb
 	    prevImage->UpdateOutputInformation();
 
 	    //Invoke histogram filter
-	    std::cout << "Calculating histograms" << "\n";
+        otbAppLogINFO("Calculating histograms");
 	    auto histoCalculationFilter = HistogramCalculationFilterType::New();
 	    m_HistoCalculationFilters.push_back(histoCalculationFilter);
 	    histoCalculationFilter->SetInput(prevImage);
@@ -204,27 +203,26 @@ namespace otb
 	    
 	    histoCalculationFilter->Update();
 
-	    std::cout << "Writing histogram image" << "\n";
+        otbAppLogINFO("Writing histogram image");
 	    auto m_HistoImageWriterFilter = HistogramImageWriterFilterType::New();
-	    std::cout << "After New" << "\n";
+        otbAppLogINFO("After New");
 	    m_HistoImageWriterFilters.push_back(m_HistoImageWriterFilter);
-	    std::cout << "1" << "\n";
+        otbAppLogINFO("1");
 	    m_HistoImageWriterFilter->SetInput(seg);
-	    std::cout << "2" << "\n";
+        otbAppLogINFO("2");
 	    // std::cout << m.begin()->second.size() << "\n";
 	    m_HistoImageWriterFilter->SetMeans(histoCalculationFilter->GetFilter()->GetMeans());
-	    std::cout << "3" << "\n";
+        otbAppLogINFO("3");
 	    m_HistoImageWriterFilter->UpdateOutputInformation();
-	    std::cout << "Setup histo done" << "\n";
-
+        otbAppLogINFO("Setup histo done");
+        
 	    ConcatenateImageFilter::Pointer m_conc = ConcatenateImageFilter::New();
 	    m_ConcatenateImageFilters.push_back(m_conc);
 	    
 	    m_conc->SetInput1(imReader->GetOutput());
 	    m_conc->SetInput2(m_HistoImageWriterFilter->GetOutput());
 	    m_conc->UpdateOutputInformation();
-	    std::cout << "setup conc done" << "\n";
-
+        otbAppLogINFO("setup conc done");
 	    imageClassifier->SetParameterInputImage("in",m_conc->GetOutput());	    
 	  }
 
@@ -240,10 +238,9 @@ namespace otb
 	    imageClassifier->ExecuteAndWriteOutput();
 	  }
 	  else{
-	    std::cout << "bef execute" << "\n";
+        otbAppLogINFO("befroe execute");
 	    imageClassifier->Execute();
-	    
-	    std::cout << "af execute" << "\n";
+        otbAppLogINFO("after execute");
 	    // imageClassifier->RegisterPipeline();
 	    auto image = imageClassifier->GetParameterImageBase("out");
 	    image->UpdateOutputInformation();
@@ -252,8 +249,7 @@ namespace otb
 
 	}
 
-	std::cout << "Finished" << "\n";
-	
+	otbAppLogINFO("Finished");
 	//TODO cleanup temp dir
       }
 
