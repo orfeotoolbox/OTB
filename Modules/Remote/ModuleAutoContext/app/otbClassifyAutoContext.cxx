@@ -117,7 +117,7 @@ namespace otb
 	SetDocAuthors(" ");
 	SetDocSeeAlso(" ");
 
-	AddParameter(ParameterType_String,  "in",    "Input image");
+	AddParameter(ParameterType_InputImage,  "in",    "Input image");
 	SetParameterDescription( "in", "The input image." );
    
 	AddParameter(ParameterType_String, "inseg", "Input segmentation");
@@ -160,11 +160,10 @@ namespace otb
 	for (unsigned i = 0; i < labellist.size(); i++) {
 	  labelPositions.insert(std::pair<LabelType,unsigned>(atoi(labellist[i].c_str()),i));
 	}
-	  
-	FloatVectorImageReaderType::Pointer imReader = FloatVectorImageReaderType::New();
-	imReader->SetFileName(GetParameterString("in"));
-	imReader->UpdateOutputInformation();
-	
+
+    FloatVectorImageType::Pointer imageIn = GetParameterImage("in");
+	imageIn->UpdateOutputInformation();
+    
 	m_Segreader = LabelReaderType::New();
 	m_Segreader->SetFileName(GetParameterString("inseg"));
 	m_Segreader->UpdateOutputInformation();
@@ -180,7 +179,7 @@ namespace otb
 	  auto imageClassifier= GetInternalApplication(clname.str());
 
 	  if (i==0) {	    
-	    imageClassifier->SetParameterInputImage("in",imReader->GetOutput());
+	    imageClassifier->SetParameterInputImage("in", imageIn);
 	  }
 	  else{
 	    
@@ -219,7 +218,7 @@ namespace otb
 	    ConcatenateImageFilter::Pointer m_conc = ConcatenateImageFilter::New();
 	    m_ConcatenateImageFilters.push_back(m_conc);
 	    
-	    m_conc->SetInput1(imReader->GetOutput());
+	    m_conc->SetInput1(imageIn);
 	    m_conc->SetInput2(m_HistoImageWriterFilter->GetOutput());
 	    m_conc->UpdateOutputInformation();
         otbAppLogINFO("setup conc done");
