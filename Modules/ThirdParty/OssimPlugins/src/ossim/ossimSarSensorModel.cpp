@@ -1037,36 +1037,37 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
       theAzimuthTimeOffset = seconds(0);
       theRangeTimeOffset = 0.0;
 
-      // First, fix the azimuth time
-      for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
-      {
-         ossimDpt estimatedImPt;
-         TimeType estimatedAzimuthTime;
-         double   estimatedRangeTime;
-
-         ossimEcefPoint sensorPos;
-         ossimEcefVector sensorVel;
-         // Estimate times
-         const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
-
-         if(s1)
-         {
-            cumulAzimuthTime -= (estimatedAzimuthTime-gcpIt->azimuthTime);
-            ++count;
-         }
-      }
-
-      theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
-
-      // Patch_locS1 : do not fix the range time
-      // This fix takes GCPs as inputs to calculate an offset in range dimension. 
+       // Patch_locS1 : do not fix the range/azimut time
+      // This fix takes GCPs as inputs to calculate an offset in range and azimut dimension. 
       // However for recent S1 products (after March 2017 with IPF >= 2.82), GCPs contain wrong values 
-      // for lat/lon coordinates => the range time offset is wrong and shift the localization.
-      // To avoid wrong offset, fixRangeTimeWithGCPs is always set to false
-      bool fixRangeTimeWithGCPs = false;
+      // for lat/lon coordinates => the range/azimut time offset is wrong and shift the localization.
+      // To avoid wrong offset, fixTimeWithGCPs is always set to false
+      bool fixTimeWithGCPs = false;
 
-      if (fixRangeTimeWithGCPs)
+      if (fixTimeWithGCPs)
 	{
+	  // First, fix the azimuth time
+	  for(std::vector<GCPRecordType>::const_iterator gcpIt = theGCPRecords.begin(); gcpIt!=theGCPRecords.end();++gcpIt)
+	    {
+	      ossimDpt estimatedImPt;
+	      TimeType estimatedAzimuthTime;
+	      double   estimatedRangeTime;
+
+	      ossimEcefPoint sensorPos;
+	      ossimEcefVector sensorVel;
+	      // Estimate times
+	      const bool s1 = this->worldToAzimuthRangeTime(gcpIt->worldPt,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+
+	      if(s1)
+		{
+		  cumulAzimuthTime -= (estimatedAzimuthTime-gcpIt->azimuthTime);
+		  ++count;
+		}
+	    }
+
+	  theAzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(0);
+   
+	
 	  // Then, fix the range time
 	  count=0;
 
