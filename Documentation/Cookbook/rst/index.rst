@@ -77,7 +77,6 @@ Table of Contents
     C++/SystemOverview.rst
     C++/Tutorial.rst
     C++/UserGuide.rst
-    C++/AboutBandMathX.rst
     C++/Examples.rst
 
     C++/DeveloperGuide.rst
