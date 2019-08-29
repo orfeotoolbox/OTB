@@ -58,40 +58,28 @@ namespace otb
       typedef otb::ImageFileReader<FloatVectorImageType>                           FloatVectorImageReaderType;
       typedef otb::ImageFileWriter<FloatVectorImageType>                           FloatVectorImageWriterType;
       
-
-
-      typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
-      typedef otb::ExtractROI<LabelType,LabelType> ExtractROIFilterType;
-      typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-
-      typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType> LabelImageToOGRDataSourceFilterType;
-
-      typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
-
+      typedef otb::StreamingStatisticsImageFilter<LabelImageType>                  StatisticsImageFilterType;
+      typedef otb::ExtractROI<LabelType,LabelType>                                 ExtractROIFilterType;
+      typedef itk::ImageRegionConstIterator<LabelImageType>                        LabelImageIterator;
+      typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>                 LabelImageToOGRDataSourceFilterType;
+      typedef otb::VectorDataFileWriter<VectorDataType>                            VectorDataFileWriterType;
+      
       typedef otb::OGRDataToSamplePositionFilter<LabelImageType, LabelImageType,otb::RandomSampler> RandomSamplerType;
 
-      typedef otb::SamplingRateCalculator               RateCalculatorType;
-
-      typedef otb::OGRDataSourceToLabelImageFilter<LabelImageType> OGRDataSourceToMapFilterType;
-
-
-
-      typedef std::map<std::string, unsigned long>      ClassCountMapType;
-      typedef RateCalculatorType::MapRateType           MapRateType;
-
-      typedef otb::OGRDataToClassStatisticsFilter<LabelImageType,LabelImageType> ClassStatFilterType;
+      typedef otb::SamplingRateCalculator                                          RateCalculatorType;
+      typedef otb::OGRDataSourceToLabelImageFilter<LabelImageType>                 OGRDataSourceToMapFilterType;
+      typedef std::map<std::string, unsigned long>                                 ClassCountMapType;
+      typedef RateCalculatorType::MapRateType                                      MapRateType;
+      typedef otb::OGRDataToClassStatisticsFilter<LabelImageType,LabelImageType>   ClassStatFilterType;
 
       typedef otb::ConcatenateVectorImageFilter< FloatVectorImageType, FloatVectorImageType, FloatVectorImageType > ConcatenateImageFilter;
 
       typedef otb::ImageToVectorImageCastFilter< LabelImageType, LabelVectorImageType > CastFilterType;
-
-      typedef otb::StreamingHistogramCalculationFilter<LabelImageType,LabelImageType> HistogramCalculationFilterType;
-      typedef otb::HistogramImageWriterFilter<LabelImageType,FloatVectorImageType> HistogramImageWriterFilterType;
-
-      typedef typename HistogramCalculationFilterType::SampleType                           SampleType;
-
-      typedef typename HistogramCalculationFilterType::LabeledSampleContainerType LabeledVectorMapType;
-      typedef typename HistogramCalculationFilterType::LabelSamplePairType LabelSamplePairType;
+      typedef otb::StreamingHistogramCalculationFilter<LabelImageType,LabelImageType>   HistogramCalculationFilterType;
+      typedef otb::HistogramImageWriterFilter<LabelImageType,FloatVectorImageType>      HistogramImageWriterFilterType;
+      typedef typename HistogramCalculationFilterType::SampleType                       SampleType;
+      typedef typename HistogramCalculationFilterType::LabeledSampleContainerType       LabeledVectorMapType;
+      typedef typename HistogramCalculationFilterType::LabelSamplePairType              LabelSamplePairType;
 
       itkNewMacro(Self);
       itkTypeMacro(ClassifyAutoContext, otb::CompositeApplication);
