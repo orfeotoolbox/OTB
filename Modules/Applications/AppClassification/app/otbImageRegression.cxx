@@ -74,11 +74,11 @@ private:
 namespace Wrapper
 {
 
-class PredictRegression : public Application
+class ImageRegression : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef PredictRegression             Self;
+  typedef ImageRegression               Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -86,7 +86,7 @@ public:
   /** Standard macro */
   itkNewMacro(Self);
 
-  itkTypeMacro(PredictRegression, otb::Application);
+  itkTypeMacro(ImageRegression, otb::Application);
 
   /** Filters typedef */
   typedef UInt8ImageType                                                                       MaskImageType;
@@ -107,7 +107,7 @@ public:
 
 protected:
 
-  ~PredictRegression() override
+  ~ImageRegression() override
     {
     MachineLearningModelFactoryType::CleanFactories();
     }
@@ -115,59 +115,57 @@ protected:
 private:
   void DoInit() override
   {
-    SetName("PredictRegression");
+    SetName("ImageRegression");
     SetDescription("Performs a prediction of the input image according to a regression model file.");
 
     // Documentation
-    SetDocLongDescription("This application predict output values from an input"
-                          " image, based on a regression model file produced by"
-                          " the TrainRegression application. Pixels of the "
-                          "output image will contain the predicted values from"
-                          "the regression model (single band). The input pixels"
-                          " can be optionally centered and reduced according "
+    SetDocLongDescription("This application predict output values from an input "
+                          "image, based on a regression model file produced either by "
+                          "TrainVectorRegression or TrainImagesRegression. "
+                          "Pixels of the output image will contain the predicted values from "
+                          "the regression model (single band). The input pixels "
+                          "can be optionally centered and reduced according "
                           "to the statistics file produced by the "
                           "ComputeImagesStatistics application. An optional "
                           "input mask can be provided, in which case only "
                           "input image pixels whose corresponding mask value "
-                          "is greater than 0 will be processed. The remaining"
-                          " of pixels will be given the value 0 in the output"
-                          " image.");
+                          "is greater than zero will be processed. The remaining "
+                          "of pixels will be given the value zero in the output "
+                          "image.");
 
-    SetDocLimitations("The input image must contain the feature bands used for"
-                      " the model training (without the predicted value). "
+    SetDocLimitations("The input image must contain the feature bands used for "
+                      "the model training. "
                       "If a statistics file was used during training by the "
                       "TrainRegression, it is mandatory to use the same "
                       "statistics file for prediction. If an input mask is "
                       "used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("TrainRegression, ComputeImagesStatistics");
+    SetDocSeeAlso("TrainImagesRegression, TrainVectorRegression, VectorRegression, ComputeImagesStatistics");
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputImage, "in",  "Input Image");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription( "in", "The input image to predict.");
 
-    // TODO : use CSV input/output ?
-
-    AddParameter(ParameterType_InputImage,  "mask",   "Input Mask");
+    AddParameter(ParameterType_InputImage, "mask", "Input Mask");
     SetParameterDescription( "mask", "The mask restrict the "
       "classification of the input image to the area where mask pixel values "
-      "are greater than 0.");
+      "are greater than zero.");
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "model", "Model file");
-    SetParameterDescription("model", "A regression model file (produced by "
-      "TrainRegression application).");
+    SetParameterDescription("model", "A regression model file (produced either by "
+      "TrainVectorRegression application or the TrainImagesRegression application).");
 
     AddParameter(ParameterType_InputFilename, "imstat", "Statistics file");
     SetParameterDescription("imstat", "An XML file containing mean and standard"
       " deviation to center and reduce samples before prediction "
-      "(produced by ComputeImagesStatistics application). If this file contains"
+      "(produced by the ComputeImagesStatistics application). If this file contains "
       "one more band than the sample size, the last stat of the last band will be"
-      "applied to expand the output predicted value");
+      "applied to expand the output predicted value.");
     MandatoryOff("imstat");
 
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription( "out", "Output image containing predicted values");
 
     AddRAMParameter();
@@ -283,4 +281,4 @@ private:
 }
 }
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::PredictRegression)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ImageRegression)
