@@ -93,10 +93,6 @@ namespace otb
       typedef typename HistogramCalculationFilterType::LabeledSampleContainerType LabeledVectorMapType;
       typedef typename HistogramCalculationFilterType::LabelSamplePairType LabelSamplePairType;
 
-      
-      // typedef std::unordered_map<LabelType,unsigned int> LabeledIntMapType;
-      // typedef std::pair<LabelType,unsigned int> LabelIntPairType;
-
       itkNewMacro(Self);
       itkTypeMacro(ClassifyAutoContext, otb::CompositeApplication);
 
@@ -208,22 +204,6 @@ namespace otb
 	    
 	    histoCalculationFilter->Update();
 
-	    // std::cout << "here2" << "\n";
-
-	    // LabeledIntMapType* c = histoCalculationFilter->GetFilter()->GetCount();
-	    // std::cout << c->size() << "\n";
-	    // std::cout << c->begin()->first << "\n";
-
-	    // std::cout << "here3" << "\n";
-
-	    // for (auto & e : (*m)) {
-	    //   std::cout << e.first << " ";
-	    //   for (unsigned i = 0; i < labellist.size(); i++) {
-	    // 	std::cout << e.second[i] << " ";
-	    //   }
-	    //   std::cout << "\n";
-	    // }
-
 	    std::cout << "Writing histogram image" << "\n";
 	    auto m_HistoImageWriterFilter = HistogramImageWriterFilterType::New();
 	    std::cout << "After New" << "\n";
@@ -236,11 +216,6 @@ namespace otb
 	    std::cout << "3" << "\n";
 	    m_HistoImageWriterFilter->UpdateOutputInformation();
 	    std::cout << "Setup histo done" << "\n";
-
-	    // auto w = FloatVectorImageWriterType::New();
-	    // w->SetFileName("test.tif");
-	    // w->SetInput(histoWriterFilter->GetOutput());
-	    // w->Update();
 
 	    ConcatenateImageFilter::Pointer m_conc = ConcatenateImageFilter::New();
 	    m_ConcatenateImageFilters.push_back(m_conc);
