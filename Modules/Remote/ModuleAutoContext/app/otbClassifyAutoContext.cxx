@@ -94,152 +94,142 @@ namespace otb
 
       LabelReaderType::Pointer m_Segreader;
 
-      void DoInit()
-      {
-	ClearApplications();
-	SetName("ClassifyAutoContext");
-	SetDescription("");
+    void DoInit()
+    {
+        ClearApplications();
+        SetName("ClassifyAutoContext");
+        SetDescription("");
 
-	SetDocLongDescription(" ");
-	SetDocLimitations(" ");
-	SetDocAuthors(" ");
-	SetDocSeeAlso(" ");
+        SetDocLongDescription(" ");
+        SetDocLimitations(" ");
+        SetDocAuthors(" ");
+        SetDocSeeAlso(" ");
 
-	AddParameter(ParameterType_InputImage,  "in",    "Input image");
-	SetParameterDescription( "in", "The input image." );
-   
-	AddParameter(ParameterType_String, "inseg", "Input segmentation");
-	SetParameterDescription( "inseg", "Input raster containing the segment label IDs" );
+        AddParameter(ParameterType_InputImage,  "in",    "Input image");
+        SetParameterDescription( "in", "The input image." );
+        AddParameter(ParameterType_String, "inseg", "Input segmentation");
+        SetParameterDescription( "inseg", "Input raster containing the segment label IDs" );
+        AddParameter(ParameterType_StringList, "models", "Input models");
+        SetParameterDescription("models","List of models from auto context trainer");
+        AddParameter(ParameterType_StringList, "lablist", "List of labels");
+        SetParameterDescription("lablist","List of labels to take into account in histograms");
+        AddParameter(ParameterType_Directory,  "tmpdir",    "Temporary directory");
+        AddParameter(ParameterType_String, "out", "output path");
+        SetParameterDescription( "out", "Path for storing results" );
+        AddRAMParameter();
+        GDALSetCacheMax(0);       
+    }
 
-	AddParameter(ParameterType_StringList, "models", "Input models");
-	SetParameterDescription("models","List of models from auto context trainer");
+      void DoUpdateParameters(){}
 
-	AddParameter(ParameterType_StringList, "lablist", "List of labels");
-	SetParameterDescription("lablist","List of labels to take into account in histograms");
+    void DoExecute()
+    {
+        const std::vector<std::string> modelList = GetParameterStringList("models");
+        for (unsigned i = 0; i < modelList.size(); i++)
+        {
+            std::stringstream clname;
+            clname << "classifier" << i;
+            AddApplication("ImageClassifier", clname.str(), "Image classifier");
+        }
 
-	AddParameter(ParameterType_Directory,  "tmpdir",    "Temporary directory");
+        const std::vector<std::string> labellist = GetParameterStringList("lablist");
+        std::unordered_map<LabelType,unsigned> labelPositions;
+        for (unsigned i = 0; i < labellist.size(); i++)
+        {
+            labelPositions.insert(std::pair<LabelType,unsigned>(atoi(labellist[i].c_str()),i));
+        }
 
-	AddParameter(ParameterType_String, "out", "output path");
-	SetParameterDescription( "out", "Path for storing results" );
+        FloatVectorImageType::Pointer imageIn = GetParameterImage("in");
+        imageIn->UpdateOutputInformation();
 
-	AddRAMParameter();
-	
-	GDALSetCacheMax(0);       
-	
-      }
+        m_Segreader = LabelReaderType::New();
+        m_Segreader->SetFileName(GetParameterString("inseg"));
+        m_Segreader->UpdateOutputInformation();
+        auto seg = m_Segreader->GetOutput();
 
-      void DoUpdateParameters()
-      {
+        LabelImageType::Pointer prevImage;
 
+        for (unsigned i = 0; i < modelList.size(); i++)
+        {
+            otbAppLogINFO("Starting iteration " << i);
+            std::stringstream clname;
+            clname << "classifier" << i;
 
-      }
+            auto imageClassifier = GetInternalApplication(clname.str());
 
-      void DoExecute()
-      {
-	const std::vector<std::string> modelList = GetParameterStringList("models");
-	for (unsigned i = 0; i < modelList.size(); i++) {
-	  std::stringstream clname;
-	  clname << "classifier" << i;
-	  AddApplication("ImageClassifier", clname.str(), "Image classifier");
-	}
-	
-	const std::vector<std::string> labellist = GetParameterStringList("lablist");
-	std::unordered_map<LabelType,unsigned> labelPositions;
-	for (unsigned i = 0; i < labellist.size(); i++) {
-	  labelPositions.insert(std::pair<LabelType,unsigned>(atoi(labellist[i].c_str()),i));
-	}
+            if (i==0)
+            {	    
+                imageClassifier->SetParameterInputImage("in", imageIn);
+            }
+            else
+            {
+                std::stringstream pclname;
+                pclname << "classifier" << i-1;
 
-    FloatVectorImageType::Pointer imageIn = GetParameterImage("in");
-	imageIn->UpdateOutputInformation();
-    
-	m_Segreader = LabelReaderType::New();
-	m_Segreader->SetFileName(GetParameterString("inseg"));
-	m_Segreader->UpdateOutputInformation();
-	auto seg = m_Segreader->GetOutput();
+                auto prevImageClassifier = GetInternalApplication(pclname.str());
+                prevImage=dynamic_cast<LabelImageType*>(prevImageClassifier->GetParameterOutputImage("out"));
+                prevImage->UpdateOutputInformation();
 
-	LabelImageType::Pointer prevImage;
+                //Invoke histogram filter
+                otbAppLogINFO("Calculating histograms");
+                auto histoCalculationFilter = HistogramCalculationFilterType::New();
+                m_HistoCalculationFilters.push_back(histoCalculationFilter);
+                histoCalculationFilter->SetInput(prevImage);
+                histoCalculationFilter->SetImageSeg(seg);
+                histoCalculationFilter->SetLabelPositions(labelPositions);
+                histoCalculationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+                histoCalculationFilter->GetFilter()->SetNumberOfThreads(1);
 
-	for (unsigned i = 0; i < modelList.size(); i++) {
-      otbAppLogINFO("Starting iteration " << i);
-	  std::stringstream clname;
-	  clname << "classifier" << i;
-	  
-	  auto imageClassifier= GetInternalApplication(clname.str());
+                histoCalculationFilter->Update();
 
-	  if (i==0) {	    
-	    imageClassifier->SetParameterInputImage("in", imageIn);
-	  }
-	  else{
-	    
-	    std::stringstream pclname;
-	    pclname << "classifier" << i-1;
-	  
-	    auto prevImageClassifier = GetInternalApplication(pclname.str());
-	    prevImage=dynamic_cast<LabelImageType*>(prevImageClassifier->GetParameterOutputImage("out"));
-	    prevImage->UpdateOutputInformation();
+                otbAppLogINFO("Writing histogram image");
+                auto m_HistoImageWriterFilter = HistogramImageWriterFilterType::New();
+                otbAppLogINFO("After New");
+                m_HistoImageWriterFilters.push_back(m_HistoImageWriterFilter);
+                otbAppLogINFO("1");
+                m_HistoImageWriterFilter->SetInput(seg);
+                otbAppLogINFO("2");
+                // std::cout << m.begin()->second.size() << "\n";
+                m_HistoImageWriterFilter->SetMeans(histoCalculationFilter->GetFilter()->GetMeans());
+                otbAppLogINFO("3");
+                m_HistoImageWriterFilter->UpdateOutputInformation();
+                otbAppLogINFO("Setup histo done");
 
-	    //Invoke histogram filter
-        otbAppLogINFO("Calculating histograms");
-	    auto histoCalculationFilter = HistogramCalculationFilterType::New();
-	    m_HistoCalculationFilters.push_back(histoCalculationFilter);
-	    histoCalculationFilter->SetInput(prevImage);
-	    histoCalculationFilter->SetImageSeg(seg);
-	    histoCalculationFilter->SetLabelPositions(labelPositions);
-	    histoCalculationFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
-	    histoCalculationFilter->GetFilter()->SetNumberOfThreads(1);
-	    
-	    histoCalculationFilter->Update();
+                ConcatenateImageFilter::Pointer m_conc = ConcatenateImageFilter::New();
+                m_ConcatenateImageFilters.push_back(m_conc);
 
-        otbAppLogINFO("Writing histogram image");
-	    auto m_HistoImageWriterFilter = HistogramImageWriterFilterType::New();
-        otbAppLogINFO("After New");
-	    m_HistoImageWriterFilters.push_back(m_HistoImageWriterFilter);
-        otbAppLogINFO("1");
-	    m_HistoImageWriterFilter->SetInput(seg);
-        otbAppLogINFO("2");
-	    // std::cout << m.begin()->second.size() << "\n";
-	    m_HistoImageWriterFilter->SetMeans(histoCalculationFilter->GetFilter()->GetMeans());
-        otbAppLogINFO("3");
-	    m_HistoImageWriterFilter->UpdateOutputInformation();
-        otbAppLogINFO("Setup histo done");
-        
-	    ConcatenateImageFilter::Pointer m_conc = ConcatenateImageFilter::New();
-	    m_ConcatenateImageFilters.push_back(m_conc);
-	    
-	    m_conc->SetInput1(imageIn);
-	    m_conc->SetInput2(m_HistoImageWriterFilter->GetOutput());
-	    m_conc->UpdateOutputInformation();
-        otbAppLogINFO("setup conc done");
-	    imageClassifier->SetParameterInputImage("in",m_conc->GetOutput());	    
-	  }
+                m_conc->SetInput1(imageIn);
+                m_conc->SetInput2(m_HistoImageWriterFilter->GetOutput());
+                m_conc->UpdateOutputInformation();
+                otbAppLogINFO("setup conc done");
+                imageClassifier->SetParameterInputImage("in",m_conc->GetOutput());	    
+            }
 
-	  imageClassifier->SetParameterString("model",modelList[i]);
+            imageClassifier->SetParameterString("model",modelList[i]);
 
-	  imageClassifier->SetParameterInt("ram",GetParameterInt("ram"));
-	  imageClassifier->UpdateParameters();
-	  if (i == modelList.size()-1) {
-	    //Last iteration
-	    std::stringstream outName_s;
-	    outName_s << GetParameterString("out") << "result_it_" << i << ".tif";
-	    imageClassifier->SetParameterString("out",outName_s.str());
-	    imageClassifier->ExecuteAndWriteOutput();
-	  }
-	  else{
-        otbAppLogINFO("befroe execute");
-	    imageClassifier->Execute();
-        otbAppLogINFO("after execute");
-	    // imageClassifier->RegisterPipeline();
-	    auto image = imageClassifier->GetParameterImageBase("out");
-	    image->UpdateOutputInformation();
-	    
-	  }
-
-	}
-
-	otbAppLogINFO("Finished");
-	//TODO cleanup temp dir
-      }
-
+            imageClassifier->SetParameterInt("ram", GetParameterInt("ram"));
+            imageClassifier->UpdateParameters();
+            if (i == modelList.size()-1)
+            {
+                //Last iteration
+                std::stringstream outName_s;
+                outName_s << GetParameterString("out") << "result_it_" << i << ".tif";
+                imageClassifier->SetParameterString("out",outName_s.str());
+                imageClassifier->ExecuteAndWriteOutput();
+            }
+            else
+            {
+                otbAppLogINFO("befroe execute");
+                imageClassifier->Execute();
+                otbAppLogINFO("after execute");
+                // imageClassifier->RegisterPipeline();
+                auto image = imageClassifier->GetParameterImageBase("out");
+                image->UpdateOutputInformation();
+            }
+        }
+        otbAppLogINFO("Finished");
+        //TODO cleanup temp dir
+    }//doExecute()
     };
   }
 }
