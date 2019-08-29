@@ -107,27 +107,21 @@ OTB team.
 
 ### Using the CI platform
 
-The CI pipelines are triggered automatically when pushing commits. If you push
-to a fork, you will need a few settings to trigger properly the CI pipelines:
-
-* You must add Runners for your fork: the best way is to ask access to the
-  runners from main repository when doing your first MR. During code review,
-  someone from CI admins will assign the runners to your fork.
-* [Optional] You can create a
-  [personal access token](https://docs.gitlab.com/ce/user/profile/personal_access_tokens.html)
-  (choose the scope API) and add it as a secret variable: on the project page of
-  your fork, go to Settings -> CI/CD -> Variables, add the variable `K8S_SECRET_API_TOKEN`
-  with your token as value (you should mask this variable for security reasons).
+There isn't much to do in order to use the CI platform. The CI pipelines are
+triggered automatically when pushing commits. However, if you push to a fork,
+you will first need an access to the Runners from main repository. You
+can request it when doing your first MergeRequest. During code review, someone
+from CI admins will assign the runners to your fork.
 
 When your pipeline ends, there are two cases:
 
 * if all the jobs succeed, you see a green pipeline, which means no problem was
   found on your commit.
 * if one job fails, you see a red pipeline, which means something is broken in
-  your commit. The pipeline widget on Gitlab will tell you which job failed. You
-  will also find special jobs "cdash:..." in the stage `external` that provide
-  a link to the [Dashboard](https://cdash.orfeo-toolbox.org/index.php?project=OTB)
-  where you can look more in details into compilation errors and failed tests.
+  your commit. The pipeline widget on Gitlab will tell you which job failed, so
+  you can check the logs. There, you may also find links to
+  [CDash](https://cdash.orfeo-toolbox.org/index.php?project=OTB) submissions
+  where compilation errors and failed test can be investigated more easily.
 
 More details on the CI platform can be found
 [here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/OTB-Continuous-Integration-platform).

@@ -116,14 +116,14 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimSentinel1Model at address " << hex << this
-          << dec
+      out << "\nDump of ossimSentinel1Model at address " << std::hex << this
+          << std::dec
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
 
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);
@@ -377,7 +377,7 @@ namespace ossimplugins
       const ossimString prefix = "support_data.";
       const ossimString xpath =  "/xfdu:XFDU/dataObjectSection/dataObject";
 
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       theManifestDoc->findNodes(xpath, xml_nodes);
 
@@ -1264,9 +1264,9 @@ namespace ossimplugins
    double ossimSentinel1Model::getBandTerrainHeight(ossimXmlDocument const& productXmlDocument)
    {
       double heightSum = 0.0;
-      vector< ossimXmlNodePtr > heightList;
+      std::vector< ossimXmlNodePtr > heightList;
       productXmlDocument.findNodes("/product/generalAnnotation/terrainHeightList/terrainHeight", heightList);
-      vector<ossimXmlNodePtr >::const_iterator it = heightList.begin();
+      std::vector<ossimXmlNodePtr >::const_iterator it = heightList.begin();
       for ( ; it != heightList.end() ; ++it)
       {
          heightSum += getOptionalTextFromFirstNode(**it, "value").toFloat64();

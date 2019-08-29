@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBUnmixingTests
 otbUnmixingTestDriver.cxx
 otbMDMDNMFImageFilter.cxx
-otbNCLSUnmixingImageFilter.cxx
 otbISRAUnmixingImageFilter.cxx
 otbUnConstrainedLeastSquareImageFilter.cxx
 otbSparseUnmixingImageFilter.cxx
@@ -50,16 +49,6 @@ otb_add_test(NAME hyTvMDMDNMFImageFilterTest COMMAND otbUnmixingTestDriver
   ${INPUTDATA}/cupriteSubHsi.tif
   ${TEMP}/hyTvMDMDNMFImageFilterTest.tif
   100)
-
-otb_add_test(NAME hyTvNCLSUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
-  --compare-image ${EPSILON_9}
-  ${BASELINE}/hyTvNCLSImageFilterTest.tif
-  ${TEMP}/hyTvNCLSImageFilterTest.tif
-  otbNCLSUnmixingImageFilterTest
-  ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-  ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-  ${TEMP}/hyTvNCLSImageFilterTest.tif
-  10)
 
 otb_add_test(NAME hyTvISRAUnmixingImageFilterTest COMMAND otbUnmixingTestDriver
   --compare-image ${EPSILON_9}

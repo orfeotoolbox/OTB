@@ -32,12 +32,6 @@ namespace otb
 namespace Wrapper
 {
 
-/** Utility function to negate std::isalnum */
-bool IsNotAlphaNum(char c)
-  {
-  return !std::isalnum(c);
-  }
-
 class PolygonClassStatistics : public Application
 {
 public:
@@ -141,7 +135,7 @@ private:
         {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
         key = item;
-        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        std::string::iterator end = std::remove_if(key.begin(),key.end(), [](char c){return !std::isalnum(c);});
         std::transform(key.begin(), end, key.begin(), tolower);
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
