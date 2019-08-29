@@ -57,13 +57,13 @@ namespace otb
       typedef otb::VectorImage<ComponentType>                                      FloatVectorImageType;
       typedef otb::ImageFileReader<FloatVectorImageType>                           FloatVectorImageReaderType;
       typedef otb::ImageFileWriter<FloatVectorImageType>                           FloatVectorImageWriterType;
-      
+
       typedef otb::StreamingStatisticsImageFilter<LabelImageType>                  StatisticsImageFilterType;
       typedef otb::ExtractROI<LabelType,LabelType>                                 ExtractROIFilterType;
       typedef itk::ImageRegionConstIterator<LabelImageType>                        LabelImageIterator;
       typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>                 LabelImageToOGRDataSourceFilterType;
       typedef otb::VectorDataFileWriter<VectorDataType>                            VectorDataFileWriterType;
-      
+
       typedef otb::OGRDataToSamplePositionFilter<LabelImageType, LabelImageType,otb::RandomSampler> RandomSamplerType;
 
       typedef otb::SamplingRateCalculator                                          RateCalculatorType;
@@ -117,10 +117,10 @@ namespace otb
         AddParameter(ParameterType_String, "out", "output path");
         SetParameterDescription( "out", "Path for storing results" );
         AddRAMParameter();
-        GDALSetCacheMax(0);       
+        GDALSetCacheMax(0);
     }
 
-      void DoUpdateParameters(){}
+    void DoUpdateParameters(){}
 
     void DoExecute()
     {
@@ -158,7 +158,7 @@ namespace otb
             auto imageClassifier = GetInternalApplication(clname.str());
 
             if (i==0)
-            {	    
+            {
                 imageClassifier->SetParameterInputImage("in", imageIn);
             }
             else
@@ -202,7 +202,7 @@ namespace otb
                 m_conc->SetInput2(m_HistoImageWriterFilter->GetOutput());
                 m_conc->UpdateOutputInformation();
                 otbAppLogINFO("setup conc done");
-                imageClassifier->SetParameterInputImage("in",m_conc->GetOutput());	    
+                imageClassifier->SetParameterInputImage("in",m_conc->GetOutput());
             }
 
             imageClassifier->SetParameterString("model",modelList[i]);
