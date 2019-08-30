@@ -136,7 +136,7 @@ namespace otb
 
         const std::string tmpdir = GetParameterString("tmpdir");
         const unsigned ram = GetParameterInt("ram");
-        const std::string field = GetParameterString("field");
+        std::string field = GetParameterString("field");
 
         //~ Some checks
         const unsigned int nbImages = in_img_list->Size();
@@ -161,6 +161,7 @@ namespace otb
         //~ iterate over inputs
         for (size_t index = 0; index < nbImages; ++index)
         {
+            auto index_string = std::to_string(index);
             VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
             imageIn->UpdateOutputInformation();
 
@@ -212,7 +213,7 @@ namespace otb
                 }
                 std::cout << "\n";
             }
-            std::string tempName = tmpdir+ "/featExtract.shp";
+            std::string tempName = tmpdir+ "/featExtract.sqlite";
 
             otb::ogr::DataSource::Pointer inter = extractFeatures<VectorImageType>(castFilter->GetOutput(),
                                                                                    refLabelDataSource,
@@ -233,7 +234,9 @@ namespace otb
 
             otbAppLogINFO("Start sampling SuperPixels at 100% rate");
             auto outSamples = fullSampleSelection(lreader->GetOutput(),
-                                                  tmpdir, ram, interSet, streamingManager,
+                                                  tmpdir,
+                                                  "fullSampleExtraction_"+index_string+".shp",
+                                                  ram, interSet, streamingManager,
                                                   threadsNumber);
             SP_points.push_back(outSamples);
             otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
@@ -259,8 +262,8 @@ namespace otb
             //~ concatImRefData->SetInput2(refRasterCast->GetOutput());
 
             //Extract features only on labeled samples for training
-            auto index_string = std::to_string(index);
-            const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_"+index_string+".shp";
+            
+            const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_"+index_string+".sqlite";
             ref_paths.push_back(initTrainSamples_s);
             otbAppLogINFO("Start sample Extraction : initialize training sample-set");
             auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter,
@@ -272,7 +275,7 @@ namespace otb
         }//for iterate over inputs
 
         otbAppLogINFO("Merge refererence");
-        const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.shp";
+        const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.sqlite";
         auto init_train_sample_full = merge_vectors(ref_extracted, initTrainSamples_s);
 
 
@@ -284,10 +287,13 @@ namespace otb
         }
 
         //Setup first iteration of training
+        
+        std::transform(field.begin(), field.end(), field.begin(), [](unsigned char c){ return std::tolower(c); });
+    
         otbAppLogINFO("Start training firts iteration");
         auto VectorTrainer = GetInternalApplication("train");
-        std::string modelName = GetParameterString("out") + "model_it_0.rf";
 
+        std::string modelName = GetParameterString("out") + "model_it_0.rf";
         VectorTrainer->SetParameterString("io.out",modelName);
         VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
         UpdateInternalParameters("train");
@@ -378,7 +384,8 @@ namespace otb
                 }
                 otbAppLogINFO("Write histograms init : first iteration");
                 //For immediate training of the new model
-                writeHistograms(ref_samples, labelList, histos, counts,"SPID0", (it > 1));
+                //~ writeHistograms(ref_samples, labelList, histos, counts,"SPID0", (it > 1));
+                writeHistograms(ref_samples, labelList, histos, counts,"spid0", (it > 1));
                 ref_samples->SyncToDisk();
                 
                 otbAppLogINFO("Write histograms all");
@@ -451,7 +458,7 @@ namespace otb
                 layer_out.CreateFeature( dstFeature );
             }
 
-            layer_out.ogr().CommitTransaction();
+            //~ layer_out.ogr().CommitTransaction();
         }
         output_ds->SyncToDisk();
         return output_ds;
@@ -469,7 +476,7 @@ namespace otb
         std::vector<std::string> options;
 
         std::stringstream shapefile;
-        shapefile << tmpdir << "/tempShapeFile.shp";
+        shapefile << tmpdir << "/tempShapeFile.sqlite";
 
         ogrDS = otb::ogr::DataSource::New(shapefile.str(), otb::ogr::DataSource::Modes::Overwrite);
         std::string layername = itksys::SystemTools::GetFilenameName(shapefile.str().c_str());
@@ -498,7 +505,7 @@ namespace otb
             layer.CreateFeature( dstFeature );
           }
 
-        layer.ogr().CommitTransaction();
+        //~ layer.ogr().CommitTransaction();
 
         return ogrDS;
     }
@@ -513,6 +520,7 @@ namespace otb
                                     std::string randomFieldName="label",
                                     unsigned ram=512)
     {
+        
         typedef otb::ExtractClassifyFilter<TInputImageType, LabelType> ExtractClassifyFilterType;
         typename ExtractClassifyFilterType::Pointer filter = ExtractClassifyFilterType::New();
         filter->SetSamplePositions(inputDS);
@@ -560,6 +568,7 @@ namespace otb
 
     otb::ogr::DataSource::Pointer fullSampleSelection(LabelImageType::Pointer inputIm,
                                                       std::string tmpdir,
+                                                      std::string file_name,
                                                       unsigned ram,
                                                       const std::unordered_set<int> & SP_id,
                                                       RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager,
@@ -591,7 +600,7 @@ namespace otb
           }
     }
 	std::stringstream tempName;
-    tempName << tmpdir << "/fullSampleExtraction.shp";
+    tempName << tmpdir << "/" << file_name;
 
 	otb::ogr::DataSource::Pointer outputSamples = otb::ogr::DataSource::New(tempName.str(), otb::ogr::DataSource::Modes::Overwrite);
     std::string layername = itksys::SystemTools::GetFilenameName(tempName.str().c_str());
@@ -604,6 +613,7 @@ namespace otb
 
     layername = layername.substr(0,layername.size() - (extension.size()));
     layer = outputSamples->CreateLayer(layername, &oSRS, wkbPoint, options);
+    
     OGRFieldDefn labelField("label", OFTInteger64);
 	layer.CreateField(labelField, true);
 
@@ -664,7 +674,7 @@ namespace otb
           }
           classifiedPointsLayer.SetFeature(dstFeature);
         }
-        classifiedPointsLayer.ogr().CommitTransaction();
+        //~ classifiedPointsLayer.ogr().CommitTransaction();
         // classifiedPoints->SyncToDisk();
       }//writeHistograms
     };
