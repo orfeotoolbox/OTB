@@ -99,7 +99,7 @@ fast-build:
 
 contibutors-check:
   extends: .common
-  only: [merge_requests, contributors_check]
+  only: [merge_requests, develop]
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   variables:
