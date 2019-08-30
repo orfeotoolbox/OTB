@@ -1,7 +1,0 @@
---- gdal-1.11.5-orig/port/cpl_config.h.vc	Fri Jul  1 10:55:03 2016
-+++ gdal-1.11.5/port/cpl_config.h.vc	Wed Jul 17 17:08:13 2019
-@@ -19,3 +19,3 @@
- #endif
--#define snprintf _snprintf
-+//#define snprintf _snprintf
- 

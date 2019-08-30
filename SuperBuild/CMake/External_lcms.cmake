@@ -17,10 +17,4 @@ ExternalProject_Add(LCMS
   LOG_INSTALL 1
   )
 
-ExternalProject_Add_Step(LCMS copy_icc34_h
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_SOURCE_DIR}/patches/LCMS/icc34.h
-  ${LCMS_SB_SRC}/include
-  DEPENDEES patch
-  DEPENDERS configure )
-  
+

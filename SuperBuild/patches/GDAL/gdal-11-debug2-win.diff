@@ -1,0 +1,69 @@
+--- gdal-2.2.1.orig/frmts/ecw/makefile.vc	Fri Jun 23 14:18:43 2017
++++ gdal-2.2.1/frmts/ecw/makefile.vc	Wed Jun 12 12:07:38 2019
+@@ -15,6 +15,12 @@
+ EXTRAFLAGS = $(EXTRAFLAGS) -D_WIN32_WINNT=0x0500
+ !ENDIF
+ 
++!IFNDEF DEBUG
++MD_FLAG =/MD
++!ELSE
++MD_FLAG =/MDd
++!ENDIF
++
+ default:	$(OBJ)
+ 	$(INSTALL) *.obj ..\o
+ 
+@@ -31,10 +37,11 @@
+ 	-del *.exe
+ 
+ testecw.exe:	testecw.cpp
+-	$(CC) /Zi /MD $(EXTRAFLAGS) testecw.cpp $(ECWLIB)
++
++	$(CC) /Zi $(MD_FLAG) $(EXTRAFLAGS) testecw.cpp $(ECWLIB)
+ 
+ ecw_example1.exe:	ecw_example1.c
+-	$(CC) /MD $(EXTRAFLAGS) ecw_example1.c $(ECWLIB)
++	$(CC) $(MD_FLAG) $(EXTRAFLAGS) ecw_example1.c $(ECWLIB)
+ 	
+ plugin:	$(PLUGIN_DLL)
+ 
+--- gdal-2.2.1.orig/frmts/pcidsk/sdk/Makefile.vc	Fri Jun 23 14:18:42 2017
++++ gdal-2.2.1/frmts/pcidsk/sdk/Makefile.vc	Wed Jun 12 12:06:02 2019
+@@ -1,7 +1,17 @@
+ #OPTFLAGS = /Zi 
+ OPTFLAGS = /Ox
+-CXXFLAGS = /nologo /MD /GR /EHsc $(OPTFLAGS) /W3 /I. \
+-	/D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
++
++
++
++!IFDEF WITH_PDB
++set OPTFLAGS = /Ox /zi
++!ENDIF
++
++!IFNDEF DEBUG
++CXXFLAGS = /nologo /MD /GR /EHsc $(OPTFLAGS) /W3 /I. /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
++!ELSE
++CXXFLAGS = /nologo /MDd /GR /EHsc $(OPTFLAGS) /W3 /I. /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE
++!ENDIF
+ 
+ # Add this if producing a DLL:
+ # /DLIBPCIDSK_EXPORTS 
+--- gdal-2.2.1.orig/nmake.opt	Fri Jun 23 14:18:38 2017
++++ gdal-2.2.1/nmake.opt	Wed Jun 12 12:07:48 2019
+@@ -132,13 +132,13 @@
+ !IFNDEF DEBUG
+ OPTFLAGS= $(CXX_ANALYZE_FLAGS) $(CXX_PDB_FLAGS) /nologo /MP /MD /EHsc /Ox /FC /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /DNDEBUG
+ !ELSE
+-OPTFLAGS= $(CXX_ANALYZE_FLAGS) $(CXX_PDB_FLAGS) /nologo /MP /MD /EHsc /FC /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /DDEBUG
++OPTFLAGS= $(CXX_ANALYZE_FLAGS) $(CXX_PDB_FLAGS) /nologo /MP /MDd /EHsc /FC /D_CRT_SECURE_NO_DEPRECATE /D_CRT_NONSTDC_NO_DEPRECATE /DDEBUG
+ !ENDIF
+ !ELSE
+ !IFNDEF DEBUG
+ OPTFLAGS= $(CXX_PDB_FLAGS) /nologo /MD /EHsc /GR /Ox /FC /DNDEBUG
+ !ELSE
+-OPTFLAGS= $(CXX_PDB_FLAGS) /nologo /MD /EHsc /GR /FC /DDEBUG
++OPTFLAGS= $(CXX_PDB_FLAGS) /nologo /MDd /EHsc /GR /FC /DDEBUG
+ !ENDIF
+ !ENDIF  #MSVC_VER
+ !ENDIF  # OPTFLAGS
