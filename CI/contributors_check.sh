@@ -40,8 +40,6 @@ curl -s ${GITLAB_PROJECT_URL}/raw/master/CI/contributors/known-contributors.txt 
 
 diff ${KNOWN_CONTRIBUTORS} ${GIT_CONTRIBUTORS} > ${UNKNOWN_CONTRIBUTORS}
 if [ "$?" -ne "0" ] ; then
-    echo "${UNKNOWN_CONTRIBUTORS}: "$(wc -l ${UNKNOWN_CONTRIBUTORS})
-    cat ${UNKNOWN_CONTRIBUTORS}
     echo ""
     echo "WARNING: ***************************************************************"
     echo "WARNING: Unknown contributors found:"
