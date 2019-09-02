@@ -151,7 +151,7 @@ namespace otb
         {
             itkExceptionMacro("number of input image, segmentation, reference must be the same");
         }
-        //~ TODO : check if every input image get the same number of bands
+        //~ TODO : check if every input image get the same number of bands, could be long if "in memory" pipeline
 
         std::vector<otb::ogr::DataSource::Pointer> ref_extracted;
         std::vector<std::string> ref_paths;
@@ -161,6 +161,7 @@ namespace otb
         //~ iterate over inputs
         for (size_t index = 0; index < nbImages; ++index)
         {
+            otbAppLogINFO("Index : " << index);
             auto index_string = std::to_string(index);
             otbAppLogINFO("Processing images at index : " << index_string);
             
