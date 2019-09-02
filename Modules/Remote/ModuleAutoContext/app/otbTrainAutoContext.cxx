@@ -152,7 +152,7 @@ namespace otb
             itkExceptionMacro("number of input image, segmentation, reference must be the same");
         }
         //~ TODO : check if every input image get the same number of bands, could be long if "in memory" pipeline
-
+     
         std::vector<otb::ogr::DataSource::Pointer> ref_extracted;
         std::vector<std::string> ref_paths;
         std::vector<otb::ogr::DataSource::Pointer> SP_points;
@@ -261,7 +261,7 @@ namespace otb
             rasterFilter->SetBurnAttribute(field);
             rasterFilter->SetOutputProjectionRef(lreader->GetOutput()->GetProjectionRef());
             rasterFilter->UpdateOutputInformation();
-
+            
             //~ auto refRasterCast = CastFilterType::New();
             //~ refRasterCast->SetInput(rasterFilter->GetOutput());
             //~ refRasterCast->UpdateOutputInformation();
@@ -487,7 +487,7 @@ namespace otb
         std::vector<std::string> options;
 
         std::stringstream shapefile;
-        shapefile << tmpdir << "/tempShapeFile.sqlite";
+        shapefile << tmpdir << "/tempShapeFile.shp";
 
         ogrDS = otb::ogr::DataSource::New(shapefile.str(), otb::ogr::DataSource::Modes::Overwrite);
         std::string layername = itksys::SystemTools::GetFilenameName(shapefile.str().c_str());
