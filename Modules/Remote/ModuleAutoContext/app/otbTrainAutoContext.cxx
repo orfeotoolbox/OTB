@@ -162,10 +162,15 @@ namespace otb
         for (size_t index = 0; index < nbImages; ++index)
         {
             auto index_string = std::to_string(index);
+            otbAppLogINFO("Processing images at index : " << index_string);
+            
             VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
             imageIn->UpdateOutputInformation();
-
+            
             std::string in_seg = in_seg_list[index];
+            
+            otbAppLogINFO("Processing segmentation : " << in_seg);
+            
             LabelReaderType::Pointer lreader = LabelReaderType::New();
             lreader->SetFileName(in_seg);
             lreader->UpdateOutputInformation();
@@ -173,6 +178,8 @@ namespace otb
 
             std::string in_ref = in_ref_list[index];
 
+            otbAppLogINFO("Processing reference data : " << in_ref);
+            
             //~ About streaming
             RegionType largestRegion = imageSeg->GetLargestPossibleRegion();
             RAMDrivenAdaptativeStreamingManagerType::Pointer
@@ -183,6 +190,8 @@ namespace otb
             streamingManager->SetBias(bias);
             streamingManager->PrepareStreaming(imageSeg, largestRegion);
 
+            otbAppLogINFO("streamingManager : OK");
+            
             CastFilterType::Pointer castFilter = CastFilterType::New();
             castFilter->SetInput(imageSeg);
             castFilter->UpdateOutputInformation();
@@ -413,10 +422,11 @@ namespace otb
             VectorTrainer->SetParameterString("rand","0");
             UpdateInternalParameters("train");
             ExecuteInternal("train");
-            
+            otbAppLogINFO("End training iteration : " << it);
         }// iterations
 
         //TODO cleanup temp dir
+        otbAppLogINFO("DoExecute");
     }// DoExecute()
 
     otb::ogr::DataSource::Pointer merge_vectors(std::vector<otb::ogr::DataSource::Pointer> vectors_to_merge,
