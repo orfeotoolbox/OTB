@@ -154,10 +154,15 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
         if ( !m_GivenMeanValues )
         {
           m_MeanValues = m_Normalizer->GetCovarianceEstimator()->GetMean();
+          // Set User mean value so the filter won't recompute the stats
+          m_Normalizer->SetMean( m_MeanValues );
 
           if ( !m_GivenStdDevValues )
+          {
             m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
-
+            // Set User std value so the filter won't recompute the stats
+            m_Normalizer->SetStdDev( m_StdDevValues );
+          }
           if ( m_UseVarianceForNormalization )
             m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCorrelation();
           else
