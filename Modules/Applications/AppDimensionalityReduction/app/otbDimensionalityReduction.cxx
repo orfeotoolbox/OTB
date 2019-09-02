@@ -238,7 +238,6 @@ private:
     int nbComp = GetParameterInt("nbcomp");
     bool normalize = GetParameterInt("normalize");
     bool rescale = IsParameterEnabled("rescale");
-
     bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");
     switch (GetParameterInt("method"))
       {
@@ -475,6 +474,7 @@ private:
 
       m_RescaleFilter = RescaleImageFilterType::New();
       m_RescaleFilter->SetInput(m_ForwardFilter->GetOutput());
+      m_RescaleFilter->SetAutomaticInputMinMaxComputation(false);
       m_RescaleFilter->SetInputMinimum(m_MinMaxFilter->GetMinimum());
       m_RescaleFilter->SetInputMaximum(m_MinMaxFilter->GetMaximum());
 
