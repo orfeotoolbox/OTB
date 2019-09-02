@@ -394,6 +394,10 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   for ( unsigned int i = 0; i < vectValP.size(); ++i )
     valP(i, i) = vectValP[i];
 
+  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
+    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
+
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); ++i )
   {
@@ -420,10 +424,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
-
-  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
 
 #endif
 }
