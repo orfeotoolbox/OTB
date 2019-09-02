@@ -245,7 +245,7 @@ private:
       case 0:
         {
 
-        otbAppLogDEBUG( << "PCA Algorithm ");
+        otbAppLogINFO("Using the PCA Algorithm ");
         PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
         m_ForwardFilter = filter;
         PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
@@ -275,12 +275,12 @@ private:
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
-
+        otbAppLogINFO("PCA transform has been computed.");
         break;
         }
       case 1:
         {
-        otbAppLogDEBUG( << "NA-PCA Algorithm ");
+        otbAppLogINFO("Using the NA-PCA Algorithm ");
 
         // NA-PCA
 
@@ -321,12 +321,12 @@ private:
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
-
+        otbAppLogINFO("NA-PCA transform has been computed.");
         break;
         }
       case 2:
         {
-        otbAppLogDEBUG( << "MAF Algorithm ");
+        otbAppLogINFO("Using the MAF Algorithm ");
         MAFForwardFilterType::Pointer filter = MAFForwardFilterType::New();
         m_ForwardFilter = filter;
         filter->SetInput(GetParameterFloatVectorImage("in"));
@@ -336,7 +336,7 @@ private:
         }
       case 3:
         {
-        otbAppLogDEBUG( << "Fast ICA Algorithm ");
+        otbAppLogINFO("Using the fast ICA Algorithm ");
 
         unsigned int nbIterations = static_cast<unsigned int> (GetParameterInt("method.ica.iter"));
         double mu = static_cast<double> (GetParameterFloat("method.ica.mu"));
@@ -405,7 +405,7 @@ private:
           invFilter->SetPCATransformationMatrix(filter->GetPCATransformationMatrix());
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           }
-
+        otbAppLogINFO("ICA transform has been computed.");
         m_TransformationMatrix = filter->GetTransformationMatrix();
 
         break;
@@ -456,8 +456,7 @@ private:
       }
     else
       {
-      otbAppLogDEBUG( << "Rescaling " )
-      otbAppLogDEBUG( << "Starting Min/Max computation" )
+      otbAppLogINFO( "Starting Min/Max computation for rescaling" );
 
       m_MinMaxFilter = MinMaxFilterType::New();
       m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
@@ -467,7 +466,7 @@ private:
       AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
       m_MinMaxFilter->Update();
 
-      otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
+      otbAppLogINFO( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
           << " max=" << m_MinMaxFilter->GetMaximum() )
 
       FloatVectorImageType::PixelType inMin, inMax;
