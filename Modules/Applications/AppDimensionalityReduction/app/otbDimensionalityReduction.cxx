@@ -103,18 +103,20 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
     MandatoryOff("out");
-    AddParameter(ParameterType_Group, "rescale", "Rescale Output");
+    
+    AddParameter(ParameterType_Choice, "rescale", "Rescale Output");
+    SetParameterDescription("rescale", "Enable rescaling of the reduced output image.");
 
     MandatoryOff("rescale");
-    //  AddChoice("rescale.no","No rescale");
-    // AddChoice("rescale.minmax","rescale to min max value");
+    AddChoice("rescale.no","No rescale");
+    AddChoice("rescale.minmax","rescale to min max value");
 
-    AddParameter(ParameterType_Float, "rescale.outmin", "Output min value");
-    AddParameter(ParameterType_Float, "rescale.outmax", "Output max value");
-    SetDefaultParameterFloat("rescale.outmin", 0.0);
-    SetParameterDescription("rescale.outmin", "Minimum value of the output image.");
-    SetDefaultParameterFloat("rescale.outmax", 255.0);
-    SetParameterDescription("rescale.outmax", "Maximum value of the output image.");
+    AddParameter(ParameterType_Float, "rescale.minmax.outmin", "Output min value");
+    AddParameter(ParameterType_Float, "rescale.minmax.outmax", "Output max value");
+    SetDefaultParameterFloat("rescale.minmax.outmin", 0.0);
+    SetParameterDescription("rescale.minmax.outmin", "Minimum value of the output image.");
+    SetDefaultParameterFloat("rescale.minmax.outmax", 255.0);
+    SetParameterDescription("rescale.minmax.outmax", "Maximum value of the output image.");
 
     AddParameter(ParameterType_OutputImage, "outinv", " Inverse Output Image");
     SetParameterDescription("outinv", "reconstruct output image.");
@@ -237,7 +239,6 @@ private:
     // Get Parameters
     int nbComp = GetParameterInt("nbcomp");
     bool normalize = GetParameterInt("normalize");
-    bool rescale = IsParameterEnabled("rescale");
     bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");
     switch (GetParameterInt("method"))
       {
@@ -450,7 +451,7 @@ private:
         }
       }
 
-    if (!rescale)
+    if (GetParameterString("rescale")=="no")
       {
       SetParameterOutputImage("out", m_ForwardFilter->GetOutput());
       }
@@ -480,8 +481,8 @@ private:
       FloatVectorImageType::PixelType outMin, outMax;
       outMin.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
       outMax.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
-      outMin.Fill(GetParameterFloat("rescale.outmin"));
-      outMax.Fill(GetParameterFloat("rescale.outmax"));
+      outMin.Fill(GetParameterFloat("rescale.minmax.outmin"));
+      outMax.Fill(GetParameterFloat("rescale.minmax.outmax"));
 
       m_RescaleFilter->SetOutputMinimum(outMin);
       m_RescaleFilter->SetOutputMaximum(outMax);
