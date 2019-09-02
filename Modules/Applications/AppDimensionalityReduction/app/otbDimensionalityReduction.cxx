@@ -127,6 +127,10 @@ private:
 
     AddChoice("method.pca", "PCA");
     SetParameterDescription("method.pca", "Principal Component Analysis.");
+    AddParameter(ParameterType_OutputFilename, "method.pca.outeigenvalues", "Output file containing eigenvalues (txt format)");
+    SetParameterDescription("method.pca.outeigenvalues", "Output file containing eigenvalues (txt format).");
+    MandatoryOff("method.pca.outeigenvalues");
+    
     AddChoice("method.napca", "NA-PCA");
     SetParameterDescription("method.napca", "Noise Adjusted Principal Component Analysis.");
     AddParameter(ParameterType_Int, "method.napca.radiusx", "Set the x radius of the sliding window");
@@ -138,6 +142,7 @@ private:
 
     AddChoice("method.maf", "MAF");
     SetParameterDescription("method.maf", "Maximum Autocorrelation Factor.");
+    
     AddChoice("method.ica", "ICA");
     SetParameterDescription("method.ica", "Independent Component Analysis using a stabilized fixed point FastICA algorithm.");
     AddParameter(ParameterType_Int, "method.ica.iter", "number of iterations");
@@ -258,6 +263,19 @@ private:
         filter->SetUseNormalization(normalize);        
         m_ForwardFilter->GetOutput()->UpdateOutputInformation();
         
+        //Write transformation matrix
+        std::ofstream outFile;
+        outFile.open(this->GetParameterString("method.pca.outeigenvalues"));
+        if (outFile.is_open())
+          {
+          outFile << std::fixed;
+          outFile.precision(10);
+
+          outFile << filter->GetEigenValues() << std::endl;;
+          outFile.close();
+          }
+        
+      
         if (invTransform)
           {  
           invFilter->SetInput(m_ForwardFilter->GetOutput());
@@ -276,6 +294,7 @@ private:
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
+        
         otbAppLogINFO("PCA transform has been computed.");
         break;
         }
@@ -443,11 +462,14 @@ private:
         //Write transformation matrix
         std::ofstream outFile;
         outFile.open(this->GetParameterString("outmatrix"));
-        outFile << std::fixed;
-        outFile.precision(10);
+        if (outFile.is_open())
+          {
+          outFile << std::fixed;
+          outFile.precision(10);
 
-        outFile << m_TransformationMatrix;
-        outFile.close();
+          outFile << m_TransformationMatrix;
+          outFile.close();
+          }
         }
       }
 
