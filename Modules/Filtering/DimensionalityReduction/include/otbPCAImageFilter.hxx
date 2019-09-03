@@ -366,50 +366,6 @@ void
 PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 ::GenerateTransformationMatrix ()
 {
-#if 0
-  /*
-   * Old stuff but did work !
-   */
-
-  MatrixType Id ( m_CovarianceMatrix );
-  Id.SetIdentity();
-
-  typename MatrixType::InternalMatrixType A = m_CovarianceMatrix.GetVnlMatrix();
-  typename MatrixType::InternalMatrixType I = Id.GetVnlMatrix();
-
-  vnl_generalized_eigensystem solver ( A, I );
-
-  typename MatrixType::InternalMatrixType transf = solver.V;
-  transf.fliplr();
-  transf.inplace_transpose();
-
-  vnl_vector< double > valP = solver.D.diagonal();
-  valP.flip();
-
-  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP[i] );
-  /*
-   * We used normalized PCA
-   */
-  for ( unsigned int i = 0; i < valP.size(); ++i )
-  {
-    if (  valP[i] != 0. )
-      valP[i] = 1. / std::sqrt( std::abs( valP[i] ) );
-    else
-      throw itk::ExceptionObject( __FILE__, __LINE__,
-            "Null Eigen value !!", ITK_LOCATION );
-  }
-  valP.post_multiply( transf );
-
-  if ( m_NumberOfPrincipalComponentsRequired
-      != this->GetInput()->GetNumberOfComponentsPerPixel() )
-    m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
-  else
-    m_TransformationMatrix = transf;
-
-
-#else
   InternalMatrixType transf;
   vnl_vector<double> vectValP;
   vnl_symmetric_eigensystem_compute( m_CovarianceMatrix.GetVnlMatrix(), transf, vectValP );
@@ -448,8 +404,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf.get_n_rows( 0, m_NumberOfPrincipalComponentsRequired );
   else
     m_TransformationMatrix = transf;
-
-#endif
 }
 
 
