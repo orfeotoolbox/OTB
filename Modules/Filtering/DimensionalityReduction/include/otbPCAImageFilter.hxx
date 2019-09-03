@@ -160,13 +160,37 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
           if ( !m_GivenStdDevValues )
           {
             m_StdDevValues = m_Normalizer->GetFunctor().GetStdDev();
-            // Set User std value so the filter won't recompute the stats
-            m_Normalizer->SetStdDev( m_StdDevValues );
+            
+            
           }
           if ( m_UseVarianceForNormalization )
-            m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCorrelation();
-          else
+          {
+            // Set User std value so the filter won't recompute the stats
+            m_Normalizer->SetStdDev( m_StdDevValues );
+            
+            // Compute the correlation matrix, note that GetCovarianceEstimator()->GetCorrelation()
+            // would give us the matrix with component E[XY], which is not what we want., we want
+            // the matrix defined by its component (E[XY]-E[X]E[Y])/(sigmaX*sigmaY)
+            
             m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+            
+            auto cov = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+            auto numberOfComponent = this->GetInput()->GetNumberOfComponentsPerPixel();
+            
+            for (unsigned int r = 0; r < numberOfComponent; ++r)
+            {
+              for (unsigned int c = 0; c < numberOfComponent; ++c)
+              {
+                m_CovarianceMatrix(r,c) = cov(r,c) / (std::sqrt(cov(r,r)) *std::sqrt( cov(c,c)));
+              }
+            }
+          }
+          else
+          {
+            m_Normalizer->SetUseStdDev(false);
+            m_CovarianceMatrix = m_Normalizer->GetCovarianceEstimator()->GetCovariance();
+          }
+        
         }
         else
         {
@@ -362,6 +386,9 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   vnl_vector< double > valP = solver.D.diagonal();
   valP.flip();
 
+  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
+  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
+    m_EigenValues[i] = static_cast< RealType >( valP[i] );
   /*
    * We used normalized PCA
    */
@@ -382,9 +409,6 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
     m_TransformationMatrix = transf;
 
 
-  m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
-  for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP[i] );
 #else
   InternalMatrixType transf;
   vnl_vector<double> vectValP;
@@ -396,8 +420,8 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[i] = static_cast< RealType >( valP(i, i) );
-
+    m_EigenValues[m_NumberOfPrincipalComponentsRequired - 1 - i] = static_cast< RealType >( valP(i, i) );
+  
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); ++i )
   {

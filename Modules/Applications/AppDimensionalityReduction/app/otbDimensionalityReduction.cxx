@@ -96,7 +96,7 @@ private:
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
 
     AddDocTag(Tags::Filter);
-	AddDocTag(Tags::DimensionReduction);
+    AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");
@@ -250,20 +250,31 @@ private:
       // PCA Algorithm
       case 0:
         {
-
         otbAppLogINFO("Using the PCA Algorithm ");
         PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
         m_ForwardFilter = filter;
         PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
         m_InverseFilter = invFilter;
 
-
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetUseNormalization(normalize);        
+        
+        // Center AND reduce the input data.
+        if (normalize)
+        {
+          filter->SetUseNormalization(true);
+          filter->SetUseVarianceForNormalization(true);
+        }
+        // Only center the input data.
+        else
+        {
+          filter->SetUseNormalization(true);
+          filter->SetUseVarianceForNormalization(false);
+        }
+        
         m_ForwardFilter->GetOutput()->UpdateOutputInformation();
         
-        //Write transformation matrix
+        //Write eigenvalues
         std::ofstream outFile;
         outFile.open(this->GetParameterString("method.pca.outeigenvalues"));
         if (outFile.is_open())
@@ -275,9 +286,8 @@ private:
           outFile.close();
           }
         
-      
         if (invTransform)
-          {  
+          {
           invFilter->SetInput(m_ForwardFilter->GetOutput());
           if (normalize)
             {
