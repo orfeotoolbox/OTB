@@ -288,16 +288,19 @@ private:
         if (invTransform)
           {
           invFilter->SetInput(m_ForwardFilter->GetOutput());
+          // Data has been centered and reduced by the forward filter
           if (normalize)
             {
             otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
             invFilter->SetMeanValues(filter->GetMeanValues());
-            // By default normalization by std dev is deactivated in
-            //forward filter, and GetStdDevValues() returns an empty
-            //vector, which confuses the invFilter.
-            //invFilter->SetStdDevValues(filter->GetStdDevValues());
+            invFilter->SetStdDevValues(filter->GetStdDevValues());
             }
-
+          // Data has been centered by the forward filter
+          else
+            {
+            invFilter->SetMeanValues(filter->GetMeanValues());
+            }
+          
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
