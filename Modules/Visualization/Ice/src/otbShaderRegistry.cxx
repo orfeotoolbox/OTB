@@ -40,6 +40,7 @@ ShaderRegistry::Pointer  ShaderRegistry::Instance()
   if(m_Instance.IsNull())
     {
     m_Instance = ShaderRegistry::New();
+    glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK)
       {
