@@ -80,4 +80,10 @@ void Shader::SetupShader()
   // glUniform2f(shader_lr,m_LR[0],m_LR[1]);
 }
 
+const std::vector<int> &
+Shader::GetAttribIdx()
+{
+  return m_AttribIdx;
+}
+
 }

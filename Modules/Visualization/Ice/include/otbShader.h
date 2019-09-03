@@ -58,6 +58,8 @@ public:
   //~ itkGetConstReferenceMacro(LL,PointType);
   //~ itkGetConstReferenceMacro(LR,PointType);
 
+  const std::vector<int> & GetAttribIdx();
+
 protected:
   Shader();
 
@@ -80,6 +82,8 @@ protected:
 
   /** ModelView matrix */
   const float * m_ModelViewMatrix;
+
+  std::vector<int> m_AttribIdx;
 
 private:
   // prevent implementation

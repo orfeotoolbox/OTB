@@ -73,7 +73,8 @@ StandardShader::StandardShader() :
   m_Loc.slider_pos = glGetUniformLocation(m_Program, "shader_slider_pos");
   m_Loc.vertical_slider_flag = glGetUniformLocation(m_Program, "shader_vertical_slider_flag");
 
-  m_TextureCoordIdx = glGetAttribLocation(m_Program , "in_coord");
+  m_AttribIdx.push_back( glGetAttribLocation(m_Program, "position") );
+  m_AttribIdx.push_back( glGetAttribLocation(m_Program , "in_coord") );
 }
 
 StandardShader::~StandardShader()
@@ -91,6 +92,7 @@ std::string StandardShader::GetVertexSource() const
     shader_source+="#version 130 \n";
     }
   shader_source +=
+    "in vec4 position;\n"                                       \
     "in vec2 in_coord;\n"                                       \
     "out vec2 tex_coord;\n"                                     \
     "uniform mat4 in_proj;\n"                                   \
@@ -98,7 +100,7 @@ std::string StandardShader::GetVertexSource() const
     "void main()\n"                                             \
     "{\n"                                                       \
     "tex_coord = in_coord;\n"                                   \
-    "gl_Position = in_proj * in_mv * gl_Vertex;\n" \
+    "gl_Position = in_proj * in_mv * position;\n" \
     "}";
 
   return shader_source;
