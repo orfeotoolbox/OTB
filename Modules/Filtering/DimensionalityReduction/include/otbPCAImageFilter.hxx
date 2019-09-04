@@ -39,7 +39,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
   this->SetNumberOfRequiredInputs(1);
 
   m_NumberOfPrincipalComponentsRequired = 0;
-
+  m_Whitening = true;
   m_UseNormalization = false;
   m_UseVarianceForNormalization = false;
   m_GivenMeanValues = false;
@@ -181,7 +181,7 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
             {
               for (unsigned int c = 0; c < numberOfComponent; ++c)
               {
-                m_CovarianceMatrix(r,c) = cov(r,c) / (std::sqrt(cov(r,r)) *std::sqrt( cov(c,c)));
+                m_CovarianceMatrix(r,c) = cov(r,c) / std::sqrt(cov(r,r)*cov(c,c));
               }
             }
           }
@@ -376,19 +376,23 @@ PCAImageFilter< TInputImage, TOutputImage, TDirectionOfTransformation >
 
   m_EigenValues.SetSize( m_NumberOfPrincipalComponentsRequired );
   for ( unsigned int i = 0; i < m_NumberOfPrincipalComponentsRequired; ++i )
-    m_EigenValues[m_NumberOfPrincipalComponentsRequired - 1 - i] = static_cast< RealType >( valP(i, i) );
+    m_EigenValues[m_NumberOfPrincipalComponentsRequired - 1 - i] = static_cast< RealType >( vectValP[i] );
   
   /* We used normalized PCA */
   for ( unsigned int i = 0; i < valP.rows(); ++i )
   {
     if (  valP(i, i) > 0. )
     {
-      valP(i, i) = 1. / std::sqrt( valP(i, i) );
+      if (m_Whitening)
+        valP(i, i) = 1. / std::sqrt( valP(i, i) );
     }
     else if ( valP(i, i) < 0. )
     {
       otbMsgDebugMacro( << "ValP(" << i << ") neg : " << valP(i, i) << " taking abs value" );
-      valP(i, i) = 1. / std::sqrt( std::abs( valP(i, i) ) );
+      if (m_Whitening)
+        valP(i, i) = 1. / std::sqrt( std::abs( valP(i, i) ) );
+      else
+        valP(i, i) = std::abs( valP(i, i));
     }
     else
     {

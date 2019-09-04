@@ -130,6 +130,10 @@ private:
     AddParameter(ParameterType_OutputFilename, "method.pca.outeigenvalues", "Output file containing eigenvalues (txt format)");
     SetParameterDescription("method.pca.outeigenvalues", "Output file containing eigenvalues (txt format).");
     MandatoryOff("method.pca.outeigenvalues");
+    AddParameter(ParameterType_Bool, "method.pca.whiten", "Perform pca whitening");
+    SetParameterDescription("method.pca.whiten", "Perform whitening and ensure uncorrelated outputs with unit component wise variances");
+    SetParameterInt("method.pca.whiten", 1);
+    MandatoryOff("method.pca.whiten");
     
     AddChoice("method.napca", "NA-PCA");
     SetParameterDescription("method.napca", "Noise Adjusted Principal Component Analysis.");
@@ -257,6 +261,7 @@ private:
 
         filter->SetInput(GetParameterFloatVectorImage("in"));
         filter->SetNumberOfPrincipalComponentsRequired(nbComp);
+        filter->SetWhitening(GetParameterInt("method.pca.whiten"));
         
         // Center AND reduce the input data.
         if (normalize)
