@@ -64,7 +64,7 @@ macro(get_xdk)
 
   # Download xdk :
   #   git clone $REPOSITORY_URL --branch $BRANCH_NAME --depth 1 superbuild-artifact
-  set ( REMOTE "https://gitlab.orfeo-toolbox.org/gbonnefille/superbuild-artifact.git")
+  set ( REMOTE "https://gitlab.orfeo-toolbox.org/orfeotoolbox/superbuild-artifact.git")
   execute_process(
     COMMAND ${CTEST_GIT_COMMAND} "clone" "${REMOTE}" "--branch" "${BRANCH_NAME}"
     "--depth" "1" "superbuild-artifact"

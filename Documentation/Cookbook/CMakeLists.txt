@@ -45,23 +45,15 @@ mark_as_advanced(SH_INTERP)
 # so in calls to add_custom_target() below, we call them directly.
 # See CMake bug: https://gitlab.kitware.com/cmake/cmake/issues/18302
 
-find_program(LATEX_COMMAND NAMES latex)
-mark_as_advanced(LATEX_COMMAND)
-
 find_program(TAR_COMMAND NAMES tar)
 mark_as_advanced(TAR_COMMAND)
-
-find_program(PDFLATEX_COMMAND NAMES pdflatex )
-mark_as_advanced(PDFLATEX_COMMAND)
 
 find_program(MAKEINDEX_COMMAND NAMES makeindex )
 mark_as_advanced(MAKEINDEX_COMMAND)
 
 # Check that we found everything we need
 foreach(cmd
-    LATEX_COMMAND
     TAR_COMMAND
-    PDFLATEX_COMMAND
     MAKEINDEX_COMMAND
     SH_INTERP)
   if(NOT ${cmd})
@@ -71,13 +63,11 @@ endforeach()
 
 set(RST_SOURCE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/rst)
 set(RST_BINARY_DIR  ${CMAKE_CURRENT_BINARY_DIR}/rst)
-set(LATEX_DIR       ${CMAKE_CURRENT_BINARY_DIR}/latex)
 set(HTML_DIR        ${CMAKE_CURRENT_BINARY_DIR}/html)
 
 # Print summary of Cookbook configuration
 message(STATUS "RST_SOURCE_DIR = ${RST_SOURCE_DIR}")
 message(STATUS "RST_BINARY_DIR = ${RST_BINARY_DIR}")
-message(STATUS "LATEX_DIR = ${LATEX_DIR}")
 message(STATUS "HTML_DIR = ${HTML_DIR}")
 
 # Clean any existing build
@@ -93,7 +83,6 @@ remove_and_make_directories(
   ${RST_BINARY_DIR}
   ${RST_BINARY_DIR}/Applications/
   ${HTML_DIR}
-  ${LATEX_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/_static
   )
 
@@ -167,28 +156,3 @@ add_custom_target(CookBookArchive
   DEPENDS CookBookHTML
   COMMENT "Creating archive for html CookBook")
 
- add_custom_target(CookBookTexFromRST
-   COMMAND sphinx-build
-   -b latex
-   ${RST_BINARY_DIR}
-   ${LATEX_DIR}
-   -v
-   -c ${SPHINX_CONF_DIR}
-   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-   DEPENDS CookBookHTML
-   COMMENT "Generating Tex files from rst"
-   VERBATIM)
-
-set(COOKBOOK_TEX CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH})
-
- add_custom_target(CookBookPDF
-   ALL
-   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
-   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
-   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
-   COMMAND ${MAKEINDEX_COMMAND} -s python.ist "${COOKBOOK_TEX}.idx" || true
-   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
-   COMMAND ${PDFLATEX_COMMAND} ${COOKBOOK_TEX}.tex
-   WORKING_DIRECTORY ${LATEX_DIR}
-   DEPENDS CookBookTexFromRST
-   COMMENT "Building RST documentation in pdf")

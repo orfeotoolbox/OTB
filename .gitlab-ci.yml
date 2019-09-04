@@ -122,7 +122,7 @@ ubuntu-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
 
 ubuntu-xdk-build-doc:
   extends: .common-build
@@ -132,7 +132,7 @@ ubuntu-xdk-build-doc:
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-ubuntu-superbuild-base -DNAME_SUFFIX:string=-glibc-2.27
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
     - mv build_packages/OTB-*.run . || true
   dependencies:
     - ubuntu-xdk-prepare
@@ -142,14 +142,14 @@ centos-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
 
 centos-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-centos-superbuild-base
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
     - mv build_packages/OTB-*.run . || true
   dependencies:
     - centos-xdk-prepare
@@ -160,15 +160,15 @@ macos-xdk-prepare:
   tags:
     - macos
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
 
 macos-xdk-build:
   tags:
     - macos
   extends: .common-build
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=otb-macos-superbuild
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=otb-macos-superbuild
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
     - mv build_packages/OTB-*.run . || true
   dependencies:
     - macos-xdk-prepare
