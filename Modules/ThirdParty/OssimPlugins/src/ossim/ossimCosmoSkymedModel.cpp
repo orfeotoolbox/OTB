@@ -476,6 +476,8 @@ namespace ossimplugins
     burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
 				       ossimplugins::time::toModifiedJulianDate(last_line_time));
 
+    burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
+
     theBurstRecords.push_back(burstRecord);
     
     const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";

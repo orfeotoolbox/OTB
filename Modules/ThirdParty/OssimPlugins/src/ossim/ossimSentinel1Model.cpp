@@ -50,8 +50,9 @@ namespace {// Anonymous namespace
    ossimTrace traceDebug ("ossimSentinel1Model:debug");
    const ossimString attAdsHeader        = "adsHeader";
    const ossimString attAzimuthTime      = "azimuthTime";
+   const ossimString attAzimuthAnxTime   = "azimuthAnxTime";
    const ossimString attFirstValidSample = "firstValidSample";
-   const ossimString attLastValidSample   = "lastValidSample";
+   const ossimString attLastValidSample  = "lastValidSample";
    const ossimString attGr0              = "gr0";
    const ossimString attGrsrCoefficients = "grsrCoefficients";
    const ossimString attHeight           = "height";
@@ -967,6 +968,8 @@ namespace ossimplugins
 	 burstRecord.startSample = add(theProductKwl, BURST_PREFIX, "[0].start_sample", 0);
 	 burstRecord.endSample   = add(theProductKwl, BURST_PREFIX, "[0].end_sample",  getFromFirstNode<unsigned int>(imageInformation, "numberOfSamples")-1);
 
+	 burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
+
          theBurstRecords.push_back(burstRecord);
       }
       else
@@ -987,6 +990,9 @@ namespace ossimplugins
 	    ossim_int64 first_sample_valid(0), last_sample_valid(samplesPerBurst-1);
 
             const TimeType azTime = getTimeFromFirstNode(**itNode, attAzimuthTime);
+
+	    // Azimuth Anx Time
+	    const double azAnxTime = getFromFirstNode<double>(**itNode, attAzimuthAnxTime);
 
 	    // Scan firstValidSample to define the first valid sample and valid lines
             ossimString const& s = getTextFromFirstNode(**itNode, attFirstValidSample);
@@ -1081,6 +1087,8 @@ namespace ossimplugins
             burstRecord.azimuthStartTime = add(theProductKwl,burstPrefix + keyAzimuthStartTime, azTime + (first_valid*theAzimuthTimeInterval));
             burstRecord.azimuthStopTime  = add(theProductKwl,burstPrefix + keyAzimuthStopTime,  azTime + (last_valid*theAzimuthTimeInterval));
 
+	    burstRecord.azimuthAnxTime = add(theProductKwl, burstPrefix + keyAzimuthAnxTime, azAnxTime);
+	    
             theBurstRecords.push_back(burstRecord);
          }
          add(theProductKwl, BURST_NUMBER_KEY, burstId);

@@ -1187,6 +1187,7 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 	      {
                 get(kwl, burstPrefix + keyStartSample,        burstRecord.startSample);
 		get(kwl, burstPrefix + keyEndSample,          burstRecord.endSample);
+		get(kwl, burstPrefix + keyAzimuthAnxTime,     burstRecord.azimuthAnxTime);
 	      }
          } 
 	 catch (...) {
@@ -1216,6 +1217,7 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
      add(kwl, burstPrefix + keyEndSample, (ossim_uint32) burstRecords[burstId].endSample);
      add(kwl, burstPrefix + keyAzimuthStartTime, burstRecords[burstId].azimuthStartTime);
      add(kwl, burstPrefix + keyAzimuthStopTime,  burstRecords[burstId].azimuthStopTime);
+     add(kwl, burstPrefix + keyAzimuthAnxTime, burstRecords[burstId].azimuthAnxTime);
      }
    }
 

@@ -62,5 +62,6 @@ namespace ossimplugins {
   const std::string keyEndSample        = "end_sample";
   const std::string keyAzimuthStartTime = "azimuth_start_time";
   const std::string keyAzimuthStopTime  = "azimuth_stop_time";
+  const std::string keyAzimuthAnxTime   = "azimuth_anx_time";
 } // ossimplugins namespace
 
