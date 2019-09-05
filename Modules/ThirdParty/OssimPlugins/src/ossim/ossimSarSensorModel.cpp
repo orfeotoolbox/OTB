@@ -1486,6 +1486,8 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   unsigned long currentStart  = it->startLine;  
   TimeType deburstAzimuthStartTime = it->azimuthStartTime;
 
+  double deburstAzimuthAnxTime = it->azimuthAnxTime;
+
   unsigned long deburstEndLine = 0;
 
   samples = std::make_pair(it->startSample, it->endSample);
@@ -1553,6 +1555,7 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
   deburstBurst.endLine = deburstEndLine;
   deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
+  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime; 
 
   if (onlyValidSample)
     {
@@ -1656,7 +1659,8 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
        oneBurst.azimuthStopTime = theLastLineTime;
        oneBurst.startSample = 0;
        oneBurst.endSample = samples.second - samples.first;
-   
+       oneBurst.azimuthAnxTime = 0;
+
        theBurstRecords.push_back(oneBurst);
      }
    else
@@ -1679,6 +1683,7 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
        oneBurst.azimuthStopTime = burstAzimuthStopTime;
        oneBurst.startSample = 0;
        oneBurst.endSample = samples.second - samples.first;
+       oneBurst.azimuthAnxTime = burstInd_Record.azimuthAnxTime;
    
        theBurstRecords.push_back(oneBurst);
 
@@ -1772,6 +1777,8 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
 
    unsigned long currentStart  = it->startLine;  
    TimeType deburstAzimuthStartTime = it->azimuthStartTime;
+
+   double deburstAzimuthAnxTime = it->azimuthAnxTime;
 
    unsigned long deburstEndLine = 0;
   
@@ -1928,6 +1935,7 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
    deburstBurst.startSample = 0;
    deburstBurst.endSample = samples.second - samples.first;
+   deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime;
 
    theBurstRecords.push_back(deburstBurst);
 
