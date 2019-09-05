@@ -65,11 +65,9 @@ private:
                           " and even different bands and number of bands between images. \n"
                           " \n"
                           "The application will output all change maps into a single multiband"
-                          " image. If numbers of bands in image 1 and 2 are equal, then change"
-                          " maps are sorted by increasing correlation. If number of bands is"
-                          " different, the change maps are sorted by decreasing correlation. \n"
+                          " image. Change maps are sorted by increasing correlation. \n"
                           " \n"
-                          "The application will also print the following information:\n"
+                          "The application will also print the following information:\n\n"
                           "- Mean1 and Mean2 which are the mean values of bands for both input"
                           " images,\n"
                           "- V1 and V2 which are the two linear transform that are applied to"
@@ -98,7 +96,7 @@ private:
     AddParameter(ParameterType_InputImage,  "in2", "Input Image 2");
     SetParameterDescription("in2","Mutliband image of the scene after perturbations.");
     AddParameter(ParameterType_OutputImage, "out", "Change Map");
-    SetParameterDescription("out","Multiband image containing change maps. Each map will be in the range [-1,1], so a floating point output type is advised.");
+    SetParameterDescription("out","Multiband image containing change maps.");
 
     AddRAMParameter();
 
