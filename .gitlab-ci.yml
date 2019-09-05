@@ -97,6 +97,18 @@ fast-build:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
 
+contibutors-check:
+  extends: .common
+  only: [merge_requests, develop]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  variables:
+    GIT_DEPTH: ""
+  allow_failure: true
+  script:
+    - ./CI/contributors_check.sh
+  after_script: []
+
 #------------------------- prepare & build jobs --------------------------------
 debian-build:
   extends: .common-build
