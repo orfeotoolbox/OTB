@@ -234,6 +234,8 @@ returnvalue = 0
 
 def verifyheader(filename, category):
 
+    global returnvalue
+
     if category == 'none':
         if debug: print('File type ignored ({} style comment): {}'.format(category, filename))
         return True
