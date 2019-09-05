@@ -97,7 +97,7 @@ public:
    */
   itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
   itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
-  
+
   itkSetMacro(Whitening, bool);
   itkGetMacro(Whitening, bool);
 
