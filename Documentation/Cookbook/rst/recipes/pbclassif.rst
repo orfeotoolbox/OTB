@@ -895,7 +895,7 @@ Two applications are available for training:
 
 
 - `TrainImagesRegression` can be used to train a classifier from multiple pairs of predictor images and label images. 
-  There is two ways to use this application:
+  There are two ways to use this application:
 
   It is possible to provide for each input image a vector data file with geometries
   corresponding to the input locations that will be used for training. This is achieved by using the `io.vd` parameter.

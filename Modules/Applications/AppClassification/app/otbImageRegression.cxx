@@ -44,16 +44,6 @@ class AffineFunctor
 public:
   typedef double InternalType;
 
-  // constructor
-  AffineFunctor() : m_A(1.0), m_B(0.0)
-  {
-  }
-
-  // destructor
-  virtual ~AffineFunctor()
-  {
-  }
-
   void SetA(InternalType a)
   {
     m_A = a;
@@ -70,8 +60,8 @@ public:
   }
 
 private:
-  InternalType m_A;
-  InternalType m_B;
+  InternalType m_A = 1.0;
+  InternalType m_B = 0.0;
 };
 }
 
