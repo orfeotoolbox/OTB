@@ -689,7 +689,7 @@ namespace otb
           classifiedPointsLayer.SetFeature(dstFeature);
         }
         //~ classifiedPointsLayer.ogr().CommitTransaction();
-        // classifiedPoints->SyncToDisk();
+        classifiedPoints->SyncToDisk();
       }//writeHistograms
     
     std::vector<otb::ogr::DataSource::Pointer> m_ref_extracted;
