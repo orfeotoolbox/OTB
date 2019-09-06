@@ -116,6 +116,8 @@ namespace otb
         AddParameter(ParameterType_Directory,  "tmpdir",    "Temporary directory");
         AddParameter(ParameterType_String, "out", "output path");
         SetParameterDescription( "out", "Path for storing results" );
+        AddParameter(ParameterType_String, "confmap", "Confidence map");
+        SetParameterDescription( "confmap", "Confidence map" );
         AddRAMParameter();
         GDALSetCacheMax(0);
     }
@@ -213,8 +215,11 @@ namespace otb
             {
                 //Last iteration
                 std::stringstream outName_s;
-                outName_s << GetParameterString("out") << "result_it_" << i << ".tif";
-                imageClassifier->SetParameterString("out",outName_s.str());
+                imageClassifier->SetParameterString("out", GetParameterString("out"));
+                if(IsParameterEnabled("confmap"))
+                {
+                    imageClassifier->SetParameterString("confmap", GetParameterString("confmap"));
+                }
                 imageClassifier->ExecuteAndWriteOutput();
             }
             else
