@@ -129,6 +129,7 @@ namespace otb
 
     void DoExecute()
     {
+        otbAppLogINFO("TrainAutoContext application");
         unsigned int threadsNumber = 12;
         FloatVectorImageListType::Pointer in_img_list = GetParameterImageList("il");
         const std::vector<std::string> in_seg_list = GetParameterStringList("inseg");
