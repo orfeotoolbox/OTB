@@ -152,11 +152,6 @@ namespace otb
             itkExceptionMacro("number of input image, segmentation, reference must be the same");
         }
         //~ TODO : check if every input image get the same number of bands, could be long if "in memory" pipeline
-     
-        std::vector<otb::ogr::DataSource::Pointer> ref_extracted;
-        std::vector<std::string> ref_paths;
-        std::vector<otb::ogr::DataSource::Pointer> SP_points;
-        
         std::vector<LabelType> labelList;
         //~ iterate over inputs
         for (size_t index = 0; index < nbImages; ++index)
@@ -248,7 +243,7 @@ namespace otb
                                                   "fullSampleExtraction_"+index_string+".shp",
                                                   ram, interSet, streamingManager,
                                                   threadsNumber);
-            SP_points.push_back(outSamples);
+            m_SP_points.push_back(outSamples);
             otbAppLogINFO("sampling SuperPixels at 100% rate : Done");
             //Rasterize ref data
             auto rasterFilter = OGRDataSourceToMapFilterType::New();
@@ -274,19 +269,19 @@ namespace otb
             //Extract features only on labeled samples for training
             
             const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_"+index_string+".sqlite";
-            ref_paths.push_back(initTrainSamples_s);
+            m_ref_paths.push_back(initTrainSamples_s);
             otbAppLogINFO("Start sample Extraction : initialize training sample-set");
             auto initTrainSamples = extractFeatures<VectorImageType>(imageIn, inter,
                                                                      initTrainSamples_s,
                                                                      "feature",
                                                                      field, availableRAM);
-            ref_extracted.push_back(initTrainSamples);
+            m_ref_extracted.push_back(initTrainSamples);
             otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
         }//for iterate over inputs
 
         otbAppLogINFO("Merge refererence");
         const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.sqlite";
-        auto init_train_sample_full = merge_vectors(ref_extracted, initTrainSamples_s);
+        auto init_train_sample_full = merge_vectors(m_ref_extracted, initTrainSamples_s);
 
 
         std::vector<std::string> featureList;
@@ -342,8 +337,8 @@ namespace otb
                 VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
                 imageIn->UpdateOutputInformation();
                 
-                auto outSamples = SP_points[index];
-                auto ref_samples = ref_extracted[index];
+                auto outSamples = m_SP_points[index];
+                auto ref_samples = m_ref_extracted[index];
 
                 if(it==1)
                 {
@@ -416,7 +411,7 @@ namespace otb
             modelName_s << GetParameterString("out") << "model_it_" << it << ".rf";
             modelName=modelName_s.str();
             VectorTrainer->SetParameterString("io.out",modelName);
-            VectorTrainer->SetParameterStringList("io.vd", ref_paths);//contains new histo features
+            VectorTrainer->SetParameterStringList("io.vd", m_ref_paths);//contains new histo features
 
             //~ //use sharkrf could improve results and computational time
             UpdateInternalParameters("train");
@@ -696,6 +691,10 @@ namespace otb
         //~ classifiedPointsLayer.ogr().CommitTransaction();
         // classifiedPoints->SyncToDisk();
       }//writeHistograms
+    
+    std::vector<otb::ogr::DataSource::Pointer> m_ref_extracted;
+    std::vector<std::string> m_ref_paths;
+    std::vector<otb::ogr::DataSource::Pointer> m_SP_points;
     };
   }
 }
