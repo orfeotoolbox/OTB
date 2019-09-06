@@ -318,12 +318,11 @@ namespace otb
 
         //Extract and classify features for all samples
         //~ auto trainSamples = otb::ogr::DataSource::New();
-        std::vector<otb::ogr::DataSource::Pointer> trainSamples_tiles;
         std::vector<std::vector<std::string>> histoNames_tiles;
         //initialize trainSamples_tiles
         for (size_t index=0; index < nbImages; ++index)
         {
-            trainSamples_tiles.push_back(otb::ogr::DataSource::New());
+            m_trainSamples_tiles.push_back(otb::ogr::DataSource::New());
             histoNames_tiles.push_back(std::vector<std::string>());
         }
 
@@ -345,7 +344,7 @@ namespace otb
                 {
                     //Use "outSamples" which doesn't contain histogram fields
                     extractFeaturesAndClassify<VectorImageType>(imageIn, outSamples,
-                                                                trainSamples_tiles[index], modelName,
+                                                                m_trainSamples_tiles[index], modelName,
                                                                 "predicted", histoNames,
                                                                 "label", this->GetParameterInt("ram"));
                     for (unsigned i = 0; i < labelListSize; i++){
@@ -360,19 +359,19 @@ namespace otb
                     //Use "trainSamples" which contains histogram fields
                     otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
                     otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
-                    extractFeaturesAndClassify<VectorImageType>(imageIn, trainSamples_tiles[index],
+                    extractFeaturesAndClassify<VectorImageType>(imageIn, m_trainSamples_tiles[index],
                                                                 trainSamplesNew, modelName,
                                                                 "predicted", histoNames,
                                                                 "label", this->GetParameterInt("ram"));
                     otbAppLogINFO("Extract SuperPixels features, then Classify pixels : DONE");
-                    trainSamples_tiles[index]=trainSamplesNew;
+                    m_trainSamples_tiles[index]=trainSamplesNew;
                 }
                 //Create histograms
                 otbAppLogINFO("Calculate histograms");
                 LabeledVectorMapType histos;
                 LabeledIntMapType counts;
 
-                auto classifiedPointsLayer = trainSamples_tiles[index]->GetLayerChecked(0);
+                auto classifiedPointsLayer = m_trainSamples_tiles[index]->GetLayerChecked(0);
                 otb::ogr::Layer::feature_iter<otb::ogr::Feature> classifiedPointsIt;
                 for (classifiedPointsIt=classifiedPointsLayer.begin();classifiedPointsIt!=classifiedPointsLayer.end(); classifiedPointsIt++)
                 {
@@ -402,7 +401,7 @@ namespace otb
                 //For next iteration, avoid doing on last iteration
                 if (it < this->GetParameterInt("nit"))
                 {
-                    writeHistograms(trainSamples_tiles[index], labelList, histos, counts, "label", (it > 1));
+                    writeHistograms(m_trainSamples_tiles[index], labelList, histos, counts, "label", (it > 1));
                 }
             }//for iterate over inputs
             
@@ -696,6 +695,7 @@ namespace otb
     std::vector<otb::ogr::DataSource::Pointer> m_ref_extracted;
     std::vector<std::string> m_ref_paths;
     std::vector<otb::ogr::DataSource::Pointer> m_SP_points;
+    std::vector<otb::ogr::DataSource::Pointer> m_trainSamples_tiles;
     };
   }
 }
