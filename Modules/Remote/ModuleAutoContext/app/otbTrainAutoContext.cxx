@@ -311,6 +311,10 @@ namespace otb
         UpdateInternalParameters("train");
         VectorTrainer->SetParameterStringList("cfield",{field});
         VectorTrainer->SetParameterString("classifier","rf");
+
+        VectorTrainer->SetParameterString("classifier.rf.min","5");
+        VectorTrainer->SetParameterString("classifier.rf.max","25");
+
         VectorTrainer->SetParameterString("rand","0");
         UpdateInternalParameters("train");
         VectorTrainer->ExecuteAndWriteOutput();
@@ -420,6 +424,10 @@ namespace otb
             UpdateInternalParameters("train");
             VectorTrainer->SetParameterStringList("cfield",{field});
             VectorTrainer->SetParameterString("classifier","rf");
+            
+            VectorTrainer->SetParameterString("classifier.rf.min","5");
+            VectorTrainer->SetParameterString("classifier.rf.max","25");
+        
             VectorTrainer->SetParameterString("rand","0");
             UpdateInternalParameters("train");
             ExecuteInternal("train");
