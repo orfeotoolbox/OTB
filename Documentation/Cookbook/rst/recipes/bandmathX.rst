@@ -5,7 +5,7 @@ Simple calculus using BandMath
 ------------------------------
 
 The *BandMath* application provides a simple and efficient way to
-perform band operations. It computes a band wise
+perform pixel wise operations. It computes a band wise
 operation according to a user defined mathematical expression. The
 following code computes the absolute difference between first bands of
 two images.
