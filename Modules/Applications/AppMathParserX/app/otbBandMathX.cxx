@@ -61,7 +61,6 @@ private:
 
     SetDescription("This application performs mathematical operations on several multiband images.");
 
-
     SetDocLongDescription(
       "This application performs a mathematical operation on several multi-band "
       "images and outputs the result into an image (multi- or mono-band, as "
@@ -87,7 +86,7 @@ private:
       "  * ``im1b2`` the 2nd component of a pixel from 1st input (band index is 1-based)\n"
       "  * ``im1b2N3x4`` a 3x4 pixels Neighbourhood of a pixel the 2nd component of a pixel from the 1st input\n"
       "  * ``im1PhyX`` horizontal (X-axis) spacing of the 1st input.\n"
-      "  * ``im1PhyY`` vertical spacing of the 1st input input.\n"
+      "  * ``im1PhyY`` vertical (Y-axis) spacing of the 1st input input.\n"
       "  * ``im1b2Mean`` mean of the 2nd component of the 1st input (global statistics)\n"
       "  * ``im1b2Mini`` minimum of the 2nd component of the 1st input (global statistics)\n"
       "  * ``im1b2Maxi`` maximum of the 2nd component of the 1st input (global statistics)\n"
@@ -100,6 +99,7 @@ private:
       "  * ``<`` less than, ``>`` greater than, ``<=`` less or equal, ``>=`` greater or equal\n"
       "  * ``==`` equal, ``!=`` not equal\n"
       "  * logical operators: ``or``, ``and``, ``xor``\n"
+      "  * bit manipulation: ``&`` (and), ``|`` (or), ``<<``(left shift) and ``>>`` (right shift)"
       "* if-then-else operator: ``(condition ? value_true : value_false)``\n"
       "* functions: abs(), exp(), log(), sin(), cos(), min(), max(), ...\n\n"
 
