@@ -97,9 +97,9 @@ fast-build:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
 
-contibutors-check:
+legal-check:
   extends: .common
-  only: [merge_requests, develop]
+  only: [merge_requests, develop, headers_check]
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   variables:
@@ -107,6 +107,7 @@ contibutors-check:
   allow_failure: true
   script:
     - ./CI/contributors_check.sh
+    - ./CI/headers_check.py
   after_script: []
 
 #------------------------- prepare & build jobs --------------------------------
