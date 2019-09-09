@@ -90,7 +90,7 @@ private:
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
     SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available. It is also possible to compute the inverse transform to reconstruct the image and to optionally export the transformation matrix to a text file.");
-    SetDocLimitations("This application does not provide the inverse transform and the transformation matrix export for the MAF.");
+    SetDocLimitations("This application does not provide the inverse transform and the transformation matrix export for the MAF. the background value option is not supported for MAF and ICA.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
