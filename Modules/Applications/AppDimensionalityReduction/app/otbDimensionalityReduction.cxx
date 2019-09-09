@@ -348,6 +348,11 @@ private:
           filter->SetUseNormalization(normalize);
           filter->GetNoiseImageFilter()->SetRadius(radius);
 
+          if( HasValue( "bv" ) )
+          {
+            filter->SetStatisticsUserIgnoredValue(GetParameterFloat("bv"));
+          }
+          
           m_ForwardFilter->GetOutput()->UpdateOutputInformation();
 
           if (invTransform)
