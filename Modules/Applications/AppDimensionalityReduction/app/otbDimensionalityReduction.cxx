@@ -183,6 +183,10 @@ private:
     MandatoryOff("outmatrix");
     DisableParameter("outmatrix");
     
+    AddParameter(ParameterType_Float, "bv", "Background Value");
+    SetParameterDescription( "bv", "Background value to ignore in computation of the transformation matrix. Note that all pixels will still be processed when applying the transformation." );
+    MandatoryOff("bv");
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -276,6 +280,11 @@ private:
             filter->SetUseVarianceForNormalization(false);
           }
 
+          if( HasValue( "bv" ) )
+          {
+            filter->SetStatisticsUserIgnoredValue(GetParameterFloat("bv"));
+          }
+          
           m_ForwardFilter->GetOutput()->UpdateOutputInformation();
 
           // Write eigenvalues

@@ -161,7 +161,17 @@ public:
     m_StdDevValues = vec;
     this->Modified();
   }
-
+  
+  void SetStatisticsUserIgnoredValue ( RealType value )
+  {
+    /** User ignored value for the normalizer */
+    m_Normalizer->GetCovarianceEstimator()->SetUserIgnoredValue(value);
+    m_Normalizer->GetCovarianceEstimator()->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the covariance estimator */
+    m_CovarianceEstimator->SetUserIgnoredValue(value);
+    m_CovarianceEstimator->SetIgnoreUserDefinedValue(true);
+  }
+  
 protected:
   PCAImageFilter();
   ~PCAImageFilter() override { }
