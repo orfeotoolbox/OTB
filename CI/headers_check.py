@@ -158,6 +158,7 @@ r'''/\*
 | \* Copyright \(C\) 20\d\d(-20\d\d)? Centre National d'Etudes Spatiales \(CNES\)
 | \* Copyright \(C\) 20\d\d(-20\d\d)? CS Systemes d'Information \(CS SI\)
 | \* Copyright \(C\) 2007-2012 Institut Mines Telecom / Telecom Bretagne
+| \* Copyright \(C\) 2005-2016 IRSTEA
 | \* Copyright \(C\) 2008 Jan Wegner
 | \* Copyright \(C\) 2007 Julien Radoux
 )+ \*
