@@ -98,6 +98,9 @@ public:
   itkSetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
   itkGetMacro(NumberOfPrincipalComponentsRequired, unsigned int);
 
+  itkSetMacro(Whitening, bool);
+  itkGetMacro(Whitening, bool);
+
   itkGetMacro(CovarianceEstimator, CovarianceEstimatorFilterType *);
   itkGetMacro(Transformer, TransformFilterType *);
 
@@ -158,7 +161,17 @@ public:
     m_StdDevValues = vec;
     this->Modified();
   }
-
+  
+  void SetStatisticsUserIgnoredValue ( RealType value )
+  {
+    /** User ignored value for the normalizer */
+    m_Normalizer->GetCovarianceEstimator()->SetUserIgnoredValue(value);
+    m_Normalizer->GetCovarianceEstimator()->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the covariance estimator */
+    m_CovarianceEstimator->SetUserIgnoredValue(value);
+    m_CovarianceEstimator->SetIgnoreUserDefinedValue(true);
+  }
+  
 protected:
   PCAImageFilter();
   ~PCAImageFilter() override { }
@@ -197,6 +210,7 @@ protected:
   bool         m_GivenCovarianceMatrix;
   bool         m_GivenTransformationMatrix;
   bool         m_IsTransformationMatrixForward;
+  bool         m_Whitening;
 
   VectorType m_MeanValues;
   VectorType m_StdDevValues;

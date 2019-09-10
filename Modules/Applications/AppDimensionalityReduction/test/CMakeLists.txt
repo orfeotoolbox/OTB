@@ -35,7 +35,7 @@ otb_test_application(NAME   apTvFEDimensionalityReductionPCA
                              -out ${TEMP}/apTvChDimensionalityReductionPCA.tif
                              -method pca
                      VALID   --compare-image 0.025
-                             ${BASELINE}/bfTvPCAImageFilter3.tif
+                             ${BASELINE}/apTvChDimensionalityReductionPCA.tif
                              ${TEMP}/apTvChDimensionalityReductionPCA.tif)
 
 #-------------------------------------------------------------------------------

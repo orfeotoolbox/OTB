@@ -145,6 +145,19 @@ public:
     m_IsTransformationMatrixForward = isForward;
   }
 
+  void SetStatisticsUserIgnoredValue ( RealType value )
+  {
+    /** User ignored value for the normalizer */
+    m_Normalizer->GetCovarianceEstimator()->SetUserIgnoredValue(value);
+    m_Normalizer->GetCovarianceEstimator()->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the covariance estimator */
+    m_CovarianceEstimator->SetUserIgnoredValue(value);
+    m_CovarianceEstimator->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the noise covariance estimator */
+    m_NoiseCovarianceEstimator->SetUserIgnoredValue(value);
+    m_NoiseCovarianceEstimator->SetIgnoreUserDefinedValue(true);
+  }
+  
   itkGetConstMacro(EigenValues, VectorType);
 
 protected:
