@@ -90,31 +90,33 @@ private:
     SetName("DimensionalityReduction");
     SetDescription("Perform Dimension reduction of the input image.");
     SetDocLongDescription("Performs dimensionality reduction on input image. PCA,NA-PCA,MAF,ICA methods are available. It is also possible to compute the inverse transform to reconstruct the image and to optionally export the transformation matrix to a text file.");
-    SetDocLimitations("This application does not provide the inverse transform and the transformation matrix export for the MAF.");
+    SetDocLimitations("This application does not provide the inverse transform and the transformation matrix export for the MAF. the background value option is not supported for MAF and ICA.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(
                   "\"Kernel maximum autocorrelation factor and minimum noise fraction transformations,\" IEEE Transactions on Image Processing, vol. 20, no. 3, pp. 612-624, (2011)");
 
     AddDocTag(Tags::Filter);
-	AddDocTag(Tags::DimensionReduction);
+    AddDocTag(Tags::DimensionReduction);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "The input image to apply dimensionality reduction.");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "output image. Components are ordered by decreasing eigenvalues.");
     MandatoryOff("out");
-    AddParameter(ParameterType_Group, "rescale", "Rescale Output");
+
+    AddParameter(ParameterType_Choice, "rescale", "Rescale Output");
+    SetParameterDescription("rescale", "Enable rescaling of the reduced output image.");
 
     MandatoryOff("rescale");
-    //  AddChoice("rescale.no","No rescale");
-    // AddChoice("rescale.minmax","rescale to min max value");
+    AddChoice("rescale.no", "No rescale");
+    AddChoice("rescale.minmax", "rescale to min max value");
 
-    AddParameter(ParameterType_Float, "rescale.outmin", "Output min value");
-    AddParameter(ParameterType_Float, "rescale.outmax", "Output max value");
-    SetDefaultParameterFloat("rescale.outmin", 0.0);
-    SetParameterDescription("rescale.outmin", "Minimum value of the output image.");
-    SetDefaultParameterFloat("rescale.outmax", 255.0);
-    SetParameterDescription("rescale.outmax", "Maximum value of the output image.");
+    AddParameter(ParameterType_Float, "rescale.minmax.outmin", "Output min value");
+    AddParameter(ParameterType_Float, "rescale.minmax.outmax", "Output max value");
+    SetDefaultParameterFloat("rescale.minmax.outmin", 0.0);
+    SetParameterDescription("rescale.minmax.outmin", "Minimum value of the output image.");
+    SetDefaultParameterFloat("rescale.minmax.outmax", 255.0);
+    SetParameterDescription("rescale.minmax.outmax", "Maximum value of the output image.");
 
     AddParameter(ParameterType_OutputImage, "outinv", " Inverse Output Image");
     SetParameterDescription("outinv", "reconstruct output image.");
@@ -125,6 +127,14 @@ private:
 
     AddChoice("method.pca", "PCA");
     SetParameterDescription("method.pca", "Principal Component Analysis.");
+    AddParameter(ParameterType_OutputFilename, "method.pca.outeigenvalues", "Output file containing eigenvalues (txt format)");
+    SetParameterDescription("method.pca.outeigenvalues", "Output file containing eigenvalues (txt format).");
+    MandatoryOff("method.pca.outeigenvalues");
+    AddParameter(ParameterType_Bool, "method.pca.whiten", "Perform pca whitening");
+    SetParameterDescription("method.pca.whiten", "Perform whitening and ensure uncorrelated outputs with unit component wise variances");
+    SetParameterInt("method.pca.whiten", 1);
+    MandatoryOff("method.pca.whiten");
+
     AddChoice("method.napca", "NA-PCA");
     SetParameterDescription("method.napca", "Noise Adjusted Principal Component Analysis.");
     AddParameter(ParameterType_Int, "method.napca.radiusx", "Set the x radius of the sliding window");
@@ -136,6 +146,7 @@ private:
 
     AddChoice("method.maf", "MAF");
     SetParameterDescription("method.maf", "Maximum Autocorrelation Factor.");
+
     AddChoice("method.ica", "ICA");
     SetParameterDescription("method.ica", "Independent Component Analysis using a stabilized fixed point FastICA algorithm.");
     AddParameter(ParameterType_Int, "method.ica.iter", "number of iterations");
@@ -164,14 +175,17 @@ private:
     MandatoryOff("nbcomp");
     SetMinimumParameterIntValue("nbcomp", 0);
 
-    AddParameter(ParameterType_Bool, "normalize", "Normalize");
-    SetParameterDescription("normalize", "Center and reduce data before Dimensionality reduction.");
+    AddParameter(ParameterType_Bool, "normalize", "Center and reduce data");
+    SetParameterDescription("normalize", "Center and reduce data before Dimensionality reduction (if this parameter is set to false, the data will be centered but not reduced.");
 
     AddParameter(ParameterType_OutputFilename, "outmatrix", "Transformation matrix output (text format)");
     SetParameterDescription("outmatrix", "Filename to store the transformation matrix (csv format)");
     MandatoryOff("outmatrix");
     DisableParameter("outmatrix");
     
+    AddParameter(ParameterType_Float, "bv", "Background Value");
+    SetParameterDescription( "bv", "Background value to ignore in computation of the transformation matrix. Note that all pixels will still be processed when applying the transformation." );
+    MandatoryOff("bv");
 
     AddRAMParameter();
 
@@ -237,74 +251,111 @@ private:
     // Get Parameters
     int nbComp = GetParameterInt("nbcomp");
     bool normalize = GetParameterInt("normalize");
-    bool rescale = IsParameterEnabled("rescale");
-
     bool invTransform = HasValue("outinv") && IsParameterEnabled("outinv");
     switch (GetParameterInt("method"))
       {
       // PCA Algorithm
       case 0:
         {
+          otbAppLogINFO("Using the PCA Algorithm ");
+          PCAForwardFilterType::Pointer filter    = PCAForwardFilterType::New();
+          m_ForwardFilter                         = filter;
+          PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
+          m_InverseFilter                         = invFilter;
 
-        otbAppLogDEBUG( << "PCA Algorithm ");
-        PCAForwardFilterType::Pointer filter = PCAForwardFilterType::New();
-        m_ForwardFilter = filter;
-        PCAInverseFilterType::Pointer invFilter = PCAInverseFilterType::New();
-        m_InverseFilter = invFilter;
+          filter->SetInput(GetParameterFloatVectorImage("in"));
+          filter->SetNumberOfPrincipalComponentsRequired(nbComp);
+          filter->SetWhitening(GetParameterInt("method.pca.whiten"));
 
-
-        filter->SetInput(GetParameterFloatVectorImage("in"));
-        filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetUseNormalization(normalize);        
-        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
-        
-        if (invTransform)
-          {  
-          invFilter->SetInput(m_ForwardFilter->GetOutput());
+          // Center AND reduce the input data.
           if (normalize)
+          {
+            filter->SetUseNormalization(true);
+            filter->SetUseVarianceForNormalization(true);
+          }
+          // Only center the input data.
+          else
+          {
+            filter->SetUseNormalization(true);
+            filter->SetUseVarianceForNormalization(false);
+          }
+
+          if( HasValue( "bv" ) )
+          {
+            filter->SetStatisticsUserIgnoredValue(GetParameterFloat("bv"));
+          }
+          
+          m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+
+          // Write eigenvalues
+          std::ofstream outFile;
+          outFile.open(this->GetParameterString("method.pca.outeigenvalues"));
+          if (outFile.is_open())
+          {
+            outFile << std::fixed;
+            outFile.precision(10);
+
+            outFile << filter->GetEigenValues() << std::endl;
+            ;
+            outFile.close();
+          }
+
+          if (invTransform)
+          {
+            invFilter->SetInput(m_ForwardFilter->GetOutput());
+            // Data has been centered and reduced by the forward filter
+            if (normalize)
             {
             otbAppLogINFO( << "Normalization MeanValue:"<<filter->GetMeanValues() );
             invFilter->SetMeanValues(filter->GetMeanValues());
-            // By default normalization by std dev is deactivated in
-            //forward filter, and GetStdDevValues() returns an empty
-            //vector, which confuses the invFilter.
-            //invFilter->SetStdDevValues(filter->GetStdDevValues());
+            invFilter->SetStdDevValues(filter->GetStdDevValues());
+            }
+            // Data has been centered by the forward filter
+            else
+            {
+              invFilter->SetMeanValues(filter->GetMeanValues());
             }
 
-          invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
-          m_TransformationMatrix = invFilter->GetTransformationMatrix();
+            invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
+            m_TransformationMatrix = invFilter->GetTransformationMatrix();
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
 
+        otbAppLogINFO("PCA transform has been computed.");
         break;
         }
       case 1:
         {
-        otbAppLogDEBUG( << "NA-PCA Algorithm ");
+          otbAppLogINFO("Using the NA-PCA Algorithm ");
 
-        // NA-PCA
+          // NA-PCA
 
-        unsigned int radiusX = static_cast<unsigned int> (GetParameterInt("method.napca.radiusx"));
-        unsigned int radiusY = static_cast<unsigned int> (GetParameterInt("method.napca.radiusy"));
+          unsigned int radiusX = static_cast<unsigned int>(GetParameterInt("method.napca.radiusx"));
+          unsigned int radiusY = static_cast<unsigned int>(GetParameterInt("method.napca.radiusy"));
 
-        // Noise filtering
-        NoiseFilterType::RadiusType radius = { { radiusX, radiusY } };
+          // Noise filtering
+          NoiseFilterType::RadiusType radius = {{radiusX, radiusY}};
 
-        NAPCAForwardFilterType::Pointer filter = NAPCAForwardFilterType::New();
-        m_ForwardFilter = filter;
-        NAPCAInverseFilterType::Pointer invFilter = NAPCAInverseFilterType::New();
-        m_InverseFilter = invFilter;
+          NAPCAForwardFilterType::Pointer filter    = NAPCAForwardFilterType::New();
+          m_ForwardFilter                           = filter;
+          NAPCAInverseFilterType::Pointer invFilter = NAPCAInverseFilterType::New();
+          m_InverseFilter                           = invFilter;
 
 
-        filter->SetInput(GetParameterFloatVectorImage("in"));
-        filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetUseNormalization(normalize);
-        filter->GetNoiseImageFilter()->SetRadius(radius);
+          filter->SetInput(GetParameterFloatVectorImage("in"));
+          filter->SetNumberOfPrincipalComponentsRequired(nbComp);
+          filter->SetUseNormalization(normalize);
+          filter->GetNoiseImageFilter()->SetRadius(radius);
 
-        m_ForwardFilter->GetOutput()->UpdateOutputInformation();
-        
-        if (invTransform)
+          if( HasValue( "bv" ) )
+          {
+            filter->SetStatisticsUserIgnoredValue(GetParameterFloat("bv"));
+          }
+          
+          m_ForwardFilter->GetOutput()->UpdateOutputInformation();
+
+          if (invTransform)
           {
           otbAppLogDEBUG( << "Compute Inverse Transform");
           invFilter->SetInput(m_ForwardFilter->GetOutput());
@@ -322,37 +373,37 @@ private:
           }
 
         m_TransformationMatrix = filter->GetTransformationMatrix();
-
+        otbAppLogINFO("NA-PCA transform has been computed.");
         break;
         }
       case 2:
         {
-        otbAppLogDEBUG( << "MAF Algorithm ");
-        MAFForwardFilterType::Pointer filter = MAFForwardFilterType::New();
-        m_ForwardFilter = filter;
-        filter->SetInput(GetParameterFloatVectorImage("in"));
-        otbAppLogINFO( << "V :"<<std::endl<<filter->GetV()<<"Auto-Correlation :"<<std::endl <<filter->GetAutoCorrelation() );
+          otbAppLogINFO("Using the MAF Algorithm ");
+          MAFForwardFilterType::Pointer filter = MAFForwardFilterType::New();
+          m_ForwardFilter                      = filter;
+          filter->SetInput(GetParameterFloatVectorImage("in"));
+          otbAppLogINFO(<< "V :" << std::endl << filter->GetV() << "Auto-Correlation :" << std::endl << filter->GetAutoCorrelation());
 
-        break;
+          break;
         }
       case 3:
         {
-        otbAppLogDEBUG( << "Fast ICA Algorithm ");
+          otbAppLogINFO("Using the fast ICA Algorithm ");
 
-        unsigned int nbIterations = static_cast<unsigned int> (GetParameterInt("method.ica.iter"));
-        double mu = static_cast<double> (GetParameterFloat("method.ica.mu"));
+          unsigned int nbIterations = static_cast<unsigned int>(GetParameterInt("method.ica.iter"));
+          double       mu           = static_cast<double>(GetParameterFloat("method.ica.mu"));
 
-        ICAForwardFilterType::Pointer filter = ICAForwardFilterType::New();
-        m_ForwardFilter = filter;
-        ICAInverseFilterType::Pointer invFilter = ICAInverseFilterType::New();
-        m_InverseFilter = invFilter;
+          ICAForwardFilterType::Pointer filter    = ICAForwardFilterType::New();
+          m_ForwardFilter                         = filter;
+          ICAInverseFilterType::Pointer invFilter = ICAInverseFilterType::New();
+          m_InverseFilter                         = invFilter;
 
-        filter->SetInput(GetParameterFloatVectorImage("in"));
-        filter->SetNumberOfPrincipalComponentsRequired(nbComp);
-        filter->SetNumberOfIterations(nbIterations);
-        filter->SetMu(mu);
-        
-        switch (GetParameterInt("method.ica.g"))
+          filter->SetInput(GetParameterFloatVectorImage("in"));
+          filter->SetNumberOfPrincipalComponentsRequired(nbComp);
+          filter->SetNumberOfIterations(nbIterations);
+          filter->SetMu(mu);
+
+          switch (GetParameterInt("method.ica.g"))
           {
           // tanh
           case 0:
@@ -406,10 +457,10 @@ private:
           invFilter->SetPCATransformationMatrix(filter->GetPCATransformationMatrix());
           invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
           }
+          otbAppLogINFO("ICA transform has been computed.");
+          m_TransformationMatrix = filter->GetTransformationMatrix();
 
-        m_TransformationMatrix = filter->GetTransformationMatrix();
-
-        break;
+          break;
         }
 
       default:
@@ -443,52 +494,54 @@ private:
         //Write transformation matrix
         std::ofstream outFile;
         outFile.open(this->GetParameterString("outmatrix"));
-        outFile << std::fixed;
-        outFile.precision(10);
+        if (outFile.is_open())
+        {
+          outFile << std::fixed;
+          outFile.precision(10);
 
-        outFile << m_TransformationMatrix;
-        outFile.close();
+          outFile << m_TransformationMatrix;
+          outFile.close();
+        }
         }
       }
 
-    if (!rescale)
+      if (GetParameterString("rescale") == "no")
       {
       SetParameterOutputImage("out", m_ForwardFilter->GetOutput());
       }
     else
       {
-      otbAppLogDEBUG( << "Rescaling " )
-      otbAppLogDEBUG( << "Starting Min/Max computation" )
+        otbAppLogINFO("Starting Min/Max computation for rescaling");
 
-      m_MinMaxFilter = MinMaxFilterType::New();
-      m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
-      //m_MinMaxFilter->GetStreamer()->SetNumberOfLinesStrippedStreaming(50);
-      m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+        m_MinMaxFilter = MinMaxFilterType::New();
+        m_MinMaxFilter->SetInput(m_ForwardFilter->GetOutput());
+        m_MinMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
-      AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
-      m_MinMaxFilter->Update();
+        AddProcess(m_MinMaxFilter->GetStreamer(), "Min/Max computing");
+        m_MinMaxFilter->Update();
 
-      otbAppLogDEBUG( << "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum()
-          << " max=" << m_MinMaxFilter->GetMaximum() )
+        otbAppLogINFO(<< "Min/Max computation done : min=" << m_MinMaxFilter->GetMinimum() << " max=" << m_MinMaxFilter->GetMaximum())
 
-      FloatVectorImageType::PixelType inMin, inMax;
+            FloatVectorImageType::PixelType inMin,
+            inMax;
 
-      m_RescaleFilter = RescaleImageFilterType::New();
-      m_RescaleFilter->SetInput(m_ForwardFilter->GetOutput());
-      m_RescaleFilter->SetInputMinimum(m_MinMaxFilter->GetMinimum());
-      m_RescaleFilter->SetInputMaximum(m_MinMaxFilter->GetMaximum());
+        m_RescaleFilter = RescaleImageFilterType::New();
+        m_RescaleFilter->SetInput(m_ForwardFilter->GetOutput());
+        m_RescaleFilter->SetAutomaticInputMinMaxComputation(false);
+        m_RescaleFilter->SetInputMinimum(m_MinMaxFilter->GetMinimum());
+        m_RescaleFilter->SetInputMaximum(m_MinMaxFilter->GetMaximum());
 
-      FloatVectorImageType::PixelType outMin, outMax;
-      outMin.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
-      outMax.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
-      outMin.Fill(GetParameterFloat("rescale.outmin"));
-      outMax.Fill(GetParameterFloat("rescale.outmax"));
+        FloatVectorImageType::PixelType outMin, outMax;
+        outMin.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
+        outMax.SetSize(m_ForwardFilter->GetOutput()->GetNumberOfComponentsPerPixel());
+        outMin.Fill(GetParameterFloat("rescale.minmax.outmin"));
+        outMax.Fill(GetParameterFloat("rescale.minmax.outmax"));
 
-      m_RescaleFilter->SetOutputMinimum(outMin);
-      m_RescaleFilter->SetOutputMaximum(outMax);
-      m_RescaleFilter->UpdateOutputInformation();
+        m_RescaleFilter->SetOutputMinimum(outMin);
+        m_RescaleFilter->SetOutputMaximum(outMax);
+        m_RescaleFilter->UpdateOutputInformation();
 
-      SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
+        SetParameterOutputImage("out", m_RescaleFilter->GetOutput());
       }
 
 
