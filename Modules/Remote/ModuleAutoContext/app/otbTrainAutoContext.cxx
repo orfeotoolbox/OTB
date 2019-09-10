@@ -282,7 +282,7 @@ namespace otb
 
         otbAppLogINFO("Merge refererence");
         const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.sqlite";
-        auto init_train_sample_full = merge_vectors(m_ref_extracted, initTrainSamples_s);
+        //~ auto init_train_sample_full = merge_vectors(m_ref_extracted, initTrainSamples_s);
 
 
         std::vector<std::string> featureList;
@@ -301,7 +301,7 @@ namespace otb
 
         std::string modelName = GetParameterString("out") + "model_it_0.rf";
         VectorTrainer->SetParameterString("io.out",modelName);
-        VectorTrainer->SetParameterStringList("io.vd",{initTrainSamples_s});
+        VectorTrainer->SetParameterStringList("io.vd", m_ref_paths);
         UpdateInternalParameters("train");
         VectorTrainer->SetParameterStringList("feat",featureList);
         UpdateInternalParameters("train");
@@ -689,7 +689,7 @@ namespace otb
           classifiedPointsLayer.SetFeature(dstFeature);
         }
         //~ classifiedPointsLayer.ogr().CommitTransaction();
-        classifiedPoints->SyncToDisk();
+        //~ classifiedPoints->SyncToDisk();
       }//writeHistograms
     
     std::vector<otb::ogr::DataSource::Pointer> m_ref_extracted;
