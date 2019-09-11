@@ -21,9 +21,11 @@
 #include "otbGlImageActor.h"
 #include "otbViewSettings.h"
 #include "otbMath.h"
+
 #ifdef _WIN32
-#include <windows.h>
+#  include <windows.h>
 #endif
+
 #include <GL/glew.h>
 
 #include "otbStandardShader.h"
@@ -32,8 +34,10 @@
 #include "otbListSampleToHistogramListGenerator.h"
 #include "otbCast.h"
 
+
 namespace otb
 {
+
 
 GlImageActor::GlImageActor()
   : m_TileSize(256),
@@ -74,69 +78,74 @@ void
 GlImageActor
 ::CreateShader()
 {
-  if (m_Shader.IsNull())
-    {
-    StandardShader::Pointer shader( StandardShader::New() );
-    shader->SetImageSettings( m_ImageSettings );
-    m_Shader = shader;
+  assert( m_Shader.IsNull() );
 
-    // Use a Vertex Array Object
-    glGenVertexArrays(1, &m_VAO);
-    glBindVertexArray(m_VAO);
+  std::cerr << "GlImageActor::CreateShader()" << std::endl;
 
-    // 1 square (made by 2 triangles) to be rendered
-    GLfloat vertexPosition[8] = {
-      -1.0, -1.0,
-      1.0, -1.0,
-      1.0, 1.0,
-      -1.0, 1.0
-    };
+  StandardShader::Pointer shader( StandardShader::New() );
 
-    GLfloat texCoord[8] = {
-      0.0, 1.0,
-      1.0, 1.0,
-      1.0, 0.0,
-      0.0, 0.0,
-    };
+  shader->SetImageSettings( m_ImageSettings );
 
-    GLuint indices[6] = {
-      0, 1, 2,
-      2, 3, 0
-    };
+  // Use a Vertex Array Object
+  glGenVertexArrays(1, &m_VAO);
+  glBindVertexArray(m_VAO);
 
-    // Create a Vector Buffer Object that will store the vertices on video memory
-    glGenBuffers(1, &m_VBO);
+  // 1 square (made by 2 triangles) to be rendered
+  GLfloat vertexPosition[8] = {
+    -1.0, -1.0,
+    1.0, -1.0,
+    1.0, 1.0,
+    -1.0, 1.0
+  };
 
-    // Allocate space for vertex positions and texture coordinates
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPosition) + sizeof(texCoord), NULL, GL_STATIC_DRAW);
+  GLfloat texCoord[8] = {
+    0.0, 1.0,
+    1.0, 1.0,
+    1.0, 0.0,
+    0.0, 0.0,
+  };
 
-    // Transfer the vertex positions:
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
+  GLuint indices[6] = {
+    0, 1, 2,
+    2, 3, 0
+  };
 
-    // Transfer the texture coordinates:
-    glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertexPosition), sizeof(texCoord), texCoord);
+  // Create a Vector Buffer Object that will store the vertices on video memory
+  glGenBuffers(1, &m_VBO);
 
-    // Create an Element Array Buffer that will store the indices array:
-    GLuint eab;
-    glGenBuffers(1, &eab);
+  // Allocate space for vertex positions and texture coordinates
+  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPosition) + sizeof(texCoord), NULL, GL_STATIC_DRAW);
 
-    // Transfer the data from indices to eab
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eab);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+  // Transfer the vertex positions:
+  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
 
-    // get attribute position for position and in_coord
-    int posIdx = m_Shader->GetAttribIdx()[0];
-    int texIdx = m_Shader->GetAttribIdx()[1];
+  // Transfer the texture coordinates:
+  glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertexPosition), sizeof(texCoord), texCoord);
 
-    // Specify how the data for position can be accessed
-    glVertexAttribPointer(posIdx, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(posIdx);
+  // Create an Element Array Buffer that will store the indices array:
+  GLuint eab;
+  glGenBuffers(1, &eab);
 
-    // Texture coord attribute
-    glVertexAttribPointer(texIdx, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)sizeof(vertexPosition));
-    glEnableVertexAttribArray(texIdx);
-    }
+  // Transfer the data from indices to eab
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eab);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+  // get attribute position for position and in_coord
+  int posIdx = shader->GetAttribIdx()[0];
+  int texIdx = shader->GetAttribIdx()[1];
+
+  // Specify how the data for position can be accessed
+  glVertexAttribPointer(posIdx, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(posIdx);
+
+  // Texture coord attribute
+  glVertexAttribPointer(texIdx, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)sizeof(vertexPosition));
+  glEnableVertexAttribArray(texIdx);
+
+  // Should be done last in order to ensure exception-safety of
+  // invariant.
+  m_Shader = shader;
 }
 
 const GlImageActor::PointType & GlImageActor::GetOrigin() const
@@ -272,11 +281,11 @@ void GlImageActor::ProcessViewSettings()
   m_ViewportForwardRotationTransform->SetParameters(rigidParameters);
 
   rigidParameters[0]=-settings->GetRotationAngle();
-  
+
   m_ViewportBackwardRotationTransform->SetParameters(rigidParameters);
-  
+
   UpdateTransforms();
-  
+
   for (TileVectorType::iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
@@ -298,7 +307,7 @@ void GlImageActor::UpdateData()
   ViewSettings::ConstPointer settings = GetSettings();
 
   RegionType largest( m_FileReader->GetOutput()->GetLargestPossibleRegion() );
- 
+
   double ulx, uly, lrx, lry;
 
   settings->GetViewportExtent(ulx,uly,lrx,lry);
@@ -311,7 +320,7 @@ void GlImageActor::UpdateData()
 
   if( !requested.Crop( largest ) )
     return;
- 
+
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
 
@@ -321,22 +330,22 @@ void GlImageActor::UpdateData()
   //unsigned int nbTilesY = std::ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
-  
+
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
   Tile newTile;
-  
+
    for(unsigned int i = 0; i < nbTilesX; ++i)
     {
     for(unsigned int j = 0; j<nbTilesY; ++j)
       {
-      
+
       newTile.m_TextureId = 0;
 
       IndexType tileIndex;
       tileIndex[0] = static_cast<unsigned int>(tileStartX+i*m_TileSize);
       tileIndex[1] = static_cast<unsigned int>(tileStartY+j*m_TileSize);
-      
+
       newTile.m_ImageRegion.SetSize(tileSize);
       newTile.m_ImageRegion.SetIndex(tileIndex);
 
@@ -400,13 +409,13 @@ void GlImageActor::Render()
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
     {
-  
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
-  
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);     
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     if(m_CurrentResolution == 0)
       {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -506,7 +515,7 @@ void GlImageActor::LoadTile(Tile& tile)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
   //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-// #if defined(GL_CLAMP_TO_BORDER)      
+// #if defined(GL_CLAMP_TO_BORDER)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
 // #elif defined (GL_CLAMP_TO_BORDER_EXT)
@@ -519,7 +528,7 @@ void GlImageActor::LoadTile(Tile& tile)
   glTexImage2D(
     GL_TEXTURE_2D, 0, GL_RGB32F,
     extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1], 
+    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
     0, GL_BGRA, GL_FLOAT,
     buffer);
 
@@ -530,7 +539,7 @@ void GlImageActor::LoadTile(Tile& tile)
   // And push to loaded texture
   m_LoadedTiles.push_back(tile);
 }
-  
+
 void GlImageActor::UnloadTile(Tile& tile)
 {
   // std::cout << std::hex << this << std::dec << "::UnloadTile()" << std::endl;
@@ -559,13 +568,13 @@ void GlImageActor::CleanLoadedTiles()
 
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
-    
+
   double ulx, uly, lrx, lry;
 
   settings->GetViewportExtent(ulx,uly,lrx,lry);
-    
+
   RegionType requested;
-  
+
   this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
 
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
@@ -583,8 +592,8 @@ void GlImageActor::CleanLoadedTiles()
        // size might be smaller at images borders
        || it->m_TileSize!=m_TileSize)
       {
-       
-      
+
+
       // Tile will not be used anymore, unload it from GPU
       UnloadTile(*it);
       }
@@ -614,7 +623,7 @@ void GlImageActor::ClearLoadedTiles()
 void GlImageActor::ImageRegionToViewportExtent(const RegionType& region, double & ulx, double & uly, double & lrx, double& lry) const
 {
   PointType tul,tur,tll,tlr;
-  
+
   ImageRegionToViewportQuad(region,tul,tur,tll,tlr);
 
   // TODO: Take into account origin/scaling/rotation here ?
@@ -630,9 +639,9 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
 {
   // Retrieve settings
   ViewSettings::ConstPointer settings = this->GetSettings();
-    
+
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
-  
+
   cul[0] = region.GetIndex()[0];
   cul[1] = region.GetIndex()[1];
   cur = cul;
@@ -659,7 +668,7 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
   ill[1]+=0.5*spacing[1];
   ilr[0]+=0.5*spacing[0];
   ilr[1]+=0.5*spacing[1];
-  
+
   PointType pul = m_ImageToViewportTransform->TransformPoint(iul);
   PointType pur = m_ImageToViewportTransform->TransformPoint(iur);
   PointType pll = m_ImageToViewportTransform->TransformPoint(ill);
@@ -672,7 +681,7 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
     pll = m_ViewportBackwardRotationTransform->TransformPoint(pll);
     plr = m_ViewportBackwardRotationTransform->TransformPoint(plr);
     }
-  
+
   ul[0] = pul[0];
   ul[1] = pul[1];
   ur[0] = pur[0];
@@ -691,7 +700,7 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   PointType ul,ur,ll,lr,tul,tur,tll,tlr;
-  
+
   ul[0]=ulx;
   ul[1]=uly;
   ur[0]=lrx;
@@ -700,7 +709,7 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   ll[1]=lry;
   lr[0]=lrx;
   lr[1]=lry;
-  
+
   tul = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ul));
   tur = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ur));
   tll = m_ViewportToImageTransform->TransformPoint(m_ViewportForwardRotationTransform->TransformPoint(ll));
@@ -712,7 +721,7 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   m_FileReader->GetOutput()->TransformPhysicalPointToContinuousIndex(tur,cur);
   m_FileReader->GetOutput()->TransformPhysicalPointToContinuousIndex(tll,cll);
   m_FileReader->GetOutput()->TransformPhysicalPointToContinuousIndex(tlr,clr);
-  
+
   // TODO: Take into account origin/scaling/rotation here ?
   // TODO: Screen to image / image to screen transform calls here ?
 
@@ -721,21 +730,21 @@ void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double &
   iulx = std::max(std::min(std::min(cul[0],cur[0]),std::min(cll[0],clr[0])),0.);
   iuly = std::max(std::min(std::min(cul[1],cur[1]),std::min(cll[1],clr[1])),0.);
   ilrx = std::min(std::max(std::max(cul[0],cur[0]),std::max(cll[0],clr[0])),static_cast<double>(largest.GetSize()[0]));
-  ilry = std::min(std::max(std::max(cul[1],cur[1]),std::max(cll[1],clr[1])),static_cast<double>(largest.GetSize()[1])); 
+  ilry = std::min(std::max(std::max(cul[1],cur[1]),std::max(cll[1],clr[1])),static_cast<double>(largest.GetSize()[1]));
   // Now we have the requested part of image, we need to find the
   // corresponding tiles
 
   IndexType index;
   index[0] = static_cast<unsigned int>(iulx);
   index[1] = static_cast<unsigned int>(iuly);
- 
+
   SizeType size;
   size[0] = static_cast<int>(ilrx-iulx);
   size[1] = static_cast<int>(ilry-iuly);
-     
+
   region.SetSize(size);
   region.SetIndex(index);
-  
+
   region.Crop(m_FileReader->GetOutput()->GetLargestPossibleRegion());
 }
 
@@ -765,7 +774,7 @@ GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType &
     }
 
   PointType out =  m_ImageToViewportTransform->TransformPoint(imgPoint);
-  
+
   return m_ViewportBackwardRotationTransform->TransformPoint(out);
 
 }
@@ -820,7 +829,7 @@ GlImageActor
 #else
   index[ 0 ] =
     static_cast< IndexType::IndexValueType >(
-      ( physical[ 0 ] + 0.5 * m_Spacing[0] - m_Origin[ 0 ] ) / 
+      ( physical[ 0 ] + 0.5 * m_Spacing[0] - m_Origin[ 0 ] ) /
       m_Spacing[ 0 ]
     );
 
@@ -893,14 +902,14 @@ void GlImageActor::UpdateResolution()
 
   // Retrieve viewport spacing
   ViewSettings::SpacingType spacing = settings->GetSpacing();
-  
+
   // 100 screen pixels
   PointType pointA, pointB, pointC;
 
   pointA  = settings->GetOrigin();
   pointB = pointA;
   pointC = pointA;
-  
+
   pointB[0]+=100*spacing[0];
   pointC[1]+=100*spacing[1];
 
@@ -922,7 +931,7 @@ void GlImageActor::UpdateResolution()
 
   double distAB = std::sqrt((pointA[0]-pointB[0])*(pointA[0]-pointB[0])+(pointA[1]-pointB[1])*(pointA[1]-pointB[1]));
   double distAC = std::sqrt((pointA[0]-pointC[0])*(pointA[0]-pointC[0])+(pointA[1]-pointC[1])*(pointA[1]-pointC[1]));
-  
+
   double resolution = std::min(100/distAB,100/distAC);
 
   // std::cout << std::endl;
@@ -982,7 +991,7 @@ void GlImageActor::UpdateResolution()
   if(newResolution != m_CurrentResolution)
     {
     m_CurrentResolution = newResolution;
-    
+
     std::ostringstream extFilename;
     extFilename<<m_FileName;
     if ( m_FileName.find('?') == std::string::npos )
@@ -1097,7 +1106,7 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
 
   ListSampleType::Pointer listSample = ListSampleType::New();
   listSample->SetMeasurementVectorSize(3);
-  
+
   if(full)
     {
     // Retrieve the lowest resolution
@@ -1146,7 +1155,7 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
     extract->SetChannel(m_GreenIdx);
     extract->SetChannel(m_BlueIdx);
     extract->Update();
-    
+
     itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
     for(it.GoToBegin();!it.IsAtEnd();++it)
       {
@@ -1198,7 +1207,7 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
     minGreen = histogramsGenerator->GetOutput()->GetNthElement(1)->Quantile(0,lcp);
     maxGreen = histogramsGenerator->GetOutput()->GetNthElement(1)->Quantile(0,1-hcp);
     minBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,lcp);
-    maxBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,1-hcp);   
+    maxBlue =  histogramsGenerator->GetOutput()->GetNthElement(2)->Quantile(0,1-hcp);
 }
 
 
