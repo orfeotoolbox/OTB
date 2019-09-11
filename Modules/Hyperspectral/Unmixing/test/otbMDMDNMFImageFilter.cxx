@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- 
+ *
  * This file is part of Orfeo Toolbox
  *
  *     https://www.orfeo-toolbox.org/

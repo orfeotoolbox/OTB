@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017 National Research Institute of Science and
- * Technology for Environment and Agriculture (IRSTEA)
+ * Copyright (C) 2017 IRSTEA
  *
  * This file is part of Orfeo Toolbox
  *
