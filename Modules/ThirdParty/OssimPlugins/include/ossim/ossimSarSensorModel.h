@@ -522,6 +522,8 @@ protected:
    TimeType                                    theFirstLineTime;
    TimeType                                    theLastLineTime;
 
+   unsigned int                                theGeomVersion; // version of input geom
+
    unsigned long                                theNumberOfLinesPerBurst;
    unsigned long                                theNumberOfSamplesPerBurst;
 

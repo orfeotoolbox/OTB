@@ -107,7 +107,7 @@ namespace ossimplugins
 
    const double ossimSarSensorModel::C = 299792458;
 
-   const unsigned int ossimSarSensorModel::thePluginVersion = 3;
+   const unsigned int ossimSarSensorModel::thePluginVersion = 4;
   const unsigned int ossimSarSensorModel::thePluginVersionMin = 2;
 
    ossimSarSensorModel::ProductType::ProductType(string_view const& s)
@@ -1187,7 +1187,11 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
 	      {
                 get(kwl, burstPrefix + keyStartSample,        burstRecord.startSample);
 		get(kwl, burstPrefix + keyEndSample,          burstRecord.endSample);
-		get(kwl, burstPrefix + keyAzimuthAnxTime,     burstRecord.azimuthAnxTime);
+		
+		if (version >= 4)
+		  {
+		    get(kwl, burstPrefix + keyAzimuthAnxTime,     burstRecord.azimuthAnxTime);
+		  }
 	      }
          } 
 	 catch (...) {
@@ -1417,6 +1421,8 @@ bool ossimSarSensorModel::worldToAzimuthRangeTime(const ossimGpt& worldPt, TimeT
          theBurstRecords.clear();
          get(kwl, theBurstRecords);
 	 
+	 get(kwl, HEADER_PREFIX, "version", theGeomVersion); 
+	 
 	 if(theBurstRecords.size() > 1)
 	   {
 	     unsigned int version;
@@ -1486,7 +1492,11 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   unsigned long currentStart  = it->startLine;  
   TimeType deburstAzimuthStartTime = it->azimuthStartTime;
 
-  double deburstAzimuthAnxTime = it->azimuthAnxTime;
+  double deburstAzimuthAnxTime = 0;
+  if (theGeomVersion >= 4)
+    { 
+       deburstAzimuthAnxTime = it->azimuthAnxTime;
+    }
 
   unsigned long deburstEndLine = 0;
 
@@ -1683,8 +1693,13 @@ ossimSarSensorModel::burstExtraction(const unsigned int burst_index,
        oneBurst.azimuthStopTime = burstAzimuthStopTime;
        oneBurst.startSample = 0;
        oneBurst.endSample = samples.second - samples.first;
-       oneBurst.azimuthAnxTime = burstInd_Record.azimuthAnxTime;
-   
+ 
+       oneBurst.azimuthAnxTime = 0;
+       if (theGeomVersion >= 4)
+	 { 
+	   oneBurst.azimuthAnxTime = burstInd_Record.azimuthAnxTime;
+	 }
+          
        theBurstRecords.push_back(oneBurst);
 
        // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
@@ -1775,10 +1790,14 @@ ossimSarSensorModel::deburstAndConcatenate(std::vector<std::pair<unsigned long,u
    std::vector<BurstRecordType>::const_iterator next = it+1;
    std::vector<BurstRecordType>::const_iterator itend = theBurstRecords.end();
 
-   unsigned long currentStart  = it->startLine;  
+   unsigned long currentStart  = it->startLine;
    TimeType deburstAzimuthStartTime = it->azimuthStartTime;
-
-   double deburstAzimuthAnxTime = it->azimuthAnxTime;
+   
+   double deburstAzimuthAnxTime = 0;
+   if (theGeomVersion >= 4)
+     { 
+       deburstAzimuthAnxTime = it->azimuthAnxTime;
+     }
 
    unsigned long deburstEndLine = 0;
   
