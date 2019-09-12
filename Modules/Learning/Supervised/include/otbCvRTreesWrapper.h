@@ -104,6 +104,10 @@ public:
   OTB_CV_WRAP_CSTREF_GET(std::vector<cv::ml::DTrees::Split>, Splits)
   OTB_CV_WRAP_CSTREF_GET(std::vector<int>, Subsets)
 
+#ifdef OTB_OPENCV_4
+  virtual void getVotes(cv::InputArray samples, cv::OutputArray results, int flags) const override;
+#endif
+
   virtual cv::Mat getVarImportance() const override;
 
   virtual cv::String 	getDefaultName () const override;
