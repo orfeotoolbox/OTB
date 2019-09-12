@@ -107,26 +107,22 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
       }
 
     unsigned int nbClasses = m_MapOfLabels.size();
-    typename MapOfLabelsType::iterator itMapOfLabels = m_MapOfLabels.begin();
-    unsigned itLabel = 0;
-    for (; itMapOfLabels != m_MapOfLabels.end(); ++itMapOfLabels)
-      {
-      classLabel = itMapOfLabels->first;
-      m_MapOfLabels[classLabel] = itLabel;
 
-      if (itLabel == 0)
-        {
-        if (m_CvMatOfLabels)
-          {
-          cvReleaseMat(&m_CvMatOfLabels);
-          }
-        m_CvMatOfLabels = cvCreateMat(1, nbClasses, CV_32SC1);
-        }
+    if (m_CvMatOfLabels)
+      {
+      cvReleaseMat(&m_CvMatOfLabels);
+      }
+    m_CvMatOfLabels = cvCreateMat(1, nbClasses, CV_32SC1);
+    
+    unsigned int itLabel = 0;
+    for (auto& kv : m_MapOfLabels)
+    {
+      classLabel = kv.first;
+      kv.second = itLabel;
       m_CvMatOfLabels->data.i[itLabel] = classLabel;
       ++itLabel;
-      }
+    }
 
-    // Allocate CvMat
     // Sample index
     unsigned int sampleIdx = 0;
     labelSampleIt = labels->Begin();
