@@ -31,6 +31,7 @@ void RegisterTests()
   REGISTER_TEST(otbCreateProjectionWithOTB);
   REGISTER_TEST(otbGenericMapProjection);
   REGISTER_TEST(otbStreamingWarpImageFilter);
+  REGISTER_TEST(otbStreamingWarpImageFilterEmptyRegion);
   REGISTER_TEST(otbInverseLogPolarTransform);
   REGISTER_TEST(otbInverseLogPolarTransformResample);
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
