@@ -25,6 +25,17 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingWarpImageFilter.h"
 
+// Images definition
+const unsigned int Dimension = 2;
+typedef double                                      PixelType;
+typedef otb::Image<PixelType, Dimension>            ImageType;
+typedef itk::Vector<PixelType, 2>                   DisplacementValueType;
+typedef otb::Image<DisplacementValueType, Dimension> DisplacementFieldType;
+
+  // Warper
+  typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DisplacementFieldType> ImageWarperType;
+
+
 int otbStreamingWarpImageFilter(int argc, char* argv[])
 {
   if (argc != 5)
@@ -39,19 +50,10 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   const char * outfname = argv[3];
   const double maxdef = atoi(argv[4]);
 
-  // Images definition
-  const unsigned int Dimension = 2;
-  typedef double                                      PixelType;
-  typedef otb::Image<PixelType, Dimension>            ImageType;
-  typedef itk::Vector<PixelType, 2>                   DisplacementValueType;
-  typedef otb::Image<DisplacementValueType, Dimension> DisplacementFieldType;
 
   // Change default output origin
   ImageType::PointType origin;
   origin.Fill(0.5);
-
-  // Warper
-  typedef otb::StreamingWarpImageFilter<ImageType, ImageType, DisplacementFieldType> ImageWarperType;
 
   // Reader/Writer
   typedef otb::ImageFileReader<ImageType>            ReaderType;
@@ -81,5 +83,77 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   writer->SetFileName(outfname);
   writer->Update();
 
+  return EXIT_SUCCESS;
+}
+
+int otbStreamingWarpImageFilterEmptyRegion(int, char**)
+{
+  ImageType:: Pointer inputPtr = ImageType::New();
+
+  ImageType::RegionType largestRegion;
+  ImageType::SizeType largestSize = {{10,10}};
+  ImageType::IndexType largestIndex = {{1,1}};
+  
+  largestRegion.SetIndex(largestIndex);
+  largestRegion.SetSize(largestSize);
+
+  inputPtr->SetRegions(largestRegion);
+
+  ImageType::RegionType emptyRegion;
+  ImageType::SizeType emptySize = {{0,0}};
+  ImageType::IndexType emptyIndex = {{0,0}};
+  emptyRegion.SetSize(emptySize);
+  emptyRegion.SetIndex(emptyIndex);
+
+  inputPtr->SetRequestedRegion(emptyRegion);
+  inputPtr->SetBufferedRegion(emptyRegion);
+
+  DisplacementFieldType::Pointer dispPtr = DisplacementFieldType::New();
+  dispPtr->SetRegions(largestRegion);
+  dispPtr->Allocate();
+  
+  DisplacementValueType v;
+  v[0]=-100;
+  v[1]=-100;
+  dispPtr->FillBuffer(v);
+
+  ImageWarperType::Pointer warper = ImageWarperType::New();
+
+  warper->SetDisplacementField(dispPtr);
+  warper->SetInput(inputPtr);
+
+  ImageType::PointType outputOrigin;
+  outputOrigin.Fill(0);
+  warper->SetOutputOrigin(outputOrigin);
+
+  // requested region for full output is completely outside largest
+  // possible region of input
+  warper->GetOutput()->UpdateOutputInformation();
+
+  // Before bugfix this would lead to famous ITK exception outside of
+  // largest possible region
+  warper->GetOutput()->PropagateRequestedRegion();
+
+  // After requested region has been propagated, we need to be sure
+  // that requested region can be cropped by largest region
+  auto requestedRegion = inputPtr->GetRequestedRegion();
+
+  std::cout<<requestedRegion<<std::endl;
+  std::cout<<inputPtr->GetLargestPossibleRegion()<<std::endl;
+
+  if (! requestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
+    {
+    std::cerr<<"Requested region can not be cropped by largest region"<<std::endl;
+    return EXIT_FAILURE;
+    }
+  
+  // And we also need to check that requested region is not largest
+  // region
+  if( inputPtr->GetRequestedRegion().GetNumberOfPixels() != 0)
+    {
+    std::cerr<<"Requested region should have {{0, 0}} size"<<std::endl;
+    return EXIT_FAILURE;
+    }
+    
   return EXIT_SUCCESS;
 }
