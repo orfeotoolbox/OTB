@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 # WARNING!
 # OTB uses Git-LFS to store the (large) tests data.
 # Git-LFS is mostly transparent for the user and recent versions
@@ -96,6 +116,19 @@ fast-build:
   script:
     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
+
+legal-check:
+  extends: .common
+  only: [merge_requests, develop, headers_check]
+  stage: precheck
+  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  variables:
+    GIT_DEPTH: ""
+  allow_failure: true
+  script:
+    - ./CI/contributors_check.sh
+    - ./CI/headers_check.py
+  after_script: []
 
 #------------------------- prepare & build jobs --------------------------------
 debian-build:

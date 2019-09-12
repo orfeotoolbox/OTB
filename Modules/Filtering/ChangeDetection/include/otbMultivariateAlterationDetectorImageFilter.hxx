@@ -266,6 +266,8 @@ MultivariateAlterationDetectorImageFilter<TInputImage, TOutputImage>
     sign2.set_diagonal(aux5);
     sign2 = sign2.apply(&SignOfValue);
     m_V2 = m_V2 * sign2;
+    
+    m_Rho.flip();
     }
 }
 

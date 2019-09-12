@@ -785,16 +785,16 @@ if(OTB_USE_OPENCV)
     ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.txt
     ${TEMP}/apTvClTrainRegressionTest_monovar.txt)
 
-  #----------- PredictRegression TESTS ----------------
-  otb_test_application(NAME apTvClPredictRegressionTest_monovar
-    APP PredictRegression
+  #----------- ImageRegression TESTS ----------------
+  otb_test_application(NAME apTvClImageRegressionTest_monovar
+    APP ImageRegression
     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
     -model ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.rf
     -imstat ${INPUTDATA}/QB_Toulouse_Ortho_regression.xml
-    -out ${TEMP}/apTvClPredictRegressionTest_monovar.tif
+    -out ${TEMP}/apTvClImageRegressionTest_monovar.tif
     VALID    --compare-image 1
-    ${OTBAPP_BASELINE}/apTvClPredictRegressionTest_monovar.tif
-    ${TEMP}/apTvClPredictRegressionTest_monovar.tif)
+    ${OTBAPP_BASELINE}/apTvClImageRegressionTest_monovar.tif
+    ${TEMP}/apTvClImageRegressionTest_monovar.tif)
 
 endif()
 

@@ -84,7 +84,7 @@ private:
 
     SetDocLimitations("The input image must have the same type, order and number of bands as the images used to produce the statistics file and the SVM model file. If a statistics file was used during training by the TrainImagesClassifier, it is mandatory to use the same statistics file for classification. If an input mask is used, its size must match the input image size.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("TrainImagesClassifier, ValidateImagesClassifier, ComputeImagesStatistics");
+    SetDocSeeAlso("TrainImagesClassifier, ComputeImagesStatistics");
 
     AddDocTag(Tags::Learning);
 

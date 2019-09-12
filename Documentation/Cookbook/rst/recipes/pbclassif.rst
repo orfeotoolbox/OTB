@@ -853,17 +853,6 @@ element is equal to 3 pixels, which corresponds to a ball included in a
 7 x 7 pixels square. Pixels with more than one majority class keep their
 original labels.
 
-
-
-Regression
-----------
-
-The machine learning models in OpenCV and LibSVM also support a
-regression mode: they can be used to predict a numeric value (i.e. not
-a class index) from an input predictor. The workflow is the same as
-classification. First, the regression model is trained, then it can be
-used to predict output values. The applications to do that are and .
-
 .. |image_61| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
 .. |image_62| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_input.png
 .. |image_63| image:: ../Art/MonteverdiImages/classification_chain_fancyclassif_CMR_3.png
@@ -877,144 +866,77 @@ used to predict output values. The applications to do that are and .
 	 
 Figure 6: From left to right: Original image, fancy colored classified image and regularized classification map with radius equal to 3 pixels. 
 
-The input data set for training must have the following structure:
 
--  *n* components for the input predictors
+Regression
+----------
 
--  one component for the corresponding output value
+The machine learning models in OpenCV, LibSVM and SharkML also support a
+regression mode: they can be used to predict a numeric value (i.e. not
+a class index) from an input predictor. The workflow is the same as
+classification. First, the regression model is trained, then it can be
+used to predict output values. 
 
-The application supports 2 input formats:
+Two applications are available for training:
 
--  An image list: each image should have components matching the
-   structure detailed earlier (*n* feature components + 1 output value)
+- `TrainVectorRegression` can be used to train a classifier with a set of geometries
+  containing a list of features (predictors) and the corresponding output value:
 
--  A CSV file: the first *n* columns are the feature components and the
-   last one is the output value
+  ::
 
-If you have separate images for predictors and output values, you can
-use the application.
+    otbcli_TrainVectorRegression -io.vd samples.sqlite
+                                 -cfield predicted
+                                 -io.out model.rf
+                                 -classifier rf
+                                 -feat perimeter area width
 
-::
+  The validation set `io.valid` is used to compute the mean square error between the original output value and the value
+  predicted by the computed model. If no validation set is provided the input training sample is used to compute the mean square error.
 
-    otbcli_ConcatenateImages  -il features.tif  output_value.tif
-                              -out training_set.tif
 
-Statistics estimation
-~~~~~~~~~~~~~~~~~~~~~
 
-As in classification, a statistics estimation step can be performed
-before training. It allows to normalize the dynamic of the input
-predictors to a standard one: zero mean, unit standard deviation. The
-main difference with the classification case is that with regression,
-the dynamic of output values can also be reduced.
+- `TrainImagesRegression` can be used to train a classifier from multiple pairs of predictor images and label images. 
+  There are two ways to use this application:
 
-The statistics file format is identical to the output file from
-application, for instance:
+  It is possible to provide for each input image a vector data file with geometries
+  corresponding to the input locations that will be used for training. This is achieved by using the `io.vd` parameter.
+  The `sample.nt` and `sample.nv` can be used to specify the number of sample extracted from the images, for training and
+  validation, respectively.
 
-::
+  ::
 
-    <?xml version="1.0" ?>
-    <FeatureStatistics>
-        <Statistic name="mean">
-            <StatisticVector value="198.796" />
-            <StatisticVector value="283.117" />
-            <StatisticVector value="169.878" />
-            <StatisticVector value="376.514" />
-        </Statistic>
-        <Statistic name="stddev">
-            <StatisticVector value="22.6234" />
-            <StatisticVector value="41.4086" />
-            <StatisticVector value="40.6766" />
-            <StatisticVector value="110.956" />
-        </Statistic>
-    </FeatureStatistics>
+    otbcli_TrainImagesRegression -io.il inputPredictorImage.tif
+                                -io.ip inputLabelImage.tif
+                                -io.vd trainingData.shp
+                                -classifier rf
+                                -io.out model.txt
+                                -sample.nt 1000
+                                -sample.nv 500
 
-In the application, normalization of input predictors and output values
-is optional. There are 3 options:
 
--  No statistic file: normalization disabled
 
--  Statistic file with *n* components: normalization enabled for input
-   predictors only
+  Alternatively, if no input vector data is provided, the training samples will be
+  extracted from the full image extent.
 
--  Statistic file with *n+1* components: normalization enabled for
-   input predictors and output values
+Two applications are also available for predictions:
 
-If you use an image list as training set, you can run application. It
-will produce a statistics file suitable for input and output
-normalization (third option).
+- `VectorRegression` uses a regression machine learning model to predict output values based on a
+  list of features:
 
 ::
 
-    otbcli_ComputeImagesStatistics  -il   training_set.tif
-                                    -out  stats.xml
+    otbcli_VectorRegression
+      -in input_vector_data.shp
+      -feat perimeter  area  width
+      -model model.txt
+      -out predicted_vector_data.shp
 
-Training
-~~~~~~~~
-
-Initially, the machine learning models in OTB only used classification.
-But since they come from external libraries (OpenCV and LibSVM), the
-regression mode was already implemented in these external libraries. So
-the integration of these models in OTB has been improved in order to
-allow the usage of regression mode. As a consequence , the machine
-learning models have nearly the same set of parameters for
-classification and regression mode.
-
-.. |image11| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image12| image:: ../Art/MonteverdiImages/QB_1_ortho_MV_C123456_CM.png
-.. |image13| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-.. |image14| image:: ../Art/MonteverdiImages/QB_1_ortho_DS_V_P_C123456_CM.png
-
-.. |image15| image:: ../Art/MonteverdiImages/classification_chain_inputimage.jpg
-             :scale: 88%
-
--  Decision Trees
-
--  Gradient Boosted Trees
-
--  Neural Network
-
--  Random Forests
-
--  K-Nearest Neighbors
-
-The behavior of application is very similar to . From the input data
-set, a portion of the samples is used for training, whereas the other
-part is used for validation. The user may also set the model to train
-and its parameters. Once the training is done, the model is stored in an
-output file.
+- Similarly, `ImageRegression` takes an image of predictors as input and computes the output image using a regression model:
 
 ::
 
-    otbcli_TrainRegression  -io.il                training_set.tif
-                            -io.imstat            stats.xml
-                            -io.out               model.txt
-                            -sample.vtr           0.5
-                            -classifier           knn
-                            -classifier.knn.k     5
-                            -classifier.knn.rule  median
+    otbcli_ImageRegression
+      -in input_image.tif
+      -model model.txt
+      -out predicted_image.tif
 
-Prediction
-~~~~~~~~~~
-
-Once the model is trained, it can be used in application to perform the
-prediction on an entire image containing input predictors (i.e. an image
-with only *n* feature components). If the model was trained with
-normalization, the same statistic file must be used for prediction. The
-behavior of with respect to statistic file is identical to:
-
--  no statistic file: normalization off
-
--  *n* components: input only
-
--  *n+1* components: input and output
-
-The model to use is read from file (the one produced during training).
-
-::
-
-    otbcli_PredictRegression  -in     features_bis.tif
-                              -model  model.txt
-                              -imstat stats.xml
-                              -out    prediction.tif
 

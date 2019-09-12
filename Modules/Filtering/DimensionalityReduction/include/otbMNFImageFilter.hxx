@@ -376,54 +376,6 @@ MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransf
 
   InternalMatrixType transf = Rn_inv * U;
 
-#if 0
-  InternalMatrixType Ax = m_CovarianceMatrix.GetVnlMatrix();
-  InternalMatrixType Ax_inv = vnl_matrix_inverse< MatrixElementType > ( Ax );
-  InternalMatrixType An = m_NoiseCovarianceMatrix.GetVnlMatrix();
-  InternalMatrixType W = An * Ax_inv;
-#endif
-
-#if 0
-  InternalMatrixType transf;
-  vnl_vector< MatrixElementType > vectValP;
-  vnl_symmetric_eigensystem_compute( W, transf, vectValP );
-
-  InternalMatrixType valP ( vectValP.size(), vectValP.size(), vnl_matrix_null );
-  for ( unsigned int i = 0; i < vectValP.size(); ++i )
-    valP(i, i) = vectValP[i];
-#endif
-
-#if 0
-  vnl_svd< MatrixElementType > solver ( W );
-  InternalMatrixType transf = solver.U();
-  InternalMatrixType valP = solver.W();
-#endif
-
-#if 0
-  MatrixType Id ( m_CovarianceMatrix );
-  Id.SetIdentity();
-
-  vnl_generalized_eigensystem solver ( W, Id.GetVnlMatrix() );
-
-  InternalMatrixType transf = solver.V;
-  transf.fliplr();
-
-  InternalMatrixType valP = solver.D;
-  valP.fliplr();
-  valP.flipud();
-#endif
-
-/*
-  InternalMatrixType normMat = transf.transpose() * Ax * transf;
-
-  for ( unsigned int i = 0; i < transf.rows(); ++i )
-  {
-    double norm = 1. / std::sqrt( normMat.get(i, i) );
-    for ( unsigned int j = 0; j < transf.cols(); ++j )
-      transf.put( j, i, transf.get(j, i) * norm );
-  }
-*/
-
   transf.inplace_transpose();
 
   if ( m_NumberOfPrincipalComponentsRequired
