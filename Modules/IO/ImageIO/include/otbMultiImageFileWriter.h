@@ -1,5 +1,5 @@
 /*
- * Copyright (C) CS SI
+ * Copyright (C) 2017-2019 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
