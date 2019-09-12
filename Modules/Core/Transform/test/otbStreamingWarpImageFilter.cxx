@@ -138,9 +138,6 @@ int otbStreamingWarpImageFilterEmptyRegion(int, char**)
   // that requested region can be cropped by largest region
   auto requestedRegion = inputPtr->GetRequestedRegion();
 
-  std::cout<<requestedRegion<<std::endl;
-  std::cout<<inputPtr->GetLargestPossibleRegion()<<std::endl;
-
   if (! requestedRegion.Crop(inputPtr->GetLargestPossibleRegion()) )
     {
     std::cerr<<"Requested region can not be cropped by largest region"<<std::endl;
