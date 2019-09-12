@@ -86,7 +86,7 @@ int otbStreamingWarpImageFilter(int argc, char* argv[])
   return EXIT_SUCCESS;
 }
 
-int otbStreamingWarpImageFilterEmptyRegion(int, char**)
+int otbStreamingWarpImageFilterEmptyRegion(int, const char**)
 {
   ImageType:: Pointer inputPtr = ImageType::New();
 
