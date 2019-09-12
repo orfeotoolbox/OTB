@@ -279,7 +279,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
 template<class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string & filename,
                                                                         const std::string & name)
-{std::cout << "save!!!!!" << std::endl;
+{
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
@@ -311,7 +311,6 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   }
   cvReleaseFileStorage(&fs);
 #endif
-std::cout << "endsave!!!!!" << std::endl;
 }
 
 template<class TInputValue, class TOutputValue>
