@@ -238,15 +238,17 @@ StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 
     for(auto dim = 0U; dim < InputImageType::ImageDimension; ++dim)
       {
-      if(inputPtr->GetLargestPossibleRegion().GetSize()[dim]>1)
+      auto largestInputRegion = inputPtr->GetLargestPossibleRegion();
+
+      if(largestInputRegion.GetSize()[dim]>1)
         {
-        inputFinalIndex[dim] = inputPtr->GetLargestPossibleRegion().GetIndex()[dim]+1;
-        inputFinalSize[dim] = 0;
+        inputFinalIndex[dim] = largestInputRegion.GetIndex()[dim]+1;
+        inputFinalSize[dim]  = 0;
         }
       else
         {
-        inputFinalIndex[dim] = inputPtr->GetLargestPossibleRegion().GetIndex()[dim];
-        inputFinalSize[dim] = inputPtr->GetLargestPossibleRegion().GetSize()[dim];
+        inputFinalIndex[dim] = largestInputRegion.GetIndex()[dim];
+        inputFinalSize[dim]  = largestInputRegion.GetSize()[dim];
         }        
       }
 
