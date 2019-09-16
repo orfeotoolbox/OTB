@@ -268,10 +268,10 @@ namespace ossimplugins
 	  }
       }
 
-    int nbRasterCout = dataset->GetRasterCount();
+    int nbRasterCount = dataset->GetRasterCount();
 
     // Metadata for each Band
-    for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+    for (int iBand = 0; iBand < nbRasterCount; iBand++)
       {
 	std::map<std::string, std::string> mapCurrentBand;
 
