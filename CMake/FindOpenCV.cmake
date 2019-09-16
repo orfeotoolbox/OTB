@@ -104,6 +104,10 @@ endif()
 
 if(NOT OPENCV_SEARCH_PATH)
   get_filename_component(OPENCV_SEARCH_PATH "${opencv_INCLUDE_DIR}" PATH)
+  # include dir is include/opencv4 in v4
+  if(OpenCV_VERSION_MAJOR EQUAL 4)
+    get_filename_component(OPENCV_SEARCH_PATH "${OPENCV_SEARCH_PATH}" PATH)
+  endif()
 endif()
 
 # Prefer the static library.
