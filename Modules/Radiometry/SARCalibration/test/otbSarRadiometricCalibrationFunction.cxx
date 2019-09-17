@@ -27,15 +27,15 @@
 int otbSarRadiometricCalibrationFunction(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * infname  = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
-  typedef otb::Image<PixelType, Dimension>                InputImageType;
-  typedef InputImageType::IndexType                       IndexType;
-  typedef otb::ImageFileReader<InputImageType>            ReaderType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef InputImageType::IndexType                              IndexType;
+  typedef otb::ImageFileReader<InputImageType>                   ReaderType;
   typedef otb::SarRadiometricCalibrationFunction<InputImageType> FunctionType;
 
   /**Instantiation ofa Smart Pointer*/
@@ -66,7 +66,7 @@ int otbSarRadiometricCalibrationFunction(int itkNotUsed(argc), char* argv[])
 
   pDst[0] = static_cast<unsigned int>(size[0] / 2.);
   pDst[1] = static_cast<unsigned int>(size[1] / 4.);
-  outfile << "Sar Radiometric Calibration computed for the point : " <<  pDst << " is " << filter->Evaluate(pDst) << std::endl;
+  outfile << "Sar Radiometric Calibration computed for the point : " << pDst << " is " << filter->Evaluate(pDst) << std::endl;
 
   outfile.close();
 

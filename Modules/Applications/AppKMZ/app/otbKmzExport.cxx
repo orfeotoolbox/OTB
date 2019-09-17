@@ -34,7 +34,7 @@ class KmzExport : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef KmzExport                       Self;
+  typedef KmzExport                     Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -50,29 +50,31 @@ private:
     SetName("KmzExport");
     SetDescription("Export the input image in a KMZ product.");
     // Documentation
-    SetDocLongDescription("This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
+    SetDocLongDescription(
+        "This application exports the input image in a kmz product that can be display in the Google Earth software. The user can set the size of the product "
+        "size, a logo and a legend to the product. Furthemore, to obtain a product that fits the relief, a DEM can be used.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Conversion");
 
     AddDocTag(Tags::Vector);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input image");
+    AddParameter(ParameterType_InputImage, "in", "Input image");
     SetParameterDescription("in", "Input image");
 
-    AddParameter(ParameterType_OutputFilename, "out",  "Output KMZ product");
+    AddParameter(ParameterType_OutputFilename, "out", "Output KMZ product");
     SetParameterDescription("out", "Output Kmz product directory (with .kmz extension)");
 
-    AddParameter(ParameterType_Int, "tilesize",  "Tile Size");
+    AddParameter(ParameterType_Int, "tilesize", "Tile Size");
     SetParameterDescription("tilesize", "Size of the tiles in the kmz product, in number of pixels (default = 512).");
     SetDefaultParameterInt("tilesize", 512);
     MandatoryOff("tilesize");
 
-    AddParameter(ParameterType_InputImage, "logo",  "Image logo");
+    AddParameter(ParameterType_InputImage, "logo", "Image logo");
     SetParameterDescription("logo", "Path to the image logo to add to the KMZ product.");
     MandatoryOff("logo");
 
-    AddParameter(ParameterType_InputImage, "legend",  "Image legend");
+    AddParameter(ParameterType_InputImage, "legend", "Image legend");
     SetParameterDescription("legend", "Path to the image legend to add to the KMZ product.");
     MandatoryOff("legend");
 
@@ -93,44 +95,43 @@ private:
     // Nothing to do here for the parameters : all are independent
   }
 
- void DoExecute() override
+  void DoExecute() override
   {
     typedef otb::KmzProductWriter<FloatVectorImageType> KmzProductWriterType;
 
     // Second part : Image To Kmz
-    KmzProductWriterType::Pointer kmzWriter  = KmzProductWriterType::New();
-    kmzWriter->SetInput( this->GetParameterImage("in") );
-    kmzWriter->SetPath( this->GetParameterString("out") );
+    KmzProductWriterType::Pointer kmzWriter = KmzProductWriterType::New();
+    kmzWriter->SetInput(this->GetParameterImage("in"));
+    kmzWriter->SetPath(this->GetParameterString("out"));
 
     // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
     // If the tile size is set
-    if( this->HasValue("tilesize") )
-      {
+    if (this->HasValue("tilesize"))
+    {
       if (this->GetParameterInt("tilesize") >= 0)
-        kmzWriter->SetTileSize( this->GetParameterInt("tilesize") );
+        kmzWriter->SetTileSize(this->GetParameterInt("tilesize"));
       else
         itkExceptionMacro(<< "The tile size should be a positive value.");
-      }
+    }
 
     // Add the logo if any
-    if( this->HasValue("logo") )
-      {
-      kmzWriter->SetLogo( this->GetParameterImage("logo") );
-      }
+    if (this->HasValue("logo"))
+    {
+      kmzWriter->SetLogo(this->GetParameterImage("logo"));
+    }
 
     // Add the legend if any
-    if( this->HasValue("legend") )
-      {
-      kmzWriter->AddLegend( this->GetParameterImage("legend") );
-      }
+    if (this->HasValue("legend"))
+    {
+      kmzWriter->AddLegend(this->GetParameterImage("legend"));
+    }
 
     // trigger the writing
     kmzWriter->Update();
   }
 };
-
 }
 }
 

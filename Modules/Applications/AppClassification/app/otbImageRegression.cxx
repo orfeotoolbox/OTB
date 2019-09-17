@@ -205,16 +205,16 @@ private:
 
     auto outputImage = classificationFilter->GetOutput();
 
-    RescalerType::Pointer             rescaler;
-    OutputRescalerType::Pointer       outRescaler;
+    RescalerType::Pointer       rescaler;
+    OutputRescalerType::Pointer outRescaler;
     // Normalize input image if asked
     if (IsParameterEnabled("imstat"))
     {
       otbAppLogINFO("Input image normalization activated.");
       // Normalize input image (optional)
-      auto statisticsReader = StatisticsReader::New();
-      MeasurementType           meanMeasurementVector;
-      MeasurementType           stddevMeasurementVector;
+      auto            statisticsReader = StatisticsReader::New();
+      MeasurementType meanMeasurementVector;
+      MeasurementType stddevMeasurementVector;
       rescaler = RescalerType::New();
       // Load input image statistics
       statisticsReader->SetFileName(GetParameterString("imstat"));

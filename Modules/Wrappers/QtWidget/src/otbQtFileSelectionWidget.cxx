@@ -27,14 +27,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtFileSelectionWidget
-::QtFileSelectionWidget() :
-  QWidget(),
-  m_HLayout( NULL ),
-  m_Input( NULL ),
-  m_Button( NULL ),
-  m_Checkbox( NULL ),
-  m_IOMode( IO_MODE_INPUT )
+QtFileSelectionWidget::QtFileSelectionWidget() : QWidget(), m_HLayout(NULL), m_Input(NULL), m_Button(NULL), m_Checkbox(NULL), m_IOMode(IO_MODE_INPUT)
 {
   this->DoCreateWidget();
 }
@@ -43,23 +36,18 @@ QtFileSelectionWidget::~QtFileSelectionWidget()
 {
 }
 
-void
-QtFileSelectionWidget
-::SetIOMode( IOMode mode )
+void QtFileSelectionWidget::SetIOMode(IOMode mode)
 {
   m_IOMode = mode;
 }
 
-QtFileSelectionWidget::IOMode
-QtFileSelectionWidget
-::GetIOMode() const
+QtFileSelectionWidget::IOMode QtFileSelectionWidget::GetIOMode() const
 {
   return m_IOMode;
 }
 
 void QtFileSelectionWidget::DoUpdateGUI()
 {
-
 }
 
 void QtFileSelectionWidget::DoCreateWidget()
@@ -74,7 +62,7 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
-  connect( m_Input, &QLineEdit::editingFinished, this, &QtFileSelectionWidget::CallFilenameChanged );
+  connect(m_Input, &QLineEdit::editingFinished, this, &QtFileSelectionWidget::CallFilenameChanged);
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
@@ -83,58 +71,36 @@ void QtFileSelectionWidget::DoCreateWidget()
   m_Button->setToolTip("Select file...");
   m_Button->setFixedWidth(30);
 
-  connect( m_Button, &QPushButton::clicked, this, &QtFileSelectionWidget::SelectFile );
+  connect(m_Button, &QPushButton::clicked, this, &QtFileSelectionWidget::SelectFile);
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
 }
 
 
-void
-QtFileSelectionWidget
-::SelectFile()
+void QtFileSelectionWidget::SelectFile()
 {
-  assert( m_Input!=NULL );
+  assert(m_Input != NULL);
 
-  QString filename(
-    m_IOMode == IO_MODE_INPUT
-    ? otb::GetOpenFilename(
-        this,
-	QString(),
-	m_Input->text(),
-	tr( "All files (*)" ),
-	NULL,
-	QFileDialog::ReadOnly )
-    : otb::GetSaveFilename(
-        this,
-	QString(),
-	m_Input->text(),
-	tr( "All files (*)" ),
-	NULL )
-  );
+  QString filename(m_IOMode == IO_MODE_INPUT ? otb::GetOpenFilename(this, QString(), m_Input->text(), tr("All files (*)"), NULL, QFileDialog::ReadOnly)
+                                             : otb::GetSaveFilename(this, QString(), m_Input->text(), tr("All files (*)"), NULL));
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
   SetFileName(filename);
 }
 
-void
-QtFileSelectionWidget
-::CallFilenameChanged()
+void QtFileSelectionWidget::CallFilenameChanged()
 {
   emit FilenameChanged();
 }
 
-void
-QtFileSelectionWidget
-::SetFileName(const QString & filename)
+void QtFileSelectionWidget::SetFileName(const QString& filename)
 {
-  m_Input->setText( filename  );
+  m_Input->setText(filename);
 
   emit FilenameChanged();
 }
-
 }
-
 }

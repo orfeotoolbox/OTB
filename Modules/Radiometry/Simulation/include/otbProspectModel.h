@@ -42,56 +42,55 @@ namespace otb
 
 class OTBSimulation_EXPORT ProspectModel : public SimulationStep1Base
 {
-   public:
-      /** Standard class typedefs */
-      typedef ProspectModel Self;
-      typedef SimulationStep1Base   Superclass;
-      typedef itk::SmartPointer<Self> Pointer;
-      typedef itk::SmartPointer<const Self> ConstPointer;
+public:
+  /** Standard class typedefs */
+  typedef ProspectModel                 Self;
+  typedef SimulationStep1Base           Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-      typedef otb::LeafParameters                   LeafParametersType;
-      typedef Superclass::SpectralResponseType      SpectralResponseType;
-      typedef Superclass::ParametersType            ParametersType;
+  typedef otb::LeafParameters              LeafParametersType;
+  typedef Superclass::SpectralResponseType SpectralResponseType;
+  typedef Superclass::ParametersType       ParametersType;
 
-      typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-      /** Standard macros */
-      itkNewMacro(Self);
-      itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
+  /** Standard macros */
+  itkNewMacro(Self);
+  itkTypeMacro(ProspectModel, SpectrumGeneratorBase);
 
-      /** Set/Get Input */
-      using Superclass::SetInput;
-      virtual  void SetInput(const ParametersType &);
-      void SetInput(const LeafParametersType *object);
-      LeafParametersType * GetInput();
+  /** Set/Get Input */
+  using Superclass::SetInput;
+  virtual void SetInput(const ParametersType&);
+  void SetInput(const LeafParametersType* object);
+  LeafParametersType* GetInput();
 
-      /** GenerateData */
-      void GenerateData() override;
+  /** GenerateData */
+  void GenerateData() override;
 
-      /** Get Output reflectance/transmittance*/
-      SpectralResponseType * GetReflectance() override;
-      SpectralResponseType * GetTransmittance() override;
+  /** Get Output reflectance/transmittance*/
+  SpectralResponseType* GetReflectance() override;
+  SpectralResponseType* GetTransmittance() override;
 
-   protected:
-      /** Constructor */
-      ProspectModel();
-      /** Destructor */
-      ~ProspectModel() override;
-      /** PrintSelf method */
-      void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+protected:
+  /** Constructor */
+  ProspectModel();
+  /** Destructor */
+  ~ProspectModel() override;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-      DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
-      using Superclass::MakeOutput;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
+  using Superclass::MakeOutput;
 
-      /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
-      double Tav(const int theta, double ref);
+  /** Compute Transmission of isotropic radiation across an interface between two dielectrics*/
+  double Tav(const int theta, double ref);
 
-   private:
-      ProspectModel(const Self&) = delete;
-      void operator=(const Self&) = delete;
-
+private:
+  ProspectModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
-}// end namespace otb
+} // end namespace otb
 
 #endif

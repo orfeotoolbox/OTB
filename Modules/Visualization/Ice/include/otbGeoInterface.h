@@ -52,17 +52,17 @@ class OTBIce_EXPORT GeoInterface
 public:
   /**
    */
-  typedef itk::Point< itk::SpacePrecisionType, 2 > Point2;
+  typedef itk::Point<itk::SpacePrecisionType, 2> Point2;
 
   /**
    * Double precision point-type.
    */
-  typedef itk::Point< double, 2 > Point2d;
+  typedef itk::Point<double, 2> Point2d;
 
   /**
    * Spacing-type based on ITK floating-point prevision.
    */
-  typedef itk::Vector< itk::SpacePrecisionType, 2 > Spacing2;
+  typedef itk::Vector<itk::SpacePrecisionType, 2> Spacing2;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -77,9 +77,7 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  virtual bool TransformFromViewport( Point2d & out,
-                                      const Point2d & in,
-                                      bool isPhysical = true ) const;
+  virtual bool TransformFromViewport(Point2d& out, const Point2d& in, bool isPhysical = true) const;
 
   /**
    * Transform given point from viewport coordinate-system to this
@@ -94,13 +92,11 @@ public:
    *
    * @return true if the operation has succeeded; false otherwise.
    */
-  virtual bool TransformToViewport( Point2d & out,
-                                    const Point2d & in,
-                                    bool isPhysical = true ) const;
+  virtual bool TransformToViewport(Point2d& out, const Point2d& in, bool isPhysical = true) const;
 
   /**
    */
-  virtual const Spacing2 & GetSpacing() const;
+  virtual const Spacing2& GetSpacing() const;
 
   /**
    */
@@ -112,7 +108,7 @@ public:
 
   /**
    */
-  virtual bool GetKwl( ImageKeywordlist & ) const;
+  virtual bool GetKwl(ImageKeywordlist&) const;
 
 
 protected:
@@ -120,7 +116,6 @@ protected:
   virtual ~GeoInterface();
 
 private:
-
 }; // End class GeoInterface
 
 

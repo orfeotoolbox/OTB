@@ -41,17 +41,17 @@ void OutputVectorDataParameter::SetValue(VectorDataType* vd)
 }
 
 /** Return any value */
-VectorDataType* OutputVectorDataParameter::GetValue( void )
+VectorDataType* OutputVectorDataParameter::GetValue(void)
 {
   return m_VectorData;
 }
 
-void OutputVectorDataParameter::SetFileName (const char* filename)
+void OutputVectorDataParameter::SetFileName(const char* filename)
 {
   this->SetFileName(std::string(filename));
 }
 
-void OutputVectorDataParameter::SetFileName (const std::string& filename)
+void OutputVectorDataParameter::SetFileName(const std::string& filename)
 {
   m_FileName = filename;
   SetActive(true);
@@ -79,6 +79,5 @@ OutputVectorDataParameter::OutputVectorDataParameter()
   this->SetName("Output Vector Data");
   this->SetKey("outvd");
 }
-
 }
 }

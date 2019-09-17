@@ -49,20 +49,16 @@ namespace mvd
 */
 
 /*******************************************************************************/
-KeymapDialog
-::KeymapDialog( QWidget* p, Qt::WindowFlags flags ) :
-  QDialog( p, flags ),
-  m_UI( new mvd::Ui::KeymapDialog() )
+KeymapDialog::KeymapDialog(QWidget* p, Qt::WindowFlags flags) : QDialog(p, flags), m_UI(new mvd::Ui::KeymapDialog())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
-  m_UI->m_ProjectLabel->setText( PROJECT_NAME );
-  m_UI->m_VersionLabel->setText( Monteverdi_VERSION_STRING );
+  m_UI->m_ProjectLabel->setText(PROJECT_NAME);
+  m_UI->m_VersionLabel->setText(Monteverdi_VERSION_STRING);
 }
 
 /*******************************************************************************/
-KeymapDialog
-::~KeymapDialog()
+KeymapDialog::~KeymapDialog()
 {
   delete m_UI;
   m_UI = NULL;

@@ -30,36 +30,35 @@
 namespace otb
 {
 
-class OTBIce_EXPORT GlActor 
-  : public itk::Object
+class OTBIce_EXPORT GlActor : public itk::Object
 {
 public:
-  typedef GlActor                                          Self;
-  typedef itk::Object                                     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef GlActor                       Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  itkSetObjectMacro(Settings,ViewSettings);
-  itkGetObjectMacro(Settings,ViewSettings);
-  itkGetConstObjectMacro(Settings,ViewSettings);
-  
-  itkSetMacro(Visible,bool);
-  itkGetMacro(Visible,bool);
+  itkSetObjectMacro(Settings, ViewSettings);
+  itkGetObjectMacro(Settings, ViewSettings);
+  itkGetConstObjectMacro(Settings, ViewSettings);
+
+  itkSetMacro(Visible, bool);
+  itkGetMacro(Visible, bool);
   itkBooleanMacro(Visible);
 
   itkSetStringMacro(Name);
   itkGetStringMacro(Name);
 
-  itkSetMacro( GeometryChanged, bool );
-  itkGetMacro( GeometryChanged, bool );
-  itkBooleanMacro( GeometryChanged );
+  itkSetMacro(GeometryChanged, bool);
+  itkGetMacro(GeometryChanged, bool);
+  itkBooleanMacro(GeometryChanged);
 
-  itkSetMacro( Overlay, bool );
-  itkGetMacro( Overlay, bool );
-  itkBooleanMacro( Overlay );
+  itkSetMacro(Overlay, bool);
+  itkGetMacro(Overlay, bool);
+  itkBooleanMacro(Overlay);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
+  virtual void GetExtent(double& ulx, double& uly, double& lrx, double& lry) const = 0;
 
   // Update internal actor state with respect to ViewSettings
   virtual void ProcessViewSettings() = 0;
@@ -86,15 +85,15 @@ private:
   std::string m_Name;
 
   // Visibility flag
-  bool m_Visible: 1;
+  bool m_Visible : 1;
 
   /**
    */
-  bool m_GeometryChanged: 1;
+  bool m_GeometryChanged : 1;
 
   /**
    */
-  bool m_Overlay: 1;
+  bool m_Overlay : 1;
 
 }; // End class GlActor
 

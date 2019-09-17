@@ -29,13 +29,12 @@ namespace otb
  * Constructor
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-::EdgeDensityImageFilter()
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>::EdgeDensityImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
   m_NeighborhoodRadius.Fill(1);
-  m_Detector =  DetectorType::New();
+  m_Detector           = DetectorType::New();
   m_DensityImageFilter = DensityImageType::New();
 }
 
@@ -43,17 +42,15 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
  * Destructor.c
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-::~EdgeDensityImageFilter()
-{}
+EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>::~EdgeDensityImageFilter()
+{
+}
 
 /**
  * threaded Generate Data
  */
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-void
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-::GenerateData()
+void EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>::GenerateData()
 {
   m_Detector->SetInput(this->GetInput());
 
@@ -69,12 +66,10 @@ EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
   PrintSelf
   -----------------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-void
-EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void EdgeDensityImageFilter<TInputImage, TOutputImage, TEdgeDetector, TDensityCount>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Neighborhood Radius " << m_NeighborhoodRadius   << std::endl;
+  os << indent << "Neighborhood Radius " << m_NeighborhoodRadius << std::endl;
 }
 
 } /** end namesapce otb*/

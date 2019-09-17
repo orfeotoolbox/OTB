@@ -45,10 +45,10 @@ class ITK_EXPORT BinaryFunctorImageFilter : public itk::BinaryFunctorImageFilter
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryFunctorImageFilter                                            Self;
+  typedef BinaryFunctorImageFilter Self;
   typedef itk::BinaryFunctorImageFilter<TInputImage1, TInputImage2, TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -57,8 +57,10 @@ public:
   itkTypeMacro(BinaryFunctorImageFilter, itk::BinaryFunctorImageFilter);
 
 protected:
-  BinaryFunctorImageFilter() {};
-  ~BinaryFunctorImageFilter() override {}
+  BinaryFunctorImageFilter(){};
+  ~BinaryFunctorImageFilter() override
+  {
+  }
 
   /** BinaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, BinaryFunctorImageFilter
@@ -73,13 +75,12 @@ protected:
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
-      this->GetFunctor().GetOutputSize());
+        this->GetFunctor().GetOutputSize());
   }
 
 private:
-  BinaryFunctorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  BinaryFunctorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

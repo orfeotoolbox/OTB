@@ -73,8 +73,7 @@ class OTBApplicationsModel;
  * \ingroup OTBMonteverdi
  *
  */
-class OTBMonteverdi_EXPORT Application
-  : public I18nApplication
+class OTBMonteverdi_EXPORT Application : public I18nApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -83,20 +82,18 @@ class OTBMonteverdi_EXPORT Application
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public constants/types.
+  //
+  // Public constants/types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param qtApp The parent Qt application (\see I18nApplication).
    */
-  Application( QApplication* qtApp );
+  Application(QApplication* qtApp);
 
   /** \brief Destructor. */
   ~Application() override;
@@ -114,14 +111,12 @@ public:
   /**
    * \brief Get the OTB application model.
    */
-  inline
-    const OTBApplicationsModel* GetOTBApplicationsModel() const;
+  inline const OTBApplicationsModel* GetOTBApplicationsModel() const;
 
   /**
    * \brief Get the OTB application model.
    */
-  inline
-    OTBApplicationsModel* GetOTBApplicationsModel();
+  inline OTBApplicationsModel* GetOTBApplicationsModel();
 
   //
   // STATIC METHODS.
@@ -130,15 +125,13 @@ public:
    * \brief Access the const instance of application singleton.
    * \return The const instance to the singleton Application.
    */
-  inline
-    static const Application* ConstInstance();
+  inline static const Application* ConstInstance();
 
   /**
    * \brief Access the non-const instance of application singleton.
    * \return The non-const instance to the singleton Application.
    */
-  inline
-    static Application* Instance();
+  inline static Application* Instance();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
@@ -146,44 +139,40 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   void virtual_InitializeCore() override;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
   void OpenApplicationsBrowser();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /**
    */
   OTBApplicationsModel* m_OTBApplicationsModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots
+  //
+  // Slots
 private slots:
 };
 
@@ -196,37 +185,25 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const Application*
-Application
-::ConstInstance()
+inline const Application* Application::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< Application >();
+  return I18nCoreApplication::ConstInstance<Application>();
 }
 
 /*****************************************************************************/
-inline
-Application*
-Application
-::Instance()
+inline Application* Application::Instance()
 {
-  return I18nCoreApplication::Instance< Application >();
+  return I18nCoreApplication::Instance<Application>();
 }
 
 /*****************************************************************************/
-inline
-const OTBApplicationsModel*
-Application
-::GetOTBApplicationsModel() const
+inline const OTBApplicationsModel* Application::GetOTBApplicationsModel() const
 {
   return m_OTBApplicationsModel;
 }
 
 /*****************************************************************************/
-inline
-OTBApplicationsModel*
-Application
-::GetOTBApplicationsModel()
+inline OTBApplicationsModel* Application::GetOTBApplicationsModel()
 {
   return m_OTBApplicationsModel;
 }

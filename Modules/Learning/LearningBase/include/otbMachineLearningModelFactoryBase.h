@@ -53,8 +53,8 @@ protected:
   static itk::SimpleMutexLock mutex;
 
 private:
-  MachineLearningModelFactoryBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MachineLearningModelFactoryBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

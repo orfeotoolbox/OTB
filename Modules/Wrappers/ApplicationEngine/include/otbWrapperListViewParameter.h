@@ -38,8 +38,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT ListViewParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT ListViewParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -54,12 +53,12 @@ public:
   /** RTTI support */
   itkTypeMacro(ListViewParameter, Parameter);
 
-  itkSetMacro(SingleSelection,bool);
-  itkGetMacro(SingleSelection,bool);
+  itkSetMacro(SingleSelection, bool);
+  itkGetMacro(SingleSelection, bool);
   itkBooleanMacro(SingleSelection);
-  
+
   /** Add a value to the choice */
-  void AddChoice( std::string choicekey, std::string choiceName );
+  void AddChoice(std::string choicekey, std::string choiceName);
 
   /** Get the key of a specific choice value */
   std::string GetChoiceKey(int i) const;
@@ -68,13 +67,13 @@ public:
   std::vector<std::string> GetChoiceKeys();
 
   /** Get the long name of a specific choice value */
-  std::string GetChoiceName( int i );
+  std::string GetChoiceName(int i);
 
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceNames();
 
   /** Get the number of available choice */
-  unsigned int GetNbChoices( void );
+  unsigned int GetNbChoices(void);
 
   /** Set choice value */
   virtual void SetValue(unsigned int v);
@@ -108,31 +107,35 @@ public:
   std::vector<std::string> GetSelectedNames() const
   {
     return m_SelectedNames;
-    }
+  }
 
 
   void SetSelectedKeys(std::vector<std::string> selectedKeys);
 
   std::vector<std::string> GetSelectedKeys()
-    {
-      return m_SelectedKeys;
-    }
+  {
+    return m_SelectedKeys;
+  }
 
   /** Set selected items using a lit of selected keys.
    *  OBSOLETE : this method is not needed anymore and does nothing. */
-  void SetSelectedItemsByKeys(){}
+  void SetSelectedItemsByKeys()
+  {
+  }
 
   /** Set selected items using a lit of selected names.
    *  OBSOLETE : this method is not needed anymore and does nothing. */
-  void SetSelectedItemsByNames(){}
+  void SetSelectedItemsByNames()
+  {
+  }
 
   void SetSelectedItems(std::vector<std::string> selectedItems)
   {
     std::vector<int> items;
-    for( unsigned int i=0; i<selectedItems.size(); i++ )
-      {
-        items.push_back( atoi( selectedItems[i].c_str() ) );
-      }
+    for (unsigned int i = 0; i < selectedItems.size(); i++)
+    {
+      items.push_back(atoi(selectedItems[i].c_str()));
+    }
     this->SetSelectedItems(items);
   }
 
@@ -143,12 +146,12 @@ public:
     m_SelectedKeys.clear();
     // update selected names and keys
     std::vector<std::string> names = this->GetChoiceNames();
-    std::vector<std::string> keys = this->GetChoiceKeys();
-    for (unsigned int i=0 ; i<m_SelectedItems.size() ; i++)
-      {
+    std::vector<std::string> keys  = this->GetChoiceKeys();
+    for (unsigned int i = 0; i < m_SelectedItems.size(); i++)
+    {
       m_SelectedNames.push_back(names[m_SelectedItems[i]]);
       m_SelectedKeys.push_back(keys[m_SelectedItems[i]]);
-      }
+    }
   }
 
   ParameterType GetType() const override
@@ -192,10 +195,12 @@ protected:
 
   struct ListViewChoice
   {
-    ListViewChoice() {}
+    ListViewChoice()
+    {
+    }
 
-    std::string             m_Key;
-    std::string             m_Name;
+    std::string m_Key;
+    std::string m_Name;
   };
 
   typedef std::vector<ListViewChoice> ChoiceList;
@@ -207,8 +212,8 @@ protected:
   bool                                m_SingleSelection;
 
 private:
-  ListViewParameter(const ListViewParameter &) = delete;
-  void operator =(const ListViewParameter&) = delete;
+  ListViewParameter(const ListViewParameter&) = delete;
+  void operator=(const ListViewParameter&) = delete;
 
 }; // End class Parameter
 

@@ -75,59 +75,48 @@ template <class TInput1, class TInput2, class TInputROIImage, class TOutput>
 class KullbackLeiblerSupervizedDistance
 {
 public:
-  KullbackLeiblerSupervizedDistance ();
-  virtual ~KullbackLeiblerSupervizedDistance ();
+  KullbackLeiblerSupervizedDistance();
+  virtual ~KullbackLeiblerSupervizedDistance();
 
   /** performs the preprocess calculation on the training area */
-  void Evaluate(const typename TInput1::ImageType * img1,
-                const typename TInput2::ImageType * img2,
-                const TInputROIImage * imgROI);
+  void Evaluate(const typename TInput1::ImageType* img1, const typename TInput2::ImageType* img2, const TInputROIImage* imgROI);
 
   /** The functor by itself */
-  TOutput operator ()(const TInput1& it1, const TInput2& it2);
+  TOutput operator()(const TInput1& it1, const TInput2& it2);
 
 protected:
-  typedef ROIdataConversion<
-      typename TInput1::ImageType, TInputROIImage> ROIConversionType1;
+  typedef ROIdataConversion<typename TInput1::ImageType, TInputROIImage> ROIConversionType1;
 
-  typedef itk::ConstNeighborhoodIterator<
-      typename ROIConversionType1::OutputImageType> ROIInputType1;
+  typedef itk::ConstNeighborhoodIterator<typename ROIConversionType1::OutputImageType> ROIInputType1;
 
-  typedef ROIdataConversion<
-      typename TInput2::ImageType, TInputROIImage> ROIConversionType2;
+  typedef ROIdataConversion<typename TInput2::ImageType, TInputROIImage> ROIConversionType2;
 
-  typedef itk::ConstNeighborhoodIterator<
-      typename ROIConversionType2::OutputImageType> ROIInputType2;
+  typedef itk::ConstNeighborhoodIterator<typename ROIConversionType2::OutputImageType> ROIInputType2;
 
-  CumulantsForEdgeworth<ROIInputType1> * m_CumROI1;
-  CumulantsForEdgeworth<ROIInputType2> * m_CumROI2;
+  CumulantsForEdgeworth<ROIInputType1>* m_CumROI1;
+  CumulantsForEdgeworth<ROIInputType2>* m_CumROI2;
+
 private:
-  KullbackLeiblerSupervizedDistance (const KullbackLeiblerSupervizedDistance&);
+  KullbackLeiblerSupervizedDistance(const KullbackLeiblerSupervizedDistance&);
 };
 
 } // Functor
 
 template <class TInputImage1, class TInputImage2, class TInputROIImage, class TOutputImage>
-class ITK_EXPORT KullbackLeiblerSupervizedDistanceImageFilter :
-  public otb::BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::KullbackLeiblerSupervizedDistance<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          TInputROIImage,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT KullbackLeiblerSupervizedDistanceImageFilter
+    : public otb::BinaryFunctorNeighborhoodImageFilter<
+          TInputImage1, TInputImage2, TOutputImage,
+          Functor::KullbackLeiblerSupervizedDistance<typename itk::ConstNeighborhoodIterator<TInputImage1>,
+                                                     typename itk::ConstNeighborhoodIterator<TInputImage2>, TInputROIImage, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef KullbackLeiblerSupervizedDistanceImageFilter Self;
   typedef typename otb::BinaryFunctorNeighborhoodImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
-      Functor::KullbackLeiblerSupervizedDistance<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          TInputROIImage,
-          typename TOutputImage::PixelType>
-      >  Superclass;
+      Functor::KullbackLeiblerSupervizedDistance<typename itk::ConstNeighborhoodIterator<TInputImage1>, typename itk::ConstNeighborhoodIterator<TInputImage2>,
+                                                 TInputROIImage, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -143,21 +132,22 @@ public:
 
   /** Method for creation of the training area and the computation
    * of some reference cumulants */
-  void  SetTrainingArea(const TInputROIImage * trainingImage);
+  void SetTrainingArea(const TInputROIImage* trainingImage);
 
 protected:
   void BeforeThreadedGenerateData(void) override;
 
   KullbackLeiblerSupervizedDistanceImageFilter()
-    {
+  {
     this->SetNumberOfRequiredInputs(3);
-    }
-  ~KullbackLeiblerSupervizedDistanceImageFilter() override {}
+  }
+  ~KullbackLeiblerSupervizedDistanceImageFilter() override
+  {
+  }
 
 private:
-  KullbackLeiblerSupervizedDistanceImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  KullbackLeiblerSupervizedDistanceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

@@ -27,13 +27,13 @@
 #include "itkImageSliceConstIteratorWithIndex.h"
 #include "otbVectorImageTo3DScalarImageFilter.h"
 
-int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int BiDimension  = 2;
-  const unsigned int TriDimension  = 3;
+  const unsigned int TriDimension = 3;
 
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   typedef unsigned char PixelType;
 
@@ -41,8 +41,8 @@ int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::Image<PixelType, TriDimension>      ImageType;
   typedef otb::Image<PixelType, BiDimension>       OutImageType;
 
-  typedef otb::ImageFileReader<VectorImageType>                             ReaderType;
-  typedef otb::ImageFileWriter<OutImageType>                                WriterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutImageType>    WriterType;
   typedef otb::VectorImageTo3DScalarImageFilter<VectorImageType, ImageType> FilterType;
 
   // Instantiating object
@@ -70,11 +70,11 @@ int otbVectorImageTo3DScalarImageFilter(int itkNotUsed(argc), char * argv[])
   outIt.GoToBegin();
 
   while (!outIt.IsAtEnd() && !inIt.IsAtEndOfSlice())
-    {
+  {
     outIt.Set(inIt.Get());
     ++inIt;
     ++outIt;
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

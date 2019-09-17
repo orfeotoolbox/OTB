@@ -25,28 +25,25 @@ namespace otb
 {
 namespace Wrapper
 {
-QtApplication::QtApplication(int& argcc, char** argvv)
-  : QApplication(argcc, argvv)
+QtApplication::QtApplication(int& argcc, char** argvv) : QApplication(argcc, argvv)
 {
-
 }
 
-bool
-QtApplication::notify(QObject *object, QEvent* ev)
+bool QtApplication::notify(QObject* object, QEvent* ev)
+{
+  try
   {
-    try
-      {
-      return QApplication::notify(object, ev);
-      }
-    catch (std::exception &ex)
-      {
-      QString message = QString("<center><font color=\"#FF0000\">");
-      message.append(ex.what());
-      message.append("</font></center>");
-      emit UnhandledException(message);
-      }
-    return false;
+    return QApplication::notify(object, ev);
   }
+  catch (std::exception& ex)
+  {
+    QString message = QString("<center><font color=\"#FF0000\">");
+    message.append(ex.what());
+    message.append("</font></center>");
+    emit UnhandledException(message);
+  }
+  return false;
+}
 
-} //end of namespace Wrapper
-} //end of namespace otb
+} // end of namespace Wrapper
+} // end of namespace otb

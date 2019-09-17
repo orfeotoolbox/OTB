@@ -30,10 +30,9 @@ namespace otb
 {
 
 template <class TLabel>
-LabelToProSailParameters<TLabel>
-::LabelToProSailParameters()
+LabelToProSailParameters<TLabel>::LabelToProSailParameters()
 {
-  //default parameters
+  // default parameters
   ParametersType Step1Parameters;
   ParametersType Step2Parameters;
 
@@ -60,17 +59,17 @@ LabelToProSailParameters<TLabel>
   this->SetStep2Parameters(Step2Parameters);
 }
 
-//template <class TLabel>
-//const typename LabelToProSailParameters<TLabel>::ParametersType &
-//LabelToProSailParameters<TLabel>
+// template <class TLabel>
+// const typename LabelToProSailParameters<TLabel>::ParametersType &
+// LabelToProSailParameters<TLabel>
 //::GetStep1Parameters()
 //{
 //   return this->m_Step1Parameters;
 //}
 
-//template <class TLabel>
-//const typename LabelToProSailParameters<TLabel>::ParametersType &
-//LabelToProSailParameters<TLabel>
+// template <class TLabel>
+// const typename LabelToProSailParameters<TLabel>::ParametersType &
+// LabelToProSailParameters<TLabel>
 //::GetStep2Parameters()
 //{
 //  return this->m_Step2Parameters;
@@ -78,17 +77,14 @@ LabelToProSailParameters<TLabel>
 
 
 template <class TLabel>
-void
-LabelToProSailParameters<TLabel>
-::GenerateData()
+void LabelToProSailParameters<TLabel>::GenerateData()
 {
-  ParametersType Step1Parameters=this->GetStep1Parameters();
-  ParametersType Step2Parameters=this->GetStep2Parameters();
-  otbMsgDevMacro(<<" Step1Parameters"<<Step1Parameters<<" Step2Parameters"<<Step2Parameters);
+  ParametersType Step1Parameters = this->GetStep1Parameters();
+  ParametersType Step2Parameters = this->GetStep2Parameters();
+  otbMsgDevMacro(<< " Step1Parameters" << Step1Parameters << " Step2Parameters" << Step2Parameters);
 }
 
 
 } // end namespace otb
 
 #endif
-

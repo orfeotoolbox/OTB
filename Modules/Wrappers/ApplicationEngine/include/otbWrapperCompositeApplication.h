@@ -45,7 +45,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT CompositeApplication: public Application
+class OTBApplicationEngine_EXPORT CompositeApplication : public Application
 {
 public:
   /** Standard class typedefs. */
@@ -58,13 +58,13 @@ public:
   itkTypeMacro(CompositeApplication, Application);
 
   /** Filters typedef */
-  typedef itk::MemberCommand< Self >        AddProcessCommandType;
+  typedef itk::MemberCommand<Self> AddProcessCommandType;
 
   typedef struct
-    {
+  {
     Application::Pointer App;
-    std::string Desc;
-    } InternalApplication;
+    std::string          Desc;
+  } InternalApplication;
 
   typedef std::map<std::string, InternalApplication> InternalAppContainer;
 
@@ -78,7 +78,7 @@ protected:
   /**
    * Callback function to retrieve the process watchers on internal filters
    */
-  void LinkWatchers(itk::Object * itkNotUsed(caller), const itk::EventObject & event);
+  void LinkWatchers(itk::Object* itkNotUsed(caller), const itk::EventObject& event);
 
   /**
    * Method to instantiate and register a new internal application
@@ -109,10 +109,7 @@ protected:
    * \param name Name for the local parameter, if empty the target's name is used
    * \param desc Description for the local parameter, if empty the target's description is used
    */
-  bool ShareParameter(std::string localKey,
-                      std::string internalKey,
-                      std::string name = std::string(),
-                      std::string desc = std::string());
+  bool ShareParameter(std::string localKey, std::string internalKey, std::string name = std::string(), std::string desc = std::string());
 
   /**
    * Decode a key to extract potential prefix for internal applications
@@ -122,7 +119,7 @@ protected:
    * If no valid prefix is found, the input key is not modified, and the
    * function returns 'this'.
    */
-  Application* DecodeKey(std::string &key);
+  Application* DecodeKey(std::string& key);
 
   /**
    * Get the internal application with the given identifier
@@ -145,14 +142,13 @@ protected:
   void UpdateInternalParameters(std::string key);
 
 private:
-  CompositeApplication(const CompositeApplication &) = delete;
-  void operator =(const CompositeApplication&) = delete;
+  CompositeApplication(const CompositeApplication&) = delete;
+  void operator=(const CompositeApplication&) = delete;
 
   InternalAppContainer m_AppContainer;
 
-  AddProcessCommandType::Pointer    m_AddProcessCommand;
+  AddProcessCommandType::Pointer m_AddProcessCommand;
 };
-
 }
 }
 #endif

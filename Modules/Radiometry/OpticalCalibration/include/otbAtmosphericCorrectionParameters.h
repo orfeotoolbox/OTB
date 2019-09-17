@@ -48,7 +48,7 @@ class OTBOpticalCalibration_EXPORT AtmosphericCorrectionParameters : public itk:
 public:
   /** Standard typedefs */
   typedef AtmosphericCorrectionParameters Self;
-  typedef itk::Object                 Superclass;
+  typedef itk::Object                     Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
@@ -58,7 +58,7 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef enum {NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 4} AerosolModelType;
+  typedef enum { NO_AEROSOL = 0, CONTINENTAL = 1, MARITIME = 2, URBAN = 3, DESERTIC = 4 } AerosolModelType;
 
   typedef ObjectList<FilterFunctionValues>                  InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
@@ -93,7 +93,7 @@ public:
   itkSetMacro(AerosolOptical, double);
   itkGetMacro(AerosolOptical, double);
 
-  
+
   /** Get/Set Aeronet file name. */
   itkSetMacro(AeronetFileName, std::string);
   itkGetMacro(AeronetFileName, std::string);
@@ -137,16 +137,17 @@ public:
   /** Constructor */
   AtmosphericCorrectionParameters();
   /** Destructor */
-  ~AtmosphericCorrectionParameters() override {}
+  ~AtmosphericCorrectionParameters() override
+  {
+  }
 
 protected:
-
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericCorrectionParameters(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  AtmosphericCorrectionParameters(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** Path to an Aeronet data file, allows computing aerosol optical and water vapor amounts. */
   std::string m_AeronetFileName;
   /** Day */

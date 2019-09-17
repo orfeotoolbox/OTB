@@ -32,9 +32,8 @@ namespace otb
 /**
  * Constructor
  */
-template<class TInputImage, class TOutputImage, class TFunction>
-FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
-::FunctionToImageFilter()
+template <class TInputImage, class TOutputImage, class TFunction>
+FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::FunctionToImageFilter()
 {
   this->InPlaceOff();
   m_PixelFunction = FunctionType::New();
@@ -55,40 +54,33 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 /**
  * BeforeThreadedGenerateData function. Validate inputs
  */
-template<class TInputImage, class TOutputImage, class TFunction>
-void
-FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
-::BeforeThreadedGenerateData()
+template <class TInputImage, class TOutputImage, class TFunction>
+void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::BeforeThreadedGenerateData()
 {
-  InputImagePointer inputPtr
-    = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+  InputImagePointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
   if (inputPtr.IsNull())
-    {
+  {
     itkExceptionMacro(<< "At least one input is missing."
-                      << " Input is missing :" << inputPtr.GetPointer(); )
-
-    }
+                      << " Input is missing :" << inputPtr.GetPointer();)
+  }
   m_PixelFunction->SetInputImage(inputPtr);
 }
 
 /**
  * ThreadedGenerateData function. Performs the pixel-wise addition
  */
-template<class TInputImage, class TOutputImage, class TFunction>
-void
-FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputImage, class TOutputImage, class TFunction>
+void FunctionToImageFilter<TInputImage, TOutputImage, TFunction>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                       itk::ThreadIdType threadId)
 {
 
   // We use dynamic_cast since inputs are stored as DataObjects.
-  InputImagePointer inputPtr
-    = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
+  InputImagePointer inputPtr = dynamic_cast<const TInputImage*>((itk::ProcessObject::GetInput(0)));
 
   OutputImagePointer outputPtr = this->GetOutput(0);
 
   itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, outputRegionForThread);
-  itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+  itk::ImageRegionIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
 
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -97,12 +89,12 @@ FunctionToImageFilter<TInputImage, TOutputImage, TFunction>
 
 
   while (!inputIt.IsAtEnd())
-    {
-      outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
-      ++inputIt;
-      ++outputIt;
-      progress.CompletedPixel(); // potential exception thrown here
-    }
+  {
+    outputIt.Set(static_cast<OutputImagePixelType>(m_PixelFunction->EvaluateAtIndex(inputIt.GetIndex())));
+    ++inputIt;
+    ++outputIt;
+    progress.CompletedPixel(); // potential exception thrown here
+  }
 }
 } // end namespace otb
 

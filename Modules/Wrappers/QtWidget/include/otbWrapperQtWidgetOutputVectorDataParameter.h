@@ -45,13 +45,13 @@ public:
   ~QtWidgetOutputVectorDataParameter() override;
 
   const QLineEdit* GetInput() const;
-  QLineEdit* GetInput();
+  QLineEdit*       GetInput();
 
   /** Get the PixelType*/
-  //itkGetMacro(PixelType, int);
+  // itkGetMacro(PixelType, int);
 
 public slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
 
 protected slots:
   void SelectFile();
@@ -64,17 +64,15 @@ private:
 
   void DoUpdateGUI() override;
 
-  std::string m_FileName;
+  std::string                        m_FileName;
   OutputVectorDataParameter::Pointer m_OutputVectorDataParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
-  QComboBox*    m_ComboBox;
-  int           m_PixelType;
-
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
+  QComboBox*   m_ComboBox;
+  int          m_PixelType;
 };
-
 }
 }
 

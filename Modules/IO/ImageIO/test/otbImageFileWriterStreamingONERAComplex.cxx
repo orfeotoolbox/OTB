@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImage.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -33,15 +31,15 @@
 int otbImageFileWriterStreamingONERAComplex(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef std::complex<float> PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int          Dimension = 2;
 
-  typedef otb::Image<PixelType,  Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::ImageFileReader<ImageType>          ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();

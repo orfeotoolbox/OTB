@@ -45,10 +45,10 @@ class ITK_EXPORT Parser : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef Parser                                   Self;
-  typedef itk::LightObject                         Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef Parser                        Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -57,20 +57,20 @@ public:
   itkTypeMacro(Parser, itk::LightObject);
 
   /** Convenient type definitions */
-  typedef Parser                                   ParserType;
-  typedef double                                   ValueType;
+  typedef Parser ParserType;
+  typedef double ValueType;
 
   /** Type for function/number of arguments map */
-  typedef std::map<std::string, int>               FunctionMapType;
+  typedef std::map<std::string, int> FunctionMapType;
 
   /** Set the expression to be parsed */
-  virtual void SetExpr(const std::string & Expression);
+  virtual void SetExpr(const std::string& Expression);
 
   /** Trigger the parsing */
   ValueType Eval();
 
   /** Define a variable */
-  void DefineVar(const std::string &sName, ValueType *fVar);
+  void DefineVar(const std::string& sName, ValueType* fVar);
 
   /** Clear all the defined variables */
   void ClearVar();
@@ -94,13 +94,13 @@ protected:
 
 
 private:
-  Parser(const Self &) = delete;
-  void operator =(const Self &) = delete;
+  Parser(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typedef itk::SmartPointer<ParserImpl> ParserImplPtr;
-  ParserImplPtr m_InternalParser;
+  ParserImplPtr                         m_InternalParser;
 }; // end class
 
-}//end namespace otb
+} // end namespace otb
 
 #endif

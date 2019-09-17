@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,29 +30,22 @@
 
 namespace otb
 {
-Radarsat2ImageMetadataInterfaceFactory
-::Radarsat2ImageMetadataInterfaceFactory()
+Radarsat2ImageMetadataInterfaceFactory::Radarsat2ImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbRadarsat2ImageMetadataInterface",
-                         "Radarsat2 Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbRadarsat2ImageMetadataInterface", "Radarsat2 Metadata Interface", 1,
                          itk::CreateObjectFunction<Radarsat2ImageMetadataInterface>::New());
 }
 
-Radarsat2ImageMetadataInterfaceFactory
-::~Radarsat2ImageMetadataInterfaceFactory()
+Radarsat2ImageMetadataInterfaceFactory::~Radarsat2ImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-Radarsat2ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* Radarsat2ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-Radarsat2ImageMetadataInterfaceFactory::GetDescription() const
+const char* Radarsat2ImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Radarsat2 Metadata Interface Factory, handle Radarsat2 metadata in OTB";
 }

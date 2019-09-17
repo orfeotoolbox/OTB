@@ -44,8 +44,8 @@ public:
   itkTypeMacro(LocalRxDetection, otb::Application);
 
   /** Image typedefs */
-  typedef DoubleVectorImageType                VectorImageType;
-  typedef DoubleImageType                      ImageType;
+  typedef DoubleVectorImageType VectorImageType;
+  typedef DoubleImageType       ImageType;
 
 private:
   void DoInit() override
@@ -54,33 +54,34 @@ private:
     SetDescription("Performs local Rx score computation on an hyperspectral image.");
 
     // Documentation
-    SetDocLongDescription("Performs local Rx score computation on an input "
-      "hyperspectral image. For each hyperspectral pixel, the Rx score is "
-      "computed using statistics computed on a dual neighborhood. The dual "
-      "neighborhood is composed of all pixel that are in between two radiuses "
-      "around the center pixel. This score can then be used to detect "
-      "anomalies in the image, this can be done for example by thresholding "
-      "the result of this application with the BandMath application.");
-    
+    SetDocLongDescription(
+        "Performs local Rx score computation on an input "
+        "hyperspectral image. For each hyperspectral pixel, the Rx score is "
+        "computed using statistics computed on a dual neighborhood. The dual "
+        "neighborhood is composed of all pixel that are in between two radiuses "
+        "around the center pixel. This score can then be used to detect "
+        "anomalies in the image, this can be done for example by thresholding "
+        "the result of this application with the BandMath application.");
+
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("BandMath");
 
     AddDocTag(Tags::Hyperspectral);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in","Input hyperspectral data cube");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "Input hyperspectral data cube");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output Rx score image");
+    SetParameterDescription("out", "Output Rx score image");
     MandatoryOff("out");
 
     AddParameter(ParameterType_Int, "ir", "Internal radius");
     SetParameterDescription("ir", "Internal radius in pixel");
     SetDefaultParameterInt("ir", 1);
 
-    AddParameter(ParameterType_Int,  "er", "External radius");
-    SetParameterDescription("er","External radius in pixel");
+    AddParameter(ParameterType_Int, "er", "External radius");
+    SetParameterDescription("er", "External radius in pixel");
     SetDefaultParameterInt("er", 5);
 
     AddRAMParameter();
@@ -103,9 +104,9 @@ private:
   {
     auto inputImage = GetParameterDoubleVectorImage("in");
     inputImage->UpdateOutputInformation();
-    
+
     Functor::LocalRxDetectionFunctor<double> detectorFunctor;
-    
+
     unsigned int externalRadius = GetParameterInt("er");
     unsigned int internalRadius = GetParameterInt("ir");
 
@@ -113,17 +114,14 @@ private:
 
     // Create a functorImageFilter with the localRx functor and the appropriate
     // external radius.
-    auto localRxDetectionFilter = otb::NewFunctorFilter
-        (detectorFunctor ,{{externalRadius,externalRadius}});
+    auto localRxDetectionFilter = otb::NewFunctorFilter(detectorFunctor, {{externalRadius, externalRadius}});
 
     localRxDetectionFilter->SetInputs(inputImage);
 
     SetParameterOutputImage("out", localRxDetectionFilter->GetOutput());
     RegisterPipeline();
   }
-
 };
-
 }
 }
 

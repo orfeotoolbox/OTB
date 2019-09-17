@@ -28,16 +28,16 @@
 
 #include "itkMacro.h"
 
-int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int itkNotUsed(argc), char * argv[])
+int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename = argv[1];
-  const char *       outputFilename1 = argv[2];
-  const char *       outputFilename2 = argv[3];
-  const unsigned int profileSize = atoi(argv[4]);
-  const unsigned int initialValue = atoi(argv[5]);
-  const unsigned int step = atoi(argv[6]);
+  const char*        inputFilename   = argv[1];
+  const char*        outputFilename1 = argv[2];
+  const char*        outputFilename2 = argv[3];
+  const unsigned int profileSize     = atoi(argv[4]);
+  const unsigned int initialValue    = atoi(argv[5]);
+  const unsigned int step            = atoi(argv[6]);
 
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
   typedef double         InputPixelType;
   typedef double         OutputPixelType;
   typedef unsigned short LabeledPixelType;
@@ -46,16 +46,14 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int itkNotUsed(argc), 
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
-  typedef otb::ImageFileReader<InputImageType>            ReaderType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
   typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
-  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>
-  OpeningProfileFilterType;
+  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType> OpeningProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
-  MultiScaleCharacteristicsFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -76,7 +74,7 @@ int otbProfileDerivativeToMultiScaleCharacteristicsFilter(int itkNotUsed(argc), 
   msCharFilter->SetInitialValue(initialValue);
   msCharFilter->SetStep(step);
 
-  WriterType::Pointer        writer = WriterType::New();
+  WriterType::Pointer        writer        = WriterType::New();
   LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
 
   writer->SetFileName(outputFilename1);

@@ -45,19 +45,19 @@ LeeImageFilter<TInputImage, TOutputImage>::LeeImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
-  {
+void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+{
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr   =  const_cast<TInputImage *>(this->GetInput());
+  typename Superclass::InputImagePointer  inputPtr  = const_cast<TInputImage*>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if (!inputPtr || !outputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -69,12 +69,12 @@ void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() t
 
   // crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
+  {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -83,21 +83,17 @@ void LeeImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() t
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
+    std::ostringstream               msg;
+    msg << static_cast<const char*>(this->GetNameOfClass()) << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
   }
+}
 
-template<class TInputImage, class TOutputImage>
-void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
-  const OutputImageRegionType&     outputRegionForThread,
-  itk::ThreadIdType threadId
-  )
+template <class TInputImage, class TOutputImage>
+void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -124,45 +120,45 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
 
   double Ci2, Cu2, w, E_I, I, Var_I, dPixel;
 
-  //Compute the ratio using the number of looks
-  Cu2 = 1.0/m_NbLooks;
+  // Compute the ratio using the number of looks
+  Cu2 = 1.0 / m_NbLooks;
 
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
-    {
-    bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
+  {
+    bit                                 = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     const unsigned int neighborhoodSize = bit.Size();
-    it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+    it                                  = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
-    
+
     bit.GoToBegin();
-	it.GoToBegin();
+    it.GoToBegin();
 
 
     while (!bit.IsAtEnd())
-      {
-      sum = itk::NumericTraits<InputRealType>::Zero;
+    {
+      sum  = itk::NumericTraits<InputRealType>::Zero;
       sum2 = itk::NumericTraits<InputRealType>::Zero;
-      
-      //Parcours du voisinage
+
+      // Parcours du voisinage
       for (i = 0; i < neighborhoodSize; ++i)
-        {
+      {
         dPixel = static_cast<double>(bit.GetPixel(i));
         sum += dPixel;
-        }
-      E_I   = sum / static_cast<double>(neighborhoodSize);
-      
+      }
+      E_I = sum / static_cast<double>(neighborhoodSize);
+
       for (i = 0; i < neighborhoodSize; ++i)
-        {
+      {
         dPixel = static_cast<double>(bit.GetPixel(i));
-        sum2 += (dPixel-E_I) * (dPixel-E_I);
-        }
-      Var_I = sum2 / static_cast<double>(neighborhoodSize -1);
-      
+        sum2 += (dPixel - E_I) * (dPixel - E_I);
+      }
+      Var_I = sum2 / static_cast<double>(neighborhoodSize - 1);
+
       I = static_cast<double>(bit.GetCenterPixel());
-      
-      Ci2    = Var_I / (E_I * E_I);
+
+      Ci2 = Var_I / (E_I * E_I);
 
       const double epsilon = 0.0000000001;
       if (std::abs(E_I) < epsilon)
@@ -171,35 +167,34 @@ void LeeImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(
       }
       else if (std::abs(Var_I) < epsilon)
       {
-		dPixel = E_I;
+        dPixel = E_I;
       }
       else if (Ci2 < Cu2)
       {
-		dPixel = E_I;
+        dPixel = E_I;
       }
       else
       {
-		w = 1 - Cu2 / Ci2;
-		dPixel = I*w + E_I*(1-w);
+        w      = 1 - Cu2 / Ci2;
+        dPixel = I * w + E_I * (1 - w);
       }
-      
+
       // set the weighted value
       it.Set(static_cast<OutputPixelType>(dPixel));
 
       ++bit;
       ++it;
-      
+
       progress.CompletedPixel();
-      }
     }
+  }
 }
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void
-LeeImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LeeImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << std::endl;

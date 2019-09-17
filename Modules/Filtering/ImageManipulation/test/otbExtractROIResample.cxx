@@ -33,23 +33,23 @@
 int otbExtractROIResample(int argc, char* argv[])
 {
   if (argc < 4)
-    {
-    std::cout << argv[0] << " <input filename> <output filename> <use resample>"  << std::endl;
+  {
+    std::cout << argv[0] << " <input filename> <output filename> <use resample>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   bool useResample = true;
   if (atoi(argv[3]) == 0)
-    {
+  {
     useResample = false;
-    }
+  }
 
   unsigned int startX = 10;
   unsigned int startY = 10;
-  unsigned int sizeX = 100;
-  unsigned int sizeY = 100;
+  unsigned int sizeX  = 100;
+  unsigned int sizeY  = 100;
 
-  typedef double                   PixelType;
+  typedef double PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
@@ -77,16 +77,16 @@ int otbExtractROIResample(int argc, char* argv[])
   filterResampleRoi->SetSizeY(sizeY);
 
   if (useResample)
-    {
+  {
     filterResampleRoi->SetInput(filterResample->GetOutput());
-    }
+  }
   else
-    {
+  {
     filterResampleRoi->SetInput(reader->GetOutput());
-    }
+  }
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer streamingWriter = WriterType::New();
+  WriterType::Pointer                     streamingWriter = WriterType::New();
 
   streamingWriter->SetFileName(argv[2]);
   streamingWriter->SetInput(filterResampleRoi->GetOutput());

@@ -69,7 +69,7 @@ class OTBImageBase_EXPORT ImageIOBase : public itk::LightProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageIOBase        Self;
+  typedef ImageIOBase             Self;
   typedef itk::LightProcessObject Superclass;
   typedef itk::SmartPointer<Self> Pointer;
 
@@ -81,8 +81,8 @@ public:
   itkGetStringMacro(FileName);
 
   /** Types for managing image size and image index components. */
-  typedef   long              IndexValueType;
-  typedef   unsigned long     SizeValueType;
+  typedef long          IndexValueType;
+  typedef unsigned long SizeValueType;
 
   /**
    * \class UnknownType
@@ -90,21 +90,34 @@ public:
  *
  * \ingroup OTBImageBase
    */
-  class UnknownType {};
+  class UnknownType
+  {
+  };
 
   /** Enums used to manipulate the pixel type. The pixel type provides
    * context for automatic data conversions (for instance, RGB to
    * SCALAR, VECTOR to SCALAR). */
-  typedef  enum {UNKNOWNPIXELTYPE,SCALAR,RGB,RGBA,OFFSET,VECTOR,
-                 POINT,COVARIANTVECTOR,SYMMETRICSECONDRANKTENSOR,
-                 DIFFUSIONTENSOR3D,COMPLEX,FIXEDARRAY,MATRIX}  IOPixelType;
+  typedef enum {
+    UNKNOWNPIXELTYPE,
+    SCALAR,
+    RGB,
+    RGBA,
+    OFFSET,
+    VECTOR,
+    POINT,
+    COVARIANTVECTOR,
+    SYMMETRICSECONDRANKTENSOR,
+    DIFFUSIONTENSOR3D,
+    COMPLEX,
+    FIXEDARRAY,
+    MATRIX
+  } IOPixelType;
 
   /** Enums used to manipulate the component type. The component type
    * refers to the actual storage class associated with either a
    * SCALAR pixel type or elements of a compound pixel.
    */
-  typedef  enum {UNKNOWNCOMPONENTTYPE,UCHAR,CHAR,USHORT,SHORT,UINT,INT,
-                 ULONG,LONG, FLOAT,DOUBLE, CSHORT, CINT, CFLOAT, CDOUBLE} IOComponentType;
+  typedef enum { UNKNOWNCOMPONENTTYPE, UCHAR, CHAR, USHORT, SHORT, UINT, INT, ULONG, LONG, FLOAT, DOUBLE, CSHORT, CINT, CFLOAT, CDOUBLE } IOComponentType;
 
   /** Set/Get the number of independent variables (dimensions) in the
    * image being read or written. Note this is not necessarily what
@@ -117,32 +130,34 @@ public:
    * SetDimensions() is used prior to writing the data. */
   virtual void SetDimensions(unsigned int i, unsigned int dim);
   virtual unsigned int GetDimensions(unsigned int i) const
-  { return m_Dimensions[i]; }
+  {
+    return m_Dimensions[i];
+  }
 
   /** Set/Get the image origin on a axis-by-axis basis. The SetOrigin() method
    * is required when writing the image. */
   virtual void SetOrigin(unsigned int i, double origin);
   virtual double GetOrigin(unsigned int i) const
-    {
+  {
     return m_Origin[i];
-    }
+  }
 
   /** Set/Get the image spacing on an axis-by-axis basis. The
    * SetSpacing() method is required when writing the image. */
   virtual void SetSpacing(unsigned int i, double spacing);
   virtual double GetSpacing(unsigned int i) const
-    {
+  {
     return m_Spacing[i];
-    }
+  }
 
   /** Set/Get the image direction on an axis-by-axis basis. The
    * SetDirection() method is required when writing the image. */
-  virtual void SetDirection(unsigned int i, std::vector<double> &direction);
-  virtual void SetDirection(unsigned int i, vnl_vector<double> &direction);
+  virtual void SetDirection(unsigned int i, std::vector<double>& direction);
+  virtual void SetDirection(unsigned int i, vnl_vector<double>& direction);
   virtual std::vector<double> GetDirection(unsigned int i) const
-    {
+  {
     return m_Direction[i];
-    }
+  }
 
   /** Return the directions to be assigned by default to recipient
    *  images whose dimension is smaller than the image dimension in file.  */
@@ -175,30 +190,30 @@ public:
 
   /** Set/Get the component type of the image. This is always a native
    * type. */
-  itkSetEnumMacro(ComponentType,IOComponentType);
-  itkGetEnumMacro(ComponentType,IOComponentType);
+  itkSetEnumMacro(ComponentType, IOComponentType);
+  itkGetEnumMacro(ComponentType, IOComponentType);
   virtual const std::type_info& GetComponentTypeInfo() const;
 
   /** Set/Get the number of components per pixel in the image. This may
    * be set by the reading process. For SCALAR pixel types,
    * NumberOfComponents will be 1.  For other pixel types,
    * NumberOfComponents will be greater than or equal to one. */
-  itkSetMacro(NumberOfComponents,unsigned int);
-  itkGetConstReferenceMacro(NumberOfComponents,unsigned int);
+  itkSetMacro(NumberOfComponents, unsigned int);
+  itkGetConstReferenceMacro(NumberOfComponents, unsigned int);
 
   /** Set/Get a boolean to use the compression or not. */
-  itkSetMacro(UseCompression,bool);
-  itkGetConstMacro(UseCompression,bool);
+  itkSetMacro(UseCompression, bool);
+  itkGetConstMacro(UseCompression, bool);
   itkBooleanMacro(UseCompression);
 
   /** Set/Get a boolean to use streaming while reading or not. */
-  itkSetMacro(UseStreamedReading,bool);
-  itkGetConstMacro(UseStreamedReading,bool);
+  itkSetMacro(UseStreamedReading, bool);
+  itkGetConstMacro(UseStreamedReading, bool);
   itkBooleanMacro(UseStreamedReading);
 
   /** Set/Get a boolean to use streaming while writing or not. */
-  itkSetMacro(UseStreamedWriting,bool);
-  itkGetConstMacro(UseStreamedWriting,bool);
+  itkSetMacro(UseStreamedWriting, bool);
+  itkGetConstMacro(UseStreamedWriting, bool);
   itkBooleanMacro(UseStreamedWriting);
 
 
@@ -212,24 +227,24 @@ public:
 
   /** Enums used to specify write style: whether binary or ASCII. Some
    * subclasses use this, some ignore it. */
-  typedef  enum {ASCII,Binary,TypeNotApplicable} FileType;
+  typedef enum { ASCII, Binary, TypeNotApplicable } FileType;
 
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
-  typedef  enum {BigEndian,LittleEndian,OrderNotApplicable} ByteOrder;
+  typedef enum { BigEndian, LittleEndian, OrderNotApplicable } ByteOrder;
 
   /** These methods control whether the file is written binary or ASCII.
    * Many file formats (i.e., subclasses) ignore this flag. */
-  itkSetEnumMacro(FileType,FileType);
-  itkGetEnumMacro(FileType,FileType);
+  itkSetEnumMacro(FileType, FileType);
+  itkGetEnumMacro(FileType, FileType);
   void SetFileTypeToASCII()
-    {
+  {
     this->SetFileType(ASCII);
-    }
+  }
   void SetFileTypeToBinary()
-    {
+  {
     this->SetFileType(Binary);
-    }
+  }
 
   /** These methods indicate the byte ordering of the file you are
    * trying to read in. These methods will then either swap or not
@@ -242,16 +257,16 @@ public:
    * a VAX or PC, SetByteOrderToLittleEndian() otherwise
    * SetByteOrderToBigEndian().  Some ImageIOBase subclasses
    * ignore these methods. */
-  itkSetEnumMacro(ByteOrder,ByteOrder);
-  itkGetEnumMacro(ByteOrder,ByteOrder);
+  itkSetEnumMacro(ByteOrder, ByteOrder);
+  itkGetEnumMacro(ByteOrder, ByteOrder);
   void SetByteOrderToBigEndian()
-    {
+  {
     this->SetByteOrder(BigEndian);
-    }
+  }
   void SetByteOrderToLittleEndian()
-    {
+  {
     this->SetByteOrder(LittleEndian);
-    }
+  }
 
   /** Convenience method returns the FileType as a string. This can be
    * used for writing output files. */
@@ -265,7 +280,7 @@ public:
   typedef std::streamoff SizeType;
 
   /** Type for representing size of bytes, and or positions along a memory buffer */
-  typedef size_t    BufferSizeType;
+  typedef size_t BufferSizeType;
 
   /** Convenient method for accessing the number of bytes to get to
    * the next pixel. Returns m_Strides[1];
@@ -273,7 +288,7 @@ public:
    * Please note that this methods depends the private methods
    * ComputeStrides being called, otherwise this is the incorrect value.
    */
-  virtual SizeType GetPixelStride () const;
+  virtual SizeType GetPixelStride() const;
 
   /** Return the number of pixels in the image. */
   SizeType GetImageSizeInPixels() const;
@@ -291,20 +306,19 @@ public:
    * component size of 1 byte. This method can be invoked only after
    * the component type is set. */
   virtual unsigned int GetComponentSize() const;
-  
+
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
-  virtual unsigned int GetOverviewsCount() = 0; 
-  
+  virtual unsigned int GetOverviewsCount() = 0;
+
   /** Get information about overviews available into the file specified
-   * Returns: overview info, empty if none. */ 
+   * Returns: overview info, empty if none. */
   virtual std::vector<std::string> GetOverviewsInfo() = 0;
 
   /** Provide hist about the output container to deal with complex pixel
-   *  type */ 
-  virtual void SetOutputImagePixelType( bool isComplexInternalPixelType, 
-                                        bool isVectorImage) = 0;
-  
+   *  type */
+  virtual void SetOutputImagePixelType(bool isComplexInternalPixelType, bool isVectorImage) = 0;
+
   /*-------- This part of the interfaces deals with reading data ----- */
 
   /** Determine the file type. Returns true if this ImageIO can read the
@@ -314,9 +328,9 @@ public:
   /** Determine if the ImageIO can stream reading from this
       file. Default is false. */
   virtual bool CanStreamRead()
-    {
+  {
     return false;
-    }
+  }
 
   /** Read the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -330,7 +344,7 @@ public:
 
   /** Determine the file type. Returns true if this ImageIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*)  = 0;
+  virtual bool CanWriteFile(const char*) = 0;
 
   /** Determine if the ImageIO can stream writing to this file. Default is false.
    *
@@ -338,9 +352,9 @@ public:
    * If true then
    */
   virtual bool CanStreamWrite()
-    {
+  {
     return false;
-    }
+  }
 
   /** Writes the spacing and dimensions of the image.
    * Assumes SetFileName has been called with a valid file name. */
@@ -349,7 +363,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write( const void* buffer) = 0;
+  virtual void Write(const void* buffer) = 0;
 
   /* --- Support reading and writing data as a series of files. --- */
 
@@ -359,9 +373,9 @@ public:
    * true/false as to whether the ImageIO can support the dimension
    * indicated. */
   virtual bool SupportsDimension(unsigned long dim)
-    {
+  {
     return (dim == 2);
-    }
+  }
 
   /** Method for supporting streaming.  Given a requested region, determine what
    * could be the region that we can read from the file. This is called the
@@ -374,8 +388,7 @@ public:
    * the requested region. For example if the file has a size of [ 10,
    * 10, 10] but the requested region is [10, 10] the return may be 3 dimensions.
    */
-  virtual itk::ImageIORegion
-  GenerateStreamableReadRegionFromRequestedRegion( const itk::ImageIORegion & requested ) const;
+  virtual itk::ImageIORegion GenerateStreamableReadRegionFromRequestedRegion(const itk::ImageIORegion& requested) const;
 
 
   /** Before this method is called all the configuration will be done,
@@ -392,9 +405,8 @@ public:
    * to any file. So the users request will be respected. If a derived
    * class has more restictive conditions then they should be checked
    */
-  virtual unsigned int GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits,
-                                                         const itk::ImageIORegion &pasteRegion,
-                                                         const itk::ImageIORegion &largestPossibleRegion);
+  virtual unsigned int GetActualNumberOfSplitsForWriting(unsigned int numberOfRequestedSplits, const itk::ImageIORegion& pasteRegion,
+                                                         const itk::ImageIORegion& largestPossibleRegion);
 
   /** returns the ith IORegion
    *
@@ -402,25 +414,23 @@ public:
    *
    * Derieved classes should overload this method to return a compatible region
    */
-  virtual itk::ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece,
-                                                      unsigned int numberOfActualSplits,
-                                                      const itk::ImageIORegion &pasteRegion,
-                                                      const itk::ImageIORegion &largestPossibleRegion);
+  virtual itk::ImageIORegion GetSplitRegionForWriting(unsigned int ithPiece, unsigned int numberOfActualSplits, const itk::ImageIORegion& pasteRegion,
+                                                      const itk::ImageIORegion& largestPossibleRegion);
 
   /** Type for the list of strings to be used for extensions.  */
-  typedef  std::vector< std::string >    ArrayOfExtensionsType;
+  typedef std::vector<std::string> ArrayOfExtensionsType;
 
   /** This method returns an array with the list of filename extensions
    * supported for reading by this ImageIO class. This is intended to
    * facilitate GUI and application level integration.
    */
-  const ArrayOfExtensionsType & GetSupportedReadExtensions() const;
+  const ArrayOfExtensionsType& GetSupportedReadExtensions() const;
 
   /** This method returns an array with the list of filename extensions
    * supported for writing by this ImageIO class. This is intended to
    * facilitate GUI and application level integration.
    */
-  const ArrayOfExtensionsType & GetSupportedWriteExtensions() const;
+  const ArrayOfExtensionsType& GetSupportedWriteExtensions() const;
 
   /** Remap band order in an input buffer using band mapping bandList
    *  This operation is done in-place. The buffer size should enough to
@@ -430,7 +440,7 @@ public:
   void DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList);
 
   /** Returns a const ref to the list of attached files*/
-  itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string> );
+  itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string>);
 
 protected:
   ImageIOBase();
@@ -445,8 +455,8 @@ protected:
   IOComponentType m_ComponentType;
 
   /** Big or Little Endian, and the type of the file. (May be ignored.) */
-  ByteOrder      m_ByteOrder;
-  FileType       m_FileType;
+  ByteOrder m_ByteOrder;
+  FileType  m_FileType;
 
   /** Does the ImageIOBase object have enough info to be of use? */
   bool m_Initialized;
@@ -475,7 +485,7 @@ protected:
   itk::ImageIORegion m_IORegion;
 
   /** The array which stores the number of pixels in the x, y, z directions. */
-  std::vector< SizeValueType > m_Dimensions;
+  std::vector<SizeValueType> m_Dimensions;
 
   /** The array which stores the spacing of pixels in the
    * x, y, z directions. */
@@ -485,18 +495,17 @@ protected:
   std::vector<double> m_Origin;
 
   /** The arrays which store the direction cosines of the image. */
-  std::vector<std::vector<double> > m_Direction;
+  std::vector<std::vector<double>> m_Direction;
 
   /** Stores the number of bytes it takes to get to the next 'thing'
    * e.g. component, pixel, row, slice, etc. */
-  std::vector< SizeType > m_Strides;
+  std::vector<SizeType> m_Strides;
 
   /** Return the object to an initialized state, ready to be used */
   virtual void Reset(const bool freeDynamic = true);
 
   /** Resize the ImageIOBase object to new dimensions. */
-  void Resize(const unsigned int numDimensions,
-              const unsigned int* dimensions);
+  void Resize(const unsigned int numDimensions, const unsigned int* dimensions);
 
   /** Compute the size (in bytes) of the pixel. For
    * example, and RGB pixel of unsigned char would have size 3 bytes. */
@@ -516,42 +525,36 @@ protected:
 
   /** Convenient method for accessing the number of bytes to get to the
    * next row. Returns m_Strides[2]. */
-  SizeType GetRowStride () const;
+  SizeType GetRowStride() const;
 
   /** Convenient method for accessing the number of bytes to get to the
    * next slice. Returns m_Strides[3]. */
-  SizeType GetSliceStride () const;
+  SizeType GetSliceStride() const;
 
   /** Convenient method to write a buffer as ASCII text. */
-  void WriteBufferAsASCII(std::ostream& os, const void *buffer,
-                          IOComponentType ctype,
-                          SizeType numberOfBytesToWrite);
+  void WriteBufferAsASCII(std::ostream& os, const void* buffer, IOComponentType ctype, SizeType numberOfBytesToWrite);
 
   /** Convenient method to read a buffer as ASCII text. */
-  void ReadBufferAsASCII(std::istream& os, void *buffer,
-                         IOComponentType ctype,
-                         SizeType numberOfBytesToBeRead);
+  void ReadBufferAsASCII(std::istream& os, void* buffer, IOComponentType ctype, SizeType numberOfBytesToBeRead);
 
   /** Convenient method to read a buffer as binary. Return true on success. */
-  bool ReadBufferAsBinary(std::istream& os, void *buffer, SizeType numberOfBytesToBeRead);
+  bool ReadBufferAsBinary(std::istream& os, void* buffer, SizeType numberOfBytesToBeRead);
 
 
   /** Insert an extension to the list of supported extensions for reading. */
-  void AddSupportedReadExtension( const char * extension );
+  void AddSupportedReadExtension(const char* extension);
 
   /** Insert an extension to the list of supported extensions for writing. */
-  void AddSupportedWriteExtension( const char * extension );
+  void AddSupportedWriteExtension(const char* extension);
 
   /** an implementation of ImageRegionSplitter:GetNumberOfSplits
    */
-  virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits,
-                                                                       const itk::ImageIORegion &pasteRegion) const;
+  virtual unsigned int GetActualNumberOfSplitsForWritingCanStreamWrite(unsigned int numberOfRequestedSplits, const itk::ImageIORegion& pasteRegion) const;
 
   /** an implementation of  ImageRegionSplitter:GetSplit
    */
-  virtual itk::ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece,
-                                                               unsigned int numberOfActualSplits,
-                                                               const itk::ImageIORegion &pasteRegion) const;
+  virtual itk::ImageIORegion GetSplitRegionForWritingCanStreamWrite(unsigned int ithPiece, unsigned int numberOfActualSplits,
+                                                                    const itk::ImageIORegion& pasteRegion) const;
 
   /** List of files part of the same dataset as the input filename */
   std::vector<std::string> m_AttachedFileNames;
@@ -560,9 +563,8 @@ private:
   ImageIOBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ArrayOfExtensionsType    m_SupportedReadExtensions;
-  ArrayOfExtensionsType    m_SupportedWriteExtensions;
-
+  ArrayOfExtensionsType m_SupportedReadExtensions;
+  ArrayOfExtensionsType m_SupportedWriteExtensions;
 };
 
 } // end namespace itk

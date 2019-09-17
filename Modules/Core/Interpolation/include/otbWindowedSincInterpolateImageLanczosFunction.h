@@ -39,15 +39,17 @@ namespace Function
  *
  * \ingroup OTBInterpolation
  */
-template<class TInput = double, class TOutput = double>
+template <class TInput = double, class TOutput = double>
 class LanczosWindowFunction
 {
 public:
-  LanczosWindowFunction(): m_Radius(1), m_Factor(CONST_PI) {} // default factor is 1 at construction
+  LanczosWindowFunction() : m_Radius(1), m_Factor(CONST_PI)
+  {
+  } // default factor is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
-    m_Factor =  CONST_PI / static_cast<double>(radius);
+    m_Factor = CONST_PI / static_cast<double>(radius);
   }
   unsigned int GetRadius() const
   {
@@ -58,28 +60,29 @@ public:
     return m_Factor;
   }
 
-  inline TOutput operator ()(const TInput& A) const
+  inline TOutput operator()(const TInput& A) const
   {
-    double x = static_cast<double>(A);
+    double x  = static_cast<double>(A);
     double px = CONST_PI * x;
     double temp;
     if (x == 0.0)
-      {
+    {
       temp = 1.0;
-      }
+    }
     else
-      {
+    {
       double z = m_Factor * x;
-      temp =  std::sin(z) / z;
-      }
+      temp     = std::sin(z) / z;
+    }
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
+
 private:
   unsigned int m_Radius;
   // Equal to \f$ \frac{\pi}{m} \f$
-  double       m_Factor;
+  double m_Factor;
 };
-} //namespace Function
+} // namespace Function
 
 /**
  * \class WindowedSincInterpolateImageLanczosFunction
@@ -96,24 +99,18 @@ private:
  *
  * \ingroup OTBInterpolation
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
-      double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageLanczosFunction :
-  public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::LanczosWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
+template <class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double,
+          class TInputInterpolator = double, class TOutputInterpolator = double>
+class ITK_EXPORT WindowedSincInterpolateImageLanczosFunction
+    : public WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::LanczosWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                      TBoundaryCondition, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageLanczosFunction Self;
-  typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::LanczosWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
-  Superclass;
+  typedef WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::LanczosWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                   TBoundaryCondition, TCoordRep>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -138,16 +135,18 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
 protected:
-  WindowedSincInterpolateImageLanczosFunction() {};
-  ~WindowedSincInterpolateImageLanczosFunction() override {}
+  WindowedSincInterpolateImageLanczosFunction(){};
+  ~WindowedSincInterpolateImageLanczosFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageLanczosFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WindowedSincInterpolateImageLanczosFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

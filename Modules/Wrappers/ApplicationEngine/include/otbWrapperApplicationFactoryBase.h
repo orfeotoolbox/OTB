@@ -38,25 +38,28 @@ public:
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ApplicationFactoryBase, itk::ObjectFactoryBase);
-  
+
   /** Create an application using the CreateObject() method of the current factory */
   Application::Pointer CreateApplication(const char* name);
 
 protected:
-  ApplicationFactoryBase(){}
+  ApplicationFactoryBase()
+  {
+  }
 
-  ~ApplicationFactoryBase() override{}
+  ~ApplicationFactoryBase() override
+  {
+  }
 
 private:
-  ApplicationFactoryBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ApplicationFactoryBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #endif

@@ -32,20 +32,14 @@ namespace Wrapper
 
 
 /*****************************************************************************/
-QtWidgetInputVectorDataListParameter
-::QtWidgetInputVectorDataListParameter( InputVectorDataListParameter * param,
-					QtWidgetModel* m , QWidget * parent) :
-  QtWidgetParameterList( param, m , parent)
+QtWidgetInputVectorDataListParameter::QtWidgetInputVectorDataListParameter(InputVectorDataListParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterList(param, m, parent)
 {
 }
 
 /*****************************************************************************/
-QtWidgetInputVectorDataListParameter
-::~QtWidgetInputVectorDataListParameter()
+QtWidgetInputVectorDataListParameter::~QtWidgetInputVectorDataListParameter()
 {
 }
-
-
 }
-
 }

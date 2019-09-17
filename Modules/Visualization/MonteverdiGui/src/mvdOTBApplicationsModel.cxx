@@ -64,43 +64,34 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-OTBApplicationsModel
-::OTBApplicationsModel( QObject* p ) :
-  AbstractModel( p ),
-  m_ApplicationsBrowser( NULL ),
-  m_ApplicationLauncher( NULL )
+OTBApplicationsModel::OTBApplicationsModel(QObject* p) : AbstractModel(p), m_ApplicationsBrowser(NULL), m_ApplicationLauncher(NULL)
 {
   //
   // instantiate apps browser
-  m_ApplicationsBrowser = new ApplicationsBrowser( this );  
+  m_ApplicationsBrowser = new ApplicationsBrowser(this);
 
   //
   // instantiate app launcher
-  m_ApplicationLauncher = new ApplicationLauncher( this );
+  m_ApplicationLauncher = new ApplicationLauncher(this);
 
   // initialize the app browser with empty string. The default
   // behavior use the env ITK_AUTOLOAD_PATH
-  //m_ApplicationsBrowser->SetAutoLoadPath("");
+  // m_ApplicationsBrowser->SetAutoLoadPath("");
 }
 
 /*******************************************************************************/
-OTBApplicationsModel
-::~OTBApplicationsModel()
+OTBApplicationsModel::~OTBApplicationsModel()
 {
 }
 
 /*******************************************************************************/
-void
-OTBApplicationsModel
-::virtual_BuildModel( void * )
+void OTBApplicationsModel::virtual_BuildModel(void*)
 {
   // nothing to do
 }
 
 /*******************************************************************************/
-void
-OTBApplicationsModel
-::FillTree( )
+void OTBApplicationsModel::FillTree()
 {
   //
   // this method is connected to the widget via a signal. In

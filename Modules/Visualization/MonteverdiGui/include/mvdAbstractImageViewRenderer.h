@@ -76,8 +76,7 @@ class StackedLayerModel;
  *
  * \brief TODO.
  */
-class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer :
-    public QObject
+class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,8 +85,8 @@ class OTBMonteverdiGUI_EXPORT AbstractImageViewRenderer :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   /**
    */
@@ -95,15 +94,15 @@ public:
   {
     /**
      */
-    inline
-    RenderingContext() :
-      m_RenderMode( RENDER_MODE_FULL )
+    inline RenderingContext() : m_RenderMode(RENDER_MODE_FULL)
     {
     }
 
     /**
      */
-    virtual ~RenderingContext() {}
+    virtual ~RenderingContext()
+    {
+    }
 
     /**
      */
@@ -116,8 +115,8 @@ public:
     RenderMode m_RenderMode;
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /**
    * Destructor.
@@ -126,102 +125,91 @@ public:
 
   /**
    */
-  inline void SetLayerStack( StackedLayerModel * );
+  inline void SetLayerStack(StackedLayerModel*);
 
   /**
    */
-  inline const StackedLayerModel * GetLayerStack() const;
+  inline const StackedLayerModel* GetLayerStack() const;
 
   /**
    */
-  inline StackedLayerModel * GetLayerStack();
+  inline StackedLayerModel* GetLayerStack();
 
   /**
    */
-  virtual bool CheckGLCapabilities( int * ) =0;
+  virtual bool CheckGLCapabilities(int*) = 0;
 
-  template< typename T >
-  const T * GetReferenceModel() const;
+  template <typename T>
+  const T* GetReferenceModel() const;
 
-  template< typename T >
-  T * GetReferenceModel();
-
-  /**
-   */
-  virtual const AbstractLayerModel * GetReferenceModel() const =0;
+  template <typename T>
+  T* GetReferenceModel();
 
   /**
    */
-  virtual AbstractLayerModel * GetReferenceModel() =0;
+  virtual const AbstractLayerModel* GetReferenceModel() const = 0;
 
   /**
    */
-  virtual void GetLayerExtent( const StackedLayerModel::KeyType & key,
-                               PointType& origin,
-                               PointType& extent ) const =0;
+  virtual AbstractLayerModel* GetReferenceModel() = 0;
 
   /**
    */
-  virtual void GetReferenceExtent( PointType& origin,
-                                   PointType& extent ) const =0;
+  virtual void GetLayerExtent(const StackedLayerModel::KeyType& key, PointType& origin, PointType& extent) const = 0;
 
   /**
    */
-  virtual void GetViewExtent( PointType& origin,
-                              PointType& extent ) const =0;
+  virtual void GetReferenceExtent(PointType& origin, PointType& extent) const = 0;
 
   /**
    */
-  virtual bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
-				 ParametersType & params,
-				 bool isGlobal ) const =0;
+  virtual void GetViewExtent(PointType& origin, PointType& extent) const = 0;
 
   /**
    */
-  virtual
-    AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const =0;
+  virtual bool GetLayerDynamics(const StackedLayerModel::KeyType& key, ParametersType& params, bool isGlobal) const = 0;
 
   /**
    */
-  virtual void InitializeGL() =0;
+  virtual AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const = 0;
 
   /**
    */
-  virtual void ResizeGL( int width, int height ) =0;
+  virtual void InitializeGL() = 0;
 
   /**
    */
-  virtual void PaintGL( RenderingContext const * context ) =0;
+  virtual void ResizeGL(int width, int height) = 0;
 
   /**
    */
-  virtual void Pick( const PointType & view,
-                     PixelInfo::Vector & pixels ) const = 0;
+  virtual void PaintGL(RenderingContext const* context) = 0;
 
   /**
    */
-  virtual void GetResolutions( PixelInfo::Vector & pixels ) const =0;
+  virtual void Pick(const PointType& view, PixelInfo::Vector& pixels) const = 0;
 
   /**
    */
-  virtual bool TransformToView( PointType & point,
-				const StackedLayerModel::KeyType &,
-				const IndexType &,
-				bool isPhysical ) const =0;
+  virtual void GetResolutions(PixelInfo::Vector& pixels) const = 0;
 
   /**
    */
-  virtual void SaveScreenshot( const QString & ) const =0;
+  virtual bool TransformToView(PointType& point, const StackedLayerModel::KeyType&, const IndexType&, bool isPhysical) const = 0;
 
   /**
    */
-  inline bool SetBypassRenderingEnabled( bool );
+  virtual void SaveScreenshot(const QString&) const = 0;
+
+  /**
+   */
+  inline bool SetBypassRenderingEnabled(bool);
   /**
    */
   inline bool IsBypassRenderingEnabled() const;
   /**
    */
-  inline bool SetGLSLEnabled( bool );
+  inline bool SetGLSLEnabled(bool);
   /**
    */
   inline bool IsGLSLEnabled() const;
@@ -230,128 +218,114 @@ public:
   virtual bool IsEffectsEnabled() const = 0;
   /**
    */
-  inline bool ZoomToRegion( const PointType & origin,
-			    const PointType & extent,
-			    PointType & center,
-			    SpacingType & spacing ) const;
+  inline bool ZoomToRegion(const PointType& origin, const PointType& extent, PointType& center, SpacingType& spacing) const;
   /**
    */
-  inline bool ZoomToExtent( PointType & center, SpacingType & spacing ) const;
+  inline bool ZoomToExtent(PointType& center, SpacingType& spacing) const;
   /**
    */
-  inline bool ZoomToLayer( const StackedLayerModel::KeyType & key,
-			   PointType & center,
-			   SpacingType & spacing ) const;
+  inline bool ZoomToLayer(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const;
   /**
    */
-  inline bool ZoomToFull( const StackedLayerModel::KeyType & key,
-			  PointType & center,
-			  SpacingType & spacing ) const;
+  inline bool ZoomToFull(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-// public slots
+  // public slots
 public slots:
-  inline void ClearScene( bool keepViewport = false );
+  inline void ClearScene(bool keepViewport = false);
   inline void UpdateScene();
   inline void RefreshScene();
 
-  virtual void UpdatePixelInfo( const QPoint & point,
-				const PointType & view,
-				const PixelInfo::Vector & pixels ) =0;
+  virtual void UpdatePixelInfo(const QPoint& point, const PointType& view, const PixelInfo::Vector& pixels) = 0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /**
    * Constructor.
    */
-  AbstractImageViewRenderer( QObject* p = NULL ) :
-    QObject( p ),
-    m_StackedLayerModel( NULL ),
-    m_BypassRenderingEnabled( false ),
-    m_GLSLEnabled( true )
+  AbstractImageViewRenderer(QObject* p = NULL) : QObject(p), m_StackedLayerModel(NULL), m_BypassRenderingEnabled(false), m_GLSLEnabled(true)
   {
   }
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  virtual void virtual_ClearScene( bool ) {};
+  virtual void virtual_ClearScene(bool){};
   /**
    */
-  virtual void virtual_PrepareScene() {};
+  virtual void virtual_PrepareScene(){};
   /**
    */
-  virtual void virtual_UpdateScene() {};
+  virtual void virtual_UpdateScene(){};
   /**
    */
-  virtual void virtual_RefreshScene() {};
+  virtual void virtual_RefreshScene(){};
   /**
    */
   // virtual void virtual_SetLayerStack( const StackedLayerModel & ) =0;
   /**
    */
-  virtual void virtual_FinishScene() {};
+  virtual void virtual_FinishScene(){};
 
   /**
    */
-  virtual bool virtual_ZoomToRegion( const PointType &,
-				     const PointType &,
-				     PointType &,
-				     SpacingType & ) const
-  { return false; }
+  virtual bool virtual_ZoomToRegion(const PointType&, const PointType&, PointType&, SpacingType&) const
+  {
+    return false;
+  }
   /**
    */
-  virtual bool virtual_ZoomToExtent( PointType &, SpacingType & ) const
-  { return false; }
+  virtual bool virtual_ZoomToExtent(PointType&, SpacingType&) const
+  {
+    return false;
+  }
   /**
    */
-  virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType &,
-				    PointType &,
-				    SpacingType & ) const
-  { return false; }
+  virtual bool virtual_ZoomToLayer(const StackedLayerModel::KeyType&, PointType&, SpacingType&) const
+  {
+    return false;
+  }
   /**
    */
-  virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType &,
-				   PointType &,
-				   SpacingType & ) const
-  { return false; }
+  virtual bool virtual_ZoomToFull(const StackedLayerModel::KeyType&, PointType&, SpacingType&) const
+  {
+    return false;
+  }
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
-  StackedLayerModel * m_StackedLayerModel;
+  StackedLayerModel* m_StackedLayerModel;
   /**
    */
-  bool m_BypassRenderingEnabled: 1;
+  bool m_BypassRenderingEnabled : 1;
   /**
    */
-  bool m_GLSLEnabled: 1;
+  bool m_GLSLEnabled : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 
@@ -364,46 +338,33 @@ namespace mvd
 {
 
 /*****************************************************************************/
-template< typename T >
-const T *
-AbstractImageViewRenderer
-::GetReferenceModel() const
+template <typename T>
+const T* AbstractImageViewRenderer::GetReferenceModel() const
 {
-  return dynamic_cast< const T * >( GetReferenceModel() );
+  return dynamic_cast<const T*>(GetReferenceModel());
 }
 
 /*****************************************************************************/
-template< typename T >
-T *
-AbstractImageViewRenderer
-::GetReferenceModel()
+template <typename T>
+T* AbstractImageViewRenderer::GetReferenceModel()
 {
-  return dynamic_cast< T * >( GetReferenceModel() );
+  return dynamic_cast<T*>(GetReferenceModel());
 }
 
 /*****************************************************************************/
-inline
-StackedLayerModel *
-AbstractImageViewRenderer
-::GetLayerStack()
+inline StackedLayerModel* AbstractImageViewRenderer::GetLayerStack()
 {
   return m_StackedLayerModel;
 }
 
 /*****************************************************************************/
-inline
-const StackedLayerModel *
-AbstractImageViewRenderer
-::GetLayerStack() const
+inline const StackedLayerModel* AbstractImageViewRenderer::GetLayerStack() const
 {
   return m_StackedLayerModel;
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::SetLayerStack( StackedLayerModel * stackedLayerModel )
+inline void AbstractImageViewRenderer::SetLayerStack(StackedLayerModel* stackedLayerModel)
 {
   virtual_PrepareScene();
 
@@ -415,19 +376,13 @@ AbstractImageViewRenderer
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::IsBypassRenderingEnabled() const
+inline bool AbstractImageViewRenderer::IsBypassRenderingEnabled() const
 {
   return m_BypassRenderingEnabled;
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::SetBypassRenderingEnabled( bool isEnabled )
+inline bool AbstractImageViewRenderer::SetBypassRenderingEnabled(bool isEnabled)
 {
   bool bypass = m_BypassRenderingEnabled;
 
@@ -437,19 +392,13 @@ AbstractImageViewRenderer
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::IsGLSLEnabled() const
+inline bool AbstractImageViewRenderer::IsGLSLEnabled() const
 {
   return m_GLSLEnabled;
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::SetGLSLEnabled( bool isEnabled )
+inline bool AbstractImageViewRenderer::SetGLSLEnabled(bool isEnabled)
 {
   bool wasEnabled = m_GLSLEnabled;
 
@@ -459,19 +408,13 @@ AbstractImageViewRenderer
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::ClearScene( bool keepViewport )
+inline void AbstractImageViewRenderer::ClearScene(bool keepViewport)
 {
-  virtual_ClearScene( keepViewport );
+  virtual_ClearScene(keepViewport);
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::UpdateScene()
+inline void AbstractImageViewRenderer::UpdateScene()
 {
   virtual_PrepareScene();
 
@@ -481,55 +424,33 @@ AbstractImageViewRenderer
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageViewRenderer
-::RefreshScene()
+inline void AbstractImageViewRenderer::RefreshScene()
 {
   virtual_RefreshScene();
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::ZoomToExtent( PointType & center, SpacingType & spacing ) const
+inline bool AbstractImageViewRenderer::ZoomToExtent(PointType& center, SpacingType& spacing) const
 {
-  return virtual_ZoomToExtent( center, spacing );
+  return virtual_ZoomToExtent(center, spacing);
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::ZoomToLayer( const StackedLayerModel::KeyType & key,
-	       PointType & center,
-	       SpacingType & spacing) const
+inline bool AbstractImageViewRenderer::ZoomToLayer(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const
 {
-  return virtual_ZoomToLayer( key, center, spacing );
+  return virtual_ZoomToLayer(key, center, spacing);
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::ZoomToRegion( const PointType & origin,
-		const PointType & extent,
-		PointType & center,
-		SpacingType & spacing ) const
+inline bool AbstractImageViewRenderer::ZoomToRegion(const PointType& origin, const PointType& extent, PointType& center, SpacingType& spacing) const
 {
-  return virtual_ZoomToRegion( origin, extent, center, spacing );
+  return virtual_ZoomToRegion(origin, extent, center, spacing);
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::ZoomToFull( const StackedLayerModel::KeyType & key,
-	      PointType & center,
-	      SpacingType & spacing ) const
+inline bool AbstractImageViewRenderer::ZoomToFull(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const
 {
-  return virtual_ZoomToFull( key, center, spacing );
+  return virtual_ZoomToFull(key, center, spacing);
 }
 
 } // end namespace 'mvd'

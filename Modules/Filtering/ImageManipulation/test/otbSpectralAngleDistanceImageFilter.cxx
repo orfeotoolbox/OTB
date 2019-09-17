@@ -25,14 +25,14 @@
 #include "otbImageFileWriter.h"
 #include "otbSpectralAngleDistanceImageFilter.h"
 
-int otbSpectralAngleDistanceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbSpectralAngleDistanceImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                                 PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                                 InputImageType;
-  typedef otb::Image<PixelType, Dimension>                                       OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                   ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                  WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::Image<PixelType, Dimension>       OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::SpectralAngleDistanceImageFilter<InputImageType, OutputImageType> DistanceFilterType;
 
   // Instantiating object
@@ -48,9 +48,9 @@ int otbSpectralAngleDistanceImageFilter(int itkNotUsed(argc), char * argv[])
   reader->UpdateOutputInformation();
   refPixel.SetSize(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   for (unsigned int i = 0; i < reader->GetOutput()->GetNumberOfComponentsPerPixel(); ++i)
-    {
+  {
     refPixel[i] = atoi(argv[3 + i]);
-    }
+  }
   filter->SetInput(reader->GetOutput());
   filter->SetReferencePixel(refPixel);
 

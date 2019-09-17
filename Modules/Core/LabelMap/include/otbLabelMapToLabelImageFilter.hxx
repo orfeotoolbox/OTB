@@ -27,21 +27,19 @@
 #include "itkProgressReporter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage, class TOutputImage>
-LabelMapToLabelImageFilter<TInputImage, TOutputImage>
-::LabelMapToLabelImageFilter()
+LabelMapToLabelImageFilter<TInputImage, TOutputImage>::LabelMapToLabelImageFilter()
 {
 }
 
-template<class TInputImage, class TOutputImage>
-void
-LabelMapToLabelImageFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion()
+template <class TInputImage, class TOutputImage>
+void LabelMapToLabelImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }
 
-}// end namespace otb
+} // end namespace otb
 #endif

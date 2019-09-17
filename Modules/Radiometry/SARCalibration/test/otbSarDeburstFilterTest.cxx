@@ -28,16 +28,16 @@ typedef otb::ImageFileReader<ImageType>       ReaderType;
 typedef otb::ImageFileWriter<ImageType>       WriterType;
 typedef otb::SarDeburstImageFilter<ImageType> DeburstFilterType;
 
-int otbSarDeburstFilterTest(int argc, char * argv[])
+int otbSarDeburstFilterTest(int argc, char* argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   bool onlyValidSamples = false;
   if (argc == 4)
-    {
-      onlyValidSamples = true;
-    }
+  {
+    onlyValidSamples = true;
+  }
 
   DeburstFilterType::Pointer filter = DeburstFilterType::New();
   filter->SetInput(reader->GetOutput());
@@ -55,15 +55,14 @@ int otbSarDeburstFilterTest(int argc, char * argv[])
 
   unsigned int nb_bursts = atoi(reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number").c_str());
 
-  if(nb_bursts != 1)
-    {
-    std::cerr<<"Error: more than 1 burst ("<<nb_bursts<<" bursts) found in output metadata."<<std::endl;
-    }
+  if (nb_bursts != 1)
+  {
+    std::cerr << "Error: more than 1 burst (" << nb_bursts << " bursts) found in output metadata." << std::endl;
+  }
   else
-    {
-    std::cout<<"Metadata have a single burst as expected."<<std::endl;
-    }
+  {
+    std::cout << "Metadata have a single burst as expected." << std::endl;
+  }
 
   return EXIT_SUCCESS;
 }
-

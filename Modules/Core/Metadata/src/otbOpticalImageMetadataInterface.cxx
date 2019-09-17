@@ -27,69 +27,63 @@
 namespace otb
 {
 
-OpticalImageMetadataInterface
-::OpticalImageMetadataInterface()
+OpticalImageMetadataInterface::OpticalImageMetadataInterface()
 {
 }
 
-double
-OpticalImageMetadataInterface::GetSunElevation() const
+double OpticalImageMetadataInterface::GetSunElevation() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  ImageKeywordlistType imageKeywordlist;
+  ImageKeywordlistType          imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
+  {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
+  }
 
   if (imageKeywordlist.HasKey("support_data.elevation_angle"))
-    {
+  {
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.elevation_angle");
-    double value = atof(valueString.c_str());
+    double      value       = atof(valueString.c_str());
     return value;
-    }
+  }
 
   return 0;
 }
 
-double
-OpticalImageMetadataInterface::GetSunAzimuth() const
+double OpticalImageMetadataInterface::GetSunAzimuth() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  ImageKeywordlistType imageKeywordlist;
+  ImageKeywordlistType          imageKeywordlist;
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
+  {
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-    }
+  }
 
   if (imageKeywordlist.HasKey("support_data.azimuth_angle"))
-    {
+  {
     std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.azimuth_angle");
-    double value = atof(valueString.c_str());
+    double      value       = atof(valueString.c_str());
     return value;
-    }
+  }
 
   return 0;
 }
 
 
-unsigned int
-OpticalImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
+unsigned int OpticalImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
 {
   return i;
 }
 
 
-void
-OpticalImageMetadataInterface
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 
   if (this->CanRead())
-    {
+  {
     os << indent << "GetSunElevation:     " << this->GetSunElevation() << std::endl;
     os << indent << "GetSunAzimuth:       " << this->GetSunAzimuth() << std::endl;
     os << indent << "GetSatElevation:     " << this->GetSatElevation() << std::endl;
@@ -99,7 +93,7 @@ OpticalImageMetadataInterface
     os << indent << "GetSolarIrradiance:  " << this->GetSolarIrradiance() << std::endl;
     os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
     os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
-    }
+  }
 }
 
 

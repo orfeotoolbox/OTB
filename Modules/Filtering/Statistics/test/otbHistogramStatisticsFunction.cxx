@@ -19,16 +19,14 @@
  */
 
 
-
-
 #include "itkHistogram.h"
 #include "otbHistogramStatisticsFunction.h"
 
-int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
+int otbHistogramStatisticsFunction(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int NbOfBins((unsigned int) ::atoi(argv[1]));
+  unsigned int NbOfBins((unsigned int)::atoi(argv[1]));
 
-  typedef float                                          MeasurementType;
+  typedef float MeasurementType;
   typedef itk::Statistics::Histogram<MeasurementType, itk::Statistics::DenseFrequencyContainer2> HistogramType;
   HistogramType::Pointer histogram = HistogramType::New();
 
@@ -45,9 +43,9 @@ int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
 
   // create histogram with same value for each frequency
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
-    {
+  {
     iter.SetFrequency(1.0);
-    }
+  }
 
   typedef otb::HistogramStatisticsFunction<HistogramType, MeasurementType> HistogramStatisticsFunctionType;
   HistogramStatisticsFunctionType::Pointer HistogramStatisticsFunction = HistogramStatisticsFunctionType::New();
@@ -58,7 +56,7 @@ int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
   MeasurementType Mean;
   MeasurementType Covariance;
 
-  std::cout << "Update OK : " <<  std::endl;
+  std::cout << "Update OK : " << std::endl;
 
   std::cout << "Entropy 1 : " << HistogramStatisticsFunction->GetEntropy()[0] << std::endl;
 
@@ -66,41 +64,41 @@ int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
   std::cout << "Entropy 1 : " << Entropy << std::endl;
 
   if (std::abs(Entropy - std::log(static_cast<double>(NbOfBins))) > 0.00001)
-    {
+  {
     std::cout << "Error in entropy estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 1 : " << Mean << std::endl;
 
   if (Mean != NbOfBins / 2.)
-    {
+  {
     std::cout << "Error in mean estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 1 : " << Covariance << std::endl;
 
   if (Covariance != 0)
-    {
+  {
     std::cout << "Error in covariance estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // create histogram just all value equal to zero except the first one
   for (HistogramType::Iterator iter = histogram->Begin(); iter != histogram->End(); ++iter)
-    {
+  {
     if (iter == histogram->Begin())
-      {
+    {
       iter.SetFrequency(1.0);
-      }
-    else
-      {
-      iter.SetFrequency(0.0);
-      }
     }
+    else
+    {
+      iter.SetFrequency(0.0);
+    }
+  }
 
   HistogramStatisticsFunction->Compute();
 
@@ -108,28 +106,28 @@ int otbHistogramStatisticsFunction(int itkNotUsed(argc), char * argv[])
   std::cout << "Entropy 2 : " << Entropy << std::endl;
 
   if (Entropy != 0.0)
-    {
+  {
     std::cout << "Error in entropy estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   Mean = HistogramStatisticsFunction->GetMean()[0];
   std::cout << "Mean 2 : " << Mean << std::endl;
 
   if (Mean != 0.5)
-    {
+  {
     std::cout << "Error in mean estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   Covariance = HistogramStatisticsFunction->GetCovariance()[0];
   std::cout << "Covariance 2 : " << Covariance << std::endl;
 
   if (Covariance != 0)
-    {
+  {
     std::cout << "Error in covariance estimation" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

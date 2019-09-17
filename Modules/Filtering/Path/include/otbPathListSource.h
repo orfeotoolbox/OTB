@@ -42,14 +42,14 @@ namespace otb
  */
 
 template <class TOutputPath>
-class ITK_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath> >
+class ITK_EXPORT PathListSource : public ObjectListSource<ObjectList<TOutputPath>>
 {
 public:
   /** Standard class typedefs. */
-  typedef PathListSource                             Self;
-  typedef ObjectListSource<ObjectList<TOutputPath> > Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef PathListSource                            Self;
+  typedef ObjectListSource<ObjectList<TOutputPath>> Superclass;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,7 +58,7 @@ public:
   itkTypeMacro(PathListSource, ObjectListSource);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer DataObjectPointer;
+  typedef itk::DataObject::Pointer                           DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   typedef TOutputPath                               OutputPathType;
@@ -107,8 +107,8 @@ public:
    * Region, which can be set using ImageBase::SetRequestedRegion().
    * By default, the largest possible region is requested.
    */
-//   OutputPathListType * GetOutput(void);
-//   OutputPathListType * GetOutput(DataObjectPointerArraySizeType idx);
+  //   OutputPathListType * GetOutput(void);
+  //   OutputPathListType * GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's path
@@ -145,7 +145,7 @@ public:
    * filter's pipeline mechanism must be consistent with what the
    * mini-pipeline will do). */
   // just calls GraftNthOutput()
-//   virtual void GraftOutput(OutputPathListType *output);
+  //   virtual void GraftOutput(OutputPathListType *output);
 
   /** Graft the specified data object onto this ProcessObject's idx'th
    * output. This is the similar to GraftOutput method except is
@@ -153,7 +153,7 @@ public:
    * must be a valid output number (less than
    * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-//   virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, OutputPathListType *output);
+  //   virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, OutputPathListType *output);
 
   /** Make a DataObject of the correct type to used as the specified
    * output.  Every ProcessObject subclass must be able to create a
@@ -168,16 +168,18 @@ public:
    * SmartPointer to a DataObject. If a subclass of ImageSource has
    * multiple outputs of different types, then that class must provide
    * an implementation of MakeOutput(). */
-//   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
+  //   virtual DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx);
 
 protected:
-  PathListSource() {};
-  ~PathListSource() override {}
-//   void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  PathListSource(){};
+  ~PathListSource() override
+  {
+  }
+  //   void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PathListSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PathListSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

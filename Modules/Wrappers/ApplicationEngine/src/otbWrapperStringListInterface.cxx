@@ -29,73 +29,56 @@ namespace otb
 namespace Wrapper
 {
 
-const std::string
-NULL_STRING;
+const std::string NULL_STRING;
 
 
 /*****************************************************************************/
-void
-StringListInterface
-::AddNullElement()
+void StringListInterface::AddNullElement()
 {
   InsertNullElement();
 }
 
 
 /*****************************************************************************/
-Role
-StringListInterface
-::GetDirection( std::size_t ) const
+Role StringListInterface::GetDirection(std::size_t) const
 {
   return GetDirection();
 }
 
 
 /*****************************************************************************/
-const std::string &
-StringListInterface
-::GetFilenameFilter( std::size_t ) const
+const std::string& StringListInterface::GetFilenameFilter(std::size_t) const
 {
   return GetFilenameFilter();
 }
 
 
 /*****************************************************************************/
-const std::string &
-StringListInterface
-::GetFilenameFilter() const
+const std::string& StringListInterface::GetFilenameFilter() const
 {
   return NULL_STRING;
 }
 
 /*****************************************************************************/
-bool
-StringListInterface
-::IsFilename() const
+bool StringListInterface::IsFilename() const
 {
   return true;
 }
 
 /*****************************************************************************/
-void
-StringListInterface
-::Erase( std::size_t id )
+void StringListInterface::Erase(std::size_t id)
 {
-  Erase( id, 1 );
+  Erase(id, 1);
 }
 
 /*****************************************************************************/
-std::size_t
-StringListInterface
-::SetStrings( const StringVector & )
+std::size_t StringListInterface::SetStrings(const StringVector&)
 {
   return 0;
 }
 
 /*****************************************************************************/
-std::size_t
-StringListInterface
-::GetStrings( StringVector & ) const
+std::size_t StringListInterface::GetStrings(StringVector&) const
 {
   return 0;
 }

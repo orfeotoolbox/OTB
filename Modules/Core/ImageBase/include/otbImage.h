@@ -37,41 +37,41 @@ namespace otb
 {
 namespace internal
 {
-  template < class ImageType >
-  typename ImageType::SpacingType GetSignedSpacing( const ImageType * input)
+template <class ImageType>
+typename ImageType::SpacingType GetSignedSpacing(const ImageType* input)
+{
+  typename ImageType::SpacingType   spacing   = input->GetSpacing();
+  typename ImageType::DirectionType direction = input->GetDirection();
+  for (unsigned int i = 0; i < ImageType::ImageDimension; i++)
   {
-    typename ImageType::SpacingType spacing = input->GetSpacing();
-    typename ImageType::DirectionType direction = input->GetDirection();
-    for ( unsigned int i = 0 ; i < ImageType::ImageDimension ; i++ )
-      {
-      spacing[i] *= direction[i][i] ;
-      }
-    return spacing;
+    spacing[i] *= direction[i][i];
   }
+  return spacing;
+}
 
-  template < class InputImage , typename SpacingType >
-  void SetSignedSpacing( InputImage *input , SpacingType spacing )
+template <class InputImage, typename SpacingType>
+void SetSignedSpacing(InputImage* input, SpacingType spacing)
+{
+  // TODO check for spacing size ==> error
+  typename InputImage::DirectionType direction = input->GetDirection();
+  for (unsigned int i = 0; i < InputImage::ImageDimension; i++)
   {
-    // TODO check for spacing size ==> error
-    typename InputImage::DirectionType direction = input->GetDirection();
-    for ( unsigned int i = 0 ; i < InputImage::ImageDimension ; i++ )
+    // TODO check if spacing[i] = 0 ==> error
+    if (spacing[i] < 0)
+    {
+      if (direction[i][i] > 0)
       {
-      // TODO check if spacing[i] = 0 ==> error
-      if ( spacing[ i ] < 0 )
+        for (unsigned int j = 0; j < InputImage::ImageDimension; j++)
         {
-        if ( direction[i][i] > 0 )
-          {
-          for ( unsigned int j = 0 ; j < InputImage::ImageDimension ; j++ )
-            {
-            direction[j][i] = - direction[j][i];
-            }
-          }
-        spacing[i] = -spacing[i];
+          direction[j][i] = -direction[j][i];
         }
       }
-    input->SetDirection( direction );
-    input->SetSpacing( spacing );
+      spacing[i] = -spacing[i];
+    }
   }
+  input->SetDirection(direction);
+  input->SetSpacing(spacing);
+}
 }
 }
 
@@ -86,15 +86,15 @@ namespace otb
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>
-class OTBImageBase_EXPORT_TEMPLATE  Image : public itk::Image<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE Image : public itk::Image<TPixel, VImageDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef Image                               Self;
+  typedef Image Self;
   typedef itk::Image<TPixel, VImageDimension> Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
-  typedef itk::WeakPointer<const Self>        ConstWeakPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
   typedef ImageMetadataInterfaceBase::VectorType           VectorType;
   typedef ImageMetadataInterfaceBase::ImageKeywordlistType ImageKeywordlistType;
@@ -123,12 +123,11 @@ public:
 
   /** Accessor type that convert data between internal and external
    *  representations.  */
-  //typedef itk::DefaultPixelAccessor< PixelType > AccessorType;
-  //typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
+  // typedef itk::DefaultPixelAccessor< PixelType > AccessorType;
+  // typedef itk::DefaultPixelAccessorFunctor< Self > AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::NeighborhoodAccessorFunctor<Self>
-  NeighborhoodAccessorFunctorType;
+  typedef itk::NeighborhoodAccessorFunctor<Self> NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type
@@ -170,16 +169,16 @@ public:
   typedef typename Superclass::OffsetValueType OffsetValueType;
 
   /** Return the Pixel Accessor object */
-//   AccessorType GetPixelAccessor( void )
-//   {
-//     return AccessorType();
-//   }
+  //   AccessorType GetPixelAccessor( void )
+  //   {
+  //     return AccessorType();
+  //   }
 
-//   /** Return the Pixel Accesor object */
-//   const AccessorType GetPixelAccessor( void ) const
-//   {
-//     return AccessorType();
-//   }
+  //   /** Return the Pixel Accesor object */
+  //   const AccessorType GetPixelAccessor( void ) const
+  //   {
+  //     return AccessorType();
+  //   }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
@@ -230,8 +229,8 @@ public:
   //   };
 
   /** Set signed spacing */
-  virtual void SetSignedSpacing( SpacingType spacing );
-  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+  virtual void SetSignedSpacing(SpacingType spacing);
+  virtual void SetSignedSpacing(double spacing[VImageDimension]);
 
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;
@@ -248,25 +247,26 @@ public:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-/// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) override;
+  /// Copy metadata from a DataObject
+  void CopyInformation(const itk::DataObject*) override;
 
 protected:
   Image();
-  ~Image() override {}
+  ~Image() override
+  {
+  }
 
 private:
-  Image(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  Image(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-    /** Return the ImageMetadataInterfacePointer associated to the data
-   *  and creates it on first call
-   */
+  /** Return the ImageMetadataInterfacePointer associated to the data
+ *  and creates it on first call
+ */
   ImageMetadataInterfacePointerType GetMetaDataInterface() const;
 
   // The image metadata accessor object. Don't use it directly. Instead use GetMetaDataInterface()
   mutable ImageMetadataInterfacePointerType m_ImageMetadataInterface;
-
 };
 
 } // end namespace otb
@@ -277,7 +277,8 @@ private:
 
 #include <complex>
 
-namespace otb {
+namespace otb
+{
 
 // Prevent implicit instanciation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
@@ -289,11 +290,10 @@ extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned short, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<short, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<float, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<double, 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<int> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<short> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<float> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double> , 2>;
-
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<int>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<short>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<float>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE Image<std::complex<double>, 2>;
 }
 
 #endif

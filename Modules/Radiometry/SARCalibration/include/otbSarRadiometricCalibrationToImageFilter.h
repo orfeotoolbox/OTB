@@ -59,17 +59,15 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SarRadiometricCalibrationToImageFilter :
-  public FunctionToImageFilter<TInputImage, TOutputImage,
-                 SarRadiometricCalibrationFunction<TInputImage> >
+class ITK_EXPORT SarRadiometricCalibrationToImageFilter
+    : public FunctionToImageFilter<TInputImage, TOutputImage, SarRadiometricCalibrationFunction<TInputImage>>
 {
 public:
   /** Standard class typedefs. */
-  typedef SarRadiometricCalibrationToImageFilter                      Self;
-  typedef FunctionToImageFilter<TInputImage, TOutputImage,
-                     SarRadiometricCalibrationFunction<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>                                     Pointer;
-  typedef itk::SmartPointer<const Self>                               ConstPointer;
+  typedef SarRadiometricCalibrationToImageFilter Self;
+  typedef FunctionToImageFilter<TInputImage, TOutputImage, SarRadiometricCalibrationFunction<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -79,14 +77,14 @@ public:
 
   /** Some typedefs. */
   /** Image size typedef. */
-  typedef typename Superclass::InputImageType           InputImageType;
-  typedef typename Superclass::InputImagePointer        InputImagePointer;
-  typedef typename Superclass::InputImageRegionType     InputImageRegionType;
-  typedef typename Superclass::InputImagePixelType      InputImagePixelType;
-  typedef typename Superclass::OutputImageType          OutputImageType;
-  typedef typename Superclass::OutputImagePointer       OutputImagePointer;
-  typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
-  typedef typename Superclass::OutputImagePixelType     OutputImagePixelType;
+  typedef typename Superclass::InputImageType        InputImageType;
+  typedef typename Superclass::InputImagePointer     InputImagePointer;
+  typedef typename Superclass::InputImageRegionType  InputImageRegionType;
+  typedef typename Superclass::InputImagePixelType   InputImagePixelType;
+  typedef typename Superclass::OutputImageType       OutputImageType;
+  typedef typename Superclass::OutputImagePointer    OutputImagePointer;
+  typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
+  typedef typename Superclass::OutputImagePixelType  OutputImagePixelType;
   /** Type of function. */
 
   typedef typename Superclass::FunctionType                     FunctionType;
@@ -112,7 +110,9 @@ protected:
   SarRadiometricCalibrationToImageFilter();
 
   /** Empty, default virtual dtor */
-  ~SarRadiometricCalibrationToImageFilter() override {}
+  ~SarRadiometricCalibrationToImageFilter() override
+  {
+  }
 
   /** Generate output information */
   void GenerateOutputInformation() override;
@@ -121,13 +121,11 @@ protected:
   void BeforeThreadedGenerateData() override;
 
 private:
-
-  SarRadiometricCalibrationToImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SarRadiometricCalibrationToImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 
   short m_LookupSelected;
-
 };
 
 } // end namespace otb

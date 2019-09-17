@@ -43,8 +43,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT DocExampleStructure :
-  public itk::Object
+class OTBApplicationEngine_EXPORT DocExampleStructure : public itk::Object
 {
 public:
   /** Standard class typedefs */
@@ -60,7 +59,7 @@ public:
   itkTypeMacro(DocExampleStructure, itk::Object);
 
   typedef std::pair<std::string, std::string> ParameterType;
-  typedef std::vector<ParameterType> ParametersVectorType;
+  typedef std::vector<ParameterType>        ParametersVectorType;
   typedef std::vector<ParametersVectorType> ParametersVectorOfVectorType;
 
   /** Get the number of examples */
@@ -68,7 +67,7 @@ public:
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
-  void AddParameter( const std::string key, const std::string name, unsigned int exId = 0);
+  void AddParameter(const std::string key, const std::string name, unsigned int exId = 0);
 
   /** Get the parameter list. */
   ParametersVectorOfVectorType GetParameterList();
@@ -77,13 +76,13 @@ public:
   unsigned int GetNumberOfParameters(unsigned int exId = 0);
 
   /** Get a specific parameter couple key.*/
-  std::string GetParameterKey( unsigned int i, unsigned int exId = 0 );
+  std::string GetParameterKey(unsigned int i, unsigned int exId = 0);
 
   /** Get a specific parameter couple value as string.*/
-  std::string GetParameterValue( unsigned int i, unsigned int exId=0 );
+  std::string GetParameterValue(unsigned int i, unsigned int exId = 0);
 
   /** Set Application name. */
-  void SetApplicationName( const std::string name );
+  void SetApplicationName(const std::string name);
 
   /** Get Application name. */
   std::string GetApplicationName();
@@ -92,24 +91,24 @@ public:
   std::vector<std::string> GetExampleCommentList();
 
   /** Get one example comment */
-  std::string GetExampleComment( unsigned int i);
+  std::string GetExampleComment(unsigned int i);
 
   /** Set one example comment */
-  void SetExampleComment( const std::string & comm, unsigned int i);
+  void SetExampleComment(const std::string& comm, unsigned int i);
 
   /** Add an example using comment. Return the index of the new example.*/
-  unsigned int  AddExample( const std::string & comm = "");
+  unsigned int AddExample(const std::string& comm = "");
 
   /** Generation of the documentation for CommandLine for one specific
   * example. */
-  std::string GenerateCLExample( unsigned int exId );
+  std::string GenerateCLExample(unsigned int exId);
 
- /** Generation of the documentation for CommandLine. */
+  /** Generation of the documentation for CommandLine. */
   std::string GenerateCLExample();
 
   /** Generation of the documentation for Qt for one specific
   * example. */
-  std::string GenerateHtmlExample( unsigned int exId );
+  std::string GenerateHtmlExample(unsigned int exId);
 
   /** Generation of the documentation for Qt. */
   std::string GenerateHtmlExample();
@@ -121,8 +120,8 @@ protected:
   ~DocExampleStructure() override;
 
 private:
-  DocExampleStructure(const DocExampleStructure &) = delete;
-  void operator =(const DocExampleStructure&) = delete;
+  DocExampleStructure(const DocExampleStructure&) = delete;
+  void operator=(const DocExampleStructure&) = delete;
 
   /** List of the application parameters. List of key/name/value couples. */
   ParametersVectorOfVectorType m_ParameterList;

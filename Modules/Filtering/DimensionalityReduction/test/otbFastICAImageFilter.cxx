@@ -26,69 +26,69 @@
 #include "otbFastICAImageFilter.h"
 
 
-int otbFastICAImageFilterTest ( int , char* argv[] )
+int otbFastICAImageFilterTest(int, char* argv[])
 {
 
-  std::string inputImageName = argv[1];
-  std::string outputImageName = argv[2];
+  std::string inputImageName     = argv[1];
+  std::string outputImageName    = argv[2];
   std::string outputInvImageName = argv[3];
 
-  const unsigned int nbComponents =  3;
-  const unsigned int nbIterations =  20;
-  const double mu = 1.;
+  const unsigned int nbComponents = 3;
+  const unsigned int nbIterations = 20;
+  const double       mu           = 1.;
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(inputImageName);
 
   // Image filtering
-  typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::FastICAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( reader->GetOutput() );
-  filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
-  filter->SetNumberOfIterations( nbIterations );
-  filter->SetMu( mu );
+  filter->SetInput(reader->GetOutput());
+  filter->SetNumberOfPrincipalComponentsRequired(nbComponents);
+  filter->SetNumberOfIterations(nbIterations);
+  filter->SetMu(mu);
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
   std::cerr << "Decomposition\n";
 
   // Writing
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( outputImageName );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+  ImageWriterType::Pointer                writer = ImageWriterType::New();
+  writer->SetFileName(outputImageName);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   // std::cerr << filter << "\n";
 
-  if ( true )
+  if (true)
   {
-    typedef otb::FastICAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
+    typedef otb::FastICAImageFilter<ImageType, ImageType, otb::Transform::INVERSE> InvFilterType;
     InvFilterType::Pointer invFilter = InvFilterType::New();
-    invFilter->SetInput( filter->GetOutput() );
-    invFilter->SetMeanValues( filter->GetMeanValues() );
-    invFilter->SetStdDevValues( filter->GetStdDevValues() );
-    invFilter->SetPCATransformationMatrix( filter->GetPCATransformationMatrix() );
-    invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
+    invFilter->SetInput(filter->GetOutput());
+    invFilter->SetMeanValues(filter->GetMeanValues());
+    invFilter->SetStdDevValues(filter->GetStdDevValues());
+    invFilter->SetPCATransformationMatrix(filter->GetPCATransformationMatrix());
+    invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
 
-    typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
-    CommandType2::Pointer invObserver = CommandType2::New();
-    invFilter->AddObserver( itk::ProgressEvent(), invObserver );
+    typedef otb::CommandProgressUpdate<InvFilterType> CommandType2;
+    CommandType2::Pointer                             invObserver = CommandType2::New();
+    invFilter->AddObserver(itk::ProgressEvent(), invObserver);
 
     std::cerr << "Reconstruction\n";
 
     ImageWriterType::Pointer invWriter = ImageWriterType::New();
     invWriter->SetFileName(outputInvImageName);
-    invWriter->SetInput( invFilter->GetOutput() );
+    invWriter->SetInput(invFilter->GetOutput());
     invWriter->Update();
   }
 

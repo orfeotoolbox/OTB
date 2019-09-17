@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperApplicationRegistry.h"
@@ -32,8 +32,8 @@ int otbWrapperApplicationRegistry(int itkNotUsed(argc), char* itkNotUsed(argv)[]
   std::cout << "Available applications :" << std::endl;
   std::vector<std::string>::const_iterator it;
   for (it = list.begin(); it != list.end(); ++it)
-    {
+  {
     std::cout << *it << std::endl;
-    }
+  }
   return EXIT_SUCCESS;
 }

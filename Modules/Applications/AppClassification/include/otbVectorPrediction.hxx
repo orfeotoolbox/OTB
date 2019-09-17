@@ -49,18 +49,18 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
   {
     auto shapefileName = GetParameterString("in");
 
-    auto ogrDS = otb::ogr::DataSource::New(shapefileName, otb::ogr::DataSource::Modes::Read);
-    auto layer     = ogrDS->GetLayer(0);
+    auto            ogrDS     = otb::ogr::DataSource::New(shapefileName, otb::ogr::DataSource::Modes::Read);
+    auto            layer     = ogrDS->GetLayer(0);
     OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
-  
+
     ClearChoices("feat");
 
     for (int iField = 0; iField < layerDefn.GetFieldCount(); iField++)
     {
-      auto fieldDefn = layerDefn.GetFieldDefn(iField);
-      std::string item = fieldDefn->GetNameRef();
+      auto        fieldDefn = layerDefn.GetFieldDefn(iField);
+      std::string item      = fieldDefn->GetNameRef();
       std::string key(item);
-      key.erase(std::remove_if(key.begin(), key.end(), [](char c){return !std::isalnum(c);}), key.end());
+      key.erase(std::remove_if(key.begin(), key.end(), [](char c) { return !std::isalnum(c); }), key.end());
       std::transform(key.begin(), key.end(), key.begin(), tolower);
       auto fieldType = fieldDefn->GetType();
       if (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
@@ -72,10 +72,8 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
   }
 }
 
-template <bool RegressionMode>
-typename VectorPrediction<RegressionMode>::ListSampleType::Pointer 
-VectorPrediction<RegressionMode>
-::ReadInputListSample(otb::ogr::Layer const& layer)
+template <bool                                                     RegressionMode>
+typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::ReadInputListSample(otb::ogr::Layer const& layer)
 {
   typename ListSampleType::Pointer input = ListSampleType::New();
 
@@ -90,7 +88,7 @@ VectorPrediction<RegressionMode>
       // Beware that itemIndex differs from ogr layer field index
       unsigned int itemIndex = GetSelectedItems("feat")[idx];
       std::string  fieldName = GetChoiceNames("feat")[itemIndex];
-      
+
       auto field = feature[fieldName];
       switch (field.GetType())
       {
@@ -110,13 +108,11 @@ VectorPrediction<RegressionMode>
   return input;
 }
 
-template <bool RegressionMode>
-typename VectorPrediction<RegressionMode>::ListSampleType::Pointer 
-VectorPrediction<RegressionMode>
-::NormalizeListSample(ListSampleType::Pointer input)
+template <bool                                                     RegressionMode>
+typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::NormalizeListSample(ListSampleType::Pointer input)
 {
   const int nbFeatures = GetSelectedItems("feat").size();
-  
+
   // Statistics for shift/scale
   MeasurementType meanMeasurementVector;
   MeasurementType stddevMeasurementVector;
@@ -145,18 +141,17 @@ VectorPrediction<RegressionMode>
   otbAppLogINFO("standard deviation used: " << stddevMeasurementVector);
 
   otbAppLogINFO("Loading model");
-  
+
   return trainingShiftScaleFilter->GetOutput();
 }
 
 
-template <bool RegressionMode>
-otb::ogr::DataSource::Pointer 
-VectorPrediction<RegressionMode>
-::CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer & layer, bool updateMode)
+template <bool                RegressionMode>
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer,
+                                                                                       bool updateMode)
 {
   ogr::DataSource::Pointer output;
-  ogr::DataSource::Pointer buffer     = ogr::DataSource::New();
+  ogr::DataSource::Pointer buffer = ogr::DataSource::New();
   if (updateMode)
   {
     // Update mode
@@ -188,9 +183,7 @@ VectorPrediction<RegressionMode>
 
 
 template <bool RegressionMode>
-void
-VectorPrediction<RegressionMode>
-::AddPredictionField(otb::ogr::Layer & outLayer, otb::ogr::Layer const& layer, bool computeConfidenceMap)
+void VectorPrediction<RegressionMode>::AddPredictionField(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, bool computeConfidenceMap)
 {
   OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
 
@@ -230,10 +223,8 @@ VectorPrediction<RegressionMode>
 }
 
 template <bool RegressionMode>
-void
-VectorPrediction<RegressionMode>
-::FillOutputLayer(otb::ogr::Layer & outLayer, otb::ogr::Layer const& layer, typename LabelListSampleType::Pointer target, 
-                   typename ConfidenceListSampleType::Pointer quality, bool updateMode, bool computeConfidenceMap)
+void VectorPrediction<RegressionMode>::FillOutputLayer(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, typename LabelListSampleType::Pointer target,
+                                                       typename ConfidenceListSampleType::Pointer quality, bool updateMode, bool computeConfidenceMap)
 {
   unsigned int count          = 0;
   std::string  classfieldname = GetParameterString("cfield");
@@ -273,7 +264,7 @@ VectorPrediction<RegressionMode>
 }
 
 template <bool RegressionMode>
-void VectorPrediction<RegressionMode>::DoExecute()
+void           VectorPrediction<RegressionMode>::DoExecute()
 {
   m_Model = MachineLearningModelFactoryType::CreateMachineLearningModel(GetParameterString("model"), MachineLearningModelFactoryType::ReadMode);
 
@@ -293,16 +284,16 @@ void VectorPrediction<RegressionMode>::DoExecute()
   auto layer  = source->GetLayer(0);
 
   auto input = ReadInputListSample(layer);
-  
+
   ListSampleType::Pointer listSample = NormalizeListSample(input);
-  
+
   typename LabelListSampleType::Pointer target;
-  
-  // The quality listSample containing confidence values is defined here, but is only used when 
+
+  // The quality listSample containing confidence values is defined here, but is only used when
   // computeConfidenceMap evaluates to true. This listSample is also used in FillOutputLayer(...)
-  const bool computeConfidenceMap = shouldComputeConfidenceMap();
+  const bool                                 computeConfidenceMap = shouldComputeConfidenceMap();
   typename ConfidenceListSampleType::Pointer quality;
-  
+
   if (computeConfidenceMap)
   {
     quality = ConfidenceListSampleType::New();
@@ -312,10 +303,10 @@ void VectorPrediction<RegressionMode>::DoExecute()
   {
     target = m_Model->PredictBatch(listSample);
   }
-  
+
   const bool updateMode = !(IsParameterEnabled("out") && HasValue("out"));
 
-  auto output = CreateOutputDataSource(source, layer, updateMode);
+  auto            output   = CreateOutputDataSource(source, layer, updateMode);
   otb::ogr::Layer outLayer = output->GetLayer(0);
 
   OGRErr errStart = outLayer.ogr().StartTransaction();

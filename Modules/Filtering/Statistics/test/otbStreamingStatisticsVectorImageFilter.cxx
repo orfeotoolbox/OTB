@@ -26,20 +26,20 @@
 #include <fstream>
 #include "otbStreamingTraits.h"
 
-int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
+int otbStreamingStatisticsVectorImageFilter(int argc, char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
-  float userIgnoredValue = 0.;
-  if (argc>3)
-    {
+  const char* infname          = argv[1];
+  const char* outfname         = argv[2];
+  float       userIgnoredValue = 0.;
+  if (argc > 3)
+  {
     userIgnoredValue = atof(argv[3]);
-    }
+  }
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
-  typedef otb::VectorImage<PixelType, Dimension>               ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>                      ReaderType;
   typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
 
@@ -49,13 +49,13 @@ int otbStreamingStatisticsVectorImageFilter(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(10);
   filter->SetInput(reader->GetOutput());
-  if (argc>3)
-    {
+  if (argc > 3)
+  {
     filter->SetIgnoreUserDefinedValue(true);
     filter->SetUserIgnoredValue(userIgnoredValue);
-    }
+  }
   filter->Update();
 
   std::ofstream file;

@@ -36,8 +36,7 @@ namespace otb
  */
 
 template <class TImage>
-class ITK_EXPORT ImageList
-  : public ObjectList<TImage>
+class ITK_EXPORT ImageList : public ObjectList<TImage>
 {
 public:
   /** Standard typedefs */
@@ -64,17 +63,18 @@ public:
    * Update images in the list.
    */
   void UpdateOutputInformation(void) override;
-  void PropagateRequestedRegion(void)
-    throw (itk::InvalidRequestedRegionError) override;
+  void PropagateRequestedRegion(void) throw(itk::InvalidRequestedRegionError) override;
   void UpdateOutputData(void) override;
 
-  void SetRequestedRegion(const itk::DataObject * source) override;
-  
+  void SetRequestedRegion(const itk::DataObject* source) override;
+
 protected:
   /** Constructor */
-  ImageList() {};
+  ImageList(){};
   /** Destructor */
-  ~ImageList() override {}
+  ~ImageList() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -82,8 +82,8 @@ protected:
   }
 
 private:
-  ImageList(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageList(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 

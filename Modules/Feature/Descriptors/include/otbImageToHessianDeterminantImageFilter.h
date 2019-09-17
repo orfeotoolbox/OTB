@@ -47,25 +47,29 @@ template <class TInput, class TOutput>
 class HessianDeterminant
 {
 public:
-  HessianDeterminant() {}
-  virtual ~HessianDeterminant() {}
+  HessianDeterminant()
+  {
+  }
+  virtual ~HessianDeterminant()
+  {
+  }
 
   /*
    *
    * \param input : A symmetric Hessian Matrix
    * \return  Determinant of the Hessian Matrix
    */
-  inline TOutput operator ()(const TInput& input)
+  inline TOutput operator()(const TInput& input)
   {
     return static_cast<TOutput>(input[0] * input[1] - input[2] * input[2]);
   }
 
-  bool operator !=(const HessianDeterminant) const
+  bool operator!=(const HessianDeterminant) const
   {
     return false;
   }
 
-  bool operator ==(const HessianDeterminant& other) const
+  bool operator==(const HessianDeterminant& other) const
   {
     return !(*this != other);
   }
@@ -82,17 +86,15 @@ public:
  * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputImage, class TPrecision = double>
-class ITK_EXPORT ImageToHessianDeterminantImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ImageToHessianDeterminantImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef ImageToHessianDeterminantImageFilter               Self;
+  typedef ImageToHessianDeterminantImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -111,19 +113,16 @@ public:
   typedef typename OutputImageType::Pointer   OutputImagePointerType;
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-  typedef itk::FixedArray<TPrecision, 3>    VectorType;
-  typedef otb::Image<VectorType, 2>         VectorImageType;
+  typedef itk::FixedArray<TPrecision, 3> VectorType;
+  typedef otb::Image<VectorType, 2>      VectorImageType;
   typedef typename VectorImageType::Pointer VectorImagePointerType;
 
   /** Internal filters typedefs */
-  typedef itk::HessianRecursiveGaussianImageFilter
-  <InputImageType, VectorImageType>                          ImageToHessianImageFilterType;
-  typedef typename ImageToHessianImageFilterType::Pointer
-  ImageToHessianImageFilterPointerType;
-  typedef Functor::HessianDeterminant<VectorType, OutputPixelType>                               DeterminantFunctorType;
+  typedef itk::HessianRecursiveGaussianImageFilter<InputImageType, VectorImageType> ImageToHessianImageFilterType;
+  typedef typename ImageToHessianImageFilterType::Pointer ImageToHessianImageFilterPointerType;
+  typedef Functor::HessianDeterminant<VectorType, OutputPixelType> DeterminantFunctorType;
   typedef itk::UnaryFunctorImageFilter<VectorImageType, OutputImageType, DeterminantFunctorType> DeterminantFilterType;
-  typedef typename DeterminantFilterType::Pointer
-  DeterminantFilterPointerType;
+  typedef typename DeterminantFilterType::Pointer DeterminantFilterPointerType;
 
 protected:
   /**
@@ -141,10 +140,9 @@ protected:
   /**
    * Main computation method.
    */
-  void  GenerateData() override;
+  void GenerateData() override;
 
 private:
-
   /** Hessian filter */
   ImageToHessianImageFilterPointerType m_HessianFilter;
   /** Hessian Determinant Computation filter */

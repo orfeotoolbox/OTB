@@ -50,98 +50,97 @@ namespace otb
  */
 
 template <class TInputLabelMap, class TSimuStep1, class TSimuStep2, class TOutputImage>
-class ITK_EXPORT LabelMapToSimulatedImageFilter :
-  public itk::LabelMapFilter <TInputLabelMap, TOutputImage>
+class ITK_EXPORT LabelMapToSimulatedImageFilter : public itk::LabelMapFilter<TInputLabelMap, TOutputImage>
 
 {
 public:
-   /**
-   * Standard "Self" & Superclass typedef.
-   */
-   typedef LabelMapToSimulatedImageFilter                       Self;
-   typedef itk::LabelMapFilter <TInputLabelMap, TOutputImage>   Superclass;
-   typedef itk::SmartPointer<Self>                              Pointer;
-   typedef itk::SmartPointer<const Self>                        ConstPointer;
+  /**
+  * Standard "Self" & Superclass typedef.
+  */
+  typedef LabelMapToSimulatedImageFilter Self;
+  typedef itk::LabelMapFilter<TInputLabelMap, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /** Some convenient typedefs. */
-   typedef TInputLabelMap                              InputLabelMapType;
-   typedef typename InputLabelMapType::Pointer         InputLabelMapPointer;
-   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointer;
-   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
-   typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
+  /** Some convenient typedefs. */
+  typedef TInputLabelMap                              InputLabelMapType;
+  typedef typename InputLabelMapType::Pointer         InputLabelMapPointer;
+  typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointer;
+  typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
 
-   typedef typename LabelObjectType::AttributesValueType AttributesValueType;
+  typedef typename LabelObjectType::AttributesValueType AttributesValueType;
 
-   typedef TOutputImage                              OutputImageType;
-   typedef typename OutputImageType::ConstPointer    OutputImageConstPointer;
-   typedef typename OutputImageType::Pointer         OutputImagePointer;
-   typedef typename OutputImageType::IndexType       IndexType;
-   typedef typename OutputImageType::InternalPixelType InternalPixelType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::ConstPointer      OutputImageConstPointer;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::IndexType         IndexType;
+  typedef typename OutputImageType::InternalPixelType InternalPixelType;
 
-   typedef TSimuStep1                             SimulationStep1Type;
-   typedef typename SimulationStep1Type::Pointer  SimulationStep1Pointer;
-   typedef TSimuStep2                             SimulationStep2Type;
-   typedef typename SimulationStep2Type::Pointer  SimulationStep2Pointer;
+  typedef TSimuStep1                            SimulationStep1Type;
+  typedef typename SimulationStep1Type::Pointer SimulationStep1Pointer;
+  typedef TSimuStep2                            SimulationStep2Type;
+  typedef typename SimulationStep2Type::Pointer SimulationStep2Pointer;
 
-   //TODO: template ??
-   typedef LabelToProSailParameters<AttributesValueType>    LabelToParametersType;
-   typedef typename LabelToParametersType::Pointer          LabelToParametersPointer;
+  // TODO: template ??
+  typedef LabelToProSailParameters<AttributesValueType> LabelToParametersType;
+  typedef typename LabelToParametersType::Pointer       LabelToParametersPointer;
 
-   typedef SpectralResponse<double, double>                 SpectralResponseType;
-   typedef typename SpectralResponseType::Pointer           SpectralResponsePointer;
-   typedef SatelliteRSR<double, double>                     SatelliteRSRType;
-   typedef typename SatelliteRSRType::Pointer               SatelliteRSRPointer;
+  typedef SpectralResponse<double, double> SpectralResponseType;
+  typedef typename SpectralResponseType::Pointer SpectralResponsePointer;
+  typedef SatelliteRSR<double, double> SatelliteRSRType;
+  typedef typename SatelliteRSRType::Pointer SatelliteRSRPointer;
 
-   typedef ReduceSpectralResponse<SpectralResponseType, SatelliteRSRType> ReduceSpectralResponseType;
-   typedef typename ReduceSpectralResponseType::Pointer                   ReduceSpectralResponsePointer;
+  typedef ReduceSpectralResponse<SpectralResponseType, SatelliteRSRType> ReduceSpectralResponseType;
+  typedef typename ReduceSpectralResponseType::Pointer ReduceSpectralResponsePointer;
 
-   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-   typedef typename RandomGeneratorType::Pointer                  RandomGeneratorPointer;
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
+  typedef typename RandomGeneratorType::Pointer                  RandomGeneratorPointer;
 
 
-   /** Standard Macro*/
-   itkTypeMacro(LabelMapToSimulatedImageFilter, LabelMapFilter);
-   itkNewMacro(Self);
+  /** Standard Macro*/
+  itkTypeMacro(LabelMapToSimulatedImageFilter, LabelMapFilter);
+  itkNewMacro(Self);
 
-   itkSetMacro(NumberOfComponentsPerPixel, unsigned int);
-   itkGetMacro(NumberOfComponentsPerPixel, unsigned int);
+  itkSetMacro(NumberOfComponentsPerPixel, unsigned int);
+  itkGetMacro(NumberOfComponentsPerPixel, unsigned int);
 
-   itkSetMacro(SatRSRFilename, std::string);
-   itkGetMacro(SatRSRFilename, std::string);
+  itkSetMacro(SatRSRFilename, std::string);
+  itkGetMacro(SatRSRFilename, std::string);
 
-   itkSetMacro(PathRoot, std::string);
-   itkGetMacro(PathRoot, std::string);
+  itkSetMacro(PathRoot, std::string);
+  itkGetMacro(PathRoot, std::string);
 
-   itkSetMacro(Mean, double);
-   itkGetMacro(Mean, double);
+  itkSetMacro(Mean, double);
+  itkGetMacro(Mean, double);
 
-   itkSetMacro(Variance, double);
-   itkGetMacro(Variance, double);
+  itkSetMacro(Variance, double);
+  itkGetMacro(Variance, double);
 
 
 protected:
-   LabelMapToSimulatedImageFilter();
-   ~LabelMapToSimulatedImageFilter() override {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  LabelMapToSimulatedImageFilter();
+  ~LabelMapToSimulatedImageFilter() override
+  {
+  }
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void BeforeThreadedGenerateData() override;
-   void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
-   void GenerateOutputInformation() override;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
+  void GenerateOutputInformation() override;
 
 
 private:
-   LabelMapToSimulatedImageFilter(const Self &) = delete;
-   void operator =(const Self&) = delete;
+  LabelMapToSimulatedImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-   unsigned int m_NumberOfComponentsPerPixel;
-   std::string m_SatRSRFilename;
-   std::string m_PathRoot;
-   /** Mean value of gaussien noise for spectra simulation.*/
-   double m_Mean;
-   /** Variance of gaussien noise for spectra simulation.*/
-   double m_Variance;
-
-
+  unsigned int m_NumberOfComponentsPerPixel;
+  std::string  m_SatRSRFilename;
+  std::string  m_PathRoot;
+  /** Mean value of gaussien noise for spectra simulation.*/
+  double m_Mean;
+  /** Variance of gaussien noise for spectra simulation.*/
+  double m_Variance;
 };
 
 } // end namespace itk

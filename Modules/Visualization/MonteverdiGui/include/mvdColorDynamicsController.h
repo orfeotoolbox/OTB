@@ -75,8 +75,7 @@ class ColorDynamicsWidget;
  *
  * \brief Color-dynamics widget controller for VectorImageModel objects.
  */
-class OTBMonteverdiGUI_EXPORT ColorDynamicsController :
-    public AbstractModelController
+class OTBMonteverdiGUI_EXPORT ColorDynamicsController : public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,25 +84,24 @@ class OTBMonteverdiGUI_EXPORT ColorDynamicsController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  ColorDynamicsController( ColorDynamicsWidget* widget, QObject* p =NULL );
+  ColorDynamicsController(ColorDynamicsWidget* widget, QObject* p = NULL);
 
   /** \brief Destructor. */
   ~ColorDynamicsController() override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
-//
-// Slots.
+  //
+  // Slots.
 public slots:
   /**
    * \brief Slot called when the band-index of a RGB channel has
@@ -112,7 +110,7 @@ public slots:
    * \param channel The RGB channel for which the band-index has changed.
    * \param band The new band-index of the RGB channel.
    */
-  void OnRgbChannelIndexChanged( RgbwChannel channel, int band );
+  void OnRgbChannelIndexChanged(RgbwChannel channel, int band);
 
   /**
    * \brief Slot called when the band-index of the white (gray)
@@ -120,7 +118,7 @@ public slots:
    *
    * \param band The new band-index of the white (gray) channel.
    */
-  void OnGrayChannelIndexChanged( int band );
+  void OnGrayChannelIndexChanged(int band);
 
   /**
    * \brief Slot called when the activation-state of the
@@ -128,22 +126,22 @@ public slots:
    *
    * \param activated The new grayscale-mode activation state.
    */
-  void OnGrayscaleActivated( bool activated );
+  void OnGrayscaleActivated(bool activated);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    * \brief
    */
-  void LowIntensityChanged( RgbwChannel channel, double value, bool refresh );
+  void LowIntensityChanged(RgbwChannel channel, double value, bool refresh);
 
   /**
    * \brief
    */
-  void HighIntensityChanged( RgbwChannel channel, double value, bool refresh );
+  void HighIntensityChanged(RgbwChannel channel, double value, bool refresh);
 
   /**
    */
@@ -151,30 +149,27 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) override;
+  void Connect(AbstractModel*) override;
 
   void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) override;
+  void virtual_ResetWidget(bool) override;
 
-  void Disconnect( AbstractModel* ) override;
+  void Disconnect(AbstractModel*) override;
 
   /**
    * \brief Reset intensity ranges to default values for given RGB
@@ -183,7 +178,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIntensityRanges( RgbwChannel );
+  void ResetIntensityRanges(RgbwChannel);
 
   /**
    * \brief Reset low and high intensities to default values for given
@@ -192,7 +187,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIntensities( RgbwChannel );
+  void ResetIntensities(RgbwChannel);
 
   /**
    * \brief Set low and high intensitied of controlled widget based on
@@ -200,7 +195,7 @@ private:
    *
    * \param channels RGB/W channels for which to set low and hight intensities.
    */
-  void SetIntensities( RgbwChannel channels );
+  void SetIntensities(RgbwChannel channels);
 
   /**
    * \brief Reset low and high quantiles to default values for given
@@ -209,7 +204,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetQuantiles( RgbwChannel channels );
+  void ResetQuantiles(RgbwChannel channels);
 
   /**
    * \brief Restore low and high intensities from quantile values
@@ -217,7 +212,7 @@ private:
    *
    * \param channels Channels for which to reset intensities.
    */
-  void RestoreQuantiles( RgbwChannel channels );
+  void RestoreQuantiles(RgbwChannel channels);
 
   /**
    * \brief Convenience method used to compute integer indices in order
@@ -242,10 +237,7 @@ private:
    * \return true if iteration indices have been set and loop can be
    * processed.
    */
-  inline
-    static bool RgbwBounds( CountType& begin,
-			    CountType& end,
-			    RgbwChannel channels );
+  inline static bool RgbwBounds(CountType& begin, CountType& end, RgbwChannel channels);
 
   /**
    */
@@ -257,16 +249,15 @@ private:
 
   /**
    */
-  void SetBoundsEnabled( RgbwChannel, bool );
+  void SetBoundsEnabled(RgbwChannel, bool);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
@@ -280,7 +271,7 @@ private slots:
    * changed.
    * \param quantile The new quantile value.
    */
-  void OnLowQuantileChanged( RgbwChannel channel, double quantile );
+  void OnLowQuantileChanged(RgbwChannel channel, double quantile);
 
   /**
    * \brief Slot called when high quantile value of a RGB channel has
@@ -290,7 +281,7 @@ private slots:
    * changed.
    * \param quantile The new quantile value.
    */
-  void OnHighQuantileChanged( RgbwChannel channel, double quantile );
+  void OnHighQuantileChanged(RgbwChannel channel, double quantile);
 
   /**
    * \brief Slot called when low intensity value of a RGB channel has
@@ -300,7 +291,7 @@ private slots:
    * changed.
    * \param intensity The new intensity value.
    */
-  void OnLowIntensityChanged( RgbwChannel channel, double intensity );
+  void OnLowIntensityChanged(RgbwChannel channel, double intensity);
 
   /**
    * \brief Slot called when high intensity value of a RGB channel has
@@ -310,7 +301,7 @@ private slots:
    * changed.
    * \param intensity The new intensity value.
    */
-  void OnHighIntensityChanged( RgbwChannel channel, double intensity );
+  void OnHighIntensityChanged(RgbwChannel channel, double intensity);
 
   /**
    * \brief Slot called when the reset intensities button has been
@@ -319,7 +310,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * intensities.
    */
-  void OnResetIntensityClicked( RgbwChannel channel );
+  void OnResetIntensityClicked(RgbwChannel channel);
 
   /**
    * \brief Slot called when the reset quantiles button has been
@@ -328,7 +319,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * quantiles.
    */
-  void OnResetQuantileClicked( RgbwChannel channel );
+  void OnResetQuantileClicked(RgbwChannel channel);
 
   /**
    * \brief Slot called when the apply all button has been clicked.
@@ -336,7 +327,7 @@ private slots:
    * \param channel RGB channel for which to reset low and high
    * quantiles.
    */
-  void OnApplyAllClicked( RgbwChannel channel, double low, double high );
+  void OnApplyAllClicked(RgbwChannel channel, double low, double high);
 
   /**
    * \brief Slot called when the NoDataFlagToggled() signal of the
@@ -344,13 +335,13 @@ private slots:
    *
    * \param enabled true when the no-data flag is enabled.
    */
-  void OnNoDataFlagToggled( bool enabled );
+  void OnNoDataFlagToggled(bool enabled);
 
   /**
    * \brief Slot called when the NoDataValueChanged() signal of the
    * controlled widget has been emitted (\see ColorDynamicsWidget).
    */
-  void OnNoDataValueChanged( double value );
+  void OnNoDataValueChanged(double value);
 
   /**
    * \brief Slot called when the link button has been toggled.
@@ -358,7 +349,7 @@ private slots:
    * \param channel RGB channel for which the link button has been toggled.
    * \param checked The state of the button.
    */
-  void OnLinkToggled( RgbwChannel channel, bool checked );
+  void OnLinkToggled(RgbwChannel channel, bool checked);
 
 
   /**
@@ -366,8 +357,7 @@ private slots:
    *
    * \param value Gamma value.
    */
-  void OnGammaValueChanged( double value );
-
+  void OnGammaValueChanged(double value);
 };
 
 } // end namespace 'mvd'.
@@ -379,10 +369,7 @@ namespace mvd
 {
 
 /*******************************************************************************/
-inline
-bool
-ColorDynamicsController
-::RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
+inline bool ColorDynamicsController::RgbwBounds(CountType& begin, CountType& end, RgbwChannel channels)
 {
 #if 0
   return mvd::RgbBounds(
@@ -392,7 +379,7 @@ ColorDynamicsController
     : channels
   );
 #else
-  return mvd::RgbwBounds( begin, end, channels );
+  return mvd::RgbwBounds(begin, end, channels);
 #endif
 }
 

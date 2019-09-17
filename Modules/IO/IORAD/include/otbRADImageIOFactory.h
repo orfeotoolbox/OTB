@@ -45,7 +45,10 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
-  static RADImageIOFactory * FactoryNew() { return new RADImageIOFactory; }
+  static RADImageIOFactory* FactoryNew()
+  {
+    return new RADImageIOFactory;
+  }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RADImageIOFactory, itk::ObjectFactoryBase);
@@ -62,9 +65,8 @@ protected:
   ~RADImageIOFactory() override;
 
 private:
-  RADImageIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  RADImageIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

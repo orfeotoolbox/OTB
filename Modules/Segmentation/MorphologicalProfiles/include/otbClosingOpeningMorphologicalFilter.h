@@ -44,15 +44,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-class ITK_EXPORT ClosingOpeningMorphologicalFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ClosingOpeningMorphologicalFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ClosingOpeningMorphologicalFilter                  Self;
+  typedef ClosingOpeningMorphologicalFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -78,7 +77,9 @@ protected:
   /** Constructor */
   ClosingOpeningMorphologicalFilter();
   /** Destructor */
-  ~ClosingOpeningMorphologicalFilter() override {}
+  ~ClosingOpeningMorphologicalFilter() override
+  {
+  }
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
@@ -89,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ClosingOpeningMorphologicalFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ClosingOpeningMorphologicalFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** Morphological operation kernel  */
   KernelType m_Kernel;
 };

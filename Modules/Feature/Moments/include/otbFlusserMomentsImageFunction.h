@@ -66,25 +66,16 @@ namespace otb
  * \ingroup OTBMoments
  */
 
-template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT FlusserMomentsImageFunction :
-  public itk::ImageFunction< TInputImage,
-    itk::FixedArray<
-    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-    11 >,
-    TCoordRep >
+template <class TInputImage, class TCoordRep = double>
+class ITK_EXPORT FlusserMomentsImageFunction
+    : public itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 11>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef FlusserMomentsImageFunction                                     Self;
-  typedef itk::ImageFunction< TInputImage,
-                   itk::FixedArray<
-                   typename itk::NumericTraits<
-                   typename TInputImage::PixelType>::RealType,
-                   11 >,
-                   TCoordRep >                                            Superclass;
-  typedef itk::SmartPointer<Self>                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                   ConstPointer;
+  typedef FlusserMomentsImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 11>, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(FlusserMomentsImageFunction, ImageFunction);
@@ -98,14 +89,13 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename OutputType::ValueType           ScalarRealType;
+  typedef typename Superclass::OutputType OutputType;
+  typedef typename OutputType::ValueType  ScalarRealType;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -117,8 +107,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -128,17 +117,19 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
 protected:
   FlusserMomentsImageFunction();
-  ~FlusserMomentsImageFunction() override {}
+  ~FlusserMomentsImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FlusserMomentsImageFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  FlusserMomentsImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NeighborhoodRadius;
 };
@@ -150,4 +141,3 @@ private:
 #endif
 
 #endif
-

@@ -71,8 +71,7 @@ class AbstractModel;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT AbstractModelController :
-    public QObject
+class OTBMonteverdiGUI_EXPORT AbstractModelController : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -81,19 +80,17 @@ class OTBMonteverdiGUI_EXPORT AbstractModelController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Destructor */
   ~AbstractModelController() override;
 
   /** */
-  void SetModel( AbstractModel* );
+  void SetModel(AbstractModel*);
 
   /** */
   inline const AbstractModel* GetModel() const;
@@ -102,11 +99,11 @@ public:
   inline AbstractModel* GetModel();
 
   /** */
-  template< typename TModel >
+  template <typename TModel>
   inline const TModel* GetModel() const;
 
   /** */
-  template< typename TModel >
+  template <typename TModel>
   inline TModel* GetModel();
 
   /** */
@@ -116,17 +113,17 @@ public:
   inline QWidget* GetWidget();
 
   /** */
-  template< typename TWidget >
+  template <typename TWidget>
   inline const TWidget* GetWidget() const;
 
   /** */
-  template< typename TWidget >
+  template <typename TWidget>
   inline TWidget* GetWidget();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 public slots:
 
   /**
@@ -135,24 +132,24 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
-  void AboutToDisconnectModel( AbstractModel* );
+  void AboutToDisconnectModel(AbstractModel*);
 
   /**
    */
-  void ModelDisconnected( AbstractModel* );
+  void ModelDisconnected(AbstractModel*);
 
   /**
    */
-  void AboutToConnectModel( AbstractModel* );
+  void AboutToConnectModel(AbstractModel*);
 
   /**
    */
-  void ModelConnected( AbstractModel* );
+  void ModelConnected(AbstractModel*);
 
   /**
    */
@@ -160,29 +157,27 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** Constructor */
-  AbstractModelController( QWidget* widget, QObject* p =NULL );
+  AbstractModelController(QWidget* widget, QObject* p = NULL);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  void private_Connect( AbstractModel* );
+  void private_Connect(AbstractModel*);
 
   /**
    */
-  void private_Disconnect( AbstractModel* );
+  void private_Disconnect(AbstractModel*);
 
   /**
    */
@@ -190,22 +185,22 @@ private:
 
   /**
    */
-  virtual void Connect( AbstractModel* ) =0;
+  virtual void Connect(AbstractModel*) = 0;
 
   /**
    */
-  virtual void Disconnect( AbstractModel* ) =0;
+  virtual void Disconnect(AbstractModel*) = 0;
 
   /**
    */
-  virtual void ClearWidget() =0;
+  virtual void ClearWidget() = 0;
 
   /**
    */
-  virtual void virtual_ResetWidget( bool ) =0;
+  virtual void virtual_ResetWidget(bool) = 0;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -217,8 +212,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    * Slot called before object is destroyed.
@@ -226,7 +221,7 @@ private slots:
    * destroyed. This prevents the indirect call the virtual
    * Disconnect() method (which is dangerous in destructor).
    */
-  void OnDestroyed( QObject* =0 );
+  void OnDestroyed(QObject* = 0);
 
   /**
    */
@@ -241,79 +236,55 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const AbstractModel*
-AbstractModelController
-::GetModel() const
+inline const AbstractModel* AbstractModelController::GetModel() const
 {
   return m_Model;
 }
 
 /*****************************************************************************/
-inline
-AbstractModel*
-AbstractModelController
-::GetModel()
+inline AbstractModel* AbstractModelController::GetModel()
 {
   return m_Model;
 }
 
 /*****************************************************************************/
-template< typename TModel >
-inline
-const TModel*
-AbstractModelController
-::GetModel() const
+template <typename TModel>
+inline const TModel* AbstractModelController::GetModel() const
 {
-  return qobject_cast< const TModel* >( m_Model );
+  return qobject_cast<const TModel*>(m_Model);
 }
 
 /*****************************************************************************/
-template< typename TModel >
-inline
-TModel*
-AbstractModelController
-::GetModel()
+template <typename TModel>
+inline TModel* AbstractModelController::GetModel()
 {
-  return qobject_cast< TModel* >( m_Model );
+  return qobject_cast<TModel*>(m_Model);
 }
 
 /*****************************************************************************/
-inline
-const QWidget*
-AbstractModelController
-::GetWidget() const
+inline const QWidget* AbstractModelController::GetWidget() const
 {
   return m_Widget;
 }
 
 /*****************************************************************************/
-inline
-QWidget*
-AbstractModelController
-::GetWidget()
+inline QWidget* AbstractModelController::GetWidget()
 {
   return m_Widget;
 }
 
 /*****************************************************************************/
-template< typename TWidget >
-inline
-const TWidget*
-AbstractModelController
-::GetWidget() const
+template <typename TWidget>
+inline const TWidget* AbstractModelController::GetWidget() const
 {
-  return qobject_cast< const TWidget* >( m_Widget );
+  return qobject_cast<const TWidget*>(m_Widget);
 }
 
 /*****************************************************************************/
-template< typename TWidget >
-inline
-TWidget*
-AbstractModelController
-::GetWidget()
+template <typename TWidget>
+inline TWidget* AbstractModelController::GetWidget()
 {
-  return qobject_cast< TWidget* >( m_Widget );
+  return qobject_cast<TWidget*>(m_Widget);
 }
 
 } // end namespace 'mvd'

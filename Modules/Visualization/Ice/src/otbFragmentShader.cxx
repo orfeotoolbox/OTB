@@ -24,29 +24,31 @@
 namespace otb
 {
 FragmentShader::FragmentShader()
-{}
+{
+}
 
 FragmentShader::~FragmentShader()
-{}
+{
+}
 
 void FragmentShader::BuildShader()
 {
   std::string source = this->GetSource();
-  std::string name = this->GetName();
-  
+  std::string name   = this->GetName();
+
   try
-    {
+  {
     // Assumption here is that each shader has its unique name
-    if(!otb::FragmentShaderRegistry::Instance()->IsShaderRegistered(name))
-      {
-      otb::FragmentShaderRegistry::Instance()->RegisterShader(name,source);
-      }
-    }
-  catch(itk::ExceptionObject& err)
+    if (!otb::FragmentShaderRegistry::Instance()->IsShaderRegistered(name))
     {
-    // Log compilation errors if any
-    std::cerr<<err<<std::endl;
+      otb::FragmentShaderRegistry::Instance()->RegisterShader(name, source);
     }
+  }
+  catch (itk::ExceptionObject& err)
+  {
+    // Log compilation errors if any
+    std::cerr << err << std::endl;
+  }
 }
 
 void FragmentShader::LoadShader()
@@ -74,5 +76,4 @@ void FragmentShader::SetupShader()
   // GLint shader_lr = glGetUniformLocation(otb::FragmentShaderRegistry::Instance()->GetShaderProgram("StandardShader"), "shader_lr");
   // glUniform2f(shader_lr,m_LR[0],m_LR[1]);
 }
-
 }

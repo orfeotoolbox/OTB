@@ -51,7 +51,6 @@ namespace otb
 class ITK_EXPORT MRFOptimizerMetropolis : public MRFOptimizer
 {
 public:
-
   typedef MRFOptimizerMetropolis        Self;
   typedef MRFOptimizer                  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -75,21 +74,21 @@ public:
   inline bool Compute(double deltaEnergy) override
   {
     if (deltaEnergy < 0)
-      {
+    {
       return true;
-      }
+    }
     if (deltaEnergy == 0)
-      {
+    {
       return false;
-      }
+    }
     else
-      {
+    {
       double proba = std::exp(-(deltaEnergy) / this->m_Parameters[0]);
       if ((m_Generator->GetIntegerVariate() % 10000) < proba * 10000)
-        {
+      {
         return true;
-        }
       }
+    }
     return false;
   }
 
@@ -105,17 +104,18 @@ public:
 
 protected:
   MRFOptimizerMetropolis()
-    {
+  {
     this->m_NumberOfParameters = 1;
     this->m_Parameters.SetSize(1);
     this->m_Parameters[0] = 1.0;
-    m_Generator = RandomGeneratorType::GetInstance();
+    m_Generator           = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
-    }
-  ~MRFOptimizerMetropolis() override {}
+  }
+  ~MRFOptimizerMetropolis() override
+  {
+  }
   RandomGeneratorType::Pointer m_Generator;
 };
-
 }
 
 #endif

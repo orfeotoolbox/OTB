@@ -28,22 +28,15 @@ namespace Wrapper
 {
 
 // TODO: Constructor/destructor
-Parameter::Parameter() :
-    m_Name(),
-    m_Description(),
-    m_Key(),
-    m_Mandatory( true ),
-    m_Active( false ),
-    m_UserValue( false ),
-    m_UserLevel( UserLevel_Basic ),
-    m_Role( Role_Input ),
-    m_Root( this )
-  {}
+Parameter::Parameter()
+  : m_Name(), m_Description(), m_Key(), m_Mandatory(true), m_Active(false), m_UserValue(false), m_UserLevel(UserLevel_Basic), m_Role(Role_Input), m_Root(this)
+{
+}
 
 /** Set/get the parameter name */
 void Parameter::SetName(const std::string& name)
 {
-   m_Name = name;
+  m_Name = name;
   this->Modified();
 }
 
@@ -59,7 +52,7 @@ void Parameter::SetDescription(const std::string& description)
   this->Modified();
 }
 
-const std::string & Parameter::GetDescription() const
+const std::string& Parameter::GetDescription() const
 {
   return m_Description;
 }
@@ -74,7 +67,7 @@ const char* Parameter::GetKey() const
 {
   return this->m_Key.c_str();
 }
-    
+
 /** Set the parameter Mandatory flag */
 void Parameter::SetMandatory(bool flag)
 {
@@ -103,7 +96,7 @@ void Parameter::SetUserLevel(const UserLevel level)
   m_UserLevel = level;
   this->Modified();
 }
-  
+
 /** Parameter::Get the user access level */
 UserLevel Parameter::GetUserLevel() const
 {
@@ -133,9 +126,9 @@ bool Parameter::GetActive(bool recurseParents) const
 {
   bool result = m_Active;
   if (recurseParents && !IsRoot())
-    {
+  {
     result = result && GetRoot()->GetActive(recurseParents);
-    }
+  }
   return result;
 }
 
@@ -179,13 +172,13 @@ void Parameter::SetUserValue(bool isUserValue)
 
 void Parameter::ClearValue()
 {
-  SetActive( false );
+  SetActive(false);
   Modified();
 }
 
 
 /** Set/Get the root of the current parameter (direct parent) */
-void Parameter::SetRoot(const Parameter::Pointer  root)
+void Parameter::SetRoot(const Parameter::Pointer root)
 {
   m_Root = root.GetPointer();
 }
@@ -212,7 +205,7 @@ void Parameter::AddChild(Parameter::Pointer child)
 /** Get the children pointer list : not const cause we need to
     * alterate the m_Active status and the m_IsCheckbox
     */
-std::vector<Parameter::Pointer > Parameter::GetChildrenList()
+std::vector<Parameter::Pointer> Parameter::GetChildrenList()
 {
   return m_ChildrenList;
 }

@@ -31,33 +31,32 @@ namespace otb
 /** \class ComputeHistoFilter
  *  \brief Compute local histogram with several parameters
  *
- *  This class implements the first part of the CLAHE algorithm. It aims 
- *  to compute local histogram with several input parameters such as 
- *  nodata value, threshold, thumbnail size and number of bin. Mandatory parameters are min 
+ *  This class implements the first part of the CLAHE algorithm. It aims
+ *  to compute local histogram with several input parameters such as
+ *  nodata value, threshold, thumbnail size and number of bin. Mandatory parameters are min
  *  and max value as it will be used in the histogram computation.
  *
  * \ingroup OTBContrast
  */
 
-template < class TInputImage , class TOutputImage >
-class ITK_EXPORT ComputeHistoFilter :
-  public itk::ImageToImageFilter< TInputImage , TOutputImage >
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT ComputeHistoFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** typedef for standard classes. */
 
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   typedef ComputeHistoFilter Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename InputImageType::InternalPixelType InputPixelType;
-  typedef typename InputImageType::IndexType IndexType;
-  typedef typename InputImageType::SizeType SizeType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename InputImageType::IndexType         IndexType;
+  typedef typename InputImageType::SizeType          SizeType;
+  typedef typename OutputImageType::RegionType       OutputImageRegionType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -91,23 +90,21 @@ public:
   itkGetMacro(ThumbSize, SizeType);
 
   /** Get/Set macro to get/set the threshold parameter */
-  itkSetMacro(Threshold , float);
-  itkGetMacro(Threshold , float);
+  itkSetMacro(Threshold, float);
+  itkGetMacro(Threshold, float);
 
   typename OutputImageType::Pointer GetHistoOutput();
 
-  virtual itk::ProcessObject::DataObjectPointer 
-    MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx) 
-      override;
+  virtual itk::ProcessObject::DataObjectPointer MakeOutput(itk::ProcessObject::DataObjectPointerArraySizeType idx) override;
 
-  virtual itk::ProcessObject::DataObjectPointer 
-    MakeOutput(const itk::ProcessObject::DataObjectIdentifierType &) 
-      override;
+  virtual itk::ProcessObject::DataObjectPointer MakeOutput(const itk::ProcessObject::DataObjectIdentifierType&) override;
 
 
 protected:
   ComputeHistoFilter();
-  ~ComputeHistoFilter() override {}
+  ~ComputeHistoFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateInputRequestedRegion() override;
@@ -117,44 +114,39 @@ protected:
   // Call  BeforeThreadedGenerateData after getting the number of thread
   void GenerateData() override;
 
-  
+
   void BeforeThreadedGenerateData() override;
 
-  virtual void ThreadedGenerateData(
-          const OutputImageRegionType & outputRegionForThread ,
-          itk::ThreadIdType threadId) override;
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void AfterThreadedGenerateData() override;
 
-  void GenerateOutputRequestedRegion( itk::DataObject *output ) override;
+  void GenerateOutputRequestedRegion(itk::DataObject* output) override;
 
 private:
-  ComputeHistoFilter(const Self &) = delete ;
-  void operator =(const Self&) = delete ;
+  ComputeHistoFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  void SetRequestedRegion( itk::ImageBase<2> * image ) ;
+  void SetRequestedRegion(itk::ImageBase<2>* image);
 
-  void ApplyThreshold( 
-       typename itk::ImageRegionIterator < OutputImageType > oit ,
-       unsigned int total );
+  void ApplyThreshold(typename itk::ImageRegionIterator<OutputImageType> oit, unsigned int total);
 
-  std::vector< typename OutputImageType::PixelType > m_HistoThread;
-  InputPixelType m_Min;
-  InputPixelType m_Max;
-  InputPixelType m_NoData;
-  SizeType m_ThumbSize;
-  bool m_NoDataFlag;
-  double m_Step;
-  float m_Threshold;
-  unsigned int m_NbBin;
-  unsigned int m_ValidThreads;
-
+  std::vector<typename OutputImageType::PixelType> m_HistoThread;
+  InputPixelType                                   m_Min;
+  InputPixelType                                   m_Max;
+  InputPixelType                                   m_NoData;
+  SizeType                                         m_ThumbSize;
+  bool                                             m_NoDataFlag;
+  double                                           m_Step;
+  float                                            m_Threshold;
+  unsigned int                                     m_NbBin;
+  unsigned int                                     m_ValidThreads;
 };
 
-}  // End namespace otb
+} // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbComputeHistoFilter.hxx"
 #endif
-  
+
 #endif

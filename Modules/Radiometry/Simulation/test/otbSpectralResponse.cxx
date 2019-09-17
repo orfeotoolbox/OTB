@@ -23,29 +23,33 @@
 
 #include "otbSpectralResponse.h"
 
-int otbSpectralResponse(int argc, char * argv[])
+int otbSpectralResponse(int argc, char* argv[])
 {
-  typedef otb::SpectralResponse< double, double>  ResponseType;
-  typedef ResponseType::Pointer  ResponsePointerType;
+  typedef otb::SpectralResponse<double, double> ResponseType;
+  typedef ResponseType::Pointer ResponsePointerType;
   typedef otb::VectorImage<double, 2> ImageType;
 
-  if ( argc!=3 )
+  if (argc != 3)
   {
-    std::cout << argv[0] << std::endl << "\t" << "<Spectrum_filename>"  << "\t" << "<Lambda>"<< std::endl;
+    std::cout << argv[0] << std::endl
+              << "\t"
+              << "<Spectrum_filename>"
+              << "\t"
+              << "<Lambda>" << std::endl;
     return EXIT_FAILURE;
   }
-  //Instantiation
-  ResponsePointerType  myResponse=ResponseType::New();
-  //Load file into vector
+  // Instantiation
+  ResponsePointerType myResponse = ResponseType::New();
+  // Load file into vector
   const std::string file(argv[1]);
   myResponse->Load(file, 100.0);
-  //itk::Indent ind;
+  // itk::Indent ind;
   double lambda = atof(argv[2]);
 
   ImageType::Pointer image = ImageType::New();
   myResponse->GetImage(image);
 
   otbLogMacro(Debug, << myResponse);
-  otbLogMacro(Info, << "SpectResponse("<<lambda<<")= " << (*myResponse)(lambda));
+  otbLogMacro(Info, << "SpectResponse(" << lambda << ")= " << (*myResponse)(lambda));
   return EXIT_SUCCESS;
 }

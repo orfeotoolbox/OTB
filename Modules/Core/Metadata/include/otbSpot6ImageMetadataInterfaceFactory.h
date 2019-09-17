@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT Spot6ImageMetadataInterfaceFactory : public itk::Object
 public:
   /** Standard class typedefs. */
   typedef Spot6ImageMetadataInterfaceFactory Self;
-  typedef itk::ObjectFactoryBase            Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::ObjectFactoryBase             Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -62,9 +62,8 @@ protected:
   ~Spot6ImageMetadataInterfaceFactory() override;
 
 private:
-  Spot6ImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  Spot6ImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

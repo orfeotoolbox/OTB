@@ -35,72 +35,62 @@
 namespace otb
 {
 
-const char * GlVersionChecker::REQUIRED_GL_VERSION = "2.0.0";
-const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.20";
+const char* GlVersionChecker::REQUIRED_GL_VERSION   = "2.0.0";
+const char* GlVersionChecker::REQUIRED_GLSL_VERSION = "1.20";
 
-const char *
-GlVersionChecker
-::GLVersion()
+const char* GlVersionChecker::GLVersion()
 {
-  const GLubyte * glVersionStr = glGetString( GL_VERSION );
+  const GLubyte* glVersionStr = glGetString(GL_VERSION);
 
-  if( glVersionStr==nullptr )
-    {
+  if (glVersionStr == nullptr)
+  {
     std::ostringstream oss;
 
-    oss << "Failed to query OpenGL version string (error: "
-        << glGetError()
-        << ").";
+    oss << "Failed to query OpenGL version string (error: " << glGetError() << ").";
 
-    throw std::runtime_error( oss.str() );
-    }
+    throw std::runtime_error(oss.str());
+  }
 
-  return reinterpret_cast< const char * >( glVersionStr );
+  return reinterpret_cast<const char*>(glVersionStr);
 }
 
 
-const char *
-GlVersionChecker
-::GLSLVersion()
+const char* GlVersionChecker::GLSLVersion()
 {
-  const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
+  const GLubyte* slVersionStr = glGetString(GL_SHADING_LANGUAGE_VERSION);
 
-  if( slVersionStr==nullptr )
-    {
+  if (slVersionStr == nullptr)
+  {
     std::ostringstream oss;
 
-    oss << "Failed to query OpenGL shading language version string (error: "
-        << glGetError()
-        << ").";
+    oss << "Failed to query OpenGL shading language version string (error: " << glGetError() << ").";
 
-    throw std::runtime_error( oss.str() );
-    }
+    throw std::runtime_error(oss.str());
+  }
 
-  return reinterpret_cast< const char * >( slVersionStr );
+  return reinterpret_cast<const char*>(slVersionStr);
 }
 
 
-bool
-GlVersionChecker
-::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion )
+bool GlVersionChecker::CheckGLCapabilities(const char*& glVersion, const char*& glslVersion)
 {
   // Get OpenGL version.
   glVersion = GlVersionChecker::GLVersion();
 
   // If OpenGL version is at least 2.0, get (and return) GLSL version
   // (before checking against OpenGL required version).
-  if( GlVersionChecker::VerCmp( glVersion, "2.0" )<0 )
+  if (GlVersionChecker::VerCmp(glVersion, "2.0") < 0)
     glslVersion = nullptr;
   else
     glslVersion = GlVersionChecker::GLSLVersion();
 
   // Now, Check OpenGL version against required version.
-  if( GlVersionChecker::VerCmp( glVersion, GlVersionChecker::REQUIRED_GL_VERSION )<0 )
+  if (GlVersionChecker::VerCmp(glVersion, GlVersionChecker::REQUIRED_GL_VERSION) < 0)
     return false;
 
   //
   // Then, check OpenGL SL version against required version.
-  if( GlVersionChecker::VerCmp( glslVersion, GlVersionChecker::REQUIRED_GLSL_VERSION )<0 )
+  if (GlVersionChecker::VerCmp(glslVersion, GlVersionChecker::REQUIRED_GLSL_VERSION) < 0)
     return false;
 
   //
@@ -109,35 +99,30 @@ GlVersionChecker
 }
 
 
-bool
-GlVersionChecker
-::SplitVersion( const char * version,
-                int& major,
-                int& minor,
-                int& release )
+bool GlVersionChecker::SplitVersion(const char* version, int& major, int& minor, int& release)
 {
   //
   // Special case: empty strings returns 0.0.0 and true.
-  if( version==nullptr || strlen( version )==0 )
-    {
-    major = 0;
-    minor = 0;
+  if (version == nullptr || strlen(version) == 0)
+  {
+    major   = 0;
+    minor   = 0;
     release = 0;
 
     return true;
-    }
+  }
 
   //
   // Parse major part.
 
-  major = atoi( version );
+  major = atoi(version);
 
-  if( major<1 )
-    {
+  if (major < 1)
+  {
     major = 0;
 
     return false;
-    }
+  }
 
 
   //
@@ -145,26 +130,26 @@ GlVersionChecker
 
   minor = 0;
 
-  const char * minorStr = strchr( version, '.' );
+  const char* minorStr = strchr(version, '.');
 
-  if( minorStr==nullptr )
+  if (minorStr == nullptr)
     return false;
 
-  minor = atoi( ++minorStr );
+  minor = atoi(++minorStr);
 
   //
   // Parse release part.
 
   release = 0;
 
-  const char * releaseStr = strchr( minorStr, '.' );
+  const char* releaseStr = strchr(minorStr, '.');
 
   // In this case, it is Ok to return because version of the form
   // Major.minor are handled.
-  if( releaseStr==nullptr )
+  if (releaseStr == nullptr)
     return true;
 
-  release = atoi( ++releaseStr );
+  release = atoi(++releaseStr);
 
   //
   // Ok.
@@ -172,9 +157,7 @@ GlVersionChecker
 }
 
 
-int
-GlVersionChecker
-::VerCmp( const char * version, const char * required )
+int GlVersionChecker::VerCmp(const char* version, const char* required)
 {
   //
   // Split version.
@@ -183,8 +166,8 @@ GlVersionChecker
   int verMin = -1;
   int verRel = -1;
 
-  if( !GlVersionChecker::SplitVersion( version, verMaj, verMin, verRel ) )
-    throw std::invalid_argument( version );
+  if (!GlVersionChecker::SplitVersion(version, verMaj, verMin, verRel))
+    throw std::invalid_argument(version);
 
   //
   // Split required version.
@@ -193,42 +176,39 @@ GlVersionChecker
   int reqMin = -1;
   int reqRel = -1;
 
-  if( !GlVersionChecker::SplitVersion( required, reqMaj, reqMin, reqRel ) )
-    throw std::runtime_error( required );
+  if (!GlVersionChecker::SplitVersion(required, reqMaj, reqMin, reqRel))
+    throw std::runtime_error(required);
 
   //
   // Compare split versions.
 
-  if( verMaj<reqMaj )
+  if (verMaj < reqMaj)
     return -1;
 
-  else if( verMaj>reqMaj )
+  else if (verMaj > reqMaj)
     return 1;
 
   else // if( verMaj==reqMaj )
-    {
-    if( verMin<reqMin )
+  {
+    if (verMin < reqMin)
       return -1;
 
-    else if( verMin>reqMin )
+    else if (verMin > reqMin)
       return 1;
 
     else // if( verMin==reqMin )
-      {
-      if( verRel<reqRel)
+    {
+      if (verRel < reqRel)
         return -1;
 
-      else if( verRel>reqRel )
+      else if (verRel > reqRel)
         return 1;
 
       else // if( verRel==reqRel )
         return 0;
-      }
     }
+  }
 }
 
 
-
-
 } // End namespace otb
-

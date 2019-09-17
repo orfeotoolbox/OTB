@@ -33,27 +33,28 @@
 #include "otbImageListSource.h"
 #include "otbImageFileReader.h"
 
-namespace otb {
+namespace otb
+{
 
 class ImageSeriesFileReaderException : public itk::ExceptionObject
 {
 public:
   itkTypeMacro(ImageSeriesFileReaderException, ExceptionObject);
 
-  ImageSeriesFileReaderException(const char *file, unsigned int line,
-                                 const char* message = "Error in IO",
-                                 const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc) {}
+  ImageSeriesFileReaderException(const char* file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 
-  ImageSeriesFileReaderException(const std::string& file, unsigned int line,
-                                 const char* message = "Error in IO",
-                                 const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc) {}
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 
-  ImageSeriesFileReaderException(const std::string& file, unsigned int line,
-                                 const std::string& message = "Error in IO",
-                                 const std::string& loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc) {}
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line, const std::string& message = "Error in IO", const std::string& loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 };
 
 /** \class ImageSeriesFileReaderBase
@@ -64,8 +65,7 @@ public:
  */
 
 template <class TImage, class TInternalImage = TImage>
-class ImageSeriesFileReaderBase
-  : public ImageListSource<TImage>
+class ImageSeriesFileReaderBase : public ImageListSource<TImage>
 {
 public:
   /** Standard typedefs */
@@ -104,7 +104,7 @@ public:
 
   typedef ObjectList<ReaderType>           ReaderListType;
   typedef typename ReaderListType::Pointer ReaderListPointerType;
-  
+
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Get the file to be read */
@@ -125,7 +125,7 @@ public:
 
   /** Get the readers */
   itkGetObjectMacro(ImageFileReaderList, ReaderListType);
-  ReaderType * GetImageFileReader(unsigned int i) const
+  ReaderType* GetImageFileReader(unsigned int i) const
   {
     return this->m_ImageFileReaderList->GetNthElement(i);
   }
@@ -135,12 +135,12 @@ public:
   {
     return m_ListOfFileNames.size();
   }
-  OutputImageListType * GetOutput(void) override;
-  virtual OutputImageType *     GetOutput(DataObjectPointerArraySizeType idx);
+  OutputImageListType*     GetOutput(void) override;
+  virtual OutputImageType* GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Performs selective file extraction */
-  virtual OutputImageListType * GenerateOutput(void);
-  virtual OutputImageType * GenerateOutput(DataObjectPointerArraySizeType idx);
+  virtual OutputImageListType* GenerateOutput(void);
+  virtual OutputImageType* GenerateOutput(DataObjectPointerArraySizeType idx);
 
   /** Synchronization */
   void Update() override
@@ -150,16 +150,25 @@ public:
 
 protected:
   ImageSeriesFileReaderBase();
-  ~ImageSeriesFileReaderBase () override {}
+  ~ImageSeriesFileReaderBase() override
+  {
+  }
 
-  enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
+  enum FileType
+  {
+    kFileName = 0,
+    kImageFileName,
+    kAnyFileName
+  };
   /**
    * Test files.
    * If the filename to test is an imageFileName, the file name may be modified in
    * order to add the appropriated path
    */
   virtual void TestFileExistenceAndReadability(std::string& file, FileType fileType);
-  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands))
+  {
+  }
 
   void GenerateData(void) override;
 
@@ -188,15 +197,15 @@ protected:
   std::string                m_FileName;
   OutputImageListPointerType m_OutputList;
 
-  std::vector<std::string>                m_ListOfFileNames;
-  std::vector<std::vector<unsigned int> > m_ListOfBandSelection;
-  std::vector<InternalRegionType>         m_ListOfRegionSelection;
+  std::vector<std::string>               m_ListOfFileNames;
+  std::vector<std::vector<unsigned int>> m_ListOfBandSelection;
+  std::vector<InternalRegionType>        m_ListOfRegionSelection;
 
   ReaderListPointerType m_ImageFileReaderList;
 
 private:
-  ImageSeriesFileReaderBase (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReaderBase(const Self&);
+  void operator=(const Self&);
 }; // end of class
 
 } // end of namespace otb

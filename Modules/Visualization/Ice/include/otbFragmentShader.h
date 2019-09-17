@@ -29,16 +29,15 @@
 namespace otb
 {
 
-class OTBIce_EXPORT FragmentShader
-  : public itk::Object
+class OTBIce_EXPORT FragmentShader : public itk::Object
 {
 public:
-  typedef FragmentShader                                  Self;
-  typedef itk::Object                                     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef FragmentShader                Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Point<float,2>                             PointType;
+  typedef itk::Point<float, 2> PointType;
 
   void LoadShader();
 
@@ -46,14 +45,14 @@ public:
 
   void UnloadShader();
 
-  itkSetMacro(UL,PointType);
-  itkSetMacro(UR,PointType);
-  itkSetMacro(LL,PointType);
-  itkSetMacro(LR,PointType);
-  itkGetConstReferenceMacro(UL,PointType);
-  itkGetConstReferenceMacro(UR,PointType);
-  itkGetConstReferenceMacro(LL,PointType);
-  itkGetConstReferenceMacro(LR,PointType);
+  itkSetMacro(UL, PointType);
+  itkSetMacro(UR, PointType);
+  itkSetMacro(LL, PointType);
+  itkSetMacro(LR, PointType);
+  itkGetConstReferenceMacro(UL, PointType);
+  itkGetConstReferenceMacro(UR, PointType);
+  itkGetConstReferenceMacro(LL, PointType);
+  itkGetConstReferenceMacro(LR, PointType);
 
 protected:
   FragmentShader();

@@ -55,15 +55,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToEdgePathFilter
-  : public ImageToPathFilter<TInputImage, TOutputPath>
+class ITK_EXPORT ImageToEdgePathFilter : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
-  typedef ImageToEdgePathFilter                       Self;
+  typedef ImageToEdgePathFilter Self;
   typedef ImageToPathFilter<TInputImage, TOutputPath> Superclass;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /// Creation through the object factory
   itkNewMacro(Self);
@@ -78,7 +77,7 @@ public:
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
 
   typedef typename InputImageType::PixelType PixelType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename InputImageType::SizeType  SizeType;
 
   /** Set and Get foreground value */
   itkSetMacro(ForegroundValue, PixelType);
@@ -86,14 +85,18 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  ~ImageToEdgePathFilter() override {}
+  ~ImageToEdgePathFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  void GenerateOutputInformation() override {}  //does nothing
+  void GenerateOutputInformation() override
+  {
+  } // does nothing
   void GenerateData() override;
 
 private:
-  ImageToEdgePathFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageToEdgePathFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PixelType m_ForegroundValue;
 };

@@ -39,17 +39,12 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue, unsigned int MapDimension>
-class ITK_EXPORT SOMModel
-  : public  MachineLearningModel<
-    itk::VariableLengthVector< TInputValue >,
-    itk::VariableLengthVector< TInputValue > >   
+class ITK_EXPORT SOMModel : public MachineLearningModel<itk::VariableLengthVector<TInputValue>, itk::VariableLengthVector<TInputValue>>
 {
 public:
   typedef SOMModel Self;
-  typedef MachineLearningModel<
-    itk::VariableLengthVector< TInputValue >,
-    itk::VariableLengthVector< TInputValue > > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef MachineLearningModel<itk::VariableLengthVector<TInputValue>, itk::VariableLengthVector<TInputValue>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::InputValueType       InputValueType;
@@ -61,21 +56,18 @@ public:
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
   // Confidence map related typedefs
-  typedef typename Superclass::ConfidenceValueType       ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType      ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType  ConfidenceListSampleType;
-  typedef typename Superclass::ProbaSampleType       ProbaSampleType;
-  typedef typename Superclass::ProbaListSampleType   ProbaListSampleType;
-  typedef SOMMap<
-    itk::VariableLengthVector<TInputValue>,
-    itk::Statistics::EuclideanDistanceMetric<
-      itk::VariableLengthVector<TInputValue> >,
-      MapDimension>                                 MapType;
-  typedef typename MapType::SizeType                SizeType;
-  typedef typename MapType::SpacingType             SpacingType;
+  typedef typename Superclass::ConfidenceValueType      ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType     ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+  typedef typename Superclass::ProbaSampleType          ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType      ProbaListSampleType;
+  typedef SOMMap<itk::VariableLengthVector<TInputValue>, itk::Statistics::EuclideanDistanceMetric<itk::VariableLengthVector<TInputValue>>, MapDimension>
+                                        MapType;
+  typedef typename MapType::SizeType    SizeType;
+  typedef typename MapType::SpacingType SpacingType;
 
-  typedef Functor::CzihoSOMLearningBehaviorFunctor      SOMLearningBehaviorFunctorType;
-  typedef Functor::CzihoSOMNeighborhoodBehaviorFunctor  SOMNeighborhoodBehaviorFunctorType;
+  typedef Functor::CzihoSOMLearningBehaviorFunctor     SOMLearningBehaviorFunctorType;
+  typedef Functor::CzihoSOMNeighborhoodBehaviorFunctor SOMNeighborhoodBehaviorFunctorType;
 
   itkNewMacro(Self);
   itkTypeMacro(SOMModel, DimensionalityReductionModel);
@@ -102,25 +94,22 @@ public:
   itkSetMacro(Seed, unsigned int);
   itkGetMacro(Seed, unsigned int);
 
-  bool CanReadFile(const std::string & filename) override;
-  bool CanWriteFile(const std::string & filename) override;
+  bool CanReadFile(const std::string& filename) override;
+  bool CanWriteFile(const std::string& filename) override;
 
-  void Save(const std::string & filename, const std::string & name="") override;
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   void Train() override;
 
 protected:
-  SOMModel(); 
+  SOMModel();
   ~SOMModel() override;
 
 private:
   typename MapType::Pointer m_SOMMap;
 
-  virtual TargetSampleType DoPredict(
-    const InputSampleType& input,
-    ConfidenceValueType * quality = nullptr,
-    ProbaSampleType * proba = nullptr) const override;
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
   /** Map size (width, height) */
   SizeType m_MapSize;

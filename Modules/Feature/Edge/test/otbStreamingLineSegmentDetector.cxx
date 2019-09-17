@@ -25,24 +25,23 @@
 #include "otbVectorDataFileWriter.h"
 
 
-
-int otbStreamingLineSegmentDetector(int itkNotUsed(argc), char * argv[])
+int otbStreamingLineSegmentDetector(int itkNotUsed(argc), char* argv[])
 {
 
-  typedef float InputPixelType;
+  typedef float      InputPixelType;
   const unsigned int Dimension = 2;
 
   // Typedefs
-  typedef otb::Image<InputPixelType,  Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>        ReaderType;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef otb::StreamingLineSegmentDetector<ImageType>::FilterType             StreamingLineSegmentDetectorType;
-  typedef StreamingLineSegmentDetectorType::FilterType::OutputVectorDataType   OutputVectorDataType;
-  typedef otb::VectorDataFileWriter<OutputVectorDataType>                      WriterType;
+  typedef otb::StreamingLineSegmentDetector<ImageType>::FilterType           StreamingLineSegmentDetectorType;
+  typedef StreamingLineSegmentDetectorType::FilterType::OutputVectorDataType OutputVectorDataType;
+  typedef otb::VectorDataFileWriter<OutputVectorDataType>                    WriterType;
 
-  ReaderType::Pointer             reader = ReaderType::New();
+  ReaderType::Pointer                       reader    = ReaderType::New();
   StreamingLineSegmentDetectorType::Pointer lsdFilter = StreamingLineSegmentDetectorType::New();
-  WriterType::Pointer             writer = WriterType::New();
+  WriterType::Pointer                       writer    = WriterType::New();
 
   reader->SetFileName(argv[1]);
   reader->GenerateOutputInformation();

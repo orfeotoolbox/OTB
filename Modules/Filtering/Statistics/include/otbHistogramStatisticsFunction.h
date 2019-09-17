@@ -40,9 +40,8 @@ namespace otb
  * \ingroup OTBStatistics
  */
 
-template<class TInputHistogram, class TOutput>
-class HistogramStatisticsFunction :
-  public itk::HistogramAlgorithmBase<TInputHistogram>
+template <class TInputHistogram, class TOutput>
+class HistogramStatisticsFunction : public itk::HistogramAlgorithmBase<TInputHistogram>
 {
 public:
   /**Standard class typedefs. */
@@ -51,8 +50,8 @@ public:
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
-  typedef typename TInputHistogram::MeasurementType              MeasurementType;
-  typedef typename TInputHistogram::AbsoluteFrequencyType        FrequencyType; //FIXME several possibilities in the new framework
+  typedef typename TInputHistogram::MeasurementType MeasurementType;
+  typedef typename TInputHistogram::AbsoluteFrequencyType FrequencyType; // FIXME several possibilities in the new framework
   typedef typename itk::NumericTraits<MeasurementType>::RealType RealType;
 
   /**Standard Macros */
@@ -72,14 +71,14 @@ public:
   OutputType GetCovariance();
 
   /** Stores the histogram pointer */
-  void SetInputHistogram(const TInputHistogram * histogram)
+  void SetInputHistogram(const TInputHistogram* histogram)
   {
     if (m_InputHistogram != histogram)
-      {
+    {
       m_InputHistogram = histogram;
       this->Modified();
       m_IsModified = true;
-      }
+    }
   }
 
   /** Calculates the thresholds and save them */
@@ -89,9 +88,10 @@ public:
   }
 
 protected:
-
   HistogramStatisticsFunction();
-  ~HistogramStatisticsFunction() override {}
+  ~HistogramStatisticsFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Calculates the thresholds and save them */
@@ -106,10 +106,8 @@ protected:
   /** Calculate covariance value */
   void CalculateCovariance();
 
-  
 
 private:
-
   OutputType m_entropy;
   OutputType m_mean;
   OutputType m_covariance;

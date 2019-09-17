@@ -23,45 +23,37 @@
 
 #include "otbListSampleSource.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
-template < class TInputSampleList, class TOutputSampleList >
-ListSampleSource<TInputSampleList, TOutputSampleList>
-::ListSampleSource()
+template <class TInputSampleList, class TOutputSampleList>
+ListSampleSource<TInputSampleList, TOutputSampleList>::ListSampleSource()
 {
   this->SetNumberOfRequiredOutputs(1);
 
   // Generate the output sample list
-  typename OutputSampleListType::Pointer outputPtr =
-    static_cast< OutputSampleListType * >(this->MakeOutput(0).GetPointer());
+  typename OutputSampleListType::Pointer outputPtr = static_cast<OutputSampleListType*>(this->MakeOutput(0).GetPointer());
   this->ProcessObject::SetNthOutput(0, outputPtr.GetPointer());
 }
 
-template < class TInputSampleList, class TOutputSampleList >
-typename ListSampleSource<TInputSampleList, TOutputSampleList>
-::DataObjectPointer
-ListSampleSource<TInputSampleList, TOutputSampleList>
-::MakeOutput(DataObjectPointerArraySizeType)
+template <class TInputSampleList, class TOutputSampleList>
+typename ListSampleSource<TInputSampleList, TOutputSampleList>::DataObjectPointer
+    ListSampleSource<TInputSampleList, TOutputSampleList>::MakeOutput(DataObjectPointerArraySizeType)
 {
   OutputSampleListPointer outputSampleList = OutputSampleListType::New();
   return static_cast<DataObjectPointer>(outputSampleList);
 }
 
-template < class TInputSampleList, class TOutputSampleList >
-typename ListSampleSource<TInputSampleList, TOutputSampleList>
-::OutputSampleListType *
-ListSampleSource<TInputSampleList, TOutputSampleList>
-::GetOutput()
+template <class TInputSampleList, class TOutputSampleList>
+typename ListSampleSource<TInputSampleList, TOutputSampleList>::OutputSampleListType* ListSampleSource<TInputSampleList, TOutputSampleList>::GetOutput()
 {
-  return static_cast<OutputSampleListType * >
-    (this->ProcessObject::GetOutput(0) );
+  return static_cast<OutputSampleListType*>(this->ProcessObject::GetOutput(0));
 }
 
-template < class TInputSampleList, class TOutputSampleList >
-void
-ListSampleSource<TInputSampleList, TOutputSampleList>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputSampleList, class TOutputSampleList>
+void ListSampleSource<TInputSampleList, TOutputSampleList>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);

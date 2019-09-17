@@ -22,9 +22,9 @@
 #include "otbSarBrightnessFunctor.h"
 #include "otbMath.h"
 
-int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef double                   ScalarType;
+  typedef double ScalarType;
 
   typedef otb::Functor::SarBrightnessFunctor<ScalarType, ScalarType> FunctorType;
 
@@ -32,29 +32,29 @@ int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(
   FunctorType functWithoutNoise;
 
   // With Noise
-  functWithNoise.SetNoise( 0.0);
-  if( std::abs(functWithNoise.GetNoise() -0.0) > 0.0)
+  functWithNoise.SetNoise(0.0);
+  if (std::abs(functWithNoise.GetNoise() - 0.0) > 0.0)
   {
     return false;
   }
-  functWithNoise.SetScale( 10.0);
-  if( std::abs(functWithNoise.GetScale() -10.0) > 0.0)
+  functWithNoise.SetScale(10.0);
+  if (std::abs(functWithNoise.GetScale() - 10.0) > 0.0)
   {
     return false;
   }
-  functWithNoise.SetAntennaPatternNewGain( 10.0);
-  if( std::abs(functWithNoise.GetAntennaPatternNewGain() -10.0) > 0.0)
+  functWithNoise.SetAntennaPatternNewGain(10.0);
+  if (std::abs(functWithNoise.GetAntennaPatternNewGain() - 10.0) > 0.0)
   {
     return false;
   }
-  functWithNoise.SetAntennaPatternOldGain( 10.0);
-  if( std::abs(functWithNoise.GetAntennaPatternOldGain() -10.0) > 0.0)
+  functWithNoise.SetAntennaPatternOldGain(10.0);
+  if (std::abs(functWithNoise.GetAntennaPatternOldGain() - 10.0) > 0.0)
   {
     return false;
   }
 
-  functWithNoise.SetRangeSpreadLoss( 10.0);
-  if( std::abs(functWithNoise.GetRangeSpreadLoss() -10.0) > 0.0)
+  functWithNoise.SetRangeSpreadLoss(10.0);
+  if (std::abs(functWithNoise.GetRangeSpreadLoss() - 10.0) > 0.0)
   {
     return false;
   }
@@ -62,32 +62,30 @@ int otbSarBrightnessFunctorWithoutNoise(int itkNotUsed(argc), char * itkNotUsed(
   // Without Noise
   functWithoutNoise.SetScale(10.0);
   if (std::abs(functWithoutNoise.GetScale() - 10.0) > 0.0)
-    {
+  {
     return false;
-    }
+  }
   functWithoutNoise.SetAntennaPatternNewGain(10.0);
   if (std::abs(functWithoutNoise.GetAntennaPatternNewGain() - 10.0) > 0.0)
-    {
+  {
     return false;
-    }
+  }
   functWithoutNoise.SetAntennaPatternOldGain(10.0);
   if (std::abs(functWithoutNoise.GetAntennaPatternOldGain() - 10.0) > 0.0)
-    {
+  {
     return false;
-    }
+  }
 
   functWithoutNoise.SetRangeSpreadLoss(10.0);
   if (std::abs(functWithoutNoise.GetRangeSpreadLoss() - 10.0) > 0.0)
-    {
+  {
     return false;
-    }
+  }
 
-  std::cout << "First BetaNaught (With Noise = 0): " << functWithNoise.operator ()( 0.) << " *** " \
-            << "First BetaNaught (Without Noise): " << functWithoutNoise.operator ()( 0.) \
-            << std::endl;
-  std::cout << "Second BetaNaught (With Noise = 0): " << functWithNoise.operator ()( 1.) << " *** " \
-            << "Second BetaNaught (Without Noise): " << functWithoutNoise.operator ()( 1.) \
-              << std::endl;
+  std::cout << "First BetaNaught (With Noise = 0): " << functWithNoise.operator()(0.) << " *** "
+            << "First BetaNaught (Without Noise): " << functWithoutNoise.operator()(0.) << std::endl;
+  std::cout << "Second BetaNaught (With Noise = 0): " << functWithNoise.operator()(1.) << " *** "
+            << "Second BetaNaught (Without Noise): " << functWithoutNoise.operator()(1.) << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -44,29 +44,30 @@ public:
   typedef CurlHelperInterface           Superclass;
 
   itkTypeMacro(CurlHelperStub, CurlHelperInterface);
-  
+
   itkNewMacro(Self);
 
   bool TestUrlAvailability(const std::string& url) const override;
-  
+
   int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const override;
-  
+
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const override;
-  
+
   int RetrieveFile(const std::string& urlString, std::string filename) const override;
 
-  int RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                        const std::vector<std::string>& listFiles,
-                        int maxConnect) const override;
+  int RetrieveFileMulti(const std::vector<std::string>& listURLs, const std::vector<std::string>& listFiles, int maxConnect) const override;
+
 protected:
-  CurlHelperStub() {}
-  ~CurlHelperStub() override {}
+  CurlHelperStub()
+  {
+  }
+  ~CurlHelperStub() override
+  {
+  }
 
 private:
-  CurlHelperStub(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-
+  CurlHelperStub(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 }
 #endif

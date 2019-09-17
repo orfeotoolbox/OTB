@@ -30,8 +30,7 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-DEMCaracteristicsExtractor<TInputImage, TOutputImage>
-::DEMCaracteristicsExtractor()
+DEMCaracteristicsExtractor<TInputImage, TOutputImage>::DEMCaracteristicsExtractor()
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(3);
@@ -41,15 +40,14 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   this->SetNthOutput(2, OutputImageType::New());
   this->SetNthOutput(3, OutputImageType::New());
 
-  m_SolarAngle = 0;
+  m_SolarAngle  = 0;
   m_SolarAzimut = 0;
-  m_ViewAngle = 0;
-  m_ViewAzimut = 0;
+  m_ViewAngle   = 0;
+  m_ViewAzimut  = 0;
 }
 
 template <class TInputImage, class TOutputImage>
-DEMCaracteristicsExtractor<TInputImage, TOutputImage>
-::~DEMCaracteristicsExtractor()
+DEMCaracteristicsExtractor<TInputImage, TOutputImage>::~DEMCaracteristicsExtractor()
 {
 }
 
@@ -57,30 +55,27 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
  * ThreadedGenerateData Performs the pixel-wise addition
  */
 template <class TInputImage, class TOutputImage>
-void
-DEMCaracteristicsExtractor<TInputImage, TOutputImage>
-::GenerateData()
+void DEMCaracteristicsExtractor<TInputImage, TOutputImage>::GenerateData()
 {
   // Input and output pointer definition
-  typename InputImageType::Pointer  inputPtr  = const_cast<InputImageType *>(this->GetInput());
-  typename OutputImageType::Pointer SlopOutputPtr = this->GetSlopOutput();
-  typename OutputImageType::Pointer AspectOutputPtr = this->GetAspectOutput();
+  typename InputImageType::Pointer  inputPtr           = const_cast<InputImageType*>(this->GetInput());
+  typename OutputImageType::Pointer SlopOutputPtr      = this->GetSlopOutput();
+  typename OutputImageType::Pointer AspectOutputPtr    = this->GetAspectOutput();
   typename OutputImageType::Pointer IncidenceOutputPtr = this->GetIncidenceOutput();
-  typename OutputImageType::Pointer ExitanceOutputPtr = this->GetExitanceOutput();
+  typename OutputImageType::Pointer ExitanceOutputPtr  = this->GetExitanceOutput();
 
   // Gradient Magnitude Image Filter used to compute the slope.
   typename GradientMagnitudeFilterType::Pointer GradientMagnitudeFilter = GradientMagnitudeFilterType::New();
   // Gradient Recursive Gaussian Image Filter used to compute the aspect.
-  typename GradientRecursiveGaussianImageFilterType::Pointer GradientRecursiveGaussianFilter =
-    GradientRecursiveGaussianImageFilterType::New();
+  typename GradientRecursiveGaussianImageFilterType::Pointer GradientRecursiveGaussianFilter = GradientRecursiveGaussianImageFilterType::New();
   // Atan used to compute the slop
-  typename AtanFilterType::Pointer AtanFilter   = AtanFilterType::New();
+  typename AtanFilterType::Pointer AtanFilter = AtanFilterType::New();
   // Atan2 Image Filter used to compute the aspect.
   typename Atan2FilterType::Pointer AspectFilter = Atan2FilterType::New();
   // Inverse cosinus Image filter used to compute the incidence image
   typename AcosImageFilterType::Pointer IncidenceFilter = AcosImageFilterType::New();
   // Inverse cosinus Image filter used to compute the exitance image
-  typename AcosImageFilterType::Pointer ExitanceFilter  = AcosImageFilterType::New();
+  typename AcosImageFilterType::Pointer ExitanceFilter = AcosImageFilterType::New();
 
   // Degrees To Radian _-> Radian To Degree coefficient
   double rad2degCoef;
@@ -91,7 +86,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   AtanFilter->SetInput(GradientMagnitudeFilter->GetOutput());
   // Transform values from radian to degrees.
   typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter = MultiplyByScalarImageFilterType::New();
-  //rad2DegFilter->SetInput( GradientMagnitudeFilter->GetOutput() );
+  // rad2DegFilter->SetInput( GradientMagnitudeFilter->GetOutput() );
   rad2DegFilter->SetInput(AtanFilter->GetOutput());
   rad2DegFilter->SetCoef(rad2degCoef);
   rad2DegFilter->GraftOutput(SlopOutputPtr);
@@ -145,7 +140,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   sinSsinSolarAngleFilter->SetCoef(std::sin(m_SolarAngle / rad2degCoef));
   sinSsinSolarAngleFilter->SetInput(sinS->GetOutput());
 
-  typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle =  MultiplyImageFilterType::New();
+  typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle = MultiplyImageFilterType::New();
   cosAAzimuthsinSsinAngle->SetInput1(sinSsinSolarAngleFilter->GetOutput());
   cosAAzimuthsinSsinAngle->SetInput2(cosAAzimut->GetOutput());
 
@@ -181,7 +176,7 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   sinSsinSolarAngleFilter2->SetCoef(std::sin(m_ViewAngle / rad2degCoef));
   sinSsinSolarAngleFilter2->SetInput(sinS->GetOutput());
 
-  typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle2 =  MultiplyImageFilterType::New();
+  typename MultiplyImageFilterType::Pointer cosAAzimuthsinSsinAngle2 = MultiplyImageFilterType::New();
   cosAAzimuthsinSsinAngle2->SetInput1(sinSsinSolarAngleFilter2->GetOutput());
   cosAAzimuthsinSsinAngle2->SetInput2(cosAAzimut2->GetOutput());
 
@@ -203,14 +198,11 @@ DEMCaracteristicsExtractor<TInputImage, TOutputImage>
   rad2DegFilter3->GraftOutput(ExitanceOutputPtr);
   rad2DegFilter3->Update();
   this->GraftNthOutput(3, rad2DegFilter3->GetOutput());
-
 }
 
 /**PrintSelf method */
 template <class TInputImage, class TOutputImage>
-void
-DEMCaracteristicsExtractor<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void DEMCaracteristicsExtractor<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Solar Angle: " << m_SolarAngle << std::endl;

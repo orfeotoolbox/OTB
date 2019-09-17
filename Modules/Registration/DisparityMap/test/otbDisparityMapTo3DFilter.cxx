@@ -24,38 +24,30 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"
 
-typedef otb::Image<float, 2>                    FloatImageType;
+typedef otb::Image<float, 2> FloatImageType;
 
-typedef otb::VectorImage<float, 2>              FloatVectorImageType;
+typedef otb::VectorImage<float, 2> FloatVectorImageType;
 
-typedef otb::DisparityMapTo3DFilter
-  <FloatImageType,
-    FloatVectorImageType,
-    FloatVectorImageType,
-    FloatImageType>                              StereoFilterType;
+typedef otb::DisparityMapTo3DFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType, FloatImageType> StereoFilterType;
 
 
 int otbDisparityMapTo3DFilter(int argc, char* argv[])
 {
-  typedef otb::ImageFileReader<FloatImageType>    ReaderType;
+  typedef otb::ImageFileReader<FloatImageType> ReaderType;
 
-  typedef otb::ImageFileReader
-    <FloatVectorImageType>                        ReaderVectorType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ReaderVectorType;
 
-  typedef otb::ImageFileWriter
-    <FloatVectorImageType>                        WriterType;
+  typedef otb::ImageFileWriter<FloatVectorImageType> WriterType;
 
-  typedef otb::ImageList<FloatImageType>          ImageListType;
+  typedef otb::ImageList<FloatImageType> ImageListType;
 
-  typedef otb::VectorImageToImageListFilter
-    <FloatVectorImageType,
-     ImageListType>                               VectorToListFilterType;
+  typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
 
   if (argc < 7)
-    {
-    std::cout << "Usage: "<<argv[0]<<" dispMap leftImage rightImage leftGrid rightGrid output3D [disparityMask]" << std::endl;
+  {
+    std::cout << "Usage: " << argv[0] << " dispMap leftImage rightImage leftGrid rightGrid output3D [disparityMask]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ReaderVectorType::Pointer dispReader = ReaderVectorType::New();
   dispReader->SetFileName(argv[1]);
@@ -76,9 +68,9 @@ int otbDisparityMapTo3DFilter(int argc, char* argv[])
 
   ReaderType::Pointer maskReader = ReaderType::New();
   if (argc == 8)
-    {
+  {
     maskReader->SetFileName(argv[7]);
-    }
+  }
 
   VectorToListFilterType::Pointer vectorToListFilter = VectorToListFilterType::New();
   vectorToListFilter->SetInput(dispReader->GetOutput());
@@ -93,9 +85,9 @@ int otbDisparityMapTo3DFilter(int argc, char* argv[])
   filter->SetRightEpipolarGridInput(rightGridReader->GetOutput());
 
   if (argc == 8)
-    {
+  {
     filter->SetDisparityMaskInput(maskReader->GetOutput());
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

@@ -43,7 +43,6 @@ namespace otb
 class ITK_EXPORT RADImageIO : public otb::ImageIOBase
 {
 public:
-
   /** Standard class typedefs. */
   typedef RADImageIO              Self;
   typedef otb::ImageIOBase        Superclass;
@@ -101,7 +100,7 @@ public:
 
   // JULIEN: NOT USED, NOT IMPLEMENTED
   // void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
-  
+
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
   unsigned int GetOverviewsCount() override
@@ -110,19 +109,20 @@ public:
     // resolution overview.
     return 1;
   }
-  
+
   /** Get information about overviews available into the file specified
-   * This imageIO didn't support overviews */ 
+   * This imageIO didn't support overviews */
   std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
   }
-  
+
   /** Provide hist about the output container to deal with complex pixel
-   *  type (Not used here) */ 
-  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)) override{}
+   *  type (Not used here) */
+  void SetOutputImagePixelType(bool itkNotUsed(isComplexInternalPixelType), bool itkNotUsed(isVectorImage)) override
+  {
+  }
 
 protected:
   /** Constructor.*/
@@ -141,49 +141,48 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RADImageIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RADImageIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Internal method to read header information */
   bool InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError);
 
-#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    { \
-    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType; \
-    if (m_ByteOrder != m_FileByteOrder) \
-      { \
-      if (m_ByteOrder == LittleEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType *) buffer, buffer_size); \
-        } \
-      else if (m_ByteOrder == BigEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *) buffer, buffer_size); \
-        } \
-      } \
-    }
+#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)                          \
+  {                                                                                                   \
+    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType;                                     \
+    if (m_ByteOrder != m_FileByteOrder)                                                               \
+    {                                                                                                 \
+      if (m_ByteOrder == LittleEndian)                                                                \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType*)buffer, buffer_size);    \
+      }                                                                                               \
+      else if (m_ByteOrder == BigEndian)                                                              \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType*)buffer, buffer_size); \
+      }                                                                                               \
+    }                                                                                                 \
+  }
 
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
-  else if (this->GetComponentType() == WeakType) \
-    { \
-    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    }
+  else if (this->GetComponentType() == WeakType)                             \
+  {                                                                          \
+    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)     \
+  }
 
-#define otbSetTypeRADMacro(WeakType, CAI_VALUE) \
+#define otbSetTypeRADMacro(WeakType, CAI_VALUE)  \
   else if (this->GetComponentType() == WeakType) \
-    { \
-    m_TypeRAD = CAI_VALUE; \
-    }
+  {                                              \
+    m_TypeRAD = CAI_VALUE;                       \
+  }
 
   bool                        m_FlagWriteImageInformation;
   otb::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream                m_HeaderFile;
   std::string                 m_TypeRAD;
   std::vector<std::string>    m_ChannelsFileName;
-  std::fstream *              m_ChannelsFile;
+  std::fstream*               m_ChannelsFile;
   unsigned int                m_NbOfChannels;
   int                         m_BytePerPixel;
-
 };
 
 } // end namespace otb

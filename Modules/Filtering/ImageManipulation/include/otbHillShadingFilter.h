@@ -39,17 +39,14 @@ namespace otb
  * \ingroup OTBImageManipulation
 */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT HillShadingFilter :
-  public UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage,
-      Functor::HillShadingFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
-          TInputImage, typename TOutputImage::PixelType>
-      >
+class ITK_EXPORT HillShadingFilter
+    : public UnaryFunctorNeighborhoodImageFilter<
+          TInputImage, TOutputImage, Functor::HillShadingFunctor<itk::ConstNeighborhoodIterator<TInputImage>, TInputImage, typename TOutputImage::PixelType>>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef  HillShadingFilter Self;
+  typedef HillShadingFilter Self;
 
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -81,15 +78,17 @@ public:
   }
 
 protected:
-  HillShadingFilter() {}
-  ~HillShadingFilter() override {}
+  HillShadingFilter()
+  {
+  }
+  ~HillShadingFilter() override
+  {
+  }
 
 private:
-  HillShadingFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  HillShadingFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
-
 }
 
 #endif

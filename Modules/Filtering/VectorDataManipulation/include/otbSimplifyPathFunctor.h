@@ -54,7 +54,6 @@ template <class TInput, class TOutput>
 class SimplifyPathFunctor
 {
 public:
-
   typedef typename TInput::VertexListType::ConstIterator VertexListConstIteratorType;
   typedef typename TInput::VertexListType::ConstPointer  VertexListConstPointerType;
   typedef TOutput                                        OutputPathType;
@@ -73,70 +72,69 @@ public:
   {
     m_Tolerance = 1.0;
   }
-  ~SimplifyPathFunctor() {}
+  ~SimplifyPathFunctor()
+  {
+  }
 
-  inline OutputPathPointerType operator ()(const TInput * input)
+  inline OutputPathPointerType operator()(const TInput* input)
   {
 
     OutputPathPointerType newPath = OutputPathType::New();
     newPath->Initialize();
     // Getting the verices list of the current input paths
-    VertexListConstPointerType  vertexList = input->GetVertexList();
-    if(vertexList->Size()>0)
-      {
-      VertexListConstIteratorType beginIt = vertexList->Begin();
+    VertexListConstPointerType vertexList = input->GetVertexList();
+    if (vertexList->Size() > 0)
+    {
+      VertexListConstIteratorType beginIt        = vertexList->Begin();
       VertexListConstIteratorType beforeTheEndIt = --(vertexList->End());
 
       // Add the first vertex
       newPath->AddVertex(beginIt.Value());
 
       while (beginIt != beforeTheEndIt)
-        {
+      {
         VertexListConstIteratorType endIt = beforeTheEndIt;
         // while the segment is not consistent, decrement endIt
         while (!this->TestPathConsistency(beginIt, endIt))
-          {
+        {
           --endIt;
-          }
+        }
         // Add the final vertex
         newPath->AddVertex(endIt.Value());
         beginIt = endIt;
-        }
       }
+    }
 
     newPath->SetMetaDataDictionary(input->GetMetaDataDictionary());
     return newPath;
-
   }
 
 private:
   double m_Tolerance;
 
-  bool TestPathConsistency(VertexListConstIteratorType begin,
-                           VertexListConstIteratorType end) const
+  bool TestPathConsistency(VertexListConstIteratorType begin, VertexListConstIteratorType end) const
   {
     VertexListConstIteratorType segmentIt = begin;
     ++segmentIt;
-    //Compute the distance of a point to a segment based on the cross product
+    // Compute the distance of a point to a segment based on the cross product
     while (segmentIt != end)
-      {
-      double crossProduct = (end.Value()[0] - begin.Value()[0]) * (segmentIt.Value()[1] - begin.Value()[1])
-                            - (end.Value()[1] - begin.Value()[1]) * (segmentIt.Value()[0] - begin.Value()[0]);
-      double lengthSeg = (end.Value()[0] - begin.Value()[0]) * (end.Value()[0] - begin.Value()[0])
-                         + (end.Value()[1] - begin.Value()[1]) * (end.Value()[1] - begin.Value()[1]);
-      if (lengthSeg == 0) return false;
+    {
+      double crossProduct = (end.Value()[0] - begin.Value()[0]) * (segmentIt.Value()[1] - begin.Value()[1]) -
+                            (end.Value()[1] - begin.Value()[1]) * (segmentIt.Value()[0] - begin.Value()[0]);
+      double lengthSeg =
+          (end.Value()[0] - begin.Value()[0]) * (end.Value()[0] - begin.Value()[0]) + (end.Value()[1] - begin.Value()[1]) * (end.Value()[1] - begin.Value()[1]);
+      if (lengthSeg == 0)
+        return false;
       double distsq = crossProduct * crossProduct / lengthSeg;
       if (distsq > static_cast<double>(m_Tolerance))
-        {
+      {
         return false;
-        }
-      ++segmentIt;
       }
+      ++segmentIt;
+    }
     return true;
   }
-
 };
-
 }
 
 #endif

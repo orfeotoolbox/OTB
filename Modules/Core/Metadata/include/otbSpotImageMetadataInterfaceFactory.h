@@ -62,9 +62,8 @@ protected:
   ~SpotImageMetadataInterfaceFactory() override;
 
 private:
-  SpotImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SpotImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

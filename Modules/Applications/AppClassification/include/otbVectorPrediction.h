@@ -49,9 +49,9 @@ class VectorPrediction : public Application
 {
 public:
   /** Standard class typedefs. */
-  using Self = VectorPrediction;
-  using Superclass = Application;
-  using Pointer = itk::SmartPointer<Self>;
+  using Self         = VectorPrediction;
+  using Superclass   = Application;
+  using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Standard macro */
@@ -59,25 +59,25 @@ public:
 
   itkTypeMacro(Self, Application)
 
-  /** Filters typedef */
-  using ValueType = float;
+      /** Filters typedef */
+      using ValueType = float;
   // Label type is float for regression and unsigned int for classification
   using LabelType = typename std::conditional<RegressionMode, float, unsigned int>::type;
 
-  using LabelSampleType = itk::FixedArray<LabelType, 1>;
+  using LabelSampleType     = itk::FixedArray<LabelType, 1>;
   using LabelListSampleType = itk::Statistics::ListSample<LabelSampleType>;
 
-  using MachineLearningModelType = otb::MachineLearningModel<ValueType, LabelType>;
+  using MachineLearningModelType        = otb::MachineLearningModel<ValueType, LabelType>;
   using MachineLearningModelFactoryType = otb::MachineLearningModelFactory<ValueType, LabelType>;
-  using ModelPointerType = typename MachineLearningModelType::Pointer;
-  using ConfidenceListSampleType = typename MachineLearningModelType::ConfidenceListSampleType;
+  using ModelPointerType                = typename MachineLearningModelType::Pointer;
+  using ConfidenceListSampleType        = typename MachineLearningModelType::ConfidenceListSampleType;
 
   /** Statistics Filters typedef */
-  using MeasurementType = itk::VariableLengthVector<ValueType>;
+  using MeasurementType  = itk::VariableLengthVector<ValueType>;
   using StatisticsReader = otb::StatisticsXMLFileReader<MeasurementType>;
 
-  using InputSampleType = itk::VariableLengthVector<ValueType>;
-  using ListSampleType = itk::Statistics::ListSample<InputSampleType>;
+  using InputSampleType      = itk::VariableLengthVector<ValueType>;
+  using ListSampleType       = itk::Statistics::ListSample<InputSampleType>;
   using ShiftScaleFilterType = otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType>;
 
   ~VectorPrediction() override
@@ -106,27 +106,19 @@ private:
 
   /** Create the output DataSource, in update mode the input layer is buffered and the input
    * data source is re opened in update mode. */
-  otb::ogr::DataSource::Pointer CreateOutputDataSource(otb::ogr::DataSource::Pointer source,
-                                                        otb::ogr::Layer & layer,
-                                                        bool updateMode);
+  otb::ogr::DataSource::Pointer CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer, bool updateMode);
 
   /** Add a prediction field in the output layer if it does not exist.
    * If computeConfidenceMap evaluates to true a confidence field will be
    * added. */
-  void AddPredictionField(otb::ogr::Layer & outLayer,
-                          otb::ogr::Layer const& layer,
-                          bool computeConfidenceMap);
+  void AddPredictionField(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, bool computeConfidenceMap);
 
   /** Fill the output layer with the predicted values and optionnaly the confidence */
-  void FillOutputLayer(otb::ogr::Layer & outLayer,
-                          otb::ogr::Layer const& layer,
-                          typename LabelListSampleType::Pointer target,
-                          typename ConfidenceListSampleType::Pointer quality,
-                          bool updateMode,
-                          bool computeConfidenceMap);
+  void FillOutputLayer(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, typename LabelListSampleType::Pointer target,
+                       typename ConfidenceListSampleType::Pointer quality, bool updateMode, bool computeConfidenceMap);
 
   ModelPointerType m_Model;
-  
+
   /** Name used for the confidence field */
   std::string confFieldName = "confidence";
 };

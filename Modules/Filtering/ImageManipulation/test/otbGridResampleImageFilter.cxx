@@ -31,33 +31,33 @@
 
 #include "otbImageFileWriter.h"
 
-int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbGridResampleImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   // This test is only to check that filter builds with VectorImage
-  // too  
+  // too
   typedef otb::VectorImage<double> VectorImageType;
-  typedef otb::GridResampleImageFilter<VectorImageType,VectorImageType> VectorFilterType;
+  typedef otb::GridResampleImageFilter<VectorImageType, VectorImageType> VectorFilterType;
 
   VectorFilterType::Pointer vectorFilter = VectorFilterType::New();
-  
+
   typedef otb::Image<double> ImageType;
-  typedef otb::GridResampleImageFilter<ImageType,ImageType> FilterType;
-  
+  typedef otb::GridResampleImageFilter<ImageType, ImageType> FilterType;
+
   FilterType::Pointer filter = FilterType::New();
-  
-  typedef itk::ResampleImageFilter<ImageType,ImageType> RefFilterType;
+
+  typedef itk::ResampleImageFilter<ImageType, ImageType> RefFilterType;
 
   RefFilterType::Pointer refFilter = RefFilterType::New();
 
   // We will resample a random image with GridResampleImageFilter and
   // ResampleImageFilter, and check that outputs are the same
-  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator   RandomGeneratorType;
-  RandomGeneratorType::Pointer randomGenerator = RandomGeneratorType::GetInstance();
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
+  RandomGeneratorType::Pointer                                   randomGenerator = RandomGeneratorType::GetInstance();
 
   ImageType::SizeType size;
   size.Fill(1000);
-  
+
   ImageType::RegionType region;
   region.SetSize(size);
 
@@ -65,45 +65,45 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   randomImage->SetRegions(region);
   randomImage->Allocate();
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
-  IteratorType iter(randomImage,region);
-  for (iter.GoToBegin() ; !iter.IsAtEnd() ; ++iter)
-    {
+  IteratorType                                iter(randomImage, region);
+  for (iter.GoToBegin(); !iter.IsAtEnd(); ++iter)
+  {
     iter.Set(randomGenerator->GetUniformVariate(0.0, 1.0) * 1000);
-    }
+  }
 
   filter->SetInput(randomImage);
 
   refFilter->SetInput(randomImage);
 
-  typedef itk::IdentityTransform<double,2> IdentityTransformType;
+  typedef itk::IdentityTransform<double, 2> IdentityTransformType;
 
   IdentityTransformType::Pointer idTransform = IdentityTransformType::New();
   refFilter->SetTransform(idTransform);
 
   ImageType::SpacingType spacing;
-  spacing[0]=0.12;
-  spacing[1]=-0.19;
+  spacing[0] = 0.12;
+  spacing[1] = -0.19;
   ImageType::PointType origin;
-  origin[0]=11;
-  origin[1]=17;
+  origin[0] = 11;
+  origin[1] = 17;
   ImageType::SizeType outSize;
   outSize.Fill(103);
   ImageType::DirectionType direction;
   direction.SetIdentity();
   ImageType::SpacingType uspacing;
-  for ( unsigned int i = 0 ; i < ImageType::ImageDimension ; i++ )
+  for (unsigned int i = 0; i < ImageType::ImageDimension; i++)
+  {
+    if (spacing[i] < 0)
     {
-    if (  spacing[i] < 0 )
-      {
       uspacing[i] = -spacing[i];
-      for (unsigned int j = 0 ; j < ImageType::ImageDimension ; j++)
-        {
+      for (unsigned int j = 0; j < ImageType::ImageDimension; j++)
+      {
         direction[j][i] = -direction[j][i];
-        }
       }
-      else
-        uspacing[i] = spacing[i];
     }
+    else
+      uspacing[i] = spacing[i];
+  }
 
   filter->SetOutputSize(outSize);
   filter->SetOutputOrigin(origin);
@@ -114,8 +114,8 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   refFilter->SetOutputSpacing(uspacing);
   refFilter->SetOutputDirection(direction);
 
-  typedef otb::DifferenceImageFilter<ImageType,ImageType> ComparisonFilterType;
-  typedef itk::StreamingImageFilter<ImageType,ImageType> StreamingFilterType;
+  typedef otb::DifferenceImageFilter<ImageType, ImageType> ComparisonFilterType;
+  typedef itk::StreamingImageFilter<ImageType, ImageType>  StreamingFilterType;
 
   StreamingFilterType::Pointer streamingRef = StreamingFilterType::New();
   streamingRef->SetInput(refFilter->GetOutput());
@@ -133,14 +133,14 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   unsigned int nbPixelsWithDiff = comparisonFilter->GetNumberOfPixelsWithDifferences();
 
-  std::cout<<"Number of pixels with differences: "<<nbPixelsWithDiff<<std::endl;
+  std::cout << "Number of pixels with differences: " << nbPixelsWithDiff << std::endl;
 
-  if(nbPixelsWithDiff)
-    {
-    std::cerr<<"Output of itk::GridResampleImageFilter does not match output of itk::ResampleImageFilter with same parameters"<<std::endl;
+  if (nbPixelsWithDiff)
+  {
+    std::cerr << "Output of itk::GridResampleImageFilter does not match output of itk::ResampleImageFilter with same parameters" << std::endl;
 
     typedef otb::ImageFileWriter<ImageType> WriterType;
-    WriterType::Pointer writer = WriterType::New();
+    WriterType::Pointer                     writer = WriterType::New();
     writer->SetInput(comparisonFilter->GetOutput());
     writer->SetFileName("otbGridResampleImageFilterTestOutput.tif");
     writer->Update();
@@ -149,14 +149,14 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char * itkNotUsed(argv)[])
     writer->SetInput(streamingRef->GetOutput());
     writer->SetFileName("otbGridResampleImageFilterTestOutput1.tif");
     writer->Update();
-    
+
     writer = WriterType::New();
     writer->SetInput(streaming->GetOutput());
     writer->SetFileName("otbGridResampleImageFilterTestOutput2.tif");
     writer->Update();
 
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

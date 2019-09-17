@@ -27,167 +27,164 @@
 
 
 // STRING LABELS
-typedef std::string                                                                 LabelPixelType;
-typedef otb::MassOfBelief<LabelPixelType>                                           MassOfBeliefFunctionType;
-typedef MassOfBeliefFunctionType::MassMapType                                       MassMapType;
-typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>                      JointMassOfBeliefFilterType;
+typedef std::string                                            LabelPixelType;
+typedef otb::MassOfBelief<LabelPixelType>                      MassOfBeliefFunctionType;
+typedef MassOfBeliefFunctionType::MassMapType                  MassMapType;
+typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
 
 // INT LABELS
-typedef int                                                                         IntLabelPixelType;
-typedef otb::MassOfBelief<IntLabelPixelType>                                        IntMassOfBeliefFunctionType;
-typedef IntMassOfBeliefFunctionType::MassMapType                                    IntMassMapType;
-typedef otb::JointMassOfBeliefFilter<IntMassOfBeliefFunctionType>                   IntJointMassOfBeliefFilterType;
+typedef int                                                       IntLabelPixelType;
+typedef otb::MassOfBelief<IntLabelPixelType>                      IntMassOfBeliefFunctionType;
+typedef IntMassOfBeliefFunctionType::MassMapType                  IntMassMapType;
+typedef otb::JointMassOfBeliefFilter<IntMassOfBeliefFunctionType> IntJointMassOfBeliefFilterType;
 
-typedef unsigned long                                                               ConfusionMatrixEltType;
-typedef itk::VariableSizeMatrix<ConfusionMatrixEltType>                             ConfusionMatrixType;
-typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, IntLabelPixelType>  ConfusionMatrixToMassOfBeliefType;
-typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType                         MapOfClassesType;
-typedef ConfusionMatrixToMassOfBeliefType::MapOfIndicesType                         MapOfIndicesType;
-typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod             MassOfBeliefDefinitionMethod;
-typedef ConfusionMatrixToMassOfBeliefType::MassType                                 MassType; //double by default
-typedef ConfusionMatrixToMassOfBeliefType::LabelMassMapType                         SingleClassLabelMassMapType;
+typedef unsigned long                                   ConfusionMatrixEltType;
+typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
+typedef otb::ConfusionMatrixToMassOfBelief<ConfusionMatrixType, IntLabelPixelType> ConfusionMatrixToMassOfBeliefType;
+typedef ConfusionMatrixToMassOfBeliefType::MapOfClassesType             MapOfClassesType;
+typedef ConfusionMatrixToMassOfBeliefType::MapOfIndicesType             MapOfIndicesType;
+typedef ConfusionMatrixToMassOfBeliefType::MassOfBeliefDefinitionMethod MassOfBeliefDefinitionMethod;
+typedef ConfusionMatrixToMassOfBeliefType::MassType                     MassType; // double by default
+typedef ConfusionMatrixToMassOfBeliefType::LabelMassMapType             SingleClassLabelMassMapType;
 
-typedef std::map<IntLabelPixelType, unsigned int>                                   ClassifierHistogramType;
+typedef std::map<IntLabelPixelType, unsigned int> ClassifierHistogramType;
 
 
-
-//Function to display MassOfBeliefFunctionType::LabelSetType instances with the "<<" operator
-std::ostream& operator <<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l)
+// Function to display MassOfBeliefFunctionType::LabelSetType instances with the "<<" operator
+std::ostream& operator<<(std::ostream& os, const MassOfBeliefFunctionType::LabelSetType& l)
 {
   MassOfBeliefFunctionType::PrintLabelSet(os, l);
   return os;
 }
 
-//Function to display IntMassOfBeliefFunctionType::LabelSetType instances with the "<<" operator
-std::ostream& operator <<(std::ostream& os, const IntMassOfBeliefFunctionType::LabelSetType& l)
+// Function to display IntMassOfBeliefFunctionType::LabelSetType instances with the "<<" operator
+std::ostream& operator<<(std::ostream& os, const IntMassOfBeliefFunctionType::LabelSetType& l)
 {
   IntMassOfBeliefFunctionType::PrintLabelSet(os, l);
   return os;
 }
 
-int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
+int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType& mapOfClassesRefClX, ConfusionMatrixType& confusionMatrixClX)
+{
+  std::ifstream inFile;
+  inFile.open(fileName);
+
+  if (!inFile)
   {
-    std::ifstream inFile;
-    inFile.open(fileName);
-
-    if (!inFile)
-      {
-      std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
-      std::cerr << fileName << std::endl;
-      return EXIT_FAILURE;
-      }
-    else
-      {
-      IntLabelPixelType labelRef = 0, labelProd = 0;
-      std::string currentLine, refLabelsLine, prodLabelsLine, currentValue;
-      const char endCommentChar = ':';
-      const char separatorChar = ',';
-      const char eolChar = '\n';
-      std::getline(inFile, refLabelsLine, endCommentChar); // Skips the comments
-      std::getline(inFile, refLabelsLine, eolChar); // Gets the first line after the comment char until the End Of Line char
-      std::getline(inFile, prodLabelsLine, endCommentChar); // Skips the comments
-      std::getline(inFile, prodLabelsLine, eolChar); // Gets the second line after the comment char until the End Of Line char
-
-      std::istringstream issRefLabelsLine(refLabelsLine);
-      std::istringstream issProdLabelsLine(prodLabelsLine);
-
-      MapOfClassesType mapOfClassesProdClX;
-
-      mapOfClassesRefClX.clear();
-      mapOfClassesProdClX.clear();
-      int itLab = 0;
-      while (issRefLabelsLine.good())
-        {
-        std::getline(issRefLabelsLine, currentValue, separatorChar);
-        labelRef = static_cast<IntLabelPixelType> (std::atoi(currentValue.c_str()));
-        mapOfClassesRefClX[labelRef] = itLab;
-        ++itLab;
-        }
-
-      itLab = 0;
-      while (issProdLabelsLine.good())
-        {
-        std::getline(issProdLabelsLine, currentValue, separatorChar);
-        labelProd = static_cast<IntLabelPixelType> (std::atoi(currentValue.c_str()));
-        mapOfClassesProdClX[labelProd] = itLab;
-        ++itLab;
-        }
-
-      unsigned int nbRefLabelsClk = mapOfClassesRefClX.size();
-      unsigned int nbProdLabelsClk = mapOfClassesProdClX.size();
-      ConfusionMatrixType confusionMatrixClXTemp;
-      confusionMatrixClXTemp = ConfusionMatrixType(nbRefLabelsClk, nbProdLabelsClk);
-      confusionMatrixClXTemp.Fill(0);
-
-      // Reading the confusion matrix confusionMatrixClXTemp from the file
-      for (unsigned int itRow = 0; itRow < nbRefLabelsClk; ++itRow)
-        {
-        //Gets the itRow^th line after the header lines with the labels
-        std::getline(inFile, currentLine, eolChar);
-        std::istringstream issCurrentLine(currentLine);
-        unsigned int itCol = 0;
-        while (issCurrentLine.good())
-          {
-          std::getline(issCurrentLine, currentValue, separatorChar);
-          confusionMatrixClXTemp(itRow, itCol) = static_cast<ConfusionMatrixEltType> (std::atoi(currentValue.c_str()));
-          ++itCol;
-          }
-        }
-
-      MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
-
-      /*for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
-        {
-        std::cout << "mapOfClassesRefClX[" << itMapOfClassesRef->first << "] = " << itMapOfClassesRef->second << std::endl;
-        }
-      std::cout << std::endl;
-      for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
-        {
-        std::cout << "mapOfClassesProdClX[" << itMapOfClassesProd->first << "] = " << itMapOfClassesProd->second << std::endl;
-        }*/
-
-      // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
-      // from the reference labels in mapOfClassesRefClX
-      int indiceLabelRef = 0, indiceLabelProd = 0;
-      int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
-      // Initialization of confusionMatrixClX
-      confusionMatrixClX = ConfusionMatrixType(nbRefLabelsClk, nbRefLabelsClk);
-      confusionMatrixClX.Fill(0);
-      for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
-        {
-        // labels labelRef of mapOfClassesRefClX are already sorted
-        labelRef = itMapOfClassesRef->first;
-        indiceLabelRefTemp = itMapOfClassesRef->second;
-
-        for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
-          {
-          // labels labelProd of mapOfClassesProdClX are already sorted
-          labelProd = itMapOfClassesProd->first;
-          indiceLabelProdTemp = itMapOfClassesProd->second;
-
-          // If labelProd is present in mapOfClassesRefClX
-          if (mapOfClassesRefClX.count(labelProd) != 0)
-            {
-            // Indice of labelProd in mapOfClassesRefClX; itMapOfClassesRef->second elements are already SORTED
-            indiceLabelProd = mapOfClassesRefClX[labelProd];
-            confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
-            }
-          }
-        ++indiceLabelRef;
-        }
-
-      //std::cout << "confusionMatrixClXTemp:" << std::endl << confusionMatrixClXTemp << std::endl << std::endl;
-      //std::cout << "confusionMatrixClX:" << std::endl << confusionMatrixClX << std::endl;
-      }
-    inFile.close();
-    return EXIT_SUCCESS;
+    std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
+    std::cerr << fileName << std::endl;
+    return EXIT_FAILURE;
   }
+  else
+  {
+    IntLabelPixelType labelRef = 0, labelProd = 0;
+    std::string       currentLine, refLabelsLine, prodLabelsLine, currentValue;
+    const char        endCommentChar = ':';
+    const char        separatorChar  = ',';
+    const char        eolChar        = '\n';
+    std::getline(inFile, refLabelsLine, endCommentChar);  // Skips the comments
+    std::getline(inFile, refLabelsLine, eolChar);         // Gets the first line after the comment char until the End Of Line char
+    std::getline(inFile, prodLabelsLine, endCommentChar); // Skips the comments
+    std::getline(inFile, prodLabelsLine, eolChar);        // Gets the second line after the comment char until the End Of Line char
 
+    std::istringstream issRefLabelsLine(refLabelsLine);
+    std::istringstream issProdLabelsLine(prodLabelsLine);
 
+    MapOfClassesType mapOfClassesProdClX;
+
+    mapOfClassesRefClX.clear();
+    mapOfClassesProdClX.clear();
+    int itLab = 0;
+    while (issRefLabelsLine.good())
+    {
+      std::getline(issRefLabelsLine, currentValue, separatorChar);
+      labelRef                     = static_cast<IntLabelPixelType>(std::atoi(currentValue.c_str()));
+      mapOfClassesRefClX[labelRef] = itLab;
+      ++itLab;
+    }
+
+    itLab = 0;
+    while (issProdLabelsLine.good())
+    {
+      std::getline(issProdLabelsLine, currentValue, separatorChar);
+      labelProd                      = static_cast<IntLabelPixelType>(std::atoi(currentValue.c_str()));
+      mapOfClassesProdClX[labelProd] = itLab;
+      ++itLab;
+    }
+
+    unsigned int        nbRefLabelsClk  = mapOfClassesRefClX.size();
+    unsigned int        nbProdLabelsClk = mapOfClassesProdClX.size();
+    ConfusionMatrixType confusionMatrixClXTemp;
+    confusionMatrixClXTemp = ConfusionMatrixType(nbRefLabelsClk, nbProdLabelsClk);
+    confusionMatrixClXTemp.Fill(0);
+
+    // Reading the confusion matrix confusionMatrixClXTemp from the file
+    for (unsigned int itRow = 0; itRow < nbRefLabelsClk; ++itRow)
+    {
+      // Gets the itRow^th line after the header lines with the labels
+      std::getline(inFile, currentLine, eolChar);
+      std::istringstream issCurrentLine(currentLine);
+      unsigned int       itCol = 0;
+      while (issCurrentLine.good())
+      {
+        std::getline(issCurrentLine, currentValue, separatorChar);
+        confusionMatrixClXTemp(itRow, itCol) = static_cast<ConfusionMatrixEltType>(std::atoi(currentValue.c_str()));
+        ++itCol;
+      }
+    }
+
+    MapOfClassesType::iterator itMapOfClassesRef, itMapOfClassesProd;
+
+    /*for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
+      {
+      std::cout << "mapOfClassesRefClX[" << itMapOfClassesRef->first << "] = " << itMapOfClassesRef->second << std::endl;
+      }
+    std::cout << std::endl;
+    for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
+      {
+      std::cout << "mapOfClassesProdClX[" << itMapOfClassesProd->first << "] = " << itMapOfClassesProd->second << std::endl;
+      }*/
+
+    // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
+    // from the reference labels in mapOfClassesRefClX
+    int indiceLabelRef = 0, indiceLabelProd = 0;
+    int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
+    // Initialization of confusionMatrixClX
+    confusionMatrixClX = ConfusionMatrixType(nbRefLabelsClk, nbRefLabelsClk);
+    confusionMatrixClX.Fill(0);
+    for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
+    {
+      // labels labelRef of mapOfClassesRefClX are already sorted
+      labelRef           = itMapOfClassesRef->first;
+      indiceLabelRefTemp = itMapOfClassesRef->second;
+
+      for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
+      {
+        // labels labelProd of mapOfClassesProdClX are already sorted
+        labelProd           = itMapOfClassesProd->first;
+        indiceLabelProdTemp = itMapOfClassesProd->second;
+
+        // If labelProd is present in mapOfClassesRefClX
+        if (mapOfClassesRefClX.count(labelProd) != 0)
+        {
+          // Indice of labelProd in mapOfClassesRefClX; itMapOfClassesRef->second elements are already SORTED
+          indiceLabelProd = mapOfClassesRefClX[labelProd];
+          confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
+        }
+      }
+      ++indiceLabelRef;
+    }
+
+    // std::cout << "confusionMatrixClXTemp:" << std::endl << confusionMatrixClXTemp << std::endl << std::endl;
+    // std::cout << "confusionMatrixClX:" << std::endl << confusionMatrixClX << std::endl;
+  }
+  inFile.close();
+  return EXIT_SUCCESS;
+}
 
 
 // OPTIMIZED RECURSIVE DS FUSION WITH CONFUSION MATRICES
-int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[])
+int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char* argv[])
 {
   unsigned int nbClassifiers = 6;
 
@@ -211,7 +208,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   confMatCl0(1, 0) = 0, confMatCl0(1, 1) = 100, confMatCl0(1, 2) = 100, confMatCl0(1, 3) = 100;
   confMatCl0(2, 0) = 452, confMatCl0(2, 1) = 20, confMatCl0(2, 2) = 200, confMatCl0(2, 3) = 100;
   confMatCl0(3, 0) = 0, confMatCl0(3, 1) = 0, confMatCl0(3, 2) = 100, confMatCl0(3, 3) = 200;
-;
+  ;
   mapOfIndicesCl1[0] = 3, mapOfIndicesCl1[1] = 4, mapOfIndicesCl1[2] = 5;
   confMatCl1(0, 0) = 128, confMatCl1(0, 1) = 256, confMatCl1(0, 2) = 0;
   confMatCl1(1, 0) = 42, confMatCl1(1, 1) = 1500, confMatCl1(1, 2) = 1;
@@ -260,39 +257,37 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
 
 
   // Converting the Confusion Matrix into a std::map<IntLabelPixelType, MassType> of Masses of Belief for each label
-  ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
+  ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass         = ConfusionMatrixToMassOfBeliefType::New();
+  MassOfBeliefDefinitionMethod               massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
 
   std::string massOfBeliefDefMethodStr = argv[1];
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
-    {
+  {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
-    }
+  }
   else
-    {
+  {
     if (massOfBeliefDefMethodStr.compare("RECALL") == 0)
-      {
+    {
       massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::RECALL;
-      }
+    }
     else
-      {
+    {
       if (massOfBeliefDefMethodStr.compare("ACCURACY") == 0)
-        {
+      {
         massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::ACCURACY;
-        }
+      }
       else
-        {
+      {
         if (massOfBeliefDefMethodStr.compare("KAPPA") == 0)
-          {
+        {
           massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::KAPPA;
-          }
         }
       }
     }
+  }
 
   confMatToMass->SetDefinitionMethod(massOfBeliefDefMethod);
-
-
 
 
   /* ***************************************************************************************** */
@@ -303,23 +298,23 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  unsigned int nbClassesClk;
-  MapOfIndicesType mapOfIndicesClk;
-  ConfusionMatrixType confMatClk;
-  MassType mobUniverseClk;
-  SingleClassLabelMassMapType mapMOBClk;
+  unsigned int                          nbClassesClk;
+  MapOfIndicesType                      mapOfIndicesClk;
+  ConfusionMatrixType                   confMatClk;
+  MassType                              mobUniverseClk;
+  SingleClassLabelMassMapType           mapMOBClk;
   SingleClassLabelMassMapType::iterator itMapMOBClk;
 
-  ClassifierHistogramType universe;
-  ClassifierHistogramType::iterator itUniverse;
+  ClassifierHistogramType                  universe;
+  ClassifierHistogramType::iterator        itUniverse;
   std::vector<SingleClassLabelMassMapType> vectorMapMOBs;
-  std::vector<MassType> vectorUniverseMOBs;
+  std::vector<MassType>                    vectorUniverseMOBs;
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     // Classifier Cl_k:
     mapOfIndicesClk = vectorOfMapOfIndices[itClk];
-    confMatClk = vectorOfConfMatrices[itClk];
-    nbClassesClk = mapOfIndicesClk.size();
+    confMatClk      = vectorOfConfMatrices[itClk];
+    nbClassesClk    = mapOfIndicesClk.size();
 
     // mobUniverseClk is set to zero in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -341,40 +336,39 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
     std::ostringstream oss;
     for (unsigned int itLabel = 0; itLabel < nbClassesClk; ++itLabel)
-      {
+    {
       IntLabelPixelType classLabel = mapOfIndicesClk[itLabel];
       oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
-        {
+      {
         universe[classLabel]++;
-        }
-      else
-        {
-        universe[classLabel] = 1;
-        }
       }
+      else
+      {
+        universe[classLabel] = 1;
+      }
+    }
     otbLogMacro(Debug, << oss.str());
     otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
-      {
+    {
       otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
-      }
+    }
 
     otbLogMacro(Debug, << "*******************************************************************************");
-    }
+  }
 
   // Number of classes in the universe
   unsigned int nbClasses = universe.size();
 
   otbLogMacro(Info, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
-    otbLogMacro(Info, << "Class Label " << itUniverse->first
-      << " present in " << itUniverse->second << " classifier(s)");
-    }
+  {
+    otbLogMacro(Info, << "Class Label " << itUniverse->first << " present in " << itUniverse->second << " classifier(s)");
+  }
 
   /* ***************************************************************************************** */
   /* ************************ RESULTS OF THE CLASSIFICATION OF PIXEL X *********************** */
@@ -395,9 +389,9 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   /* ***************************************************************************************** */
 
   IntLabelPixelType classLabelk;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  MassType mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
-  MassType KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
+  MassType          mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  MassType          mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
+  MassType          KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
 
   SingleClassLabelMassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
 
@@ -405,41 +399,41 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     classLabelk = classifiedPixelX[itClk];
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = vectorUniverseMOBs[itClk];
-    mLabelSetClk = vectorMapMOBs[itClk][classLabelk];
+    mUniverseClk  = vectorUniverseMOBs[itClk];
+    mLabelSetClk  = vectorMapMOBs[itClk][classLabelk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
-    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk
-      << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk);
+    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk
+                       << "] = " << mLabelSetClk);
 
     // The first time the label {Ai} is found in classifiedPixelX
     if (mapJointMassesStepI.count(classLabelk) == 0)
-      {
-      mLabelSetClkNew = mLabelSetClk;
+    {
+      mLabelSetClkNew  = mLabelSetClk;
       mLabelSetClkNew_ = mLabelSetClk_;
-      mUniverseClkNew = mUniverseClk;
-      }
-    else
-      {
-      mLabelSetClkprev = mapJointMassesStepI[classLabelk];
-      mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
-      mUniverseClkprev = mapJointMassesUniverseStepI[classLabelk];
-
-      KClk = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
-      mLabelSetClkNew = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
-      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
-      mUniverseClkNew = KClk * mUniverseClkprev * mUniverseClk;
-      }
-
-    mapJointMassesStepI[classLabelk] = mLabelSetClkNew;
-    mapJointMassesStepI_[classLabelk] = mLabelSetClkNew_;
-    mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
+      mUniverseClkNew  = mUniverseClk;
     }
+    else
+    {
+      mLabelSetClkprev  = mapJointMassesStepI[classLabelk];
+      mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
+      mUniverseClkprev  = mapJointMassesUniverseStepI[classLabelk];
+
+      KClk             = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
+      mLabelSetClkNew  = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
+      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
+      mUniverseClkNew  = KClk * mUniverseClkprev * mUniverseClk;
+    }
+
+    mapJointMassesStepI[classLabelk]         = mLabelSetClkNew;
+    mapJointMassesStepI_[classLabelk]        = mLabelSetClkNew_;
+    mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
+  }
 
   /* ***************************************************************************************** */
   /* *************************************** DS STEP #2 ************************************** */
@@ -448,12 +442,12 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   // Calculation of the four A, B, C and K constants
   MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
-    {
+  {
     classLabelk = itMapMOBClk->first;
 
-    mLabelSetClk = mapJointMassesStepI[classLabelk];
+    mLabelSetClk  = mapJointMassesStepI[classLabelk];
     mLabelSetClk_ = mapJointMassesStepI_[classLabelk];
-    mUniverseClk = mapJointMassesUniverseStepI[classLabelk];
+    mUniverseClk  = mapJointMassesUniverseStepI[classLabelk];
 
     A = A + (mLabelSetClk / (1 - mLabelSetClk));
     B = B * (1 - mLabelSetClk);
@@ -462,20 +456,20 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     otbLogMacro(Debug, << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk);
     otbLogMacro(Debug, << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_);
     otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk);
-    }
+  }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
   if (nbClkGroupsStepI == nbClasses)
-    {
+  {
     K = 1 / ((1 + A) * B - C);
-    }
+  }
   else
-    {
+  {
     if (nbClkGroupsStepI < nbClasses)
-      {
+    {
       K = 1 / ((1 + A) * B);
-      }
     }
+  }
 
   otbLogMacro(Info, << "nbClasses = " << nbClasses);
   otbLogMacro(Info, << "nbClassifiers = " << nbClassifiers);
@@ -483,25 +477,25 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
   SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
-  MassType belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0.;
+  MassType                    belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0.;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
-    {
+  {
     classLabelk = itMapMOBClk->first;
 
     // Joint Masses AFTER STEP I (one mass per singleton {Ai})
-    mLabelSetClk = mapJointMassesStepI[classLabelk];
+    mLabelSetClk  = mapJointMassesStepI[classLabelk];
     mLabelSetClk_ = mapJointMassesStepI_[classLabelk];
-    mUniverseClk = mapJointMassesUniverseStepI[classLabelk];
+    mUniverseClk  = mapJointMassesUniverseStepI[classLabelk];
 
     // Bel(Ai)
     if ((nbClkGroupsStepI == nbClasses) || ((nbClkGroupsStepI == (nbClasses - 1)) && (K == nbClasses)))
-      {
+    {
       belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B + (mUniverseClk * C / mLabelSetClk_));
-      }
+    }
     else
-      {
+    {
       belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
-      }
+    }
 
     // Bel(Ai_)
     belLabelSetClk_ = 1 - belLabelSetClk;
@@ -521,10 +515,10 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
         }
       }*/
 
-    mapBelStepII[classLabelk] = belLabelSetClk;
+    mapBelStepII[classLabelk]  = belLabelSetClk;
     mapBelStepII_[classLabelk] = belLabelSetClk_;
     addBelLabelSetClk += belLabelSetClk;
-    }
+  }
 
   /* ***************************************************************************************** */
   /* ************************************ DECISION PROCESS *********************************** */
@@ -533,11 +527,11 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
-  IntLabelPixelType fusedDSLabelSet = 0;
-  MassType fusedDSBelLabelSetClk = 0.; //Here the MAX of Bel(Ai)
+  IntLabelPixelType fusedDSLabelSet       = 0;
+  MassType          fusedDSBelLabelSetClk = 0.; // Here the MAX of Bel(Ai)
 
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
+  {
     classLabelk = itUniverse->first;
 
     /*
@@ -547,39 +541,39 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
     */
 
     if (itUniverse == universe.begin())
-      {
-      fusedDSLabelSet = classLabelk;
+    {
+      fusedDSLabelSet       = classLabelk;
       fusedDSBelLabelSetClk = mapBelStepII[classLabelk];
-      }
+    }
     else
-      {
+    {
       if (mapBelStepII[classLabelk] >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = classLabelk;
+      {
+        fusedDSLabelSet       = classLabelk;
         fusedDSBelLabelSetClk = mapBelStepII[classLabelk];
-        }
       }
+    }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
     // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[classLabelk] == 0)
-      {
+    {
       mapBelStepII_[classLabelk] = addBelLabelSetClk;
-      }
+    }
 
     otbLogMacro(Info, << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk]);
     otbLogMacro(Info, << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk]);
-    }
+  }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is undefinedValue
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
+  {
     classLabelk = itUniverse->first;
     if ((mapBelStepII[classLabelk] == fusedDSBelLabelSetClk) && (classLabelk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet = undefinedValue;
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
@@ -589,7 +583,7 @@ int otbDempsterShaferFusionOptRecConfMatTest(int itkNotUsed(argc), char * argv[]
 
 
 // OPTIMIZED RECURSIVE DS FUSION
-int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
+int otbDempsterShaferFusionOptRecTest(int argc, char* argv[])
 {
   //*****************************
   // For DEBUG PURPOSE ONLY
@@ -597,26 +591,26 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   //*****************************
 
   std::vector<LabelPixelType> vectorAllLabels;
-  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  unsigned int                nbArgs = static_cast<unsigned int>(argc);
   for (unsigned int it = 1; it < nbArgs; ++it)
-    {
+  {
     vectorAllLabels.push_back(argv[it]);
-    }
+  }
 
   unsigned int nbClasses = vectorAllLabels.size();
 
   MassOfBeliefFunctionType::LabelSetType universe, labelSet;
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
-  LabelSetMapType mapLabelSets;
+  LabelSetMapType           mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
   for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
-    {
-    //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
+  {
+    // The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
     labelSet.clear();
     labelSet.insert(vectorAllLabels[it]);
     mapLabelSets[vectorAllLabels[it]] = labelSet;
-    }
+  }
 
   otbLogMacro(Info, << "universe = " << universe);
 
@@ -626,7 +620,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 
   // Values (as MassOfBeliefFunctionType::LabelSetType) of the K CLASSIFICATION MAPS for the pixel X
   typedef std::vector<MassOfBeliefFunctionType::LabelSetType> LabelSetOfVectorType;
-  LabelSetOfVectorType classifiedPixelX;
+  LabelSetOfVectorType                                        classifiedPixelX;
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
@@ -634,8 +628,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
 
-  if ((nbArgs - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
-    {
+  if ((nbArgs - 1) > nbClassesMax) // For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
+  {
     classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[3]]);
     classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[4]]);
     classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[5]]);
@@ -665,12 +659,12 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
      classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[24]]);
      classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[25]]);
      */
-    }
+  }
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
-    {
+  {
     otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
-    }
+  }
 
   //**********************************************************************
   //**********************************************************************
@@ -681,45 +675,45 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  //typedef MassOfBeliefFunctionType::MassMapType MassMapType;
+  // typedef MassOfBeliefFunctionType::MassMapType MassMapType;
   MassMapType::iterator itMapMasses;
-  MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
+  MassMapType           mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
   mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
-  //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  //mCl0[universe] = 0.2;
+  // mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  // mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
   mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
-  //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
-  //mCl1[universe] = 0;
+  // mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
+  // mCl1[universe] = 0;
 
   mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  //mCl2[universe] = 0.1;
+  // mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
+  // mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
   mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl3[universe] = 0;
+  // mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl3[universe] = 0;
 
   mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
   mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
   mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
-  //mCl4[universe] = 0;
+  // mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
+  // mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
   mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl5[universe] = 0;
+  // mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl5[universe] = 0;
 
 
   // Vector containing the std::maps of masses of ALL the singleton sets for each classifier k = 0,...,27 here
@@ -731,22 +725,22 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   mClVector.push_back(mCl4);
   mClVector.push_back(mCl5);
 
-  if ((nbArgs - 1) > nbClassesMax) //For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
-    {
+  if ((nbArgs - 1) > nbClassesMax) // For tests with more than 4 labels in the universe TO TEST PROCESSING SPEED
+  {
     //**********************************************************************
     // OTHER MASSES TO TEST PROCESSING SPEED
-    MassMapType mCl6, mCl7, mCl8, mCl9, mCl10, mCl11, mCl12, mCl13, mCl14, mCl15, mCl16, mCl17, mCl18, mCl19, mCl20,
-        mCl21, mCl22, mCl23, mCl24, mCl25, mCl26, mCl27, mCl28, mCl29, mCl30;
+    MassMapType mCl6, mCl7, mCl8, mCl9, mCl10, mCl11, mCl12, mCl13, mCl14, mCl15, mCl16, mCl17, mCl18, mCl19, mCl20, mCl21, mCl22, mCl23, mCl24, mCl25, mCl26,
+        mCl27, mCl28, mCl29, mCl30;
 
     // The other masses of each of the classifiers below (mCl6,...,mCl30) are assumed to be equal to zero,
     // that is why they are not initialized
-    mCl6[mapLabelSets[vectorAllLabels[3]]] = 0.6;
-    mCl7[mapLabelSets[vectorAllLabels[4]]] = 0.6;
-    mCl8[mapLabelSets[vectorAllLabels[5]]] = 0.6;
-    mCl9[mapLabelSets[vectorAllLabels[6]]] = 0.6;
-    mCl10[mapLabelSets[vectorAllLabels[7]]] = 0.6;
-    mCl11[mapLabelSets[vectorAllLabels[8]]] = 0.6;
-    mCl12[mapLabelSets[vectorAllLabels[9]]] = 0.6;
+    mCl6[mapLabelSets[vectorAllLabels[3]]]   = 0.6;
+    mCl7[mapLabelSets[vectorAllLabels[4]]]   = 0.6;
+    mCl8[mapLabelSets[vectorAllLabels[5]]]   = 0.6;
+    mCl9[mapLabelSets[vectorAllLabels[6]]]   = 0.6;
+    mCl10[mapLabelSets[vectorAllLabels[7]]]  = 0.6;
+    mCl11[mapLabelSets[vectorAllLabels[8]]]  = 0.6;
+    mCl12[mapLabelSets[vectorAllLabels[9]]]  = 0.6;
     mCl13[mapLabelSets[vectorAllLabels[10]]] = 0.6;
     mCl14[mapLabelSets[vectorAllLabels[11]]] = 0.6;
     mCl15[mapLabelSets[vectorAllLabels[12]]] = 0.6;
@@ -760,8 +754,8 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     mCl23[mapLabelSets[vectorAllLabels[20]]] = 0.6;
     mCl24[mapLabelSets[vectorAllLabels[21]]] = 0.6;
     mCl25[mapLabelSets[vectorAllLabels[22]]] = 0.6;
-    mCl26[mapLabelSets[vectorAllLabels[0]]] = 0.65;
-    mCl27[mapLabelSets[vectorAllLabels[2]]] = 0.65;
+    mCl26[mapLabelSets[vectorAllLabels[0]]]  = 0.65;
+    mCl27[mapLabelSets[vectorAllLabels[2]]]  = 0.65;
     mCl28[mapLabelSets[vectorAllLabels[23]]] = 0.6; // NOT used here
     mCl29[mapLabelSets[vectorAllLabels[24]]] = 0.6; // NOT used here
     mCl30[mapLabelSets[vectorAllLabels[25]]] = 0.6; // NOT used here
@@ -791,7 +785,7 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     mClVector.push_back(mCl28); // NOT used here
     mClVector.push_back(mCl29); // NOT used here
     mClVector.push_back(mCl30); // NOT used here
-    }
+  }
   //**********************************************************************
 
   //**********************************************************************
@@ -799,9 +793,9 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   //**********************************************************************
 
   MassOfBeliefFunctionType::LabelSetType labelSetClk;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  MassType mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
-  MassType KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
+  MassType                               mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  MassType                               mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
+  MassType                               KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
 
   MassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
 
@@ -809,38 +803,38 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
-    {
+  {
     labelSetClk = classifiedPixelX[itk]; // Label of the classified pixel X: {a}, {b} or {c} here
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = mClVector[itk][universe];
-    mLabelSetClk = mClVector[itk][labelSetClk];
+    mUniverseClk  = mClVector[itk][universe];
+    mLabelSetClk  = mClVector[itk][labelSetClk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
     // The first time the label {Ai} is found in classifiedPixelX
     if (mapJointMassesStepI.count(labelSetClk) == 0)
-      {
-      mLabelSetClkNew = mLabelSetClk;
+    {
+      mLabelSetClkNew  = mLabelSetClk;
       mLabelSetClkNew_ = mLabelSetClk_;
-      mUniverseClkNew = mUniverseClk;
-      }
-    else
-      {
-      mLabelSetClkprev = mapJointMassesStepI[labelSetClk];
-      mLabelSetClkprev_ = mapJointMassesStepI_[labelSetClk];
-      mUniverseClkprev = mapJointMassesUniverseStepI[labelSetClk];
-
-      KClk = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
-      mLabelSetClkNew = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
-      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
-      mUniverseClkNew = KClk * mUniverseClkprev * mUniverseClk;
-      }
-
-    mapJointMassesStepI[labelSetClk] = mLabelSetClkNew;
-    mapJointMassesStepI_[labelSetClk] = mLabelSetClkNew_;
-    mapJointMassesUniverseStepI[labelSetClk] = mUniverseClkNew;
+      mUniverseClkNew  = mUniverseClk;
     }
+    else
+    {
+      mLabelSetClkprev  = mapJointMassesStepI[labelSetClk];
+      mLabelSetClkprev_ = mapJointMassesStepI_[labelSetClk];
+      mUniverseClkprev  = mapJointMassesUniverseStepI[labelSetClk];
+
+      KClk             = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
+      mLabelSetClkNew  = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
+      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
+      mUniverseClkNew  = KClk * mUniverseClkprev * mUniverseClk;
+    }
+
+    mapJointMassesStepI[labelSetClk]         = mLabelSetClkNew;
+    mapJointMassesStepI_[labelSetClk]        = mLabelSetClkNew_;
+    mapJointMassesUniverseStepI[labelSetClk] = mUniverseClkNew;
+  }
 
   //**********************************************************************
   //***************************** DS STEP #2 *****************************
@@ -850,10 +844,10 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 
   MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMasses = mapJointMassesStepI.begin(); itMapMasses != mapJointMassesStepI.end(); ++itMapMasses)
-    {
+  {
     labelSetClk = itMapMasses->first;
 
-    mLabelSetClk = mapJointMassesStepI[labelSetClk];
+    mLabelSetClk  = mapJointMassesStepI[labelSetClk];
     mLabelSetClk_ = mapJointMassesStepI_[labelSetClk];
 
     A = A + (mLabelSetClk / (1 - mLabelSetClk));
@@ -863,47 +857,47 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     otbLogMacro(Debug, << "mapJointMassesStepI[" << labelSetClk << "] = " << mLabelSetClk);
     otbLogMacro(Debug, << "mapJointMassesStepI_[" << labelSetClk << "] = " << mLabelSetClk_);
     otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << labelSetClk << "] = " << mapJointMassesUniverseStepI[labelSetClk]);
-    }
+  }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
   if (nbClkGroupsStepI == nbClasses)
-    {
+  {
     K = 1 / ((1 + A) * B - C);
-    }
+  }
   else
-    {
+  {
     if (nbClkGroupsStepI < nbClasses)
-      {
+    {
       K = 1 / ((1 + A) * B);
-      }
     }
+  }
 
   otbLogMacro(Info, << "nbClasses = " << nbClasses);
-  otbLogMacro(Info, << "nbClassifiers = " << classifiedPixelX .size());
+  otbLogMacro(Info, << "nbClassifiers = " << classifiedPixelX.size());
   otbLogMacro(Info, << "nbClkGroupsStepI = " << nbClkGroupsStepI);
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
 
   MassMapType mapBelStepII, mapBelStepII_;
-  MassType belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0;
+  MassType    belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0;
   for (itMapMasses = mapJointMassesStepI.begin(); itMapMasses != mapJointMassesStepI.end(); ++itMapMasses)
-    {
+  {
     labelSetClk = itMapMasses->first;
 
     // Joint Masses AFTER STEP I (one mass per singleton {Ai})
-    mLabelSetClk = mapJointMassesStepI[labelSetClk];
+    mLabelSetClk  = mapJointMassesStepI[labelSetClk];
     mLabelSetClk_ = mapJointMassesStepI_[labelSetClk];
-    mUniverseClk = mapJointMassesUniverseStepI[labelSetClk];
+    mUniverseClk  = mapJointMassesUniverseStepI[labelSetClk];
 
     // Bel(Ai)
     if ((nbClkGroupsStepI == nbClasses) || ((nbClkGroupsStepI == (nbClasses - 1)) && (K == nbClasses)))
-      {
+    {
       belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B + (mUniverseClk * C / mLabelSetClk_));
-      }
+    }
     else
-      {
+    {
       belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
-      }
+    }
 
     // Bel(Ai_)
     belLabelSetClk_ = 1 - belLabelSetClk;
@@ -923,18 +917,18 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
         }
       }*/
 
-    mapBelStepII[labelSetClk] = belLabelSetClk;
+    mapBelStepII[labelSetClk]  = belLabelSetClk;
     mapBelStepII_[labelSetClk] = belLabelSetClk_;
-    addBelLabelSetClk = addBelLabelSetClk + belLabelSetClk;
-    }
+    addBelLabelSetClk          = addBelLabelSetClk + belLabelSetClk;
+  }
 
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
   MassOfBeliefFunctionType::LabelSetType fusedDSLabelSet;
-  MassType fusedDSBelLabelSetClk = 0; //Here the MAX of Bel(Ai)
+  MassType                               fusedDSBelLabelSetClk = 0; // Here the MAX of Bel(Ai)
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
+  {
     labelSetClk = itMapLabelSets->second;
 
     /*
@@ -944,40 +938,40 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
     */
 
     if (itMapLabelSets == mapLabelSets.begin())
-      {
-      fusedDSLabelSet = labelSetClk;
+    {
+      fusedDSLabelSet       = labelSetClk;
       fusedDSBelLabelSetClk = mapBelStepII[labelSetClk];
-      }
+    }
     else
-      {
+    {
       if (mapBelStepII[labelSetClk] >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = labelSetClk;
+      {
+        fusedDSLabelSet       = labelSetClk;
         fusedDSBelLabelSetClk = mapBelStepII[labelSetClk];
-        }
       }
+    }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
     // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
-      {
+    {
       mapBelStepII_[labelSetClk] = addBelLabelSetClk;
-      }
+    }
 
     otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk]);
     otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = " << mapBelStepII_[labelSetClk]);
-    }
+  }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is the UNION of all the candidates {Ai}
   // with Bel({Ai}) = MAX(Bel({Aj}))
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
+  {
     labelSetClk = itMapLabelSets->second;
     if ((mapBelStepII[labelSetClk] == fusedDSBelLabelSetClk) && (labelSetClk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet.insert(itMapLabelSets->first);
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
@@ -990,29 +984,29 @@ int otbDempsterShaferFusionOptRecTest(int argc, char * argv[])
 // ********************************************************************************************************
 
 // OPTIMIZED DS FUSION
-int otbDempsterShaferFusionOptTest(int argc, char * argv[])
+int otbDempsterShaferFusionOptTest(int argc, char* argv[])
 {
   std::vector<LabelPixelType> vectorAllLabels;
-  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  unsigned int                nbArgs = static_cast<unsigned int>(argc);
   for (unsigned int it = 1; it < nbArgs; ++it)
-    {
+  {
     vectorAllLabels.push_back(argv[it]);
-    }
+  }
 
   unsigned int nbClasses = vectorAllLabels.size();
 
   MassOfBeliefFunctionType::LabelSetType universe, labelSet;
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
-  LabelSetMapType mapLabelSets;
+  LabelSetMapType           mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
   for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
-    {
-    //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
+  {
+    // The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
     labelSet.clear();
     labelSet.insert(vectorAllLabels[it]);
     mapLabelSets[vectorAllLabels[it]] = labelSet;
-    }
+  }
 
   otbLogMacro(Info, << "universe = " << universe);
 
@@ -1022,7 +1016,7 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 
   // Values (as MassOfBeliefFunctionType::LabelSetType) of the K CLASSIFICATION MAPS for the pixel X
   typedef std::vector<MassOfBeliefFunctionType::LabelSetType> LabelSetOfVectorType;
-  LabelSetOfVectorType classifiedPixelX;
+  LabelSetOfVectorType                                        classifiedPixelX;
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
@@ -1031,9 +1025,9 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
-    {
+  {
     otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
-    }
+  }
 
   //**********************************************************************
   //**********************************************************************
@@ -1044,45 +1038,45 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  //typedef MassOfBeliefFunctionType::MassMapType MassMapType;
+  // typedef MassOfBeliefFunctionType::MassMapType MassMapType;
   MassMapType::iterator itMapMasses;
-  MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
+  MassMapType           mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
   mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
-  //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  //mCl0[universe] = 0.2;
+  // mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  // mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
   mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
-  //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
-  //mCl1[universe] = 0;
+  // mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
+  // mCl1[universe] = 0;
 
   mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  //mCl2[universe] = 0.1;
+  // mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
+  // mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
   mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl3[universe] = 0;
+  // mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl3[universe] = 0;
 
   mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
   mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
   mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
-  //mCl4[universe] = 0;
+  // mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
+  // mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
   mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl5[universe] = 0;
+  // mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl5[universe] = 0;
 
 
   // Vector containing the std::maps of masses of ALL the singleton sets for each classifier k = 0,...,5 here
@@ -1099,20 +1093,19 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
   //**********************************************************************
 
   MassOfBeliefFunctionType::LabelSetType labelSetClk, labelSetClk_;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  MassOfBeliefFunctionType::Pointer mOBFClk;
-  JointMassOfBeliefFilterType::Pointer jointMassClkFilter;
+  MassType                               mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  MassOfBeliefFunctionType::Pointer      mOBFClk;
+  JointMassOfBeliefFilterType::Pointer   jointMassClkFilter;
 
-  typedef std::map<MassOfBeliefFunctionType::LabelSetType, JointMassOfBeliefFilterType::Pointer>
-      mapJointMassOfBeliefFilterType;
-  mapJointMassOfBeliefFilterType mapJointMassFilters;
+  typedef std::map<MassOfBeliefFunctionType::LabelSetType, JointMassOfBeliefFilterType::Pointer> mapJointMassOfBeliefFilterType;
+  mapJointMassOfBeliefFilterType           mapJointMassFilters;
   mapJointMassOfBeliefFilterType::iterator itMapJMOBFilters;
 
   // Extracting the masses m(Ai), m(Ai_) and m(OMEGA) for each of the K = 6 classifiers
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
-    {
+  {
     // Allocation of a new MassOfBeliefFunctionType::Pointer object pointing at a new memory address
     mOBFClk = MassOfBeliefFunctionType::New();
 
@@ -1123,8 +1116,8 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = mClVector[itk][universe];
-    mLabelSetClk = mClVector[itk][labelSetClk];
+    mUniverseClk  = mClVector[itk][universe];
+    mLabelSetClk  = mClVector[itk][labelSetClk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
     // Defining the MassOfBeliefFunctionType::Pointer object mOBFClk for the classifier k
@@ -1134,27 +1127,26 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     mOBFClk->EstimateUncertainty();
 
     if (mapJointMassFilters.count(labelSetClk) == 0)
-      {
+    {
       // Allocation of a new JointMassOfBeliefFilterType::Pointer object pointing at a new memory address
-      jointMassClkFilter = JointMassOfBeliefFilterType::New();
+      jointMassClkFilter               = JointMassOfBeliefFilterType::New();
       mapJointMassFilters[labelSetClk] = jointMassClkFilter;
-      }
-
-    mapJointMassFilters[labelSetClk]->PushBackInput(mOBFClk);
     }
 
-  typedef std::map<MassOfBeliefFunctionType::LabelSetType, MassOfBeliefFunctionType::Pointer>
-      mapMassesOfBeliefFunctionType;
-  mapMassesOfBeliefFunctionType mapJMOBFStepI;
+    mapJointMassFilters[labelSetClk]->PushBackInput(mOBFClk);
+  }
+
+  typedef std::map<MassOfBeliefFunctionType::LabelSetType, MassOfBeliefFunctionType::Pointer> mapMassesOfBeliefFunctionType;
+  mapMassesOfBeliefFunctionType           mapJMOBFStepI;
   mapMassesOfBeliefFunctionType::iterator itMapJMOBFStepI;
   for (itMapJMOBFilters = mapJointMassFilters.begin(); itMapJMOBFilters != mapJointMassFilters.end(); ++itMapJMOBFilters)
-    {
+  {
     // JointMassOfBeliefFilterType filters are executed, and the resulting joint masses are inserted in mapJMOBFStepI
     itMapJMOBFilters->second->Update();
     mapJMOBFStepI[itMapJMOBFilters->first] = itMapJMOBFilters->second->GetOutput();
 
     otbLogMacro(Debug, << "jointMassClkFilterStepI[" << itMapJMOBFilters->first << "] = " << itMapJMOBFilters->second);
-    }
+  }
 
   //**********************************************************************
   //***************************** DS STEP #2 *****************************
@@ -1162,15 +1154,15 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 
   // Calculation of the four A, B, C and K constants
 
-  MassType A = 0, B = 1, C = 1, K = 0;
+  MassType                                A = 0, B = 1, C = 1, K = 0;
   mapMassesOfBeliefFunctionType::iterator itMapJMOBF;
   for (itMapJMOBF = mapJMOBFStepI.begin(); itMapJMOBF != mapJMOBFStepI.end(); ++itMapJMOBF)
-    {
-    labelSetClk = itMapJMOBF->first;
+  {
+    labelSetClk  = itMapJMOBF->first;
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
 
-    mLabelSetClk = itMapJMOBF->second->GetMass(labelSetClk);
+    mLabelSetClk  = itMapJMOBF->second->GetMass(labelSetClk);
     mLabelSetClk_ = itMapJMOBF->second->GetMass(labelSetClk_);
 
     A = A + (mLabelSetClk / (1 - mLabelSetClk));
@@ -1178,45 +1170,45 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     C = C * mLabelSetClk_;
 
     otbLogMacro(Debug, << "jointMassOfBeliefStepI[" << itMapJMOBF->first << "] = " << itMapJMOBF->second);
-    }
+  }
 
   unsigned int nbClkGroupsStepI = mapJMOBFStepI.size();
   if (nbClkGroupsStepI == nbClasses)
-    {
+  {
     K = 1 / ((1 + A) * B - C);
-    }
+  }
   else
-    {
+  {
     if (nbClkGroupsStepI < nbClasses)
-      {
+    {
       K = 1 / ((1 + A) * B);
-      }
     }
+  }
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
 
-  MassMapType mapBelStepII;
+  MassMapType           mapBelStepII;
   MassMapType::iterator itMapBelStepII;
-  MassType belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0;
+  MassType              belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0;
   for (itMapJMOBF = mapJMOBFStepI.begin(); itMapJMOBF != mapJMOBFStepI.end(); ++itMapJMOBF)
-    {
-    labelSetClk = itMapJMOBF->first;
+  {
+    labelSetClk  = itMapJMOBF->first;
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
 
-    mUniverseClk = itMapJMOBF->second->GetMass(universe);
-    mLabelSetClk = itMapJMOBF->second->GetMass(labelSetClk);
+    mUniverseClk  = itMapJMOBF->second->GetMass(universe);
+    mLabelSetClk  = itMapJMOBF->second->GetMass(labelSetClk);
     mLabelSetClk_ = itMapJMOBF->second->GetMass(labelSetClk_);
 
     // Bel(Ai)
     if ((nbClkGroupsStepI == nbClasses) || ((nbClkGroupsStepI == (nbClasses - 1)) && (K == nbClasses)))
-      {
+    {
       belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B + (mUniverseClk * C / mLabelSetClk_));
-      }
+    }
     else
-      {
+    {
       belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
-      }
+    }
 
     // Bel(Ai_)
     belLabelSetClk_ = 1 - belLabelSetClk;
@@ -1236,19 +1228,19 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
         }
       }*/
 
-    mapBelStepII[labelSetClk] = belLabelSetClk;
+    mapBelStepII[labelSetClk]  = belLabelSetClk;
     mapBelStepII[labelSetClk_] = belLabelSetClk_;
-    addBelLabelSetClk = addBelLabelSetClk + belLabelSetClk;
-    }
+    addBelLabelSetClk          = addBelLabelSetClk + belLabelSetClk;
+  }
 
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
   MassOfBeliefFunctionType::LabelSetType fusedDSLabelSet;
-  MassType fusedDSBelLabelSetClk = 0; //Here the MAX of Bel(Ai)
+  MassType                               fusedDSBelLabelSetClk = 0; // Here the MAX of Bel(Ai)
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
-    labelSetClk = itMapLabelSets->second;
+  {
+    labelSetClk  = itMapLabelSets->second;
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
 
@@ -1259,40 +1251,40 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
     */
 
     if (itMapLabelSets == mapLabelSets.begin())
-      {
-      fusedDSLabelSet = labelSetClk;
+    {
+      fusedDSLabelSet       = labelSetClk;
       fusedDSBelLabelSetClk = mapBelStepII[labelSetClk];
-      }
+    }
     else
-      {
+    {
       if (mapBelStepII[labelSetClk] >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = labelSetClk;
+      {
+        fusedDSLabelSet       = labelSetClk;
         fusedDSBelLabelSetClk = mapBelStepII[labelSetClk];
-        }
       }
+    }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
     // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[labelSetClk] == 0)
-      {
+    {
       mapBelStepII[labelSetClk_] = addBelLabelSetClk;
-      }
+    }
 
     otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << mapBelStepII[labelSetClk]);
     otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = " << mapBelStepII[labelSetClk_]);
-    }
+  }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is the UNION of all the candidates {Ai}
   // with Bel({Ai}) = MAX(Bel({Aj}))
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
+  {
     labelSetClk = itMapLabelSets->second;
     if ((mapBelStepII[labelSetClk] == fusedDSBelLabelSetClk) && (labelSetClk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet.insert(itMapLabelSets->first);
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
@@ -1304,29 +1296,29 @@ int otbDempsterShaferFusionOptTest(int argc, char * argv[])
 // ********************************************************************************************************
 // ********************************************************************************************************
 // NOT OPTIMIZED DS FUSION
-int otbDempsterShaferFusionTest(int argc, char * argv[])
+int otbDempsterShaferFusionTest(int argc, char* argv[])
 {
   std::vector<LabelPixelType> vectorAllLabels;
-  unsigned int nbArgs = static_cast<unsigned int> (argc);
+  unsigned int                nbArgs = static_cast<unsigned int>(argc);
   for (unsigned int it = 1; it < nbArgs; ++it)
-    {
+  {
     vectorAllLabels.push_back(argv[it]);
-    }
+  }
 
-//  unsigned int nbClasses = vectorAllLabels.size();
+  //  unsigned int nbClasses = vectorAllLabels.size();
 
   MassOfBeliefFunctionType::LabelSetType universe, labelSet;
   typedef std::map<LabelPixelType, MassOfBeliefFunctionType::LabelSetType> LabelSetMapType;
-  LabelSetMapType mapLabelSets;
+  LabelSetMapType           mapLabelSets;
   LabelSetMapType::iterator itMapLabelSets;
   for (unsigned int it = 0; it < vectorAllLabels.size(); ++it)
-    {
-    //The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
+  {
+    // The universe LabelSet is filled with ALL the possible labels of vectorAllLabels
     universe.insert(vectorAllLabels[it]);
     labelSet.clear();
     labelSet.insert(vectorAllLabels[it]);
     mapLabelSets[vectorAllLabels[it]] = labelSet;
-    }
+  }
 
   otbLogMacro(Info, << "universe = " << universe);
 
@@ -1336,7 +1328,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
 
   // Values (as MassOfBeliefFunctionType::LabelSetType) of the K CLASSIFICATION MAPS for the pixel X
   typedef std::vector<MassOfBeliefFunctionType::LabelSetType> LabelSetOfVectorType;
-  LabelSetOfVectorType classifiedPixelX;
+  LabelSetOfVectorType                                        classifiedPixelX;
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[1]]);
@@ -1345,9 +1337,9 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   classifiedPixelX.push_back(mapLabelSets[vectorAllLabels[0]]);
 
   for (unsigned int it = 0; it < classifiedPixelX.size(); ++it)
-    {
+  {
     otbLogMacro(Debug, << "classifiedPixelX[" << it << "] = " << classifiedPixelX[it]);
-    }
+  }
 
   //**********************************************************************
   //**********************************************************************
@@ -1358,45 +1350,45 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  //typedef MassOfBeliefFunctionType::MassMapType MassMapType;
+  // typedef MassOfBeliefFunctionType::MassMapType MassMapType;
   MassMapType::iterator itMapMasses;
-  MassMapType mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
+  MassMapType           mCl0, mCl1, mCl2, mCl3, mCl4, mCl5;
 
   mCl0[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl0[mapLabelSets[vectorAllLabels[1]]] = 0.7;
   mCl0[mapLabelSets[vectorAllLabels[2]]] = 0.8;
-  //mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
-  //mCl0[universe] = 0.2;
+  // mCl0[mapLabelSets[vectorAllLabels[3]]] = 0.05;
+  // mCl0[universe] = 0.2;
 
   mCl1[mapLabelSets[vectorAllLabels[0]]] = 0.8;
   mCl1[mapLabelSets[vectorAllLabels[1]]] = 0;
   mCl1[mapLabelSets[vectorAllLabels[2]]] = 0.5;
-  //mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
-  //mCl1[universe] = 0;
+  // mCl1[mapLabelSets[vectorAllLabels[3]]] = 0.15;
+  // mCl1[universe] = 0;
 
   mCl2[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl2[mapLabelSets[vectorAllLabels[1]]] = 0.65;
   mCl2[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
-  //mCl2[universe] = 0.1;
+  // mCl2[mapLabelSets[vectorAllLabels[3]]] = 0.1;
+  // mCl2[universe] = 0.1;
 
   mCl3[mapLabelSets[vectorAllLabels[0]]] = 0.5;
   mCl3[mapLabelSets[vectorAllLabels[1]]] = 0.25;
   mCl3[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl3[universe] = 0;
+  // mCl3[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl3[universe] = 0;
 
   mCl4[mapLabelSets[vectorAllLabels[0]]] = 0.75;
   mCl4[mapLabelSets[vectorAllLabels[1]]] = 0.3;
   mCl4[mapLabelSets[vectorAllLabels[2]]] = 0.6;
-  //mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
-  //mCl4[universe] = 0;
+  // mCl4[mapLabelSets[vectorAllLabels[3]]] = 0.5;
+  // mCl4[universe] = 0;
 
   mCl5[mapLabelSets[vectorAllLabels[0]]] = 0.9;
   mCl5[mapLabelSets[vectorAllLabels[1]]] = 0.5;
   mCl5[mapLabelSets[vectorAllLabels[2]]] = 0.3;
-  //mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
-  //mCl5[universe] = 0;
+  // mCl5[mapLabelSets[vectorAllLabels[3]]] = 0.2;
+  // mCl5[universe] = 0;
 
 
   // Vector containing the std::maps of masses of ALL the singleton sets for each classifier k = 0,...,5 here
@@ -1413,13 +1405,13 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   //**********************************************************************
 
   MassOfBeliefFunctionType::LabelSetType labelSetClk, labelSetClk_;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  MassOfBeliefFunctionType::Pointer mOBFClk;
-  JointMassOfBeliefFilterType::Pointer jointMassClkFilter;
+  MassType                               mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  MassOfBeliefFunctionType::Pointer      mOBFClk;
+  JointMassOfBeliefFilterType::Pointer   jointMassClkFilter;
   jointMassClkFilter = JointMassOfBeliefFilterType::New();
 
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
-    {
+  {
     // Allocation of a new MassOfBeliefFunctionType::Pointer object pointing at a new memory address
     mOBFClk = MassOfBeliefFunctionType::New();
 
@@ -1430,8 +1422,8 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = mClVector[itk][universe];
-    mLabelSetClk = mClVector[itk][labelSetClk];
+    mUniverseClk  = mClVector[itk][universe];
+    mLabelSetClk  = mClVector[itk][labelSetClk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
     // Defining the MassOfBeliefFunctionType::Pointer object mOBFClk for the classifier k
@@ -1441,7 +1433,7 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
     mOBFClk->EstimateUncertainty();
 
     jointMassClkFilter->PushBackInput(mOBFClk);
-    }
+  }
 
   jointMassClkFilter->Update();
   MassOfBeliefFunctionType::Pointer jointMass = jointMassClkFilter->GetOutput();
@@ -1453,41 +1445,40 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
   MassOfBeliefFunctionType::LabelSetType fusedDSLabelSet;
-  MassType fusedDSBelLabelSetClk = 0; //Here the MAX of Bel(Ai)
+  MassType                               fusedDSBelLabelSetClk = 0; // Here the MAX of Bel(Ai)
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
-    labelSetClk = itMapLabelSets->second;
+  {
+    labelSetClk  = itMapLabelSets->second;
     labelSetClk_ = universe;
     labelSetClk_.erase(*labelSetClk.begin());
 
     if (itMapLabelSets == mapLabelSets.begin())
-      {
-      fusedDSLabelSet = labelSetClk;
+    {
+      fusedDSLabelSet       = labelSetClk;
       fusedDSBelLabelSetClk = jointMass->GetBelief(labelSetClk);
-      }
+    }
     else
-      {
+    {
       if (jointMass->GetBelief(labelSetClk) >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = labelSetClk;
+      {
+        fusedDSLabelSet       = labelSetClk;
         fusedDSBelLabelSetClk = jointMass->GetBelief(labelSetClk);
-        }
       }
+    }
 
     otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk));
-    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
-        << jointMass->GetBelief(labelSetClk_));
-    }
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = " << jointMass->GetBelief(labelSetClk_));
+  }
 
-  //If the DS VOTED LABEL is NOT unique
+  // If the DS VOTED LABEL is NOT unique
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
+  {
     labelSetClk = itMapLabelSets->second;
     if ((jointMass->GetBelief(labelSetClk) == fusedDSBelLabelSetClk) && (labelSetClk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet.insert(itMapLabelSets->first);
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
@@ -1497,56 +1488,55 @@ int otbDempsterShaferFusionTest(int argc, char * argv[])
 
 
 // OPTIMIZED RECURSIVE DS FUSION FROM CONFUSION MATRIX FILES
-int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
+int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char* argv[])
 {
-  unsigned int nbParameters = 1;
+  unsigned int nbParameters  = 1;
   unsigned int nbClassifiers = (argc - 1 - nbParameters);
 
   IntLabelPixelType undefinedValue = 0;
 
-  std::string massOfBeliefDefMethodStr = argv[argc - 4];
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
+  std::string                  massOfBeliefDefMethodStr = argv[argc - 4];
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod    = ConfusionMatrixToMassOfBeliefType::PRECISION;
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
-    {
+  {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
-    }
+  }
   else
-    {
+  {
     if (massOfBeliefDefMethodStr.compare("RECALL") == 0)
-      {
+    {
       massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::RECALL;
-      }
+    }
     else
-      {
+    {
       if (massOfBeliefDefMethodStr.compare("ACCURACY") == 0)
-        {
+      {
         massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::ACCURACY;
-        }
+      }
       else
-        {
+      {
         if (massOfBeliefDefMethodStr.compare("KAPPA") == 0)
-          {
+        {
           massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::KAPPA;
-          }
         }
       }
     }
+  }
 
 
-    std::vector<MapOfClassesType> vectorOfMapOfClasses;
-    std::vector<ConfusionMatrixType> vectorOfConfMatrices;
-    for (unsigned int itCM = 0; itCM < nbClassifiers; ++itCM)
-      {
-      std::string fileNameConfMat = argv[itCM + 1];
+  std::vector<MapOfClassesType>    vectorOfMapOfClasses;
+  std::vector<ConfusionMatrixType> vectorOfConfMatrices;
+  for (unsigned int itCM = 0; itCM < nbClassifiers; ++itCM)
+  {
+    std::string fileNameConfMat = argv[itCM + 1];
 
-      MapOfClassesType mapOfClassesClk;
-      ConfusionMatrixType confusionMatrixClk;
-      CSVConfusionMatrixFileReader(fileNameConfMat, mapOfClassesClk, confusionMatrixClk);
+    MapOfClassesType    mapOfClassesClk;
+    ConfusionMatrixType confusionMatrixClk;
+    CSVConfusionMatrixFileReader(fileNameConfMat, mapOfClassesClk, confusionMatrixClk);
 
-      vectorOfMapOfClasses.push_back(mapOfClassesClk);
-      vectorOfConfMatrices.push_back(confusionMatrixClk);
-      }
-
+    vectorOfMapOfClasses.push_back(mapOfClassesClk);
+    vectorOfConfMatrices.push_back(confusionMatrixClk);
+  }
 
 
   /* ***************************************************************************************** */
@@ -1557,23 +1547,23 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  MapOfClassesType mapOfClassesClk;
-  MapOfClassesType::iterator itMapOfClassesClk;
-  ConfusionMatrixType confMatClk;
-  MassType mobUniverseClk;
-  SingleClassLabelMassMapType mapMOBClk;
+  MapOfClassesType                      mapOfClassesClk;
+  MapOfClassesType::iterator            itMapOfClassesClk;
+  ConfusionMatrixType                   confMatClk;
+  MassType                              mobUniverseClk;
+  SingleClassLabelMassMapType           mapMOBClk;
   SingleClassLabelMassMapType::iterator itMapMOBClk;
 
-  ClassifierHistogramType universe;
-  ClassifierHistogramType::iterator itUniverse;
-  std::vector<SingleClassLabelMassMapType> vectorMapMOBs;
-  std::vector<MassType> vectorUniverseMOBs;
+  ClassifierHistogramType                    universe;
+  ClassifierHistogramType::iterator          itUniverse;
+  std::vector<SingleClassLabelMassMapType>   vectorMapMOBs;
+  std::vector<MassType>                      vectorUniverseMOBs;
   ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     // Classifier Cl_k:
     mapOfClassesClk = vectorOfMapOfClasses[itClk];
-    confMatClk = vectorOfConfMatrices[itClk];
+    confMatClk      = vectorOfConfMatrices[itClk];
 
     // mobUniverseClk is set to zero in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -1596,38 +1586,37 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
     std::ostringstream oss;
     for (itMapOfClassesClk = mapOfClassesClk.begin(); itMapOfClassesClk != mapOfClassesClk.end(); ++itMapOfClassesClk)
-      {
+    {
       IntLabelPixelType classLabel = itMapOfClassesClk->first;
       oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
-        {
+      {
         universe[classLabel]++;
-        }
-      else
-        {
-        universe[classLabel] = 1;
-        }
       }
+      else
+      {
+        universe[classLabel] = 1;
+      }
+    }
     otbLogMacro(Debug, << oss.str());
     otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
-      {
+    {
       otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
-      }
     }
+  }
 
   // Number of classes in the universe
   unsigned int nbClasses = universe.size();
 
   otbLogMacro(Info, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
-    otbLogMacro(Info, << "Class Label " << itUniverse->first
-      << " present in " << itUniverse->second << " classifier(s)");
-    }
+  {
+    otbLogMacro(Info, << "Class Label " << itUniverse->first << " present in " << itUniverse->second << " classifier(s)");
+  }
 
   /* ***************************************************************************************** */
   /* ************************ RESULTS OF THE CLASSIFICATION OF PIXEL X *********************** */
@@ -1652,9 +1641,9 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   /* ***************************************************************************************** */
 
   IntLabelPixelType classLabelk;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  MassType mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
-  MassType KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
+  MassType          mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  MassType          mLabelSetClkprev, mLabelSetClkprev_, mUniverseClkprev;
+  MassType          KClk, mLabelSetClkNew, mLabelSetClkNew_, mUniverseClkNew;
 
   SingleClassLabelMassMapType mapJointMassesStepI, mapJointMassesStepI_, mapJointMassesUniverseStepI;
 
@@ -1662,41 +1651,41 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // and grouping them according to the {Ai} singletons
   // (ex: mg(A), mg(B), mg(C),..., with mg(Ai) the joint mass of the masses of classifiers with result Ai for pixel X)
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     classLabelk = classifiedPixelX[itClk];
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = vectorUniverseMOBs[itClk];
-    mLabelSetClk = vectorMapMOBs[itClk][classLabelk];
+    mUniverseClk  = vectorUniverseMOBs[itClk];
+    mLabelSetClk  = vectorMapMOBs[itClk][classLabelk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
-    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk
-      << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk << "] = " << mLabelSetClk);
+    otbLogMacro(Debug, << "classifiedPixelX[" << itClk << "] = " << classLabelk << "; MassOfBelief_Cl_" << itClk << "[" << classLabelk
+                       << "] = " << mLabelSetClk);
 
     // The first time the label {Ai} is found in classifiedPixelX
     if (mapJointMassesStepI.count(classLabelk) == 0)
-      {
-      mLabelSetClkNew = mLabelSetClk;
+    {
+      mLabelSetClkNew  = mLabelSetClk;
       mLabelSetClkNew_ = mLabelSetClk_;
-      mUniverseClkNew = mUniverseClk;
-      }
-    else
-      {
-      mLabelSetClkprev = mapJointMassesStepI[classLabelk];
-      mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
-      mUniverseClkprev = mapJointMassesUniverseStepI[classLabelk];
-
-      KClk = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
-      mLabelSetClkNew = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
-      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
-      mUniverseClkNew = KClk * mUniverseClkprev * mUniverseClk;
-      }
-
-    mapJointMassesStepI[classLabelk] = mLabelSetClkNew;
-    mapJointMassesStepI_[classLabelk] = mLabelSetClkNew_;
-    mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
+      mUniverseClkNew  = mUniverseClk;
     }
+    else
+    {
+      mLabelSetClkprev  = mapJointMassesStepI[classLabelk];
+      mLabelSetClkprev_ = mapJointMassesStepI_[classLabelk];
+      mUniverseClkprev  = mapJointMassesUniverseStepI[classLabelk];
+
+      KClk             = 1 / (1 - mLabelSetClkprev * mLabelSetClk_ - mLabelSetClkprev_ * mLabelSetClk);
+      mLabelSetClkNew  = KClk * (mLabelSetClkprev * (mLabelSetClk + mUniverseClk) + mUniverseClkprev * mLabelSetClk);
+      mLabelSetClkNew_ = KClk * (mLabelSetClkprev_ * (mLabelSetClk_ + mUniverseClk) + mUniverseClkprev * mLabelSetClk_);
+      mUniverseClkNew  = KClk * mUniverseClkprev * mUniverseClk;
+    }
+
+    mapJointMassesStepI[classLabelk]         = mLabelSetClkNew;
+    mapJointMassesStepI_[classLabelk]        = mLabelSetClkNew_;
+    mapJointMassesUniverseStepI[classLabelk] = mUniverseClkNew;
+  }
 
   /* ***************************************************************************************** */
   /* *************************************** DS STEP #2 ************************************** */
@@ -1705,12 +1694,12 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // Calculation of the four A, B, C and K constants
   MassType A = 0, B = 1, C = 1, K = 0;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
-    {
+  {
     classLabelk = itMapMOBClk->first;
 
-    mLabelSetClk = mapJointMassesStepI[classLabelk];
+    mLabelSetClk  = mapJointMassesStepI[classLabelk];
     mLabelSetClk_ = mapJointMassesStepI_[classLabelk];
-    mUniverseClk = mapJointMassesUniverseStepI[classLabelk];
+    mUniverseClk  = mapJointMassesUniverseStepI[classLabelk];
 
     A = A + (mLabelSetClk / (1 - mLabelSetClk));
     B = B * (1 - mLabelSetClk);
@@ -1719,20 +1708,20 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     otbLogMacro(Debug, << "mapJointMassesStepI[" << classLabelk << "] = " << mLabelSetClk);
     otbLogMacro(Debug, << "mapJointMassesStepI_[" << classLabelk << "] = " << mLabelSetClk_);
     otbLogMacro(Debug, << "mapJointMassesUniverseStepI[" << classLabelk << "] = " << mUniverseClk);
-    }
+  }
 
   unsigned int nbClkGroupsStepI = mapJointMassesStepI.size();
   if (nbClkGroupsStepI == nbClasses)
-    {
+  {
     K = 1 / ((1 + A) * B - C);
-    }
+  }
   else
-    {
+  {
     if (nbClkGroupsStepI < nbClasses)
-      {
+    {
       K = 1 / ((1 + A) * B);
-      }
     }
+  }
 
   otbLogMacro(Info, << "nbClasses = " << nbClasses);
   otbLogMacro(Info, << "nbClassifiers = " << nbClassifiers);
@@ -1740,25 +1729,25 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
 
   // Calculation of the Belief function of each singleton {Ai} and {Ai_}
   SingleClassLabelMassMapType mapBelStepII, mapBelStepII_;
-  MassType belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0.;
+  MassType                    belLabelSetClk, belLabelSetClk_, addBelLabelSetClk = 0.;
   for (itMapMOBClk = mapJointMassesStepI.begin(); itMapMOBClk != mapJointMassesStepI.end(); ++itMapMOBClk)
-    {
+  {
     classLabelk = itMapMOBClk->first;
 
     // Joint Masses AFTER STEP I (one mass per singleton {Ai})
-    mLabelSetClk = mapJointMassesStepI[classLabelk];
+    mLabelSetClk  = mapJointMassesStepI[classLabelk];
     mLabelSetClk_ = mapJointMassesStepI_[classLabelk];
-    mUniverseClk = mapJointMassesUniverseStepI[classLabelk];
+    mUniverseClk  = mapJointMassesUniverseStepI[classLabelk];
 
     // Bel(Ai)
     if ((nbClkGroupsStepI == nbClasses) || ((nbClkGroupsStepI == (nbClasses - 1)) && (K == nbClasses)))
-      {
+    {
       belLabelSetClk = K * ((mLabelSetClk / (1 - mLabelSetClk)) * B + (mUniverseClk * C / mLabelSetClk_));
-      }
+    }
     else
-      {
+    {
       belLabelSetClk = K * (mLabelSetClk / (1 - mLabelSetClk)) * B;
-      }
+    }
 
     // Bel(Ai_)
     belLabelSetClk_ = 1 - belLabelSetClk;
@@ -1778,10 +1767,10 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
         }
       }*/
 
-    mapBelStepII[classLabelk] = belLabelSetClk;
+    mapBelStepII[classLabelk]  = belLabelSetClk;
     mapBelStepII_[classLabelk] = belLabelSetClk_;
     addBelLabelSetClk += belLabelSetClk;
-    }
+  }
 
   /* ***************************************************************************************** */
   /* ************************************ DECISION PROCESS *********************************** */
@@ -1790,11 +1779,11 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
   // The decision for the DS Fusion is made with the MAXIMAL Belief function:
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
-  IntLabelPixelType fusedDSLabelSet = 0;
-  MassType fusedDSBelLabelSetClk = 0.; //Here the MAX of Bel(Ai)
+  IntLabelPixelType fusedDSLabelSet       = 0;
+  MassType          fusedDSBelLabelSetClk = 0.; // Here the MAX of Bel(Ai)
 
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
+  {
     classLabelk = itUniverse->first;
 
     /*
@@ -1804,39 +1793,39 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
     */
 
     if (itUniverse == universe.begin())
-      {
-      fusedDSLabelSet = classLabelk;
+    {
+      fusedDSLabelSet       = classLabelk;
       fusedDSBelLabelSetClk = mapBelStepII[classLabelk];
-      }
+    }
     else
-      {
+    {
       if (mapBelStepII[classLabelk] >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = classLabelk;
+      {
+        fusedDSLabelSet       = classLabelk;
         fusedDSBelLabelSetClk = mapBelStepII[classLabelk];
-        }
       }
+    }
 
     // For labels {Ai} of the universe which are NOT present in classifiedPixelX,
     // the Bel({Ai_}) = SUM(m_stepII({Aj})) = SUM(Bel({Aj})) here; with {Aj} ALL labels present in classifiedPixelX
     if (mapBelStepII[classLabelk] == 0)
-      {
+    {
       mapBelStepII_[classLabelk] = addBelLabelSetClk;
-      }
+    }
 
     otbLogMacro(Debug, << "Bel(" << classLabelk << ") = " << mapBelStepII[classLabelk]);
     otbLogMacro(Debug, << "Bel(NOT_" << classLabelk << ") = " << mapBelStepII_[classLabelk]);
-    }
+  }
 
   // If the DS VOTED LABEL is NOT unique, the result of the DS Fusion is undefinedValue
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
+  {
     classLabelk = itUniverse->first;
     if ((mapBelStepII[classLabelk] == fusedDSBelLabelSetClk) && (classLabelk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet = undefinedValue;
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
@@ -1846,55 +1835,54 @@ int otbDempsterShaferFusionOptRecConfMatFileTest(int argc, char * argv[])
 
 
 // NOT OPTIMIZED DS FUSION FROM CONFUSION MATRIX FILES
-int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
+int otbDempsterShaferFusionConfMatFileTest(int argc, char* argv[])
 {
-  unsigned int nbParameters = 1;
+  unsigned int nbParameters  = 1;
   unsigned int nbClassifiers = (argc - 1 - nbParameters);
 
-//  IntLabelPixelType undefinedValue = 0;
+  //  IntLabelPixelType undefinedValue = 0;
 
-  std::string massOfBeliefDefMethodStr = argv[argc - 4];
-  MassOfBeliefDefinitionMethod massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
+  std::string                  massOfBeliefDefMethodStr = argv[argc - 4];
+  MassOfBeliefDefinitionMethod massOfBeliefDefMethod    = ConfusionMatrixToMassOfBeliefType::PRECISION;
   if (massOfBeliefDefMethodStr.compare("PRECISION") == 0)
-    {
+  {
     massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::PRECISION;
-    }
+  }
   else
-    {
+  {
     if (massOfBeliefDefMethodStr.compare("RECALL") == 0)
-      {
+    {
       massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::RECALL;
-      }
+    }
     else
-      {
+    {
       if (massOfBeliefDefMethodStr.compare("ACCURACY") == 0)
-        {
+      {
         massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::ACCURACY;
-        }
+      }
       else
-        {
+      {
         if (massOfBeliefDefMethodStr.compare("KAPPA") == 0)
-          {
+        {
           massOfBeliefDefMethod = ConfusionMatrixToMassOfBeliefType::KAPPA;
-          }
         }
       }
     }
+  }
 
-  std::vector<MapOfClassesType> vectorOfMapOfClasses;
+  std::vector<MapOfClassesType>    vectorOfMapOfClasses;
   std::vector<ConfusionMatrixType> vectorOfConfMatrices;
   for (unsigned int itCM = 0; itCM < nbClassifiers; ++itCM)
-    {
+  {
     std::string fileNameConfMat = argv[itCM + 1];
 
-    MapOfClassesType mapOfClassesClk;
+    MapOfClassesType    mapOfClassesClk;
     ConfusionMatrixType confusionMatrixClk;
     CSVConfusionMatrixFileReader(fileNameConfMat, mapOfClassesClk, confusionMatrixClk);
 
     vectorOfMapOfClasses.push_back(mapOfClassesClk);
     vectorOfConfMatrices.push_back(confusionMatrixClk);
-    }
-
+  }
 
 
   /* ***************************************************************************************** */
@@ -1905,25 +1893,25 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   // These masses represent the degree of belief of each classifier that the output class of the pixel X
   // is {Ai} when the input pixel X actually belongs to the class {Ai}
 
-  MapOfClassesType mapOfClassesClk;
-  MapOfClassesType::iterator itMapOfClassesClk;
-  ConfusionMatrixType confMatClk;
-  MassType mobUniverseClk;
-  SingleClassLabelMassMapType mapMOBClk;
+  MapOfClassesType                      mapOfClassesClk;
+  MapOfClassesType::iterator            itMapOfClassesClk;
+  ConfusionMatrixType                   confMatClk;
+  MassType                              mobUniverseClk;
+  SingleClassLabelMassMapType           mapMOBClk;
   SingleClassLabelMassMapType::iterator itMapMOBClk;
 
-  ClassifierHistogramType universe;
-  ClassifierHistogramType::iterator itUniverse;
-  std::vector<SingleClassLabelMassMapType> vectorMapMOBs;
-  std::vector<MassType> vectorUniverseMOBs;
+  ClassifierHistogramType                    universe;
+  ClassifierHistogramType::iterator          itUniverse;
+  std::vector<SingleClassLabelMassMapType>   vectorMapMOBs;
+  std::vector<MassType>                      vectorUniverseMOBs;
   ConfusionMatrixToMassOfBeliefType::Pointer confMatToMass = ConfusionMatrixToMassOfBeliefType::New();
 
 
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     // Classifier Cl_k:
     mapOfClassesClk = vectorOfMapOfClasses[itClk];
-    confMatClk = vectorOfConfMatrices[itClk];
+    confMatClk      = vectorOfConfMatrices[itClk];
 
     // mobUniverseClk is set to zero in order to assure the correct estimation of the Belief Functions of the
     // complementary sets bel({Ai_}) in the optimized DS combination
@@ -1946,64 +1934,62 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
     otbLogMacro(Debug, << "confusion matrix[Cl_" << itClk << "] = ");
     std::ostringstream oss;
     for (itMapOfClassesClk = mapOfClassesClk.begin(); itMapOfClassesClk != mapOfClassesClk.end(); ++itMapOfClassesClk)
-      {
+    {
       IntLabelPixelType classLabel = itMapOfClassesClk->first;
       oss << "[" << classLabel << "] ";
 
       // If the current classLabel has already been added to the universe
       if (universe.count(classLabel) > 0)
-        {
+      {
         universe[classLabel]++;
-        }
-      else
-        {
-        universe[classLabel] = 1;
-        }
       }
+      else
+      {
+        universe[classLabel] = 1;
+      }
+    }
     otbLogMacro(Debug, << oss.str());
     otbLogMacro(Debug, << confMatClk);
 
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
-      {
+    {
       otbLogMacro(Debug, << "mapMOBCl_" << itClk << "[" << itMapMOBClk->first << "] = " << itMapMOBClk->second);
-      }
     }
+  }
 
   // Number of classes in the universe
-//  unsigned int nbClasses = universe.size();
+  //  unsigned int nbClasses = universe.size();
 
 
   IntMassOfBeliefFunctionType::LabelSetType universeSet, labelSet;
   typedef std::map<IntLabelPixelType, IntMassOfBeliefFunctionType::LabelSetType> IntLabelSetMapType;
-  IntLabelSetMapType mapLabelSets;
+  IntLabelSetMapType           mapLabelSets;
   IntLabelSetMapType::iterator itMapLabelSets;
 
   otbLogMacro(Debug, << "universe:");
   for (itUniverse = universe.begin(); itUniverse != universe.end(); ++itUniverse)
-    {
-    otbLogMacro(Debug, << "Class Label " << itUniverse->first
-      << " present in " << itUniverse->second << " classifier(s)");
+  {
+    otbLogMacro(Debug, << "Class Label " << itUniverse->first << " present in " << itUniverse->second << " classifier(s)");
     universeSet.insert(itUniverse->first);
     labelSet.clear();
     labelSet.insert(itUniverse->first);
     mapLabelSets[itUniverse->first] = labelSet;
-    }
+  }
 
   // Vector containing the std::maps of masses of ALL the singleton sets for each classifier k
-  IntMassMapType mClk;
+  IntMassMapType              mClk;
   std::vector<IntMassMapType> mClVector;
   for (unsigned int itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
+  {
     mapMOBClk = vectorMapMOBs[itClk];
     mClk.clear();
     for (itMapMOBClk = mapMOBClk.begin(); itMapMOBClk != mapMOBClk.end(); ++itMapMOBClk)
-      {
-      labelSet = mapLabelSets[itMapMOBClk->first];
+    {
+      labelSet       = mapLabelSets[itMapMOBClk->first];
       mClk[labelSet] = itMapMOBClk->second;
-      }
-    mClVector.push_back(mClk);
     }
-
+    mClVector.push_back(mClk);
+  }
 
 
   /* ***************************************************************************************** */
@@ -2012,7 +1998,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
 
   // Values (as IntLabelPixelType) of the K CLASSIFICATION MAPS for the pixel X
   typedef std::vector<IntMassOfBeliefFunctionType::LabelSetType> IntLabelSetOfVectorType;
-  IntLabelSetOfVectorType classifiedPixelX;
+  IntLabelSetOfVectorType                                        classifiedPixelX;
 
   classifiedPixelX.push_back(mapLabelSets[2]);
   classifiedPixelX.push_back(mapLabelSets[2]);
@@ -2030,13 +2016,13 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   //**********************************************************************
 
   IntMassOfBeliefFunctionType::LabelSetType labelSetClk, labelSetClk_;
-  MassType mLabelSetClk, mLabelSetClk_, mUniverseClk;
-  IntMassOfBeliefFunctionType::Pointer mOBFClk;
-  IntJointMassOfBeliefFilterType::Pointer jointMassClkFilter;
+  MassType                                  mLabelSetClk, mLabelSetClk_, mUniverseClk;
+  IntMassOfBeliefFunctionType::Pointer      mOBFClk;
+  IntJointMassOfBeliefFilterType::Pointer   jointMassClkFilter;
   jointMassClkFilter = IntJointMassOfBeliefFilterType::New();
 
   for (unsigned int itk = 0; itk < classifiedPixelX.size(); ++itk)
-    {
+  {
     // Allocation of a new MassOfBeliefFunctionType::Pointer object pointing at a new memory address
     mOBFClk = IntMassOfBeliefFunctionType::New();
 
@@ -2047,8 +2033,8 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
 
     // Setting the masses of the three focal elements {Ai}, {Ai_} and OMEGA = {Ai U Ai_}
     // Extraction of mk({Ai}) = mLabelClk of the classifier k for the labelSetClk = {Ai}
-    mUniverseClk = mClVector[itk][universeSet];
-    mLabelSetClk = mClVector[itk][labelSetClk];
+    mUniverseClk  = mClVector[itk][universeSet];
+    mLabelSetClk  = mClVector[itk][labelSetClk];
     mLabelSetClk_ = 1 - mLabelSetClk - mUniverseClk;
 
     // Defining the MassOfBeliefFunctionType::Pointer object mOBFClk for the classifier k
@@ -2058,7 +2044,7 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
     mOBFClk->EstimateUncertainty();
 
     jointMassClkFilter->PushBackInput(mOBFClk);
-    }
+  }
 
   jointMassClkFilter->Update();
   IntMassOfBeliefFunctionType::Pointer jointMass = jointMassClkFilter->GetOutput();
@@ -2070,41 +2056,40 @@ int otbDempsterShaferFusionConfMatFileTest(int argc, char * argv[])
   // {Ai} is chosen if Bel({Ai}) = MAX(Bel({Aj}))
 
   IntMassOfBeliefFunctionType::LabelSetType fusedDSLabelSet;
-  MassType fusedDSBelLabelSetClk = 0; //Here the MAX of Bel(Ai)
+  MassType                                  fusedDSBelLabelSetClk = 0; // Here the MAX of Bel(Ai)
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
-    labelSetClk = itMapLabelSets->second;
+  {
+    labelSetClk  = itMapLabelSets->second;
     labelSetClk_ = universeSet;
     labelSetClk_.erase(*labelSetClk.begin());
 
     if (itMapLabelSets == mapLabelSets.begin())
-      {
-      fusedDSLabelSet = labelSetClk;
+    {
+      fusedDSLabelSet       = labelSetClk;
       fusedDSBelLabelSetClk = jointMass->GetBelief(labelSetClk);
-      }
+    }
     else
-      {
+    {
       if (jointMass->GetBelief(labelSetClk) >= fusedDSBelLabelSetClk)
-        {
-        fusedDSLabelSet = labelSetClk;
+      {
+        fusedDSLabelSet       = labelSetClk;
         fusedDSBelLabelSetClk = jointMass->GetBelief(labelSetClk);
-        }
       }
+    }
 
     otbLogMacro(Debug, << "Bel(" << labelSetClk << ") = " << jointMass->GetBelief(labelSetClk));
-    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = "
-        << jointMass->GetBelief(labelSetClk_));
-    }
+    otbLogMacro(Debug, << "Bel(NOT_" << labelSetClk << ") = Bel(" << labelSetClk_ << ") = " << jointMass->GetBelief(labelSetClk_));
+  }
 
-  //If the DS VOTED LABEL is NOT unique
+  // If the DS VOTED LABEL is NOT unique
   for (itMapLabelSets = mapLabelSets.begin(); itMapLabelSets != mapLabelSets.end(); ++itMapLabelSets)
-    {
+  {
     labelSetClk = itMapLabelSets->second;
     if ((jointMass->GetBelief(labelSetClk) == fusedDSBelLabelSetClk) && (labelSetClk != fusedDSLabelSet))
-      {
+    {
       fusedDSLabelSet.insert(itMapLabelSets->first);
-      }
     }
+  }
 
   otbLogMacro(Info, << "fusedDSLabelSet = " << fusedDSLabelSet);
   otbLogMacro(Info, << "fusedDSBelLabelSetClk = " << fusedDSBelLabelSetClk);
