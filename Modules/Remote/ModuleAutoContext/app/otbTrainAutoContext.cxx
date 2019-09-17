@@ -30,6 +30,8 @@
 #include <chrono>
 #include <ctime>
 
+#include <sys/time.h>
+#include <sys/resource.h>
 namespace otb
 {
   namespace Wrapper
@@ -122,6 +124,7 @@ namespace otb
         ClearApplications();
         AddApplication("TrainVectorClassifier", "train", "train vector classifier");
         AddApplication("VectorClassifier","classifier","Vector Classifier");
+        GDALSetCacheMax(0);
     }
 
     void DoUpdateParameters()
@@ -130,6 +133,10 @@ namespace otb
     void DoExecute()
     {
         otbAppLogINFO("TrainAutoContext application");
+        struct rusage r_usage;
+        getrusage(RUSAGE_SELF,&r_usage);
+        printf("-----------------> Etat de la RAM au début de DoExecute() : %ld\n",r_usage.ru_maxrss);
+        
         unsigned int threadsNumber = 12;
         FloatVectorImageListType::Pointer in_img_list = GetParameterImageList("il");
         const std::vector<std::string> in_seg_list = GetParameterStringList("inseg");
@@ -159,6 +166,8 @@ namespace otb
         {
             otbAppLogINFO("Index : " << index);
             auto index_string = std::to_string(index);
+            getrusage(RUSAGE_SELF,&r_usage);
+            std::cout<< "-----------------> extraction de primitives, image "+index_string+" : RAM = "<< r_usage.ru_maxrss << std::endl;
             otbAppLogINFO("Processing images at index : " << index_string);
             
             VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
@@ -280,7 +289,8 @@ namespace otb
             otbAppLogINFO("Start sample Extraction : initialize training sample-set : DONE");
         }//for iterate over inputs
 
-        otbAppLogINFO("Merge refererence");
+        getrusage(RUSAGE_SELF,&r_usage);
+        std::cout<< "-----------------> Avant apprentissage : RAM = "<< r_usage.ru_maxrss << std::endl;
         const std::string initTrainSamples_s = tmpdir + "/initTrainSamples_full.sqlite";
         //~ auto init_train_sample_full = merge_vectors(m_ref_extracted, initTrainSamples_s);
 
@@ -315,7 +325,8 @@ namespace otb
         UpdateInternalParameters("train");
         VectorTrainer->ExecuteAndWriteOutput();
         otbAppLogINFO("Training firts iteration : DONE");
-
+        getrusage(RUSAGE_SELF,&r_usage);
+        std::cout<< "-----------------> Après apprentissage : RAM = "<< r_usage.ru_maxrss << std::endl;
         //Extract and classify features for all samples
         //~ auto trainSamples = otb::ogr::DataSource::New();
         std::vector<std::vector<std::string>> histoNames_tiles;
@@ -332,14 +343,14 @@ namespace otb
             const unsigned labelListSize=labelList.size();
             for (size_t index=0; index < nbImages; ++index)
             {
+                //~ getrusage(RUSAGE_SELF,&r_usage);
+                //~ std::cout<< "-----------------> Image : "<< index << " iteration : " << it << " RAM = " << r_usage.ru_maxrss << std::endl;
                 auto histoNames = histoNames_tiles[index];
                 //~ std::vector<std::string> histoNames;
                 VectorImageType::Pointer imageIn = in_img_list->GetNthElement(index);
                 imageIn->UpdateOutputInformation();
-                
                 auto outSamples = m_SP_points[index];
                 auto ref_samples = m_ref_extracted[index];
-
                 if(it==1)
                 {
                     //Use "outSamples" which doesn't contain histogram fields
@@ -359,6 +370,11 @@ namespace otb
                     //Use "trainSamples" which contains histogram fields
                     otbAppLogINFO("Extract SuperPixels features, then Classify pixels");
                     otb::ogr::DataSource::Pointer trainSamplesNew = otb::ogr::DataSource::New();
+                    //~ std::cout<<m_trainSamples_tiles[index]<<std::endl;
+                    std::cout<< "-----------------> Image : "<< index << " iteration : " << it << std::endl;
+                    std::cout<< "taille de m_trainSamples_tiles : "<< m_trainSamples_tiles.size() << std::endl;
+                    char in;
+                    //~ std::cin >> in;
                     extractFeaturesAndClassify<VectorImageType>(imageIn, m_trainSamples_tiles[index],
                                                                 trainSamplesNew, modelName,
                                                                 "predicted", histoNames,
@@ -405,6 +421,9 @@ namespace otb
                 }
             }//for iterate over inputs
             
+            getrusage(RUSAGE_SELF,&r_usage);
+            std::cout<< "-----------------> Restart training, RAM = "<< r_usage.ru_maxrss << std::endl;
+                
             //Update model name
             otbAppLogINFO("Restart training");
             std::stringstream modelName_s;
@@ -428,7 +447,8 @@ namespace otb
             ExecuteInternal("train");
             otbAppLogINFO("End training iteration : " << it);
         }// iterations
-
+        getrusage(RUSAGE_SELF,&r_usage);
+        std::cout<< "-----------------> DoExecute, RAM = "<< r_usage.ru_maxrss << std::endl;
         //TODO cleanup temp dir
         otbAppLogINFO("DoExecute");
     }// DoExecute()
@@ -550,7 +570,7 @@ namespace otb
         }
         filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
         filter->Update();
-        // outputDS->SyncToDisk();
+        //~ outputDS->SyncToDisk();
     }
 
     template<typename TInputImageType>
