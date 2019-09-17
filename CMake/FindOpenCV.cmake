@@ -137,7 +137,7 @@ if( OPENCV_INCLUDE_DIRS AND OPENCV_LIBRARIES )
   set(OPENCV_VERSION ${OpenCV_VERSION}) #for compatility
 endif()
 message("OpenCV_VERSION")
-message("${OpenCV_VERSION} ${OPENCV_ml_LIBRARY} ${OPENCV_core_LIBRARY}")
+message("${OpenCV_VERSION} ${OPENCV_ml_LIBRARY} ${OPENCV_core_LIBRARY} ${opencv_INCLUDE_DIR} ${OPENCV_SEARCH_PATH}")
 
 include(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
 find_package_handle_standard_args(OpenCV
