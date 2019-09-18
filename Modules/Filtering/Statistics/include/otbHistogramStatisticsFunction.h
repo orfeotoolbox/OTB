@@ -50,8 +50,8 @@ public:
   typedef itk::SmartPointer<Self>                      Pointer;
   typedef itk::SmartPointer<const Self>                ConstPointer;
 
-  typedef typename TInputHistogram::MeasurementType MeasurementType;
-  typedef typename TInputHistogram::AbsoluteFrequencyType FrequencyType; // FIXME several possibilities in the new framework
+  typedef typename TInputHistogram::MeasurementType              MeasurementType;
+  typedef typename TInputHistogram::AbsoluteFrequencyType        FrequencyType; // FIXME several possibilities in the new framework
   typedef typename itk::NumericTraits<MeasurementType>::RealType RealType;
 
   /**Standard Macros */

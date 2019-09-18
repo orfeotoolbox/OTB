@@ -48,11 +48,11 @@ class LocalRxDetectionFunctor
 public:
   /** typedef */
   typedef typename itk::Neighborhood<itk::VariableLengthVector<TInput>>::OffsetType OffsetType;
-  typedef typename itk::VariableLengthVector<TInput>                                VectorMeasurementType;
-  typedef itk::Statistics::ListSample<VectorMeasurementType>                        ListSampleType;
-  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType>                   CovarianceCalculatorType;
-  typedef typename CovarianceCalculatorType::MeasurementVectorRealType              MeasurementVectorRealType;
-  typedef typename CovarianceCalculatorType::MatrixType                             MatrixType;
+  typedef typename itk::VariableLengthVector<TInput>                               VectorMeasurementType;
+  typedef itk::Statistics::ListSample<VectorMeasurementType>                       ListSampleType;
+  typedef itk::Statistics::CovarianceSampleFilter<ListSampleType>                  CovarianceCalculatorType;
+  typedef typename CovarianceCalculatorType::MeasurementVectorRealType             MeasurementVectorRealType;
+  typedef typename CovarianceCalculatorType::MatrixType                            MatrixType;
 
 private:
   // Internal radius along the X axis

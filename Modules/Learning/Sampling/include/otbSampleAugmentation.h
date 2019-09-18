@@ -111,7 +111,7 @@ void JitterSamples(const SampleVectorType& inSamples, const size_t nbSamples, Sa
   std::srand(seed);
   // We use one gaussian distribution per component since they may
   // have different stds
-  auto                                          stds = EstimateStds(inSamples);
+  auto                                         stds = EstimateStds(inSamples);
   std::vector<std::normal_distribution<double>> gaussDis(nbComponents);
 #ifdef _OPENMP
 #pragma omp parallel for

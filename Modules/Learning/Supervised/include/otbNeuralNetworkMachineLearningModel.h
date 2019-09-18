@@ -200,15 +200,15 @@ private:
   int                       m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;
 
-  double                    m_Alpha;
-  double                    m_Beta;
-  double                    m_BackPropDWScale;
-  double                    m_BackPropMomentScale;
-  double                    m_RegPropDW0;
-  double                    m_RegPropDWMin;
-  int                       m_TermCriteriaType;
-  int                       m_MaxIter;
-  double                    m_Epsilon;
+  double m_Alpha;
+  double m_Beta;
+  double m_BackPropDWScale;
+  double m_BackPropMomentScale;
+  double m_RegPropDW0;
+  double m_RegPropDWMin;
+  int    m_TermCriteriaType;
+  int    m_MaxIter;
+  double m_Epsilon;
 
   cv::Mat            m_MatrixOfLabels;
   MapOfLabelsType    m_MapOfLabels;

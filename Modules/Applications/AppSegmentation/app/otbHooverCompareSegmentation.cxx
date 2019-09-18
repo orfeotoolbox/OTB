@@ -125,7 +125,7 @@ public:
   typedef HooverMatrixFilterType::MatrixType MatrixType;
 
   typedef otb::HooverInstanceFilter<LabelMapType> InstanceFilterType;
-  typedef otb::LabelMapToAttributeImageFilter<LabelMapType, FloatVectorImageType>              AttributeImageFilterType;
+  typedef otb::LabelMapToAttributeImageFilter<LabelMapType, FloatVectorImageType>             AttributeImageFilterType;
   typedef otb::FunctorImageFilter<Functor::HooverColorMapping<FloatPixelType, Int16PixelType>> HooverColorFilterType;
 
 private:
