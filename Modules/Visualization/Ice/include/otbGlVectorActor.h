@@ -40,22 +40,23 @@ class GLUtesselator;
 namespace otb
 {
 
-class OTBIce_EXPORT GlVectorActor : public GlActor, public GeoInterface
+class OTBIce_EXPORT GlVectorActor 
+  : public GlActor, public GeoInterface
 {
 public:
-  typedef GlVectorActor                   Self;
-  typedef GlActor                         Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
-  typedef otb::GenericRSTransform<>       RSTransformType;
-  typedef RSTransformType::InputPointType PointType;
-  typedef itk::Vector<double, 3> ColorType;
-  typedef itk::CenteredRigid2DTransform<> RigidTransformType;
+  typedef GlVectorActor                                   Self;
+  typedef GlActor                                         Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef otb::GenericRSTransform<>                       RSTransformType;
+  typedef RSTransformType::InputPointType                 PointType;
+  typedef itk::Vector<double,3>                           ColorType;
+  typedef itk::CenteredRigid2DTransform<>                 RigidTransformType;
 
   itkNewMacro(Self);
-
+  
   // Initialize with a new file
-  void Initialize(const std::string& filename, const std::string& layername = "");
+  void Initialize(const std::string & filename, const std::string & layername = "");
 
   // Get all available layers
   std::vector<std::string> GetAvailableLayers() const;
@@ -64,13 +65,13 @@ public:
   std::string GetCurrentLayer() const;
 
   // Set layer name
-  void SetCurrentLayer(const std::string& layername);
+  void SetCurrentLayer(const std::string & layername);
 
   // Retrieve the full extent of the actor
-  void GetExtent(double& ulx, double& uly, double& lrx, double& lry) const override;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Return actor extent in its own geometry
-  void GetBoundingBox(double& ulx, double& uly, double& lrx, double& lry) const;
+  void GetBoundingBox(double & ulx, double & uly, double & lrx, double & lry) const;
 
   // Update internal actor state with respect to ViewSettings
   void ProcessViewSettings() override;
@@ -81,30 +82,30 @@ public:
   // Gl rendering of current state
   void Render() override;
 
-  PointType ViewportToVectorTransform(const PointType& point) const;
+  PointType ViewportToVectorTransform(const PointType & point) const;
 
-  itkSetMacro(Color, ColorType);
-  itkGetConstReferenceMacro(Color, ColorType);
-
-  itkSetMacro(Alpha, double);
-  itkGetConstReferenceMacro(Alpha, double);
+  itkSetMacro(Color,ColorType);
+  itkGetConstReferenceMacro(Color,ColorType);
+  
+  itkSetMacro(Alpha,double);
+  itkGetConstReferenceMacro(Alpha,double);
 
   void SetFill(bool flag);
-  itkGetMacro(Fill, bool);
+  itkGetMacro(Fill,bool);
   itkBooleanMacro(Fill);
 
   void SetSolidBorder(bool flag);
-  itkGetMacro(SolidBorder, bool);
+  itkGetMacro(SolidBorder,bool);
   itkBooleanMacro(SolidBorder);
 
   void SetOptimizedRendering(bool flag);
-  itkGetMacro(OptimizedRendering, bool);
+  itkGetMacro(OptimizedRendering,bool);
   itkBooleanMacro(OptimizedRendering);
+  
+  itkGetMacro(OptimizedRenderingActive,bool);
 
-  itkGetMacro(OptimizedRenderingActive, bool);
-
-  itkSetMacro(LineWidth, double);
-  itkGetConstReferenceMacro(LineWidth, double);
+  itkSetMacro(LineWidth,double);
+  itkGetConstReferenceMacro(LineWidth,double);
 
   std::string GetWkt() const override;
 
@@ -112,12 +113,14 @@ public:
   // otb::GlActor overloads.
   //
 
-  bool TransformFromViewport(Point2d& out, const Point2d& in, bool isPhysical = true) const override;
+  bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const override;
 
 
 protected:
   GlVectorActor();
-
+  
   ~GlVectorActor() override;
 
 
@@ -125,14 +128,15 @@ protected:
   class InternalFeature
   {
   public:
-    InternalFeature(OGRFeatureDefn& definition) : m_SourceFeature(definition), m_RenderedFeature(definition)
-    {
-    }
+    InternalFeature(OGRFeatureDefn & definition)
+      : m_SourceFeature(definition),
+        m_RenderedFeature(definition)
+    {}
 
     otb::ogr::Feature m_SourceFeature;
     otb::ogr::Feature m_RenderedFeature;
   };
-
+  
 private:
   // prevent implementation
   GlVectorActor(const Self&);
@@ -144,12 +148,12 @@ private:
 
   void UpdateDisplayList();
 
-  ColorType m_Color;
-  double    m_Alpha;
-  bool      m_Fill;
-  bool      m_SolidBorder;
-  double    m_LineWidth;
-
+  ColorType            m_Color;
+  double               m_Alpha;
+  bool                 m_Fill;
+  bool                 m_SolidBorder;
+  double               m_LineWidth;
+  
   RSTransformType::Pointer m_ViewportToVectorTransform;
   RSTransformType::Pointer m_VectorToViewportTransform;
 
@@ -158,10 +162,10 @@ private:
 
   std::vector<InternalFeature> m_InternalFeatures;
 
-  GLUtesselator* m_GluTesselator;
+  GLUtesselator * m_GluTesselator;
 
   unsigned int m_DisplayList;
-  bool         m_DisplayListNeedsRebuild;
+  bool m_DisplayListNeedsRebuild;
 
   double m_ExtentULX;
   double m_ExtentULY;

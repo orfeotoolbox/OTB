@@ -29,7 +29,8 @@
 namespace otb
 {
 
-typedef enum {
+typedef enum
+{
   SHADER_STANDARD,
   SHADER_LOCAL_CONTRAST,
   SHADER_LOCAL_ALPHA,
@@ -50,43 +51,44 @@ typedef enum {
 } ShaderType;
 
 
-class OTBIce_EXPORT StandardShader : public FragmentShader
+class OTBIce_EXPORT StandardShader
+  : public FragmentShader
 {
 public:
-  typedef StandardShader                Self;
-  typedef FragmentShader                Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef StandardShader                                  Self;
+  typedef FragmentShader                                  Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
-  typedef itk::Point<float, 2> PointType;
+  typedef itk::Point<float,2>                             PointType;
 
-  itkSetObjectMacro(ImageSettings, ImageSettings);
-  itkGetObjectMacro(ImageSettings, ImageSettings);
-  itkGetConstObjectMacro(ImageSettings, ImageSettings);
+  itkSetObjectMacro( ImageSettings, ImageSettings );
+  itkGetObjectMacro( ImageSettings, ImageSettings );
+  itkGetConstObjectMacro( ImageSettings, ImageSettings );
 
-  itkSetMacro(LocalContrastRange, double);
-  itkGetMacro(LocalContrastRange, double);
+  itkSetMacro(LocalContrastRange,double);
+  itkGetMacro(LocalContrastRange,double);
 
-  itkSetMacro(SpectralAngleRange, double);
-  itkGetMacro(SpectralAngleRange, double);
+  itkSetMacro(SpectralAngleRange,double);
+  itkGetMacro(SpectralAngleRange,double);
 
-  itkSetMacro(ShaderType, ShaderType);
-  itkGetMacro(ShaderType, ShaderType);
+  itkSetMacro(ShaderType,ShaderType);
+  itkGetMacro(ShaderType,ShaderType);
 
-  itkSetMacro(Radius, double);
-  itkGetConstReferenceMacro(Radius, double);
+  itkSetMacro(Radius,double);
+  itkGetConstReferenceMacro(Radius,double);
 
-  itkSetMacro(ChessboardSize, double);
-  itkGetConstReferenceMacro(ChessboardSize, double);
+  itkSetMacro(ChessboardSize,double);
+  itkGetConstReferenceMacro(ChessboardSize,double);
 
-  itkSetMacro(SliderPosition, double);
-  itkGetConstReferenceMacro(SliderPosition, double);
+  itkSetMacro(SliderPosition,double);
+  itkGetConstReferenceMacro(SliderPosition,double);
 
-  itkSetMacro(VerticalSlider, bool);
-  itkGetMacro(VerticalSlider, bool);
+  itkSetMacro(VerticalSlider,bool);
+  itkGetMacro(VerticalSlider,bool);
 
-  itkSetMacro(Center, PointType);
-  itkGetConstReferenceMacro(Center, PointType);
+  itkSetMacro(Center,PointType);
+  itkGetConstReferenceMacro(Center,PointType);
 
   void SetupShader() override;
 

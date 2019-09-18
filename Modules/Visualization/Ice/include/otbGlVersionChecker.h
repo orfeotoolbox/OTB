@@ -29,17 +29,18 @@ namespace otb
 class OTBIce_EXPORT GlVersionChecker
 {
 public:
+
   /**
    * Constant containing required OpenGL version for
    * client-application feedback messages.
    */
-  static const char* REQUIRED_GL_VERSION;
+  static const char * REQUIRED_GL_VERSION;
 
   /**
    * Constant containing required shading-language version for
    * client-application feedback messages.
    */
-  static const char* REQUIRED_GLSL_VERSION;
+  static const char * REQUIRED_GLSL_VERSION;
 
   /**
    * \return The OpenGL version used at runtime. The call to this
@@ -47,7 +48,7 @@ public:
    * std::runtime_error() is thrown when glGetError() is different
    * than GL_NO_ERROR.
    */
-  static const char* GLVersion();
+  static const char * GLVersion();
 
   /**
    * \return The OpenGL Shading-Language version used at runtime. The
@@ -58,7 +59,7 @@ public:
    * 2.0. (@see
    * http://www.opengl.org/sdk/docs/man2/xhtml/glGetString.xml).
    */
-  static const char* GLSLVersion();
+  static const char * GLSLVersion();
 
   /**
    * \brief Check that OpenGL required capabilities have been reached.
@@ -72,7 +73,8 @@ public:
    * \return true if OpengGL capabilities of running platform meets
    * the needs of the library.
    */
-  static bool CheckGLCapabilities(const char*& glVersion, const char*& glslVersion);
+  static bool CheckGLCapabilities( const char * & glVersion,
+                                   const char * & glslVersion );
 
   /**
    * \brief Compares to version-strings on the model of strcmp().
@@ -88,7 +90,7 @@ public:
    * \return <code>-1</code> if version<required; <code>0</code> if
    * version==required; <code>+1</code> if version>=required.
    */
-  static int VerCmp(const char* version, const char* required);
+  static int VerCmp( const char * version, const char * required );
 
 private:
   // Prevent instantiation
@@ -109,7 +111,10 @@ private:
    * \return <code>true</code> if operation has succeeded,
    * <code>false</code> otherwise.
    */
-  static bool SplitVersion(const char* version, int& major, int& minor, int& release);
+  static bool SplitVersion( const char * version,
+                            int& major,
+                            int& minor,
+                            int& release );
 };
 
 } // End namespace otb

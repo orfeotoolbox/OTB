@@ -27,13 +27,14 @@
 namespace otb
 {
 
-class FragmentShaderRegistry : public itk::Object
+class FragmentShaderRegistry 
+  : public itk::Object
 {
 public:
-  typedef FragmentShaderRegistry        Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef FragmentShaderRegistry                          Self;
+  typedef itk::Object                                     Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   static Pointer Instance();
 
@@ -57,7 +58,7 @@ protected:
   ~FragmentShaderRegistry() override;
 
 private:
-  typedef std::map<std::string, std::pair<unsigned int, unsigned int>> ShaderMapType;
+  typedef std::map<std::string, std::pair<unsigned int, unsigned int> > ShaderMapType;
 
   itkNewMacro(Self);
 

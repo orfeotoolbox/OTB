@@ -41,47 +41,47 @@
 namespace otb
 {
 
-class OTBIce_EXPORT GlImageActor : public GlActor, public GeoInterface
+class OTBIce_EXPORT GlImageActor 
+  : public GlActor, public GeoInterface
 {
 public:
-  typedef GlImageActor                  Self;
-  typedef GlActor                       Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef GlImageActor                                    Self;
+  typedef GlActor                                         Superclass;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   itkNewMacro(Self);
 
-  typedef VectorImage<float>                    VectorImageType;
-  typedef VectorImage<unsigned char>            UCharVectorImageType;
-  typedef VectorImageType::PixelType            PixelType;
-  typedef VectorImageType::ImageKeywordlistType ImageKeywordlistType;
-  typedef itk::MetaDataDictionary               MetaDataDictionaryType;
-  typedef VectorImageType::SizeType             SizeType;
-  typedef VectorImageType::IndexType            IndexType;
-  typedef VectorImageType::RegionType           RegionType;
-  typedef VectorImageType::SpacingType          SpacingType;
-  typedef VectorImageType::PointType            PointType;
-  typedef VectorRescaleIntensityImageFilter<VectorImageType, UCharVectorImageType> RescaleFilterType;
-
+  typedef VectorImage<float>                              VectorImageType;
+  typedef VectorImage<unsigned char>                      UCharVectorImageType;
+  typedef VectorImageType::PixelType                      PixelType;
+  typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
+  typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
+  typedef VectorImageType::SizeType                       SizeType;
+  typedef VectorImageType::IndexType                      IndexType;
+  typedef VectorImageType::RegionType                     RegionType;
+  typedef VectorImageType::SpacingType                    SpacingType;
+  typedef VectorImageType::PointType                      PointType;
+  typedef VectorRescaleIntensityImageFilter<VectorImageType,UCharVectorImageType> RescaleFilterType;
+  
   struct ResolutionAlgorithm
   {
     enum type
     {
       Invalid,
-      Nearest,       ///<Use the nearest resolution (lower or upper)
+      Nearest, ///<Use the nearest resolution (lower or upper)
       Nearest_Lower, ///<Use the nearest lower resolution (better for
-                     /// performances, poorer quality
-      Nearest_Upper, ///<Use the nearest upper resolution (lower
-                     /// performances, better quality)
-      MAX__
+                     ///performances, poorer quality
+      Nearest_Upper,///<Use the nearest upper resolution (lower
+                    ///performances, better quality)
+      MAX__};
     };
-  };
-
+  
   // Initialize with a new image
-  void Initialize(const std::string& filename);
+  void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  void GetExtent(double& ulx, double& uly, double& lrx, double& lry) const override;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Update internal actor state with respect to ViewSettings
   void ProcessViewSettings() override;
@@ -93,12 +93,16 @@ public:
   void Render() override;
 
   // Automatic color adjustment
-  void AutoColorAdjustment(double& minRed, double& maxRed, double& minGreen, double& maxGreen, double& minBlue, double& maxBlue, bool full = true,
-                           unsigned int refSize = 500, double lcp = 0.02, double hcp = 0.02);
+  void AutoColorAdjustment( double & minRed, double & maxRed,
+			    double & minGreen, double & maxGreen,
+			    double & minBlue, double & maxBlue,
+			    bool full = true,
+			    unsigned int refSize = 500,
+			    double lcp = 0.02, double hcp = 0.02 );
 
-  const PointType& GetOrigin() const;
+  const PointType & GetOrigin() const;
 
-  const GeoInterface::Spacing2& GetSpacing() const override;
+  const GeoInterface::Spacing2 & GetSpacing() const override;
 
   std::string GetWkt() const override;
 
@@ -106,24 +110,24 @@ public:
 
   bool HasKwl() const override;
 
-  bool GetKwl(ImageKeywordlist&) const override;
+  bool GetKwl( ImageKeywordlist & ) const override;
 
-  MetaDataDictionaryType& GetMetaDataDictionary() const;
+  MetaDataDictionaryType & GetMetaDataDictionary() const;
 
-  itkGetMacro(RedIdx, unsigned int);
-  itkGetMacro(GreenIdx, unsigned int);
-  itkGetMacro(BlueIdx, unsigned int);
+  itkGetMacro(RedIdx,unsigned int);
+  itkGetMacro(GreenIdx,unsigned int);
+  itkGetMacro(BlueIdx,unsigned int);
 
-  itkGetMacro(NumberOfComponents, unsigned int);
-  itkGetMacro(CurrentResolution, unsigned int);
-  itkGetMacro(LargestRegion, RegionType);
+  itkGetMacro(NumberOfComponents,unsigned int);
+  itkGetMacro(CurrentResolution,unsigned int);
+  itkGetMacro(LargestRegion,RegionType);
 
-  itkSetMacro(TileSize, unsigned int);
-  itkGetMacro(TileSize, unsigned int);
+  itkSetMacro(TileSize,unsigned int);
+  itkGetMacro(TileSize,unsigned int);
 
-  itkBooleanMacro(SoftwareRendering);
-  itkSetMacro(SoftwareRendering, bool);
-  itkGetMacro(SoftwareRendering, bool);
+  itkBooleanMacro(SoftwareRendering );
+  itkSetMacro(SoftwareRendering, bool );
+  itkGetMacro(SoftwareRendering, bool );
 
   void CreateShader();
 
@@ -139,67 +143,74 @@ public:
 
   virtual void SetRedIdx(const unsigned int idx)
   {
-    if (this->m_RedIdx != idx)
-    {
-      this->m_RedIdx = std::min(this->GetNumberOfComponents(), idx);
-      this->Modified();
-    }
+  if ( this->m_RedIdx != idx )
+   { 
+   this->m_RedIdx = std::min(this->GetNumberOfComponents(),idx);
+   this->Modified();
+   }
   }
 
   virtual void SetGreenIdx(const unsigned int idx)
   {
-    if (this->m_GreenIdx != idx)
-    {
-      this->m_GreenIdx = std::min(this->GetNumberOfComponents(), idx);
-      this->Modified();
+  if ( this->m_GreenIdx != idx )
+    { 
+    this->m_GreenIdx = std::min(this->GetNumberOfComponents(),idx);
+    this->Modified();
     }
-  }
+  }  
 
   virtual void SetBlueIdx(const unsigned int idx)
   {
-    if (this->m_BlueIdx != idx)
-    {
-      this->m_BlueIdx = std::min(this->GetNumberOfComponents(), idx);
-      this->Modified();
+  if ( this->m_BlueIdx != idx )
+    { 
+    this->m_BlueIdx = std::min(this->GetNumberOfComponents(),idx);
+    this->Modified(); 
     }
   }
 
-  PointType ViewportToImageTransform(const PointType& in, bool physical = true) const;
+  PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
 
-  PointType ImageToViewportTransform(const PointType& in, bool physical = true) const;
+  PointType ImageToViewportTransform(const PointType & in, bool physical = true) const;
+  
+  bool GetPixelFromViewport( const PointType & in, PixelType & pixel ) const;
 
-  bool GetPixelFromViewport(const PointType& in, PixelType& pixel) const;
+  bool GetPixelFromViewport( const PointType & view,
+			     PixelType & pixel,
+			     PointType & physical,
+			     IndexType & index ) const;
 
-  bool GetPixelFromViewport(const PointType& view, PixelType& pixel, PointType& physical, IndexType& index) const;
+  bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
 
-  bool GetPixel(const PointType& physical, PixelType& pixel, IndexType& index) const;
+  itkGetObjectMacro(Shader,FragmentShader);
+  itkSetObjectMacro(Shader,FragmentShader);
 
-  itkGetObjectMacro(Shader, FragmentShader);
-  itkSetObjectMacro(Shader, FragmentShader);
-
-  itkGetObjectMacro(ImageSettings, ImageSettings);
+  itkGetObjectMacro( ImageSettings, ImageSettings );
 
   //
   // otb::GlActor overloads.
   //
 
-  bool TransformFromViewport(Point2d& out, const Point2d& in, bool isPhysical = true) const override;
+  bool TransformFromViewport( Point2d & out,
+                                      const Point2d & in,
+                                      bool isPhysical = true ) const override;
 
-  bool TransformToViewport(Point2d& out, const Point2d& in, bool isPhysical = true) const override;
+  bool TransformToViewport( Point2d & out,
+                                    const Point2d & in,
+                                    bool isPhysical = true ) const override;
 
 
   void UpdateTransforms();
 
 protected:
   GlImageActor();
-
+  
   ~GlImageActor() override;
 
-  typedef ImageFileReader<VectorImageType> ReaderType;
-  typedef MultiChannelExtractROI<float, float> ExtractROIFilterType;
-  typedef otb::GenericRSTransform<>       RSTransformType;
-  typedef itk::CenteredRigid2DTransform<> RigidTransformType;
-  typedef std::vector<unsigned int>       ResolutionVectorType;
+  typedef ImageFileReader<VectorImageType>                                        ReaderType;
+  typedef MultiChannelExtractROI<float,float>                                     ExtractROIFilterType;
+  typedef otb::GenericRSTransform<>                                               RSTransformType;
+  typedef itk::CenteredRigid2DTransform<>                                         RigidTransformType;
+  typedef std::vector<unsigned int>                                               ResolutionVectorType;
 
   // Internal class to hold tiles
   class Tile
@@ -227,24 +238,24 @@ protected:
       m_LR.Fill(0);
     }
 
-    bool                       m_Loaded;
-    unsigned int               m_TextureId;
-    RegionType                 m_ImageRegion;
-    unsigned int               m_TileSize;
-    VectorImageType::Pointer   m_Image;
-    PointType                  m_UL;
-    PointType                  m_UR;
-    PointType                  m_LL;
-    PointType                  m_LR;
-    unsigned int               m_Resolution;
-    unsigned int               m_RedIdx;
-    unsigned int               m_GreenIdx;
-    unsigned int               m_BlueIdx;
+    bool m_Loaded;
+    unsigned int m_TextureId;
+    RegionType m_ImageRegion;
+    unsigned int m_TileSize;
+    VectorImageType::Pointer m_Image;
+    PointType m_UL;
+    PointType m_UR;
+    PointType m_LL;
+    PointType m_LR;
+    unsigned int m_Resolution;
+    unsigned int m_RedIdx;
+    unsigned int m_GreenIdx;
+    unsigned int m_BlueIdx;
     RescaleFilterType::Pointer m_RescaleFilter;
   };
 
-  typedef std::vector<Tile> TileVectorType;
-
+  typedef std::vector<Tile>                                                       TileVectorType;    
+  
 private:
   // prevent implementation
   GlImageActor(const Self&);
@@ -252,7 +263,7 @@ private:
 
   // Load tile to GPU
   void LoadTile(Tile& tile);
-
+  
   // Unload tile from GPU
   void UnloadTile(Tile& tile);
 
@@ -265,18 +276,18 @@ private:
   // Is tile loaded ?
   bool TileAlreadyLoaded(const Tile& tile);
 
-  void ImageRegionToViewportExtent(const RegionType& region, double& ulx, double& uly, double& lrx, double& lry) const;
+  void ImageRegionToViewportExtent(const RegionType& region, double & ulx, double & uly, double & lrx, double& lry) const;
 
-  void ImageRegionToViewportQuad(const RegionType& region, PointType& ul, PointType& ur, PointType& ll, PointType& lr, bool rotate = true) const;
+  void ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr, bool rotate = true) const;
 
-  void ViewportExtentToImageRegion(const double& ulx, const double& uly, const double& lrx, const double& lry, RegionType& region) const;
+  void ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const;
 
   void UpdateResolution();
-
+ 
   unsigned int m_TileSize;
 
   std::string m_FileName;
-
+  
   ReaderType::Pointer m_FileReader;
 
   TileVectorType m_LoadedTiles;
@@ -296,7 +307,7 @@ private:
   RegionType   m_LargestRegion;
   unsigned int m_NumberOfComponents;
 
-  ImageSettings::Pointer  m_ImageSettings;
+  ImageSettings::Pointer m_ImageSettings;
   FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;

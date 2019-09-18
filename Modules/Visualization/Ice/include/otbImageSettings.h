@@ -33,49 +33,49 @@ namespace otb
 class ImageSettings : public itk::Object
 {
 public:
-  typedef ImageSettings                 Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef ImageSettings Self;
+  typedef itk::Object Superclass;
+  typedef itk::SmartPointer< Self > Pointer;
+  typedef itk::SmartPointer< const Self > ConstPointer;
 
+  
+  itkSetMacro( MinRed, double );
+  itkSetMacro( MinGreen, double );
+  itkSetMacro( MinBlue, double );
 
-  itkSetMacro(MinRed, double);
-  itkSetMacro(MinGreen, double);
-  itkSetMacro(MinBlue, double);
+  itkGetMacro( MinRed, double );
+  itkGetMacro( MinGreen, double );
+  itkGetMacro( MinBlue, double );
 
-  itkGetMacro(MinRed, double);
-  itkGetMacro(MinGreen, double);
-  itkGetMacro(MinBlue, double);
+  itkSetMacro( MaxRed, double );
+  itkSetMacro( MaxGreen, double );
+  itkSetMacro( MaxBlue, double);
 
-  itkSetMacro(MaxRed, double);
-  itkSetMacro(MaxGreen, double);
-  itkSetMacro(MaxBlue, double);
+  itkGetMacro( MaxRed, double);
+  itkGetMacro( MaxGreen, double);
+  itkGetMacro( MaxBlue, double);  
 
-  itkGetMacro(MaxRed, double);
-  itkGetMacro(MaxGreen, double);
-  itkGetMacro(MaxBlue, double);
+  itkSetMacro( UseNoData, bool );
+  itkGetMacro( UseNoData, bool );
 
-  itkSetMacro(UseNoData, bool);
-  itkGetMacro(UseNoData, bool);
+  itkSetMacro( NoData, double );
+  itkGetMacro( NoData, double );
 
-  itkSetMacro(NoData, double);
-  itkGetMacro(NoData, double);
+  itkSetMacro( CurrentRed, double );
+  itkSetMacro( CurrentGreen, double );
+  itkSetMacro( CurrentBlue, double );
 
-  itkSetMacro(CurrentRed, double);
-  itkSetMacro(CurrentGreen, double);
-  itkSetMacro(CurrentBlue, double);
+  itkGetMacro( CurrentRed, double );
+  itkGetMacro( CurrentGreen, double );
+  itkGetMacro( CurrentBlue, double );
 
-  itkGetMacro(CurrentRed, double);
-  itkGetMacro(CurrentGreen, double);
-  itkGetMacro(CurrentBlue, double);
+  itkSetMacro( Gamma, double );
+  itkGetMacro( Gamma, double );
 
-  itkSetMacro(Gamma, double);
-  itkGetMacro(Gamma, double);
+  itkSetMacro( Alpha, double );
+  itkGetMacro( Alpha, double );
 
-  itkSetMacro(Alpha, double);
-  itkGetMacro(Alpha, double);
-
-  itkNewMacro(Self);
+  itkNewMacro( Self );
 
 
 protected:
@@ -86,8 +86,8 @@ protected:
 
 private:
   // prevent implementation
-  ImageSettings(const Self&);
-  void operator=(const Self&);
+  ImageSettings( const Self & );
+  void operator = ( const Self & );
 
   double m_MinRed;
   double m_MaxRed;

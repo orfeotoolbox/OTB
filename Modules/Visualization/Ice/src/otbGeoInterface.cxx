@@ -27,12 +27,14 @@ namespace otb
 class StaticInitializer
 {
 public:
-  StaticInitializer() : m_Spacing()
+  StaticInitializer() :
+    m_Spacing()
   {
-    m_Spacing.Fill(1);
+    m_Spacing.Fill( 1 );
   }
 
-  const GeoInterface::Spacing2& GetSpacing() const
+  const GeoInterface::Spacing2 &
+  GetSpacing() const
   {
     return m_Spacing;
   }
@@ -45,17 +47,23 @@ private:
 static const StaticInitializer INITIALIZER;
 
 
-GeoInterface::GeoInterface()
+GeoInterface
+::GeoInterface()
 {
 }
 
 
-GeoInterface::~GeoInterface()
+GeoInterface
+::~GeoInterface()
 {
 }
 
 
-bool GeoInterface::TransformFromViewport(Point2d&, const Point2d&, bool) const
+bool
+GeoInterface
+::TransformFromViewport( Point2d &,
+                         const Point2d &,
+                         bool ) const
 {
   return false;
 }
@@ -83,7 +91,11 @@ GeoInterface
 
 #endif
 
-bool GeoInterface::TransformToViewport(Point2d&, const Point2d&, bool) const
+bool
+GeoInterface
+::TransformToViewport( Point2d &,
+                       const Point2d &,
+                       bool ) const
 {
   return false;
 }
@@ -113,7 +125,9 @@ GeoInterface
 #endif
 
 
-const GeoInterface::Spacing2& GeoInterface::GetSpacing() const
+const GeoInterface::Spacing2 &
+GeoInterface
+::GetSpacing() const
 {
   // By default, spacing is (1, 1) if sub-class has no scale-related
   // spacing.
@@ -125,19 +139,25 @@ const GeoInterface::Spacing2& GeoInterface::GetSpacing() const
 }
 
 
-std::string GeoInterface::GetWkt() const
+std::string
+GeoInterface
+::GetWkt() const
 {
   return std::string();
 }
 
 
-bool GeoInterface::HasKwl() const
+bool
+GeoInterface
+::HasKwl() const
 {
   return false;
 }
 
 
-bool GeoInterface::GetKwl(ImageKeywordlist&) const
+bool
+GeoInterface
+::GetKwl( ImageKeywordlist & ) const
 {
   return false;
 }
