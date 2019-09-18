@@ -243,29 +243,20 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
 
   // MODE CLASSIFICATION : find the highest response
   float secondResponse = -1e10;
-<<<<<<< HEAD
-  target[0]            = m_CvMatOfLabels->data.i[0];
 
-  unsigned int nbClasses = m_CvMatOfLabels->cols;
-=======
   target[0] = m_MatrixOfLabels.at<TOutputValue>(0);
   unsigned int nbClasses = m_MatrixOfLabels.size[1];
->>>>>>> develop
+
   for (unsigned itLabel = 1; itLabel < nbClasses; ++itLabel)
   {
     currentResponse = response.at<float>(0, itLabel);
     if (currentResponse > maxResponse)
     {
       secondResponse = maxResponse;
-<<<<<<< HEAD
-      maxResponse    = currentResponse;
-      target[0]      = m_CvMatOfLabels->data.i[itLabel];
-    }
-=======
+
       maxResponse = currentResponse;
       target[0] = m_MatrixOfLabels.at<TOutputValue>(itLabel);
-      }
->>>>>>> develop
+    }
     else
     {
       if (currentResponse > secondResponse)
