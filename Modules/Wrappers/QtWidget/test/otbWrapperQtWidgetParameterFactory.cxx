@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperQtWidgetParameterFactory.h"
@@ -39,7 +39,7 @@ class ITK_EXPORT StubApplication : public otb::Wrapper::Application
 {
 public:
   /** Standard class typedefs. */
-  typedef StubApplication                      Self;
+  typedef StubApplication               Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -70,20 +70,19 @@ protected:
   {
   }
 };
-
 }
 }
 
 
 int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
 {
-  QApplication app(argc, argv);
-  otb::WrapperTest::StubApplication::Pointer application = otb::WrapperTest::StubApplication::New();
-  otb::Wrapper::QtWidgetModel* model = new otb::Wrapper::QtWidgetModel(application);
-  otb::Wrapper::QtWidgetParameterFactory::Pointer factory = otb::Wrapper::QtWidgetParameterFactory::New();
+  QApplication                                    app(argc, argv);
+  otb::WrapperTest::StubApplication::Pointer      application = otb::WrapperTest::StubApplication::New();
+  otb::Wrapper::QtWidgetModel*                    model       = new otb::Wrapper::QtWidgetModel(application);
+  otb::Wrapper::QtWidgetParameterFactory::Pointer factory     = otb::Wrapper::QtWidgetParameterFactory::New();
 
-  otb::Wrapper::IntParameter::Pointer   intParam = otb::Wrapper::IntParameter::New();
-  otb::Wrapper::FloatParameter::Pointer floatParam = otb::Wrapper::FloatParameter::New();
+  otb::Wrapper::IntParameter::Pointer    intParam    = otb::Wrapper::IntParameter::New();
+  otb::Wrapper::FloatParameter::Pointer  floatParam  = otb::Wrapper::FloatParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam = otb::Wrapper::ChoiceParameter::New();
 
   intParam->SetName("Int parameter");
@@ -109,23 +108,22 @@ int otbWrapperQtWidgetParameterFactory(int argc, char* argv[])
   choiceParam->AddChoice("choice2", "Choice 2");
   choiceParam->AddChoice("choice3", "Choice 3");
 
-  QWidget * intWidget   = factory->CreateQtWidget(intParam, model, nullptr);
-  QWidget * floatWidget = factory->CreateQtWidget(floatParam, model, nullptr);
-  QWidget * choiceWidget = factory->CreateQtWidget(choiceParam, model, nullptr);
+  QWidget* intWidget    = factory->CreateQtWidget(intParam, model, nullptr);
+  QWidget* floatWidget  = factory->CreateQtWidget(floatParam, model, nullptr);
+  QWidget* choiceWidget = factory->CreateQtWidget(choiceParam, model, nullptr);
 
-  if(intWidget)
-    {
+  if (intWidget)
+  {
     intWidget->show();
     floatWidget->show();
     choiceWidget->show();
 
-    //return app.exec();
+    // return app.exec();
     return EXIT_SUCCESS;
-    }
+  }
 
   return EXIT_FAILURE;
 }
-
 
 
 int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
@@ -133,12 +131,12 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   QApplication app(argc, argv);
 
   otb::WrapperTest::StubApplication::Pointer application = otb::WrapperTest::StubApplication::New();
-  otb::Wrapper::QtWidgetModel* model = new otb::Wrapper::QtWidgetModel(application);
+  otb::Wrapper::QtWidgetModel*               model       = new otb::Wrapper::QtWidgetModel(application);
 
   otb::Wrapper::QtWidgetParameterFactory::Pointer factory = otb::Wrapper::QtWidgetParameterFactory::New();
 
-  otb::Wrapper::IntParameter::Pointer   intParam = otb::Wrapper::IntParameter::New();
-  otb::Wrapper::FloatParameter::Pointer floatParam = otb::Wrapper::FloatParameter::New();
+  otb::Wrapper::IntParameter::Pointer    intParam    = otb::Wrapper::IntParameter::New();
+  otb::Wrapper::FloatParameter::Pointer  floatParam  = otb::Wrapper::FloatParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam = otb::Wrapper::ChoiceParameter::New();
   otb::Wrapper::StringParameter::Pointer stringParam = otb::Wrapper::StringParameter::New();
 
@@ -176,8 +174,8 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   list->AddParameter(otb::Wrapper::Parameter::Pointer(choiceParam.GetPointer()));
   list->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam.GetPointer()));
 
-  otb::Wrapper::IntParameter::Pointer   intParam2 = otb::Wrapper::IntParameter::New();
-  otb::Wrapper::FloatParameter::Pointer floatParam2 = otb::Wrapper::FloatParameter::New();
+  otb::Wrapper::IntParameter::Pointer    intParam2    = otb::Wrapper::IntParameter::New();
+  otb::Wrapper::FloatParameter::Pointer  floatParam2  = otb::Wrapper::FloatParameter::New();
   otb::Wrapper::ChoiceParameter::Pointer choiceParam2 = otb::Wrapper::ChoiceParameter::New();
   otb::Wrapper::StringParameter::Pointer stringParam2 = otb::Wrapper::StringParameter::New();
   intParam2->SetName("Int parameter");
@@ -219,14 +217,14 @@ int otbWrapperQtWidgetParameterGroup(int argc, char* argv[])
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(stringParam2.GetPointer()));
   group2->AddParameter(otb::Wrapper::Parameter::Pointer(list.GetPointer()));
 
-  QWidget * group = new otb::Wrapper::QtWidgetParameterGroup(group2, model, nullptr);
+  QWidget* group = new otb::Wrapper::QtWidgetParameterGroup(group2, model, nullptr);
 
-  if(group)
-    {
+  if (group)
+  {
     group->show();
-    //return app.exec();
+    // return app.exec();
     return EXIT_SUCCESS;
-    }
+  }
 
   return EXIT_FAILURE;
 }

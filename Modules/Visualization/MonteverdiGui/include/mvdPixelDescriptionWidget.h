@@ -77,8 +77,7 @@ class PixelDescriptionWidget;
  *
  * \brief Widget to show current pixel under cursor description
  */
-class OTBMonteverdiGUI_EXPORT PixelDescriptionWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT PixelDescriptionWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,58 +86,53 @@ class OTBMonteverdiGUI_EXPORT PixelDescriptionWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  PixelDescriptionWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  PixelDescriptionWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~PixelDescriptionWidget() override;
 
   /** Get TreeWidget */
-  QTreeWidget * GetDescriptionTree();
+  QTreeWidget* GetDescriptionTree();
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   void OnCurrentPhysicalUpdated(const QStringList&);
 
   void OnCurrentGeographicUpdated(const QStringList& /*currentGeo const QString &*/);
 
-  void OnCurrentPixelValueUpdated(const VectorImageType::PixelType &,
-                                  const QStringList& bandNames);
+  void OnCurrentPixelValueUpdated(const VectorImageType::PixelType&, const QStringList& bandNames);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   void SetupUI();
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -153,25 +147,25 @@ private:
   /**
    * \brief text to search in the widget tree
    */
-  QString                  m_SearchText;
+  QString m_SearchText;
 
   /**
    * \brief Root items
    */
-  QTreeWidgetItem*    m_CartographicRootItem;
-  QTreeWidgetItem*    m_GeographicRootItem;
-  QTreeWidgetItem*    m_PixelValueRootItem;
+  QTreeWidgetItem* m_CartographicRootItem;
+  QTreeWidgetItem* m_GeographicRootItem;
+  QTreeWidgetItem* m_PixelValueRootItem;
 
-   /**
-   * \brief child items
-   */
-  QTreeWidgetItem*    m_CartographicItem;
-  QTreeWidgetItem*    m_GeographicItem;
+  /**
+  * \brief child items
+  */
+  QTreeWidgetItem* m_CartographicItem;
+  QTreeWidgetItem* m_GeographicItem;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

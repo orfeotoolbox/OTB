@@ -24,43 +24,41 @@
 namespace otb
 {
 
-StringToHTML::StringToHTML(const std::string & str)
-  : m_Str(str)
+StringToHTML::StringToHTML(const std::string& str) : m_Str(str)
 {
 }
 
-void
-StringToHTML::Print(std::ostream& os) const
+void StringToHTML::Print(std::ostream& os) const
 {
   // TODO : add a Tex to HTML translator (maybe try TtH)
-  bool formulaMode=false;
-  for(auto&& c : m_Str)
+  bool formulaMode = false;
+  for (auto&& c : m_Str)
+  {
+    if (c == '`')
     {
-    if (c=='`')
-      {
       formulaMode = !formulaMode;
-      }
-    switch (c)
-      {
-      case '<':
-        os.write("&lt;",4);
-        break;
-      case '>':
-        os.write("&gt;",4);
-        break;
-      case '&':
-        os.write("&amp;",5);
-        break;
-      case '\n':
-        os.write("<br/>",5);
-        break;
-      default:
-        os.put(c);
-      }
     }
+    switch (c)
+    {
+    case '<':
+      os.write("&lt;", 4);
+      break;
+    case '>':
+      os.write("&gt;", 4);
+      break;
+    case '&':
+      os.write("&amp;", 5);
+      break;
+    case '\n':
+      os.write("<br/>", 5);
+      break;
+    default:
+      os.put(c);
+    }
+  }
 }
 
-std::ostream & operator<< (std::ostream& os, const StringToHTML& str)
+std::ostream& operator<<(std::ostream& os, const StringToHTML& str)
 {
   str.Print(os);
   return os;

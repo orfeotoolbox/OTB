@@ -98,8 +98,7 @@ class VectorImageModel;
  * for example, provide sessio management), the specialized instance
  * can be passed as argument of constructor.
  */
-class OTBMonteverdiCore_EXPORT I18nCoreApplication
-  : public QObject
+class OTBMonteverdiCore_EXPORT I18nCoreApplication : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -108,8 +107,8 @@ class OTBMonteverdiCore_EXPORT I18nCoreApplication
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public constants & types.
+  //
+  // Public constants & types.
 public:
   enum SettingsKey
   {
@@ -126,16 +125,15 @@ public:
     SETTINGS_KEY_COUNT
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param qtApp The parent Qt application of this MVD2 application.
    */
-  I18nCoreApplication( QCoreApplication* qtApp );
+  I18nCoreApplication(QCoreApplication* qtApp);
 
   /** \brief Destructor. */
   ~I18nCoreApplication() override;
@@ -168,12 +166,12 @@ public:
   // APPLICATION MODEL.
   //
 
- /**
-  * \brief Access the AbstractModel of the MVC which is managed by the
-  * application.
-  *
-  * \return The managed AbstractModel.
-  */
+  /**
+   * \brief Access the AbstractModel of the MVC which is managed by the
+   * application.
+   *
+   * \return The managed AbstractModel.
+   */
   inline const AbstractModel* GetModel() const;
 
   /**
@@ -184,13 +182,13 @@ public:
    */
   inline AbstractModel* GetModel();
 
- /**
-  * \brief Access the AbstractModel of the MVC which is managed by the
-  * application and cast it into the given dynamic type.
-  *
-  * \return The managed TModel typename instance.
-  */
-  template< typename TModel >
+  /**
+   * \brief Access the AbstractModel of the MVC which is managed by the
+   * application and cast it into the given dynamic type.
+   *
+   * \return The managed TModel typename instance.
+   */
+  template <typename TModel>
   inline const TModel* GetModel() const;
 
   /**
@@ -199,7 +197,7 @@ public:
   *
   * \return The managed TModel typename instance.
    */
-  template< typename TModel >
+  template <typename TModel>
   inline TModel* GetModel();
 
   //
@@ -220,32 +218,32 @@ public:
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( SettingsKey ) const;
+  inline bool HasSettingsKey(SettingsKey) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( SettingsKey, const QVariant& value );
+  inline void StoreSettingsKey(SettingsKey, const QVariant& value);
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( SettingsKey ) const;
+  inline QVariant RetrieveSettingsKey(SettingsKey) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline bool HasSettingsKey( const QString & key ) const;
+  inline bool HasSettingsKey(const QString& key) const;
 
   /**
    */
   // TODO: Move method into ApplicationSettings class.
-  inline void StoreSettingsKey( const QString & key, const QVariant& value );
+  inline void StoreSettingsKey(const QString& key, const QVariant& value);
 
   /**
    */
   // TODO: Move method into Application class.
-  inline QVariant RetrieveSettingsKey( const QString & key ) const;
+  inline QVariant RetrieveSettingsKey(const QString& key) const;
 
   //
   // STATIC methods.
@@ -253,10 +251,10 @@ public:
 
   /**
    */
-  static bool IsResultsDirValid( const QString& path );
+  static bool IsResultsDirValid(const QString& path);
   /**
    */
-  static bool IsDirValid( const QString& path );
+  static bool IsDirValid(const QString& path);
 
   /**
    * \brief Make directory tree in given path.
@@ -271,9 +269,7 @@ public:
    * \return true if sub-directory tree is newly created or false if
    * it is already existing.
    */
-  static bool MakeDirTree( const QString& path,
-			   const QString& tree,
-			   QDir* dir =NULL );
+  static bool MakeDirTree(const QString& path, const QString& tree, QDir* dir = NULL);
 
   /**
    * \brief Construct a consistent Dataset path-name.
@@ -286,23 +282,15 @@ public:
    * \return The MD5 hash-code generated from to full absolute
    * pathname of image file.
    */
-  static
-    QString DatasetPathName( QString& name,
-                             const QString& imageFilename );
+  static QString DatasetPathName(QString& name, const QString& imageFilename);
 
   /**
    */
-  static
-    VectorImageModel *
-    LoadImageModel( const QString & filename,
-                    int width,
-                    int height,
-                    QObject * p =NULL );
+  static VectorImageModel* LoadImageModel(const QString& filename, int width, int height, QObject* p = NULL);
 
   /**
    */
-  static
-    void DeleteDatasetModel( const QString & path, const QString & hash );
+  static void DeleteDatasetModel(const QString& path, const QString& hash);
 
   //
   // NON-STATIC methods.
@@ -321,8 +309,8 @@ public:
   // TODO: Remove method when Viewer/Application is updated to reuse factorized code of I18nCoreApplication.
   inline QDir& GetResultsDir();
 
-//
-// Public attributes.
+  //
+  // Public attributes.
 public:
   /**
    * Name of the cache directory
@@ -351,12 +339,12 @@ public slots:
    */
   // Method could be inline but it's better not new/delete in inline
   // methods (heap and memory-alignment contexts).
-  void SetModel( AbstractModel* model );
+  void SetModel(AbstractModel* model);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
   /**
    * \brief Signal emitted when the AbstractModel of the MVC is about
@@ -368,7 +356,7 @@ signals:
    * \param model The newly managed model (previous model can still
    * be accessed using the GetModel() methods).
    */
-  void AboutToChangeModel( const AbstractModel* model );
+  void AboutToChangeModel(const AbstractModel* model);
 
   /**
    * \brief Signal emitted when the AbstractModel of the MVC has been
@@ -379,14 +367,13 @@ signals:
    *
    * \param model The newly selected model.
    */
-  void ModelChanged( AbstractModel* model );
+  void ModelChanged(AbstractModel* model);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /**
    * \brief Get the singleton instance of application (safe) casted
    * into the TApplication type.
@@ -394,8 +381,8 @@ protected:
    * \return The singleton instance of application (safely) casted
    * into TApplication type.
    */
-  template< typename TApplication >
-    inline static TApplication* Instance();
+  template <typename TApplication>
+  inline static TApplication* Instance();
 
   /**
    * \brief Get the constant singleton instance of application (safe)
@@ -404,29 +391,22 @@ protected:
    * \return The constant singleton instance of application (safely)
    * casted into TApplication type.
    */
-  template< typename TApplication >
-    inline static const TApplication* ConstInstance();
+  template <typename TApplication>
+  inline static const TApplication* ConstInstance();
 
   /**
    */
-  void InitializeCore( const QString& appName,
-		       const QString& appVersion,
-		       const QString& orgName,
-		       const QString& orgDomain );
+  void InitializeCore(const QString& appName, const QString& appVersion, const QString& orgName, const QString& orgDomain);
 
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   //
   // Static methods.
   //
@@ -441,15 +421,15 @@ private:
    * \param type Type of caught message.
    * \param message Content of caught message.
    */
-  static void HandleQtMessage( QtMsgType type, const QMessageLogContext & , const QString & message );
-  /* Old function was 
+  static void HandleQtMessage(QtMsgType type, const QMessageLogContext&, const QString& message);
+  /* Old function was
   static void HandleQtMessage( QtMsgType type, const char * message );
   Qstring has a constructor QString(const char *str) but I have no idea
   of the perf impact */
 
   /**
    */
-  virtual void virtual_InitializeCore() =0;
+  virtual void virtual_InitializeCore() = 0;
 
   /**
    */
@@ -461,18 +441,15 @@ private:
 
   /**
    */
-  void LoadAndInstallTranslator( const QString& filename,
-				 const QString& directory =QString(),
-				 const QString& searchDelimiters =QString(),
-				 const QString& suffix =QString() );
+  void LoadAndInstallTranslator(const QString& filename, const QString& directory = QString(), const QString& searchDelimiters = QString(),
+                                const QString& suffix = QString());
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /**
    */
-  static const char* SETTINGS_KEYS[ SETTINGS_KEY_COUNT ];
+  static const char* SETTINGS_KEYS[SETTINGS_KEY_COUNT];
 
   /**
    * \brief I18nCoreApplication singleton instance.
@@ -488,7 +465,7 @@ private:
   /**
    * \brief Application settings
    */
-  QSettings * m_Settings;
+  QSettings* m_Settings;
 
   /**
    * \brief AbstractModel of the Model-View-Controller design pattern
@@ -502,8 +479,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS
+  //
+  // SLOTS
 private slots:
 };
 
@@ -516,155 +493,111 @@ namespace mvd
 {
 
 /*****************************************************************************/
-I18nCoreApplication*
-I18nCoreApplication
-::Instance()
+I18nCoreApplication* I18nCoreApplication::Instance()
 {
   return I18nCoreApplication::m_Instance;
 }
 
 /*****************************************************************************/
-const I18nCoreApplication*
-I18nCoreApplication
-::ConstInstance()
+const I18nCoreApplication* I18nCoreApplication::ConstInstance()
 {
   return I18nCoreApplication::m_Instance;
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-T*
-I18nCoreApplication
-::Instance()
+template <typename T>
+inline T* I18nCoreApplication::Instance()
 {
-  return qobject_cast< T* >( I18nCoreApplication::Instance() );
+  return qobject_cast<T*>(I18nCoreApplication::Instance());
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-const T*
-I18nCoreApplication
-::ConstInstance()
+template <typename T>
+inline const T* I18nCoreApplication::ConstInstance()
 {
-  return qobject_cast< const T* >( I18nCoreApplication::ConstInstance() );
+  return qobject_cast<const T*>(I18nCoreApplication::ConstInstance());
 }
 
 /*****************************************************************************/
-inline
-const AbstractModel*
-I18nCoreApplication
-::GetModel() const
+inline const AbstractModel* I18nCoreApplication::GetModel() const
 {
   return m_Model;
 }
 
 /*****************************************************************************/
-inline
-AbstractModel*
-I18nCoreApplication
-::GetModel()
+inline AbstractModel* I18nCoreApplication::GetModel()
 {
   return m_Model;
 }
 
 /*****************************************************************************/
-template< typename TModel >
-inline
-const TModel*
-I18nCoreApplication
-::GetModel() const
+template <typename TModel>
+inline const TModel* I18nCoreApplication::GetModel() const
 {
-  return qobject_cast< const TModel* >( m_Model );
+  return qobject_cast<const TModel*>(m_Model);
 }
 
 /*****************************************************************************/
-template< typename TModel >
-inline
-TModel*
-I18nCoreApplication
-::GetModel()
+template <typename TModel>
+inline TModel* I18nCoreApplication::GetModel()
 {
-  return qobject_cast< TModel* >( m_Model );
+  return qobject_cast<TModel*>(m_Model);
 }
 
 /*****************************************************************************/
-const QDir&
-I18nCoreApplication
-::GetResultsDir() const
+const QDir& I18nCoreApplication::GetResultsDir() const
 {
   return m_ResultsDir;
 }
 
 /*****************************************************************************/
-QDir&
-I18nCoreApplication
-::GetResultsDir()
+QDir& I18nCoreApplication::GetResultsDir()
 {
   return m_ResultsDir;
 }
 
 /*****************************************************************************/
-inline
-bool
-I18nCoreApplication
-::HasSettingsKey( SettingsKey key ) const
+inline bool I18nCoreApplication::HasSettingsKey(SettingsKey key) const
 {
-  return HasSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return HasSettingsKey(I18nCoreApplication::SETTINGS_KEYS[key]);
 }
 
 /*****************************************************************************/
-inline
-void
-I18nCoreApplication
-::StoreSettingsKey( SettingsKey key, const QVariant & value )
+inline void I18nCoreApplication::StoreSettingsKey(SettingsKey key, const QVariant& value)
 {
-  StoreSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ], value );
+  StoreSettingsKey(I18nCoreApplication::SETTINGS_KEYS[key], value);
 }
 
 /*****************************************************************************/
-inline
-QVariant
-I18nCoreApplication
-::RetrieveSettingsKey( SettingsKey key ) const
+inline QVariant I18nCoreApplication::RetrieveSettingsKey(SettingsKey key) const
 {
-  return RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEYS[ key ] );
+  return RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEYS[key]);
 }
 
 /*****************************************************************************/
-inline
-bool
-I18nCoreApplication
-::HasSettingsKey( const QString & key ) const
+inline bool I18nCoreApplication::HasSettingsKey(const QString& key) const
 {
-  assert( m_Settings!=NULL );
+  assert(m_Settings != NULL);
 
-  return m_Settings->contains( key );
+  return m_Settings->contains(key);
 }
 
 /*****************************************************************************/
-inline
-void
-I18nCoreApplication
-::StoreSettingsKey( const QString & key, const QVariant& value )
+inline void I18nCoreApplication::StoreSettingsKey(const QString& key, const QVariant& value)
 {
-  assert( m_Settings!=NULL );
+  assert(m_Settings != NULL);
 
   // qDebug() << this << "::StoreSettingsKey(" << key << ", " << value << ")";
 
-  m_Settings->setValue( key, value );
+  m_Settings->setValue(key, value);
 }
 
 /*****************************************************************************/
-inline
-QVariant
-I18nCoreApplication
-::RetrieveSettingsKey( const QString & key ) const
+inline QVariant I18nCoreApplication::RetrieveSettingsKey(const QString& key) const
 {
-  assert( m_Settings!=NULL );
+  assert(m_Settings != NULL);
 
-  return m_Settings->value( key );
+  return m_Settings->value(key);
 }
 
 } // end namespace 'mvd'

@@ -35,7 +35,7 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPath>
-//class ITK_EXPORT ImageToPathListFilter : public itk::PathSource<TOutputPath>
+// class ITK_EXPORT ImageToPathListFilter : public itk::PathSource<TOutputPath>
 class ITK_EXPORT ImageToPathListFilter : public PathListSource<TOutputPath>
 {
 public:
@@ -54,7 +54,7 @@ public:
   itkTypeMacro(ImageToPathListFilter, PathListSource);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                  InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::ConstPointer InputImagePointer;
   typedef typename InputImageType::RegionType   InputImageRegionType;
   typedef typename InputImageType::PixelType    InputImagePixelType;
@@ -66,23 +66,24 @@ public:
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Set/Get the image input of this process object. */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType * image);
-  const InputImageType * GetInput(void);
+  virtual void SetInput(const InputImageType* image);
+  const InputImageType* GetInput(void);
 
 protected:
   ImageToPathListFilter();
-  ~ImageToPathListFilter() override {}
+  ~ImageToPathListFilter() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToPathListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageToPathListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

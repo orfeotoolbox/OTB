@@ -42,26 +42,22 @@ namespace mvd
 {
 
 /*****************************************************************************/
-ImagePlacenameLoader
-::ImagePlacenameLoader(VectorImageModel* model):
-  m_Model(model)
+ImagePlacenameLoader::ImagePlacenameLoader(VectorImageModel* model) : m_Model(model)
 {
 }
 
 /*****************************************************************************/
-void
-ImagePlacenameLoader
-::LoadPlacename()
+void ImagePlacenameLoader::LoadPlacename()
 {
   // This method is executed in a separate thread
 
   // get the placename if any
   std::string placename = m_Model->GetCenterPixelPlaceName();
   if (!placename.empty())
-    {
+  {
     // emit a signal to
-    emit PlacenameLoaded( FromStdString( placename) );
-    }
+    emit PlacenameLoaded(FromStdString(placename));
+  }
 
   emit Finished();
 }

@@ -34,12 +34,12 @@ namespace otb
 class ITK_ABI_EXPORT SoilDataBase
 {
 public:
-  //wavelength in nm
+  // wavelength in nm
   using WavelenghtType = unsigned int;
-  using SoilData = std::unordered_map<WavelenghtType, double>;
+  using SoilData       = std::unordered_map<WavelenghtType, double>;
   using SoilDataVector = std::vector<SoilData>;
 
-  SoilDataBase(const std::string& SoilFileName, double wlfactor); 
+  SoilDataBase(const std::string& SoilFileName, double wlfactor);
   const SoilDataVector& GetDB() const;
   double GetReflectance(size_t SoilIndex, WavelenghtType wl) const;
 
@@ -47,9 +47,9 @@ protected:
   size_t CountColumns(std::string fileName) const;
   void ParseSoilFile();
 
-  std::string m_SoilFileName;
-  double m_WlFactor;
-  SoilDataVector m_SoilDataVector;
+  std::string                 m_SoilFileName;
+  double                      m_WlFactor;
+  SoilDataVector              m_SoilDataVector;
   std::vector<WavelenghtType> m_Wavelengths;
 };
 }

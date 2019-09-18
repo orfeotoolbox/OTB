@@ -34,20 +34,19 @@ namespace otb
 
 namespace
 {
-  static bool is_logger_singleton_level_set;
+static bool is_logger_singleton_level_set;
 }
 
-Logger::Logger() :
-  m_LogSetupInfoDone(false)
+Logger::Logger() : m_LogSetupInfoDone(false)
 {
-  m_LevelForFlushing = itk::LoggerBase::CRITICAL;
-  m_TimeStampFormat = itk::LoggerBase::HUMANREADABLE;
+  m_LevelForFlushing    = itk::LoggerBase::CRITICAL;
+  m_TimeStampFormat     = itk::LoggerBase::HUMANREADABLE;
   m_HumanReadableFormat = "%Y-%m-%d %H:%M:%S";
 }
 
-Logger * Logger::CreateInstance()
+Logger* Logger::CreateInstance()
 {
-  Logger * logger = new Logger;
+  Logger* logger = new Logger;
 
   // By default redirect logs to std::cout
   itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
@@ -57,10 +56,10 @@ Logger * Logger::CreateInstance()
   return logger;
 }
 
-Logger * Logger::Instance()
+Logger* Logger::Instance()
 {
-  static Logger * logger_singleton = CreateInstance();
-  if ( !is_logger_singleton_level_set )
+  static Logger* logger_singleton = CreateInstance();
+  if (!is_logger_singleton_level_set)
   {
     is_logger_singleton_level_set = true;
     logger_singleton->SetPriorityLevel(ConfigurationManager::GetLoggerLevel());
@@ -78,34 +77,30 @@ Logger::Pointer Logger::New()
 
 void Logger::LogSetupInformation()
 {
-  if (! IsLogSetupInformationDone())
-    {
+  if (!IsLogSetupInformationDone())
+  {
     std::ostringstream oss;
 
-    oss<<"Default RAM limit for OTB is "<<
-      otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
+    oss << "Default RAM limit for OTB is " << otb::ConfigurationManager::GetMaxRAMHint() << " MB" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss<<"GDAL maximum cache size is "<<
-      GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
+    oss << "GDAL maximum cache size is " << GDALGetCacheMax64() / (1024 * 1024) << " MB" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss<<"OTB will use at most "<<
-      itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<
-      " threads"<<std::endl;
+    oss << "OTB will use at most " << itk::MultiThreader::GetGlobalDefaultNumberOfThreads() << " threads" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-// ensure LogSetupInformation is done once per logger, and also that it is
-// skipped by the singleton when it has already been printed by an other instance
+    // ensure LogSetupInformation is done once per logger, and also that it is
+    // skipped by the singleton when it has already been printed by an other instance
     LogSetupInformationDone();
     Instance()->LogSetupInformationDone();
-    }
+  }
 }
 
 void Logger::ResetOutputs()

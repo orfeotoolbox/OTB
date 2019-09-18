@@ -34,7 +34,7 @@
 
 using ImageType          = otb::Image<double>;
 using ReaderType         = otb::ImageFileReader<ImageType>;
-using ExtractType        = otb::ExtractROI<double,double>;
+using ExtractType        = otb::ExtractROI<double, double>;
 using TransformType      = itk::ScalableAffineTransform<double, 2>;
 using ResamplerType      = otb::StreamingResampleImageFilter<ImageType, ImageType, double>;
 using InterpolatorType   = otb::BCOInterpolateImageFunction<ImageType, double>;
@@ -52,7 +52,7 @@ bool testMatchingFilter()
   auto ps1 = PointSetType::New();
   auto ps2 = PointSetType::New();
 
-  PointSetType::PointType p1,p2,p3,p4,p5,p6;
+  PointSetType::PointType p1, p2, p3, p4, p5, p6;
   p1.Fill(1.);
   p2.Fill(2.);
   p3.Fill(3.);
@@ -67,13 +67,13 @@ bool testMatchingFilter()
   ps2->SetPoint(2, p6);
 
 
-  VectorType d1(1), d2(1), d3(1), d4(1),d5(1), d6(1);
-  d1[0]=0.7;
-  d2[0]=0.8;
-  d3[0]=10.;
-  d4[0]=0.;
-  d5[0]=1.;
-  d6[0]=11.;
+  VectorType d1(1), d2(1), d3(1), d4(1), d5(1), d6(1);
+  d1[0] = 0.7;
+  d2[0] = 0.8;
+  d3[0] = 10.;
+  d4[0] = 0.;
+  d5[0] = 1.;
+  d6[0] = 11.;
 
   ps1->SetPointData(0, d1);
   ps1->SetPointData(1, d2);
@@ -85,34 +85,34 @@ bool testMatchingFilter()
   auto filter1 = MatchingFilterType::New();
   filter1->SetDistanceThreshold(0.6);
   filter1->SetUseBackMatching(false);
-  filter1->SetInput1(ps1);  
+  filter1->SetInput1(ps1);
   filter1->SetInput2(ps2);
   filter1->Update();
 
   auto matches1 = filter1->GetOutput();
 
-  std::cout<<"Matches without backmatching: "<<std::endl;
+  std::cout << "Matches without backmatching: " << std::endl;
 
   for (auto it = matches1->Begin(); it != matches1->End(); ++it)
-    {
-    std::cout<<it.Get()->GetPoint1()<<" <-> "<<it.Get()->GetPoint2()<<std::endl;
-    }
+  {
+    std::cout << it.Get()->GetPoint1() << " <-> " << it.Get()->GetPoint2() << std::endl;
+  }
 
   auto filter2 = MatchingFilterType::New();
   filter2->SetDistanceThreshold(0.6);
   filter2->SetUseBackMatching(true);
-  filter2->SetInput1(ps1);  
+  filter2->SetInput1(ps1);
   filter2->SetInput2(ps2);
   filter2->Update();
 
   auto matches2 = filter2->GetOutput();
 
-  std::cout<<"Matches with backmatching: "<<std::endl;
+  std::cout << "Matches with backmatching: " << std::endl;
 
   for (auto it = matches2->Begin(); it != matches2->End(); ++it)
-    {
-    std::cout<<it.Get()->GetPoint1()<<" <-> "<<it.Get()->GetPoint2()<<std::endl;
-    }
+  {
+    std::cout << it.Get()->GetPoint1() << " <-> " << it.Get()->GetPoint2() << std::endl;
+  }
 
   bool success = true;
 
@@ -121,39 +121,38 @@ bool testMatchingFilter()
   // p2 <-> p5
   // p3 <-> p6
   unsigned int nb_matches = matches1->Size();
-  
+
   bool test = nb_matches == 3;
-  std::cout<<"Without backmatching, the number of matches is 3:\t"<<printResult(test)<<std::endl;
+  std::cout << "Without backmatching, the number of matches is 3:\t" << printResult(test) << std::endl;
   success = success && test;
 
   test = nb_matches > 1 && matches1->GetNthElement(0)->GetPoint1() == p1 && matches1->GetNthElement(0)->GetPoint2() == p5;
-  std::cout<<"Without backmatching, p1 matches with p5:\t\t"<<printResult(test)<<std::endl;
+  std::cout << "Without backmatching, p1 matches with p5:\t\t" << printResult(test) << std::endl;
   success = success && test;
 
   test = nb_matches > 0 && matches1->GetNthElement(1)->GetPoint1() == p2 && matches1->GetNthElement(1)->GetPoint2() == p5;
-  std::cout<<"Without backmatching, p2 matches with p5:\t\t"<<printResult(test)<<std::endl;
+  std::cout << "Without backmatching, p2 matches with p5:\t\t" << printResult(test) << std::endl;
   success = success && test;
 
 
   test = nb_matches > 2 && matches1->GetNthElement(2)->GetPoint1() == p3 && matches1->GetNthElement(2)->GetPoint2() == p6;
-  std::cout<<"Without backmatching, p3 matches with p6:\t\t"<<printResult(test)<<std::endl;
+  std::cout << "Without backmatching, p3 matches with p6:\t\t" << printResult(test) << std::endl;
   success = success && test;
 
-  // With back-matching there should be only 2 matches: 
+  // With back-matching there should be only 2 matches:
   // p2 <-> p5
   // p3 <-> p6
   test = matches2->Size() == 2;
-  std::cout<<"With backmatching, the number of matches is 2:\t"<<printResult(test)<<std::endl;
+  std::cout << "With backmatching, the number of matches is 2:\t" << printResult(test) << std::endl;
   success = success && test;
 
   test = matches2->GetNthElement(0)->GetPoint1() == p2 && matches2->GetNthElement(0)->GetPoint2() == p5;
-  std::cout<<"With backmatching, p2 matches with p5:\t\t"<<printResult(test)<<std::endl;
+  std::cout << "With backmatching, p2 matches with p5:\t\t" << printResult(test) << std::endl;
   success = success && test;
 
   test = matches2->GetNthElement(1)->GetPoint1() == p3 && matches2->GetNthElement(1)->GetPoint2() == p6;
-  std::cout<<"With backmatching, p3 matches with p6:\t\t"<<printResult(test)<<std::endl;
+  std::cout << "With backmatching, p3 matches with p6:\t\t" << printResult(test) << std::endl;
   success = success && test;
-
 
 
   return success;
@@ -283,17 +282,17 @@ bool checkKeyPointsFilter(const ImageType* reference, const ImageType* secondary
   std::cout << "Found " << nb_matches << " matches with " << good_matches << " valid matches (tolerance of 0.5 pixels)" << std::endl;
 
   // Quality gate
-  bool current_test   = nbReferencePoints >= nb_points_thresh;
-  std::cout << "More than " << nb_points_thresh << " points found in reference image:\t" << printResult(current_test) << " ("
-            << nbReferencePoints << ")" << std::endl;
+  bool current_test = nbReferencePoints >= nb_points_thresh;
+  std::cout << "More than " << nb_points_thresh << " points found in reference image:\t" << printResult(current_test) << " (" << nbReferencePoints << ")"
+            << std::endl;
   bool overall_status = current_test;
 
-  current_test = nbSecondaryPoints> nb_points_thresh;
-  std::cout << "More than " << nb_points_thresh << " points found in secondary image:\t" << printResult(current_test) << " ("
-            << nbSecondaryPoints << ")" << std::endl;
+  current_test = nbSecondaryPoints > nb_points_thresh;
+  std::cout << "More than " << nb_points_thresh << " points found in secondary image:\t" << printResult(current_test) << " (" << nbSecondaryPoints << ")"
+            << std::endl;
   overall_status = overall_status && current_test;
 
-  current_test   = reference_match_rate > match_rate_thresh;
+  current_test = reference_match_rate > match_rate_thresh;
   std::cout << "More than " << 100 * match_rate_thresh << "% of reference points have a match:\t" << printResult(current_test) << " ("
             << 100 * reference_match_rate << "%)" << std::endl;
   overall_status = overall_status && current_test;
@@ -328,12 +327,12 @@ int otbKeyPointsAlgorithmsTest(int argc, char* argv[])
   // Small rotation and scaling
   const double rotation = 2.5; // 5°
   const double scaling  = 0.99;
-  
+
   // First test matching filter alone
-  std::cout<<"Checking matching filter:"<<std::endl;
-  std::cout<<"========================="<<std::endl;
+  std::cout << "Checking matching filter:" << std::endl;
+  std::cout << "=========================" << std::endl;
   bool status = testMatchingFilter();
-  
+
   std::tie(reference, secondary, transform) = generateImagePair(infname, rotation, scaling);
 
   std::cout << "Secondary image generated by applying a rotation of " << rotation << " degrees and scaling of " << scaling << "." << std::endl;

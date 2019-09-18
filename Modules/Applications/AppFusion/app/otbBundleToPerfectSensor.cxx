@@ -41,14 +41,17 @@ public:
   itkTypeMacro(BundleToPerfectSensor, otb::Wrapper::CompositeApplication);
 
 private:
-
   void DoInit() override
   {
     SetName("BundleToPerfectSensor");
     SetDescription("Perform P+XS pansharpening");
 
     // Documentation
-    SetDocLongDescription("This application performs P+XS pansharpening. The default mode use Pan and XS sensor models to estimate the transformation to superimpose XS over Pan before the fusion (\"default mode\"). The application provides also a PHR mode for Pleiades images which does not use sensor models as Pan and XS products are already coregistered but only estimate an affine transformation to superimpose XS over the Pan.Note that this option is automatically activated in case Pleiades images are detected as input.");
+    SetDocLongDescription(
+        "This application performs P+XS pansharpening. The default mode use Pan and XS sensor models to estimate the transformation to superimpose XS over Pan "
+        "before the fusion (\"default mode\"). The application provides also a PHR mode for Pleiades images which does not use sensor models as Pan and XS "
+        "products are already coregistered but only estimate an affine transformation to superimpose XS over the Pan.Note that this option is automatically "
+        "activated in case Pleiades images are detected as input.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -60,22 +63,21 @@ private:
     AddApplication("Superimpose", "superimpose", "Reproject XS onto Pan");
     AddApplication("Pansharpening", "pansharp", "Fusion of XS and Pan");
 
-    ShareParameter("inp","superimpose.inr","Input PAN Image","Input panchromatic image.");
-    ShareParameter("inxs","superimpose.inm","Input XS Image","Input XS image.");
-    ShareParameter("out","pansharp.out");
-    ShareParameter("elev","superimpose.elev");
-    ShareParameter("mode","superimpose.mode");
-    ShareParameter("method","pansharp.method");
-    ShareParameter("lms","superimpose.lms",
-      "Spacing of the deformation field",
-      "Spacing of the deformation field. Default is 10 times the PAN image spacing.");
-    ShareParameter("interpolator","superimpose.interpolator");
-    ShareParameter("fv","superimpose.fv");
-    ShareParameter("ram","superimpose.ram");
+    ShareParameter("inp", "superimpose.inr", "Input PAN Image", "Input panchromatic image.");
+    ShareParameter("inxs", "superimpose.inm", "Input XS Image", "Input XS image.");
+    ShareParameter("out", "pansharp.out");
+    ShareParameter("elev", "superimpose.elev");
+    ShareParameter("mode", "superimpose.mode");
+    ShareParameter("method", "pansharp.method");
+    ShareParameter("lms", "superimpose.lms", "Spacing of the deformation field",
+                   "Spacing of the deformation field. Default is 10 times the PAN image spacing.");
+    ShareParameter("interpolator", "superimpose.interpolator");
+    ShareParameter("fv", "superimpose.fv");
+    ShareParameter("ram", "superimpose.ram");
 
-    Connect("pansharp.inp","superimpose.inr");
-    Connect("pansharp.ram","superimpose.ram");
-    
+    Connect("pansharp.inp", "superimpose.inr");
+    Connect("pansharp.ram", "superimpose.ram");
+
     // Doc example parameter settings
     SetDocExampleParameterValue("inp", "QB_Toulouse_Ortho_PAN.tif");
     SetDocExampleParameterValue("inxs", "QB_Toulouse_Ortho_XS.tif");
@@ -93,15 +95,11 @@ private:
   {
     ExecuteInternal("superimpose");
 
-    GetInternalApplication("pansharp")->SetParameterInputImage("inxs",
-      GetInternalApplication("superimpose")->GetParameterOutputImage("out"));
+    GetInternalApplication("pansharp")->SetParameterInputImage("inxs", GetInternalApplication("superimpose")->GetParameterOutputImage("out"));
 
     ExecuteInternal("pansharp");
   }
-
 };
-
-
 }
 }
 

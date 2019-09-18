@@ -29,17 +29,23 @@ namespace Functor
 {
 namespace LevelingFunctor_tags
 {
-struct pixel {};
-struct convex_pixel {};
-struct concave_pixel {};
+struct pixel
+{
+};
+struct convex_pixel
+{
+};
+struct concave_pixel
+{
+};
 }
 /** \class LevelingFunctor
  * \brief This functor performs the pixel-wise leveling operation needed in the
  * geodesic morphology decomposition filter. For more details, please refer to
  * the documentation of this filter.
- * 
+ *
  * Use otb::GeodesicMorphologyLevelingFilter to apply it image-wise.
- * 
+ *
  * \sa GeodesicMorphologyDecompositionImageFilter
  *
  * \ingroup OTBMorphologicalProfiles
@@ -49,26 +55,30 @@ class LevelingFunctor
 {
 public:
   /// Constructor
-  LevelingFunctor() {}
+  LevelingFunctor()
+  {
+  }
   /// Destructor
-  virtual ~LevelingFunctor() {}
+  virtual ~LevelingFunctor()
+  {
+  }
 
-  inline TOutput operator ()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel) const
+  inline TOutput operator()(const TInput& pixel, const TInputMap& convexPixel, const TInputMap& concavePixel) const
   {
     TOutput result;
 
     if (convexPixel > concavePixel)
-      {
+    {
       result = static_cast<TOutput>(pixel - convexPixel);
-      }
+    }
     else if (convexPixel < concavePixel)
-      {
+    {
       result = static_cast<TOutput>(concavePixel + pixel);
-      }
+    }
     else
-      {
+    {
       result = static_cast<TOutput>(pixel);
-      }
+    }
     return result;
   }
 };
@@ -80,19 +90,16 @@ public:
  *  functions. Please refer to the documentation of this filter for more details.
  *
  * It applies the Functor::LevelingFunctor image-wise.
- * 
+ *
  * \sa GeodesicMorphologyDecompositionImageFilter
- * 
+ *
  * \ingroup OTBMorphologicalProfiles
  */
 
 template <class TInputImage, class TInputMaps, class TOutputImage>
-using GeodesicMorphologyLevelingFilter = FunctorImageFilter
-  < Functor::LevelingFunctor<typename TInputImage::PixelType,
-                             typename TInputMaps::PixelType,
-                             typename TOutputImage::PixelType>, 
-    std::tuple<typename Functor::LevelingFunctor_tags::pixel,
-               typename Functor::LevelingFunctor_tags::convex_pixel,
-               typename Functor::LevelingFunctor_tags::concave_pixel > >;
+using GeodesicMorphologyLevelingFilter =
+    FunctorImageFilter<Functor::LevelingFunctor<typename TInputImage::PixelType, typename TInputMaps::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<typename Functor::LevelingFunctor_tags::pixel, typename Functor::LevelingFunctor_tags::convex_pixel,
+                                  typename Functor::LevelingFunctor_tags::concave_pixel>>;
 } // End namespace otb
 #endif

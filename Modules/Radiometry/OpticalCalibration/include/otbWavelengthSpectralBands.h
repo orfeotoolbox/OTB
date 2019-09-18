@@ -49,10 +49,10 @@ public:
   /** Creation through object factory macro */
   itkNewMacro(Self);
 
-  typedef FilterFunctionValues                              FilterFunctionValuesType;
-  typedef ObjectList <FilterFunctionValuesType>             InternalWavelengthSpectralBandListType;
-  typedef InternalWavelengthSpectralBandListType::Pointer   WavelengthSpectralBandListType;
-  //typedef std::map <FilterFunctionValuesType>        FilterFunctionValuesMapType;
+  typedef FilterFunctionValues                            FilterFunctionValuesType;
+  typedef ObjectList<FilterFunctionValuesType>            InternalWavelengthSpectralBandListType;
+  typedef InternalWavelengthSpectralBandListType::Pointer WavelengthSpectralBandListType;
+  // typedef std::map <FilterFunctionValuesType>        FilterFunctionValuesMapType;
 
   /** Set the number of bands. */
   itkSetMacro(NbBands, unsigned int);
@@ -63,20 +63,22 @@ protected:
   /** Constructor */
   WavelengthSpectralBands();
   /** Destructor */
-  ~WavelengthSpectralBands() override {}
+  ~WavelengthSpectralBands() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WavelengthSpectralBands(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WavelengthSpectralBands(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** List that contains the filter function value. */
   WavelengthSpectralBandListType m_WavelengthSpectralBandsList;
   unsigned int                   m_NbBands;
 };
 
-} //end namespace
+} // end namespace
 
 #endif

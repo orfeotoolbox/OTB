@@ -26,23 +26,22 @@
 #include "otbImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbScalarImageToPanTexTextureFilter(int argc, char * argv[])
+int otbScalarImageToPanTexTextureFilter(int argc, char* argv[])
 {
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char *       infname      = argv[1];
-  const char *       outprefix    = argv[2];
-  const unsigned int nbBins = atoi(argv[3]);
-  const unsigned int radius = atoi(argv[4]);
+  }
+  const char*        infname   = argv[1];
+  const char*        outprefix = argv[2];
+  const unsigned int nbBins    = atoi(argv[3]);
+  const unsigned int radius    = atoi(argv[4]);
 
   const unsigned int Dimension = 2;
-  typedef float                            PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ScalarImageToPanTexTextureFilter
-  <ImageType, ImageType>                        PanTexTextureFilterType;
+  typedef float      PixelType;
+  typedef otb::Image<PixelType, Dimension>                            ImageType;
+  typedef otb::ScalarImageToPanTexTextureFilter<ImageType, ImageType> PanTexTextureFilterType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 

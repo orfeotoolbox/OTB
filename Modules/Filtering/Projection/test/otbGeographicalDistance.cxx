@@ -22,7 +22,7 @@
 #include "otbGeographicalDistance.h"
 
 
-int otbGeographicalDistance(int itkNotUsed(argc), char * argv[])
+int otbGeographicalDistance(int itkNotUsed(argc), char* argv[])
 {
   typedef itk::Point<double, 2> PointType;
   typedef otb::GeographicalDistance<PointType> GeoDistanceType;
@@ -40,45 +40,45 @@ int otbGeographicalDistance(int itkNotUsed(argc), char * argv[])
   o[1] = b[1];
 
   double expectedDistance = atof(argv[5]);
-  double tolerance = atof(argv[6]);
+  double tolerance        = atof(argv[6]);
 
-  double distEvaluate2 = geoDistance->Evaluate(a, b);
+  double distEvaluate2     = geoDistance->Evaluate(a, b);
   double distEvaluate2Null = geoDistance->Evaluate(a, a);
 
   geoDistance->SetOrigin(o);
-  double distEvaluate1 = geoDistance->Evaluate(a);
+  double distEvaluate1     = geoDistance->Evaluate(a);
   double distEvaluate1Null = geoDistance->Evaluate(b);
 
   // Check results
   bool failFlag = false;
   std::cerr.setf(std::ios_base::fixed);
   std::cerr.precision(5);
-  if(std::abs(distEvaluate1 - expectedDistance) > tolerance)
-    {
-    std::cerr<<"Evaluate("<<a<<") with origin "<<o<<" is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate1<<std::endl;
+  if (std::abs(distEvaluate1 - expectedDistance) > tolerance)
+  {
+    std::cerr << "Evaluate(" << a << ") with origin " << o << " is inaccurate: expected " << expectedDistance << ", found " << distEvaluate1 << std::endl;
     failFlag = true;
-    }
+  }
 
-  if(std::abs(distEvaluate2 - expectedDistance) > tolerance)
-    {
-    std::cerr<<"Evaluate("<<a<<", "<<b<<") is inaccurate: expected "<< expectedDistance<<", found "<<distEvaluate2<<std::endl;
+  if (std::abs(distEvaluate2 - expectedDistance) > tolerance)
+  {
+    std::cerr << "Evaluate(" << a << ", " << b << ") is inaccurate: expected " << expectedDistance << ", found " << distEvaluate2 << std::endl;
     failFlag = true;
-    }
+  }
 
-  if(distEvaluate2Null > tolerance)
-    {
-    std::cerr<<"Evaluate("<<a<<", "<<a<<") is inaccurate: expected 0., found "<<distEvaluate2Null<<std::endl;
+  if (distEvaluate2Null > tolerance)
+  {
+    std::cerr << "Evaluate(" << a << ", " << a << ") is inaccurate: expected 0., found " << distEvaluate2Null << std::endl;
     failFlag = true;
-    }
+  }
 
-    if(distEvaluate1Null > tolerance)
-    {
-    std::cerr<<"Evaluate("<<b<<") with origin "<<o<< " is inaccurate: expected 0., found "<<distEvaluate2Null<<std::endl;
+  if (distEvaluate1Null > tolerance)
+  {
+    std::cerr << "Evaluate(" << b << ") with origin " << o << " is inaccurate: expected 0., found " << distEvaluate2Null << std::endl;
     failFlag = true;
-    }
+  }
 
-    if(failFlag)
-      return EXIT_FAILURE;
+  if (failFlag)
+    return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
 }

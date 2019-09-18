@@ -52,11 +52,11 @@ public:
 
   itkNewMacro(ProgressReporterManager);
 
-  typedef SwigPrintCallback CallbackType;
+  typedef SwigPrintCallback                          CallbackType;
   typedef StandardOneLineFilterWatcher<CallbackType> WatcherType;
-  
+
   /** Filter watcher list type */
-  typedef std::vector<std::unique_ptr <WatcherType> > WatcherListType;
+  typedef std::vector<std::unique_ptr<WatcherType>> WatcherListType;
 
   /** Command Member */
   typedef itk::MemberCommand<Self> AddProcessCommandType;

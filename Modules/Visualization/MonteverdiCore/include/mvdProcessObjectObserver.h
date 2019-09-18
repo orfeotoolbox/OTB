@@ -75,8 +75,7 @@ class ProgressInterface;
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
-    public itk::Command
+class OTBMonteverdiCore_EXPORT ProcessObjectObserver : public itk::Command
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,76 +84,70 @@ class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-  typedef ProcessObjectObserver Self;
-  typedef itk::Command Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
+  typedef ProcessObjectObserver   Self;
+  typedef itk::Command            Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   ~ProcessObjectObserver() override;
 
-  const ProgressInterface * GetProgressInterface() const;
-  ProgressInterface * GetProgressInterface();
+  const ProgressInterface* GetProgressInterface() const;
+  ProgressInterface*       GetProgressInterface();
 
-  void SetProgressInterface( ProgressInterface * );
+  void SetProgressInterface(ProgressInterface*);
 
   //
   // itk::Command overloads.
 
-  void Execute( itk::Object * caller,
-			const itk::EventObject & event ) override;
+  void Execute(itk::Object* caller, const itk::EventObject& event) override;
 
-  void Execute( const itk::Object * caller,
-			const itk::EventObject & event ) override;
+  void Execute(const itk::Object* caller, const itk::EventObject& event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   ProcessObjectObserver();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  ProgressInterface * m_ProgressInterface;
+  ProgressInterface* m_ProgressInterface;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

@@ -26,21 +26,21 @@
 #include "otbImageFileWriter.h"
 #include "itkVariableLengthVector.h"
 
-int otbRadianceToImageImageFilter(int itkNotUsed(argc), char * argv[])
+int otbRadianceToImageImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double                                                            PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                            InputImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                            OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                              ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                             WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::RadianceToImageImageFilter<InputImageType, OutputImageType> RadianceToImageImageFilterType;
-  typedef RadianceToImageImageFilterType::VectorType                       VectorType;
+  typedef RadianceToImageImageFilterType::VectorType VectorType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
@@ -54,10 +54,10 @@ int otbRadianceToImageImageFilter(int itkNotUsed(argc), char * argv[])
   beta.Fill(0);
 
   for (unsigned int i = 0; i < nbOfComponent; ++i)
-    {
+  {
     alpha[i] = static_cast<double>(atof(argv[i + 3]));
-    beta[i] = static_cast<double>(atof(argv[i + 7]));
-    }
+    beta[i]  = static_cast<double>(atof(argv[i + 7]));
+  }
 
   // Instantiating object
   RadianceToImageImageFilterType::Pointer filter = RadianceToImageImageFilterType::New();

@@ -34,12 +34,11 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT OutputFilenameParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT OutputFilenameParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputFilenameParameter        Self;
+  typedef OutputFilenameParameter       Self;
   typedef StringParameter               Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -61,12 +60,12 @@ public:
 
   // Set Value
   virtual void SetValue(const std::string value)
-    {
+  {
     itkDebugMacro("setting member m_StringParam to " << value);
     this->m_StringParam->SetValue(value);
     SetActive(true);
     this->Modified();
-    }
+  }
 
   // Clear Value
   void ClearValue() override
@@ -94,19 +93,18 @@ protected:
   OutputFilenameParameter()
   {
     // Initialize the String Parameter
-    m_StringParam= StringParameter::New();
-
-
+    m_StringParam = StringParameter::New();
   }
 
   /** Destructor */
   ~OutputFilenameParameter() override
-  {}
+  {
+  }
 
 private:
-  OutputFilenameParameter(const OutputFilenameParameter &) = delete;
-  void operator =(const OutputFilenameParameter&); //purposely not
-                                                  //implemented
+  OutputFilenameParameter(const OutputFilenameParameter&) = delete;
+  void operator                                           =(const OutputFilenameParameter&); // purposely not
+  // implemented
 
   StringParameter::Pointer m_StringParam;
 

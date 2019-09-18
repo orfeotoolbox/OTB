@@ -44,49 +44,48 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-  template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampImageFilter 
-  : public itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
-      Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
-                                   typename TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage = TInputImage>
+class ITK_EXPORT ClampImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::ConvertTypeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef ClampImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter< TInputImage , TOutputImage ,
-    Functor::ConvertTypeFunctor <typename TInputImage::PixelType ,
-                                 typename TOutputImage::PixelType> >  Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Functor::ConvertTypeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( ClampImageFilter , itk::UnaryFunctorImageFilter );
+  itkTypeMacro(ClampImageFilter, itk::UnaryFunctorImageFilter);
 
 
   /** Some additional typedefs.  */
-  typedef TInputImage                                  InputImageType;
-  typedef typename InputImageType::RegionType          InputImageRegionType;
-  typedef typename InputImageType::PixelType           InputImagePixelType;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::PixelType OutputImagePixelType;
-  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
-  typedef typename itk::NumericTraits< OutputInternalPixelType >::ValueType OutputPixelValueType;
+  typedef TOutputImage                                                    OutputImageType;
+  typedef typename OutputImageType::RegionType                            OutputImageRegionType;
+  typedef typename OutputImageType::PixelType                             OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType                     OutputInternalPixelType;
+  typedef typename itk::NumericTraits<OutputInternalPixelType>::ValueType OutputPixelValueType;
 
 
   /** The values greater than or equal to the value are set to \p thresh. */
-  void ClampAbove(const OutputPixelValueType &thresh);
+  void ClampAbove(const OutputPixelValueType& thresh);
 
   /** The values less than or equal to the value are set to \p thresh. */
-  void ClampBelow(const OutputPixelValueType &thresh);
+  void ClampBelow(const OutputPixelValueType& thresh);
 
   /** The values outside the range are set to \p lower or \p upper. */
-  void ClampOutside(const OutputPixelValueType &lower, const OutputPixelValueType &upper);
+  void ClampOutside(const OutputPixelValueType& lower, const OutputPixelValueType& upper);
 
   /** Set/Get methods to set the lower threshold */
   void SetLower(OutputPixelValueType val);
@@ -101,21 +100,20 @@ public:
 
 protected:
   ClampImageFilter();
-  ~ClampImageFilter() override {};
+  ~ClampImageFilter() override{};
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation(void) override
-    {
+  {
     Superclass::GenerateOutputInformation();
     unsigned int sizeIn = this->GetInput()->GetNumberOfComponentsPerPixel();
-    this->GetFunctor().SetInputComponents( sizeIn );
-    this->GetOutput()->SetNumberOfComponentsPerPixel( 
-      this->GetFunctor().GetOutputSize () );
-    }
+    this->GetFunctor().SetInputComponents(sizeIn);
+    this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetFunctor().GetOutputSize());
+  }
 
 private:
-  ClampImageFilter(const Self&) = delete ;
-  void operator=(const Self&) = delete ;
+  ClampImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OutputPixelValueType m_Lower;
   OutputPixelValueType m_Upper;

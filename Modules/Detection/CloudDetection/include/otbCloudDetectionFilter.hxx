@@ -30,8 +30,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::CloudDetectionFilter()
+CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::CloudDetectionFilter()
 {
 }
 
@@ -39,9 +38,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * Printself
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 }
@@ -50,27 +47,22 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * BeforeThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::BeforeThreadedGenerateData()
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::BeforeThreadedGenerateData()
 {
   unsigned int ReferencePixelNumberOfBands = 0;
-  ReferencePixelNumberOfBands = this->GetReferencePixel().GetSize();
+  ReferencePixelNumberOfBands              = this->GetReferencePixel().GetSize();
 
   if (ReferencePixelNumberOfBands != this->GetInput()->GetNumberOfComponentsPerPixel())
-    {
-    itkExceptionMacro(
-      "The number of bands of the reference pixel is different from the number of bands of the input image. ");
-    }
+  {
+    itkExceptionMacro("The number of bands of the reference pixel is different from the number of bands of the input image. ");
+  }
 }
 
 /**
  * SetVariance
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::SetVariance(double var)
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::SetVariance(double var)
 {
   this->GetFunctor().SetVariance(var);
 }
@@ -79,9 +71,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * GetVariance
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-double
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::GetVariance()
+double CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::GetVariance()
 {
   return this->GetFunctor().GetVariance();
 }
@@ -90,9 +80,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * SetReferencePixel
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::SetReferencePixel(InputPixelType ref)
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::SetReferencePixel(InputPixelType ref)
 {
   this->GetFunctor().SetReferencePixel(ref);
 }
@@ -102,8 +90,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  */
 template <class TInputImage, class TOutputImage, class TFunction>
 typename CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::InputPixelType
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::GetReferencePixel()
+CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::GetReferencePixel()
 {
   return this->GetFunctor().GetReferencePixel();
 }
@@ -112,9 +99,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * SetMinThreshold
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::SetMinThreshold(double threshold)
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::SetMinThreshold(double threshold)
 {
   this->GetFunctor().SetMinThreshold(threshold);
 }
@@ -123,9 +108,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * SetMaxThreshold
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-void
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::SetMaxThreshold(double threshold)
+void CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::SetMaxThreshold(double threshold)
 {
   this->GetFunctor().SetMaxThreshold(threshold);
 }
@@ -134,9 +117,7 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * GetMinThreshold
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-double
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::GetMinThreshold()
+double CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::GetMinThreshold()
 {
   return this->GetFunctor().GetMinThreshold();
 }
@@ -145,13 +126,10 @@ CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
  * GetMaxThreshold
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-double
-CloudDetectionFilter<TInputImage, TOutputImage, TFunction>
-::GetMaxThreshold()
+double CloudDetectionFilter<TInputImage, TOutputImage, TFunction>::GetMaxThreshold()
 {
   return this->GetFunctor().GetMaxThreshold();
 }
-
 }
 
 #endif

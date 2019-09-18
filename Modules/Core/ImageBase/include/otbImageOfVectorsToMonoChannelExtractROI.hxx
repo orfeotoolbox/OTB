@@ -29,20 +29,16 @@ namespace otb
 /**
  *
  */
-template<class TInputImage, class TOutputImage>
-ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
-::ImageOfVectorsToMonoChannelExtractROI() : m_Channel(1)
+template <class TInputImage, class TOutputImage>
+ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::ImageOfVectorsToMonoChannelExtractROI() : m_Channel(1)
 {
-
 }
 
 /**
  *
  */
-template<class TInputImage, class TOutputImage>
-void
-ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputImage, class TOutputImage>
+void ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -56,34 +52,30 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
  *
  * \sa ProcessObject::GenerateOutputInformaton()
  */
-template<class TInputImage, class TOutputImage>
-void
-ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
-::GenerateOutputInformation()
+template <class TInputImage, class TOutputImage>
+void ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
   typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
   // Analysis of processed channel
   if ((m_Channel <= 0) || (m_Channel > InputImagePixelType::Dimension))
-    {
+  {
     itkExceptionMacro(<< "otb::ExtractImImageOfVectorsToMonoChannelExtractROIageFilter::GenerateOutputInformation "
                       << " Channel must be in the following range: [1;" << InputImagePixelType::Dimension << "] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name());
-    }
+  }
 
   // Call base class implementation
   Superclass::GenerateOutputInformation();
 }
 
-template<class TInputImage, class TOutputImage>
-void
-ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputImage, class TOutputImage>
+void ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                            itk::ThreadIdType threadId)
 {
   itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
-  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   // support progress methods/callbacks
@@ -98,23 +90,22 @@ ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
-  InputIterator inIt(inputPtr, inputRegionForThread);
+  InputIterator  inIt(inputPtr, inputRegionForThread);
 
   // Loop through the processed channels
   unsigned int channelIn(m_Channel - 1);
 
   InputImagePixelType pixelInput;
   while (!outIt.IsAtEnd())
-    {
+  {
     OutputImagePixelType pixelOutput;
-    pixelInput = inIt.Get();
+    pixelInput  = inIt.Get();
     pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
     outIt.Set(pixelOutput);
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-    }
-
+  }
 }
 
 } // end namespace otb

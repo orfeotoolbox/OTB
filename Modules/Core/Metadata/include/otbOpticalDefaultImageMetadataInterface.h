@@ -38,7 +38,6 @@ namespace otb
 class OTBMetadata_EXPORT OpticalDefaultImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef OpticalDefaultImageMetadataInterface Self;
   typedef OpticalImageMetadataInterface        Superclass;
   typedef itk::SmartPointer<Self>              Pointer;
@@ -162,30 +161,30 @@ public:
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override
-      {
+  {
     std::vector<unsigned int> rgb(3);
     rgb[0] = 0;
     rgb[1] = 1;
     rgb[2] = 2;
     return rgb;
-      }
+  }
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override
   {
     itkExceptionMacro("GetSpectralSensitivity not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
 protected:
   OpticalDefaultImageMetadataInterface(){};
-  ~OpticalDefaultImageMetadataInterface() override {}
+  ~OpticalDefaultImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  OpticalDefaultImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  OpticalDefaultImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

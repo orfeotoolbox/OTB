@@ -19,7 +19,6 @@
  */
 
 
-
 /*!
  *
  * PURPOSE:
@@ -45,20 +44,20 @@
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
   if (argc != 2)
-    {
+  {
     std::cout << argv[0] << " <input filename>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  typedef otb::Image<unsigned int, 2>     ImageType;
+  typedef otb::Image<unsigned int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::InverseSensorModel<double> InverseModelType;
   typedef otb::ForwardSensorModel<double> ForwardModelType;
 
-  //Allocate pointer
+  // Allocate pointer
   InverseModelType::Pointer inverse_model = InverseModelType::New();
   ForwardModelType::Pointer forward_model = ForwardModelType::New();
-  ReaderType::Pointer       reader = ReaderType::New();
+  ReaderType::Pointer       reader        = ReaderType::New();
 
   // Set parameters ...
   reader->SetFileName(argv[1]);
@@ -69,19 +68,19 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 
   otbGenericMsgDebugMacro(<< "Inverse model creation...");
   inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if( inverse_model->IsValidSensorModel() == false )
-    {
-      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (inverse_model->IsValidSensorModel() == false)
+  {
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   otbGenericMsgDebugMacro(<< "Forward model creation...");
   forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if( forward_model->IsValidSensorModel() == false )
-    {
-      std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (forward_model->IsValidSensorModel() == false)
+  {
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

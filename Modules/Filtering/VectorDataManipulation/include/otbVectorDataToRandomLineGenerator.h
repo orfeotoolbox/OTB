@@ -46,15 +46,14 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
-class ITK_EXPORT VectorDataToRandomLineGenerator :
-    public VectorDataSource<TVectorData>
+class ITK_EXPORT VectorDataToRandomLineGenerator : public VectorDataSource<TVectorData>
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataToRandomLineGenerator              Self;
-  typedef VectorDataSource<TVectorData>                Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef VectorDataToRandomLineGenerator Self;
+  typedef VectorDataSource<TVectorData>   Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataToRandomLineGenerator, VectorDataSource);
@@ -62,14 +61,14 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef TVectorData                                           VectorDataType;
-  typedef typename VectorDataType::Pointer                      VectorDataPointerType;
-  typedef typename VectorDataType::DataNodeType                 DataNodeType;
-  typedef typename DataNodeType::PolygonType::RegionType        RegionType;
-  typedef typename DataNodeType::PointType                      PointType;
-  typedef typename DataNodeType::LineType                       LineType;
-  typedef typename DataNodeType::LineType::VertexType           VertexType;
-  typedef typename std::vector<PointType>                       PointVectorType;
+  typedef TVectorData                                    VectorDataType;
+  typedef typename VectorDataType::Pointer               VectorDataPointerType;
+  typedef typename VectorDataType::DataNodeType          DataNodeType;
+  typedef typename DataNodeType::PolygonType::RegionType RegionType;
+  typedef typename DataNodeType::PointType               PointType;
+  typedef typename DataNodeType::LineType                LineType;
+  typedef typename DataNodeType::LineType::VertexType    VertexType;
+  typedef typename std::vector<PointType>                PointVectorType;
 
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
@@ -77,8 +76,8 @@ public:
 
   /** Connects the VectorData from which the extend will be extracted. */
   using Superclass::SetInput;
-  void SetInput(const VectorDataType *);
-  const VectorDataType * GetInput() const;
+  void                  SetInput(const VectorDataType*);
+  const VectorDataType* GetInput() const;
 
   itkGetConstMacro(NumberOfOutputLine, unsigned int);
   itkSetMacro(NumberOfOutputLine, unsigned int);
@@ -98,32 +97,34 @@ public:
 
 protected:
   VectorDataToRandomLineGenerator();
-  ~VectorDataToRandomLineGenerator() override {}
+  ~VectorDataToRandomLineGenerator() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
   void GenerateData(void) override;
 
-  PointVectorType RandomPointsGenerator(DataNodeType * node);
+  PointVectorType RandomPointsGenerator(DataNodeType* node);
 
 private:
-  VectorDataToRandomLineGenerator(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataToRandomLineGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string GetNextID()
-    {
-      std::ostringstream oss;
-      oss << m_CurrentID++;
-      return oss.str();
-    }
+  {
+    std::ostringstream oss;
+    oss << m_CurrentID++;
+    return oss.str();
+  }
 
   RandomGeneratorType::Pointer m_RandomGenerator;
   RandomGeneratorType::Pointer m_RandomSizeGenerator;
 
-  unsigned int                 m_NumberOfOutputLine;
-  unsigned int                 m_MinLineSize;
-  unsigned int                 m_MaxLineSize;
-  unsigned int                 m_CurrentID;
+  unsigned int m_NumberOfOutputLine;
+  unsigned int m_MinLineSize;
+  unsigned int m_MaxLineSize;
+  unsigned int m_CurrentID;
 };
 
 } // end namespace otb

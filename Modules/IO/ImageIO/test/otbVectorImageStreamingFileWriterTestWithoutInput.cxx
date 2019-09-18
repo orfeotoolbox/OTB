@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <complex>
 #include <iostream>
 
@@ -35,34 +33,34 @@
  * 1.
  * Write VectorImage<scalar> with an VectorImageFileWriter<scalar>
  ***********/
-template<class InternalType>
+template <class InternalType>
 int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
     std::cout << "Invalid arguments" << std::endl;
     std::cout << "1:Output File Name" << std::endl;
     std::cout << "2:Image Size" << std::endl;
     std::cout << "3:Nb of Channels" << std::endl;
     return 1;
-    }
+  }
 
   // TYPEDEFS
-  typedef InternalType                                 PixelType;
-  typedef otb::VectorImage<PixelType, 2>               ImageType;
-  typedef typename ImageType::PixelType                ImagePixelType;
-  typedef typename ImageType::RegionType               RegionType;
-  typedef typename ImageType::SizeType                 SizeType;
-  typedef typename ImageType::IndexType                IndexType;
-  typedef itk::ImageRegionIterator<ImageType>          IteratorType;
+  typedef InternalType PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef typename ImageType::PixelType       ImagePixelType;
+  typedef typename ImageType::RegionType      RegionType;
+  typedef typename ImageType::SizeType        SizeType;
+  typedef typename ImageType::IndexType       IndexType;
+  typedef itk::ImageRegionIterator<ImageType> IteratorType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
   // INSTANTIATIONS
   typename WriterType::Pointer writer = WriterType::New();
-  typename ImageType::Pointer image = ImageType::New();
+  typename ImageType::Pointer  image  = ImageType::New();
 
   RegionType region;
-  SizeType size;
+  SizeType   size;
   size.Fill(atoi(argv[2]));
   IndexType orig;
   orig.Fill(0);
@@ -70,9 +68,9 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   region.SetSize(size);
   region.SetIndex(orig);
 
-  typedef typename ImageType::PointType        PointType;
-  typedef typename ImageType::SpacingType      SpacingType;
-  PointType origin;
+  typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SpacingType SpacingType;
+  PointType                               origin;
   origin.Fill(0.5);
   SpacingType spacing;
   spacing.Fill(1.0);
@@ -85,10 +83,10 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
 
   ImagePixelType pix0;
   pix0.SetSize(atoi(argv[3]));
-  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
-    {
-    pix0[i] = static_cast<PixelType> (0);
-    }
+  for (unsigned int i = 0; i < static_cast<unsigned int>(atoi(argv[3])); ++i)
+  {
+    pix0[i] = static_cast<PixelType>(0);
+  }
   image->FillBuffer(pix0);
 
   IteratorType it(image, image->GetLargestPossibleRegion());
@@ -98,16 +96,16 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   pixVal.SetSize(atoi(argv[3]));
 
   while (!it.IsAtEnd())
+  {
+    for (unsigned int i = 0; i < static_cast<unsigned int>(atoi(argv[3])); ++i)
     {
-    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
-      {
-      pixVal[i] = static_cast<PixelType> (i * size[0] * size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
-      }
+      pixVal[i] = static_cast<PixelType>(i * size[0] * size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
+    }
 
     it.Set(pixVal);
 
     ++it;
-    }
+  }
 
   writer->SetFileName(argv[1]);
   writer->SetNumberOfDivisionsStrippedStreaming(10);
@@ -117,19 +115,19 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric(int argc, cha
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageStreamingFileWriterScalarTestWithoutInputShort(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterScalarTestWithoutInputShort(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterScalarTestWithoutInputInt(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterScalarTestWithoutInputInt(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterScalarTestWithoutInputFloat(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterScalarTestWithoutInputFloat(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterScalarTestWithoutInputDouble(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterScalarTestWithoutInputDouble(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterScalarTestWithoutInputGeneric<double>(argc, argv);
 }
@@ -138,34 +136,34 @@ int otbVectorImageStreamingFileWriterScalarTestWithoutInputDouble(int argc, char
  * 2.
  * Write VectorImage<complex> with an VectorImageFileWriter<complex>
  ***********/
-template<class InternalType>
+template <class InternalType>
 int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, char* argv[])
 {
   if (argc != 4)
-    {
+  {
     std::cout << "Invalid arguments" << std::endl;
     std::cout << "1:Output File Name" << std::endl;
     std::cout << "2:Image Size" << std::endl;
     std::cout << "3:Nb of Channels" << std::endl;
     return 1;
-    }
+  }
 
   // TYPEDEFS
-  typedef std::complex<InternalType>                   PixelType;
-  typedef otb::VectorImage<PixelType, 2>               ImageType;
-  typedef typename ImageType::PixelType                ImagePixelType;
-  typedef typename ImageType::RegionType               RegionType;
-  typedef typename ImageType::SizeType                 SizeType;
-  typedef typename ImageType::IndexType                IndexType;
-  typedef itk::ImageRegionIterator<ImageType>          IteratorType;
+  typedef std::complex<InternalType> PixelType;
+  typedef otb::VectorImage<PixelType, 2> ImageType;
+  typedef typename ImageType::PixelType       ImagePixelType;
+  typedef typename ImageType::RegionType      RegionType;
+  typedef typename ImageType::SizeType        SizeType;
+  typedef typename ImageType::IndexType       IndexType;
+  typedef itk::ImageRegionIterator<ImageType> IteratorType;
   typedef otb::ImageFileWriter<ImageType>     WriterType;
 
   // INSTANTIATIONS
   typename WriterType::Pointer writer = WriterType::New();
-  typename ImageType::Pointer image = ImageType::New();
+  typename ImageType::Pointer  image  = ImageType::New();
 
   RegionType region;
-  SizeType size;
+  SizeType   size;
   size.Fill(atoi(argv[2]));
   IndexType orig;
   orig.Fill(0);
@@ -173,9 +171,9 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
   region.SetSize(size);
   region.SetIndex(orig);
 
-  typedef typename ImageType::PointType        PointType;
-  typedef typename ImageType::SpacingType      SpacingType;
-  PointType origin;
+  typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SpacingType SpacingType;
+  PointType                               origin;
   origin.Fill(0.5);
   SpacingType spacing;
   spacing.Fill(1.0);
@@ -188,10 +186,10 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
 
   ImagePixelType pix0;
   pix0.SetSize(atoi(argv[3]));
-  for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
-    {
-    pix0[i] = static_cast<PixelType> (0);
-    }
+  for (unsigned int i = 0; i < static_cast<unsigned int>(atoi(argv[3])); ++i)
+  {
+    pix0[i] = static_cast<PixelType>(0);
+  }
   image->FillBuffer(pix0);
 
   IteratorType it(image, image->GetLargestPossibleRegion());
@@ -202,23 +200,23 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
 
   typedef typename itk::NumericTraits<PixelType>::ScalarRealType ScalarRealType;
   while (!it.IsAtEnd())
+  {
+    for (unsigned int i = 0; i < static_cast<unsigned int>(atoi(argv[3])); ++i)
     {
-    for (unsigned int i = 0; i < static_cast<unsigned int> (atoi(argv[3])); ++i)
-      {
-      ScalarRealType realPart = 2 * (i *size[0]*size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
-      ScalarRealType imagPart = 2 * (i *size[0]*size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]) + 1;
+      ScalarRealType realPart = 2 * (i * size[0] * size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
+      ScalarRealType imagPart = 2 * (i * size[0] * size[1] + size[0] * it.GetIndex()[1] + it.GetIndex()[0]) + 1;
 
-      PixelType internalPixelVal  (realPart, imagPart);
+      PixelType internalPixelVal(realPart, imagPart);
 
-      //std::cout << "internalPixelVal = " << internalPixelVal <<std::endl;
+      // std::cout << "internalPixelVal = " << internalPixelVal <<std::endl;
 
       pixVal[i] = internalPixelVal;
-      }
+    }
 
     it.Set(pixVal);
 
     ++it;
-    }
+  }
 
   writer->SetFileName(argv[1]);
   writer->SetNumberOfDivisionsStrippedStreaming(10);
@@ -228,19 +226,19 @@ int otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric(int argc, ch
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageStreamingFileWriterComplexTestWithoutInputShort(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterComplexTestWithoutInputShort(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterComplexTestWithoutInputInt(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterComplexTestWithoutInputInt(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble(int argc, char * argv[])
+int otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble(int argc, char* argv[])
 {
   return otbVectorImageStreamingFileWriterComplexTestWithoutInputGeneric<double>(argc, argv);
 }

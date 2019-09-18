@@ -47,8 +47,6 @@ private:
   QtWidgetParameterLabel(const QtWidgetParameterLabel&) = delete;
   void operator=(const QtWidgetParameterLabel&) = delete;
 };
-
-
 }
 }
 

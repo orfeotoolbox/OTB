@@ -20,13 +20,11 @@
 
 #include "otbImageFileReaderException.h"
 
-namespace otb {
+namespace otb
+{
 
-ImageFileReaderException::ImageFileReaderException(const char *file, unsigned int line,
-                                                   const std::string& desc,
-                                                   const std::string& filename) :
-    ExceptionObject(file, line, desc),
-    m_Filename(filename)
+ImageFileReaderException::ImageFileReaderException(const char* file, unsigned int line, const std::string& desc, const std::string& filename)
+  : ExceptionObject(file, line, desc), m_Filename(filename)
 {
 }
 

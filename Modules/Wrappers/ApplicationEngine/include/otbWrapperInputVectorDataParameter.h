@@ -52,14 +52,14 @@ public:
 
   typedef double CoordinatePrecisionType;
   typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
+  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType> VectorDataType;
 
   /** Set value from filename */
   bool SetFromFileName(const std::string& filename);
-  itkGetConstReferenceMacro( FileName, std::string );
+  itkGetConstReferenceMacro(FileName, std::string);
 
-  const VectorDataType * GetVectorData() const;
-  VectorDataType * GetVectorData();
+  const VectorDataType* GetVectorData() const;
+  VectorDataType*       GetVectorData();
 
   void SetVectorData(VectorDataType* vectorData);
 
@@ -90,17 +90,16 @@ protected:
   ~InputVectorDataParameter() override;
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
-  VectorDataType::Pointer m_VectorData;
-  VectorDataFileReaderType::Pointer m_Reader;
+  VectorDataType::Pointer                           m_VectorData;
+  VectorDataFileReaderType::Pointer                 m_Reader;
 
   std::string m_FileName;
 
   std::string m_PreviousFileName;
 
 private:
-  InputVectorDataParameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
-
+  InputVectorDataParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 };
 
 } // End namespace Wrapper

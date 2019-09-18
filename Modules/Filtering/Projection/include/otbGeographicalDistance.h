@@ -47,8 +47,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TVector>
-class ITK_EXPORT GeographicalDistance :
-    public itk::Statistics::DistanceMetric<TVector>
+class ITK_EXPORT GeographicalDistance : public itk::Statistics::DistanceMetric<TVector>
 {
 public:
   /** Standard class typedefs. */
@@ -64,14 +63,14 @@ public:
   itkNewMacro(Self);
 
   /** Useful typedefs */
-  typedef TVector                                  VectorType;
+  typedef TVector VectorType;
 
   /** Gets the distance between the origin point and x. This function
    *  work with SetOrigin() function */
-  double Evaluate(const VectorType & x) const override;
+  double Evaluate(const VectorType& x) const override;
 
   /* Gets the distance between x and y points */
-  double Evaluate(const VectorType & x, const VectorType & y) const override;
+  double Evaluate(const VectorType& x, const VectorType& y) const override;
 
   /** Set the earth radius */
   itkSetMacro(EarthRadius, double);
@@ -84,14 +83,16 @@ protected:
   GeographicalDistance();
 
   /** Destructor */
-  ~GeographicalDistance() override{}
+  ~GeographicalDistance() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GeographicalDistance(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GeographicalDistance(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Earth radius */
   double m_EarthRadius;
@@ -100,7 +101,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbGeographicalDistance.hxx"
+#include "otbGeographicalDistance.hxx"
 #endif
 
 #endif

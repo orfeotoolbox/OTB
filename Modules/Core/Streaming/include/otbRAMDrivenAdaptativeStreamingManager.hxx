@@ -31,9 +31,7 @@ namespace otb
 {
 
 template <class TImage>
-RAMDrivenAdaptativeStreamingManager<TImage>::RAMDrivenAdaptativeStreamingManager()
-  : m_AvailableRAMInMB(0),
-    m_Bias(1.0)
+RAMDrivenAdaptativeStreamingManager<TImage>::RAMDrivenAdaptativeStreamingManager() : m_AvailableRAMInMB(0), m_Bias(1.0)
 {
 }
 
@@ -43,23 +41,17 @@ RAMDrivenAdaptativeStreamingManager<TImage>::~RAMDrivenAdaptativeStreamingManage
 }
 
 template <class TImage>
-void
-RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+void RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming(itk::DataObject* input, const RegionType& region)
 {
-  unsigned long nbDivisions =
-      this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
+  unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
 
   unsigned int tileHintX(0), tileHintY(0);
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintX,
-                                    tileHintX);
+  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(), MetaDataKey::TileHintX, tileHintX);
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(),
-                                    MetaDataKey::TileHintY,
-                                    tileHintY);
+  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(), MetaDataKey::TileHintY, tileHintY);
 
   tileHint[0] = tileHintX;
   tileHint[1] = tileHintY;

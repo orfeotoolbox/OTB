@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT SarImageMetadataInterfaceFactory : public itk::Object
 public:
   /** Standard class typedefs. */
   typedef SarImageMetadataInterfaceFactory Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                      Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -64,9 +64,8 @@ protected:
   ~SarImageMetadataInterfaceFactory() override;
 
 private:
-  SarImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SarImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

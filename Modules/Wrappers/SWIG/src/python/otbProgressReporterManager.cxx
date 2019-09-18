@@ -47,7 +47,7 @@ void ProgressReporterManager::LinkWatchers(itk::Object* itkNotUsed(caller), cons
   {
     const Wrapper::AddProcessToWatchEvent* eventToWatch = dynamic_cast<const Wrapper::AddProcessToWatchEvent*>(&event);
 
-    auto watch = std::make_unique< WatcherType>(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
+    auto watch = std::make_unique<WatcherType>(eventToWatch->GetProcess(), eventToWatch->GetProcessDescription());
     watch->SetCallback(m_Callback);
     m_WatcherList.push_back(std::move(watch));
   }

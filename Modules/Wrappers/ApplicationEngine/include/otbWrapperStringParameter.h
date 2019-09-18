@@ -34,8 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT StringParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT StringParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -51,14 +50,14 @@ public:
   itkTypeMacro(StringParameter, Parameter);
 
   /** Set the value */
-  void SetValue( const std::string & value )
+  void SetValue(const std::string& value)
   {
     m_Value = value;
-    SetActive( true );
+    SetActive(true);
   }
 
   /** Get the value */
-  const std::string & GetValue() const
+  const std::string& GetValue() const
   {
     return m_Value;
   }
@@ -91,17 +90,19 @@ public:
 protected:
   /** Constructor */
   StringParameter()
-  {}
+  {
+  }
 
   /** Destructor */
   ~StringParameter() override
-  {}
+  {
+  }
 
-  std::string  m_Value;
+  std::string m_Value;
 
 private:
-  StringParameter(const StringParameter &) = delete;
-  void operator =(const StringParameter&) = delete;
+  StringParameter(const StringParameter&) = delete;
+  void operator=(const StringParameter&) = delete;
 
 }; // End class Parameter
 

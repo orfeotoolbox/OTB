@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbVectorImage.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -29,25 +27,25 @@
 #include "otbImageFileWriter.h"
 #include "otbGDALImageIO.h"
 
-template<class PixelType>
+template <class PixelType>
 int otbGenericGDALImageIOTest(int argc, char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   std::vector<std::string> creationOptions;
   for (int curArg = 3; curArg < argc; curArg++)
-    {
+  {
     creationOptions.push_back(argv[curArg]);
     std::cout << "Creation option : " << argv[curArg] << std::endl;
-    }
+  }
 
-  typedef PixelType InputPixelType;
-  typedef PixelType OutputPixelType;
+  typedef PixelType  InputPixelType;
+  typedef PixelType  OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension>  InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

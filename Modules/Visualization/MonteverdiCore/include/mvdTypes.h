@@ -89,92 +89,86 @@ typedef RealType ComponentType;
 
 /**
  */
-typedef itk::VariableLengthVector< RealType > VectorPixelType;
+typedef itk::VariableLengthVector<RealType> VectorPixelType;
 
 /*******************************************************************************/
 /* Type definitions of STL realization.                                        */
 
 /**
  */
-typedef std::vector< std::string > StringVector;
+typedef std::vector<std::string> StringVector;
 
 /**
  */
-typedef std::vector< int > IntVector;
+typedef std::vector<int> IntVector;
 
 /**
  */
-typedef std::vector< unsigned int > UIntVector;
+typedef std::vector<unsigned int> UIntVector;
 
 /**
  */
-typedef std::list< std::string > StringList;
+typedef std::list<std::string> StringList;
 
 /**
  */
-typedef std::vector< double > DoubleVector;
+typedef std::vector<double> DoubleVector;
 
 /*******************************************************************************/
 /* Type definitions of ITK realization.                                        */
 
 /**
  */
-typedef itk::Array< double > ParametersType;
+typedef itk::Array<double> ParametersType;
 
 /*******************************************************************************/
 /* Type definitions depending on dimension.                                    */
 
 /**
  */
-typedef itk::ImageRegion< Monteverdi_DIMENSION > ImageRegionType;
+typedef itk::ImageRegion<Monteverdi_DIMENSION> ImageRegionType;
 
 /**
  */
-typedef itk::Index< Monteverdi_DIMENSION > IndexType;
+typedef itk::Index<Monteverdi_DIMENSION> IndexType;
 
 /**
  */
-typedef itk::Size< Monteverdi_DIMENSION > SizeType;
+typedef itk::Size<Monteverdi_DIMENSION> SizeType;
 
 /**
  */
-typedef itk::ImageBase< Monteverdi_DIMENSION > ImageBaseType;
+typedef itk::ImageBase<Monteverdi_DIMENSION> ImageBaseType;
 
 /*******************************************************************************/
 /* Type definitions for scalar/mono-band images.                               */
 
 /**
  */
-typedef
-otb::Image< ComponentType, Monteverdi_DIMENSION >
-ScalarImageType;
+typedef otb::Image<ComponentType, Monteverdi_DIMENSION> ScalarImageType;
 
 /**
  */
-typedef
-otb::ImageFileReader< ScalarImageType > ScalarImageFileReaderType;
+typedef otb::ImageFileReader<ScalarImageType> ScalarImageFileReaderType;
 
 /**
  */
-typedef
-otb::ImageFileWriter< ScalarImageType > ScalarImageFileWriterType;
+typedef otb::ImageFileWriter<ScalarImageType> ScalarImageFileWriterType;
 
 /*******************************************************************************/
 /* Type definitions for vector/multi-band images (generic internal data).      */
 
 /**
  */
-typedef
-otb::VectorImage< ComponentType, Monteverdi_DIMENSION >
-VectorImageType;
+typedef otb::VectorImage<ComponentType, Monteverdi_DIMENSION> VectorImageType;
 
 /**
  */
-typedef otb::ImageFileReader< VectorImageType > VectorImageFileReaderType;
+typedef otb::ImageFileReader<VectorImageType> VectorImageFileReaderType;
 
 /**
  */
-typedef otb::ImageFileWriter< VectorImageType > VectorImageFileWriterType;
+typedef otb::ImageFileWriter<VectorImageType> VectorImageFileWriterType;
 
 /**
  */
@@ -203,18 +197,9 @@ typedef mvd::VectorImageFileReaderType DefaultImageFileReaderType;
  */
 struct PixelInfo
 {
-  typedef std::vector< PixelInfo > Vector;
+  typedef std::vector<PixelInfo> Vector;
 
-  PixelInfo() :
-    m_Key(),
-    m_Point(),
-    m_Index(),
-    m_Pixel(),
-    m_Resolution (1),
-    m_HasPoint( false ),
-    m_HasIndex( false ),
-    m_HasPixel( false ),
-    m_HasResolution( false )
+  PixelInfo() : m_Key(), m_Point(), m_Index(), m_Pixel(), m_Resolution(1), m_HasPoint(false), m_HasIndex(false), m_HasPixel(false), m_HasResolution(false)
   {
   }
 
@@ -223,12 +208,12 @@ struct PixelInfo
   DefaultImageType::PointType m_Point;
   DefaultImageType::IndexType m_Index;
   DefaultImageType::PixelType m_Pixel;
-  unsigned int m_Resolution;
+  unsigned int                m_Resolution;
 
-  bool m_HasPoint: 1;
-  bool m_HasIndex: 1;
-  bool m_HasPixel: 1;
-  bool m_HasResolution: 1;
+  bool m_HasPoint : 1;
+  bool m_HasIndex : 1;
+  bool m_HasPixel : 1;
+  bool m_HasResolution : 1;
 };
 
 /*******************************************************************************/
@@ -236,7 +221,7 @@ struct PixelInfo
 
 /**
  */
-typedef std::map< std::string, StringVector > ApplicationsTagContainer;
+typedef std::map<std::string, StringVector> ApplicationsTagContainer;
 
 /*******************************************************************************/
 /* Type definitions for dataset properties                                     */
@@ -249,47 +234,44 @@ typedef qlonglong SqlId;
 typedef QString DatasetHash;
 /**
  */
-typedef std::pair< std::string, std::string > PropertyType;
+typedef std::pair<std::string, std::string> PropertyType;
 
 /**
  */
-typedef std::vector< PropertyType > PropertiesVector;
+typedef std::vector<PropertyType> PropertiesVector;
 
 /**
  */
-typedef
-std::pair< std::string, std::vector< PropertyType > > PropertiesVectorByCategory;
+typedef std::pair<std::string, std::vector<PropertyType>> PropertiesVectorByCategory;
 
 /**
  */
-typedef std::map< std::string, PropertiesVector > PropertiesContainer;
+typedef std::map<std::string, PropertiesVector> PropertiesContainer;
 
 /*******************************************************************************/
 /* Type definitions for Dataset list                                           */
 
 /**
  */
-typedef QPair< QString, QString > StringPairType;
+typedef QPair<QString, QString> StringPairType;
 
 /**
  */
-typedef QList< StringPairType > StringPairListType;
+typedef QList<StringPairType> StringPairListType;
 
 /*******************************************************************************/
-template< typename T >
-inline
-T
-QObjectCast( QObject * object, const QString & string = QString() )
+template <typename T>
+inline T QObjectCast(QObject* object, const QString& string = QString())
 {
-  T model = qobject_cast< T >( object );
+  T model = qobject_cast<T>(object);
 
-  if( model!=object )
-    {
-    if( !string.isNull() )
+  if (model != object)
+  {
+    if (!string.isNull())
       qWarning() << string;
 
     throw std::bad_cast();
-    }
+  }
 
   return model;
 }

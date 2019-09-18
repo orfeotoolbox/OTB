@@ -63,9 +63,8 @@ protected:
   ~SarDefaultImageMetadataInterfaceFactory() override;
 
 private:
-  SarDefaultImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SarDefaultImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

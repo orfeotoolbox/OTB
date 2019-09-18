@@ -20,7 +20,8 @@
 
 #include "otbImageFileReader.h"
 
-namespace otb {
+namespace otb
+{
 
 // Explicit instanciation of common types
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileReader<Image<unsigned int, 2>>;
@@ -47,5 +48,4 @@ template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileReader<VectorImage<s
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileReader<VectorImage<std::complex<short>, 2>>;
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileReader<VectorImage<std::complex<float>, 2>>;
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileReader<VectorImage<std::complex<double>, 2>>;
-
 }

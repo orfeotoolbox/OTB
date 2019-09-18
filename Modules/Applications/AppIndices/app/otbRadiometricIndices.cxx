@@ -34,11 +34,11 @@ namespace otb
 namespace Wrapper
 {
 
-class RadiometricIndices: public Application
+class RadiometricIndices : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef RadiometricIndices       Self;
+  typedef RadiometricIndices            Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -60,8 +60,8 @@ public:
     indiceSpec(std::string k, std::string i, RadiometricIndexType* ind) : key(k), item(i), indice(ind)
     {
     }
-    std::string key;
-    std::string item;
+    std::string                           key;
+    std::string                           item;
     std::unique_ptr<RadiometricIndexType> indice;
   };
 
@@ -73,13 +73,15 @@ private:
     SetDescription("Compute radiometric indices.");
 
     // Documentation
-    SetDocLongDescription("This application computes radiometric indices using the relevant channels of the input image. The output is a multi band image into which each channel is one of the selected indices.");
+    SetDocLongDescription(
+        "This application computes radiometric indices using the relevant channels of the input image. The output is a multi band image into which each "
+        "channel is one of the selected indices.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("otbVegetationIndicesFunctor, otbWaterIndicesFunctor and otbSoilIndicesFunctor classes");
 
     AddDocTag(Tags::FeatureExtraction);
-	AddDocTag("Radiometric Indices");
+    AddDocTag("Radiometric Indices");
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image");
@@ -90,32 +92,32 @@ private:
     AddParameter(ParameterType_Group, "channels", "Channels selection");
     SetParameterDescription("channels", "Channels selection");
 
-    AddParameter(ParameterType_Int,  "channels.blue",  "Blue Channel");
+    AddParameter(ParameterType_Int, "channels.blue", "Blue Channel");
     SetParameterDescription("channels.blue", "Blue channel index");
     SetDefaultParameterInt("channels.blue", 1);
     SetMinimumParameterIntValue("channels.blue", 1);
 
-    AddParameter(ParameterType_Int,  "channels.green",  "Green Channel");
+    AddParameter(ParameterType_Int, "channels.green", "Green Channel");
     SetParameterDescription("channels.green", "Green channel index");
     SetDefaultParameterInt("channels.green", 1);
     SetMinimumParameterIntValue("channels.green", 1);
 
-    AddParameter(ParameterType_Int,  "channels.red",  "Red Channel");
+    AddParameter(ParameterType_Int, "channels.red", "Red Channel");
     SetParameterDescription("channels.red", "Red channel index");
     SetDefaultParameterInt("channels.red", 1);
     SetMinimumParameterIntValue("channels.red", 1);
 
-    AddParameter(ParameterType_Int,  "channels.nir",  "NIR Channel");
+    AddParameter(ParameterType_Int, "channels.nir", "NIR Channel");
     SetParameterDescription("channels.nir", "NIR channel index");
     SetDefaultParameterInt("channels.nir", 1);
     SetMinimumParameterIntValue("channels.nir", 1);
 
-    AddParameter(ParameterType_Int,  "channels.mir",  "Mir Channel");
+    AddParameter(ParameterType_Int, "channels.mir", "Mir Channel");
     SetParameterDescription("channels.mir", "Mir channel index");
     SetDefaultParameterInt("channels.mir", 1);
     SetMinimumParameterIntValue("channels.mir", 1);
 
-    AddParameter(ParameterType_ListView,  "list", "Available Radiometric Indices");
+    AddParameter(ParameterType_ListView, "list", "Available Radiometric Indices");
     SetParameterDescription("list",
                             "List of available radiometric indices with their relevant channels in brackets:\n\n"
                             "* Vegetation:NDVI - Normalized difference vegetation index (Red, NIR)\n"
@@ -175,10 +177,10 @@ private:
 
     ClearChoices("list");
 
-    for ( unsigned int i=0; i<m_Map.size(); i++ )
-      {
+    for (unsigned int i = 0; i < m_Map.size(); i++)
+    {
       AddChoice(m_Map[i].key, m_Map[i].item);
-      }
+    }
   }
 
   // Compute required bands for selected indices
@@ -196,7 +198,7 @@ private:
 
   void DoUpdateParameters() override
   {
-    //Nothing to do here
+    // Nothing to do here
   }
 
   void DoExecute() override
@@ -247,24 +249,23 @@ private:
 
       // And set bands using the band map
       indices.back()->SetBandsIndices(bandIndicesMap);
-      }
+    }
 
-      // Build a composite indices functor to compute all indices at
-      // once
-      auto compositeFunctor = IndicesStackFunctorType(indices);
+    // Build a composite indices functor to compute all indices at
+    // once
+    auto compositeFunctor = IndicesStackFunctorType(indices);
 
-      // Build and plug functor filter
-      auto filter = NewFunctorFilter(compositeFunctor);
-      filter->SetInputs(GetParameterImage("in"));
-      SetParameterOutputImage("out", filter->GetOutput());
+    // Build and plug functor filter
+    auto filter = NewFunctorFilter(compositeFunctor);
+    filter->SetInputs(GetParameterImage("in"));
+    SetParameterOutputImage("out", filter->GetOutput());
 
-      // Call register pipeline to allow streaming and garbage collection
-      RegisterPipeline();
+    // Call register pipeline to allow streaming and garbage collection
+    RegisterPipeline();
   }
 
   std::vector<indiceSpec> m_Map;
 };
-
 }
 }
 

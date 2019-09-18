@@ -80,69 +80,68 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
   // return PIXEL_TYPE_NAME[ type ];
 
   std::string ret;
-  switch(type)
-    {
-    case ImagePixelType_uint8:
-      {
-      ret = "uint8";
-      break;
-      }
-    case ImagePixelType_int16:
-      {
-      ret = "int16";
-      break;
-      }
-    case ImagePixelType_uint16:
-      {
-      ret = "uint16";
-      break;
-      }
-    case ImagePixelType_int32:
-      {
-      ret = "int32";
-      break;
-      }
-    case ImagePixelType_uint32:
-      {
-      ret = "uint32";
-      break;
-      }
-    case ImagePixelType_float:
-      {
-      ret = "float";
-      break;
-      }
-    case ImagePixelType_double:
-      {
-      ret = "double";
-      break;
-      }
-    case ImagePixelType_cint16:
-      {
-      ret = "cint16";
-      break;
-      }
-    case ImagePixelType_cint32:
-      {
-      ret = "cint32";
-      break;
-      }
-    case ImagePixelType_cfloat:
-      {
-      ret = "cfloat";
-      break;
-      }
-    case ImagePixelType_cdouble:
-      {
-      ret = "cdouble";
-      break;
-      }
-    }
+  switch (type)
+  {
+  case ImagePixelType_uint8:
+  {
+    ret = "uint8";
+    break;
+  }
+  case ImagePixelType_int16:
+  {
+    ret = "int16";
+    break;
+  }
+  case ImagePixelType_uint16:
+  {
+    ret = "uint16";
+    break;
+  }
+  case ImagePixelType_int32:
+  {
+    ret = "int32";
+    break;
+  }
+  case ImagePixelType_uint32:
+  {
+    ret = "uint32";
+    break;
+  }
+  case ImagePixelType_float:
+  {
+    ret = "float";
+    break;
+  }
+  case ImagePixelType_double:
+  {
+    ret = "double";
+    break;
+  }
+  case ImagePixelType_cint16:
+  {
+    ret = "cint16";
+    break;
+  }
+  case ImagePixelType_cint32:
+  {
+    ret = "cint32";
+    break;
+  }
+  case ImagePixelType_cfloat:
+  {
+    ret = "cfloat";
+    break;
+  }
+  case ImagePixelType_cdouble:
+  {
+    ret = "cdouble";
+    break;
+  }
+  }
   return ret;
 }
 
-bool
-OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePixelType &type)
+bool OutputImageParameter::ConvertStringToPixelType(const std::string& value, ImagePixelType& type)
 {
   // TODO: Could be replaced std::find_if() in constant static string
   // array (see ::ConvertPixelTypeToString().
@@ -175,7 +174,7 @@ OutputImageParameter::ConvertStringToPixelType(const std::string &value, ImagePi
 }
 
 
-void OutputImageParameter ::InitializeWriters()
+void OutputImageParameter::InitializeWriters()
 {
   ImageBaseType* image = m_Image.GetPointer();
 
@@ -215,7 +214,7 @@ void OutputImageParameter ::InitializeWriters()
 
 
 template <typename TOutputImage, typename TInputImage>
-void OutputImageParameter ::ClampAndWriteVectorImage(TInputImage* in)
+void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
 {
   assert(in);
   assert(!m_FileName.empty());
@@ -279,36 +278,35 @@ void OutputImageParameter ::ClampAndWriteVectorImage(TInputImage* in)
 #endif // OTB_USE_SPTW
 
     else
-      {
-        itkGenericExceptionMacro("File format " << extension
-                                                << " not supported for parallel writing with MPI. Supported formats are "
-                                                   ".vrt and .tif. Extended filenames are not supported.");
-      }
+    {
+      itkGenericExceptionMacro("File format " << extension << " not supported for parallel writing with MPI. Supported formats are "
+                                                              ".vrt and .tif. Extended filenames are not supported.");
     }
+  }
 
 #endif // OTB_USE_MPI
 
-    //
-    // Use default OTB writer.
+  //
+  // Use default OTB writer.
 
-    auto writer = otb::ImageFileWriter<TOutputImage>::New();
+  auto writer = otb::ImageFileWriter<TOutputImage>::New();
 
-    writer->SetFileName(m_FileName);
-    writer->SetInput(clamp.out);
-    writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
+  writer->SetFileName(m_FileName);
+  writer->SetInput(clamp.out);
+  writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
 
-    // Change internal state only when everything has been setup
-    // without raising exception.
+  // Change internal state only when everything has been setup
+  // without raising exception.
 
-    m_InputCaster  = clamp.icif;
-    m_OutputCaster = clamp.ocif;
+  m_InputCaster  = clamp.icif;
+  m_OutputCaster = clamp.ocif;
 
-    m_Writer = writer;
+  m_Writer = writer;
 }
 
 
 template <typename TInputImage>
-void OutputImageParameter ::SwitchInput(TInputImage* image)
+void OutputImageParameter::SwitchInput(TInputImage* image)
 {
   assert(image);
 
@@ -355,19 +353,18 @@ void OutputImageParameter ::SwitchInput(TInputImage* image)
     ClampAndWriteVectorImage<ComplexFloatVectorImageType>(image);
     break;
 
-    case ImagePixelType_cdouble:
-      ClampAndWriteVectorImage<ComplexDoubleVectorImageType>(image);
-      break;
+  case ImagePixelType_cdouble:
+    ClampAndWriteVectorImage<ComplexDoubleVectorImageType>(image);
+    break;
 
-    default:
-      assert(false && "Unexpected image-type.");
-      break;
-    }
+  default:
+    assert(false && "Unexpected image-type.");
+    break;
+  }
 }
 
 
-void
-OutputImageParameter::Write()
+void OutputImageParameter::Write()
 {
   m_Writer->Update();
 
@@ -379,75 +376,68 @@ OutputImageParameter::Write()
 }
 
 
-itk::ProcessObject*
-OutputImageParameter::GetWriter()
+itk::ProcessObject* OutputImageParameter::GetWriter()
 {
   return m_Writer;
 }
 
-ImageBaseType*
-OutputImageParameter::GetValue( )
+ImageBaseType* OutputImageParameter::GetValue()
 {
   return m_Image;
 }
 
-void
-OutputImageParameter::SetValue(ImageBaseType* image)
+void OutputImageParameter::SetValue(ImageBaseType* image)
 {
   m_Image = image;
   SetActive(true);
 }
 
-bool OutputImageParameter ::HasValue() const
+bool OutputImageParameter::HasValue() const
 {
   return !m_FileName.empty();
 }
 
-std::string
-OutputImageParameter::CheckFileName(bool fixMissingExtension)
+std::string OutputImageParameter::CheckFileName(bool fixMissingExtension)
 {
   std::string ret("");
   // Check that there is an ImageIO capable of writing the file
-  otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper =
-    otb::ExtendedFilenameToWriterOptions::New();
+  otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper = otb::ExtendedFilenameToWriterOptions::New();
   filenameHelper->SetExtendedFileName(this->GetFileName());
   std::string simpleFilename = filenameHelper->GetSimpleFileName();
   // TODO : check if simpleFilename is empty
 
-  otb::ImageIOBase::Pointer imageIO =
-    otb::ImageIOFactory::CreateImageIO(simpleFilename.c_str(),
-                                       otb::ImageIOFactory::WriteMode);
-  if(imageIO.IsNull())
-    {
+  otb::ImageIOBase::Pointer imageIO = otb::ImageIOFactory::CreateImageIO(simpleFilename.c_str(), otb::ImageIOFactory::WriteMode);
+  if (imageIO.IsNull())
+  {
     // check for missing extension
     std::string outExt = itksys::SystemTools::GetFilenameLastExtension(simpleFilename);
     if (outExt.empty())
-      {
+    {
       if (fixMissingExtension)
-        {
+      {
         // try with .tif
         std::string fullFileName(this->GetFileName());
         std::string extendedPart = fullFileName.substr(simpleFilename.size());
-        this->SetFileName(simpleFilename+std::string(".tif")+extendedPart);
+        this->SetFileName(simpleFilename + std::string(".tif") + extendedPart);
         ret += std::string("no extension detected, using TIF as default.");
-        }
-      else
-        {
-        // TODO : call exception here?
-        }
       }
-    else
+      else
       {
-      // TODO : call exception here?
+        // TODO : call exception here?
       }
     }
+    else
+    {
+      // TODO : call exception here?
+    }
+  }
   return ret;
 }
 
 // Specialization for UInt8RGBAImageType
 
 template <>
-void OutputImageParameter ::SwitchInput(UInt8RGBAImageType* img)
+void OutputImageParameter::SwitchInput(UInt8RGBAImageType* img)
 {
   assert(img);
 
@@ -465,7 +455,7 @@ void OutputImageParameter ::SwitchInput(UInt8RGBAImageType* img)
 
 // Specialization for UInt8RGBImageType
 template <>
-void OutputImageParameter ::SwitchInput(UInt8RGBImageType* img)
+void OutputImageParameter::SwitchInput(UInt8RGBImageType* img)
 {
   if (m_PixelType != ImagePixelType_uint8)
     itkExceptionMacro("Unknown PixelType for RGB Image. Only uint8 is supported.");
@@ -479,16 +469,15 @@ void OutputImageParameter ::SwitchInput(UInt8RGBImageType* img)
   m_Writer = writer;
 }
 
-void OutputImageParameter::SetFileName (const char* filename)
+void OutputImageParameter::SetFileName(const char* filename)
 {
   this->SetFileName(std::string(filename));
 }
 
-void OutputImageParameter::SetFileName (const std::string& filename)
+void OutputImageParameter::SetFileName(const std::string& filename)
 {
   m_FileName = filename;
   SetActive(true);
 }
-
 }
 }

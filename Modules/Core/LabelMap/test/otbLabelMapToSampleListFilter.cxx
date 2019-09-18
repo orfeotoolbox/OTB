@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -34,57 +33,55 @@
 
 int otbLabelMapToSampleListFilter(int argc, char* argv[])
 {
-  const char * infname = argv[1];
+  const char* infname = argv[1];
 
- // Labeled image type
-  const unsigned int Dimension = 2;
-  typedef unsigned short                                                 LabelType;
-  typedef otb::Image<LabelType, Dimension>                                LabeledImageType;
-  typedef otb::ImageFileReader<LabeledImageType>                         LabeledReaderType;
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>      LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                 LabelMapType;
+  // Labeled image type
+  const unsigned int     Dimension = 2;
+  typedef unsigned short LabelType;
+  typedef otb::Image<LabelType, Dimension> LabeledImageType;
+  typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType> LabelMapType;
   typedef itk::BinaryImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
-  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>               ShapeLabelMapFilterType;
+  typedef otb::ShapeAttributesLabelMapFilter<LabelMapType> ShapeLabelMapFilterType;
 
 
-
-  typedef itk::VariableLengthVector<double>                      VectorType;
-  typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
-  typedef otb::LabelMapToSampleListFilter<LabelMapType,
-                                          ListSampleType>        LabelMap2ListSampleFilterType;
+  typedef itk::VariableLengthVector<double>       VectorType;
+  typedef itk::Statistics::ListSample<VectorType> ListSampleType;
+  typedef otb::LabelMapToSampleListFilter<LabelMapType, ListSampleType> LabelMap2ListSampleFilterType;
 
   // instantiation
-   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
-   lreader->SetFileName(infname);
+  LabeledReaderType::Pointer lreader = LabeledReaderType::New();
+  lreader->SetFileName(infname);
 
-   LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
-   labelMapFilter->SetInput(lreader->GetOutput());
-   labelMapFilter->SetInputForegroundValue(255);
+  LabelMapFilterType::Pointer labelMapFilter = LabelMapFilterType::New();
+  labelMapFilter->SetInput(lreader->GetOutput());
+  labelMapFilter->SetInputForegroundValue(255);
 
-   ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
-   shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
-   shapeLabelMapFilter->SetReducedAttributeSet(false);
-   shapeLabelMapFilter->SetComputePerimeter(true);
-   shapeLabelMapFilter->SetComputeFeretDiameter(true);
-   shapeLabelMapFilter->Update();
+  ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
+  shapeLabelMapFilter->SetInput(labelMapFilter->GetOutput());
+  shapeLabelMapFilter->SetReducedAttributeSet(false);
+  shapeLabelMapFilter->SetComputePerimeter(true);
+  shapeLabelMapFilter->SetComputeFeretDiameter(true);
+  shapeLabelMapFilter->Update();
 
-   LabelMap2ListSampleFilterType::Pointer filter = LabelMap2ListSampleFilterType::New();
+  LabelMap2ListSampleFilterType::Pointer filter = LabelMap2ListSampleFilterType::New();
 
-   filter->SetInputLabelMap(shapeLabelMapFilter->GetOutput());
+  filter->SetInputLabelMap(shapeLabelMapFilter->GetOutput());
 
-   filter->GetMeasurementFunctor().AddAttribute("test");
-   filter->GetMeasurementFunctor().RemoveAttribute("test");
-   filter->GetMeasurementFunctor().AddAttribute("test");
-   filter->GetMeasurementFunctor().ClearAttributes();
+  filter->GetMeasurementFunctor().AddAttribute("test");
+  filter->GetMeasurementFunctor().RemoveAttribute("test");
+  filter->GetMeasurementFunctor().AddAttribute("test");
+  filter->GetMeasurementFunctor().ClearAttributes();
 
-   for(int i = 2; i<argc; ++i)
-     {
-     filter->GetMeasurementFunctor().AddAttribute(argv[i]);
-     }
+  for (int i = 2; i < argc; ++i)
+  {
+    filter->GetMeasurementFunctor().AddAttribute(argv[i]);
+  }
 
-   std::cout<<"Number of attributes: "<<filter->GetMeasurementFunctor().GetNumberOfAttributes()<<std::endl;
+  std::cout << "Number of attributes: " << filter->GetMeasurementFunctor().GetNumberOfAttributes() << std::endl;
 
-   filter->Update();
+  filter->Update();
 
   return EXIT_SUCCESS;
 }

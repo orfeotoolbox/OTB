@@ -27,17 +27,17 @@
 #include "otbStreamingTraits.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char * argv[])
+int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
-  typedef otb::Image<PixelType, Dimension>               ImageType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::StreamingMinMaxImageFilter<ImageType>     StreamingMinMaxImageFilterType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>            ReaderType;
+  typedef otb::StreamingMinMaxImageFilter<ImageType> StreamingMinMaxImageFilterType;
 
   // Instantiating object
   StreamingMinMaxImageFilterType::Pointer filter = StreamingMinMaxImageFilterType::New();
@@ -45,7 +45,7 @@ int otbStreamingMinMaxImageFilter(int itkNotUsed(argc), char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(10);
   filter->SetInput(reader->GetOutput());
   otb::StandardFilterWatcher watcher(filter->GetStreamer(), "Min Max Computation");
   filter->Update();

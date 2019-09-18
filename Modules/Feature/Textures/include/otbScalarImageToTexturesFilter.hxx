@@ -34,16 +34,15 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::ScalarImageToTexturesFilter()
-: m_Radius()
-, m_Offset()
-, m_NeighborhoodRadius()
-, m_NumberOfBinsPerAxis(8)
-, m_InputImageMinimum(0)
-, m_InputImageMaximum(255)
-, m_SubsampleFactor()
-, m_SubsampleOffset()
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ScalarImageToTexturesFilter()
+  : m_Radius(),
+    m_Offset(),
+    m_NeighborhoodRadius(),
+    m_NumberOfBinsPerAxis(8),
+    m_InputImageMinimum(0),
+    m_InputImageMaximum(255),
+    m_SubsampleFactor(),
+    m_SubsampleOffset()
 {
   // There are 8 outputs corresponding to the 8 textures indices
   this->SetNumberOfRequiredOutputs(8);
@@ -63,127 +62,105 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::~ScalarImageToTexturesFilter()
-{}
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::~ScalarImageToTexturesFilter()
+{
+}
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetEnergyOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType* ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetEnergyOutput()
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(0));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(0));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetEntropyOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType* ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetEntropyOutput()
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(1));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(1));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetCorrelationOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType* ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetCorrelationOutput()
 {
   if (this->GetNumberOfOutputs() < 3)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(2));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(2));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetInverseDifferenceMomentOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType*
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetInverseDifferenceMomentOutput()
 {
   if (this->GetNumberOfOutputs() < 4)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(3));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(3));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetInertiaOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType* ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetInertiaOutput()
 {
   if (this->GetNumberOfOutputs() < 5)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(4));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(4));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetClusterShadeOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType*
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetClusterShadeOutput()
 {
   if (this->GetNumberOfOutputs() < 6)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(5));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(5));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetClusterProminenceOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType*
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetClusterProminenceOutput()
 {
   if (this->GetNumberOfOutputs() < 7)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(6));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(6));
 }
 
 template <class TInputImage, class TOutputImage>
-typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::OutputImageType *
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GetHaralickCorrelationOutput()
+typename ScalarImageToTexturesFilter<TInputImage, TOutputImage>::OutputImageType*
+ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GetHaralickCorrelationOutput()
 {
   if (this->GetNumberOfOutputs() < 8)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>(this->GetOutput(7));
+  }
+  return static_cast<OutputImageType*>(this->GetOutput(7));
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation()
+void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
   // First, call superclass implementation
   Superclass::GenerateOutputInformation();
 
   // Compute output size, origin & spacing
-  InputRegionType inputRegion = this->GetInput()->GetLargestPossibleRegion();
+  InputRegionType  inputRegion = this->GetInput()->GetLargestPossibleRegion();
   OutputRegionType outputRegion;
-  outputRegion.SetIndex(0,0);
-  outputRegion.SetIndex(1,0);
+  outputRegion.SetIndex(0, 0);
+  outputRegion.SetIndex(1, 0);
   outputRegion.SetSize(0, 1 + (inputRegion.GetSize(0) - 1 - m_SubsampleOffset[0]) / m_SubsampleFactor[0]);
   outputRegion.SetSize(1, 1 + (inputRegion.GetSize(1) - 1 - m_SubsampleOffset[1]) / m_SubsampleFactor[1]);
 
@@ -192,33 +169,31 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   outSpacing[1] *= m_SubsampleFactor[1];
 
   typename OutputImageType::PointType outOrigin;
-  this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex()+m_SubsampleOffset,outOrigin);
+  this->GetInput()->TransformIndexToPhysicalPoint(inputRegion.GetIndex() + m_SubsampleOffset, outOrigin);
 
-  for (unsigned int i=0 ; i<this->GetNumberOfOutputs() ; i++)
-    {
+  for (unsigned int i = 0; i < this->GetNumberOfOutputs(); i++)
+  {
     OutputImagePointerType outputPtr = this->GetOutput(i);
     outputPtr->SetLargestPossibleRegion(outputRegion);
     outputPtr->SetOrigin(outOrigin);
     outputPtr->SetSignedSpacing(outSpacing);
-    }
+  }
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion()
+void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // First, call superclass implementation
   Superclass::GenerateInputRequestedRegion();
 
   // Retrieve the input and output pointers
-  InputImagePointerType  inputPtr = const_cast<InputImageType *>(this->GetInput());
+  InputImagePointerType  inputPtr  = const_cast<InputImageType*>(this->GetInput());
   OutputImagePointerType outputPtr = this->GetOutput();
 
   if (!inputPtr || !outputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // Retrieve the output requested region
   // We use only the first output since requested regions for all outputs are enforced to be equal
@@ -226,25 +201,23 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   OutputRegionType outputRequestedRegion = outputPtr->GetRequestedRegion();
 
   typename OutputRegionType::IndexType outputIndex = outputRequestedRegion.GetIndex();
-  typename OutputRegionType::SizeType  outputSize   = outputRequestedRegion.GetSize();
+  typename OutputRegionType::SizeType  outputSize  = outputRequestedRegion.GetSize();
   typename InputRegionType::IndexType  inputIndex;
   typename InputRegionType::SizeType   inputSize;
-  InputRegionType inputLargest = inputPtr->GetLargestPossibleRegion();
+  InputRegionType                      inputLargest = inputPtr->GetLargestPossibleRegion();
 
   // Convert index and size to full grid
   outputIndex[0] = outputIndex[0] * m_SubsampleFactor[0] + m_SubsampleOffset[0] + inputLargest.GetIndex(0);
   outputIndex[1] = outputIndex[1] * m_SubsampleFactor[1] + m_SubsampleOffset[1] + inputLargest.GetIndex(1);
-  outputSize[0] = 1 + (outputSize[0] - 1) * m_SubsampleFactor[0];
-  outputSize[1] = 1 + (outputSize[1] - 1) * m_SubsampleFactor[1];
+  outputSize[0]  = 1 + (outputSize[0] - 1) * m_SubsampleFactor[0];
+  outputSize[1]  = 1 + (outputSize[1] - 1) * m_SubsampleFactor[1];
 
   // First, apply offset
   for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
-    {
+  {
     inputIndex[dim] = std::min(outputIndex[dim], outputIndex[dim] + m_Offset[dim]);
-    inputSize[dim] =
-      std::max(outputIndex[dim] + outputSize[dim], outputIndex[dim] + outputSize[dim] +
-               m_Offset[dim]) - inputIndex[dim];
-    }
+    inputSize[dim]  = std::max(outputIndex[dim] + outputSize[dim], outputIndex[dim] + outputSize[dim] + m_Offset[dim]) - inputIndex[dim];
+  }
 
   // Build the input requested region
   InputRegionType inputRequestedRegion;
@@ -256,52 +229,48 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
 
   // Try to apply the requested region to the input image
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
+  {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
-    }
+  }
   else
-    {
+  {
     // Build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
     e.SetLocation(ITK_LOCATION);
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
+  }
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::BeforeThreadedGenerateData()
+void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   unsigned int minRadius = 0;
-  for ( unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++ )
-    {
+  for (unsigned int i = 0; i < m_Offset.GetOffsetDimension(); i++)
+  {
     unsigned int distance = std::abs(m_Offset[i]);
-    if ( distance > minRadius )
-      {
+    if (distance > minRadius)
+    {
       minRadius = distance;
-      }
     }
+  }
   m_NeighborhoodRadius.Fill(minRadius);
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ScalarImageToTexturesFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ScalarImageToTexturesFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Retrieve the input and output pointers
-  InputImagePointerType  inputPtr             =      const_cast<InputImageType *>(this->GetInput());
-  OutputImagePointerType energyPtr            =      this->GetEnergyOutput();
-  OutputImagePointerType entropyPtr           =      this->GetEntropyOutput();
-  OutputImagePointerType correlationPtr       =      this->GetCorrelationOutput();
-  OutputImagePointerType invDiffMomentPtr     =      this->GetInverseDifferenceMomentOutput();
-  OutputImagePointerType inertiaPtr           =      this->GetInertiaOutput();
-  OutputImagePointerType clusterShadePtr      =      this->GetClusterShadeOutput();
-  OutputImagePointerType clusterProminencePtr =      this->GetClusterProminenceOutput();
-  OutputImagePointerType haralickCorPtr       =      this->GetHaralickCorrelationOutput();
+  InputImagePointerType  inputPtr             = const_cast<InputImageType*>(this->GetInput());
+  OutputImagePointerType energyPtr            = this->GetEnergyOutput();
+  OutputImagePointerType entropyPtr           = this->GetEntropyOutput();
+  OutputImagePointerType correlationPtr       = this->GetCorrelationOutput();
+  OutputImagePointerType invDiffMomentPtr     = this->GetInverseDifferenceMomentOutput();
+  OutputImagePointerType inertiaPtr           = this->GetInertiaOutput();
+  OutputImagePointerType clusterShadePtr      = this->GetClusterShadeOutput();
+  OutputImagePointerType clusterProminencePtr = this->GetClusterProminenceOutput();
+  OutputImagePointerType haralickCorPtr       = this->GetHaralickCorrelationOutput();
 
   // Build output iterators
   itk::ImageRegionIteratorWithIndex<OutputImageType> energyIt(energyPtr, outputRegionForThread);
@@ -331,18 +300,12 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate on outputs to compute textures
-  while (!energyIt.IsAtEnd()
-         && !entropyIt.IsAtEnd()
-         && !correlationIt.IsAtEnd()
-         && !invDiffMomentIt.IsAtEnd()
-         && !inertiaIt.IsAtEnd()
-         && !clusterShadeIt.IsAtEnd()
-         && !clusterProminenceIt.IsAtEnd()
-         && !haralickCorIt.IsAtEnd())
-    {
+  while (!energyIt.IsAtEnd() && !entropyIt.IsAtEnd() && !correlationIt.IsAtEnd() && !invDiffMomentIt.IsAtEnd() && !inertiaIt.IsAtEnd() &&
+         !clusterShadeIt.IsAtEnd() && !clusterProminenceIt.IsAtEnd() && !haralickCorIt.IsAtEnd())
+  {
     // Compute the region on which co-occurence will be estimated
     typename InputRegionType::IndexType inputIndex;
-    typename InputRegionType::SizeType inputSize;
+    typename InputRegionType::SizeType  inputSize;
 
     // Convert index to full grid
     typename OutputImageType::IndexType outIndex;
@@ -350,11 +313,11 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     // First, create an window for neighborhood iterator based on m_Radius
     // For example, if xradius and yradius is 2. window size is 5x5 (2 * radius + 1).
     for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
-      {
-      outIndex[dim] = energyIt.GetIndex()[dim] * m_SubsampleFactor[dim] + m_SubsampleOffset[dim] + inputLargest.GetIndex(dim);
+    {
+      outIndex[dim]   = energyIt.GetIndex()[dim] * m_SubsampleFactor[dim] + m_SubsampleOffset[dim] + inputLargest.GetIndex(dim);
       inputIndex[dim] = outIndex[dim] - m_Radius[dim];
-      inputSize[dim] = 2 * m_Radius[dim] + 1;
-      }
+      inputSize[dim]  = 2 * m_Radius[dim] + 1;
+    }
 
     // Build the input  region
     InputRegionType inputRegion;
@@ -365,44 +328,44 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     CooccurrenceIndexedListPointerType GLCIList = CooccurrenceIndexedListType::New();
     GLCIList->Initialize(m_NumberOfBinsPerAxis, m_InputImageMinimum, m_InputImageMaximum);
 
-    typedef itk::ConstNeighborhoodIterator< InputImageType > NeighborhoodIteratorType;
-    NeighborhoodIteratorType neighborIt;
+    typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
+    NeighborhoodIteratorType                               neighborIt;
     neighborIt = NeighborhoodIteratorType(m_NeighborhoodRadius, inputPtr, inputRegion);
-    for ( neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt )
-      {
+    for (neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt)
+    {
       const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
-      bool pixelInBounds;
-      const InputPixelType pixelIntensity =  neighborIt.GetPixel(m_Offset, pixelInBounds);
-      if ( !pixelInBounds )
-        {
+      bool                 pixelInBounds;
+      const InputPixelType pixelIntensity = neighborIt.GetPixel(m_Offset, pixelInBounds);
+      if (!pixelInBounds)
+      {
         continue; // don't put a pixel in the co-occurrence list if the value is
                   // out of bounds
-        }
-      GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
       }
+      GLCIList->AddPixelPair(centerPixelIntensity, pixelIntensity);
+    }
 
     double pixelMean = 0.;
     double marginalMean;
     double marginalDevSquared = 0.;
-    double pixelVariance = 0.;
+    double pixelVariance      = 0.;
 
-    //Create and Initialize marginalSums
+    // Create and Initialize marginalSums
     std::vector<double> marginalSums(m_NumberOfBinsPerAxis, 0);
 
-    //get co-occurrence vector and totalfrequency
-    VectorType glcVector = GLCIList->GetVector();
-    double totalFrequency = static_cast<double> (GLCIList->GetTotalFrequency());
+    // get co-occurrence vector and totalfrequency
+    VectorType glcVector      = GLCIList->GetVector();
+    double     totalFrequency = static_cast<double>(GLCIList->GetTotalFrequency());
 
-    //Normalize the co-occurrence indexed list and compute mean, marginalSum
+    // Normalize the co-occurrence indexed list and compute mean, marginalSum
     typename VectorType::iterator it = glcVector.begin();
-    while( it != glcVector.end())
-      {
-      double frequency = (*it).second / totalFrequency;
-      CooccurrenceIndexType index = (*it).first;
+    while (it != glcVector.end())
+    {
+      double                frequency = (*it).second / totalFrequency;
+      CooccurrenceIndexType index     = (*it).first;
       pixelMean += index[0] * frequency;
       marginalSums[index[0]] += frequency;
       ++it;
-      }
+    }
 
     /* Now get the mean and deviaton of the marginal sums.
        Compute incremental mean and SD, a la Knuth, "The  Art of Computer
@@ -415,69 +378,68 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
        population SD).
      */
     std::vector<double>::const_iterator msIt = marginalSums.begin();
-    marginalMean = *msIt;
-    //Increment iterator to start with index 1
+    marginalMean                             = *msIt;
+    // Increment iterator to start with index 1
     ++msIt;
-    for(int k= 2; msIt != marginalSums.end(); ++k, ++msIt)
-      {
+    for (int k = 2; msIt != marginalSums.end(); ++k, ++msIt)
+    {
       double M_k_minus_1 = marginalMean;
       double S_k_minus_1 = marginalDevSquared;
-      double x_k = *msIt;
-      double M_k = M_k_minus_1 + ( x_k - M_k_minus_1 ) / k;
-      double S_k = S_k_minus_1 + ( x_k - M_k_minus_1 ) * ( x_k - M_k );
-      marginalMean = M_k;
+      double x_k         = *msIt;
+      double M_k         = M_k_minus_1 + (x_k - M_k_minus_1) / k;
+      double S_k         = S_k_minus_1 + (x_k - M_k_minus_1) * (x_k - M_k);
+      marginalMean       = M_k;
       marginalDevSquared = S_k;
-      }
+    }
     marginalDevSquared = marginalDevSquared / m_NumberOfBinsPerAxis;
 
     VectorConstIteratorType constVectorIt;
     constVectorIt = glcVector.begin();
-    while( constVectorIt != glcVector.end())
+    while (constVectorIt != glcVector.end())
     {
-    RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
-    CooccurrenceIndexType        index = (*constVectorIt).first;
-    pixelVariance += ( index[0] - pixelMean ) * ( index[0] - pixelMean ) * frequency;
-    ++constVectorIt;
+      RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
+      CooccurrenceIndexType index     = (*constVectorIt).first;
+      pixelVariance += (index[0] - pixelMean) * (index[0] - pixelMean) * frequency;
+      ++constVectorIt;
     }
 
     double pixelVarianceSquared = pixelVariance * pixelVariance;
     // Variance is only used in correlation. If variance is 0, then (index[0] - pixelMean) * (index[1] - pixelMean)
     // should be zero as well. In this case, set the variance to 1. in order to
     // avoid NaN correlation.
-    if(pixelVarianceSquared < GetPixelValueTolerance())
-      {
+    if (pixelVarianceSquared < GetPixelValueTolerance())
+    {
       pixelVarianceSquared = 1.;
-      }
+    }
 
-    //Initialize texture variables;
-    PixelValueType energy      = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType entropy     = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType correlation = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType inverseDifferenceMoment      = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType inertia             = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType clusterShade        = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType clusterProminence   = itk::NumericTraits< PixelValueType >::Zero;
-    PixelValueType haralickCorrelation = itk::NumericTraits< PixelValueType >::Zero;
+    // Initialize texture variables;
+    PixelValueType energy                  = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType entropy                 = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType correlation             = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType inverseDifferenceMoment = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType inertia                 = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType clusterShade            = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType clusterProminence       = itk::NumericTraits<PixelValueType>::Zero;
+    PixelValueType haralickCorrelation     = itk::NumericTraits<PixelValueType>::Zero;
 
-    //Compute textures
+    // Compute textures
     constVectorIt = glcVector.begin();
-    while( constVectorIt != glcVector.end())
-      {
-      CooccurrenceIndexType index = (*constVectorIt).first;
+    while (constVectorIt != glcVector.end())
+    {
+      CooccurrenceIndexType index     = (*constVectorIt).first;
       RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
       energy += frequency * frequency;
-      entropy -= ( frequency > GetPixelValueTolerance() ) ? frequency *std::log(frequency) / log2 : 0;
-      correlation += ( ( index[0] - pixelMean ) * ( index[1] - pixelMean ) * frequency ) / pixelVarianceSquared;
-      inverseDifferenceMoment += frequency / ( 1.0 + ( index[0] - index[1] ) * ( index[0] - index[1] ) );
-      inertia += ( index[0] - index[1] ) * ( index[0] - index[1] ) * frequency;
-      clusterShade += std::pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 3 ) * frequency;
-      clusterProminence += std::pow( ( index[0] - pixelMean ) + ( index[1] - pixelMean ), 4 ) * frequency;
+      entropy -= (frequency > GetPixelValueTolerance()) ? frequency * std::log(frequency) / log2 : 0;
+      correlation += ((index[0] - pixelMean) * (index[1] - pixelMean) * frequency) / pixelVarianceSquared;
+      inverseDifferenceMoment += frequency / (1.0 + (index[0] - index[1]) * (index[0] - index[1]));
+      inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
+      clusterShade += std::pow((index[0] - pixelMean) + (index[1] - pixelMean), 3) * frequency;
+      clusterProminence += std::pow((index[0] - pixelMean) + (index[1] - pixelMean), 4) * frequency;
       haralickCorrelation += index[0] * index[1] * frequency;
       ++constVectorIt;
-      }
+    }
 
-    haralickCorrelation = (fabs(marginalDevSquared) > 1E-8) ?
-      ( haralickCorrelation - marginalMean * marginalMean )  / marginalDevSquared : 0;
+    haralickCorrelation = (fabs(marginalDevSquared) > 1E-8) ? (haralickCorrelation - marginalMean * marginalMean) / marginalDevSquared : 0;
 
     // Fill outputs
     energyIt.Set(energy);
@@ -501,7 +463,7 @@ ScalarImageToTexturesFilter<TInputImage, TOutputImage>
     ++clusterShadeIt;
     ++clusterProminenceIt;
     ++haralickCorIt;
-    }
+  }
 }
 
 } // End namespace otb

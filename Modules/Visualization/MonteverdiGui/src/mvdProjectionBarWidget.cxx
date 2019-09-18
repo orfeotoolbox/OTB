@@ -24,11 +24,9 @@
 namespace mvd
 {
 
-ProjectionBarWidget::ProjectionBarWidget( QWidget* p, Qt::WindowFlags flags  ) :
-        QWidget( p, flags )
-        , m_UI( new mvd::Ui::ProjectionBarWidget() )
+ProjectionBarWidget::ProjectionBarWidget(QWidget* p, Qt::WindowFlags flags) : QWidget(p, flags), m_UI(new mvd::Ui::ProjectionBarWidget())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 }
 
 ProjectionBarWidget::~ProjectionBarWidget()
@@ -37,15 +35,15 @@ ProjectionBarWidget::~ProjectionBarWidget()
   m_UI = NULL;
 }
 
-void ProjectionBarWidget::SetProjectionScale(double scale_x, double )
+void ProjectionBarWidget::SetProjectionScale(double scale_x, double)
 {
   QString text = "1:1";
 
-  if( scale_x>1.0 )
-    text = QString( "%1:1" ).arg( scale_x );
+  if (scale_x > 1.0)
+    text = QString("%1:1").arg(scale_x);
 
-  else if( scale_x<1.0 )
-    text = QString( "1:%1" ).arg( 1.0 / scale_x );
+  else if (scale_x < 1.0)
+    text = QString("1:%1").arg(1.0 / scale_x);
 
   m_UI->projectionScaleLineEdit->setText(text);
 }
@@ -57,44 +55,42 @@ void ProjectionBarWidget::on_projectionScaleLineEdit_returnPressed()
 
 void ProjectionBarWidget::on_projectionScaleLineEdit_editingFinished()
 {
-  if(m_UI->projectionScaleLineEdit->isModified())
-    {
+  if (m_UI->projectionScaleLineEdit->isModified())
+  {
     ChangeScale();
-    }
+  }
 }
 
 void ProjectionBarWidget::ChangeScale()
 {
   // Cancel if scale text is empty.
-  if( m_UI->projectionScaleLineEdit->text().isEmpty() )
+  if (m_UI->projectionScaleLineEdit->text().isEmpty())
     return;
 
   // Split scale text.
-  QStringList scale( m_UI->projectionScaleLineEdit->text().split( ':' ) );
+  QStringList scale(m_UI->projectionScaleLineEdit->text().split(':'));
 
-  if( scale.size()!=1 && scale.size()!=2 )
+  if (scale.size() != 1 && scale.size() != 2)
     return;
 
   // Convert scale numerator.
-  bool isOk = true;
-  double numerator = scale.front().toDouble( &isOk );
+  bool   isOk      = true;
+  double numerator = scale.front().toDouble(&isOk);
 
-  if( !isOk || numerator==0.0 )
+  if (!isOk || numerator == 0.0)
     return;
 
   // Convert scale denominator.
   double denominator = 1.0;
 
-  if( scale.size()>1 )
-    {
-    denominator = scale.back().toDouble( &isOk );
-    if( !isOk )
+  if (scale.size() > 1)
+  {
+    denominator = scale.back().toDouble(&isOk);
+    if (!isOk)
       return;
-    }
+  }
 
   // Emit scale changed.
-  emit ProjectionScaleChanged( numerator / denominator );
+  emit ProjectionScaleChanged(numerator / denominator);
 }
-
-
 }

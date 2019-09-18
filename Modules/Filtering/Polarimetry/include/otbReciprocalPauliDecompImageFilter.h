@@ -25,9 +25,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ReciprocalPauliDecompFunctor
  *
@@ -37,35 +38,34 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalPauliDecompFunctor
 {
 public:
-
-  typedef typename TInput::ValueType   InputValueType;
-  typedef typename TOutput::ValueType  OutputValueType;
+  typedef typename TInput::ValueType  InputValueType;
+  typedef typename TOutput::ValueType OutputValueType;
 
   inline void operator()(TOutput& result, const TInput& Sinclair) const
   {
-    InputValueType sqrt2(std::sqrt(2.0),0.0);
+    InputValueType sqrt2(std::sqrt(2.0), 0.0);
 
     InputValueType Shh = static_cast<InputValueType>(Sinclair[0]);
     InputValueType Shv = static_cast<InputValueType>(Sinclair[1]);
     InputValueType Svv = static_cast<InputValueType>(Sinclair[2]);
 
-    result[0] = (Shh+Svv)/sqrt2;
-    result[1] = (Shh-Svv)/sqrt2;
-    result[2] = sqrt2*Shv;
-    }
+    result[0] = (Shh + Svv) / sqrt2;
+    result[1] = (Shh - Svv) / sqrt2;
+    result[2] = sqrt2 * Shv;
+  }
 
-    constexpr size_t OutputSize(...) const
-    {
-      // Size of the result
-      return 3;
-    }
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 3;
+  }
 
-  private:
-    static constexpr double m_Epsilon = 1e-6;
+private:
+  static constexpr double m_Epsilon = 1e-6;
 };
 } // namespace Functor
 

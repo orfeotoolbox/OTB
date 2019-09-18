@@ -63,7 +63,7 @@ public:
   void SetValue(ImageBaseType* image);
 
   /** Return any value */
-  ImageBaseType* GetValue( void );
+  ImageBaseType* GetValue(void);
 
   /** Set/Get PixelType to be used when saving */
   itkSetMacro(PixelType, ImagePixelType);
@@ -88,13 +88,13 @@ public:
 
   /** Converts a string into a pixel type (returns false if the conversion
    *  fails) */
-  static bool ConvertStringToPixelType(const std::string &value, ImagePixelType &type);
+  static bool ConvertStringToPixelType(const std::string& value, ImagePixelType& type);
 
   /** Return true if a filename is set */
   bool HasValue() const override;
 
-  void SetFileName (const char* filename);
-  void SetFileName (const std::string& filename);
+  void SetFileName(const char* filename);
+  void SetFileName(const std::string& filename);
 
   itkGetStringMacro(FileName);
 
@@ -128,8 +128,8 @@ protected:
   ~OutputImageParameter() override;
 
 private:
-  OutputImageParameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
+  OutputImageParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
   /** Switch TInputImage according to expected output type. */
   template <typename TInputImage>

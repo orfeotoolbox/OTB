@@ -23,15 +23,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbVarianceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbVarianceImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
   typedef otb::Image<PixelType, Dimension>               ImageType;
   typedef otb::VarianceImageFilter<ImageType, ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

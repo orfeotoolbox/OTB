@@ -25,29 +25,29 @@
 #include "itkVariableLengthVector.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbReflectanceToImageImageFilterAuto(int itkNotUsed(argc), char * argv[])
+int otbReflectanceToImageImageFilterAuto(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * inputFileName2  = argv[2];
-  const char * outputFileName = argv[3];
-  const char * outputFileName2 = argv[4];
+  const char* inputFileName   = argv[1];
+  const char* inputFileName2  = argv[2];
+  const char* outputFileName  = argv[3];
+  const char* outputFileName2 = argv[4];
 
   const unsigned int Dimension = 2;
-  typedef double                                                              PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                              InputImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                              OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ReflectanceToImageImageFilter<InputImageType, OutputImageType> ReflectanceToImageImageFilterType;
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>                   RoiFilterType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
   reader->UpdateOutputInformation();
 
-  ReaderType::Pointer reader2  = ReaderType::New();
+  ReaderType::Pointer reader2 = ReaderType::New();
   WriterType::Pointer writer2 = WriterType::New();
   reader2->SetFileName(inputFileName2);
   writer2->SetFileName(outputFileName2);

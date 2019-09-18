@@ -23,21 +23,21 @@
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
+int otbVectorDataProjectionFilterFromMapToGeo(int argc, char* argv[])
 {
 
   if (argc < 2)
-    {
-    std::cout << argv[0] << " <input vector filename> <output vector filename> "  << std::endl;
+  {
+    std::cout << argv[0] << " <input vector filename> <output vector filename> " << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
   typedef otb::VectorData<double> InputVectorDataType;
   typedef otb::VectorData<double> OutputVectorDataType;
 
   typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
-  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+  VectorDataFileReaderType::Pointer                      reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
@@ -48,7 +48,7 @@ int otbVectorDataProjectionFilterFromMapToGeo(int argc, char * argv[])
   vectorDataProjection->SetInput(reader->GetOutput());
 
   typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
-  VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
+  VectorDataFileWriterType::Pointer                       writer = VectorDataFileWriterType::New();
 
   writer->SetFileName(argv[2]);
   writer->SetInput(vectorDataProjection->GetOutput());

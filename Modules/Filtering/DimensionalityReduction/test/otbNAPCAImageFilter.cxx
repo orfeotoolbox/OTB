@@ -28,67 +28,65 @@
 
 #include "otbLocalActivityVectorImageFilter.h"
 
-int otbNAPCAImageFilterTest ( int , char* argv[] )
+int otbNAPCAImageFilterTest(int, char* argv[])
 {
 
   const unsigned int nbComponents = atoi(argv[5]);
-  unsigned int radiusX = 1;
-  unsigned int radiusY = 1;
+  unsigned int       radiusX      = 1;
+  unsigned int       radiusY      = 1;
 
-  bool normalization = false ;
-  if ( std::string( argv[4] ).compare("true") == 0 )
+  bool normalization = false;
+  if (std::string(argv[4]).compare("true") == 0)
     normalization = true;
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   // Noise filtering
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > NoiseFilterType;
-  NoiseFilterType::RadiusType radius = {{ radiusX, radiusY }};
+  typedef otb::LocalActivityVectorImageFilter<ImageType, ImageType> NoiseFilterType;
+  NoiseFilterType::RadiusType radius = {{radiusX, radiusY}};
 
   // Image filtering
-  typedef otb::NAPCAImageFilter< ImageType, ImageType,
-    NoiseFilterType, otb::Transform::FORWARD > FilterType;
+  typedef otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::FORWARD> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( reader->GetOutput() );
-  filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
-  filter->SetUseNormalization( normalization );
-  filter->GetNoiseImageFilter()->SetRadius( radius );
+  filter->SetInput(reader->GetOutput());
+  filter->SetNumberOfPrincipalComponentsRequired(nbComponents);
+  filter->SetUseNormalization(normalization);
+  filter->GetNoiseImageFilter()->SetRadius(radius);
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
   // Writing
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+  ImageWriterType::Pointer                writer = ImageWriterType::New();
+  writer->SetFileName(argv[2]);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
-  typedef otb::NAPCAImageFilter< ImageType, ImageType,
-    NoiseFilterType, otb::Transform::INVERSE > InvFilterType;
+  typedef otb::NAPCAImageFilter<ImageType, ImageType, NoiseFilterType, otb::Transform::INVERSE> InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
-  invFilter->SetInput( filter->GetOutput() );
-  invFilter->SetMeanValues( filter->GetMeanValues() );
-  if ( normalization )
-    invFilter->SetStdDevValues( filter->GetStdDevValues() );
-  invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
+  invFilter->SetInput(filter->GetOutput());
+  invFilter->SetMeanValues(filter->GetMeanValues());
+  if (normalization)
+    invFilter->SetStdDevValues(filter->GetStdDevValues());
+  invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
 
-  typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
-  CommandType2::Pointer invObserver = CommandType2::New();
-  invFilter->AddObserver( itk::ProgressEvent(), invObserver );
+  typedef otb::CommandProgressUpdate<InvFilterType> CommandType2;
+  CommandType2::Pointer                             invObserver = CommandType2::New();
+  invFilter->AddObserver(itk::ProgressEvent(), invObserver);
 
   ImageWriterType::Pointer invWriter = ImageWriterType::New();
-  invWriter->SetFileName( argv[3] );
-  invWriter->SetInput( invFilter->GetOutput() );
+  invWriter->SetFileName(argv[3]);
+  invWriter->SetInput(invFilter->GetOutput());
   invWriter->Update();
 
   return EXIT_SUCCESS;

@@ -47,7 +47,6 @@ namespace otb
 class OTBTestKernel_EXPORT TestHelper : public itk::Object
 {
 public:
-
   /** Standard class typedefs. */
   typedef TestHelper                    Self;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -57,40 +56,29 @@ public:
   itkTypeMacro(TestHelper, itk::Object);
   itkNewMacro(Self);
 
-  typedef std::vector<std::string> StringList;
+  typedef std::vector<std::string>   StringList;
   typedef StringList::const_iterator StringListIt;
 
-  typedef std::vector<double> EpsilonList;
+  typedef std::vector<double>         EpsilonList;
   typedef EpsilonList::const_iterator EpsilonListIt;
 
   TestHelper();
 
   ~TestHelper() override;
 
-  int RegressionTestAllImages(const StringList& baselineFilenamesImage,
-                              const StringList& testFilenamesImage,
-                              const EpsilonList& epsilons);
+  int RegressionTestAllImages(const StringList& baselineFilenamesImage, const StringList& testFilenamesImage, const EpsilonList& epsilons);
 
-  int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
-                                const StringList& testFilenamesMetaData,
-                                const EpsilonList& epsilons);
+  int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData, const StringList& testFilenamesMetaData, const EpsilonList& epsilons);
 
-  int RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
-                             const StringList& testFilenamesAscii,
-                             const EpsilonList& epsilons,
+  int RegressionTestAllAscii(const StringList& baselineFilenamesAscii, const StringList& testFilenamesAscii, const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
-  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
-                             const StringList& testFilenamesAscii,
-                             const EpsilonList& epsilons,
-                             const StringList& ignoredLines);
+  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii, const StringList& testFilenamesAscii, const EpsilonList& epsilons,
+                            const StringList& ignoredLines);
 
-  int RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
-                              const StringList& testFilenamesBinary);
+  int RegressionTestAllBinary(const StringList& baselineFilenamesBinary, const StringList& testFilenamesBinary);
 
-  int RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
-                           const StringList& testFilenamesOgr,
-                           const EpsilonList& epsilons);
+  int RegressionTestAllOgr(const StringList& baselineFilenamesOgr, const StringList& testFilenamesOgr, const EpsilonList& epsilons);
 
   itkSetMacro(ReportErrors, bool);
   itkBooleanMacro(ReportErrors);
@@ -101,33 +89,21 @@ public:
   itkSetMacro(ToleranceRatio, double);
 
 private:
+  std::map<std::string, int> RegressionTestBaselines(char* baselineFilename) const;
 
-  std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
+  int RegressionTestImage(int cpt, const char* testImageFilename, const char* baselineImageFilename, const double toleranceDiffPixelImage) const;
 
-  int RegressionTestImage(int cpt, const char *testImageFilename,
-                          const char *baselineImageFilename,
-                          const double toleranceDiffPixelImage) const;
+  int RegressionTestOgrFile(const char* testOgrFilename, const char* baselineOgrFilename, const double toleranceDiffValue) const;
 
-  int RegressionTestOgrFile(const char *testOgrFilename,
-                            const char *baselineOgrFilename,
-                            const double toleranceDiffValue) const;
+  int RegressionTestBinaryFile(const char* testBinaryFileName, const char* baselineBinaryFileName) const;
 
-  int RegressionTestBinaryFile(const char * testBinaryFileName,
-                               const char * baselineBinaryFileName) const;
-
-  int RegressionTestAsciiFile(const char * testAsciiFileName,
-                              const char * baselineAsciiFileName,
-                              const double epsilon,
+  int RegressionTestAsciiFile(const char* testAsciiFileName, const char* baselineAsciiFileName, const double epsilon,
                               std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestDiffFile(const char * testAsciiFileName,
-                              const char * baselineAsciiFileName,
-                              const double epsilon,
-                              std::vector<std::string> ignoredLines) const;
+  int RegressionTestDiffFile(const char* testAsciiFileName, const char* baselineAsciiFileName, const double epsilon,
+                             std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestMetaData(const char *testImageFilename,
-                             const char *baselineImageFilename,
-                             const double toleranceDiffPixelImage) const;
+  int RegressionTestMetaData(const char* testImageFilename, const char* baselineImageFilename, const double toleranceDiffPixelImage) const;
 
   bool isNumber(int i) const;
   bool isHexaNumber(int i) const;
@@ -140,41 +116,33 @@ private:
   bool isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
-  int TokenizeLine(const std::string &line, StringList &tokens) const;
+  int TokenizeLine(const std::string& line, StringList& tokens) const;
 
-  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token);
+  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator>& token);
 
   // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
-  bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
-  //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
-  bool CompareLines(const std::string& strfileref,
-                    const std::string& strfiletest,
-                    int& nbdiff,
-                    std::ofstream& fluxfilediff,
-                    int& numLine,
-                    std::vector<std::string>& listStrDiffLineFileRef,
-                    std::vector<std::string>& listStrDiffLineFileTest,
-                    double epsilon) const;
+  bool IsLineValid(const std::string& str, const StringList& ignoredLines) const;
+  // FIXME parameters have to be cleaned up later (this is the first step of refactoring)
+  bool CompareLines(const std::string& strfileref, const std::string& strfiletest, int& nbdiff, std::ofstream& fluxfilediff, int& numLine,
+                    std::vector<std::string>& listStrDiffLineFileRef, std::vector<std::string>& listStrDiffLineFileTest, double epsilon) const;
 
-  void
-  ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
-                   OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
-                   int& nbdiff, double epsilon) const;
+  void ogrReportOnLayer(OGRLayer* ref_poLayer, const char* ref_pszWHERE, OGRGeometry* ref_poSpatialFilter, OGRLayer* test_poLayer, const char* test_pszWHERE,
+                        OGRGeometry* test_poSpatialFilter, int& nbdiff, double epsilon) const;
 
   static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
-  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = nullptr);
+  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char* pszPrefix, char** papszOptions = nullptr);
 
-  double m_ToleranceRatio;
-  double m_EpsilonBoundaryChecking;
-  bool   m_ReportErrors;
-  bool   m_IgnoreLineOrder;
+  double             m_ToleranceRatio;
+  double             m_EpsilonBoundaryChecking;
+  bool               m_ReportErrors;
+  bool               m_IgnoreLineOrder;
   const unsigned int m_MaxArea;
 
-  void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+  void AddWhiteSpace(const std::string& strIn, std::string& strOut) const;
 
-  void CheckValueTolerance(const char *Comment, double ref, double test, int &count, bool report, double epsilon) const;
+  void CheckValueTolerance(const char* Comment, double ref, double test, int& count, bool report, double epsilon) const;
 
-  std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
+  std::vector<std::pair<std::string, std::string>> m_SpecialTokens;
 };
 }
 

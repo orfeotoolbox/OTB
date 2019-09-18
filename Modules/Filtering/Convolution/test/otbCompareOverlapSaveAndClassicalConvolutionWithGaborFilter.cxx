@@ -31,38 +31,37 @@
 #include "otbGaborFilterGenerator.h"
 #include "itkConstantBoundaryCondition.h"
 
-int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char *argv[])
+int otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter(int argc, char* argv[])
 {
   if (argc != 12)
-    {
-    std::cerr << "Usage: " << argv[0] << " infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi" <<
-    std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << " infname outfname1 outfname2 xradius yradius a b theta u0 v0 phi" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char *       infname =  argv[1];
-  const char *       outfname1 = argv[2];
-  const char *       outfname2 = argv[3];
-  const unsigned int xradius = atoi(argv[4]);
-  const unsigned int yradius = atoi(argv[5]);
-  const double       a = atof(argv[6]);
-  const double       b = atof(argv[7]);
-  const double       theta = atof(argv[8]);
-  const double       u0 = atof(argv[9]);
-  const double       v0 = atof(argv[10]);
-  const double       phi = atof(argv[11]);
+  const char*        infname   = argv[1];
+  const char*        outfname1 = argv[2];
+  const char*        outfname2 = argv[3];
+  const unsigned int xradius   = atoi(argv[4]);
+  const unsigned int yradius   = atoi(argv[5]);
+  const double       a         = atof(argv[6]);
+  const double       b         = atof(argv[7]);
+  const double       theta     = atof(argv[8]);
+  const double       u0        = atof(argv[9]);
+  const double       v0        = atof(argv[10]);
+  const double       phi       = atof(argv[11]);
 
   typedef double                                   PrecisionType;
   typedef otb::GaborFilterGenerator<PrecisionType> GaborGeneratorType;
   typedef GaborGeneratorType::RadiusType           RadiusType;
   typedef GaborGeneratorType::ArrayType            ArrayType;
 
-  typedef otb::Image<PrecisionType, 2>                                 ImageType;
-  typedef otb::ImageFileReader<ImageType>                              ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                     WriterType;
+  typedef otb::Image<PrecisionType, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::OverlapSaveConvolutionImageFilter<ImageType, ImageType> OSConvolutionFilterType;
   // Setting the same boundary conditions than the one used in the overlap save convolution filter
-  typedef itk::ConstantBoundaryCondition<ImageType>                                BoundaryConditionType;
+  typedef itk::ConstantBoundaryCondition<ImageType> BoundaryConditionType;
   typedef otb::ConvolutionImageFilter<ImageType, ImageType, BoundaryConditionType> ConvolutionFilterType;
 
   // Gabor filter generation

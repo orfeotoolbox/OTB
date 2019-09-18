@@ -31,18 +31,18 @@ int otbCBAMIChangeDetectionTest(int argc, char* argv[])
 {
 
   if (argc < 5)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile1 inputImageFile2  radius outputImageFile " << std::endl;
     return -1;
-    }
+  }
 
   // Define the dimension of the images
   const unsigned int Dimension = 2;
 
   // Declare the types of the images
-  typedef double                                   InternalPixelType;
-  typedef unsigned char                            OutputPixelType;
+  typedef double        InternalPixelType;
+  typedef unsigned char OutputPixelType;
   typedef otb::Image<InternalPixelType, Dimension> InputImageType1;
   typedef otb::Image<InternalPixelType, Dimension> InputImageType2;
   typedef otb::Image<InternalPixelType, Dimension> ChangeImageType;
@@ -51,24 +51,20 @@ int otbCBAMIChangeDetectionTest(int argc, char* argv[])
   typedef otb::ImageFileReader<InputImageType1> ReaderType1;
   typedef otb::ImageFileReader<InputImageType2> ReaderType2;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  typedef itk::RescaleIntensityImageFilter<ChangeImageType,
-      OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<ChangeImageType, OutputImageType> RescalerType;
 
   // Declare the type for the filter
-  typedef otb::CBAMIChangeDetector<
-      InputImageType1,
-      InputImageType2,
-      ChangeImageType>       FilterType;
+  typedef otb::CBAMIChangeDetector<InputImageType1, InputImageType2, ChangeImageType> FilterType;
 
-  ReaderType1::Pointer  reader1 = ReaderType1::New();
-  ReaderType2::Pointer  reader2 = ReaderType2::New();
-  WriterType::Pointer   writer = WriterType::New();
-  FilterType::Pointer   filter = FilterType::New();
+  ReaderType1::Pointer  reader1  = ReaderType1::New();
+  ReaderType2::Pointer  reader2  = ReaderType2::New();
+  WriterType::Pointer   writer   = WriterType::New();
+  FilterType::Pointer   filter   = FilterType::New();
   RescalerType::Pointer rescaler = RescalerType::New();
 
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename = argv[4];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[4];
 
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);

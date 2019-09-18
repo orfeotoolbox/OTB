@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperParameterGroup.h"
@@ -28,7 +28,7 @@
 #include "otbWrapperProxyParameter.h"
 
 
-int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbWrapperParameterList(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::Wrapper::ParameterGroup  GroupPrm;
   typedef otb::Wrapper::StringParameter StringPrm;
@@ -57,36 +57,36 @@ int otbWrapperParameterList(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   otherParameters->AddParameter(hiddenParam.GetPointer());
 
-  ProxyPrm::Pointer proxyParam = ProxyPrm::New();
+  ProxyPrm::Pointer         proxyParam = ProxyPrm::New();
   ProxyPrm::ProxyTargetType target;
-  target.first = otherParameters;
+  target.first  = otherParameters;
   target.second = "hidden";
   proxyParam->SetTarget(target);
 
   // try to set a proxy to "hidden" in the first group
   std::string proxyKey("num");
-  if (! parameters->ReplaceParameter(proxyKey, proxyParam.GetPointer()))
-    {
+  if (!parameters->ReplaceParameter(proxyKey, proxyParam.GetPointer()))
+  {
     std::cout << "Failed to replace with proxy parameter" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // check that we get the right value in "num"
   otb::Wrapper::Parameter* resultParam = GroupPrm::ResolveParameter(parameters->GetParameterByKey("num"));
-  IntPrm* castInt = dynamic_cast<IntPrm*>(resultParam);
+  IntPrm*                  castInt     = dynamic_cast<IntPrm*>(resultParam);
   if (castInt)
-    {
+  {
     if (castInt->GetValue() != 2)
-      {
-      std::cout << "Failed to setup proxy on int parameter, got "<< castInt->GetValue()<< ", expected 2."<< std::endl;
-      return EXIT_FAILURE;
-      }
-    }
-  else
     {
-    std::cout << "Can't cast parameter to Int, probably wrong type."<< std::endl;
-    return EXIT_FAILURE;
+      std::cout << "Failed to setup proxy on int parameter, got " << castInt->GetValue() << ", expected 2." << std::endl;
+      return EXIT_FAILURE;
     }
+  }
+  else
+  {
+    std::cout << "Can't cast parameter to Int, probably wrong type." << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

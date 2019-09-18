@@ -36,7 +36,7 @@ enum
   Map_Utm,
   Map_Lambert2,
   Map_Lambert93,
-  //Map_Transmercator,
+  // Map_Transmercator,
   Map_WGS84,
   Map_Epsg
 };
@@ -57,15 +57,14 @@ public:
     * Add a Group containing several choices for map projections
     *
     */
-  static OTBApplicationEngine_EXPORT void AddMapProjectionParameters(Application::Pointer app, const std::string & key);
+  static OTBApplicationEngine_EXPORT void AddMapProjectionParameters(Application::Pointer app, const std::string& key);
 
   /**
     * Helper method : Compute the ProjectionRef knowing the map
     * projection picked up by the user
     *
     */
-  static OTBApplicationEngine_EXPORT const std::string GetProjectionRefFromChoice(const Application::Pointer app,
-                                                      const std::string & key);
+  static OTBApplicationEngine_EXPORT const std::string GetProjectionRefFromChoice(const Application::Pointer app, const std::string& key);
 
 
   /**
@@ -74,15 +73,12 @@ public:
     *       The key must be totally if the InputImageParameter belongs
     *       to a ParameterGroup, ie set io.in
     */
-  static OTBApplicationEngine_EXPORT void InitializeUTMParameters(Application::Pointer app,
-                                      const std::string & imageKey,
-                                      const std::string & mapKey );
+  static OTBApplicationEngine_EXPORT void InitializeUTMParameters(Application::Pointer app, const std::string& imageKey, const std::string& mapKey);
 
 protected:
-  MapProjectionParametersHandler(); // not implemented
+  MapProjectionParametersHandler();          // not implemented
   virtual ~MapProjectionParametersHandler(); // not implemented
 };
-
 }
 }
 

@@ -25,29 +25,29 @@
 #include "otbConcatenateVectorDataFilter.h"
 
 
-typedef otb::VectorData<>                                 VectorDataType;
-typedef otb::VectorDataFileReader<VectorDataType>         ReaderType;
-typedef otb::VectorDataFileWriter<VectorDataType>         WriterType;
-typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
+typedef otb::VectorData<>                                VectorDataType;
+typedef otb::VectorDataFileReader<VectorDataType>        ReaderType;
+typedef otb::VectorDataFileWriter<VectorDataType>        WriterType;
+typedef otb::ConcatenateVectorDataFilter<VectorDataType> ConcatenateFilterType;
 
-int otbConcatenateVectorDataFilter (int argc, char * argv[])
+int otbConcatenateVectorDataFilter(int argc, char* argv[])
 {
   // Instantiate a concatenate filter
   // Concatenate the vector datas
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
-  for (int idx = 1; idx < argc-1 ; ++idx)
-    {
+  for (int idx = 1; idx < argc - 1; ++idx)
+  {
     // Reader object
     ReaderType::Pointer reader = ReaderType::New();
     reader->SetFileName(argv[idx]);
     reader->Update();
 
     concatenate->AddInput(reader->GetOutput());
-    }
+  }
 
   // Write the output
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName(argv[argc-1]);
+  writer->SetFileName(argv[argc - 1]);
   writer->SetInput(concatenate->GetOutput());
   writer->Update();
 

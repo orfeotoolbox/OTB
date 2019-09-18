@@ -44,18 +44,14 @@ namespace otb
  *
  * \ingroup OTBSOM
  */
-template <class TListSample, class TMap,
-    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
-class ITK_EXPORT SOMWithMissingValue
-  : public PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
+template <class TListSample, class TMap, class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+class ITK_EXPORT SOMWithMissingValue : public PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
 public:
   /** Standard typedefs */
   typedef SOMWithMissingValue Self;
-  typedef PeriodicSOM<TListSample, TMap,
-      TSOMLearningBehaviorFunctor,
-      TSOMNeighborhoodBehaviorFunctor> Superclass;
+  typedef PeriodicSOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -79,13 +75,13 @@ public:
 
 protected:
   /** Constructor */
-  SOMWithMissingValue ();
+  SOMWithMissingValue();
   /** Destructor */
   ~SOMWithMissingValue() override;
   /** Output information redefinition */
   void GenerateOutputInformation() override
   {
-    Superclass::GenerateOutputInformation ();
+    Superclass::GenerateOutputInformation();
   }
   /** Output allocation redefinition */
   void AllocateOutputs() override
@@ -108,12 +104,12 @@ protected:
     Superclass::Step(currentIteration);
   }
   /** PrintSelf method */
-void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  SOMWithMissingValue (const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SOMWithMissingValue(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

@@ -36,68 +36,71 @@ namespace otb
  * \ingroup OTBCommon
  */
 
-namespace Function {
+namespace Function
+{
 
-template< class TInputImageImaginaryPart, class TOutput>
+template <class TInputImageImaginaryPart, class TOutput>
 class ImaginaryToComplex
 {
 public:
   typedef typename TOutput::value_type OutputValueType;
 
-  ImaginaryToComplex() {}
-  ~ImaginaryToComplex() {}
-  bool operator!=( const ImaginaryToComplex & ) const
-    {
+  ImaginaryToComplex()
+  {
+  }
+  ~ImaginaryToComplex()
+  {
+  }
+  bool operator!=(const ImaginaryToComplex&) const
+  {
     return false;
-    }
-  bool operator==( const ImaginaryToComplex & other ) const
-    {
+  }
+  bool operator==(const ImaginaryToComplex& other) const
+  {
     return !(*this != other);
-    }
-  inline TOutput operator()( const TInputImageImaginaryPart & imaginary) const
-    {
+  }
+  inline TOutput operator()(const TInputImageImaginaryPart& imaginary) const
+  {
     return TOutput(static_cast<OutputValueType>(0.0), static_cast<OutputValueType>(imaginary));
-    }
+  }
 };
 }
 
 template <class TInputImageImaginaryPart, class TOutputImage>
-class ITK_EXPORT ImaginaryImageToComplexImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImageImaginaryPart, TOutputImage,
-                        Function::ImaginaryToComplex<
-                                  typename TInputImageImaginaryPart::PixelType,
-                                  typename TOutputImage::PixelType>   >
+class ITK_EXPORT ImaginaryImageToComplexImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImageImaginaryPart, TOutputImage,
+                                          Function::ImaginaryToComplex<typename TInputImageImaginaryPart::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImaginaryImageToComplexImageFilter  Self;
-  typedef itk::UnaryFunctorImageFilter<
-      TInputImageImaginaryPart, TOutputImage,
-      Function::ImaginaryToComplex< typename TInputImageImaginaryPart::PixelType,
-                              typename TOutputImage::PixelType> >
-                                         Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ImaginaryImageToComplexImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImageImaginaryPart, TOutputImage,
+                                       Function::ImaginaryToComplex<typename TInputImageImaginaryPart::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ImaginaryImageToComplexImageFilter,
-               UnaryFunctorImageFilter);
+  itkTypeMacro(ImaginaryImageToComplexImageFilter, UnaryFunctorImageFilter);
 
-  typedef typename TInputImageImaginaryPart::PixelType              InputImaginaryPartPixelType;
-  typedef typename TOutputImage::PixelType                          OutputPixelType;
-  typedef typename itk::NumericTraits< OutputPixelType >::ValueType OutputPixelValueType;
+  typedef typename TInputImageImaginaryPart::PixelType            InputImaginaryPartPixelType;
+  typedef typename TOutputImage::PixelType                        OutputPixelType;
+  typedef typename itk::NumericTraits<OutputPixelType>::ValueType OutputPixelValueType;
 
 protected:
-  ImaginaryImageToComplexImageFilter() {}
-  ~ImaginaryImageToComplexImageFilter() override {}
+  ImaginaryImageToComplexImageFilter()
+  {
+  }
+  ~ImaginaryImageToComplexImageFilter() override
+  {
+  }
 
 private:
   ImaginaryImageToComplexImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-
 };
 
 } // end namespace otb

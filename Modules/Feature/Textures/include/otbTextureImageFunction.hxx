@@ -30,8 +30,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TFunctor, class TCoordRep>
-TextureImageFunction<TInputImage, TFunctor, TCoordRep>
-::TextureImageFunction()
+TextureImageFunction<TInputImage, TFunctor, TCoordRep>::TextureImageFunction()
 {
   m_Radius.Fill(0);
   m_Offset.Fill(0);
@@ -41,33 +40,29 @@ TextureImageFunction<TInputImage, TFunctor, TCoordRep>
  *
  */
 template <class TInputImage, class TFunctor, class TCoordRep>
-void
-TextureImageFunction<TInputImage, TFunctor, TCoordRep>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void TextureImageFunction<TInputImage, TFunctor, TCoordRep>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << "Radius: "  << m_Radius << std::endl;
-  os << indent << "Offset: "  << m_Offset << std::endl;
+  os << indent << "Radius: " << m_Radius << std::endl;
+  os << indent << "Offset: " << m_Offset << std::endl;
 }
 
 /**
  *
  */
 template <class TInputImage, class TFunctor, class TCoordRep>
-typename TextureImageFunction<TInputImage, TFunctor, TCoordRep>
-::RealType
-TextureImageFunction<TInputImage, TFunctor, TCoordRep>
-::EvaluateAtIndex(const IndexType& index) const
+typename TextureImageFunction<TInputImage, TFunctor, TCoordRep>::RealType
+TextureImageFunction<TInputImage, TFunctor, TCoordRep>::EvaluateAtIndex(const IndexType& index) const
 {
   if (!this->GetInputImage())
-    {
+  {
     return (itk::NumericTraits<RealType>::max());
-    }
+  }
 
   if (!this->IsInsideBuffer(index))
-    {
+  {
     return (itk::NumericTraits<RealType>::max());
-    }
+  }
 
   SizeType radiusOff;
   radiusOff[0] = (m_Radius[0]) + std::abs(m_Offset[0]);

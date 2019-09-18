@@ -31,16 +31,17 @@ namespace Functor
 {
 /**
  * \class VariadicAdd
- * \brief This functor adds any number of compile time scalar inputs 
+ * \brief This functor adds any number of compile time scalar inputs
  * \ingroup OTBFunctor
  */
-template <typename TOut, typename ...TIns> struct VariadicAdd
+template <typename TOut, typename... TIns>
+struct VariadicAdd
 {
   auto operator()(TIns... ins) const
   {
     std::array<TOut, sizeof...(TIns)> outArray = {{static_cast<TOut>(ins)...}};
 
-    return std::accumulate(outArray.begin(), outArray.end(),TOut{});
+    return std::accumulate(outArray.begin(), outArray.end(), TOut{});
   }
 };
 

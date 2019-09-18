@@ -44,15 +44,12 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
-class ITK_EXPORT ImageListToImageListApplyFilter
-  : public ImageListToImageListFilter<typename TInputImageList::ImageType,
-      typename TOutputImageList::ImageType>
+class ITK_EXPORT ImageListToImageListApplyFilter : public ImageListToImageListFilter<typename TInputImageList::ImageType, typename TOutputImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef ImageListToImageListApplyFilter Self;
-  typedef ImageListToImageListFilter<typename TInputImageList::ImageType,
-      typename TOutputImageList::ImageType> Superclass;
+  typedef ImageListToImageListFilter<typename TInputImageList::ImageType, typename TOutputImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -92,13 +89,15 @@ protected:
   /** Constructor */
   ImageListToImageListApplyFilter();
   /** Destructor */
-  ~ImageListToImageListApplyFilter() override {}
+  ~ImageListToImageListApplyFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToImageListApplyFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageListToImageListApplyFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The processing filter */
   FilterPointerType m_Filter;

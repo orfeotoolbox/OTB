@@ -41,7 +41,6 @@ namespace otb
 class OTBMetadata_EXPORT SarImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
-
   typedef SarImageMetadataInterface     Self;
   typedef ImageMetadataInterfaceBase    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -50,20 +49,20 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SarImageMetadataInterface, ImageMetadataInterfaceBase);
 
-  typedef Superclass::ImageType                      ImageType;
-  typedef ImageType::IndexType                       IndexType;
-  typedef Superclass::MetaDataDictionaryType         MetaDataDictionaryType;
-  typedef Superclass::VectorType                     VectorType;
-  typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
-  typedef Superclass::UIntVectorType                 UIntVectorType;
-  typedef Superclass::StringVectorType               StringVectorType;
-  typedef itk::PointSet<double, 2>                   PointSetType;
-  typedef PointSetType::Pointer                      PointSetPointer;
-  typedef double                                     RealType;
-  typedef PointSetType::PointType                    PointType;
-  typedef SarCalibrationLookupData                   LookupDataType;
-  typedef LookupDataType::Pointer                    LookupDataPointerType;
+  typedef Superclass::ImageType                ImageType;
+  typedef ImageType::IndexType                 IndexType;
+  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
+  typedef Superclass::VectorType               VectorType;
+  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
+  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
+  typedef Superclass::UIntVectorType           UIntVectorType;
+  typedef Superclass::StringVectorType         StringVectorType;
+  typedef itk::PointSet<double, 2> PointSetType;
+  typedef PointSetType::Pointer    PointSetPointer;
+  typedef double                   RealType;
+  typedef PointSetType::PointType  PointType;
+  typedef SarCalibrationLookupData LookupDataType;
+  typedef LookupDataType::Pointer  LookupDataPointerType;
 
   virtual void CreateCalibrationLookupData(const short t);
 
@@ -76,7 +75,7 @@ public:
     m_SarLut = lut;
   }
 
-  virtual RealType   GetRadiometricCalibrationScale() const;
+  virtual RealType GetRadiometricCalibrationScale() const;
 
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
@@ -90,11 +89,10 @@ public:
   virtual IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
   virtual IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
-  virtual double GetPRF() const = 0;
-  virtual double GetRSF() const = 0;
-  virtual double GetRadarFrequency () const = 0;
+  virtual double GetPRF() const                  = 0;
+  virtual double GetRSF() const                  = 0;
+  virtual double GetRadarFrequency() const       = 0;
   virtual double GetCenterIncidenceAngle() const = 0;
-
 
 
   virtual double GetRescalingFactor() const;
@@ -112,7 +110,9 @@ public:
 
 protected:
   SarImageMetadataInterface();
-  ~SarImageMetadataInterface() override {}
+  ~SarImageMetadataInterface() override
+  {
+  }
 
   PointSetPointer GetConstantValuePointSet(const RealType& value) const;
   IndexType GetConstantPolynomialDegree() const;
@@ -123,9 +123,8 @@ protected:
 
 
 private:
-  SarImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SarImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

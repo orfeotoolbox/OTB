@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT PleiadesImageMetadataInterfaceFactory : public itk::Obj
 public:
   /** Standard class typedefs. */
   typedef PleiadesImageMetadataInterfaceFactory Self;
-  typedef itk::ObjectFactoryBase            Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::ObjectFactoryBase                Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -62,9 +62,8 @@ protected:
   ~PleiadesImageMetadataInterfaceFactory() override;
 
 private:
-  PleiadesImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  PleiadesImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -26,19 +26,16 @@
 namespace otb
 {
 /***********************      FilterFunctionValues **************************/
-FilterFunctionValues
-::FilterFunctionValues()
+FilterFunctionValues::FilterFunctionValues()
 {
   m_MinSpectralValue = 0.3;
   m_MaxSpectralValue = 1;
   // Fill with 1. Size 3 for 6S interpolation
   m_FilterFunctionValues = ValuesVectorType(280, 1.);
-  m_UserStep = 0.0025;
+  m_UserStep             = 0.0025;
 }
 
-FilterFunctionValues::WavelengthSpectralBandType
-FilterFunctionValues
-::GetCenterSpectralValue() const
+FilterFunctionValues::WavelengthSpectralBandType FilterFunctionValues::GetCenterSpectralValue() const
 {
   // The computation is done by taking the weighted average of the
   // filter. The computation is done each time the value is requested.
@@ -46,23 +43,22 @@ FilterFunctionValues
   // the cost will be negligible compared to the rest of the processing
   WavelengthSpectralBandType total = 0;
   for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)
-    {
+  {
     total += m_FilterFunctionValues6S[i];
-    }
-  unsigned int centerIndex = 0;
-  WavelengthSpectralBandType total2 = 0;
+  }
+  unsigned int               centerIndex = 0;
+  WavelengthSpectralBandType total2      = 0;
   for (centerIndex = 0; centerIndex < m_FilterFunctionValues6S.size(); ++centerIndex)
-    {
+  {
     total2 += m_FilterFunctionValues6S[centerIndex];
-    if (total2 > total / 2) break;
-    }
+    if (total2 > total / 2)
+      break;
+  }
   return m_MinSpectralValue + 0.0025 * centerIndex;
 }
 
 /**PrintSelf method */
-void
-FilterFunctionValues
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void FilterFunctionValues::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "Minimum spectral value       : " << m_MinSpectralValue << std::endl;
   os << indent << "Maximum spectral value       : " << m_MaxSpectralValue << std::endl;
@@ -71,16 +67,16 @@ FilterFunctionValues
 
   os << std::scientific;
   for (unsigned int i = 0; i < m_FilterFunctionValues.size(); ++i)
+  {
+    if (i % 6 == 0 && i >= 6)
     {
-       if ( i%6 == 0 && i >= 6)
-       {
-          os << std::endl;
-       }
-       os << indent << m_FilterFunctionValues[i];
+      os << std::endl;
     }
+    os << indent << m_FilterFunctionValues[i];
+  }
   os << std::endl;
-  //Default notation for floating point value can be selected by
-  //calling str.unsetf(ios_base::floatfield)
+  // Default notation for floating point value can be selected by
+  // calling str.unsetf(ios_base::floatfield)
   os.unsetf(std::ios_base::floatfield);
   // os << indent << "6S Filter function values: " << std::endl;
   // for (unsigned int i = 0; i < m_FilterFunctionValues6S.size(); ++i)

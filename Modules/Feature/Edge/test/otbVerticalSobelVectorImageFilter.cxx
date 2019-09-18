@@ -27,38 +27,37 @@
 
 #include "otbVerticalSobelVectorImageFilter.h"
 
-int otbVerticalSobelVectorImageFilterTest ( int argc, char* argv[] )
+int otbVerticalSobelVectorImageFilterTest(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: otbVerticalSobelVectorImageFilterTest input output\n";
     return EXIT_FAILURE;
-    }
+  }
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   // Image filtering
-  typedef otb::VerticalSobelVectorImageFilter< ImageType, ImageType >
-    FilterType;
+  typedef otb::VerticalSobelVectorImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+  ImageWriterType::Pointer                writer = ImageWriterType::New();
+  writer->SetFileName(argv[2]);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

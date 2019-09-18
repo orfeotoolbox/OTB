@@ -61,9 +61,9 @@ public:
     if (std::abs(nir + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return 0.;
-      }
+    }
 
-      return (nir - red) / (nir + red);
+    return (nir - red) / (nir + red);
   }
 };
 
@@ -93,8 +93,8 @@ public:
     if (std::abs(red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>(nir / red));
+    }
+    return (static_cast<TOutput>(nir / red));
   }
 };
 
@@ -160,8 +160,8 @@ public:
     if (std::abs(nir + red + L) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>(((nir - red) * (1 + L)) / (nir + red + L)));
+    }
+    return (static_cast<TOutput>(((nir - red) * (1 + L)) / (nir + red + L)));
   }
 
   /** L correction */
@@ -196,8 +196,8 @@ public:
     if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>((A * (nir - A * red - S)) / denominator));
+    }
+    return (static_cast<TOutput>((A * (nir - A * red - S)) / denominator));
   }
 
   /** A and S parameters */
@@ -277,9 +277,9 @@ public:
     if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
+    }
 
-      return (static_cast<TOutput>(((nir - red) * (1 + L)) / denominator));
+    return (static_cast<TOutput>(((nir - red) * (1 + L)) / denominator));
   }
 
 private:
@@ -312,12 +312,11 @@ public:
 
     double sqrt_value = (2 * nir + 1) * (2 * nir + 1) - 8 * (nir - red);
     if (sqrt_value < 0.)
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>((2 * nir + 1 - std::sqrt(sqrt_value)) / 2.));
+    }
+    return (static_cast<TOutput>((2 * nir + 1 - std::sqrt(sqrt_value)) / 2.));
   }
-
 };
 
 /** \class GEMI
@@ -350,21 +349,20 @@ public:
     if (std::abs(denom_nu) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       nu = 0;
-      }
+    }
     else
-      {
-        num_nu = 2 * (nir * nir - red * red) + 1.5 * nir + 0.5 * red;
-        nu     = num_nu / denom_nu;
-      }
+    {
+      num_nu = 2 * (nir * nir - red * red) + 1.5 * nir + 0.5 * red;
+      nu     = num_nu / denom_nu;
+    }
 
-      double denom_GEMI = 1 - red;
-      if (std::abs(denom_GEMI) < RadiometricIndex<TInput, TOutput>::Epsilon)
-      {
+    double denom_GEMI = 1 - red;
+    if (std::abs(denom_GEMI) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>((nu * (1 - 0.25 * nu) - (red - 0.125)) / denom_GEMI));
+    }
+    return (static_cast<TOutput>((nu * (1 - 0.25 * nu) - (red - 0.125)) / denom_GEMI));
   }
-
 };
 
 /** \class AVI
@@ -395,28 +393,27 @@ public:
 
     constexpr double dfact1 = (LambdaNir - LambdaR) / LambdaR;
     constexpr double dfact2 = (LambdaR - LambdaG) / LambdaR;
-    double dterm1;
-    double dterm2;
+    double           dterm1;
+    double           dterm2;
     if (std::abs(nir - red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       dterm1 = 0;
-      }
+    }
     else
-      {
-        dterm1 = std::atan(dfact1 / (nir - red));
-      }
+    {
+      dterm1 = std::atan(dfact1 / (nir - red));
+    }
 
-      if (std::abs(green - red) < RadiometricIndex<TInput, TOutput>::Epsilon)
-      {
+    if (std::abs(green - red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       dterm2 = 0;
-      }
+    }
     else
-      {
-        dterm2 = std::atan(dfact2 / (green - red));
-      }
+    {
+      dterm2 = std::atan(dfact2 / (green - red));
+    }
 
     return static_cast<TOutput>(dterm1 + dterm2);
-
   }
 
   /**  Central wavelength of the green channel (=Lambda1) */
@@ -460,8 +457,8 @@ public:
     if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
-      return (static_cast<TOutput>((nir - RHOrb) / denominator));
+    }
+    return (static_cast<TOutput>((nir - RHOrb) / denominator));
   }
 
   /** Gamma parameter */
@@ -498,8 +495,8 @@ public:
     if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return (static_cast<TOutput>(0.));
-      }
-      return (static_cast<TOutput>(G * (nir - red) / denominator));
+    }
+    return (static_cast<TOutput>(G * (nir - red) / denominator));
   }
 
   /** Gain factor */
@@ -541,11 +538,11 @@ public:
     if (std::abs(nir + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
+    }
     else
-      {
-        return (static_cast<TOutput>(nir / (nir + red)));
-      }
+    {
+      return (static_cast<TOutput>(nir / (nir + red)));
+    }
   }
 };
 
@@ -576,12 +573,12 @@ public:
 
     if (val < 0)
     {
-      return  (static_cast<TOutput>(0));
-      }
+      return (static_cast<TOutput>(0));
+    }
     else
-      {
-        return (static_cast<TOutput>(std::sqrt(val)));
-      }
+    {
+      return (static_cast<TOutput>(std::sqrt(val)));
+    }
   }
 };
 
@@ -649,12 +646,12 @@ public:
 
     if (val < 0)
     {
-      return  (static_cast<TOutput>(0));
-      }
+      return (static_cast<TOutput>(0));
+    }
     else
-      {
-        return static_cast<TOutput>(-(1.0 / m_ExtinctionCoefficient) * std::log((val - m_NdviInf) / (m_NdviSoil - m_NdviInf)));
-      }
+    {
+      return static_cast<TOutput>(-(1.0 / m_ExtinctionCoefficient) * std::log((val - m_NdviInf) / (m_NdviSoil - m_NdviInf)));
+    }
   }
 
   double m_NdviSoil;

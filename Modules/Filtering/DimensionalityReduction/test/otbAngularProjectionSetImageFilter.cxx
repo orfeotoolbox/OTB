@@ -28,11 +28,11 @@
 
 #include "otbAngularProjectionSetImageFilter.h"
 
-int otbAngularProjectionSetImageFilterTest ( int, char * argv[] )
+int otbAngularProjectionSetImageFilterTest(int, char* argv[])
 {
-  const unsigned int Dimension = 2;
+  const unsigned int Dimension      = 2;
   const unsigned int SpaceDimension = 3;
-  const unsigned int nbInputImages = SpaceDimension+1;
+  const unsigned int nbInputImages  = SpaceDimension + 1;
 
   // Use the same input several time in this test
   std::string inputImageName = argv[1];
@@ -43,56 +43,54 @@ int otbAngularProjectionSetImageFilterTest ( int, char * argv[] )
   // Main type definition
   typedef float  PixelType;
   typedef double PrecisionType;
-  typedef itk::FixedArray< PrecisionType, SpaceDimension > AngleType;
-  typedef itk::Statistics::ListSample< AngleType >         AngleListType;
-  typedef otb::Image< PixelType, Dimension >               ImageType;
+  typedef itk::FixedArray<PrecisionType, SpaceDimension> AngleType;
+  typedef itk::Statistics::ListSample<AngleType> AngleListType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ObjectList< ReaderType > ReaderListType;
-  ReaderListType::Pointer reader = ReaderListType::New();
-  reader->Resize( nbInputImages );
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
+  typedef otb::ObjectList<ReaderType>     ReaderListType;
+  ReaderListType::Pointer                 reader = ReaderListType::New();
+  reader->Resize(nbInputImages);
+  for (unsigned int i = 0; i < nbInputImages; i++)
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName );
+    reader->GetNthElement(i)->SetFileName(inputImageName);
     reader->GetNthElement(i)->Update();
   }
 
   // Parameter (to be changed if necessary)
   // Here, we will have one output only
   AngleListType::Pointer angleList = AngleListType::New();
-  AngleType angle;
-  for ( unsigned int i = 0; i < SpaceDimension; i++ )
+  AngleType              angle;
+  for (unsigned int i = 0; i < SpaceDimension; i++)
   {
-    angle[i] = otb::CONST_PI / static_cast<double>( SpaceDimension );
+    angle[i] = otb::CONST_PI / static_cast<double>(SpaceDimension);
   }
-  angleList->PushBack( angle );
+  angleList->PushBack(angle);
 
   // Filter
-  typedef otb::AngularProjectionSetImageFilter<
-    ImageType, ImageType, AngleListType, PrecisionType > FilterType;
+  typedef otb::AngularProjectionSetImageFilter<ImageType, ImageType, AngleListType, PrecisionType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
+  for (unsigned int i = 0; i < nbInputImages; i++)
   {
-    filter->SetInput( i, reader->GetNthElement(i)->GetOutput() );
+    filter->SetInput(i, reader->GetNthElement(i)->GetOutput());
   }
-  filter->SetAngleList( angleList );
+  filter->SetAngleList(angleList);
   filter->Update();
   // Saving
-  typedef otb::ImageFileWriter< ImageType > WriterType;
-  typedef otb::ObjectList< WriterType > WriterListType;
-  WriterListType::Pointer writers = WriterListType::New();
-  writers->Resize( filter->GetOutput()->Size() );
-  for ( unsigned int i = 0; i < filter->GetOutput()->Size(); i++ )
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+  typedef otb::ObjectList<WriterType>     WriterListType;
+  WriterListType::Pointer                 writers = WriterListType::New();
+  writers->Resize(filter->GetOutput()->Size());
+  for (unsigned int i = 0; i < filter->GetOutput()->Size(); i++)
   {
     writers->SetNthElement(i, WriterType::New());
     WriterType::Pointer writer = writers->GetNthElement(i);
-    writer->SetFileName( outputImageName);
-    writer->SetInput( filter->GetOutput()->GetNthElement(i) );
+    writer->SetFileName(outputImageName);
+    writer->SetInput(filter->GetOutput()->GetNthElement(i));
     writer->Update();
   }
 
   return EXIT_SUCCESS;
 }
-

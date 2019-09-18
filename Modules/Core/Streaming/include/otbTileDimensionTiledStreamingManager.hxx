@@ -29,8 +29,7 @@ namespace otb
 {
 
 template <class TImage>
-TileDimensionTiledStreamingManager<TImage>::TileDimensionTiledStreamingManager()
-  : m_TileDimension(0)
+TileDimensionTiledStreamingManager<TImage>::TileDimensionTiledStreamingManager() : m_TileDimension(0)
 {
 }
 
@@ -40,24 +39,20 @@ TileDimensionTiledStreamingManager<TImage>::~TileDimensionTiledStreamingManager(
 }
 
 template <class TImage>
-void
-TileDimensionTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
+void TileDimensionTiledStreamingManager<TImage>::PrepareStreaming(itk::DataObject* /*input*/, const RegionType& region)
 {
   if (m_TileDimension < 16)
-    {
-    itkWarningMacro(<< "TileDimension inferior to 16 : using 16 as tile dimension")
-    m_TileDimension = 16;
-    }
+  {
+    itkWarningMacro(<< "TileDimension inferior to 16 : using 16 as tile dimension") m_TileDimension = 16;
+  }
 
   // Calculate number of split
-  this->m_Splitter = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
-  unsigned int nbDesiredTiles =
-    itk::Math::Ceil<unsigned int>( double(region.GetNumberOfPixels() ) / (m_TileDimension * m_TileDimension) );
+  this->m_Splitter               = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  unsigned int nbDesiredTiles    = itk::Math::Ceil<unsigned int>(double(region.GetNumberOfPixels()) / (m_TileDimension * m_TileDimension));
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDesiredTiles);
-  this->m_Region = region;
+  this->m_Region                 = region;
 }
 
 } // End namespace otb
 
 #endif
-

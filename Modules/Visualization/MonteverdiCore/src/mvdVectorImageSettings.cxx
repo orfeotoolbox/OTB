@@ -67,229 +67,173 @@ namespace
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-VectorImageSettings
-::VectorImageSettings() :
-  m_RgbChannels(),
-  m_RgbDynamicsParams( 6 ),
-  m_IsGrayscaleActivated( false ),
-  m_GrayChannel( 0 ),
-  m_GrayDynamicsParams( 6 ),
-  m_Gamma( 1.0 )
+VectorImageSettings::VectorImageSettings()
+  : m_RgbChannels(), m_RgbDynamicsParams(6), m_IsGrayscaleActivated(false), m_GrayChannel(0), m_GrayDynamicsParams(6), m_Gamma(1.0)
 {
-  m_RgbDynamicsParams.Fill( 0 );
-  m_GrayDynamicsParams.Fill( 0 );
+  m_RgbDynamicsParams.Fill(0);
+  m_GrayDynamicsParams.Fill(0);
 }
 
 /***************************************************************************/
-VectorImageSettings
-::VectorImageSettings( const VectorImageSettings & other ) :
-  ImageSettings(other),
-  m_RgbChannels( other.m_RgbChannels ),
-  m_RgbDynamicsParams( other.m_RgbDynamicsParams ),
-  m_IsGrayscaleActivated( other.m_IsGrayscaleActivated ),
-  m_GrayChannel( other.m_GrayChannel ),
-  m_GrayDynamicsParams( 6 ),
-  m_Gamma( other.m_Gamma )
+VectorImageSettings::VectorImageSettings(const VectorImageSettings& other)
+  : ImageSettings(other),
+    m_RgbChannels(other.m_RgbChannels),
+    m_RgbDynamicsParams(other.m_RgbDynamicsParams),
+    m_IsGrayscaleActivated(other.m_IsGrayscaleActivated),
+    m_GrayChannel(other.m_GrayChannel),
+    m_GrayDynamicsParams(6),
+    m_Gamma(other.m_Gamma)
 {
 }
 
 /*****************************************************************************/
-VectorImageSettings
-::~VectorImageSettings()
+VectorImageSettings::~VectorImageSettings()
 {
 }
 
 /*****************************************************************************/
-VectorImageSettings::ChannelVector::value_type
-VectorImageSettings
-::GetRgbwChannel( RgbwChannel channel ) const
+VectorImageSettings::ChannelVector::value_type VectorImageSettings::GetRgbwChannel(RgbwChannel channel) const
 {
-  switch( channel )
-    {
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      return m_RgbChannels[ channel ];
-      break;
+  switch (channel)
+  {
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    return m_RgbChannels[channel];
+    break;
 
-    case RGBW_CHANNEL_WHITE:
-      return m_GrayChannel;
-      break;
+  case RGBW_CHANNEL_WHITE:
+    return m_GrayChannel;
+    break;
 
-    default:
-      throw std::invalid_argument(
-        ToStdString(
-          QCoreApplication::translate(
-            "mvd::VectorImageSettings",
-            "Invalid argument: %1 ('%2')"
-          )
-          .arg( channel )
-          .arg( RGBW_CHANNEL_NAMES[ channel ] )
-        )
-      );
-      break;
-    }
+  default:
+    throw std::invalid_argument(
+        ToStdString(QCoreApplication::translate("mvd::VectorImageSettings", "Invalid argument: %1 ('%2')").arg(channel).arg(RGBW_CHANNEL_NAMES[channel])));
+    break;
+  }
 }
 
 /*****************************************************************************/
-void
-VectorImageSettings
-::SetLowIntensity( RgbwChannel channel, ParametersType::ValueType intensity )
+void VectorImageSettings::SetLowIntensity(RgbwChannel channel, ParametersType::ValueType intensity)
 {
-  switch( channel )
-    {
-    case RGBW_CHANNEL_RGB:
-      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_RED, intensity );
-      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_GREEN, intensity );
-      SetRgbDynamicsParam( 2 * RGBW_CHANNEL_BLUE, intensity );
-      break;
+  switch (channel)
+  {
+  case RGBW_CHANNEL_RGB:
+    SetRgbDynamicsParam(2 * RGBW_CHANNEL_RED, intensity);
+    SetRgbDynamicsParam(2 * RGBW_CHANNEL_GREEN, intensity);
+    SetRgbDynamicsParam(2 * RGBW_CHANNEL_BLUE, intensity);
+    break;
 
-    case RGBW_CHANNEL_WHITE:
-      SetGrayDynamicsParam( 0, intensity );
-      break;
+  case RGBW_CHANNEL_WHITE:
+    SetGrayDynamicsParam(0, intensity);
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      SetRgbDynamicsParam( 2 * channel, intensity );
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    SetRgbDynamicsParam(2 * channel, intensity);
+    break;
 
-    default:
-      throw std::invalid_argument(
-	ToStdString(
-	  QCoreApplication::translate(
-            "mvd::VectorImageSettings",
-            "Invalid argument: %1 ('%2')"
-          )
-	  .arg( channel )
-	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
-	)
-      );
-      break;
-    }
+  default:
+    throw std::invalid_argument(
+        ToStdString(QCoreApplication::translate("mvd::VectorImageSettings", "Invalid argument: %1 ('%2')").arg(channel).arg(RGBW_CHANNEL_NAMES[channel])));
+    break;
+  }
 }
 
 /*****************************************************************************/
-ParametersType::ValueType
-VectorImageSettings
-::GetLowIntensity( RgbwChannel channel ) const
+ParametersType::ValueType VectorImageSettings::GetLowIntensity(RgbwChannel channel) const
 {
-  switch( channel )
-    {
-    case RGBW_CHANNEL_RGB:
-      {
-      ParametersType::ValueType r =
-	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_RED );
+  switch (channel)
+  {
+  case RGBW_CHANNEL_RGB:
+  {
+    ParametersType::ValueType r = GetRgbDynamicsParam(2 * RGBW_CHANNEL_RED);
 
-      ParametersType::ValueType g =
-	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_GREEN );
+    ParametersType::ValueType g = GetRgbDynamicsParam(2 * RGBW_CHANNEL_GREEN);
 
-      ParametersType::ValueType b =
-	GetRgbDynamicsParam( 2 * RGBW_CHANNEL_BLUE );
+    ParametersType::ValueType b = GetRgbDynamicsParam(2 * RGBW_CHANNEL_BLUE);
 
-      return (r + g + b) / 3;
-      }
-      break;
+    return (r + g + b) / 3;
+  }
+  break;
 
-    case RGBW_CHANNEL_WHITE:
-      return GetGrayDynamicsParam( false );
-      break;
+  case RGBW_CHANNEL_WHITE:
+    return GetGrayDynamicsParam(false);
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      return GetRgbDynamicsParam( 2 * channel );
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    return GetRgbDynamicsParam(2 * channel);
+    break;
 
-    default:
-      throw std::invalid_argument(
-	ToStdString(
-	  QCoreApplication::translate(
-            "mvd::VectorImageSettings",
-            "Invalid argument: %1 ('%2')"
-          )
-	  .arg( channel )
-	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
-	)
-      );
-      break;
-    }
+  default:
+    throw std::invalid_argument(
+        ToStdString(QCoreApplication::translate("mvd::VectorImageSettings", "Invalid argument: %1 ('%2')").arg(channel).arg(RGBW_CHANNEL_NAMES[channel])));
+    break;
+  }
 }
 
 /*****************************************************************************/
-void
-VectorImageSettings
-::SetHighIntensity( RgbwChannel channel, ParametersType::ValueType intensity )
+void VectorImageSettings::SetHighIntensity(RgbwChannel channel, ParametersType::ValueType intensity)
 {
-  switch( channel )
-    {
-    case RGBW_CHANNEL_RGB:
-      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_RED, intensity );
-      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_GREEN, intensity );
-      SetRgbDynamicsParam( 1 + 2 * RGBW_CHANNEL_BLUE, intensity );
-      break;
+  switch (channel)
+  {
+  case RGBW_CHANNEL_RGB:
+    SetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_RED, intensity);
+    SetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_GREEN, intensity);
+    SetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_BLUE, intensity);
+    break;
 
-    case RGBW_CHANNEL_WHITE:
-      SetGrayDynamicsParam( 1, intensity );
-      break;
+  case RGBW_CHANNEL_WHITE:
+    SetGrayDynamicsParam(1, intensity);
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      SetRgbDynamicsParam( 1 + 2 * channel, intensity );
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    SetRgbDynamicsParam(1 + 2 * channel, intensity);
+    break;
 
-    default:
-      assert( false );
-      break;
-    }
+  default:
+    assert(false);
+    break;
+  }
 }
 
 /*****************************************************************************/
-ParametersType::ValueType
-VectorImageSettings
-::GetHighIntensity( RgbwChannel channel ) const
+ParametersType::ValueType VectorImageSettings::GetHighIntensity(RgbwChannel channel) const
 {
-  switch( channel )
-    {
-    case RGBW_CHANNEL_RGB:
-      {
-      ParametersType::ValueType r =
-	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_RED );
+  switch (channel)
+  {
+  case RGBW_CHANNEL_RGB:
+  {
+    ParametersType::ValueType r = GetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_RED);
 
-      ParametersType::ValueType g =
-	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_GREEN );
+    ParametersType::ValueType g = GetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_GREEN);
 
-      ParametersType::ValueType b =
-	GetRgbDynamicsParam( 1+ 2*RGBW_CHANNEL_BLUE );
+    ParametersType::ValueType b = GetRgbDynamicsParam(1 + 2 * RGBW_CHANNEL_BLUE);
 
-      return (r + g + b) / 3;
-      }
-      break;
+    return (r + g + b) / 3;
+  }
+  break;
 
-    case RGBW_CHANNEL_WHITE:
-      return GetGrayDynamicsParam( 1 );
-      break;
+  case RGBW_CHANNEL_WHITE:
+    return GetGrayDynamicsParam(1);
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      return GetRgbDynamicsParam( 1 + 2 * channel );
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    return GetRgbDynamicsParam(1 + 2 * channel);
+    break;
 
-    default:
-      throw std::invalid_argument(
-	ToStdString(
-	  QCoreApplication::translate(
-            "mvd::VectorImageSettings",
-            "Invalid argument: %1 ('%2')"
-          )
-	  .arg( channel )
-	  .arg( RGBW_CHANNEL_NAMES[ channel ] )
-	)
-      );
-      break;
-    }
+  default:
+    throw std::invalid_argument(
+        ToStdString(QCoreApplication::translate("mvd::VectorImageSettings", "Invalid argument: %1 ('%2')").arg(channel).arg(RGBW_CHANNEL_NAMES[channel])));
+    break;
+  }
 }
 
 } // end namespace 'mvd'

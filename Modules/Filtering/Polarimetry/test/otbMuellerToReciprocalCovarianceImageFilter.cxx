@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -28,25 +26,25 @@
 
 #include "otbMuellerToReciprocalCovarianceImageFilter.h"
 
-int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbMuellerToReciprocalCovarianceImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  ComplexPixelType;
+  typedef double                  PixelType;
+  typedef std::complex<PixelType> ComplexPixelType;
 
-  typedef otb::VectorImage<PixelType>                                          RealImageType;
-  typedef otb::VectorImage<ComplexPixelType>                                   ComplexImageType;
+  typedef otb::VectorImage<PixelType>        RealImageType;
+  typedef otb::VectorImage<ComplexPixelType> ComplexImageType;
   typedef otb::MuellerToReciprocalCovarianceImageFilter<RealImageType, ComplexImageType> FilterType;
 
-  typedef otb::ImageFileReader<RealImageType>  ReaderType;
+  typedef otb::ImageFileReader<RealImageType>    ReaderType;
   typedef otb::ImageFileWriter<ComplexImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  reader->SetFileName(inputFilename );
+  reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput<0>(reader->GetOutput());

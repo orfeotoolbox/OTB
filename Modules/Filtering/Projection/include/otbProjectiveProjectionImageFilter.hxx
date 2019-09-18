@@ -29,34 +29,28 @@ namespace Functor
 {
 
 template <class TInput, class TOutput, class TPrecision>
-size_t
-ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>
-::OutputSize(const std::array<size_t,1> &) const
+size_t ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::OutputSize(const std::array<size_t, 1>&) const
 {
   return m_OutputSize;
 }
 
 template <class TInput, class TOutput, class TPrecision>
 const typename ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::InputType&
-ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>
-::GetProjectionDirection()
+ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::GetProjectionDirection()
 {
   return m_ProjectionDirection;
 }
 
 template <class TInput, class TOutput, class TPrecision>
-void
-ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>
-::SetProjectionDirection(const InputType& p)
+void ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::SetProjectionDirection(const InputType& p)
 {
   m_ProjectionDirection = p;
-  m_OutputSize = m_ProjectionDirection.Size();
+  m_OutputSize          = m_ProjectionDirection.Size();
 }
 
 template <class TInput, class TOutput, class TPrecision>
-typename ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::OutputType
-ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>
-::operator ()(const InputType& in)
+typename ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::OutputType ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::
+operator()(const InputType& in)
 {
   PrecisionType dotProduct = 0;
   for (unsigned int i = 0; i < in.Size(); ++i)

@@ -36,9 +36,8 @@ namespace otb
 class OTBMetadata_EXPORT SpotImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef SpotImageMetadataInterface    Self;
-  typedef OpticalImageMetadataInterface    Superclass;
+  typedef OpticalImageMetadataInterface Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -125,17 +124,17 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
 protected:
   SpotImageMetadataInterface();
-  ~SpotImageMetadataInterface() override {}
+  ~SpotImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  SpotImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SpotImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

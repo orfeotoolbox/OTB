@@ -40,18 +40,22 @@ namespace Functor
  *
  * \ingroup OTBImageManipulation
 */
-template<class TInput1, class TInput2 = TInput1, class TOutput = TInput1>
+template <class TInput1, class TInput2 = TInput1, class TOutput = TInput1>
 class HillShadeModulationFunctor
 {
 public:
-  HillShadeModulationFunctor() {}
-  ~HillShadeModulationFunctor() {}
+  HillShadeModulationFunctor()
+  {
+  }
+  ~HillShadeModulationFunctor()
+  {
+  }
 
-  inline TOutput operator ()(const TInput1& A, const TInput2& B) const
+  inline TOutput operator()(const TInput1& A, const TInput2& B) const
   {
     TOutput out;
-    out.SetRed( static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetRed()) * static_cast<double>(B)) );
-    out.SetGreen( static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetGreen()) * static_cast<double>(B)) );
+    out.SetRed(static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetRed()) * static_cast<double>(B)));
+    out.SetGreen(static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetGreen()) * static_cast<double>(B)));
     out.SetBlue(static_cast<typename TOutput::ValueType>(static_cast<double>(A.GetBlue()) * static_cast<double>(B)));
     return out;
   }
@@ -73,20 +77,20 @@ template <class TNeighIter, class TInputImage, class TOutput>
 class HillShadingFunctor
 {
 public:
-
   typedef HillShadingFunctor               Self;
   typedef TNeighIter                       IteratorType;
   typedef typename IteratorType::PixelType PixelType;
 
-  HillShadingFunctor() : m_AzimuthLight(30.0 * CONST_PI_180), m_ElevationLight(45.0 *CONST_PI_180),
-    m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
+  HillShadingFunctor() : m_AzimuthLight(30.0 * CONST_PI_180), m_ElevationLight(45.0 * CONST_PI_180), m_XRes(100.0), m_YRes(100.0), m_Scale(0.1)
   {
     m_SinElev = std::sin(m_ElevationLight);
     m_CosElev = std::cos(m_ElevationLight);
-    m_SinAz = std::sin(m_AzimuthLight);
-    m_CosAz = std::cos(m_AzimuthLight);
+    m_SinAz   = std::sin(m_AzimuthLight);
+    m_CosAz   = std::cos(m_AzimuthLight);
   }
-  ~HillShadingFunctor() {}
+  ~HillShadingFunctor()
+  {
+  }
 
   double GetXRes() const
   {
@@ -126,8 +130,8 @@ public:
   void SetAzimuthLight(double az)
   {
     m_AzimuthLight = az;
-    m_SinAz = std::sin(m_AzimuthLight);
-    m_CosAz = std::cos(m_AzimuthLight);
+    m_SinAz        = std::sin(m_AzimuthLight);
+    m_CosAz        = std::cos(m_AzimuthLight);
   }
 
   double GetElevationLight() const
@@ -138,51 +142,46 @@ public:
   void SetElevationLight(double el)
   {
     m_ElevationLight = el;
-    m_SinElev = std::sin(m_ElevationLight);
-    m_CosElev = std::cos(m_ElevationLight);
+    m_SinElev        = std::sin(m_ElevationLight);
+    m_CosElev        = std::cos(m_ElevationLight);
   }
 
-  inline TOutput operator ()(const TNeighIter& it) const
+  inline TOutput operator()(const TNeighIter& it) const
   {
-    const typename IteratorType::OffsetType LEFT   = {{-1, 0}};
-    const typename IteratorType::OffsetType RIGHT  = {{1, 0}};
-    const typename IteratorType::OffsetType UP     = {{0, -1}};
-    const typename IteratorType::OffsetType DOWN   = {{0, 1}};
-    const typename IteratorType::OffsetType LEFTUP   = {{-1, -1}};
+    const typename IteratorType::OffsetType LEFT      = {{-1, 0}};
+    const typename IteratorType::OffsetType RIGHT     = {{1, 0}};
+    const typename IteratorType::OffsetType UP        = {{0, -1}};
+    const typename IteratorType::OffsetType DOWN      = {{0, 1}};
+    const typename IteratorType::OffsetType LEFTUP    = {{-1, -1}};
     const typename IteratorType::OffsetType RIGHTDOWN = {{1, 1}};
-    const typename IteratorType::OffsetType RIGHTUP  = {{1, -1}};
-    const typename IteratorType::OffsetType LEFTDOWN = {{-1, 1}};
-//    const typename IteratorType::OffsetType CENTER ={{0, 0}};
+    const typename IteratorType::OffsetType RIGHTUP   = {{1, -1}};
+    const typename IteratorType::OffsetType LEFTDOWN  = {{-1, 1}};
+    //    const typename IteratorType::OffsetType CENTER ={{0, 0}};
 
-    float xSlope =
-      ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(LEFTDOWN)))
-       - (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) + makeValid(it.GetPixel(RIGHTDOWN))))
-      / (m_XRes * m_Scale);
+    float xSlope = ((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(LEFT)) + makeValid(it.GetPixel(LEFTDOWN))) -
+                    (makeValid(it.GetPixel(RIGHTUP)) + 2 * makeValid(it.GetPixel(RIGHT)) + makeValid(it.GetPixel(RIGHTDOWN)))) /
+                   (m_XRes * m_Scale);
     // - as the azimuth is given compared to y axis pointing up
-    float ySlope = -((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(UP)) + makeValid(it.GetPixel(RIGHTUP)))
-                     - (makeValid(it.GetPixel(LEFTDOWN)) + 2 * makeValid(it.GetPixel(DOWN)) + makeValid(it.GetPixel(RIGHTDOWN)))
-                     )
-                   / (m_YRes * m_Scale);
+    float ySlope = -((makeValid(it.GetPixel(LEFTUP)) + 2 * makeValid(it.GetPixel(UP)) + makeValid(it.GetPixel(RIGHTUP))) -
+                     (makeValid(it.GetPixel(LEFTDOWN)) + 2 * makeValid(it.GetPixel(DOWN)) + makeValid(it.GetPixel(RIGHTDOWN)))) /
+                   (m_YRes * m_Scale);
 
     // permutation between x and y as the azimuth angle is given compared to the north-south axis
-    float lambertian = ((m_CosElev * m_CosAz * ySlope) + (m_CosElev * m_SinAz * xSlope) + m_SinElev)
-                       / std::sqrt(xSlope * xSlope + ySlope * ySlope + 1);
+    float lambertian = ((m_CosElev * m_CosAz * ySlope) + (m_CosElev * m_SinAz * xSlope) + m_SinElev) / std::sqrt(xSlope * xSlope + ySlope * ySlope + 1);
 
-    return (lambertian + 1) / 2; //normalize between 0 and 1
-
+    return (lambertian + 1) / 2; // normalize between 0 and 1
   }
 
 private:
-
   inline PixelType makeValid(PixelType v) const
   {
     return v < itk::NumericTraits<PixelType>::Zero ? itk::NumericTraits<PixelType>::Zero : v;
   }
 
-  double m_AzimuthLight; // in radian
+  double m_AzimuthLight;   // in radian
   double m_ElevationLight; // in radian
-  double m_XRes; // assumed to be positive provided in m
-  double m_YRes; // assumed to be positive provided in m
+  double m_XRes;           // assumed to be positive provided in m
+  double m_YRes;           // assumed to be positive provided in m
   double m_Scale;
 
   // precomputed parameters to avoid the sin() cos() call for each pixel
@@ -190,9 +189,7 @@ private:
   double m_CosElev;
   double m_SinAz;
   double m_CosAz;
-
 };
-
 }
 }
 

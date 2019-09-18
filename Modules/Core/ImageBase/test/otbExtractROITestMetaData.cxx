@@ -32,22 +32,22 @@
 
 #include "otb_boost_string_header.h"
 
-int otbExtractROITestMetaData(int itkNotUsed(argc), char * argv[])
+int otbExtractROITestMetaData(int itkNotUsed(argc), char* argv[])
 {
   typedef float PixelType;
 
-  typedef otb::Image<PixelType>                    ImageType;
+  typedef otb::Image<PixelType> ImageType;
 
-  typedef otb::ImageFileReader<ImageType>          ImageFileReaderType;
-  typedef otb::ImageFileWriter<ImageType>          ImageFileWriterType;
+  typedef otb::ImageFileReader<ImageType> ImageFileReaderType;
+  typedef otb::ImageFileWriter<ImageType> ImageFileWriterType;
 
-  typedef otb::ExtractROI<PixelType, PixelType>    ExtractROIType;
+  typedef otb::ExtractROI<PixelType, PixelType> ExtractROIType;
 
   ImageFileReaderType::Pointer readerInput = ImageFileReaderType::New();
-  ImageFileReaderType::Pointer reader00 = ImageFileReaderType::New();
-  ImageFileReaderType::Pointer reader57 = ImageFileReaderType::New();
-  ImageFileWriterType::Pointer writer00 = ImageFileWriterType::New();
-  ImageFileWriterType::Pointer writer57 = ImageFileWriterType::New();
+  ImageFileReaderType::Pointer reader00    = ImageFileReaderType::New();
+  ImageFileReaderType::Pointer reader57    = ImageFileReaderType::New();
+  ImageFileWriterType::Pointer writer00    = ImageFileWriterType::New();
+  ImageFileWriterType::Pointer writer57    = ImageFileWriterType::New();
 
   ExtractROIType::Pointer extract00 = ExtractROIType::New();
   ExtractROIType::Pointer extract57 = ExtractROIType::New();
@@ -87,49 +87,49 @@ int otbExtractROITestMetaData(int itkNotUsed(argc), char * argv[])
   // Write left up image
   writer00->SetFileName(argv[2]);
   writer00->SetInput(extract00->GetOutput());
-  //writer00->SetWriteGeomFile(true);
+  // writer00->SetWriteGeomFile(true);
   writer00->Update();
 
   // Write image with non zero index
   writer57->SetFileName(argv[3]);
   writer57->SetInput(extract57->GetOutput());
-  //writer57->SetWriteGeomFile(true);
+  // writer57->SetWriteGeomFile(true);
   writer57->Update();
 
   // Reading image with left up index
   reader00->SetFileName(argv[2]);
   reader00->GenerateOutputInformation();
 
-  if( reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
-    {
-    std::cout<<"The read generated extract from index (0, 0) must NOT contain a ProjectionReference."<<std::endl;
-    std::cout<<"Found ProjectionReference: "<<reader00->GetOutput()->GetProjectionRef()<<std::endl;
+  if (reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS"))
+  {
+    std::cout << "The read generated extract from index (0, 0) must NOT contain a ProjectionReference." << std::endl;
+    std::cout << "Found ProjectionReference: " << reader00->GetOutput()->GetProjectionRef() << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
-  if( reader00->GetOutput()->GetGCPCount() == 0)
-    {
-    std::cout<<"The read generated extract from index (0, 0) must contain a list a GCPs.."<<std::endl;
+  if (reader00->GetOutput()->GetGCPCount() == 0)
+  {
+    std::cout << "The read generated extract from index (0, 0) must contain a list a GCPs.." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Reading image with non-zero index
   reader57->SetFileName(argv[3]);
   reader57->GenerateOutputInformation();
 
-  if( reader57->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader57->GetOutput()->GetProjectionRef(), "LOCAL_CS") )
-    {
-    std::cout<<"The read generated extract from index (x, y) must NOT contain a ProjectionReference."<<std::endl;
-    std::cout<<"Found ProjectionReference: "<<reader57->GetOutput()->GetProjectionRef()<<std::endl;
+  if (reader57->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader57->GetOutput()->GetProjectionRef(), "LOCAL_CS"))
+  {
+    std::cout << "The read generated extract from index (x, y) must NOT contain a ProjectionReference." << std::endl;
+    std::cout << "Found ProjectionReference: " << reader57->GetOutput()->GetProjectionRef() << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  if( reader57->GetOutput()->GetGCPCount() != 0)
-    {
-    std::cout<<"The read generated extract from index (x, y) must NOT contain a list a GCPs.."<<std::endl;
+  if (reader57->GetOutput()->GetGCPCount() != 0)
+  {
+    std::cout << "The read generated extract from index (x, y) must NOT contain a list a GCPs.." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   return EXIT_SUCCESS;

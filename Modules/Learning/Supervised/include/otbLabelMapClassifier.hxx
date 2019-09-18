@@ -24,11 +24,11 @@
 #include "otbLabelMapClassifier.h"
 
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage>
-LabelMapClassifier<TInputImage>
-::LabelMapClassifier()
+LabelMapClassifier<TInputImage>::LabelMapClassifier()
 {
   // Force to single-threaded in case the learning model is not thread safe
   // This way, we benefit of the LabelMapFilter design and only need
@@ -36,24 +36,20 @@ LabelMapClassifier<TInputImage>
   this->SetNumberOfThreads(1); // TODO : check if still needed
 }
 
-template<class TInputImage>
-void
-LabelMapClassifier<TInputImage>
-::ReleaseInputs( )
+template <class TInputImage>
+void LabelMapClassifier<TInputImage>::ReleaseInputs()
 {
   // by pass itk::InPlaceLabelMapFilter::ReleaseInputs() implementation,
   // which caused memory issue when ran inplace
   this->itk::LabelMapFilter<TInputImage, TInputImage>::ReleaseInputs();
 }
 
-template<class TInputImage>
-void
-LabelMapClassifier<TInputImage>
-::ThreadedProcessLabelObject( LabelObjectType * labelObject )
+template <class TInputImage>
+void LabelMapClassifier<TInputImage>::ThreadedProcessLabelObject(LabelObjectType* labelObject)
 {
   ClassLabelType classLabel = (m_Model->Predict(m_MeasurementFunctor(labelObject)))[0];
   labelObject->SetClassLabel(classLabel);
 }
 
-}// end namespace otb
+} // end namespace otb
 #endif

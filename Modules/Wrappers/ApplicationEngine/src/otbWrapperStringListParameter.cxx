@@ -32,76 +32,60 @@ namespace Wrapper
 
 
 /*****************************************************************************/
-StringListParameter
-::StringListParameter()
+StringListParameter::StringListParameter()
 {
-  SetName( "String List" );
-  SetKey( "strList" );
+  SetName("String List");
+  SetKey("strList");
 }
 
 
 /*****************************************************************************/
-StringListParameter
-::~StringListParameter()
+StringListParameter::~StringListParameter()
 {
 }
 
 
 /*****************************************************************************/
-void
-StringListParameter
-::SetValue( const StringListInterface::StringVector & strings )
+void StringListParameter::SetValue(const StringListInterface::StringVector& strings)
 {
-  SetStrings( strings );
+  SetStrings(strings);
 }
 
 /*****************************************************************************/
-StringListInterface::StringVector
-StringListParameter
-::GetValue() const
+StringListInterface::StringVector StringListParameter::GetValue() const
 {
   // Should get benefit of C++11 move constructor.
   return GetFileNameList();
 }
 
 /*****************************************************************************/
-void
-StringListParameter
-::AddString( const std::string & s )
+void StringListParameter::AddString(const std::string& s)
 {
-  AddFromFileName( s );
+  AddFromFileName(s);
 }
 
 /*****************************************************************************/
 std::string StringListParameter::GetNthElement(std::size_t i) const
 {
-  return GetNthFileName( i );
+  return GetNthFileName(i);
 }
 
 /*****************************************************************************/
-void
-StringListParameter
-::SetNthElement( std::size_t i, const std::string & string )
+void StringListParameter::SetNthElement(std::size_t i, const std::string& string)
 {
-  SetNthFileName( i, string );
+  SetNthFileName(i, string);
 }
 
 /*****************************************************************************/
-Role
-StringListParameter
-::GetDirection() const
+Role StringListParameter::GetDirection() const
 {
   return GetRole();
 }
 
 /*****************************************************************************/
-bool
-StringListParameter
-::IsFilename() const
+bool StringListParameter::IsFilename() const
 {
   return false;
 }
-
 }
-
 }

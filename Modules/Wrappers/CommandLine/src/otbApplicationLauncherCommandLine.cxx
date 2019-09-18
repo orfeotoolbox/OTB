@@ -28,17 +28,17 @@
 #include "otbMPIConfig.h"
 #endif
 
-std::string CleanWord(const std::string & word)
+std::string CleanWord(const std::string& word)
 {
   std::string res("");
   // Suppress whitespace characters at the beginning and ending of the string
   std::string::size_type cleanStart = word.find_first_not_of(" \t");
-  std::string::size_type cleanEnd = word.find_last_not_of(" \t\f\v\n\r");
+  std::string::size_type cleanEnd   = word.find_last_not_of(" \t\f\v\n\r");
   // cleanStart == npos implies cleanEnd == npos
   if (cleanEnd != std::string::npos)
-    {
+  {
     res = word.substr(cleanStart, cleanEnd - cleanStart + 1);
-    }
+  }
   return res;
 }
 
@@ -51,8 +51,8 @@ int main(int argc, char* argv[])
 {
   if (argc < 2)
   {
-      ShowUsage(argv);
-      return EXIT_FAILURE;
+    ShowUsage(argv);
+    return EXIT_FAILURE;
   }
 
   std::vector<std::string> vexp;
@@ -76,21 +76,21 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  #ifdef OTB_USE_MPI
-  if (std::find(vexp.begin(), vexp.end(), "-testenv") == vexp.end() )
-    otb::MPIConfig::Instance()->Init(argc,argv);
-  #endif
+#ifdef OTB_USE_MPI
+  if (std::find(vexp.begin(), vexp.end(), "-testenv") == vexp.end())
+    otb::MPIConfig::Instance()->Init(argc, argv);
+#endif
 
   otb::ConfigurationManager::InitOpenMPThreads();
 
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
-  LauncherType::Pointer launcher = LauncherType::New();
+  LauncherType::Pointer                     launcher = LauncherType::New();
 
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
-  // shutdown MPI after application finished
-  #ifdef OTB_USE_MPI
+// shutdown MPI after application finished
+#ifdef OTB_USE_MPI
   otb::MPIConfig::Instance()->terminate();
-  #endif
+#endif
   return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }

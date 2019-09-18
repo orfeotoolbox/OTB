@@ -30,7 +30,8 @@
 
 #include <cmath>
 
-namespace otb {
+namespace otb
+{
 
 // For Windows MSVC, defines these macros.
 #ifdef _USE_MATH_DEFINES
@@ -82,8 +83,8 @@ constexpr long double CONST_2PIl      = 2.0L * CONST_PI;                       /
 constexpr long double CONST_PI_180l   = CONST_PI / 180.0L;                     /* pi/180 */
 constexpr long double CONST_180_PIl   = 180.0L / CONST_PI;                     /* 180/pi */
 // Defined but not used?
-//const long double CONST_LNPIl =     std::log(CONST_PIl);                    /* ln(pi)*/
-//const long double CONST_SQRTPIl =   std::sqrt(CONST_PIl);                   /* sqrt(pi)*/
+// const long double CONST_LNPIl =     std::log(CONST_PIl);                    /* ln(pi)*/
+// const long double CONST_SQRTPIl =   std::sqrt(CONST_PIl);                   /* sqrt(pi)*/
 constexpr long double CONST_SQRT2l   = 1.4142135623730950488016887242096981L; /* sqrt(2) */
 constexpr long double CONST_SQRT1_2l = 0.7071067811865475244008443621048490L; /* 1/sqrt(2) */
 constexpr long double CONST_SQRT3l   = 1.7320508075688772935274463415058724L; /* sqrt(3) */
@@ -91,16 +92,17 @@ constexpr long double CONST_EULERl   = 0.5772156649015328606065120900824024L; /*
 
 #endif
 
-template <typename T> T InverseValue(const T & value)
+template <typename T>
+T InverseValue(const T& value)
 {
-  return ((value > 0 || value < 0) ? 1/value : 0);
+  return ((value > 0 || value < 0) ? 1 / value : 0);
 }
 
-template <typename T> T SignOfValue(const T & value)
+template <typename T>
+T SignOfValue(const T& value)
 {
   return (value > 0) ? 1 : ((value < 0) ? -1 : 0);
 }
-
 }
 
 #endif

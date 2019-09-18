@@ -34,10 +34,10 @@ class EndmemberNumberEstimation : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef EndmemberNumberEstimation         Self;
-  typedef Application                       Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef EndmemberNumberEstimation     Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -45,8 +45,8 @@ public:
   itkTypeMacro(EndmemberNumberEstimation, otb::Application);
 
   typedef otb::StreamingStatisticsVectorImageFilter<FloatVectorImageType, double> StreamingStatisticsVectorImageFilterType;
-  typedef otb::VirtualDimensionality<double>                                      VirtualDimensionalityType;
-  typedef otb::EigenvalueLikelihoodMaximisation<double>                           EigenvalueLikelihoodMaximisationType;
+  typedef otb::VirtualDimensionality<double>            VirtualDimensionalityType;
+  typedef otb::EigenvalueLikelihoodMaximisation<double> EigenvalueLikelihoodMaximisationType;
 
 private:
   void DoInit() override
@@ -55,32 +55,32 @@ private:
     SetDescription("Estimate the number of endmembers in a hyperspectral image");
 
     // Documentation
-    SetDocLongDescription("Estimate the number of endmembers "
-    "in a hyperspectral image. First, compute statistics on the image and then "
-    "apply an endmember number estimation algorithm using these statistics. Two "
-    "algorithms are available:\n\n"
+    SetDocLongDescription(
+        "Estimate the number of endmembers "
+        "in a hyperspectral image. First, compute statistics on the image and then "
+        "apply an endmember number estimation algorithm using these statistics. Two "
+        "algorithms are available:\n\n"
 
-    "1. Virtual Dimensionality (HFC-VD) [1][2]\n"
-    "2. Eigenvalue Likelihood Maximization (ELM) [3][4]\n\n"
+        "1. Virtual Dimensionality (HFC-VD) [1][2]\n"
+        "2. Eigenvalue Likelihood Maximization (ELM) [3][4]\n\n"
 
-    "The application then returns the estimated number of endmembers.\n\n"
+        "The application then returns the estimated number of endmembers.\n\n"
 
-    "[1] C.-I. Chang and Q. Du, Estimation of number of spectrally distinct signal "
-    "sources in hyperspectral imagery, IEEE Transactions on Geoscience and Remote "
-    "Sensing, vol. 43, no. 3, mar 2004.\n\n"
+        "[1] C.-I. Chang and Q. Du, Estimation of number of spectrally distinct signal "
+        "sources in hyperspectral imagery, IEEE Transactions on Geoscience and Remote "
+        "Sensing, vol. 43, no. 3, mar 2004.\n\n"
 
-    "[2] J. Wang and C.-I. Chang, Applications of independent component analysis "
-    "in endmember extraction and abundance quantification for hyperspectral imagery"
-    ", IEEE Transactions on Geoscience and Remote Sensing, vol. 44, no. 9, pp. "
-    "2601-1616, sep 2006.\n\n"
+        "[2] J. Wang and C.-I. Chang, Applications of independent component analysis "
+        "in endmember extraction and abundance quantification for hyperspectral imagery"
+        ", IEEE Transactions on Geoscience and Remote Sensing, vol. 44, no. 9, pp. "
+        "2601-1616, sep 2006.\n\n"
 
-    "[3] Unsupervised Endmember Extraction of Martian Hyperspectral Images, B.Luo, "
-    "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009\n\n"
+        "[3] Unsupervised Endmember Extraction of Martian Hyperspectral Images, B.Luo, "
+        "J. Chanussot, S. Dout\'e and X. Ceamanos, IEEE Whispers 2009, Grenoble France, 2009\n\n"
 
-    "[4] Unsupervised classification of hyperspectral images by using "
-    "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image"
-    "Processing(ICIP) 2009, Cairo, Egypte, 2009"
-    );
+        "[4] Unsupervised classification of hyperspectral images by using "
+        "linear unmixing algorithm Luo, B. and Chanussot, J., IEEE Int. Conf. On Image"
+        "Processing(ICIP) 2009, Cairo, Egypte, 2009");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -88,10 +88,10 @@ private:
 
     AddDocTag(Tags::Hyperspectral);
 
-    AddParameter(ParameterType_InputImage,  "in", "Input Image Filename");
-    SetParameterDescription("in","The hyperspectral data cube input");
+    AddParameter(ParameterType_InputImage, "in", "Input Image Filename");
+    SetParameterDescription("in", "The hyperspectral data cube input");
 
-    AddParameter(ParameterType_Int,"number","Number of endmembers");
+    AddParameter(ParameterType_Int, "number", "Number of endmembers");
     SetParameterDescription("number", "The output estimated number of endmembers");
     SetParameterRole("number", Role_Output);
 
@@ -102,15 +102,14 @@ private:
     AddChoice("algo.vd", "Virtual Dimensionality");
     SetParameterDescription("algo.vd", "HFC Virtual Dimensionality algorithm");
 
-    AddParameter( ParameterType_Float , "algo.vd.far" , "False alarm rate");
+    AddParameter(ParameterType_Float, "algo.vd.far", "False alarm rate");
     SetMinimumParameterFloatValue("algo.vd.far", 0);
     SetMaximumParameterFloatValue("algo.vd.far", 1);
-    SetDefaultParameterFloat( "algo.vd.far" , 1.0E-3 );
-    SetParameterDescription( "algo.vd.far" , 
-      "False alarm rate for the virtual dimensionality algorithm");
+    SetDefaultParameterFloat("algo.vd.far", 1.0E-3);
+    SetParameterDescription("algo.vd.far", "False alarm rate for the virtual dimensionality algorithm");
 
     AddRAMParameter();
-    
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("algo", "vd");
@@ -137,13 +136,13 @@ private:
     statisticsFilter->Update();
 
     auto correlationMatrix = statisticsFilter->GetCorrelation().GetVnlMatrix();
-    auto covarianceMatrix = statisticsFilter->GetCovariance().GetVnlMatrix();
-    auto numberOfPixels = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
+    auto covarianceMatrix  = statisticsFilter->GetCovariance().GetVnlMatrix();
+    auto numberOfPixels    = inputImage->GetLargestPossibleRegion().GetNumberOfPixels();
 
-    int numberOfEndmembers = 0;
-    const std::string algorithm = GetParameterString("algo");
-    if (algorithm=="elm")
-      {
+    int               numberOfEndmembers = 0;
+    const std::string algorithm          = GetParameterString("algo");
+    if (algorithm == "elm")
+    {
       otbAppLogINFO("Estimation algorithm: Eigenvalue Likelihood Maximization.");
       auto elm = EigenvalueLikelihoodMaximisationType::New();
       elm->SetCovariance(covarianceMatrix);
@@ -151,9 +150,9 @@ private:
       elm->SetNumberOfPixels(numberOfPixels);
       elm->Compute();
       numberOfEndmembers = elm->GetNumberOfEndmembers();
-      }
-    else if (algorithm=="vd")
-      {
+    }
+    else if (algorithm == "vd")
+    {
       otbAppLogINFO("Estimation algorithm: HFC Virtual Dimensionality.");
       auto vd = VirtualDimensionalityType::New();
       vd->SetCovariance(covarianceMatrix);
@@ -162,12 +161,10 @@ private:
       vd->SetFAR(GetParameterFloat("algo.vd.far"));
       vd->Compute();
       numberOfEndmembers = vd->GetNumberOfEndmembers();
-      }
+    }
     SetParameterInt("number", numberOfEndmembers);
   }
-
 };
-
 }
 }
 

@@ -47,15 +47,11 @@ public:
   itkTypeMacro(MultiResolutionPyramid, otb::Application);
 
   /** Image and filters typedef */
-  typedef itk::DiscreteGaussianImageFilter<FloatImageType,
-                                           FloatImageType>         SmoothingImageFilterType;
+  typedef itk::DiscreteGaussianImageFilter<FloatImageType, FloatImageType> SmoothingImageFilterType;
 
-  typedef otb::PerBandVectorImageFilter<FloatVectorImageType,
-                                        FloatVectorImageType,
-                                        SmoothingImageFilterType>   SmoothingVectorImageFilterType;
+  typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, SmoothingImageFilterType> SmoothingVectorImageFilterType;
 
-  typedef itk::ShrinkImageFilter<FloatVectorImageType,
-                                 FloatVectorImageType>              ShrinkFilterType;
+  typedef itk::ShrinkImageFilter<FloatVectorImageType, FloatVectorImageType> ShrinkFilterType;
 
 private:
   void DoInit() override
@@ -64,12 +60,14 @@ private:
     SetDescription("Build a multi-resolution pyramid of the image.");
 
     // Documentation
-    SetDocLongDescription("This application builds a multi-resolution pyramid of the input image. User can specified the number of levels of the pyramid and the subsampling factor. To speed up the process, you can use the fast scheme option");
+    SetDocLongDescription(
+        "This application builds a multi-resolution pyramid of the input image. User can specified the number of levels of the pyramid and the subsampling "
+        "factor. To speed up the process, you can use the fast scheme option");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-	AddDocTag(Tags::Manip);
+    AddDocTag(Tags::Manip);
     AddDocTag("Conversion");
     AddDocTag(Tags::Multi);
     AddDocTag("Util");
@@ -77,26 +75,27 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","will be used to get the prefix and the extension of the images to write");
+    SetParameterDescription("out", "will be used to get the prefix and the extension of the images to write");
 
     AddParameter(ParameterType_Int, "level", "Number Of Levels");
     SetDefaultParameterInt("level", 1);
-    SetParameterDescription( "level", "Number of levels in the pyramid (default is 1).");
+    SetParameterDescription("level", "Number of levels in the pyramid (default is 1).");
     SetMinimumParameterIntValue("level", 1);
 
     AddParameter(ParameterType_Int, "sfactor", "Subsampling factor");
     SetDefaultParameterInt("sfactor", 2);
-    SetParameterDescription( "sfactor", "Subsampling factor between each level of the pyramid (default is 2).");
+    SetParameterDescription("sfactor", "Subsampling factor between each level of the pyramid (default is 2).");
 
-    AddParameter(ParameterType_Float,  "vfactor", "Variance factor");
+    AddParameter(ParameterType_Float, "vfactor", "Variance factor");
     SetDefaultParameterFloat("vfactor", 0.6);
-    SetParameterDescription( "vfactor", "Variance factor use in smoothing. It is multiplied by the subsampling factor of each level in the  pyramid (default is 0.6).");
+    SetParameterDescription("vfactor",
+                            "Variance factor use in smoothing. It is multiplied by the subsampling factor of each level in the  pyramid (default is 0.6).");
 
     // Boolean Fast scheme
     AddParameter(ParameterType_Bool, "fast", "Use Fast Scheme");
     std::ostringstream desc;
-    desc<<"If used, this option allows one to speed-up computation by iteratively"
-        <<" subsampling previous level of pyramid instead of processing the full input.";
+    desc << "If used, this option allows one to speed-up computation by iteratively"
+         << " subsampling previous level of pyramid instead of processing the full input.";
     SetParameterDescription("fast", desc.str());
 
     AddRAMParameter();
@@ -122,13 +121,13 @@ private:
   void DoExecute() override
   {
     // Initializing the process
-    m_SmoothingFilter =  SmoothingVectorImageFilterType::New();
+    m_SmoothingFilter = SmoothingVectorImageFilterType::New();
     m_ShrinkFilter    = ShrinkFilterType::New();
 
     // Extract Parameters
-    unsigned int nbLevels     = GetParameterInt("level");
-    unsigned int shrinkFactor = GetParameterInt("sfactor");
-    double varianceFactor     = GetParameterFloat("vfactor");
+    unsigned int nbLevels       = GetParameterInt("level");
+    unsigned int shrinkFactor   = GetParameterInt("sfactor");
+    double       varianceFactor = GetParameterFloat("vfactor");
 
     bool fastScheme = GetParameterInt("fast");
 
@@ -144,13 +143,12 @@ private:
     fname = itksys::SystemTools::GetFilenameWithoutExtension(ofname);
     ext   = itksys::SystemTools::GetFilenameExtension(ofname);
 
-    unsigned int currentLevel = 1;
+    unsigned int currentLevel  = 1;
     unsigned int currentFactor = shrinkFactor;
 
-    while(currentLevel <= nbLevels)
-      {
-      otbAppLogDEBUG( << "Processing level " << currentLevel
-                      << " with shrink factor "<<currentFactor);
+    while (currentLevel <= nbLevels)
+    {
+      otbAppLogDEBUG(<< "Processing level " << currentLevel << " with shrink factor " << currentFactor);
 
       m_SmoothingFilter->SetInput(inImage);
 
@@ -163,14 +161,14 @@ private:
       m_ShrinkFilter->SetInput(m_SmoothingFilter->GetOutput());
       m_ShrinkFilter->SetShrinkFactors(currentFactor);
 
-      if(!fastScheme)
-        {
+      if (!fastScheme)
+      {
         currentFactor *= shrinkFactor;
-        }
+      }
       else
-        {
+      {
         otbAppLogWARNING("fast scheme enabled : not implemented for the moment ");
-        }
+      }
 
       // Create an output parameter to write the current output image
       OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
@@ -178,18 +176,18 @@ private:
       // build the current image filename
       std::ostringstream oss;
       if (!path.empty())
-        {
-        oss <<path<<"/";
-        }
-      oss <<fname<<"_"<<currentLevel<<ext;
+      {
+        oss << path << "/";
+      }
+      oss << fname << "_" << currentLevel << ext;
 
       // writer label
       std::ostringstream osswriter;
-      osswriter<< "writer (level "<< currentLevel<<")";
+      osswriter << "writer (level " << currentLevel << ")";
 
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
-      otbAppLogINFO(<< "File: "<<paramOut->GetFileName() << " will be written.");
+      otbAppLogINFO(<< "File: " << paramOut->GetFileName() << " will be written.");
       paramOut->SetValue(m_ShrinkFilter->GetOutput());
       paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
@@ -198,14 +196,14 @@ private:
       paramOut->Write();
 
       ++currentLevel;
-      }
+    }
 
     // Disable this parameter since the images have already been produced
     DisableParameter("out");
   }
 
-  SmoothingVectorImageFilterType::Pointer   m_SmoothingFilter;
-  ShrinkFilterType::Pointer                 m_ShrinkFilter;
+  SmoothingVectorImageFilterType::Pointer m_SmoothingFilter;
+  ShrinkFilterType::Pointer               m_ShrinkFilter;
 };
 }
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbOpticalDefaultImageMetadataInterfaceFactory.h"
 #include "otbOpticalDefaultImageMetadataInterface.h"
 
@@ -29,29 +28,22 @@
 namespace otb
 {
 
-OpticalDefaultImageMetadataInterfaceFactory
-::OpticalDefaultImageMetadataInterfaceFactory()
+OpticalDefaultImageMetadataInterfaceFactory::OpticalDefaultImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbOpticalDefaultImageMetadataInterface",
-                         "Default Metadata Interface",
-                         1,
+  this->RegisterOverride("OpticalImageMetadataInterface", "otbOpticalDefaultImageMetadataInterface", "Default Metadata Interface", 1,
                          itk::CreateObjectFunction<OpticalDefaultImageMetadataInterface>::New());
 }
 
-OpticalDefaultImageMetadataInterfaceFactory
-::~OpticalDefaultImageMetadataInterfaceFactory()
+OpticalDefaultImageMetadataInterfaceFactory::~OpticalDefaultImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-OpticalDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* OpticalDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-OpticalDefaultImageMetadataInterfaceFactory::GetDescription() const
+const char* OpticalDefaultImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Optical Default Metadata Interface Factory, handle Default Optical metadata in OTB";
 }

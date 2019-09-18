@@ -25,9 +25,11 @@
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Statistics {
+namespace Statistics
+{
 
 /** \class EuclideanDistanceMetricWithMissingValue
  * \brief Euclidean distance function facing missing value.
@@ -45,20 +47,17 @@ namespace Statistics {
  *
  * \ingroup OTBImageManipulation
  */
-template<class TVector>
-class ITK_EXPORT EuclideanDistanceMetricWithMissingValue :
-  public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
+template <class TVector>
+class ITK_EXPORT EuclideanDistanceMetricWithMissingValue : public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
 {
 public:
   /** Standard "Self" typedef. */
-  typedef EuclideanDistanceMetricWithMissingValue Self;
-  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
-  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef EuclideanDistanceMetricWithMissingValue                               Self;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector> Superclass;
+  typedef itk::SmartPointer<Self>                                               Pointer;
+  typedef itk::SmartPointer<const Self>                                         ConstPointer;
 
-  typedef typename Superclass::MeasurementVectorSizeType
-  MeasurementVectorSizeType;
+  typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(EuclideanDistanceMetricWithMissingValue, EuclideanDistanceMetricWithMissingValuePow2);
@@ -96,8 +95,12 @@ public:
   }
 
 protected:
-  EuclideanDistanceMetricWithMissingValue() {}
-  ~EuclideanDistanceMetricWithMissingValue() override {}
+  EuclideanDistanceMetricWithMissingValue()
+  {
+  }
+  ~EuclideanDistanceMetricWithMissingValue() override
+  {
+  }
 }; // end of class
 
 } // end namespace statistics

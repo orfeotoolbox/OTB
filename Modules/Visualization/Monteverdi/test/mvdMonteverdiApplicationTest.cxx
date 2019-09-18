@@ -36,10 +36,10 @@
 
 int mvdMonteverdiApplicationTest(int argc, char* argv[])
 {
-  QApplication qtApp( argc, argv );
+  QApplication qtApp(argc, argv);
 
-  mvd::Application application( &qtApp );
-  mvd::MainWindow main_window;
+  mvd::Application application(&qtApp);
+  mvd::MainWindow  main_window;
 
   main_window.show();
 

@@ -48,15 +48,15 @@ class ITK_EXPORT VectorImageToASPixelAccessor
 {
 public:
   /** Standard class typedefs. */
-  typedef   VectorImageToASPixelAccessor Self;
+  typedef VectorImageToASPixelAccessor Self;
 
   /** External typedef. It defines the external aspect
     * that this class will exhibit */
-  typedef  itk::FixedArray<T, 3> ExternalType;
+  typedef itk::FixedArray<T, 3> ExternalType;
 
   /** Internal typedef. It defines the internal real
    * representation of data */
-  typedef  itk::Vector<T, 3> InternalType;
+  typedef itk::Vector<T, 3> InternalType;
 
   /** Write access to the VectorToRGB component */
   inline void Set(InternalType& output, const ExternalType& input) const
@@ -76,7 +76,7 @@ public:
 private:
 };
 
-}  // end namespace Accessor
-}  // end namespace otb
+} // end namespace Accessor
+} // end namespace otb
 
 #endif

@@ -19,35 +19,33 @@
  */
 
 
-
-
 #include "itkMacro.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbThresholdImageToPointSetFilter.h"
 
-int otbThresholdImageToPointSetTest(int itkNotUsed(argc), char * argv[])
+int otbThresholdImageToPointSetTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension>                            InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                              ReaderType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef itk::PointSet<InputPixelType, Dimension>                          PointSetType;
   typedef otb::ThresholdImageToPointSetFilter<InputImageType, PointSetType> FunctionType;
-  typedef PointSetType::PointType                                           PointType;
-  typedef FunctionType::InputPixelType                                      InputPixelType;
-  typedef FunctionType::OutputPointSetType                                  OutputPointSetType;
+  typedef PointSetType::PointType          PointType;
+  typedef FunctionType::InputPixelType     InputPixelType;
+  typedef FunctionType::OutputPointSetType OutputPointSetType;
 
-  InputPixelType LowerThreshold((InputPixelType) ::atoi(argv[3]));
-  InputPixelType UpperThreshold((InputPixelType) ::atoi(argv[4]));
+  InputPixelType LowerThreshold((InputPixelType)::atoi(argv[3]));
+  InputPixelType UpperThreshold((InputPixelType)::atoi(argv[4]));
 
-  ReaderType::Pointer   reader         = ReaderType::New();
-  FunctionType::Pointer function       = FunctionType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
 
@@ -55,24 +53,24 @@ int otbThresholdImageToPointSetTest(int itkNotUsed(argc), char * argv[])
   function->SetLowerThreshold(LowerThreshold);
   function->SetUpperThreshold(UpperThreshold);
   function->Update();
-  OutputPointSetType * pointList = function->GetOutput();
+  OutputPointSetType* pointList = function->GetOutput();
 
   std::ofstream file;
   file.open(outputFilename);
 
-  unsigned long NbPoints  = pointList->GetNumberOfPoints();
+  unsigned long NbPoints = pointList->GetNumberOfPoints();
   file << "NbPoints : " << NbPoints << std::endl;
 
   PointType CoordPoint;
 
-  //Initialization
+  // Initialization
   CoordPoint.Fill(0);
 
   for (unsigned long i = 0; i < NbPoints; ++i)
-    {
+  {
     pointList->GetPoint(i, &CoordPoint);
     file << i + 1 << "/" << NbPoints << " : " << CoordPoint[0] << " , " << CoordPoint[1] << std::endl;
-    }
+  }
 
   file.close();
 

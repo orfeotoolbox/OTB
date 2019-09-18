@@ -44,13 +44,16 @@ public:
   virtual ~SwigPrintCallback() = default;
 
   /** Write a string to a buffer */
-  virtual void Call(std::string const&) {};
+  virtual void Call(std::string const&){};
 
   /** Flush the buffer */
-  virtual void Flush() {};
+  virtual void Flush(){};
 
   /** Determine if the bufer is interactive */
-  virtual bool IsInteractive() {return false;};
+  virtual bool IsInteractive()
+  {
+    return false;
+  };
 };
 
 } // namespace otb

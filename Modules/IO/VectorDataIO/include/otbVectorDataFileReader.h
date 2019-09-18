@@ -40,25 +40,19 @@ public:
   itkTypeMacro(VectorDataFileReaderException, itk::ExceptionObject);
 
   /** Constructor. */
-  VectorDataFileReaderException(const char *file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
+  VectorDataFileReaderException(const char* file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
-  VectorDataFileReaderException(const std::string& file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
+  VectorDataFileReaderException(const std::string& file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
   {
   }
 
-  VectorDataFileReaderException(const std::string& file, unsigned int line,
-                                const std::string& message = "Error in IO",
-                                const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc)
+  VectorDataFileReaderException(const std::string& file, unsigned int line, const std::string& message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
   {
   }
 };
@@ -93,7 +87,6 @@ template <class TOutputVectorData>
 class ITK_EXPORT VectorDataFileReader : public VectorDataSource<TOutputVectorData>
 {
 public:
-
   /** Standard class typedefs. */
   typedef VectorDataFileReader                Self;
   typedef VectorDataSource<TOutputVectorData> Superclass;
@@ -106,8 +99,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataFileReader, VectorDataSource);
 
-  typedef TOutputVectorData                  OutputVectorType;
-  typedef VectorDataIOBase                   VectorDataIOBaseType;
+  typedef TOutputVectorData OutputVectorType;
+  typedef VectorDataIOBase  VectorDataIOBaseType;
 
   itkStaticConstMacro(VDimension, unsigned int, OutputVectorType::DataNodeType::Dimension);
   typedef itk::Vector<double, VDimension> SpacingType;
@@ -123,7 +116,7 @@ public:
    * instance that is created. Or you can directly specify the VectorDataIO
    * to use to read a particular file in case the factory mechanism will
    * not work properly (e.g., unknown or unusual extension). */
-  void  SetVectorDataIO(VectorDataIOBaseType * vectorDataIO);
+  void SetVectorDataIO(VectorDataIOBaseType* vectorDataIO);
   itkGetObjectMacro(VectorDataIO, VectorDataIOBaseType);
 
   /** Prepare the allocation of the output vector data during the first back
@@ -139,21 +132,20 @@ protected:
   std::string m_ExceptionMessage;
 
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
-  bool m_UserSpecifiedVectorDataIO;  // keep track whether the
+  bool                                   m_UserSpecifiedVectorDataIO; // keep track whether the
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   std::string m_FileName; // The file to be read
 
 private:
-  VectorDataFileReader(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataFileReader(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Test whether the given filename exist and it is readable.
       If the file doesn't exist or it is not readable, and exception with an
       appropriate message will be thrown. */
   void TestFileExistenceAndReadability();
-
 };
 
 } // end namespace otb

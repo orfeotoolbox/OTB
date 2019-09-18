@@ -23,25 +23,25 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char * argv[])
+int otbConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * levelingfname = argv[2];
-  const char * outfname = argv[3];
-  const double sigma = atof(argv[4]);
+  const char*  infname       = argv[1];
+  const char*  levelingfname = argv[2];
+  const char*  outfname      = argv[3];
+  const double sigma         = atof(argv[4]);
 
   typedef otb::Image<double, 2>        InputImageType;
   typedef otb::Image<unsigned char, 2> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ConvexOrConcaveClassificationFilter<InputImageType, OutputImageType> ClassificationFilterType;
 
   // Instantiating objects
-  ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
-  ReaderType::Pointer               reader = ReaderType::New();
+  ClassificationFilterType::Pointer filter         = ClassificationFilterType::New();
+  ReaderType::Pointer               reader         = ReaderType::New();
   ReaderType::Pointer               levelingReader = ReaderType::New();
-  WriterType::Pointer               writer = WriterType::New();
+  WriterType::Pointer               writer         = WriterType::New();
 
   reader->SetFileName(infname);
   levelingReader->SetFileName(levelingfname);

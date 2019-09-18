@@ -58,23 +58,18 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage>
-class ITK_EXPORT TouziEdgeDetectorImageFilter :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-      TOutputImageDirection>
+class ITK_EXPORT TouziEdgeDetectorImageFilter : public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef TouziEdgeDetectorImageFilter                                                            Self;
+  typedef TouziEdgeDetectorImageFilter Self;
   typedef ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection> Superclass;
-  typedef itk::SmartPointer<Self>                                                                 Pointer;
-  typedef itk::SmartPointer<const Self>                                                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -100,12 +95,13 @@ public:
    * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   TouziEdgeDetectorImageFilter();
-  ~TouziEdgeDetectorImageFilter() override {}
+  ~TouziEdgeDetectorImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void BeforeThreadedGenerateData() override;
@@ -118,16 +114,14 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  TouziEdgeDetectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  TouziEdgeDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius declaration */
   SizeType m_Radius;
-
 };
 
 } // end namespace otb

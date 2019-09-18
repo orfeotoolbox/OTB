@@ -35,7 +35,7 @@ namespace otb
 {
 namespace Wrapper
 {
-  class QtMainWindow;
+class QtMainWindow;
 }
 }
 

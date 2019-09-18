@@ -27,7 +27,7 @@ namespace otb
 {
 
 /** \class SOMModelFactory
- * 
+ *
  * Factory for SOMModel
  *
  * \ingroup OTBDimensionalityReductionLearning
@@ -37,7 +37,7 @@ class ITK_EXPORT SOMModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef SOMModelFactory   Self;
+  typedef SOMModelFactory               Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -64,12 +64,11 @@ protected:
   ~SOMModelFactory() override;
 
 private:
-  SOMModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SOMModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
-} //namespace otb
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSOMModelFactory.hxx"

@@ -28,45 +28,38 @@
 namespace otb
 {
 
-  template <class TReduceSpectralResponse , class TFunction>
-      ReduceSpectralResponseClassifierRAndNIR <TReduceSpectralResponse , TFunction>
-  ::ReduceSpectralResponseClassifierRAndNIR()
-  {
-    //m_Response = VectorType::New();
-  }
+template <class TReduceSpectralResponse, class TFunction>
+ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse, TFunction>::ReduceSpectralResponseClassifierRAndNIR()
+{
+  // m_Response = VectorType::New();
+}
 
-  template <class TReduceSpectralResponse , class TFunction>
-      bool
-          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
-  ::Clear()
-  {
-    return ( m_InputReduceSpectralResponse->Clear() );
-  }
+template <class TReduceSpectralResponse, class TFunction>
+bool ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse, TFunction>::Clear()
+{
+  return (m_InputReduceSpectralResponse->Clear());
+}
 
 
-  template <class TReduceSpectralResponse , class TFunction>
-      inline typename ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
-  ::ValuePrecisionType
-      ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
-  ::operator()()
-  {
-    itk::VariableLengthVector<ValuePrecisionType> sr(2);
-    sr[0]=(*m_InputReduceSpectralResponse)(m_RBandNumber);
-    sr[1]=(*m_InputReduceSpectralResponse)(m_NIRBandNumber);
-    m_Functor.SetBandIndex(CommonBandNames::RED,1);
-    m_Functor.SetBandIndex(CommonBandNames::NIR,2);
+template <class TReduceSpectralResponse, class TFunction>
+inline typename ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse, TFunction>::ValuePrecisionType
+ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse, TFunction>::operator()()
+{
+  itk::VariableLengthVector<ValuePrecisionType> sr(2);
+  sr[0] = (*m_InputReduceSpectralResponse)(m_RBandNumber);
+  sr[1] = (*m_InputReduceSpectralResponse)(m_NIRBandNumber);
+  m_Functor.SetBandIndex(CommonBandNames::RED, 1);
+  m_Functor.SetBandIndex(CommonBandNames::NIR, 2);
 
-    return m_Functor(sr);
-  }
+  return m_Functor(sr);
+}
 
 
-  template <class TReduceSpectralResponse , class TFunction>
-      void
-          ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse , TFunction>
-  ::PrintSelf(std::ostream& os, itk::Indent indent) const
-  {
-    Superclass::PrintSelf(os, indent);
-  }
+template <class TReduceSpectralResponse, class TFunction>
+void ReduceSpectralResponseClassifierRAndNIR<TReduceSpectralResponse, TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
+{
+  Superclass::PrintSelf(os, indent);
+}
 } // end namespace otb
 
 #endif

@@ -27,26 +27,20 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>
-::ConcatenateScalarValueImageFilter()
+ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>::ConcatenateScalarValueImageFilter()
 {
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation(void)
+void ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
 
-  this->GetOutput()->SetNumberOfComponentsPerPixel(
-    this->GetInput()->GetNumberOfComponentsPerPixel() + 1 );
+  this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel() + 1);
 }
 
 template <class TInputImage, class TOutputImage>
-void
-ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ConcatenateScalarValueImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

@@ -53,9 +53,9 @@ public:
     if (nir == 0)
     {
       return static_cast<TOutput>(0.);
-      }
+    }
 
-      return (static_cast<TOutput>(A - (B * red) / nir));
+    return (static_cast<TOutput>(A - (B * red) / nir));
   }
 
   static constexpr double A = 100.;

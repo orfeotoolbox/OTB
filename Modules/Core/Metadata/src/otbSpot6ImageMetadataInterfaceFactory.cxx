@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,29 +30,22 @@
 
 namespace otb
 {
-Spot6ImageMetadataInterfaceFactory
-::Spot6ImageMetadataInterfaceFactory()
+Spot6ImageMetadataInterfaceFactory::Spot6ImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbSpot6ImageMetadataInterface",
-                         "Spot6 Metadata Interface",
-                         1,
+  this->RegisterOverride("OpticalImageMetadataInterface", "otbSpot6ImageMetadataInterface", "Spot6 Metadata Interface", 1,
                          itk::CreateObjectFunction<Spot6ImageMetadataInterface>::New());
 }
 
-Spot6ImageMetadataInterfaceFactory
-::~Spot6ImageMetadataInterfaceFactory()
+Spot6ImageMetadataInterfaceFactory::~Spot6ImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-Spot6ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* Spot6ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-Spot6ImageMetadataInterfaceFactory::GetDescription() const
+const char* Spot6ImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Spot6 Metadata Interface Factory, handle Spot6 metadata in OTB";
 }

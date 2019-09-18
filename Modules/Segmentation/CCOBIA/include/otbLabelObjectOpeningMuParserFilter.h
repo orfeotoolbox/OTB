@@ -58,26 +58,26 @@ namespace otb
  *
  * \ingroup OTBCCOBIA
  */
-template<class TImage, class TFunction = Functor::OBIAMuParserFunctor<typename TImage::LabelObjectType> >
-class ITK_EXPORT LabelObjectOpeningMuParserFilter: public itk::InPlaceLabelMapFilter<TImage>
+template <class TImage, class TFunction = Functor::OBIAMuParserFunctor<typename TImage::LabelObjectType>>
+class ITK_EXPORT LabelObjectOpeningMuParserFilter : public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelObjectOpeningMuParserFilter Self;
+  typedef LabelObjectOpeningMuParserFilter   Self;
   typedef itk::InPlaceLabelMapFilter<TImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TImage ImageType;
-  typedef typename ImageType::Pointer ImagePointer;
-  typedef typename ImageType::ConstPointer ImageConstPointer;
-  typedef typename ImageType::PixelType PixelType;
-  typedef typename ImageType::IndexType IndexType;
-  typedef typename ImageType::RegionType InputImageRegionType;
-  typedef typename ImageType::LabelObjectType LabelObjectType;
-  typedef typename LabelObjectType::ConstPointer LabelObjectConstPointer;
-  typedef TFunction FunctorType;
+  typedef TImage                                  ImageType;
+  typedef typename ImageType::Pointer             ImagePointer;
+  typedef typename ImageType::ConstPointer        ImageConstPointer;
+  typedef typename ImageType::PixelType           PixelType;
+  typedef typename ImageType::IndexType           IndexType;
+  typedef typename ImageType::RegionType          InputImageRegionType;
+  typedef typename ImageType::LabelObjectType     LabelObjectType;
+  typedef typename LabelObjectType::ConstPointer  LabelObjectConstPointer;
+  typedef TFunction                               FunctorType;
   typedef typename LabelObjectType::AttributeType AttributeType;
 
   /** ImageDimension constants */
@@ -114,7 +114,9 @@ public:
 
   void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) override {}
+  void EnlargeOutputRequestedRegion(itk::DataObject*) override
+  {
+  }
 
   void GenerateData() override;
 
@@ -129,10 +131,9 @@ private:
 
   FunctorType m_Functor;
   std::string m_Expression;
-
 };
 
-}//end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbLabelObjectOpeningMuParserFilter.hxx"
