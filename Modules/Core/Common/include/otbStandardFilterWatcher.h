@@ -52,23 +52,20 @@ namespace otb
 class OTBCommon_EXPORT StandardFilterWatcher : public FilterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  StandardFilterWatcher(itk::ProcessObject* process,
-                        const char *comment = "");
+  StandardFilterWatcher(itk::ProcessObject* process, const char* comment = "");
 
-  StandardFilterWatcher(itk::ProcessObject* process,
-                        const std::string& comment = "");
+  StandardFilterWatcher(itk::ProcessObject* process, const std::string& comment = "");
 
   /** Default constructor */
-  StandardFilterWatcher() : m_StarsCount(0) {};
+  StandardFilterWatcher() : m_StarsCount(0){};
 
   /** Copy constructor */
   StandardFilterWatcher(const StandardFilterWatcher&);
 
   /** operator=  */
-  void operator =(const StandardFilterWatcher&);
+  void operator=(const StandardFilterWatcher&);
 
   /** Get/Set number of stars */
   void SetStars(int count)
@@ -81,7 +78,6 @@ public:
   }
 
 protected:
-
   /** Callback method to show the ProgressEvent */
   void ShowProgress() override;
 
@@ -92,7 +88,6 @@ protected:
   void EndFilter() override;
 
 private:
-
   /** Stars coutning */
   int m_StarsCount;
 

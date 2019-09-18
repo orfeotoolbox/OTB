@@ -33,40 +33,33 @@ namespace otb
  * Constructor
  */
 template <class TImageType>
-ImageListToSingleImageFilter<TImageType>
-::ImageListToSingleImageFilter()
- :m_ExtractedImagePosition(0)
+ImageListToSingleImageFilter<TImageType>::ImageListToSingleImageFilter() : m_ExtractedImagePosition(0)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
 }
 
 template <class TImageType>
-typename ImageListToSingleImageFilter<TImageType>::OutputImagePointerType
-ImageListToSingleImageFilter<TImageType>
-::GetOutput()
+typename ImageListToSingleImageFilter<TImageType>::OutputImagePointerType ImageListToSingleImageFilter<TImageType>::GetOutput()
 {
   // If there is no input
   if (this->GetNumberOfInputs() != 1)
-    {
+  {
     // exit
     return nullptr;
-    }
+  }
   // else return the first input
-  return static_cast<OutputImagePointerType>(
-       this->GetInput()->GetNthElement(m_ExtractedImagePosition));
+  return static_cast<OutputImagePointerType>(this->GetInput()->GetNthElement(m_ExtractedImagePosition));
 }
 
 /**
  * Main computation method
  */
 template <class TImageType>
-void
-ImageListToSingleImageFilter<TImageType>
-::GenerateData(void)
+void ImageListToSingleImageFilter<TImageType>::GenerateData(void)
 {
-  OutputImagePointerType  outputPtr = this->GetOutput();
-  InputImagePointerType inputPtr = this->GetInput()->GetNthElement(m_ExtractedImagePosition);
+  OutputImagePointerType outputPtr = this->GetOutput();
+  InputImagePointerType  inputPtr  = this->GetInput()->GetNthElement(m_ExtractedImagePosition);
 
   typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIteratorWithIndex<OutputImageType>     OutputIteratorType;
@@ -82,28 +75,26 @@ ImageListToSingleImageFilter<TImageType>
   InputIteratorType inputIt(inputPtr, outputPtr->GetRequestedRegion());
   inputIt.GoToBegin();
   while (!inputIt.IsAtEnd())
-    {
+  {
 
-    if ( !(outputIt).IsAtEnd())
-      {
+    if (!(outputIt).IsAtEnd())
+    {
       outputIt.Set(inputIt.Get());
       ++outputIt;
-      }
-    else
-      {
-      itkGenericExceptionMacro("End of image at index " << outputIt.GetIndex() << " !");
-      }
-    ++inputIt;
     }
+    else
+    {
+      itkGenericExceptionMacro("End of image at index " << outputIt.GetIndex() << " !");
+    }
+    ++inputIt;
+  }
 }
 
 /**
  * PrintSelf Method
  */
 template <class TImageType>
-void
-ImageListToSingleImageFilter<TImageType>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageListToSingleImageFilter<TImageType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

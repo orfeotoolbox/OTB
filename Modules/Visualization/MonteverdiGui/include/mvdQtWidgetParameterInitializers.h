@@ -86,30 +86,23 @@ namespace Wrapper
 
 /**
  */
-template< typename W >
-void
-SetupForFilenameDrop( W* widget );
+template <typename W>
+void SetupForFilenameDrop(W* widget);
 
 /**
  */
-template< typename W >
-void
-SetupOutputFilename( W* widget,
-                     const QDir& dir,
-                     const QString& prefix,
-                     const QString& extension );
+template <typename W>
+void SetupOutputFilename(W* widget, const QDir& dir, const QString& prefix, const QString& extension);
 
 /**
  */
-template< typename W >
-void
-SetupOutputFilename( W * widget,
-                     const QDir & =QDir::current() );
+template <typename W>
+void SetupOutputFilename(W* widget, const QDir& = QDir::current());
 
 /**
  */
-template< typename F >
-inline void SetupWidget( QWidget * widget, const F& functor );
+template <typename F>
+inline void SetupWidget(QWidget* widget, const F& functor);
 
 
 /*****************************************************************************/
@@ -122,13 +115,10 @@ inline void SetupWidget( QWidget * widget, const F& functor );
  *
  * \brief WIP.
  */
-class FileSelectionInitializer : public std::unary_function<
-  otb::Wrapper::QtFileSelectionWidget*,
-  void
-  >
+class FileSelectionInitializer : public std::unary_function<otb::Wrapper::QtFileSelectionWidget*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -138,13 +128,10 @@ public:
  *
  * \brief WIP.
  */
-class InputImageInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputImageParameter*,
-  void
-  >
+class InputImageInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputImageParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -154,13 +141,10 @@ public:
  *
  * \brief WIP.
  */
-class InputImageListInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputImageListParameter*,
-  void
-  >
+class InputImageListInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputImageListParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -170,12 +154,10 @@ public:
  *
  * \brief WIP.
  */
-class InputVectorDataInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputVectorDataParameter*,
-  void >
+class InputVectorDataInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputVectorDataParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -185,12 +167,10 @@ public:
  *
  * \brief WIP.
  */
-class InputVectorDataListInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputVectorDataListParameter*,
-  void >
+class InputVectorDataListInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputVectorDataListParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -200,12 +180,10 @@ public:
  *
  * \brief WIP.
  */
-class InputFilenameInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputFilenameParameter*,
-  void >
+class InputFilenameInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputFilenameParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -215,12 +193,10 @@ public:
  *
  * \brief WIP.
  */
-class InputFilenameListInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetInputFilenameListParameter*,
-  void >
+class InputFilenameListInitializer : public std::unary_function<otb::Wrapper::QtWidgetInputFilenameListParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -230,15 +206,12 @@ public:
  *
  * \brief WIP.
  */
-class OutputImageInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetOutputImageParameter*,
-  void
-  >
+class OutputImageInitializer : public std::unary_function<otb::Wrapper::QtWidgetOutputImageParameter*, void>
 {
 public:
-  inline OutputImageInitializer( const QString & prefix );
+  inline OutputImageInitializer(const QString& prefix);
 
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 
 private:
   QString m_Prefix;
@@ -251,13 +224,10 @@ private:
  *
  * \brief WIP.
  */
-class OutputVectorDataInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetOutputVectorDataParameter*,
-  void
-  >
+class OutputVectorDataInitializer : public std::unary_function<otb::Wrapper::QtWidgetOutputVectorDataParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -267,13 +237,10 @@ public:
  *
  * \brief WIP.
  */
-class OutputFilenameInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetOutputFilenameParameter*,
-  void
-  >
+class OutputFilenameInitializer : public std::unary_function<otb::Wrapper::QtWidgetOutputFilenameParameter*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -283,10 +250,10 @@ public:
  *
  * \brief WIP.
  */
-class ToolTipInitializer : public std::unary_function< QWidget*, void >
+class ToolTipInitializer : public std::unary_function<QWidget*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 /**
@@ -296,12 +263,10 @@ public:
  *
  * \brief WIP.
  */
-class ParameterListInitializer : public std::unary_function<
-  otb::Wrapper::QtWidgetParameterList *,
-  void >
+class ParameterListInitializer : public std::unary_function<otb::Wrapper::QtWidgetParameterList*, void>
 {
 public:
-  inline result_type operator () ( argument_type widget ) const;
+  inline result_type operator()(argument_type widget) const;
 };
 
 } // end namespace 'Wrapper'.
@@ -336,32 +301,23 @@ namespace Wrapper
 {
 
 /*****************************************************************************/
-inline
-FileSelectionInitializer::result_type
-FileSelectionInitializer
-::operator () ( argument_type widget ) const
+inline FileSelectionInitializer::result_type FileSelectionInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 }
 
 /*****************************************************************************/
-inline
-InputImageInitializer::result_type
-InputImageInitializer
-::operator () ( argument_type widget ) const
+inline InputImageInitializer::result_type InputImageInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 }
 
 /*****************************************************************************/
-inline
-InputImageListInitializer::result_type
-InputImageListInitializer
-::operator () ( argument_type /* widget */ ) const
+inline InputImageListInitializer::result_type InputImageListInitializer::operator()(argument_type /* widget */) const
 {
   // assert( widget!=NULL );
 
@@ -369,21 +325,15 @@ InputImageListInitializer
 }
 
 /*****************************************************************************/
-inline
-InputFilenameInitializer::result_type
-InputFilenameInitializer
-::operator () ( argument_type widget ) const
+inline InputFilenameInitializer::result_type InputFilenameInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 }
 
 /*****************************************************************************/
-inline
-InputFilenameListInitializer::result_type
-InputFilenameListInitializer
-::operator () ( argument_type /* widget */) const
+inline InputFilenameListInitializer::result_type InputFilenameListInitializer::operator()(argument_type /* widget */) const
 {
   // assert( widget!=NULL );
 
@@ -391,21 +341,15 @@ InputFilenameListInitializer
 }
 
 /*****************************************************************************/
-inline
-InputVectorDataInitializer::result_type
-InputVectorDataInitializer
-::operator () ( argument_type widget ) const
+inline InputVectorDataInitializer::result_type InputVectorDataInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 }
 
 /*****************************************************************************/
-inline
-InputVectorDataListInitializer::result_type
-InputVectorDataListInitializer
-::operator () ( argument_type /* widget */) const
+inline InputVectorDataListInitializer::result_type InputVectorDataListInitializer::operator()(argument_type /* widget */) const
 {
   // assert( widget!=NULL );
 
@@ -413,241 +357,175 @@ InputVectorDataListInitializer
 }
 
 /*****************************************************************************/
-inline
-ToolTipInitializer::result_type
-ToolTipInitializer
-::operator () ( argument_type otbUseInDebug( widget ) ) const
+inline ToolTipInitializer::result_type ToolTipInitializer::operator()(argument_type otbUseInDebug(widget)) const
 {
-#if defined( OTB_DEBUG )
-  assert( widget!=NULL );
+#if defined(OTB_DEBUG)
+  assert(widget != NULL);
 
-  widget->setToolTip(
-    widget->toolTip() +
-    "\n(" +
-    widget->metaObject()->className() +
-    ")"
-  );
+  widget->setToolTip(widget->toolTip() + "\n(" + widget->metaObject()->className() + ")");
 
 #endif // defined( OTB_DEBUG )
 }
 
 /*****************************************************************************/
-inline
-OutputImageInitializer
-::OutputImageInitializer( const QString& prefix ) :
-  m_Prefix( prefix )
+inline OutputImageInitializer::OutputImageInitializer(const QString& prefix) : m_Prefix(prefix)
 {
 }
 
 /*****************************************************************************/
-inline
-OutputImageInitializer::result_type
-OutputImageInitializer
-::operator () ( argument_type widget ) const
+inline OutputImageInitializer::result_type OutputImageInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
-  assert( I18nCoreApplication::ConstInstance()!=NULL );
+  assert(widget != NULL);
+  assert(I18nCoreApplication::ConstInstance() != NULL);
 
-  if( m_Prefix.isEmpty() )
-    {
-    SetupForFilenameDrop( widget );
+  if (m_Prefix.isEmpty())
+  {
+    SetupForFilenameDrop(widget);
 
-    assert( qApp!=NULL );
-    assert( !qApp->arguments().empty() );
+    assert(qApp != NULL);
+    assert(!qApp->arguments().empty());
 
-    SetupOutputFilename( widget );
-    }
+    SetupOutputFilename(widget);
+  }
   else
-    SetupOutputFilename(
-      widget,
-      I18nCoreApplication::ConstInstance()->GetResultsDir(),
-      m_Prefix,
-      ".tif"
-    );
+    SetupOutputFilename(widget, I18nCoreApplication::ConstInstance()->GetResultsDir(), m_Prefix, ".tif");
 }
 
 /*****************************************************************************/
-inline
-OutputVectorDataInitializer::result_type
-OutputVectorDataInitializer
-::operator () ( argument_type widget ) const
+inline OutputVectorDataInitializer::result_type OutputVectorDataInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 
-  assert( qApp!=NULL );
-  assert( !qApp->arguments().empty() );
+  assert(qApp != NULL);
+  assert(!qApp->arguments().empty());
 
-  SetupOutputFilename( widget );
+  SetupOutputFilename(widget);
 }
 
 /*****************************************************************************/
-inline
-OutputFilenameInitializer::result_type
-OutputFilenameInitializer
-::operator () ( argument_type widget ) const
+inline OutputFilenameInitializer::result_type OutputFilenameInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupForFilenameDrop( widget );
+  SetupForFilenameDrop(widget);
 
-  assert( qApp!=NULL );
-  assert( !qApp->arguments().empty() );
+  assert(qApp != NULL);
+  assert(!qApp->arguments().empty());
 
-  SetupOutputFilename( widget );
+  SetupOutputFilename(widget);
 }
 
 /*****************************************************************************/
-inline
-ParameterListInitializer::result_type
-ParameterListInitializer
-::operator () ( argument_type widget ) const
+inline ParameterListInitializer::result_type ParameterListInitializer::operator()(argument_type widget) const
 {
-  assert( widget!=nullptr );
+  assert(widget != nullptr);
 
-  QWidget *listWidget = widget->layout()->itemAt(0)->widget();
+  QWidget* listWidget = widget->layout()->itemAt(0)->widget();
 
-  assert( listWidget );
+  assert(listWidget);
 
-  otb::Wrapper::ListEditWidget *castListEdit =
-    dynamic_cast<otb::Wrapper::ListEditWidget *>(listWidget);
+  otb::Wrapper::ListEditWidget* castListEdit = dynamic_cast<otb::Wrapper::ListEditWidget*>(listWidget);
 
   assert(castListEdit);
 
-  QObject* eventFilter = new FilenameDragAndDropEventFilter( castListEdit );
+  QObject* eventFilter = new FilenameDragAndDropEventFilter(castListEdit);
   castListEdit->installEventFilter(eventFilter);
-  QObject::connect(
-    eventFilter,
-    SIGNAL( FilenameDropped( const QString& ) ),
-    // to:
-    castListEdit,
-    SLOT( OnFilenameDropped( const QString& ) )
-  );
+  QObject::connect(eventFilter, SIGNAL(FilenameDropped(const QString&)),
+                   // to:
+                   castListEdit, SLOT(OnFilenameDropped(const QString&)));
 }
 
 /*****************************************************************************/
-template< typename W >
-void
-SetupForFilenameDrop( W* widget )
+template <typename W>
+void SetupForFilenameDrop(W* widget)
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  QLineEdit * lineEdit = widget->GetInput();
+  QLineEdit* lineEdit = widget->GetInput();
 
   //
   // Setup widget.
-  bool signalsBlocked = lineEdit->blockSignals( true );
+  bool signalsBlocked = lineEdit->blockSignals(true);
   {
-    lineEdit->setPlaceholderText(
-      QCoreApplication::translate(
-        "mvd::Wrapper::QtWidgetView",
-        "You can drop a file here"
-      )
-    );
+    lineEdit->setPlaceholderText(QCoreApplication::translate("mvd::Wrapper::QtWidgetView", "You can drop a file here"));
 
-  // lineEdit->setReadOnly( true );
+    // lineEdit->setReadOnly( true );
 
-  lineEdit->setToolTip(
-    lineEdit->toolTip() +
-    "\n" +
-    QCoreApplication::translate(
-      "mvd::Wrapper::QtWidgetView",
-      "You can drag filename from file-manager and drop it here."
-    )
-  );
+    lineEdit->setToolTip(lineEdit->toolTip() + "\n" +
+                         QCoreApplication::translate("mvd::Wrapper::QtWidgetView", "You can drag filename from file-manager and drop it here."));
   }
-  lineEdit->blockSignals( signalsBlocked );
+  lineEdit->blockSignals(signalsBlocked);
 
 
   //
   // Install event-filters.
 
-  QObject* eventFilter = new FilenameDragAndDropEventFilter( lineEdit );
+  QObject* eventFilter = new FilenameDragAndDropEventFilter(lineEdit);
 
-  lineEdit->installEventFilter( eventFilter );
+  lineEdit->installEventFilter(eventFilter);
 
   // BUG : temporary fix for drag & drop in InputImageParameter
   // in the future, all "filename" parameters should have the same behaviour
-  if (dynamic_cast<otb::Wrapper::QtWidgetInputImageParameter*>(widget) ||
-      dynamic_cast<otb::Wrapper::QtFileSelectionWidget*>(widget))
-    {
-    QObject::connect(
-      eventFilter,
-      SIGNAL( FilenameDropped( const QString& ) ),
-      // to:
-      widget,
-      SLOT( SetFileName( const QString& ) )
-    );
-    }
+  if (dynamic_cast<otb::Wrapper::QtWidgetInputImageParameter*>(widget) || dynamic_cast<otb::Wrapper::QtFileSelectionWidget*>(widget))
+  {
+    QObject::connect(eventFilter, SIGNAL(FilenameDropped(const QString&)),
+                     // to:
+                     widget, SLOT(SetFileName(const QString&)));
+  }
   else
-    {
-    QObject::connect(
-      eventFilter,
-      SIGNAL( FilenameDropped( const QString& ) ),
-      // to:
-      lineEdit,
-      SLOT( setText( const QString& ) )
-    );
-    }
+  {
+    QObject::connect(eventFilter, SIGNAL(FilenameDropped(const QString&)),
+                     // to:
+                     lineEdit, SLOT(setText(const QString&)));
+  }
 }
 
 /*****************************************************************************/
-template< typename W >
-void
-SetupOutputFilename( W* widget,
-                     const QDir& dir,
-                     const QString& prefix,
-                     const QString& extension )
+template <typename W>
+void SetupOutputFilename(W* widget, const QDir& dir, const QString& prefix, const QString& extension)
 {
-  if(widget->isEnabled())
-    {
-    QString id( QUuid::createUuid().toString() );
+  if (widget->isEnabled())
+  {
+    QString id(QUuid::createUuid().toString());
 
-    id.replace( QRegExp( "[\\{|\\}]" ), "" );
+    id.replace(QRegExp("[\\{|\\}]"), "");
 
-    if( prefix!=NULL )
-      id.prepend( "_" );
+    if (prefix != NULL)
+      id.prepend("_");
 
-    widget->SetFileName(
-      dir.absoluteFilePath( prefix + id + extension )
-    );
+    widget->SetFileName(dir.absoluteFilePath(prefix + id + extension));
 
     widget->UpdateGUI();
-    }
+  }
 }
 
 /*****************************************************************************/
-template< typename W >
-void
-SetupOutputFilename( W * widget,
-                     const QDir & dir )
+template <typename W>
+void SetupOutputFilename(W* widget, const QDir& dir)
 {
-  if(widget->isEnabled())
-    {
-    widget->SetFileName( dir.path() );
+  if (widget->isEnabled())
+  {
+    widget->SetFileName(dir.path());
 
     widget->UpdateGUI();
-    }
+  }
 }
 
 /*******************************************************************************/
-template< typename F >
-inline
-void
-SetupWidget( QWidget * widget, const F & functor )
+template <typename F>
+inline void SetupWidget(QWidget* widget, const F& functor)
 {
   typedef typename F::argument_type Widget;
-  typedef QList< Widget > WidgetList;
+  typedef QList<Widget>             WidgetList;
 
-  WidgetList list( widget->findChildren< Widget >() );
+  WidgetList list(widget->findChildren<Widget>());
 
-  for( typename WidgetList::iterator it( list.begin() );
-       it!=list.end();
-       ++it )
-    {
-    functor( *it );
-    }
+  for (typename WidgetList::iterator it(list.begin()); it != list.end(); ++it)
+  {
+    functor(*it);
+  }
 }
 
 } // end namespace 'Wrapper'.

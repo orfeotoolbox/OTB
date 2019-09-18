@@ -62,28 +62,20 @@ namespace otb
  *
  * \ingroup OTBEdge
  */
-template <class TInputImage,
-    class TOutputImage,
-    class TOutputImageDirection = TOutputImage,
-    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineRatioDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
-      TOutputImageDirection,
-      TInterpolator>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage>>
+class ITK_EXPORT LineRatioDetectorImageFilter : public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef LineRatioDetectorImageFilter                                                                 Self;
+  typedef LineRatioDetectorImageFilter Self;
   typedef LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator> Superclass;
-  typedef itk::SmartPointer<Self>                                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -114,15 +106,16 @@ public:
 
 protected:
   LineRatioDetectorImageFilter();
-  ~LineRatioDetectorImageFilter() override {}
+  ~LineRatioDetectorImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3) override;
 
 private:
-  LineRatioDetectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  LineRatioDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 

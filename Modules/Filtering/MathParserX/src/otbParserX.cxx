@@ -30,10 +30,10 @@ class ITK_EXPORT ParserXImpl : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ParserXImpl                               Self;
-  typedef itk::LightObject                         Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef ParserXImpl                   Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -42,20 +42,19 @@ public:
   itkTypeMacro(ParserXImpl, itk::LightObject);
 
   /** Convenient type definitions */
-  typedef mup::Value                                ValueType;
-  typedef mup::IValue                                IValueType;
-  typedef mup::ParserError                          ExceptionType;
+  typedef mup::Value       ValueType;
+  typedef mup::IValue      IValueType;
+  typedef mup::ParserError ExceptionType;
 
   /** Initialize user defined constants */
   virtual void InitConst()
   {
-    
-    m_MuParserX.DefineConst( "log2e",  CONST_LOG2E );
-    m_MuParserX.DefineConst( "log10e", CONST_LOG10E );
-    m_MuParserX.DefineConst( "ln2",    CONST_LN2 );
-    m_MuParserX.DefineConst( "ln10",   CONST_LN10 );
-    m_MuParserX.DefineConst( "euler",  CONST_EULER );
 
+    m_MuParserX.DefineConst("log2e", CONST_LOG2E);
+    m_MuParserX.DefineConst("log10e", CONST_LOG10E);
+    m_MuParserX.DefineConst("ln2", CONST_LN2);
+    m_MuParserX.DefineConst("ln10", CONST_LN10);
+    m_MuParserX.DefineConst("euler", CONST_EULER);
   }
 
   /** Initialize user defined functions */
@@ -96,11 +95,10 @@ public:
     m_MuParserX.DefineFun(new vabs);
     m_MuParserX.DefineFun(new vexp);
     m_MuParserX.DefineFun(new vsqrt);
-
   }
 
   /** Set the expression to be parsed */
-  virtual void SetExpr(const std::string & Expression)
+  virtual void SetExpr(const std::string& Expression)
   {
     m_MuParserX.SetExpr(Expression);
   }
@@ -108,44 +106,44 @@ public:
   /** Trigger the parsing */
   ValueType Eval()
   {
-    //ParserX::ValueType result = 0.0;
+    // ParserX::ValueType result = 0.0;
     ValueType result = 0.0;
     try
-      {
+    {
       result = m_MuParserX.Eval();
-      }
-    catch(ExceptionType &e)
-      {
+    }
+    catch (ExceptionType& e)
+    {
       ExceptionHandler(e);
-      }
+    }
     return result;
   }
 
-  const IValueType & EvalRef()
-    {
+  const IValueType& EvalRef()
+  {
     try
-      {
+    {
       return m_MuParserX.Eval();
-      }
-    catch(ExceptionType &e)
-      {
-      ExceptionHandler(e);
-      }
-    return m_NullValue;
     }
+    catch (ExceptionType& e)
+    {
+      ExceptionHandler(e);
+    }
+    return m_NullValue;
+  }
 
 
   /** Define a variable */
-  void DefineVar(const std::string &sName, ValueType *fVar)
+  void DefineVar(const std::string& sName, ValueType* fVar)
   {
     try
-      {
+    {
       m_MuParserX.DefineVar(sName, mup::Variable(fVar));
-      }
-    catch(ExceptionType &e)
-      {
+    }
+    catch (ExceptionType& e)
+    {
       ExceptionHandler(e);
-      }
+    }
   }
 
   /** Define a constant */
@@ -183,13 +181,13 @@ public:
   const mup::var_maptype& GetExprVar() const
   {
     try
-      {
+    {
       return m_MuParserX.GetExprVar();
-      }
-    catch(ExceptionType &e)
-      {
+    }
+    catch (ExceptionType& e)
+    {
       ExceptionHandler(e);
-      }
+    }
     return m_MuParserX.GetExprVar();
   }
 
@@ -200,10 +198,10 @@ public:
     {
       m_MuParserX.Eval();
     }
-   catch(ExceptionType &e)
+    catch (ExceptionType& e)
     {
-     ExceptionHandler(e);
-     return false;
+      ExceptionHandler(e);
+      return false;
     }
 
     return true;
@@ -225,22 +223,22 @@ public:
   }*/
 
   /** Convert parser specific exception into itk exception */
-  virtual void ExceptionHandler(ExceptionType &e) const
+  virtual void ExceptionHandler(ExceptionType& e) const
   {
-    itkExceptionMacro(                                     << std::endl
-          << "Message:     "   << e.GetMsg()   << std::endl
-          << "Formula:     "   << e.GetExpr()  << std::endl
-          << "Token:       "   << e.GetToken() << std::endl
-          << "Position:    "   << e.GetPos()   << std::endl
-                 << std::endl);
-  //        << "Errc:        "   << e.GetCode()  << std::endl);
+    itkExceptionMacro(<< std::endl
+                      << "Message:     " << e.GetMsg() << std::endl
+                      << "Formula:     " << e.GetExpr() << std::endl
+                      << "Token:       " << e.GetToken() << std::endl
+                      << "Position:    " << e.GetPos() << std::endl
+                      << std::endl);
+    //        << "Errc:        "   << e.GetCode()  << std::endl);
   }
 
   /** Convert parser specific exception into itk debug macro */
-   virtual void ExceptionHandlerDebug(ExceptionType &e)
-   {
-     ExceptionHandler(e);
-   }
+  virtual void ExceptionHandlerDebug(ExceptionType& e)
+  {
+    ExceptionHandler(e);
+  }
 
 protected:
   ParserXImpl()
@@ -261,8 +259,8 @@ protected:
 
 
 private:
-  ParserXImpl(const Self &) = delete;
-  void operator =(const Self &) = delete;
+  ParserXImpl(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   mup::ParserX m_MuParserX;
 
@@ -278,8 +276,7 @@ void ParserX::PrintSelf(std::ostream& os, itk::Indent indent) const
 }
 
 
-ParserX::ParserX()
-: m_InternalParserX( ParserXImpl::New() )
+ParserX::ParserX() : m_InternalParserX(ParserXImpl::New())
 {
 }
 
@@ -287,7 +284,7 @@ ParserX::~ParserX()
 {
 }
 
-void ParserX::SetExpr(const std::string & Expression)
+void ParserX::SetExpr(const std::string& Expression)
 {
   m_InternalParserX->SetExpr(Expression);
 }
@@ -297,12 +294,12 @@ ParserX::ValueType ParserX::Eval()
   return m_InternalParserX->Eval();
 }
 
-const ParserX::IValueType &  ParserX::EvalRef()
+const ParserX::IValueType& ParserX::EvalRef()
 {
   return m_InternalParserX->EvalRef();
 }
 
-void ParserX::DefineVar(const std::string &sName, ValueType *fVar)
+void ParserX::DefineVar(const std::string& sName, ValueType* fVar)
 {
   m_InternalParserX->DefineVar(sName, fVar);
 }
@@ -334,7 +331,7 @@ const mup::var_maptype& ParserX::GetVar() const
 /** Return the list of expression variables (only make sense after having set up an expression) */
 const mup::var_maptype& ParserX::GetExprVar() const
 {
-   return m_InternalParserX->GetExprVar();
+  return m_InternalParserX->GetExprVar();
 }
 
 
@@ -344,4 +341,4 @@ const mup::var_maptype& ParserX::GetExprVar() const
   return m_InternalParserX->GetFunList();
 }*/
 
-}//end namespace otb
+} // end namespace otb

@@ -75,10 +75,10 @@ class ITK_EXPORT FineRegistrationImageFilter : public itk::ImageToImageFilter<TI
 {
 public:
   /** Standard class typedefs. */
-  typedef FineRegistrationImageFilter                             Self;
+  typedef FineRegistrationImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, T0utputCorrelation> Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -87,24 +87,24 @@ public:
   itkTypeMacro(FineRegistrationImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef typename T0utputCorrelation::RegionType                 OutputImageRegionType;
-  typedef typename TOutputDisplacementField::PixelType             DisplacementValueType;
-  typedef typename TInputImage::Pointer                           InputImagePointerType;
-  typedef typename TInputImage::RegionType                        InputImageRegionType;
-  typedef typename TInputImage::SizeType                          SizeType;
-  typedef typename TInputImage::IndexType                         IndexType;
-  typedef typename TInputImage::SpacingType                       SpacingType;
-  typedef typename TInputImage::PointType                         PointType;
-  typedef typename TInputImage::OffsetType                        OffsetType;
-  typedef itk::InterpolateImageFunction<TInputImage, double>      InterpolatorType;
-  typedef typename InterpolatorType::Pointer                      InterpolatorPointerType;
-  typedef itk::ContinuousIndex<double, 2>                         ContinuousIndexType;
-  typedef itk::ImageToImageMetric<TInputImage, TInputImage>       MetricType;
-  typedef typename MetricType::Pointer                            MetricPointerType;
-  typedef itk::TranslationTransform<double, 2>                     TranslationType;
-  typedef typename TranslationType::Pointer                       TranslationPointerType;
-  typedef typename itk::Transform<double, 2, 2>                     TransformType;
-  typedef typename TransformType::Pointer                         TransformPointerType;
+  typedef typename T0utputCorrelation::RegionType      OutputImageRegionType;
+  typedef typename TOutputDisplacementField::PixelType DisplacementValueType;
+  typedef typename TInputImage::Pointer                InputImagePointerType;
+  typedef typename TInputImage::RegionType             InputImageRegionType;
+  typedef typename TInputImage::SizeType               SizeType;
+  typedef typename TInputImage::IndexType              IndexType;
+  typedef typename TInputImage::SpacingType            SpacingType;
+  typedef typename TInputImage::PointType              PointType;
+  typedef typename TInputImage::OffsetType             OffsetType;
+  typedef itk::InterpolateImageFunction<TInputImage, double> InterpolatorType;
+  typedef typename InterpolatorType::Pointer InterpolatorPointerType;
+  typedef itk::ContinuousIndex<double, 2>                   ContinuousIndexType;
+  typedef itk::ImageToImageMetric<TInputImage, TInputImage> MetricType;
+  typedef typename MetricType::Pointer MetricPointerType;
+  typedef itk::TranslationTransform<double, 2> TranslationType;
+  typedef typename TranslationType::Pointer TranslationPointerType;
+  typedef typename itk::Transform<double, 2, 2> TransformType;
+  typedef typename TransformType::Pointer TransformPointerType;
 
   /** Set/Get the Metric used to compare images */
   itkSetObjectMacro(Metric, MetricType);
@@ -115,17 +115,17 @@ public:
   itkGetObjectMacro(Interpolator, InterpolatorType);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetFixedInput( const TInputImage * image);
+  void SetFixedInput(const TInputImage* image);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetMovingInput( const TInputImage * image);
+  void SetMovingInput(const TInputImage* image);
 
   /** Get the inputs */
-  const TInputImage * GetFixedInput();
-  const TInputImage * GetMovingInput();
+  const TInputImage* GetFixedInput();
+  const TInputImage* GetMovingInput();
 
   /** Get the output displacement field */
-  TOutputDisplacementField * GetOutputDisplacementField();
+  TOutputDisplacementField* GetOutputDisplacementField();
 
   /** Set the radius of the area on which metric is evaluated */
   itkSetMacro(Radius, SizeType);
@@ -138,11 +138,11 @@ public:
   /** Set/Get convergence accuracy */
   itkSetMacro(ConvergenceAccuracy, double);
   itkGetMacro(ConvergenceAccuracy, double);
-  
+
   /** Set/Get subpixel accuracy */
   itkSetMacro(SubPixelAccuracy, double);
   itkGetMacro(SubPixelAccuracy, double);
-  
+
   /** Set/Get max number of iterations */
   itkSetMacro(MaxIter, int);
   itkGetMacro(MaxIter, int);
@@ -169,7 +169,7 @@ public:
     m_Radius.Fill(radius);
   }
 
- /** Set unsigned int radius */
+  /** Set unsigned int radius */
   void SetSearchRadius(unsigned int radius)
   {
     m_SearchRadius.Fill(radius);
@@ -189,7 +189,7 @@ protected:
   /** Constructor */
   FineRegistrationImageFilter();
   /** Destructor */
-  ~FineRegistrationImageFilter() override {};
+  ~FineRegistrationImageFilter() override{};
 
   /** Threaded generate data */
   void GenerateData() override;
@@ -203,51 +203,50 @@ protected:
 private:
   FineRegistrationImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-  
-  inline double callMetric(double val1,double val2,double &oldRes,bool &flag);
-  inline void updateOptParams(double potBestVal,double parx,double pary,                             //inputs
-                              double &bestVal, typename TranslationType::ParametersType& optParams); //outputs
-  inline void updatePoints(double& gn, double& in1, double& in2, double &in3,      //inputs
-                           double& out1, double& out2, double& out3, double& out4); //outputs
+
+  inline double callMetric(double val1, double val2, double& oldRes, bool& flag);
+  inline void updateOptParams(double potBestVal, double parx, double pary,                           // inputs
+                              double& bestVal, typename TranslationType::ParametersType& optParams); // outputs
+  inline void updatePoints(double& gn, double& in1, double& in2, double& in3,                        // inputs
+                           double& out1, double& out2, double& out3, double& out4);                  // outputs
   inline void updateMinimize(double& a, double& b);
 
   /** The radius for correlation */
-  SizeType                      m_Radius;
+  SizeType m_Radius;
 
   /** The search radius */
-  SizeType                      m_SearchRadius;
+  SizeType m_SearchRadius;
 
   /** Minimize/maximize metric */
-  bool                          m_Minimize;
+  bool m_Minimize;
 
   /** If true, displacement field uses spacing. Otherwise, uses pixel grid */
-  bool                          m_UseSpacing;
+  bool m_UseSpacing;
 
   /** Search step */
-  double                        m_ConvergenceAccuracy;
-  double                        m_SubPixelAccuracy;
-  
+  double m_ConvergenceAccuracy;
+  double m_SubPixelAccuracy;
+
   /** Max number of iterations */
-  int                           m_MaxIter;
+  int m_MaxIter;
 
   /** The interpolator */
-  InterpolatorPointerType       m_Interpolator;
+  InterpolatorPointerType m_Interpolator;
 
   /** The metric */
-  MetricPointerType             m_Metric;
+  MetricPointerType m_Metric;
 
   /** The translation */
-  TranslationPointerType        m_Translation;
+  TranslationPointerType m_Translation;
 
   /** Default offset */
-  SpacingType                   m_InitialOffset;
+  SpacingType m_InitialOffset;
 
   /** Grid step */
-  OffsetType                    m_GridStep;
+  OffsetType m_GridStep;
 
   /** Transform for initial offset */
-  TransformPointerType          m_Transform;
-
+  TransformPointerType m_Transform;
 };
 
 } // end namespace otb

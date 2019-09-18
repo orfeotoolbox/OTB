@@ -48,11 +48,9 @@ namespace otb
 class OTBCommon_EXPORT FilterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  FilterWatcherBase(itk::ProcessObject* process,
-                    const char *comment = "");
+  FilterWatcherBase(itk::ProcessObject* process, const char* comment = "");
 
   /** Default constructor */
   FilterWatcherBase();
@@ -61,19 +59,19 @@ public:
   FilterWatcherBase(const FilterWatcherBase&);
 
   /** operator=  */
-  void operator =(const FilterWatcherBase&);
+  void operator=(const FilterWatcherBase&);
 
   /** Destructor. */
   virtual ~FilterWatcherBase();
 
-  const char *GetNameOfClass()
-    {
+  const char* GetNameOfClass()
+  {
     return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
-    }
+  }
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess()
+  itk::ProcessObject* GetProcess()
   {
     return m_Process.GetPointer();
   }
@@ -91,7 +89,6 @@ public:
   }
 
 protected:
-
   /** Callback method to show the ProgressEvent */
   virtual void ShowProgressCallback()
   {
@@ -102,20 +99,20 @@ protected:
   virtual void StartFilterCallback()
   {
     if (!m_Started)
-      {
+    {
       this->StartFilter();
       m_Started = true;
-      }
+    }
   }
 
   /** Callback method to show the EndEvent */
   virtual void EndFilterCallback()
   {
     if (!m_Ended)
-      {
+    {
       this->EndFilter();
       m_Ended = true;
-      }
+    }
   }
 
   /** Callback method to show the ProgressEvent */
@@ -166,7 +163,6 @@ protected:
   bool m_Ended;
 
 private:
-
 };
 
 } // end namespace otb

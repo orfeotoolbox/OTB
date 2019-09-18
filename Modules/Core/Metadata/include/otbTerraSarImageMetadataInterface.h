@@ -39,7 +39,6 @@ namespace otb
 class OTBMetadata_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
   typedef TerraSarImageMetadataInterface Self;
   typedef SarImageMetadataInterface      Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
@@ -62,9 +61,9 @@ public:
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
 
-  typedef Superclass::PointSetType              PointSetType;
-  typedef Superclass::PointSetPointer           PointSetPointer;
-  typedef double                                RealType;
+  typedef Superclass::PointSetType    PointSetType;
+  typedef Superclass::PointSetPointer PointSetPointer;
+  typedef double                      RealType;
 
   /** Get the imaging start acquisition day from the ossim metadata */
   int GetDay() const override;
@@ -142,14 +141,14 @@ public:
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
   /** Get the constant calibration factor */
-  RealType   GetRadiometricCalibrationScale() const override;
+  RealType GetRadiometricCalibrationScale() const override;
 
   PointSetPointer GetRadiometricCalibrationNoise() const override;
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
+  IndexType       GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
-  //PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
+  // PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
+  IndexType       GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
   bool CanRead() const override;
 
@@ -159,15 +158,17 @@ public:
 
 protected:
   TerraSarImageMetadataInterface();
-  ~TerraSarImageMetadataInterface() override {}
+  ~TerraSarImageMetadataInterface() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Evaluate polynom with Horner scheme*/
 
   inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
 
-  double GetStartTimeUTC() const;
-  double GetStopTimeUTC() const;
+  double   GetStartTimeUTC() const;
+  double   GetStopTimeUTC() const;
   RealType GetRangeTimeFirstPixel() const;
 
   RealType GetRangeTimeLastPixel() const;
@@ -188,9 +189,8 @@ protected:
   double GetNoiseReferencePoint(unsigned int noiseRecord) const;
 
 private:
-  TerraSarImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  TerraSarImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

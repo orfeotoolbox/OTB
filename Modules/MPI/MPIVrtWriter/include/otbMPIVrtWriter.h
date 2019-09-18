@@ -34,17 +34,18 @@
 #include <gdal.h>
 #include <gdal_priv.h>
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
 #include <vrtdataset.h>
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #else
 #include <vrtdataset.h>
 #endif
 
 #include <ogr_spatialref.h>
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class MPIVrtWriter
@@ -54,14 +55,14 @@ namespace otb {
  * \ingroup OTBMPIVrtWriter
  */
 template <typename TImage>
-class MPIVrtWriter: public itk::ProcessObject
+class MPIVrtWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef MPIVrtWriter                                      Self;
-  typedef itk::ProcessObject                                Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef MPIVrtWriter                  Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TImage InputImageType;
 
@@ -72,7 +73,7 @@ public:
   itkTypeMacro(MPIVrtWriter, itk::ProcessObject);
 
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType *input);
+  virtual void SetInput(const InputImageType* input);
 
   /** Get writer only input */
   const InputImageType* GetInput();
@@ -82,7 +83,7 @@ public:
 
   virtual void SetFileName(const std::string& extendedFileName);
 
-  virtual const char* GetFileName () const;
+  virtual const char* GetFileName() const;
 
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
@@ -101,8 +102,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MPIVrtWriter(const MPIVrtWriter &) = delete;
-  void operator =(const MPIVrtWriter&) = delete;
+  MPIVrtWriter(const MPIVrtWriter&) = delete;
+  void operator=(const MPIVrtWriter&) = delete;
 
   unsigned int m_AvailableRAM;
 
@@ -111,7 +112,6 @@ private:
   std::string m_Filename;
 
   bool m_WriteVRT;
-
 };
 
 /**
@@ -128,7 +128,8 @@ private:
  *\param availableRAM Available memory for streaming
  *\param writeVRTFile Activate the VRT file writing
  */
-template <typename TImage> void WriteMPI(TImage *img, const std::string &output, unsigned int availableRAM = 0, bool writeVRTFile=true)
+template <typename TImage>
+void WriteMPI(TImage* img, const std::string& output, unsigned int availableRAM = 0, bool writeVRTFile = true)
 {
   typename MPIVrtWriter<TImage>::Pointer writer = MPIVrtWriter<TImage>::New();
   writer->SetInput(img);

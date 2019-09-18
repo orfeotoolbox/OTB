@@ -39,11 +39,15 @@ template <class TInputVectorPixel, class TOutputPixel>
 class SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
-  typedef SqrtSpectralAngleFunctor                              Self;
+  typedef SqrtSpectralAngleFunctor Self;
   typedef SpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
 
-  SqrtSpectralAngleFunctor() {}
-  ~SqrtSpectralAngleFunctor() override {}
+  SqrtSpectralAngleFunctor()
+  {
+  }
+  ~SqrtSpectralAngleFunctor() override
+  {
+  }
 
 protected:
   TOutputPixel Evaluate(const TInputVectorPixel& inPix) const override
@@ -53,7 +57,7 @@ protected:
 };
 
 } // end namespace Functor
-}  // end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #endif

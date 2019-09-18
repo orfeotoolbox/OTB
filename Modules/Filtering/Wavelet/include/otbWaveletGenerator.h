@@ -32,18 +32,24 @@ namespace otb
 
 namespace Wavelet
 {
-enum Wavelet {
-  HAAR = 0,
-  DAUBECHIES4 = 1, DB4 = 1,
-  DAUBECHIES6 = 2, DB6 = 2,
-  DAUBECHIES8 = 3, DB8 = 3,
-  DAUBECHIES12 = 4, DB12 = 4,
-  DAUBECHIES20 = 5, DB20 = 5,
+enum Wavelet
+{
+  HAAR         = 0,
+  DAUBECHIES4  = 1,
+  DB4          = 1,
+  DAUBECHIES6  = 2,
+  DB6          = 2,
+  DAUBECHIES8  = 3,
+  DB8          = 3,
+  DAUBECHIES12 = 4,
+  DB12         = 4,
+  DAUBECHIES20 = 5,
+  DB20         = 5,
   SPLINE_BIORTHOGONAL_2_4, // 6
   SPLINE_BIORTHOGONAL_4_4, // 7
-  SYMLET8, // 8
+  SYMLET8,                 // 8
   TotalNumberOfDefinedMotherWavelets
-  };
+};
 }
 
 /** \class WaveletGenerator
@@ -61,8 +67,7 @@ enum Wavelet {
  * \ingroup OTBWavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
-class ITK_EXPORT WaveletGenerator
-  : public itk::LightObject
+class ITK_EXPORT           WaveletGenerator : public itk::LightObject
 {
 public:
   /** Standard typedefs */
@@ -84,7 +89,7 @@ public:
    * GetWaveletName
    * By default (without template specification) it does nothing usable
    */
-  const char * GetWaveletName() const;
+  const char* GetWaveletName() const;
 
   /**
    * GetLowPassCoefficientVector
@@ -99,13 +104,17 @@ public:
   void GetHighPassCoefficientVector(CoefficientVector& coeff) const;
 
 protected:
-  WaveletGenerator() {}
-  ~WaveletGenerator() override {}
+  WaveletGenerator()
+  {
+  }
+  ~WaveletGenerator() override
+  {
+  }
 
 private:
-  WaveletGenerator(const Self &);  // not implemented
-  void operator =(const Self&); // not implemented
-}; // end of class
+  WaveletGenerator(const Self&); // not implemented
+  void operator=(const Self&);   // not implemented
+};                               // end of class
 
 } // end of namespace otb
 

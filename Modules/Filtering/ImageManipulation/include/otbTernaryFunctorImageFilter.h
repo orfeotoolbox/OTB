@@ -45,10 +45,10 @@ class ITK_EXPORT TernaryFunctorImageFilter : public itk::TernaryFunctorImageFilt
 {
 public:
   /** Standard class typedefs. */
-  typedef TernaryFunctorImageFilter                                            Self;
+  typedef TernaryFunctorImageFilter Self;
   typedef itk::TernaryFunctorImageFilter<TInputImage1, TInputImage2, TInputImage3, TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -57,8 +57,10 @@ public:
   itkTypeMacro(TernaryFunctorImageFilter, itk::TernaryFunctorImageFilter);
 
 protected:
-  TernaryFunctorImageFilter() {};
-  ~TernaryFunctorImageFilter() override {}
+  TernaryFunctorImageFilter(){};
+  ~TernaryFunctorImageFilter() override
+  {
+  }
 
   /** TernaryFunctorImageFilter can produce an image which has a different number of bands
    * than its input image.  As such, TernaryFunctorImageFilter
@@ -73,13 +75,12 @@ protected:
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
-      this->GetFunctor().GetOutputSize());
+        this->GetFunctor().GetOutputSize());
   }
 
 private:
-  TernaryFunctorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  TernaryFunctorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -24,35 +24,29 @@
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 #include "itkExtractImageFilter.h"
 
-namespace otb {
-
-template<class TVImage,class TMaskImage, class TLabelImage>
-MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
-::MeanShiftConnectedComponentSegmentationFilter()
+namespace otb
 {
-   m_MinimumObjectSize=2;
-   m_MeanShiftFilter= MeanShiftFilterType::New();
 
+template <class TVImage, class TMaskImage, class TLabelImage>
+MeanShiftConnectedComponentSegmentationFilter<TVImage, TMaskImage, TLabelImage>::MeanShiftConnectedComponentSegmentationFilter()
+{
+  m_MinimumObjectSize = 2;
+  m_MeanShiftFilter   = MeanShiftFilterType::New();
 }
 
-template<class TVImage,class TMaskImage, class TLabelImage>
-MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
-::~MeanShiftConnectedComponentSegmentationFilter()
+template <class TVImage, class TMaskImage, class TLabelImage>
+MeanShiftConnectedComponentSegmentationFilter<TVImage, TMaskImage, TLabelImage>::~MeanShiftConnectedComponentSegmentationFilter()
 {
 }
 
-template<class TVImage,class TMaskImage, class TLabelImage>
-void
-MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
-::GenerateInputRequestedRegion()
+template <class TVImage, class TMaskImage, class TLabelImage>
+void MeanShiftConnectedComponentSegmentationFilter<TVImage, TMaskImage, TLabelImage>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 }
 
-template<class TVImage,class TMaskImage, class TLabelImage>
-void
-MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
-::GenerateData()
+template <class TVImage, class TMaskImage, class TLabelImage>
+void MeanShiftConnectedComponentSegmentationFilter<TVImage, TMaskImage, TLabelImage>::GenerateData()
 {
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typedef itk::ExtractImageFilter<TVImage, TVImage> ExtractImageFilterType;
@@ -63,19 +57,19 @@ MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
 
   // meanshift filtering
 
-  //not necessary
+  // not necessary
   /* if (this->m_MeanShiftFilter.IsNotNull())
    {
    itkExceptionMacro("MeanShiftFilter is null");
    }*/
   this->m_MeanShiftFilter->SetInput(extract->GetOutput());
 
-  //this->m_MeanShiftFilter->SetInput(this->GetInput());
+  // this->m_MeanShiftFilter->SetInput(this->GetInput());
 
 
   typename MaskImageType::Pointer mask;
   if (!m_MaskExpression.empty())
-    {
+  {
     // Compute the mask
     typename MaskMuParserFilterType::Pointer maskFilter;
     maskFilter = MaskMuParserFilterType::New();
@@ -83,13 +77,14 @@ MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
     maskFilter->SetExpression(m_MaskExpression);
     maskFilter->Update();
     mask = maskFilter->GetOutput();
-    }
+  }
 
   // Perform connected components segmentation
   typename ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
   connected->SetInput(this->m_MeanShiftFilter->GetOutput());
 
-  if (mask.IsNotNull()) connected->SetMaskImage(mask);
+  if (mask.IsNotNull())
+    connected->SetMaskImage(mask);
   connected->GetFunctor().SetExpression(m_ConnectedComponentExpression);
   connected->Update();
 
@@ -100,7 +95,6 @@ MeanShiftConnectedComponentSegmentationFilter<TVImage,TMaskImage,  TLabelImage>
   relabel->Update();
 
   this->GraftOutput(relabel->GetOutput());
-
 }
 
 } // end namespace otb

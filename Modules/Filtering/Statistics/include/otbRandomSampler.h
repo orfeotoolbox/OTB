@@ -30,7 +30,7 @@ namespace otb
  * \class RandomSampler
  *
  * \brief Random sampler for iteration loops
- * 
+ *
  * This class allows doing random sampling during an iteration loop.
  * It uses the MersenneTwisterRandomGenerator.
  *
@@ -39,43 +39,43 @@ namespace otb
 class ITK_EXPORT RandomSampler : public SamplerBase
 {
 public:
-  typedef RandomSampler  Self;
-  typedef SamplerBase      Superclass;
+  typedef RandomSampler                 Self;
+  typedef SamplerBase                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Internal parameters, only contains an offset to shift the periodic 
+  /** Internal parameters, only contains an offset to shift the periodic
    * sampling
    */
   typedef struct Parameter
-    {
+  {
     /** Maximum buffer size to generate permutations */
     unsigned long MaxBufferSize;
-    
-    bool operator!=(const struct Parameter  & param) const;
-    } ParameterType; 
+
+    bool operator!=(const struct Parameter& param) const;
+  } ParameterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RandomSampler,SamplerBase);
+  itkTypeMacro(RandomSampler, SamplerBase);
 
   /** Setter for internal parameters */
-  void SetParameters(const ParameterType &param)
-    {
+  void SetParameters(const ParameterType& param)
+  {
     if (m_Parameters != param)
-      {
+    {
       this->Modified();
       m_Parameters = param;
-      }
     }
+  }
 
   /** Getter for internal parameters */
   ParameterType GetParameters()
-    {
+  {
     return m_Parameters;
-    }
+  }
 
   /**
    * Reset internal counter (to be called before starting iteration)
@@ -91,15 +91,17 @@ public:
 protected:
   /** Constructor */
   RandomSampler();
-   
+
   /** Destructor */
-  ~RandomSampler() override {}
+  ~RandomSampler() override
+  {
+  }
 
 private:
   // Not implemented
   RandomSampler(const Self&);
   void operator=(const Self&);
-  
+
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
 

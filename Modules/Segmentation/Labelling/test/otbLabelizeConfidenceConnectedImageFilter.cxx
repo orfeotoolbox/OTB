@@ -19,7 +19,6 @@
  */
 
 
-
 #include <iostream>
 
 #include "itkUnaryFunctorImageFilter.h"
@@ -31,36 +30,36 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbLabelizeConfidenceConnectedImageFilter(int itkNotUsed(argc), char * argv[])
+int otbLabelizeConfidenceConnectedImageFilter(int itkNotUsed(argc), char* argv[])
 {
   // Arguments
-  char* inputImageName = argv[1];
+  char* inputImageName  = argv[1];
   char* outputImageName = argv[2];
 
   typedef unsigned char                InputPixelType;
   typedef unsigned char                OutputPixelType;
   typedef itk::RGBPixel<unsigned char> ColorPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int                   Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<ColorPixelType, Dimension>  RGBImageType;
 
-  InputPixelType lowerThreshold((InputPixelType) ::atoi(argv[3]));
-  InputPixelType upperThreshold((InputPixelType) ::atoi(argv[4]));
+  InputPixelType lowerThreshold((InputPixelType)::atoi(argv[3]));
+  InputPixelType upperThreshold((InputPixelType)::atoi(argv[4]));
 
-  double       multiplier = (double) (atof(argv[5]));
-  unsigned int numberOfIterations = (unsigned int) (atoi(argv[6]));
-  unsigned int initialRadius = (unsigned int) (atoi(argv[7]));
+  double       multiplier         = (double)(atof(argv[5]));
+  unsigned int numberOfIterations = (unsigned int)(atoi(argv[6]));
+  unsigned int initialRadius      = (unsigned int)(atoi(argv[7]));
 
   // Reader
   typedef otb::ImageFileReader<InputImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                          reader = ReaderType::New();
   reader->SetFileName(inputImageName);
 
   // Writer
   typedef otb::ImageFileWriter<RGBImageType> WriterType;
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer                        writer = WriterType::New();
   writer->SetFileName(outputImageName);
 
   // Labelize filter
@@ -80,7 +79,7 @@ int otbLabelizeConfidenceConnectedImageFilter(int itkNotUsed(argc), char * argv[
   rescaler->SetOutputMaximum(255);
 
   // Label to RGB image
-  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType>                   FunctorType;
+  typedef itk::Functor::ScalarToRGBPixelFunctor<OutputPixelType> FunctorType;
   typedef itk::UnaryFunctorImageFilter<OutputImageType, RGBImageType, FunctorType> ColorLabelFilterType;
   ColorLabelFilterType::Pointer labelToRGB = ColorLabelFilterType::New();
 

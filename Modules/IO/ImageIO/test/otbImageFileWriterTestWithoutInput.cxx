@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <complex>
 #include <iostream>
 
@@ -36,21 +34,21 @@
  * 1.
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
-template<class InternalType>
+template <class InternalType>
 int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * outputFilename = argv[1];
+  const char* outputFilename = argv[1];
 
-  typedef InternalType                         PixelType;
-  typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::RegionType       RegionType;
-  typedef typename ImageType::SizeType         SizeType;
-  typedef typename ImageType::IndexType        IndexType;
-  typedef itk::ImageRegionIterator<ImageType>  IteratorType;
-  typedef otb::ImageFileWriter<ImageType>      WriterType;
+  typedef InternalType PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
+  typedef typename ImageType::RegionType      RegionType;
+  typedef typename ImageType::SizeType        SizeType;
+  typedef typename ImageType::IndexType       IndexType;
+  typedef itk::ImageRegionIterator<ImageType> IteratorType;
+  typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  typename ImageType::Pointer image = ImageType::New();
+  typename ImageType::Pointer  image  = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();
 
   SizeType size;
@@ -61,9 +59,9 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* 
   region.SetSize(size);
   region.SetIndex(orig);
 
-  typedef typename ImageType::PointType        PointType;
-  typedef typename ImageType::SpacingType      SpacingType;
-  PointType origin;
+  typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SpacingType SpacingType;
+  PointType                               origin;
   origin.Fill(0.5);
   SpacingType spacing;
   spacing.Fill(1.0);
@@ -80,10 +78,10 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* 
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
-    it.Set(static_cast<PixelType> (size[0] * it.GetIndex()[1] + it.GetIndex()[0]));
+  {
+    it.Set(static_cast<PixelType>(size[0] * it.GetIndex()[1] + it.GetIndex()[0]));
     ++it;
-    }
+  }
 
   writer->SetFileName(outputFilename);
   writer->SetInput(image);
@@ -93,19 +91,19 @@ int otbImageScalarFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* 
   return EXIT_SUCCESS;
 }
 
-int otbImageScalarFileWriterTestWithoutInputShort(int argc, char * argv[])
+int otbImageScalarFileWriterTestWithoutInputShort(int argc, char* argv[])
 {
   return otbImageScalarFileWriterTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputInt(int argc, char * argv[])
+int otbImageScalarFileWriterTestWithoutInputInt(int argc, char* argv[])
 {
   return otbImageScalarFileWriterTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputFloat(int argc, char * argv[])
+int otbImageScalarFileWriterTestWithoutInputFloat(int argc, char* argv[])
 {
   return otbImageScalarFileWriterTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char * argv[])
+int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char* argv[])
 {
   return otbImageScalarFileWriterTestWithoutInputGeneric<double>(argc, argv);
 }
@@ -114,21 +112,21 @@ int otbImageScalarFileWriterTestWithoutInputDouble(int argc, char * argv[])
  * 1.
  * Write Image<scalar> with an ImageFileWriter<scalar>
  ***********/
-template<class InternalType>
+template <class InternalType>
 int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * outputFilename = argv[1];
+  const char* outputFilename = argv[1];
 
-  typedef std::complex<InternalType>           PixelType;
-  typedef otb::Image<PixelType, 2>             ImageType;
-  typedef typename ImageType::RegionType       RegionType;
-  typedef typename ImageType::SizeType         SizeType;
-  typedef typename ImageType::IndexType        IndexType;
-  typedef itk::ImageRegionIterator<ImageType>  IteratorType;
-  typedef otb::ImageFileWriter<ImageType>      WriterType;
+  typedef std::complex<InternalType> PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
+  typedef typename ImageType::RegionType      RegionType;
+  typedef typename ImageType::SizeType        SizeType;
+  typedef typename ImageType::IndexType       IndexType;
+  typedef itk::ImageRegionIterator<ImageType> IteratorType;
+  typedef otb::ImageFileWriter<ImageType>     WriterType;
 
-  typename ImageType::Pointer image = ImageType::New();
+  typename ImageType::Pointer  image  = ImageType::New();
   typename WriterType::Pointer writer = WriterType::New();
 
   SizeType size;
@@ -139,9 +137,9 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char*
   region.SetSize(size);
   region.SetIndex(orig);
 
-  typedef typename ImageType::PointType        PointType;
-  typedef typename ImageType::SpacingType      SpacingType;
-  PointType origin;
+  typedef typename ImageType::PointType   PointType;
+  typedef typename ImageType::SpacingType SpacingType;
+  PointType                               origin;
   origin.Fill(0.5);
   SpacingType spacing;
   spacing.Fill(1.0);
@@ -159,17 +157,17 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char*
 
   typedef typename itk::NumericTraits<PixelType>::ScalarRealType ScalarRealType;
   while (!it.IsAtEnd())
-    {
-    ScalarRealType realPart = 2*(size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
-    ScalarRealType imagPart = 2*(size[0] * it.GetIndex()[1] + it.GetIndex()[0]) +1;
+  {
+    ScalarRealType realPart = 2 * (size[0] * it.GetIndex()[1] + it.GetIndex()[0]);
+    ScalarRealType imagPart = 2 * (size[0] * it.GetIndex()[1] + it.GetIndex()[0]) + 1;
 
-    PixelType pixelVal  (realPart, imagPart);
+    PixelType pixelVal(realPart, imagPart);
 
-    //std::cout << "pixelVal = " << pixelVal <<std::endl;
+    // std::cout << "pixelVal = " << pixelVal <<std::endl;
     it.Set(pixelVal);
-    //std::cout << "pixelVal = " <<it.Get() <<std::endl;
+    // std::cout << "pixelVal = " <<it.Get() <<std::endl;
     ++it;
-    }
+  }
 
   writer->SetFileName(outputFilename);
   writer->SetInput(image);
@@ -180,19 +178,19 @@ int otbImageComplexFileWriterTestWithoutInputGeneric(int itkNotUsed(argc), char*
 }
 
 
-int otbImageComplexFileWriterTestWithoutInputShort(int argc, char * argv[])
+int otbImageComplexFileWriterTestWithoutInputShort(int argc, char* argv[])
 {
   return otbImageComplexFileWriterTestWithoutInputGeneric<short>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputInt(int argc, char * argv[])
+int otbImageComplexFileWriterTestWithoutInputInt(int argc, char* argv[])
 {
   return otbImageComplexFileWriterTestWithoutInputGeneric<int>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputFloat(int argc, char * argv[])
+int otbImageComplexFileWriterTestWithoutInputFloat(int argc, char* argv[])
 {
   return otbImageComplexFileWriterTestWithoutInputGeneric<float>(argc, argv);
 }
-int otbImageComplexFileWriterTestWithoutInputDouble(int argc, char * argv[])
+int otbImageComplexFileWriterTestWithoutInputDouble(int argc, char* argv[])
 {
   return otbImageComplexFileWriterTestWithoutInputGeneric<double>(argc, argv);
 }

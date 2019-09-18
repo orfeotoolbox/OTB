@@ -32,61 +32,61 @@ namespace otb
 namespace GdalDataTypeBridge
 {
 
-template<class Type>
+template <class Type>
 GDALDataType GetGDALDataType()
 {
-   if (typeid(Type) == typeid(char))
-   {
-   return GDT_Byte;
-   }
-   else if (typeid(Type) == typeid(unsigned char))
-   {
-   return GDT_Byte;
-   }
-   else if (typeid(Type) == typeid(unsigned short))
-   {
-   return GDT_UInt16;
-   }
-   else if (typeid(Type) == typeid(short))
-   {
-   return GDT_Int16;
-   }
-   else if (typeid(Type) == typeid(int))
-   {
-   return GDT_Int32;
-   }
-   else if (typeid(Type) == typeid(unsigned int))
-   {
-   return GDT_UInt32;
-   }
-   else if (typeid(Type) == typeid(long))
-   {
-      if( sizeof(long) == 8 )
-         {
-         //itkWarningMacro(<< "Cast a long (64 bit) image to an int (32 bit) one.")
-         }
-      return GDT_Int32;
-   }
-   else if (typeid(Type) == typeid(unsigned long))
-   {
-      if( sizeof(unsigned long) == 8 )
-         {
-         //itkWarningMacro(<< "Cast an unsigned long (64 bit) image to an unsigned int (32 bit) one.")
-         }
-      return GDT_UInt32;
-   }
-   else if (typeid(Type) == typeid(float))
-   {
-   return GDT_Float32;
-   }
-   else if (typeid(Type) == typeid(double))
-   {
-   return GDT_Float64;
-   }
-   else
-   {
-   return GDT_Byte;
-   }
+  if (typeid(Type) == typeid(char))
+  {
+    return GDT_Byte;
+  }
+  else if (typeid(Type) == typeid(unsigned char))
+  {
+    return GDT_Byte;
+  }
+  else if (typeid(Type) == typeid(unsigned short))
+  {
+    return GDT_UInt16;
+  }
+  else if (typeid(Type) == typeid(short))
+  {
+    return GDT_Int16;
+  }
+  else if (typeid(Type) == typeid(int))
+  {
+    return GDT_Int32;
+  }
+  else if (typeid(Type) == typeid(unsigned int))
+  {
+    return GDT_UInt32;
+  }
+  else if (typeid(Type) == typeid(long))
+  {
+    if (sizeof(long) == 8)
+    {
+      // itkWarningMacro(<< "Cast a long (64 bit) image to an int (32 bit) one.")
+    }
+    return GDT_Int32;
+  }
+  else if (typeid(Type) == typeid(unsigned long))
+  {
+    if (sizeof(unsigned long) == 8)
+    {
+      // itkWarningMacro(<< "Cast an unsigned long (64 bit) image to an unsigned int (32 bit) one.")
+    }
+    return GDT_UInt32;
+  }
+  else if (typeid(Type) == typeid(float))
+  {
+    return GDT_Float32;
+  }
+  else if (typeid(Type) == typeid(double))
+  {
+    return GDT_Float64;
+  }
+  else
+  {
+    return GDT_Byte;
+  }
 }
 
 } // End namespace GdalDataTypeBridge

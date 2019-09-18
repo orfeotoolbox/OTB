@@ -41,10 +41,10 @@ class ITK_EXPORT PointSetDensityEpanechnikovFunction : public PointSetFunction<T
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetDensityEpanechnikovFunction  Self;
+  typedef PointSetDensityEpanechnikovFunction Self;
   typedef PointSetFunction<TPointSet, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetDensityEpanechnikovFunction, PointSetFunction);
@@ -53,9 +53,9 @@ public:
   itkNewMacro(Self);
 
   /** PointSet Type typedef Support*/
-  typedef TPointSet                       PointSetType;
-  typedef typename Superclass::InputType  InputType;
-  typedef typename  PointSetType::Pointer PointSetPointerType;
+  typedef TPointSet                      PointSetType;
+  typedef typename Superclass::InputType InputType;
+  typedef typename PointSetType::Pointer PointSetPointerType;
 
   /** TOutput typedef support*/
   typedef TOutput OutputType;
@@ -68,14 +68,16 @@ public:
   OutputType Evaluate(const InputType& input) const override;
 
 protected:
-  PointSetDensityEpanechnikovFunction() : m_Radius(1) {};
-  ~PointSetDensityEpanechnikovFunction() override {}
+  PointSetDensityEpanechnikovFunction() : m_Radius(1){};
+  ~PointSetDensityEpanechnikovFunction() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetDensityEpanechnikovFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PointSetDensityEpanechnikovFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Radius;
 };

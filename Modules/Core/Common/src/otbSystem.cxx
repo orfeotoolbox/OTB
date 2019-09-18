@@ -32,9 +32,9 @@
 #include <tchar.h>
 #include <stdio.h>
 #ifndef WIN32CE
-#  include <io.h>
+#include <io.h>
 #else
-#  include <wce_io.h>
+#include <wce_io.h>
 #endif
 #else
 /*=====================================================================
@@ -48,21 +48,20 @@
 namespace otb
 {
 
-//GetRootName from uiig library.
-std::string
-System::GetRootName(const std::string& filename)
+// GetRootName from uiig library.
+std::string System::GetRootName(const std::string& filename)
 {
   const std::string fileExt = itksys::SystemTools::GetFilenameLastExtension(filename);
 
   // Create a base filename
   // i.e Image.ent --> Image
   if (fileExt.length() > 0)
-    {
+  {
     const std::string::size_type it = filename.find_last_of(fileExt);
     std::string                  baseName(filename, 0, it - fileExt.length() + 1);
     return (baseName);
-    }
-  //Default to return same as input when the extension is nothing (Analyze)
+  }
+  // Default to return same as input when the extension is nothing (Analyze)
   return (filename);
 }
 
@@ -73,7 +72,7 @@ System::GetRootName(const std::string& filename)
                    WIN32 / MSVC++ implementation
  *====================================================================*/
 
-std::vector<std::string> System::Readdir(const std::string&  pszPath)
+std::vector<std::string> System::Readdir(const std::string& pszPath)
 {
   WIN32_FIND_DATA          c_file;
   HANDLE                   hFile = INVALID_HANDLE_VALUE;
@@ -81,20 +80,20 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
   std::string              pszFileSpec;
   std::string              path(pszPath);
 
-  if (pszPath.empty() == true) path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
   pszFileSpec = path + "\\*.*";
 
   if ((hFile = FindFirstFile(pszFileSpec.c_str(), &c_file)) != INVALID_HANDLE_VALUE)
-    {
+  {
     do
-      {
+    {
       listFileFind.push_back(c_file.cFileName);
-      }
-    while (FindNextFile(hFile, &c_file) != 0);
+    } while (FindNextFile(hFile, &c_file) != 0);
 
     FindClose(hFile);
-    }
+  }
 
   return listFileFind;
 }
@@ -123,22 +122,23 @@ std::vector<std::string> System::Readdir(const std::string&  pszPath)
 
 std::vector<std::string> System::Readdir(const std::string& pszPath)
 {
-  DIR *                    hDir;
+  DIR*                     hDir;
   std::vector<std::string> listFileFind;
-  struct dirent *          psDirEntry;
+  struct dirent*           psDirEntry;
   std::string              path(pszPath);
 
-  if (pszPath.empty() == true) path = ".";
+  if (pszPath.empty() == true)
+    path = ".";
 
   if ((hDir = opendir(path.c_str())) != nullptr)
-    {
+  {
     while ((psDirEntry = readdir(hDir)) != nullptr)
-      {
+    {
       listFileFind.push_back(psDirEntry->d_name);
-      }
+    }
 
     closedir(hDir);
-    }
+  }
   return listFileFind;
 }
 
@@ -153,9 +153,10 @@ std::vector<std::string> System::Readdir(const std::string& pszPath)
 bool System::ParseHdfSubsetName(const std::string& id, std::string& key, std::string& name)
 {
   std::size_t pos = id.find("=");
-  if (pos == std::string::npos) return false;
-  key = id.substr(0, pos);
-  name = id.substr(pos+1, id.size() - pos - 1);
+  if (pos == std::string::npos)
+    return false;
+  key  = id.substr(0, pos);
+  name = id.substr(pos + 1, id.size() - pos - 1);
   return true;
 }
 
@@ -167,17 +168,18 @@ bool System::ParseHdfSubsetName(const std::string& id, std::string& key, std::st
 bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned int& datasetNum)
 {
   std::size_t pos = id.rfind(":");
-  if (pos == std::string::npos) return false;
-  std::string datasetNumString(id.substr(pos+1, id.size() - pos - 1));
+  if (pos == std::string::npos)
+    return false;
+  std::string datasetNumString(id.substr(pos + 1, id.size() - pos - 1));
   datasetNum = atoi(datasetNumString.c_str());
   // a value of 0 could be the sign that the conversion failed, we need to check that the character was really 0
   if (datasetNum == 0)
+  {
+    if (datasetNumString.compare("0") != 0)
     {
-      if (datasetNumString.compare("0") != 0)
-        {
-        return false;
-        }
+      return false;
     }
+  }
   file = id.substr(0, pos);
   return true;
 }
@@ -190,18 +192,19 @@ bool System::ParseHdfFileName(const std::string& id, std::string& file, unsigned
 bool System::ParseFileNameForAdditionalInfo(const std::string& id, std::string& file, unsigned int& addNum)
 {
   std::size_t pos = id.rfind(":");
-  if (pos == std::string::npos) return false;
+  if (pos == std::string::npos)
+    return false;
 
-  std::string addNumString(id.substr(pos+1, id.size() - pos - 1));
+  std::string addNumString(id.substr(pos + 1, id.size() - pos - 1));
   addNum = atoi(addNumString.c_str());
   // a value of 0 could be the sign that the conversion failed, we need to check that the character was really 0
   if (addNum == 0)
+  {
+    if (addNumString.compare("0") != 0)
     {
-      if (addNumString.compare("0") != 0)
-        {
-        return false;
-        }
+      return false;
     }
+  }
   file = id.substr(0, pos);
   return true;
 }
@@ -213,7 +216,7 @@ bool System::IsInteractive(int fd)
   HANDLE hcon;
 
   /* get OS handle of the file descriptor */
-  hcon = (HANDLE) _get_osfhandle(fd);
+  hcon = (HANDLE)_get_osfhandle(fd);
   if (hcon == INVALID_HANDLE_VALUE)
     return false;
 
@@ -223,12 +226,12 @@ bool System::IsInteractive(int fd)
 
   /* check if its a handle to a console output screen buffer */
   CONSOLE_SCREEN_BUFFER_INFO screenBufferInfo;
-  DWORD mode;
+  DWORD                      mode;
   if (!fd)
-    {
+  {
     if (!GetConsoleMode(hcon, &mode))
       return false;
-    }
+  }
   else if (!GetConsoleScreenBufferInfo(hcon, &screenBufferInfo))
     return false;
 
@@ -238,5 +241,4 @@ bool System::IsInteractive(int fd)
   return isatty(fd);
 #endif
 }
-
 }

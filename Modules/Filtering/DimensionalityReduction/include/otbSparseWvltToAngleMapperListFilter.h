@@ -28,7 +28,8 @@
 #include "itkDataObjectDecorator.h"
 #include "itkImageRegionConstIterator.h"
 
-namespace otb {
+namespace otb
+{
 
 
 /** \class SparseWvltToAngleMapperListFilter
@@ -42,9 +43,8 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInputImageList, class TOutputSampleList, unsigned int VNbInputImages >
-class SparseWvltToAngleMapperListFilter
-  : public ITK_EXPORT itk::ProcessObject
+template <class TInputImageList, class TOutputSampleList, unsigned int VNbInputImages>
+class SparseWvltToAngleMapperListFilter : public ITK_EXPORT itk::ProcessObject
 {
 public:
   /** Standard typedefs. */
@@ -63,7 +63,7 @@ public:
   itkStaticConstMacro(NumberOfInputImages, unsigned int, VNbInputImages);
 
   /** InputList typedefs */
-  typedef TInputImageList InputImageListType;
+  typedef TInputImageList                            InputImageListType;
   typedef typename InputImageListType::Pointer       InputImageListPointerType;
   typedef typename InputImageListType::ConstIterator InputImageListConstIteratorType;
   typedef typename InputImageListType::ImageType     InputImageType;
@@ -81,26 +81,26 @@ public:
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
 
   /** Iterator */
-  typedef itk::ImageRegionConstIterator< InputImageType > ImageConstIteratorType;
-  typedef std::vector< ImageConstIteratorType >           ImageConstIteratorVectorType;
-  typedef std::vector< InputImageListConstIteratorType >  InputImageListConstIteratorVectorType;
+  typedef itk::ImageRegionConstIterator<InputImageType> ImageConstIteratorType;
+  typedef std::vector<ImageConstIteratorType>           ImageConstIteratorVectorType;
+  typedef std::vector<InputImageListConstIteratorType>  InputImageListConstIteratorVectorType;
 
-  void SetInput ( unsigned int i, const InputImageListType * );
+  void SetInput(unsigned int i, const InputImageListType*);
   using Superclass::SetInput;
 
-  const InputImageListType * GetInput( unsigned int i ) const;
+  const InputImageListType* GetInput(unsigned int i) const;
 
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
-  typedef itk::DataObject::Pointer                             DataObjectPointer;
-  typedef itk::DataObjectDecorator< OutputSampleListType >     OutputSampleListObjectType;
+  typedef itk::DataObject::Pointer                           DataObjectPointer;
+  typedef itk::DataObjectDecorator<OutputSampleListType>     OutputSampleListObjectType;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Returns the output sample list */
-  OutputSampleListType * GetOutputSampleList();
+  OutputSampleListType* GetOutputSampleList();
 
   /** Returns the output sample list as a data object */
-  OutputSampleListObjectType * GetOutput();
+  OutputSampleListObjectType* GetOutput();
 
   /** Get/Set the threshold value */
   itkGetMacro(ThresholdValue, ValueType);
@@ -108,7 +108,9 @@ public:
 
 protected:
   SparseWvltToAngleMapperListFilter();
-  ~SparseWvltToAngleMapperListFilter() override { }
+  ~SparseWvltToAngleMapperListFilter() override
+  {
+  }
 
   /** Standard itk::ProcessObject subclass method. */
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
@@ -120,13 +122,13 @@ protected:
   void GenerateData() override;
 
   /* Internal functions */
-  virtual bool IsToGenerate ( const ImageConstIteratorVectorType & ) const;
-  virtual OutputMeasurementVectorType GenerateData ( const ImageConstIteratorVectorType & ) const;
-  virtual OutputMeasurementVectorType FromEuclideanToSphericalSpace ( const ImageConstIteratorVectorType & ) const;
+  virtual bool                        IsToGenerate(const ImageConstIteratorVectorType&) const;
+  virtual OutputMeasurementVectorType GenerateData(const ImageConstIteratorVectorType&) const;
+  virtual OutputMeasurementVectorType FromEuclideanToSphericalSpace(const ImageConstIteratorVectorType&) const;
 
 private:
-  SparseWvltToAngleMapperListFilter(const Self &); // not implemented
-  void operator=(const Self &);
+  SparseWvltToAngleMapperListFilter(const Self&); // not implemented
+  void operator=(const Self&);
 
   ValueType m_ThresholdValue;
 
@@ -139,5 +141,3 @@ private:
 #endif
 
 #endif
-
-

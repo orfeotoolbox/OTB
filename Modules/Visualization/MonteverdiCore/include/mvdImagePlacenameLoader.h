@@ -72,7 +72,7 @@ class VectorImageModel;
  */
 class OTBMonteverdiCore_EXPORT ImagePlacenameLoader : public QObject
 {
-    Q_OBJECT;
+  Q_OBJECT;
 
 public:
   /** \brief Constructor */
@@ -84,13 +84,12 @@ public slots:
 
 signals:
   /** \brief Triggered after a non empty placename was loaded */
-  void PlacenameLoaded( const QString& );
+  void PlacenameLoaded(const QString&);
 
   /** \brief Triggered when processing is finished */
   void Finished();
 
 private:
-
   VectorImageModel* m_Model;
 };
 

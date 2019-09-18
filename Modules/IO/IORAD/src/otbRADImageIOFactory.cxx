@@ -29,25 +29,19 @@ namespace otb
 
 RADImageIOFactory::RADImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbRADImageIO",
-                         "RAD Image IO",
-                         1,
-                         itk::CreateObjectFunction<RADImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbRADImageIO", "RAD Image IO", 1, itk::CreateObjectFunction<RADImageIO>::New());
 }
 
 RADImageIOFactory::~RADImageIOFactory()
 {
 }
 
-const char*
-RADImageIOFactory::GetITKSourceVersion(void) const
+const char* RADImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-RADImageIOFactory::GetDescription() const
+const char* RADImageIOFactory::GetDescription() const
 {
   return "RAD ImageIO Factory, permettant le chargement d'image au format RAD dans l'OTB";
 }
@@ -59,10 +53,10 @@ static bool RADImageIOFactoryHasBeenRegistered;
 
 void RADImageIOFactoryRegister__Private(void)
 {
-  if( ! RADImageIOFactoryHasBeenRegistered )
-    {
+  if (!RADImageIOFactoryHasBeenRegistered)
+  {
     RADImageIOFactoryHasBeenRegistered = true;
     RADImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 } // end namespace otb

@@ -50,25 +50,23 @@ namespace otb
  */
 template <class TImageType>
 class PersistentStreamingLineSegmentDetector
-  : public otb::PersistentImageToVectorDataFilter<TImageType,
-     typename otb::LineSegmentDetector<TImageType, double>::VectorDataType >
+    : public otb::PersistentImageToVectorDataFilter<TImageType, typename otb::LineSegmentDetector<TImageType, double>::VectorDataType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingLineSegmentDetector                              Self;
-  typedef PersistentImageToVectorDataFilter<TImageType,
-      typename otb::LineSegmentDetector<TImageType, double>::VectorDataType > Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef PersistentStreamingLineSegmentDetector Self;
+  typedef PersistentImageToVectorDataFilter<TImageType, typename otb::LineSegmentDetector<TImageType, double>::VectorDataType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef otb::LineSegmentDetector<TImageType, double>     LSDType;
-  typedef typename Superclass::InputImageType              InputImageType;
-  typedef typename Superclass::InputImagePointer           InputImagePointerType;
+  typedef otb::LineSegmentDetector<TImageType, double> LSDType;
+  typedef typename Superclass::InputImageType    InputImageType;
+  typedef typename Superclass::InputImagePointer InputImagePointerType;
 
   typedef typename Superclass::OutputVectorDataType        OutputVectorDataType;
   typedef typename Superclass::OutputVectorDataPointerType OutputVectorDataPointerType;
 
-  typedef typename Superclass::ExtractImageFilterType      ExtractImageFilterType;
+  typedef typename Superclass::ExtractImageFilterType ExtractImageFilterType;
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
@@ -83,8 +81,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  PersistentStreamingLineSegmentDetector(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentStreamingLineSegmentDetector(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OutputVectorDataPointerType ProcessTile() override;
 };
@@ -93,22 +91,15 @@ template <class TImageType>
 class StreamingLineSegmentDetector
 {
 public:
-
   // define the PersistentStreamingLineSegmentDetector template
-  typedef PersistentStreamingLineSegmentDetector<TImageType>
-    PersistentStreamingLineSegmentDetectorType;
+  typedef PersistentStreamingLineSegmentDetector<TImageType> PersistentStreamingLineSegmentDetectorType;
 
-  typedef typename PersistentStreamingLineSegmentDetectorType::InputImageType
-      InputImageType;
-  typedef typename PersistentStreamingLineSegmentDetectorType::OutputVectorDataType
-      OutputVectorDataType;
+  typedef typename PersistentStreamingLineSegmentDetectorType::InputImageType       InputImageType;
+  typedef typename PersistentStreamingLineSegmentDetectorType::OutputVectorDataType OutputVectorDataType;
 
   // typedef for streaming capable filter
-  typedef PersistentFilterStreamingDecorator<PersistentStreamingLineSegmentDetectorType>
-    FilterType;
-
+  typedef PersistentFilterStreamingDecorator<PersistentStreamingLineSegmentDetectorType> FilterType;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

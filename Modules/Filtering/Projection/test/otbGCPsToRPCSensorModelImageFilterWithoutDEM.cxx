@@ -26,20 +26,20 @@
 int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
 {
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname outfname a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   else if ((argc - 3) % 5 != 0)
-    {
+  {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * infname       = argv[1];
-  const char * outfname      = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  typedef otb::Image<float, 2>                            ImageType;
+  typedef otb::Image<float, 2> ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
@@ -56,7 +56,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
   otbLogMacro(Info, << "Receiving " << nbGCPs << " from command line.");
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
-    {
+  {
     Point2DType sensorPoint;
     sensorPoint[0] = atof(argv[3 + gcpId * 5]);
     sensorPoint[1] = atof(argv[4 + gcpId * 5]);
@@ -69,7 +69,7 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
     otbLogMacro(Debug, << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
-    }
+  }
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 

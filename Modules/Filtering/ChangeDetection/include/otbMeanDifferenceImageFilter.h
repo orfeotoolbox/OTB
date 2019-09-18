@@ -53,24 +53,19 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT MeanDifferenceImageFilter :
-  public BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::MeanDifference<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT MeanDifferenceImageFilter
+    : public BinaryFunctorNeighborhoodImageFilter<
+          TInputImage1, TInputImage2, TOutputImage,
+          Functor::MeanDifference<typename itk::ConstNeighborhoodIterator<TInputImage1>, typename itk::ConstNeighborhoodIterator<TInputImage2>,
+                                  typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef MeanDifferenceImageFilter Self;
-  typedef BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::MeanDifference<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType>
-      >  Superclass;
+  typedef BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                               Functor::MeanDifference<typename itk::ConstNeighborhoodIterator<TInputImage1>,
+                                                                       typename itk::ConstNeighborhoodIterator<TInputImage2>, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -81,13 +76,16 @@ public:
   itkTypeMacro(MeanDifferenceImageFilter, SuperClass);
 
 protected:
-  MeanDifferenceImageFilter() {}
-  ~MeanDifferenceImageFilter() override {}
+  MeanDifferenceImageFilter()
+  {
+  }
+  ~MeanDifferenceImageFilter() override
+  {
+  }
 
 private:
-  MeanDifferenceImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  MeanDifferenceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

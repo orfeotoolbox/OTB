@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT Radarsat2ImageMetadataInterfaceFactory : public itk::Ob
 public:
   /** Standard class typedefs. */
   typedef Radarsat2ImageMetadataInterfaceFactory Self;
-  typedef itk::ObjectFactoryBase            Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::ObjectFactoryBase                 Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -62,9 +62,8 @@ protected:
   ~Radarsat2ImageMetadataInterfaceFactory() override;
 
 private:
-  Radarsat2ImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  Radarsat2ImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

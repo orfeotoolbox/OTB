@@ -29,167 +29,114 @@ namespace Wrapper
 {
 
 
-const std::string
-VECTOR_DATA_FILTER(
-  "All files (*);;"
-  "Shape file (*shp)"
-);
+const std::string VECTOR_DATA_FILTER(
+    "All files (*);;"
+    "Shape file (*shp)");
 
 
 /*****************************************************************************/
-InputVectorDataParameter::Pointer
-InputVectorDataListParameter
-::FromVectorData( VectorDataType * data )
+InputVectorDataParameter::Pointer InputVectorDataListParameter::FromVectorData(VectorDataType* data)
 {
-  assert( data!=nullptr );
+  assert(data != nullptr);
 
   InputVectorDataParameter::Pointer p;
 
-  return FromVectorData( p, data );
+  return FromVectorData(p, data);
 }
 
 /*****************************************************************************/
-InputVectorDataParameter::Pointer &
-InputVectorDataListParameter
-::FromVectorData( InputVectorDataParameter::Pointer & parameter,
-		  VectorDataType * data )
+InputVectorDataParameter::Pointer& InputVectorDataListParameter::FromVectorData(InputVectorDataParameter::Pointer& parameter, VectorDataType* data)
 {
-  return
-    FromData(
-      parameter,
-      data,
-      []( auto p, auto d ) -> void
-      {
-        assert( p );
+  return FromData(parameter, data,
+                  [](auto p, auto d) -> void {
+                    assert(p);
 
-	p->SetVectorData( d );
-      },
-      "Vector-data filename"
-    );
+                    p->SetVectorData(d);
+                  },
+                  "Vector-data filename");
 }
 
 /*****************************************************************************/
-InputVectorDataListParameter
-::InputVectorDataListParameter() :
-  m_VectorDataList( VectorDataListType::New() )
+InputVectorDataListParameter::InputVectorDataListParameter() : m_VectorDataList(VectorDataListType::New())
 {
-  SetName( "Input VectorData List" );
-  SetKey( "vdList" );
+  SetName("Input VectorData List");
+  SetKey("vdList");
 }
 
 /*****************************************************************************/
-InputVectorDataListParameter
-::~InputVectorDataListParameter()
+InputVectorDataListParameter::~InputVectorDataListParameter()
 {
 }
 
 /*****************************************************************************/
-const VectorDataListType *
-InputVectorDataListParameter
-::GetVectorDataList() const
+const VectorDataListType* InputVectorDataListParameter::GetVectorDataList() const
 {
-  return
-    const_cast< InputVectorDataListParameter * >( this )
-    ->GetVectorDataList();
+  return const_cast<InputVectorDataListParameter*>(this)->GetVectorDataList();
 }
 
 /*****************************************************************************/
-VectorDataListType *
-InputVectorDataListParameter
-::GetVectorDataList()
+VectorDataListType* InputVectorDataListParameter::GetVectorDataList()
 {
-  return
-    GetObjectList(
-      m_VectorDataList,
-      []( auto param ) -> auto
-      {
-        assert( param );
+  return GetObjectList(m_VectorDataList, [](auto param) -> auto {
+    assert(param);
 
-	return param->GetVectorData();
-      }
-    );
+    return param->GetVectorData();
+  });
 }
 
 /*****************************************************************************/
-const VectorDataType *
-InputVectorDataListParameter
-::GetNthVectorData( std::size_t i )
+const VectorDataType* InputVectorDataListParameter::GetNthVectorData(std::size_t i)
 {
-  assert( i<m_Parameters.size() );
-  assert( !m_Parameters[ i ].IsNull() );
-  assert( m_Parameters[ i ]->GetVectorData()!=nullptr );
+  assert(i < m_Parameters.size());
+  assert(!m_Parameters[i].IsNull());
+  assert(m_Parameters[i]->GetVectorData() != nullptr);
 
-  return m_Parameters[ i ]->GetVectorData();
+  return m_Parameters[i]->GetVectorData();
 }
 
 /*****************************************************************************/
-void
-InputVectorDataListParameter
-::SetVectorDataList( VectorDataListType * vdList )
+void InputVectorDataListParameter::SetVectorDataList(VectorDataListType* vdList)
 {
-  assert( vdList!=nullptr );
-  assert( !m_VectorDataList.IsNull() );
+  assert(vdList != nullptr);
+  assert(!m_VectorDataList.IsNull());
 
-  SetObjectList(
-    *m_VectorDataList,
-    *vdList,
-    //
-    [ this ]( auto p, auto vd ) -> auto
-    {
-      this->FromVectorData( p, vd );
-    },
-    //
-    []( auto p ) -> auto
-    {
-      assert( p );
+  SetObjectList(*m_VectorDataList, *vdList,
+                //
+                [this](auto p, auto vd) -> auto { this->FromVectorData(p, vd); },
+                //
+                [](auto p) -> auto {
+                  assert(p);
 
-      return p->GetVectorData();
-    }
-  );
+                  return p->GetVectorData();
+                });
 }
 
 /*****************************************************************************/
-void
-InputVectorDataListParameter
-::AddVectorData( VectorDataType * vectorData )
+void InputVectorDataListParameter::AddVectorData(VectorDataType* vectorData)
 {
-  AddData(
-    vectorData,
-    [ this ]( auto d ) -> auto
-    {
-      return this->FromVectorData( d );
-    }
-  );
+  AddData(vectorData, [this](auto d) -> auto { return this->FromVectorData(d); });
 }
 
 /*****************************************************************************/
-void
-InputVectorDataListParameter
-::ClearValue()
+void InputVectorDataListParameter::ClearValue()
 {
   Superclass::ClearValue();
 
-  assert( m_VectorDataList );
+  assert(m_VectorDataList);
 
   m_VectorDataList->Clear();
 }
 
 /*****************************************************************************/
-Role
-InputVectorDataListParameter
-::GetDirection() const
+Role InputVectorDataListParameter::GetDirection() const
 {
   return Role_Input;
 }
 
 /*****************************************************************************/
-const std::string &
-InputVectorDataListParameter
-::GetFilenameFilter() const
+const std::string& InputVectorDataListParameter::GetFilenameFilter() const
 {
   return VECTOR_DATA_FILTER;
 }
-
 }
-
 }

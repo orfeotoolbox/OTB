@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbImaginaryImageToComplexImageFilter.h"
 #include "itkMacro.h"
 #include "otbImageFileReader.h"
@@ -28,18 +27,18 @@
 #include "itkComplexToImaginaryImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
 
-int otbImaginaryImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbImaginaryImageToComplexImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
+  const char* inputFilename = argv[1];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  ComplexPixelType;
-  const unsigned int Dimension = 2;
+  typedef double                  PixelType;
+  typedef std::complex<PixelType> ComplexPixelType;
+  const unsigned int              Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension>        ImageType;
   typedef otb::Image<ComplexPixelType, Dimension> ComplexImageType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   typedef otb::ImaginaryImageToComplexImageFilter<ImageType, ComplexImageType> FilterType;
 
@@ -58,18 +57,18 @@ int otbImaginaryImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[
   ImageFilterType::Pointer filterImaginaryPart = ImageFilterType::New();
   filterImaginaryPart->SetInput(filter->GetOutput());
 
-  typedef otb::StreamingCompareImageFilter<ImageType>   CompareImageFilterType;
-  CompareImageFilterType::Pointer compareImaginaryImageFilter = CompareImageFilterType::New();
+  typedef otb::StreamingCompareImageFilter<ImageType> CompareImageFilterType;
+  CompareImageFilterType::Pointer                     compareImaginaryImageFilter = CompareImageFilterType::New();
 
   compareImaginaryImageFilter->SetInput1(filterImaginaryPart->GetOutput());
   compareImaginaryImageFilter->SetInput2(reader->GetOutput());
   compareImaginaryImageFilter->Update();
 
-  if(compareImaginaryImageFilter->GetMSE() > 0.0000001)
-    {
-      std::cout << " Invalid ImaginaryPart ! MSE: "<< compareImaginaryImageFilter->GetMSE() << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (compareImaginaryImageFilter->GetMSE() > 0.0000001)
+  {
+    std::cout << " Invalid ImaginaryPart ! MSE: " << compareImaginaryImageFilter->GetMSE() << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

@@ -121,7 +121,7 @@ private:
         "12 muellertomcovariance --> Mueller matrix to covariance matrix (input: 16 real channels | output: 6 complex channels)\n"
         "13 muellertopoldegandpower --> Mueller matrix to polarization degree and power (input: 16 real channels | output: 4 real channels)"
 
-    );
+        );
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("SARPolarSynth, SARDecompositions");
@@ -168,18 +168,18 @@ private:
 
     // #1
     // SinclairToReciprocalCoherency
-    AddChoice("conv.msinclairtocoherency","1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocoherency","1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
+    AddChoice("conv.msinclairtocoherency", "1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocoherency", "1 Monostatic: Sinclair matrix to coherency matrix (complex output)");
 
     // #2
     // SinclairToReciprocalCovariance
-    AddChoice("conv.msinclairtocovariance","2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocovariance","2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
+    AddChoice("conv.msinclairtocovariance", "2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocovariance", "2 Monostatic: Sinclair matrix to covariance matrix (complex output)");
 
     // #3
     // SinclairToReciprocalCircularCovariance
-    AddChoice("conv.msinclairtocircovariance","3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.msinclairtocircovariance","3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.msinclairtocircovariance", "3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.msinclairtocircovariance", "3 Monostatic: Sinclair matrix to circular covariance matrix (complex output)");
 
     // #4
     // ReciprocalCoherencyToReciprocalMuellerImageFilter
@@ -203,38 +203,38 @@ private:
 
     // #8
     // MuellerToReciprocalCovarianceImageFilter
-    AddChoice("conv.muellertomcovariance","8 Bi/mono: Mueller matrix to monostatic covariance matrix");
-    SetParameterDescription("conv.muellertomcovariance","8 Bi/mono: Mueller matrix to monostatic covariance matrix");
+    AddChoice("conv.muellertomcovariance", "8 Bi/mono: Mueller matrix to monostatic covariance matrix");
+    SetParameterDescription("conv.muellertomcovariance", "8 Bi/mono: Mueller matrix to monostatic covariance matrix");
 
-    //Bistatic case
+    // Bistatic case
 
     // #9
     // SinclairToCoherency
-    AddChoice("conv.bsinclairtocoherency","9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocoherency","9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
+    AddChoice("conv.bsinclairtocoherency", "9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocoherency", "9 Bistatic: Sinclair matrix to coherency matrix (complex output)");
 
     // #10
     // SinclairToCovariance
-    AddChoice("conv.bsinclairtocovariance","10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocovariance","10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
+    AddChoice("conv.bsinclairtocovariance", "10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocovariance", "10 Bistatic: Sinclair matrix to covariance matrix (complex output)");
 
     // #11
     // SinclairToCircularCovariance
-    AddChoice("conv.bsinclairtocircovariance","11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
-    SetParameterDescription("conv.bsinclairtocircovariance","11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
+    AddChoice("conv.bsinclairtocircovariance", "11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
+    SetParameterDescription("conv.bsinclairtocircovariance", "11 Bistatic: Sinclair matrix to circular covariance matrix (complex output)");
 
-    //Both case
+    // Both case
 
     // #12
     // SinclairToMueller
-    AddChoice("conv.sinclairtomueller","12 Bi/mono: Sinclair matrix to Mueller matrix");
-    SetParameterDescription("conv.sinclairtomueller","12 Bi/mono: Sinclair matrix to Mueller matrix");
+    AddChoice("conv.sinclairtomueller", "12 Bi/mono: Sinclair matrix to Mueller matrix");
+    SetParameterDescription("conv.sinclairtomueller", "12 Bi/mono: Sinclair matrix to Mueller matrix");
 
 
     // #13
     // MuellerToPolarisationDegreeAndPowerImageFilter
-    AddChoice("conv.muellertopoldegandpower","13 Bi/mono: Mueller matrix to polarisation degree and power");
-    SetParameterDescription("conv.muellertopoldegandpower","13 Bi/mono: Mueller matrix to polarisation degree and power");
+    AddChoice("conv.muellertopoldegandpower", "13 Bi/mono: Mueller matrix to polarisation degree and power");
+    SetParameterDescription("conv.muellertopoldegandpower", "13 Bi/mono: Mueller matrix to polarisation degree and power");
 
     AddRAMParameter();
 
@@ -386,9 +386,9 @@ private:
     switch (GetParameterInt("conv"))
     {
 
-      //***************************************
-      //*             MONOSTATIC              *
-      //***************************************
+    //***************************************
+    //*             MONOSTATIC              *
+    //***************************************
 
     case 0: // SinclairToReciprocalCoherency
       m_RCohSRFilter = RCohSRFilterType::New();
@@ -491,9 +491,9 @@ private:
       break;
 
 
-      //***************************************
-      //*               BISTATIC              *
-      //***************************************
+    //***************************************
+    //*               BISTATIC              *
+    //***************************************
 
     case 8: // SinclairToCoherency
 
@@ -534,9 +534,9 @@ private:
       break;
 
 
-      //***************************************
-      //*             BOTH CASES              *
-      //***************************************
+    //***************************************
+    //*             BOTH CASES              *
+    //***************************************
 
 
     case 11: // SinclairToMueller

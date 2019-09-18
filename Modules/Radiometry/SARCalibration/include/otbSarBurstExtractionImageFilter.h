@@ -26,44 +26,44 @@
 
 namespace otb
 {
-/** \class SarBurstExtractionImageFilter 
+/** \class SarBurstExtractionImageFilter
  * \brief Performs a burst extraction by keeping only lines and samples
  * of a required Burst
- * 
+ *
  * This filter performs a burst extraction by keeping only lines and samples
  * of a required burst. This operation is useful when dealing with
  * Sentinel1 IW SLC products, where each subswath is composed of
  * several overlapping burst separated by black lines. The aim is to separate
  * bursts to be able to process each burst independently.
- * The output image represents only one burst and is smaller in azimuth and range 
+ * The output image represents only one burst and is smaller in azimuth and range
  * direction than the input line. This filter is the perfect preprocessing step
  * to process each burst of S1 IW SLC product with OTB without suffering from
  * artifacts caused by bursts separation.
- * 
+ *
  * Note that currently only Sentinel1 IW SLC products are supported.
- * 
+ *
  * \ingroup OTBSARCalibration
  */
 
-template <class TImage> class ITK_EXPORT SarBurstExtractionImageFilter :
-    public itk::ImageToImageFilter<TImage,TImage>
+template <class TImage>
+class ITK_EXPORT SarBurstExtractionImageFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
   // Standard class typedefs
-  typedef SarBurstExtractionImageFilter                  Self;
-  typedef itk::ImageToImageFilter<TImage,TImage> Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef SarBurstExtractionImageFilter Self;
+  typedef itk::ImageToImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(SarBurstExtractionImageFilter,ImageToImageFilter);
+  itkTypeMacro(SarBurstExtractionImageFilter, ImageToImageFilter);
 
-  typedef TImage                                 ImageType;
-  typedef typename ImageType::RegionType         RegionType;
-  typedef typename ImageType::PointType          PointType;
+  typedef TImage                         ImageType;
+  typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::PointType  PointType;
 
   typedef std::pair<unsigned long, unsigned long> RecordType;
-  typedef std::vector<RecordType>            LinesRecordVectorType;
+  typedef std::vector<RecordType> LinesRecordVectorType;
 
   // Setter
   itkSetMacro(BurstIndex, unsigned int);
@@ -86,11 +86,11 @@ protected:
   virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
-  
+
 private:
   SarBurstExtractionImageFilter(const Self&) = delete;
-  void operator=(const Self &) = delete;
-  
+  void operator=(const Self&) = delete;
+
   // Pair for sample valid selection
   RecordType m_LinesRecord;
 
@@ -100,10 +100,10 @@ private:
   // Burst index
   unsigned int m_BurstIndex;
 
-  // Mode for extraction : 
+  // Mode for extraction :
   // If true : all pixels of the burst are selected
   // If false : only valid pixels are selected
-  bool m_AllPixels;  
+  bool m_AllPixels;
 };
 
 } // End namespace otb
@@ -111,7 +111,6 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSarBurstExtractionImageFilter.hxx"
 #endif
-
 
 
 #endif

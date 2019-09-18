@@ -27,40 +27,27 @@
 namespace otb
 {
 
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SensorModelBase() : Superclass(0)
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>::SensorModelBase() : Superclass(0)
 {
   m_Model = SensorModelAdapter::New();
 }
 
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::~SensorModelBase()
-{}
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>::~SensorModelBase()
+{
+}
 
 /// Get the Geometry Keyword list
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-ImageKeywordlist
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::GetImageGeometryKeywordlist(void) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+ImageKeywordlist SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>::GetImageGeometryKeywordlist(void) const
 {
   return m_ImageKeywordlist;
 }
 
 /** Set the Imagekeywordlist and affect the ossim projection ( m_Model) */
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-void
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::SetImageGeometry(const ImageKeywordlist& image_kwl)
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>::SetImageGeometry(const ImageKeywordlist& image_kwl)
 {
   m_ImageKeywordlist = image_kwl;
   m_Model->CreateProjection(m_ImageKeywordlist);
@@ -69,12 +56,8 @@ SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 /**
  * PrintSelf method
  */
-template <class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-void
-SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Model: " << m_Model << std::endl;

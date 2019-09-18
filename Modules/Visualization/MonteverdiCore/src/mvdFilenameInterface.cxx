@@ -67,32 +67,25 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-FilenameInterface
-::FilenameInterface() :
-  m_Filename()
+FilenameInterface::FilenameInterface() : m_Filename()
 {
 }
 
 /*****************************************************************************/
-FilenameInterface
-::~FilenameInterface()
+FilenameInterface::~FilenameInterface()
 {
 }
 
 /*****************************************************************************/
-void
-FilenameInterface
-::SetFilename( const QString & filename )
+void FilenameInterface::SetFilename(const QString& filename)
 {
   m_Filename = filename;
 
-  virtual_SetFilename( filename );
+  virtual_SetFilename(filename);
 }
 
 /*****************************************************************************/
-const QString &
-FilenameInterface
-::GetFilename() const
+const QString& FilenameInterface::GetFilename() const
 {
   return m_Filename;
 }

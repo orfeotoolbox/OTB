@@ -22,16 +22,15 @@
 
 #include "otbWaveletOperator.h"
 
-int otbWaveletOperator(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbWaveletOperator(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   const otb::Wavelet::WaveletDirection directionID = otb::Wavelet::FORWARD;
-  const otb::Wavelet::Wavelet          wvltID = otb::Wavelet::HAAR;
+  const otb::Wavelet::Wavelet          wvltID      = otb::Wavelet::HAAR;
 
-  const int Dimension = 2;
+  const int      Dimension = 2;
   typedef double PixelType;
 
-  typedef otb::WaveletOperator<wvltID, directionID, PixelType, Dimension>
-  WaveletOperator;
+  typedef otb::WaveletOperator<wvltID, directionID, PixelType, Dimension> WaveletOperator;
   typedef WaveletOperator::LowPassOperator  LowPassOperatorType;
   typedef WaveletOperator::HighPassOperator HighPassOperatorType;
 

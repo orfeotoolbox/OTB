@@ -43,41 +43,41 @@ namespace otb
 class ITK_EXPORT SimulationStep1Base : public itk::ProcessObject
 {
 public:
+  /**Standard "Self" & Superclass typedef*/
+  typedef SimulationStep1Base           Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /**Standard "Self" & Superclass typedef*/
-   typedef SimulationStep1Base                 Self;
-   typedef itk::ProcessObject                  Superclass;
-   typedef itk::SmartPointer<Self>             Pointer;
-   typedef itk::SmartPointer<const Self>       ConstPointer;
-
-   /** Some convenient typedefs. */
-   typedef double                                ParametersValueType;
-   typedef itk::Array<ParametersValueType>       ParametersType;
-   typedef otb::SpectralResponse<double, double>  SpectralResponseType;
+  /** Some convenient typedefs. */
+  typedef double                          ParametersValueType;
+  typedef itk::Array<ParametersValueType> ParametersType;
+  typedef otb::SpectralResponse<double, double> SpectralResponseType;
 
 
-   /** Standard Macro*/
-   itkTypeMacro(SimulationStep1Base, ProcessObject);
+  /** Standard Macro*/
+  itkTypeMacro(SimulationStep1Base, ProcessObject);
 
-   itkSetMacro(Parameters, ParametersType);
-   itkGetMacro(Parameters, ParametersType);
-   //virtual  void SetInput(const ParametersType &) = 0;
+  itkSetMacro(Parameters, ParametersType);
+  itkGetMacro(Parameters, ParametersType);
+  // virtual  void SetInput(const ParametersType &) = 0;
 
-   virtual SpectralResponseType * GetReflectance() = 0;
-   virtual SpectralResponseType * GetTransmittance() = 0;
+  virtual SpectralResponseType* GetReflectance()   = 0;
+  virtual SpectralResponseType* GetTransmittance() = 0;
 
 
 protected:
-   SimulationStep1Base(){};
-   ~SimulationStep1Base() override {}
+  SimulationStep1Base(){};
+  ~SimulationStep1Base() override
+  {
+  }
 
 
 private:
-   SimulationStep1Base(const Self &) = delete;
-   void operator =(const Self&) = delete;
+  SimulationStep1Base(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-   ParametersType m_Parameters;
-
+  ParametersType m_Parameters;
 };
 
 } // end namespace otb

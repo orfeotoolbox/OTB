@@ -30,36 +30,34 @@
 #include "otbFlexibleDistanceWithMissingValue.h"
 
 
-
 int otbSOMWithMissingValueTest(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension = 2;
-  char *             inputFileName = argv[1];
-  char *             outputFileName = argv[2];
-  unsigned int       sizeX = atoi(argv[3]);
-  unsigned int       sizeY = atoi(argv[4]);
-  unsigned int       neighInitX = atoi(argv[5]);
-  unsigned int       neighInitY = atoi(argv[6]);
-  unsigned int       nbIterations = atoi(argv[7]);
-  double             betaInit = atof(argv[8]);
-  double             betaEnd = atof(argv[9]);
-  double             initValue = atof(argv[10]);
+  const unsigned int Dimension      = 2;
+  char*              inputFileName  = argv[1];
+  char*              outputFileName = argv[2];
+  unsigned int       sizeX          = atoi(argv[3]);
+  unsigned int       sizeY          = atoi(argv[4]);
+  unsigned int       neighInitX     = atoi(argv[5]);
+  unsigned int       neighInitY     = atoi(argv[6]);
+  unsigned int       nbIterations   = atoi(argv[7]);
+  double             betaInit       = atof(argv[8]);
+  double             betaEnd        = atof(argv[9]);
+  double             initValue      = atof(argv[10]);
 
 
-  typedef double                                 PixelType;
+  typedef double PixelType;
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
-  typedef ImageType::PixelType                   VectorType;
+  typedef ImageType::PixelType VectorType;
 
   typedef otb::Statistics::FlexibleDistanceWithMissingValue<VectorType> DistanceType;
-  typedef otb::SOMMap<VectorType, DistanceType, Dimension>  MapType;
+  typedef otb::SOMMap<VectorType, DistanceType, Dimension> MapType;
   typedef itk::Statistics::ListSample<VectorType>           SampleListType;
   typedef otb::Functor::CzihoSOMLearningBehaviorFunctor     LearningBehaviorFunctorType;
   typedef otb::Functor::CzihoSOMNeighborhoodBehaviorFunctor NeighborhoodBehaviorFunctorType;
-  typedef otb::SOMWithMissingValue<SampleListType, MapType,
-      LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
+  typedef otb::SOMWithMissingValue<SampleListType, MapType, LearningBehaviorFunctorType, NeighborhoodBehaviorFunctorType> SOMType;
 
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::ImageFileWriter<MapType>                   WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<MapType>   WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
@@ -73,10 +71,10 @@ int otbSOMWithMissingValueTest(int itkNotUsed(argc), char* argv[])
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     listSample->PushBack(it.Get());
     ++it;
-    }
+  }
 
   std::cout << "LIST SAMPLE SIZE: " << listSample->GetMeasurementVectorSize() << std::endl;
 

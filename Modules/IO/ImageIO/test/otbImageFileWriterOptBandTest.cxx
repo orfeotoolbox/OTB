@@ -31,37 +31,38 @@
 int otbImageFileWriterOptBandTest(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::ExtendedFilenameToWriterOptions FilenameHelperType;
-  FilenameHelperType::Pointer helper = FilenameHelperType::New();
+  FilenameHelperType::Pointer                  helper = FilenameHelperType::New();
 
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   helper->SetExtendedFileName(outputFilename);
-  unsigned int nbBands = atoi(argv[3]);
+  unsigned int              nbBands = atoi(argv[3]);
   std::vector<unsigned int> bandList;
-  bool ret = helper->ResolveBandRange(helper->GetBandRange(),nbBands,bandList);
+  bool                      ret = helper->ResolveBandRange(helper->GetBandRange(), nbBands, bandList);
   if (ret)
-    {
+  {
     std::cout << "BandList = [";
-    for (unsigned int k=0 ; k<bandList.size() ; k++)
-      {
-      if (k) std::cout << ",";
-      std::cout << bandList[k];
-      }
-    std::cout << "]" << std::endl;
-    }
-  else
+    for (unsigned int k = 0; k < bandList.size(); k++)
     {
-    std::cout << "Invalid band range for a "<<nbBands<<" bands image"<< std::endl;
+      if (k)
+        std::cout << ",";
+      std::cout << bandList[k];
     }
+    std::cout << "]" << std::endl;
+  }
+  else
+  {
+    std::cout << "Invalid band range for a " << nbBands << " bands image" << std::endl;
+  }
 
   typedef unsigned int PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int   Dimension = 2;
 
   typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::ImageFileReader<ImageType> ReaderType; 
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -69,7 +70,7 @@ int otbImageFileWriterOptBandTest(int itkNotUsed(argc), char* argv[])
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
- 
+
   writer->SetInput(reader->GetOutput());
   writer->Update();
 

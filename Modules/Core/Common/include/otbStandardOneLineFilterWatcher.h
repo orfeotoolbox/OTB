@@ -60,11 +60,9 @@ class OTBCommon_EXPORT_TEMPLATE StandardOneLineFilterWatcher : public FilterWatc
 public:
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const char *comment = "");
+  StandardOneLineFilterWatcher(itk::ProcessObject* process, const char* comment = "");
 
-  StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const std::string& comment = "");
+  StandardOneLineFilterWatcher(itk::ProcessObject* process, const std::string& comment = "");
 
   /** Default constructor */
   StandardOneLineFilterWatcher();
@@ -83,13 +81,12 @@ public:
   }
 
   /** Set the callback class */
-  void SetCallback(PrintCallbackType * callback)
+  void SetCallback(PrintCallbackType* callback)
   {
     m_Callback = callback;
   }
 
 protected:
-
   /** Callback method to show the ProgressEvent */
   void ShowProgress() override;
 
@@ -100,7 +97,6 @@ protected:
   void EndFilter() override;
 
 private:
-
   /** Stars counting */
   int m_StarsCount;
 
@@ -111,14 +107,14 @@ private:
   /** If the output is not interactive (e.g. it is redirected to a file), it
    * is buffered and only written at the end of the processing */
   std::string m_Buffer;
-  
+
   /** The point to the callback used for printing. It is set to the default
    * callback on construction and can be changed later using the setter.
    * Delete will not be called on this pointer. */
-  PrintCallbackType * m_Callback;
-  
-  /** A default callback created in the constructor and deleted in the 
-   * destructor. */ 
+  PrintCallbackType* m_Callback;
+
+  /** A default callback created in the constructor and deleted in the
+   * destructor. */
   std::shared_ptr<PrintCallbackType> m_DefaultCallback;
 };
 

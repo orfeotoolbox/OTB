@@ -83,8 +83,7 @@ class MaplaMainWindow;
  *
  * \brief The application main-widow widget.
  */
-class OTBMapla_EXPORT MaplaMainWindow
-  : public I18nMainWindow
+class OTBMapla_EXPORT MaplaMainWindow : public I18nMainWindow
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -93,79 +92,73 @@ class OTBMapla_EXPORT MaplaMainWindow
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** \brief Constructor. */
-  MaplaMainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  MaplaMainWindow(QWidget* Parent = 0, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~MaplaMainWindow() override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) override;
+  void closeEvent(QCloseEvent* event) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
-//
-// Protected slots.
+  //
+  // Protected slots.
 protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel* ) override;
+  void OnAboutToChangeModel(const AbstractModel*) override;
 
   /**
    */
-  void OnModelChanged( AbstractModel* ) override;
+  void OnModelChanged(AbstractModel*) override;
 
   /**
    */
-  void OnApplicationToLaunchSelected( const QString & name );
+  void OnApplicationToLaunchSelected(const QString& name);
 
-  /**
-   */
+/**
+ */
 #if 0
   void OnOTBApplicationOutputImageChanged( const QString & name,
                                            const QString & filename);
 #endif
   /**
    */
-  void OnExecutionDone( int status );
+  void OnExecutionDone(int status);
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
   void InitializeDockWidgets();
@@ -181,8 +174,8 @@ private:
 
   void virtual_ConnectUI() override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -193,13 +186,13 @@ private:
   /**
    *  \brief OTB-applications tool-box controller.
    */
-  ApplicationsToolBoxController * m_ApplicationsToolBoxController;
+  ApplicationsToolBoxController* m_ApplicationsToolBoxController;
 #endif
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Private slots.
+  //
+  // Private slots.
 private slots:
   /**
    * \brief Qt auto-connected slot which is called when

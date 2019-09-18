@@ -29,19 +29,20 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TImage>
-GCPsToRPCSensorModelImageFilter<TImage>
-::GCPsToRPCSensorModelImageFilter() : m_UseImageGCPs(false),
-  m_RMSGroundError(0.),
-  m_ErrorsContainer(),
-  m_MeanError(0.),
-  m_UseDEM(false),
-  m_MeanElevation(0.),
-  m_DEMHandler(),
-  m_GCPsContainer(),
-  m_ModelUpToDate(false)
+GCPsToRPCSensorModelImageFilter<TImage>::GCPsToRPCSensorModelImageFilter()
+  : m_UseImageGCPs(false),
+    m_RMSGroundError(0.),
+    m_ErrorsContainer(),
+    m_MeanError(0.),
+    m_UseDEM(false),
+    m_MeanElevation(0.),
+    m_DEMHandler(),
+    m_GCPsContainer(),
+    m_ModelUpToDate(false)
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -56,8 +57,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 }
 
 template <class TImage>
-GCPsToRPCSensorModelImageFilter<TImage>
-::~GCPsToRPCSensorModelImageFilter()
+GCPsToRPCSensorModelImageFilter<TImage>::~GCPsToRPCSensorModelImageFilter()
 {
   // Clear the GCPs container
   this->ClearGCPs();
@@ -65,9 +65,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::Modified() const
+void GCPsToRPCSensorModelImageFilter<TImage>::Modified() const
 {
   // Call superclass implementation
   this->Superclass::Modified();
@@ -78,29 +76,21 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
 
 template <class TImage>
-typename GCPsToRPCSensorModelImageFilter<TImage>
-::GCPsContainerType&
-GCPsToRPCSensorModelImageFilter<TImage>
-::GetGCPsContainer()
+typename GCPsToRPCSensorModelImageFilter<TImage>::GCPsContainerType& GCPsToRPCSensorModelImageFilter<TImage>::GetGCPsContainer()
 {
   // return the GCPs container
   return m_GCPsContainer;
 }
 
 template <class TImage>
-typename GCPsToRPCSensorModelImageFilter<TImage>
-::ErrorsContainerType&
-GCPsToRPCSensorModelImageFilter<TImage>
-::GetErrorsContainer()
+typename GCPsToRPCSensorModelImageFilter<TImage>::ErrorsContainerType& GCPsToRPCSensorModelImageFilter<TImage>::GetErrorsContainer()
 {
   // return the GCPs container
   return m_ErrorsContainer;
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::SetGCPsContainer(const GCPsContainerType& container)
+void GCPsToRPCSensorModelImageFilter<TImage>::SetGCPsContainer(const GCPsContainerType& container)
 {
   // Set the GCPs container
   m_GCPsContainer = container;
@@ -109,9 +99,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::AddGCP(const Point2DType& sensorPoint, const Point3DType& groundPoint)
+void GCPsToRPCSensorModelImageFilter<TImage>::AddGCP(const Point2DType& sensorPoint, const Point3DType& groundPoint)
 {
   // Create a new GCP
   GCPType newGCP(sensorPoint, groundPoint);
@@ -122,9 +110,7 @@ GCPsToRPCSensorModelImageFilter<TImage>
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::AddGCP(const Point2DType& sensorPoint, const Point2DType& groundPoint)
+void GCPsToRPCSensorModelImageFilter<TImage>::AddGCP(const Point2DType& sensorPoint, const Point2DType& groundPoint)
 {
   // Create the ground point with elevation
   Point3DType groundPointWithElevation;
@@ -134,49 +120,44 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
   // Check whether we are using a DEM or not
   if (m_UseDEM)
-    {
+  {
     // If so, use it to get the elevation
     double height = m_DEMHandler->GetHeightAboveEllipsoid(groundPoint);
     // To avoid nan value
-    if (height != height) height = 0;
+    if (height != height)
+      height                    = 0;
     groundPointWithElevation[2] = height;
-    }
+  }
   else
-    {
+  {
     // Use the MeanElevation value
     groundPointWithElevation[2] = m_MeanElevation;
-    }
+  }
 
   // Call the 3D version of the method
   this->AddGCP(sensorPoint, groundPointWithElevation);
 }
 
-template<class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::RemoveGCP(unsigned int id)
+template <class TImage>
+void GCPsToRPCSensorModelImageFilter<TImage>::RemoveGCP(unsigned int id)
 {
   if (id < m_GCPsContainer.size())
-    {
+  {
     m_GCPsContainer.erase(m_GCPsContainer.begin() + id);
-    }
+  }
 
   this->Modified();
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::ClearGCPs()
+void GCPsToRPCSensorModelImageFilter<TImage>::ClearGCPs()
 {
   m_GCPsContainer.clear();
   this->Modified();
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::SetUseImageGCPs(bool use)
+void GCPsToRPCSensorModelImageFilter<TImage>::SetUseImageGCPs(bool use)
 {
   // Set the internal value
   m_UseImageGCPs = use;
@@ -185,16 +166,14 @@ GCPsToRPCSensorModelImageFilter<TImage>
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::LoadImageGCPs()
+void GCPsToRPCSensorModelImageFilter<TImage>::LoadImageGCPs()
 {
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
   // Iterate on the image GCPs
   for (unsigned int i = 0; i < imagePtr->GetGCPCount(); ++i)
-    {
+  {
     // Store row/col in an index
     typename TImage::IndexType index;
     index[0] = static_cast<long int>(imagePtr->GetGCPCol(i));
@@ -207,8 +186,8 @@ GCPsToRPCSensorModelImageFilter<TImage>
     // Sensor and Ground points
     Point3DType groundPoint;
 
-    groundPoint[0] = imagePtr->GetGCPX(i);  // Lon
-    groundPoint[1] = imagePtr->GetGCPY(i);  // Lat
+    groundPoint[0] = imagePtr->GetGCPX(i); // Lon
+    groundPoint[1] = imagePtr->GetGCPY(i); // Lat
     groundPoint[2] = imagePtr->GetGCPZ(i);
 
     // Search image GCPs and remove them from container
@@ -217,32 +196,31 @@ GCPsToRPCSensorModelImageFilter<TImage>
     unsigned int currentGCP = 0;
 
     while ((currentGCP < m_GCPsContainer.size()) && !found)
+    {
+      if ((m_GCPsContainer[currentGCP].first == sensorPoint) && (m_GCPsContainer[currentGCP].second == groundPoint))
       {
-      if ((m_GCPsContainer[currentGCP].first == sensorPoint)
-          && (m_GCPsContainer[currentGCP].second == groundPoint))
-        {
         // If we don't use image GCPs, erase the GCP
-        if (!m_UseImageGCPs) m_GCPsContainer.erase(m_GCPsContainer.begin() + currentGCP);
+        if (!m_UseImageGCPs)
+          m_GCPsContainer.erase(m_GCPsContainer.begin() + currentGCP);
 
         found = true;
-        }
-
-      currentGCP++;
       }
 
-    // If we use image GCPs, add it to the container
-    if (m_UseImageGCPs && !found) this->AddGCP(sensorPoint, groundPoint);
+      currentGCP++;
     }
+
+    // If we use image GCPs, add it to the container
+    if (m_UseImageGCPs && !found)
+      this->AddGCP(sensorPoint, groundPoint);
+  }
 
   this->Modified();
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::ComputeErrors()
+void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
 {
-  typedef GenericRSTransform<double,3,3> RSTransformType;
+  typedef GenericRSTransform<double, 3, 3> RSTransformType;
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
   rsTransform->SetInputKeywordList(m_Keywordlist);
@@ -254,14 +232,14 @@ GCPsToRPCSensorModelImageFilter<TImage>
   Point2DType sensorPoint;
   Point3DType groundPoint;
 
-  double sum = 0.;
+  double sum  = 0.;
   m_MeanError = 0.;
 
   // Clear Error container
   m_ErrorsContainer.clear();
 
   for (unsigned int i = 0; i < m_GCPsContainer.size(); ++i)
-    {
+  {
     // GCP value
     sensorPoint = m_GCPsContainer[i].first;
     groundPoint = m_GCPsContainer[i].second;
@@ -293,15 +271,13 @@ GCPsToRPCSensorModelImageFilter<TImage>
 
     // Compute mean error
     sum += error;
-    }
+  }
 
   m_MeanError = sum / static_cast<double>(m_ErrorsContainer.size());
 }
 
-template<class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::GenerateOutputInformation()
+template <class TImage>
+void GCPsToRPCSensorModelImageFilter<TImage>::GenerateOutputInformation()
 {
   // First, call the superclass implementation
   Superclass::GenerateOutputInformation();
@@ -309,9 +285,9 @@ GCPsToRPCSensorModelImageFilter<TImage>
   // First, retrieve the image pointer
   typename TImage::Pointer imagePtr = this->GetOutput();
 
-  if(!m_ModelUpToDate)
-    {
-    double rmsError;
+  if (!m_ModelUpToDate)
+  {
+    double           rmsError;
     ImageKeywordlist otb_kwl;
     otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
 
@@ -324,27 +300,25 @@ GCPsToRPCSensorModelImageFilter<TImage>
     m_Keywordlist = otb_kwl;
 
     m_ModelUpToDate = true;
-    }
+  }
 
-   // Update image keywordlist. We need to do it at each stream
-   // because it will be overwritten by up-stream
-   // GenerateOutputInformation() calls.
-    itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Keywordlist);
+  // Update image keywordlist. We need to do it at each stream
+  // because it will be overwritten by up-stream
+  // GenerateOutputInformation() calls.
+  itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
+  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Keywordlist);
 }
 
 template <class TImage>
-void
-GCPsToRPCSensorModelImageFilter<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void GCPsToRPCSensorModelImageFilter<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "UseImageGCPs: " << (m_UseImageGCPs ? "yes" : "no") << std::endl;
   os << indent << "UseDEM: " << (m_UseDEM ? "yes" : "no") << std::endl;
   if (!m_UseDEM)
-    {
+  {
     os << indent << "MeanElevation: " << m_MeanElevation << std::endl;
-    }
+  }
   os << indent << "RMS ground error: " << m_RMSGroundError << std::endl;
 }
 

@@ -30,7 +30,7 @@ namespace otb
  * \class PeriodicSampler
  *
  * \brief Periodic sampler for iteration loops
- * 
+ *
  * This class allows doing periodic sampling during an iteration loop.
  *
  * \ingroup OTBStatistics
@@ -38,16 +38,16 @@ namespace otb
 class ITK_EXPORT PeriodicSampler : public SamplerBase
 {
 public:
-  typedef PeriodicSampler  Self;
-  typedef SamplerBase      Superclass;
+  typedef PeriodicSampler               Self;
+  typedef SamplerBase                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Internal parameters, only contains an offset to shift the periodic 
+  /** Internal parameters, only contains an offset to shift the periodic
    * sampling
    */
   typedef struct Parameter
-    {
+  {
     /** Offset that shifts the whole periodic sampling
      *  (disabled if jitter is used) */
     unsigned long Offset;
@@ -57,37 +57,37 @@ public:
 
     /** Maximum buffer size for internal jitter values */
     unsigned long MaxBufferSize;
-    
-    bool operator!=(const struct Parameter  & param) const;
-    } ParameterType; 
+
+    bool operator!=(const struct Parameter& param) const;
+  } ParameterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PeriodicSampler,SamplerBase);
-  
+  itkTypeMacro(PeriodicSampler, SamplerBase);
+
   /** Setter for internal parameters */
-  void SetParameters(const ParameterType &param)
-    {
+  void SetParameters(const ParameterType& param)
+  {
     if (m_Parameters != param)
-      {
+    {
       this->Modified();
       m_Parameters = param;
-      }
     }
+  }
 
   /** Getter for internal parameters */
   ParameterType GetParameters()
-    {
+  {
     return m_Parameters;
-    }
+  }
 
   /**
    * Method that resets the internal state of the sampler
    */
   void Reset(void) override;
-  
+
   /**
    * Method to call during iteration, returns true if the sample is selected,
    * and false otherwise.
@@ -97,15 +97,17 @@ public:
 protected:
   /** Constructor */
   PeriodicSampler();
-   
+
   /** Destructor */
-  ~PeriodicSampler() override {}
+  ~PeriodicSampler() override
+  {
+  }
 
 private:
   // Not implemented
   PeriodicSampler(const Self&);
   void operator=(const Self&);
-  
+
   /** Internal parameters for the sampler */
   ParameterType m_Parameters;
 

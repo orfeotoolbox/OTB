@@ -51,24 +51,18 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT MeanRatioImageFilter :
-  public BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::MeanRatio<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT MeanRatioImageFilter
+    : public BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                                  Functor::MeanRatio<typename itk::ConstNeighborhoodIterator<TInputImage1>,
+                                                                     typename itk::ConstNeighborhoodIterator<TInputImage2>, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef MeanRatioImageFilter Self;
-  typedef BinaryFunctorNeighborhoodImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::MeanRatio<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType>
-      >  Superclass;
+  typedef BinaryFunctorNeighborhoodImageFilter<TInputImage1, TInputImage2, TOutputImage,
+                                               Functor::MeanRatio<typename itk::ConstNeighborhoodIterator<TInputImage1>,
+                                                                  typename itk::ConstNeighborhoodIterator<TInputImage2>, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -79,13 +73,16 @@ public:
   itkTypeMacro(MeanRatioImageFilter, SuperClass);
 
 protected:
-  MeanRatioImageFilter() {}
-  ~MeanRatioImageFilter() override {}
+  MeanRatioImageFilter()
+  {
+  }
+  ~MeanRatioImageFilter() override
+  {
+  }
 
 private:
-  MeanRatioImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  MeanRatioImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

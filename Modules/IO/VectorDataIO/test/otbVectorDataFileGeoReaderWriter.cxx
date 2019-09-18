@@ -27,27 +27,26 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
-int otbVectorDataFileGeoReaderWriter(int itkNotUsed(argc), char * argv[])
+int otbVectorDataFileGeoReaderWriter(int itkNotUsed(argc), char* argv[])
 {
 
-  typedef otb::VectorData<double, 2>                VectorDataType;
+  typedef otb::VectorData<double, 2> VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
 
-  //Instantiation
+  // Instantiation
   VectorDataReaderType::Pointer vectorDataReader = VectorDataReaderType::New();
   VectorDataWriterType::Pointer vectorDataWriter = VectorDataWriterType::New();
-  VectorDataType::Pointer       data = VectorDataType::New();
+  VectorDataType::Pointer       data             = VectorDataType::New();
 
   vectorDataReader->SetFileName(argv[1]);
 
-//      vectorData->SetOrigin(m_Reader->GetOutput()->GetOrigin());
-//       vectorData->SetSignedSpacing(m_Reader->GetOutput()->GetSignedSpacing());
+  //      vectorData->SetOrigin(m_Reader->GetOutput()->GetOrigin());
+  //       vectorData->SetSignedSpacing(m_Reader->GetOutput()->GetSignedSpacing());
 
   std::string projectionRef;
-  itk::ExposeMetaData<std::string>(
-    vectorDataReader->GetOutput()->GetMetaDataDictionary(), otb::MetaDataKey::ProjectionRefKey, projectionRef);
-//    vectorData->SetProjectionRef(projectionRef);
+  itk::ExposeMetaData<std::string>(vectorDataReader->GetOutput()->GetMetaDataDictionary(), otb::MetaDataKey::ProjectionRefKey, projectionRef);
+  //    vectorData->SetProjectionRef(projectionRef);
   std::cout << projectionRef << std::endl;
 
   vectorDataWriter->SetFileName(argv[2]);

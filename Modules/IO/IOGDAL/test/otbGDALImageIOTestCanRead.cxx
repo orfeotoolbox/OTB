@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbGDALImageIO.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -28,12 +26,12 @@
 int otbGDALImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::GDALImageIO::Pointer lGDALImageIO = otb::GDALImageIO::New();
-  bool                      lCanRead = lGDALImageIO->CanReadFile(argv[1]);
+  bool                      lCanRead     = lGDALImageIO->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Error otb::GDALImageIO : impossible to open the dataset: " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

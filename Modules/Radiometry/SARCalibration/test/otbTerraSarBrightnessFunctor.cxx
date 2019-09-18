@@ -24,10 +24,10 @@
 
 #include "otbTerraSarBrightnessFunctor.h"
 
-int otbTerraSarBrightnessFunctor(int itkNotUsed(argc), char * argv[])
+int otbTerraSarBrightnessFunctor(int itkNotUsed(argc), char* argv[])
 {
-  char * outFilename = argv[5];
-  double calFact =  atof(argv[4]);
+  char*  outFilename = argv[5];
+  double calFact     = atof(argv[4]);
 
   typedef double                   ScalarType;
   typedef std::complex<ScalarType> ComplexType;
@@ -46,9 +46,9 @@ int otbTerraSarBrightnessFunctor(int itkNotUsed(argc), char * argv[])
 
   file << std::fixed << std::setprecision(10);
 
-  file << "Scalar pixel : " << inPix << " -> " << funct.operator ()(inPix) << std::endl;
+  file << "Scalar pixel : " << inPix << " -> " << funct.operator()(inPix) << std::endl;
 
-  file << "Complex pixel : " << inCplxPix << " -> " << funct.operator ()(inCplxPix) << std::endl;
+  file << "Complex pixel : " << inCplxPix << " -> " << funct.operator()(inCplxPix) << std::endl;
 
   file.close();
 

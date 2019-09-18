@@ -52,22 +52,19 @@
 namespace otb
 {
 
-ApplicationException::ApplicationException(const char *file, unsigned int line,
-                   const char* message, const char* loc) :
-ExceptionObject(file, line, message, loc)
+ApplicationException::ApplicationException(const char* file, unsigned int line, const char* message, const char* loc)
+  : ExceptionObject(file, line, message, loc)
 {
 }
 
 /** Constructor. */
-ApplicationException::ApplicationException(const std::string &file, unsigned int line,
-                   const char* message, const char* loc) :
-ExceptionObject(file, line, message, loc)
+ApplicationException::ApplicationException(const std::string& file, unsigned int line, const char* message, const char* loc)
+  : ExceptionObject(file, line, message, loc)
 {
 }
 
-ApplicationException::ApplicationException(const std::string &file, unsigned int line,
-                   const std::string& message, const std::string& loc) :
-ExceptionObject(file, line, message, loc)
+ApplicationException::ApplicationException(const std::string& file, unsigned int line, const std::string& message, const std::string& loc)
+  : ExceptionObject(file, line, message, loc)
 {
 }
 
@@ -84,11 +81,15 @@ template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt32VectorImageType* Ap
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE FloatVectorImageType* Application::GetParameterImage<FloatVectorImageType>(std::string const&);
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE DoubleVectorImageType* Application::GetParameterImage<DoubleVectorImageType>(std::string const&);
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16VectorImageType* Application::GetParameterImage<ComplexInt16VectorImageType>(std::string const&);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32VectorImageType* Application::GetParameterImage<ComplexInt32VectorImageType>(std::string const&);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt16VectorImageType*
+                                                       Application::GetParameterImage<ComplexInt16VectorImageType>(std::string const&);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexInt32VectorImageType*
+                                                       Application::GetParameterImage<ComplexInt32VectorImageType>(std::string const&);
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatVectorImageType* Application::GetParameterImage<ComplexFloatVectorImageType>(std::string const&);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleVectorImageType* Application::GetParameterImage<ComplexDoubleVectorImageType>(std::string const&);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexFloatVectorImageType*
+                                                       Application::GetParameterImage<ComplexFloatVectorImageType>(std::string const&);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleVectorImageType*
+                                                       Application::GetParameterImage<ComplexDoubleVectorImageType>(std::string const&);
 
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBImageType* Application::GetParameterImage<UInt8RGBImageType>(std::string const&);
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE UInt8RGBAImageType* Application::GetParameterImage<UInt8RGBAImageType>(std::string const&);
@@ -110,14 +111,21 @@ template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE ComplexDoubleImageType* A
 
 //
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8VectorImageType>(std::string const&, UInt8VectorImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int16VectorImageType>(std::string const&, Int16VectorImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt16VectorImageType>(std::string const&, UInt16VectorImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int32VectorImageType>(std::string const&, Int32VectorImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt32VectorImageType>(std::string const&, UInt32VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt8VectorImageType>(std::string const&,
+                                                                                                                       UInt8VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int16VectorImageType>(std::string const&,
+                                                                                                                       Int16VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt16VectorImageType>(std::string const&,
+                                                                                                                        UInt16VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<Int32VectorImageType>(std::string const&,
+                                                                                                                       Int32VectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<UInt32VectorImageType>(std::string const&,
+                                                                                                                        UInt32VectorImageType*);
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<FloatVectorImageType>(std::string const&, FloatVectorImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<DoubleVectorImageType>(std::string const&, DoubleVectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<FloatVectorImageType>(std::string const&,
+                                                                                                                       FloatVectorImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<DoubleVectorImageType>(std::string const&,
+                                                                                                                        DoubleVectorImageType*);
 
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16VectorImageType>(std::string const&,
                                                                                                                               ComplexInt16VectorImageType*);
@@ -141,14 +149,18 @@ template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetPara
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<FloatImageType>(std::string const&, FloatImageType*);
 template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<DoubleImageType>(std::string const&, DoubleImageType*);
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16ImageType>(std::string const&, ComplexInt16ImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32ImageType>(std::string const&, ComplexInt32ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt16ImageType>(std::string const&,
+                                                                                                                        ComplexInt16ImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexInt32ImageType>(std::string const&,
+                                                                                                                        ComplexInt32ImageType*);
 
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatImageType>(std::string const&, ComplexFloatImageType*);
-template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleImageType>(std::string const&, ComplexDoubleImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexFloatImageType>(std::string const&,
+                                                                                                                        ComplexFloatImageType*);
+template OTBApplicationEngine_EXPORT_EXPLICIT_TEMPLATE void Application::SetParameterOutputImage<ComplexDoubleImageType>(std::string const&,
+                                                                                                                         ComplexDoubleImageType*);
 
 
-void Application::SetName( const std::string & name )
+void Application::SetName(const std::string& name)
 {
   m_Name = name;
   GetDocExample()->SetApplicationName(name);
@@ -227,14 +239,14 @@ std::vector<std::string> Application::GetDocTags() const
   return m_DocTags;
 }
 
-void Application::AddDocTag(const std::string & tag)
+void Application::AddDocTag(const std::string& tag)
 {
   const auto wh = std::find(begin(m_DocTags), end(m_DocTags), tag);
   if (wh == end(m_DocTags))
-    {
+  {
     m_DocTags.push_back(tag);
     this->Modified();
-    }
+  }
 }
 
 bool Application::IsDeprecated()
@@ -279,19 +291,19 @@ std::string Application::GetExampleParameterValue(unsigned int exId, unsigned in
 
 void Application::SetDocExampleParameterValue(const std::string key, const std::string value, unsigned int exId)
 {
-  GetDocExample()->AddParameter( key, value, exId );
+  GetDocExample()->AddParameter(key, value, exId);
   this->Modified();
 }
 
-void Application::SetExampleComment( const std::string & comm, unsigned int i )
+void Application::SetExampleComment(const std::string& comm, unsigned int i)
 {
-  GetDocExample()->SetExampleComment( comm, i );
+  GetDocExample()->SetExampleComment(comm, i);
   this->Modified();
 }
 
-unsigned int Application::AddExample(const std::string & comm)
+unsigned int Application::AddExample(const std::string& comm)
 {
-  unsigned int id = GetDocExample()->AddExample( comm );
+  unsigned int id = GetDocExample()->AddExample(comm);
   this->Modified();
   return id;
 }
@@ -306,7 +318,7 @@ std::string Application::GetHtmlExample()
   return GetDocExample()->GenerateHtmlExample();
 }
 
-void Application::SetDocLink(const std::string & link)
+void Application::SetDocLink(const std::string& link)
 {
   if (m_Doclink.compare(link) != 0)
   {
@@ -353,17 +365,16 @@ otb::Logger* Application::GetLogger() const
   return m_Logger;
 }
 
-void Application::SetLogger(otb::Logger *logger)
+void Application::SetLogger(otb::Logger* logger)
 {
   if (m_Logger != logger)
-    {
+  {
     m_Logger = logger;
-    }
+  }
   this->Modified();
 }
 
-std::vector<std::string>
-Application::GetParametersKeys(bool recursive)
+std::vector<std::string> Application::GetParametersKeys(bool recursive)
 {
   return GetParameterList()->GetParametersKeys(recursive);
 }
@@ -376,9 +387,9 @@ bool Application::IsInitialized() const
 ParameterGroup* Application::GetParameterList()
 {
   if (!IsInitialized())
-    {
+  {
     Init();
-    }
+  }
 
   return m_ParameterList;
 }
@@ -420,20 +431,20 @@ void Application::SetParameterUserValue(std::string const& paramKey, bool value)
   **/
   EnableParameter(paramKey);
   if (m_IsInPrivateDo)
-    {
+  {
     GetParameterByKey(paramKey)->SetUserValue(false);
-    }
+  }
   else
-    {
+  {
     GetParameterByKey(paramKey)->SetUserValue(value);
-    }
+  }
 }
 
-const Parameter* Application::GetParameterByKey(std::string  const& name, bool follow) const
+const Parameter* Application::GetParameterByKey(std::string const& name, bool follow) const
 {
   // GetParameterList is non const...
   Application* _this = const_cast<Application*>(this);
-  return _this->GetParameterByKey(name,follow);
+  return _this->GetParameterByKey(name, follow);
 }
 
 void Application::Init()
@@ -476,202 +487,200 @@ void Application::UpdateParameters()
 }
 
 void Application::AfterExecuteAndWriteOutputs()
-{}
-
-void
-Application::RegisterPipeline()
 {
-  std::stack< itk::DataObject * > dataStack;
-  std::set< itk::DataObject * > inputData;
-  std::vector<std::string> paramList = GetParametersKeys(true);
+}
+
+void Application::RegisterPipeline()
+{
+  std::stack<itk::DataObject*> dataStack;
+  std::set<itk::DataObject*>   inputData;
+  std::vector<std::string>     paramList = GetParametersKeys(true);
   // Get both end of the pipeline
-  for ( auto const & key : paramList )
+  for (auto const& key : paramList)
+  {
+    if (GetParameterType(key) == ParameterType_OutputImage)
     {
-    if ( GetParameterType(key) == ParameterType_OutputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
+      Parameter*            param   = GetParameterByKey(key);
       OutputImageParameter* outP    = dynamic_cast<OutputImageParameter*>(param);
-      itk::ImageBase< 2 > * outData = outP->GetValue();
-      if ( outData )
+      itk::ImageBase<2>*    outData = outP->GetValue();
+      if (outData)
         dataStack.push(outData);
-      }
-    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
-      {
-      Parameter* param = GetParameterByKey(key);
+    }
+    else if (GetParameterType(key) == ParameterType_OutputVectorData)
+    {
+      Parameter*                 param   = GetParameterByKey(key);
       OutputVectorDataParameter* outP    = dynamic_cast<OutputVectorDataParameter*>(param);
-      VectorDataType * outData = outP->GetValue();
-      if ( outData )
+      VectorDataType*            outData = outP->GetValue();
+      if (outData)
         dataStack.push(outData);
-      }
-    else if ( GetParameterType(key) == ParameterType_InputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
+    }
+    else if (GetParameterType(key) == ParameterType_InputImage)
+    {
+      Parameter*           param = GetParameterByKey(key);
       InputImageParameter* inP   = dynamic_cast<InputImageParameter*>(param);
-      if ( !inP->HasValue() )
+      if (!inP->HasValue())
         continue;
-      ImageBaseType * inData = inP->GetImage< ImageBaseType >();
-      if ( inData && !inputData.count(inData) )
+      ImageBaseType* inData = inP->GetImage<ImageBaseType>();
+      if (inData && !inputData.count(inData))
         inputData.insert(inData);
-      }
-    else if ( GetParameterType(key) == ParameterType_InputImageList )
-      {
-      Parameter * param = GetParameterByKey(key);
+    }
+    else if (GetParameterType(key) == ParameterType_InputImageList)
+    {
+      Parameter*               param = GetParameterByKey(key);
       InputImageListParameter* inP   = dynamic_cast<InputImageListParameter*>(param);
-      if ( !inP->HasValue() )
+      if (!inP->HasValue())
         continue;
-      const FloatVectorImageListType * list = inP->GetImageList();
+      const FloatVectorImageListType* list = inP->GetImageList();
       for (auto it = list->Begin(); it != list->End(); ++it)
       {
-        FloatVectorImageType * inData = it.Get().GetPointer();
-        if ( inData && !inputData.count(inData) )
+        FloatVectorImageType* inData = it.Get().GetPointer();
+        if (inData && !inputData.count(inData))
           inputData.insert(inData);
-        }
-      }
-    else if ( GetParameterType(key) == ParameterType_InputVectorData )
-      {
-      Parameter * param = GetParameterByKey(key);
-      InputVectorDataParameter * inP =
-        dynamic_cast< InputVectorDataParameter * > ( param );
-      if ( !inP->HasValue() )
-        continue;
-      VectorDataType * inData = inP->GetVectorData();
-      if ( inData && !inputData.count(inData) )
-        inputData.insert(inData);
-      }
-    else if ( GetParameterType(key) == ParameterType_InputVectorDataList )
-      {
-      Parameter * param = GetParameterByKey(key);
-      InputVectorDataListParameter * inP =
-        dynamic_cast< InputVectorDataListParameter * > ( param );
-      if ( !inP->HasValue() )
-        continue;
-      VectorDataListType * list = inP->GetVectorDataList();
-      for ( auto it = list->Begin() ; it != list->End() ; ++it )
-        {
-        VectorDataType * inData = it.Get().GetPointer();
-        if ( inData && !inputData.count(inData) )
-          inputData.insert(inData);
-        }
       }
     }
+    else if (GetParameterType(key) == ParameterType_InputVectorData)
+    {
+      Parameter*                param = GetParameterByKey(key);
+      InputVectorDataParameter* inP   = dynamic_cast<InputVectorDataParameter*>(param);
+      if (!inP->HasValue())
+        continue;
+      VectorDataType* inData = inP->GetVectorData();
+      if (inData && !inputData.count(inData))
+        inputData.insert(inData);
+    }
+    else if (GetParameterType(key) == ParameterType_InputVectorDataList)
+    {
+      Parameter*                    param = GetParameterByKey(key);
+      InputVectorDataListParameter* inP   = dynamic_cast<InputVectorDataListParameter*>(param);
+      if (!inP->HasValue())
+        continue;
+      VectorDataListType* list = inP->GetVectorDataList();
+      for (auto it = list->Begin(); it != list->End(); ++it)
+      {
+        VectorDataType* inData = it.Get().GetPointer();
+        if (inData && !inputData.count(inData))
+          inputData.insert(inData);
+      }
+    }
+  }
 
   // DFS
-  while ( !dataStack.empty() )
-    {
-    itk::DataObject * current = dataStack.top();
+  while (!dataStack.empty())
+  {
+    itk::DataObject* current = dataStack.top();
     dataStack.pop();
     // whether current = null or is an input data it has no source
-    if ( !current || inputData.count( current ) )
+    if (!current || inputData.count(current))
       continue;
     // if current is a list push every of its members in datastack
-    if ( dynamic_cast< DataObjectListInterface *> (current) )
+    if (dynamic_cast<DataObjectListInterface*>(current))
+    {
+      DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(current);
+      int                      length = list->Size();
+      for (int i = 0; i < length; i++)
       {
-        DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(current);
-        int                      length = list->Size();
-        for (int i = 0; i < length; i++)
-        {
-        itk::DataObject * newData = list->GetNthDataObject(i);
-        if ( !current || inputData.count( current ) )
+        itk::DataObject* newData = list->GetNthDataObject(i);
+        if (!current || inputData.count(current))
           continue;
-        dataStack.push( newData );
-      continue;
-        }
-      }
-    // Finally get the current's process object source
-    itk::ProcessObject * process = (current->GetSource()).GetPointer();
-    if ( !process || m_Filters.find( process ) != m_Filters.end() )
-      continue;
-    m_Filters.insert( process );
-    std::vector< itk::DataObject::Pointer > inputs = process->GetInputs();
-    // Push back all source's inputs in datastack
-    for ( auto const & it : inputs )
-      {
-      if ( inputData.count( it.GetPointer() ) )
+        dataStack.push(newData);
         continue;
-      dataStack.push( it.GetPointer() );
       }
     }
+    // Finally get the current's process object source
+    itk::ProcessObject* process = (current->GetSource()).GetPointer();
+    if (!process || m_Filters.find(process) != m_Filters.end())
+      continue;
+    m_Filters.insert(process);
+    std::vector<itk::DataObject::Pointer> inputs = process->GetInputs();
+    // Push back all source's inputs in datastack
+    for (auto const& it : inputs)
+    {
+      if (inputData.count(it.GetPointer()))
+        continue;
+      dataStack.push(it.GetPointer());
+    }
+  }
 }
 
 void Application::FreeRessources()
 {
-  std::set< itk::DataObject * > dataSetToRelease; // do not release output
-  std::set< itk::DataObject * > dataSet;
-  std::vector<std::string> paramList = GetParametersKeys(true);
+  std::set<itk::DataObject*> dataSetToRelease; // do not release output
+  std::set<itk::DataObject*> dataSet;
+  std::vector<std::string>   paramList = GetParametersKeys(true);
   // Get the end of the pipeline
-  for ( const auto & key : paramList )
+  for (const auto& key : paramList)
+  {
+    if (GetParameterType(key) == ParameterType_OutputImage)
     {
-    if ( GetParameterType(key) == ParameterType_OutputImage )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputImageParameter * outP = dynamic_cast<OutputImageParameter*>(param);
-      itk::ImageBase<2> * outData = outP->GetValue();
-      if ( outData )
+      Parameter*            param   = GetParameterByKey(key);
+      OutputImageParameter* outP    = dynamic_cast<OutputImageParameter*>(param);
+      itk::ImageBase<2>*    outData = outP->GetValue();
+      if (outData)
         dataSet.insert(outData);
-      }
-    else if ( GetParameterType(key) == ParameterType_OutputVectorData )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter * outP = dynamic_cast<OutputVectorDataParameter*>(param);
-      Wrapper::VectorDataType * outData = outP->GetValue();
-      if ( outData )
+    }
+    else if (GetParameterType(key) == ParameterType_OutputVectorData)
+    {
+      Parameter*                 param   = GetParameterByKey(key);
+      OutputVectorDataParameter* outP    = dynamic_cast<OutputVectorDataParameter*>(param);
+      Wrapper::VectorDataType*   outData = outP->GetValue();
+      if (outData)
         dataSet.insert(outData);
-      }
+    }
     else
       continue;
-    }
+  }
   // initialize DFS
-  std::stack< itk::ProcessObject * > processStack;
-  for ( auto data : dataSet )
-    {
+  std::stack<itk::ProcessObject*> processStack;
+  for (auto data : dataSet)
+  {
     auto process = (data->GetSource()).GetPointer();
-    if ( process )
-      processStack.push( process );
-    }
+    if (process)
+      processStack.push(process);
+  }
   // DFS
-  while ( !processStack.empty() )
-    {
-    itk::ProcessObject * current = processStack.top();
+  while (!processStack.empty())
+  {
+    itk::ProcessObject* current = processStack.top();
     processStack.pop();
     // if null continue
-    if ( !current )
+    if (!current)
       continue;
     // Get all inputs
     auto inputVector = current->GetInputs();
-    for ( auto data : inputVector )
-      {
+    for (auto data : inputVector)
+    {
       // If input is null or already in the set continue
-      if ( !data.GetPointer() || dataSet.count( data.GetPointer() ) )
+      if (!data.GetPointer() || dataSet.count(data.GetPointer()))
         continue;
       // If input is a list
-      if ( dynamic_cast< DataObjectListInterface *> (data.GetPointer()) )
+      if (dynamic_cast<DataObjectListInterface*>(data.GetPointer()))
+      {
+        DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(data.GetPointer());
+        int                      length = list->Size();
+        for (int i = 0; i < length; i++)
         {
-          DataObjectListInterface* list   = dynamic_cast<DataObjectListInterface*>(data.GetPointer());
-          int                      length = list->Size();
-          for (int i = 0; i < length; i++)
-          {
-          itk::DataObject * newData = list->GetNthDataObject(i);
-          if ( !newData || dataSet.count( newData ) )
+          itk::DataObject* newData = list->GetNthDataObject(i);
+          if (!newData || dataSet.count(newData))
             continue;
-          dataSet.insert( newData );
-          dataSetToRelease.insert( newData );
-          itk::ProcessObject * process = newData->GetSource().GetPointer();
-          if ( process )
-            processStack.push( process );
-          }
-        }
-      else
-        {
-        dataSet.insert( data.GetPointer() );
-        dataSetToRelease.insert( data.GetPointer() );
-        itk::ProcessObject * process = data->GetSource().GetPointer();
-        if ( process )
-          processStack.push( process );
+          dataSet.insert(newData);
+          dataSetToRelease.insert(newData);
+          itk::ProcessObject* process = newData->GetSource().GetPointer();
+          if (process)
+            processStack.push(process);
         }
       }
+      else
+      {
+        dataSet.insert(data.GetPointer());
+        dataSetToRelease.insert(data.GetPointer());
+        itk::ProcessObject* process = data->GetSource().GetPointer();
+        if (process)
+          processStack.push(process);
+      }
     }
+  }
   // Release data
-  for ( auto data : dataSetToRelease )
+  for (auto data : dataSetToRelease)
   {
     data->ReleaseData();
   }
@@ -682,160 +691,157 @@ void Application::FreeRessources()
 int Application::Execute()
 {
   //----------- Recursive part -------------------------------------------------
-  std::vector<std::string> paramList = GetParametersKeys(true);
-  int status=0;
+  std::vector<std::string>         paramList = GetParametersKeys(true);
+  int                              status    = 0;
   std::unordered_set<Application*> targetApps;
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
-    {
-    std::string key = *it;
-    Parameter* param = GetParameterByKey(key);
+  {
+    std::string          key      = *it;
+    Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
-    
-    if(imgParam)
-      {
+
+    if (imgParam)
+    {
       Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
-      if(targetApp.IsNotNull() && !targetApp->IsExecuteDone())
-        {
-        targetApps.insert(targetApp);
-        }
-      }
-    else
+      if (targetApp.IsNotNull() && !targetApp->IsExecuteDone())
       {
+        targetApps.insert(targetApp);
+      }
+    }
+    else
+    {
       InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
       if (imgListParam)
+      {
+        for (unsigned int i = 0; i < imgListParam->Size(); i++)
         {
-        for (unsigned int i=0 ; i<imgListParam->Size(); i++)
-          {
           Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
-          if(targetApp.IsNotNull() && !targetApp->IsExecuteDone())
-            {
+          if (targetApp.IsNotNull() && !targetApp->IsExecuteDone())
+          {
             targetApps.insert(targetApp);
-            }
           }
         }
-      } 
+      }
     }
-  for (auto &app : targetApps)
-    {
+  }
+  for (auto& app : targetApps)
+  {
     // Call target Execute()
     status = status | app->Execute();
-    }
+  }
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
-    {
-    std::string key = *it;
-    Parameter* param = GetParameterByKey(key);
+  {
+    std::string          key      = *it;
+    Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
-    if(imgParam)
-      {
+    if (imgParam)
+    {
       Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
-      if(targetApp.IsNotNull())
-        {
+      if (targetApp.IsNotNull())
+      {
         std::string outKey = imgParam->GetConnection().key;
-        if(imgParam->GetConnection().isMem || !targetApp->HasValue(outKey))
-          {
+        if (imgParam->GetConnection().isMem || !targetApp->HasValue(outKey))
+        {
           // memory connection
-          SetParameterInputImage(key,
-            targetApp->GetParameterOutputImage(outKey));
+          SetParameterInputImage(key, targetApp->GetParameterOutputImage(outKey));
           targetApp->DisableParameter(outKey);
-          }
+        }
         else
-          {
+        {
           // set input string based on out image (and strip any extended filename)
           otb::ExtendedFilenameToWriterOptions::Pointer fnHelper = otb::ExtendedFilenameToWriterOptions::New();
           fnHelper->SetExtendedFileName(targetApp->GetParameterString(outKey));
-          SetParameterString(key, fnHelper->GetSimpleFileName() );
+          SetParameterString(key, fnHelper->GetSimpleFileName());
           targetApp->EnableParameter(outKey);
-          }
         }
       }
+    }
     else
-      {
+    {
       InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
       if (imgListParam)
+      {
+        for (unsigned int i = 0; i < imgListParam->Size(); i++)
         {
-        for (unsigned int i=0 ; i<imgListParam->Size() ; i++)
-          {
           Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
-          if(targetApp.IsNotNull())
-            {
+          if (targetApp.IsNotNull())
+          {
             std::string outKey = imgListParam->GetNthElement(i)->GetConnection().key;
-            if(imgListParam->GetNthElement(i)->GetConnection().isMem ||
-               !targetApp->HasValue(outKey))
-              {
+            if (imgListParam->GetNthElement(i)->GetConnection().isMem || !targetApp->HasValue(outKey))
+            {
               // memory connection
-              SetNthParameterInputImageList(key,i,
-                targetApp->GetParameterOutputImage(outKey));
+              SetNthParameterInputImageList(key, i, targetApp->GetParameterOutputImage(outKey));
               targetApp->DisableParameter(outKey);
-              }
+            }
             else
-              {
+            {
               // set input string based on out image (and strip any extended filename)
               otb::ExtendedFilenameToWriterOptions::Pointer fnHelper = otb::ExtendedFilenameToWriterOptions::New();
               fnHelper->SetExtendedFileName(targetApp->GetParameterString(outKey));
               SetNthParameterStringList(key, i, fnHelper->GetSimpleFileName());
               targetApp->EnableParameter(outKey);
-              }
             }
           }
         }
       }
     }
+  }
   if (status != 0)
-    {
+  {
     return status;
-    }
-  for (auto &app : targetApps)
-    {
+  }
+  for (auto& app : targetApps)
+  {
     app->WriteOutput();
-    }
+  }
 
   //------------------------------------------------------------
   this->UpdateParameters();
 
   // before execute we set the seed of mersenne twister
-  
+
   bool UseSpecificSeed = false;
 
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  {
+    std::string key = *it;
+    if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
     {
-      std::string key = *it;
-      if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
-       {
-         UseSpecificSeed = true;
-      Parameter* param = GetParameterByKey(key);
-      IntParameter* randParam = dynamic_cast<IntParameter*> (param);
-      if(randParam!=nullptr)
-        {
+      UseSpecificSeed         = true;
+      Parameter*    param     = GetParameterByKey(key);
+      IntParameter* randParam = dynamic_cast<IntParameter*>(param);
+      if (randParam != nullptr)
+      {
         int seed = randParam->GetValue();
         itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->SetSeed(seed);
-        }
       }
     }
+  }
   if (!UseSpecificSeed)
-    {
-      itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
-    }
+  {
+    itk::Statistics::MersenneTwisterRandomVariateGenerator::GetInstance()->Initialize();
+  }
 
   m_IsInPrivateDo = true;
   this->DoExecute();
   m_IsInPrivateDo = false;
-  m_ExecuteDone = true;
+  m_ExecuteDone   = true;
 
   // Ensure that all output image parameter have called UpdateOutputInformation()
   for (auto it = paramList.begin(); it != paramList.end(); ++it)
-    {
-    OutputImageParameter * outImgParamPtr = dynamic_cast<OutputImageParameter *>(GetParameterByKey(*it));
+  {
+    OutputImageParameter* outImgParamPtr = dynamic_cast<OutputImageParameter*>(GetParameterByKey(*it));
     // If this is an OutputImageParameter
-    if(outImgParamPtr != nullptr)
-      {
+    if (outImgParamPtr != nullptr)
+    {
       // If the parameter is enabled
-      if(IsParameterEnabled(*it))
-        {
+      if (IsParameterEnabled(*it))
+      {
         // Call UpdateOutputInformation()
         outImgParamPtr->GetValue()->UpdateOutputInformation();
-        }
       }
     }
+  }
 
   return 0;
 }
@@ -845,71 +851,64 @@ void Application::WriteOutput()
   std::vector<std::string> paramList = GetParametersKeys(true);
   // First Get the value of the available memory to use with the
   // writer if a RAMParameter is set
-  bool useRAM = false;
-  unsigned int ram = 0;
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
+  bool         useRAM = false;
+  unsigned int ram    = 0;
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  {
     std::string key = *it;
 
-    if (GetParameterType(key) == ParameterType_RAM
-        && IsParameterEnabled(key))
-      {
-      Parameter* param = GetParameterByKey(key);
+    if (GetParameterType(key) == ParameterType_RAM && IsParameterEnabled(key))
+    {
+      Parameter*    param    = GetParameterByKey(key);
       RAMParameter* ramParam = dynamic_cast<RAMParameter*>(param);
-      if(ramParam!=nullptr)
-        {
-        ram = ramParam->GetValue();
+      if (ramParam != nullptr)
+      {
+        ram    = ramParam->GetValue();
         useRAM = true;
-        }
       }
     }
+  }
 
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  {
     std::string key = *it;
-    if (GetParameterType(key) == ParameterType_OutputImage
-        && IsParameterEnabled(key) && HasValue(key) )
-      {
-      Parameter* param = GetParameterByKey(key);
+    if (GetParameterType(key) == ParameterType_OutputImage && IsParameterEnabled(key) && HasValue(key))
+    {
+      Parameter*            param       = GetParameterByKey(key);
       OutputImageParameter* outputParam = dynamic_cast<OutputImageParameter*>(param);
 
-      if(outputParam!=nullptr)
-        {
+      if (outputParam != nullptr)
+      {
         std::string checkReturn = outputParam->CheckFileName(true);
         if (!checkReturn.empty())
-          {
-          otbAppLogWARNING("Check filename: "<<checkReturn);
-          }
-        if (useRAM)
-          {
-          outputParam->SetRAMValue(ram);
-          }
-        outputParam->InitializeWriters();
-        std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
-        }
-      }
-    else if (GetParameterType(key) == ParameterType_OutputVectorData
-             && IsParameterEnabled(key) && HasValue(key) )
-      {
-      Parameter* param = GetParameterByKey(key);
-      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
-      if(outputParam!=nullptr)
         {
+          otbAppLogWARNING("Check filename: " << checkReturn);
+        }
+        if (useRAM)
+        {
+          outputParam->SetRAMValue(ram);
+        }
         outputParam->InitializeWriters();
         std::ostringstream progressId;
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
         outputParam->Write();
-        }
       }
     }
+    else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
+    {
+      Parameter*                 param       = GetParameterByKey(key);
+      OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
+      if (outputParam != nullptr)
+      {
+        outputParam->InitializeWriters();
+        std::ostringstream progressId;
+        progressId << "Writing " << outputParam->GetFileName() << "...";
+        AddProcess(outputParam->GetWriter(), progressId.str());
+        outputParam->Write();
+      }
+    }
+  }
 }
 
 int Application::ExecuteAndWriteOutput()
@@ -923,9 +922,9 @@ int Application::ExecuteAndWriteOutput()
   int status = this->Execute();
 
   if (status == 0)
-    {
+  {
     this->WriteOutput();
-    }
+  }
 
   this->AfterExecuteAndWriteOutputs();
   m_Chrono.Stop();
@@ -935,8 +934,7 @@ int Application::ExecuteAndWriteOutput()
   return status;
 }
 
-void
-Application::Stop()
+void Application::Stop()
 {
   m_ProgressSource->SetAbortGenerateData(true);
 }
@@ -1044,15 +1042,15 @@ std::vector<std::string> Application::GetChoiceKeys(std::string const& name)
 {
   Parameter* param = GetParameterByKey(name);
   if (dynamic_cast<ChoiceParameter*>(param))
-    {
+  {
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     return paramChoice->GetChoiceKeys();
-    }
+  }
   else if (dynamic_cast<ListViewParameter*>(param))
-    {
+  {
     ListViewParameter* paramList = dynamic_cast<ListViewParameter*>(param);
     return paramList->GetChoiceKeys();
-    }
+  }
   itkExceptionMacro(<< name << " is not a choice parameter");
 }
 
@@ -1060,78 +1058,82 @@ std::vector<std::string> Application::GetChoiceNames(std::string const& name)
 {
   Parameter* param = GetParameterByKey(name);
   if (dynamic_cast<ChoiceParameter*>(param))
-    {
+  {
     ChoiceParameter* paramChoice = dynamic_cast<ChoiceParameter*>(param);
     return paramChoice->GetChoiceNames();
-    }
+  }
   else if (dynamic_cast<ListViewParameter*>(param))
-    {
+  {
     ListViewParameter* paramList = dynamic_cast<ListViewParameter*>(param);
     return paramList->GetChoiceNames();
-    }
+  }
   itkExceptionMacro(<< name << " is not a choice parameter");
 }
 
 
 void Application::SetDefaultParameterInt(std::string const& parameter, int value)
 {
-  Parameter* param = GetParameterByKey(parameter);
-  bool hasUserValue = param->HasUserValue();
+  Parameter* param        = GetParameterByKey(parameter);
+  bool       hasUserValue = param->HasUserValue();
 
   if (dynamic_cast<RadiusParameter*>(param))
-    {
+  {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
     paramRadius->SetDefaultValue(value);
-    if (!hasUserValue) paramRadius->SetValue(value);
-    }
-   else if (dynamic_cast<IntParameter*>(param))
-    {
+    if (!hasUserValue)
+      paramRadius->SetValue(value);
+  }
+  else if (dynamic_cast<IntParameter*>(param))
+  {
     IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
     paramInt->SetDefaultValue(value);
-    if (!hasUserValue) paramInt->SetValue(value);
-    }
+    if (!hasUserValue)
+      paramInt->SetValue(value);
+  }
   else if (dynamic_cast<FloatParameter*>(param))
-    {
+  {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     paramFloat->SetDefaultValue(static_cast<float>(value));
-    if (!hasUserValue) paramFloat->SetValue(static_cast<float>(value));
-    }
+    if (!hasUserValue)
+      paramFloat->SetValue(static_cast<float>(value));
+  }
   else if (dynamic_cast<RAMParameter*>(param))
-    {
+  {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
     paramRAM->SetDefaultValue(static_cast<unsigned int>(value));
-    if (!hasUserValue) paramRAM->SetValue(static_cast<unsigned int>(value));
-    }
+    if (!hasUserValue)
+      paramRAM->SetValue(static_cast<unsigned int>(value));
+  }
 }
 
 int Application::GetDefaultParameterInt(std::string const& parameter)
 {
   Parameter* param = GetParameterByKey(parameter);
-  int ret = 0 ;
+  int        ret   = 0;
   if (dynamic_cast<RadiusParameter*>(param))
-    {
+  {
     RadiusParameter* paramRadius = dynamic_cast<RadiusParameter*>(param);
-    ret = paramRadius->GetDefaultValue();
-    }
-   else if (dynamic_cast<IntParameter*>(param))
-    {
+    ret                          = paramRadius->GetDefaultValue();
+  }
+  else if (dynamic_cast<IntParameter*>(param))
+  {
     IntParameter* paramInt = dynamic_cast<IntParameter*>(param);
-    ret = paramInt->GetDefaultValue();
-    }
+    ret                    = paramInt->GetDefaultValue();
+  }
   else if (dynamic_cast<FloatParameter*>(param))
-    {
+  {
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
-    ret = paramFloat->GetDefaultValue();
-    }
+    ret                        = paramFloat->GetDefaultValue();
+  }
   else if (dynamic_cast<RAMParameter*>(param))
-    {
+  {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
-    ret = paramRAM->GetDefaultValue();
-    }
+    ret                    = paramRAM->GetDefaultValue();
+  }
   else
-    {
+  {
     // log
-    }
+  }
   return ret;
 }
 
@@ -1216,21 +1218,21 @@ void Application::SetParameterOutputVectorData(std::string const& key, VectorDat
 std::string Application::GetParameterName(std::string const& parameter)
 {
   // get the actual parameter, even if it is a proxy
-  Parameter* param = GetParameterByKey(parameter,false);
+  Parameter* param = GetParameterByKey(parameter, false);
   return param->GetName();
 }
 
 std::string Application::GetParameterDescription(std::string const& parameter)
 {
   // get the actual parameter, even if it is a proxy
-  Parameter* param = GetParameterByKey(parameter,false);
+  Parameter* param = GetParameterByKey(parameter, false);
   return param->GetDescription();
 }
 
 void Application::SetParameterDescription(std::string const& parameter, std::string desc)
 {
   // get the actual parameter, even if it is a proxy
-  Parameter* param = GetParameterByKey(parameter,false);
+  Parameter* param = GetParameterByKey(parameter, false);
   param->SetDescription(desc);
 }
 
@@ -1336,26 +1338,22 @@ ImagePixelType Application::GetParameterOutputImagePixelType(std::string const& 
   return param->GetPixelType();
 }
 
-void
-Application::AddChoice(std::string const& paramKey, std::string const& paramName)
+void Application::AddChoice(std::string const& paramKey, std::string const& paramName)
 {
   GetParameterList()->AddChoice(paramKey, paramName);
 }
 
-void
-Application::ClearChoices(std::string const& paramKey)
+void Application::ClearChoices(std::string const& paramKey)
 {
   GetParameterList()->ClearChoices(paramKey);
 }
 
-std::vector<int>
-Application::GetSelectedItems(std::string const& param)
+std::vector<int> Application::GetSelectedItems(std::string const& param)
 {
   return GetParameterList()->GetSelectedItems(param);
 }
 
-void
-Application::AddParameter(ParameterType type, std::string const& paramKey, std::string const& paramName)
+void Application::AddParameter(ParameterType type, std::string const& paramKey, std::string const& paramName)
 {
   GetParameterList()->AddParameter(type, paramKey, paramName);
 }
@@ -1391,106 +1389,94 @@ void Application::AddRANDParameter(std::string const& paramKey)
   GetParameterList()->AddParameter(ParameterType_Int, paramKey, "Random seed");
   MandatoryOff(paramKey);
   SetParameterDescription(paramKey, "Set a specific random seed with integer value.");
-
 }
 
-std::vector< std::pair<std::string, std::string> >
-Application::GetOutputParametersSumUp()
+std::vector<std::pair<std::string, std::string>> Application::GetOutputParametersSumUp()
 {
-  std::vector< std::pair<std::string, std::string> > res;
+  std::vector<std::pair<std::string, std::string>> res;
   std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
-    Parameter* param = GetParameterByKey(*it);
-    ParameterType type = GetParameterType(*it);
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  {
+    Parameter*    param = GetParameterByKey(*it);
+    ParameterType type  = GetParameterType(*it);
 
-    if ( type != ParameterType_Group )
+    if (type != ParameterType_Group)
+    {
+      if (param->GetRole() == Role_Output && IsParameterEnabled(*it))
       {
-      if ( param->GetRole() == Role_Output && IsParameterEnabled(*it) )
-        {
         std::pair<std::string, std::string> keyVal;
         keyVal.first = (*it);
         if (type == ParameterType_Float)
-          {
+        {
           std::ostringstream oss;
           oss << std::setprecision(10);
           oss << GetParameterFloat(*it);
           keyVal.second = oss.str();
-          }
-        else
-          {
-          keyVal.second = GetParameterAsString(*it);
-          }
-        res.push_back( keyVal );
         }
+        else
+        {
+          keyVal.second = GetParameterAsString(*it);
+        }
+        res.push_back(keyVal);
       }
     }
+  }
   return res;
 }
 
-bool
-Application::IsApplicationReady()
+bool Application::IsApplicationReady()
 {
   // Check if all the mandatory parameters are set
   bool ready = true;
 
   std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin();
-       it != paramList.end();
-       ++it)
-    {
+  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  {
     // Check all parameters
     if (IsParameterMissing(*it))
-      {
+    {
       ready = false;
       break;
-      }
     }
+  }
   return ready;
 }
 
-bool
-Application::IsParameterMissing(const std::string &key) const
+bool Application::IsParameterMissing(const std::string& key) const
 {
-  bool ret(false);
+  bool             ret(false);
   const Parameter* param = GetParameterByKey(key);
-  if (param->GetRole() == Role_Input &&
-      GetParameterType(key) != ParameterType_Group &&
-      param->GetMandatory() &&
-      !param->HasValue())
-    {
+  if (param->GetRole() == Role_Input && GetParameterType(key) != ParameterType_Group && param->GetMandatory() && !param->HasValue())
+  {
     ret = true;
-    ParameterKey paramKey(key);
+    ParameterKey             paramKey(key);
     std::vector<std::string> split = paramKey.Split();
-    std::string currentRoot(key);
-    unsigned int level = 1;
+    std::string              currentRoot(key);
+    unsigned int             level = 1;
     while (level < split.size())
-      {
+    {
       currentRoot.resize(currentRoot.find_last_of("."));
       param = GetParameterByKey(currentRoot);
       if (!param->GetActive() && !param->GetMandatory())
-        {
+      {
         // the missing parameter is not on an active branch : we can ignore it
         ret = false;
         break;
-        }
+      }
       level++;
-      }
-    if (ret)
-      {
-      // the missing parameter is on an active branch : we need it
-      otbDebugMacro("MISSING : "<< key << " (Level "<< split.size()<<")");
-      }
     }
+    if (ret)
+    {
+      // the missing parameter is on an active branch : we need it
+      otbDebugMacro("MISSING : " << key << " (Level " << split.size() << ")");
+    }
+  }
   return ret;
 }
 
-void
-Application::AddProcess(itk::ProcessObject* object, std::string description)
+void Application::AddProcess(itk::ProcessObject* object, std::string description)
 {
-  m_ProgressSource = object;
+  m_ProgressSource            = object;
   m_ProgressSourceDescription = description;
 
   AddProcessToWatchEvent event;
@@ -1514,36 +1500,30 @@ double Application::GetLastExecutionTiming() const
   return m_Chrono.GetElapsedMilliseconds() / 1000.0;
 }
 
-ImageBaseType::PointType
-Application::GetImageOrigin(const std::string & key, unsigned int idx)
+ImageBaseType::PointType Application::GetImageOrigin(const std::string& key, unsigned int idx)
 {
   return this->GetParameterImageBase(key, idx)->GetOrigin();
 }
 
-ImageBaseType::SpacingType
-Application::GetImageSpacing(const std::string & key, unsigned int idx)
+ImageBaseType::SpacingType Application::GetImageSpacing(const std::string& key, unsigned int idx)
 {
   return otb::internal::GetSignedSpacing(this->GetParameterImageBase(key, idx));
 }
 
-ImageBaseType::SizeType
-Application::GetImageSize(const std::string & key, unsigned int idx)
+ImageBaseType::SizeType Application::GetImageSize(const std::string& key, unsigned int idx)
 {
   return this->GetParameterImageBase(key, idx)->GetLargestPossibleRegion().GetSize();
 }
 
-unsigned int
-Application::GetImageNbBands(const std::string & key, unsigned int idx)
+unsigned int Application::GetImageNbBands(const std::string& key, unsigned int idx)
 {
   return this->GetParameterImageBase(key, idx)->GetNumberOfComponentsPerPixel();
 }
 
-std::string
-Application::GetImageProjection(const std::string & key, unsigned int idx)
+std::string Application::GetImageProjection(const std::string& key, unsigned int idx)
 {
-  std::string proj;
-  const itk::MetaDataDictionary& dict =
-    this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
+  std::string                    proj;
+  const itk::MetaDataDictionary& dict = this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
 
   if (!dict.HasKey(MetaDataKey::ProjectionRefKey))
     return std::string("");
@@ -1552,12 +1532,10 @@ Application::GetImageProjection(const std::string & key, unsigned int idx)
   return proj;
 }
 
-otb::ImageKeywordlist
-Application::GetImageKeywordlist(const std::string & key, unsigned int idx)
+otb::ImageKeywordlist Application::GetImageKeywordlist(const std::string& key, unsigned int idx)
 {
-  ImageKeywordlist kwl;
-  const itk::MetaDataDictionary& dict =
-    this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
+  ImageKeywordlist               kwl;
+  const itk::MetaDataDictionary& dict = this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
 
   if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
     itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, kwl);
@@ -1565,162 +1543,143 @@ Application::GetImageKeywordlist(const std::string & key, unsigned int idx)
   return kwl;
 }
 
-unsigned long
-Application::PropagateRequestedRegion(const std::string & key, ImageBaseType::RegionType region, unsigned int idx)
+unsigned long Application::PropagateRequestedRegion(const std::string& key, ImageBaseType::RegionType region, unsigned int idx)
 {
-  ImageBaseType* image = this->GetParameterImageBase(key, idx);
-  ImageBaseType::RegionType largest = image->GetLargestPossibleRegion();
+  ImageBaseType*            image     = this->GetParameterImageBase(key, idx);
+  ImageBaseType::RegionType largest   = image->GetLargestPossibleRegion();
   ImageBaseType::RegionType requested = region;
   requested.SetIndex(0, requested.GetIndex(0) + largest.GetIndex(0));
   requested.SetIndex(1, requested.GetIndex(1) + largest.GetIndex(1));
   image->SetRequestedRegion(requested);
   image->PropagateRequestedRegion();
   // estimate RAM usage
-  otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator =
-    otb::PipelineMemoryPrintCalculator::New();
+  otb::PipelineMemoryPrintCalculator::Pointer memoryPrintCalculator = otb::PipelineMemoryPrintCalculator::New();
   memoryPrintCalculator->SetDataToWrite(image);
   memoryPrintCalculator->SetBiasCorrectionFactor(1);
   memoryPrintCalculator->Compute(false);
   return memoryPrintCalculator->GetMemoryPrint();
 }
 
-ImageBaseType::RegionType
-Application::GetImageRequestedRegion(const std::string & key, unsigned int idx)
+ImageBaseType::RegionType Application::GetImageRequestedRegion(const std::string& key, unsigned int idx)
 {
-  ImageBaseType* image = this->GetParameterImageBase(key, idx);
-  ImageBaseType::RegionType largest = image->GetLargestPossibleRegion();
+  ImageBaseType*            image     = this->GetParameterImageBase(key, idx);
+  ImageBaseType::RegionType largest   = image->GetLargestPossibleRegion();
   ImageBaseType::RegionType requested = image->GetRequestedRegion();
   requested.SetIndex(0, requested.GetIndex(0) - largest.GetIndex(0));
   requested.SetIndex(1, requested.GetIndex(1) - largest.GetIndex(1));
   return requested;
 }
 
-itk::MetaDataDictionary
-Application::GetImageMetaData(const std::string & key, unsigned int idx)
+itk::MetaDataDictionary Application::GetImageMetaData(const std::string& key, unsigned int idx)
 {
   ImageBaseType* image = this->GetParameterImageBase(key, idx);
   return image->GetMetaDataDictionary();
 }
 
-ImageBaseType*
-Application::GetParameterImageBase(const std::string & key, unsigned int idx)
+ImageBaseType* Application::GetParameterImageBase(const std::string& key, unsigned int idx)
 {
   Parameter* param = GetParameterByKey(key);
   if (dynamic_cast<InputImageParameter*>(param))
-    {
+  {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     return paramDown->GetImage<ImageBaseType>();
-    }
+  }
   else if (dynamic_cast<InputImageListParameter*>(param))
-    {
+  {
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     return paramDown->GetNthImage(idx);
-    }
+  }
   else if (dynamic_cast<OutputImageParameter*>(param))
-    {
+  {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     return paramDown->GetValue();
-    }
+  }
   else
-    {
-    itkExceptionMacro("Wrong parameter type, expect InputImageParameter, "
-      "InputImageListParameter or OutputImageParameter");
-    }
+  {
+    itkExceptionMacro(
+        "Wrong parameter type, expect InputImageParameter, "
+        "InputImageListParameter or OutputImageParameter");
+  }
   return nullptr;
 }
 
-void
-Application::SetParameterImageBase(const std::string & key, ImageBaseType* img, unsigned int idx)
+void Application::SetParameterImageBase(const std::string& key, ImageBaseType* img, unsigned int idx)
 {
   Parameter* param = GetParameterByKey(key);
   if (dynamic_cast<InputImageParameter*>(param))
-    {
+  {
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
     paramDown->SetImage(img);
-    }
+  }
   else if (dynamic_cast<InputImageListParameter*>(param))
-    {
+  {
     InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
     if (idx >= paramDown->Size())
-      {
-      paramDown->AddImage(img);
-      }
-    else
-      {
-      paramDown->SetNthImage(idx, img);
-      }
-    }
-  else
     {
-    itkExceptionMacro("Wrong parameter type, expect InputImageParameter or InputImageListParameter");
+      paramDown->AddImage(img);
     }
+    else
+    {
+      paramDown->SetNthImage(idx, img);
+    }
+  }
+  else
+  {
+    itkExceptionMacro("Wrong parameter type, expect InputImageParameter or InputImageListParameter");
+  }
 }
 
-ImagePixelType
-Application::GetImageBasePixelType(const std::string & key, unsigned int idx)
+ImagePixelType Application::GetImageBasePixelType(const std::string& key, unsigned int idx)
 {
   ImageBaseType* img = this->GetParameterImageBase(key, idx);
-  if (! img)
-    {
+  if (!img)
+  {
     itkExceptionMacro("No input image");
-    }
+  }
   std::string className(img->GetNameOfClass());
   if (className == "VectorImage")
-    {
-#define FindVectorImagePixelTypeMacro(TImage, TPixel) \
-    TImage##VectorImageType* img##TImage = dynamic_cast< TImage##VectorImageType* >(img); \
-    if ( img##TImage ) return ImagePixelType_##TPixel ;
+  {
+#define FindVectorImagePixelTypeMacro(TImage, TPixel)                                 \
+  TImage##VectorImageType* img##TImage = dynamic_cast<TImage##VectorImageType*>(img); \
+  if (img##TImage)                                                                    \
+    return ImagePixelType_##TPixel;
 
-    FindVectorImagePixelTypeMacro(UInt8,  uint8)
-    FindVectorImagePixelTypeMacro(Int16,  int16)
-    FindVectorImagePixelTypeMacro(UInt16, uint16)
-    FindVectorImagePixelTypeMacro(Int32,  int32)
-    FindVectorImagePixelTypeMacro(UInt32, uint32)
-    FindVectorImagePixelTypeMacro(Float,  float)
-    FindVectorImagePixelTypeMacro(Double, double)
-    FindVectorImagePixelTypeMacro(ComplexInt16,  cint16)
-    FindVectorImagePixelTypeMacro(ComplexInt32,  cint32)
-    FindVectorImagePixelTypeMacro(ComplexFloat,  cfloat)
-    FindVectorImagePixelTypeMacro(ComplexDouble, cdouble)
+    FindVectorImagePixelTypeMacro(UInt8, uint8) FindVectorImagePixelTypeMacro(Int16, int16) FindVectorImagePixelTypeMacro(UInt16, uint16)
+        FindVectorImagePixelTypeMacro(Int32, int32) FindVectorImagePixelTypeMacro(UInt32, uint32) FindVectorImagePixelTypeMacro(Float, float)
+            FindVectorImagePixelTypeMacro(Double, double) FindVectorImagePixelTypeMacro(ComplexInt16, cint16)
+                FindVectorImagePixelTypeMacro(ComplexInt32, cint32) FindVectorImagePixelTypeMacro(ComplexFloat, cfloat)
+                    FindVectorImagePixelTypeMacro(ComplexDouble, cdouble)
 #undef FindVectorImagePixelTypeMacro
-    }
+  }
   else
-    {
-#define FindImagePixelTypeMacro(TImage, TPixel) \
-    TImage##ImageType* img##TImage = dynamic_cast< TImage##ImageType* >(img); \
-    if ( img##TImage ) return ImagePixelType_##TPixel ;
+  {
+#define FindImagePixelTypeMacro(TImage, TPixel)                           \
+  TImage##ImageType* img##TImage = dynamic_cast<TImage##ImageType*>(img); \
+  if (img##TImage)                                                        \
+    return ImagePixelType_##TPixel;
 
-    FindImagePixelTypeMacro(UInt8,  uint8)
-    FindImagePixelTypeMacro(Int16,  int16)
-    FindImagePixelTypeMacro(UInt16, uint16)
-    FindImagePixelTypeMacro(Int32,  int32)
-    FindImagePixelTypeMacro(UInt32, uint32)
-    FindImagePixelTypeMacro(Float,  float)
-    FindImagePixelTypeMacro(Double, double)
-    FindImagePixelTypeMacro(ComplexInt16,  cint16)
-    FindImagePixelTypeMacro(ComplexInt32,  cint32)
-    FindImagePixelTypeMacro(ComplexFloat,  cfloat)
-    FindImagePixelTypeMacro(ComplexDouble, cdouble)
-    FindImagePixelTypeMacro(UInt8RGB,  uint8)
-    FindImagePixelTypeMacro(UInt8RGBA, uint8)
+    FindImagePixelTypeMacro(UInt8, uint8) FindImagePixelTypeMacro(Int16, int16) FindImagePixelTypeMacro(UInt16, uint16) FindImagePixelTypeMacro(Int32, int32)
+        FindImagePixelTypeMacro(UInt32, uint32) FindImagePixelTypeMacro(Float, float) FindImagePixelTypeMacro(Double, double)
+            FindImagePixelTypeMacro(ComplexInt16, cint16) FindImagePixelTypeMacro(ComplexInt32, cint32) FindImagePixelTypeMacro(ComplexFloat, cfloat)
+                FindImagePixelTypeMacro(ComplexDouble, cdouble) FindImagePixelTypeMacro(UInt8RGB, uint8) FindImagePixelTypeMacro(UInt8RGBA, uint8)
 #undef FindImagePixelTypeMacro
-    }
+  }
   itkWarningMacro("Unknown pixel type");
   // by default uint8
   return ImagePixelType_uint8;
 }
 
-#define otbGetParameterImageMacro( Image )                              \
-  Image##Type * Application::GetParameter##Image(std::string const& parameter) \
-    {                                                                   \
-    Parameter* param = GetParameterByKey(parameter);                    \
+#define otbGetParameterImageMacro(Image)                                        \
+  Image##Type* Application::GetParameter##Image(std::string const& parameter)   \
+  {                                                                             \
+    Parameter*           param     = GetParameterByKey(parameter);              \
     InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param); \
-    if ( paramDown )                                                    \
-      {                                                                 \
-      return paramDown->Get##Image();                                   \
-      }                                                                 \
-    return Image##Type::Pointer();                                      \
-    }
+    if (paramDown)                                                              \
+    {                                                                           \
+      return paramDown->Get##Image();                                           \
+    }                                                                           \
+    return Image##Type::Pointer();                                              \
+  }
 
 otbGetParameterImageMacro(UInt8Image);
 otbGetParameterImageMacro(UInt16Image);
@@ -1752,91 +1711,87 @@ otbGetParameterImageMacro(ComplexFloatVectorImage);
 otbGetParameterImageMacro(ComplexDoubleVectorImage);
 
 
-bool
-Application::ConnectImage(std::string in, Application* app, std::string out)
+bool Application::ConnectImage(std::string in, Application* app, std::string out)
 {
-  if(app == nullptr)
-    {
+  if (app == nullptr)
+  {
     // throw error ?
     return false;
-    }
+  }
 
-  Parameter* param = GetParameterByKey(in);
+  Parameter*           param   = GetParameterByKey(in);
   InputImageParameter* inParam = dynamic_cast<InputImageParameter*>(param);
-  if(inParam == nullptr)
-    {
+  if (inParam == nullptr)
+  {
     InputImageListParameter* inListParam = dynamic_cast<InputImageListParameter*>(param);
     if (inListParam == nullptr)
-      {
-      return false;
-      }
-    inListParam->InsertElement(InputImageParameter::New(),inListParam->Size());
-    inParam = (inListParam->GetNthElement(inListParam->Size() - 1)).GetPointer();
-    }
-  param = app->GetParameterByKey(out);
-  OutputImageParameter* outParam = dynamic_cast<OutputImageParameter*>(param);
-  if(outParam == nullptr)
     {
-    return false;
+      return false;
     }
+    inListParam->InsertElement(InputImageParameter::New(), inListParam->Size());
+    inParam = (inListParam->GetNthElement(inListParam->Size() - 1)).GetPointer();
+  }
+  param                          = app->GetParameterByKey(out);
+  OutputImageParameter* outParam = dynamic_cast<OutputImageParameter*>(param);
+  if (outParam == nullptr)
+  {
+    return false;
+  }
   InputImageParameter::Connector c;
-  c.app = app;
-  c.key = out;
+  c.app   = app;
+  c.key   = out;
   c.isMem = true;
   inParam->SetConnection(c);
   return true;
 }
 
-void
-Application::PropagateConnectMode(bool isMem)
+void Application::PropagateConnectMode(bool isMem)
 {
   // reset ExecuteDone flag
-  m_ExecuteDone = false;
-  std::vector<std::string> paramList = GetParametersKeys(true);
+  m_ExecuteDone                              = false;
+  std::vector<std::string>         paramList = GetParametersKeys(true);
   std::unordered_set<Application*> targetApps;
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
-    {
-    std::string key = *it;
-    Parameter* param = GetParameterByKey(key);
+  {
+    std::string          key      = *it;
+    Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
-    
-    if(imgParam)
-      {
+
+    if (imgParam)
+    {
       Application::Pointer targetApp = otb::DynamicCast<Application>(imgParam->GetConnection().app);
-      if(targetApp.IsNotNull())
-        {
+      if (targetApp.IsNotNull())
+      {
         imgParam->SetConnectionMode(isMem);
         targetApps.insert(targetApp);
-        }
       }
+    }
     else
-      {
+    {
       InputImageListParameter* imgListParam = dynamic_cast<InputImageListParameter*>(param);
       if (imgListParam)
+      {
+        for (unsigned int i = 0; i < imgListParam->Size(); i++)
         {
-        for (unsigned int i=0 ; i<imgListParam->Size(); i++)
-          {
           Application::Pointer targetApp = otb::DynamicCast<Application>(imgListParam->GetNthElement(i)->GetConnection().app);
-          if(targetApp.IsNotNull())
-            {
+          if (targetApp.IsNotNull())
+          {
             imgListParam->GetNthElement(i)->SetConnectionMode(isMem);
             targetApps.insert(targetApp);
-            }
           }
         }
       }
     }
-  for (auto &app : targetApps)
-    {
+  }
+  for (auto& app : targetApps)
+  {
     app->PropagateConnectMode(isMem);
-    }
+  }
 }
 
-bool
-Application::IsExecuteDone()
+bool Application::IsExecuteDone()
 {
   return m_ExecuteDone;
 }
-
 }
 }

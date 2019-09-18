@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT CosmoImageMetadataInterfaceFactory : public itk::Object
 public:
   /** Standard class typedefs. */
   typedef CosmoImageMetadataInterfaceFactory Self;
-  typedef itk::ObjectFactoryBase            Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::ObjectFactoryBase             Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -62,9 +62,8 @@ protected:
   ~CosmoImageMetadataInterfaceFactory() = default;
 
 private:
-  CosmoImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  CosmoImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

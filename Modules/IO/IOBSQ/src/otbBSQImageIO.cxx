@@ -37,27 +37,27 @@ BSQImageIO::BSQImageIO()
 {
   // By default set number of dimensions to two.
   this->SetNumberOfDimensions(2);
-  m_PixelType = SCALAR;
+  m_PixelType     = SCALAR;
   m_ComponentType = UCHAR;
   if (itk::ByteSwapper<char>::SystemIsLittleEndian() == true)
-    {
+  {
     m_ByteOrder = LittleEndian;
-    }
+  }
   else
-    {
+  {
     m_ByteOrder = BigEndian;
-    }
+  }
 
   m_FileByteOrder = m_ByteOrder;
-  m_TypeBsq = "";
+  m_TypeBsq       = "";
   // Set default spacing to one
   m_Spacing[0] = 1.0;
   m_Spacing[1] = 1.0;
   // Set default origin to [0.5 , 0.5]
   // (consistency between ImageIO, see Mantis #942)
-  m_Origin[0] = 0.5;
-  m_Origin[1] = 0.5;
-  m_ChannelsFile = nullptr;
+  m_Origin[0]                 = 0.5;
+  m_Origin[1]                 = 0.5;
+  m_ChannelsFile              = nullptr;
   m_FlagWriteImageInformation = true;
 
   this->AddSupportedWriteExtension(".hd");
@@ -65,26 +65,25 @@ BSQImageIO::BSQImageIO()
 
   this->AddSupportedReadExtension(".hd");
   this->AddSupportedReadExtension(".HD");
-
 }
 
 BSQImageIO::~BSQImageIO()
 {
   if (m_HeaderFile.is_open())
-    {
+  {
     m_HeaderFile.close();
-    }
-  if (m_ChannelsFile !=  nullptr)
-    {
+  }
+  if (m_ChannelsFile != nullptr)
+  {
     for (unsigned int numComponent = 0; numComponent < this->GetNumberOfComponents(); numComponent++)
-      {
+    {
       if (m_ChannelsFile[numComponent].is_open())
-        {
+      {
         m_ChannelsFile[numComponent].close();
-        }
       }
-    delete[] m_ChannelsFile;
     }
+    delete[] m_ChannelsFile;
+  }
 }
 
 bool BSQImageIO::CanReadFile(const char* filename)
@@ -93,25 +92,25 @@ bool BSQImageIO::CanReadFile(const char* filename)
   std::string  lFileName(filename);
   std::string  extension = itksys::SystemTools::GetFilenameLastExtension(filename);
   if ((extension != ".HD") && (extension != ".hd"))
-    {
+  {
     return false;
-    }
+  }
   if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
-    {
+  {
     return false;
-    }
+  }
   if (itksys::SystemTools::LowerCase(itksys::SystemTools::GetFilenameLastExtension(lFileName)) != ".hd")
-    {
+  {
     return false;
-    }
+  }
 
-  header_file.open(lFileName,  std::ios::in);
+  header_file.open(lFileName, std::ios::in);
   if (header_file.fail())
-    {
+  {
     otbMsgDevMacro(<< "BSQImageIO::CanReadFile() failed header open ! ");
     return false;
-    }
-  //Read header information
+  }
+  // Read header information
   bool lResult = InternalReadHeaderInformation(lFileName, header_file, false);
   header_file.close();
   return (lResult);
@@ -132,10 +131,10 @@ void BSQImageIO::ReadVolume(void*)
 void BSQImageIO::Read(void* buffer)
 {
   unsigned long step = this->GetNumberOfComponents();
-  char *        p = static_cast<char *>(buffer);
+  char*         p    = static_cast<char*>(buffer);
 
-  int lNbLines   = this->GetIORegion().GetSize()[1];
-  int lNbColumns = this->GetIORegion().GetSize()[0];
+  int lNbLines     = this->GetIORegion().GetSize()[1];
+  int lNbColumns   = this->GetIORegion().GetSize()[0];
   int lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
@@ -152,14 +151,14 @@ void BSQImageIO::Read(void* buffer)
   unsigned long   cpt = 0;
 
   // Update the step variable
-  step = step * (unsigned long) (this->GetComponentSize());
+  step = step * (unsigned long)(this->GetComponentSize());
 
-  char * value = new char[numberOfBytesToBeRead];
+  char* value = new char[numberOfBytesToBeRead];
   if (value == nullptr)
-    {
+  {
     itkExceptionMacro(<< "BSQImageIO::Read(): Bad alloc");
     return;
-    }
+  }
 
   otbMsgDevMacro(<< " sizeof(streamsize)    : " << sizeof(std::streamsize));
   otbMsgDevMacro(<< " sizeof(streampos)     : " << sizeof(std::streampos));
@@ -169,72 +168,70 @@ void BSQImageIO::Read(void* buffer)
   otbMsgDevMacro(<< " sizeof(unsigned long) : " << sizeof(unsigned long));
 
   for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
-    {
-    cpt = (unsigned long) (nbComponents) * (unsigned long) (this->GetComponentSize());
-    //Read region of the channel
+  {
+    cpt = (unsigned long)(nbComponents) * (unsigned long)(this->GetComponentSize());
+    // Read region of the channel
     for (int LineNo = lFirstLine; LineNo < lFirstLine + lNbLines; LineNo++)
-      {
-      offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-      offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
+    {
+      offset = headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+      offset += static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
       m_ChannelsFile[nbComponents].seekg(offset, std::ios::beg);
-      //Read a line
-      m_ChannelsFile[nbComponents].read(static_cast<char *>(value), numberOfBytesToBeRead);
+      // Read a line
+      m_ChannelsFile[nbComponents].read(static_cast<char*>(value), numberOfBytesToBeRead);
       numberOfBytesRead = m_ChannelsFile[nbComponents].gcount();
 #ifdef __APPLE_CC__
       // fail() is broken in the Mac. It returns true when reaches eof().
       if (numberOfBytesRead != numberOfBytesToBeRead)
 #else
-      if ((numberOfBytesRead != numberOfBytesToBeRead)  || m_ChannelsFile[nbComponents].fail())
+      if ((numberOfBytesRead != numberOfBytesToBeRead) || m_ChannelsFile[nbComponents].fail())
 #endif
-        {
+      {
         itkExceptionMacro(<< "BSQImageIO::Read() Can Read the specified Region"); // read failed
-        }
-//                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents() * LineNo;
-//                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead * this->GetNumberOfComponents();
-      for (std::streamsize i = 0;
-           i < numberOfBytesToBeRead;
-           i = i + static_cast<std::streamsize>(this->GetComponentSize()))
-        {
-        memcpy((void*) (&(p[cpt])), (const void*) (&(value[i])), (size_t) (this->GetComponentSize()));
+      }
+      //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead *
+      //                        this->GetNumberOfComponents() * LineNo;
+      //                        cpt = (unsigned long )(nbComponents)* (unsigned long)(this->GetComponentSize()) + numberOfBytesToBeRead *
+      //                        this->GetNumberOfComponents();
+      for (std::streamsize i = 0; i < numberOfBytesToBeRead; i = i + static_cast<std::streamsize>(this->GetComponentSize()))
+      {
+        memcpy((void*)(&(p[cpt])), (const void*)(&(value[i])), (size_t)(this->GetComponentSize()));
         cpt += step;
-        }
       }
     }
+  }
   unsigned long numberOfPixelsOfRegion = lNbLines * lNbColumns * this->GetNumberOfComponents();
 
   delete[] value;
 
   // Swap bytes if necessary
-  if (0) {}
-  otbSwappFileToSystemMacro(unsigned short, USHORT, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(short, SHORT, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(char, CHAR, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(unsigned char, UCHAR, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(unsigned int, UINT, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(int, INT, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(long, LONG, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(unsigned long, ULONG, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(float, FLOAT, buffer, numberOfPixelsOfRegion)
-  otbSwappFileToSystemMacro(double, DOUBLE, buffer, numberOfPixelsOfRegion)
-  else
-    {
+  if (0)
+  {
+  }
+  otbSwappFileToSystemMacro(unsigned short, USHORT, buffer, numberOfPixelsOfRegion) otbSwappFileToSystemMacro(short, SHORT, buffer, numberOfPixelsOfRegion)
+      otbSwappFileToSystemMacro(char, CHAR, buffer, numberOfPixelsOfRegion) otbSwappFileToSystemMacro(unsigned char, UCHAR, buffer, numberOfPixelsOfRegion)
+          otbSwappFileToSystemMacro(unsigned int, UINT, buffer, numberOfPixelsOfRegion) otbSwappFileToSystemMacro(int, INT, buffer, numberOfPixelsOfRegion)
+              otbSwappFileToSystemMacro(long, LONG, buffer, numberOfPixelsOfRegion)
+                  otbSwappFileToSystemMacro(unsigned long, ULONG, buffer, numberOfPixelsOfRegion)
+                      otbSwappFileToSystemMacro(float, FLOAT, buffer, numberOfPixelsOfRegion)
+                          otbSwappFileToSystemMacro(double, DOUBLE, buffer, numberOfPixelsOfRegion) else
+  {
     itkExceptionMacro(<< "BSQImageIO::Read() undefined component type! ");
-    }
+  }
 }
 
 void BSQImageIO::ReadImageInformation()
 {
   if (m_HeaderFile.is_open())
-    {
+  {
     m_HeaderFile.close();
-    }
-  m_HeaderFile.open(m_FileName,  std::ios::in);
+  }
+  m_HeaderFile.open(m_FileName, std::ios::in);
   if (m_HeaderFile.fail())
-    {
+  {
     itkExceptionMacro(<< "BSQImageIO::ReadImageInformation() failed header open ! ");
-    }
+  }
 
-  //Read header information
+  // Read header information
   InternalReadHeaderInformation(m_FileName, m_HeaderFile, true);
 
   otbMsgDebugMacro(<< "Driver to read: BSQ");
@@ -244,7 +241,6 @@ void BSQImageIO::ReadImageInformation()
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
-
 }
 
 bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std::fstream& file, const bool reportError)
@@ -252,133 +248,131 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
 
   std::string lString;
   std::string lStrCodePix;
-  //Read TYPE information
+  // Read TYPE information
   file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "TYPE")
-    {
+  {
     if (reportError == true)
-      {
+    {
       itkExceptionMacro(<< "BSQ : the first line of the header file must be contains 'TYPE' caracters.");
-      }
-    else
-      {
-      return false;
-      }
     }
+    else
+    {
+      return false;
+    }
+  }
   file >> lStrCodePix;
   lStrCodePix = itksys::SystemTools::UpperCase(lStrCodePix);
   if (lStrCodePix == "OCT")
-    {
+  {
     SetComponentType(CHAR);
-    }
+  }
   else if (lStrCodePix == "UOCT")
-    {
+  {
     SetComponentType(UCHAR);
-    }
+  }
   else if (lStrCodePix == "I2")
-    {
+  {
     SetComponentType(SHORT);
-    }
+  }
   else if (lStrCodePix == "UI2")
-    {
+  {
     SetComponentType(USHORT);
-    }
+  }
   else if (lStrCodePix == "I4")
-    {
+  {
     SetComponentType(INT);
-    }
+  }
   else if (lStrCodePix == "UI4")
-    {
+  {
     SetComponentType(UINT);
-    }
+  }
   else if (lStrCodePix == "R4")
-    {
+  {
     SetComponentType(FLOAT);
-    }
+  }
   else if (lStrCodePix == "R8")
-    {
+  {
     SetComponentType(DOUBLE);
-    }
+  }
   else
-    {
+  {
     if (reportError == true)
-      {
-      itkExceptionMacro(
-        << "BSQ : the value type '" << lStrCodePix <<
-        "' (second line) set in the header file is not recognized as correct value.");
-      }
-    else
-      {
-      return false;
-      }
+    {
+      itkExceptionMacro(<< "BSQ : the value type '" << lStrCodePix << "' (second line) set in the header file is not recognized as correct value.");
     }
-  //Read LABEL information
+    else
+    {
+      return false;
+    }
+  }
+  // Read LABEL information
   file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LABEL")
-    {
+  {
     if (reportError == true)
-      {
-      itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' caracters.");
-      }
-    else
-      {
-      return false;
-      }
-    }
-  while ((lString != "CHANNELS") || (file.eof()))
     {
+      itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' caracters.");
+    }
+    else
+    {
+      return false;
+    }
+  }
+  while ((lString != "CHANNELS") || (file.eof()))
+  {
     file >> lString;
     lString = itksys::SystemTools::UpperCase(lString);
-    }
+  }
   if (lString != "CHANNELS")
-    {
+  {
     if (reportError == true)
-      {
+    {
       itkExceptionMacro(<< "BSQ : 'CHANNELS' keyword is not find in the header file.");
-      }
-    else
-      {
-      return false;
-      }
     }
+    else
+    {
+      return false;
+    }
+  }
   unsigned int lNbChannels;
   file >> lNbChannels;
   this->SetNumberOfComponents(lNbChannels);
 
-  //Read LINES information
+  // Read LINES information
   file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "LINES")
-    {
+  {
     if (reportError == true)
-      {
+    {
       itkExceptionMacro(<< "BSQ : 'LINES' keyword is not find in the header file.");
-      }
-    else
-      {
-      return false;
-      }
     }
+    else
+    {
+      return false;
+    }
+  }
   file >> m_Dimensions[1];
-  //Read COLUMNS information
+  // Read COLUMNS information
   file >> lString;
   lString = itksys::SystemTools::UpperCase(lString);
   if (lString != "COLUMNS")
-    {
+  {
     if (reportError == true)
-      {
+    {
       itkExceptionMacro(<< "BSQ : 'COLUMNS' keyword is not find in the header file.");
-      }
-    else
-      {
-      return false;
-      }
     }
+    else
+    {
+      return false;
+    }
+  }
   file >> m_Dimensions[0];
 
-  //Read "BITS PER PIXEL" information
+  // Read "BITS PER PIXEL" information
   file >> lString;
   std::string lStrBitsPerPixels(lString);
   file >> lString;
@@ -387,81 +381,80 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   lStrBitsPerPixels = lStrBitsPerPixels + " " + lString;
   lStrBitsPerPixels = itksys::SystemTools::UpperCase(lStrBitsPerPixels);
   if (lStrBitsPerPixels != "BITS PER PIXEL")
-    {
+  {
     if (reportError == true)
-      {
+    {
       itkExceptionMacro(<< "BSQ : 'BITS PER PIXEL' keyword is not find in the header file.");
-      }
-    else
-      {
-      return false;
-      }
     }
+    else
+    {
+      return false;
+    }
+  }
   int lNbBitsPerPixels;
   file >> lNbBitsPerPixels;
 
-  //Read "SENSCODAGE" information (optional)
+  // Read "SENSCODAGE" information (optional)
   file >> lString;
   if (lString.empty() == false)
-    {
+  {
     lString = itksys::SystemTools::UpperCase(lString);
     if (lString == "SENSCODAGE")
-      {
+    {
       file >> lString;
       lString = itksys::SystemTools::UpperCase(lString);
       if (lString == "INTEL")
-        {
+      {
         m_FileByteOrder = LittleEndian;
-        }
+      }
       else if (lString == "IEEE")
-        {
+      {
         m_FileByteOrder = BigEndian;
-        }
+      }
       else
-        {
+      {
         if (reportError == true)
-          {
-          itkExceptionMacro(
-            << "BSQ : the value SENSCODAGE '" << lString <<
-            "' set in the header file is not recognized as correct value. Possible values are INTEL or IEEE");
-          }
+        {
+          itkExceptionMacro(<< "BSQ : the value SENSCODAGE '" << lString
+                            << "' set in the header file is not recognized as correct value. Possible values are INTEL or IEEE");
+        }
         else
-          {
+        {
           return false;
-          }
         }
       }
     }
+  }
   file.close();
 
-  //Define channels file name
+  // Define channels file name
   std::string lRootName = System::GetRootName(file_name);
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < this->GetNumberOfComponents(); ++i)
-    {
+  {
     std::ostringstream lStream;
     lStream << lRootName << ".c" << i + 1;
     m_ChannelsFileName.push_back(lStream.str());
-    }
+  }
 
   m_ChannelsFile = new std::fstream[this->GetNumberOfComponents()];
 
-  //Try to open channels file
+  // Try to open channels file
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
-    {
-    m_ChannelsFile[channels].open(m_ChannelsFileName[channels],  std::ios::in | std::ios::binary);
+  {
+    m_ChannelsFile[channels].open(m_ChannelsFileName[channels], std::ios::in | std::ios::binary);
     if (m_ChannelsFile[channels].fail())
-      {
+    {
       if (reportError == true)
-        {
+      {
         itkExceptionMacro(<< "BSQ : impossible to find the file <" << m_ChannelsFileName[channels] << ">.");
-        }
+      }
       else
-        {
+      {
         return false;
-        }
       }
     }
+  }
   this->SetFileTypeToBinary();
   this->SetNumberOfDimensions(2);
 
@@ -473,46 +466,46 @@ bool BSQImageIO::CanWriteFile(const char* filename)
   std::string lFileName(filename);
   std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
   if ((extension != ".HD") && (extension != ".hd"))
-    {
+  {
     return false;
-    }
+  }
   if (itksys::SystemTools::FileIsDirectory(lFileName) == true)
-    {
+  {
     return false;
-    }
+  }
   const std::string Extension = itksys::SystemTools::GetFilenameLastExtension(filename);
   if ((Extension == ".hd") || (Extension == ".HD"))
-    {
+  {
     return true;
-    }
+  }
   else
-    {
+  {
     return false;
-    }
+  }
 }
 
 void BSQImageIO::Write(const void* buffer)
 {
   if (m_FlagWriteImageInformation == true)
-    {
+  {
     this->WriteImageInformation();
     m_FlagWriteImageInformation = false;
-    }
+  }
 
-  unsigned long step = this->GetNumberOfComponents();
-  unsigned int  lNbLines   = this->GetIORegion().GetSize()[1];
-  unsigned int  lNbColumns = this->GetIORegion().GetSize()[0];
+  unsigned long step         = this->GetNumberOfComponents();
+  unsigned int  lNbLines     = this->GetIORegion().GetSize()[1];
+  unsigned int  lNbColumns   = this->GetIORegion().GetSize()[0];
   int           lFirstLine   = this->GetIORegion().GetIndex()[1]; // [1... ]
   int           lFirstColumn = this->GetIORegion().GetIndex()[0]; // [1... ]
 
   // Special case: check that the region to write is the same size as the entire
   // image. Start at offset 0 (when no streaming)
   if ((lNbLines == m_Dimensions[1]) && (lNbColumns == m_Dimensions[0]))
-    {
+  {
     otbMsgDevMacro(<< "Forcing offset to [0, 0]");
-    lFirstLine = 0;
+    lFirstLine   = 0;
     lFirstColumn = 0;
-    }
+  }
 
   otbMsgDevMacro(<< " BSQImageIO::Write()  ");
   otbMsgDevMacro(<< " Image size  : " << m_Dimensions[0] << "," << m_Dimensions[1]);
@@ -521,161 +514,153 @@ void BSQImageIO::Write(const void* buffer)
   otbMsgDevMacro(<< " GetComponentSize       : " << this->GetComponentSize());
 
   std::streamoff  headerLength(0);
-  std::streamoff  numberOfBytesPerLines = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
+  std::streamoff  numberOfBytesPerLines  = static_cast<std::streamoff>(this->GetComponentSize() * m_Dimensions[0]);
   std::streamsize numberOfBytesToBeWrite = static_cast<std::streamsize>(this->GetComponentSize() * lNbColumns);
-  std::streamoff  offset = 0;
-  unsigned long   cpt = 0;
+  std::streamoff  offset                 = 0;
+  unsigned long   cpt                    = 0;
 
   // Update the step variable
-  step = step * (unsigned long) (this->GetComponentSize());
-  const char * p = static_cast<const char *>(buffer);
+  step          = step * (unsigned long)(this->GetComponentSize());
+  const char* p = static_cast<const char*>(buffer);
 
   char* value = new char[numberOfBytesToBeWrite];
   if (value == nullptr)
-    {
+  {
     itkExceptionMacro(<< "Memory allocation error");
     return;
-    }
+  }
 
   for (unsigned int nbComponents = 0; nbComponents < this->GetNumberOfComponents(); ++nbComponents)
-    {
-    cpt = (unsigned long) (nbComponents) * (unsigned long) (this->GetComponentSize());
-    //Read region of the channel
+  {
+    cpt = (unsigned long)(nbComponents) * (unsigned long)(this->GetComponentSize());
+    // Read region of the channel
     for (unsigned int LineNo = lFirstLine; LineNo < lFirstLine + lNbLines; LineNo++)
+    {
+      for (std::streamsize i = 0; i < numberOfBytesToBeWrite; i = i + static_cast<std::streamsize>(this->GetComponentSize()))
       {
-      for (std::streamsize i = 0;
-           i < numberOfBytesToBeWrite;
-           i = i + static_cast<std::streamsize>(this->GetComponentSize()))
-        {
-        memcpy((void*) (&(value[i])), (const void*) (&(p[cpt])), (size_t) (this->GetComponentSize()));
+        memcpy((void*)(&(value[i])), (const void*)(&(p[cpt])), (size_t)(this->GetComponentSize()));
         cpt += step;
-        }
-
-      offset  =  headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
-      offset +=  static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
-      m_ChannelsFile[nbComponents].seekp(offset, std::ios::beg);
-      //Write a line
-      m_ChannelsFile[nbComponents].write(static_cast<char *>(value), numberOfBytesToBeWrite);
       }
+
+      offset = headerLength + numberOfBytesPerLines * static_cast<std::streamoff>(LineNo);
+      offset += static_cast<std::streamoff>(this->GetComponentSize() * lFirstColumn);
+      m_ChannelsFile[nbComponents].seekp(offset, std::ios::beg);
+      // Write a line
+      m_ChannelsFile[nbComponents].write(static_cast<char*>(value), numberOfBytesToBeWrite);
     }
+  }
   delete[] value;
 }
 
 void BSQImageIO::WriteImageInformation()
 {
   if (m_FileName == "")
-    {
+  {
     itkExceptionMacro(<< "A FileName must be specified.");
-    }
+  }
   if (CanWriteFile(m_FileName.c_str()) == false)
-    {
+  {
     itkExceptionMacro(<< "The file " << m_FileName << " is not defined as a BSQ file");
-    }
+  }
   // Close file from any previous image
   if (m_HeaderFile.is_open())
-    {
+  {
     m_HeaderFile.close();
-    }
+  }
 
   // Open the new file for writing
   // Actually open the file
-  m_HeaderFile.open(m_FileName,  std::ios::out | std::ios::trunc);
+  m_HeaderFile.open(m_FileName, std::ios::out | std::ios::trunc);
   if (m_HeaderFile.fail())
-    {
+  {
     itkExceptionMacro(<< "Cannot write requested file " << m_FileName << ".");
-    }
+  }
 
-  if (0) {}
-  otbSetTypeBsqMacro(CHAR,   "OCT")
-  otbSetTypeBsqMacro(UCHAR,  "UOCT")
-  otbSetTypeBsqMacro(SHORT,  "I2")
-  otbSetTypeBsqMacro(USHORT, "UI2")
-  otbSetTypeBsqMacro(INT,    "I4")
-  otbSetTypeBsqMacro(UINT,   "UI4")
-  otbSetTypeBsqMacro(FLOAT,  "R4")
-  otbSetTypeBsqMacro(DOUBLE, "R8")
-  else
-    {
+  if (0)
+  {
+  }
+  otbSetTypeBsqMacro(CHAR, "OCT") otbSetTypeBsqMacro(UCHAR, "UOCT") otbSetTypeBsqMacro(SHORT, "I2") otbSetTypeBsqMacro(USHORT, "UI2")
+      otbSetTypeBsqMacro(INT, "I4") otbSetTypeBsqMacro(UINT, "UI4") otbSetTypeBsqMacro(FLOAT, "R4") otbSetTypeBsqMacro(DOUBLE, "R8") else
+  {
     itkExceptionMacro(<< "BSQ format doesn't recognized (TYPE).");
-    }
+  }
 
   std::string lString;
-  //Write TYPE information
+  // Write TYPE information
   m_HeaderFile << "TYPE" << std::endl;
   m_HeaderFile << m_TypeBsq << std::endl;
 
-  //Write LABEL information
+  // Write LABEL information
   m_HeaderFile << "LABEL" << std::endl;
   m_HeaderFile << m_TypeBsq << " - This BSQ image file was producted by OTB software." << std::endl;
 
-  //Write CHANNELS information
+  // Write CHANNELS information
   m_HeaderFile << "CHANNELS" << std::endl;
   m_HeaderFile << this->GetNumberOfComponents() << std::endl;
 
-  //Write LINES information
-  m_HeaderFile <<  "LINES" << std::endl;
+  // Write LINES information
+  m_HeaderFile << "LINES" << std::endl;
   m_HeaderFile << m_Dimensions[1] << std::endl;
-  //Write COLUMNS information
-  m_HeaderFile <<  "COLUMNS" << std::endl;
+  // Write COLUMNS information
+  m_HeaderFile << "COLUMNS" << std::endl;
   m_HeaderFile << m_Dimensions[0] << std::endl;
 
-  //Write "BITS PER PIXEL" information
-  m_HeaderFile <<  "BITS PER PIXEL" << std::endl;
+  // Write "BITS PER PIXEL" information
+  m_HeaderFile << "BITS PER PIXEL" << std::endl;
   m_HeaderFile << this->GetComponentSize() * 8 << std::endl;
 
-  //Write "SENSCODAGE" information
-  m_HeaderFile <<  "SENSCODAGE" << std::endl;
+  // Write "SENSCODAGE" information
+  m_HeaderFile << "SENSCODAGE" << std::endl;
   if (m_ByteOrder == LittleEndian)
-    {
-    m_HeaderFile <<  "INTEL" << std::endl;
-    }
+  {
+    m_HeaderFile << "INTEL" << std::endl;
+  }
   else
-    {
-    m_HeaderFile <<  "IEEE" << std::endl;
-    }
+  {
+    m_HeaderFile << "IEEE" << std::endl;
+  }
 
   m_HeaderFile.close();
 
-  //Create channels files
+  // Create channels files
 
-  //Define channels file name
+  // Define channels file name
   std::string lRootName = System::GetRootName(m_FileName);
   m_ChannelsFileName.clear();
   for (unsigned int i = 0; i < this->GetNumberOfComponents(); ++i)
-    {
+  {
     std::ostringstream lStream;
     lStream << lRootName << ".c" << i + 1;
     m_ChannelsFileName.push_back(lStream.str());
-    }
+  }
 
-  //Allocate  buffer of stream file
+  // Allocate  buffer of stream file
   m_ChannelsFile = new std::fstream[this->GetNumberOfComponents()];
 
-  //Try to open channels file
+  // Try to open channels file
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
-    {
-    m_ChannelsFile[channels].open(
-      m_ChannelsFileName[channels].c_str(),  std::ios::out | std::ios::trunc | std::ios::binary);
+  {
+    m_ChannelsFile[channels].open(m_ChannelsFileName[channels].c_str(), std::ios::out | std::ios::trunc | std::ios::binary);
     if (m_ChannelsFile[channels].fail())
-      {
+    {
       itkExceptionMacro(<< "BSQ : unable to find the file <" << m_ChannelsFileName[channels] << ">");
-      }
     }
+  }
   this->SetFileTypeToBinary();
   this->SetNumberOfDimensions(2);
 
   unsigned long headerLength = this->GetComponentSize() * m_Dimensions[0];
-  char*         value = new char[headerLength];
+  char*         value        = new char[headerLength];
 
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
-    {
+  {
     m_ChannelsFile[channels].seekp(0, std::ios::beg);
-    //Write Header line and all file (whitout information)
+    // Write Header line and all file (whitout information)
     for (unsigned int numLigne = 0; numLigne < (m_Dimensions[1]); numLigne++)
-      {
+    {
       m_ChannelsFile[channels].write(value, headerLength);
-      }
     }
+  }
 
   delete[] value;
 
@@ -687,7 +672,6 @@ void BSQImageIO::WriteImageInformation()
   otbMsgDebugMacro(<< "         NumberOfComponents : " << this->GetNumberOfComponents());
   otbMsgDebugMacro(<< "         ComponentSize      : " << this->GetComponentSize());
   otbMsgDebugMacro(<< "         GetPixelSize       : " << this->GetPixelSize());
-
 }
 
 } // end namespace otb

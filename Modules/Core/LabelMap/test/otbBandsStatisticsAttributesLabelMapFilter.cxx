@@ -19,7 +19,6 @@
  */
 
 
-
 #include <fstream>
 #include <iostream>
 
@@ -30,36 +29,35 @@
 #include "itkLabelImageToLabelMapFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 
-const unsigned int Dimension = 2;
+const unsigned int     Dimension = 2;
 typedef unsigned short LabelType;
 typedef double         DoublePixelType;
 
-typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>                LabelObjectType;
-typedef itk::LabelMap<LabelObjectType>                                             LabelMapType;
-typedef otb::VectorImage<DoublePixelType, Dimension>                               VectorImageType;
-typedef otb::Image<unsigned int, 2>                                                LabeledImageType;
+typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+typedef itk::LabelMap<LabelObjectType> LabelMapType;
+typedef otb::VectorImage<DoublePixelType, Dimension> VectorImageType;
+typedef otb::Image<unsigned int, 2>                  LabeledImageType;
 
-typedef LabelMapType::Iterator                                                     IteratorType;
+typedef LabelMapType::Iterator IteratorType;
 
-typedef otb::ImageFileReader<VectorImageType>                                      ReaderType;
-typedef otb::ImageFileReader<LabeledImageType>                                     LabeledReaderType;
+typedef otb::ImageFileReader<VectorImageType>  ReaderType;
+typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
 
 typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>             LabelMapFilterType;
 typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
 
-
 int otbBandsStatisticsAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname  = argv[1];
-  const char * lfname   = argv[2];
-  const char * outfname = argv[3];
+  const char* infname  = argv[1];
+  const char* lfname   = argv[2];
+  const char* outfname = argv[3];
 
   // Filters instantiation
-  ReaderType::Pointer                reader              = ReaderType::New();
-  LabeledReaderType::Pointer         labeledReader       = LabeledReaderType::New();
-  LabelMapFilterType::Pointer        filter              = LabelMapFilterType::New();
-  BandsStatisticsFilterType::Pointer stats               = BandsStatisticsFilterType::New();
+  ReaderType::Pointer                reader        = ReaderType::New();
+  LabeledReaderType::Pointer         labeledReader = LabeledReaderType::New();
+  LabelMapFilterType::Pointer        filter        = LabelMapFilterType::New();
+  BandsStatisticsFilterType::Pointer stats         = BandsStatisticsFilterType::New();
 
   // Read inputs
   reader->SetFileName(infname);
@@ -69,7 +67,7 @@ int otbBandsStatisticsAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[
   filter->SetInput(labeledReader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
 
-  //Compute band statistics attributes
+  // Compute band statistics attributes
   stats->SetInput(filter->GetOutput());
   stats->SetFeatureImage(reader->GetOutput());
 
@@ -79,26 +77,26 @@ int otbBandsStatisticsAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[
 
   // Dump all results in the output file
   std::ofstream outfile(outfname);
-  IteratorType it = IteratorType( labelMap );
+  IteratorType  it = IteratorType(labelMap);
 
-  while ( !it.IsAtEnd() )
-    {
-    LabelType label = it.GetLabel();
+  while (!it.IsAtEnd())
+  {
+    LabelType                label       = it.GetLabel();
     LabelObjectType::Pointer labelObject = it.GetLabelObject();
 
     outfile << "Label " << label << " : " << std::endl;
 
-    std::vector<std::string> attributes = labelObject->GetAvailableAttributes();
-    std::vector<std::string>::const_iterator attrIt = attributes.begin();
-    std::vector<std::string>::const_iterator attrEnd = attributes.end();
+    std::vector<std::string>                 attributes = labelObject->GetAvailableAttributes();
+    std::vector<std::string>::const_iterator attrIt     = attributes.begin();
+    std::vector<std::string>::const_iterator attrEnd    = attributes.end();
     for (; attrIt != attrEnd; ++attrIt)
-      {
+    {
       LabelObjectType::AttributesValueType value = labelObject->GetAttribute(attrIt->c_str());
-      outfile << "  " << *attrIt << " : "<< std::fixed << std::setprecision(6) << value << std::endl;
-      }
+      outfile << "  " << *attrIt << " : " << std::fixed << std::setprecision(6) << value << std::endl;
+    }
     outfile << std::endl;
     ++it;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

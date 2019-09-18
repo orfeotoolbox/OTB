@@ -50,20 +50,15 @@ namespace otb
  *
  * \ingroup OTBMoments
  */
-template <class TInputPath,
-    class TOutput = std::complex<double>,
-    class TPrecision = double>
-class ITK_EXPORT ComplexMomentPathFunction :
-  public GeometricMomentPathFunction<TInputPath,
-      TOutput,
-      TPrecision>
+template <class TInputPath, class TOutput = std::complex<double>, class TPrecision = double>
+class ITK_EXPORT ComplexMomentPathFunction : public GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexMomentPathFunction                                    Self;
+  typedef ComplexMomentPathFunction Self;
   typedef GeometricMomentPathFunction<TInputPath, TOutput, TPrecision> Superclass;
-  typedef itk::SmartPointer<Self>                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComplexMomentPathFunction, GeometricMomentPathFunction);
@@ -72,11 +67,11 @@ public:
   itkNewMacro(Self);
 
   /** InputPathType typedef support. */
-  typedef typename Superclass::PathType              PathType;
-  typedef typename Superclass::PathConstPointer      PathConstPointer;
-  typedef typename PathType::ContinuousIndexType     VertexType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathConstPointer  PathConstPointer;
+  typedef typename PathType::ContinuousIndexType VertexType;
   typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
-  typedef typename VertexListType::ConstPointer      VertexListPointer;
+  typedef typename VertexListType::ConstPointer VertexListPointer;
 
   /** Complex Type */
   typedef typename Superclass::OutputType ComplexType;
@@ -102,12 +97,14 @@ public:
 
 protected:
   ComplexMomentPathFunction();
-  ~ComplexMomentPathFunction() override {}
+  ~ComplexMomentPathFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ComplexMomentPathFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ComplexMomentPathFunction(const Self&) = delete;
+  void                 operator=(const Self&) = delete;
   ComplexPrecisionType EvaluateComplexMomentAtIndex(VertexType index) const;
 
   unsigned int m_P;

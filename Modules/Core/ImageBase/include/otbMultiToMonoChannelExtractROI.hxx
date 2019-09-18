@@ -29,21 +29,17 @@ namespace otb
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType>
-MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
-::MultiToMonoChannelExtractROI() :    ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >(),
-  m_Channel(1)
+template <class TInputPixelType, class TOutputPixelType>
+MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::MultiToMonoChannelExtractROI()
+  : ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2>>(), m_Channel(1)
 {
-
 }
 
 /**
  *
  */
-template<class TInputPixelType, class TOutputPixelType>
-void
-MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputPixelType, class TOutputPixelType>
+void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -57,34 +53,30 @@ MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
  *
  * \sa ProcessObject::GenerateOutputInformaton()
  */
-template<class TInputPixelType, class TOutputPixelType>
-void
-MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
-::GenerateOutputInformation()
+template <class TInputPixelType, class TOutputPixelType>
+void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::GenerateOutputInformation()
 {
   typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
   // Bounds checking for the channel to process
   if ((m_Channel <= 0) || (m_Channel > inputPtr->GetVectorLength()))
-    {
+  {
     itkExceptionMacro(<< "otb::MultiToMonoChannelExtractROI::GenerateOutputInformation "
                       << "The selected channel must in the range [1;" << inputPtr->GetVectorLength() << "] "
                       << typeid(itk::ImageBase<InputImageDimension>*).name());
-    }
+  }
 
   // Calling the superclass method
   Superclass::GenerateOutputInformation();
 }
 
-template<class TInputPixelType, class TOutputPixelType>
-void
-MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputPixelType, class TOutputPixelType>
+void MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                           itk::ThreadIdType threadId)
 {
   itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
-  typename Superclass::InputImageConstPointer inputPtr = this->GetInput();
+  typename Superclass::InputImageConstPointer inputPtr  = this->GetInput();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   // support progress methods/callbacks
@@ -99,22 +91,21 @@ MultiToMonoChannelExtractROI<TInputPixelType, TOutputPixelType>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIterator;
 
   OutputIterator outIt(outputPtr, outputRegionForThread);
-  InputIterator inIt(inputPtr, inputRegionForThread);
+  InputIterator  inIt(inputPtr, inputRegionForThread);
 
   // Go through channels to process
   const unsigned int channelIn(m_Channel - 1);
 
   while (!outIt.IsAtEnd())
-    {
+  {
 
-    InputImagePixelType const& pixelInput = inIt.Get();
+    InputImagePixelType const& pixelInput  = inIt.Get();
     OutputImagePixelType const pixelOutput = static_cast<OutputValueType>(pixelInput[channelIn]);
     outIt.Set(pixelOutput);
     ++outIt;
     ++inIt;
     progress.CompletedPixel();
-    }
-
+  }
 }
 
 } // end namespace otb

@@ -31,23 +31,23 @@ int otbWriteGeomFile(int itkNotUsed(argc), char* argv[])
   std::string inputFilename(argv[1]);
   std::string outputFilename(argv[2]);
 
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
-  otb::ImageKeywordlist otb_kwl;
-  itk::MetaDataDictionary &dict = reader->GetOutput()->GetMetaDataDictionary();
+  otb::ImageKeywordlist    otb_kwl;
+  itk::MetaDataDictionary& dict = reader->GetOutput()->GetMetaDataDictionary();
   itk::ExposeMetaData<otb::ImageKeywordlist>(dict, otb::MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
   if (otb_kwl.Empty())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   otb::WriteGeometry(otb_kwl, outputFilename);
 

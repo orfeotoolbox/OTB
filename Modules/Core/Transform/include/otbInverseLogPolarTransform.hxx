@@ -31,35 +31,31 @@ namespace otb
  * Constructor.
  */
 template <class TScalarType>
-InverseLogPolarTransform<TScalarType>
-::InverseLogPolarTransform()
-  : Superclass(4)
+InverseLogPolarTransform<TScalarType>::InverseLogPolarTransform() : Superclass(4)
 {
   m_Center[0] = 0.0;
   m_Center[1] = 0.0;
-  m_Scale[0] = 1.0;
-  m_Scale[1] = 1.0;
+  m_Scale[0]  = 1.0;
+  m_Scale[1]  = 1.0;
 }
 /**
  * Destructor.
  */
 template <class TScalarType>
-InverseLogPolarTransform<TScalarType>
-::~InverseLogPolarTransform()
-{}
+InverseLogPolarTransform<TScalarType>::~InverseLogPolarTransform()
+{
+}
 /**
  * Set the transform parameters through the standard interface.
  * \param parameters The parameters of the transform.
   */
 template <class TScalarType>
-void
-InverseLogPolarTransform<TScalarType>
-::SetParameters(const ParametersType& parameters)
+void InverseLogPolarTransform<TScalarType>::SetParameters(const ParametersType& parameters)
 {
   m_Center[0] = parameters[0];
   m_Center[1] = parameters[1];
-  m_Scale[0] = parameters[2];
-  m_Scale[1] = parameters[3];
+  m_Scale[0]  = parameters[2];
+  m_Scale[1]  = parameters[3];
   otbMsgDebugMacro(<< "Call To SetParameters: Center=" << m_Center << ", Scale=" << m_Scale);
   this->m_Parameters = parameters;
   this->Modified();
@@ -69,10 +65,7 @@ InverseLogPolarTransform<TScalarType>
  * \return The parameters of the transform.
  */
 template <class TScalarType>
-typename InverseLogPolarTransform<TScalarType>
-::ParametersType&
-InverseLogPolarTransform<TScalarType>
-::GetParameters(void) const
+typename InverseLogPolarTransform<TScalarType>::ParametersType& InverseLogPolarTransform<TScalarType>::GetParameters(void) const
 {
   // Filling parameters vector
   this->m_Parameters[0] = m_Center[0];
@@ -89,15 +82,12 @@ InverseLogPolarTransform<TScalarType>
  * \return The transformed point.
  */
 template <class TScalarType>
-typename InverseLogPolarTransform<TScalarType>
-::OutputPointType
-InverseLogPolarTransform<TScalarType>
-::TransformPoint(const InputPointType& point) const
+typename InverseLogPolarTransform<TScalarType>::OutputPointType InverseLogPolarTransform<TScalarType>::TransformPoint(const InputPointType& point) const
 {
   OutputPointType result;
   double          rho = std::sqrt(std::pow(point[0] - m_Center[0], 2) + std::pow(point[1] - m_Center[1], 2));
   if (rho > 0)
-    {
+  {
     result[0] = (1. / m_Scale[0]) * std::asin((point[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180. / CONST_PI);
@@ -105,18 +95,18 @@ InverseLogPolarTransform<TScalarType>
     result[0] = result[0] > 0. ? result[0] : result[0] + 360.;
     // Avoiding asin indetermination
     if ((point[0] - m_Center[0]) >= 0)
-      {
+    {
       result[0] = result[0] < 90. ? result[0] + 90. : result[0] - 90.;
-      }
+    }
     result[1] = (1. / m_Scale[1]) * std::log(rho);
     // otbMsgDebugMacro(<<std::log(std::pow(point[0]-m_Center[0], 2)+std::pow(point[1]-m_Center[1], 2)));
-    }
+  }
   else
-    {
+  {
     // for rho=0, reject the point outside the angular range to avoid nan error
     result[0] = 400.;
     result[1] = 0.;
-    }
+  }
   return result;
 }
 /**
@@ -125,15 +115,12 @@ InverseLogPolarTransform<TScalarType>
  * \return The transformed point.
  */
 template <class TScalarType>
-typename InverseLogPolarTransform<TScalarType>
-::OutputVectorType
-InverseLogPolarTransform<TScalarType>
-::TransformVector(const InputVectorType& vector) const
+typename InverseLogPolarTransform<TScalarType>::OutputVectorType InverseLogPolarTransform<TScalarType>::TransformVector(const InputVectorType& vector) const
 {
   OutputVectorType result;
   double           rho = std::sqrt(std::pow(vector[0] - m_Center[0], 2) + std::pow(vector[1] - m_Center[1], 2));
   if (rho > 0)
-    {
+  {
     result[0] = (1 / m_Scale[0]) * std::asin((vector[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180 / CONST_PI);
@@ -141,18 +128,18 @@ InverseLogPolarTransform<TScalarType>
     result[0] = result[0] > 0 ? result[0] : result[0] + 360;
     // Avoiding asin indetermination
     if ((vector[0] - m_Center[0]) >= 0)
-      {
+    {
       result[0] = result[0] < 90 ? result[0] + 90 : result[0] - 90;
-      }
+    }
     result[1] = (1 / m_Scale[1]) * std::log(rho);
     // otbMsgDebugMacro(<<std::log(std::pow(vector[0]-m_Center[0], 2)+std::pow(vector[1]-m_Center[1], 2)));
-    }
+  }
   else
-    {
+  {
     // for rho=0, reject the vector outside the angular range to avoid nan error
     result[0] = 400;
     result[1] = 0;
-    }
+  }
   return result;
 }
 /**
@@ -161,15 +148,13 @@ InverseLogPolarTransform<TScalarType>
  * \return The transformed vector.
  */
 template <class TScalarType>
-typename InverseLogPolarTransform<TScalarType>
-::OutputVnlVectorType
-InverseLogPolarTransform<TScalarType>
-::TransformVector(const InputVnlVectorType& vector) const
+typename InverseLogPolarTransform<TScalarType>::OutputVnlVectorType
+InverseLogPolarTransform<TScalarType>::TransformVector(const InputVnlVectorType& vector) const
 {
   OutputVnlVectorType result;
   double              rho = std::sqrt(std::pow(vector[0], 2) + std::pow(vector[1], 2));
   if (rho > 0)
-    {
+  {
     result[0] = (1 / m_Scale[0]) * std::asin((vector[1] - m_Center[1]) / rho);
     // degree conversion
     result[0] = result[0] * (180 / CONST_PI);
@@ -177,27 +162,25 @@ InverseLogPolarTransform<TScalarType>
     result[0] = result[0] > 0 ? result[0] : result[0] + 360;
     // Avoiding std::asin indetermination
     if ((vector[0] - m_Center[0]) >= 0)
-      {
+    {
       result[0] = result[0] < 90 ? result[0] + 90 : result[0] - 90;
-      }
+    }
     result[1] = (1 / m_Scale[1]) * std::log(rho);
     // otbMsgDebugMacro(<<log(std::pow(vector[0]-m_Center[0], 2)+std::pow(vector[1]-m_Center[1], 2)));
-    }
+  }
   else
-    {
+  {
     // for rho=0, reject the vector outside the angular range to avoid nan error
     result[0] = 400;
     result[1] = 0;
-    }
+  }
   return result;
 }
 /**
  * PrintSelf method.
  */
 template <class TScalarType>
-void
-InverseLogPolarTransform<TScalarType>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void InverseLogPolarTransform<TScalarType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Center: " << m_Center << std::endl;

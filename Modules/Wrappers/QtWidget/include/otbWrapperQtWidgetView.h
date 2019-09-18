@@ -39,19 +39,15 @@ namespace Wrapper
  *
  * \brief WIP.
  */
-class OTBQtWidget_EXPORT QtWidgetView :
-    public QWidget
+class OTBQtWidget_EXPORT QtWidgetView : public QWidget
 {
   Q_OBJECT
 
 public:
-
-  static char const * const OBJECT_NAME;
+  static char const* const OBJECT_NAME;
 
   /** \brief Constructor. */
-  QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent=nullptr,
-		Qt::WindowFlags flags =0 );
+  QtWidgetView(const otb::Wrapper::Application::Pointer& otbApp, QWidget* parent = nullptr, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~QtWidgetView() override;
@@ -73,11 +69,10 @@ public:
 signals:
   void ExecuteAndWriteOutput();
   void Stop();
-  void OTBApplicationOutputImageChanged( const QString &, const QString &);
-  void ExecutionDone( int nbOutputs );
+  void OTBApplicationOutputImageChanged(const QString&, const QString&);
+  void ExecutionDone(int nbOutputs);
 
 protected:
-
   bool IsRunning() const;
 
   virtual QWidget* CreateInputWidgets();
@@ -89,7 +84,6 @@ protected slots:
   }
 
 private:
-
   QtWidgetView(const QtWidgetView&) = delete;
   void operator=(const QtWidgetView&) = delete;
 

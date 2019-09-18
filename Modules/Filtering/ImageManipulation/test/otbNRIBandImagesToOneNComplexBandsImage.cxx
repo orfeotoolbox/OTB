@@ -27,38 +27,37 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbNRIBandImagesToOneNComplexBandsImage(int itkNotUsed(argc), char * argv[])
+int otbNRIBandImagesToOneNComplexBandsImage(int itkNotUsed(argc), char* argv[])
 {
 
   typedef double PixelType;
-  typedef otb::VectorImage<PixelType,  2> InputImageType;
-    
+  typedef otb::VectorImage<PixelType, 2> InputImageType;
+
   typedef std::complex<double> OutputPixelType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
- 
- 
+
+
   typedef otb::NRIBandImagesToOneNComplexBandsImage<InputImageType, OutputImageType> FilterType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer readerA = ReaderType::New();
   ReaderType::Pointer readerB = ReaderType::New();
   ReaderType::Pointer readerC = ReaderType::New();
-  FilterType::Pointer filter = FilterType::New();
-  WriterType::Pointer writer = WriterType::New();
-  
-  
+  FilterType::Pointer filter  = FilterType::New();
+  WriterType::Pointer writer  = WriterType::New();
+
+
   readerA->SetFileName(argv[1]);
   readerB->SetFileName(argv[2]);
   readerC->SetFileName(argv[3]);
   writer->SetFileName(argv[4]);
 
-  filter->SetInput(0,readerA->GetOutput());
-  filter->SetInput(1,readerB->GetOutput());
-  filter->SetInput(2,readerC->GetOutput());
+  filter->SetInput(0, readerA->GetOutput());
+  filter->SetInput(1, readerB->GetOutput());
+  filter->SetInput(2, readerC->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

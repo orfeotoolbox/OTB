@@ -80,8 +80,7 @@ class ImportSubDatasetDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT ImportSubDatasetDialog :
-    public QDialog
+class OTBMonteverdiGUI_EXPORT ImportSubDatasetDialog : public QDialog
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -90,25 +89,21 @@ class OTBMonteverdiGUI_EXPORT ImportSubDatasetDialog :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  ImportSubDatasetDialog( const QString & filename,
-		     QWidget* p = NULL,
-		     Qt::WindowFlags flags = 0 );
+  ImportSubDatasetDialog(const QString& filename, QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~ImportSubDatasetDialog() override;
 
   /**
    */
-  void GetSubDatasets( IntVector & ) const;
+  void GetSubDatasets(IntVector&) const;
 
   /**
    */
@@ -116,42 +111,39 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
+  /**
+   */
+  void Setup(const QString& filename);
 
   /**
    */
-  void Setup( const QString & filename );
+  void SetSubDatasetsCheckState(Qt::CheckState);
 
-  /**
-   */
-  void SetSubDatasetsCheckState( Qt::CheckState );
-
-//
-// Private types.
+  //
+  // Private types.
 private:
   enum DatasetColumns
   {
@@ -162,17 +154,17 @@ private:
     DATASET_COLUMN_COUNT
   };
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
-  static char const * const DATASET_COLUMN_NAMES[ DATASET_COLUMN_COUNT ];
+  static char const* const DATASET_COLUMN_NAMES[DATASET_COLUMN_COUNT];
 
   /**
    * \brief uic generated.
    */
-  Ui::ImportSubDatasetDialog * m_UI;
+  Ui::ImportSubDatasetDialog* m_UI;
 
   /**
    */
@@ -180,8 +172,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */

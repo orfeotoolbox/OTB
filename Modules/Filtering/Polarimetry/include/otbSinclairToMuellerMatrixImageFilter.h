@@ -82,15 +82,14 @@ namespace Functor
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
 class SinclairToMuellerMatrixFunctor
 {
 public:
   /** Some typedefs. */
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
-  typedef double                                   RealType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename TOutput::ValueType   OutputValueType;
+  typedef double                        RealType;
 
   inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
@@ -104,22 +103,22 @@ public:
     const ComplexType conjTyx = std::conj(Tyx);
     const ComplexType conjTyy = std::conj(Tyy);
 
-    result[0]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) + std::norm(Txy) + std::norm(Tyx) + std::norm(Tyy) ) );
-    result[1]  = static_cast<OutputValueType>( 0.5 * ( std::norm(Txx) - std::norm(Txy) + std::norm(Tyx) - std::norm(Tyy) ) );
-    result[2]  = static_cast<OutputValueType>( (Txx*conjTxy + Tyx*conjTyy).real()  );
-    result[3]  = static_cast<OutputValueType>( (Txx*conjTxy + Tyx*conjTyy).imag()  );
-    result[4]  = static_cast<OutputValueType>( 0.5 * (std::norm(Txx) + std::norm(Txy) - std::norm(Tyx) - std::norm(Tyy) ) );
-    result[5]  = static_cast<OutputValueType>( 0.5 * (std::norm(Txx) - std::norm(Txy) - std::norm(Tyx) + std::norm(Tyy) ) );
-    result[6]  = static_cast<OutputValueType>( (Txx*conjTxy - Tyx*conjTyy).real()  );
-    result[7]  = static_cast<OutputValueType>( (Txx*conjTxy - Tyx*conjTyy).imag()  );
-    result[8]  = static_cast<OutputValueType>( (Txx*conjTyx + Txy*conjTyy).real()  );
-    result[9]  = static_cast<OutputValueType>( (Txx*conjTyx - Txy*conjTyy).real()  );
-    result[10] = static_cast<OutputValueType>( (Txx*conjTyy + Txy*conjTyx).real()  );
-    result[11] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).imag()  );
-    result[12] = static_cast<OutputValueType>( (conjTxx*Tyx + conjTxy*Tyy).imag()  );
-    result[13] = static_cast<OutputValueType>( (conjTxx*Tyx - conjTxy*Tyy).imag()  );
-    result[14] = static_cast<OutputValueType>( (conjTxx*Tyy + conjTxy*Tyx).imag()  );
-    result[15] = static_cast<OutputValueType>( (Txx*conjTyy - Txy*conjTyx).real()  );
+    result[0]  = static_cast<OutputValueType>(0.5 * (std::norm(Txx) + std::norm(Txy) + std::norm(Tyx) + std::norm(Tyy)));
+    result[1]  = static_cast<OutputValueType>(0.5 * (std::norm(Txx) - std::norm(Txy) + std::norm(Tyx) - std::norm(Tyy)));
+    result[2]  = static_cast<OutputValueType>((Txx * conjTxy + Tyx * conjTyy).real());
+    result[3]  = static_cast<OutputValueType>((Txx * conjTxy + Tyx * conjTyy).imag());
+    result[4]  = static_cast<OutputValueType>(0.5 * (std::norm(Txx) + std::norm(Txy) - std::norm(Tyx) - std::norm(Tyy)));
+    result[5]  = static_cast<OutputValueType>(0.5 * (std::norm(Txx) - std::norm(Txy) - std::norm(Tyx) + std::norm(Tyy)));
+    result[6]  = static_cast<OutputValueType>((Txx * conjTxy - Tyx * conjTyy).real());
+    result[7]  = static_cast<OutputValueType>((Txx * conjTxy - Tyx * conjTyy).imag());
+    result[8]  = static_cast<OutputValueType>((Txx * conjTyx + Txy * conjTyy).real());
+    result[9]  = static_cast<OutputValueType>((Txx * conjTyx - Txy * conjTyy).real());
+    result[10] = static_cast<OutputValueType>((Txx * conjTyy + Txy * conjTyx).real());
+    result[11] = static_cast<OutputValueType>((Txx * conjTyy - Txy * conjTyx).imag());
+    result[12] = static_cast<OutputValueType>((conjTxx * Tyx + conjTxy * Tyy).imag());
+    result[13] = static_cast<OutputValueType>((conjTxx * Tyx - conjTxy * Tyy).imag());
+    result[14] = static_cast<OutputValueType>((conjTxx * Tyy + conjTxy * Tyx).imag());
+    result[15] = static_cast<OutputValueType>((Txx * conjTyy - Txy * conjTyx).real());
   }
 
   constexpr size_t OutputSize(...) const
@@ -134,7 +133,9 @@ public:
   }
 
   /** Destructor */
-  virtual ~SinclairToMuellerMatrixFunctor() {}
+  virtual ~SinclairToMuellerMatrixFunctor()
+  {
+  }
 };
 
 } // namespace Functor

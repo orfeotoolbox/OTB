@@ -19,13 +19,13 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperChoiceParameter.h"
 
 
-int otbWrapperChoiceParameterTest1(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbWrapperChoiceParameterTest1(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // TODO
   return EXIT_FAILURE;

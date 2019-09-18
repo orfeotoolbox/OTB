@@ -57,25 +57,23 @@ class CzihoSOMNeighborhoodBehaviorFunctor
 {
 public:
   /** Empty constructor / descructor */
-  CzihoSOMNeighborhoodBehaviorFunctor () {}
-  virtual ~CzihoSOMNeighborhoodBehaviorFunctor() {}
+  CzihoSOMNeighborhoodBehaviorFunctor()
+  {
+  }
+  virtual ~CzihoSOMNeighborhoodBehaviorFunctor()
+  {
+  }
 
   /** Functor */
   template <unsigned int VDimension>
-  itk::Size<VDimension> operator ()(unsigned int currentIteration,
-                                    unsigned int numberOfIterations,
-                                    const itk::Size<VDimension>& sizeInit) const
+  itk::Size<VDimension> operator()(unsigned int currentIteration, unsigned int numberOfIterations, const itk::Size<VDimension>& sizeInit) const
   {
     itk::Size<VDimension> theSize;
-    double                weightening = ::std::pow(1.0
-                                                  - static_cast<double>(currentIteration)
-                                                  / static_cast<double>(numberOfIterations),
-                                                  2.0);
+    double                weightening = ::std::pow(1.0 - static_cast<double>(currentIteration) / static_cast<double>(numberOfIterations), 2.0);
     for (unsigned int i = 0; i < VDimension; ++i)
-      {
-      theSize[i] = static_cast<typename itk::Size<VDimension>::SizeValueType> (
-        static_cast<double>(sizeInit[i]) * weightening);
-      }
+    {
+      theSize[i] = static_cast<typename itk::Size<VDimension>::SizeValueType>(static_cast<double>(sizeInit[i]) * weightening);
+    }
 
     return theSize;
   }

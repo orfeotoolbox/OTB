@@ -34,12 +34,12 @@ namespace Wrapper
 
 class OTBQtWidget_EXPORT AppliThread : public QThread
 {
- Q_OBJECT
+  Q_OBJECT
 
- public:
-   AppliThread(Application::Pointer app) : m_Application(app)
-   {
-    }
+public:
+  AppliThread(Application::Pointer app) : m_Application(app)
+  {
+  }
 
   ~AppliThread() override;
 
@@ -55,7 +55,7 @@ signals:
    *
    * \param status 0 The result status of the OTB-application.
    */
-  void ApplicationExecutionDone( int status =0 );
+  void ApplicationExecutionDone(int status = 0);
 
   /**
    * \brief Signal emitted when an exception has been raised by an
@@ -63,7 +63,7 @@ signals:
    *
    * \param what The std::exception::what() which is forwarded to listeners.
    */
-  void ExceptionRaised( QString what );
+  void ExceptionRaised(QString what);
 
 protected:
   void run() override;
@@ -104,11 +104,11 @@ public:
   void Stop();
 
   /** Logger warning message sender */
-  void SendLogWARNING( const std::string & mes );
+  void SendLogWARNING(const std::string& mes);
   /** Logger info message sender */
-  void SendLogINFO( const std::string & mes );
+  void SendLogINFO(const std::string& mes);
   /** Logger debug message sender */
-  void SendLogDEBUG( const std::string & mes );
+  void SendLogDEBUG(const std::string& mes);
 
 signals:
   void SetApplicationReady(bool);
@@ -121,7 +121,7 @@ signals:
    * \param status The result status of the otb::application (-1 when
    * an exception has occurred).
    */
-  void SetProgressReportDone( int status =0 );
+  void SetProgressReportDone(int status = 0);
 
   /**
    * \brief Signal emitted when an exception has been raised by an
@@ -129,7 +129,7 @@ signals:
    *
    * \param what The std::exception::what() which is forwarded to listeners.
    */
-  void ExceptionRaised( QString what );
+  void ExceptionRaised(QString what);
 
   void UpdateGui();
 
@@ -153,13 +153,13 @@ private slots:
    *
    * \param status
    */
-  void OnApplicationExecutionDone( int status );
+  void OnApplicationExecutionDone(int status);
 
 private:
   QtWidgetModel(const QtWidgetModel&) = delete;
   void operator=(const QtWidgetModel&) = delete;
 
-  QtLogOutput::Pointer  m_LogOutput;
+  QtLogOutput::Pointer m_LogOutput;
 
   AppliThread* m_taskAppli;
 
@@ -168,8 +168,6 @@ private:
 public:
   Application::Pointer m_Application;
 };
-
-
 }
 }
 

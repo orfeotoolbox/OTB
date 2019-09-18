@@ -54,220 +54,157 @@ namespace mvd
 */
 
 /*******************************************************************************/
-ColorBandDynamicsWidget
-::ColorBandDynamicsWidget( QWidget* p, Qt::WindowFlags flags  ):
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::ColorBandDynamicsWidget() ),
-  m_LowIntensityValidator( NULL ),
-  m_HighIntensityValidator( NULL ),
-  m_Channel( RGBW_CHANNEL_RGB )
+ColorBandDynamicsWidget::ColorBandDynamicsWidget(QWidget* p, Qt::WindowFlags flags)
+  : QWidget(p, flags), m_UI(new mvd::Ui::ColorBandDynamicsWidget()), m_LowIntensityValidator(NULL), m_HighIntensityValidator(NULL), m_Channel(RGBW_CHANNEL_RGB)
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
-  m_LowIntensityValidator = new DoubleValidator( m_UI->lowIntensityLineEdit );
-  m_UI->lowIntensityLineEdit->setValidator( m_LowIntensityValidator );
+  m_LowIntensityValidator = new DoubleValidator(m_UI->lowIntensityLineEdit);
+  m_UI->lowIntensityLineEdit->setValidator(m_LowIntensityValidator);
 
-  m_HighIntensityValidator = new DoubleValidator( m_UI->highIntensityLineEdit );
-  m_UI->highIntensityLineEdit->setValidator( m_HighIntensityValidator );
+  m_HighIntensityValidator = new DoubleValidator(m_UI->highIntensityLineEdit);
+  m_UI->highIntensityLineEdit->setValidator(m_HighIntensityValidator);
 }
 
 /*******************************************************************************/
-ColorBandDynamicsWidget
-::~ColorBandDynamicsWidget()
+ColorBandDynamicsWidget::~ColorBandDynamicsWidget()
 {
   delete m_UI;
   m_UI = NULL;
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetMinIntensity() const
+double ColorBandDynamicsWidget::GetMinIntensity() const
 {
   return m_UI->lowIntensityLineEdit->text().toDouble();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetMinIntensity( double value )
+void ColorBandDynamicsWidget::SetMinIntensity(double value)
 {
-  m_LowIntensityValidator->setBottom( value );
-  m_HighIntensityValidator->setBottom( value );
+  m_LowIntensityValidator->setBottom(value);
+  m_HighIntensityValidator->setBottom(value);
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetMaxIntensity() const
+double ColorBandDynamicsWidget::GetMaxIntensity() const
 {
   return m_LowIntensityValidator->bottom();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetMaxIntensity( double value )
+void ColorBandDynamicsWidget::SetMaxIntensity(double value)
 {
-  m_LowIntensityValidator->setTop( value );
-  m_HighIntensityValidator->setTop( value );
+  m_LowIntensityValidator->setTop(value);
+  m_HighIntensityValidator->setTop(value);
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetLowIntensity() const
+double ColorBandDynamicsWidget::GetLowIntensity() const
 {
   return m_HighIntensityValidator->top();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetLowIntensity( double value )
+void ColorBandDynamicsWidget::SetLowIntensity(double value)
 {
   // qDebug() << this << "::SetLowIntensity(" << value << ")";
 
-  QString number(
-    QString::number( value, 'g', MAX_SIGNIFICANT_DIGITS )
-  );
+  QString number(QString::number(value, 'g', MAX_SIGNIFICANT_DIGITS));
 
-  assert( !number.isEmpty() );
+  assert(!number.isEmpty());
 
-  m_UI->lowIntensityLineEdit->setText( number );
+  m_UI->lowIntensityLineEdit->setText(number);
 
-  m_UI->lowIntensityLineEdit->setCursorPosition( 0 );
+  m_UI->lowIntensityLineEdit->setCursorPosition(0);
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetHighIntensity() const
+double ColorBandDynamicsWidget::GetHighIntensity() const
 {
   return m_UI->highIntensityLineEdit->text().toDouble();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetHighIntensity( double value )
+void ColorBandDynamicsWidget::SetHighIntensity(double value)
 {
   // qDebug() << this << "::SetHighIntensity(" << value << ")";
 
-  QString number(
-    QString::number( value, 'g', MAX_SIGNIFICANT_DIGITS )
-  );
+  QString number(QString::number(value, 'g', MAX_SIGNIFICANT_DIGITS));
 
-  assert( !number.isEmpty() );
+  assert(!number.isEmpty());
 
-  m_UI->highIntensityLineEdit->setText( number );
+  m_UI->highIntensityLineEdit->setText(number);
 
-  m_UI->highIntensityLineEdit->setCursorPosition( 0 );
+  m_UI->highIntensityLineEdit->setCursorPosition(0);
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetLowQuantile() const
+double ColorBandDynamicsWidget::GetLowQuantile() const
 {
   return m_UI->lowQuantileSpinBox->value();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetLowQuantile( double value )
+void ColorBandDynamicsWidget::SetLowQuantile(double value)
 {
-  m_UI->lowQuantileSpinBox->setValue( value );
+  m_UI->lowQuantileSpinBox->setValue(value);
 }
 
 /*****************************************************************************/
-double
-ColorBandDynamicsWidget
-::GetHighQuantile() const
+double ColorBandDynamicsWidget::GetHighQuantile() const
 {
   return m_UI->highQuantileSpinBox->value();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetHighQuantile( double value )
+void ColorBandDynamicsWidget::SetHighQuantile(double value)
 {
-  m_UI->highQuantileSpinBox->setValue( value );
+  m_UI->highQuantileSpinBox->setValue(value);
 }
 
 /*****************************************************************************/
-bool
-ColorBandDynamicsWidget
-::IsBounded() const
+bool ColorBandDynamicsWidget::IsBounded() const
 {
   return m_UI->linkButton->isChecked();
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetBounded( bool enabled )
+void ColorBandDynamicsWidget::SetBounded(bool enabled)
 {
-  return m_UI->linkButton->setChecked( enabled );
+  return m_UI->linkButton->setChecked(enabled);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetLinkButtonEnabled( bool enabled )
+void ColorBandDynamicsWidget::SetLinkButtonEnabled(bool enabled)
 {
-  return m_UI->linkButton->setEnabled( enabled );
+  return m_UI->linkButton->setEnabled(enabled);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetDefaultsButtonEnabled( bool enabled )
+void ColorBandDynamicsWidget::SetDefaultsButtonEnabled(bool enabled)
 {
-  return m_UI->defaultsButton->setEnabled( enabled );
+  return m_UI->defaultsButton->setEnabled(enabled);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::SetChannelLabel( RgbwChannel channel )
+void ColorBandDynamicsWidget::SetChannelLabel(RgbwChannel channel)
 {
   m_Channel = channel;
-  
-  m_UI->rLabel->setVisible(
-    channel==RGBW_CHANNEL_RED ||
-    channel==RGBW_CHANNEL_RGB ||
-    channel==RGBW_CHANNEL_ALL
-  );
 
-  m_UI->gLabel->setVisible(
-    channel==RGBW_CHANNEL_GREEN ||
-    channel==RGBW_CHANNEL_RGB ||
-    channel==RGBW_CHANNEL_ALL
-  );
+  m_UI->rLabel->setVisible(channel == RGBW_CHANNEL_RED || channel == RGBW_CHANNEL_RGB || channel == RGBW_CHANNEL_ALL);
 
-  m_UI->bLabel->setVisible(
-    channel==RGBW_CHANNEL_BLUE ||
-    channel==RGBW_CHANNEL_RGB ||
-    channel==RGBW_CHANNEL_ALL
-  );
+  m_UI->gLabel->setVisible(channel == RGBW_CHANNEL_GREEN || channel == RGBW_CHANNEL_RGB || channel == RGBW_CHANNEL_ALL);
 
-  m_UI->wLabel->setVisible( channel==RGBW_CHANNEL_WHITE );
+  m_UI->bLabel->setVisible(channel == RGBW_CHANNEL_BLUE || channel == RGBW_CHANNEL_RGB || channel == RGBW_CHANNEL_ALL);
 
-  m_UI->applyAllButton->setEnabled(
-    channel==RGBW_CHANNEL_RED ||
-    channel==RGBW_CHANNEL_GREEN ||
-    channel==RGBW_CHANNEL_BLUE ||
-    channel==RGBW_CHANNEL_RGB
-  );
+  m_UI->wLabel->setVisible(channel == RGBW_CHANNEL_WHITE);
+
+  m_UI->applyAllButton->setEnabled(channel == RGBW_CHANNEL_RED || channel == RGBW_CHANNEL_GREEN || channel == RGBW_CHANNEL_BLUE || channel == RGBW_CHANNEL_RGB);
 }
 
 /*****************************************************************************/
-RgbwChannel
-ColorBandDynamicsWidget
-::GetChannelLabel() const
+RgbwChannel ColorBandDynamicsWidget::GetChannelLabel() const
 {
   return m_Channel;
 }
@@ -275,20 +212,18 @@ ColorBandDynamicsWidget
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_lowIntensityLineEdit_editingFinished()
+void ColorBandDynamicsWidget::on_lowIntensityLineEdit_editingFinished()
 {
   // qDebug() << this << "::on_lowIntensityLineEdit_editingFinished()";
 
-  assert( m_UI!=NULL );
-  assert( m_UI->lowIntensityLineEdit!=NULL );
+  assert(m_UI != NULL);
+  assert(m_UI->lowIntensityLineEdit != NULL);
 
-  bool isOk = true;
-  double value = m_UI->lowIntensityLineEdit->text().toDouble( &isOk );
+  bool   isOk  = true;
+  double value = m_UI->lowIntensityLineEdit->text().toDouble(&isOk);
 
-  if( !isOk )
-    {
+  if (!isOk)
+  {
 #if 0
     throw std::invalid_argument(
       ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
@@ -296,26 +231,24 @@ ColorBandDynamicsWidget
 #else
     return;
 #endif
-    }
+  }
 
-  emit LowIntensityChanged( m_Channel, value );
+  emit LowIntensityChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_highIntensityLineEdit_editingFinished()
+void ColorBandDynamicsWidget::on_highIntensityLineEdit_editingFinished()
 {
   // qDebug() << this << "::on_highIntensityLineEdit_editingFinished()";
 
-  assert( m_UI!=NULL );
-  assert( m_UI->highIntensityLineEdit!=NULL );
+  assert(m_UI != NULL);
+  assert(m_UI->highIntensityLineEdit != NULL);
 
-  bool isOk = true;
-  double value = m_UI->highIntensityLineEdit->text().toDouble( &isOk );
+  bool   isOk  = true;
+  double value = m_UI->highIntensityLineEdit->text().toDouble(&isOk);
 
-  if( !isOk )
-    {
+  if (!isOk)
+  {
 #if 0
     throw std::invalid_argument(
       ToStdString( tr( "Invalid argument '%1'." ).arg( text ) )
@@ -323,59 +256,43 @@ ColorBandDynamicsWidget
 #else
     return;
 #endif
-    }
+  }
 
-  emit HighIntensityChanged( m_Channel, value );
+  emit HighIntensityChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_lowQuantileSpinBox_valueChanged( double value )
+void ColorBandDynamicsWidget::on_lowQuantileSpinBox_valueChanged(double value)
 {
-  emit LowQuantileChanged( m_Channel, value );
+  emit LowQuantileChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_highQuantileSpinBox_valueChanged( double value )
+void ColorBandDynamicsWidget::on_highQuantileSpinBox_valueChanged(double value)
 {
-  emit HighQuantileChanged( m_Channel, value );
+  emit HighQuantileChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_minMaxButton_clicked()
+void ColorBandDynamicsWidget::on_minMaxButton_clicked()
 {
-  emit ResetIntensityClicked( m_Channel );
+  emit ResetIntensityClicked(m_Channel);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_defaultsButton_clicked()
+void ColorBandDynamicsWidget::on_defaultsButton_clicked()
 {
-  emit ResetQuantileClicked( m_Channel );
+  emit ResetQuantileClicked(m_Channel);
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_applyAllButton_clicked()
+void ColorBandDynamicsWidget::on_applyAllButton_clicked()
 {
-  emit ApplyAllClicked(
-    m_Channel,
-    m_UI->lowQuantileSpinBox->value(),
-    m_UI->highQuantileSpinBox->value()
-  );
+  emit ApplyAllClicked(m_Channel, m_UI->lowQuantileSpinBox->value(), m_UI->highQuantileSpinBox->value());
 }
 
 /*****************************************************************************/
-void
-ColorBandDynamicsWidget
-::on_linkButton_toggled( bool checked )
+void ColorBandDynamicsWidget::on_linkButton_toggled(bool checked)
 {
   /*
   if( checked )
@@ -390,7 +307,7 @@ ColorBandDynamicsWidget
     }
   */
 
-  emit LinkToggled( m_Channel, checked );
+  emit LinkToggled(m_Channel, checked);
 }
 
 } // end namespace 'mvd'

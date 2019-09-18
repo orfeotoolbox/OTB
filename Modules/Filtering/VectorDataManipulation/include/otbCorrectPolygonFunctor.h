@@ -42,18 +42,20 @@ template <class TPolygon>
 class CorrectPolygonFunctor
 {
 public:
-
   typedef TPolygon                      PolygonType;
   typedef typename PolygonType::Pointer PolygonPointerType;
 
   /** Some typedefs specific to functors*/
   typedef otb::SimplifyPathFunctor<PolygonType, PolygonType> SimplifyFunctorType;
-  typedef ClosePathFunctor <PolygonType, PolygonType>        CloseFunctorType;
+  typedef ClosePathFunctor<PolygonType, PolygonType>         CloseFunctorType;
   CorrectPolygonFunctor()
-  {}
-  ~CorrectPolygonFunctor() {}
+  {
+  }
+  ~CorrectPolygonFunctor()
+  {
+  }
 
-  inline PolygonPointerType operator ()(const TPolygon * input)
+  inline PolygonPointerType operator()(const TPolygon* input)
   {
     /**create functors */
     SimplifyFunctorType simplifyFunctor;
@@ -62,12 +64,9 @@ public:
     simplifyFunctor.SetTolerance(0.0);
 
     /** Erase aligned points and close polygon*/
-    return closeFunctor (simplifyFunctor(input));
-
+    return closeFunctor(simplifyFunctor(input));
   }
-
 };
-
 }
 
 #endif

@@ -25,41 +25,38 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
-typedef float InputPixelType;
+typedef float      InputPixelType;
 const unsigned int Dimension = 2;
 typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
 typedef otb::Image<unsigned int, Dimension>         LabelImageType;
 typedef otb::Image<unsigned int, Dimension>         MaskImageType;
-typedef otb::ImageFileReader<InputVectorImageType>  ReaderType;
+typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
 
-typedef otb::VectorData<double, Dimension>          VectorDataType;
-typedef VectorDataType::Pointer                     VectorDataPointerType;
-typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
-typedef VectorDataFileWriterType::Pointer           VectorDataFileWriterPointerType;
+typedef otb::VectorData<double, Dimension> VectorDataType;
+typedef VectorDataType::Pointer                   VectorDataPointerType;
+typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
+typedef VectorDataFileWriterType::Pointer         VectorDataFileWriterPointerType;
 
-typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
-  < InputVectorImageType,
-    LabelImageType,
-    MaskImageType,
-    VectorDataType >  ConnectedComponentSegmentationOBIAToVectorDataFilterType;
+typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter<InputVectorImageType, LabelImageType, MaskImageType, VectorDataType>
+    ConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
 
-int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char * argv[])
+int otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename          = argv[1];
-  const char * outputFilename         = argv[2];
-  const char * maskexpression         = argv[3];
-  const char * segmentationexpression = argv[4];
+  const char*  inputFilename          = argv[1];
+  const char*  outputFilename         = argv[2];
+  const char*  maskexpression         = argv[3];
+  const char*  segmentationexpression = argv[4];
   unsigned int minobjectsize          = atoi(argv[5]);
-  const char * obiaexpression         = argv[6];
+  const char*  obiaexpression         = argv[6];
   unsigned int nbstreams              = atoi(argv[7]);
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
-  ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected
-    = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
+  ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected =
+      ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
   connected->GetFilter()->SetInput(reader->GetOutput());
 
   connected->GetFilter()->SetMaskExpression(maskexpression);

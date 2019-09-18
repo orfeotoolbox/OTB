@@ -36,11 +36,10 @@ namespace otb
 class OTBMetadata_EXPORT Radarsat2ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
-  typedef Radarsat2ImageMetadataInterface    Self;
-  typedef SarImageMetadataInterface         Superclass;
+  typedef Radarsat2ImageMetadataInterface Self;
+  typedef SarImageMetadataInterface       Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -53,8 +52,8 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-  typedef Superclass::LookupDataPointerType LookupDataPointerType;
-//  typedef Radarsat2CalibrationLookupData::Pointer          LookupDataPointerType;
+  typedef Superclass::LookupDataPointerType    LookupDataPointerType;
+  //  typedef Radarsat2CalibrationLookupData::Pointer          LookupDataPointerType;
 
   /*ImageMetadataInterfaceBase pure virtuals */
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
@@ -99,23 +98,24 @@ protected:
   Radarsat2ImageMetadataInterface();
 
   /* class desctructor */
-  ~Radarsat2ImageMetadataInterface() override {}
+  ~Radarsat2ImageMetadataInterface() override
+  {
+  }
 
 private:
-  Radarsat2ImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  Radarsat2ImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-/* Helper function to parse date and time into a std::vector<std::string>
- * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
- * the date-time string is to be found in keywordlist with key 'key'
- * fills argument dateFields of type std::vector<std::string> which is mutable!
- * TODO: move this method into base class
- */
+  /* Helper function to parse date and time into a std::vector<std::string>
+   * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
+   * the date-time string is to be found in keywordlist with key 'key'
+   * fills argument dateFields of type std::vector<std::string> which is mutable!
+   * TODO: move this method into base class
+   */
   void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
 
   mutable std::vector<int> m_ProductionDateFields;
   mutable std::vector<int> m_AcquisitionDateFields;
-
 };
 
 
@@ -123,12 +123,11 @@ class Radarsat2CalibrationLookupData : public SarCalibrationLookupData
 {
 
 public:
-
   /** Standard typedefs */
-  typedef Radarsat2CalibrationLookupData   Self;
-  typedef SarCalibrationLookupData         Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef Radarsat2CalibrationLookupData Self;
+  typedef SarCalibrationLookupData       Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -141,64 +140,58 @@ public:
   typedef std::vector<float> GainListType;
 
 
-  Radarsat2CalibrationLookupData()
-    : m_Offset(0)
+  Radarsat2CalibrationLookupData() : m_Offset(0)
   {
-
   }
 
   ~Radarsat2CalibrationLookupData() override
   {
-
   }
 
-  void InitParameters(short type, int offset,  GainListType gains)
+  void InitParameters(short type, int offset, GainListType gains)
   {
     this->SetType(type);
     m_Offset = offset;
-    m_Gains = gains;
+    m_Gains  = gains;
   }
 
   double GetValue(const IndexValueType x, const IndexValueType itkNotUsed(y)) const override
   {
     double lutVal = 1.0;
 
-    const size_t pos =  x + m_Offset;
-    if(pos  < m_Gains.size())
-      {
+    const size_t pos = x + m_Offset;
+    if (pos < m_Gains.size())
+    {
       lutVal = m_Gains[pos];
-      }
+    }
     else
-      {
-      //itkExceptionMacro( << "error: (pos < list.size() )" << pos << " < " << list.size())
-      }
+    {
+      // itkExceptionMacro( << "error: (pos < list.size() )" << pos << " < " << list.size())
+    }
     return lutVal;
   }
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const override
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     os << indent << " offset:'" << m_Offset << "'" << std::endl;
-    os <<  " referenceNoiseLevel.gain: " << std::endl;
+    os << " referenceNoiseLevel.gain: " << std::endl;
     std::vector<float>::const_iterator it = m_Gains.begin();
     while (it != m_Gains.end())
-      {
+    {
       os << (*it) << " ";
       ++it;
-      }
+    }
     os << std::endl;
 
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-
   Radarsat2CalibrationLookupData(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   GainListType m_Gains;
-  int m_Offset;
-
-
+  int          m_Offset;
 };
 
 } // end namespace otb

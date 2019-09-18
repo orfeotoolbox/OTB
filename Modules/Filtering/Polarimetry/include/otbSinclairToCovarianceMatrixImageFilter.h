@@ -64,14 +64,13 @@ namespace Functor
  *  \sa SinclairToReciprocalCovarianceMatrixFunctor
  *
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
 class SinclairToCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename TOutput::ValueType   OutputValueType;
   inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
@@ -79,16 +78,16 @@ public:
     const ComplexType S_vh = static_cast<ComplexType>(Svh);
     const ComplexType S_vv = static_cast<ComplexType>(Svv);
 
-    result[0] = static_cast<OutputValueType>( std::norm(S_hh) );
-    result[1] = static_cast<OutputValueType>( S_hh*std::conj(S_hv) );
-    result[2] = static_cast<OutputValueType>( S_hh*std::conj(S_vh) );
-    result[3] = static_cast<OutputValueType>( S_hh*std::conj(S_vv) );
-    result[4] = static_cast<OutputValueType>( std::norm(S_hv) );
-    result[5] = static_cast<OutputValueType>( S_hv*std::conj(S_vh) );
-    result[6] = static_cast<OutputValueType>( S_hv*std::conj(S_vv) );
-    result[7] = static_cast<OutputValueType>( std::norm(S_vh) );
-    result[8] = static_cast<OutputValueType>( S_vh*std::conj(S_vv) );
-    result[9] = static_cast<OutputValueType>( std::norm(S_vv) );
+    result[0] = static_cast<OutputValueType>(std::norm(S_hh));
+    result[1] = static_cast<OutputValueType>(S_hh * std::conj(S_hv));
+    result[2] = static_cast<OutputValueType>(S_hh * std::conj(S_vh));
+    result[3] = static_cast<OutputValueType>(S_hh * std::conj(S_vv));
+    result[4] = static_cast<OutputValueType>(std::norm(S_hv));
+    result[5] = static_cast<OutputValueType>(S_hv * std::conj(S_vh));
+    result[6] = static_cast<OutputValueType>(S_hv * std::conj(S_vv));
+    result[7] = static_cast<OutputValueType>(std::norm(S_vh));
+    result[8] = static_cast<OutputValueType>(S_vh * std::conj(S_vv));
+    result[9] = static_cast<OutputValueType>(std::norm(S_vv));
   }
 
   constexpr size_t OutputSize(...) const

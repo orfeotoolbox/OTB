@@ -22,14 +22,14 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageOfVectorsToMonoChannelExtractROI(int itkNotUsed(argc), char * argv[])
+int otbImageOfVectorsToMonoChannelExtractROI(int itkNotUsed(argc), char* argv[])
 {
-  const int Dimension = 2;
-  typedef unsigned char                         ScalarPixelType;
+  const int             Dimension = 2;
+  typedef unsigned char ScalarPixelType;
   typedef itk::Vector<unsigned char, Dimension> VectorPixelType;
 
-  const char * inputImageFileName = argv[1];
-  const char * outputImageFileName = argv[7];
+  const char* inputImageFileName  = argv[1];
+  const char* outputImageFileName = argv[7];
   typedef otb::Image<ScalarPixelType, Dimension>                                       ScalarImageType;
   typedef otb::Image<VectorPixelType, Dimension>                                       VectorImageType;
   typedef otb::ImageOfVectorsToMonoChannelExtractROI<VectorImageType, ScalarImageType> FilterType;

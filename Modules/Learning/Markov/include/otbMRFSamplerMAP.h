@@ -41,13 +41,12 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFSamplerMAP : public MRFSampler<TInput1, TInput2>
 {
 public:
-
-  typedef MRFSamplerMAP                 Self;
-  typedef MRFSampler<TInput1, TInput2>  Superclass;
+  typedef MRFSamplerMAP Self;
+  typedef MRFSampler<TInput1, TInput2> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -64,49 +63,45 @@ public:
 
   itkTypeMacro(MRFSamplerMAP, MRFSampler);
 
-  inline int Compute(const InputImageNeighborhoodIterator& itData,
-                     const LabelledImageNeighborhoodIterator& itRegul) override
+  inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) override
   {
     if (this->m_NumberOfClasses == 0)
-      {
+    {
       itkExceptionMacro(<< "NumberOfClasse has to be greater than 0.");
-      }
+    }
 
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
-    this->m_EnergyBefore += this->m_Lambda
-                            * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
+    this->m_EnergyBefore += this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
 
-    //Try all possible value (how to be generic ?)
-    this->m_EnergyAfter = this->m_EnergyBefore; //default values to current one
-    this->m_Value = itRegul.GetCenterPixel();
+    // Try all possible value (how to be generic ?)
+    this->m_EnergyAfter = this->m_EnergyBefore; // default values to current one
+    this->m_Value       = itRegul.GetCenterPixel();
 
     LabelledImagePixelType valueCurrent = 0;
-    while (valueCurrent < static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent !=
-           itk::NumericTraits<LabelledImagePixelType>::max())
-      {
+    while (valueCurrent < static_cast<LabelledImagePixelType>(this->GetNumberOfClasses()) && valueCurrent != itk::NumericTraits<LabelledImagePixelType>::max())
+    {
       this->m_EnergyCurrent = this->m_EnergyFidelity->GetValue(itData, valueCurrent);
-      this->m_EnergyCurrent += this->m_Lambda
-                               * this->m_EnergyRegularization->GetValue(itRegul, valueCurrent);
+      this->m_EnergyCurrent += this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, valueCurrent);
       if (this->m_EnergyCurrent < this->m_EnergyAfter)
-        {
+      {
         this->m_EnergyAfter = this->m_EnergyCurrent;
-        this->m_Value = valueCurrent;
-        }
-      valueCurrent++;
+        this->m_Value       = valueCurrent;
       }
+      valueCurrent++;
+    }
 
-    this->m_DeltaEnergy =  this->m_EnergyAfter - this->m_EnergyBefore;
+    this->m_DeltaEnergy = this->m_EnergyAfter - this->m_EnergyBefore;
 
     return 0;
   }
 
 protected:
   // The constructor and destructor.
-  MRFSamplerMAP() {};
-  ~MRFSamplerMAP() override {}
-
+  MRFSamplerMAP(){};
+  ~MRFSamplerMAP() override
+  {
+  }
 };
-
 }
 
 #endif

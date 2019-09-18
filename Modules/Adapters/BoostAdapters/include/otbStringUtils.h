@@ -48,18 +48,19 @@ namespace otb
 {
 namespace Utils
 {
-template <typename Res, typename In >
-inline
-Res LexicalCast(In const& in, std::string const& kind) {
-    try
-    {
-        return boost::lexical_cast<Res>(in);
-    }
-    catch (boost::bad_lexical_cast &) {
-        std::ostringstream oss;
-        oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
-        throw std::runtime_error(oss.str());
-    }
+template <typename Res, typename In>
+inline Res LexicalCast(In const& in, std::string const& kind)
+{
+  try
+  {
+    return boost::lexical_cast<Res>(in);
+  }
+  catch (boost::bad_lexical_cast&)
+  {
+    std::ostringstream oss;
+    oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
+    throw std::runtime_error(oss.str());
+  }
 }
 
 /**\ingroup Utils
@@ -78,21 +79,20 @@ cannot be converted into a valid \c T instance.
  *
  * \see \c otb::Utils::LexicalCast()
  */
-template<typename T>
-void
-ConvertStringToVector(std::string const &str, T& ret, std::string const& errmsg, const char *  delims=" ")
+template <typename T>
+void ConvertStringToVector(std::string const& str, T& ret, std::string const& errmsg, const char* delims = " ")
 {
-  typedef std::vector<boost::iterator_range<std::string::const_iterator> > ListType;
+  typedef std::vector<boost::iterator_range<std::string::const_iterator>> ListType;
 
   ListType split;
 
   boost::split(split, str, boost::is_any_of(delims));
 
-  for(size_t i = 0; i < split.size(); i++)
-    {
-    typename T::value_type value = LexicalCast<typename T::value_type> (split[i], errmsg);
+  for (size_t i = 0; i < split.size(); i++)
+  {
+    typename T::value_type value = LexicalCast<typename T::value_type>(split[i], errmsg);
     ret.push_back(value);
-    }
+  }
 }
 
 /**\ingroup Utils
@@ -113,35 +113,34 @@ cannot be converted into a valid \c T instance.
  *
  * \see \c otb::Utils::LexicalCast()
  */
-template<typename T>
-void SplitStringToSingleKeyValue(const std::string& str,
-                                 std::string& key, T& value, const T& defValue,
-                                 std::string const& errmsg, const std::string delims="=")
+template <typename T>
+void SplitStringToSingleKeyValue(const std::string& str, std::string& key, T& value, const T& defValue, std::string const& errmsg,
+                                 const std::string delims = "=")
 {
 
   typedef boost::iterator_range<std::string::const_iterator> BoostRangeIteratorType;
-  typedef std::list< BoostRangeIteratorType > ListType;
+  typedef std::list<BoostRangeIteratorType>                  ListType;
 
   ListType split;
 
-  boost::split( split, str, boost::is_any_of(delims), boost::token_compress_on );
+  boost::split(split, str, boost::is_any_of(delims), boost::token_compress_on);
 
-  typename ListType::iterator it = split.begin();
-  BoostRangeIteratorType kIt = boost::trim_copy((*it));
-  key.assign( kIt.begin(), kIt.end());
+  typename ListType::iterator it  = split.begin();
+  BoostRangeIteratorType      kIt = boost::trim_copy((*it));
+  key.assign(kIt.begin(), kIt.end());
   ++it;
 
-  if( it != split.end())
-    {
-    value =  LexicalCast<T>(boost::trim_copy(*it), errmsg);
+  if (it != split.end())
+  {
+    value = LexicalCast<T>(boost::trim_copy(*it), errmsg);
     ++it;
-    }
+  }
   else
-    {
+  {
     value = defValue;
-    }
+  }
 }
 } // end namespace Utils
 } // end namespace otb
 
-#endif //otbStringUtils_h
+#endif // otbStringUtils_h

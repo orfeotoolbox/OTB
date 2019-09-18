@@ -44,15 +44,14 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
-class OTBImageBase_EXPORT_TEMPLATE MultiChannelExtractROI :
-  public ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2> >
+class OTBImageBase_EXPORT_TEMPLATE MultiChannelExtractROI : public ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2>>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelExtractROI                                                             Self;
-  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                                      ConstPointer;
+  typedef MultiChannelExtractROI Self;
+  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, VectorImage<TOutputPixelType, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -109,14 +108,14 @@ public:
   void ClearChannels(void);
 
   /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      OutputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
 protected:
   MultiChannelExtractROI();
-  ~MultiChannelExtractROI() override {}
+  ~MultiChannelExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** MultiChannelExtractROI can produce an image which is a different
@@ -137,12 +136,11 @@ protected:
   /** ExtractImageFilter can be implemented as a  multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MultiChannelExtractROI(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MultiChannelExtractROI(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** First/ last channel to process [1...] */
   unsigned int m_FirstChannel;

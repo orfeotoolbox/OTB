@@ -28,7 +28,8 @@
 #include "OTBCartoExport.h"
 #include <string>
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class WorldFile
@@ -44,7 +45,6 @@ namespace otb {
 class OTBCarto_EXPORT WorldFile : public itk::Object
 {
 public:
-
   typedef WorldFile                     Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -70,17 +70,18 @@ public:
   itkSetStringMacro(ImageFilename);
 
   void Update();
-  
+
 protected:
-  WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0),
-    m_LonSpacing(0.0), m_LatSpacing(0.0),
-    m_LonRotation(0.0), m_LatRotation(0.0),
-    m_ImageFilename("") {}
-  ~WorldFile() override {}
+  WorldFile() : m_LonOrigin(0.0), m_LatOrigin(0.0), m_LonSpacing(0.0), m_LatSpacing(0.0), m_LonRotation(0.0), m_LatRotation(0.0), m_ImageFilename("")
+  {
+  }
+  ~WorldFile() override
+  {
+  }
 
 private:
-  WorldFile(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WorldFile(const Self&) = delete;
+  void        operator=(const Self&) = delete;
   double      m_LonOrigin;
   double      m_LatOrigin;
   double      m_LonSpacing;

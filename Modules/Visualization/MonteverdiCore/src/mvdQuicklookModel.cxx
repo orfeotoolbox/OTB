@@ -65,39 +65,33 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-QuicklookModel
-::QuicklookModel( QObject* p ) :
-  VectorImageModel( p )
+QuicklookModel::QuicklookModel(QObject* p) : VectorImageModel(p)
 {
 }
 
 /*******************************************************************************/
-QuicklookModel
-::~QuicklookModel()
+QuicklookModel::~QuicklookModel()
 {
 }
 
 /*******************************************************************************/
-void
-QuicklookModel
-::virtual_BuildModel( void* context )
+void QuicklookModel::virtual_BuildModel(void* context)
 {
   //
   // Get build-context.
-  assert( context );
-  BuildContext* buildContext = static_cast< BuildContext* >( context );
+  assert(context);
+  BuildContext* buildContext = static_cast<BuildContext*>(context);
 
   //
   // Access rendering settings.
 
   // TODO: Remove temporary hack (Quicklook rendering settings).
-  if( buildContext->m_Settings!=NULL )
-    {
-    VectorImageSettings * const settings =
-      static_cast< VectorImageSettings * >( buildContext->m_Settings );
+  if (buildContext->m_Settings != NULL)
+  {
+    VectorImageSettings* const settings = static_cast<VectorImageSettings*>(buildContext->m_Settings);
 
-    SetSettings( *settings );
-    }
+    SetSettings(*settings);
+  }
 
   //
   // Quicklook file.
@@ -105,48 +99,39 @@ QuicklookModel
   // Quicklook file information.
   bool inMemory = buildContext->m_Quicklook.isEmpty();
 
-  QFileInfo quicklookFileInfo(
-    inMemory
-    ? buildContext->m_Filename
-    : buildContext->m_Quicklook
-  );
+  QFileInfo quicklookFileInfo(inMemory ? buildContext->m_Filename : buildContext->m_Quicklook);
 
   // Quicklook filename.
-  QString quicklookFilename( quicklookFileInfo.filePath() );
+  QString quicklookFilename(quicklookFileInfo.filePath());
 
   // First time?
-  if( buildContext->IsBeingStored() && !inMemory )
-    {
+  if (buildContext->IsBeingStored() && !inMemory)
+  {
     // Instantiate a quicklook file writer.
-    VectorImageFileWriterType::Pointer fileWriter(
-      VectorImageFileWriterType::New()
-    );
+    VectorImageFileWriterType::Pointer fileWriter(VectorImageFileWriterType::New());
 
     // Access parent image-model.
-    VectorImageModel* viModel = GetImageModel< VectorImageModel >();
-    assert( viModel!=NULL );
+    VectorImageModel* viModel = GetImageModel<VectorImageModel>();
+    assert(viModel != NULL);
 
     CountType currentLod = viModel->GetCurrentLod();
-    CountType bestLod = viModel->ComputeBestLod( 512, 512 );
+    CountType bestLod    = viModel->ComputeBestLod(512, 512);
 
-    if( bestLod!=currentLod )
-      viModel->SetCurrentLod( bestLod );
+    if (bestLod != currentLod)
+      viModel->SetCurrentLod(bestLod);
 
     // Write quicklook file on the disk.
-    fileWriter->SetFileName( QFile::encodeName( quicklookFilename ).constData()  );
-    fileWriter->SetInput( viModel->ToImage() );
+    fileWriter->SetFileName(QFile::encodeName(quicklookFilename).constData());
+    fileWriter->SetInput(viModel->ToImage());
     fileWriter->Update();
 
-    if( currentLod!=bestLod )
-      viModel->SetCurrentLod( currentLod );
-    }
+    if (currentLod != bestLod)
+      viModel->SetCurrentLod(currentLod);
+  }
 
   // Source stored quicklook image-file.
   // Best fit to 512x512 px² size.
-  SetFilename(
-    quicklookFilename,
-    VectorImageModel::DEFAULT_LOD_SIZE,
-    VectorImageModel::DEFAULT_LOD_SIZE );
+  SetFilename(quicklookFilename, VectorImageModel::DEFAULT_LOD_SIZE, VectorImageModel::DEFAULT_LOD_SIZE);
 }
 
 /*******************************************************************************/

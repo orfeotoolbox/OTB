@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbRealImageToComplexImageFilter.h"
 #include "itkMacro.h"
 #include "otbImageFileReader.h"
@@ -28,18 +27,18 @@
 #include "itkComplexToRealImageFilter.h"
 #include "otbStreamingCompareImageFilter.h"
 
-int otbRealImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbRealImageToComplexImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
+  const char* inputFilename = argv[1];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  ComplexPixelType;
-  const unsigned int Dimension = 2;
+  typedef double                  PixelType;
+  typedef std::complex<PixelType> ComplexPixelType;
+  const unsigned int              Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension>        ImageType;
   typedef otb::Image<ComplexPixelType, Dimension> ComplexImageType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   typedef otb::RealImageToComplexImageFilter<ImageType, ComplexImageType> FilterType;
 
@@ -58,18 +57,18 @@ int otbRealImageToComplexImageFilterTest(int itkNotUsed(argc), char * argv[])
   ImageFilterType::Pointer filterRealPart = ImageFilterType::New();
   filterRealPart->SetInput(filter->GetOutput());
 
-  typedef otb::StreamingCompareImageFilter<ImageType>   CompareImageFilterType;
-  CompareImageFilterType::Pointer compareRealImageFilter = CompareImageFilterType::New();
+  typedef otb::StreamingCompareImageFilter<ImageType> CompareImageFilterType;
+  CompareImageFilterType::Pointer                     compareRealImageFilter = CompareImageFilterType::New();
 
   compareRealImageFilter->SetInput1(filterRealPart->GetOutput());
   compareRealImageFilter->SetInput2(reader->GetOutput());
   compareRealImageFilter->Update();
 
-  if(compareRealImageFilter->GetMSE() > 0.0000001)
-    {
-      std::cout << " Invalid RealPart ! MSE: "<< compareRealImageFilter->GetMSE() << std::endl;
-      return EXIT_FAILURE;
-    }
+  if (compareRealImageFilter->GetMSE() > 0.0000001)
+  {
+    std::cout << " Invalid RealPart ! MSE: " << compareRealImageFilter->GetMSE() << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

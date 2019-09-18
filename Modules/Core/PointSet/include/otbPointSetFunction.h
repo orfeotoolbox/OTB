@@ -36,21 +36,19 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TPointSet, class TOutput>
-class ITK_EXPORT PointSetFunction :
-  public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/,
-      typename TPointSet::PointType>
+class ITK_EXPORT PointSetFunction : public itk::SpatialFunction<TOutput, 2 /* TODO : change 2 by PointType::PointDimension*/, typename TPointSet::PointType>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetFunction                                                 Self;
-  typedef itk::SpatialFunction<TOutput, 2,  typename TPointSet::PointType> Superclass;
+  typedef PointSetFunction Self;
+  typedef itk::SpatialFunction<TOutput, 2, typename TPointSet::PointType> Superclass;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetFunction, itk::SpatialFunction);
 
   /** PointSet Type typedef Support*/
-  typedef TPointSet                            PointSetType;
-  typedef typename  PointSetType::ConstPointer PointSetPointerType;
+  typedef TPointSet                           PointSetType;
+  typedef typename PointSetType::ConstPointer PointSetPointerType;
 
   /** TOutput typedef suppoty*/
   typedef TOutput OutputType;
@@ -58,7 +56,7 @@ public:
   /** Set the input image (reimplemented since we need to set the detector input) */
   itkGetConstObjectMacro(PointSet, PointSetType);
 
-  void SetPointSet(PointSetType * PointSet)
+  void SetPointSet(PointSetType* PointSet)
   {
     m_PointSet = PointSet;
   }
@@ -71,16 +69,17 @@ public:
 
 protected:
   PointSetFunction();
-  ~PointSetFunction() override {}
+  ~PointSetFunction() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PointSetFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PointSetPointerType m_PointSet;
-
 };
 
 } // end namespace otb

@@ -25,7 +25,8 @@
 #include "otbImageToImageListFilter.h"
 #include "otbObjectList.h"
 
-namespace otb {
+namespace otb
+{
 /** \class AngularProjectionSetImageFilter
  * \brief Performs spherical transformation in ND space from a set of angle values
  *
@@ -44,16 +45,15 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInputImage, class TOutputImage, class TAngleList, class TPrecision >
-class ITK_EXPORT AngularProjectionSetImageFilter
-  : public ImageToImageListFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TAngleList, class TPrecision>
+class ITK_EXPORT AngularProjectionSetImageFilter : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef AngularProjectionSetImageFilter    Self;
+  typedef AngularProjectionSetImageFilter Self;
   typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -62,9 +62,9 @@ public:
   itkTypeMacro(AngularProjectionSetImageFilter, ImageToImageListFilter);
 
   /** Dimension */
-  itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-  //itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleList::MeasurementVectorType::Dimension+1);
+  // itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleList::MeasurementVectorType::Dimension+1);
 
   /** Template parameters typedefs */
   typedef TInputImage                         InputImageType;
@@ -85,54 +85,57 @@ public:
 
   typedef TPrecision PrecisionType;
 
-  typedef TAngleList AngleListType;
+  typedef TAngleList                                    AngleListType;
   typedef typename AngleListType::Pointer               AngleListPointerType;
   typedef typename AngleListType::MeasurementVectorType MeasurementVectorType;
   typedef typename AngleListType::MeasurementType       MeasurementType;
-  typedef MeasurementVectorType AngleArrayType;
-  typedef MeasurementType       AngleValueType;
+  typedef MeasurementVectorType                         AngleArrayType;
+  typedef MeasurementType                               AngleValueType;
 
-  typedef AngularProjectionImageFilter< InputImageType, OutputImageType, AngleArrayType, PrecisionType > FilterType;
+  typedef AngularProjectionImageFilter<InputImageType, OutputImageType, AngleArrayType, PrecisionType> FilterType;
   typedef typename FilterType::Pointer      FilterPointerType;
   typedef ObjectList<FilterType>            FilterListType;
   typedef typename FilterListType::Pointer  FilterListPointerType;
   typedef typename FilterListType::Iterator FilterListIterator;
 
   itkGetObjectMacro(FilterList, FilterListType);
-  FilterType * GetNthFilter(unsigned int idx) const
+  FilterType* GetNthFilter(unsigned int idx) const
   {
     if (idx >= m_FilterList->Size())
-      {
-      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element "
-                        << idx << "; this element don't exist, the size of the filter list is "
+    {
+      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element " << idx << "; this element don't exist, the size of the filter list is "
                         << m_FilterList->Size() << ".");
-      }
+    }
     return static_cast<FilterType*>(m_FilterList->GetNthElement(idx));
   }
 
-    /** Set/Get Angle List */
-  AngleListType * GetAngleList () const {
-    return static_cast<AngleListType *>( this->m_AngleList );
+  /** Set/Get Angle List */
+  AngleListType* GetAngleList() const
+  {
+    return static_cast<AngleListType*>(this->m_AngleList);
   }
-  void SetAngleList ( const AngleListType * angles ) {
-    this->m_AngleList = const_cast<AngleListType*>( angles );
+  void SetAngleList(const AngleListType* angles)
+  {
+    this->m_AngleList = const_cast<AngleListType*>(angles);
     this->Modified();
   }
 
-  void SetInput ( unsigned int i, const InputImageType * );
+  void SetInput(unsigned int i, const InputImageType*);
   using Superclass::SetInput;
 
-  const InputImageType * GetInput( unsigned int i ) const;
+  const InputImageType* GetInput(unsigned int i) const;
 
 protected:
   AngularProjectionSetImageFilter();
-  ~AngularProjectionSetImageFilter() override { }
+  ~AngularProjectionSetImageFilter() override
+  {
+  }
 
   void GenerateData() override;
 
 private:
   AngularProjectionSetImageFilter(const Self&); // not implemented
-  void operator=(const Self&); // not implemented
+  void operator=(const Self&);                  // not implemented
 
   AngleListPointerType  m_AngleList;
   FilterListPointerType m_FilterList;
@@ -147,4 +150,3 @@ private:
 
 
 #endif
-

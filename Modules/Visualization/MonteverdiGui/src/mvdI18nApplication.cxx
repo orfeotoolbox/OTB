@@ -59,25 +59,20 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-I18nApplication
-::I18nApplication( QApplication* qtApp ) :
-  I18nCoreApplication( qtApp )
+I18nApplication::I18nApplication(QApplication* qtApp) : I18nCoreApplication(qtApp)
 {
 }
 
 /*******************************************************************************/
-I18nApplication
-::~I18nApplication()
+I18nApplication::~I18nApplication()
 {
 }
 
 /*******************************************************************************/
-void
-I18nApplication
-::virtual_InitializeCore()
+void I18nApplication::virtual_InitializeCore()
 {
 #ifndef Q_WS_MAC
-    qApp->setWindowIcon( QIcon( QLatin1String( ":/images/application_icon" ) ) );
+  qApp->setWindowIcon(QIcon(QLatin1String(":/images/application_icon")));
 #endif
 }
 

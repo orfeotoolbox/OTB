@@ -80,8 +80,7 @@ class ImportImagesDialog;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT ImportImagesDialog :
-    public QDialog
+class OTBMonteverdiGUI_EXPORT ImportImagesDialog : public QDialog
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -90,19 +89,16 @@ class OTBMonteverdiGUI_EXPORT ImportImagesDialog :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 public:
-  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
+  typedef std::vector<otb::GDALOverviewsBuilder::Pointer> GDALOverviewsBuilderVector;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  ImportImagesDialog( const QStringList & filename,
-		      QWidget * p =NULL,
-		      Qt::WindowFlags flags =0 );
+  ImportImagesDialog(const QStringList& filename, QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~ImportImagesDialog() override;
@@ -113,59 +109,56 @@ public:
 
   /**
    */
-  const GDALOverviewsBuilderVector & GetGDALOverviewsBuilders() const;
+  const GDALOverviewsBuilderVector& GetGDALOverviewsBuilders() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types
+  //
+  // Private types
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  const otb::GDALOverviewsBuilder::Pointer & GetBuilder( const QModelIndex & ) const;
+  const otb::GDALOverviewsBuilder::Pointer& GetBuilder(const QModelIndex&) const;
   /**
    */
-  void SetFilenames( const QStringList & );
+  void SetFilenames(const QStringList&);
   /**
    */
   void SetHeaders();
   /**
    */
-  void UpdateFileSize( size_t row );
+  void UpdateFileSize(size_t row);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
    */
-  Ui::ImportImagesDialog * m_UI;
+  Ui::ImportImagesDialog* m_UI;
 
   /**
    */
@@ -177,21 +170,21 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
-  void on_buttonBox_clicked( QAbstractButton * );
+  void on_buttonBox_clicked(QAbstractButton*);
 
-  void on_pyramidWidget_BaseValueChanged( int );
-  void on_pyramidWidget_LevelsValueChanged( int );
-  void on_pyramidWidget_SizeValueChanged( int );
+  void on_pyramidWidget_BaseValueChanged(int);
+  void on_pyramidWidget_LevelsValueChanged(int);
+  void on_pyramidWidget_SizeValueChanged(int);
 
   /**
    */
-  void OnCurrentChanged( const QModelIndex & , const QModelIndex & );
+  void OnCurrentChanged(const QModelIndex&, const QModelIndex&);
   /**
    */
-  void OnItemChanged( QStandardItem * );
+  void OnItemChanged(QStandardItem*);
 };
 
 } // end namespace 'mvd'

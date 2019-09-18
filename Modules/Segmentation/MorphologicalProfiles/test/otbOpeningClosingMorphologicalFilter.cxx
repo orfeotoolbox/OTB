@@ -26,13 +26,13 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbOpeningClosingMorphologicalFilter(int itkNotUsed(argc), char * argv[])
+int otbOpeningClosingMorphologicalFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  const unsigned int Radius = atoi(argv[3]);
+  const unsigned int Radius    = atoi(argv[3]);
 
-  const char * inputFilename = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
@@ -44,8 +44,7 @@ int otbOpeningClosingMorphologicalFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
-  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, OutputImageType,
-      StructuringElementType> OpeningClosingFilterType;
+  typedef otb::OpeningClosingMorphologicalFilter<InputImageType, OutputImageType, StructuringElementType> OpeningClosingFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();

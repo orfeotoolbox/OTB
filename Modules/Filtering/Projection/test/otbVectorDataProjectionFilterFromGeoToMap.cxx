@@ -26,28 +26,28 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-int otbVectorDataProjectionFilterFromGeoToMap(int argc, char * argv[])
+int otbVectorDataProjectionFilterFromGeoToMap(int argc, char* argv[])
 {
 
   if (argc < 2)
-    {
-    std::cout << argv[0] << " <input vector filename> <output vector filename> "  << std::endl;
+  {
+    std::cout << argv[0] << " <input vector filename> <output vector filename> " << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
   typedef otb::VectorData<double> InputVectorDataType;
   typedef otb::VectorData<double> OutputVectorDataType;
 
   typedef otb::VectorDataFileReader<InputVectorDataType> VectorDataFileReaderType;
-  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+  VectorDataFileReaderType::Pointer                      reader = VectorDataFileReaderType::New();
 
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
   typedef otb::Image<unsigned short int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  ImageReaderType::Pointer                imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
@@ -58,7 +58,7 @@ int otbVectorDataProjectionFilterFromGeoToMap(int argc, char * argv[])
   vectorDataProjection->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());
 
   typedef otb::VectorDataFileWriter<OutputVectorDataType> VectorDataFileWriterType;
-  VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
+  VectorDataFileWriterType::Pointer                       writer = VectorDataFileWriterType::New();
 
   writer->SetFileName(argv[3]);
   writer->SetInput(vectorDataProjection->GetOutput());

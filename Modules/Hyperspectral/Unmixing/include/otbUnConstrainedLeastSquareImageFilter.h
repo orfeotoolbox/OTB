@@ -29,7 +29,8 @@
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class UnConstrainedLeastSquareFunctor
  *
@@ -39,7 +40,7 @@ namespace Functor {
  *
  * \ingroup OTBUnmixing
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class UnConstrainedLeastSquareFunctor
 {
 public:
@@ -60,7 +61,6 @@ public:
   OutputType operator()(const InputType& in) const;
 
 private:
-
   typedef vnl_svd<PrecisionType>     SVDType;
   typedef boost::shared_ptr<SVDType> SVDPointerType;
 
@@ -102,4 +102,3 @@ using UnConstrainedLeastSquareImageFilter =
 #endif
 
 #endif
-

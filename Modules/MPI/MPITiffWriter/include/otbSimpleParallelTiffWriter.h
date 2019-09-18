@@ -61,11 +61,11 @@
 #include <string>
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-# pragma GCC diagnostic ignored "-Wcast-align"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wcast-align"
 #include "sptw.h"
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #else
 #include "sptw.h"
 #endif
@@ -110,10 +110,10 @@ class ITK_EXPORT SimpleParallelTiffWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef SimpleParallelTiffWriter                                   Self;
-  typedef itk::ProcessObject                                Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef SimpleParallelTiffWriter      Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -122,11 +122,11 @@ public:
   itkTypeMacro(SimpleParallelTiffWriter, itk::ProcessObject);
 
   /** Some typedefs for the input and output. */
-  typedef TInputImage                            InputImageType;
-  typedef typename InputImageType::Pointer       InputImagePointer;
-  typedef typename InputImageType::RegionType    InputImageRegionType;
-  typedef typename InputImageType::PixelType     InputImagePixelType;
-  typedef typename InputImageType::IndexType     InputIndexType;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::Pointer    InputImagePointer;
+  typedef typename InputImageType::RegionType InputImageRegionType;
+  typedef typename InputImageType::PixelType  InputImagePixelType;
+  typedef typename InputImageType::IndexType  InputIndexType;
 
   typedef TInputImage                            OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointer;
@@ -135,14 +135,13 @@ public:
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
 
   /** The Filename Helper. */
-  typedef otb::ExtendedFilenameToWriterOptions            FNameHelperType;
+  typedef otb::ExtendedFilenameToWriterOptions FNameHelperType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-      InputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Streaming manager base class pointer */
-  typedef otb::StreamingManager<InputImageType>       StreamingManagerType;
+  typedef otb::StreamingManager<InputImageType>  StreamingManagerType;
   typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
 
   /**  Return the StreamingManager object responsible for dividing
@@ -209,7 +208,7 @@ public:
 
   /** Set the only input of the writer */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType *input);
+  virtual void SetInput(const InputImageType* input);
 
   /** Get writer only input */
   const InputImageType* GetInput();
@@ -219,7 +218,7 @@ public:
 
   virtual void SetFileName(const std::string& extendedFileName);
 
-  virtual const char* GetFileName () const;
+  virtual const char* GetFileName() const;
 
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
@@ -253,7 +252,7 @@ public:
   itkGetMacro(TiffTiledMode, bool);
 
   /** This override doesn't return a const ref on the actual boolean */
-  const bool & GetAbortGenerateData() const override;
+  const bool& GetAbortGenerateData() const override;
 
   void SetAbortGenerateData(bool val) override;
 
@@ -263,28 +262,28 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SimpleParallelTiffWriter(const SimpleParallelTiffWriter &) = delete;
-  void operator =(const SimpleParallelTiffWriter&) = delete;
+  SimpleParallelTiffWriter(const SimpleParallelTiffWriter&) = delete;
+  void operator=(const SimpleParallelTiffWriter&) = delete;
 
-  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject& event)
   {
     if (typeid(event) != typeid(itk::ProgressEvent))
-      {
+    {
       return;
-      }
+    }
 
     itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
     if (processObject)
-      {
+    {
       m_DivisionProgress = processObject->GetProgress();
-      }
+    }
 
     this->UpdateFilterProgress();
   }
 
   void UpdateFilterProgress()
   {
-    this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
+    this->UpdateProgress((m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions);
   }
 
   /*
@@ -299,34 +298,34 @@ private:
 
   unsigned int m_NumberOfDivisions;
   unsigned int m_CurrentDivision;
-  float m_DivisionProgress;
+  float        m_DivisionProgress;
 
   /** SimpleParallelTiffWriter Parameters */
   std::string m_FileName;
 
   otb::ImageIOBase::Pointer m_ImageIO;
 
-  bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
+  bool m_UserSpecifiedImageIO; // track whether the ImageIO is user specified
 
   itk::ImageIORegion m_IORegion;
-  bool m_UserSpecifiedIORegion; // track whether the region is user specified
-  bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
-  bool m_UseInputMetaDataDictionary; // whether to use the
+  bool               m_UserSpecifiedIORegion;      // track whether the region is user specified
+  bool               m_FactorySpecifiedImageIO;    // track whether the factory mechanism set the ImageIO
+  bool               m_UseInputMetaDataDictionary; // whether to use the
   // MetaDataDictionary from the
   // input or not.
 
-  bool m_WriteGeomFile;              // Write a geom file to store the
+  bool m_WriteGeomFile; // Write a geom file to store the
   // kwl
 
   FNameHelperType::Pointer m_FilenameHelper;
 
   StreamingManagerPointerType m_StreamingManager;
 
-  bool          m_IsObserving;
-  unsigned long m_ObserverID;
+  bool           m_IsObserving;
+  unsigned long  m_ObserverID;
   InputIndexType m_ShiftOutputIndex;
 
-  int m_TiffTileSize;
+  int  m_TiffTileSize;
   bool m_Verbose;
   bool m_VirtualMode;
   bool m_TiffTiledMode;
@@ -337,7 +336,6 @@ private:
 
 
 } // end namespace itk
-
 
 
 #ifndef OTB_MANUAL_INSTANTIATION

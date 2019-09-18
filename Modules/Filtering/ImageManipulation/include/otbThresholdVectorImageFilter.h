@@ -40,15 +40,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-  template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage = TInputImage>
+class ITK_EXPORT ThresholdVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ThresholdVectorImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef ThresholdVectorImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,17 +59,17 @@ public:
 
   /** Some additional typedefs.  */
   typedef TInputImage                                InputImageType;
-  typedef typename InputImageType::ConstPointer InputImagePointer;
-  typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename InputImageType::PixelType    InputImagePixelType;
-  typedef typename InputImageType::InternalPixelType    InputImageInternalPixelType;
+  typedef typename InputImageType::ConstPointer      InputImagePointer;
+  typedef typename InputImageType::RegionType        InputImageRegionType;
+  typedef typename InputImageType::PixelType         InputImagePixelType;
+  typedef typename InputImageType::InternalPixelType InputImageInternalPixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage                             OutputImageType;
-  typedef typename OutputImageType::Pointer     OutputImagePointer;
-  typedef typename OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename OutputImageType::PixelType   OutputImagePixelType;
-  typedef typename OutputImageType::InternalPixelType   OutputImageInternalPixelType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** Set the "outside" pixel value. The default value
    * NumericTraits<PixelType>::Zero. */
@@ -79,13 +79,13 @@ public:
   itkGetConstMacro(OutsideValue, OutputImageInternalPixelType);
 
   /** The values greater than or equal to the value are set to OutsideValue. */
-  void ThresholdAbove(const InputImageInternalPixelType &thresh);
+  void ThresholdAbove(const InputImageInternalPixelType& thresh);
 
   /** The values less than or equal to the value are set to OutsideValue. */
-  void ThresholdBelow(const InputImageInternalPixelType &thresh);
+  void ThresholdBelow(const InputImageInternalPixelType& thresh);
 
   /** The values outside the range are set to OutsideValue. */
-  void ThresholdOutside(const InputImageInternalPixelType &lower, const InputImageInternalPixelType &upper);
+  void ThresholdOutside(const InputImageInternalPixelType& lower, const InputImageInternalPixelType& upper);
 
   /** Set/Get methods to set the lower threshold */
   itkSetMacro(Lower, InputImageInternalPixelType);
@@ -98,7 +98,7 @@ public:
 
 protected:
   ThresholdVectorImageFilter();
-  ~ThresholdVectorImageFilter() override {};
+  ~ThresholdVectorImageFilter() override{};
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ThresholdVectorImageFilter can be implemented as a multithreaded filter.
@@ -111,14 +111,13 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType ThrethreadId ) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType ThrethreadId) override;
 
   void GenerateOutputInformation(void) override
   {
     Superclass::GenerateOutputInformation();
 
-    this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
+    this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
   }
 
 private:
@@ -126,8 +125,8 @@ private:
   void operator=(const Self&) = delete;
 
   OutputImageInternalPixelType m_OutsideValue;
-  InputImageInternalPixelType m_Lower;
-  InputImageInternalPixelType m_Upper;
+  InputImageInternalPixelType  m_Lower;
+  InputImageInternalPixelType  m_Upper;
 };
 
 

@@ -41,15 +41,14 @@ namespace otb
  * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT ImageClassificationFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ImageClassificationFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageClassificationFilter                       Self;
+  typedef ImageClassificationFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -71,16 +70,16 @@ public:
   typedef typename OutputImageType::PixelType  LabelType;
 
   typedef MachineLearningModel<ValueType, LabelType> ModelType;
-  typedef typename ModelType::Pointer                ModelPointerType;
+  typedef typename ModelType::Pointer ModelPointerType;
 
   typedef otb::Image<double>                    ConfidenceImageType;
   typedef typename ConfidenceImageType::Pointer ConfidenceImagePointerType;
 
   /**Output type for Proba */
-  typedef otb::VectorImage<double>              ProbaImageType;
+  typedef otb::VectorImage<double> ProbaImageType;
 
-  typedef typename ProbaImageType::Pointer      ProbaImagePointerType;
-  typedef itk::VariableLengthVector<double>     ProbaSampleType;
+  typedef typename ProbaImageType::Pointer  ProbaImagePointerType;
+  typedef itk::VariableLengthVector<double> ProbaSampleType;
   /** Set/Get the model */
   itkSetObjectMacro(Model, ModelType);
   itkGetObjectMacro(Model, ModelType);
@@ -96,7 +95,7 @@ public:
   /** Set/Get the proba map flag */
   itkSetMacro(UseProbaMap, bool);
   itkGetMacro(UseProbaMap, bool);
-  
+
   itkSetMacro(BatchMode, bool);
   itkGetMacro(BatchMode, bool);
   itkBooleanMacro(BatchMode);
@@ -108,24 +107,27 @@ public:
    * All pixels with a value greater than 0 in the mask, will be classified.
    * \param mask The input mask.
    */
-  void SetInputMask(const MaskImageType * mask);
+  void SetInputMask(const MaskImageType* mask);
 
   /**
    * Get the input mask.
    * \return The mask.
    */
-  const MaskImageType * GetInputMask(void);
+  const MaskImageType* GetInputMask(void);
 
   /**
    * Get the output confidence map
    */
-  ConfidenceImageType * GetOutputConfidence(void);
-  ProbaImageType * GetOutputProba(void);
+  ConfidenceImageType* GetOutputConfidence(void);
+  ProbaImageType*      GetOutputProba(void);
+
 protected:
   /** Constructor */
   ImageClassificationFilter();
   /** Destructor */
-  ~ImageClassificationFilter() override {}
+  ~ImageClassificationFilter() override
+  {
+  }
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -142,18 +144,19 @@ protected:
     // Define the number of output bands
     this->GetOutputProba()->SetNumberOfComponentsPerPixel(m_NumberOfClasses);
   }
+
 private:
-  ImageClassificationFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageClassificationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The model used for classification */
   ModelPointerType m_Model;
   /** Default label for invalid pixels (when using a mask) */
   LabelType m_DefaultLabel;
   /** Flag to produce the confidence map (if the model supports it) */
-  bool m_UseConfidenceMap;
-  bool m_UseProbaMap;
-  bool m_BatchMode;
+  bool         m_UseConfidenceMap;
+  bool         m_UseProbaMap;
+  bool         m_BatchMode;
   unsigned int m_NumberOfClasses;
 };
 } // End namespace otb

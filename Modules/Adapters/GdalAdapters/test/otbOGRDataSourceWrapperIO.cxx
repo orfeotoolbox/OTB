@@ -33,13 +33,13 @@ using namespace otb;
 /*==============================[ other stuff ]==============================*/
 /*===========================================================================*/
 // int otbOGRDataSourceNew (int argc, char **argv)
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   if (argc < 2)
-    {
+  {
     std::cerr << "otbOGRDataSourceNew <shape-file>\n";
     return EXIT_FAILURE;
-    }
+  }
   ogr::DataSource::Pointer ds = ogr::DataSource::New(argv[1]);
 
   std::cout << "file:\t" << argv[1] << std::endl;

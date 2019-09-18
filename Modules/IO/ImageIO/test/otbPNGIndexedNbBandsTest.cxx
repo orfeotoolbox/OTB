@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImageFileReader.h"
 #include "otbVectorImage.h"
 #include "itkRGBPixel.h"
@@ -30,13 +28,13 @@
 int otbPNGIndexedNbBandsTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char *       inputFilename    = argv[1];
-  const unsigned int nbBands    = atoi(argv[2]);
+  const char*        inputFilename = argv[1];
+  const unsigned int nbBands       = atoi(argv[2]);
 
   typedef itk::RGBPixel<unsigned char> InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int                   Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
@@ -47,13 +45,12 @@ int otbPNGIndexedNbBandsTest(int itkNotUsed(argc), char* argv[])
   reader->UpdateOutputInformation();
 
   if (reader->GetOutput()->GetNumberOfComponentsPerPixel() == nbBands)
-    {
+  {
     return EXIT_SUCCESS;
-    }
+  }
   else
-    {
-    std::cout << "Read " << reader->GetOutput()->GetNumberOfComponentsPerPixel() <<
-    " but the real number of bands is " << nbBands << std::endl;
+  {
+    std::cout << "Read " << reader->GetOutput()->GetNumberOfComponentsPerPixel() << " but the real number of bands is " << nbBands << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 }

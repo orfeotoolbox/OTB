@@ -41,19 +41,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeNeighborhoodConnectedImageFilter
-  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> >
+    : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>>
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeNeighborhoodConnectedImageFilter
-  Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self>
-  Pointer;
-  typedef itk::SmartPointer<const Self>
-  ConstPointer;
+  typedef LabelizeNeighborhoodConnectedImageFilter Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::NeighborhoodConnectedImageFilter<TInputImage, TOutputImage>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage  InputImageType;
@@ -104,15 +99,17 @@ public:
 
 protected:
   LabelizeNeighborhoodConnectedImageFilter();
-  ~LabelizeNeighborhoodConnectedImageFilter() override {}
+  ~LabelizeNeighborhoodConnectedImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
   void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeNeighborhoodConnectedImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelizeNeighborhoodConnectedImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Delta + threshold for growing region */
   InputPixelType m_UpperThresholdDelta;

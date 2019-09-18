@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -31,24 +29,24 @@
 #include "otbRealMomentsImageFunction.h"
 
 
-int otbRealMomentsImageFunction(int itkNotUsed(argc), char * argv[])
+int otbRealMomentsImageFunction(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  unsigned int p((unsigned int) ::atoi(argv[2]));
-  unsigned int q((unsigned int) ::atoi(argv[3]));
-  const char * outputFilename  = argv[4];
+  const char*  inputFilename = argv[1];
+  unsigned int p((unsigned int)::atoi(argv[2]));
+  unsigned int q((unsigned int)::atoi(argv[3]));
+  const char*  outputFilename = argv[4];
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
-  typedef otb::RealMomentsImageFunction<InputImageType>   FunctionType;
-  typedef FunctionType::OutputType                        OutputType;
+  typedef otb::RealMomentsImageFunction<InputImageType> FunctionType;
+  typedef FunctionType::OutputType                      OutputType;
 
-  ReaderType::Pointer    reader         = ReaderType::New();
-  FunctionType::Pointer  function       = FunctionType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
 
@@ -69,13 +67,13 @@ int otbRealMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
-  for (unsigned int k=0; k<=p; ++k)
+  for (unsigned int k = 0; k <= p; ++k)
+  {
+    for (unsigned int l = 0; l <= q; ++l)
     {
-    for (unsigned int l=0; l<=q; ++l)
-      {
       outputStream << "RealMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
-      }
     }
+  }
   outputStream.close();
 
   return EXIT_SUCCESS;

@@ -26,7 +26,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
+int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension> InputImageType;
@@ -35,16 +35,15 @@ int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::WaterSqrtSpectralAngleImageFilter<InputImageType, OutputImageType>
-  WaterSqrtSpectralAngleImageFilterType;
+  typedef otb::WaterSqrtSpectralAngleImageFilter<InputImageType, OutputImageType> WaterSqrtSpectralAngleImageFilterType;
 
   // Instantiating objects
   WaterSqrtSpectralAngleImageFilterType::Pointer filter = WaterSqrtSpectralAngleImageFilterType::New();
   ReaderType::Pointer                            reader = ReaderType::New();
   WriterType::Pointer                            writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   unsigned int blueChannel(::atoi(argv[3]));
   unsigned int greenChannel(::atoi(argv[4]));
@@ -64,5 +63,4 @@ int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

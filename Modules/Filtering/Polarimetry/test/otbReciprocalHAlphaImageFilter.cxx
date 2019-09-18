@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 
 #include "otbImage.h"
@@ -32,31 +31,30 @@
 #include "otbReciprocalHAlphaImageFilter.h"
 #include "otbSinclairToReciprocalCovarianceMatrixImageFilter.h"
 
-int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
+int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilenameHH = argv[1];
-  const char * inputFilenameHV = argv[2];
-  const char * inputFilenameVV = argv[3];
-  int size = atoi(argv[4]);
-  const char * outputFilename = argv[5];
+  const char* inputFilenameHH = argv[1];
+  const char* inputFilenameHV = argv[2];
+  const char* inputFilenameVV = argv[3];
+  int         size            = atoi(argv[4]);
+  const char* outputFilename  = argv[5];
 
 
-  typedef std::complex<double>  ComplexPixelType;
-  const unsigned int Dimension = 2;
+  typedef std::complex<double> ComplexPixelType;
+  const unsigned int           Dimension = 2;
 
 
-  typedef otb::Image<ComplexPixelType, Dimension>  	   ComplexImageType;
-  typedef otb::VectorImage<ComplexPixelType, Dimension>  ComplexVectorImageType;
-  typedef otb::VectorImage<double, Dimension>          RealVectorImageType;
+  typedef otb::Image<ComplexPixelType, Dimension>       ComplexImageType;
+  typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexVectorImageType;
+  typedef otb::VectorImage<double, Dimension>           RealVectorImageType;
 
 
-
-  typedef otb::ImageFileReader<ComplexImageType>  ReaderType;
+  typedef otb::ImageFileReader<ComplexImageType>    ReaderType;
   typedef otb::ImageFileWriter<RealVectorImageType> WriterType;
 
   using SinclairToCovFilterType = otb::SinclairToReciprocalCovarianceMatrixImageFilter<ComplexImageType, ComplexVectorImageType>;
 
-  typedef itk::MeanImageFilter<ComplexImageType, ComplexImageType>         MeanFilterType;
+  typedef itk::MeanImageFilter<ComplexImageType, ComplexImageType> MeanFilterType;
   typedef otb::PerBandVectorImageFilter<ComplexVectorImageType, ComplexVectorImageType, MeanFilterType> PerBandMeanFilterType;
 
 
@@ -69,12 +67,12 @@ int otbReciprocalHAlphaImageFilter(int itkNotUsed(argc), char * argv[])
   WriterType::Pointer writer = WriterType::New();
 
   SinclairToCovFilterType::Pointer sinclairtocov = SinclairToCovFilterType::New();
-  PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
-  HAlphaFilterType::Pointer haafilter = HAlphaFilterType::New();
+  PerBandMeanFilterType::Pointer   perBand       = PerBandMeanFilterType::New();
+  HAlphaFilterType::Pointer        haafilter     = HAlphaFilterType::New();
 
 
   MeanFilterType::InputSizeType radius;
-  radius.Fill( size );
+  radius.Fill(size);
   perBand->GetFilter()->SetRadius(radius);
 
 

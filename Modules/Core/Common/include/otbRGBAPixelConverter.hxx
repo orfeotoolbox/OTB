@@ -27,33 +27,23 @@
 namespace otb
 {
 
-//Base
+// Base
 template <class TInternalInputPixelType, class TOutputPixelType>
-typename RGBAPixelConverter<TInternalInputPixelType,
-                            TOutputPixelType>
-::OutputPixelType
-RGBAPixelConverter<TInternalInputPixelType,
-                            TOutputPixelType>
-::Convert(InputPixelType input)
+typename RGBAPixelConverter<TInternalInputPixelType, TOutputPixelType>::OutputPixelType
+RGBAPixelConverter<TInternalInputPixelType, TOutputPixelType>::Convert(InputPixelType input)
 {
   double result;
 
-  result = (
-    ( 2125.0 * static_cast<double>(input[0]) +
-      7154.0 * static_cast<double>(input[1]) +
-      0721.0 * static_cast<double>(input[2])) / 10000.0); //alpha not supported yet
+  result = ((2125.0 * static_cast<double>(input[0]) + 7154.0 * static_cast<double>(input[1]) + 0721.0 * static_cast<double>(input[2])) /
+            10000.0); // alpha not supported yet
 
   return (static_cast<OutputPixelType>(result));
 }
 
-//RGBA to RGBA
+// RGBA to RGBA
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-typename RGBAPixelConverter<TInternalInputPixelType,
-                            typename itk::RGBAPixel<TInternalOutputPixelType> >
-::OutputPixelType
-RGBAPixelConverter<TInternalInputPixelType,
-                   typename itk::RGBAPixel<TInternalOutputPixelType> >
-::Convert(InputPixelType input)
+typename RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBAPixel<TInternalOutputPixelType>>::OutputPixelType
+RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBAPixel<TInternalOutputPixelType>>::Convert(InputPixelType input)
 {
   OutputPixelType result;
 
@@ -65,14 +55,10 @@ RGBAPixelConverter<TInternalInputPixelType,
   return result;
 }
 
-//RGBA to RGB
+// RGBA to RGB
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-typename RGBAPixelConverter<TInternalInputPixelType,
-                           typename itk::RGBPixel<TInternalOutputPixelType> >
-::OutputPixelType
-RGBAPixelConverter<TInternalInputPixelType,
-                   typename itk::RGBPixel<TInternalOutputPixelType> >
-::Convert(InputPixelType input)
+typename RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBPixel<TInternalOutputPixelType>>::OutputPixelType
+RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBPixel<TInternalOutputPixelType>>::Convert(InputPixelType input)
 {
   OutputPixelType result;
 

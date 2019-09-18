@@ -21,26 +21,26 @@
 #include "itkFixedArray.h"
 #include "otbLandsatTMIndices.h"
 
-int otbLandsatTMIndexNDSIVis(int itkNotUsed(argc), char * argv[])
+int otbLandsatTMIndexNDSIVis(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                           OutputPixelType;
-  typedef itk::FixedArray< double, 8 >     InputPixelType;
+  typedef double OutputPixelType;
+  typedef itk::FixedArray<double, 8> InputPixelType;
 
   typedef otb::Functor::LandsatTM::NDSIVis<InputPixelType, OutputPixelType> FunctorType;
 
   FunctorType ndsiVisFunct = FunctorType();
 
-  double TM1 = (::atof(argv[1]));
-  double TM2 = (::atof(argv[2]));
-  double TM3 = (::atof(argv[3]));
-  double TM4 = (::atof(argv[4]));
-  double TM5 = (::atof(argv[5]));
+  double TM1  = (::atof(argv[1]));
+  double TM2  = (::atof(argv[2]));
+  double TM3  = (::atof(argv[3]));
+  double TM4  = (::atof(argv[4]));
+  double TM5  = (::atof(argv[5]));
   double TM61 = (::atof(argv[6]));
   double TM62 = (::atof(argv[7]));
-  double TM7 = (::atof(argv[8]));
+  double TM7  = (::atof(argv[8]));
 
-  double vis = (TM1+TM2+TM3)/3.0;
-  double goodResult = (vis-TM5)/(vis+TM5+ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
+  double vis        = (TM1 + TM2 + TM3) / 3.0;
+  double goodResult = (vis - TM5) / (vis + TM5 + ndsiVisFunct.GetEpsilonToBeConsideredAsZero());
 
   std::cout << goodResult;
 
@@ -58,7 +58,8 @@ int otbLandsatTMIndexNDSIVis(int itkNotUsed(argc), char * argv[])
 
   std::cout << " " << result << std::endl;
 
-  if( result!=goodResult ) return EXIT_FAILURE;
+  if (result != goodResult)
+    return EXIT_FAILURE;
 
   return EXIT_SUCCESS;
 }
