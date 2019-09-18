@@ -199,6 +199,7 @@ private:
   int                       m_TrainMethod;
   int                       m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;
+
   double                    m_Alpha;
   double                    m_Beta;
   double                    m_BackPropDWScale;
@@ -209,8 +210,9 @@ private:
   int                       m_MaxIter;
   double                    m_Epsilon;
 
-  CvMat*          m_CvMatOfLabels;
-  MapOfLabelsType m_MapOfLabels;
+  cv::Mat            m_MatrixOfLabels;
+  MapOfLabelsType    m_MapOfLabels;
+
 };
 } // end namespace otb
 

@@ -199,6 +199,13 @@ cv::Mat CvRTreesWrapper::getVarImportance() const
   return m_Impl->getVarImportance();
 }
 
+#ifdef OTB_OPENCV_4
+void CvRTreesWrapper::getVotes(cv::InputArray samples, cv::OutputArray results, int flags) const
+{
+  m_Impl->getVotes(samples, results, flags);
+}
+#endif
+
 cv::String CvRTreesWrapper::getDefaultName() const
 {
   return m_Impl->getDefaultName();
