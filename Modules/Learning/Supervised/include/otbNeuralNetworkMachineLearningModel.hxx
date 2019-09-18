@@ -46,8 +46,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
   m_RegPropDWMin(FLT_EPSILON),
   m_TermCriteriaType(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS),
   m_MaxIter(1000),
-  m_Epsilon(0.01),
-  m_CvMatOfLabels(nullptr)
+  m_Epsilon(0.01)
 {
   this->m_ConfidenceIndex = true;
   this->m_IsRegressionSupported = true;
@@ -59,7 +58,6 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMach
 #ifndef OTB_OPENCV_3
   delete m_ANNModel;
 #endif
-  cvReleaseMat(&m_CvMatOfLabels);
 }
 
 /** Sets the topology of the NN */
@@ -107,26 +105,17 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::LabelsToMat(c
       }
 
     unsigned int nbClasses = m_MapOfLabels.size();
-    typename MapOfLabelsType::iterator itMapOfLabels = m_MapOfLabels.begin();
-    unsigned itLabel = 0;
-    for (; itMapOfLabels != m_MapOfLabels.end(); ++itMapOfLabels)
-      {
-      classLabel = itMapOfLabels->first;
-      m_MapOfLabels[classLabel] = itLabel;
 
-      if (itLabel == 0)
-        {
-        if (m_CvMatOfLabels)
-          {
-          cvReleaseMat(&m_CvMatOfLabels);
-          }
-        m_CvMatOfLabels = cvCreateMat(1, nbClasses, CV_32SC1);
-        }
-      m_CvMatOfLabels->data.i[itLabel] = classLabel;
+    m_MatrixOfLabels = cv::Mat(1,nbClasses, CV_32FC1);
+    unsigned int itLabel = 0;
+    for (auto& kv : m_MapOfLabels)
+    {
+      classLabel = kv.first;
+      kv.second = itLabel;
+      m_MatrixOfLabels.at<float>(0,itLabel) = classLabel;
       ++itLabel;
-      }
+    }
 
-    // Allocate CvMat
     // Sample index
     unsigned int sampleIdx = 0;
     labelSampleIt = labels->Begin();
@@ -257,9 +246,8 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
 
   // MODE CLASSIFICATION : find the highest response
   float secondResponse = -1e10;
-  target[0] = m_CvMatOfLabels->data.i[0];
-
-  unsigned int nbClasses = m_CvMatOfLabels->cols;
+  target[0] = m_MatrixOfLabels.at<TOutputValue>(0);
+  unsigned int nbClasses = m_MatrixOfLabels.size[1];
   for (unsigned itLabel = 1; itLabel < nbClasses; ++itLabel)
     {
     currentResponse = response.at<float> (0, itLabel);
@@ -267,7 +255,7 @@ typename NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::TargetSam
       {
       secondResponse = maxResponse;
       maxResponse = currentResponse;
-      target[0] = m_CvMatOfLabels->data.i[itLabel];
+      target[0] = m_MatrixOfLabels.at<TOutputValue>(itLabel);
       }
     else
       {
@@ -296,10 +284,9 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
   m_ANNModel->write(fs);
-  if (m_CvMatOfLabels != nullptr)
+  if (!m_MatrixOfLabels.empty())
     {
-    std::string labelsName("class_labels");
-    fs.writeObj(labelsName,m_CvMatOfLabels);
+    fs << "class_labels" << m_MatrixOfLabels;
     }
   fs << "}";
   fs.release();
@@ -316,9 +303,12 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
     }
 
   m_ANNModel->write(fs, lname);
-  if (m_CvMatOfLabels != nullptr)
-    cvWrite(fs, "class_labels", m_CvMatOfLabels);
-
+  if (!m_MatrixOfLabels.empty())
+  {
+    // cvWrite can't write cv::Mat
+    auto tmpMat = CvMat(m_MatrixOfLabels);
+    cvWrite(fs, "class_labels", &tmpMat);
+  }
   cvReleaseFileStorage(&fs);
 #endif
 }
@@ -331,7 +321,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
   cv::FileStorage fs(filename, cv::FileStorage::READ);
   cv::FileNode model_node(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
   m_ANNModel->read(model_node);
-  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
+  model_node["class_labels"] >> m_MatrixOfLabels;
   fs.release();
 #else
   const char* lname = nullptr;
@@ -357,8 +347,7 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const st
     }
 
   m_ANNModel->read(*fs,*model_node);
-  m_CvMatOfLabels = (CvMat*)cvReadByName( *fs, *model_node, "class_labels" );
-
+  model_node["class_labels"] >> m_MatrixOfLabels;
   fs.release();
 #endif
 }
@@ -386,7 +375,6 @@ bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
 #endif
         )
       {
-      //std::cout << "Reading a " << CV_TYPE_NAME_ML_ANN_MLP << " model" << std::endl;
       return true;
       }
     }

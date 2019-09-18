@@ -210,7 +210,7 @@ private:
   int m_MaxIter;
   double m_Epsilon;
 
-  CvMat*             m_CvMatOfLabels;
+  cv::Mat            m_MatrixOfLabels;
   MapOfLabelsType    m_MapOfLabels;
 
 };
