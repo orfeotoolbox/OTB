@@ -24,48 +24,25 @@
 #include "OTBIceExport.h"
 
 
-#include "otbGlError.h"
+#include "otbGlHandle.h"
 #include "otbGlTypeTraits.h"
-
-
-#include <utility>
 
 
 namespace otb { namespace gl {
 
-
 /**
- * @class OpenGL vertex-array object.
+ * @class OpenGL vertex-arary object handle policy.
  */
-struct OTBIce_EXPORT VertexArrayObject
+struct OTBIce_EXPORT VertexArrayObjectPolicy
 {
-  using Id_t = otb::gl::Id_t;
-
-  /** Default constructor. */
-  VertexArrayObject();
-
-  /** Destructor. */
-  ~VertexArrayObject();
-
-  VertexArrayObject( VertexArrayObject const & ) = delete;
-
-  VertexArrayObject & operator = ( VertexArrayObject const & ) = delete;
-
-  VertexArrayObject( VertexArrayObject && rhs ) :
-    m_Id( std::exchange( rhs.m_Id, GL_ZERO ) )
-  {}
-
-  VertexArrayObject & operator = ( VertexArrayObject && rhs );
-
-  /** OpenGL binding. */
-  void Bind( bool = true ) const;
-
-private:
-  void Release();
-
-  /** OpenGL resource identifier. */
-  Id_t m_Id = GL_ZERO;
+  static void Generate( Id_t & );
+  static void Bind( Id_t );
+  static void Release( Id_t & );
 };
+
+
+/** VertexArrayObject type definition. */
+using VertexArrayObject = Handle< VertexArrayObjectPolicy >;
 
 
 } // end namespace gl.

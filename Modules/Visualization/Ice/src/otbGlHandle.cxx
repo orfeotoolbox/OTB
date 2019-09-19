@@ -18,34 +18,10 @@
  * limitations under the License.
  */
 
-#include "otbGlVertexArrayObject.h"
+#include "otbGlHandle.h"
+
 
 namespace otb { namespace gl {
-
-
-void
-VertexArrayObjectPolicy
-::Generate( Id_t & id )
-{
-  glGenVertexArrays( 1, &id );
-}
-
-
-void
-VertexArrayObjectPolicy
-::Bind( Id_t id )
-{
-  glBindVertexArray( id );
-}
-
-
-void
-VertexArrayObjectPolicy
-::Release( Id_t & id )
-{
-  glDeleteVertexArrays( 1, &id );
-}
-
 
 } // End namespace 'gl'.
 

@@ -24,15 +24,9 @@
 #include "OTBIceExport.h"
 
 
-#include "otbGlError.h"
+#include "otbGlHandle.h"
 #include "otbGlTypeTraits.h"
 
-
-#include <utility>
-
-#ifndef bool_str
-#  define bool_str( b ) ( ( b ) ? "true" : "false" )
-#endif
 
 namespace otb { namespace gl {
 
@@ -43,6 +37,34 @@ enum class element : GLenum
 {
   vertex = GL_ARRAY_BUFFER,
   index = GL_ELEMENT_ARRAY_BUFFER,
+};
+
+
+/**
+ */
+template< element E >
+struct BufferObjectPolicy
+{
+  static
+  void
+  Generate( Id_t & id )
+    {
+      glGenBuffers( 1, &id );
+    }
+
+  static
+  void
+  Bind( Id_t id )
+    {
+      glBindBuffer( static_cast< GLenum >( E ), id );
+    }
+
+  static
+  void
+  Release( Id_t & id )
+    {
+      glDeleteBuffers( 1, &id );
+    }
 };
 
 
@@ -64,16 +86,13 @@ struct BufferObject
   }
 
   /** Default constructor. */
-  BufferObject()
-  {
-    Generate();
-    Bind();
-  }
+  BufferObject() = default;
 
   /** Construct and fill. */
   template< typename T >
   BufferObject( std::initializer_list< T > data,
 		std::size_t components = 1 ) :
+    m_Id(),
     m_Count( data.size() ),
     m_Size( sizeof( T ) ),
     m_Components( components ),
@@ -81,16 +100,6 @@ struct BufferObject
   {
     assert( data.size() );
     assert( components );
-
-    Generate();
-
-    Bind();
-
-    std::cerr
-      << "BufferObject #" << m_Id << " " << TypeTraits< T >::name()
-      << std::endl;
-
-    std::cout << data.size() << " " << sizeof( T ) << std::endl;
 
     glBufferData(
       static_cast< GLenum >( E ),
@@ -102,37 +111,16 @@ struct BufferObject
     CheckError();
   }
 
-  ~BufferObject()
-  {
-    Release();
-  }
+  ~BufferObject() = default;
 
-  BufferObject( BufferObject && rhs ) :
-    m_Id( std::exchange( rhs.m_Id, GL_ZERO ) )
-  {}
+  BufferObject( BufferObject && ) = default;
 
-  BufferObject &
-  operator = ( BufferObject && rhs )
-
-  {
-    Release();
-
-    m_Id = std::exchange( rhs.m_Id, GL_ZERO );
-
-    return *this;
-  }
+  BufferObject & operator = ( BufferObject && ) = default;
 
   void
   Bind( bool isEnabled = true ) const
   {
-    assert( m_Id );
-
-#if OTB_DEBUG
-    std::cerr << "glBindBuffer(" << m_Id << ") " << bool_str( isEnabled ) << std::endl;
-#endif // OTB_DEBUG
-
-    glBindBuffer( static_cast< GLenum >( E ), isEnabled ? m_Id : GL_ZERO );
-    CheckError();
+    m_Id.Bind( isEnabled );
   }
 
   GLenum
@@ -159,42 +147,7 @@ struct BufferObject
   }
 
 private:
-  void
-  Generate()
-  {
-#if OTB_DEBUG
-  std::cerr << "glGenBuffers()" << std::endl;
-#endif // OTB_DEBUG
-
-  glGenBuffers( 1, &m_Id );
-  assert( m_Id );
-
-#if OTB_DEBUG
-  std::cerr << "-> " << m_Id << std::endl;
-#endif // OTB_DEBUG
-
-  CheckError();
-  }
-
-  void
-  Release()
-  {
-    if( m_Id==GL_ZERO )
-      return;
-
-#if OTB_DEBUG
-    std::cerr << "glDeleteBuffers(" << m_Id << ")" << std::endl;
-#endif // OTB_DEBUG
-
-    CheckError< error::clear >();
-
-    glDeleteBuffers( 1, &m_Id );
-    CheckError();
-
-    m_Id = GL_ZERO;
-  }
-
-  Id_t m_Id = GL_ZERO;
+  Handle< BufferObjectPolicy< E > > m_Id;
   std::size_t m_Count = 0;
   std::size_t m_Size = 0;
   std::size_t m_Components = 0;

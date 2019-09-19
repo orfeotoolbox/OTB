@@ -23,9 +23,9 @@ set(OTBICE_SRCS
   otbGlActor.cxx
   otbGlBufferObject.cxx
   otbGlError.cxx
+  otbGlHandle.cxx
   otbGlImageActor.cxx
   otbGlMesh.cxx
-  # otbGlObject.cxx
   otbGlROIActor.cxx
   otbGlView.cxx
   otbGlVectorActor.cxx
