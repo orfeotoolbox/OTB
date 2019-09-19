@@ -185,6 +185,7 @@ r'''(.*
 )+(# Copyright \(C\) 1999-2011 Insight Software Consortium
 |# Copyright \(C\) 20\d\d(-20\d\d)? Centre National d'Etudes Spatiales \(CNES\)
 |# Copyright \(C\) 20\d\d(-20\d\d)? CS Systemes d'Information \(CS SI\)
+|# Copyright \(C\) 20\d\d(-20\d\d)? IRSTEA
 |# Copyright \(C\) 2007-2012 Institut Mines Telecom / Telecom Bretagne
 )+#
 # This file is part of Orfeo Toolbox
