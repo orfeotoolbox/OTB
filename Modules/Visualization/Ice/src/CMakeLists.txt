@@ -19,19 +19,25 @@
 #
 
 set(OTBICE_SRCS
-  otbShader.cxx
-  otbShaderRegistry.cxx
   otbGeoInterface.cxx
   otbGlActor.cxx
+  otbGlBufferObject.cxx
+  otbGlError.cxx
   otbGlImageActor.cxx
+  otbGlMesh.cxx
+  # otbGlObject.cxx
   otbGlROIActor.cxx
+  otbGlView.cxx
   otbGlVectorActor.cxx
   otbGlVersionChecker.cxx
-  otbGlView.cxx
+  otbGlTypeTraits.cxx
+  otbGlVertexArrayObject.cxx
   otbImageSettings.cxx
+  otbMinimalShader.cxx
+  otbShader.cxx
+  otbShaderRegistry.cxx
   otbStandardShader.cxx
   otbViewSettings.cxx
-  otbMinimalShader.cxx
   )
 
 add_library(OTBIce ${OTBICE_SRCS})
