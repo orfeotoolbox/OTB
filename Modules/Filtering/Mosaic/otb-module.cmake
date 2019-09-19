@@ -1,5 +1,7 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2016-2019 Institut de Recherche Scientifique et 
+#  Technique pour l'Environnement et l'Agriculture (IRSTEA)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,32 +20,17 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Image utils and handling application.")
+set(DOCUMENTATION "This module provide components to enable the 
+generation of images mosaics, including some color/radiometric
+harmonization based on statistics of overlapping pixels.")
 
-otb_module(OTBAppImageUtils
+otb_module(OTBMosaic
   DEPENDS
-    OTBConversion
-    OTBApplicationEngine
-    OTBBoostAdapters
-    OTBCarto
-    OTBColorMap
     OTBCommon
-    OTBCurlAdapters
-    OTBITK
-    OTBImageBase
-    OTBImageManipulation
-    OTBOSSIMAdapters
-    OTBObjectList
-    OTBProjection
-    OTBStatistics
-    OTBStreaming
-    OTBTransform
+    OTBConversion
     OTBFunctor
-    OTBMosaic
 
   TEST_DEPENDS
-    OTBCommandLine
-    OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
