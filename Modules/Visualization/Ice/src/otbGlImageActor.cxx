@@ -28,11 +28,39 @@
 
 #include <GL/glew.h>
 
+// #include "otbGlBufferObject.h"
+// #include "otbGlError.h"
+#include "otbGlMesh.h"
+// #include "otbGlObject.h"
+// #include "otbGlTypeTraits.h"
+// #include "otbGlVertexArrayObject.h"
+
 #include "otbStandardShader.h"
 
 #include "itkListSample.h"
 #include "otbListSampleToHistogramListGenerator.h"
 #include "otbCast.h"
+
+#include <stdexcept>
+
+
+namespace otb
+{
+
+
+namespace gl
+{
+
+
+// struct Dummy
+// {
+//   virtual ~Dummy() = default;
+// };
+
+
+} // end namespace 'gl'.
+
+} // end of namespace 'otb'.
 
 
 namespace otb
@@ -58,8 +86,12 @@ GlImageActor::GlImageActor()
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New()),
     m_ResolutionAlgorithm(ResolutionAlgorithm::Nearest),
+#if !USE_GL_RAII
     m_VAO(0),
     m_VBO(0)
+#else
+    m_Mesh()
+#endif
 {}
 
 GlImageActor
@@ -85,6 +117,8 @@ GlImageActor
   StandardShader::Pointer shader( StandardShader::New() );
 
   shader->SetImageSettings( m_ImageSettings );
+
+#if !USE_GL_RAII
 
   // Use a Vertex Array Object
   glGenVertexArrays(1, &m_VAO);
@@ -142,6 +176,21 @@ GlImageActor
   // Texture coord attribute
   glVertexAttribPointer(texIdx, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)sizeof(vertexPosition));
   glEnableVertexAttribArray(texIdx);
+
+#else
+  // Check previous OpenGL error and clear error flag.
+  gl::CheckError< gl::error::clear >();
+
+  m_Mesh = std::make_unique< gl::Mesh >(
+    gl::MakeTexturedQuad(
+      shader->GetAttribIdx()[ 0 ],
+      shader->GetAttribIdx()[ 1 ]
+    )
+  );
+
+  // assert( m_Mesh );
+  // m_Mesh->Bind( false );
+#endif
 
   // Should be done last in order to ensure exception-safety of
   // invariant.
@@ -397,14 +446,22 @@ void GlImageActor::Render()
   m_Shader->SetupShader();
 
   GLfloat vertexPosition[8] = {
-      -1.0, -1.0,
-      1.0, -1.0,
-      1.0, 1.0,
-      -1.0, 1.0
+      -1.0f, -1.0f,
+      1.0f, -1.0f,
+      1.0f, 1.0f,
+      -1.0f, 1.0f
     };
 
+#if !USE_GL_RAII
   glBindVertexArray(m_VAO);
   glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+#else
+  // Check OpenGL error and clear error flag.
+  gl::CheckError< gl::error::clear >();
+
+  assert( m_Mesh );
+  m_Mesh->Bind();
+#endif
 
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
