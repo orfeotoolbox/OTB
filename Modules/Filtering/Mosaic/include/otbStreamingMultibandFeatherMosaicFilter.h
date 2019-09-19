@@ -158,6 +158,6 @@ private:
 
 } // end namespace gtb
 
-#include "otbStreamingMultibandFeatherMosaicFilter.txx"
+#include "otbStreamingMultibandFeatherMosaicFilter.hxx"
 
 #endif /* StreamingMultibandFeatherMosaicFilter_H_ */

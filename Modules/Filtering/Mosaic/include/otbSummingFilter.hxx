@@ -1,5 +1,5 @@
-#ifndef __SummingFilter_txx
-#define __SummingFilter_txx
+#ifndef __SummingFilter_hxx
+#define __SummingFilter_hxx
 
 #include "otbSummingFilter.h"
 #include "itkProgressReporter.h"

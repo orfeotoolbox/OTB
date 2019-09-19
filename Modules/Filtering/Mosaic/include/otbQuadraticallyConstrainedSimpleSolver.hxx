@@ -1,5 +1,5 @@
-#ifndef QuadraticallyConstrainedSimpleSolver_txx_
-#define QuadraticallyConstrainedSimpleSolver_txx_
+#ifndef QuadraticallyConstrainedSimpleSolver_hxx
+#define QuadraticallyConstrainedSimpleSolver_hxx
 
 #include "otbQuadraticallyConstrainedSimpleSolver.h"
 

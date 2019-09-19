@@ -149,6 +149,6 @@ private:
 
 } /* namespace otb */
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbQuadraticallyConstrainedSimpleSolver.txx"
+#include "otbQuadraticallyConstrainedSimpleSolver.hxx"
 #endif
 #endif /* QuadraticallyConstrainedSimpleSolver_H_ */

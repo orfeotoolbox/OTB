@@ -1,5 +1,5 @@
-#ifndef __StreamingSimpleMosaicFilter_txx
-#define __StreamingSimpleMosaicFilter_txx
+#ifndef __StreamingSimpleMosaicFilter_hxx
+#define __StreamingSimpleMosaicFilter_hxx
 
 #include "otbStreamingSimpleMosaicFilter.h"
 

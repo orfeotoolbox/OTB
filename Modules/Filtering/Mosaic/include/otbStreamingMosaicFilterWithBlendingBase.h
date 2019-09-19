@@ -109,7 +109,7 @@ private:
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingMosaicFilterWithBlendingBase.txx"
+#include "otbStreamingMosaicFilterWithBlendingBase.hxx"
 #endif
 
 #endif

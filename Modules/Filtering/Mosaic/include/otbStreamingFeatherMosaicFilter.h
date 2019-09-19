@@ -123,7 +123,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingFeatherMosaicFilter.txx"
+#include "otbStreamingFeatherMosaicFilter.hxx"
 #endif
 
 #endif
