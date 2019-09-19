@@ -70,7 +70,7 @@ if(XDK_PATH)
 set(cmake_configure_option
 "${cmake_configure_option}
 CMAKE_PREFIX_PATH=${XDK_PATH}")
-foreach(remote_module OTBTemporalGapFilling Mosaic SertitObject DiapOTBModule)#otbGRM
+foreach(remote_module OTBTemporalGapFilling SertitObject DiapOTBModule)#otbGRM
   set(cmake_configure_option
 "${cmake_configure_option}
 Module_${remote_module}:BOOL=ON")

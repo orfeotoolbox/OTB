@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2019 IRSTEA
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,33 +19,6 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Image utils and handling application.")
 
-otb_module(OTBAppImageUtils
-  DEPENDS
-    OTBConversion
-    OTBApplicationEngine
-    OTBBoostAdapters
-    OTBCarto
-    OTBColorMap
-    OTBCommon
-    OTBCurlAdapters
-    OTBITK
-    OTBImageBase
-    OTBImageManipulation
-    OTBOSSIMAdapters
-    OTBObjectList
-    OTBProjection
-    OTBStatistics
-    OTBStreaming
-    OTBTransform
-    OTBFunctor
-    OTBMosaic
-
-  TEST_DEPENDS
-    OTBCommandLine
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+project(OTBMosaic)
+otb_module_impl()

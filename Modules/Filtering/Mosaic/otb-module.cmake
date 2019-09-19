@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2019 IRSTEA
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,12 +19,18 @@
 # limitations under the License.
 #
 
-#Contact: Rémi Cresson <remi.cresson@teledetection.fr>
-otb_fetch_module(Mosaic
-  "This module provides one application dedicated to images mosaicking
-A more detailed description can be found on the project website:
-https://github.com/remicres/otb-mosaic
-"
-  GIT_REPOSITORY https://github.com/remicres/otb-mosaic.git
-  GIT_TAG 2e113fd35f1fafebefa976581b47b300f5fb8bc5
+set(DOCUMENTATION "This module provide components to enable the 
+generation of images mosaics, including some color/radiometric
+harmonization based on statistics of overlapping pixels.")
+
+otb_module(OTBMosaic
+  DEPENDS
+    OTBCommon
+    OTBConversion
+    OTBFunctor
+
+  TEST_DEPENDS
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
 )
