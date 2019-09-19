@@ -25,11 +25,11 @@
 
 #include "otbStreamingMosaicFilterWithBlendingBase.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::StreamingMosaicFilterWithBlendingBase()
+StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::StreamingMosaicFilterWithBlendingBase()
 {
 
   // Default distance offset
@@ -37,8 +37,7 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
 
   // Default interpolator
   typename DistanceImageDefaultInterpolatorType::Pointer interp = DistanceImageDefaultInterpolatorType::New();
-  m_DistanceInterpolator = static_cast<DistanceImageInterpolatorType*>( interp.GetPointer() );
-
+  m_DistanceInterpolator                                        = static_cast<DistanceImageInterpolatorType*>(interp.GetPointer());
 }
 
 /*
@@ -46,21 +45,18 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
  * an input distance image
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-void
-StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::AddUsedInputImageIndex(unsigned int inputImageIndex)
+void StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::AddUsedInputImageIndex(unsigned int inputImageIndex)
 {
   // Add this index only if input is an inputImage (i.e. not a distanceImage)
   if (inputImageIndex % 2 == 0)
-    {
-    itkDebugMacro(<<"Input #" << inputImageIndex << " is an InputImage and will be used");
+  {
+    itkDebugMacro(<< "Input #" << inputImageIndex << " is an InputImage and will be used");
     Superclass::AddUsedInputImageIndex(inputImageIndex);
-    }
+  }
   else
-    {
-    itkDebugMacro(<<"Input #" << inputImageIndex << " is an DistanceImage and will NOT be used");
-    }
-
+  {
+    itkDebugMacro(<< "Input #" << inputImageIndex << " is an DistanceImage and will NOT be used");
+  }
 }
 
 /*
@@ -68,9 +64,7 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
  *  (1 input image on 2 is a DistanceImage)
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-unsigned int
-StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::GetNumberOfInputImages()
+unsigned int StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::GetNumberOfInputImages()
 {
   return 0.5 * this->GetNumberOfInputs();
 }
@@ -82,10 +76,9 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
  * 1 image region, which correspond to the buffered region which can be used by the interpolator
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-void
-StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::PrepareDistanceImageAccessors(typename std::vector<DistanceImageType *>& currentDistanceImage,
-                                typename std::vector<DistanceImageInterpolatorPointer>& distanceInterpolator){
+void StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::PrepareDistanceImageAccessors(
+    typename std::vector<DistanceImageType*>& currentDistanceImage, typename std::vector<DistanceImageInterpolatorPointer>& distanceInterpolator)
+{
 
   // Get number of used input images
   const unsigned int n = Superclass::GetNumberOfUsedInputImages();
@@ -94,17 +87,15 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
   distanceInterpolator.reserve(n);
 
   // Loop on input images
-  for (unsigned int i = 0 ; i < n ; i++)
-    {
+  for (unsigned int i = 0; i < n; i++)
+  {
     // Input distance image i
-    currentDistanceImage.push_back( static_cast<DistanceImageType *>(
-        Superclass::ProcessObject::GetInput(Superclass::GetUsedInputImageIndice(i)+1) ) );
+    currentDistanceImage.push_back(static_cast<DistanceImageType*>(Superclass::ProcessObject::GetInput(Superclass::GetUsedInputImageIndice(i) + 1)));
 
     // Distance interpolator i
-    distanceInterpolator.push_back( static_cast<DistanceImageInterpolatorType*>(
-        (m_DistanceInterpolator->CreateAnother() ).GetPointer() ) );
+    distanceInterpolator.push_back(static_cast<DistanceImageInterpolatorType*>((m_DistanceInterpolator->CreateAnother()).GetPointer()));
     distanceInterpolator[i]->SetInputImage(currentDistanceImage[i]);
-    }
+  }
 }
 
 } // end namespace otb

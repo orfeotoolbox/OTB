@@ -50,17 +50,15 @@ namespace otb
  *
  * \ingroup OTBMosaic
  */
-template <class TInputImage, class TOutputImage=TInputImage, class TInternalValueType=double>
-class ITK_EXPORT PersistentStatisticsMosaicFilter : public otb::PersistentMosaicFilter<TInputImage, TOutputImage,
-                                                                                         TInternalValueType>
+template <class TInputImage, class TOutputImage = TInputImage, class TInternalValueType = double>
+class ITK_EXPORT PersistentStatisticsMosaicFilter : public otb::PersistentMosaicFilter<TInputImage, TOutputImage, TInternalValueType>
 {
 public:
-
   /** Standard Self typedef */
-  typedef PersistentStatisticsMosaicFilter                                               Self;
+  typedef PersistentStatisticsMosaicFilter Self;
   typedef PersistentMosaicFilter<TInputImage, TOutputImage, TInternalValueType> Superclass;
-  typedef itk::SmartPointer<Self>                                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,9 +74,9 @@ public:
   typedef typename Superclass::InputImageInternalPixelType InputImageInternalPixelType;
 
   /** Output image typedefs.  */
-  typedef typename Superclass::OutputImageType              OutputImageType;
-  typedef typename Superclass::OutputImagePointType         OutputImagePointType;
-  typedef typename Superclass::OutputImageRegionType        OutputImageRegionType;
+  typedef typename Superclass::OutputImageType       OutputImageType;
+  typedef typename Superclass::OutputImagePointType  OutputImagePointType;
+  typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
 
   /** Internal computing typedef support. */
   typedef typename Superclass::InternalValueType       InternalValueType;
@@ -87,19 +85,19 @@ public:
   typedef itk::ImageRegionConstIteratorWithOnlyIndex<OutputImageType> IteratorType;
 
   /** Typedefs for statistics */
-  typedef vnl_vector<InternalValueType>                       RealVectorType;
-  typedef vnl_matrix<InternalValueType>                       RealMatrixType;
-  typedef itk::SimpleDataObjectDecorator<RealMatrixType>      RealMatrixObjectType;
-  typedef std::vector<RealMatrixType>                         RealMatrixListType;
-  typedef itk::SimpleDataObjectDecorator<RealMatrixListType>  RealMatrixListObjectType;
+  typedef vnl_vector<InternalValueType>                      RealVectorType;
+  typedef vnl_matrix<InternalValueType>                      RealMatrixType;
+  typedef itk::SimpleDataObjectDecorator<RealMatrixType>     RealMatrixObjectType;
+  typedef std::vector<RealMatrixType>                        RealMatrixListType;
+  typedef itk::SimpleDataObjectDecorator<RealMatrixListType> RealMatrixListObjectType;
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Overrided methods */
   virtual void AllocateOutputs();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   virtual void Reset();
   virtual void Synthetize();
 
@@ -112,7 +110,7 @@ public:
   {
     return this->GetMeansOutput()->Get();
   }
-  RealMatrixListObjectType* GetMeansOutput();
+  RealMatrixListObjectType*       GetMeansOutput();
   const RealMatrixListObjectType* GetMeansOutput() const;
 
   /** Return the computed Std. */
@@ -120,7 +118,7 @@ public:
   {
     return this->GetStdsOutput()->Get();
   }
-  RealMatrixListObjectType* GetStdsOutput();
+  RealMatrixListObjectType*       GetStdsOutput();
   const RealMatrixListObjectType* GetStdsOutput() const;
 
   /** Return the computed Min. */
@@ -128,7 +126,7 @@ public:
   {
     return this->GetMinsOutput()->Get();
   }
-  RealMatrixListObjectType* GetMinsOutput();
+  RealMatrixListObjectType*       GetMinsOutput();
   const RealMatrixListObjectType* GetMinsOutput() const;
 
   /** Return the computed Max. */
@@ -136,7 +134,7 @@ public:
   {
     return this->GetMaxsOutput()->Get();
   }
-  RealMatrixListObjectType* GetMaxsOutput();
+  RealMatrixListObjectType*       GetMaxsOutput();
   const RealMatrixListObjectType* GetMaxsOutput() const;
 
   /** Return the computed MeansOfProduct. */
@@ -144,7 +142,7 @@ public:
   {
     return this->GetMeansOfProductsOutput()->Get();
   }
-  RealMatrixListObjectType* GetMeansOfProductsOutput();
+  RealMatrixListObjectType*       GetMeansOfProductsOutput();
   const RealMatrixListObjectType* GetMeansOfProductsOutput() const;
 
   /** Return the computed areas. */
@@ -152,12 +150,14 @@ public:
   {
     return this->GetAreasOutput()->Get();
   }
-  RealMatrixObjectType* GetAreasOutput();
+  RealMatrixObjectType*       GetAreasOutput();
   const RealMatrixObjectType* GetAreasOutput() const;
 
 protected:
   PersistentStatisticsMosaicFilter();
-  virtual ~PersistentStatisticsMosaicFilter() {}
+  virtual ~PersistentStatisticsMosaicFilter()
+  {
+  }
 
   /** PersistentStatisticsMosaicFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -171,7 +171,6 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
 
 
-
   /** Class for storing thread results:
    * -sum of values
    * -sum of squared values
@@ -179,10 +178,12 @@ protected:
    * -max value
    * -count
    */
-  class ThreadResultsContainer {
-public:
+  class ThreadResultsContainer
+  {
+  public:
     /** Default constructor */
-    ThreadResultsContainer(){
+    ThreadResultsContainer()
+    {
     }
 
     /* Constructor with size */
@@ -218,13 +219,13 @@ public:
     }
 
     /* 1-Pixel update */
-    void Update( const InputImagePixelType& pixel, unsigned int sampleId)
+    void Update(const InputImagePixelType& pixel, unsigned int sampleId)
     {
       unsigned int nbOfBands = pixel.Size();
 
       m_count[sampleId]++;
-      for (unsigned int band = 0 ; band < nbOfBands ; band++)
-        {
+      for (unsigned int band = 0; band < nbOfBands; band++)
+      {
         // Cast
         InternalValueType pixelValue = static_cast<InternalValueType>(pixel[band]);
 
@@ -236,36 +237,36 @@ public:
 
         // Update Sums
         m_sum[band][sampleId] += pixelValue;
-        m_sqSum[band][sampleId] += pixelValue*pixelValue;
-        }
+        m_sqSum[band][sampleId] += pixelValue * pixelValue;
+      }
     }
 
     /* 2-Pixels update */
-    void Update( const InputImagePixelType& pixel_i,const InputImagePixelType& pixel_j, unsigned int sampleId)
+    void Update(const InputImagePixelType& pixel_i, const InputImagePixelType& pixel_j, unsigned int sampleId)
     {
       Update(pixel_i, sampleId);
       unsigned int nbOfBands = pixel_i.Size();
-      for (unsigned int band = 0 ; band < nbOfBands ; band++)
-        {
+      for (unsigned int band = 0; band < nbOfBands; band++)
+      {
         // Cast
         InternalValueType pixelValue_i = static_cast<InternalValueType>(pixel_i[band]);
         InternalValueType pixelValue_j = static_cast<InternalValueType>(pixel_j[band]);
 
-        m_cosum[band][sampleId] += pixelValue_i*pixelValue_j;
-        }
+        m_cosum[band][sampleId] += pixelValue_i * pixelValue_j;
+      }
     }
 
     /* Self update */
     void Update(const ThreadResultsContainer& other)
     {
-      unsigned int nbOfBands = other.m_sum.rows();
+      unsigned int nbOfBands   = other.m_sum.rows();
       unsigned int nbOfSamples = other.m_sum.cols();
 
-      for (unsigned int sampleId = 0 ; sampleId < nbOfSamples ; sampleId++)
-        {
+      for (unsigned int sampleId = 0; sampleId < nbOfSamples; sampleId++)
+      {
         m_count[sampleId] += other.m_count[sampleId];
-        for (unsigned int band = 0 ; band < nbOfBands ; band++)
-          {
+        for (unsigned int band = 0; band < nbOfBands; band++)
+        {
           m_sum[band][sampleId] += other.m_sum[band][sampleId];
           m_cosum[band][sampleId] += other.m_cosum[band][sampleId];
           m_sqSum[band][sampleId] += other.m_sqSum[band][sampleId];
@@ -273,16 +274,16 @@ public:
             m_min[band][sampleId] = other.m_min[band][sampleId];
           if (other.m_max[band][sampleId] > m_max[band][sampleId])
             m_max[band][sampleId] = other.m_max[band][sampleId];
-          }
         }
+      }
     }
 
-    RealMatrixType   m_sum;
-    RealMatrixType   m_sqSum;
-    RealMatrixType   m_cosum;
-    RealMatrixType   m_min;
-    RealMatrixType   m_max;
-    RealVectorType   m_count;
+    RealMatrixType m_sum;
+    RealMatrixType m_sqSum;
+    RealMatrixType m_cosum;
+    RealMatrixType m_min;
+    RealMatrixType m_max;
+    RealVectorType m_count;
   };
 
   // Internal threads count
@@ -297,8 +298,8 @@ public:
   RealMatrixType     m_Area;
 
 private:
-  PersistentStatisticsMosaicFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                  //purposely not implemented
+  PersistentStatisticsMosaicFilter(const Self&); // purposely not implemented
+  void operator=(const Self&);                   // purposely not implemented
 
 }; // end of class
 
@@ -306,16 +307,14 @@ private:
 /*
  * Decorator
  */
-template<class TInputImage,class TOutputImage,class TInternalValueType>
-class ITK_EXPORT StreamingStatisticsMosaicFilter :
-  public PersistentFilterStreamingDecorator<
-  PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType> >
+template <class TInputImage, class TOutputImage, class TInternalValueType>
+class ITK_EXPORT StreamingStatisticsMosaicFilter
+    : public PersistentFilterStreamingDecorator<PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType>>
 {
 public:
   /** Standard Self typedef */
   typedef StreamingStatisticsMosaicFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType> > Superclass;
+  typedef PersistentFilterStreamingDecorator<PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -326,16 +325,16 @@ public:
   itkTypeMacro(StreamingStatisticsMosaicFilter, PersistentFilterStreamingDecorator);
 
   /** Typedefs for statistics */
-  typedef typename Superclass::FilterType::RealMatrixType              RealMatrixType;
-  typedef typename Superclass::FilterType::RealMatrixObjectType        RealMatrixObjectType;
-  typedef typename Superclass::FilterType::RealMatrixListType          RealMatrixListType;
-  typedef typename Superclass::FilterType::RealMatrixListObjectType    RealMatrixListObjectType;
+  typedef typename Superclass::FilterType::RealMatrixType           RealMatrixType;
+  typedef typename Superclass::FilterType::RealMatrixObjectType     RealMatrixObjectType;
+  typedef typename Superclass::FilterType::RealMatrixListType       RealMatrixListType;
+  typedef typename Superclass::FilterType::RealMatrixListObjectType RealMatrixListObjectType;
 
   /** Input image typedefs.  */
-  typedef typename Superclass::FilterType::InputImageType              InputImageType;
+  typedef typename Superclass::FilterType::InputImageType InputImageType;
 
   using Superclass::PushBackInput;
-  void PushBackInput(InputImageType * input)
+  void PushBackInput(InputImageType* input)
   {
     this->GetFilter()->PushBackInput(input);
   }
@@ -426,13 +425,15 @@ public:
 
 protected:
   /** Constructor */
-  StreamingStatisticsMosaicFilter() {};
+  StreamingStatisticsMosaicFilter(){};
   /** Destructor */
-  ~StreamingStatisticsMosaicFilter() ITK_OVERRIDE {}
+  ~StreamingStatisticsMosaicFilter() ITK_OVERRIDE
+  {
+  }
 
 private:
-  StreamingStatisticsMosaicFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingStatisticsMosaicFilter(const Self&); // purposely not implemented
+  void operator=(const Self&);                  // purposely not implemented
 };
 
 } // end namespace otb

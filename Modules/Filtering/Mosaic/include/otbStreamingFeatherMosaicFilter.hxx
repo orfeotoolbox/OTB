@@ -25,32 +25,32 @@
 
 #include "otbStreamingFeatherMosaicFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::StreamingFeatherMosaicFilter(){
+StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::StreamingFeatherMosaicFilter()
+{
   m_FeatheringTransitionDistance = 500;
-  m_FeatheringSmoothness = 1.5;
+  m_FeatheringSmoothness         = 1.5;
 }
 
 /**
  * Processing
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
-void
-StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>::ThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
 
   // Debug info
-  itkDebugMacro(<<"Actually executing thread " << threadId << " in region " << outputRegionForThread);
+  itkDebugMacro(<< "Actually executing thread " << threadId << " in region " << outputRegionForThread);
 
   // Support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels() );
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Get output pointer
-  OutputImageType * mosaicImage = this->GetOutput();
+  OutputImageType* mosaicImage = this->GetOutput();
 
   // Get number of used inputs
   const unsigned int nbOfUsedInputImages = Superclass::GetNumberOfUsedInputImages();
@@ -62,12 +62,12 @@ StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInterna
   IteratorType outputIt(mosaicImage, outputRegionForThread);
 
   // Prepare input pointers, interpolators, and valid regions (input images)
-  typename std::vector<InputImageType *>        currentImage;
+  typename std::vector<InputImageType*>         currentImage;
   typename std::vector<InterpolatorPointerType> interp;
   Superclass::PrepareImageAccessors(currentImage, interp);
 
   // Prepare input pointers, interpolators, and valid regions (distances images)
-  typename std::vector<DistanceImageType *>              currentDistanceImage;
+  typename std::vector<DistanceImageType*>               currentDistanceImage;
   typename std::vector<DistanceImageInterpolatorPointer> distanceInterpolator;
   Superclass::PrepareDistanceImageAccessors(currentDistanceImage, distanceInterpolator);
 
@@ -85,10 +85,10 @@ StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInterna
 
   unsigned int band, i;
 
-  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt )
-    {
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+  {
     // Current pixel --> Geographical point
-    mosaicImage->TransformIndexToPhysicalPoint (outputIt.GetIndex(), geoPoint) ;
+    mosaicImage->TransformIndexToPhysicalPoint(outputIt.GetIndex(), geoPoint);
 
     // Presence of at least one non-null pixel of the used input images
     isDataInCurrentOutputPixel = false;
@@ -97,103 +97,102 @@ StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInterna
     tempOutputPixel.Fill(0.0);
 
     // Loop on used input images
-    for (i = 0 ; i < nbOfUsedInputImages ; i++)
-      {
+    for (i = 0; i < nbOfUsedInputImages; i++)
+    {
 
       // Check if the point is inside the transformed thread region
       // (i.e. the region in the current input image which match the thread
       // region)
-      if (interp[i]->IsInsideBuffer(geoPoint) )
-        {
+      if (interp[i]->IsInsideBuffer(geoPoint))
+      {
 
         // Compute the interpolated pixel value
         interpolatedPixel = interp[i]->Evaluate(geoPoint);
 
         // Check that interpolated pixel is not empty
-        if (Superclass::IsPixelNotEmpty(interpolatedPixel) )
-          {
+        if (Superclass::IsPixelNotEmpty(interpolatedPixel))
+        {
 
           // Geographical point (current pixel) --> Continuous index (from
           // current input image)
-          if (distanceInterpolator[i]->IsInsideBuffer(geoPoint) )
-            {
+          if (distanceInterpolator[i]->IsInsideBuffer(geoPoint))
+          {
             distanceImagePixel = distanceInterpolator[i]->Evaluate(geoPoint);
             distanceImagePixel -= Superclass::GetDistanceOffset();
 
             // Check that the distance is positive (i.e. we are inside the valid
             // area of the image)
-            if (distanceImagePixel> 0 || !isDataInCurrentOutputPixel)
-              {
+            if (distanceImagePixel > 0 || !isDataInCurrentOutputPixel)
+            {
 
               // Two possibility: distance < buffer or not
               InternalValueType coef1, coef2;
-              if (distanceImagePixel<m_FeatheringTransitionDistance && isDataInCurrentOutputPixel)
-                {
+              if (distanceImagePixel < m_FeatheringTransitionDistance && isDataInCurrentOutputPixel)
+              {
                 // Feather the image
-                coef1 = distanceImagePixel/m_FeatheringTransitionDistance;
-                coef1 = vcl_pow(coef1,m_FeatheringSmoothness);
+                coef1 = distanceImagePixel / m_FeatheringTransitionDistance;
+                coef1 = vcl_pow(coef1, m_FeatheringSmoothness);
                 coef2 = 1.0 - coef1;
-                }
+              }
               else
-                {
+              {
                 // Do not feather, put the image foreground
-                coef1 = 1.0 ;
-                coef2 = 0.0 ;
-                }
+                coef1 = 1.0;
+                coef2 = 0.0;
+              }
 
               // Average-Weight pixels (current pixel, and temporary pixel)
               const unsigned int inputImageIndex = Superclass::GetUsedInputImageIndice(i);
-              for (band = 0 ; band < nBands ; band++)
-                {
+              for (band = 0; band < nBands; band++)
+              {
                 // Cast the interpolated pixel to a internal pixel type
                 interpolatedMathPixel[band] = static_cast<InternalValueType>(interpolatedPixel[band]);
 
                 // Shift-scale the input pixel value
-                if (this->GetShiftScaleInputImages() )
-                  {
+                if (this->GetShiftScaleInputImages())
+                {
                   this->ShiftScaleValue(interpolatedMathPixel[band], inputImageIndex, band);
-                  }
+                }
 
                 // Average-Weight
-                tempOutputPixel[band] = coef1*interpolatedMathPixel[band] +
-                  coef2*tempOutputPixel[band];
+                tempOutputPixel[band] = coef1 * interpolatedMathPixel[band] + coef2 * tempOutputPixel[band];
 
-                } // loop on pixels band
+              } // loop on pixels band
 
               // Update the presence of data for this pixel
               isDataInCurrentOutputPixel = true;
 
-              } // Distance value is positive
+            } // Distance value is positive
 
-            } // Interpolated distance pixel not empty
+          } // Interpolated distance pixel not empty
 
           else
-            {
-            itkWarningMacro(<<"Unable to evaluate distance at point " << geoPoint);
+          {
+            itkWarningMacro(<< "Unable to evaluate distance at point " << geoPoint);
             distanceImagePixel = 0;
-            }
+          }
 
-          } // Interpolated pixel is not empty
-        }   // point inside buffer
-      }     // next image
+        } // Interpolated pixel is not empty
+      }   // point inside buffer
+    }     // next image
 
     // Prepare output pixel
-    OutputImagePixelType outputPixel(Superclass::GetNoDataOutputPixel() );
+    OutputImagePixelType outputPixel(Superclass::GetNoDataOutputPixel());
 
     if (isDataInCurrentOutputPixel)
-      {
+    {
 
       // Compute output pixel
-      for (band = 0 ; band < nBands ; band++)
-        {
+      for (band = 0; band < nBands; band++)
+      {
 
         // Normalize & cast
         pixelValue = tempOutputPixel[band];
         Superclass::NormalizePixelValue(pixelValue);
         outputPixel[band] = static_cast<OutputImageInternalPixelType>(pixelValue);
-        }
+      }
 
-      } // if data presence
+    } // if data presence
 
     // Update output pixel value
     outputIt.Set(outputPixel);
@@ -201,8 +200,7 @@ StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage, TInterna
     // Update progress
     progress.CompletedPixel();
 
-    } // next output pixel
-
+  } // next output pixel
 }
 
 } // end namespace gtb

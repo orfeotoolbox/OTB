@@ -54,17 +54,14 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage>
-class ITK_EXPORT StreamingMultibandFeatherMosaicFilter : public otb::StreamingFeatherMosaicFilter<TInputImage,
-                                                                                                  TOutputImage,
-                                                                                                  TDistanceImage>
+class ITK_EXPORT StreamingMultibandFeatherMosaicFilter : public otb::StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage>
 {
 public:
-
   /** Standard Self typedef */
-  typedef StreamingMultibandFeatherMosaicFilter                                        Self;
+  typedef StreamingMultibandFeatherMosaicFilter Self;
   typedef otb::StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage> Superclass;
-  typedef itk::SmartPointer<Self>                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -82,20 +79,20 @@ public:
   typedef typename OutputImage::SpacingType        OutputImageSpacingType;
 
   /** Gaussian filter typedefs */
-  typedef typename TInputImage::InternalPixelType                                         InputImageInternalValueType;
-  typedef otb::Image<InputImageInternalValueType>                                         SingleImageType;
-  typedef itk::DiscreteGaussianImageFilter<SingleImageType, SingleImageType>              DiscreteGaussianFilterType;
-  typedef typename DiscreteGaussianFilterType::Pointer                                    DiscreteGaussianFilterPointer;
+  typedef typename TInputImage::InternalPixelType InputImageInternalValueType;
+  typedef otb::Image<InputImageInternalValueType> SingleImageType;
+  typedef itk::DiscreteGaussianImageFilter<SingleImageType, SingleImageType> DiscreteGaussianFilterType;
+  typedef typename DiscreteGaussianFilterType::Pointer DiscreteGaussianFilterPointer;
   typedef otb::PerBandVectorImageFilter<ImageType, ImageType, DiscreteGaussianFilterType> PerBandFilterType;
-  typedef typename PerBandFilterType::Pointer                                             PerBandFilterPointer;
+  typedef typename PerBandFilterType::Pointer PerBandFilterPointer;
 
   /** Other filters typedefs */
-  typedef itk::SubtractImageFilter<TInputImage, TInputImage, TInputImage>              SubImageFilterType;
-  typedef typename SubImageFilterType::Pointer                                         SubImageFilterPointer;
+  typedef itk::SubtractImageFilter<TInputImage, TInputImage, TInputImage> SubImageFilterType;
+  typedef typename SubImageFilterType::Pointer SubImageFilterPointer;
   typedef otb::StreamingFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceImage> MosaicFilterType;
-  typedef typename MosaicFilterType::Pointer                                           MosaicFilterPointer;
-  typedef otb::SummingFilter<TOutputImage, TOutputImage>                               SummingFilterType;
-  typedef typename SummingFilterType::Pointer                                          SummingFilterPointer;
+  typedef typename MosaicFilterType::Pointer MosaicFilterPointer;
+  typedef otb::SummingFilter<TOutputImage, TOutputImage> SummingFilterType;
+  typedef typename SummingFilterType::Pointer SummingFilterPointer;
 
   /** Accessors for the number of levels */
   itkSetMacro(NumberOfLevels, unsigned int);
@@ -109,7 +106,8 @@ public:
 
 protected:
   StreamingMultibandFeatherMosaicFilter();
-  virtual ~StreamingMultibandFeatherMosaicFilter() {
+  virtual ~StreamingMultibandFeatherMosaicFilter()
+  {
   }
 
   virtual void Modified();
@@ -126,56 +124,55 @@ protected:
   }
 
 private:
-  StreamingMultibandFeatherMosaicFilter(const Self&); //purposely not
-                                                      // implemented
-  void operator=(const Self&);                        //purposely not
-                                                      // implemented
+  StreamingMultibandFeatherMosaicFilter(const Self&); // purposely not
+  // implemented
+  void operator=(const Self&); // purposely not
+  // implemented
 
-  unsigned int m_NumberOfLevels;    // number of scales
+  unsigned int m_NumberOfLevels; // number of scales
 
   /* Variances */
   double              m_FirstLevelVariance; // variance of first scale
   std::vector<double> m_Variances;          // variances values
 
   /* Transitions parameters */
-  DistanceImageValueType              m_FirstLevelTransitionDistance; // transition
-                                                                      // distance
-                                                                      // of the
-                                                                      // first
-                                                                      // scale
-  std::vector<DistanceImageValueType> m_TransitionDistances;          // transition
-                                                                      // distances
-                                                                      // for
-                                                                      // each
-                                                                      // scale
-  std::vector<DistanceImageValueType> m_TransitionOffsets;            // transition
-                                                                      // offsets
-                                                                      // for
-                                                                      // each
-                                                                      // scale
+  DistanceImageValueType m_FirstLevelTransitionDistance;     // transition
+                                                             // distance
+                                                             // of the
+                                                             // first
+                                                             // scale
+  std::vector<DistanceImageValueType> m_TransitionDistances; // transition
+                                                             // distances
+                                                             // for
+                                                             // each
+                                                             // scale
+  std::vector<DistanceImageValueType> m_TransitionOffsets;   // transition
+                                                             // offsets
+                                                             // for
+                                                             // each
+                                                             // scale
 
   /* Internal filters */
-  std::vector<std::vector<SubImageFilterPointer> >          m_SubImageFilter; // subtract
-                                                                              // filter
-                                                                              // array
-                                                                              // (2D)
-  std::vector<std::vector<PerBandFilterPointer> >           m_Filter;         // smoothing
-                                                                              // filter
-                                                                              // array
-                                                                              // (2D)
-  std::vector<std::vector<DiscreteGaussianFilterPointer>  > m_SingleFilter;   // smoothing
-                                                                              // filter
-                                                                              // (per
-                                                                              // band)
-                                                                              // array
-                                                                              // (2D)
-  std::vector<MosaicFilterPointer>                          m_MosaicFilter;   // mosaicking
-                                                                              // filter
-                                                                              // array
-                                                                              // (1D)
-  SummingFilterPointer                                      m_SummingFilter;  // Summing
-                                                                              // filter
-
+  std::vector<std::vector<SubImageFilterPointer>> m_SubImageFilter;       // subtract
+                                                                          // filter
+                                                                          // array
+                                                                          // (2D)
+  std::vector<std::vector<PerBandFilterPointer>> m_Filter;                // smoothing
+                                                                          // filter
+                                                                          // array
+                                                                          // (2D)
+  std::vector<std::vector<DiscreteGaussianFilterPointer>> m_SingleFilter; // smoothing
+                                                                          // filter
+                                                                          // (per
+                                                                          // band)
+                                                                          // array
+                                                                          // (2D)
+  std::vector<MosaicFilterPointer> m_MosaicFilter;                        // mosaicking
+                                                                          // filter
+                                                                          // array
+                                                                          // (1D)
+  SummingFilterPointer m_SummingFilter;                                   // Summing
+                                                                          // filter
 };
 
 } // end namespace gtb

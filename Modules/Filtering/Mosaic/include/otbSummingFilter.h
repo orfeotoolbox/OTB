@@ -41,12 +41,11 @@ template <class TInputImage, class TOutputImage>
 class ITK_EXPORT SummingFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
   /** Standard Self typedef */
-  typedef SummingFilter                                      Self;
+  typedef SummingFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,14 +75,16 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** Iterators */
-  typedef itk::ImageRegionIterator< OutputImageType >   OutputIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
 
 protected:
-  SummingFilter() {
+  SummingFilter()
+  {
   }
 
-  virtual ~SummingFilter() {
+  virtual ~SummingFilter()
+  {
   }
 
   /** SummingFilter can be implemented as a multithreaded filter.
@@ -103,11 +104,10 @@ protected:
   virtual void GenerateOutputInformation(void);
 
 private:
-  SummingFilter(const Self&);   //purposely not implemented
-  void operator=(const Self&);  //purposely not implemented
+  SummingFilter(const Self&);  // purposely not implemented
+  void operator=(const Self&); // purposely not implemented
 
 }; // end of class
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

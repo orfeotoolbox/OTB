@@ -41,17 +41,15 @@ namespace otb
  *
  * \ingroup OTBMosaic
  */
-template <class TInputImage, class TOutputImage=TInputImage, class TInternalValueType=double>
-class ITK_EXPORT StreamingSimpleMosaicFilter : public otb::StreamingMosaicFilterBase<TInputImage, TOutputImage,
-                                                                                     TInternalValueType>
+template <class TInputImage, class TOutputImage = TInputImage, class TInternalValueType = double>
+class ITK_EXPORT StreamingSimpleMosaicFilter : public otb::StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>
 {
 public:
-
   /** Standard Self typedef */
-  typedef StreamingSimpleMosaicFilter                                                   Self;
+  typedef StreamingSimpleMosaicFilter Self;
   typedef otb::StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType> Superclass;
-  typedef itk::SmartPointer<Self>                                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,18 +76,20 @@ public:
   typedef typename Superclass::InternalPixelType InternalPixelType;
 
 protected:
-  StreamingSimpleMosaicFilter() {
+  StreamingSimpleMosaicFilter()
+  {
   }
 
-  virtual ~StreamingSimpleMosaicFilter() {
+  virtual ~StreamingSimpleMosaicFilter()
+  {
   }
 
   /** Overrided methods */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
-  StreamingSimpleMosaicFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);              //purposely not implemented
+  StreamingSimpleMosaicFilter(const Self&); // purposely not implemented
+  void operator=(const Self&);              // purposely not implemented
 
 }; // end of class
 

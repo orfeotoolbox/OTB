@@ -50,10 +50,10 @@ class ITK_EXPORT PersistentMosaicFilter : public otb::StreamingMosaicFilterBase<
 {
 public:
   /** Standard typedefs */
-  typedef PersistentMosaicFilter                              Self;
+  typedef PersistentMosaicFilter Self;
   typedef otb::StreamingMosaicFilterBase<TInputImage, TOutputImage, TPrecisionType> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkTypeMacro(PersistentMosaicFilter, StreamingMosaicFilterBase);
@@ -103,9 +103,13 @@ public:
 
 protected:
   /** Constructor */
-  PersistentMosaicFilter() {}
+  PersistentMosaicFilter()
+  {
+  }
   /** Destructor */
-  ~PersistentMosaicFilter() override {}
+  ~PersistentMosaicFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -113,11 +117,10 @@ protected:
   }
 
 private:
-  PersistentMosaicFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMosaicFilter(const Self&); // purposely not implemented
+  void operator=(const Self&);         // purposely not implemented
 };
 } // End namespace otb
-
 
 
 #endif /* MODULES_REMOTE_MOSAIC_INCLUDE_OTBPERSISTENTMOSAICFILTER_H_ */

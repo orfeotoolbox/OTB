@@ -46,64 +46,58 @@ namespace otb
  *
  * \ingroup OTBMosaic
  */
-template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType=double>
-class ITK_EXPORT StreamingMosaicFilterWithBlendingBase : public otb::StreamingMosaicFilterBase<TInputImage,
-                                                                                               TOutputImage,
-                                                                                               TInternalValueType>
+template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType = double>
+class ITK_EXPORT StreamingMosaicFilterWithBlendingBase : public otb::StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>
 {
 public:
-
   /** Standard class typedef */
-  typedef StreamingMosaicFilterWithBlendingBase                                         Self;
+  typedef StreamingMosaicFilterWithBlendingBase Self;
   typedef otb::StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType> Superclass;
-  typedef itk::SmartPointer<Self>                                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information support. */
   itkTypeMacro(StreamingMosaicFilterWithBlendingBase, StreamingMosaicFilterBase);
 
   /** Distance image typedefs */
-  typedef TDistanceImage                           DistanceImageType;
-  typedef typename DistanceImageType::Pointer      DistanceImagePointer;
-  typedef typename DistanceImageType::ConstPointer DistanceImageConstPointer;
-  typedef typename DistanceImageType::PointType    DistanceImagePointType;
-  typedef typename DistanceImageType::PixelType    DistanceImagePixelType;
-  typedef typename DistanceImageType::InternalPixelType
-    DistanceImageInternalPixelType;
-  typedef typename itk::InterpolateImageFunction<DistanceImageType>
-    DistanceImageInterpolatorType;
-  typedef typename itk::LinearInterpolateImageFunction<DistanceImageType>
-    DistanceImageDefaultInterpolatorType;
-  typedef typename DistanceImageInterpolatorType::Pointer
-    DistanceImageInterpolatorPointer;
-  typedef typename DistanceImageType::RegionType DistanceImageRegionType;
+  typedef TDistanceImage                                                  DistanceImageType;
+  typedef typename DistanceImageType::Pointer                             DistanceImagePointer;
+  typedef typename DistanceImageType::ConstPointer                        DistanceImageConstPointer;
+  typedef typename DistanceImageType::PointType                           DistanceImagePointType;
+  typedef typename DistanceImageType::PixelType                           DistanceImagePixelType;
+  typedef typename DistanceImageType::InternalPixelType                   DistanceImageInternalPixelType;
+  typedef typename itk::InterpolateImageFunction<DistanceImageType>       DistanceImageInterpolatorType;
+  typedef typename itk::LinearInterpolateImageFunction<DistanceImageType> DistanceImageDefaultInterpolatorType;
+  typedef typename DistanceImageInterpolatorType::Pointer                 DistanceImageInterpolatorPointer;
+  typedef typename DistanceImageType::RegionType                          DistanceImageRegionType;
 
   /** Distance offset accessors */
   itkSetMacro(DistanceOffset, DistanceImageInternalPixelType);
   itkGetMacro(DistanceOffset, DistanceImageInternalPixelType);
 
   /** Set/Get the distance interpolator function. */
-  itkSetObjectMacro(DistanceInterpolator, DistanceImageInterpolatorType );
-  itkGetObjectMacro(DistanceInterpolator, DistanceImageInterpolatorType );
+  itkSetObjectMacro(DistanceInterpolator, DistanceImageInterpolatorType);
+  itkGetObjectMacro(DistanceInterpolator, DistanceImageInterpolatorType);
 
   /** Method to add one image
    * Two images are required
    * -1 input image (must be TInputImage type)
    * -1 input distance image (must be TDistanceImage: distance to the edges of the image)
    */
-  void PushBackInputs(const TInputImage * image, const TDistanceImage * distance)
+  void PushBackInputs(const TInputImage* image, const TDistanceImage* distance)
   {
-    this->PushBackInput(const_cast<TInputImage*>(image) );
-    this->PushBackInput(const_cast<TDistanceImage*>(distance) );
+    this->PushBackInput(const_cast<TInputImage*>(image));
+    this->PushBackInput(const_cast<TDistanceImage*>(distance));
   }
 
   /** Prepare interpolators, valid regions, and input images pointers */
-  virtual void PrepareDistanceImageAccessors(typename std::vector<DistanceImageType *>& currentDistanceImage,
-      typename std::vector<DistanceImageInterpolatorPointer>& distanceInterpolator);
+  virtual void PrepareDistanceImageAccessors(typename std::vector<DistanceImageType*>&               currentDistanceImage,
+                                             typename std::vector<DistanceImageInterpolatorPointer>& distanceInterpolator);
 
 protected:
   StreamingMosaicFilterWithBlendingBase();
-  ~StreamingMosaicFilterWithBlendingBase() {
+  ~StreamingMosaicFilterWithBlendingBase()
+  {
   }
 
   /* Overrided methods */
@@ -111,16 +105,16 @@ protected:
 
   virtual unsigned int GetNumberOfInputImages();
 
-  virtual unsigned int GetUsedInputImageIndice(unsigned int i){
+  virtual unsigned int GetUsedInputImageIndice(unsigned int i)
+  {
     return 0.5 * Superclass::GetUsedInputImageIndice(i);
   }
 
 private:
-
-  StreamingMosaicFilterWithBlendingBase(const Self&); //purposely not
-                                                      // implemented
-  void operator=(const Self&);                        //purposely not
-                                                      // implemented
+  StreamingMosaicFilterWithBlendingBase(const Self&); // purposely not
+  // implemented
+  void operator=(const Self&); // purposely not
+  // implemented
 
   DistanceImageInternalPixelType   m_DistanceOffset;       // distance offset
   DistanceImageInterpolatorPointer m_DistanceInterpolator; // distance image

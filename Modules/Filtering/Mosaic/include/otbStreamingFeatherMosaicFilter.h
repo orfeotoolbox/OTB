@@ -51,19 +51,15 @@ namespace otb
  *
  * \ingroup OTBMosaic
  */
-template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType=double>
-class ITK_EXPORT StreamingFeatherMosaicFilter :
-  public StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
+template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType = double>
+class ITK_EXPORT StreamingFeatherMosaicFilter : public StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
 {
 public:
-
   /** Standard Self typedef */
   typedef StreamingFeatherMosaicFilter Self;
-  typedef StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
-                                                TInternalValueType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>
-    ConstPointer;
+  typedef StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -106,18 +102,16 @@ public:
   typedef typename Superclass::StreamingTraitsType     StreamingTraitsType;
 
   /** Distance image typedefs */
-  typedef TDistanceImage                                DistanceImageType;
-  typedef typename DistanceImageType::Pointer           DistanceImagePointer;
-  typedef typename DistanceImageType::ConstPointer      DistanceImageConstPointer;
-  typedef typename DistanceImageType::PointType         DistanceImagePointType;
-  typedef typename DistanceImageType::PixelType         DistanceImagePixelType;
-  typedef typename DistanceImageType::InternalPixelType DistanceImageInternalPixelType;
-  typedef typename DistanceImageType::RegionType        DistanceImageRegionType;
-  typedef typename itk::InterpolateImageFunction<DistanceImageType>
-    DistanceImageInterpolatorType;
-  typedef typename itk::LinearInterpolateImageFunction<DistanceImageType>
-    DistanceImageDefaultInterpolatorType;
-  typedef typename DistanceImageInterpolatorType::Pointer DistanceImageInterpolatorPointer;
+  typedef TDistanceImage                                                  DistanceImageType;
+  typedef typename DistanceImageType::Pointer                             DistanceImagePointer;
+  typedef typename DistanceImageType::ConstPointer                        DistanceImageConstPointer;
+  typedef typename DistanceImageType::PointType                           DistanceImagePointType;
+  typedef typename DistanceImageType::PixelType                           DistanceImagePixelType;
+  typedef typename DistanceImageType::InternalPixelType                   DistanceImageInternalPixelType;
+  typedef typename DistanceImageType::RegionType                          DistanceImageRegionType;
+  typedef typename itk::InterpolateImageFunction<DistanceImageType>       DistanceImageInterpolatorType;
+  typedef typename itk::LinearInterpolateImageFunction<DistanceImageType> DistanceImageDefaultInterpolatorType;
+  typedef typename DistanceImageInterpolatorType::Pointer                 DistanceImageInterpolatorPointer;
 
   /** Feathering transition distance accessors */
   itkSetMacro(FeatheringTransitionDistance, InternalValueType);
@@ -129,11 +123,12 @@ public:
 
 protected:
   StreamingFeatherMosaicFilter();
-  virtual ~StreamingFeatherMosaicFilter() {
+  virtual ~StreamingFeatherMosaicFilter()
+  {
   }
 
   /** Overrided methods */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
   InternalValueType m_FeatheringTransitionDistance; // feathering transition

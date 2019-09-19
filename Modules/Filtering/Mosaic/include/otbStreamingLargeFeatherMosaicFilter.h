@@ -46,19 +46,15 @@ namespace otb
  *
  * \ingroup OTBMosaic
  */
-template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType=double>
-class ITK_EXPORT StreamingLargeFeatherMosaicFilter :
-  public StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
+template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType = double>
+class ITK_EXPORT StreamingLargeFeatherMosaicFilter : public StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType>
 {
 public:
-
   /** Standard Self typedef */
   typedef StreamingLargeFeatherMosaicFilter Self;
-  typedef StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
-                                                TInternalValueType> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self>
-    ConstPointer;
+  typedef StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage, TInternalValueType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -112,14 +108,16 @@ public:
   typedef typename Superclass::DistanceImageInterpolatorPointer     DistanceImageInterpolatorPointer;
 
 protected:
-  StreamingLargeFeatherMosaicFilter() {
+  StreamingLargeFeatherMosaicFilter()
+  {
   }
 
-  virtual ~StreamingLargeFeatherMosaicFilter() {
+  virtual ~StreamingLargeFeatherMosaicFilter()
+  {
   }
 
   /** Overrided method */
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
+  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 }; // end of class
 

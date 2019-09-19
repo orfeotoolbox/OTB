@@ -26,36 +26,31 @@
 #include "otbSummingFilter.h"
 #include "itkProgressReporter.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * Generates output information:
  */
 template <class TInputImage, class TOutputImage>
-void SummingFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation(void)
+void SummingFilter<TInputImage, TOutputImage>::GenerateOutputInformation(void)
 {
-  itkDebugMacro( << "Generate output informations" );
+  itkDebugMacro(<< "Generate output informations");
   Superclass::GenerateOutputInformation();
-
 }
 
 /**
  * Processing.
  */
 template <class TInputImage, class TOutputImage>
-void SummingFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId )
+void SummingFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
 
   // Debug info
-  itkDebugMacro(<<"Actually executing thread " << threadId
-                << " in region " << outputRegionForThread);
+  itkDebugMacro(<< "Actually executing thread " << threadId << " in region " << outputRegionForThread);
 
   // Support progress methods/callbacks
-  itk::ProgressReporter progress(this, threadId,
-                                 outputRegionForThread.GetNumberOfPixels() );
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // Iterate through the thread region
   OutputIteratorType outputIt(this->GetOutput(), outputRegionForThread);
@@ -65,38 +60,35 @@ void SummingFilter<TInputImage, TOutputImage>
   unsigned int nbInputBands;
 
   InputIteratorType inputIt[nbInputImages];
-  for (unsigned int i = 0 ; i < nbInputImages ; i++)
-    {
-    InputImageType * currentImage = const_cast<InputImageType *>(this->GetInput(i) );
-    inputIt[i] = InputIteratorType(currentImage, outputRegionForThread);
-    nbInputBands = currentImage->GetNumberOfComponentsPerPixel();
-    }
+  for (unsigned int i = 0; i < nbInputImages; i++)
+  {
+    InputImageType* currentImage = const_cast<InputImageType*>(this->GetInput(i));
+    inputIt[i]                   = InputIteratorType(currentImage, outputRegionForThread);
+    nbInputBands                 = currentImage->GetNumberOfComponentsPerPixel();
+  }
 
   OutputImagePixelType pix;
   pix.SetSize(nbInputBands);
 
   // Sum images
-  for ( outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt )
-    {
+  for (outputIt.GoToBegin(); !outputIt.IsAtEnd(); ++outputIt)
+  {
     pix.Fill(0.0);
-    for (unsigned int i = 0 ; i < nbInputImages ; i++)
+    for (unsigned int i = 0; i < nbInputImages; i++)
+    {
+
+      for (unsigned int band = 0; band < nbInputBands; band++)
       {
-
-      for (unsigned int band = 0 ; band < nbInputBands ; band++)
-        {
         pix[band] += inputIt[i].Get()[band];
-
-        }
-      ++inputIt[i];
       }
+      ++inputIt[i];
+    }
     outputIt.Set(pix);
 
     // Update process
     progress.CompletedPixel();
-    }
-
+  }
 }
-
 }
 
 #endif

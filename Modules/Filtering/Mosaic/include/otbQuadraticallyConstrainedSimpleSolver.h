@@ -29,7 +29,8 @@
 #include <vnl/vnl_matrix.h>
 #include "vnl/algo/vnl_solve_qp.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class QuadraticallyConstrainedSimpleSolver
@@ -62,11 +63,10 @@ namespace otb {
  * \ingroup OTBMosaic
  */
 
-template<class ValueType>
+template <class ValueType>
 class ITK_EXPORT QuadraticallyConstrainedSimpleSolver : public itk::LightObject
 {
 public:
-
   /** Standard class typedef */
   typedef QuadraticallyConstrainedSimpleSolver Self;
   typedef itk::LightObject                     Superclass;
@@ -80,39 +80,66 @@ public:
   itkNewMacro(Self);
 
   /** Typedefs */
-  typedef vnl_matrix<ValueType> RealMatrixType;
-  typedef vnl_vector<ValueType> RealVectorType;
-  typedef vnl_matrix<double>    DoubleMatrixType;
-  typedef vnl_vector<double>    DoubleVectorType;
-  typedef std::vector <unsigned int> ListIndexType;
+  typedef vnl_matrix<ValueType>     RealMatrixType;
+  typedef vnl_vector<ValueType>     RealVectorType;
+  typedef vnl_matrix<double>        DoubleMatrixType;
+  typedef vnl_vector<double>        DoubleVectorType;
+  typedef std::vector<unsigned int> ListIndexType;
 
   /** Enum for objective function type */
   enum ObjectiveFunctionType
-    {
+  {
     Cost_Function_rmse,          // Root mean square error based
     Cost_Function_musig,         // Mean and standard deviation based
     Cost_Function_mu,            // Mean based
     Cost_Function_weighted_musig // Mean and weighted standard deviation based
-    };
+  };
 
   /** Mean-in-overlaps matrix */
-  void SetMeanInOverlaps(const RealMatrixType & matrix) { m_MeanInOverlaps = RealMatrixType(matrix); }
-  const RealMatrixType GetMeanInOverlaps()      { return m_MeanInOverlaps; }
+  void SetMeanInOverlaps(const RealMatrixType& matrix)
+  {
+    m_MeanInOverlaps = RealMatrixType(matrix);
+  }
+  const RealMatrixType GetMeanInOverlaps()
+  {
+    return m_MeanInOverlaps;
+  }
 
   /** Standard-deviation-in-overlaps matrix  */
-  void SetStandardDeviationInOverlaps(const RealMatrixType & matrix) { m_StandardDeviationInOverlaps = RealMatrixType(matrix); }
-  const RealMatrixType GetStandardDeviationInOverlaps() { return m_StandardDeviationInOverlaps; }
+  void SetStandardDeviationInOverlaps(const RealMatrixType& matrix)
+  {
+    m_StandardDeviationInOverlaps = RealMatrixType(matrix);
+  }
+  const RealMatrixType GetStandardDeviationInOverlaps()
+  {
+    return m_StandardDeviationInOverlaps;
+  }
 
   /** Area-in-overlaps matrix */
-  void SetAreaInOverlaps(const RealMatrixType & matrix) { m_AreaInOverlaps = RealMatrixType(matrix); }
-  const RealMatrixType GetAreaInOverlaps() { return m_AreaInOverlaps; }
+  void SetAreaInOverlaps(const RealMatrixType& matrix)
+  {
+    m_AreaInOverlaps = RealMatrixType(matrix);
+  }
+  const RealMatrixType GetAreaInOverlaps()
+  {
+    return m_AreaInOverlaps;
+  }
 
   /** Mean-of-pixels-products-in-overlaps matrix */
-  void SetMeanOfProductsInOverlaps(const RealMatrixType & matrix) { m_MeanOfProductsInOverlaps = RealMatrixType(matrix); }
-  const RealMatrixType GetMeanOfProductsInOverlaps() { return m_MeanOfProductsInOverlaps; }
+  void SetMeanOfProductsInOverlaps(const RealMatrixType& matrix)
+  {
+    m_MeanOfProductsInOverlaps = RealMatrixType(matrix);
+  }
+  const RealMatrixType GetMeanOfProductsInOverlaps()
+  {
+    return m_MeanOfProductsInOverlaps;
+  }
 
   /** Output correction model */
-  const RealVectorType GetOutputCorrectionModel() { return m_OutputCorrectionModel; }
+  const RealVectorType GetOutputCorrectionModel()
+  {
+    return m_OutputCorrectionModel;
+  }
 
   /**
    * STD weight in harmonization
@@ -120,37 +147,53 @@ public:
    * if value is 1, importance is the same than MEAN
    * if value is higher than 1, importance is accorder to STD
    */
-  void SetWeightOfStandardDeviationTerm(ValueType weight) { m_WeightOfStandardDeviationTerm = weight; }
-  ValueType GetWeightOfStandardDeviationTerm() { return m_WeightOfStandardDeviationTerm; }
+  void SetWeightOfStandardDeviationTerm(ValueType weight)
+  {
+    m_WeightOfStandardDeviationTerm = weight;
+  }
+  ValueType GetWeightOfStandardDeviationTerm()
+  {
+    return m_WeightOfStandardDeviationTerm;
+  }
 
   /** Solving routine */
   void Solve();
 
   /** Set the cost function type */
-  void SetMeanBased()                             { oft = Cost_Function_mu; }
-  void SetMeanAndStandardDeviationBased()         { oft = Cost_Function_musig; }
-  void SetRMSEBased()                             { oft = Cost_Function_rmse; }
-  void SetWeightedMeanAndStandardDeviationBased() { oft = Cost_Function_weighted_musig; }
+  void SetMeanBased()
+  {
+    oft = Cost_Function_mu;
+  }
+  void SetMeanAndStandardDeviationBased()
+  {
+    oft = Cost_Function_musig;
+  }
+  void SetRMSEBased()
+  {
+    oft = Cost_Function_rmse;
+  }
+  void SetWeightedMeanAndStandardDeviationBased()
+  {
+    oft = Cost_Function_weighted_musig;
+  }
 
 protected:
-
   QuadraticallyConstrainedSimpleSolver();
   virtual ~QuadraticallyConstrainedSimpleSolver();
 
 private:
-
   // Check inputs
   void CheckInputs(void) const;
 
   // Deep First Search
-  void DFS(std::vector<bool> & marked, unsigned int s) const;
+  void DFS(std::vector<bool>& marked, unsigned int s) const;
 
   // Compute the objective matrix
-  const DoubleMatrixType GetQuadraticObjectiveMatrix(const DoubleMatrixType & areas,
-      const DoubleMatrixType & means, const DoubleMatrixType & stds, const DoubleMatrixType & mops);
+  const DoubleMatrixType GetQuadraticObjectiveMatrix(const DoubleMatrixType& areas, const DoubleMatrixType& means, const DoubleMatrixType& stds,
+                                                     const DoubleMatrixType& mops);
 
   // Extract a sub matrix from indices list
-  const DoubleMatrixType ExtractMatrix(const RealMatrixType & mat, const ListIndexType & idx);
+  const DoubleMatrixType ExtractMatrix(const RealMatrixType& mat, const ListIndexType& idx);
 
   // Input
   RealMatrixType m_MeanInOverlaps;
@@ -166,7 +209,6 @@ private:
 
   // objective funciton type (enum)
   ObjectiveFunctionType oft;
-
 };
 
 } /* namespace otb */

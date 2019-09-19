@@ -51,16 +51,15 @@ namespace otb
  *
  **/
 
-template <class TInputImage, class TOutputImage=TInputImage, class TInternalValueType=double>
+template <class TInputImage, class TOutputImage = TInputImage, class TInternalValueType = double>
 class ITK_EXPORT StreamingMosaicFilterBase : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
   /** Standard class typedef */
-  typedef StreamingMosaicFilterBase                          Self;
+  typedef StreamingMosaicFilterBase Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information support. */
   itkTypeMacro(StreamingMosaicFilterBase, ImageToImageFilter);
@@ -88,18 +87,16 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** Internal computing typedefs */
-  typedef TInternalValueType                       InternalValueType;
-  typedef typename itk::ContinuousIndex<double, 2> ContinuousIndexType;
-  typedef itk::InterpolateImageFunction<InputImageType, InternalValueType>
-    InterpolatorType;
+  typedef TInternalValueType InternalValueType;
+  typedef typename itk::ContinuousIndex<double, 2>                         ContinuousIndexType;
+  typedef itk::InterpolateImageFunction<InputImageType, InternalValueType> InterpolatorType;
   typedef typename InterpolatorType::Pointer InterpolatorPointerType;
-  typedef itk::NearestNeighborInterpolateImageFunction<InputImageType,InternalValueType>
-    DefaultInterpolatorType;
-  typedef typename otb::VectorImage<InternalValueType, 2> InternalImageType;
-  typedef typename InternalImageType::PixelType           InternalPixelType;
-  typedef itk::ImageRegionIterator<OutputImageType>       IteratorType;
-  typedef itk::ImageRegionConstIterator<OutputImageType>  ConstIteratorType;
-  typedef otb::StreamingTraits <OutputImageType>          StreamingTraitsType;
+  typedef itk::NearestNeighborInterpolateImageFunction<InputImageType, InternalValueType> DefaultInterpolatorType;
+  typedef typename otb::VectorImage<InternalValueType, 2>                                 InternalImageType;
+  typedef typename InternalImageType::PixelType          InternalPixelType;
+  typedef itk::ImageRegionIterator<OutputImageType>      IteratorType;
+  typedef itk::ImageRegionConstIterator<OutputImageType> ConstIteratorType;
+  typedef otb::StreamingTraits<OutputImageType>          StreamingTraitsType;
 
   /** Typedef for input images indices
    * TODO maybe use a itk class instead of std::vector ?*/
@@ -109,8 +106,8 @@ public:
   typedef vnl_matrix<InternalValueType> MatrixType;
 
   /** Set/Get the interpolator function. */
-  itkSetObjectMacro(Interpolator, InterpolatorType );
-  itkGetObjectMacro(Interpolator, InterpolatorType );
+  itkSetObjectMacro(Interpolator, InterpolatorType);
+  itkGetObjectMacro(Interpolator, InterpolatorType);
 
   /** Set/Get the output no data value */
   itkSetMacro(NoDataOutputPixel, OutputImagePixelType);
@@ -137,30 +134,35 @@ public:
   itkGetMacro(AutomaticOutputParametersComputation, bool);
 
   /** Set shift-scale mode */
-  itkSetMacro(ShiftScaleInputImages,bool);
-  itkGetMacro(ShiftScaleInputImages,bool);
+  itkSetMacro(ShiftScaleInputImages, bool);
+  itkGetMacro(ShiftScaleInputImages, bool);
   itkBooleanMacro(ShiftScaleInputImages);
 
   /** Set the shift-scale matrices */
-  virtual void SetShiftMatrix(MatrixType shiftMatrix) {
+  virtual void SetShiftMatrix(MatrixType shiftMatrix)
+  {
     m_ShiftMatrix = MatrixType(shiftMatrix);
   }
 
-  virtual void SetScaleMatrix(MatrixType scaleMatrix) {
+  virtual void SetScaleMatrix(MatrixType scaleMatrix)
+  {
     m_ScaleMatrix = MatrixType(scaleMatrix);
   }
 
-  virtual MatrixType GetShiftMatrix() {
+  virtual MatrixType GetShiftMatrix()
+  {
     return m_ShiftMatrix;
   }
 
-  virtual MatrixType GetScaleMatrix() {
+  virtual MatrixType GetScaleMatrix()
+  {
     return m_ScaleMatrix;
   }
 
 protected:
   StreamingMosaicFilterBase();
-  ~StreamingMosaicFilterBase() {
+  ~StreamingMosaicFilterBase()
+  {
   }
 
   /**
@@ -175,11 +177,10 @@ protected:
   virtual void BeforeThreadedGenerateData();
 
   /** Image extent computing */
-  virtual void ImageToExtent(InputImageType* image, InputImagePointType &extentInf, InputImagePointType &extentSup);
+  virtual void ImageToExtent(InputImageType* image, InputImagePointType& extentInf, InputImagePointType& extentSup);
 
   /** Requested region computing */
-  virtual bool OutputRegionToInputRegion(const OutputImageRegionType &mosaicRegion,
-                                         InputImageRegionType &inputRegion, InputImageType* &inputImage);
+  virtual bool OutputRegionToInputRegion(const OutputImageRegionType& mosaicRegion, InputImageRegionType& inputRegion, InputImageType*& inputImage);
 
   /** normalize pixel value, according to numeric type **/
   virtual void NormalizePixelValue(InternalValueType& pixelValue);
@@ -188,15 +189,18 @@ protected:
   virtual bool IsPixelNotEmpty(InputImagePixelType& inputPixel);
 
   /** Get the used input images indices */
-  virtual void AddUsedInputImageIndex(unsigned int index){
+  virtual void AddUsedInputImageIndex(unsigned int index)
+  {
     usedInputIndices.push_back(index);
   }
 
-  virtual unsigned int GetUsedInputImageIndice(unsigned int i){
+  virtual unsigned int GetUsedInputImageIndice(unsigned int i)
+  {
     return usedInputIndices[i];
   }
 
-  virtual unsigned int GetNumberOfUsedInputImages() {
+  virtual unsigned int GetNumberOfUsedInputImages()
+  {
     return usedInputIndices.size();
   }
 
@@ -204,12 +208,14 @@ protected:
   virtual void ComputeOutputParameters();
 
   /** Get the number of input images */
-  virtual unsigned int GetNumberOfInputImages() {
+  virtual unsigned int GetNumberOfInputImages()
+  {
     return this->GetNumberOfInputs();
   }
 
   /** Get number of bands */
-  virtual unsigned int GetNumberOfBands() {
+  virtual unsigned int GetNumberOfBands()
+  {
     return nbOfBands;
   }
 
@@ -217,7 +223,7 @@ protected:
   virtual void ComputeRequestedRegionOfInputImage(unsigned int inputImageIndex);
 
   /** Shift-Scale a value */
-  virtual void ShiftScaleValue(InternalValueType& value, const unsigned int& imageIndex, unsigned int& band )
+  virtual void ShiftScaleValue(InternalValueType& value, const unsigned int& imageIndex, unsigned int& band)
   {
     value *= m_ScaleMatrix[imageIndex][band];
     value += m_ShiftMatrix[imageIndex][band];
@@ -227,17 +233,15 @@ protected:
   virtual void CheckShiftScaleMatrices();
 
   /** Prepare interpolators, valid regions, and input images pointers */
-  virtual void PrepareImageAccessors(typename std::vector<InputImageType *>& image,
-      typename std::vector<InterpolatorPointerType>& interpolator);
+  virtual void PrepareImageAccessors(typename std::vector<InputImageType*>& image, typename std::vector<InterpolatorPointerType>& interpolator);
 
 private:
+  StreamingMosaicFilterBase(const Self&); // purposely not implemented
+  void operator=(const Self&);            // purposely not implemented
 
-  StreamingMosaicFilterBase(const Self&); //purposely not implemented
-  void operator=(const Self&);            //purposely not implemented
-
-  InterpolatorPointerType m_Interpolator;       // Interpolator
-  OutputImagePixelType    m_NoDataOutputPixel;  // No data (output)
-  InputImagePixelType     m_NoDataInputPixel;   // No data (input)
+  InterpolatorPointerType m_Interpolator;      // Interpolator
+  OutputImagePixelType    m_NoDataOutputPixel; // No data (output)
+  InputImagePixelType     m_NoDataInputPixel;  // No data (input)
 
   OutputImageSpacingType m_OutputSpacing; // Output spacing
   OutputImagePointType   m_OutputOrigin;  // Output origin
@@ -246,8 +250,8 @@ private:
   bool m_AutomaticOutputParametersComputation; // Output parameters auto on/off
   bool m_ShiftScaleInputImages;                // Shift-scale mode on/off
 
-  MatrixType m_ShiftMatrix;           // matrix of shifts
-  MatrixType m_ScaleMatrix;           // matrix of scales
+  MatrixType m_ShiftMatrix; // matrix of shifts
+  MatrixType m_ScaleMatrix; // matrix of scales
 
   /** Internal */
   unsigned int      nbOfBands;          // number of bands
