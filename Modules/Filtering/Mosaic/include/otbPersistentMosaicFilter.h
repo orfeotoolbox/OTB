@@ -83,9 +83,9 @@ protected:
   /** Constructor */
   PersistentMosaicFilter() {}
   /** Destructor */
-  ~PersistentMosaicFilter() ITK_OVERRIDE {}
+  ~PersistentMosaicFilter() override {}
   /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
