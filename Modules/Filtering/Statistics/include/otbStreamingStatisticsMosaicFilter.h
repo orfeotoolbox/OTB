@@ -49,6 +49,7 @@ namespace otb
  * i in the overlapping area with the image j.
  *
  * \ingroup OTBMosaic
+ * \ingroup OTBStatistics
  */
 template <class TInputImage, class TOutputImage = TInputImage, class TInternalValueType = double>
 class ITK_EXPORT PersistentStatisticsMosaicFilter : public otb::PersistentMosaicFilter<TInputImage, TOutputImage, TInternalValueType>
@@ -158,18 +159,6 @@ protected:
   virtual ~PersistentStatisticsMosaicFilter()
   {
   }
-
-  /** PersistentStatisticsMosaicFilter can be implemented as a multithreaded filter.
-   * Therefore, this implementation provides a ThreadedGenerateData() routine
-   * which is called for each processing thread. The output image data is
-   * allocated automatically by the superclass prior to calling
-   * ThreadedGenerateData().  ThreadedGenerateData can only write to the
-   * portion of the output image specified by the parameter
-   * "outputRegionForThread"
-   *
-   * \sa ImageToImageFilter::ThreadedGenerateData(),
-   *     ImageToImageFilter::GenerateData()  */
-
 
   /** Class for storing thread results:
    * -sum of values
@@ -304,9 +293,26 @@ private:
 }; // end of class
 
 
-/*
- * Decorator
+/** \class StreamingStatisticsMosaicFilter
+ * \brief This class streams the whole input image through the PersistentStatisticsMosaicFilter.
+ *
+ * This way, it allows computing the stats of the input images. It calls the
+ * Reset() method of the PersistentStatisticsMosaicFilter before streaming the image and the
+ * Synthetize() method of the PersistentStatisticsMosaicFilter after having streamed the image
+ * to compute the statistics. The accessor on the results are wrapping the accessors of the
+ * internal PersistentStatisticsMosaicFilter.
+ *
+ * \sa PersistentStatisticsMosaicFilter
+ * \sa PersistentImageFilter
+ * \sa PersistentFilterStreamingDecorator
+ * \sa StreamingImageVirtualWriter
+ * \ingroup Streamed
+ * \ingroup Multithreaded
+ * \ingroup Mosaic
+ *
+ * \ingroup OTBStatistics
  */
+
 template <class TInputImage, class TOutputImage, class TInternalValueType>
 class ITK_EXPORT StreamingStatisticsMosaicFilter
     : public PersistentFilterStreamingDecorator<PersistentStatisticsMosaicFilter<TInputImage, TOutputImage, TInternalValueType>>
@@ -439,7 +445,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingStatisticsMosaicFilter.txx"
+#include "otbStreamingStatisticsMosaicFilter.hxx"
 #endif
 
 #endif
