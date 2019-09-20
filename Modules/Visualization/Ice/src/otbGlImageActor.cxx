@@ -86,12 +86,7 @@ GlImageActor::GlImageActor()
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New()),
     m_ResolutionAlgorithm(ResolutionAlgorithm::Nearest),
-#if !USE_GL_RAII
-    m_VAO(0),
-    m_VBO(0)
-#else
     m_Mesh()
-#endif
 {}
 
 GlImageActor
@@ -118,66 +113,6 @@ GlImageActor
 
   shader->SetImageSettings( m_ImageSettings );
 
-#if !USE_GL_RAII
-
-  // Use a Vertex Array Object
-  glGenVertexArrays(1, &m_VAO);
-  glBindVertexArray(m_VAO);
-
-  // 1 square (made by 2 triangles) to be rendered
-  GLfloat vertexPosition[8] = {
-    -1.0, -1.0,
-    1.0, -1.0,
-    1.0, 1.0,
-    -1.0, 1.0
-  };
-
-  GLfloat texCoord[8] = {
-    0.0, 1.0,
-    1.0, 1.0,
-    1.0, 0.0,
-    0.0, 0.0,
-  };
-
-  GLuint indices[6] = {
-    0, 1, 2,
-    2, 3, 0
-  };
-
-  // Create a Vector Buffer Object that will store the vertices on video memory
-  glGenBuffers(1, &m_VBO);
-
-  // Allocate space for vertex positions and texture coordinates
-  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertexPosition) + sizeof(texCoord), NULL, GL_STATIC_DRAW);
-
-  // Transfer the vertex positions:
-  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
-
-  // Transfer the texture coordinates:
-  glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertexPosition), sizeof(texCoord), texCoord);
-
-  // Create an Element Array Buffer that will store the indices array:
-  GLuint eab;
-  glGenBuffers(1, &eab);
-
-  // Transfer the data from indices to eab
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eab);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-  // get attribute position for position and in_coord
-  int posIdx = shader->GetAttribIdx()[0];
-  int texIdx = shader->GetAttribIdx()[1];
-
-  // Specify how the data for position can be accessed
-  glVertexAttribPointer(posIdx, 2, GL_FLOAT, GL_FALSE, 0, 0);
-  glEnableVertexAttribArray(posIdx);
-
-  // Texture coord attribute
-  glVertexAttribPointer(texIdx, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)sizeof(vertexPosition));
-  glEnableVertexAttribArray(texIdx);
-
-#else
   // Check previous OpenGL error and clear error flag.
   gl::CheckError< gl::error::clear >();
 
@@ -187,10 +122,6 @@ GlImageActor
       shader->GetAttribIdx()[ 1 ]
     )
   );
-
-  // assert( m_Mesh );
-  // m_Mesh->Bind( false );
-#endif
 
   // Should be done last in order to ensure exception-safety of
   // invariant.
@@ -452,16 +383,11 @@ void GlImageActor::Render()
       -1.0f, 1.0f
     };
 
-#if !USE_GL_RAII
-  glBindVertexArray(m_VAO);
-  glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-#else
   // Check OpenGL error and clear error flag.
   gl::CheckError< gl::error::clear >();
 
   assert( m_Mesh );
   m_Mesh->Bind();
-#endif
 
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
@@ -502,7 +428,6 @@ void GlImageActor::Render()
     }
 
   m_Shader->UnloadShader();
-
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -541,7 +466,7 @@ void GlImageActor::LoadTile(Tile& tile)
   unsigned int idx = 0;
 
   for(it.GoToBegin();!it.IsAtEnd();++it)
-    {
+  {
     buffer[idx] = static_cast<float>(it.Get()[2]);
     ++idx;
     buffer[idx] = static_cast<float>(it.Get()[1]);
@@ -550,7 +475,7 @@ void GlImageActor::LoadTile(Tile& tile)
     ++idx;
     buffer[idx] = 255.;
     ++idx;
-    }
+  }
 
   // Now load the texture
   assert( tile.m_TextureId==0 );

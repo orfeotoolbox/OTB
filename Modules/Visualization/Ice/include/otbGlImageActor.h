@@ -37,8 +37,6 @@
 #include <string>
 
 
-#define USE_GL_RAII 1
-
 namespace otb
 {
 
@@ -317,15 +315,8 @@ private:
 
   ResolutionAlgorithm::type m_ResolutionAlgorithm;
 
-#if !USE_GL_RAII
-  // index of Vertex Array Object
-  unsigned int m_VAO;
-
-  // index of Vector Buffer Object
-  unsigned int m_VBO;
-#else
+  /** OpenGL quad. */
   std::unique_ptr< gl::Mesh > m_Mesh;
-#endif
 
 }; // End class GlImageActor
 
