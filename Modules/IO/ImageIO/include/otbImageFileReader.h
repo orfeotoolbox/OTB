@@ -195,7 +195,7 @@ private:
 namespace otb
 {
 
-// Prevent implicit instanciation of common types to improve build performance
+// Prevent implicit instantiation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<Image<unsigned int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<Image<int, 2>>;

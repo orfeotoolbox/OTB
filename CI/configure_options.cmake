@@ -56,7 +56,7 @@ OTB_USE_SIFTFAST:BOOL=ON
 OTB_USE_SPTW:BOOL=ON
 OTB_USE_SSE_FLAGS:BOOL=ON")
 
-# Usefull if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
+# Useful if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
 
 set (otb_wrap_option
 "OTB_WRAP_PYTHON:BOOL=ON")

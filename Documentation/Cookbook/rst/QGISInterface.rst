@@ -13,7 +13,7 @@ With QGIS > 3.8, the plugin is in the QGIS core. So you just need install OTB an
 Download and Install OTB
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-OTB is not distributed with qgis-otb-plugin. It is a seperate project and has its own git repository.
+OTB is not distributed with qgis-otb-plugin. It is a separate project and has its own git repository.
 Download latest OTB version: https://www.orfeo-toolbox.org/download/.
 
 Configure plugin in QGIS

@@ -66,7 +66,7 @@ if __name__ == "__main__":
   # are we in a merge_request pipeline ?
   if 'CI_MERGE_REQUEST_IID' in env.keys():
     if not CheckEnvParameters(['K8S_SECRET_API_TOKEN']):
-      print("WARNING: Make sure you have set a valid acces token for Gitlab API." \
+      print("WARNING: Make sure you have set a valid access token for Gitlab API." \
         + "The K8S_SECRET_API_TOKEN environment variable should be set in 'Settings -> CI/CD -> Variables'" \
         + "Without this token, some feature of the CI platform will be disabled.")
       sys.exit(0)

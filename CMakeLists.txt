@@ -102,7 +102,7 @@ reset_qt_i18n_sources()
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 # Find python stuff
-# Version 3 is prefered before 2
+# Version 3 is preferred before 2
 set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )

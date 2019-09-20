@@ -472,7 +472,7 @@ otb_test_application(NAME MosaicTestSlimFeathering
                      OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
                              -out ${TEMP}/apTvMosaicTestSlimFeathering.tif uint8 
                              -comp.feather slim 
-                             -comp.feather.slim.lenght 100
+                             -comp.feather.slim.length 100
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSlimFeathering.tif
                              ${TEMP}/apTvMosaicTestSlimFeathering.tif)
