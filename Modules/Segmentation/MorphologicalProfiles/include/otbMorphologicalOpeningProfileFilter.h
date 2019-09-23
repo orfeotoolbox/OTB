@@ -50,18 +50,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
 class ITK_EXPORT MorphologicalOpeningProfileFilter
-  : public ImageToProfileFilter<TInputImage, TOutputImage,
-      itk::OpeningByReconstructionImageFilter
-      <TInputImage, TOutputImage, TStructuringElement>,
-      unsigned int>
+    : public ImageToProfileFilter<TInputImage, TOutputImage, itk::OpeningByReconstructionImageFilter<TInputImage, TOutputImage, TStructuringElement>,
+                                  unsigned int>
 {
 public:
   /** Standard typedefs */
   typedef MorphologicalOpeningProfileFilter Self;
-  typedef ImageToProfileFilter<TInputImage, TOutputImage,
-      itk::OpeningByReconstructionImageFilter
-      <TInputImage, TOutputImage, TStructuringElement>,
-      unsigned int> Superclass;
+  typedef ImageToProfileFilter<TInputImage, TOutputImage, itk::OpeningByReconstructionImageFilter<TInputImage, TOutputImage, TStructuringElement>, unsigned int>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -84,9 +80,11 @@ protected:
     this->GetFilter()->SetKernel(se);
   }
   /** Constructor */
-  MorphologicalOpeningProfileFilter() {};
+  MorphologicalOpeningProfileFilter(){};
   /** Destructor */
-  ~MorphologicalOpeningProfileFilter() override {}
+  ~MorphologicalOpeningProfileFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -94,8 +92,8 @@ protected:
   }
 
 private:
-  MorphologicalOpeningProfileFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MorphologicalOpeningProfileFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #endif

@@ -50,57 +50,41 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ApplicationLauncher
-::ApplicationLauncher( QObject* p ) :
-  QObject( p )
+ApplicationLauncher::ApplicationLauncher(QObject* p) : QObject(p)
 {
 }
 
 /*******************************************************************************/
-ApplicationLauncher
-::~ApplicationLauncher()
+ApplicationLauncher::~ApplicationLauncher()
 {
 }
 
 /*******************************************************************************/
-otb::Wrapper::Application::Pointer
-ApplicationLauncher
-::PrepareApplication(const QString& appName, bool isStandalone) const
+otb::Wrapper::Application::Pointer ApplicationLauncher::PrepareApplication(const QString& appName, bool isStandalone) const
 {
   // Create module
-  otb::Wrapper::Application::Pointer otbApp(
-    otb::Wrapper::ApplicationRegistry::CreateApplication(
-      ToStdString( appName )
-    )
-  );
+  otb::Wrapper::Application::Pointer otbApp(otb::Wrapper::ApplicationRegistry::CreateApplication(ToStdString(appName)));
 
-  if( otbApp.IsNull() )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	tr( "Failed to instantiate OTB-application '%1'." )
-	.arg( appName )
-      )
-    );
-    }
+  if (otbApp.IsNull())
+  {
+    throw std::runtime_error(ToStdString(tr("Failed to instantiate OTB-application '%1'.").arg(appName)));
+  }
 
-  if( !isStandalone )
-    {
+  if (!isStandalone)
+  {
     // Search for elev parameters
-    typedef std::vector< std::string > ParametersKeys;
-    const ParametersKeys parameters( otbApp->GetParametersKeys() );
+    typedef std::vector<std::string> ParametersKeys;
+    const ParametersKeys             parameters(otbApp->GetParametersKeys());
 
     // Little flag structure with bool operator to optimize look
     // scanning parameter keys.
     struct Flags
     {
-      Flags() :
-        m_HasDem( false ),
-        m_HasGeoid( false )
+      Flags() : m_HasDem(false), m_HasGeoid(false)
       {
       }
 
-      inline operator bool () const
+      inline operator bool() const
       {
         return m_HasDem && m_HasGeoid;
       }
@@ -111,75 +95,49 @@ ApplicationLauncher
 
     Flags found;
 
-    for( ParametersKeys::const_iterator it( parameters.begin() );
-         it!=parameters.end() && !found;
-         ++it )
-      {
+    for (ParametersKeys::const_iterator it(parameters.begin()); it != parameters.end() && !found; ++it)
+    {
       std::size_t lastDot = it->find_last_of('.');
 
-      assert( I18nCoreApplication::ConstInstance()!=NULL );
+      assert(I18nCoreApplication::ConstInstance() != NULL);
       const I18nCoreApplication* i18nApp = I18nCoreApplication::ConstInstance();
 
-      if( lastDot != std::string::npos )
-        {
-        std::string lastKey(
-          it->substr( lastDot + 1, it->size() - lastDot - 1 )
-        );
+      if (lastDot != std::string::npos)
+      {
+        std::string lastKey(it->substr(lastDot + 1, it->size() - lastDot - 1));
 
-        if( lastKey=="dem" )
-          {
+        if (lastKey == "dem")
+        {
           found.m_HasDem = true;
 
-          if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ) &&
-              i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ).toBool() )
-            {
-            otbApp->EnableParameter( *it );
-            otbApp->SetParameterString(
-              *it,
-              ToStdString(
-                i18nApp->RetrieveSettingsKey(
-                  I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-                )
-                .toString()
-              )
-            );
-            }
-          }
-        else if( lastKey=="geoid" )
+          if (i18nApp->HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE) &&
+              i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE).toBool())
           {
+            otbApp->EnableParameter(*it);
+            otbApp->SetParameterString(*it, ToStdString(i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()));
+          }
+        }
+        else if (lastKey == "geoid")
+        {
           found.m_HasGeoid = true;
 
-          if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ) &&
-              i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE )
-              .toBool() )
-            {
-            otbApp->EnableParameter( *it );
+          if (i18nApp->HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE) &&
+              i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE).toBool())
+          {
+            otbApp->EnableParameter(*it);
 
-            otbApp->SetParameterString(
-              *it,
-              ToStdString(
-                i18nApp->RetrieveSettingsKey(
-                  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-                )
-                .toString()
-              )
-            );
-            }
+            otbApp->SetParameterString(*it, ToStdString(i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString()));
           }
         }
       }
     }
+  }
 
   return otbApp;
-
 }
 
 
-otb::Wrapper::QtMainWindow* ApplicationLauncher ::NewOtbApplicationWindow(const QString& appName, bool isStandalone, QWidget* parent) const
+otb::Wrapper::QtMainWindow* ApplicationLauncher::NewOtbApplicationWindow(const QString& appName, bool isStandalone, QWidget* parent) const
 {
   // Setup the otb application
   auto otbApp = PrepareApplication(appName, isStandalone);

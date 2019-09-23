@@ -27,8 +27,8 @@ typedef otb::ExtendedFilenameToWriterOptions FilenameHelperType;
 int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputExtendedFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputExtendedFilename = argv[1];
+  const char* outputFilename        = argv[2];
 
   FilenameHelperType::Pointer helper = FilenameHelperType::New();
 
@@ -45,9 +45,9 @@ int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
 
   file << helper->gdalCreationOptionsIsSet() << std::endl;
   if (helper->gdalCreationOptionsIsSet())
-    for (unsigned int i=0; i<helper->GetgdalCreationOptions().size(); i++)
+    for (unsigned int i = 0; i < helper->GetgdalCreationOptions().size(); i++)
     {
-    file << helper->GetgdalCreationOptions()[i] << std::endl;
+      file << helper->GetgdalCreationOptions()[i] << std::endl;
     }
 
   return EXIT_SUCCESS;

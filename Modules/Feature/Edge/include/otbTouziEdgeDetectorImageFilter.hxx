@@ -45,21 +45,19 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage,
-    TOutputImageDirection>::GenerateInputRequestedRegion() throw (
-  itk::InvalidRequestedRegionError)
-  {
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+{
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer  inputPtr   =  const_cast<TInputImage *>(this->GetInput());
+  typename Superclass::InputImagePointer  inputPtr  = const_cast<TInputImage*>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if (!inputPtr || !outputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -71,12 +69,12 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage,
 
   // crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
+  {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -85,15 +83,14 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage,
 
     // build an exception
     itk::InvalidRequestedRegionError e(__FILE__, __LINE__);
-    std::ostringstream msg;
-    msg << static_cast<const char *>(this->GetNameOfClass())
-        << "::GenerateInputRequestedRegion()";
+    std::ostringstream               msg;
+    msg << static_cast<const char*>(this->GetNameOfClass()) << "::GenerateInputRequestedRegion()";
     e.SetLocation(msg.str());
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
   }
+}
 
 /**
  * Set up state of filter before multi-threading.
@@ -101,15 +98,13 @@ void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage,
  * has to be set up before ThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void
-TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
-::BeforeThreadedGenerateData()
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::BeforeThreadedGenerateData()
 {
 
   typename OutputImageDirectionType::RegionType region;
   typename OutputImageType::Pointer             output = this->GetOutput();
 
-  OutputImageDirectionType * direction = this->GetOutputDirection();
+  OutputImageDirectionType* direction = this->GetOutputDirection();
 
   region.SetSize(output->GetRequestedRegion().GetSize());
   region.SetIndex(output->GetRequestedRegion().GetIndex());
@@ -120,12 +115,8 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void
-TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
-::ThreadedGenerateData(
-  const OutputImageRegionType&     outputRegionForThread,
-  itk::ThreadIdType threadId
-  )
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                          itk::ThreadIdType threadId)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -134,8 +125,8 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   itk::ImageRegionIterator<OutputImageType>             it_dir;
 
   // Allocate output
-  typename OutputImageType::Pointer          output = this->GetOutput();
-  typename InputImageType::ConstPointer      input  = this->GetInput();
+  typename OutputImageType::Pointer          output    = this->GetOutput();
+  typename InputImageType::ConstPointer      input     = this->GetInput();
   typename OutputImageDirectionType::Pointer outputDir = this->GetOutputDirection();
 
   // Find the data-set boundary "faces"
@@ -192,21 +183,21 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
-    {
+  {
 
     cpt += 1;
 
-    bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
+    bit                           = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
 
-    it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+    it     = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     it_dir = itk::ImageRegionIterator<OutputImageDirectionType>(outputDir, *fit);
 
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
     while (!bit.IsAtEnd())
-      {
+    {
 
       // Location of the pixel central
       bitIndex = bit.GetIndex();
@@ -216,71 +207,84 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 
       // Initializations
       for (int dir = 0; dir < NB_DIR; ++dir)
-        {
-        for (int m = 0; m < NB_REGION; m++)
+      {
+        for (int m    = 0; m < NB_REGION; m++)
           Sum[dir][m] = 0.;
-        }
+      }
 
-      R_contour = -1;
+      R_contour   = -1;
       Dir_contour = 0.;
       Sum_R_theta = 0.;
 
       // Loop on pixels of the filter
       for (i = 0; i < neighborhoodSize; ++i)
-        {
+      {
 
         bitIndex = bit.GetIndex(i);
-        x = bitIndex[0];
-        y = bitIndex[1];
+        x        = bitIndex[0];
+        y        = bitIndex[1];
 
         // We determine for each direction with which region the pixel belongs.
 
         // Horizontal direction
-        if (y < yc) Sum[0][0] += static_cast<double>(bit.GetPixel(i));
-        else if (y > yc) Sum[0][1] += static_cast<double>(bit.GetPixel(i));
+        if (y < yc)
+          Sum[0][0] += static_cast<double>(bit.GetPixel(i));
+        else if (y > yc)
+          Sum[0][1] += static_cast<double>(bit.GetPixel(i));
 
         // Diagonal direction 1
-        if ((y - yc) < (x - xc)) Sum[1][0] += static_cast<double>(bit.GetPixel(i));
-        else if ((y - yc) > (x - xc)) Sum[1][1] += static_cast<double>(bit.GetPixel(i));
+        if ((y - yc) < (x - xc))
+          Sum[1][0] += static_cast<double>(bit.GetPixel(i));
+        else if ((y - yc) > (x - xc))
+          Sum[1][1] += static_cast<double>(bit.GetPixel(i));
 
         // Vertical direction
-        if (x > xc) Sum[2][0] += static_cast<double>(bit.GetPixel(i));
-        else if (x < xc) Sum[2][1] += static_cast<double>(bit.GetPixel(i));
+        if (x > xc)
+          Sum[2][0] += static_cast<double>(bit.GetPixel(i));
+        else if (x < xc)
+          Sum[2][1] += static_cast<double>(bit.GetPixel(i));
 
         // Diagonal direction 2
-        if ((y - yc) > -(x - xc)) Sum[3][0] += static_cast<double>(bit.GetPixel(i));
-        else if ((y - yc) < -(x - xc)) Sum[3][1] += static_cast<double>(bit.GetPixel(i));
+        if ((y - yc) > -(x - xc))
+          Sum[3][0] += static_cast<double>(bit.GetPixel(i));
+        else if ((y - yc) < -(x - xc))
+          Sum[3][1] += static_cast<double>(bit.GetPixel(i));
 
-        } // end of the loop on pixels of the filter
+      } // end of the loop on pixels of the filter
 
       // Loop on the 4 directions
       for (int dir = 0; dir < NB_DIR; ++dir)
-        {
+      {
         // Calculation of the mean of the 2 regions
         M1 = Sum[dir][0] / static_cast<double>(m_Radius[0] * (2 * m_Radius[0] + 1));
         M2 = Sum[dir][1] / static_cast<double>(m_Radius[0] * (2 * m_Radius[0] + 1));
 
         // Calculation of the intensity of the contour
-        if ((M1 != 0) && (M2 != 0)) R_theta[dir] = static_cast<double>(1 - std::min((M1 / M2), (M2 / M1)));
-        else R_theta[dir] = 0.;
+        if ((M1 != 0) && (M2 != 0))
+          R_theta[dir] = static_cast<double>(1 - std::min((M1 / M2), (M2 / M1)));
+        else
+          R_theta[dir] = 0.;
 
         // Determination of the maximum intensity of the contour
         R_contour = static_cast<double>(std::max(R_contour, R_theta[dir]));
 
         // Determination of the sign of contour
-        if (M2 > M1) sign = +1;
-        else sign = -1;
+        if (M2 > M1)
+          sign = +1;
+        else
+          sign = -1;
 
         Dir_contour += sign * Theta[dir] * R_theta[dir];
         Sum_R_theta += R_theta[dir];
 
-        } // end of the loop on the directions
+      } // end of the loop on the directions
 
       // Assignment of this value to the output pixel
       it.Set(static_cast<OutputPixelType>(R_contour));
 
       // Determination of the direction of the contour
-      if (Sum_R_theta != 0.) Dir_contour = Dir_contour / Sum_R_theta;
+      if (Sum_R_theta != 0.)
+        Dir_contour = Dir_contour / Sum_R_theta;
 
       // Assignment of this value to the "outputdir" pixel
       it_dir.Set(static_cast<OutputPixelDirectionType>(Dir_contour));
@@ -289,19 +293,15 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
       ++it;
       ++it_dir;
       progress.CompletedPixel();
-
-      }
-
     }
+  }
 }
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void
-TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << std::endl;

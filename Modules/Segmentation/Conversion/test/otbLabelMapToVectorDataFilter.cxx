@@ -32,31 +32,31 @@
 #include "otbAttributesMapLabelObject.h"
 #include "itkLabelImageToLabelMapFilter.h"
 
-int otbLabelMapToVectorDataFilter(int argc, char * argv[])
+int otbLabelMapToVectorDataFilter(int argc, char* argv[])
 {
   /** Use the labelObjecttopolygon functor (not thread safe) only polygon conversion is available yet*/
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputImageFile outputVectorfile(shp)" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  }
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   // Labeled image type
-  const unsigned int Dimension                 = 2;
-  typedef unsigned short                         LabelType;
-  typedef otb::Image<LabelType, Dimension>       LabeledImageType;
+  const unsigned int     Dimension = 2;
+  typedef unsigned short LabelType;
+  typedef otb::Image<LabelType, Dimension> LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
 
   // Label map typedef
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         LabelMapFilterType;
-  typedef otb::VectorData<double, 2>                                              VectorDataType;
-  typedef otb::VectorDataFileWriter<VectorDataType>                               WriterType;
-  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>         VectorDataFilterType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType> LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+  typedef otb::VectorData<double, 2>                                      VectorDataType;
+  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataFilterType;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   lreader->SetFileName(infname);
@@ -87,5 +87,4 @@ int otbLabelMapToVectorDataFilter(int argc, char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

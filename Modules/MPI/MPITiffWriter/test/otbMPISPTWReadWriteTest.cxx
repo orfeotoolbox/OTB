@@ -33,39 +33,41 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
 
   // Initialize MPI environment
   otb::MPIConfig::Pointer config = otb::MPIConfig::Instance();
-  config->Init(argc,argv);
+  config->Init(argc, argv);
 
   // Get command line arguments
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << std::endl;
     std::cerr << argv[0] << " inputImageFile outputImageFile " << std::endl;
     return EXIT_SUCCESS;
-    }
+  }
 
   // Image typedefs
-  typedef float PixelType;
-  typedef otb::VectorImage<PixelType>	ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef float                                    PixelType;
+  typedef otb::VectorImage<PixelType>              ImageType;
+  typedef otb::ImageFileReader<ImageType>          ReaderType;
   typedef otb::SimpleParallelTiffWriter<ImageType> WriterType;
 
   // Reader configuration
-  ReaderType::Pointer reader = ReaderType::New();
-  std::string inputFilename = std::string(argv[1]);
+  ReaderType::Pointer reader        = ReaderType::New();
+  std::string         inputFilename = std::string(argv[1]);
   reader->SetFileName(inputFilename);
   reader->GenerateOutputInformation();
 
   // Writer configuration
-  WriterType::Pointer writer = WriterType::New();
-  std::string outputFilename = std::string(argv[2]);
+  WriterType::Pointer writer         = WriterType::New();
+  std::string         outputFilename = std::string(argv[2]);
   writer->SetFileName(outputFilename);
   writer->SetInput(reader->GetOutput());
-  
+
   // Execute the MPI pipeline
-  try{
+  try
+  {
     writer->Update();
   }
-  catch (std::exception & err) {
+  catch (std::exception& err)
+  {
     std::cerr << "ExceptionObject caught !" << std::endl;
     std::cerr << err.what() << std::endl;
 
@@ -73,5 +75,4 @@ int otbMPISPTWReadWriteTest(int argc, char* argv[])
   }
 
   return EXIT_SUCCESS;
-
 }

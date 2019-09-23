@@ -49,15 +49,14 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT SiftFastImageFilter
-  : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+class ITK_EXPORT SiftFastImageFilter : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
   /** Standard typedefs */
-  typedef SiftFastImageFilter                                 Self;
+  typedef SiftFastImageFilter Self;
   typedef ImageToPointSetFilter<TInputImage, TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -77,13 +76,13 @@ public:
   typedef typename TOutputPointSet::PointType       OutputPointType;
   typedef typename TOutputPointSet::PointIdentifier OutputPointIdentifierType;
 
-  typedef otb::Image<float, 2>                             FloatImageType;
-  typedef std::vector<std::pair<OutputPointType, double> > OrientationVectorType;
+  typedef otb::Image<float, 2>                            FloatImageType;
+  typedef std::vector<std::pair<OutputPointType, double>> OrientationVectorType;
 
   itkSetMacro(ScalesNumber, unsigned int);
   itkGetMacro(ScalesNumber, unsigned int);
 
-  //Set/Get the Orientation of all KeyPoints
+  // Set/Get the Orientation of all KeyPoints
   OrientationVectorType GetOrientationVector()
   {
     return m_OrientationVector;
@@ -97,7 +96,9 @@ protected:
   SiftFastImageFilter();
 
   /** Destructor */
-  ~SiftFastImageFilter() override {}
+  ~SiftFastImageFilter() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -106,7 +107,6 @@ private:
   /** The number of scales */
   unsigned int          m_ScalesNumber;
   OrientationVectorType m_OrientationVector;
-
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

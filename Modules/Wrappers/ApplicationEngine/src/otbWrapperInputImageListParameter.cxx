@@ -31,198 +31,143 @@ namespace Wrapper
 {
 
 
-const std::string
-IMAGES_FILTER(
-  "All files (*);;"
-  "TIFF file (*tif);;"
-  "PNG File (*.png);;"
-  "JPEG File (*.jpg)"
-);
+const std::string IMAGES_FILTER(
+    "All files (*);;"
+    "TIFF file (*tif);;"
+    "PNG File (*.png);;"
+    "JPEG File (*.jpg)");
 
 
 /*****************************************************************************/
-InputImageParameter::Pointer
-InputImageListParameter
-::FromImage( ImageBaseType * image )
+InputImageParameter::Pointer InputImageListParameter::FromImage(ImageBaseType* image)
 {
-  assert( image!=nullptr );
+  assert(image != nullptr);
 
-  InputImageParameter::Pointer p;
+  InputImageParameter::Pointer p(InputImageParameter::New());
 
-  return FromImage( p, image );
+  return FromImage(p, image);
 }
 
 /*****************************************************************************/
-InputImageParameter::Pointer &
-InputImageListParameter
-::FromImage( InputImageParameter::Pointer & parameter,
-	     ImageBaseType * image )
+InputImageParameter::Pointer& InputImageListParameter::FromImage(InputImageParameter::Pointer& parameter, ImageBaseType* image)
 {
-  return
-    FromData(
-      parameter,
-      image,
-      []( auto p, auto i ) -> void
-      {
-        assert( p );
+  return FromData(parameter, image,
+                  [](auto p, auto i) -> void {
+                    assert(p);
 
-	p->SetImage( i );
-      },
-      "Image filename"
-    );
+                    p->SetImage(i);
+                  },
+                  "Image filename");
 }
 
 
 /*****************************************************************************/
-InputImageListParameter
-::InputImageListParameter() :
-  m_ImageList( FloatVectorImageListType::New() )
+InputImageListParameter::InputImageListParameter() : m_ImageList(FloatVectorImageListType::New())
 {
-  SetName( "Input Image List" );
-  SetKey( "inList" );
+  SetName("Input Image List");
+  SetKey("inList");
 }
 
 
 /*****************************************************************************/
-InputImageListParameter
-::~InputImageListParameter()
+InputImageListParameter::~InputImageListParameter()
 {
 }
 
 /*****************************************************************************/
-const FloatVectorImageListType *
-InputImageListParameter
-::GetImageList() const
+const FloatVectorImageListType* InputImageListParameter::GetImageList() const
 {
-  return const_cast< InputImageListParameter * >( this )->GetImageList();
+  return const_cast<InputImageListParameter*>(this)->GetImageList();
 }
 
 
 /*****************************************************************************/
-FloatVectorImageListType *
-InputImageListParameter
-::GetImageList()
+FloatVectorImageListType* InputImageListParameter::GetImageList()
 {
-  return
-    GetObjectList(
-      m_ImageList,
-      []( auto param ) -> auto
-      {
-        assert( param );
+  return GetObjectList(m_ImageList, [](auto param) -> auto {
+    assert(param);
 
-        return param->GetFloatVectorImage();
-      }
-    );
+    return param->GetFloatVectorImage();
+  });
 }
 
 
 /*****************************************************************************/
-const FloatVectorImageType *
-InputImageListParameter
-::GetNthImage( std::size_t i ) const
+const FloatVectorImageType* InputImageListParameter::GetNthImage(std::size_t i) const
 {
-  return const_cast< InputImageListParameter * >( this )->GetNthImage( i );
+  return const_cast<InputImageListParameter*>(this)->GetNthImage(i);
 }
 
 
 /*****************************************************************************/
-FloatVectorImageType *
-InputImageListParameter::GetNthImage( std::size_t i )
+FloatVectorImageType* InputImageListParameter::GetNthImage(std::size_t i)
 {
-  assert( i<Size() );
-  assert( !m_Parameters[ i ].IsNull() );
-  assert( m_Parameters[ i ]->GetFloatVectorImage()!=nullptr );
+  assert(i < Size());
+  assert(!m_Parameters[i].IsNull());
+  assert(m_Parameters[i]->GetFloatVectorImage() != nullptr);
 
-  return m_Parameters[ i ]->GetFloatVectorImage();
+  return m_Parameters[i]->GetFloatVectorImage();
 }
 
 /*****************************************************************************/
-void
-InputImageListParameter
-::SetImageList( FloatVectorImageListType * imList )
+void InputImageListParameter::SetImageList(FloatVectorImageListType* imList)
 {
-  assert( imList!=nullptr );
-  assert( !m_ImageList.IsNull() );
+  assert(imList != nullptr);
+  assert(!m_ImageList.IsNull());
 
-  SetObjectList(
-    *m_ImageList,
-    *imList,
-    [ this ]( auto p, auto image ) -> auto
-    {
-      this->FromImage( p, image );
-    },
-    //
-    []( auto p ) -> auto
-    {
-      assert( p );
+  SetObjectList(*m_ImageList, *imList, [this](auto p, auto image) -> auto { this->FromImage(p, image); },
+                //
+                [](auto p) -> auto {
+                  assert(p);
 
-      return p->GetFloatVectorImage();
-    }
-  );
+                  return p->GetFloatVectorImage();
+                });
 }
 
 
 /*****************************************************************************/
-void
-InputImageListParameter
-::SetNthImage( std::size_t i, ImageBaseType * image )
+void InputImageListParameter::SetNthImage(std::size_t i, ImageBaseType* image)
 {
-  assert( i<Size() );
-  assert( image!=nullptr );
+  assert(i < Size());
+  assert(image != nullptr);
 
   // Check input availability
   image->UpdateOutputInformation();
 
   // Build parameter.
-  FromImage( m_Parameters[ i ], image );
+  FromImage(m_Parameters[i], image);
 }
 
 
 /*****************************************************************************/
-void
-InputImageListParameter
-::AddImage( ImageBaseType * image )
+void InputImageListParameter::AddImage(ImageBaseType* image)
 {
-  AddData(
-    image,
-    [ this ]( auto i ) -> auto
-    {
-      return this->FromImage( i );
-    }
-  );
+  AddData(image, [this](auto i) -> auto { return this->FromImage(i); });
 }
 
 
 /*****************************************************************************/
-void
-InputImageListParameter
-::ClearValue()
+void InputImageListParameter::ClearValue()
 {
   Superclass::ClearValue();
 
-  assert( m_ImageList );
+  assert(m_ImageList);
 
   m_ImageList->Clear();
 }
 
 
 /*****************************************************************************/
-Role
-InputImageListParameter
-::GetDirection() const
+Role InputImageListParameter::GetDirection() const
 {
   return Role_Input;
 }
 
 
 /*****************************************************************************/
-const std::string &
-InputImageListParameter
-::GetFilenameFilter() const
+const std::string& InputImageListParameter::GetFilenameFilter() const
 {
   return IMAGES_FILTER;
 }
-
 }
-
 }

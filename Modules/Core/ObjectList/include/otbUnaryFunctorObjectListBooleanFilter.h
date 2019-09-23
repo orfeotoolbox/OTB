@@ -38,15 +38,14 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputList, class TOutputList, class TFunction>
-class ITK_EXPORT UnaryFunctorObjectListBooleanFilter :
-  public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
+class ITK_EXPORT UnaryFunctorObjectListBooleanFilter : public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorObjectListBooleanFilter                        Self;
+  typedef UnaryFunctorObjectListBooleanFilter Self;
   typedef otb::ObjectListToObjectListFilter<TInputList, TOutputList> Superclass;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -85,15 +84,17 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
 protected:
   UnaryFunctorObjectListBooleanFilter();
-  ~UnaryFunctorObjectListBooleanFilter() override {}
+  ~UnaryFunctorObjectListBooleanFilter() override
+  {
+  }
 
   /** Multi-threading implementation */
 
@@ -112,8 +113,8 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListBooleanFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  UnaryFunctorObjectListBooleanFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
 };

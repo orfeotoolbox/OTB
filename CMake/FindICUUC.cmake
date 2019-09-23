@@ -39,7 +39,7 @@ find_library( ICUUC_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set ICUUC_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( ICUUC DEFAULT_MSG ICUUC_LIBRARY ICUUC_INCLUDE_DIR )
+find_package_handle_standard_args( ICUUC DEFAULT_MSG ICUUC_LIBRARY ICUUC_INCLUDE_DIR )
 
 mark_as_advanced( ICUUC_INCLUDE_DIR ICUUC_LIBRARY )
 

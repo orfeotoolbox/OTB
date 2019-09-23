@@ -31,34 +31,33 @@ namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::DecisionTreeMachineLearningModel() :
+DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::DecisionTreeMachineLearningModel()
+  :
 #ifdef OTB_OPENCV_3
- m_DTreeModel(cv::ml::DTrees::create()),
- m_MaxDepth(10),
- m_MinSampleCount(10),
- m_RegressionAccuracy(0.01),
- m_UseSurrogates(false),
- m_MaxCategories(10),
- m_CVFolds(0),
+    m_DTreeModel(cv::ml::DTrees::create()),
+    m_MaxDepth(10),
+    m_MinSampleCount(10),
+    m_RegressionAccuracy(0.01),
+    m_UseSurrogates(false),
+    m_MaxCategories(10),
+    m_CVFolds(0),
 #else
- m_DTreeModel (new CvDTree),
- m_MaxDepth(INT_MAX),
- m_MinSampleCount(10),
- m_RegressionAccuracy(0.01),
- m_UseSurrogates(true),
- m_MaxCategories(10),
- m_CVFolds(10),
+    m_DTreeModel(new CvDTree),
+    m_MaxDepth(INT_MAX),
+    m_MinSampleCount(10),
+    m_RegressionAccuracy(0.01),
+    m_UseSurrogates(true),
+    m_MaxCategories(10),
+    m_CVFolds(10),
 #endif
- m_Use1seRule(true),
- m_TruncatePrunedTree(true)
+    m_Use1seRule(true),
+    m_TruncatePrunedTree(true)
 {
   this->m_IsRegressionSupported = true;
 }
 
 template <class TInputValue, class TOutputValue>
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::~DecisionTreeMachineLearningModel()
+DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::~DecisionTreeMachineLearningModel()
 {
 #ifndef OTB_OPENCV_3
   delete m_DTreeModel;
@@ -67,21 +66,19 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 
 /** Train the machine learning model */
 template <class TInputValue, class TOutputValue>
-void
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
-  //convert listsample to opencv matrix
+  // convert listsample to opencv matrix
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
 
   cv::Mat labels;
-  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(),labels);
+  otb::ListSampleToMat<TargetListSampleType>(this->GetTargetListSample(), labels);
 
-  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U );
-  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL) ); // all inputs are numerical
+  cv::Mat var_type = cv::Mat(this->GetInputListSample()->GetMeasurementVectorSize() + 1, 1, CV_8U);
+  var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL)); // all inputs are numerical
 
-  if (!this->m_RegressionMode) //Classification
+  if (!this->m_RegressionMode) // Classification
     var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
 #ifdef OTB_OPENCV_3
@@ -94,37 +91,28 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   m_DTreeModel->setUse1SERule(m_Use1seRule);
   m_DTreeModel->setTruncatePrunedTree(m_TruncatePrunedTree);
   m_DTreeModel->setPriors(cv::Mat(m_Priors));
-  m_DTreeModel->train(cv::ml::TrainData::create(
-    samples,
-    cv::ml::ROW_SAMPLE,
-    labels,
-    cv::noArray(),
-    cv::noArray(),
-    cv::noArray(),
-    var_type));
+  m_DTreeModel->train(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels, cv::noArray(), cv::noArray(), cv::noArray(), var_type));
 #else
-  float * priors = m_Priors.empty() ? nullptr : &m_Priors.front();
+  float* priors = m_Priors.empty() ? nullptr : &m_Priors.front();
 
-  CvDTreeParams params = CvDTreeParams(m_MaxDepth, m_MinSampleCount, m_RegressionAccuracy,
-                                       m_UseSurrogates, m_MaxCategories, m_CVFolds, m_Use1seRule, m_TruncatePrunedTree, priors);
+  CvDTreeParams params = CvDTreeParams(m_MaxDepth, m_MinSampleCount, m_RegressionAccuracy, m_UseSurrogates, m_MaxCategories, m_CVFolds, m_Use1seRule,
+                                       m_TruncatePrunedTree, priors);
 
-  //train the Decision Tree model
-  m_DTreeModel->train(samples,CV_ROW_SAMPLE,labels,cv::Mat(),cv::Mat(),var_type,cv::Mat(),params);
+  // train the Decision Tree model
+  m_DTreeModel->train(samples, CV_ROW_SAMPLE, labels, cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
 #endif
 }
 
 template <class TInputValue, class TOutputValue>
-typename DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality, ProbaSampleType *proba) const
+typename DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType
+DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const InputSampleType& input, ConfidenceValueType* quality, ProbaSampleType* proba) const
 {
   TargetSampleType target;
 
-  //convert listsample to Mat
+  // convert listsample to Mat
   cv::Mat sample;
 
-  otb::SampleToMat<InputSampleType>(input,sample);
+  otb::SampleToMat<InputSampleType>(input, sample);
 #ifdef OTB_OPENCV_3
   double result = m_DTreeModel->predict(sample);
 #else
@@ -134,22 +122,20 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
   target[0] = static_cast<TOutputValue>(result);
 
   if (quality != nullptr)
-    {
+  {
     if (!this->m_ConfidenceIndex)
-      {
+    {
       itkExceptionMacro("Confidence index not available for this classifier !");
-      }
     }
+  }
   if (proba != nullptr && !this->m_ProbaIndex)
     itkExceptionMacro("Probability per class not available for this classifier !");
 
-return target;
+  return target;
 }
 
 template <class TInputValue, class TOutputValue>
-void
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::Save(const std::string & filename, const std::string & name)
+void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& name)
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
@@ -166,9 +152,7 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::Load(const std::string & filename, const std::string & name)
+void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& name)
 {
 #ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
@@ -182,16 +166,14 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-bool
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const std::string & file)
+bool DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(const std::string& file)
 {
   std::ifstream ifs;
   ifs.open(file);
 
-  if(!ifs)
+  if (!ifs)
   {
-    std::cerr<<"Could not read file "<<file<<std::endl;
+    std::cerr << "Could not read file " << file << std::endl;
     return false;
   }
 
@@ -200,15 +182,15 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
     std::string line;
     std::getline(ifs, line);
 
-    //if (line.find(m_SVMModel->getName()) != std::string::npos)
+    // if (line.find(m_SVMModel->getName()) != std::string::npos)
     if (line.find(CV_TYPE_NAME_ML_TREE) != std::string::npos
 #ifdef OTB_OPENCV_3
         || line.find(m_DTreeModel->getDefaultName()) != std::string::npos
 #endif
-      )
+        )
     {
-       //std::cout<<"Reading a "<<CV_TYPE_NAME_ML_TREE<<" model"<<std::endl;
-       return true;
+      // std::cout<<"Reading a "<<CV_TYPE_NAME_ML_TREE<<" model"<<std::endl;
+      return true;
     }
   }
   ifs.close();
@@ -216,22 +198,18 @@ DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-bool
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & itkNotUsed(file))
+bool DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string& itkNotUsed(file))
 {
   return false;
 }
 
 template <class TInputValue, class TOutputValue>
-void
-DecisionTreeMachineLearningModel<TInputValue,TOutputValue>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
-} //end namespace otb
+} // end namespace otb
 
 #endif

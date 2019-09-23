@@ -46,12 +46,9 @@ public:
   typedef StatisticsAttributesLabelObjectFunctor Self;
 
   // Matrix typedef
-  typedef typename itk::Matrix<double,
-      TFeatureImage::ImageDimension,
-      TFeatureImage::ImageDimension> MatrixType;
+  typedef typename itk::Matrix<double, TFeatureImage::ImageDimension, TFeatureImage::ImageDimension> MatrixType;
   // Vector typedef
-  typedef typename itk::Vector<double,
-      TFeatureImage::ImageDimension>        VectorType;
+  typedef typename itk::Vector<double, TFeatureImage::ImageDimension> VectorType;
 
   /// Typedef of the feature image type
   typedef typename TFeatureImage::PixelType FeatureType;
@@ -60,7 +57,7 @@ public:
   typedef TLabelObject LabelObjectType;
 
   /** Const iterator over LabelObject lines */
-  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
 
   /** Constructor */
   StatisticsAttributesLabelObjectFunctor();
@@ -69,13 +66,13 @@ public:
   virtual ~StatisticsAttributesLabelObjectFunctor();
 
   /** The comparators */
-  bool operator !=(const Self& self);
-  bool operator ==(const Self& self);
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
 
   /** This is the functor implementation
    *  Calling the functor on a label object
    *  will update its statistics attributes */
-  inline void operator ()(LabelObjectType * lo) const;
+  inline void operator()(LabelObjectType* lo) const;
 
   /** Set the name of the feature */
   void SetFeatureName(const std::string& name);
@@ -84,10 +81,10 @@ public:
   const std::string& GetFeatureName() const;
 
   /** Set the feature image */
-  void SetFeatureImage(const TFeatureImage * img);
+  void SetFeatureImage(const TFeatureImage* img);
 
   /** Get the feature image */
-  const TFeatureImage * GetFeatureImage() const;
+  const TFeatureImage* GetFeatureImage() const;
 
   /** Set the reduced attribute set */
   void SetReducedAttributeSet(bool flag);
@@ -126,12 +123,10 @@ private:
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage, class TFeatureImage>
-class ITK_EXPORT StatisticsAttributesLabelMapFilter :
-  public LabelMapFeaturesFunctorImageFilter
-  <TImage,
-      typename Functor::StatisticsAttributesLabelObjectFunctor
-      <typename TImage::LabelObjectType, TFeatureImage> >
+template <class TImage, class TFeatureImage>
+class ITK_EXPORT StatisticsAttributesLabelMapFilter
+    : public LabelMapFeaturesFunctorImageFilter<TImage,
+                                                typename Functor::StatisticsAttributesLabelObjectFunctor<typename TImage::LabelObjectType, TFeatureImage>>
 {
 public:
   /** Some convenient typedefs. */
@@ -140,13 +135,11 @@ public:
   typedef TFeatureImage                       FeatureImageType;
 
   /** Functor typedef */
-  typedef Functor::StatisticsAttributesLabelObjectFunctor
-  <LabelObjectType, FeatureImageType>              FunctorType;
+  typedef Functor::StatisticsAttributesLabelObjectFunctor<LabelObjectType, FeatureImageType> FunctorType;
 
   /** Standard class typedefs. */
   typedef StatisticsAttributesLabelMapFilter Self;
-  typedef LabelMapFeaturesFunctorImageFilter
-  <ImageType, FunctorType>                         Superclass;
+  typedef LabelMapFeaturesFunctorImageFilter<ImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -160,22 +153,22 @@ public:
   itkTypeMacro(StatisticsAttributesLabelMapFilter, LabelMapFeaturesFunctorImageFilter);
 
   /** Set the feature image */
-  void SetFeatureImage(const TFeatureImage *input);
+  void SetFeatureImage(const TFeatureImage* input);
 
   /** Get the feature image */
-  const FeatureImageType * GetFeatureImage() const;
+  const FeatureImageType* GetFeatureImage() const;
 
   /** Set Input1 (for backward compatibility) */
-  void SetInput1(const TImage * input);
+  void SetInput1(const TImage* input);
 
   /** Get Input1 (for backward compatibility) */
-  const TImage * GetInput1() const;
+  const TImage* GetInput1() const;
 
   /** Set Input2 (for backward compatibility) */
-  void SetInput2(const TFeatureImage * input);
+  void SetInput2(const TFeatureImage* input);
 
   /** Get Input2 (for backward compatibility) */
-  const TFeatureImage * GetInput2() const;
+  const TFeatureImage* GetInput2() const;
 
   /** Set the name of the feature */
   void SetFeatureName(const std::string& name);
@@ -205,8 +198,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StatisticsAttributesLabelMapFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StatisticsAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 }; // end of class
 
 } // end namespace otb

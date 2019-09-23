@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 
 #include "otbImage.h"
@@ -29,22 +28,22 @@
 #include "otbReciprocalCoherencyToReciprocalMuellerImageFilter.h"
 
 
-int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), char * argv[])
+int otbReciprocalCoherencyToReciprocalMuellerImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  InputPixelType;
-  const unsigned int Dimension = 2;
+  typedef double                  PixelType;
+  typedef std::complex<PixelType> InputPixelType;
+  const unsigned int              Dimension = 2;
 
 
-  typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
-  typedef otb::VectorImage<PixelType, Dimension>       RealImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> ImageType;
+  typedef otb::VectorImage<PixelType, Dimension>      RealImageType;
 
   typedef otb::ReciprocalCoherencyToReciprocalMuellerImageFilter<ImageType, RealImageType> FilterType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType>     ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();

@@ -27,95 +27,87 @@
 namespace otb
 {
 
-template< typename TInputImage >
-void
-ChangeInformationImageFilter<TInputImage>
-::SetChangeMetaData(const char *keyname, bool flag)
+template <typename TInputImage>
+void ChangeInformationImageFilter<TInputImage>::SetChangeMetaData(const char* keyname, bool flag)
 {
   std::string key(keyname);
-  if (! key.empty())
-    {
+  if (!key.empty())
+  {
     if (flag)
-      {
+    {
       m_ChangedKeys.insert(key);
-      }
+    }
     else
-      {
+    {
       std::set<std::string>::iterator pos = m_ChangedKeys.find(key);
       if (pos != m_ChangedKeys.end())
-        {
+      {
         m_ChangedKeys.erase(pos);
-        }
       }
     }
+  }
 }
 
-template< typename TInputImage >
-bool
-ChangeInformationImageFilter<TInputImage>
-::GetChangeMetaData(const char *keyname)
+template <typename TInputImage>
+bool ChangeInformationImageFilter<TInputImage>::GetChangeMetaData(const char* keyname)
 {
   std::string key(keyname);
-  if (! key.empty())
-    {
+  if (!key.empty())
+  {
     if (m_ChangedKeys.find(key) != m_ChangedKeys.end())
-      {
+    {
       return true;
-      }
     }
+  }
   return false;
 }
 
-template< typename TInputImage >
-template<typename T>
-void
-ChangeInformationImageFilter<TInputImage>
-::SetOutputMetaData(const char *keyname, const T * value)
+template <typename TInputImage>
+template <typename T>
+void ChangeInformationImageFilter<TInputImage>::SetOutputMetaData(const char* keyname, const T* value)
 {
   std::string key(keyname);
-  if (! key.empty())
-    {
+  if (!key.empty())
+  {
     // enable this key for metadata change
     m_ChangedKeys.insert(key);
-    itk::MetaDataDictionary &dict = this->GetMetaDataDictionary();
+    itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
     if (value == nullptr)
-      {
+    {
       // Remove meta-data from dictionary
       dict.Erase(key);
-      }
-    else
-      {
-      // Set metadata in dictionary
-      const T &valueRef = (*value);
-      itk::EncapsulateMetaData<T>(dict,key,valueRef);
-      }
     }
+    else
+    {
+      // Set metadata in dictionary
+      const T& valueRef = (*value);
+      itk::EncapsulateMetaData<T>(dict, key, valueRef);
+    }
+  }
 }
 
-template< typename TInputImage >
-void
-ChangeInformationImageFilter<TInputImage>
-::GenerateOutputInformation()
+template <typename TInputImage>
+void ChangeInformationImageFilter<TInputImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
   // Process the metadatas to be changed
-  itk::MetaDataDictionary &dict = this->GetMetaDataDictionary();
-  itk::MetaDataDictionary &outputDict = this->GetOutput()->GetMetaDataDictionary();
-  std::set<std::string>::iterator it = m_ChangedKeys.begin();
-  for ( ; it != m_ChangedKeys.end() ; ++it)
-    {
+  itk::MetaDataDictionary&        dict       = this->GetMetaDataDictionary();
+  itk::MetaDataDictionary&        outputDict = this->GetOutput()->GetMetaDataDictionary();
+  std::set<std::string>::iterator it         = m_ChangedKeys.begin();
+  for (; it != m_ChangedKeys.end(); ++it)
+  {
     if (dict.HasKey(*it))
-      {
+    {
       // Replace metadata in output dictionary
       outputDict[*it] = dict[*it];
-      }
+    }
     else
-      {
+    {
       // Remove metadata from output dictionary
       outputDict.Erase(*it);
-      }
     }
+  }
 }
 
 } // End of namespace OTB

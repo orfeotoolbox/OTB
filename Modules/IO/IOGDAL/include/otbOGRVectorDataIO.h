@@ -44,11 +44,9 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class OTBIOGDAL_EXPORT OGRVectorDataIO
-  : public VectorDataIOBase
+class OTBIOGDAL_EXPORT OGRVectorDataIO : public VectorDataIOBase
 {
 public:
-
   /** Standard class typedefs. */
   typedef OGRVectorDataIO               Self;
   typedef VectorDataIOBase              Superclass;
@@ -65,7 +63,7 @@ public:
   typedef Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
-  typedef VectorData<double, 2>                  VectorDataType;
+  typedef VectorData<double, 2> VectorDataType;
   typedef VectorDataType::DataTreeType           DataTreeType;
   typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
@@ -103,7 +101,7 @@ public:
   bool CanWriteFile(const char*) const override;
 
   /** Writes the data to disk from the memory buffer provided */
-  void Write(const itk::DataObject* data,  char ** papszOptions = nullptr) override;
+  void Write(const itk::DataObject* data, char** papszOptions = nullptr) override;
 
 protected:
   /** Constructor.*/
@@ -116,28 +114,18 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRVectorDataIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  OGRVectorDataIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string GetOGRDriverName(std::string name) const;
 
   void CloseInternalDataSource();
 
-  GDALDataset * m_DataSource;
+  GDALDataset* m_DataSource;
 
-  const std::map<std::string, std::string> 
-    m_OGRExtensionsToDrivers = {
-                                { ".SHP", "ESRI Shapefile"},
-                                { ".TAB", "MapInfo File"},
-                                { ".GML", "GML"},
-                                { ".GPX", "GPX"},
-                                { ".SQLITE", "SQLite"},
-                                {".KML", "KML"},
-                                { ".GMT", "OGR_GMT"},
-                                { ".GPKG", "GPKG"},
-                                { ".JSON", "GeoJSON"},
-                                { ".GEOJSON", "GeoJSON"}
-  };
+  const std::map<std::string, std::string> m_OGRExtensionsToDrivers = {
+      {".SHP", "ESRI Shapefile"}, {".TAB", "MapInfo File"}, {".GML", "GML"},      {".GPX", "GPX"},        {".SQLITE", "SQLite"}, {".KML", "KML"},
+      {".GMT", "OGR_GMT"},        {".GPKG", "GPKG"},        {".JSON", "GeoJSON"}, {".GEOJSON", "GeoJSON"}};
 };
 
 } // end namespace otb

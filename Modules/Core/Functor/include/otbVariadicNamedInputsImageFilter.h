@@ -22,7 +22,8 @@
 
 #include "otbVariadicInputsImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /// TODO: Documentation
 
@@ -38,16 +39,19 @@ namespace internal
  *
  * ::value holds the index of type Arg in tuple Tuple.
  */
-template<typename Arg, typename Tuple> struct tuple_index;
-template<typename Arg, typename...Args> struct tuple_index<Arg, std::tuple<Arg,Args...> >
+template <typename Arg, typename Tuple>
+struct tuple_index;
+template <typename Arg, typename... Args>
+struct tuple_index<Arg, std::tuple<Arg, Args...>>
 {
   static constexpr std::size_t value = 0;
 };
 
-template<typename Arg, typename NotMatching, typename...Args> struct tuple_index<Arg, std::tuple<NotMatching,Args...>>
+template <typename Arg, typename NotMatching, typename... Args>
+struct tuple_index<Arg, std::tuple<NotMatching, Args...>>
 {
-  static_assert(sizeof...(Args)>0,"Could not find requested type in tuple");
-  static constexpr std::size_t value = 1 + tuple_index<Arg,std::tuple<Args...>>::value;
+  static_assert(sizeof...(Args) > 0, "Could not find requested type in tuple");
+  static constexpr std::size_t value = 1 + tuple_index<Arg, std::tuple<Args...>>::value;
 };
 }
 
@@ -88,20 +92,23 @@ template<typename Arg, typename NotMatching, typename...Args> struct tuple_index
  *
  * \ingroup OTBFunctor
  */
-template<class TOuptut, class TInputNameMap, class ... TInputs> class VariadicNamedInputsImageFilter : public VariadicInputsImageFilter<TOuptut,TInputs...>
+template <class TOuptut, class TInputNameMap, class... TInputs>
+class VariadicNamedInputsImageFilter : public VariadicInputsImageFilter<TOuptut, TInputs...>
 {
 public:
-  using Self         = VariadicNamedInputsImageFilter<TOuptut,TInputNameMap, TInputs...>;
+  using Self         = VariadicNamedInputsImageFilter<TOuptut, TInputNameMap, TInputs...>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
-  using Superclass   = VariadicInputsImageFilter<TOuptut, TInputs...>;;
+  using Superclass   = VariadicInputsImageFilter<TOuptut, TInputs...>;
+  ;
 
-  using InputTypesTupleType                = typename Superclass::InputTypesTupleType;
-  template <size_t I> using InputImageType = typename Superclass::template InputImageType<I>;
-  static constexpr size_t NumberOfInputs   = Superclass::NumberOfInputs;
+  using InputTypesTupleType = typename Superclass::InputTypesTupleType;
+  template <size_t I>
+  using InputImageType                   = typename Superclass::template InputImageType<I>;
+  static constexpr size_t NumberOfInputs = Superclass::NumberOfInputs;
 
   // This checks that TInputNameMap has the correct size
-  static_assert(std::tuple_size<TInputNameMap>::value == NumberOfInputs,"Tuple for input name does not match the size of ... TInputs");
+  static_assert(std::tuple_size<TInputNameMap>::value == NumberOfInputs, "Tuple for input name does not match the size of ... TInputs");
 
   // Good old new macro
   itkNewMacro(Self);
@@ -120,7 +127,7 @@ public:
   void SetInput(const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value>* inputPtr)
   {
     constexpr size_t idx = internal::tuple_index<Tag, TInputNameMap>::value;
-    this->SetNthInput(idx,const_cast<InputImageType<idx> *>(inputPtr));
+    this->SetNthInput(idx, const_cast<InputImageType<idx>*>(inputPtr));
   }
 
   /**
@@ -158,14 +165,13 @@ public:
   }
 
 protected:
-  VariadicNamedInputsImageFilter() = default;
+  VariadicNamedInputsImageFilter()  = default;
   ~VariadicNamedInputsImageFilter() = default;
-  
+
 private:
   VariadicNamedInputsImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
-
 }
 
 #endif

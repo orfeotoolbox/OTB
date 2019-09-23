@@ -75,8 +75,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT FilenameDragAndDropEventFilter :
-    public AbstractDragAndDropEventFilter
+class OTBMonteverdiGUI_EXPORT FilenameDragAndDropEventFilter : public AbstractDragAndDropEventFilter
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,81 +84,76 @@ class OTBMonteverdiGUI_EXPORT FilenameDragAndDropEventFilter :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  FilenameDragAndDropEventFilter( QObject* p =NULL );
+  FilenameDragAndDropEventFilter(QObject* p = NULL);
 
   /** \brief Destructor. */
   ~FilenameDragAndDropEventFilter() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /**
    */
-  void FilenameDropped( const QString& filename );
+  void FilenameDropped(const QString& filename);
 
   /**
    */
-  void FilenamesDropped( const QStringList & );
+  void FilenamesDropped(const QStringList&);
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
    */
-  bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) override;
+  bool DragEnterEvent(QObject* object, QDragEnterEvent* event) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
    */
-  bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) override;
+  bool DragLeaveEvent(QObject* object, QDragLeaveEvent* event) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
    */
-  bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) override;
+  bool DragMoveEvent(QObject* object, QDragMoveEvent* event) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
    */
-  bool DropEvent( QObject* object, QDropEvent* event ) override;
+  bool DropEvent(QObject* object, QDropEvent* event) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

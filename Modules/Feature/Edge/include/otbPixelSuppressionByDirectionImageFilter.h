@@ -48,25 +48,21 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PixelSuppressionByDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT PixelSuppressionByDirectionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimensions */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** typedef for the classes standards. */
-  typedef PixelSuppressionByDirectionImageFilter                   Self;
+  typedef PixelSuppressionByDirectionImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -96,32 +92,31 @@ public:
   itkGetConstReferenceMacro(AngularBeam, InputRealType);
 
   /** Set/Get the image input of this process object.  */
-  void SetInputImage(const InputImageType *image);
-  const InputImageType * GetInputImage(void);
+  void SetInputImage(const InputImageType* image);
+  const InputImageType* GetInputImage(void);
 
-  void SetInputImageDirection(const InputImageType *image);
-  const InputImageType * GetInputImageDirection(void);
+  void SetInputImageDirection(const InputImageType* image);
+  const InputImageType* GetInputImageDirection(void);
 
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   PixelSuppressionByDirectionImageFilter();
-  ~PixelSuppressionByDirectionImageFilter() override {}
+  ~PixelSuppressionByDirectionImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PixelSuppressionByDirectionImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PixelSuppressionByDirectionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Radius of the region
   SizeType m_Radius;
   // Angular Accuracy on the direction of the central pixel
   InputRealType m_AngularBeam;
-
 };
 } // end namespace otb
 

@@ -119,14 +119,14 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimCosmoSkymedModel at address " << hex << this
-          << dec
+      out << "\nDump of ossimCosmoSkymedModel at address " << std::hex << this
+          << std::dec
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
 
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);
@@ -271,7 +271,7 @@ namespace ossimplugins
     int nbRasterCount = dataset->GetRasterCount();
 
     // Metadata for each Band
-    for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+    for (int iBand = 0; iBand < nbRasterCount; iBand++)
       {
 	std::map<std::string, std::string> mapCurrentBand;
 
@@ -310,12 +310,13 @@ namespace ossimplugins
 	return false;
       }
 
-    if( (metadataDataSet["Product_Type"] != "SCS_B")) 
+    if( (metadataDataSet["Product_Type"] != "SCS_B") && metadataDataSet["Product_Type"] != "SCS_U") 
       {
 	ossimNotify(ossimNotifyLevel_WARN)
-	  << "Not an expected product type (only SCS_B expected)" << "'\n" ;
+	  << "Not an expected product type (only SCS_B and SCS_U expected)" << "'\n" ;
 	return false;
       }
+
 
     ////////////////// Add General Parameters ////////////////
     add(theProductKwl, "sensor", "CSK"); 
@@ -352,8 +353,10 @@ namespace ossimplugins
     add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", 
 	std::stod(metadataBands[0]["S01_SBI_Line_Spacing"]));
  
-    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate", 
-	std::stod(metadataDataSet["S01_Sampling_Rate"]));
+
+    double samplingRate = 1./std::stod(metadataBands[0]["S01_SBI_Column_Time_Interval"]);
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_sampling_rate", samplingRate);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "radar_frequency",  std::stod(metadataDataSet["Radar_Frequency"]));
     add(theProductKwl, SUPPORT_DATA_PREFIX, "slant_range_to_first_pixel", 
 	std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]));
@@ -473,6 +476,8 @@ namespace ossimplugins
     burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
 				       ossimplugins::time::toModifiedJulianDate(last_line_time));
 
+    burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
+
     theBurstRecords.push_back(burstRecord);
     
     const std::string BURST_NUMBER_LINES_KEY    = "support_data.geom.bursts.number_lines_per_burst";
@@ -483,7 +488,6 @@ namespace ossimplugins
 
 
     //////////////// Add GCPs one for the moment ////////////////
-    
     // Get the borders
     std::string geoCoor_TL = metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"];
     std::vector<std::string> vGeoCoor_TL;
@@ -500,6 +504,7 @@ namespace ossimplugins
     std::string geoCoor_BR = metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"];
     std::vector<std::string> vGeoCoor_BR;
     otb::Utils::ConvertStringToVector(geoCoor_BR, vGeoCoor_BR, "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+   
     
     // Mean
     std::vector<double> vGeoCoor_Mean;
@@ -523,6 +528,7 @@ namespace ossimplugins
     
     // Inverse model for the middle point
     loadState(theProductKwl); // Load the kwl to make the inverse projection
+    
     ossimEcefPoint sensorPos;
     ossimEcefVector sensorVel;
     const bool s1 = this->worldToAzimuthRangeTime(gptPt,estimatedAzimuthTime,estimatedRangeTime,sensorPos,

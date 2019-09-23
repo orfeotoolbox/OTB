@@ -50,8 +50,7 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TModel>
-class ITK_EXPORT SVMCrossValidationCostFunction
-  : public itk::SingleValuedCostFunction
+class ITK_EXPORT SVMCrossValidationCostFunction : public itk::SingleValuedCostFunction
 {
 public:
   /** Standard class typedefs. */
@@ -101,8 +100,8 @@ protected:
   void UpdateParameters(const ParametersType& parameters) const;
 
 private:
-  SVMCrossValidationCostFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SVMCrossValidationCostFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /**Pointer to the SVM model to optimize */
   SVMModelPointer m_Model;

@@ -51,15 +51,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SpectralAngleDistanceImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT SpectralAngleDistanceImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef SpectralAngleDistanceImageFilter                   Self;
+  typedef SpectralAngleDistanceImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -84,7 +83,9 @@ protected:
   /** Constructor */
   SpectralAngleDistanceImageFilter();
   /** Destructor */
-  ~SpectralAngleDistanceImageFilter() override {}
+  ~SpectralAngleDistanceImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** SpectralAngleDistanceImageFilter can be implemented as a multithreaded filter.
@@ -97,14 +98,13 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void BeforeThreadedGenerateData() override;
 
 private:
-  SpectralAngleDistanceImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SpectralAngleDistanceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The reference pixel */
   InputPixelType m_ReferencePixel;

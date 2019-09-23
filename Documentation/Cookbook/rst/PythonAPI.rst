@@ -218,6 +218,68 @@ implementation does not break it, for instance by using an internal
 writer to write intermediate data. In this case, execution should
 still be correct, but some intermediate data will be read or written.
 
+Mixed in-memory / on-disk connection
+------------------------------------
+
+As an extension to the connection of OTB Applications (described in previous
+section), a mixed mode is also available to easily switch between:
+
+- **in-memory**: if you want to avoid unecessary I/O between applications
+- **on-disk**: if you want intermediate outputs on disk
+
+This mixed mode is based on the ``Application::ConnectImage()`` function. This
+is how you use it:
+
+.. code-block:: python
+
+    # for in-memory mode
+    app1 = otb.Registry.CreateApplication("Smoothing")
+    app2 = otb.Registry.CreateApplication("Smoothing")
+    
+    app1.IN = input_image
+    
+    app2.ConnectImage("in", app1, "out")
+    app2.OUT = output_image
+    app2.ExecuteAndWriteOutput()
+
+Comparing with the standard in-memory connection, you can notice that:
+
+- the syntax to do the connection is simpler
+- you don't need to call ``Execute()`` on upstream applications anymore,
+  this is done recursively by calling ``ExecuteAndWriteOutput()`` on the latest
+  application
+
+The on-disk version of this code is very similar:
+
+.. code-block:: python
+
+    # for on-disk mode
+    app1 = otb.Registry.CreateApplication("Smoothing")
+    app2 = otb.Registry.CreateApplication("Smoothing")
+    
+    app1.IN = input_image
+    app1.OUT = temp_image
+    
+    app2.ConnectImage("in", app1, "out")
+    app2.OUT = output_image
+    app2.PropagateConnectMode(False)
+    app2.ExecuteAndWriteOutput()
+
+The function ``PropagateConnectMode()`` is applied recursively in the upstream
+applications. It allows to change between the 2 modes:
+
+- ``True`` : means in-memory mode (this is the default)
+- ``False`` : means on-disk mode
+
+When you want to use the on-disk mode, you have to specify the path to
+the intermediate image in the **output** image parameter of the upstream
+application (``app1.OUT`` in the previous example). If this path is empty, the
+in-memory mode is used as fallback.
+
+This feature also works for ``InputImageList``. Calling the function
+``ConnectImage("il", app1, "out")``, with ``il`` being an input image list, will
+append a new image to the list, and connect it to output parameter ``out``.
+
 Load and save parameters to XML
 -------------------------------
 
@@ -341,6 +403,7 @@ Here is a small example of what can be done:
 .. code-block:: python
 
   import otbApplication as otb
+  from sys import argv
   
   # Create a smoothing application
   app = otb.Registry.CreateApplication("Smoothing")
@@ -354,7 +417,8 @@ Here is a small example of what can be done:
   myRegion = otb.itkRegion()
   myRegion['size'][0] = 20
   myRegion['size'][1] = 25
-  myRegion['index'].Fill(10)
+  myRegion['index'][0] = 10
+  myRegion['index'][1] = 10
   ram = app.PropagateRequestedRegion("out",myRegion)
   
   # Check the requested region on the input image
@@ -387,43 +451,10 @@ happens, this documentation will report the OTB version that fixes the issue.
 Calling UpdateParameters()
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-These wrappers are made as a mirror of the C++ API, so there is a function
-``UpdateParameters()``. Its role is to update parameters that depend on others.
-It is called at least once at the beginning of ``Execute()``.
-
-In command line and GUI launchers, this functions gets called each time a
-parameter of the application is modified. In Python, this mechanism is not
-automated: there are cases where you may have to call it yourself.
-
-Let's take an example with the application ``PolygonClassStatictics``. In this
-application, the choices available in the parameter ``field`` depend on the list
-of fields actually present in the vector file ``vec``. If you try to set the
-parameters ``vec`` and ``field``, you will get an error:
-
-.. code-block:: python
-
-    import otbApplication as otb
-    app = otb.Registry.CreateApplication("PolygonClassStatistics")
-    app.SetParameterString("vec","../../src/OTB-Data/Input/Classification/variousVectors.sqlite")
-    app.SetParameterString("field", "label")
-
-::
-
-  Traceback (most recent call last):
-    File "<stdin>", line 1, in <module>
-    File "/home/gpasero/Projet_OTB/build/OTB/lib/otb/python/otbApplication.py", line 897, in SetParameterString
-      def SetParameterString(self, *args): return _otbApplication.Application_SetParameterString(self, *args)
-  RuntimeError: Exception thrown in otbApplication Application_SetParameterString: /home/gpasero/Projet_OTB/src/OTB/Modules/Wrappers/ApplicationEngine/src/otbWrapperListViewParameter.cxx:141:
-  itk::ERROR: ListViewParameter(0x149da10): Cannot find label
-
-The error says that the choice ``label`` is not recognized, because ``UpdateParameters()``
-was not called after setting the vector file. The solution is to call it before
-setting the ``field`` parameter:
-
-.. code-block:: python
-
-    app.UpdateParameters()
-    app.SetParameterString("field", "label")
+``UpdateParameters()`` is available to the Python API. But in normal use, it
+does not need to be called manually. From OTB 7.0.0 and later, it is called
+automatically after each call to ``SetParameter*()`` methods. With previous versions
+of OTB you may need to call it after setting a parameter.
 
 No metadata in NumPy arrays
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^

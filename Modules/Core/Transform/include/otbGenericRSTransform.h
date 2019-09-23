@@ -28,7 +28,12 @@ namespace otb
 {
 namespace Projection
 {
-enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
+enum TransformAccuracy
+{
+  UNKNOWN,
+  ESTIMATE,
+  PRECISE
+};
 }
 /** \class GenericRSTransform
  *  \brief This is the class to handle generic remote sensing transform
@@ -45,36 +50,33 @@ enum TransformAccuracy {UNKNOWN, ESTIMATE, PRECISE};
  * \ingroup OTBTransform
  **/
 
-template <class TScalarType = double,
-    unsigned int NInputDimensions = 2,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericRSTransform : public otb::Transform<TScalarType,          // Data type for scalars
-      NInputDimensions,                                                       // Number of dimensions in the input space
-      NOutputDimensions>                                                       // Number of dimensions in the output space
+template <class TScalarType = double, unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT       GenericRSTransform : public otb::Transform<TScalarType, // Data type for scalars
+                                                            NInputDimensions,  // Number of dimensions in the input space
+                                                            NOutputDimensions> // Number of dimensions in the output space
 {
 public:
   /**\name Standard ITK typedefs */
   //@{
-  typedef otb::Transform<TScalarType,
-          NInputDimensions,
-          NOutputDimensions>                Superclass;
+  typedef otb::Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef GenericRSTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   //@}
 
-  typedef typename Superclass::ScalarType           ScalarType;
-  typedef typename Superclass::JacobianType         JacobianType;
+  typedef typename Superclass::ScalarType   ScalarType;
+  typedef typename Superclass::JacobianType JacobianType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
 
-  typedef itk::Transform<double, NInputDimensions, NOutputDimensions>         GenericTransformType;
-  typedef typename GenericTransformType::Pointer                              GenericTransformPointerType;
+  typedef itk::Transform<double, NInputDimensions, NOutputDimensions> GenericTransformType;
+  typedef typename GenericTransformType::Pointer GenericTransformPointerType;
   typedef otb::CompositeTransform<GenericTransformType, GenericTransformType> TransformType;
-  typedef typename TransformType::Pointer                                     TransformPointerType;
+  typedef typename TransformType::Pointer TransformPointerType;
 
   typedef typename Superclass::InverseTransformBasePointer InverseTransformBasePointer;
 
@@ -89,7 +91,7 @@ public:
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions + 1));
 
   /** Set/Get for input and output projections.  */
   itkSetStringMacro(InputProjectionRef);
@@ -167,25 +169,31 @@ public:
   itkGetMacro(TransformAccuracy, Projection::TransformAccuracy);
 
   /** Methods prototypes */
-  virtual const TransformType * GetTransform() const;
+  virtual const TransformType* GetTransform() const;
 
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
-  virtual void  InstantiateTransform();
-  
+  virtual void InstantiateTransform();
+
   // Get inverse methods
-  bool GetInverse(Self * inverseTransform) const;
+  bool GetInverse(Self* inverseTransform) const;
   InverseTransformBasePointer GetInverseTransform() const override;
 
   // Dummy set parameter method
-  void SetParameters(const typename Superclass::ParametersType &) override  {}
+  void SetParameters(const typename Superclass::ParametersType&) override
+  {
+  }
 
   // Dummy ComputeJacobianWithRespectToParameters method
-  void ComputeJacobianWithRespectToParameters(const InputPointType  &, JacobianType& ) const override {}
+  void ComputeJacobianWithRespectToParameters(const InputPointType&, JacobianType&) const override
+  {
+  }
 
 protected:
   GenericRSTransform();
-  ~GenericRSTransform() override {}
+  ~GenericRSTransform() override
+  {
+  }
 
   void Modified() const override
   {
@@ -196,8 +204,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GenericRSTransform(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GenericRSTransform(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ImageKeywordlist m_InputKeywordList;
   ImageKeywordlist m_OutputKeywordList;

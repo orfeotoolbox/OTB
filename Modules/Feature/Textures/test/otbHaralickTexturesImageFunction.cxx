@@ -19,27 +19,25 @@
  */
 
 
-
 #include "otbHaralickTexturesImageFunction.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 
-typedef unsigned short                                                InputPixelType;
-const unsigned int Dimension =                                        2;
+typedef unsigned short InputPixelType;
+const unsigned int     Dimension = 2;
 
-typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
-typedef otb::ImageFileReader<InputImageType>                          ReaderType;
+typedef otb::Image<InputPixelType, Dimension> InputImageType;
+typedef otb::ImageFileReader<InputImageType> ReaderType;
 
-typedef otb::HaralickTexturesImageFunction<
-        InputImageType, double>                                        HaralickTexturesImageFunctionType;
-typedef HaralickTexturesImageFunctionType::PointType                  PointType;
-typedef HaralickTexturesImageFunctionType::OutputType                 OutputType;
+typedef otb::HaralickTexturesImageFunction<InputImageType, double> HaralickTexturesImageFunctionType;
+typedef HaralickTexturesImageFunctionType::PointType  PointType;
+typedef HaralickTexturesImageFunctionType::OutputType OutputType;
 
 
-int otbHaralickTexturesImageFunction(int itkNotUsed(argc), char * argv[])
+int otbHaralickTexturesImageFunction(int itkNotUsed(argc), char* argv[])
 {
   // Read the input image
-  ReaderType::Pointer   reader = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->Update();
 
@@ -59,7 +57,7 @@ int otbHaralickTexturesImageFunction(int itkNotUsed(argc), char * argv[])
 
   OutputType output = haralick->Evaluate(p);
 
-  outputStream<<"Evaluate("<<p<<") = "<<output<<std::endl;
+  outputStream << "Evaluate(" << p << ") = " << output << std::endl;
 
   outputStream.close();
 

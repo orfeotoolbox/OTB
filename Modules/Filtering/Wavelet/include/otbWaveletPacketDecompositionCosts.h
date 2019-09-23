@@ -27,7 +27,8 @@
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class FullyDecomposedWaveletPacketCost
  * \brief Cost evaluation to be used into the Wavelet Packet decomposition class.
@@ -40,8 +41,7 @@ namespace otb {
  * \ingroup OTBWavelet
  */
 template <class TImage>
-class ITK_EXPORT FullyDecomposedWaveletPacketCost
-  : public itk::Object
+class ITK_EXPORT FullyDecomposedWaveletPacketCost : public itk::Object
 {
 public:
   /** Standard typedefs */
@@ -62,18 +62,22 @@ public:
   static unsigned int NumberOfAllowedDecompositions;
 
   /** Evaluate the cost */
-  bool Evaluate(unsigned int decomposition, const ImageType * itkNotUsed(image))
+  bool Evaluate(unsigned int decomposition, const ImageType* itkNotUsed(image))
   {
     return (decomposition < NumberOfAllowedDecompositions);
   }
 
 protected:
-  FullyDecomposedWaveletPacketCost () {}
-  ~FullyDecomposedWaveletPacketCost() override {}
+  FullyDecomposedWaveletPacketCost()
+  {
+  }
+  ~FullyDecomposedWaveletPacketCost() override
+  {
+  }
 
 private:
-  FullyDecomposedWaveletPacketCost (const Self &);   // not implemented
-  void operator =(const Self&);
+  FullyDecomposedWaveletPacketCost(const Self&); // not implemented
+  void operator=(const Self&);
 
 }; // end of class
 

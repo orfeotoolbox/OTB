@@ -29,7 +29,8 @@
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ISRAUnmixingFunctor
  *
@@ -39,7 +40,7 @@ namespace Functor {
  *
  * \ingroup OTBUnmixing
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class ISRAUnmixingFunctor
 {
 public:
@@ -70,10 +71,9 @@ public:
     return m_MaxIteration;
   }
 
-  OutputType operator ()(const InputType& in) const;
+  OutputType operator()(const InputType& in) const;
 
 private:
-
   static bool IsNonNegative(PrecisionType val)
   {
     return val >= 0;
@@ -125,4 +125,3 @@ using ISRAUnmixingImageFilter = FunctorImageFilter<Functor::ISRAUnmixingFunctor<
 #endif
 
 #endif
-

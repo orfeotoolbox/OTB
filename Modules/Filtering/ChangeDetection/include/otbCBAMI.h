@@ -30,32 +30,33 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput1, class TInput2, class TOutput>
+template <class TInput1, class TInput2, class TOutput>
 class CBAMI
 {
 public:
-
   typedef typename std::vector<TOutput>         VectorType;
   typedef typename VectorType::iterator         IteratorType;
   typedef typename std::vector<VectorType>      VectorOfVectorType;
   typedef typename VectorOfVectorType::iterator VecOfVecIteratorType;
 
-  CBAMI() {}
-  virtual ~CBAMI() {}
-  inline TOutput operator ()(const TInput1& itA,
-                             const TInput2& itB) const
+  CBAMI()
+  {
+  }
+  virtual ~CBAMI()
+  {
+  }
+  inline TOutput operator()(const TInput1& itA, const TInput2& itB) const
   {
     double     epsilon = 0.01;
     VectorType vecA;
     VectorType vecB;
 
     for (unsigned long pos = 0; pos < itA.Size(); ++pos)
-      {
+    {
 
       vecA.push_back(static_cast<double>(itA.GetPixel(pos)));
       vecB.push_back(static_cast<double>(itB.GetPixel(pos)));
-
-      }
+    }
 
     normalizeInPlace(vecA);
     normalizeInPlace(vecB);
@@ -64,7 +65,6 @@ public:
   }
 
 protected:
-
   inline void normalizeInPlace(VectorType vx) const
   {
 
@@ -73,47 +73,45 @@ protected:
     IteratorType itx;
 
     for (itx = vx.begin(); itx < vx.end(); ++itx)
-      {
+    {
       Ex += static_cast<TOutput>(*itx);
-      }
+    }
 
     Ex /= (vx.size());
 
     TOutput Vx = 0.0;
 
     for (itx = vx.begin(); itx < vx.end(); ++itx)
-      {
+    {
       Vx += static_cast<TOutput>(std::pow(static_cast<double>((*itx) - Ex), 2));
-      }
+    }
 
     Vx /= (vx.size());
 
     for (itx = vx.begin(); itx < vx.end(); ++itx)
-      {
+    {
       (*itx) = ((*itx) - Ex) / static_cast<TOutput>(std::sqrt(static_cast<double>(Vx)));
-      }
-
+    }
   }
   inline TOutput Exyc(VectorType vx, VectorType vy) const
   {
 
     TOutput Exy = 0.0;
-    TOutput Ex = 0.0;
-    TOutput Ey = 0.0;
+    TOutput Ex  = 0.0;
+    TOutput Ey  = 0.0;
 
     IteratorType itx;
     IteratorType ity;
 
     for (itx = vx.begin(), ity = vy.begin(); itx < vx.end(); ++itx, ++ity)
-      {
-      //Ex  += (*itx);
-      //Ey  += (*ity);
+    {
+      // Ex  += (*itx);
+      // Ey  += (*ity);
       Exy += (*itx) * (*ity);
+    }
 
-      }
-
-    //Ex /= (vx.size());
-    //Ey /= (vy.size());
+    // Ex /= (vx.size());
+    // Ey /= (vy.size());
     Exy /= (vx.size());
 
     return Exy - Ex * Ey;
@@ -146,20 +144,12 @@ protected:
     IteratorType itz;
     IteratorType itt;
 
-    for (itx = vx.begin(),
-         ity = vy.begin(),
-         itz = vz.begin(),
-         itt = vt.begin();
-         itx < vx.end();
-         ++itx,
-         ++ity,
-         itz++,
-         itt++)
-      {
-      //Ex  += (*itx);
-      //Ey  += (*ity);
-      //Ez  += (*itz);
-      //Et  += (*itt);
+    for (itx = vx.begin(), ity = vy.begin(), itz = vz.begin(), itt = vt.begin(); itx < vx.end(); ++itx, ++ity, itz++, itt++)
+    {
+      // Ex  += (*itx);
+      // Ey  += (*ity);
+      // Ez  += (*itz);
+      // Et  += (*itt);
 
       Exy += (*itx) * (*ity);
       Exz += (*itx) * (*itz);
@@ -174,8 +164,7 @@ protected:
       Eyzt += (*ity) * (*itz) * (*itt);
 
       Exyzt += (*itx) * (*ity) * (*itz) * (*itt);
-
-      }
+    }
 
     /*Ex  /= (vx.size());
     Ey  /= (vx.size());
@@ -194,9 +183,8 @@ protected:
     Exzt /= (vx.size());
     Eyzt /= (vx.size());
 
-    TOutput result = Exyzt - Exyz * Et - Exyt * Ez - Exzt * Ey - Eyzt * Ex +
-                     Exy * Ez * Et + Exz * Et * Ey + Ext * Ey * Ez + Eyz * Et * Ex + Eyt * Ex * Ez + Ezt * Ex * Ey -
-                     3 * Ex * Ey * Ez * Et;
+    TOutput result = Exyzt - Exyz * Et - Exyt * Ez - Exzt * Ey - Eyzt * Ex + Exy * Ez * Et + Exz * Et * Ey + Ext * Ey * Ez + Eyz * Et * Ex + Eyt * Ex * Ez +
+                     Ezt * Ex * Ey - 3 * Ex * Ey * Ez * Et;
 
     return result;
   }
@@ -205,15 +193,14 @@ protected:
   {
 
     return Exyc(va, vb);
-
   }
 
   inline TOutput Qxijkl(VectorType va, VectorType vb, VectorType vc, VectorType vd) const
   {
-//    IteratorType ita;
-//    IteratorType itb;
-//    IteratorType itc;
-//    IteratorType itd;
+    //    IteratorType ita;
+    //    IteratorType itb;
+    //    IteratorType itc;
+    //    IteratorType itd;
 
     TOutput Eabcd_c = Exyztc(va, vb, vc, vd);
 
@@ -225,7 +212,6 @@ protected:
     TOutput Ebc_c = Exyc(vb, vc);
 
     return Eabcd_c - Eab_c * Ecd_c - Eac_c * Ebd_c - Ead_c * Ebc_c;
-
   }
 
   inline TOutput PhiMI(VectorType v1, VectorType v2) const
@@ -245,27 +231,22 @@ protected:
 
     for (iti = donnees.begin(); iti < donnees.end(); ++iti)
       for (itj = donnees.begin(); itj < donnees.end(); ++itj)
-        {
-        if (iti != itj) termeR += static_cast<TOutput>(std::pow(static_cast<double>(Rxy((*iti), (*itj))), 2));
+      {
+        if (iti != itj)
+          termeR += static_cast<TOutput>(std::pow(static_cast<double>(Rxy((*iti), (*itj))), 2));
 
         for (itk = donnees.begin(); itk < donnees.end(); ++itk)
           for (itl = donnees.begin(); itl < donnees.end(); itl++)
-            {
-            if ((iti != itj) || (iti != itk) ||
-                (iti !=
-                 itl))
-              termeQ +=
-                static_cast<TOutput>(std::pow(static_cast<double>(Qxijkl((*iti), (*itj), (*itk), (*itl))), 2));
-            }
-        }
+          {
+            if ((iti != itj) || (iti != itk) || (iti != itl))
+              termeQ += static_cast<TOutput>(std::pow(static_cast<double>(Qxijkl((*iti), (*itj), (*itk), (*itl))), 2));
+          }
+      }
 
     return 1.0 / 4.0 * termeR + 1.0 / 48.0 * termeQ;
-
   }
-
 };
 }
-
 }
 
 #endif

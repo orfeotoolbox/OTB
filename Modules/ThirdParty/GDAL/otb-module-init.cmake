@@ -53,38 +53,37 @@ endmacro(error_message)
 
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
-message(STATUS "Performing Test ${var}")
-set(${var})
-try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
-${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
-RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
-ARGS ${ARGN}
-)
-
-if(NOT COMPILE_${var})
-  error_message("Compiling Test ${var} - Failed \n
-COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
-endif()
-if(RUN_${var})
-  set(${var} FALSE)
-  #if msg_type is STATUS (ie "okay" if test is failing),
-  #then we don't need to give an run-output and exit status.
-  if("${msg_type}" STREQUAL "STATUS")
-    message(${msg_type} "Performing Test ${var} - Failed")
-  else()
-    error_message("Performing Test ${var} - Failed \n
-            Exit status: '${RUN_${var}}' \n
-            RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+  message(STATUS "Performing Test ${var}")
+  set(${var})
+  try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
+  RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
+  ARGS ${ARGN}
+  )
+  if(NOT COMPILE_${var})
+    error_message("Compiling Test ${var} - Failed \n"
+                  "COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
   endif()
-else()
-  set(${var} TRUE)
-  message(STATUS "Performing Test ${var} - Success")
-endif()
-unset(RUN_OUTPUT_${var})
-unset(COMPILE_OUTPUT_${var})
-unset(COMPILE_${var})
+  if(RUN_${var})
+    set(${var} FALSE)
+    #if msg_type is STATUS (ie "okay" if test is failing),
+    #then we don't need to give an run-output and exit status.
+    if("${msg_type}" STREQUAL "STATUS")
+      message(${msg_type} "Performing Test ${var} - Failed")
+    else()
+      error_message("Performing Test ${var} - Failed \n"
+              "Exit status: '${RUN_${var}}' \n"
+              "RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+    endif()
+  else()
+    set(${var} TRUE)
+    message(STATUS "Performing Test ${var} - Success")
+  endif()
+  unset(RUN_OUTPUT_${var})
+  unset(COMPILE_OUTPUT_${var})
+  unset(COMPILE_${var})
 endmacro()
 
 #------------------- TESTS ---------------------
@@ -104,7 +103,8 @@ endif()
 #gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
 try_compile(COMPILE_GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+COMPILE_DEFINITIONS "-std=c++14" "-w"
 OUTPUT_VARIABLE COMPILE_OUTPUT_GDAL_HAS_OGR
 )
 if(NOT COMPILE_GDAL_HAS_OGR)

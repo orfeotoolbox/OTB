@@ -102,14 +102,16 @@ protected:
   /** Constructor */
   FilterFunctionValues();
   /** Destructor */
-  ~FilterFunctionValues() override {}
+  ~FilterFunctionValues() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  FilterFunctionValues(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  FilterFunctionValues(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Vector that contains the filter function value. */
   ValuesVectorType m_FilterFunctionValues;
@@ -125,6 +127,6 @@ private:
   WavelengthSpectralBandType m_UserStep;
 };
 
-} //end namespace
+} // end namespace
 
 #endif

@@ -119,7 +119,7 @@ otb_add_test(NAME cdTvKullbackLeiblerProfileImageFilter COMMAND otbChangeDetecti
   ${INPUTDATA}/GomaAvant.png
   ${INPUTDATA}/GomaApres.png
   ${TEMP}/cdTVKullbackLeiblerProfileImageFilterOutput.tif
-  5 51)
+  5 31)
 
 otb_add_test(NAME cdTvKullbackLeiblerDistanceImageFilter COMMAND otbChangeDetectionTestDriver
   --compare-image ${EPSILON_10}

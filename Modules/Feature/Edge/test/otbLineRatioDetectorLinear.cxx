@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -32,37 +30,35 @@
 
 int otbLineRatioDetectorLinear(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename1 = argv[2];
-  const char * outputFilename2 = argv[3];
+  const char* inputFilename   = argv[1];
+  const char* outputFilename1 = argv[2];
+  const char* outputFilename2 = argv[3];
 
   // Width of the linear feature = 2*WidthLine+1
-  unsigned int WidthLine((unsigned int) ::atoi(argv[4]));
+  unsigned int WidthLine((unsigned int)::atoi(argv[4]));
   // Length of the linear feature = 2*LengthLine+1
-  unsigned int LengthLine((unsigned int) ::atoi(argv[5]));
+  unsigned int LengthLine((unsigned int)::atoi(argv[5]));
 
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef itk::LinearInterpolateImageFunction<InputImageType,
-      double>         InterpolatorType;
-  typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType,  OutputImageDirectionType,
-      InterpolatorType> FilterType;
+  typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
+  typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType> FilterType;
 
   FilterType::Pointer FilterLineRatio = FilterType::New();
 
   FilterLineRatio->SetWidthLine(WidthLine);
   FilterLineRatio->SetLengthLine(LengthLine);
 
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer reader  = ReaderType::New();
   WriterType::Pointer writer1 = WriterType::New();
   WriterType::Pointer writer2 = WriterType::New();
 

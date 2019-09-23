@@ -26,21 +26,20 @@
 namespace otb
 {
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::MorphologicalProfilesSegmentationFilter()
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::MorphologicalProfilesSegmentationFilter()
 {
-  m_ProfileSize = 5;
+  m_ProfileSize  = 5;
   m_ProfileStart = 1;
-  m_ProfileStep = 1;
-  m_Sigma = 0.0;
+  m_ProfileStep  = 1;
+  m_Sigma        = 0.0;
 
-  m_ClassificationFilter = MultiScaleClassificationFilterType::New();
-  m_ConnectedComponentsFilter = ConnectedComponentsFilterType::New();
-  m_OpeningProfile = OpeningProfileFilterType::New();
-  m_ClosingProfile = ClosingProfileFilterType::New();
-  m_OpeningDerivativeProfile = DerivativeFilterType::New();
-  m_ClosingDerivativeProfile = DerivativeFilterType::New();
+  m_ClassificationFilter         = MultiScaleClassificationFilterType::New();
+  m_ConnectedComponentsFilter    = ConnectedComponentsFilterType::New();
+  m_OpeningProfile               = OpeningProfileFilterType::New();
+  m_ClosingProfile               = ClosingProfileFilterType::New();
+  m_OpeningDerivativeProfile     = DerivativeFilterType::New();
+  m_ClosingDerivativeProfile     = DerivativeFilterType::New();
   m_OpeningCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
   m_ClosingCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
   // Wire pipeline
@@ -58,18 +57,15 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_ClassificationFilter->template SetInput<closing_profile_characteristics>(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
 
   m_ConnectedComponentsFilter->SetInput(m_ClassificationFilter->GetOutput());
-
 }
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::~MorphologicalProfilesSegmentationFilter()
-{}
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::~MorphologicalProfilesSegmentationFilter()
+{
+}
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-void
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::GenerateData()
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+void MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::GenerateData()
 {
   m_OpeningProfile->SetInput(this->GetInput());
   m_ClosingProfile->SetInput(this->GetInput());
@@ -95,6 +91,5 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_ConnectedComponentsFilter->Update();
   this->GraftOutput(m_ConnectedComponentsFilter->GetOutput());
 }
-
 }
 #endif

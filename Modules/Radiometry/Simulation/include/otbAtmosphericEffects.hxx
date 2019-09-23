@@ -27,15 +27,13 @@
 namespace otb
 {
 
-template <class TSpectralResponse , class TRSR>
-AtmosphericEffects<TSpectralResponse , TRSR>
-::AtmosphericEffects() :
-m_IsSetAtmosphericRadiativeTerms(false)
-  {
-    m_InputSpectralResponse = InputSpectralResponseType::New();
-    m_CorrectedSpectralResponse = InputSpectralResponseType::New();
-    m_InputSatRSR = InputRSRType::New();
-  }
+template <class TSpectralResponse, class TRSR>
+AtmosphericEffects<TSpectralResponse, TRSR>::AtmosphericEffects() : m_IsSetAtmosphericRadiativeTerms(false)
+{
+  m_InputSpectralResponse     = InputSpectralResponseType::New();
+  m_CorrectedSpectralResponse = InputSpectralResponseType::New();
+  m_InputSatRSR               = InputRSRType::New();
+}
 /*
 template <class TSpectralResponse , class TRSR>
 void
@@ -49,15 +47,14 @@ AtmosphericEffects<TSpectralResponse , TRSR>
   }
 }
 */
-template <class TSpectralResponse , class TRSR>
-void
-AtmosphericEffects<TSpectralResponse , TRSR>
-::Process(/*const unsigned int numBand*/)
+template <class TSpectralResponse, class TRSR>
+void AtmosphericEffects<TSpectralResponse, TRSR>::Process(/*const unsigned int numBand*/)
 {
   /*typedef otb::AtmosphericCorrectionParametersTo6SAtmosphericRadiativeTerms
       AtmosphericCorrectionParametersTo6SRadiativeTermsType;
 
-  AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms = AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
+  AtmosphericCorrectionParametersTo6SRadiativeTermsType::Pointer  filterAtmosphericCorrectionParametersTo6SRadiativeTerms =
+  AtmosphericCorrectionParametersTo6SRadiativeTermsType::New();
 
     //Set filter function to get the RSR Sat!!!//TODO
   typedef otb::FilterFunctionValues FilterFunctionValuesType;
@@ -115,23 +112,22 @@ AtmosphericEffects<TSpectralResponse , TRSR>
 
   /*if (m_IsSetAtmosphericRadiativeTerms)
   {*/
-    typedef typename InputSpectralResponseType::ImageType       ImageType;
+  typedef typename InputSpectralResponseType::ImageType ImageType;
 
-    typedef SurfaceReflectanceToReflectanceFilter<ImageType, ImageType>              SurfaceReflectanceToReflectanceFilterType;
-    typename SurfaceReflectanceToReflectanceFilterType::Pointer filterSRToR = SurfaceReflectanceToReflectanceFilterType::New();
+  typedef SurfaceReflectanceToReflectanceFilter<ImageType, ImageType> SurfaceReflectanceToReflectanceFilterType;
+  typename SurfaceReflectanceToReflectanceFilterType::Pointer filterSRToR = SurfaceReflectanceToReflectanceFilterType::New();
 
-    filterSRToR->SetAtmosphericRadiativeTerms( m_AtmosphericRadiativeTerms );
+  filterSRToR->SetAtmosphericRadiativeTerms(m_AtmosphericRadiativeTerms);
 
-    typename ImageType::Pointer image = ImageType::New();
-    this->m_InputSpectralResponse->GetImage(image);
-    filterSRToR->SetInput( image );
-    filterSRToR->Update();
+  typename ImageType::Pointer image = ImageType::New();
+  this->m_InputSpectralResponse->GetImage(image);
+  filterSRToR->SetInput(image);
+  filterSRToR->Update();
 
-    this->m_CorrectedSpectralResponse->SetFromImage( filterSRToR->GetOutput() );
+  this->m_CorrectedSpectralResponse->SetFromImage(filterSRToR->GetOutput());
   /*}
   else
     itkExceptionMacro(<< "Atmospheric radiative terms must be provided before updating the CSR (Corrected Spectral Response)"); */
-
 }
 } // end namespace otb
 

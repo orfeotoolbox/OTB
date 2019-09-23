@@ -40,15 +40,13 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarParametricMapFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
-      TCoordRep>
+class ITK_EXPORT SarParametricMapFunction
+    : public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef SarParametricMapFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType,
-      TCoordRep>                        Superclass;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::ScalarRealType, TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -67,16 +65,16 @@ public:
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
-  typedef itk::PointSet<OutputType, ImageDimension>      PointSetType;
-  typedef typename PointSetType::Pointer                 PointSetPointer;
-  typedef typename PointSetType::ConstPointer            PointSetConstPointer;
-  typedef typename PointSetType::PointType               PointType;
-  typedef typename PointSetType::PixelType               PixelType;
+  typedef itk::PointSet<OutputType, ImageDimension> PointSetType;
+  typedef typename PointSetType::Pointer      PointSetPointer;
+  typedef typename PointSetType::ConstPointer PointSetConstPointer;
+  typedef typename PointSetType::PointType    PointType;
+  typedef typename PointSetType::PixelType    PixelType;
 
-  typedef itk::VariableSizeMatrix<double>                MatrixType;
+  typedef itk::VariableSizeMatrix<double> MatrixType;
 
   /** Datatype used for the evaluation */
-  typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType                       RealType;
+  typedef typename itk::NumericTraits<InputPixelType>::ScalarRealType RealType;
 
   /** Evaluate the function at specific positions */
   RealType Evaluate(const PointType& point) const override;
@@ -90,8 +88,7 @@ public:
     return this->Evaluate(point);
   }
 
-  RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  RealType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -104,7 +101,7 @@ public:
   void SetPointSet(PointSetPointer val)
   {
     m_IsInitialize = false;
-    m_PointSet = val;
+    m_PointSet     = val;
     this->Modified();
   }
 
@@ -127,19 +124,21 @@ public:
 
 protected:
   SarParametricMapFunction();
-  ~SarParametricMapFunction() override{}
+  ~SarParametricMapFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SarParametricMapFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SarParametricMapFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double Horner(PointType point) const;
 
   PointSetPointer m_PointSet;
   MatrixType      m_Coeff;
   bool            m_IsInitialize;
-  double          m_ProductWidth; /// the width of the complete product (read from metadata)
+  double          m_ProductWidth;  /// the width of the complete product (read from metadata)
   double          m_ProductHeight; /// the height of the complete product (read from metadata)
 };
 

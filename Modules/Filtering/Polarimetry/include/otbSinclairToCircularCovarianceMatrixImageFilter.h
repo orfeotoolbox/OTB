@@ -74,15 +74,14 @@ namespace Functor
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
 class SinclairToCircularCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
-  typedef double                                   RealType;
-  typedef std::complex <RealType>                  ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                      RealType;
+  typedef std::complex<RealType>      ComplexType;
+  typedef typename TOutput::ValueType OutputValueType;
   typedef SinclairToCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, ComplexType, TOutput> SinclairToCovarianceFunctorType;
   inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
@@ -98,10 +97,10 @@ public:
 
     const ComplexType coef(0.5);
 
-    const ComplexType Sll = coef*( S_hh+jS_hv+jS_vh-S_vv );
-    const ComplexType Slr = coef*( jS_hh+S_hv-S_vh+jS_vv );
-    const ComplexType Srl = coef*( jS_hh-S_hv+S_vh+jS_vv );
-    const ComplexType Srr = coef*( -S_hh+jS_hv+jS_vh+S_vv );
+    const ComplexType Sll = coef * (S_hh + jS_hv + jS_vh - S_vv);
+    const ComplexType Slr = coef * (jS_hh + S_hv - S_vh + jS_vv);
+    const ComplexType Srl = coef * (jS_hh - S_hv + S_vh + jS_vv);
+    const ComplexType Srr = coef * (-S_hh + jS_hv + jS_vh + S_vv);
 
     SinclairToCovarianceFunctorType funct;
     funct(result, Sll, Slr, Srl, Srr);
@@ -119,7 +118,9 @@ public:
   }
 
   /** Destructor */
-  virtual ~SinclairToCircularCovarianceMatrixFunctor() {}
+  virtual ~SinclairToCircularCovarianceMatrixFunctor()
+  {
+  }
 };
 
 } // namespace Functor

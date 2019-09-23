@@ -24,17 +24,17 @@
 #include "otbImageFileReader.h"
 
 const unsigned int Dimension = 2;
-typedef double                                                        PixelType;
-typedef otb::Image<PixelType, Dimension>                              ImageType;
-typedef unsigned char                                                 MaskPixelType;
-typedef otb::Image<MaskPixelType, Dimension>                          MaskImageType;
+typedef double     PixelType;
+typedef otb::Image<PixelType, Dimension> ImageType;
+typedef unsigned char MaskPixelType;
+typedef otb::Image<MaskPixelType, Dimension> MaskImageType;
 
 
-typedef otb::ImageFileReader<ImageType>                      ReaderType;
-typedef otb::ImageFileReader<MaskImageType>                  MaskReaderType;
+typedef otb::ImageFileReader<ImageType>     ReaderType;
+typedef otb::ImageFileReader<MaskImageType> MaskReaderType;
 
-typedef otb::ImageFileWriter<ImageType>                      WriterType;
-typedef otb::ImageFileWriter<MaskImageType>                  MaskWriterType;
+typedef otb::ImageFileWriter<ImageType>     WriterType;
+typedef otb::ImageFileWriter<MaskImageType> MaskWriterType;
 
 typedef otb::AdhesionCorrectionFilter<ImageType, MaskImageType> AdhesionCorrectionFilterType;
 
@@ -43,27 +43,28 @@ int otbAdhesionCorrectionFilter(int argc, char* argv[])
 {
 
   if (argc != 12)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr << "MedianDisparityFileName MedianMaskFileName SubpixelDisparityFileName SubpixelMaskFileName CannyRefFileName CannyMedianFileName Radius Tolerance";
+    std::cerr
+        << "MedianDisparityFileName MedianMaskFileName SubpixelDisparityFileName SubpixelMaskFileName CannyRefFileName CannyMedianFileName Radius Tolerance";
     std::cerr << " CorrectedDisparityFileName CorrectedMaskFileName RiskEdgesFileName";
     return EXIT_FAILURE;
-    }
+  }
 
-  const char* medianDisparityFileName = argv[1];
-  const char* medianMaskFileName = argv[2];
-  const char* subpixelDisparityFileName = argv[3];
-  const char* subpixelMaskFileName = argv[4];
-  const char* cannyRefFileName = argv[5];
-  const char* cannyMedianFileName = argv[6];
-  const unsigned int radius = atoi(argv[7]);
-  const float tolerance = atof(argv[8]);
-  const char* correctedDisparityFileName = argv[9];
-  const char* correctedMaskFileName = argv[10];
-  const char* riskEdgesFileName = argv[11];
+  const char*        medianDisparityFileName    = argv[1];
+  const char*        medianMaskFileName         = argv[2];
+  const char*        subpixelDisparityFileName  = argv[3];
+  const char*        subpixelMaskFileName       = argv[4];
+  const char*        cannyRefFileName           = argv[5];
+  const char*        cannyMedianFileName        = argv[6];
+  const unsigned int radius                     = atoi(argv[7]);
+  const float        tolerance                  = atof(argv[8]);
+  const char*        correctedDisparityFileName = argv[9];
+  const char*        correctedMaskFileName      = argv[10];
+  const char*        riskEdgesFileName          = argv[11];
 
   typedef otb::ImageFileReader<ImageType> DisparityMapReaderType;
-  DisparityMapReaderType::Pointer mediandisparityreader = DisparityMapReaderType::New();
+  DisparityMapReaderType::Pointer         mediandisparityreader = DisparityMapReaderType::New();
   mediandisparityreader->SetFileName(medianDisparityFileName);
 
   MaskReaderType::Pointer medianmaskreader = MaskReaderType::New();

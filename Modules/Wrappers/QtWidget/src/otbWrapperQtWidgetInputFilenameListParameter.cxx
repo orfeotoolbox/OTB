@@ -29,20 +29,15 @@ namespace Wrapper
 {
 
 /*****************************************************************************/
-QtWidgetInputFilenameListParameter
-::QtWidgetInputFilenameListParameter( InputFilenameListParameter * param,
-				      QtWidgetModel * m , QWidget * parent) :
-  QtWidgetParameterList( param, m , parent)
+QtWidgetInputFilenameListParameter::QtWidgetInputFilenameListParameter(InputFilenameListParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterList(param, m, parent)
 {
 }
 
 
 /*****************************************************************************/
-QtWidgetInputFilenameListParameter
-::~QtWidgetInputFilenameListParameter()
+QtWidgetInputFilenameListParameter::~QtWidgetInputFilenameListParameter()
 {
 }
-
 }
-
 }

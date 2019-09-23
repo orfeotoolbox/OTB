@@ -35,8 +35,7 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
-::ConvolutionImageFilter()
+ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::ConvolutionImageFilter()
 {
   m_Radius.Fill(1);
   m_Filter.SetSize(3 * 3);
@@ -45,22 +44,20 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
 }
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
-void
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
-::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
-  {
+void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::GenerateInputRequestedRegion() throw(
+    itk::InvalidRequestedRegionError)
+{
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr =
-    const_cast<TInputImage *>(this->GetInput());
+  typename Superclass::InputImagePointer  inputPtr  = const_cast<TInputImage*>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if (!inputPtr || !outputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -74,12 +71,12 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
 
   // crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
+  {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -92,14 +89,12 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
   }
+}
 
-template<class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
-void
-ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
+void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::ThreadedGenerateData(
+    const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // Allocate output
   typename OutputImageType::Pointer     output = this->GetOutput();
@@ -113,7 +108,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
   InputImageRegionType inputRegionForThread;
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
-  itk::ConstNeighborhoodIterator<InputImageType, BoundaryConditionType>  inputIt(m_Radius, input, inputRegionForThread);
+  itk::ConstNeighborhoodIterator<InputImageType, BoundaryConditionType> inputIt(m_Radius, input, inputRegionForThread);
   itk::ImageRegionIterator<OutputImageType> outputIt(output, outputRegionForThread);
 
   inputIt.GoToBegin();
@@ -171,13 +166,10 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput, class TBoundaryCondition, class TFilterPrecision>
-void
-ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition, TFilterPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ConvolutionImageFilter<TInputImage, TOutput, TBoundaryCondition, TFilterPrecision>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << '\n';
-
 }
 
 } // end namespace otb

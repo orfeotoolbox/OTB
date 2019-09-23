@@ -67,7 +67,7 @@ bool CheckResult(const std::string& testName, std::map<typename TIndice::BandNam
 
 using namespace otb::Functor;
 
-int otbVegetationIndicesTest(int, char ** const)
+int otbVegetationIndicesTest(int, char** const)
 {
 
   const std::map<CommonBandNames, size_t> bandMap = {
@@ -105,7 +105,7 @@ int otbVegetationIndicesTest(int, char ** const)
   }
 }
 
-int otbWaterIndicesTest(int, char ** const)
+int otbWaterIndicesTest(int, char** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -130,7 +130,7 @@ int otbWaterIndicesTest(int, char ** const)
   }
 }
 
-int otbSoilIndicesTest(int, char ** const)
+int otbSoilIndicesTest(int, char** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -151,7 +151,7 @@ int otbSoilIndicesTest(int, char ** const)
   }
 }
 
-int otbBuiltUpIndicesTest(int, char ** const)
+int otbBuiltUpIndicesTest(int, char** const)
 {
   const std::map<CommonBandNames, size_t> bandMap = {
       {CommonBandNames::BLUE, 1}, {CommonBandNames::GREEN, 2}, {CommonBandNames::RED, 3}, {CommonBandNames::NIR, 4}, {CommonBandNames::MIR, 5}};
@@ -171,7 +171,7 @@ int otbBuiltUpIndicesTest(int, char ** const)
 }
 
 
-int otbRadiometricIndexTest(int, char ** const)
+int otbRadiometricIndexTest(int, char** const)
 {
   auto ndvi = NDVI<double, double>();
 
@@ -210,7 +210,7 @@ int otbRadiometricIndexTest(int, char ** const)
     std::cerr << "Calling SetBandIndices with ::MAX should raise a runtime_error exception." << std::endl;
     success = false;
   }
-  catch (const std::runtime_error& e)
+  catch (const std::runtime_error& /*e*/)
   {
   }
 
@@ -224,7 +224,7 @@ int otbRadiometricIndexTest(int, char ** const)
   }
 }
 
-int otbIndicesStackFunctorTest(int, char ** const)
+int otbIndicesStackFunctorTest(int, char** const)
 {
   using IndicesType      = RadiometricIndex<double, int>;
   using StackFunctorType = IndicesStackFunctor<IndicesType>;

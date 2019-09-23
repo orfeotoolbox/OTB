@@ -8,7 +8,6 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 
 ### 2. Housekeeping
 * [ ] In this story, make a list of blocking issues for the release (if any)
-* [ ] [Update dashboard scripts](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#dashboard) to support new version numbers
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive) (if needed)
 * [ ] Update release notes (walk the GitLab MR merged history and log all improvements)
 * [ ] Update the date in RELEASE_NOTES.txt
@@ -31,12 +30,10 @@ Once all blocking issues are closed, and the previous steps are done:
 
 ### 4. Publish and plan next release
 * [ ]   [Prepare and upload source packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#prepare-and-upload-source-packages)
-* [ ]   [Promote nightly packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#promote-nightly-packages)
+* [ ]   [Promote staging packages](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#promote-staging-packages)
 * [ ]   [Update documentation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#update-documentation)
-    * [ ] Software Guide
     * [ ] Cookbook
     * [ ] Doxygen
-    * [ ] Application online documentation
     * [ ] WordPress page "Home" and "Download" pages
 * [ ] Upload OTB source archive to [Zenodo](https://zenodo.org/) to create a unique Digital Object Identifier (DOI)
 * [ ] Send email to mailing list to announce the release
@@ -44,7 +41,6 @@ Once all blocking issues are closed, and the previous steps are done:
 * [ ] Announcement on social networks (twitter, google+)
 * [ ] Forward announcement to news_item@osgeo.org ([OSGeo news](https://www.osgeo.org/foundation-news/))
 * [ ] Plan the next release (nominate new release manager, setup PSC meeting on IRC)
-* [ ] Contact QGis processing plugin maintainer to update XML description for new OTB-Applications (or [supply it](https://wiki.orfeo-toolbox.org/index.php/QGIS_access_to_OTB_applications#updating-the-XML-descriptors))
 * [ ] Remove public branches related to MR or bugfix merged before the release
 
 /label ~story

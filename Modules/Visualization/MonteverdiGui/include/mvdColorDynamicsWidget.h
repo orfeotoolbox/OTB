@@ -76,65 +76,49 @@ class ColorDynamicsWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT ColorDynamicsWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT ColorDynamicsWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
   Q_OBJECT;
 
-  Q_PROPERTY( bool isNoDataChecked
-	      READ IsNoDataChecked
-	      WRITE SetNoDataChecked );
+  Q_PROPERTY(bool isNoDataChecked READ IsNoDataChecked WRITE SetNoDataChecked);
 
-  Q_PROPERTY( double NoDataValue
-	      READ GetNoDataValue
-	      WRITE SetNoDataValue );
+  Q_PROPERTY(double NoDataValue READ GetNoDataValue WRITE SetNoDataValue);
 
-  Q_PROPERTY( int GammaCursorPosition
-	      READ GetGammaCursorPosition
-	      WRITE SetGammaCursorPosition );
+  Q_PROPERTY(int GammaCursorPosition READ GetGammaCursorPosition WRITE SetGammaCursorPosition);
 
-  Q_PROPERTY( int MinGamma
-	      READ GetMinGamma
-	      WRITE SetMinGamma );
+  Q_PROPERTY(int MinGamma READ GetMinGamma WRITE SetMinGamma);
 
-  Q_PROPERTY( int MaxGamma
-	      READ GetMaxGamma
-	      WRITE SetMaxGamma );
+  Q_PROPERTY(int MaxGamma READ GetMaxGamma WRITE SetMaxGamma);
 
-  Q_PROPERTY( int GammaStep
-	      READ GetGammaStep
-	      WRITE SetGammaStep );
+  Q_PROPERTY(int GammaStep READ GetGammaStep WRITE SetGammaStep);
 
-  Q_PROPERTY( double Gamma
-              READ GetGamma
-              WRITE SetGamma );
+  Q_PROPERTY(double Gamma READ GetGamma WRITE SetGamma);
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor. */
-  ColorDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  ColorDynamicsWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** Destructor. */
   ~ColorDynamicsWidget() override;
 
   /**
    */
-  inline const ColorBandDynamicsWidget* GetChannel( RgbwChannel ) const;
+  inline const ColorBandDynamicsWidget* GetChannel(RgbwChannel) const;
 
   /**
    */
-  inline ColorBandDynamicsWidget* GetChannel( RgbwChannel );
+  inline ColorBandDynamicsWidget* GetChannel(RgbwChannel);
 
   /**
    */
-  void SetGrayscaleActivated( bool activated );
+  void SetGrayscaleActivated(bool activated);
 
   /**
    */
@@ -142,7 +126,7 @@ public:
 
   /**
    */
-  void SetNoDataChecked( bool checked );
+  void SetNoDataChecked(bool checked);
 
   /**
    */
@@ -150,7 +134,7 @@ public:
 
   /**
    */
-  void SetNoDataValue( double value );
+  void SetNoDataValue(double value);
 
   /**
    */
@@ -158,7 +142,7 @@ public:
 
   /**
    */
-  void SetGamma( double value );
+  void SetGamma(double value);
 
   /**
    */
@@ -166,7 +150,7 @@ public:
 
   /**
    */
-  void SetGammaCursorPosition( int value );
+  void SetGammaCursorPosition(int value);
 
   /**
    */
@@ -174,7 +158,7 @@ public:
 
   /**
    */
-  void SetMinGamma( int value );
+  void SetMinGamma(int value);
 
   /**
    */
@@ -182,7 +166,7 @@ public:
 
   /**
    */
-  void SetMaxGamma( int value );
+  void SetMaxGamma(int value);
 
   /**
    */
@@ -190,64 +174,64 @@ public:
 
   /**
    */
-  void SetGammaStep( int value );
+  void SetGammaStep(int value);
 
   /**
    */
   int GetGammaStep() const;
 
-//
-// Public slots.
+  //
+  // Public slots.
 public slots:
 
   /**
    */
-  void SetNoDataButtonChecked( bool checked );
+  void SetNoDataButtonChecked(bool checked);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
-  void LowQuantileChanged( RgbwChannel, double );
+  void LowQuantileChanged(RgbwChannel, double);
 
   /**
    */
-  void HighQuantileChanged( RgbwChannel, double );
+  void HighQuantileChanged(RgbwChannel, double);
 
   /**
    */
-  void LowIntensityChanged( RgbwChannel, double );
+  void LowIntensityChanged(RgbwChannel, double);
 
   /**
    */
-  void HighIntensityChanged( RgbwChannel, double );
+  void HighIntensityChanged(RgbwChannel, double);
 
   /**
    */
-  void ResetIntensityClicked( RgbwChannel );
+  void ResetIntensityClicked(RgbwChannel);
 
   /**
    */
-  void ResetQuantileClicked( RgbwChannel );
+  void ResetQuantileClicked(RgbwChannel);
 
   /**
    */
-  void ApplyAllClicked( RgbwChannel, double, double );
+  void ApplyAllClicked(RgbwChannel, double, double);
 
   /**
    */
-  void LinkToggled( RgbwChannel, bool );
+  void LinkToggled(RgbwChannel, bool);
 
   /**
    */
-  void NoDataFlagToggled( bool enabled );
+  void NoDataFlagToggled(bool enabled);
 
   /**
    */
-  void NoDataValueChanged( double value );
+  void NoDataValueChanged(double value);
 
   /**
    */
@@ -255,26 +239,24 @@ signals:
 
   /**
    */
-  void GammaCursorPositionChanged( int value );
+  void GammaCursorPositionChanged(int value);
 
   /**
    */
-  void GammaValueChanged( double value );
+  void GammaValueChanged(double value);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    * \brief Connect signals of color-band dynamics child widget to
@@ -283,10 +265,10 @@ private:
    * \param child Color-band dynamics child widget.
    * \param channel RGBAW channel setup of child widget.
    */
-  void ConnectChild( ColorBandDynamicsWidget* child, RgbwChannel channel );
+  void ConnectChild(ColorBandDynamicsWidget* child, RgbwChannel channel);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /** */
   static const char* COLOR_BAND_DYNAMICS_WIDGET_NAMES[];
@@ -306,25 +288,25 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 
   /**
    */
-  void on_noDataLineEdit_textChanged( const QString& text );
+  void on_noDataLineEdit_textChanged(const QString& text);
 
   /**
    */
-  void on_noDataCheckBox_toggled( bool enabled );
+  void on_noDataCheckBox_toggled(bool enabled);
 
   /**
    */
-  void on_noDataButton_toggled( bool checked );
+  void on_noDataButton_toggled(bool checked);
 
   /**
    */
-  void on_gammaSlider_valueChanged( int gamma );
+  void on_gammaSlider_valueChanged(int gamma);
 
   void on_gammaResetButton_clicked();
 };
@@ -338,32 +320,19 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const ColorBandDynamicsWidget*
-ColorDynamicsWidget
-::GetChannel( RgbwChannel channel ) const
+inline const ColorBandDynamicsWidget* ColorDynamicsWidget::GetChannel(RgbwChannel channel) const
 {
-  return findChild< const ColorBandDynamicsWidget* >(
-    ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
-  );
+  return findChild<const ColorBandDynamicsWidget*>(ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[channel]);
 }
 
 /*****************************************************************************/
-inline
-ColorBandDynamicsWidget*
-ColorDynamicsWidget
-::GetChannel( RgbwChannel channel )
+inline ColorBandDynamicsWidget* ColorDynamicsWidget::GetChannel(RgbwChannel channel)
 {
-  return findChild< ColorBandDynamicsWidget* >(
-    ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[ channel ]
-  );
+  return findChild<ColorBandDynamicsWidget*>(ColorDynamicsWidget::COLOR_BAND_DYNAMICS_WIDGET_NAMES[channel]);
 }
 
 /*****************************************************************************/
-inline
-bool
-ColorDynamicsWidget
-::IsGrayscaleActivated() const
+inline bool ColorDynamicsWidget::IsGrayscaleActivated() const
 {
   return m_IsGrayscaleActivated;
 }

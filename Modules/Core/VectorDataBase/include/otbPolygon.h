@@ -40,17 +40,16 @@ namespace otb
  *
  * \ingroup OTBVectorDataBase
  */
-template<class TValue = double>
-class ITK_EXPORT Polygon
-  : public PolyLineParametricPathWithValue<TValue, 2>
+template <class TValue = double>
+class ITK_EXPORT Polygon : public PolyLineParametricPathWithValue<TValue, 2>
 {
 public:
   /** Standard typedefs */
-  typedef Polygon                                    Self;
+  typedef Polygon Self;
   typedef PolyLineParametricPathWithValue<TValue, 2> Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
-  typedef TValue                                     ValueType;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef TValue                        ValueType;
   /** Type macro */
   itkNewMacro(Self);
 
@@ -128,34 +127,35 @@ public:
   */
   double GetLength() const override;
 
-  void  AddVertex(const ContinuousIndexType& vertex) override;
+  void AddVertex(const ContinuousIndexType& vertex) override;
 
 protected:
   /** Constructor */
   Polygon()
-    {
-    m_Epsilon = 0.000001;
-    m_Area = -1.0;
+  {
+    m_Epsilon     = 0.000001;
+    m_Area        = -1.0;
     m_AreaIsValid = false;
-    };
+  };
 
   /** Destructor */
-  ~Polygon() override {}
+  ~Polygon() override
+  {
+  }
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void ComputeArea() const;
-  void Modified() const override;
+  void         Modified() const override;
 
 private:
-  Polygon(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  Polygon(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double         m_Epsilon;
   mutable double m_Area;
   mutable bool   m_AreaIsValid;
-
 };
 } // End namespace otb
 

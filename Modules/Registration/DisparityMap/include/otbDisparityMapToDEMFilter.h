@@ -59,18 +59,16 @@ namespace otb
  *
  * \ingroup OTBDisparityMap
  */
-template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage,
-          class TEpipolarGridImage = otb::VectorImage<float,2> , class TMaskImage = otb::Image<unsigned char> >
-class ITK_EXPORT DisparityMapToDEMFilter :
-    public itk::ImageToImageFilter<TDisparityImage,TOutputDEMImage>
+template <class TDisparityImage, class TInputImage, class TOutputDEMImage = TDisparityImage, class TEpipolarGridImage = otb::VectorImage<float, 2>,
+          class TMaskImage = otb::Image<unsigned char>>
+class ITK_EXPORT DisparityMapToDEMFilter : public itk::ImageToImageFilter<TDisparityImage, TOutputDEMImage>
 {
 public:
   /** Standard class typedef */
-  typedef DisparityMapToDEMFilter                           Self;
-  typedef itk::ImageToImageFilter<TDisparityImage,
-                                  TOutputDEMImage>          Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef DisparityMapToDEMFilter Self;
+  typedef itk::ImageToImageFilter<TDisparityImage, TOutputDEMImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -79,58 +77,58 @@ public:
   itkTypeMacro(DisparityMapToDEMFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef TDisparityImage         DisparityMapType;
-  typedef TInputImage             SensorImageType;
-  typedef TOutputDEMImage         DEMImageType;
-  typedef TEpipolarGridImage      GridImageType;
-  typedef TMaskImage              MaskImageType;
+  typedef TDisparityImage    DisparityMapType;
+  typedef TInputImage        SensorImageType;
+  typedef TOutputDEMImage    DEMImageType;
+  typedef TEpipolarGridImage GridImageType;
+  typedef TMaskImage         MaskImageType;
 
-  typedef typename DEMImageType::RegionType         RegionType;
-  typedef typename DEMImageType::PixelType          DEMPixelType;
+  typedef typename DEMImageType::RegionType RegionType;
+  typedef typename DEMImageType::PixelType  DEMPixelType;
 
-  typedef itk::ImageRegionSplitter<2>   SplitterType;
+  typedef itk::ImageRegionSplitter<2> SplitterType;
 
   // 3D RS transform
   // TODO: Allow tuning precision (i.e. double or float)
-  typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
-  //typedef typename RSTransformType::Pointer         RSTransformPointerType;
+  typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
+  // typedef typename RSTransformType::Pointer         RSTransformPointerType;
 
   // 3D points
-  typedef typename RSTransformType::InputPointType  TDPointType;
+  typedef typename RSTransformType::InputPointType TDPointType;
 
   /** Set horizontal disparity map input */
-  void SetHorizontalDisparityMapInput( const TDisparityImage * hmap);
+  void SetHorizontalDisparityMapInput(const TDisparityImage* hmap);
 
   /** Set vertical disparity map input */
-  void SetVerticalDisparityMapInput( const TDisparityImage * vmap);
+  void SetVerticalDisparityMapInput(const TDisparityImage* vmap);
 
   /** Set left input */
-  void SetLeftInput( const TInputImage * image);
+  void SetLeftInput(const TInputImage* image);
 
   /** Set right input */
-  void SetRightInput( const TInputImage * image);
+  void SetRightInput(const TInputImage* image);
 
   /** Set left epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
-  void SetLeftEpipolarGridInput( const TEpipolarGridImage * grid);
+  void SetLeftEpipolarGridInput(const TEpipolarGridImage* grid);
 
   /** Set right epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
-  void SetRightEpipolarGridInput( const TEpipolarGridImage * grid);
+  void SetRightEpipolarGridInput(const TEpipolarGridImage* grid);
 
   /** Set mask associated to disparity maps (optional, pixels with a null mask value are ignored) */
-  void SetDisparityMaskInput( const TMaskImage * mask);
+  void SetDisparityMaskInput(const TMaskImage* mask);
 
   /** Get the inputs */
-  const TDisparityImage * GetHorizontalDisparityMapInput() const;
-  const TDisparityImage * GetVerticalDisparityMapInput() const;
-  const TInputImage * GetLeftInput() const;
-  const TInputImage * GetRightInput() const;
-  const TEpipolarGridImage * GetLeftEpipolarGridInput() const;
-  const TEpipolarGridImage * GetRightEpipolarGridInput() const;
-  const TMaskImage  * GetDisparityMaskInput() const;
+  const TDisparityImage*    GetHorizontalDisparityMapInput() const;
+  const TDisparityImage*    GetVerticalDisparityMapInput() const;
+  const TInputImage*        GetLeftInput() const;
+  const TInputImage*        GetRightInput() const;
+  const TEpipolarGridImage* GetLeftEpipolarGridInput() const;
+  const TEpipolarGridImage* GetRightEpipolarGridInput() const;
+  const TMaskImage*         GetDisparityMaskInput() const;
 
   /** Get DEM output*/
-  const TOutputDEMImage * GetDEMOutput() const;
-  TOutputDEMImage * GetDEMOutput();
+  const TOutputDEMImage* GetDEMOutput() const;
+  TOutputDEMImage*       GetDEMOutput();
 
   /** Set/Get macro for minimum elevation */
   itkSetMacro(ElevationMin, double);
@@ -161,7 +159,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** After threaded generate data : sum up temporary DEMs */
   void AfterThreadedGenerateData() override;
@@ -171,7 +169,9 @@ protected:
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 
 private:
@@ -195,13 +195,12 @@ private:
 
   /** Temporary DEMs for mutlithreading */
   std::vector<typename DEMImageType::Pointer> m_TempDEMRegions;
-  
+
   /** Left sensor image transform */
   RSTransformType::Pointer m_LeftToGroundTransform;
-  
+
   /** Right sensor image transform */
   RSTransformType::Pointer m_RightToGroundTransform;
-  
 };
 } // end namespace otb
 

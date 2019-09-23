@@ -32,42 +32,42 @@
 #include "itkLabelMapToLabelImageFilter.h"
 #include "otbBandsStatisticsAttributesLabelMapFilter.h"
 
-int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
+int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * imageInputFilename  = argv[1];
-  const char * labelImageInputFilename  = argv[2];
-  const char * outputFilename = argv[3];
-  const char * expression =     argv[4];
+  const char* imageInputFilename      = argv[1];
+  const char* labelImageInputFilename = argv[2];
+  const char* outputFilename          = argv[3];
+  const char* expression              = argv[4];
 
-  typedef float InputPixelType;
-  const unsigned int     Dimension = 2;
+  typedef float      InputPixelType;
+  const unsigned int Dimension = 2;
 
   typedef unsigned int LabelType;
-  typedef otb::Image<LabelType, Dimension>              LabelImageType;
-  typedef otb::VectorImage<InputPixelType,  Dimension>  InputVectorImageType;
+  typedef otb::Image<LabelType, Dimension>            LabelImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
 
-  typedef otb::ImageFileReader<InputVectorImageType>  ImageReaderType;
-  typedef otb::ImageFileReader<LabelImageType>        LabelImageReaderType;
-  typedef otb::ImageFileWriter<LabelImageType>        WriterType;
+  typedef otb::ImageFileReader<InputVectorImageType> ImageReaderType;
+  typedef otb::ImageFileReader<LabelImageType>       LabelImageReaderType;
+  typedef otb::ImageFileWriter<LabelImageType>       WriterType;
 
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>    AttributesMapLabelObjectType;
-  typedef itk::LabelMap<AttributesMapLabelObjectType>                    AttributesLabelMapType;
-  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>  FilterType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> AttributesMapLabelObjectType;
+  typedef itk::LabelMap<AttributesMapLabelObjectType>                   AttributesLabelMapType;
+  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType> FilterType;
 
   typedef itk::LabelImageToLabelMapFilter<LabelImageType, AttributesLabelMapType> LabelImageToLabelMapFilterType;
 
-  typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType>  ShapeLabelMapFilterType;
+  typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType> ShapeLabelMapFilterType;
 
   typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, InputVectorImageType> RadiometricLabelMapFilterType;
 
   typedef itk::LabelMapToLabelImageFilter<AttributesLabelMapType, LabelImageType> LabelMapToLabelImageFilterType;
 
 
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  ImageReaderType::Pointer      imageReader      = ImageReaderType::New();
   LabelImageReaderType::Pointer labelImageReader = LabelImageReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  FilterType::Pointer filter = FilterType::New();
+  WriterType::Pointer           writer           = WriterType::New();
+  FilterType::Pointer           filter           = FilterType::New();
 
   labelImageReader->SetFileName(labelImageInputFilename);
   labelImageReader->GenerateOutputInformation();
@@ -86,8 +86,7 @@ int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
   shapeLabelMapFilter->SetReducedAttributeSet(false);
 
   // band stat attributes computation
-  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter
-  = RadiometricLabelMapFilterType::New();
+  RadiometricLabelMapFilterType::Pointer radiometricLabelMapFilter = RadiometricLabelMapFilterType::New();
 
   radiometricLabelMapFilter->SetInput(shapeLabelMapFilter->GetOutput());
 
@@ -97,7 +96,7 @@ int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
 
   AttributesLabelMapType::Pointer AttributesLabelMap;
 
-  AttributesLabelMap=radiometricLabelMapFilter->GetOutput();
+  AttributesLabelMap = radiometricLabelMapFilter->GetOutput();
 
   std::string stringExpression(expression);
 
@@ -109,7 +108,6 @@ int otbLabelObjectOpeningMuParserFilterTest(int itkNotUsed(argc), char * argv[])
   LabelMapToLabelImageFilterType::Pointer labelMapToLabelImage = LabelMapToLabelImageFilterType::New();
   labelMapToLabelImage->SetInput(filter->GetOutput());
   labelMapToLabelImage->Update();
-
 
 
   writer->SetInput(labelMapToLabelImage->GetOutput());

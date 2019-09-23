@@ -30,16 +30,7 @@ namespace otb
  * \brief This enumeration describes the different architectures we can find in polarimetry.
  *  HH_HV_VH_VV (0), HH_HV_VV (1), HH_VH_VV (2), HH_HV(3), VH_VV (4), HH_VV (5).
  */
-typedef enum
-  {
-  HH_HV_VH_VV = 0,
-  HH_HV_VV = 1,
-  HH_VH_VV = 2,
-  HH_HV = 3,
-  VH_VV = 4,
-  HH_VV = 5,
-  UNKNOWN_ARCHITECTURE = 6
-  } ArchitectureType;
+typedef enum { HH_HV_VH_VV = 0, HH_HV_VV = 1, HH_VH_VV = 2, HH_HV = 3, VH_VV = 4, HH_VV = 5, UNKNOWN_ARCHITECTURE = 6 } ArchitectureType;
 
 /** \class PolarimetricData
 *  \brief This class allows determining the type of architecture we get.
@@ -54,7 +45,6 @@ typedef enum
 class ITK_EXPORT PolarimetricData : public itk::DataObject
 {
 public:
-
   /** Standard typedefs */
   typedef PolarimetricData              Self;
   typedef itk::DataObject               Superclass;
@@ -68,7 +58,7 @@ public:
   itkNewMacro(Self);
 
   /** Determine the kind of architecture of the input */
-  void DetermineArchitecture(bool *PresentInputImages);
+  void DetermineArchitecture(bool* PresentInputImages);
   void DetermineArchitecture(int NumberOfImages, bool EmissionH, bool EmissionV);
 
   /** Set/Get ArchitectureType */
@@ -79,17 +69,18 @@ protected:
   /** Constructor */
   PolarimetricData();
   /** Destructor */
-  ~PolarimetricData() override {}
+  ~PolarimetricData() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PolarimetricData(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PolarimetricData(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Architecture Type */
   ArchitectureType m_ArchitectureType;
-
 };
 
 } // end namespace otb

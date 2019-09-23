@@ -40,20 +40,18 @@
 /*===========================================================================*/
 /*======================[ Construction / Destruction ]=======================*/
 /*===========================================================================*/
-otb::ogr::Feature::Feature(OGRFeatureDefn & definition)
-: m_Feature(
-  OGRFeature::CreateFeature(&definition),
-  [&](auto const & x) {return OGRFeature::DestroyFeature(x);})
+otb::ogr::Feature::Feature(OGRFeatureDefn& definition)
+  : m_Feature(OGRFeature::CreateFeature(&definition), [&](auto const& x) { return OGRFeature::DestroyFeature(x); })
 {
   CheckInvariants();
 }
 
-otb::ogr::Feature::Feature(OGRFeature * feature)
+otb::ogr::Feature::Feature(OGRFeature* feature)
 {
   if (feature)
-    {
-    m_Feature.reset(feature, [&](auto const & x) {return OGRFeature::DestroyFeature(x);});
-    }
+  {
+    m_Feature.reset(feature, [&](auto const& x) { return OGRFeature::DestroyFeature(x); });
+  }
   // else default is perfect -> delete null
 }
 
@@ -71,35 +69,35 @@ void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, bool mustForgive)
 {
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), mustForgive);
   if (res != OGRERR_NONE)
-    {
-    itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
-    }
+  {
+    itkGenericExceptionMacro(<< "Cannot assign from another feature: " << CPLGetLastErrorMsg());
+  }
 }
 
-void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int * map, bool mustForgive)
+void otb::ogr::Feature::UncheckedSetFrom(Feature const& rhs, int* map, bool mustForgive)
 {
   const OGRErr res = m_Feature->SetFrom(&rhs.ogr(), map, mustForgive);
   if (res != OGRERR_NONE)
-    {
-    itkGenericExceptionMacro(<<"Cannot assign from another feature: " << CPLGetLastErrorMsg());
-    }
+  {
+    itkGenericExceptionMacro(<< "Cannot assign from another feature: " << CPLGetLastErrorMsg());
+  }
 }
 
 /*===========================================================================*/
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
-void otb::ogr::Feature::UncheckedPrintSelf(std::ostream & os, itk::Indent indent) const
+void otb::ogr::Feature::UncheckedPrintSelf(std::ostream& os, itk::Indent indent) const
 {
   const int nbFields = m_Feature->GetFieldCount();
   os << indent << "+";
   os << " " << nbFields << " fields\n";
   indent = indent.GetNextIndent();
-  for (int i=0; i!=nbFields; ++i)
-    {
+  for (int i = 0; i != nbFields; ++i)
+  {
     assert(ogr().GetFieldDefnRef(i) && "No definition associated to the i-th field");
     Field const& field = (*this)[i];
     field.PrintSelf(os, indent);
-    }
+  }
 }
 
 bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const& rhs)
@@ -107,19 +105,18 @@ bool otb::ogr::operator==(otb::ogr::Feature const& lhs, otb::ogr::Feature const&
   // special case: they may be null (end() mark)
 
   // OGR is not const correct ...
-  OGRFeature * l = const_cast<OGRFeature*>(lhs.m_Feature.get());
-  OGRFeature * r = const_cast<OGRFeature*>(rhs.m_Feature.get());
-  return
-    (l == r ) // incl. ==0
-    ||
-    (l && r && l->Equal(r)) // must be non-null to compare them with Equal
-;
+  OGRFeature* l = const_cast<OGRFeature*>(lhs.m_Feature.get());
+  OGRFeature* r = const_cast<OGRFeature*>(rhs.m_Feature.get());
+  return (l == r)                   // incl. ==0
+         || (l && r && l->Equal(r)) // must be non-null to compare them with Equal
+      ;
 }
 
 /*===========================================================================*/
 /*================================[ Fields ]=================================*/
 /*===========================================================================*/
-int otb::ogr::Feature::GetSize() const {
+int otb::ogr::Feature::GetSize() const
+{
   return ogr().GetFieldCount();
 }
 
@@ -144,21 +141,19 @@ otb::ogr::FieldDefn otb::ogr::Feature::UncheckedGetFieldDefn(std::string const& 
 {
   const int index = GetFieldIndex(name);
   if (index < 0)
-    {
-    itkGenericExceptionMacro(<<"no field named <"<<name<<">");
-    }
+  {
+    itkGenericExceptionMacro(<< "no field named <" << name << ">");
+  }
   return this->GetFieldDefn(index);
 }
 
-int
-otb::ogr::Feature
-::UncheckedGetFieldIndex(std::string const& name) const
+int otb::ogr::Feature::UncheckedGetFieldIndex(std::string const& name) const
 {
   const int index = m_Feature->GetFieldIndex(name.c_str());
   if (index < 0)
-    {
-    itkGenericExceptionMacro(<<"No field named <"<<name<<"> in feature");
-    }
+  {
+    itkGenericExceptionMacro(<< "No field named <" << name << "> in feature");
+  }
   return index;
 }
 
@@ -174,12 +169,12 @@ void otb::ogr::Feature::UncheckedSetFID(long fid)
 {
   const OGRErr res = m_Feature->SetFID(fid);
   if (res != OGRERR_NONE)
-    {
-    itkGenericExceptionMacro(<<"Cannot Set FID to "<<fid<<" for feature: " << CPLGetLastErrorMsg());
-    }
+  {
+    itkGenericExceptionMacro(<< "Cannot Set FID to " << fid << " for feature: " << CPLGetLastErrorMsg());
+  }
 }
 
-OGRFeatureDefn&  otb::ogr::Feature::UncheckedGetDefn() const
+OGRFeatureDefn& otb::ogr::Feature::UncheckedGetDefn() const
 {
   return *m_Feature->GetDefnRef();
 }
@@ -190,29 +185,29 @@ OGRFeatureDefn&  otb::ogr::Feature::UncheckedGetDefn() const
 
 void otb::ogr::Feature::UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry)
 {
-  OGRGeometry * g = geometry.get();
+  OGRGeometry* g   = geometry.get();
   const OGRErr res = m_Feature->SetGeometryDirectly(g);
   if (res != OGRERR_NONE)
-    {
-    itkGenericExceptionMacro(<<"Cannot set (directly) the geometry: " << CPLGetLastErrorMsg());
-    }
+  {
+    itkGenericExceptionMacro(<< "Cannot set (directly) the geometry: " << CPLGetLastErrorMsg());
+  }
   geometry.release(); // success => commit the transaction (after any exception thrown)
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::Feature::UncheckedStealGeometry()
 {
-  OGRGeometry * g = m_Feature->StealGeometry();
+  OGRGeometry* g = m_Feature->StealGeometry();
   return UniqueGeometryPtr(g);
 }
 
 void otb::ogr::Feature::UncheckedSetGeometry(OGRGeometry const* geometry)
 {
   // OGR copies the input geometry => should have been const
-  const OGRErr res = m_Feature->SetGeometry(const_cast <OGRGeometry*>(geometry));
+  const OGRErr res = m_Feature->SetGeometry(const_cast<OGRGeometry*>(geometry));
   if (res != OGRERR_NONE)
-    {
-    itkGenericExceptionMacro(<<"Cannot set the geometry: " << CPLGetLastErrorMsg());
-    }
+  {
+    itkGenericExceptionMacro(<< "Cannot set the geometry: " << CPLGetLastErrorMsg());
+  }
 }
 
 OGRGeometry const* otb::ogr::Feature::UncheckedGetGeometry() const

@@ -128,7 +128,7 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
                   << ":  " 
                   << ( ossimUnitTypeLut::instance()->
                        getEntryString(units).c_str() )
-                  << endl;
+                  << std::endl;
                break;
             }
          } // End of switch (units)
@@ -491,11 +491,11 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
    }
    else 
    {
-      cerr << "ossimOgcWktTranslator::fromOssimKwl:\n"
+      std::cerr << "ossimOgcWktTranslator::fromOssimKwl:\n"
            << "Projection translation for "
            << projType
            << " not supported "
-           << endl;
+           << std::endl;
    }
    
    if(pcsCodeVal >= EPSG_CODE_MAX)
@@ -532,10 +532,10 @@ ossimString ossimOgcWktTranslator::fromOssimKwl(const ossimKeywordlist &kwl,
       }
       else
       {
-         cerr << "ossimOgcWktTranslator::fromOssimKwl: Datum translation for "
+         std::cerr << "ossimOgcWktTranslator::fromOssimKwl: Datum translation for "
               << datumType
               <<" not supported"
-              << endl;
+              << std::endl;
       }
    }
 
@@ -700,7 +700,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
          << MODULE << "DEBUG:"
-         << "\nossimProj = " << ossimProj << endl;
+         << "\nossimProj = " << ossimProj << std::endl;
    }
    
    kwl.add(prefix, ossimKeywordNames::TYPE_KW, ossimProj.c_str(), true);
@@ -916,7 +916,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
             << "Projection conversion to OSSIM not supported !!!!!!!!!\n"
             << "Please send the following string to the development staff\n" 
             << "to be added to the transaltion to OSSIM\n"
-            << wkt << endl;
+            << wkt << std::endl;
       }
       return false;
    }
@@ -1055,7 +1055,7 @@ ossimString ossimOgcWktTranslator::wktToOssimDatum(const ossimString& datum)cons
 ossimString ossimOgcWktTranslator::ossimToWktDatum(const ossimString& datum)const
 {
    ossimString result;
-   map<std::string, std::string>::const_iterator i = theOssimToWktDatumTranslation.find(datum);
+   std::map<std::string, std::string>::const_iterator i = theOssimToWktDatumTranslation.find(datum);
    if(i != theOssimToWktDatumTranslation.end())
    {
       result = (*i).second;
@@ -1066,7 +1066,7 @@ ossimString ossimOgcWktTranslator::ossimToWktDatum(const ossimString& datum)cons
 ossimString ossimOgcWktTranslator::wktToOssimProjection(const ossimString& datum)const
 {
    std::string result;
-   map<std::string, std::string>::const_iterator i =
+   std::map<std::string, std::string>::const_iterator i =
       theWktToOssimProjectionTranslation.find(datum);
    if(i != theWktToOssimProjectionTranslation.end())
    {
@@ -1078,7 +1078,7 @@ ossimString ossimOgcWktTranslator::wktToOssimProjection(const ossimString& datum
 ossimString ossimOgcWktTranslator::ossimToWktProjection(const ossimString& datum)const
 {
    ossimString result;
-   map<std::string, std::string>::const_iterator i =
+   std::map<std::string, std::string>::const_iterator i =
       theOssimToWktProjectionTranslation.find(datum);
    if(i != theOssimToWktProjectionTranslation.end())
    {

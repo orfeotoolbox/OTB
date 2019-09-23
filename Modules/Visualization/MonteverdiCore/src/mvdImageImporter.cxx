@@ -68,31 +68,19 @@ namespace
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
-ImageImporter
-::ImageImporter( const QString& filename,
-		 int width,
-		 int height,
-		 QObject* p ) :
-  AbstractWorker( p ),
-  m_Filename( filename ),
-  m_ModelType( IMAGE ),
-  m_Width( width ),
-  m_Height( height ),
-  m_IsForceCreateEnabled( false )
+ImageImporter::ImageImporter(const QString& filename, int width, int height, QObject* p)
+  : AbstractWorker(p), m_Filename(filename), m_ModelType(IMAGE), m_Width(width), m_Height(height), m_IsForceCreateEnabled(false)
 {
 }
 
 /*******************************************************************************/
-ImageImporter
-::~ImageImporter()
+ImageImporter::~ImageImporter()
 {
   // qDebug() << this << "destroyed.";
 }
 
 /*******************************************************************************/
-QObject*
-ImageImporter
-::virtual_Do()
+QObject* ImageImporter::virtual_Do()
 {
   /*
   emit ProgressTextChanged(
@@ -103,46 +91,38 @@ ImageImporter
 
   // emit ProgressTextChanged( GetFirstProgressText() );
 
-  emit ProgressValueChanged( -1 );
+  emit ProgressValueChanged(-1);
 
-  emit ProgressRangeChanged( 0, 0 );
+  emit ProgressRangeChanged(0, 0);
 
   // Load model.
-  switch( m_ModelType )
-    {
-    case IMAGE:
-      return
-        I18nCoreApplication::LoadImageModel(
-          m_Filename, m_Width, m_Height
-        );
-      break;
+  switch (m_ModelType)
+  {
+  case IMAGE:
+    return I18nCoreApplication::LoadImageModel(m_Filename, m_Width, m_Height);
+    break;
 
-    default:
-      assert( false && "Unhandled ImageImporter::ModelType value." );
-      break;
-    }
+  default:
+    assert(false && "Unhandled ImageImporter::ModelType value.");
+    break;
+  }
 
   return NULL;
 }
 
 /*******************************************************************************/
-QString
-ImageImporter
-::virtual_GetFirstProgressText() const
+QString ImageImporter::virtual_GetFirstProgressText() const
 {
-  switch( m_ModelType )
-    {
-    case IMAGE:
-      return
-        tr( "Loading image '%1'..." )
-        .arg( QFileInfo( m_Filename ).fileName()
-        );
-      break;
+  switch (m_ModelType)
+  {
+  case IMAGE:
+    return tr("Loading image '%1'...").arg(QFileInfo(m_Filename).fileName());
+    break;
 
-    default:
-      assert( false && "Unhandled ImageImporter::ModelType value." );
-      break;
-    }
+  default:
+    assert(false && "Unhandled ImageImporter::ModelType value.");
+    break;
+  }
 
   return QString();
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -28,20 +27,20 @@
 #include "otbImageFileWriter.h"
 #include "otbGammaMAPImageFilter.h"
 
-int otbGammaMAPFilter(int itkNotUsed(argc), char * argv[])
+int otbGammaMAPFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
-  unsigned int RadiusY((unsigned int) ::atoi(argv[4]));
-  double       NbLooks((double) ::atof(argv[5]));
+  unsigned int RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int RadiusY((unsigned int)::atoi(argv[4]));
+  double       NbLooks((double)::atof(argv[5]));
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

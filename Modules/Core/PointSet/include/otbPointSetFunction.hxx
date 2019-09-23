@@ -33,8 +33,7 @@ namespace otb
  * Constructor
  */
 template <class TPointSet, class TOutput>
-PointSetFunction<TPointSet,   TOutput>
-::PointSetFunction()
+PointSetFunction<TPointSet, TOutput>::PointSetFunction()
 {
   m_PointSet = PointSetType::New();
 }
@@ -43,9 +42,7 @@ PointSetFunction<TPointSet,   TOutput>
  *
  */
 template <class TPointSet, class TOutput>
-void
-PointSetFunction<TPointSet,   TOutput>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PointSetFunction<TPointSet, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 }

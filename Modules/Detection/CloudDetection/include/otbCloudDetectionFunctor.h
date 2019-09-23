@@ -33,7 +33,7 @@ namespace otb
  */
 namespace Functor
 {
-template<class TInput, class TOutputValue>
+template <class TInput, class TOutputValue>
 class CloudDetectionFunctor
 {
 public:
@@ -45,17 +45,19 @@ public:
     m_MaxThreshold = 1.0;
   }
 
-  virtual ~CloudDetectionFunctor() {}
-  inline TOutputValue operator ()(const TInput& inPix)
+  virtual ~CloudDetectionFunctor()
+  {
+  }
+  inline TOutputValue operator()(const TInput& inPix)
   {
     if ((m_CloudEstimatorFunctor(inPix) > m_MinThreshold) && (m_CloudEstimatorFunctor(inPix) <= m_MaxThreshold))
-      {
+    {
       return 1;
-      }
+    }
     else
-      {
+    {
       return 0;
-      }
+    }
   }
 
   void SetReferencePixel(TInput ref)
@@ -95,7 +97,6 @@ protected:
   CloudEstimatorFunctorType m_CloudEstimatorFunctor;
   double                    m_MinThreshold;
   double                    m_MaxThreshold;
-
 };
 
 } // end namespace functor

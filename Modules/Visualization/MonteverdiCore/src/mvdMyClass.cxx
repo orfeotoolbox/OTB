@@ -67,15 +67,12 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-MyClass
-::MyClass( QObject* p ) :
-  QObject( p )
+MyClass::MyClass(QObject* p) : QObject(p)
 {
 }
 
 /*******************************************************************************/
-MyClass
-::~MyClass()
+MyClass::~MyClass()
 {
 }
 

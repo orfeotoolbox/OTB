@@ -38,7 +38,7 @@
 #endif
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
-#if ! defined(NDEBUG)
+#if !defined(NDEBUG)
 #include "cpl_string.h" // CSLCount
 #endif
 
@@ -74,59 +74,56 @@ struct OTBGdalAdapters_EXPORT StringListConverter
 {
 
   template <class ContainerType>
-    /**
-     * Init constructor.
-     * \tparam    ContainerType Any container matching C++ convention for
-     * standard containers (have a \c value_type, \c begin(), \c end()).
-     * \param[in] strings  list of strings to convert
-     *
-     * \throw std::bad_alloc
-     * Prepares \c m_raw with to contain a list of strings that can be seen as a
-     * 0-terminated array of <tt>char*</tt>.
-     */
+  /**
+   * Init constructor.
+   * \tparam    ContainerType Any container matching C++ convention for
+   * standard containers (have a \c value_type, \c begin(), \c end()).
+   * \param[in] strings  list of strings to convert
+   *
+   * \throw std::bad_alloc
+   * Prepares \c m_raw with to contain a list of strings that can be seen as a
+   * 0-terminated array of <tt>char*</tt>.
+   */
   explicit StringListConverter(ContainerType const& strings)
-    {
+  {
     BOOST_MPL_ASSERT((boost::is_same<typename ContainerType::value_type, std::string>));
-    m_raw.reserve(boost::size(strings)+1);
+    m_raw.reserve(boost::size(strings) + 1);
     for (typename ContainerType::const_iterator b = boost::begin(strings), e = boost::end(strings); b != e; ++b)
-      {
+    {
       m_raw.push_back(b->c_str());
-      }
-    m_raw.push_back(nullptr);
-    assert(CSLCount(const_cast <char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
     }
+    m_raw.push_back(nullptr);
+    assert(CSLCount(const_cast<char**>(&m_raw[0])) == static_cast<int>(boost::size(strings)));
+  }
   /**
    * Access to the OGR compliant list of strings.
    */
-  char ** to_ogr() const
-    {
-    return m_raw.size() == 1
-            ? nullptr
-            : const_cast <char**>(&m_raw[0]);
-    }
+  char** to_ogr() const
+  {
+    return m_raw.size() == 1 ? nullptr : const_cast<char**>(&m_raw[0]);
+  }
+
 private:
   std::vector<char const*> m_raw;
 };
 
-/** 
+/**
   * Return the list of available drivers.
   *
   * \return A vector of string containing the list of available drivers.
-*/  
-OTBGdalAdapters_EXPORT
-std::vector<std::string> GetAvailableDriversAsStringVector();
+*/
+OTBGdalAdapters_EXPORT std::vector<std::string> GetAvailableDriversAsStringVector();
 
 /**
   * Return the list of files composing the dataset.
-  * 
+  *
   * \param dataset Pointer to the dataset to get the file list from. Will not be
   * checked for null pointer.
-  * 
+  *
   * \return A vector of string containing the list of files.
 */
-   
-OTBGdalAdapters_EXPORT 
-std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset);
+
+OTBGdalAdapters_EXPORT std::vector<std::string> GetFileListAsStringVector(GDALDataset* dataset);
 
 /**
   * Returns true if the field 'index' is set and not-null in the given feature
@@ -134,8 +131,7 @@ std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset);
   * Before gdal 2.2, it calls OGRFeature::IsFieldSet().
   * After gdal 2.2, it calls OGRFeature::IsFieldSetAndNotNull()
 */
-OTBGdalAdapters_EXPORT
-bool IsFieldSetAndNotNull(OGRFeature *feat, int index);
+OTBGdalAdapters_EXPORT bool IsFieldSetAndNotNull(OGRFeature* feat, int index);
 
 } // ogr namespace
 } // end namespace otb

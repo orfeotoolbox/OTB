@@ -64,51 +64,35 @@ namespace
 {
 } // end of anonymous namespace.
 
-ITK_EXPORT const char*
-RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ] = {
-  "RGBW_CHANNEL_RED",
-  "RGBW_CHANNEL_GREEN",
-  "RGBW_CHANNEL_BLUE",
-  "RGBW_CHANNEL_WHITE",
-  "RGBW_CHANNEL_RGB",
-  "RGBW_CHANNEL_ALL"
-};
+ITK_EXPORT const char* RGBW_CHANNEL_NAMES[RGBW_CHANNEL_COUNT] = {"RGBW_CHANNEL_RED",   "RGBW_CHANNEL_GREEN", "RGBW_CHANNEL_BLUE",
+                                                                 "RGBW_CHANNEL_WHITE", "RGBW_CHANNEL_RGB",   "RGBW_CHANNEL_ALL"};
 
-const char*
-BOUND_NAMES[ BOUND_COUNT ] = {
-  "BOUND_LOWER",
-  "BOUND_UPPER"
-};
+const char* BOUND_NAMES[BOUND_COUNT] = {"BOUND_LOWER", "BOUND_UPPER"};
 
-char const * const
-EFFECT_NAMES[ EFFECT_COUNT ] =
-{
-  // QT_TRANSLATE_NOOP( "mvd", "None" ),
-  QT_TRANSLATE_NOOP( "mvd", "Chessboard" ),
-  QT_TRANSLATE_NOOP( "mvd", "Gradient" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local contrast" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local translucency" ),
-  QT_TRANSLATE_NOOP( "mvd", "Normal" ),
-  QT_TRANSLATE_NOOP( "mvd", "Swipe (horizontal)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Swipe (vertical)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Spectral angle" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lookup table (jet)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (jet)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lookup table (hot)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (hot)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lookup table (winter)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (winter)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lookup table (summer)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (summer)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lookup table (cool)" ),
-  QT_TRANSLATE_NOOP( "mvd", "Local lookup table (cool)" )
-};
+char const* const EFFECT_NAMES[EFFECT_COUNT] = {
+    // QT_TRANSLATE_NOOP( "mvd", "None" ),
+    QT_TRANSLATE_NOOP("mvd", "Chessboard"),
+    QT_TRANSLATE_NOOP("mvd", "Gradient"),
+    QT_TRANSLATE_NOOP("mvd", "Local contrast"),
+    QT_TRANSLATE_NOOP("mvd", "Local translucency"),
+    QT_TRANSLATE_NOOP("mvd", "Normal"),
+    QT_TRANSLATE_NOOP("mvd", "Swipe (horizontal)"),
+    QT_TRANSLATE_NOOP("mvd", "Swipe (vertical)"),
+    QT_TRANSLATE_NOOP("mvd", "Spectral angle"),
+    QT_TRANSLATE_NOOP("mvd", "Lookup table (jet)"),
+    QT_TRANSLATE_NOOP("mvd", "Local lookup table (jet)"),
+    QT_TRANSLATE_NOOP("mvd", "Lookup table (hot)"),
+    QT_TRANSLATE_NOOP("mvd", "Local lookup table (hot)"),
+    QT_TRANSLATE_NOOP("mvd", "Lookup table (winter)"),
+    QT_TRANSLATE_NOOP("mvd", "Local lookup table (winter)"),
+    QT_TRANSLATE_NOOP("mvd", "Lookup table (summer)"),
+    QT_TRANSLATE_NOOP("mvd", "Local lookup table (summer)"),
+    QT_TRANSLATE_NOOP("mvd", "Lookup table (cool)"),
+    QT_TRANSLATE_NOOP("mvd", "Local lookup table (cool)")};
 
-bool
-OVERVIEWS_ENABLED_DEFAULT = true;
+bool OVERVIEWS_ENABLED_DEFAULT = true;
 
-int
-OVERVIEWS_SIZE_DEFAULT = 4096;
+int OVERVIEWS_SIZE_DEFAULT = 4096;
 
 
 /*****************************************************************************/

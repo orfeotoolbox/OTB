@@ -43,7 +43,6 @@ namespace otb
 class OTBCommon_EXPORT System
 {
 public:
-
   /** Standard class typedefs. */
   typedef System Self;
 

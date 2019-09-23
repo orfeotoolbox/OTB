@@ -30,32 +30,32 @@
 
 int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
 {
-  const char*        fixedFileName = argv[1];
-  const char*        movingFileName = argv[2];
+  const char*        fixedFileName    = argv[1];
+  const char*        movingFileName   = argv[2];
   const char*        pointSetFileName = argv[3];
-  const char*        outputFileName = argv[4];
-  const unsigned int exploSize = atoi(argv[5]);
-  const unsigned int winSize = atoi(argv[6]);
+  const char*        outputFileName   = argv[4];
+  const unsigned int exploSize        = atoi(argv[5]);
+  const unsigned int winSize          = atoi(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef double                           PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef itk::TranslationTransform<double, Dimension>                          TransformType;
-  typedef TransformType::ParametersType                                         ParametersType;
-  typedef itk::PointSet<ParametersType, Dimension>                              PointSetType;
+  typedef itk::TranslationTransform<double, Dimension> TransformType;
+  typedef TransformType::ParametersType ParametersType;
+  typedef itk::PointSet<ParametersType, Dimension> PointSetType;
   typedef otb::DisparityMapEstimationMethod<ImageType, ImageType, PointSetType> DMEstimationType;
-  typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType>    MetricType;
-  typedef itk::LinearInterpolateImageFunction<ImageType, double>                InterpolatorType;
-  typedef itk::GradientDescentOptimizer                                         OptimizerType;
-  typedef otb::ImageFileReader<ImageType>                                       ReaderType;
-  typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType>          PointSetSourceType;
-  typedef PointSetType::PointsContainer::Iterator                               PointSetIteratorType;
-  typedef PointSetType::PointDataContainer::Iterator                            PointDataIteratorType;
+  typedef itk::NormalizedCorrelationImageToImageMetric<ImageType, ImageType> MetricType;
+  typedef itk::LinearInterpolateImageFunction<ImageType, double>             InterpolatorType;
+  typedef itk::GradientDescentOptimizer   OptimizerType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ThresholdImageToPointSetFilter<ImageType, PointSetType> PointSetSourceType;
+  typedef PointSetType::PointsContainer::Iterator    PointSetIteratorType;
+  typedef PointSetType::PointDataContainer::Iterator PointDataIteratorType;
 
-  //Input images reading
-  ReaderType::Pointer fixedReader = ReaderType::New();
-  ReaderType::Pointer movingReader = ReaderType::New();
+  // Input images reading
+  ReaderType::Pointer fixedReader    = ReaderType::New();
+  ReaderType::Pointer movingReader   = ReaderType::New();
   ReaderType::Pointer pointSetReader = ReaderType::New();
 
   fixedReader->SetFileName(fixedFileName);
@@ -67,11 +67,10 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
 
   // Ajout
   typedef itk::MinimumMaximumImageCalculator<ImageType> MinMaxType;
-  MinMaxType::Pointer mm = MinMaxType::New();
+  MinMaxType::Pointer                                   mm = MinMaxType::New();
   mm->SetImage(pointSetReader->GetOutput());
-  mm->ComputeMinimum();
-  mm->ComputeMaximum();
-  std::cout << "min: " << (int) mm->GetMinimum() << " max: " << (int) mm->GetMaximum() << std::endl;
+  mm->Compute();
+  std::cout << "min: " << (int)mm->GetMinimum() << " max: " << (int)mm->GetMaximum() << std::endl;
 
   PointSetSourceType::Pointer pointSetSource = PointSetSourceType::New();
   pointSetSource->SetLowerThreshold(mm->GetMaximum());
@@ -82,11 +81,11 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
   std::cout << "PointSet size: " << pointSetSource->GetOutput()->GetPoints()->Size() << std::endl;
 
   // Instantiation
-  DMEstimationType::Pointer dmestimator = DMEstimationType::New();
-  TransformType::Pointer    transform = TransformType::New();
-  OptimizerType::Pointer    optimizer = OptimizerType::New();
+  DMEstimationType::Pointer dmestimator  = DMEstimationType::New();
+  TransformType::Pointer    transform    = TransformType::New();
+  OptimizerType::Pointer    optimizer    = OptimizerType::New();
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
-  MetricType::Pointer       metric = MetricType::New();
+  MetricType::Pointer       metric       = MetricType::New();
 
   // Set up
   dmestimator->SetTransform(transform);
@@ -96,12 +95,12 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
 
   // For gradient descent
   optimizer->SetLearningRate(5.0);
-  optimizer->SetNumberOfIterations(600);
+  optimizer->SetNumberOfIterations(100);
   DMEstimationType::ParametersType initialParameters(transform->GetNumberOfParameters());
-  initialParameters[0] = 0.0;  // Initial offset in mm along X
-  initialParameters[1] = 0.0;  // Initial offset in mm along Y
+  initialParameters[0] = 0.0; // Initial offset in mm along X
+  initialParameters[1] = 0.0; // Initial offset in mm along Y
 
-  //Initial parameter set up
+  // Initial parameter set up
   // dmestimator->SetInitialTransformParameters(initialParameters);
 
   // inputs wiring
@@ -131,16 +130,12 @@ int otbDisparityMapEstimationMethod(int itkNotUsed(argc), char* argv[])
   //     unsigned int idData=0;
   PointDataIteratorType itData = pointSet->GetPointData()->Begin();
   std::cout << "Point data size: " << pointSet->GetPointData()->Size() << std::endl;
-  for (;
-       it != pointSet->GetPoints()->End()
-       && itData != pointSet->GetPointData()->End();
-       ++it, ++itData)
-    {
+  for (; it != pointSet->GetPoints()->End() && itData != pointSet->GetPointData()->End(); ++it, ++itData)
+  {
     out << "Point " << it.Value() << " -> transform parameters: ";
     out << itData.Value();
     out << std::endl;
-
-    }
+  }
   out.close();
 
   return EXIT_SUCCESS;

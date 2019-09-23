@@ -29,9 +29,9 @@ using namespace otb;
 
 int otbSpectralSensitivityReaderTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * dataPath  = argv[1];
-  const char * imageName = argv[2];
-  const char * output    = argv[3];
+  const char* dataPath  = argv[1];
+  const char* imageName = argv[2];
+  const char* output    = argv[3];
 
   typedef VectorImage<double>        ImageType;
   typedef ImageFileReader<ImageType> ReaderType;
@@ -56,9 +56,9 @@ int otbSpectralSensitivityReaderTest(int itkNotUsed(argc), char* argv[])
 
 int otbSpectralSensitivityReaderGenericTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * sensitivityFileName = argv[1];
-  const char * imageName = argv[2];
-  const char * output    = argv[3];
+  const char* sensitivityFileName = argv[1];
+  const char* imageName           = argv[2];
+  const char* output              = argv[3];
 
   typedef VectorImage<double>        ImageType;
   typedef ImageFileReader<ImageType> ReaderType;
@@ -70,7 +70,7 @@ int otbSpectralSensitivityReaderGenericTest(int itkNotUsed(argc), char* argv[])
   SpectralSensitivityReader::Pointer spectSen = SpectralSensitivityReader::New();
 
   spectSen->SetFileName(sensitivityFileName);
-//   std::cout << "test : " << "filemane " << spectSen->GetFileName() <<std::endl;
+  //   std::cout << "test : " << "filemane " << spectSen->GetFileName() <<std::endl;
   spectSen->SetImage(reader->GetOutput());
 
   spectSen->Update();

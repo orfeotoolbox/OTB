@@ -34,20 +34,14 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TPointSet, class TValue, class TCoordRep = double>
-class ITK_EXPORT PointSetAndValuesFunction
-  : public itk::FunctionBase<itk::Point<TCoordRep, TPointSet::PointDimension>, TValue>
+class ITK_EXPORT PointSetAndValuesFunction : public itk::FunctionBase<itk::Point<TCoordRep, TPointSet::PointDimension>, TValue>
 {
 public:
   /** Standard typedefs */
   typedef PointSetAndValuesFunction Self;
-  typedef itk::FunctionBase<
-             itk::Point<TCoordRep, TPointSet::PointDimension>,
-             TValue
-             > Superclass;
-  typedef itk::SmartPointer<Self>
-  Pointer;
-  typedef itk::SmartPointer<const Self>
-  ConstPointer;
+  typedef itk::FunctionBase<itk::Point<TCoordRep, TPointSet::PointDimension>, TValue> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkTypeMacro(PointSetAndValuesFunction, itk::FunctionBase);
@@ -58,11 +52,11 @@ public:
   typedef TCoordRep                           CoordRepType;
   typedef typename PointSetType::PointType    PointType;
 
-  typedef itk::Index<PointType::PointDimension>                         IndexType;
+  typedef itk::Index<PointType::PointDimension> IndexType;
   typedef itk::ContinuousIndex<CoordRepType, PointType::PointDimension> ContinuousIndexType;
 
   typedef itk::VectorContainer<unsigned long, ValueType> ValueVectorType;
-  typedef typename ValueVectorType::ConstPointer         ValueVectorPointerType;
+  typedef typename ValueVectorType::ConstPointer ValueVectorPointerType;
 
   itkSetObjectMacro(ValueVector, ValueVectorType);
   itkGetObjectMacro(ValueVector, ValueVectorType);
@@ -71,12 +65,12 @@ public:
    * Set the point set.
    * \param the point set
    */
-  virtual void SetPointSet(const PointSetType * ptr);
+  virtual void SetPointSet(const PointSetType* ptr);
   /**
    * Get the point set.
    * \return the point set
    */
-  const PointSetType * GetPointSet() const
+  const PointSetType* GetPointSet() const
   {
     return m_PointSet.GetPointer();
   }
@@ -96,19 +90,20 @@ public:
 protected:
   /** Constructor */
   PointSetAndValuesFunction()
-    {
-    m_PointSet = PointSetType::New();
+  {
+    m_PointSet    = PointSetType::New();
     m_ValueVector = ValueVectorType::New();
-
-    }
+  }
   /** Destructor */
-  virtual ~PointSetAndValuesFunction() {}
+  virtual ~PointSetAndValuesFunction()
+  {
+  }
   /**PrintSelf method */
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-  PointSetAndValuesFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PointSetAndValuesFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** PointSet */
   PointSetConstPointerType m_PointSet;

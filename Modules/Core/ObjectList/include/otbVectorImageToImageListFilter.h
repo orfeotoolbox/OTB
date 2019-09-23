@@ -41,14 +41,12 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TVectorImageType, class TImageList>
-class ITK_EXPORT VectorImageToImageListFilter
-  : public ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType>
+class ITK_EXPORT VectorImageToImageListFilter : public ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef VectorImageToImageListFilter Self;
-  typedef ImageToImageListFilter<TVectorImageType,
-      typename TImageList::ImageType>         Superclass;
+  typedef ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -73,20 +71,21 @@ public:
   void GenerateOutputInformation(void) override;
 
 protected:
-
   /** Main computation method */
   void GenerateData(void) override;
 
   /** Constructor */
-  VectorImageToImageListFilter() {};
+  VectorImageToImageListFilter(){};
   /** Destructor */
-  ~VectorImageToImageListFilter() override {}
+  ~VectorImageToImageListFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorImageToImageListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorImageToImageListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

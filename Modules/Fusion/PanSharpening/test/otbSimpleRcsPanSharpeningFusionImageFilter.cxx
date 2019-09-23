@@ -26,27 +26,26 @@
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
 
-int otbSimpleRcsPanSharpeningFusionImageFilter(int itkNotUsed(argc), char * argv[])
+int otbSimpleRcsPanSharpeningFusionImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * panchro = argv[1];
-  const char * multispect = argv[2];
-  const char * output = argv[3];
+  const char* panchro    = argv[1];
+  const char* multispect = argv[2];
+  const char* output     = argv[3];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
-  typedef otb::VectorImage<PixelType, Dimension>         VectorImageType;
-  typedef otb::Image<PixelType, Dimension>               PanchroImageType;
-  typedef otb::ImageFileReader<VectorImageType>          VectorReaderType;
-  typedef otb::ImageFileReader<PanchroImageType>         ImageReaderType;
-  typedef otb::ImageFileWriter<VectorImageType> VectorImageWriterType;
-  typedef otb::SimpleRcsPanSharpeningFusionImageFilter
-    <PanchroImageType, VectorImageType,  VectorImageType, double> FilterType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::Image<PixelType, Dimension>       PanchroImageType;
+  typedef otb::ImageFileReader<VectorImageType>  VectorReaderType;
+  typedef otb::ImageFileReader<PanchroImageType> ImageReaderType;
+  typedef otb::ImageFileWriter<VectorImageType>  VectorImageWriterType;
+  typedef otb::SimpleRcsPanSharpeningFusionImageFilter<PanchroImageType, VectorImageType, VectorImageType, double> FilterType;
 
   VectorReaderType::Pointer      multiSpectReader = VectorReaderType::New();
-  ImageReaderType::Pointer       panchroReader = ImageReaderType::New();
-  FilterType::Pointer            filter = FilterType::New();
-  VectorImageWriterType::Pointer writer = VectorImageWriterType::New();
+  ImageReaderType::Pointer       panchroReader    = ImageReaderType::New();
+  FilterType::Pointer            filter           = FilterType::New();
+  VectorImageWriterType::Pointer writer           = VectorImageWriterType::New();
 
   multiSpectReader->SetFileName(multispect);
   panchroReader->SetFileName(panchro);

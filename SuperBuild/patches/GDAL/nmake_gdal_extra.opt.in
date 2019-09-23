@@ -44,6 +44,7 @@ SQLITE_LIB=@SB_INSTALL_PREFIX_NATIVE@\lib\sqlite3.lib
 SQLITE_HAS_COLUMN_METADATA=yes
 
 # PROJ.4 stuff
+PROJ_FLAGS = -DPROJ_STATIC -DPROJ_VERSION=4
 PROJ_INCLUDE = -I@SB_INSTALL_PREFIX_NATIVE@\include
 PROJ_LIBRARY = @SB_INSTALL_PREFIX_NATIVE@\lib\proj.lib
 
@@ -60,10 +61,9 @@ GEOS_CFLAGS = -I$(GEOS_DIR)\include -I$(GEOS_DIR)\include\geos -DHAVE_GEOS
 GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
 
 # Uncomment for OpenJpeg support
-HAVE_OPENJPEG = YES
 OPENJPEG_ENABLED = YES
 OPENJPEG_VERSION = 20200
-OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include
+OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include\openjpeg-2.2
 OPENJPEG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\openjp2.lib
 
 
@@ -110,3 +110,7 @@ NETCDF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\netcdf.lib
 NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
 NETCDF_HAS_NC4 = YES
 NETCDF_HAS_HDF4 = YES
+
+# Binding list. One or several in the following list
+# csharp, java, python
+BINDINGS=python

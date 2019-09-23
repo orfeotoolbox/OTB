@@ -36,43 +36,51 @@ namespace Functor
 namespace variadic_concatenate_details
 {
 
-template <typename T> size_t NumberOfElements(const T &)
+template <typename T>
+size_t NumberOfElements(const T&)
 {
-  static_assert(std::is_scalar<T>::value,"variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
+  static_assert(std::is_scalar<T>::value,
+                "variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
   return 1;
 }
 
-template <typename T> size_t NumberOfElements(const itk::VariableLengthVector<T> & v)
+template <typename T>
+size_t NumberOfElements(const itk::VariableLengthVector<T>& v)
 {
-  static_assert(std::is_scalar<T>::value,"variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
+  static_assert(std::is_scalar<T>::value,
+                "variadic_concatenate_details::NumberOfElements<T> only works for T and itk::VariableLengthVector<T> where T is a scalar type.");
   return v.GetSize();
 }
 
-template <typename ...T> size_t NumberOfElements(const T&...t)
+template <typename... T>
+size_t NumberOfElements(const T&... t)
 {
-  std::array<size_t,sizeof...(T)> sizes = {{NumberOfElements(t)...}};
-  return std::accumulate(sizes.begin(),sizes.end(),0);
+  std::array<size_t, sizeof...(T)> sizes = {{NumberOfElements(t)...}};
+  return std::accumulate(sizes.begin(), sizes.end(), 0);
 }
 
-template <typename Out, typename T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const T & t)
+template <typename Out, typename T>
+size_t fillVector(itk::VariableLengthVector<Out>& out, size_t idx, const T& t)
 {
-  assert(idx<out.GetSize());
+  assert(idx < out.GetSize());
   out[idx] = static_cast<Out>(t);
-  return idx+1;
+  return idx + 1;
 }
 
-template <typename Out, typename T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const itk::VariableLengthVector<T> & t)
+template <typename Out, typename T>
+size_t fillVector(itk::VariableLengthVector<Out>& out, size_t idx, const itk::VariableLengthVector<T>& t)
 {
-  assert(idx+t.GetSize()<=out.GetSize());
-  for(auto it = 0UL; it<t.GetSize(); ++it)
-    out[idx+it] = static_cast<Out>(t[it]);
-  return idx+t.GetSize();
+  assert(idx + t.GetSize() <= out.GetSize());
+  for (auto it    = 0UL; it < t.GetSize(); ++it)
+    out[idx + it] = static_cast<Out>(t[it]);
+  return idx + t.GetSize();
 }
 
-template <typename Out, typename Current, typename ...T> size_t fillVector(itk::VariableLengthVector<Out> & out, size_t idx, const Current& current, const T&...t)
+template <typename Out, typename Current, typename... T>
+size_t fillVector(itk::VariableLengthVector<Out>& out, size_t idx, const Current& current, const T&... t)
 {
-  size_t newIdx = fillVector(out,idx,current);
-  return fillVector(out,newIdx,t...);
+  size_t newIdx = fillVector(out, idx, current);
+  return fillVector(out, newIdx, t...);
 }
 } // end namespace variadic_concatenate_details
 
@@ -80,28 +88,29 @@ template <typename Out, typename Current, typename ...T> size_t fillVector(itk::
 // This functor concatenates N images (N = variadic) of type
 // VectorImage and or Image, into a single VectorImage
 
-/** 
+/**
  * \class VariadicConcatenate
  * \brief This functor concatenates any number of input of scalar type
  * or VariableLengthVector.
  * \ingroup OTBFunctor
  */
-template<typename TOut, typename ...TIns> struct VariadicConcatenate
+template <typename TOut, typename... TIns>
+struct VariadicConcatenate
 {
-  auto operator()(const TIns &...  ins) const
+  auto operator()(const TIns&... ins) const
   {
-    const size_t numberOfElements = variadic_concatenate_details::NumberOfElements(ins...);
+    const size_t                    numberOfElements = variadic_concatenate_details::NumberOfElements(ins...);
     itk::VariableLengthVector<TOut> out(numberOfElements);
 
-    variadic_concatenate_details::fillVector(out,0,ins...);
-    
+    variadic_concatenate_details::fillVector(out, 0, ins...);
+
     return out;
   }
 
   // Must define OutputSize because output pixel is vector
   constexpr size_t OutputSize(const std::array<size_t, sizeof...(TIns)> inputsNbBands) const
   {
-    return std::accumulate(inputsNbBands.begin(),inputsNbBands.end(),0);
+    return std::accumulate(inputsNbBands.begin(), inputsNbBands.end(), 0);
   }
 };
 

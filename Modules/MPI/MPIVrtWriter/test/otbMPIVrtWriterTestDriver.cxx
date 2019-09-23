@@ -23,6 +23,5 @@
 
 void RegisterTests()
 {
-   REGISTER_TEST(otbMPIReadWriteTest);
+  REGISTER_TEST(otbMPIReadWriteTest);
 }
-

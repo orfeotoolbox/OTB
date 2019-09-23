@@ -35,12 +35,11 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::ThresholdVectorImageFilter()
+ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdVectorImageFilter()
 {
   m_OutsideValue = itk::NumericTraits<OutputImageInternalPixelType>::Zero;
-  m_Lower = itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin();
-  m_Upper = itk::NumericTraits<InputImageInternalPixelType>::max();
+  m_Lower        = itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin();
+  m_Upper        = itk::NumericTraits<InputImageInternalPixelType>::max();
 }
 
 
@@ -48,54 +47,41 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "OutsideValue: "
-     << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_OutsideValue)
-     << std::endl;
-  os << indent << "Lower: "
-     << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_Lower)
-     << std::endl;
-  os << indent << "Upper: "
-     << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_Upper)
-     << std::endl;
+  os << indent << "OutsideValue: " << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_OutsideValue) << std::endl;
+  os << indent << "Lower: " << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_Lower) << std::endl;
+  os << indent << "Upper: " << static_cast<typename itk::NumericTraits<InputImageInternalPixelType>::PrintType>(m_Upper) << std::endl;
 }
 
 /**
  * The values greater than or equal to the value are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::ThresholdAbove(const InputImageInternalPixelType &thresh)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdAbove(const InputImageInternalPixelType& thresh)
 {
-  if (m_Upper != thresh
-      || m_Lower > itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin())
-    {
+  if (m_Upper != thresh || m_Lower > itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin())
+  {
     m_Lower = itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin();
     m_Upper = thresh;
     this->Modified();
-    }
+  }
 }
 
 /**
  * The values less than or equal to the value are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::ThresholdBelow(const InputImageInternalPixelType &thresh)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdBelow(const InputImageInternalPixelType& thresh)
 {
   if (m_Lower != thresh || m_Upper < itk::NumericTraits<InputImageInternalPixelType>::max())
-    {
+  {
     m_Lower = thresh;
     m_Upper = itk::NumericTraits<InputImageInternalPixelType>::max();
     this->Modified();
-    }
+  }
 }
 
 
@@ -103,22 +89,20 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  * The values outside the range are set to OutsideValue
  */
 template <class TInputImage, class TOutputImage>
-void
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::ThresholdOutside(const InputImageInternalPixelType &lower, const InputImageInternalPixelType &upper)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdOutside(const InputImageInternalPixelType& lower, const InputImageInternalPixelType& upper)
 {
   if (lower > upper)
-    {
-    itkExceptionMacro(<<"Lower threshold cannot be greater than upper threshold.");
+  {
+    itkExceptionMacro(<< "Lower threshold cannot be greater than upper threshold.");
     return;
-    }
+  }
 
   if (m_Lower != lower || m_Upper != upper)
-    {
+  {
     m_Lower = lower;
     m_Upper = upper;
     this->Modified();
-    }
+  }
 }
 
 
@@ -126,12 +110,9 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-ThresholdVectorImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+void ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
-  itkDebugMacro(<<"Actually executing");
+  itkDebugMacro(<< "Actually executing");
 
   // Get the input and output pointers
   InputImagePointer  inputPtr  = this->GetInput();
@@ -140,7 +121,7 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
   // Define/declare an iterator that will walk the output region for this
   // thread.
   typedef itk::ImageRegionConstIterator<TInputImage> InputIterator;
-  typedef itk::ImageRegionIterator<TOutputImage>      OutputIterator;
+  typedef itk::ImageRegionIterator<TOutputImage>     OutputIterator;
 
   InputIterator  inIt(inputPtr, outputRegionForThread);
   OutputIterator outIt(outputPtr, outputRegionForThread);
@@ -149,35 +130,34 @@ ThresholdVectorImageFilter<TInputImage, TOutputImage>
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   // walk the regions, threshold each pixel
-  while( !outIt.IsAtEnd() && !inIt.IsAtEnd()  )
-    {
-    const InputImagePixelType inPix = inIt.Get();
-    unsigned int l_size = inPix.Size();
-    OutputImagePixelType outPix;
+  while (!outIt.IsAtEnd() && !inIt.IsAtEnd())
+  {
+    const InputImagePixelType inPix  = inIt.Get();
+    unsigned int              l_size = inPix.Size();
+    OutputImagePixelType      outPix;
     outPix.SetSize(l_size);
-    for(unsigned int i=0; i<l_size; i++)
-      {
+    for (unsigned int i = 0; i < l_size; i++)
+    {
       const InputImageInternalPixelType value = inPix[i];
 
       if (m_Lower <= value && value <= m_Upper)
-        {
+      {
         // pixel passes to output unchanged and is replaced by m_OutsideValue in
         // the inverse output image
         outPix[i] = static_cast<OutputImageInternalPixelType>(value);
-        }
-      else
-        {
-        outPix[i] = static_cast<OutputImageInternalPixelType>(m_OutsideValue);
-        }
       }
+      else
+      {
+        outPix[i] = static_cast<OutputImageInternalPixelType>(m_OutsideValue);
+      }
+    }
 
-    outIt.Set( outPix );
+    outIt.Set(outPix);
 
     ++inIt;
     ++outIt;
     progress.CompletedPixel();
-    }
-
+  }
 }
 
 } // end namespace itk

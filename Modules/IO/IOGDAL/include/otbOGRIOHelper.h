@@ -44,7 +44,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class OTBIOGDAL_EXPORT OGRIOHelper: public itk::Object
+class OTBIOGDAL_EXPORT OGRIOHelper : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -55,12 +55,12 @@ public:
 
   /** Template parameters typedefs */
   /** Data typedef */
-  typedef VectorData<>                                    VectorDataType;
-  typedef VectorDataType::DataTreeType           DataTreeType;
-  typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
+  typedef VectorData<>                 VectorDataType;
+  typedef VectorDataType::DataTreeType DataTreeType;
+  typedef DataTreeType::TreeNodeType   InternalTreeNodeType;
 
-  typedef VectorDataType::DataNodeType           DataNodeType;
-  typedef DataNodeType::Pointer                  DataNodePointerType;
+  typedef VectorDataType::DataNodeType DataNodeType;
+  typedef DataNodeType::Pointer        DataNodePointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,46 +69,41 @@ public:
   itkTypeMacro(OGRIOHelper, itk::Object);
 
   /** Conversion tools */
-  void ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const;
+  void ConvertOGRLayerToDataTreeNode(OGRLayer* layer, InternalTreeNodeType* documentPtr) const;
 
 
-  unsigned int ProcessNodeWrite(InternalTreeNodeType * source,
-                                GDALDataset * m_DataSource,
-                                OGRGeometryCollection * ogrCollection,
-                                OGRLayer * ogrCurrentLayer,
-                                OGRSpatialReference * oSRS);
+  unsigned int ProcessNodeWrite(InternalTreeNodeType* source, GDALDataset* m_DataSource, OGRGeometryCollection* ogrCollection, OGRLayer* ogrCurrentLayer,
+                                OGRSpatialReference* oSRS);
 
   /** Return a list of OGRLayer * */
-  std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                                        GDALDataset * dummyDatasource,
-                                                        OGRLayer* ogrCurrentLayer,
-                                                        OGRSpatialReference * oSRS);
+  std::vector<OGRLayer*> ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType* source, GDALDataset* dummyDatasource, OGRLayer* ogrCurrentLayer,
+                                                        OGRSpatialReference* oSRS);
 
-  void ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  void ConvertGeometryToPointNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const;
 
-  void ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  void ConvertGeometryToLineNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const;
 
-  void ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const;
+  void ConvertGeometryToPolygonNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const;
 
 protected:
   OGRIOHelper();
   ~OGRIOHelper() override;
 
 private:
-  OGRIOHelper(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  OGRIOHelper(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  typedef DataNodeType::PointType                PointType;
+  typedef DataNodeType::PointType PointType;
 
-  typedef DataNodeType::LineType                 LineType;
-  typedef LineType::Pointer                      LinePointerType;
-  typedef LineType::VertexListType               VertexListType;
-  typedef VertexListType::ConstPointer           VertexListConstPointerType;
+  typedef DataNodeType::LineType       LineType;
+  typedef LineType::Pointer            LinePointerType;
+  typedef LineType::VertexListType     VertexListType;
+  typedef VertexListType::ConstPointer VertexListConstPointerType;
 
-  typedef DataNodeType::PolygonType              PolygonType;
-  typedef PolygonType::Pointer                   PolygonPointerType;
-  typedef DataNodeType::PolygonListType          PolygonListType;
-  typedef PolygonListType::Pointer               PolygonListPointerType;
+  typedef DataNodeType::PolygonType     PolygonType;
+  typedef PolygonType::Pointer          PolygonPointerType;
+  typedef DataNodeType::PolygonListType PolygonListType;
+  typedef PolygonListType::Pointer      PolygonListPointerType;
 
 }; // end class OGRIOHelper
 

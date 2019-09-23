@@ -142,32 +142,6 @@ endmacro()
 # OTB wrapper for add_test that automatically sets the test's LABELS property
 # to the value of its containing module.
 #
-# function(otb_add_test)
-#   # Add tests with data in the OTBData group.
-#   ExternalData_add_test(OTBData ${ARGN})
-
-#   if("NAME" STREQUAL "${ARGV0}")
-#     set(_iat_testname ${ARGV1})
-#   else()
-#     set(_iat_testname ${ARGV0})
-#   endif()
-
-#   if(otb-module)
-#     set(_label ${otb-module})
-#     if(TARGET ${otb-module}-all AND "${ARGN}" MATCHES "DATA{")
-#       add_dependencies(${otb-module}-all OTBData)
-#     endif()
-#   else()
-#     set(_label ${main_project_name})
-#   endif()
-
-#   set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
-# endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB wrapper for add_test that automatically sets the test's LABELS property
-# to the value of its containing module.
-#
 function(otb_add_test)
   set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
 

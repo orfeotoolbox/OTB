@@ -27,23 +27,23 @@
 #include "itkWeightedCentroidKdTreeGenerator.h"
 #include "itkKdTreeBasedKmeansEstimator.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class KMeansAttributesLabelMapFilter
  * \brief Execute a KMeans on the attributes of a itk::LabelMap<otb::AttributesMapLabelObject>
  *
  * \ingroup OTBLabelMap
  */
-template<class TInputImage>
-class ITK_EXPORT KMeansAttributesLabelMapFilter :
-    public itk::Object
+template <class TInputImage>
+class ITK_EXPORT KMeansAttributesLabelMapFilter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef KMeansAttributesLabelMapFilter                Self;
+  typedef KMeansAttributesLabelMapFilter Self;
   typedef itk::LabelMapFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                       Pointer;
-  typedef itk::SmartPointer<const Self>                 ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
   typedef TInputImage                              InputImageType;
@@ -56,38 +56,33 @@ public:
   typedef DataObjectType::Pointer                  DataObjectPointerType;
 
   // LabelObject attributes
-  typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
-  typedef typename LabelObjectType::ClassLabelType          ClassLabelType;
+  typedef typename LabelObjectType::AttributesValueType AttributesValueType;
+  typedef typename LabelObjectType::ClassLabelType      ClassLabelType;
 
   // LabelMapToSampleList
-  typedef itk::VariableLengthVector<AttributesValueType>    VectorType;
-  typedef itk::FixedArray<ClassLabelType, 1>                 ClassLabelVectorType;
+  typedef itk::VariableLengthVector<AttributesValueType> VectorType;
+  typedef itk::FixedArray<ClassLabelType, 1> ClassLabelVectorType;
 
   typedef itk::Statistics::ListSample<VectorType>           ListSampleType;
   typedef itk::Statistics::ListSample<ClassLabelVectorType> TrainingListSampleType;
-  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<
-            InputImageType,
-            ListSampleType,
-            TrainingListSampleType>                         LabelMapToSampleListFilterType;
+  typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<InputImageType, ListSampleType, TrainingListSampleType> LabelMapToSampleListFilterType;
   typedef typename LabelMapToSampleListFilterType::MeasurementFunctorType MeasurementFunctorType;
 
   // KMeans
-  typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType>         TreeGeneratorType;
-  typedef typename TreeGeneratorType::KdTreeType                                   TreeType;
-  typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>                    EstimatorType;
-  typedef itk::Statistics::EuclideanDistanceMetric<VectorType>                     DistanceType;
-  typedef std::vector<VectorType>                                                  CentroidsVectorType;
+  typedef itk::Statistics::WeightedCentroidKdTreeGenerator<ListSampleType> TreeGeneratorType;
+  typedef typename TreeGeneratorType::KdTreeType                           TreeType;
+  typedef itk::Statistics::KdTreeBasedKmeansEstimator<TreeType>            EstimatorType;
+  typedef itk::Statistics::EuclideanDistanceMetric<VectorType>             DistanceType;
+  typedef std::vector<VectorType>                                          CentroidsVectorType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(KMeansAttributesLabelMapFilter,
-               itk::Object);
+  itkTypeMacro(KMeansAttributesLabelMapFilter, itk::Object);
 
   /** Return the centroids resulting from the KMeans */
   CentroidsVectorType& GetCentroids()
@@ -123,18 +118,18 @@ public:
 
 protected:
   KMeansAttributesLabelMapFilter();
-  ~KMeansAttributesLabelMapFilter() override {};
+  ~KMeansAttributesLabelMapFilter() override{};
 
 
 private:
   KMeansAttributesLabelMapFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  InputImagePointer m_InputLabelMap;
+  InputImagePointer   m_InputLabelMap;
   CentroidsVectorType m_Centroids;
 
   typename LabelMapToSampleListFilterType::Pointer m_LabelMapToSampleListFilter;
-  unsigned int m_NumberOfClasses;
+  unsigned int                                     m_NumberOfClasses;
 
 }; // end of class
 
@@ -145,5 +140,3 @@ private:
 #endif
 
 #endif
-
-

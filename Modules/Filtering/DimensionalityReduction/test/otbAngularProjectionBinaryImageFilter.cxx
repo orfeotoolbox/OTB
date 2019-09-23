@@ -28,7 +28,7 @@
 
 #include "otbAngularProjectionBinaryImageFilter.h"
 
-int otbAngularProjectionBinaryImageFilterTest ( int , char * argv[] )
+int otbAngularProjectionBinaryImageFilterTest(int, char* argv[])
 {
   std::string inputImageName1(argv[1]);
   std::string inputImageName2(argv[2]);
@@ -37,45 +37,44 @@ int otbAngularProjectionBinaryImageFilterTest ( int , char * argv[] )
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::Image< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader1 = ReaderType::New();
+  ReaderType::Pointer                     reader1 = ReaderType::New();
   reader1->SetFileName(inputImageName1);
 
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName(inputImageName2);
 
   // Image filtering
-  typedef otb::AngularProjectionBinaryImageFilter< ImageType, ImageType, PixelType >
-    FilterType;
+  typedef otb::AngularProjectionBinaryImageFilter<ImageType, ImageType, PixelType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput1( reader1->GetOutput() );
-  filter->SetInput2( reader2->GetOutput() );
+  filter->SetInput1(reader1->GetOutput());
+  filter->SetInput2(reader2->GetOutput());
 
-  std::vector< PixelType > angle;
-  angle.push_back( otb::CONST_PI_2 );
-  angle.push_back( 0 );
+  std::vector<PixelType> angle;
+  angle.push_back(otb::CONST_PI_2);
+  angle.push_back(0);
 
-  filter->SetAngleSet( angle );
+  filter->SetAngleSet(angle);
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
   filter->Update();
 
-  typedef otb::ImageFileWriter< ImageType > WriterType;
-  auto writer1 = WriterType::New();
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+  auto                                    writer1 = WriterType::New();
   writer1->SetFileName(outputImageName1);
-  writer1->SetInput( filter->GetOutput(0) );
+  writer1->SetInput(filter->GetOutput(0));
   writer1->Update();
-  
+
   auto writer2 = WriterType::New();
   writer2->SetFileName(outputImageName2);
-  writer2->SetInput( filter->GetOutput(1) );
+  writer2->SetInput(filter->GetOutput(1));
   writer2->Update();
 
   return EXIT_SUCCESS;

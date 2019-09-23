@@ -64,7 +64,7 @@ public:
    : private equality_comparable<ProductType>
    , private less_than_comparable<ProductType>
    {
-     enum Type { SLC, GRD, MGD, GEC, EEC, SCS_B, MAX__, UNDEFINED__, FIRST__=0 };
+     enum Type { SLC, GRD, MGD, GEC, EEC, SCS_B, SCS_U, MAX__, UNDEFINED__, FIRST__=0 };
 
       explicit ProductType(unsigned char value)
          : m_value(Type(value))
@@ -159,12 +159,16 @@ public:
       unsigned long endLine;
       unsigned long startSample;
       unsigned long endSample;
+      double        azimuthAnxTime;
       friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
       {
          return os << "{ azimuthStartTime: " << v.azimuthStartTime
             <<        ", azimuthStopTime: "  << v.azimuthStopTime
             <<        ", startLine: "        << v.startLine
             <<        ", stopLine: "         << v.endLine
+	    <<        ", startSample: "      << v.startSample
+            <<        ", stopSample: "       << v.endSample
+	    <<        ", azimuthAnxTime:"    << v.azimuthAnxTime
             <<        "}";
       }
    };
@@ -517,6 +521,8 @@ protected:
    
    TimeType                                    theFirstLineTime;
    TimeType                                    theLastLineTime;
+
+   unsigned int                                theGeomVersion; // version of input geom
 
    unsigned long                                theNumberOfLinesPerBurst;
    unsigned long                                theNumberOfSamplesPerBurst;

@@ -43,12 +43,6 @@ namespace otb
 namespace Wrapper
 {
 
-/** Utility function to negate std::isalnum */
-bool IsNotAlphaNum(char c)
-{
-  return !std::isalnum( c );
-}
-
 template <class TInputValue, class TOutputValue>
 class TrainVectorBase : public LearningApplicationBase<TInputValue, TOutputValue>
 {
@@ -56,7 +50,7 @@ public:
   /** Standard class typedefs. */
   typedef TrainVectorBase Self;
   typedef LearningApplicationBase<TInputValue, TOutputValue> Superclass;
-  typedef itk::SmartPointer <Self> Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
@@ -66,15 +60,14 @@ public:
   typedef typename Superclass::ListSampleType       ListSampleType;
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
-  typedef double ValueType;
-  typedef itk::VariableLengthVector <ValueType> MeasurementType;
+  typedef double                               ValueType;
+  typedef itk::VariableLengthVector<ValueType> MeasurementType;
 
   typedef otb::StatisticsXMLFileReader<SampleType> StatisticsReader;
 
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
 protected:
-
   /** Class used to store statistics Measurment (mean/stddev) */
   class ShiftScaleParameters
   {
@@ -91,7 +84,7 @@ protected:
     typename TargetListSampleType::Pointer labeledListSample;
     SamplesWithLabel()
     {
-      listSample = ListSampleType::New();
+      listSample        = ListSampleType::New();
       labeledListSample = TargetListSampleType::New();
     }
   };
@@ -110,36 +103,38 @@ protected:
     /** Selected class field name */
     std::string m_SelectedCFieldName;
     /** Selected names */
-    std::vector <std::string> m_SelectedNames;
-    unsigned int m_NbFeatures;
+    std::vector<std::string> m_SelectedNames;
+    unsigned int             m_NbFeatures;
 
-    void SetFieldNames(std::vector <std::string> fieldNames, std::vector<int> selectedIdx)
+    void SetFieldNames(std::vector<std::string> fieldNames, std::vector<int> selectedIdx)
     {
-      m_SelectedIdx = selectedIdx;
-      m_NbFeatures = static_cast<unsigned int>(selectedIdx.size());
-      m_SelectedNames = std::vector<std::string>( m_NbFeatures );
-      for( unsigned int i = 0; i < m_NbFeatures; ++i )
-        {
+      m_SelectedIdx   = selectedIdx;
+      m_NbFeatures    = static_cast<unsigned int>(selectedIdx.size());
+      m_SelectedNames = std::vector<std::string>(m_NbFeatures);
+      for (unsigned int i = 0; i < m_NbFeatures; ++i)
+      {
         m_SelectedNames[i] = fieldNames[selectedIdx[i]];
-        }
+      }
     }
     void SetClassFieldNames(std::vector<std::string> cFieldNames, std::vector<int> selectedCFieldIdx)
     {
       m_SelectedCFieldIdx = selectedCFieldIdx;
       // Handle only one class field name, if several are provided only the first one is used.
-      m_SelectedCFieldName = selectedCFieldIdx.empty() ? cFieldNames.front() : cFieldNames[selectedCFieldIdx.front()];
+      if (selectedCFieldIdx.empty())
+        m_SelectedCFieldName.clear();
+      else
+        m_SelectedCFieldName = cFieldNames[selectedCFieldIdx.front()];
     }
   };
 
 
 protected:
-
   /**
    * Function which extract and store all samples for Training and Classification.
    * \param measurement statics measurement (mean/stddev)
    * \param featuresInfo information about the features
    */
-  virtual void ExtractAllSamples(const ShiftScaleParameters &measurement);
+  virtual void ExtractAllSamples(const ShiftScaleParameters& measurement);
 
   /**
   * Extract the training sample list
@@ -147,7 +142,7 @@ protected:
   * \param featuresInfo information about the features
   * \return sample list used for training
   */
-  virtual SamplesWithLabel ExtractTrainingSamplesWithLabel(const ShiftScaleParameters &measurement);
+  virtual SamplesWithLabel ExtractTrainingSamplesWithLabel(const ShiftScaleParameters& measurement);
 
   /**
    * Extract classification the sample list
@@ -155,7 +150,7 @@ protected:
    * \param featuresInfo information about the features
    * \return sample list used for classification
    */
-  virtual SamplesWithLabel ExtractClassificationSamplesWithLabel(const ShiftScaleParameters &measurement);
+  virtual SamplesWithLabel ExtractClassificationSamplesWithLabel(const ShiftScaleParameters& measurement);
 
 
   /** Extract samples from input file for corresponding field name
@@ -166,8 +161,7 @@ protected:
    * \param nbFeatures the number of features.
    * \return the list of samples and their corresponding labels.
    */
-  SamplesWithLabel
-  ExtractSamplesWithLabel(std::string parameterName, std::string parameterLayer, const ShiftScaleParameters &measurement);
+  SamplesWithLabel ExtractSamplesWithLabel(std::string parameterName, std::string parameterLayer, const ShiftScaleParameters& measurement);
 
 
   /**
@@ -177,22 +171,15 @@ protected:
    */
   ShiftScaleParameters GetStatistics(unsigned int nbFeatures);
 
-  SamplesWithLabel m_TrainingSamplesWithLabel;
-  SamplesWithLabel m_ClassificationSamplesWithLabel;
+  SamplesWithLabel                       m_TrainingSamplesWithLabel;
+  SamplesWithLabel                       m_ClassificationSamplesWithLabel;
   typename TargetListSampleType::Pointer m_PredictedList;
-  FeaturesInfo m_FeaturesInfo;
+  FeaturesInfo                           m_FeaturesInfo;
 
   void DoInit() override;
   void DoUpdateParameters() override;
   void DoExecute() override;
-
-private:
-  /**
-   * Get the field of the input feature corresponding to the input field
-   */
-  inline TOutputValue GetFeatureField(const ogr::Feature& feature, int field);
 };
-
 }
 }
 

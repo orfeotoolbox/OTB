@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
@@ -40,9 +40,6 @@ endif()
 
 include(ExternalProject)
 
-# Not needed as OTB Superbuild requires c++14 since version 6.2
-# include(OTBCheckCpp11Keywords)
-
 include(OTBCheckTargetSystemArch)
 
 set(LINUX FALSE)
@@ -50,17 +47,18 @@ if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(LINUX TRUE)
 endif()
 
-option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
+option(BUILD_SHARED_LIBS "Build Superbuild with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
+option(BUILD_GEOS_STATIC_LIBS "Build GEOS with static libraries." OFF)
+mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with "
+  "the syntax (semi-colon used as a separator): "
+  "-D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
 if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
@@ -120,6 +118,7 @@ message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 # Special setting for low kernel versions
 if(UNIX)
   option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
+  mark_as_advanced(USE_LOW_KERNEL_VERSION)
 endif()
 
 
@@ -258,6 +257,9 @@ if(CMAKE_MODULE_LINKER_FLAGS)
   list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_MODULE_LINKER_FLAGS}")
 endif()
 
+# This is needed for gdal 2.4 in order to find OpenJPEG
+list(APPEND SB_ENV_CONFIGURE_CMD "PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+
 list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
@@ -343,10 +345,10 @@ option(OTB_USE_MPI "Enable MPI in OTB" OFF)
 option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data
-  PATHS
-  $ENV{OTB_DATA_ROOT}
-  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS ${OTB-SuperBuild_SOURCE_DIR}/../Data
+  )
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
@@ -383,7 +385,7 @@ set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
 endif()

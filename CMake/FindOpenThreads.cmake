@@ -58,6 +58,7 @@
 # standard install paths.
 # Explicit -DVAR=value arguments should still be able to override everything.
 
+# This whole file could be deleted. Find Packages OpenThreads can be used now
 find_path(
   OPENTHREADS_INCLUDE_DIR OpenThreads/Thread
   PATH_SUFFIXES include

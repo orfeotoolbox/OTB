@@ -32,7 +32,7 @@
 
 #include "otbImage.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   // First the image type should be declared
   using ImageType = otb::Image<unsigned short, 2>;

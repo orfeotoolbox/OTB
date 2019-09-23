@@ -35,85 +35,86 @@ namespace otb
  */
 namespace MetaDataKey
 {
-  extern OTBOSSIMAdapters_EXPORT char const* DriverShortNameKey;
-  extern OTBOSSIMAdapters_EXPORT char const* DriverLongNameKey;
+extern OTBOSSIMAdapters_EXPORT char const* DriverShortNameKey;
+extern OTBOSSIMAdapters_EXPORT char const* DriverLongNameKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* ProjectionRefKey;
+extern OTBOSSIMAdapters_EXPORT char const* ProjectionRefKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* GCPProjectionKey;
-  extern OTBOSSIMAdapters_EXPORT char const* GCPParametersKey;
-  extern OTBOSSIMAdapters_EXPORT char const* GCPCountKey;
+extern OTBOSSIMAdapters_EXPORT char const* GCPProjectionKey;
+extern OTBOSSIMAdapters_EXPORT char const* GCPParametersKey;
+extern OTBOSSIMAdapters_EXPORT char const* GCPCountKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* GeoTransformKey;
+extern OTBOSSIMAdapters_EXPORT char const* GeoTransformKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* MetadataKey;
-  extern OTBOSSIMAdapters_EXPORT char const* SubMetadataKey;
+extern OTBOSSIMAdapters_EXPORT char const* MetadataKey;
+extern OTBOSSIMAdapters_EXPORT char const* SubMetadataKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* UpperLeftCornerKey;
-  extern OTBOSSIMAdapters_EXPORT char const* UpperRightCornerKey;
-  extern OTBOSSIMAdapters_EXPORT char const* LowerLeftCornerKey;
-  extern OTBOSSIMAdapters_EXPORT char const* LowerRightCornerKey;
+extern OTBOSSIMAdapters_EXPORT char const* UpperLeftCornerKey;
+extern OTBOSSIMAdapters_EXPORT char const* UpperRightCornerKey;
+extern OTBOSSIMAdapters_EXPORT char const* LowerLeftCornerKey;
+extern OTBOSSIMAdapters_EXPORT char const* LowerRightCornerKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* ColorTableNameKey;
-  extern OTBOSSIMAdapters_EXPORT char const* ColorEntryCountKey;
-  extern OTBOSSIMAdapters_EXPORT char const* ColorEntryAsRGBKey;
+extern OTBOSSIMAdapters_EXPORT char const* ColorTableNameKey;
+extern OTBOSSIMAdapters_EXPORT char const* ColorEntryCountKey;
+extern OTBOSSIMAdapters_EXPORT char const* ColorEntryAsRGBKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistKey;
-  extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistDelimiterKey;
+extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistKey;
+extern OTBOSSIMAdapters_EXPORT char const* OSSIMKeywordlistDelimiterKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistKey;
-  extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistDelimiterKey;
+extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistKey;
+extern OTBOSSIMAdapters_EXPORT char const* VectorDataKeywordlistDelimiterKey;
 
-  extern OTBOSSIMAdapters_EXPORT char const* ResolutionFactor;
-  extern OTBOSSIMAdapters_EXPORT char const* SubDatasetIndex;
-  extern OTBOSSIMAdapters_EXPORT char const* CacheSizeInBytes;
+extern OTBOSSIMAdapters_EXPORT char const* ResolutionFactor;
+extern OTBOSSIMAdapters_EXPORT char const* SubDatasetIndex;
+extern OTBOSSIMAdapters_EXPORT char const* CacheSizeInBytes;
 
-  extern OTBOSSIMAdapters_EXPORT char const* TileHintX;
-  extern OTBOSSIMAdapters_EXPORT char const* TileHintY;
+extern OTBOSSIMAdapters_EXPORT char const* TileHintX;
+extern OTBOSSIMAdapters_EXPORT char const* TileHintY;
 
-  extern OTBOSSIMAdapters_EXPORT char const * NoDataValueAvailable;
-  extern OTBOSSIMAdapters_EXPORT char const * NoDataValue;
+extern OTBOSSIMAdapters_EXPORT char const* NoDataValueAvailable;
+extern OTBOSSIMAdapters_EXPORT char const* NoDataValue;
 
-  extern OTBOSSIMAdapters_EXPORT char const * DataType;
+extern OTBOSSIMAdapters_EXPORT char const* DataType;
 
 
-  enum  KeyType
-    {
-    TSTRING,
-    TENTIER,
-    TDOUBLE,
-    TOTB_GCP,
-    TVECTOR,
-    TOSSIMKEYWORDLIST,
-    TVECTORDATAKEYWORDLIST,
-    TBOOLVECTOR
-    };
-  /*
-  typedef struct
+enum KeyType
+{
+  TSTRING,
+  TENTIER,
+  TDOUBLE,
+  TOTB_GCP,
+  TVECTOR,
+  TOSSIMKEYWORDLIST,
+  TVECTORDATAKEYWORDLIST,
+  TBOOLVECTOR
+};
+/*
+typedef struct
+{
+  std::string keyname;
+  KeyType type;
+} KeyTypeDef; */
+
+struct KeyTypeDef
+{
+  std::string keyname;
+  KeyType     type;
+
+  KeyTypeDef()
   {
-    std::string keyname;
-    KeyType type;
-  } KeyTypeDef; */
-
-  struct KeyTypeDef
+  }
+  KeyTypeDef(const std::string& _keyname, const KeyType& _type)
   {
-    std::string keyname;
-    KeyType type;
+    keyname = _keyname;
+    type    = _type;
+  }
+};
 
-    KeyTypeDef() {}
-    KeyTypeDef(const std::string& _keyname, const KeyType& _type)
-    {
-      keyname = _keyname;
-      type = _type;
-    }
+KeyType OTBOSSIMAdapters_EXPORT GetKeyType(const std::string& name);
 
-  };
-
-  KeyType OTBOSSIMAdapters_EXPORT GetKeyType(const std::string& name);
-
-  typedef std::vector<double>               VectorType;
-  typedef std::vector<bool>                 BoolVectorType;
-  typedef itk::VariableLengthVector<double> VariableLengthVectorType;
+typedef std::vector<double>               VectorType;
+typedef std::vector<bool>                 BoolVectorType;
+typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 }
 
 /** \class OTB_GCP
@@ -127,7 +128,6 @@ namespace MetaDataKey
 class OTBOSSIMAdapters_EXPORT OTB_GCP
 {
 public:
-
   /** Unique identifier, often numeric */
   std::string m_Id;
 

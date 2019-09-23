@@ -184,7 +184,7 @@ namespace ossimplugins
    std::ostream& ossimTileMapModel::print(std::ostream& os) const
    {
       os << "\nDump of ossimTileMapModel object at "
-         << hex << this << ":\n"
+         << std::hex << this << ":\n"
          << "\nTileMapModel -- Dump of all data members: "
          << "\n        theImageID: " << theImageID.chars()
          << "\n        theImageSize: " << theImageSize
@@ -193,7 +193,7 @@ namespace ossimplugins
          << "\n        theGSD.line: " << theGSD.line
          << "\n        theGSD.samp: " << theGSD.samp
          << "\n        qDepth: " << qDepth
-         << endl;
+         << std::endl;
 
       return ossimSensorModel::print(os);
    }
@@ -282,7 +282,7 @@ namespace ossimplugins
 //  Writes a sample kwl to output stream.
 //
 //*****************************************************************************
-   void ossimTileMapModel::writeGeomTemplate(ostream& os)
+   void ossimTileMapModel::writeGeomTemplate(std::ostream& os)
    {
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: entering..." << std::endl;
 
@@ -290,7 +290,7 @@ namespace ossimplugins
          "//**************************************************************\n"
          "// Template for TileMap model keywordlist\n"
          "//**************************************************************\n"
-         << ossimKeywordNames::TYPE_KW << ": " << "ossimTileMapModel" << endl;
+         << ossimKeywordNames::TYPE_KW << ": " << "ossimTileMapModel" << std::endl;
 
 
       if (traceExec())  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG ossimTileMapModel::writeGeomTemplate: returning..." << std::endl;

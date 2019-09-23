@@ -41,22 +41,16 @@ namespace Wrapper
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-char const * const
-QtWidgetView
-::OBJECT_NAME = "otb::Wrapper::QtWidgetView";
+char const* const QtWidgetView::OBJECT_NAME = "otb::Wrapper::QtWidgetView";
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-QtWidgetView::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* parent,
-		Qt::WindowFlags flags ) :
-  QWidget( parent, flags ),
-  m_Model( NULL ),
-  m_IsRunning(false)
+QtWidgetView::QtWidgetView(const otb::Wrapper::Application::Pointer& otbApp, QWidget* parent, Qt::WindowFlags flags)
+  : QWidget(parent, flags), m_Model(NULL), m_IsRunning(false)
 {
-  setObjectName( QtWidgetView::OBJECT_NAME );
-  m_Model = new otb::Wrapper::QtWidgetModel( otbApp );
+  setObjectName(QtWidgetView::OBJECT_NAME);
+  m_Model = new otb::Wrapper::QtWidgetModel(otbApp);
 }
 
 QtWidgetView::~QtWidgetView()
@@ -67,7 +61,7 @@ QtWidgetView::~QtWidgetView()
 
 void QtWidgetView::CreateGui()
 {
-  QVBoxLayout *mainLayout = new QVBoxLayout;
+  QVBoxLayout* mainLayout = new QVBoxLayout;
   this->setLayout(mainLayout);
   mainLayout->addWidget(CreateInputWidgets());
 }
@@ -84,7 +78,7 @@ bool QtWidgetView::IsRunning() const
 
 QtWidgetModel* QtWidgetView::GetModel() const
 {
-return m_Model;
+  return m_Model;
 }
 
 void QtWidgetView::Disable()
@@ -111,4 +105,3 @@ void QtWidgetView::Enable()
 
 } // end of namespace Wrapper
 } // end of namespace otb
-

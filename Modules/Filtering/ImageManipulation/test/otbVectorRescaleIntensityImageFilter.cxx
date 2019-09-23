@@ -24,22 +24,22 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbVectorRescaleIntensityImageFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorRescaleIntensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *        infname = argv[1];
-  const char *        outfname = argv[2];
-  const unsigned char min = atoi(argv[3]);
-  const unsigned char max = atoi(argv[4]);
+  const char*         infname  = argv[1];
+  const char*         outfname = argv[2];
+  const unsigned char min      = atoi(argv[3]);
+  const unsigned char max      = atoi(argv[4]);
 
-  const unsigned int Dimension = 2;
-  typedef double                                                                  InputPixelType;
-  typedef unsigned char                                                           OutputPixelType;
+  const unsigned int    Dimension = 2;
+  typedef double        InputPixelType;
+  typedef unsigned char OutputPixelType;
   typedef otb::VectorImage<InputPixelType, Dimension>                             InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension>                            OutputImageType;
   typedef otb::VectorRescaleIntensityImageFilter<InputImageType, OutputImageType> VectorRescaleIntensityImageFilterType;
-  typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                   WriterType;
-  typedef otb::MultiChannelExtractROI<OutputPixelType, OutputPixelType>           SelectBandsFilterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::MultiChannelExtractROI<OutputPixelType, OutputPixelType> SelectBandsFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);

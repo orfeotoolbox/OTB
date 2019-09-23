@@ -28,16 +28,14 @@
 namespace otb
 {
 
-void
-OGRIOHelper
-::ConvertGeometryToPointNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
+void OGRIOHelper::ConvertGeometryToPointNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const
 {
-  OGRPoint * ogrPoint = (OGRPoint *) ogrGeometry;
+  OGRPoint* ogrPoint = (OGRPoint*)ogrGeometry;
 
   if (ogrPoint == nullptr)
-    {
+  {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRPoint");
-    }
+  }
 
   PointType otbPoint;
   otbPoint.Fill(0);
@@ -45,35 +43,33 @@ OGRIOHelper
   otbPoint[1] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getY());
 
   if (DataNodeType::Dimension > 2)
-    {
+  {
     if (PointType::PointDimension != 3)
-      {
+    {
       itkGenericExceptionMacro(<< "OTB vector data can't contain the OGR information (2D instead of 2.5D)");
-      }
-    otbPoint[2] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getZ());
     }
+    otbPoint[2] = static_cast<DataNodeType::PrecisionType>(ogrPoint->getZ());
+  }
 
   node->SetPoint(otbPoint);
 }
 
 
-void
-OGRIOHelper
-::ConvertGeometryToLineNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
+void OGRIOHelper::ConvertGeometryToLineNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const
 {
-  OGRLineString * ogrLine = (OGRLineString *) ogrGeometry;
+  OGRLineString* ogrLine = (OGRLineString*)ogrGeometry;
 
   if (ogrLine == nullptr)
-    {
+  {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRLine");
-    }
+  }
 
   LinePointerType line = LineType::New();
 
-  OGRPoint * ogrTmpPoint = (OGRPoint *) OGRGeometryFactory::createGeometry(wkbPoint);
+  OGRPoint* ogrTmpPoint = (OGRPoint*)OGRGeometryFactory::createGeometry(wkbPoint);
 
   for (int pIndex = 0; pIndex < ogrLine->getNumPoints(); ++pIndex)
-    {
+  {
 
     ogrLine->getPoint(pIndex, ogrTmpPoint);
 
@@ -83,82 +79,80 @@ OGRIOHelper
     vertex[1] = ogrTmpPoint->getY();
 
     if (DataNodeType::Dimension > 2)
-      {
+    {
       if (LineType::VertexType::PointDimension != 3)
-        {
+      {
         itkGenericExceptionMacro(<< "OTB vector data can't contain the OGR information (2D instead of 2.5D)");
-        }
-      vertex[2] = ogrTmpPoint->getZ();
       }
+      vertex[2] = ogrTmpPoint->getZ();
+    }
 
     line->AddVertex(vertex);
-    }
+  }
   OGRGeometryFactory::destroyGeometry(ogrTmpPoint);
 
   node->SetLine(line);
 }
 
 
-void
-OGRIOHelper
-::ConvertGeometryToPolygonNode(const OGRGeometry * ogrGeometry, DataNodePointerType node) const
+void OGRIOHelper::ConvertGeometryToPolygonNode(const OGRGeometry* ogrGeometry, DataNodePointerType node) const
 {
-  OGRPolygon * ogrPolygon = (OGRPolygon *) ogrGeometry;
+  OGRPolygon* ogrPolygon = (OGRPolygon*)ogrGeometry;
 
   if (ogrPolygon == nullptr)
-    {
+  {
     itkGenericExceptionMacro(<< "Failed to convert OGRGeometry to OGRPolygon");
-    }
+  }
 
-  OGRPoint *      ogrTmpPoint = (OGRPoint *) OGRGeometryFactory::createGeometry(wkbPoint);
-  OGRLinearRing * ogrRing = ogrPolygon->getExteriorRing();
+  OGRPoint*      ogrTmpPoint = (OGRPoint*)OGRGeometryFactory::createGeometry(wkbPoint);
+  OGRLinearRing* ogrRing     = ogrPolygon->getExteriorRing();
 
   PolygonPointerType extRing = PolygonType::New();
 
   for (int pIndex = 0; pIndex < ogrRing->getNumPoints(); ++pIndex)
-    {
+  {
     ogrRing->getPoint(pIndex, ogrTmpPoint);
     PolygonType::VertexType vertex;
     vertex[0] = ogrTmpPoint->getX();
     vertex[1] = ogrTmpPoint->getY();
 
     if (DataNodeType::Dimension > 2)
-      {
+    {
       if (PolygonType::VertexType::PointDimension != 3)
-        {
+      {
         itkGenericExceptionMacro(<< "OTB vector data can't contain the OGR information (2D instead of 2.5D)");
-        }
-      vertex[2] = ogrTmpPoint->getZ();
       }
+      vertex[2] = ogrTmpPoint->getZ();
+    }
 
     extRing->AddVertex(vertex);
-    }
+  }
 
   PolygonListPointerType intRings = PolygonListType::New();
 
   for (int intRingIndex = 0; intRingIndex < ogrPolygon->getNumInteriorRings(); ++intRingIndex)
-    {
+  {
     PolygonPointerType ring = PolygonType::New();
-    ogrRing = ogrPolygon->getInteriorRing(intRingIndex);
+    ogrRing                 = ogrPolygon->getInteriorRing(intRingIndex);
     for (int pIndex = 0; pIndex < ogrRing->getNumPoints(); ++pIndex)
-      {
+    {
       ogrRing->getPoint(pIndex, ogrTmpPoint);
       PolygonType::VertexType vertex;
 
       vertex[0] = ogrTmpPoint->getX();
       vertex[1] = ogrTmpPoint->getY();
       if (DataNodeType::Dimension > 2)
-        {
+      {
         if (PolygonType::VertexType::PointDimension != 3)
-          {
+        {
           itkGenericExceptionMacro(<< "OTB vector data can't contain the OGR information (2D instead of 2.5D)");
-          }
-        vertex[2] = ogrTmpPoint->getZ();
         }
-      ring->AddVertex(vertex);
+        vertex[2] = ogrTmpPoint->getZ();
       }
-    intRings->PushBack(ring);
+      ring->AddVertex(vertex);
     }
+    intRings->PushBack(ring);
+  }
 
   OGRGeometryFactory::destroyGeometry(ogrTmpPoint);
 
@@ -167,157 +161,138 @@ OGRIOHelper
 }
 
 
-OGRIOHelper
-::OGRIOHelper()
+OGRIOHelper::OGRIOHelper()
 {
   otb::ogr::Drivers::Init();
 }
 
 
-OGRIOHelper
-::~OGRIOHelper()
-{}
+OGRIOHelper::~OGRIOHelper()
+{
+}
 
 
-void OGRIOHelper
-::ConvertOGRLayerToDataTreeNode(OGRLayer * layer, InternalTreeNodeType * documentPtr) const
+void OGRIOHelper::ConvertOGRLayerToDataTreeNode(OGRLayer* layer, InternalTreeNodeType* documentPtr) const
 {
   /** Temporary pointer to store the feature */
-  OGRFeature * feature;
+  OGRFeature* feature;
 
   layer->ResetReading();
 
   // Warn user that 3D data are not supported for reading/writing
   auto geomType = layer->GetGeomType();
 
-  if(geomType == wkbPoint25D 
-     || geomType == wkbLineString25D 
-     || geomType == wkbPolygon25D 
-     || geomType == wkbMultiPoint25D 
-     || geomType == wkbMultiLineString25D 
-     || geomType == wkbMultiPolygon25D 
-     || geomType == wkbGeometryCollection25D)
-    {
-    otbLogMacro(Warning,<<"OGRVectorDataIO does not support 3D data. "<<OGRGeometryTypeToName(geomType)<<" will be converted to 2D upon reading."); 
-    }
+  if (geomType == wkbPoint25D || geomType == wkbLineString25D || geomType == wkbPolygon25D || geomType == wkbMultiPoint25D ||
+      geomType == wkbMultiLineString25D || geomType == wkbMultiPolygon25D || geomType == wkbGeometryCollection25D)
+  {
+    otbLogMacro(Warning, << "OGRVectorDataIO does not support 3D data. " << OGRGeometryTypeToName(geomType) << " will be converted to 2D upon reading.");
+  }
 
 
   unsigned int   counter = 0;
-  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
+  otb::Stopwatch chrono  = otb::Stopwatch::StartNew();
 
   while ((feature = layer->GetNextFeature()) != nullptr)
-    {
+  {
 
     // A pointer to the current multi-geometry
     InternalTreeNodeType::Pointer multiPtr;
 
     /** Temporary geometry container */
-    OGRGeometry * geometry = feature->GetGeometryRef();
+    OGRGeometry* geometry = feature->GetGeometryRef();
 
     if (geometry == nullptr)
-      {
+    {
       OGRFeature::DestroyFeature(feature);
       ++counter;
       continue;
-      }
+    }
 
     otb::VectorDataKeywordlist kwl;
     for (int fieldNum = 0; fieldNum < feature->GetFieldCount(); ++fieldNum)
-      {
+    {
       if (ogr::IsFieldSetAndNotNull(feature, fieldNum))
-        {
+      {
         kwl.AddField(feature->GetFieldDefnRef(fieldNum), feature->GetRawFieldRef(fieldNum));
-        }
       }
+    }
 
     switch (geometry->getGeometryType())
-      {
-      case wkbPoint:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    {
+    case wkbPoint:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToPointNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbPoint25D:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    }
+    case wkbPoint25D:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToPointNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbLineString:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    }
+    case wkbLineString:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToLineNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbLineString25D:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    }
+    case wkbLineString25D:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToLineNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbPolygon:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    }
+    case wkbPolygon:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToPolygonNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbPolygon25D:
-      {
-      InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-      DataNodePointerType dataNode = DataNodeType::New();
+    }
+    case wkbPolygon25D:
+    {
+      InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+      DataNodePointerType           dataNode = DataNodeType::New();
       ConvertGeometryToPolygonNode(geometry, dataNode);
       newNode->Set(dataNode);
-      //Reach the DataNode inside the tree node
+      // Reach the DataNode inside the tree node
       itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                      MetaDataKey::VectorDataKeywordlistKey,
-                                                      kwl);
+      itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
       documentPtr->AddChild(newNode);
       break;
-      }
-      case wkbMultiPoint:
-      {
+    }
+    case wkbMultiPoint:
+    {
 
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTIPOINT);
@@ -325,24 +300,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
+      OGRMultiPoint* ogrMulti = (OGRMultiPoint*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbMultiPoint25D:
-      {
+      break;
+    }
+    case wkbMultiPoint25D:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTIPOINT);
 
@@ -350,24 +323,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiPoint * ogrMulti = (OGRMultiPoint *) geometry;
+      OGRMultiPoint* ogrMulti = (OGRMultiPoint*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbMultiLineString:
-      {
+      break;
+    }
+    case wkbMultiLineString:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTILINE);
 
@@ -375,24 +346,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
+      OGRMultiLineString* ogrMulti = (OGRMultiLineString*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbMultiLineString25D:
-      {
+      break;
+    }
+    case wkbMultiLineString25D:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTILINE);
 
@@ -400,24 +369,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiLineString * ogrMulti = (OGRMultiLineString *) geometry;
+      OGRMultiLineString* ogrMulti = (OGRMultiLineString*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbMultiPolygon:
-      {
+      break;
+    }
+    case wkbMultiPolygon:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTIPOLYGON);
 
@@ -425,24 +392,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
+      OGRMultiPolygon* ogrMulti = (OGRMultiPolygon*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbMultiPolygon25D:
-      {
+      break;
+    }
+    case wkbMultiPolygon25D:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_MULTIPOLYGON);
 
@@ -450,24 +415,22 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRMultiPolygon * ogrMulti = (OGRMultiPolygon *) geometry;
+      OGRMultiPolygon* ogrMulti = (OGRMultiPolygon*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-        DataNodePointerType dataNode = DataNodeType::New();
+      {
+        InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+        DataNodePointerType           dataNode = DataNodeType::New();
         ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
         newNode->Set(dataNode);
         itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                        MetaDataKey::VectorDataKeywordlistKey,
-                                                        kwl);
+        itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
         multiPtr->AddChild(newNode);
-        }
-      break;
       }
-      case wkbGeometryCollection:
-      {
+      break;
+    }
+    case wkbGeometryCollection:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_COLLECTION);
 
@@ -475,101 +438,89 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
+      OGRGeometryCollection* ogrMulti = (OGRGeometryCollection*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
-          {
-          case wkbPoint:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPoint25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbLineString:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbLineString25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPolygon:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPolygon25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
-          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict,
-                                                          MetaDataKey::VectorDataKeywordlistKey,
-                                                          kwl);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          default:
-          {
-          otbWarningMacro( << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
-          break;
-          }
-          }
-        }
-      break;
-      }
-      case wkbGeometryCollection25D:
       {
+        switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
+        {
+        case wkbPoint:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPoint25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbLineString:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbLineString25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPolygon:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPolygon25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          itk::MetaDataDictionary& dict = newNode->Get()->GetMetaDataDictionary();
+          itk::EncapsulateMetaData<VectorDataKeywordlist>(dict, MetaDataKey::VectorDataKeywordlistKey, kwl);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        default:
+        {
+          otbWarningMacro(<< "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
+          break;
+        }
+        }
+      }
+      break;
+    }
+    case wkbGeometryCollection25D:
+    {
       DataNodePointerType multi = DataNodeType::New();
       multi->SetNodeType(FEATURE_COLLECTION);
 
@@ -577,775 +528,763 @@ void OGRIOHelper
       multiPtr->Set(multi);
       documentPtr->AddChild(multiPtr);
 
-      OGRGeometryCollection * ogrMulti = (OGRGeometryCollection *) geometry;
+      OGRGeometryCollection* ogrMulti = (OGRGeometryCollection*)geometry;
 
       for (int geoIndex = 0; geoIndex < ogrMulti->getNumGeometries(); ++geoIndex)
-        {
-        switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
-          {
-          case wkbPoint:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPoint25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbLineString:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbLineString25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPolygon:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          case wkbPolygon25D:
-          {
-          InternalTreeNodeType::Pointer newNode = InternalTreeNodeType::New();
-          DataNodePointerType dataNode = DataNodeType::New();
-          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
-          newNode->Set(dataNode);
-          multiPtr->AddChild(newNode);
-          break;
-          }
-          default:
-          {
-          otbWarningMacro( << "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
-          break;
-          }
-          }
-        }
-      break;
-      }
-      default:
       {
+        switch (ogrMulti->getGeometryRef(geoIndex)->getGeometryType())
+        {
+        case wkbPoint:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPoint25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPointNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbLineString:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbLineString25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToLineNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPolygon:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        case wkbPolygon25D:
+        {
+          InternalTreeNodeType::Pointer newNode  = InternalTreeNodeType::New();
+          DataNodePointerType           dataNode = DataNodeType::New();
+          ConvertGeometryToPolygonNode(ogrMulti->getGeometryRef(geoIndex), dataNode);
+          newNode->Set(dataNode);
+          multiPtr->AddChild(newNode);
+          break;
+        }
+        default:
+        {
+          otbWarningMacro(<< "Geometry type not found: " << ogrMulti->getGeometryRef(geoIndex)->getGeometryType());
+          break;
+        }
+        }
+      }
+      break;
+    }
+    default:
+    {
       otbWarningMacro("Geometry not handled: " << geometry->getGeometryName());
       break;
-      }
-      }
+    }
+    }
 
 
     OGRFeature::DestroyFeature(feature);
     ++counter;
-    } //end While feature
+  } // end While feature
 
   chrono.Stop();
-  otbMsgDevMacro(
-    << layer->GetFeatureCount() << " features read, total processing time " << chrono.GetElapsedMilliseconds() << " ms");
+  otbMsgDevMacro(<< layer->GetFeatureCount() << " features read, total processing time " << chrono.GetElapsedMilliseconds() << " ms");
 }
 
 
-unsigned int OGRIOHelper
-::ProcessNodeWrite(InternalTreeNodeType * source,
-                   GDALDataset * m_DataSource,
-                   OGRGeometryCollection * ogrCollection,
-                   OGRLayer * ogrCurrentLayer,
-                   OGRSpatialReference * oSRS)
+unsigned int OGRIOHelper::ProcessNodeWrite(InternalTreeNodeType* source, GDALDataset* m_DataSource, OGRGeometryCollection* ogrCollection,
+                                           OGRLayer* ogrCurrentLayer, OGRSpatialReference* oSRS)
 {
-  unsigned int kept = 0;
-  bool fieldsAddedToOGRLayer = false;
+  unsigned int kept                  = 0;
+  bool         fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType                               children = source->GetChildrenList();
 
   // For each child
   for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
-    {
+  {
     DataNodePointerType dataNode = (*it)->Get();
-    //otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
+    // otbMsgDevMacro(<< "Type of node " << dataNode->GetNodeType() << " id " << dataNode->GetNodeId());
     ++kept;
 
     // Get the kwl
     otb::VectorDataKeywordlist kwl;
-    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
-                                               MetaDataKey::VectorDataKeywordlistKey,
-                                               kwl);
+    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
 
     // Create the field once
     if (ogrCurrentLayer != nullptr && !fieldsAddedToOGRLayer)
-      {
+    {
       // Take into account the fields stored in the
       // vectordatakeywordlist
-      for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+      for (unsigned int fieldIdx = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+      {
+        if (std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID")
         {
-        if ( std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID" )
-          {
           otbMsgDevMacro(<< " CreateField '" << kwl.GetNthField(fieldIdx).first->GetNameRef() << "'");
-          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
-            {
-            itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
-            }
-          }
-         else
+          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE)
           {
-          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+            itkExceptionMacro(<< "Failed to create Field " << kwl.GetNthField(fieldIdx).first->GetNameRef());
           }
         }
+        else
+        {
+          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+        }
+      }
       // While no feature are added to the layer (in case of multiple
       // folders added to the document) continue test for adding
       // fields to the ogrCurrentLayer
-      if ( kwl.GetNumberOfFields() > 0 || ogrCurrentLayer->GetFeatureCount() > 0)
-        {
+      if (kwl.GetNumberOfFields() > 0 || ogrCurrentLayer->GetFeatureCount() > 0)
+      {
         fieldsAddedToOGRLayer = true;
-        }
       }
+    }
 
     switch (dataNode->GetNodeType())
-      {
-      case ROOT:
-      {
+    {
+    case ROOT:
+    {
       break;
-      }
-      case DOCUMENT:
-      {
+    }
+    case DOCUMENT:
+    {
       ogrCurrentLayer = m_DataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
-        {
+      {
         itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
-        }
+      }
       else
-        {
+      {
         // New OGRLayer, set the flag to false
         fieldsAddedToOGRLayer = false;
-        }
+      }
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FOLDER:
-      {
+    }
+    case FOLDER:
+    {
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FEATURE_POINT:
-      {
-      //Build the ogrObject
+    }
+    case FEATURE_POINT:
+    {
+      // Build the ogrObject
       OGRPoint ogrPoint;
       ogrPoint.setX(dataNode->GetPoint()[0]);
       ogrPoint.setY(dataNode->GetPoint()[1]);
 
       if (DataNodeType::Dimension > 2)
-        {
+      {
         ogrPoint.setZ(dataNode->GetPoint()[2]);
-        }
+      }
 
-      //Save it in the structure
+      // Save it in the structure
       if (ogrCollection == nullptr)
-        {
-        OGRFeature *ogrFeature;
+      {
+        OGRFeature* ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-          {
+        for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
           // Get the key of the Nth OGRFieldRefn
-          const char * key = kwl.GetNthField(i).first->GetNameRef();
+          const char* key = kwl.GetNthField(i).first->GetNameRef();
 
           if (std::string(key) != "FID")
-            {
+          {
             // Edit the value of the field and add it to the current feature
             int fIndex = ogrFeature->GetFieldIndex(key);
             if (fIndex >= 0)
-              ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
-            }
+              ogrFeature->SetField(fIndex, kwl.GetFieldAsString(key).c_str());
           }
+        }
 
-//        ogrFeature->SetField("Name", dataNode->GetNodeId());
+        //        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrPoint);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-          {
+        {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
-          }
+        }
 
         OGRFeature::DestroyFeature(ogrFeature);
-        }
+      }
       else
-        {
+      {
         ogrCollection->addGeometry(&ogrPoint);
-        }
+      }
 
       break;
-      }
-      case FEATURE_LINE:
-      {
-      //Build the ogrObject
+    }
+    case FEATURE_LINE:
+    {
+      // Build the ogrObject
       OGRLineString              ogrLine;
       VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
 
       VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
-        {
+      {
         OGRPoint ogrPoint;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
-          {
+        {
           ogrPoint.setZ(vIt.Value()[2]);
-          }
+        }
         ogrLine.addPoint(&ogrPoint);
         ++vIt;
-        }
+      }
 
-      //Save it in the structure
+      // Save it in the structure
       if (ogrCollection == nullptr)
-        {
-        OGRFeature *ogrFeature;
+      {
+        OGRFeature* ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-          {
+        for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
           // Get the key of the Nth OGRFieldRefn
-          const char * key = kwl.GetNthField(i).first->GetNameRef();
+          const char* key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
-          int fIndex = ogrFeature->GetFieldIndex(key);
-          if (fIndex >= 0)
-            ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
-          }
 
-//        ogrFeature->SetField("Name", dataNode->GetNodeId());
+          if (std::string(key) != "FID")
+          {
+            int fIndex = ogrFeature->GetFieldIndex(key);
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex, kwl.GetFieldAsString(key).c_str());
+          }
+        }
+
+        //        ogrFeature->SetField("Name", dataNode->GetNodeId());
         ogrFeature->SetGeometry(&ogrLine);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-          {
+        {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
-          }
+        }
 
         OGRFeature::DestroyFeature(ogrFeature);
-
-        }
+      }
       else
-        {
+      {
         ogrCollection->addGeometry(&ogrLine);
-        }
+      }
 
       break;
-      }
-      case FEATURE_POLYGON:
-      {
+    }
+    case FEATURE_POLYGON:
+    {
 
-      //Build the ogrObject
-      OGRPolygon *               ogrPolygon = (OGRPolygon *) OGRGeometryFactory::createGeometry(wkbPolygon);
-      OGRLinearRing *            ogrExternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
-      VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+      // Build the ogrObject
+      OGRPolygon*                ogrPolygon      = (OGRPolygon*)OGRGeometryFactory::createGeometry(wkbPolygon);
+      OGRLinearRing*             ogrExternalRing = (OGRLinearRing*)OGRGeometryFactory::createGeometry(wkbLinearRing);
+      VertexListConstPointerType vertexList      = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
       VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
-        {
+      {
         OGRPoint ogrPoint;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
-          {
+        {
           ogrPoint.setZ(vIt.Value()[2]);
-          }
+        }
 
         ogrExternalRing->addPoint(&ogrPoint);
         ++vIt;
-        }
+      }
       ogrPolygon->addRing(ogrExternalRing);
       // Close the polygon
       ogrPolygon->closeRings();
       OGRGeometryFactory::destroyGeometry(ogrExternalRing);
 
       // Retrieving internal rings as well
-      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
-           pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
-        {
-        OGRLinearRing * ogrInternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
-        vertexList = pIt.Get()->GetVertexList();
-        vIt = vertexList->Begin();
+      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin(); pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
+      {
+        OGRLinearRing* ogrInternalRing = (OGRLinearRing*)OGRGeometryFactory::createGeometry(wkbLinearRing);
+        vertexList                     = pIt.Get()->GetVertexList();
+        vIt                            = vertexList->Begin();
 
         while (vIt != vertexList->End())
-          {
+        {
           OGRPoint ogrPoint;
           ogrPoint.setX(vIt.Value()[0]);
           ogrPoint.setY(vIt.Value()[1]);
           if (DataNodeType::Dimension > 2)
-            {
+          {
             ogrPoint.setZ(vIt.Value()[2]);
-            }
+          }
           ogrInternalRing->addPoint(&ogrPoint);
           ++vIt;
-          }
+        }
         ogrPolygon->addRing(ogrInternalRing);
         OGRGeometryFactory::destroyGeometry(ogrInternalRing);
-        }
+      }
 
-      //Save it in the structure
+      // Save it in the structure
       if (ogrCollection == nullptr)
-        {
-        OGRFeature *ogrFeature;
+      {
+        OGRFeature* ogrFeature;
         ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
         // Add the fields to the features
-        for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-          {
+        for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+        {
           // Get the key of the Nth OGRFieldRefn
-          const char * key = kwl.GetNthField(i).first->GetNameRef();
+          const char* key = kwl.GetNthField(i).first->GetNameRef();
           // Edit the value of the field and add it to the current feature
           int fIndex = ogrFeature->GetFieldIndex(key);
-          if (fIndex >= 0)
-            ogrFeature->SetField(fIndex , kwl.GetFieldAsString(key).c_str());
-          }
 
+          if (std::string(key) != "FID")
+          {
+            if (fIndex >= 0)
+              ogrFeature->SetField(fIndex, kwl.GetFieldAsString(key).c_str());
+          }
+        }
         ogrFeature->SetGeometry(ogrPolygon);
 
         if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-          {
+        {
           itkExceptionMacro(<< "Failed to create feature in shapefile.");
-          }
+        }
 
         OGRFeature::DestroyFeature(ogrFeature);
-        }
+      }
       else
-        {
+      {
         ogrCollection->addGeometry(ogrPolygon);
-        }
+      }
 
       OGRGeometryFactory::destroyGeometry(ogrPolygon);
       break;
-      }
-      case FEATURE_MULTIPOINT:
-      {
-      OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*) OGRGeometryFactory::createGeometry(wkbMultiPoint);
-      OGRFeature *   ogrFeature;
+    }
+    case FEATURE_MULTIPOINT:
+    {
+      OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*)OGRGeometryFactory::createGeometry(wkbMultiPoint);
+      OGRFeature*    ogrFeature;
 
       ProcessNodeWrite(*it, m_DataSource, ogrMultiPoint, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-//      ogrFeature->SetField("Name", dataNode->GetNodeId());
+      //      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
       ogrFeature->SetGeometry(ogrMultiPoint);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       break;
-      }
-      case FEATURE_MULTILINE:
-      {
+    }
+    case FEATURE_MULTILINE:
+    {
       // Instantiate a new  ogrMultiLineString feature
-      OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
-        wkbMultiLineString);
+      OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*)OGRGeometryFactory::createGeometry(wkbMultiLineString);
 
-      OGRFeature *ogrFeature;
+      OGRFeature* ogrFeature;
 
       ProcessNodeWrite(*it, m_DataSource, ogrMultiLineString, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-//      ogrFeature->SetField("Name", dataNode->GetNodeId());
+      //      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
       ogrFeature->SetGeometry(ogrMultiLineString);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       break;
-      }
-      case FEATURE_MULTIPOLYGON:
-      {
+    }
+    case FEATURE_MULTIPOLYGON:
+    {
       // Instantiate a new multipolygon feature
-      OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
-      OGRFeature *     ogrFeature;
+      OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*)OGRGeometryFactory::createGeometry(wkbMultiPolygon);
+      OGRFeature*      ogrFeature;
 
       ProcessNodeWrite(*it, m_DataSource, ogrMultiPolygon, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-//      ogrFeature->SetField("Name", dataNode->GetNodeId());
+      //      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->SetGeometry(ogrMultiPolygon);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       break;
-      }
-      case FEATURE_COLLECTION:
-      {
+    }
+    case FEATURE_COLLECTION:
+    {
 
-      OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(
-        wkbGeometryCollection);
+      OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*)OGRGeometryFactory::createGeometry(wkbGeometryCollection);
 
-      OGRFeature *ogrFeature;
+      OGRFeature* ogrFeature;
 
       ProcessNodeWrite(*it, m_DataSource, ogrCollection, ogrCurrentLayer, oSRS);
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
-//      ogrFeature->SetField("Name", dataNode->GetNodeId());
+      //      ogrFeature->SetField("Name", dataNode->GetNodeId());
       ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
       ogrFeature->SetGeometry(ogrCollectionGeometry);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
       break;
-      }
-      }
     }
+    }
+  }
 
   return kept;
-
 }
 
 /**
  * They may be several OGRLayers in this tree node.
  * Return a vector of OGRLayer
  **/
-std::vector<OGRLayer*> OGRIOHelper
-::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType * source,
-                                 GDALDataset * inMemoryDataSource,
-                                 OGRLayer* ogrCurrentLayer,
-                                 OGRSpatialReference * oSRS)
+std::vector<OGRLayer*> OGRIOHelper::ConvertDataTreeNodeToOGRLayers(InternalTreeNodeType* source, GDALDataset* inMemoryDataSource, OGRLayer* ogrCurrentLayer,
+                                                                   OGRSpatialReference* oSRS)
 {
 
   // Create the in memory datasource if NULL
   if (inMemoryDataSource == nullptr)
-    {
-    const char * driverName = "Memory";
-    GDALDriver * ogrDriver = GetGDALDriverManager()->GetDriverByName(driverName);
-    inMemoryDataSource = ogrDriver->Create( "tempDataSource",
-                    0,
-                    0,
-                    0,
-                    GDT_Unknown,
-                    0);
-    }
-
-  std::vector<OGRLayer*>  ogrLayerVector;
-  //unsigned int kept = 0;
+  {
+    const char* driverName = "Memory";
+    GDALDriver* ogrDriver  = GetGDALDriverManager()->GetDriverByName(driverName);
+    inMemoryDataSource     = ogrDriver->Create("tempDataSource", 0, 0, 0, GDT_Unknown, 0);
+  }
+  std::vector<OGRLayer*> ogrLayerVector;
+  // unsigned int kept = 0;
   bool fieldsAddedToOGRLayer = false;
   // Get the children list from the input node
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
-  ChildrenListType children = source->GetChildrenList();
+  ChildrenListType                               children = source->GetChildrenList();
 
   // For each child
   for (ChildrenListType::iterator it = children.begin(); it != children.end(); ++it)
-    {
+  {
     DataNodePointerType dataNode = (*it)->Get();
 
     // Get the kwl
     otb::VectorDataKeywordlist kwl;
-    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(),
-                                               MetaDataKey::VectorDataKeywordlistKey,
-                                               kwl);
+    itk::ExposeMetaData<VectorDataKeywordlist>(dataNode->GetMetaDataDictionary(), MetaDataKey::VectorDataKeywordlistKey, kwl);
 
     // Create the field once
     if (ogrCurrentLayer != nullptr && !fieldsAddedToOGRLayer)
-      {
+    {
       // Take into account the fields stored in the
       // vectordatakeywordlist
-      for (unsigned int fieldIdx  = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+      for (unsigned int fieldIdx = 0; fieldIdx < kwl.GetNumberOfFields(); fieldIdx++)
+      {
+        if (std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID")
         {
-        if ( std::string(kwl.GetNthField(fieldIdx).first->GetNameRef()) != "FID" )
-          {
           otbMsgDevMacro(<< " CreateField '" << kwl.GetNthField(fieldIdx).first->GetNameRef() << "'");
-          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE )
-            {
-            itkExceptionMacro(<< "Failed to create Field "<<kwl.GetNthField(fieldIdx).first->GetNameRef());
-            }
-          }
-         else
+          if (ogrCurrentLayer->CreateField(kwl.GetNthField(fieldIdx).first) != OGRERR_NONE)
           {
-          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+            itkExceptionMacro(<< "Failed to create Field " << kwl.GetNthField(fieldIdx).first->GetNameRef());
           }
         }
-      fieldsAddedToOGRLayer = true;
+        else
+        {
+          otbMsgDevMacro(<< "WARNING: Skipping OGR field 'FID'");
+        }
       }
+      fieldsAddedToOGRLayer = true;
+    }
 
     switch (dataNode->GetNodeType())
-      {
-      case ROOT:
-      {
+    {
+    case ROOT:
+    {
       break;
-      }
-      case DOCUMENT:
-      {
-      ogrCurrentLayer = inMemoryDataSource->CreateLayer(dataNode->GetNodeId(), oSRS,
-                                      wkbUnknown, nullptr);
+    }
+    case DOCUMENT:
+    {
+      ogrCurrentLayer = inMemoryDataSource->CreateLayer(dataNode->GetNodeId(), oSRS, wkbUnknown, nullptr);
       if (ogrCurrentLayer == nullptr)
-        {
+      {
         itkExceptionMacro(<< "Failed to create layer " << dataNode->GetNodeId());
-        }
+      }
       else
-        {
+      {
         // New OGRLayer, set the flag to false
         fieldsAddedToOGRLayer = false;
-        }
+      }
       ogrLayerVector.push_back(ogrCurrentLayer);
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FOLDER:
-      {
+    }
+    case FOLDER:
+    {
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FEATURE_POINT:
-      {
-      //Build the ogrObject
+    }
+    case FEATURE_POINT:
+    {
+      // Build the ogrObject
       OGRPoint ogrPoint;
       ogrPoint.setX(dataNode->GetPoint()[0]);
       ogrPoint.setY(dataNode->GetPoint()[1]);
 
       if (DataNodeType::Dimension > 2)
-        {
+      {
         ogrPoint.setZ(dataNode->GetPoint()[2]);
-        }
+      }
 
-      //Save it in the structure
-      OGRFeature *ogrFeature;
+      // Save it in the structure
+      OGRFeature* ogrFeature;
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
       // Add the fields to the features
-      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-        {
+      for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+      {
         // Get the key of the Nth OGRFieldRefn
-        const char * key = kwl.GetNthField(i).first->GetNameRef();
+        const char* key = kwl.GetNthField(i).first->GetNameRef();
 
         if (std::string(key) != "FID")
-          {
+        {
           // Edit the value of the field and add it to the current feature
-          ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
-          }
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key), kwl.GetFieldAsString(key).c_str());
         }
+      }
       ogrFeature->SetGeometry(&ogrPoint);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       OGRFeature::DestroyFeature(ogrFeature);
       break;
-      }
-      case FEATURE_LINE:
-      {
-      //Build the ogrObject
+    }
+    case FEATURE_LINE:
+    {
+      // Build the ogrObject
       OGRLineString              ogrLine;
       VertexListConstPointerType vertexList = dataNode->GetLine()->GetVertexList();
 
       VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
-        {
+      {
         OGRPoint ogrPoint;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
-          {
+        {
           ogrPoint.setZ(vIt.Value()[2]);
-          }
+        }
         ogrLine.addPoint(&ogrPoint);
         ++vIt;
-        }
+      }
 
-      //Save it in the structure
-      OGRFeature *ogrFeature;
+      // Save it in the structure
+      OGRFeature* ogrFeature;
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
       // Add the fields to the features
-      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-        {
+      for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+      {
         // Get the key of the Nth OGRFieldRefn
-        const char * key = kwl.GetNthField(i).first->GetNameRef();
+        const char* key = kwl.GetNthField(i).first->GetNameRef();
         // Edit the value of the field and add it to the current feature
-        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+
+        if (std::string(key) != "FID")
+        {
+          // Edit the value of the field and add it to the current feature
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key), kwl.GetFieldAsString(key).c_str());
         }
+      }
       ogrFeature->SetGeometry(&ogrLine);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       OGRFeature::DestroyFeature(ogrFeature);
       break;
-      }
-      case FEATURE_POLYGON:
-      {
-      //Build the ogrObject
-      OGRPolygon *               ogrPolygon = (OGRPolygon *) OGRGeometryFactory::createGeometry(wkbPolygon);
-      OGRLinearRing *            ogrExternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
-      VertexListConstPointerType vertexList = dataNode->GetPolygonExteriorRing()->GetVertexList();
+    }
+    case FEATURE_POLYGON:
+    {
+      // Build the ogrObject
+      OGRPolygon*                ogrPolygon      = (OGRPolygon*)OGRGeometryFactory::createGeometry(wkbPolygon);
+      OGRLinearRing*             ogrExternalRing = (OGRLinearRing*)OGRGeometryFactory::createGeometry(wkbLinearRing);
+      VertexListConstPointerType vertexList      = dataNode->GetPolygonExteriorRing()->GetVertexList();
 
       VertexListType::ConstIterator vIt = vertexList->Begin();
 
       while (vIt != vertexList->End())
-        {
+      {
         OGRPoint ogrPoint;
         ogrPoint.setX(vIt.Value()[0]);
         ogrPoint.setY(vIt.Value()[1]);
         if (DataNodeType::Dimension > 2)
-          {
+        {
           ogrPoint.setZ(vIt.Value()[2]);
-          }
+        }
 
         ogrExternalRing->addPoint(&ogrPoint);
         ++vIt;
-        }
+      }
       ogrPolygon->addRing(ogrExternalRing);
       // Close the polygon
       ogrPolygon->closeRings();
       OGRGeometryFactory::destroyGeometry(ogrExternalRing);
 
       // Retrieving internal rings as well
-      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin();
-           pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
-        {
-        OGRLinearRing * ogrInternalRing = (OGRLinearRing *) OGRGeometryFactory::createGeometry(wkbLinearRing);
-        vertexList = pIt.Get()->GetVertexList();
-        vIt = vertexList->Begin();
+      for (PolygonListType::Iterator pIt = dataNode->GetPolygonInteriorRings()->Begin(); pIt != dataNode->GetPolygonInteriorRings()->End(); ++pIt)
+      {
+        OGRLinearRing* ogrInternalRing = (OGRLinearRing*)OGRGeometryFactory::createGeometry(wkbLinearRing);
+        vertexList                     = pIt.Get()->GetVertexList();
+        vIt                            = vertexList->Begin();
 
         while (vIt != vertexList->End())
-          {
+        {
           OGRPoint ogrPoint;
           ogrPoint.setX(vIt.Value()[0]);
           ogrPoint.setY(vIt.Value()[1]);
           if (DataNodeType::Dimension > 2)
-            {
+          {
             ogrPoint.setZ(vIt.Value()[2]);
-            }
+          }
           ogrInternalRing->addPoint(&ogrPoint);
           ++vIt;
-          }
+        }
         ogrPolygon->addRing(ogrInternalRing);
         OGRGeometryFactory::destroyGeometry(ogrInternalRing);
-        }
+      }
 
-      OGRFeature *ogrFeature;
+      OGRFeature* ogrFeature;
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
 
       // Add the fields to the features
-      for (unsigned int i  = 0; i < kwl.GetNumberOfFields(); ++i)
-        {
+      for (unsigned int i = 0; i < kwl.GetNumberOfFields(); ++i)
+      {
         // Get the key of the Nth OGRFieldRefn
-        const char * key = kwl.GetNthField(i).first->GetNameRef();
-        // Edit the value of the field and add it to the current feature
-        ogrFeature->SetField(ogrFeature->GetFieldIndex(key) , kwl.GetFieldAsString(key).c_str());
+        const char* key = kwl.GetNthField(i).first->GetNameRef();
+        if (std::string(key) != "FID")
+        {
+          // Edit the value of the field and add it to the current feature
+          ogrFeature->SetField(ogrFeature->GetFieldIndex(key), kwl.GetFieldAsString(key).c_str());
         }
+      }
 
       ogrFeature->SetGeometry(ogrPolygon);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
 
       OGRFeature::DestroyFeature(ogrFeature);
       OGRGeometryFactory::destroyGeometry(ogrPolygon);
       break;
-      }
-      case FEATURE_MULTIPOINT:
-      {
-      OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*) OGRGeometryFactory::createGeometry(wkbMultiPoint);
-      OGRFeature *   ogrFeature;
+    }
+    case FEATURE_MULTIPOINT:
+    {
+      OGRMultiPoint* ogrMultiPoint = (OGRMultiPoint*)OGRGeometryFactory::createGeometry(wkbMultiPoint);
+      OGRFeature*    ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPoint);
       ogrFeature->SetGeometry(ogrMultiPoint);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FEATURE_MULTILINE:
-      {
+    }
+    case FEATURE_MULTILINE:
+    {
       // Instantiate a new  ogrMultiLineString feature
-      OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*) OGRGeometryFactory::createGeometry(
-        wkbMultiLineString);
+      OGRMultiLineString* ogrMultiLineString = (OGRMultiLineString*)OGRGeometryFactory::createGeometry(wkbMultiLineString);
 
-      OGRFeature *ogrFeature;
+      OGRFeature* ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiLineString);
       ogrFeature->SetGeometry(ogrMultiLineString);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FEATURE_MULTIPOLYGON:
-      {
+    }
+    case FEATURE_MULTIPOLYGON:
+    {
       // Instantiate a new multipolygon feature
-      OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*) OGRGeometryFactory::createGeometry(wkbMultiPolygon);
-      OGRFeature *     ogrFeature;
+      OGRMultiPolygon* ogrMultiPolygon = (OGRMultiPolygon*)OGRGeometryFactory::createGeometry(wkbMultiPolygon);
+      OGRFeature*      ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->GetDefnRef()->SetGeomType(wkbMultiPolygon);
       ogrFeature->SetGeometry(ogrMultiPolygon);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      case FEATURE_COLLECTION:
-      {
-      OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*) OGRGeometryFactory::createGeometry(
-        wkbGeometryCollection);
+    }
+    case FEATURE_COLLECTION:
+    {
+      OGRGeometryCollection* ogrCollectionGeometry = (OGRGeometryCollection*)OGRGeometryFactory::createGeometry(wkbGeometryCollection);
 
-      OGRFeature *ogrFeature;
+      OGRFeature* ogrFeature;
 
       ogrFeature = OGRFeature::CreateFeature(ogrCurrentLayer->GetLayerDefn());
       ogrFeature->GetDefnRef()->SetGeomType(wkbGeometryCollection);
       ogrFeature->SetGeometry(ogrCollectionGeometry);
 
       if (ogrCurrentLayer->CreateFeature(ogrFeature) != OGRERR_NONE)
-        {
+      {
         itkExceptionMacro(<< "Failed to create feature in shapefile.");
-        }
+      }
       ConvertDataTreeNodeToOGRLayers(*it, inMemoryDataSource, ogrCurrentLayer, oSRS);
       break;
-      }
-      }
     }
+    }
+  }
 
   return ogrLayerVector;
 }

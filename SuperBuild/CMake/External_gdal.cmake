@@ -29,7 +29,9 @@ ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL PNG_ROOT      --with-png)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL JPEG_ROOT     --with-jpeg)
-ADD_SUPERBUILD_CONFIGURE_VAR(GDAL OPENJPEG_ROOT --with-openjpeg)
+# This is not needed as from GDAL 2.4 it uses pkg-config to find openjpeg.
+# It is found thanks to the $PKG_CONFIG_PATH in SB_ENV_CONFIGURE_CMD
+# ADD_SUPERBUILD_CONFIGURE_VAR(GDAL OPENJPEG_ROOT --with-openjpeg)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL SQLITE_ROOT   --with-sqlite3)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL ZLIB_ROOT     --with-libz)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL EXPAT_ROOT    --with-expat)
@@ -88,11 +90,11 @@ if(UNIX)
     --with-odbc=no
     --with-ogdi=no
     --with-pam
+    --with-openjpeg
     --with-pcidsk=yes
     --with-pcraster=no
     --with-pcre=no
     --with-perl=no
-    --with-php=no
     --with-python=no
     --with-qhull=internal
     --with-sde=no
@@ -103,6 +105,7 @@ if(UNIX)
     --with-webp=no
     --with-threads=yes
     --with-freexl=no
+    --with-proj=yes
     --with-libjson-c=internal
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
@@ -145,8 +148,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  URL_MD5 785acf2b0cbf9d56d37c9044d0ee2505
+  URL "http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz"
+  URL_MD5 8bc93c7ae4d3a46916918a52c7f5f10f
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

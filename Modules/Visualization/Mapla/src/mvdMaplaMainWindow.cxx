@@ -44,14 +44,14 @@
 //
 // Monteverdi includes (sorted by alphabetic order)
 #ifdef OTB_USE_QT
-# include "mvdApplicationLauncher.h"
-# include "mvdApplicationsToolBoxController.h"
-# include "mvdOTBApplicationsModel.h"
-# if 1
-#   include "mvdQtWidgetView.h"
-# else
-#   include "otbWrappperQtWidgetView.h"
-# endif
+#include "mvdApplicationLauncher.h"
+#include "mvdApplicationsToolBoxController.h"
+#include "mvdOTBApplicationsModel.h"
+#if 1
+#include "mvdQtWidgetView.h"
+#else
+#include "otbWrappperQtWidgetView.h"
+#endif
 #endif
 //
 #include "mvdApplicationsToolBox.h"
@@ -83,107 +83,81 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-MaplaMainWindow
-::MaplaMainWindow( QWidget * p, Qt::WindowFlags flags ) :
-  I18nMainWindow( p, flags ),
-  m_UI( new mvd::Ui::MaplaMainWindow() )
+MaplaMainWindow::MaplaMainWindow(QWidget* p, Qt::WindowFlags flags)
+  : I18nMainWindow(p, flags),
+    m_UI(new mvd::Ui::MaplaMainWindow())
 #ifdef OTB_USE_QT
-  ,
-  m_ApplicationsToolBoxController( NULL )
+    ,
+    m_ApplicationsToolBoxController(NULL)
 #endif
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 }
 
 /*****************************************************************************/
-MaplaMainWindow
-::~MaplaMainWindow()
+MaplaMainWindow::~MaplaMainWindow()
 {
   delete m_UI;
   m_UI = NULL;
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::virtual_SetupUI()
+void MaplaMainWindow::virtual_SetupUI()
 {
-  setObjectName( "Mapla" );
-  setWindowTitle( PROJECT_NAME " Application Launcher" );
+  setObjectName("Mapla");
+  setWindowTitle(PROJECT_NAME " Application Launcher");
 
 #ifdef OTB_USE_QT
 
-  assert( m_ApplicationsToolBoxController==NULL );
+  assert(m_ApplicationsToolBoxController == NULL);
 
-  m_ApplicationsToolBoxController =
-    new ApplicationsToolBoxController(
-      new ApplicationsToolBox( this ),
-      this
-    );
+  m_ApplicationsToolBoxController = new ApplicationsToolBoxController(new ApplicationsToolBox(this), this);
 
-  assert( MaplaApplication::Instance() );
+  assert(MaplaApplication::Instance());
 
-  setCentralWidget( m_ApplicationsToolBoxController->GetWidget() );
+  setCentralWidget(m_ApplicationsToolBoxController->GetWidget());
 
 #else // OTB_USE_QT
 
-  setCentralWidget(
-    new QLabel(
-      tr( "Enable OTB_USE_QT preprocessor definition at compile time!" ),
-      this
-    )
-  );
+  setCentralWidget(new QLabel(tr("Enable OTB_USE_QT preprocessor definition at compile time!"), this));
 
 #endif // OTB_USE_QT
 
-  if( !RestoreLayout( Monteverdi_UI_VERSION ) )
-    {
+  if (!RestoreLayout(Monteverdi_UI_VERSION))
+  {
     qWarning() << "Failed to restore window layout!";
-    }
+  }
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::virtual_ConnectUI()
+void MaplaMainWindow::virtual_ConnectUI()
 {
-  //
-  // OTB application support.
+//
+// OTB application support.
 #ifdef OTB_USE_QT
 
-  QObject::connect(
-    m_ApplicationsToolBoxController->GetWidget(),
-    SIGNAL( ApplicationToLaunchSelected( const QString & ) ),
-    // to:
-    this,
-    SLOT( OnApplicationToLaunchSelected(const QString & ) )
-  );
+  QObject::connect(m_ApplicationsToolBoxController->GetWidget(), SIGNAL(ApplicationToLaunchSelected(const QString&)),
+                   // to:
+                   this, SLOT(OnApplicationToLaunchSelected(const QString&)));
 
 #endif
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::closeEvent( QCloseEvent* e )
+void MaplaMainWindow::closeEvent(QCloseEvent* e)
 {
-  assert( MaplaApplication::Instance() );
-  assert(
-    MaplaApplication::Instance()->GetModel()==
-    MaplaApplication::Instance()->GetModel< OTBApplicationsModel >()
-  );
+  assert(MaplaApplication::Instance());
+  assert(MaplaApplication::Instance()->GetModel() == MaplaApplication::Instance()->GetModel<OTBApplicationsModel>());
 
-  SaveLayout( Monteverdi_UI_VERSION );
+  SaveLayout(Monteverdi_UI_VERSION);
 
-  I18nMainWindow::closeEvent( e );
+  I18nMainWindow::closeEvent(e);
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-MaplaMainWindow
-::on_action_Preferences_triggered()
+void MaplaMainWindow::on_action_Preferences_triggered()
 {
 #if 0
   PreferencesDialog prefDialog( this );
@@ -193,51 +167,35 @@ MaplaMainWindow
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::OnAboutToChangeModel( const AbstractModel * )
+void MaplaMainWindow::OnAboutToChangeModel(const AbstractModel*)
 {
   // qDebug() << this << "::OnAboutToChangeModel(" << model << ")";
 
-  m_ApplicationsToolBoxController->SetModel( NULL );
+  m_ApplicationsToolBoxController->SetModel(NULL);
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::OnModelChanged( AbstractModel* model )
+void MaplaMainWindow::OnModelChanged(AbstractModel* model)
 {
   // qDebug() << this << "::OnModelChanged(" << model << ")";
 
-  m_ApplicationsToolBoxController->SetModel( model );
+  m_ApplicationsToolBoxController->SetModel(model);
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::OnApplicationToLaunchSelected( const QString & appName )
+void MaplaMainWindow::OnApplicationToLaunchSelected(const QString& appName)
 {
 #ifdef OTB_USE_QT
 
-  assert( MaplaApplication::ConstInstance()!=NULL );
-  assert( MaplaApplication::ConstInstance()->GetModel()!=NULL );
-  assert(
-    MaplaApplication::ConstInstance()->GetModel()==
-    MaplaApplication::ConstInstance()->GetModel< OTBApplicationsModel >()
-  );
-  assert(
-    MaplaApplication::ConstInstance()
-    ->GetModel< OTBApplicationsModel >()
-    ->GetLauncher()!=NULL
-  );
+  assert(MaplaApplication::ConstInstance() != NULL);
+  assert(MaplaApplication::ConstInstance()->GetModel() != NULL);
+  assert(MaplaApplication::ConstInstance()->GetModel() == MaplaApplication::ConstInstance()->GetModel<OTBApplicationsModel>());
+  assert(MaplaApplication::ConstInstance()->GetModel<OTBApplicationsModel>()->GetLauncher() != NULL);
 
   otb::Wrapper::QtMainWindow* appWindow =
-    MaplaApplication::ConstInstance()
-    ->GetModel< OTBApplicationsModel >()
-    ->GetLauncher()
-    ->NewOtbApplicationWindow( appName, true, this );
+      MaplaApplication::ConstInstance()->GetModel<OTBApplicationsModel>()->GetLauncher()->NewOtbApplicationWindow(appName, true, this);
 
-  assert( appWindow!=NULL );
+  assert(appWindow != NULL);
 
   appWindow->show();
 
@@ -245,11 +203,9 @@ MaplaMainWindow
 }
 
 /*****************************************************************************/
-void
-MaplaMainWindow
-::OnExecutionDone( int status )
+void MaplaMainWindow::OnExecutionDone(int status)
 {
-  if( status<0 )
+  if (status < 0)
     return;
 }
 

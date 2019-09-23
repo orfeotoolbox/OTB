@@ -99,52 +99,52 @@ public:
            * This method requires an operator!=() be defined on the functor
            * (or the compiler's default implementation of operator!=() being
            * appropriate). */
-          void SetFunctor(const FunctorType& functor)
-          {
-            m_Functor = functor;
-          }
-          /** Clear the vector data  */
-          virtual bool Clear();
+  void SetFunctor(const FunctorType& functor)
+  {
+    m_Functor = functor;
+  }
+  /** Clear the vector data  */
+  virtual bool Clear();
 
 
-          /** PrintSelf method */
-          void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  /** PrintSelf method */
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
-          /**
-           * \param ValuePrecisionType
-           * \return the indice value.
-           */
-          inline ValuePrecisionType operator()();
+  /**
+   * \param ValuePrecisionType
+   * \return the indice value.
+   */
+  inline ValuePrecisionType operator()();
 
 
-        protected:
-          /** Constructor */
-          ReduceSpectralResponseClassifierRAndNIR();
-          /** Constructor from a ASCII file */
-          //ReduceSpectralResponseClassifierRAndNIR( const std::string & filename );
-          /** Destructor */
-          ~ReduceSpectralResponseClassifierRAndNIR() override {};
-          /** PrintSelf method */
-          //void PrintSelf(std::ostream& os, itk::Indent indent) const;
+protected:
+  /** Constructor */
+  ReduceSpectralResponseClassifierRAndNIR();
+  /** Constructor from a ASCII file */
+  // ReduceSpectralResponseClassifierRAndNIR( const std::string & filename );
+  /** Destructor */
+  ~ReduceSpectralResponseClassifierRAndNIR() override{};
+  /** PrintSelf method */
+  // void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
-        private:
-          ReduceSpectralResponseClassifierRAndNIR(const Self&) = delete;
-          void operator=(const Self&) = delete;
+private:
+  ReduceSpectralResponseClassifierRAndNIR(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-          /** Input reduce spectral sensor model of response */
-          InputReduceSpectralResponsePointerType  m_InputReduceSpectralResponse;
+  /** Input reduce spectral sensor model of response */
+  InputReduceSpectralResponsePointerType m_InputReduceSpectralResponse;
 
-          /** Number of the red band in the ReduceSpectralResponse vector */
-          unsigned int m_RBandNumber;
+  /** Number of the red band in the ReduceSpectralResponse vector */
+  unsigned int m_RBandNumber;
 
-          /** Number of the NIR band in the ReduceSpectralResponse vector */
-          unsigned int m_NIRBandNumber;
+  /** Number of the NIR band in the ReduceSpectralResponse vector */
+  unsigned int m_NIRBandNumber;
 
-          /** Indice classifier */
-          FunctorType m_Functor;
-      };
-}// end namespace otb
+  /** Indice classifier */
+  FunctorType m_Functor;
+};
+} // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -28,19 +28,18 @@ namespace otb
 {
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
-::ForwardSensorModel()
-{}
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::ForwardSensorModel()
+{
+}
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
-::~ForwardSensorModel()
-{}
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::~ForwardSensorModel()
+{
+}
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
-::TransformPoint(const InputPointType& point) const
+ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
 {
   double x = point[0];
   double y = point[1];
@@ -48,31 +47,29 @@ ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
   double lon, lat, h;
 
   if (InputPointType::PointDimension == 3)
-    {
+  {
     double z = point[2];
 
     this->m_Model->ForwardTransformPoint(x, y, z, lon, lat, h);
-    }
+  }
   else
-    {
+  {
     this->m_Model->ForwardTransformPoint(x, y, lon, lat, h);
-    }
+  }
 
   OutputPointType outputPoint;
   outputPoint[0] = lon;
   outputPoint[1] = lat;
 
   if (OutputPointType::PointDimension == 3)
-    {
+  {
     outputPoint[2] = h;
-    }
+  }
   return outputPoint;
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-void
-ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ForwardSensorModel<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

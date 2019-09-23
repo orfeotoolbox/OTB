@@ -67,22 +67,17 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-VisibleInterface
-::VisibleInterface( bool isVisible ) :
-  m_IsVisible( isVisible )
+VisibleInterface::VisibleInterface(bool isVisible) : m_IsVisible(isVisible)
 {
 }
 
 /*******************************************************************************/
-VisibleInterface
-::~VisibleInterface()
+VisibleInterface::~VisibleInterface()
 {
 }
 
 /*******************************************************************************/
-void
-VisibleInterface
-::virtual_SignalVisibilityChanged( bool )
+void VisibleInterface::virtual_SignalVisibilityChanged(bool)
 {
 }
 

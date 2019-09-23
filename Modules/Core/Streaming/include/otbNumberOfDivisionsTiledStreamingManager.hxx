@@ -29,8 +29,7 @@ namespace otb
 {
 
 template <class TImage>
-NumberOfDivisionsTiledStreamingManager<TImage>::NumberOfDivisionsTiledStreamingManager()
-  : m_NumberOfDivisions(0)
+NumberOfDivisionsTiledStreamingManager<TImage>::NumberOfDivisionsTiledStreamingManager() : m_NumberOfDivisions(0)
 {
 }
 
@@ -40,25 +39,21 @@ NumberOfDivisionsTiledStreamingManager<TImage>::~NumberOfDivisionsTiledStreaming
 }
 
 template <class TImage>
-void
-NumberOfDivisionsTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
+void NumberOfDivisionsTiledStreamingManager<TImage>::PrepareStreaming(itk::DataObject* /*input*/, const RegionType& region)
 {
-  otbMsgDevMacro(<< "Activating NumberOfDivisionsTiledStreamingManager streaming mode")
-  if (m_NumberOfDivisions < 1)
-    {
-    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled")
-    m_NumberOfDivisions = 1;
-    }
+  otbMsgDevMacro(<< "Activating NumberOfDivisionsTiledStreamingManager streaming mode") if (m_NumberOfDivisions < 1)
+  {
+    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled") m_NumberOfDivisions = 1;
+  }
 
-  this->m_Splitter = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  this->m_Splitter               = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, m_NumberOfDivisions);
   otbMsgDevMacro(<< "Computed number of split : " << this->m_ComputedNumberOfSplits)
 
-  // Save the region to generate the splits later
-  this->m_Region = region;
+      // Save the region to generate the splits later
+      this->m_Region = region;
 }
 
 } // End namespace otb
 
 #endif
-

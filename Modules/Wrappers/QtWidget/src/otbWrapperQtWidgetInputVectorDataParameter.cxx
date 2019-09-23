@@ -27,12 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m, QWidget * parent)
-: QtWidgetParameterBase(param, m, parent),
-  m_InputVectorDataParam(param),
-  m_HLayout( nullptr ),
-  m_Input( nullptr ),
-  m_Button( nullptr )
+QtWidgetInputVectorDataParameter::QtWidgetInputVectorDataParameter(InputVectorDataParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent), m_InputVectorDataParam(param), m_HLayout(nullptr), m_Input(nullptr), m_Button(nullptr)
 {
 }
 
@@ -40,32 +36,26 @@ QtWidgetInputVectorDataParameter::~QtWidgetInputVectorDataParameter()
 {
 }
 
-const QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput() const
+const QLineEdit* QtWidgetInputVectorDataParameter::GetInput() const
 {
   return m_Input;
 }
 
-QLineEdit*
-QtWidgetInputVectorDataParameter
-::GetInput()
+QLineEdit* QtWidgetInputVectorDataParameter::GetInput()
 {
   return m_Input;
 }
 
 void QtWidgetInputVectorDataParameter::DoUpdateGUI()
 {
-  //update lineedit
-  if(m_InputVectorDataParam->HasUserValue())
-    {
-    QString text(
-      QFile::decodeName( m_InputVectorDataParam->GetFileName().c_str() )
-    );
+  // update lineedit
+  if (m_InputVectorDataParam->HasUserValue())
+  {
+    QString text(QFile::decodeName(m_InputVectorDataParam->GetFileName().c_str()));
 
     if (text != m_Input->text())
       m_Input->setText(text);
-    }
+  }
 }
 
 void QtWidgetInputVectorDataParameter::DoCreateWidget()
@@ -75,11 +65,9 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit(this);
-  m_Input->setToolTip(
-    QString::fromStdString( m_InputVectorDataParam->GetDescription() )
-  );
-  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetInputVectorDataParameter::SetFileName );
-  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
+  m_Input->setToolTip(QString::fromStdString(m_InputVectorDataParam->GetDescription()));
+  connect(m_Input, &QLineEdit::textChanged, this, &QtWidgetInputVectorDataParameter::SetFileName);
+  connect(m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   m_HLayout->addWidget(m_Input);
 
@@ -88,49 +76,36 @@ void QtWidgetInputVectorDataParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, &QPushButton::clicked, this, &QtWidgetInputVectorDataParameter::SelectFile );
+  connect(m_Button, &QPushButton::clicked, this, &QtWidgetInputVectorDataParameter::SelectFile);
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
 }
 
 
-void
-QtWidgetInputVectorDataParameter
-::SelectFile()
+void QtWidgetInputVectorDataParameter::SelectFile()
 {
-  assert( m_Input!=NULL );
+  assert(m_Input != NULL);
 
-  QString filename(
-    otb::GetOpenFilename(
-      this,
-      QString(),
-      m_Input->text(),
-      tr( "Vector data files (*)" ),
-      NULL,
-      QFileDialog::ReadOnly
-    )
-  );
+  QString filename(otb::GetOpenFilename(this, QString(), m_Input->text(), tr("Vector data files (*)"), NULL, QFileDialog::ReadOnly));
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
-  if( !SetFileName( filename ) )
-    {
+  if (!SetFileName(filename))
+  {
     std::ostringstream oss;
 
-    oss << "Invalid filename: '"
-	<< QFile::encodeName( filename ).constData()
-	<< "'";
+    oss << "Invalid filename: '" << QFile::encodeName(filename).constData() << "'";
 
-    assert( GetModel()!=NULL );
+    assert(GetModel() != NULL);
 
-    GetModel()->SendLogWARNING( oss.str() );
+    GetModel()->SendLogWARNING(oss.str());
 
     return;
-    }
+  }
 
-  m_Input->setText( filename  );
+  m_Input->setText(filename);
 }
 
 
@@ -138,18 +113,16 @@ bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
 {
   bool res = true;
   // save value
-  if( m_InputVectorDataParam->SetFromFileName(
-	QFile::encodeName( value ).constData() ) == true )
-    {
+  if (m_InputVectorDataParam->SetFromFileName(QFile::encodeName(value).constData()) == true)
+  {
     // notify of value change
-    QString key( m_InputVectorDataParam->GetKey() );
-    emit ParameterChanged(key);
-    }
+    QString key(m_InputVectorDataParam->GetKey());
+    emit    ParameterChanged(key);
+  }
   else
     res = false;
 
   return res;
 }
-
 }
 }

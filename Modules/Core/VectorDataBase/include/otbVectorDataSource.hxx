@@ -30,16 +30,14 @@ namespace otb
  *   Constructor
  */
 template <class TOutputVectorData>
-VectorDataSource<TOutputVectorData>
-::VectorDataSource()
+VectorDataSource<TOutputVectorData>::VectorDataSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, OutputVectorDataType::New().GetPointer());
 }
 
 template <class TOutputVectorData>
-VectorDataSource<TOutputVectorData>
-::~VectorDataSource()
+VectorDataSource<TOutputVectorData>::~VectorDataSource()
 {
 }
 
@@ -48,9 +46,7 @@ VectorDataSource<TOutputVectorData>
  */
 
 template <class TOutputVectorData>
-void
-VectorDataSource<TOutputVectorData>
-::GraftOutput(itk::DataObject *graft)
+void VectorDataSource<TOutputVectorData>::GraftOutput(itk::DataObject* graft)
 {
   this->GraftNthOutput(0, graft);
 }
@@ -60,43 +56,38 @@ VectorDataSource<TOutputVectorData>
  */
 
 template <class TOutputVectorData>
-void
-VectorDataSource<TOutputVectorData>
-::GraftNthOutput(unsigned int idx, itk::DataObject *graft)
+void VectorDataSource<TOutputVectorData>::GraftNthOutput(unsigned int idx, itk::DataObject* graft)
 {
-  if ( idx >= this->GetNumberOfOutputs() )
-    {
-    itkExceptionMacro(<<"Requested to graft output " << idx <<
-        " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }
+  if (idx >= this->GetNumberOfOutputs())
+  {
+    itkExceptionMacro(<< "Requested to graft output " << idx << " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+  }
 
-  if ( !graft )
-    {
-    itkExceptionMacro(<<"Requested to graft output that is a NULL pointer" );
-    }
+  if (!graft)
+  {
+    itkExceptionMacro(<< "Requested to graft output that is a NULL pointer");
+  }
 
   // we use the process object method since all out output may not be
   // of the same type
-  itk::DataObject * output = this->ProcessObject::GetOutput(idx);
+  itk::DataObject* output = this->ProcessObject::GetOutput(idx);
 
   // Call GraftImage to copy meta-information, regions, and the pixel container
-  output->Graft( graft );
+  output->Graft(graft);
 }
 
 
 template <class TOutputVectorData>
-void
-VectorDataSource<TOutputVectorData>
-::AllocateOutputs()
+void VectorDataSource<TOutputVectorData>::AllocateOutputs()
 {
   OutputVectorDataPointer outputPtr;
 
   // Allocate the output memory
   for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
-    {
+  {
     outputPtr = this->GetOutput(i);
     outputPtr->Clear();
-    }
+  }
 }
 
 /**
@@ -104,33 +95,26 @@ VectorDataSource<TOutputVectorData>
  * \return The vector data produced.
  */
 template <class TOutputVectorData>
-typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
-VectorDataSource<TOutputVectorData>
-::GetOutput(void)
+typename VectorDataSource<TOutputVectorData>::OutputVectorDataType* VectorDataSource<TOutputVectorData>::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputVectorDataType *> (this->ProcessObject::GetOutput(0));
+  }
+  return static_cast<OutputVectorDataType*>(this->ProcessObject::GetOutput(0));
 }
 
 template <class TOutputVectorData>
-typename VectorDataSource<TOutputVectorData>::OutputVectorDataType *
-VectorDataSource<TOutputVectorData>
-::GetOutput(DataObjectPointerArraySizeType idx)
+typename VectorDataSource<TOutputVectorData>::OutputVectorDataType* VectorDataSource<TOutputVectorData>::GetOutput(DataObjectPointerArraySizeType idx)
 {
-  return static_cast<OutputVectorDataType*>
-           (this->Superclass::GetOutput(idx));
+  return static_cast<OutputVectorDataType*>(this->Superclass::GetOutput(idx));
 }
 
 /**
  * PrintSelf Method
  */
-template<class TOutputVectorData>
-void
-VectorDataSource<TOutputVectorData>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TOutputVectorData>
+void VectorDataSource<TOutputVectorData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbMassOfBelief.h"
 #include "otbMacro.h"
 
@@ -45,7 +44,7 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   massFunction->SetMass(set2, 0.3);
   massFunction->SetMass(set4, 0.1);
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
   std::ostringstream oss;
   MassOfBeliefFunctionType::PrintLabelSet(oss, set4);
@@ -53,12 +52,12 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   massFunction->RemoveMass(set4);
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
-  otbLogMacro(Info, <<"Estimating uncertainty");
+  otbLogMacro(Info, << "Estimating uncertainty");
   massFunction->EstimateUncertainty();
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
   oss.str(std::string());
   oss << "Removing mass ";
@@ -70,22 +69,20 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   massFunction->RemoveMass(set2);
   massFunction->SetMass(set3, 0.6);
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
-  otbLogMacro(Info, <<"Normalizing masses ");
+  otbLogMacro(Info, << "Normalizing masses ");
   massFunction->Normalize();
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
   oss.str(std::string());
   MassOfBeliefFunctionType::PrintLabelSet(oss, set3);
-  otbLogMacro(Info, <<"Belief of "<< oss.str()
-    << " is "<< massFunction->GetBelief(set3));
+  otbLogMacro(Info, << "Belief of " << oss.str() << " is " << massFunction->GetBelief(set3));
 
   oss.str(std::string());
   MassOfBeliefFunctionType::PrintLabelSet(oss, set3);
-  otbLogMacro(Info, <<"Plausibility of " << oss.str()
-    << " is " << massFunction->GetPlausibility(set3));
+  otbLogMacro(Info, << "Plausibility of " << oss.str() << " is " << massFunction->GetPlausibility(set3));
 
   MassOfBeliefFunctionType::LabelSetType otherSet;
   otherSet.insert("cat");
@@ -94,11 +91,11 @@ int otbMassOfBelief(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   oss.str(std::string());
   MassOfBeliefFunctionType::PrintLabelSet(oss, otherSet);
-  otbLogMacro(Info, <<"Initializing with power set from universal set "<< oss.str());
+  otbLogMacro(Info, << "Initializing with power set from universal set " << oss.str());
 
   massFunction->InitializePowerSetMasses(otherSet);
 
-  otbLogMacro(Debug, <<massFunction);
+  otbLogMacro(Debug, << massFunction);
 
   return EXIT_SUCCESS;
 }

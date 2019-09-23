@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbTerraSarImageMetadataInterfaceFactory.h"
 #include "otbTerraSarImageMetadataInterface.h"
 
@@ -28,30 +27,23 @@
 
 namespace otb
 {
-TerraSarImageMetadataInterfaceFactory
-::TerraSarImageMetadataInterfaceFactory()
+TerraSarImageMetadataInterfaceFactory::TerraSarImageMetadataInterfaceFactory()
 {
 
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbTerraSarImageMetadataInterface",
-                         "TerraSar Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbTerraSarImageMetadataInterface", "TerraSar Metadata Interface", 1,
                          itk::CreateObjectFunction<TerraSarImageMetadataInterface>::New());
 }
 
-TerraSarImageMetadataInterfaceFactory
-::~TerraSarImageMetadataInterfaceFactory()
+TerraSarImageMetadataInterfaceFactory::~TerraSarImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-TerraSarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* TerraSarImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-TerraSarImageMetadataInterfaceFactory::GetDescription() const
+const char* TerraSarImageMetadataInterfaceFactory::GetDescription() const
 {
   return "TerraSar Metadata Interface Factory, handle TerraSar metadata in OTB";
 }

@@ -34,7 +34,7 @@ class SARConcatenateBursts : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef SARConcatenateBursts     Self;
+  typedef SARConcatenateBursts          Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -44,11 +44,10 @@ public:
 
   itkTypeMacro(SARConcatenateBursts, otb::Application);
 
-  typedef otb::ImageList<FloatVectorImageType>  ImageListType;
-  typedef MultiChannelExtractROI<FloatVectorImageType::InternalPixelType,
-				 FloatVectorImageType::InternalPixelType>       ExtractROIFilterType;
-  typedef ObjectList<ExtractROIFilterType>                                      ExtractROIFilterListType;
- 
+  typedef otb::ImageList<FloatVectorImageType> ImageListType;
+  typedef MultiChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> ExtractROIFilterType;
+  typedef ObjectList<ExtractROIFilterType> ExtractROIFilterListType;
+
   typedef otb::SarConcatenateBurstsImageFilter<FloatVectorImageType> BurstFusionFilterType;
 
 private:
@@ -58,27 +57,29 @@ private:
     SetDescription("Concatenate a list of Bursts to provide a whole SAR Deburst Image.");
 
     // Documentation
-    SetDocLongDescription("This application performs a burst concatenation and provides a SAR Deburst Image. "
-			  "It reads the input image list (single bursts) "
-			  "and generates a whole SAR image with deburst operations.");
-    SetDocLimitations("Only Sentinel1 IW SLC products are supported for now. In order to concatenate several" 
-		      " bursts, all valid lines of each burst are required as inputs." 
-		      "ie : Careful with ROI extraction inside a Burst.");
+    SetDocLongDescription(
+        "This application performs a burst concatenation and provides a SAR Deburst Image. "
+        "It reads the input image list (single bursts) "
+        "and generates a whole SAR image with deburst operations.");
+    SetDocLimitations(
+        "Only Sentinel1 IW SLC products are supported for now. In order to concatenate several"
+        " bursts, all valid lines of each burst are required as inputs."
+        "ie : Careful with ROI extraction inside a Burst.");
     SetDocAuthors("OTB-Team");
 
     AddDocTag(Tags::SAR);
     AddDocTag(Tags::Calibration);
-    
-    AddParameter(ParameterType_InputImageList,  "il",   "Input bursts list");
+
+    AddParameter(ParameterType_InputImageList, "il", "Input bursts list");
     SetParameterDescription("il", "The list of bursts to concatenate.");
 
-    AddParameter(ParameterType_InputImage,  "insar",   "Input Sentinel1 IW SLC Image (only metadata used)");
+    AddParameter(ParameterType_InputImage, "insar", "Input Sentinel1 IW SLC Image (only metadata used)");
     SetParameterDescription("insar", "Raw Sentinel1 IW SLC image, or any extract of such made by OTB (geom file needed).");
 
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "The concatenated and debursted output image.");
 
-    AddParameter(ParameterType_Int,  "burstindex", "Index of the first Burst");
+    AddParameter(ParameterType_Int, "burstindex", "Index of the first Burst");
     SetParameterDescription("burstindex", "Index for the first required Burst");
     MandatoryOff("burstindex");
     SetDefaultParameterInt("burstindex", 0);
@@ -86,7 +87,7 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("insar","s1_iw_slc.tif");
+    SetDocExampleParameterValue("insar", "s1_iw_slc.tif");
     SetDocExampleParameterValue("il", "Burst0.png Burst1.png");
     SetDocExampleParameterValue("out", "otbConcatenateBursts.tif");
 
@@ -94,131 +95,128 @@ private:
   }
 
   void DoUpdateParameters() override
-  {}
+  {
+  }
 
   void DoExecute() override
   {
-    // Get the first Burst index 
+    // Get the first Burst index
     int burst_index = GetParameterInt("burstindex");
 
     // Instanciate filters
     ExtractROIFilterListType::Pointer m_ExtractorList = ExtractROIFilterListType::New();
-    ImageListType::Pointer m_ImageList = ImageListType::New();
-    BurstFusionFilterType::Pointer fusionFilter = BurstFusionFilterType::New();
-    
+    ImageListType::Pointer            m_ImageList     = ImageListType::New();
+    BurstFusionFilterType::Pointer    fusionFilter    = BurstFusionFilterType::New();
+
     // Get the input complex image list
-    FloatVectorImageListType*  inList = GetParameterImageList("il");
+    FloatVectorImageListType* inList = GetParameterImageList("il");
     // Get the input complex image
-    FloatVectorImageType*  in = GetParameterImage("insar");
+    FloatVectorImageType* in = GetParameterImage("insar");
     in->UpdateOutputInformation();
 
-    std::vector<std::pair<unsigned long,unsigned long> > lines;
-    std::vector<std::pair<unsigned long,unsigned long> > samples;
+    std::vector<std::pair<unsigned long, unsigned long>> lines;
+    std::vector<std::pair<unsigned long, unsigned long>> samples;
 
     // Check number of inputs with number of bursts into SLC image (must be the same)
     unsigned int nbBursts = 1;
     try
-      {
-	nbBursts = std::stoi(in->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number"));
-      }
-    catch( ... )
-      {
-	// Throw an execption
-	otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
-      }
+    {
+      nbBursts = std::stoi(in->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number"));
+    }
+    catch (...)
+    {
+      // Throw an execption
+      otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
+    }
 
     nbBursts = inList->Size();
-    
+
     /*if (inList->Size() != nbBursts)
       {
-	throw std::runtime_error("Failed to concatenate bursts. Some bursts are missing.");
-	}*/ 
+  throw std::runtime_error("Failed to concatenate bursts. Some bursts are missing.");
+  }*/
 
     // Coniguration for fusion filter
     fusionFilter->SetSLCImageKeyWorList(in->GetImageKeywordlist());
-    // Get Invalid pixel Key (from Image 0) 
+    // Get Invalid pixel Key (from Image 0)
     FloatVectorImageType::Pointer Im0 = inList->GetNthElement(0);
     Im0->UpdateOutputInformation();
-    
+
     auto const& kwl = Im0->GetImageKeywordlist();
 
-    const bool inputWithInvalidPixels = kwl.HasKey("support_data.invalid_pixels")
-      && kwl.GetMetadataByKey("support_data.invalid_pixels") == "yes";
- 
+    const bool inputWithInvalidPixels = kwl.HasKey("support_data.invalid_pixels") && kwl.GetMetadataByKey("support_data.invalid_pixels") == "yes";
+
 
     fusionFilter->getDeburstLinesAndSamples(lines, samples, burst_index, inputWithInvalidPixels);
-       
+
     // Split each input burst to keep only interested region
-    for( unsigned int i=0; i<inList->Size(); i++ )
+    for (unsigned int i = 0; i < inList->Size(); i++)
+    {
+      FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
+      vectIm->UpdateOutputInformation();
+
+      // Check invalid Pixel Key
+      const bool inputWithInvalidPixels_loop = vectIm->GetImageKeywordlist().HasKey("support_data.invalid_pixels") &&
+                                               vectIm->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes";
+
+      if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
       {
-	FloatVectorImageType::Pointer vectIm = inList->GetNthElement(i);
-	vectIm->UpdateOutputInformation();
-
-	// Check invalid Pixel Key
-	const bool inputWithInvalidPixels_loop = vectIm->GetImageKeywordlist().HasKey("support_data.invalid_pixels")
-	  && vectIm->GetImageKeywordlist().GetMetadataByKey("support_data.invalid_pixels") == "yes";
-
-	if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
-	  {
-	    // Throw an execption
-	    otbAppLogFATAL(<< "Incoherency between input images (for support_data.invalid_pixels key).");
-	  }
-
-	unsigned long originOffset_samples = static_cast<long>(vectIm->GetOrigin()[0]-0.5);
-	unsigned long originOffset_lines = static_cast<long>(vectIm->GetOrigin()[1]-0.5);
-
-	// Retrieve start and size for each burst
-	std::pair<unsigned long,unsigned long> line = lines[i];
-	std::pair<unsigned long,unsigned long> sample = samples[i];
-
-	unsigned long minSamples = std::min(sample.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[0]-1));
-	unsigned long minLines = std::min(line.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[1]-1));
-
-	unsigned long startL = line.first - originOffset_lines;
-	unsigned long sizeL = minLines - line.first + 1;
-	unsigned long startS = sample.first - originOffset_samples;
-	unsigned long sizeS = minSamples - sample.first + 1;
-	// Readjust if origin is superior to the first selected line/sample for the current burst
-	if (line.first < originOffset_lines) 
-	  {
-	    startL = 0;
-	    sizeL =  minLines - line.first - originOffset_lines + 1;
-	  }
-	if (sample.first < originOffset_samples) 
-	  {
-	    startS = 0;
-	    sizeS =  minSamples - sample.first - originOffset_samples + 1;
-	  }
-
-	ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
-	extractor->SetInput(vectIm);
-	extractor->SetStartX(startS);
-	extractor->SetStartY(startL);
-	extractor->SetSizeX(sizeS);
-	extractor->SetSizeY(sizeL);
-	extractor->UpdateOutputInformation();
-
-	m_ExtractorList->PushBack( extractor );
-	m_ImageList->PushBack( extractor->GetOutput() );
-	
+        // Throw an execption
+        otbAppLogFATAL(<< "Incoherency between input images (for support_data.invalid_pixels key).");
       }
+
+      unsigned long originOffset_samples = static_cast<long>(vectIm->GetOrigin()[0] - 0.5);
+      unsigned long originOffset_lines   = static_cast<long>(vectIm->GetOrigin()[1] - 0.5);
+
+      // Retrieve start and size for each burst
+      std::pair<unsigned long, unsigned long> line   = lines[i];
+      std::pair<unsigned long, unsigned long> sample = samples[i];
+
+      unsigned long minSamples = std::min(sample.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[0] - 1));
+      unsigned long minLines   = std::min(line.second, static_cast<unsigned long>(vectIm->GetLargestPossibleRegion().GetSize()[1] - 1));
+
+      unsigned long startL = line.first - originOffset_lines;
+      unsigned long sizeL  = minLines - line.first + 1;
+      unsigned long startS = sample.first - originOffset_samples;
+      unsigned long sizeS  = minSamples - sample.first + 1;
+      // Readjust if origin is superior to the first selected line/sample for the current burst
+      if (line.first < originOffset_lines)
+      {
+        startL = 0;
+        sizeL  = minLines - line.first - originOffset_lines + 1;
+      }
+      if (sample.first < originOffset_samples)
+      {
+        startS = 0;
+        sizeS  = minSamples - sample.first - originOffset_samples + 1;
+      }
+
+      ExtractROIFilterType::Pointer extractor = ExtractROIFilterType::New();
+      extractor->SetInput(vectIm);
+      extractor->SetStartX(startS);
+      extractor->SetStartY(startL);
+      extractor->SetSizeX(sizeS);
+      extractor->SetSizeY(sizeL);
+      extractor->UpdateOutputInformation();
+
+      m_ExtractorList->PushBack(extractor);
+      m_ImageList->PushBack(extractor->GetOutput());
+    }
 
     BurstFusionFilterType::SizeType layout;
     layout[0] = 1;
     layout[1] = nbBursts;
     fusionFilter->SetLayout(layout);
 
-    for (unsigned int i=0; i<(layout[0]*layout[1]); i++)
-      {
-	fusionFilter->SetInput(i,m_ImageList->GetNthElement(i));
-      }
+    for (unsigned int i = 0; i < (layout[0] * layout[1]); i++)
+    {
+      fusionFilter->SetInput(i, m_ImageList->GetNthElement(i));
+    }
 
     SetParameterOutputImage("out", fusionFilter->GetOutput());
 
     RegisterPipeline();
   }
-
-
 };
 }
 }

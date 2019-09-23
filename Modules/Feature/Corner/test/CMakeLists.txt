@@ -22,9 +22,7 @@ otb_module_test()
 
 set(OTBCornerTests
 otbCornerTestDriver.cxx
-otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 otbVectorDataToRightAngleVectorDataFilter.cxx
-otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
 otbHarrisImage.cxx
 otbHarrisToPointSet.cxx
 )
@@ -35,15 +33,6 @@ otb_module_target_label(otbCornerTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME feTvLineSpatialObjectListToRightAnglePointSetFilter COMMAND otbCornerTestDriver
-  --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  otbLineSpatialObjectListToRightAnglePointSetFilter
-  ${INPUTDATA}/carre.png
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  )
-
 otb_add_test(NAME feTvVectorDataToRightAngleVectorDataFilter COMMAND otbCornerTestDriver
   --compare-ogr ${EPSILON_8}
   ${BASELINE_FILES}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp
@@ -51,15 +40,6 @@ otb_add_test(NAME feTvVectorDataToRightAngleVectorDataFilter COMMAND otbCornerTe
   otbVectorDataToRightAngleVectorDataFilter
   ${BASELINE_FILES}/feTvLineSegmentDetectorOutput.shp     #input vectordata
   ${TEMP}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp  #output text file
-  )
-
-otb_add_test(NAME feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps COMMAND otbCornerTestDriver
-  --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
-  otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii
-  ${INPUTDATA}/carre.png
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
   )
 
 otb_add_test(NAME feTvHarrisImage COMMAND otbCornerTestDriver

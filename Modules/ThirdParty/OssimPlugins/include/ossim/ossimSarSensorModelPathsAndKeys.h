@@ -65,6 +65,7 @@ namespace ossimplugins {
    extern const std::string keyEndSample        ;
    extern const std::string keyAzimuthStartTime ;
    extern const std::string keyAzimuthStopTime  ;
+   extern const std::string keyAzimuthAnxTime   ;
 } // ossimplugins namespace
 
 

@@ -24,58 +24,52 @@
 #include "otbMeanShiftSmoothingImageFilter.h"
 #include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.h"
 
-typedef float InputPixelType;
+typedef float      InputPixelType;
 const unsigned int Dimension = 2;
 
-typedef otb::Image<unsigned int, Dimension>             LabelImageType;
-typedef otb::Image<unsigned int, Dimension>             MaskImageType;
+typedef otb::Image<unsigned int, Dimension> LabelImageType;
+typedef otb::Image<unsigned int, Dimension> MaskImageType;
 
-typedef otb::VectorData<double, Dimension>          VectorDataType;
-typedef VectorDataType::Pointer                     VectorDataPointerType;
-typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
-typedef VectorDataFileWriterType::Pointer           VectorDataFileWriterPointerType;
+typedef otb::VectorData<double, Dimension> VectorDataType;
+typedef VectorDataType::Pointer                   VectorDataPointerType;
+typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
+typedef VectorDataFileWriterType::Pointer         VectorDataFileWriterPointerType;
 
-typedef otb::VectorImage<InputPixelType, Dimension>     ImageType;
-typedef otb::ImageFileReader<ImageType>                 ReaderType;
-
-
+typedef otb::VectorImage<InputPixelType, Dimension> ImageType;
+typedef otb::ImageFileReader<ImageType> ReaderType;
 
 
-
-typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
-  < ImageType,
-    LabelImageType,
-    MaskImageType,
-    VectorDataType >  ConnectedComponentSegmentationOBIAToVectorDataFilterType;
+typedef otb::StreamingConnectedComponentSegmentationOBIAToVectorDataFilter<ImageType, LabelImageType, MaskImageType, VectorDataType>
+    ConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
 typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftFilterType;
 
 
-int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char * argv[])
+int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {
 
   /* mean shift parameters */
 
-  const char * infname = argv[1];
-  const char * outputFilename = argv[2];
+  const char* infname        = argv[1];
+  const char* outputFilename = argv[2];
 
   /* mean shift parameters */
   const double spatialBandwidth = atof(argv[3]);
-  const double rangeBandwidth = atof(argv[4]);
-  const double threshold = atof(argv[5]);
+  const double rangeBandwidth   = atof(argv[4]);
+  const double threshold        = atof(argv[5]);
 
   /* conencted component parameters */
-  const char * segmentationexpression = argv[6];
-  unsigned int minobjectsize = atoi(argv[7]);
-  const char * obiaexpression = argv[8];
-  unsigned int nbstreams = atoi(argv[9]);
+  const char*  segmentationexpression = argv[6];
+  unsigned int minobjectsize          = atoi(argv[7]);
+  const char*  obiaexpression         = argv[8];
+  unsigned int nbstreams              = atoi(argv[9]);
 
   // add meanshift options
 
 
   // Instantiating object
   MeanShiftFilterType::Pointer meanShiftFilter = MeanShiftFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer          reader          = ReaderType::New();
 
   reader->SetFileName(infname);
 
@@ -87,8 +81,8 @@ int otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter(in
   meanShiftFilter->SetInput(reader->GetOutput());
   meanShiftFilter->GetRangeOutput();
 
-  ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer
-      connected = ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
+  ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::Pointer connected =
+      ConnectedComponentSegmentationOBIAToVectorDataFilterType::FilterType::New();
   connected->GetFilter()->SetInput(meanShiftFilter->GetRangeOutput());
 
   connected->GetFilter()->SetConnectedComponentExpression(segmentationexpression);

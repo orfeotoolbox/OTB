@@ -58,9 +58,9 @@ public:
     if (std::abs(green) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
+    }
 
-      return static_cast<TOutput>(red * red / (green * green * green));
+    return static_cast<TOutput>(red * red / (green * green * green));
   }
 };
 
@@ -94,9 +94,9 @@ public:
     if (std::abs(green + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return static_cast<TOutput>(0.);
-      }
+    }
 
-      return (static_cast<TOutput>((red - green) / (red + green)));
+    return (static_cast<TOutput>((red - green) / (red + green)));
   }
 };
 

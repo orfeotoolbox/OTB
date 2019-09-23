@@ -26,20 +26,20 @@
 #include "itkRGBAPixel.h"
 #include "otbMath.h"
 
-int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbAmplitudeFunctorTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef double                   ScalarType;
+  typedef double ScalarType;
 
-  typedef otb::Function::AmplitudeFunctor<ScalarType>       FunctorType;
-  typedef itk::VariableLengthVector<ScalarType>             VectorPixelType;
-  typedef itk::RGBPixel<ScalarType>                         RGBPixelType;
-  typedef itk::RGBAPixel<ScalarType>                        RGBAPixelType;
-  typedef VectorPixelType OutputPixelType;
+  typedef otb::Function::AmplitudeFunctor<ScalarType> FunctorType;
+  typedef itk::VariableLengthVector<ScalarType>       VectorPixelType;
+  typedef itk::RGBPixel<ScalarType>                   RGBPixelType;
+  typedef itk::RGBAPixel<ScalarType>                  RGBAPixelType;
+  typedef VectorPixelType                             OutputPixelType;
 
-  FunctorType funct;
-  OutputPixelType output;
+  FunctorType               funct;
+  OutputPixelType           output;
   std::vector<unsigned int> channels;
-  ScalarType result;
+  ScalarType                result;
 
   VectorPixelType vectorPixel;
   vectorPixel.SetSize(3);
@@ -48,50 +48,46 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   vectorPixel.SetElement(2, 3.0);
 
   // Test VectorPixelType
-  for(unsigned int i = 0; i < 3; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
+  {
+    for (unsigned int j = 0; j < 3; ++j)
     {
-    for(unsigned int j = 0; j < 3; ++j)
-      {
       channels.clear();
       channels.push_back(i);
       channels.push_back(j);
       funct.SetChannelList(channels);
-      output = funct.operator ()(vectorPixel);
+      output = funct.operator()(vectorPixel);
       result = std::sqrt(vectorPixel[i] * vectorPixel[i] + vectorPixel[j] * vectorPixel[j]);
-      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
-        {
-          std::cout << "vectorPixelType Test VectorPixelType failed for channels " << i<< " and "
-              << j << " !" << std::endl;
-          return EXIT_FAILURE;
-        }
+      if (std::abs(static_cast<double>(result) - static_cast<double>(output[0])) > 0.0000001)
+      {
+        std::cout << "vectorPixelType Test VectorPixelType failed for channels " << i << " and " << j << " !" << std::endl;
+        return EXIT_FAILURE;
       }
     }
+  }
 
   // Test RGBPixelType
-  RGBPixelType  rgbPixel;
+  RGBPixelType rgbPixel;
   rgbPixel.SetRed(1.0);
   rgbPixel.SetGreen(2.0);
   rgbPixel.SetBlue(3.0);
-  for(unsigned int i = 0; i < 3; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
+  {
+    for (unsigned int j = 0; j < 3; ++j)
     {
-    for(unsigned int j = 0; j < 3; ++j)
-      {
       channels.clear();
       channels.push_back(i);
       channels.push_back(j);
       funct.SetChannelList(channels);
-      output = funct.operator ()(rgbPixel);
+      output = funct.operator()(rgbPixel);
       result = std::sqrt(rgbPixel[i] * rgbPixel[i] + rgbPixel[j] * rgbPixel[j]);
-      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
-        {
-          std::cout << "vectorPixelType Test RGBPixelType failed for channels " << i<< " and "
-              << j << " !" << std::endl;
-          return EXIT_FAILURE;
-        }
+      if (std::abs(static_cast<double>(result) - static_cast<double>(output[0])) > 0.0000001)
+      {
+        std::cout << "vectorPixelType Test RGBPixelType failed for channels " << i << " and " << j << " !" << std::endl;
+        return EXIT_FAILURE;
       }
     }
-
-
+  }
 
 
   // Test RGBPAixelType
@@ -101,24 +97,23 @@ int otbAmplitudeFunctorTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   rgbaPixel.SetBlue(3.0);
   rgbaPixel.SetAlpha(4.0);
 
-  for(unsigned int i = 0; i < 4; ++i)
+  for (unsigned int i = 0; i < 4; ++i)
+  {
+    for (unsigned int j = 0; j < 4; ++j)
     {
-    for(unsigned int j = 0; j < 4; ++j)
-      {
       channels.clear();
       channels.push_back(i);
       channels.push_back(j);
       funct.SetChannelList(channels);
-      output = funct.operator ()(rgbaPixel);
+      output = funct.operator()(rgbaPixel);
       result = std::sqrt(rgbaPixel[i] * rgbaPixel[i] + rgbaPixel[j] * rgbaPixel[j]);
-      if( std::abs(static_cast<double>(result)-static_cast<double>(output[0])) > 0.0000001)
-        {
-          std::cout << "vectorPixelType Test RGBAPixelType failed for channels " << i<< " and "
-              << j << " !" << std::endl;
-          return EXIT_FAILURE;
-        }
+      if (std::abs(static_cast<double>(result) - static_cast<double>(output[0])) > 0.0000001)
+      {
+        std::cout << "vectorPixelType Test RGBAPixelType failed for channels " << i << " and " << j << " !" << std::endl;
+        return EXIT_FAILURE;
       }
     }
+  }
 
   return EXIT_SUCCESS;
 }

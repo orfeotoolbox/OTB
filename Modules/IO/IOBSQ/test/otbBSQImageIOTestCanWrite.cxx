@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbBSQImageIO.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -28,12 +26,12 @@
 int otbBSQImageIOTestCanWrite(int itkNotUsed(argc), char* argv[])
 {
   otb::BSQImageIO::Pointer lBSQImageIO = otb::BSQImageIO::New();
-  bool                     lCanRead = lBSQImageIO->CanWriteFile(argv[1]);
+  bool                     lCanRead    = lBSQImageIO->CanWriteFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::L'image " << argv[1] << " n'est pas une image BSQ." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

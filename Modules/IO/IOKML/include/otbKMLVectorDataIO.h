@@ -44,11 +44,9 @@ namespace otb
  *
  * \ingroup OTBIOKML
  */
-class ITK_EXPORT KMLVectorDataIO
-  : public VectorDataIOBase
+class ITK_EXPORT KMLVectorDataIO : public VectorDataIOBase
 {
 public:
-
   /** Standard class typedefs. */
   typedef KMLVectorDataIO               Self;
   typedef VectorDataIOBase              Superclass;
@@ -65,7 +63,7 @@ public:
   typedef Superclass::ByteOrder ByteOrder;
 
   /** Data typedef */
-  typedef VectorData<double, 2>                           VectorDataType;
+  typedef VectorData<double, 2> VectorDataType;
   typedef VectorDataType::DataTreeType           DataTreeType;
   typedef DataTreeType::TreeNodeType             InternalTreeNodeType;
   typedef InternalTreeNodeType::ChildrenListType ChildrenListType;
@@ -102,7 +100,7 @@ public:
   bool CanWriteFile(const char*) const override;
 
   /** Writes the data to disk from the data structure provided */
-  void Write(const itk::DataObject* data, char ** papszOptions = nullptr) override;
+  void Write(const itk::DataObject* data, char** papszOptions = nullptr) override;
 
 protected:
   /** Constructor.*/
@@ -131,13 +129,12 @@ protected:
   DataNodePointerType ConvertGeometryToPolygonNode(const kmldom::GeometryPtr& geometry);
   /** end conversion tools */
 
-  void ProcessNodeWrite(InternalTreeNodeType * source, kmldom::KmlFactory* factory,
-                        kmldom::KmlPtr kml, kmldom::DocumentPtr currentDocument, kmldom::FolderPtr currentFolder,
-                        kmldom::MultiGeometryPtr currentMultiGeometry);
+  void ProcessNodeWrite(InternalTreeNodeType* source, kmldom::KmlFactory* factory, kmldom::KmlPtr kml, kmldom::DocumentPtr currentDocument,
+                        kmldom::FolderPtr currentFolder, kmldom::MultiGeometryPtr currentMultiGeometry);
 
 private:
-  KMLVectorDataIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  KMLVectorDataIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   DataTreePointerType m_Tree;
 

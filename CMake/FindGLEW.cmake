@@ -35,6 +35,7 @@
 # GLEW_LIBRARY
 #
 
+# This whole file could be deleted. Find Packages GLEW can be used now
 find_path(
   GLEW_INCLUDE_DIR GL/glew.h
   DOC "The directory where GL/glew.h resides"
@@ -57,6 +58,6 @@ if (GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
 endif()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLEW
+find_package_handle_standard_args(GLEW
   REQUIRED_VARS GLEW_LIBRARY GLEW_INCLUDE_DIR
   VERSION_VAR GLEW_VERSION_STRING)

@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -29,21 +27,21 @@
 int otbImageFileWriterONERAComplex(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef std::complex<float> PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int          Dimension = 2;
 
-  typedef otb::Image<PixelType,  Dimension> ImageType;
-  typedef otb::ExtractROI<PixelType, PixelType>  ExtractROIFilterType;
+  typedef otb::Image<PixelType, Dimension>      ImageType;
+  typedef otb::ExtractROI<PixelType, PixelType> ExtractROIFilterType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  ReaderType::Pointer complexReader = ReaderType::New();
+  ReaderType::Pointer           complexReader    = ReaderType::New();
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
-  WriterType::Pointer complexWriter = WriterType::New();
+  WriterType::Pointer           complexWriter    = WriterType::New();
 
   // Reader Parameters
   complexReader->SetFileName(inputFilename);

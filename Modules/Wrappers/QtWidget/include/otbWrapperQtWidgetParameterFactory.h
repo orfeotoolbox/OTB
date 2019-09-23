@@ -46,7 +46,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef QtWidgetParameterFactory     Self;
+  typedef QtWidgetParameterFactory      Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -58,7 +58,7 @@ public:
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
   /** Create the appropriate QtWidget depending on the particulars of the parameter */
-  static QtWidgetParameterBase* CreateQtWidget( Parameter* param, QtWidgetModel* model, QWidget * parent );
+  static QtWidgetParameterBase* CreateQtWidget(Parameter* param, QtWidgetModel* model, QWidget* parent);
 
 protected:
   QtWidgetParameterFactory();
@@ -67,9 +67,7 @@ protected:
 private:
   QtWidgetParameterFactory(const Self&) = delete;
   void operator=(const Self&) = delete;
-
 };
-
 }
 }
 

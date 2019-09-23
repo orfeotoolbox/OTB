@@ -19,33 +19,31 @@
  */
 
 
-
 #include "otbLabelImageToOGRDataSourceFilter.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
 
-
-int otbLabelImageToOGRDataSourceFilter(int argc, char * argv[])
+int otbLabelImageToOGRDataSourceFilter(int argc, char* argv[])
 {
   if (argc != 2)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " inputLabelImageFile " << std::endl;
     return EXIT_FAILURE;
-    }
-  const char * infname = argv[1];
+  }
+  const char* infname = argv[1];
 
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
   typedef unsigned short LabelType;
   typedef otb::Image<LabelType, Dimension> InputLabelImageType;
 
-  typedef otb::LabelImageToOGRDataSourceFilter<InputLabelImageType>   FilterType;
-  typedef otb::ImageFileReader<InputLabelImageType>                LabelImageReaderType;
+  typedef otb::LabelImageToOGRDataSourceFilter<InputLabelImageType> FilterType;
+  typedef otb::ImageFileReader<InputLabelImageType>                 LabelImageReaderType;
 
 
-  FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer           filter = FilterType::New();
   LabelImageReaderType::Pointer reader = LabelImageReaderType::New();
 
   reader->SetFileName(infname);
