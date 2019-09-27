@@ -302,7 +302,7 @@ private:
     }
     catch (...)
     {
-      SetParameterDescription("exp", "Other exception catched");
+      SetParameterDescription("exp", "Other exception caught");
     }
   }
 

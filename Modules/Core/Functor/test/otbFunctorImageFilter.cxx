@@ -424,7 +424,7 @@ int otbFunctorImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     return out;
   };
 
-  // In this case, we use the helper function which allows to specify
+  // In this case, we use the helper function which allows specifying
   // the number of outputs
   auto filterLambda2 = NewFunctorFilter(Lambda2, vimage->GetNumberOfComponentsPerPixel(), {{3, 3}});
   filterLambda2->SetInputs(image);
