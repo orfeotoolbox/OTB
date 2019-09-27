@@ -162,11 +162,11 @@ namespace otb
         
         //~ iterate over inputs
         VectorImageType::Pointer imageIn;
-        LabelReaderType::Pointer lreader = LabelReaderType::New();
+        LabelReaderType::Pointer lreader;
         LabelImageType::Pointer imageSeg;
-        CastFilterType::Pointer castFilter = CastFilterType::New();
-        RAMDrivenAdaptativeStreamingManagerType::Pointer
-                      streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+        CastFilterType::Pointer castFilter;
+        RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager;
+
         RegionType largestRegion;
         otb::ogr::DataSource::Pointer SPDataSource;
         //~ otb::ogr::Layer SPLayer;
@@ -177,6 +177,10 @@ namespace otb
 
         for (size_t index = 0; index < nbImages; ++index)
         {
+            lreader = LabelReaderType::New();
+            castFilter = CastFilterType::New();
+            streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+
             otbAppLogINFO("Index : " << index);
             auto index_string = std::to_string(index);
             getrusage(RUSAGE_SELF,&r_usage);
