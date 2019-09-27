@@ -94,7 +94,7 @@ public:
   /** To be allowed to use the pipeline method FrostImageFilter needs
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   FrostImageFilter();

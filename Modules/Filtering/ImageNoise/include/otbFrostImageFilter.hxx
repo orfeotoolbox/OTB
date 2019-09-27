@@ -45,7 +45,7 @@ FrostImageFilter<TInputImage, TOutputImage>::FrostImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void FrostImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

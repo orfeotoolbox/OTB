@@ -63,7 +63,7 @@ public:
    * Update images in the list.
    */
   void UpdateOutputInformation(void) override;
-  void PropagateRequestedRegion(void) throw(itk::InvalidRequestedRegionError) override;
+  void PropagateRequestedRegion(void) override;
   void UpdateOutputData(void) override;
 
   void SetRequestedRegion(const itk::DataObject* source) override;

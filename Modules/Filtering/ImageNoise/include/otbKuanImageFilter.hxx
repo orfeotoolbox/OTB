@@ -45,7 +45,7 @@ KuanImageFilter<TInputImage, TOutputImage>::KuanImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void KuanImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void KuanImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

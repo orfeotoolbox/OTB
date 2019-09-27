@@ -45,7 +45,7 @@ GammaMAPImageFilter<TInputImage, TOutputImage>::GammaMAPImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void GammaMAPImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void GammaMAPImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

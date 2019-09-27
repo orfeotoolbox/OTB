@@ -77,7 +77,7 @@ AbstractWorker::~AbstractWorker()
 }
 
 /*****************************************************************************/
-void AbstractWorker::Do() throw()
+void AbstractWorker::Do()
 {
   QObject* result = NULL;
 

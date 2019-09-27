@@ -86,7 +86,7 @@ public:
   SystemError(const std::string& message = std::string()) : std::runtime_error(itksys::SystemTools::GetLastSystemError() + ": " + message){};
 
   /** \brief Destructor. */
-  ~SystemError() throw() override{};
+  ~SystemError() override{};
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
