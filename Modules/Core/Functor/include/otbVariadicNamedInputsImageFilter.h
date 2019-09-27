@@ -67,7 +67,7 @@ struct tuple_index<Arg, std::tuple<NotMatching, Args...>>
  * used as a tag to set/get the corresponding input and thus should be
  * unique in tuple.
  *
- * This allows to add semantic to inputs and remove the need for the
+ * This allows adding semantic to inputs and remove the need for the
  * user to know input orders and set them by their index.
  *
  * Example of use:

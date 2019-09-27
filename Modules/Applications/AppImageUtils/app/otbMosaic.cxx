@@ -315,7 +315,7 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice, "interpolator", "Interpolation");
-    SetParameterDescription("interpolator", "This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator", "This group of parameters allows defining how the input image will be interpolated during resampling.");
     MandatoryOff("interpolator");
 
     // NN

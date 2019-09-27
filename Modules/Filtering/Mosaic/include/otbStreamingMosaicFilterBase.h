@@ -41,7 +41,7 @@ namespace otb
  * regions of input images. There is a shift-scale mode which allows
  * to shift-scale input images, which can be useful e.g. color or
  * radiometric harmonization of input set of images. The output
- * spacing (SetOuputSpacing()), the start index (SetOutputIndex()) and
+ * spacing (SetOutputSpacing()), the start index (SetOutputIndex()) and
  * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
  * can be set using the method between brackets.
  *

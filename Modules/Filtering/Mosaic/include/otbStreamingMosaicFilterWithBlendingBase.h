@@ -38,7 +38,7 @@ namespace otb
  * Two parameters can be set:
  * -Distance image interpolator: explicit
  * -Distance image offset: this value is added to the interpolated distance image
- *                         value, which allows to create a margin around the edges
+ *                         value, which allows creating a margin around the edges
  *                         of the image (i.e. around the 0-value distance image contour)
  *
  * Support streaming
