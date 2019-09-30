@@ -54,9 +54,8 @@ mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with "
-  "the syntax (semi-colon used as a separator): "
-  "-D<var>:<type>=<value>;-D<var>:<type>=<value>")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
+
 
 if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
