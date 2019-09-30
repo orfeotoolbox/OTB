@@ -77,7 +77,7 @@ AbstractWorker::~AbstractWorker()
 }
 
 /*****************************************************************************/
-void AbstractWorker::Do()
+void AbstractWorker::Do() noexcept
 {
   QObject* result = NULL;
 

@@ -102,7 +102,7 @@ public slots:
   /**
    * \brief Call the implemented do job/task routine.
    */
-  void Do();
+  void Do() noexcept;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
