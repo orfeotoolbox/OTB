@@ -131,6 +131,7 @@ namespace otb
 
     void DoExecute()
     {
+        itk::DataObject::GlobalReleaseDataFlagOn();
         otbAppLogINFO("TrainAutoContext application");
         struct rusage r_usage;
         getrusage(RUSAGE_SELF,&r_usage);
@@ -545,7 +546,7 @@ namespace otb
         }
         filter->GetStreamer()->SetAutomaticAdaptativeStreaming(ram);
         filter->Update();
-        sampleExtractionClassifyFilters.push_back(filter);
+        //sampleExtractionClassifyFilters.push_back(filter);
         outputDS->SyncToDisk();
     }
 
@@ -575,7 +576,7 @@ namespace otb
         filter->Update();
         output->SyncToDisk();
         
-        extractionFilters.push_back(filter);
+        //extractionFilters.push_back(filter);
         
         return output;
     }
