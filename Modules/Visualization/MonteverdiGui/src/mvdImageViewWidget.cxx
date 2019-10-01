@@ -28,6 +28,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QGLFormat>
 
 //
 // System includes (sorted by alphabetic order)
@@ -998,6 +999,25 @@ ImageViewWidget
     .toLatin1()
     .constData();
 
+  switch( format().profile() )
+  {
+  case QGLFormat::NoProfile:
+    qWarning() << "QGLFormat::NoProfile";
+    break;
+
+  case QGLFormat::CoreProfile:
+    qWarning() << "QGLFormat::CoreProfile";
+    break;
+
+  case QGLFormat::CompatibilityProfile:
+    qWarning() << "QGLFormat::CompatibilityProfile";
+    break;
+
+  default:
+    assert( false && "Unexpected QGLFormat::profile()." );
+    break;
+  }
+
   QGLFormat::OpenGLVersionFlags glVersionFlags(
     QGLFormat::openGLVersionFlags()
   );
@@ -1010,7 +1030,7 @@ ImageViewWidget
 
   if( glVersionFlags & QGLFormat::OpenGL_Version_4_0 )
     qWarning() << "QGLFormat::OpenGL_Version_4_0";
-
+  //
   if( glVersionFlags & QGLFormat::OpenGL_Version_3_3 )
     qWarning() << "- QGLFormat::OpenGL_Version_3_3";
   if( glVersionFlags & QGLFormat::OpenGL_Version_3_2 )
@@ -1019,12 +1039,12 @@ ImageViewWidget
     qWarning() << "- QGLFormat::OpenGL_Version_3_1";
   if( glVersionFlags & QGLFormat::OpenGL_Version_3_0 )
     qWarning() << "- QGLFormat::OpenGL_Version_3_0";
-
+  //
   if( glVersionFlags & QGLFormat::OpenGL_Version_2_1 )
     qWarning() << "- QGLFormat::OpenGL_Version_2_1";
   if( glVersionFlags & QGLFormat::OpenGL_Version_2_0 )
     qWarning() << "- QGLFormat::OpenGL_Version_2_0";
-
+  //
   if( glVersionFlags & QGLFormat::OpenGL_Version_1_5 )
     qWarning() << "- QGLFormat::OpenGL_Version_1_5";
   if( glVersionFlags & QGLFormat::OpenGL_Version_1_4 )
@@ -1407,7 +1427,7 @@ ImageViewWidget
   // qDebug() << this << "::OnClearProjectionRequested()";
 
   assert( m_Manipulator!=NULL );
-  
+
   m_Manipulator->SetWkt( std::string() );
   m_Manipulator->SetKeywordList( otb::ViewSettings::KeywordListType() );
 
@@ -1753,7 +1773,7 @@ ImageViewWidget
   double sy = ( spacing[ 1 ]>0.0 ? 1.0 : -1.0 ) / spacing[ 1 ];
 #endif
 
-  
+
   // qDebug() << "sx:" << sx << "; sy:" << sy;
   // qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
 
@@ -2152,7 +2172,7 @@ ImageViewWidget
       }
     // RGB
     else
-      {	
+      {
       // Get color-setup.
       VectorImageSettings::ChannelVector channels( settings.GetRgbChannels() );
 
@@ -2228,8 +2248,8 @@ ImageViewWidget
       filename+=".tif";
       }
     }
-                        
-  
+
+
   assert( m_Renderer!=NULL );
 
   try
@@ -2287,7 +2307,7 @@ ImageViewWidget
 
   assert( m_Renderer!=NULL );
 
-  
+
   StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
   assert( stackedLayerModel!=NULL );
 
