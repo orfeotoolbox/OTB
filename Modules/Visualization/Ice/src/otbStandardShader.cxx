@@ -80,30 +80,22 @@ StandardShader::StandardShader() :
 StandardShader::~StandardShader()
 {}
 
-std::string StandardShader::GetVertexSource() const
+std::string
+StandardShader
+::GetVertexSource() const
 {
-  std::string shader_source = "";
-  if(m_HasGLSL140)
-    {
-    shader_source+="#version 140 \n";
-    }
-  else
-    {
-    shader_source+="#version 130 \n";
-    }
-  shader_source +=
-    "in vec4 position;\n"                                       \
-    "in vec2 in_coord;\n"                                       \
-    "out vec2 tex_coord;\n"                                     \
-    "uniform mat4 in_proj;\n"                                   \
-    "uniform mat4 in_mv;\n"                                     \
-    "void main()\n"                                             \
-    "{\n"                                                       \
-    "tex_coord = in_coord;\n"                                   \
-    "gl_Position = in_proj * in_mv * position;\n" \
+  return
+    "#version 130\n"
+    "in vec4 position;\n"
+    "in vec2 in_coord;\n"
+    "out vec2 tex_coord;\n"
+    "uniform mat4 in_proj;\n"
+    "uniform mat4 in_mv;\n"
+    "void main()\n"
+    "{\n"
+    "tex_coord = in_coord;\n"
+    "gl_Position = in_proj * in_mv * position;\n"
     "}";
-
-  return shader_source;
 }
 
 std::string StandardShader::GetFragmentSource() const
@@ -112,11 +104,11 @@ std::string StandardShader::GetFragmentSource() const
 
   if(m_HasGLSL140)
     {
-    shader_source+="#version 140 \n";
+    shader_source+="#version 140\n";
     }
   else
     {
-    shader_source+="#version 130 \n";
+    shader_source+="#version 130\n";
     }
 
   shader_source +=
@@ -320,26 +312,26 @@ std::string StandardShader::GetFragmentSource() const
     "out_color[2] = mapped[2];\n"                                    \
     "}\n"                                                               \
     "}\n";
-  
-  if(m_HasGLSL140)
-    {
+
+  if( m_HasGLSL140 )
+  {
     shader_source+=
-    "else if(shader_type == 6)\n"                                       \
-    "{\n"                                                               \
-    "if(dist < shader_radius)\n"                                        \
-    "{\n"                                                               \
-    "vec2 size = vec2(textureSize(src,0));\n"                           \
-    "vec2 dx = tex_coord;\n"                              \
-    "dx[0]+=1.0/size[0];\n"                                             \
-    "vec2 dy = tex_coord;\n"                              \
-    "dy[1]+=1.0/size[1];\n"                                             \
-    "vec4 pdx = texture2D(src, dx);\n"                                  \
-    "vec4 pdy = texture2D(src, dy);\n"                                  \
-    "out_color = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
-    "out_color[3] = alpha;\n"                                        \
-    "}\n"                                                               \
-    "}\n";                   
-    }
+      "else if(shader_type == 6)\n"                                       \
+      "{\n"                                                               \
+      "if(dist < shader_radius)\n"                                        \
+      "{\n"                                                               \
+      "vec2 size = vec2(textureSize(src,0));\n"                           \
+      "vec2 dx = tex_coord;\n"                              \
+      "dx[0]+=1.0/size[0];\n"                                             \
+      "vec2 dy = tex_coord;\n"                              \
+      "dy[1]+=1.0/size[1];\n"                                             \
+      "vec4 pdx = texture2D(src, dx);\n"                                  \
+      "vec4 pdy = texture2D(src, dy);\n"                                  \
+      "out_color = clamp(pow(5*shader_a*(0.5*abs((pdx-p))+ 0.5*abs((pdy-p))),shader_gamma),0.0,1.0);\n" \
+      "out_color[3] = alpha;\n"                                        \
+      "}\n"                                                               \
+      "}\n";
+  }
   shader_source+="}";
   return shader_source;
 }
@@ -392,4 +384,3 @@ void StandardShader::SetupShader()
 }
 
 } // End namespace otb
-

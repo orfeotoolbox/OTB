@@ -180,7 +180,12 @@ unsigned int ShaderRegistry::CompileShader(int stype, const std::string& name, c
     glDeleteShader( shader );
     shader = 0;
 
-    itkExceptionMacro(<<"Shader "<<name<<" with sources "<<src<<" failed to compile: "<<slogs);
+    itkExceptionMacro(
+      << "Failed to compile shader: " << name
+      << std::endl
+      << slogs << std::endl
+      << src
+      );
     }
   return shader;
 }
