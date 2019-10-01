@@ -488,7 +488,7 @@ private:
       // in this case, the pipeline cannot be resolved : the output image (wo)
       // won't be computed and a segfault can occur.
       otbAppLogFATAL(
-          "w option has not been set : the ouput image cannot be produced."
+          "w option has not been set : the output image cannot be produced."
           "Stop execution because the pipeline cannot be resolved");
     }
 

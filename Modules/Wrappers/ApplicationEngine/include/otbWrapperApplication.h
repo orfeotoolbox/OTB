@@ -696,16 +696,16 @@ public:
    * to select the image in an InputImageList. */
   ImageBaseType::PointType GetImageOrigin(const std::string& key, unsigned int idx = 0);
 
-  /** Get the spacing of the image parameter 'key'. The optional 'idx' allows to
-   *  select the image in an InputImageList. We use the signed spacing convention. */
+  /** Get the spacing of the image parameter 'key'. The optional 'idx' allows
+   *  selecting the image in an InputImageList. We use the signed spacing convention. */
   ImageBaseType::SpacingType GetImageSpacing(const std::string& key, unsigned int idx = 0);
 
-  /** Get the size of the image parameter 'key'. The optional 'idx' allows to
-   * select the image in an InputImageList. It corresponds to the size of LargestPossibleRegion*/
+  /** Get the size of the image parameter 'key'. The optional 'idx' allows
+   * selecting the image in an InputImageList. It corresponds to the size of LargestPossibleRegion*/
   ImageBaseType::SizeType GetImageSize(const std::string& key, unsigned int idx = 0);
 
   /** Get the number of bands in the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList.*/
+   * allows selecting the image in an InputImageList.*/
   unsigned int GetImageNbBands(const std::string& key, unsigned int idx = 0);
 
   /** Get the projection of the image parameter 'key'. The optional 'idx' allows
@@ -713,18 +713,18 @@ public:
   std::string GetImageProjection(const std::string& key, unsigned int idx = 0);
 
   /** Get the keywordlist of the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList.*/
+   * allows selecting the image in an InputImageList.*/
   otb::ImageKeywordlist GetImageKeywordlist(const std::string& key, unsigned int idx = 0);
 
   /** Set the requested region on the image parameter 'key' and propagate it.
    *  The returned value is an estimate of the RAM usage (in Bytes) to process
    *  this region. It should be assumed that the index of the largest possible
-   *  region starts at (0,0). The optional 'idx' allows to select the image in
+   *  region starts at (0,0). The optional 'idx' allows selecting the image in
    *  an InputImageList*/
   unsigned long PropagateRequestedRegion(const std::string& key, ImageBaseType::RegionType region, unsigned int idx = 0);
 
   /** Get the requested region of the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList. It should be assumed that
+   * allows selecting the image in an InputImageList. It should be assumed that
    * the index of the largest possible region starts at (0,0).*/
   ImageBaseType::RegionType GetImageRequestedRegion(const std::string& key, unsigned int idx = 0);
 
@@ -733,12 +733,12 @@ public:
 
   /** Find out what is the pixel type from an image parameter
    *  This function assumes that the underlying object is either an otb::Image
-   *  or an otb::VectorImage. The optional 'idx' allows to access InputImageList.
+   *  or an otb::VectorImage. The optional 'idx' allows accessing InputImageList.
    */
   ImagePixelType GetImageBasePixelType(const std::string& key, unsigned int idx = 0);
 
   /** Return the image from parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
+   *  allows accessing InputImageList.
    *
    *  Works on parameters:
    *  \li ParameterType_InputImage
@@ -748,7 +748,7 @@ public:
   ImageBaseType* GetParameterImageBase(const std::string& key, unsigned int idx = 0);
 
   /** Set the image in parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
+   *  allows accessing InputImageList.
    *
    *  Works on parameters:
    *  \li ParameterType_InputImage
