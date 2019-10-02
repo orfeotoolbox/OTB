@@ -101,6 +101,7 @@ GlImageActor
   m_LoadedTiles.clear();
 }
 
+
 void
 GlImageActor
 ::CreateShader()
@@ -373,61 +374,195 @@ void GlImageActor::Render()
   //   << "\tresolution: " << m_ResolutionAlgorithm << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  m_Shader->LoadShader();
-  m_Shader->SetupShader();
+  bool isShaderMode = !m_SoftwareRendering && !m_Shader.IsNull();
 
-  GLfloat vertexPosition[8] = {
-      -1.0f, -1.0f,
-      1.0f, -1.0f,
-      1.0f, 1.0f,
-      -1.0f, 1.0f
-    };
+  if( isShaderMode )
+  {
+    m_Shader->LoadShader();
+    m_Shader->SetupShader();
 
-  // Check OpenGL error and clear error flag.
-  gl::CheckError< gl::error::clear >();
+    // Check OpenGL error and clear error flag.
+    gl::CheckError< gl::error::clear >();
 
-  assert( m_Mesh );
-  m_Mesh->Bind();
+    assert( m_Mesh );
+    m_Mesh->Bind();
+  }
+  else
+  {
+    for(TileVectorType::iterator it = m_LoadedTiles.begin();
+        it != m_LoadedTiles.end(); ++it)
+    {
+      if(!it->m_RescaleFilter)
+      {
+        it->m_RescaleFilter = RescaleFilterType::New();
+        it->m_RescaleFilter->AutomaticInputMinMaxComputationOff();
+        it->m_RescaleFilter->SetInput(it->m_Image);
+      }
+
+      VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
+      mins.Fill(0);
+      maxs.Fill(255);
+
+      double noData(0.);
+
+      assert( !m_ImageSettings.IsNull() );
+
+      mins[ 0 ] = m_ImageSettings->GetMinRed();
+      mins[ 1 ] = m_ImageSettings->GetMinGreen();
+      mins[ 2 ] = m_ImageSettings->GetMinBlue();
+
+      maxs[ 0 ] = m_ImageSettings->GetMaxRed();
+      maxs[ 1 ] = m_ImageSettings->GetMaxGreen();
+      maxs[ 2 ] = m_ImageSettings->GetMaxBlue();
+
+      // MANTIS-1204
+      // {
+      double gamma = m_ImageSettings->GetGamma();
+
+      gamma =
+	gamma == 0.0
+        ? std::numeric_limits< double >::max()
+        : 1.0 / gamma;
+      // }
+
+
+      if( m_ImageSettings->GetUseNoData() )
+        noData = m_ImageSettings->GetNoData();
+
+
+      omins.Fill( 0 );
+      omaxs.Fill( 255 );
+
+      it->m_RescaleFilter->SetInputMinimum(mins);
+      it->m_RescaleFilter->SetInputMaximum(maxs);
+      it->m_RescaleFilter->SetOutputMinimum(omins);
+      it->m_RescaleFilter->SetOutputMaximum(omaxs);
+      it->m_RescaleFilter->SetGamma(gamma);
+
+      it->m_RescaleFilter->Update();
+
+
+      itk::ImageRegionConstIterator<UCharVectorImageType> imIt(it->m_RescaleFilter->GetOutput(),it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<VectorImageType> inIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
+
+      auto buffer =
+	std::make_unique< GLubyte[] >(
+	  4 * it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
+	  );
+
+      unsigned int idx = 0;
+
+      for(imIt.GoToBegin(),inIt.GoToBegin();!imIt.IsAtEnd()&&!inIt.IsAtEnd();++imIt,++inIt)
+      {
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[2]);
+        ++idx;
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[1]);
+        ++idx;
+        buffer[idx] = static_cast<unsigned char>(imIt.Get()[0]);
+        ++idx;
+        buffer[idx] = 255;
+
+        if(m_ImageSettings->GetUseNoData() && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
+	{
+          buffer[idx] = 0;
+	}
+
+        ++idx;
+      }
+
+      if(!it->m_TextureId)
+      {
+        glGenTextures(1, &(it->m_TextureId));
+      }
+      glBindTexture(GL_TEXTURE_2D, it->m_TextureId);
+#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+#endif
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+// #if defined(GL_CLAMP_TO_BORDER)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+// #elif defined (GL_MIRRORED_REPEAT)
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+// #endif
+      glTexImage2D(
+        GL_TEXTURE_2D, 0, GL_RGBA8,
+        it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+        it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
+        0, GL_BGRA, GL_UNSIGNED_BYTE,
+        buffer.get()
+	);
+
+      it->m_Loaded = true;
+    }
+  }
 
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
-    {
-
+  {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
     glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    if(m_CurrentResolution == 0)
-      {
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      }
+
+    glTexParameteri(
+      GL_TEXTURE_2D,
+      GL_TEXTURE_MAG_FILTER,
+      m_CurrentResolution ? GL_LINEAR : GL_NEAREST
+      );
+
+    if( isShaderMode )
+    {
+      GLfloat vertexPosition[ 8 ] = {
+	-1.0f, -1.0f,
+	1.0f, -1.0f,
+	1.0f, 1.0f,
+	-1.0f, 1.0f
+      };
+
+      vertexPosition[0] = it->m_LL[0];
+      vertexPosition[1] = it->m_LL[1];
+      vertexPosition[2] = it->m_LR[0];
+      vertexPosition[3] = it->m_LR[1];
+      vertexPosition[4] = it->m_UR[0];
+      vertexPosition[5] = it->m_UR[1];
+      vertexPosition[6] = it->m_UL[0];
+      vertexPosition[7] = it->m_UL[1];
+
+      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
+
+      glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    }
     else
+    {
+      // Reset color before rendering
+      glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
+
+      glBegin( GL_QUADS );
       {
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexCoord2f( 0.0, 1.0 ); glVertex2f( it->m_LL[ 0 ], it->m_LL[ 1 ] );
+	glTexCoord2f( 1.0, 1.0 ); glVertex2f( it->m_LR[ 0 ], it->m_LR[ 1 ] );
+	glTexCoord2f( 1.0, 0.0 ); glVertex2f( it->m_UR[ 0 ], it->m_UR[ 1 ] );
+	glTexCoord2f( 0.0, 0.0 ); glVertex2f( it->m_UL[ 0 ], it->m_UL[ 1 ] );
       }
-
-    // Reset color before rendering
-    //glColor4d(1.0f,1.0f,1.0f, m_ImageSettings->GetAlpha());
-
-    vertexPosition[0] = it->m_LL[0];
-    vertexPosition[1] = it->m_LL[1];
-    vertexPosition[2] = it->m_LR[0];
-    vertexPosition[3] = it->m_LR[1];
-    vertexPosition[4] = it->m_UR[0];
-    vertexPosition[5] = it->m_UR[1];
-    vertexPosition[6] = it->m_UL[0];
-    vertexPosition[7] = it->m_UL[1];
-
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
-
-    glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    glDisable(GL_BLEND);
+      glEnd ();
     }
 
-  m_Shader->UnloadShader();
+    glDisable( GL_TEXTURE_2D );
+    glDisable( GL_BLEND );
+  }
+
+  if( isShaderMode )
+    m_Shader->UnloadShader();
 }
 
 void GlImageActor::LoadTile(Tile& tile)
@@ -459,44 +594,46 @@ void GlImageActor::LoadTile(Tile& tile)
 
   tile.m_Image = extract->GetOutput();
 
-  itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
-
-  float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
-
-  unsigned int idx = 0;
-
-  for(it.GoToBegin();!it.IsAtEnd();++it)
+  if( !m_SoftwareRendering )
   {
-    buffer[idx] = static_cast<float>(it.Get()[2]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[1]);
-    ++idx;
-    buffer[idx] = static_cast<float>(it.Get()[0]);
-    ++idx;
-    buffer[idx] = 255.;
-    ++idx;
-  }
+    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
 
-  // Now load the texture
-  assert( tile.m_TextureId==0 );
+    float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
 
-  glGenTextures( 1, &tile.m_TextureId );
+    unsigned int idx = 0;
 
-  // Following assert is sometimes false on some OpenGL systems for
-  // some unknown reason even though the glGenTexture() call has
-  // succeeded.
-  // assert( glGetError()==GL_NO_ERROR );
+    for(it.GoToBegin();!it.IsAtEnd();++it)
+    {
+      buffer[idx] = static_cast<float>(it.Get()[2]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[1]);
+      ++idx;
+      buffer[idx] = static_cast<float>(it.Get()[0]);
+      ++idx;
+      buffer[idx] = 255.;
+      ++idx;
+    }
 
-  assert( tile.m_TextureId!=0 );
+    // Now load the texture
+    assert( tile.m_TextureId==0 );
 
-  // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
+    glGenTextures( 1, &tile.m_TextureId );
 
-  glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
+    // Following assert is sometimes false on some OpenGL systems for
+    // some unknown reason even though the glGenTexture() call has
+    // succeeded.
+    // assert( glGetError()==GL_NO_ERROR );
+
+    assert( tile.m_TextureId!=0 );
+
+    // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
+
+    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 #endif
-  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 // #if defined(GL_CLAMP_TO_BORDER)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
@@ -504,19 +641,20 @@ void GlImageActor::LoadTile(Tile& tile)
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
 //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
 // #elif defined (GL_MIRRORED_REPEAT)
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
-  glTexImage2D(
-    GL_TEXTURE_2D, 0, GL_RGB32F,
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-    extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
-    0, GL_BGRA, GL_FLOAT,
-    buffer);
+    glTexImage2D(
+      GL_TEXTURE_2D, 0, GL_RGB32F,
+      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
+      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
+      0, GL_BGRA, GL_FLOAT,
+      buffer);
 
-  tile.m_Loaded = true;
+    tile.m_Loaded = true;
 
-  delete [] buffer;
+    delete [] buffer;
+  }
 
   // And push to loaded texture
   m_LoadedTiles.push_back(tile);
