@@ -229,6 +229,9 @@ main( int argc, char * argv[] )
 
   //
   // 4. Check OpenGL capabilities
+#if OTB_DEBUG
+  std::cout << "mainWindow.CheckGLCapabilities();" << std::endl;
+#endif
   if( !mainWindow.CheckGLCapabilities( flags.forceNoGLSL ) )
     return ERROR_CODE_GL_VERSION;
 
@@ -245,10 +248,16 @@ main( int argc, char * argv[] )
   // 6. Load command-line filenames.
   args.pop_front();
 
+#if OTB_DEBUG
+  std::cout << "mainWindow.ImportImages();" << std::endl;
+#endif
   mainWindow.ImportImages( args, !flags.forceNoOverviews );
 
   //
   // 6. Let's go: run the application and return exit code.
+#if OTB_DEBUG
+  std::cout << "QCoreApplication::instance()->exec();" << std::endl;
+#endif
   int result = QCoreApplication::instance()->exec();
 
   // Coverity-14835
