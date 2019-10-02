@@ -49,13 +49,25 @@ struct BufferObjectPolicy
   void
   Generate( Id_t & id )
     {
+#if OTB_DEBUG
+      std::cout << "glGenBuffers()" << std::endl;
+#endif
+
       glGenBuffers( 1, &id );
+
+#if OTB_DEBUG
+  std::cout << "-> " << id << std::endl;
+#endif
     }
 
   static
   void
   Bind( Id_t id )
     {
+#if OTB_DEBUG
+      std::cout << "glBindBuffer( " << id << " )" << std::endl;
+#endif
+
       glBindBuffer( static_cast< GLenum >( E ), id );
     }
 
@@ -63,6 +75,10 @@ struct BufferObjectPolicy
   void
   Release( Id_t & id )
     {
+#if OTB_DEBUG
+      std::cout << "glDeleteBuffers( " << id << " )" << std::endl;
+#endif
+
       glDeleteBuffers( 1, &id );
     }
 };
@@ -116,6 +132,12 @@ struct BufferObject
   BufferObject( BufferObject && ) = default;
 
   BufferObject & operator = ( BufferObject && ) = default;
+
+  /** Cast operator. */
+  operator Id_t() const noexcept
+  {
+    return m_Id;
+  }
 
   void
   Bind( bool isEnabled = true ) const
