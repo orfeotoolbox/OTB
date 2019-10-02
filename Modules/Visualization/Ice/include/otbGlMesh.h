@@ -60,6 +60,11 @@ struct Mesh
   void
   Bind( bool isEnabled = true )
   {
+    assert( glIsBuffer( m_VBO ) );
+    assert( glIsBuffer( m_IBO ) );
+
+    assert( glIsVertexArray( m_VAO ) );
+
     m_VAO.Bind( isEnabled );
     m_VBO.Bind( isEnabled );
     m_IBO.Bind( isEnabled );
