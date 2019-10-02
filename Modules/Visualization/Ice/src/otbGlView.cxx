@@ -557,14 +557,14 @@ GlView
   assert( RgbPixel::Length==3 );
   assert( sizeof( GLubyte )==1 );
 
-  RgbPixel::ValueType * glBuffer = new RgbPixel::ValueType[ RgbPixel::Length  * count ];
+  auto glBuffer = std::make_unique< RgbPixel::ValueType[] >( RgbPixel::Length  * count );
   assert( glBuffer!=NULL );
 
   glReadPixels(
     0, 0,
     size[ 0 ], size[ 1 ],
     GL_RGB, GL_UNSIGNED_BYTE,
-    glBuffer
+    glBuffer.get()
   );
 
   //
@@ -584,7 +584,7 @@ GlView
 
   //
   // Copy & flip OpenGL pixel buffer into itk::RGBAPixel<> buffer.
-  RgbPixel * itkBuffer = new RgbPixel[ count ];
+  auto itkBuffer = std::make_unique< RgbPixel[] >( count );
   assert( itkBuffer );
 
   for( unsigned long j=0; j<size[ 1 ]; ++j )
@@ -601,9 +601,6 @@ GlView
       itkBuffer[ itkOffset ][ 2 ] = glBuffer[ glOffset + 2 ];
       }
 
-  delete[] glBuffer;
-  glBuffer = nullptr;
-
   //
   // Setup import RGBA-image filter.
   ImportRgbImageFilter::Pointer filter( ImportRgbImageFilter::New() );
@@ -617,7 +614,7 @@ GlView
   // Pass ownership of allocated buffer to ImportRgbImageFilter. So,
   // it will be deleted automatically in case an exception is thrown.
   filter->SetImportPointer(
-    itkBuffer,
+    itkBuffer.release(),
     count,
     true
   );
