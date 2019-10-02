@@ -31,7 +31,7 @@
 namespace otb
 {
 
-class OTBIce_EXPORT GlActor 
+class OTBIce_EXPORT GlActor
   : public itk::Object
 {
 public:
@@ -43,7 +43,7 @@ public:
   itkSetObjectMacro(Settings,ViewSettings);
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
-  
+
   itkSetMacro(Visible,bool);
   itkGetMacro(Visible,bool);
   itkBooleanMacro(Visible);
@@ -59,8 +59,8 @@ public:
   itkGetMacro( Overlay, bool );
   itkBooleanMacro( Overlay );
 
-  itkGetObjectMacro(Shader,Shader);
-  itkSetObjectMacro(Shader,Shader);
+  itkGetObjectMacro( Shader, Shader );
+  itkSetObjectMacro( Shader, Shader );
 
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
@@ -86,8 +86,8 @@ protected:
 
 private:
   // prevent implementation
-  GlActor(const Self&);
-  void operator=(const Self&);
+  GlActor( const Self & ) = delete;
+  void operator=( const Self & ) = delete;
 
   ViewSettings::Pointer m_Settings;
 
