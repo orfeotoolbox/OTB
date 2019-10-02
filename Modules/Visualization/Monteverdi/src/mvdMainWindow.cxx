@@ -104,7 +104,6 @@ namespace mvd
   Context comment for translator.
 */
 
-
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
@@ -144,7 +143,7 @@ MainWindow
   m_KeymapDialog( NULL ),
   m_ProjectionBarWidget( NULL ),
   m_GLSL140( -2 ),
-  m_isGLSLAvailable( false ),
+  // m_isGLSLAvailable( false ),
   m_ForceNoGLSL( false )
 {
   m_UI->setupUi( this );
@@ -179,8 +178,8 @@ bool
 MainWindow
 ::CheckGLCapabilities( bool forceNoGLSL )
 {
-  assert( m_ImageView!=NULL );
-  assert( m_ImageView->GetRenderer()!=NULL );
+  assert( m_ImageView );
+  assert( m_ImageView->GetRenderer() );
 
   // Coverity-19845
   //
@@ -188,8 +187,17 @@ MainWindow
   //     m_ImageView->GetRenderer()==NULL )
   //   return false;
 
-  m_isGLSLAvailable =
-    m_ImageView->GetRenderer()->CheckGLCapabilities( &m_GLSL140 );
+  int glsl140 = 0;
+
+  bool isGLSLAvailable =
+    m_ImageView->CheckGLCapabilities( &glsl140 );
+
+  assert( GetQuicklookView() );
+
+  int glsl140QL = 0;
+
+  bool isGLSLAvailableQL =
+    GetQuicklookView()->CheckGLCapabilities( &glsl140QL );
 
 #if FORCE_NO_GLSL
   qWarning() << "No-GLSL is always forced in this build!";
@@ -201,7 +209,9 @@ MainWindow
 
 #endif // FORCE_NO_GLSL
 
-  bool isGLSL = m_isGLSLAvailable && !m_ForceNoGLSL;
+  bool isAvailable = isGLSLAvailable && isGLSLAvailableQL;
+
+  bool isEnabled = isAvailable && !m_ForceNoGLSL;
 
   {
     assert( m_UI!=NULL );
@@ -209,15 +219,15 @@ MainWindow
 
     bool isBlocked = m_UI->action_GLSL->blockSignals( true );
 
-    m_UI->action_GLSL->setEnabled( m_isGLSLAvailable );
-    m_UI->action_GLSL->setChecked( isGLSL );
+    m_UI->action_GLSL->setEnabled( isAvailable );
+    m_UI->action_GLSL->setChecked( isEnabled );
 
     m_UI->action_GLSL->blockSignals( isBlocked );
   }
 
-  SetGLSLEnabled( isGLSL );
+  SetGLSLEnabled( isEnabled );
 
-  return ( !m_isGLSLAvailable || m_ForceNoGLSL ) || m_isGLSLAvailable;
+  return ( !isAvailable || m_ForceNoGLSL ) || isGLSLAvailable;
 }
 
 /*****************************************************************************/
@@ -225,60 +235,38 @@ void
 MainWindow
 ::SetGLSLEnabled( bool enabled )
 {
+#if OTB_DEBUG
+  std::cout << "MainWindow::SetGLSLEnabled( " << enabled << " )" << std::endl;
+#endif
+
   //
   // Image view
-  {
-    assert( m_ImageView!=NULL );
+  assert( m_ImageView );
 
-    AbstractImageViewRenderer * renderer = m_ImageView->GetRenderer();
+  bool glslEnabled =
+    m_ImageView->SetGLSLEnabled( !m_ForceNoGLSL && enabled );
 
-    assert( renderer!=NULL );
+  // MANTIS-1204
+  // {
+  //
+  // Forward GLSL state to quicklook view.
+  assert( GetQuicklookView() );
 
-    if( renderer->SetGLSLEnabled( enabled )!=enabled )
-      {
-      renderer->ClearScene( true );
-      renderer->UpdateScene();
-
-      m_ImageView->updateGL();
-      }
-  }
-
-  {
-    ImageViewWidget * quicklookView = GetQuicklookView();
-    assert( quicklookView!=NULL );
-
-    // MANTIS-1204
-    // {
-    //
-    // Forward GLSL state to quicklook view.
-    assert( GetQuicklookView()->GetRenderer()!=NULL );
-
-    AbstractImageViewRenderer * renderer = quicklookView->GetRenderer();
-
-    assert( renderer!=NULL );
-
-    if( renderer->SetGLSLEnabled( enabled )!=enabled )
-      {
-      renderer->ClearScene( true );
-      renderer->UpdateScene();
-
-      quicklookView->updateGL();
-      }
-    // }
-  }
+  glslEnabled =
+    GetQuicklookView()->SetGLSLEnabled( glslEnabled );
 
   //
   // Shader widget
-  assert( m_ShaderWidget!=NULL );
+  assert( m_ShaderWidget );
 
-  m_ShaderWidget->SetGLSLEnabled( enabled );
+  m_ShaderWidget->SetGLSLEnabled( glslEnabled );
   m_ShaderWidget->SetGLSL140Enabled( m_GLSL140>=0 );
 
   //
   // Status bar widget.
-  assert( m_StatusBarWidget!=NULL );
+  assert( m_StatusBarWidget );
 
-  m_StatusBarWidget->SetGLSLEnabled( enabled );
+  m_StatusBarWidget->SetGLSLEnabled( glslEnabled );
 
   //
   // Paint
@@ -1684,7 +1672,7 @@ MainWindow
 {
   // qDebug() << this << "::on_action_GLSL_triggered(" << checked << ")";
 
-  SetGLSLEnabled( m_isGLSLAvailable && !m_ForceNoGLSL && checked );
+  SetGLSLEnabled( /* m_isGLSLAvailable && !m_ForceNoGLSL && */ checked );
 }
 
 /*****************************************************************************/

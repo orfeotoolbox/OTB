@@ -140,7 +140,7 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities( int * ) override;
+  bool CheckGLCapabilities( int * ) const override;
 
   /**
    */
@@ -170,14 +170,14 @@ public:
   void GetViewExtent( PointType& origin,
                               PointType& extent ) const override;
 
-  
+
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const override;
 
   void InitializeGL() override;
 
   void ResizeGL( int width, int height ) override;
 
-  
+
   void PaintGL( const AbstractImageViewRenderer::RenderingContext* context ) override;
 
   void Pick( const PointType & view,
@@ -199,6 +199,12 @@ public:
                const SpacingType & vspacing ) const;
 
   bool IsEffectsEnabled() const override;
+
+  bool IsGLSLAvailable() const noexcept override;
+
+  bool SetGLSLEnabled( bool ) override;
+
+  bool IsGLSLEnabled() const noexcept override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

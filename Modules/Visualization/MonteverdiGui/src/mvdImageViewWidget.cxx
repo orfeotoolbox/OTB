@@ -1397,24 +1397,26 @@ ImageViewWidget
     }
 }
 
-void ImageViewWidget
+/******************************************************************************/
+void
+ImageViewWidget
 ::OnResetEffectsRequested()
 {
-    StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
 
-    for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
-         it!=layerStack->End();
-         ++it )
+  for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
+       it!=layerStack->End();
+       ++it )
+  {
+    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
-        if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
-        {
-            VectorImageModel * imageModel =
-                qobject_cast< VectorImageModel * >( it->second );
+      VectorImageModel * imageModel =
+	qobject_cast< VectorImageModel * >( it->second );
 
-            VectorImageSettings & settings = imageModel->GetSettings();
-            settings.SetEffect( EFFECT_NORMAL );
-        }
+      VectorImageSettings & settings = imageModel->GetSettings();
+      settings.SetEffect( EFFECT_NORMAL );
     }
+  }
 
   emit ModelUpdated();
 }
@@ -1453,6 +1455,8 @@ ImageViewWidget
 {
   // qDebug() << this << "::OnContentChanged()";
 
+  makeCurrent();
+
   UpdateScene();
 
   if( !ApplyFixedZoomType() )
@@ -1465,6 +1469,8 @@ ImageViewWidget
 ::OnContentReset()
 {
   // qDebug() << this << "::OnContentReset()";
+
+  makeCurrent();
 
   UpdateScene();
 
@@ -2249,6 +2255,7 @@ ImageViewWidget
       }
     }
 
+  makeCurrent();
 
   assert( m_Renderer!=NULL );
 
@@ -2398,6 +2405,60 @@ ImageViewWidget
 
   // Centering must be done at the last step.
   m_Manipulator->CenterOn( center );
+}
+
+/******************************************************************************/
+bool
+ImageViewWidget
+::CheckGLCapabilities( int * glsl140 )
+{
+  assert( m_Renderer );
+
+  makeCurrent();
+
+  return m_Renderer->CheckGLCapabilities( glsl140 );
+}
+
+/******************************************************************************/
+bool
+ImageViewWidget
+::SetGLSLEnabled( bool isEnabled ) noexcept
+{
+  assert( m_Renderer );
+
+  bool glslEnabled = m_Renderer->IsGLSLAvailable() && isEnabled;
+
+  if( m_Renderer->IsGLSLEnabled()==glslEnabled )
+    return m_Renderer->IsGLSLEnabled();
+
+  makeCurrent();
+
+  ClearScene( true );
+
+#if OTB_DEBUG
+  std::cout
+    << "ImageViewRenderer( 0x" << std::hex << m_Renderer << std::dec
+    << " )::SetGLSLEnabled( " << glslEnabled << " )"
+    << std::endl;
+#endif
+
+  m_Renderer->SetGLSLEnabled( glslEnabled );
+
+  UpdateScene();
+
+  updateGL();
+
+  return glslEnabled;
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::ClearScene( bool keepViewport )
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->ClearScene( keepViewport );
 }
 
 /******************************************************************************/

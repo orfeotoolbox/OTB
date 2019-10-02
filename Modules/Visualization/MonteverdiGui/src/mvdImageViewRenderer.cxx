@@ -151,7 +151,7 @@ ImageViewRenderer
 /*****************************************************************************/
 bool
 ImageViewRenderer
-::CheckGLCapabilities( int * glsl140 )
+::CheckGLCapabilities( int * glsl140 ) const
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -165,7 +165,7 @@ ImageViewRenderer
       tr( "Required OpenGL version '%1' with GLSL version '%2'." )
       .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
       .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
-    ).c_str();
+      ).c_str();
 
   //
   // Get and check OpenGL and GLSL versions.
@@ -173,11 +173,15 @@ ImageViewRenderer
   const char * glVersion = NULL;
   const char * glslVersion = NULL;
 
+  assert( !m_GlView.IsNull() );
+
   bool isOk = false;
 
   try
-    {
-    isOk = otb::GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+  {
+    std::size_t glslVer = m_GlView->CheckGLCapabilities( glVersion, glslVersion );
+
+    isOk = glslVer>0;
 
     if( glsl140!=NULL )
       *glsl140 = otb::GlVersionChecker::VerCmp( glslVersion, "1.40" );
@@ -185,24 +189,24 @@ ImageViewRenderer
     //
     // Trace runtime OpenGL and GLSL versions.
     qWarning() <<
-    ToStdString(
-      tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
-      .arg( glVersion )
-      .arg( glslVersion )
-    ).c_str();
-    }
+      ToStdString(
+	tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
+	.arg( glVersion )
+	.arg( glslVersion )
+	).c_str();
+  }
   catch( std::exception& exc )
-    {
+  {
     QMessageBox::critical(
       qobject_cast< QWidget* >( parent() ),
       tr( "Critical error!"),
       ToQString( exc.what() )
-    );
-    }
+      );
+  }
 
   //
   // Set GLSL effects state.
-  SetGLSLEnabled( isOk );
+  // SetGLSLEnabled( isOk );
 
   //
   // Return if check has succeeded.
@@ -217,7 +221,7 @@ ImageViewRenderer
     .arg( glslVersion )
     .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
     .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
-  );
+    );
 
   //
   // Warn user is check has failed.
@@ -228,7 +232,7 @@ ImageViewRenderer
     qobject_cast< QWidget* >( parent() ),
     tr( "Critical error!" ),
     message
-  );
+    );
 #endif
 
   //
@@ -795,18 +799,18 @@ ImageViewRenderer
         case EFFECT_LUT_JET:
           shader->SetShaderType(otb::SHADER_LUT_JET);
           break;
-          
+
         case EFFECT_LUT_LOCAL_JET:
           shader->SetShaderType(otb::SHADER_LUT_LOCAL_JET);
           shader->SetRadius( settings.GetSize() );
           shader->SetLocalContrastRange(settings.GetValue());
-          
+
           break;
-          
+
         case EFFECT_LUT_HOT:
           shader->SetShaderType(otb::SHADER_LUT_HOT);
           break;
-          
+
         case EFFECT_LUT_LOCAL_HOT:
           shader->SetShaderType(otb::SHADER_LUT_LOCAL_HOT);
           shader->SetRadius( settings.GetSize() );
@@ -817,18 +821,18 @@ ImageViewRenderer
         case EFFECT_LUT_SUMMER:
           shader->SetShaderType(otb::SHADER_LUT_SUMMER);
           break;
-          
+
         case EFFECT_LUT_LOCAL_SUMMER:
           shader->SetShaderType(otb::SHADER_LUT_LOCAL_SUMMER);
           shader->SetRadius( settings.GetSize() );
           shader->SetLocalContrastRange(settings.GetValue());
 
           break;
-          
+
         case EFFECT_LUT_WINTER:
           shader->SetShaderType(otb::SHADER_LUT_WINTER);
           break;
-          
+
         case EFFECT_LUT_LOCAL_WINTER:
           shader->SetShaderType(otb::SHADER_LUT_LOCAL_WINTER);
           shader->SetRadius( settings.GetSize() );
@@ -839,7 +843,7 @@ ImageViewRenderer
                   case EFFECT_LUT_COOL:
           shader->SetShaderType(otb::SHADER_LUT_COOL);
           break;
-          
+
         case EFFECT_LUT_LOCAL_COOL:
           shader->SetShaderType(otb::SHADER_LUT_LOCAL_COOL);
           shader->SetRadius( settings.GetSize() );
@@ -850,7 +854,7 @@ ImageViewRenderer
 
 
 
-          
+
 	      default:
 		assert( false && "Unhandled mvd::Effect value!" );
 		break;
@@ -919,22 +923,21 @@ ImageViewRenderer
     ClearScene();
 
   else
+  {
     {
-      {
       otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
       for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
 	   it!=keys.end();
 	   ++it )
 	if( !stackedLayerModel->Contains( *it ) )
-	  {
+	{
 	  // qDebug()
 	  //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
 
 	  m_GlView->RemoveActor( *it );
-	  }
-      }
-
+	}
+    }
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
@@ -943,11 +946,11 @@ ImageViewRenderer
          it!=stackedLayerModel->End();
          ++it )
       if( !m_GlView->ContainsActor( it->first ) )
-        {
+      {
         assert( it->second!=NULL );
 
         if( it->second->inherits( VectorImageModel::staticMetaObject.className()))
-          {
+	{
           otb::GlImageActor::Pointer glImageActor( otb::GlImageActor::New() );
 
           // Should all AbstractLayerModel have a ::GetFilename()
@@ -972,18 +975,18 @@ ImageViewRenderer
 	  //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
 
 	  if( IsGLSLEnabled() )
-	    {
+	  {
 	    // qDebug() << "Created shader for" << FromStdString( it->first );
 
 	    glImageActor->CreateShader();
-	    }
+	  }
 
           glImageActor->Initialize(
             QFile::encodeName(
               vectorImageModel->GetFilename()
-            )
+	      )
 	    .constData()
-          );
+	    );
 
           m_GlView->AddActor( glImageActor, it->first );
 
@@ -991,15 +994,15 @@ ImageViewRenderer
 	  //   QString( "Added image-actor '%1' from file '%2'" )
 	  //   .arg( FromStdString( it->first ) )
 	  //   .arg( vectorImageModel->GetFilename() );
-          }
+	}
         else
-          {
+	{
           assert( false && "Unhandled AbstractLayerModel derived type." );
-          }
-        }
+	}
+      }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
-    }
+  }
 
   RefreshScene();
 }
@@ -1371,6 +1374,42 @@ ImageViewRenderer
   assert( !m_GlView.IsNull() );
 
   return m_GlView->ZoomToFull( key, center, spacing );
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::IsGLSLAvailable() const noexcept
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->IsGLSLAvailable();
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::IsGLSLEnabled() const noexcept
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->IsGLSLEnabled();
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::SetGLSLEnabled( bool isEnabled )
+{
+  assert( !m_GlView.IsNull() );
+
+  bool wasGLSLEnabled = m_GlView->IsGLSLEnabled();
+
+  assert( m_GlView->IsEmpty() );
+
+  m_GlView->SetGLSLEnabled( isEnabled );
+
+  return wasGLSLEnabled;
 }
 
 /******************************************************************************/

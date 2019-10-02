@@ -138,7 +138,7 @@ public:
 
   /**
    */
-  virtual bool CheckGLCapabilities( int * ) =0;
+  virtual bool CheckGLCapabilities( int * ) const =0;
 
   template< typename T >
   const T * GetReferenceModel() const;
@@ -221,10 +221,13 @@ public:
   inline bool IsBypassRenderingEnabled() const;
   /**
    */
-  inline bool SetGLSLEnabled( bool );
+  virtual bool IsGLSLAvailable() const noexcept = 0;
   /**
    */
-  inline bool IsGLSLEnabled() const;
+  virtual bool SetGLSLEnabled( bool ) = 0;
+  /**
+   */
+  virtual bool IsGLSLEnabled() const noexcept = 0;
   /**
    */
   virtual bool IsEffectsEnabled() const = 0;
@@ -278,8 +281,7 @@ protected:
   AbstractImageViewRenderer( QObject* p = NULL ) :
     QObject( p ),
     m_StackedLayerModel( NULL ),
-    m_BypassRenderingEnabled( false ),
-    m_GLSLEnabled( true )
+    m_BypassRenderingEnabled( false )
   {
   }
 
@@ -318,16 +320,19 @@ private:
 				     PointType &,
 				     SpacingType & ) const
   { return false; }
+
   /**
    */
   virtual bool virtual_ZoomToExtent( PointType &, SpacingType & ) const
   { return false; }
+
   /**
    */
   virtual bool virtual_ZoomToLayer( const StackedLayerModel::KeyType &,
 				    PointType &,
 				    SpacingType & ) const
   { return false; }
+
   /**
    */
   virtual bool virtual_ZoomToFull( const StackedLayerModel::KeyType &,
@@ -346,7 +351,7 @@ private:
   bool m_BypassRenderingEnabled: 1;
   /**
    */
-  bool m_GLSLEnabled: 1;
+  // bool m_GLSLEnabled: 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
@@ -437,26 +442,28 @@ AbstractImageViewRenderer
 }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::IsGLSLEnabled() const
-{
-  return m_GLSLEnabled;
-}
+// inline
+// bool
+// AbstractImageViewRenderer
+// ::IsGLSLEnabled() const
+// {
+//   return m_GLSLEnabled;
+// }
 
 /*****************************************************************************/
-inline
-bool
-AbstractImageViewRenderer
-::SetGLSLEnabled( bool isEnabled )
-{
-  bool wasEnabled = m_GLSLEnabled;
+// inline
+// bool
+// AbstractImageViewRenderer
+// ::SetGLSLEnabled( bool isEnabled )
+// {
+//   bool wasEnabled = m_GLSLEnabled;
 
-  m_GLSLEnabled = isEnabled;
+//   virtual_SetGLSLEnabled( isEnabled );
 
-  return wasEnabled;
-}
+//   m_GLSLEnabled = isEnabled;
+
+//   return wasEnabled;
+// }
 
 /*****************************************************************************/
 inline
