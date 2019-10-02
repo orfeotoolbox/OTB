@@ -598,7 +598,12 @@ void GlImageActor::LoadTile(Tile& tile)
   {
     itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
 
-    float * buffer = new float[4*extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()];
+    auto buffer =
+      std::make_unique< float[] >(
+	4 * extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
+	);
+
+    assert( buffer );
 
     unsigned int idx = 0;
 
@@ -649,11 +654,10 @@ void GlImageActor::LoadTile(Tile& tile)
       extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
       extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
       0, GL_BGRA, GL_FLOAT,
-      buffer);
+      buffer.get()
+      );
 
     tile.m_Loaded = true;
-
-    delete [] buffer;
   }
 
   // And push to loaded texture
