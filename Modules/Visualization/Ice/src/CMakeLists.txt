@@ -31,6 +31,7 @@ set(OTBICE_SRCS
   otbGlVectorActor.cxx
   otbGlVersionChecker.cxx
   otbGlTypeTraits.cxx
+  otbGlVersionChecker.cxx
   otbGlVertexArrayObject.cxx
   otbImageSettings.cxx
   otbMinimalShader.cxx

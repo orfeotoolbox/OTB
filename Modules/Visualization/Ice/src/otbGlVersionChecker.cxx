@@ -40,7 +40,7 @@ const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.30";
 
 const char *
 GlVersionChecker
-::GLVersion()
+::GLVersion() noexcept
 {
   const GLubyte * glVersionStr = glGetString( GL_VERSION );
 
@@ -61,7 +61,7 @@ GlVersionChecker
 
 const char *
 GlVersionChecker
-::GLSLVersion()
+::GLSLVersion() noexcept
 {
   const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
 
@@ -82,7 +82,18 @@ GlVersionChecker
 
 bool
 GlVersionChecker
-::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion )
+::CheckGLCapabilities() noexcept
+{
+  char const * glVersion = nullptr;
+  char const * glslVersion = nullptr;
+
+  return GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+}
+
+
+bool
+GlVersionChecker
+::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion ) noexcept
 {
   // Get OpenGL version.
   glVersion = GlVersionChecker::GLVersion();
@@ -114,7 +125,7 @@ GlVersionChecker
 ::SplitVersion( const char * version,
                 int& major,
                 int& minor,
-                int& release )
+                int& release ) noexcept
 {
   //
   // Special case: empty strings returns 0.0.0 and true.
@@ -174,7 +185,7 @@ GlVersionChecker
 
 int
 GlVersionChecker
-::VerCmp( const char * version, const char * required )
+::VerCmp( const char * version, const char * required ) noexcept
 {
   //
   // Split version.
