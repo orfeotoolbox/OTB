@@ -164,16 +164,20 @@ GlView
   // Clear back-buffer(s) before rendering
   glClear( GL_COLOR_BUFFER_BIT );
 
-  // Setup projection according to view settings
   double ulx = -1.0;
   double uly = -1.0;
   double lrx = 1.0;
   double lry = 1.0;
 
+  assert( !m_Settings.IsNull() );
+
   m_Settings->GetViewportExtent(ulx,uly,lrx,lry);
 
   if( m_IsGLSLAvailable && m_IsGLSLEnabled )
   {
+    // TODO: Use GLM [1] for OpenGL linear algebra.
+    // [1]: https://glm.g-truc.net/0.9.9/index.html
+
     m_ProjMatrix[0] = 2.0/(lrx-ulx);
     m_ProjMatrix[1] = 0.0;
     m_ProjMatrix[2] = 0.0;
@@ -237,7 +241,9 @@ GlView
   }
   else
   {
-    glOrtho(ulx, lrx, lry, uly, -1, 1);
+    // Setup projection according to view settings
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
     // std::cout
     //   << "glOrtho( "
@@ -246,14 +252,24 @@ GlView
     //   << ", -1, 1 )"
     //   << std::endl;
 
+    glOrtho(ulx, lrx, lry, uly, -1, 1);
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glPushMatrix();
+    // glPushMatrix();
 
-    glTranslatef(m_Settings->GetRotationCenter()[0],m_Settings->GetRotationCenter()[1],0);
-    glRotatef(-m_Settings->GetRotationAngle()*180/M_PI,0,0,1);
-    glTranslatef(-m_Settings->GetRotationCenter()[0],-m_Settings->GetRotationCenter()[1],0);
+    glTranslatef(
+      m_Settings->GetRotationCenter()[ 0 ],
+      m_Settings->GetRotationCenter()[ 1 ], 0
+      );
+
+    glRotatef( -m_Settings->GetRotationAngle() * 180.0 / M_PI, 0, 0, 1 );
+
+    glTranslatef(
+      -m_Settings->GetRotationCenter()[ 0 ],
+      -m_Settings->GetRotationCenter()[ 1 ],
+      0);
   }
 }
 
@@ -262,7 +278,8 @@ void GlView::AfterRendering()
   // std::cout << "geometry-changed: FALSE" << std::endl;
 
   m_Settings->SetGeometryChanged(false);
-  glPopMatrix();
+
+  // glPopMatrix();
 }
 
 std::string GlView::AddActor(ActorType * actor, const std::string& key)

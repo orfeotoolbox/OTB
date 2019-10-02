@@ -507,6 +507,24 @@ void GlImageActor::Render()
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
   {
+    // std::cout << it->m_LL[ 0 ] << ", " << it->m_LL[ 1 ] << std::endl;
+    // std::cout << it->m_LR[ 0 ] << ", " << it->m_LR[ 1 ] << std::endl;
+    // std::cout << it->m_UR[ 0 ] << ", " << it->m_UR[ 1 ] << std::endl;
+    // std::cout << it->m_UL[ 0 ] << ", " << it->m_UL[ 1 ] << std::endl;
+
+    // glDisable( GL_BLEND );
+
+    // glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
+
+    // glBegin( GL_QUADS );
+    // {
+    //   glVertex2f( it->m_LL[ 0 ], it->m_LL[ 1 ] );
+    //   glVertex2f( it->m_LR[ 0 ], it->m_LR[ 1 ] );
+    //   glVertex2f( it->m_UR[ 0 ], it->m_UR[ 1 ] );
+    //   glVertex2f( it->m_UL[ 0 ], it->m_UL[ 1 ] );
+    // }
+    // glEnd();
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
