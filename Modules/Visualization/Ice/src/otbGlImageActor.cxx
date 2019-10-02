@@ -454,26 +454,23 @@ void GlImageActor::Render()
 
       for(imIt.GoToBegin(),inIt.GoToBegin();!imIt.IsAtEnd()&&!inIt.IsAtEnd();++imIt,++inIt)
       {
-        buffer[idx] = static_cast<unsigned char>(imIt.Get()[2]);
-        ++idx;
-        buffer[idx] = static_cast<unsigned char>(imIt.Get()[1]);
-        ++idx;
-        buffer[idx] = static_cast<unsigned char>(imIt.Get()[0]);
-        ++idx;
-        buffer[idx] = 255;
-
-        if(m_ImageSettings->GetUseNoData() && (inIt.Get()[0] == noData ||inIt.Get()[1] == noData ||inIt.Get()[2] == noData))
-	{
-          buffer[idx] = 0;
-	}
-
-        ++idx;
+        buffer[ idx++ ] = static_cast< GLubyte >(imIt.Get()[2]);
+        buffer[ idx++ ] = static_cast< GLubyte >(imIt.Get()[1]);
+        buffer[ idx++ ] = static_cast< GLubyte >(imIt.Get()[0]);
+        buffer[ idx++ ] =
+	  ( m_ImageSettings->GetUseNoData() &&
+	    ( inIt.Get()[ 0 ] == noData ||
+	      inIt.Get()[ 1 ] == noData ||
+	      inIt.Get()[ 2 ] == noData ) )
+	  ? 0
+	  : 255;
       }
 
-      if(!it->m_TextureId)
-      {
-        glGenTextures(1, &(it->m_TextureId));
-      }
+      assert( it->m_TextureId );
+
+      // if(!it->m_TextureId)
+      //   glGenTextures(1, &(it->m_TextureId));
+
       glBindTexture(GL_TEXTURE_2D, it->m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
@@ -528,6 +525,7 @@ void GlImageActor::Render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
+    glEnable( GL_TEXTURE_2D );
     glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -563,7 +561,7 @@ void GlImageActor::Render()
     else
     {
       // Reset color before rendering
-      glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
+      // glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
 
       glBegin( GL_QUADS );
       {
