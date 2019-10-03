@@ -67,6 +67,64 @@ namespace otb
 {
 
 
+GlImageActor::Tile
+::~Tile()
+{
+  // Release();
+}
+
+
+void
+GlImageActor::Tile
+::Release()
+{
+  assert( m_TextureId );
+
+  glDeleteTextures( 1, &m_TextureId );
+
+  // std::cout << "Deleted texture #" << m_TextureId << std::endl;
+
+  m_TextureId = GL_ZERO;
+
+#if 0
+  tile.m_Image = VectorImageType::Pointer();
+
+  tile.m_RescaleFilter = RescaleFilterType::Pointer();
+
+  tile.m_Loaded = false;
+#endif
+}
+
+
+void
+GlImageActor::Tile
+::Link( GlImageActor::ReaderType::OutputImageType * i )
+{
+  assert( i );
+
+  assert( !m_Loaded );
+  assert( m_Image.IsNull() );
+
+  auto extract = ExtractROIFilterType::New();
+
+  assert( extract );
+
+  extract->SetInput( i );
+
+  extract->SetExtractionRegion( m_ImageRegion );
+
+  extract->SetChannel( m_RedIdx );
+  extract->SetChannel( m_GreenIdx );
+  extract->SetChannel( m_BlueIdx );
+
+  // std::cout << "ExtractROIFilter::Update()...";
+  extract->Update();
+  // std::cout << "\tDONE\n";
+
+  m_Image = extract->GetOutput();
+}
+
+
 GlImageActor::GlImageActor()
   : m_TileSize(256),
     m_FileName(),
@@ -396,7 +454,7 @@ void GlImageActor::Render()
       {
         it->m_RescaleFilter = RescaleFilterType::New();
         it->m_RescaleFilter->AutomaticInputMinMaxComputationOff();
-        it->m_RescaleFilter->SetInput(it->m_Image);
+        it->m_RescaleFilter->SetInput( it->Image() );
       }
 
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
@@ -443,7 +501,7 @@ void GlImageActor::Render()
 
 
       itk::ImageRegionConstIterator<UCharVectorImageType> imIt(it->m_RescaleFilter->GetOutput(),it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion());
-      itk::ImageRegionConstIterator<VectorImageType> inIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator<VectorImageType> inIt(it->Image(),it->Image()->GetLargestPossibleRegion());
 
       auto buffer =
 	std::make_unique< GLubyte[] >(
@@ -596,6 +654,9 @@ void GlImageActor::LoadTile(Tile& tile)
   //   << "]"
   //   << std::endl;
 
+  assert( !m_FileReader.IsNull() );
+
+#if 0
   ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
 
   extract->SetInput(m_FileReader->GetOutput());
@@ -609,14 +670,21 @@ void GlImageActor::LoadTile(Tile& tile)
   // std::cout << "\tDONE\n";
 
   tile.m_Image = extract->GetOutput();
+#else
+  tile.Link( m_FileReader->GetOutput() );
+#endif
+
+  assert( tile.Image() );
 
   if( !m_SoftwareRendering )
   {
-    itk::ImageRegionConstIterator<VectorImageType> it(extract->GetOutput(),extract->GetOutput()->GetLargestPossibleRegion());
+    itk::ImageRegionConstIterator< VectorImageType > it(
+      tile.Image(),
+      tile.Image()->GetLargestPossibleRegion());
 
     auto buffer =
       std::make_unique< float[] >(
-	4 * extract->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
+	4 * tile.Image()->GetLargestPossibleRegion().GetNumberOfPixels()
 	);
 
     assert( buffer );
@@ -667,8 +735,8 @@ void GlImageActor::LoadTile(Tile& tile)
 // #endif
     glTexImage2D(
       GL_TEXTURE_2D, 0, GL_RGB32F,
-      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
-      extract->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
+      tile.Image()->GetLargestPossibleRegion().GetSize()[ 0 ],
+      tile.Image()->GetLargestPossibleRegion().GetSize()[ 1 ],
       0, GL_BGRA, GL_FLOAT,
       buffer.get()
       );
@@ -684,22 +752,7 @@ void GlImageActor::UnloadTile(Tile& tile)
 {
   // std::cout << std::hex << this << std::dec << "::UnloadTile()" << std::endl;
 
-  if( tile.m_Loaded )
-    {
-    assert( tile.m_TextureId>0 );
-
-    glDeleteTextures( 1, &tile.m_TextureId );
-
-    // std::cout << "Deleted texture #" << tile.m_TextureId << std::endl;
-
-    tile.m_TextureId = 0;
-
-    tile.m_Image = VectorImageType::Pointer();
-
-    tile.m_RescaleFilter = RescaleFilterType::Pointer();
-
-    tile.m_Loaded = false;
-    }
+  tile.Release();
 }
 
 void GlImageActor::CleanLoadedTiles()
@@ -715,10 +768,11 @@ void GlImageActor::CleanLoadedTiles()
 
   RegionType requested;
 
-  this->ViewportExtentToImageRegion(ulx,uly,lrx,lry,requested);
+  ViewportExtentToImageRegion( ulx, uly, lrx, lry, requested );
 
-  for(TileVectorType::iterator it = m_LoadedTiles.begin();
-  it!=m_LoadedTiles.end();++it)
+  for( TileVectorType::iterator it = m_LoadedTiles.begin();
+       it!=m_LoadedTiles.end();
+       ++it )
     {
     RegionType tileRegion = it->m_ImageRegion;
 
@@ -746,8 +800,6 @@ void GlImageActor::CleanLoadedTiles()
   // std::cout<<"GPU memory cleanup: removing "<<m_LoadedTiles.size() - newLoadedTiles.size() << " over "<<m_LoadedTiles.size() <<" tiles"<<std::endl;
 
   m_LoadedTiles.swap(newLoadedTiles);
-
-
 }
 
 void GlImageActor::ClearLoadedTiles()
@@ -1022,7 +1074,7 @@ GlImageActor
 
       // std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
 
-      pixel = it->m_Image->GetPixel( idx );
+      pixel = it->Image()->GetPixel( idx );
 
       return true;
       }
@@ -1317,7 +1369,11 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
     // Retrieve all tiles
     for(TileVectorType::iterator it = m_LoadedTiles.begin();it!=m_LoadedTiles.end();++it)
     {
-    itk::ImageRegionConstIterator<VectorImageType> imIt(it->m_Image,it->m_Image->GetLargestPossibleRegion());
+      itk::ImageRegionConstIterator< VectorImageType > imIt(
+	it->Image(),
+	it->Image()->GetLargestPossibleRegion()
+	);
+
     for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
       {
       bool nonan = true;

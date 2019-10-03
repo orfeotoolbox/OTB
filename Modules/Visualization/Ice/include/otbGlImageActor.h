@@ -223,7 +223,6 @@ protected:
         m_TextureId(0),
         m_ImageRegion(),
         m_TileSize(0),
-        m_Image(),
         m_UL(),
         m_UR(),
         m_LL(),
@@ -240,11 +239,20 @@ protected:
       m_LR.Fill(0);
     }
 
+    ~Tile();
+
+    void Link( ReaderType::OutputImageType * );
+
+    ReaderType::OutputImageType::Pointer const &
+    Image() const noexcept
+      { return m_Image; }
+
+    void Release();
+
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
     unsigned int m_TileSize;
-    VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
     PointType m_LL;
@@ -254,9 +262,13 @@ protected:
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
     RescaleFilterType::Pointer m_RescaleFilter;
+
+  private:
+    VectorImageType::Pointer m_Image;
+
   };
 
-  typedef std::vector<Tile>                                                       TileVectorType;
+  typedef std::vector< Tile > TileVectorType;
 
 private:
   // prevent implementation
