@@ -84,7 +84,7 @@ PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::GetInputImage
 }
 
 template <class TInputImage, class TOutputImage>
-void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void PixelSuppressionByDirectionImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

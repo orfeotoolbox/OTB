@@ -78,7 +78,7 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FOR
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 
@@ -616,7 +616,7 @@ void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INV
 }
 
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 

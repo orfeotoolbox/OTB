@@ -157,7 +157,7 @@ protected:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate output information */
   void GenerateOutputInformation(void) override;

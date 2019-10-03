@@ -57,8 +57,7 @@ LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, In
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection, class InterpolatorType>
-void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>::GenerateInputRequestedRegion() throw(
-    itk::InvalidRequestedRegionError)
+void LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, InterpolatorType>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

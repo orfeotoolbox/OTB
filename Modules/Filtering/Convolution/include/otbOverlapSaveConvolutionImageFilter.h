@@ -137,7 +137,7 @@ public:
   /** Since this filter implements a neighborhood operation, it requests a largest input
    * region than the output region.
    */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
