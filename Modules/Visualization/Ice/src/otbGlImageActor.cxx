@@ -76,6 +76,54 @@ GlImageActor::Tile
 
 void
 GlImageActor::Tile
+::Acquire() noexcept
+{
+  // Now load the texture
+  assert( m_TextureId==0 );
+
+  glGenTextures( 1, &m_TextureId );
+
+  // Following assert is sometimes false on some OpenGL systems for
+  // some unknown reason even though the glGenTexture() call has
+  // succeeded.
+  // assert( glGetError()==GL_NO_ERROR );
+
+  assert( m_TextureId!=0 );
+
+  // std::cout << "Generated texture #" << m_TextureId << std::endl;
+
+  glBindTexture( GL_TEXTURE_2D, m_TextureId );
+
+#if defined( GL_TEXTURE_BASE_LEVEL ) && defined( GL_TEXTURE_MAX_LEVEL )
+  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0 );
+  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0 );
+#endif
+
+#if 0
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+#endif
+
+  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+
+// #if defined(GL_CLAMP_TO_BORDER)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+
+// #elif defined (GL_CLAMP_TO_BORDER_EXT)
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
+
+// #elif defined (GL_MIRRORED_REPEAT)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
+
+// #endif
+}
+
+
+void
+GlImageActor::Tile
 ::Release()
 {
   assert( m_TextureId );
@@ -526,8 +574,9 @@ void GlImageActor::Render()
 
       assert( it->m_TextureId );
 
-      // if(!it->m_TextureId)
-      //   glGenTextures(1, &(it->m_TextureId));
+#if 0
+      if(!it->m_TextureId)
+        glGenTextures(1, &(it->m_TextureId));
 
       glBindTexture(GL_TEXTURE_2D, it->m_TextureId);
 #if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
@@ -547,6 +596,9 @@ void GlImageActor::Render()
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
+
+#endif
+
       glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA8,
         it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
@@ -687,6 +739,7 @@ void GlImageActor::LoadTile(Tile& tile)
       ++idx;
     }
 
+#if 0
     // Now load the texture
     assert( tile.m_TextureId==0 );
 
@@ -717,6 +770,12 @@ void GlImageActor::LoadTile(Tile& tile)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 // #endif
+
+#else
+    tile.Acquire();
+
+#endif
+
     glTexImage2D(
       GL_TEXTURE_2D, 0, GL_RGB32F,
       tile.Image()->GetLargestPossibleRegion().GetSize()[ 0 ],
@@ -729,7 +788,7 @@ void GlImageActor::LoadTile(Tile& tile)
   }
 
   // And push to loaded texture
-  m_LoadedTiles.push_back(tile);
+  m_LoadedTiles.push_back( tile );
 }
 
 void GlImageActor::UnloadTile(Tile& tile)

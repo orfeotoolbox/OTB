@@ -34,6 +34,7 @@
 #include "otbMultiChannelExtractROI.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
+
 #include <string>
 
 
@@ -247,6 +248,7 @@ protected:
     Image() const noexcept
       { return m_Image; }
 
+    void Acquire() noexcept;
     void Release();
 
     bool m_Loaded;
@@ -268,7 +270,7 @@ protected:
 
   };
 
-  typedef std::vector< Tile > TileVectorType;
+  typedef std::list< Tile > TileVectorType;
 
 private:
   // prevent implementation
