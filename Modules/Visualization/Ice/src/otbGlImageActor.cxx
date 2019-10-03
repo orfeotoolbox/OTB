@@ -656,23 +656,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
   assert( !m_FileReader.IsNull() );
 
-#if 0
-  ExtractROIFilterType::Pointer extract = ExtractROIFilterType::New();
-
-  extract->SetInput(m_FileReader->GetOutput());
-  extract->SetExtractionRegion(tile.m_ImageRegion);
-  extract->SetChannel(tile.m_RedIdx);
-  extract->SetChannel(tile.m_GreenIdx);
-  extract->SetChannel(tile.m_BlueIdx);
-
-  // std::cout << "ExtractROIFilter::Update()...";
-  extract->Update();
-  // std::cout << "\tDONE\n";
-
-  tile.m_Image = extract->GetOutput();
-#else
   tile.Link( m_FileReader->GetOutput() );
-#endif
 
   assert( tile.Image() );
 
