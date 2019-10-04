@@ -37,8 +37,8 @@ MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImag
 }
 
 template <class TImage>
-MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())), m_Writer(writer), m_ImageIO(NULL)
+MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::Pointer writer)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput())), m_Writer(writer), m_ImageIO(NULL)
 {
 }
 
