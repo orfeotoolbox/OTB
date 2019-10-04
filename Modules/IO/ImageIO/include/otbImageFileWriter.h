@@ -166,7 +166,7 @@ public:
   virtual void SetInput(const InputImageType* input);
 
   /** Get writer only input */
-  const InputImageType* GetInput();
+  const InputImageType* GetInput() const;
 
   /** Override Update() from ProcessObject because this filter
    *  has no output. */

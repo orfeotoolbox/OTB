@@ -226,7 +226,7 @@ void ImageFileWriter<TInputImage>::SetInput(const InputImageType* input)
 }
 
 template <class TInputImage>
-const TInputImage* ImageFileWriter<TInputImage>::GetInput()
+const TInputImage* ImageFileWriter<TInputImage>::GetInput() const
 {
   if (this->GetNumberOfInputs() < 1)
   {
