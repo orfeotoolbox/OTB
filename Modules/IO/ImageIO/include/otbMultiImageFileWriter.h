@@ -138,7 +138,7 @@ public:
    *  when you already have an instanciated writer.
    */
   template <class TWriter>
-  void AddInputWriter(const TWriter* writer)
+  void AddInputWriter(typename TWriter::Pointer writer)
   {
     Sink<typename TWriter::InputImageType>* sink = new Sink<typename TWriter::InputImageType>(writer);
     m_SinkList.push_back(SinkBase::Pointer(sink));
@@ -265,7 +265,7 @@ private:
     {
     }
     Sink(typename TImage::ConstPointer inputImage, const std::string& filename);
-    Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
+    Sink(typename otb::ImageFileWriter<TImage>::Pointer writer);
 
     virtual ~Sink()
     {
