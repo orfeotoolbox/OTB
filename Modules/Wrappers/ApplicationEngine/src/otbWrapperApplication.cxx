@@ -895,7 +895,7 @@ void Application::WriteOutput()
         outputParam->Write();
       }
     }
-    else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
+    else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key, true) && HasValue(key))
     {
       Parameter*                 param       = GetParameterByKey(key);
       OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
