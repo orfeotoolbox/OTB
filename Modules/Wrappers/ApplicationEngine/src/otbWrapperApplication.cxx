@@ -847,7 +847,7 @@ int Application::Execute()
 }
 
 void Application::WriteOutput()
-{
+{std::cout << "yo" << std::endl;
   std::vector<std::string> paramList = GetParametersKeys(true);
   // First Get the value of the available memory to use with the
   // writer if a RAMParameter is set
@@ -895,7 +895,7 @@ void Application::WriteOutput()
         outputParam->Write();
       }
     }
-    else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
+    else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key, true) && HasValue(key))
     {
       Parameter*                 param       = GetParameterByKey(key);
       OutputVectorDataParameter* outputParam = dynamic_cast<OutputVectorDataParameter*>(param);
