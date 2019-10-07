@@ -40,7 +40,7 @@ VarianceImageFilter<TInputImage, TOutputImage>::VarianceImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

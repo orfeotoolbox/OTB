@@ -98,7 +98,7 @@ public:
   void SetInputImageDirection(const InputImageType* image);
   const InputImageType* GetInputImageDirection(void);
 
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   PixelSuppressionByDirectionImageFilter();
