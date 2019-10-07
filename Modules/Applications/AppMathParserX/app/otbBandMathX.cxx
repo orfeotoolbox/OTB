@@ -191,7 +191,10 @@ private:
         "The application is currently unable to produce one output image per "
         "expression, contrary to otbBandMathXImageFilter. "
         "Separating expressions by semicolons ``;`` will concatenate their results "
-        "into a unique multiband output image.");
+        "into a unique multiband output image. \n\n"
+        "Matrix variables cannot be defined directly with the `-exp` parameter (because "
+        "the semicolon ``;`` operator is required to define matrices and already has another meaning). "
+        "A context file should be used when defining matrix variables.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(
         "[1] https://beltoforion.de/article.php?a=muparserx\n\n"
