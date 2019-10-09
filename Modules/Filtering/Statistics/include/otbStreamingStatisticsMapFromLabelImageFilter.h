@@ -97,8 +97,11 @@ public:
       const RealValueType value   = pixel[band];
       const RealValueType sqValue = value * value;
 
-      UpdateValues(!m_UseNoDataValue || value != m_NoDataValue, value, sqValue, value, value, m_BandCount[band], m_Sum[band], m_SqSum[band], m_Min[band],
+      if(!m_UseNoDataValue || value != m_NoDataValue)
+        {
+        UpdateValues(1, value, sqValue, value, value, m_BandCount[band], m_Sum[band], m_SqSum[band], m_Min[band],
                    m_Max[band]);
+        }
     }
   }
 
