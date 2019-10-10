@@ -29,6 +29,8 @@ namespace otb
 {
 
 MinimalShader::MinimalShader()
+  : m_ColorRGB(nullptr)
+  , m_ColorA(nullptr)
 {
   // Register the shader in the ShaderRegistry
   BuildShader();
@@ -38,8 +40,9 @@ MinimalShader::MinimalShader()
   m_Loc.proj = glGetUniformLocation(m_Program, "in_proj");
   m_Loc.modelview = glGetUniformLocation(m_Program, "in_mv");
   //  - for fragment shader
+  m_Loc.color = glGetUniformLocation(m_Program, "in_color");
 
-  m_ColorIdx = glGetAttribLocation(m_Program , "in_color");
+  m_AttribIdx.push_back( glGetAttribLocation(m_Program, "position") );
 }
 
 MinimalShader::~MinimalShader()
@@ -49,14 +52,12 @@ std::string MinimalShader::GetVertexSource() const
 {
   std::string shader_source =
     "#version 130 \n"                                           \
-    "in vec4 in_color;\n"                                       \
-    "out vec4 v_color;\n"                                       \
+    "in vec4 position;\n"                                       \
     "uniform mat4 in_proj;\n"                                   \
     "uniform mat4 in_mv;\n"                                     \
     "void main()\n"                                             \
     "{\n"                                                       \
-    "v_color = in_color;\n"                                     \
-    "gl_Position = in_proj * in_mv * gl_Vertex;\n"              \
+    "gl_Position = in_proj * in_mv * position;\n"               \
     "}";
 
   return shader_source;
@@ -66,10 +67,10 @@ std::string MinimalShader::GetFragmentSource() const
 {
   std::string shader_source =
     "#version 130 \n"                                       \
-    "in vec4 v_color;\n"                                    \
+    "uniform vec4 in_color;\n"                              \
     "out vec4 out_color;\n"                                 \
     "void main (void) {\n"                                  \
-    "out_color = v_color;\n"                                \
+    "out_color = in_color;\n"                                \
     "}";
 
   return shader_source;
@@ -84,6 +85,17 @@ void MinimalShader::SetupShader()
 {
   glUniformMatrix4fv(m_Loc.proj,1, GL_FALSE, m_ProjMatrix);
   glUniformMatrix4fv(m_Loc.modelview,1, GL_FALSE, m_ModelViewMatrix);
+
+  assert(m_ColorRGB);
+  assert(m_ColorA);
+
+  glUniform4f(m_Loc.color, m_ColorRGB[0], m_ColorRGB[1], m_ColorRGB[2], (*m_ColorA));
+}
+
+void MinimalShader::SetColor(const double *rgb, const double *a)
+{
+  m_ColorRGB = rgb;
+  m_ColorA = a;
 }
 
 } // End namespace otb

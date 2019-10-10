@@ -43,7 +43,7 @@ public:
 
   itkNewMacro(Self);
 
-  itkGetMacro(ColorIdx, int);
+  void SetColor(const double *rgb, const double *a);
 
 protected:
   MinimalShader();
@@ -61,15 +61,17 @@ private:
   MinimalShader(const Self&);
   void operator=(const Self&);
 
+  const double *m_ColorRGB;
+  const double *m_ColorA;
+  
   struct UniformLocs
     {
     int proj;
     int modelview;
+    int color;
     };
 
   UniformLocs m_Loc;
-
-  int m_ColorIdx;
 }; // End class MinimalShader
 
 } // End namespace otb
