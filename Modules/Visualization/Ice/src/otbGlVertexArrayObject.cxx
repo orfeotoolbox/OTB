@@ -27,14 +27,10 @@ void
 VertexArrayObjectPolicy
 ::Generate( Id_t & id )
 {
-#if OTB_DEBUG
-  std::cout << "glGenVertexArrays()" << std::endl;
-#endif
-
   glGenVertexArrays( 1, &id );
 
 #if OTB_DEBUG
-  std::cout << "-> " << id << std::endl;
+  std::cout << "glGenVertexArrays() -> " << id << std::endl;
 #endif
 }
 
@@ -43,11 +39,6 @@ void
 VertexArrayObjectPolicy
 ::Bind( Id_t id )
 {
-
-#if OTB_DEBUG
-  std::cout << "glBindVertexArray( " << id << " )" << std::endl;
-#endif
-
   glBindVertexArray( id );
 }
 

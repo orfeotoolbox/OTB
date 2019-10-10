@@ -49,14 +49,10 @@ struct BufferObjectPolicy
   void
   Generate( Id_t & id )
     {
-#if OTB_DEBUG
-      std::cout << "glGenBuffers()" << std::endl;
-#endif
-
-      glGenBuffers( 1, &id );
+    glGenBuffers( 1, &id );
 
 #if OTB_DEBUG
-  std::cout << "-> " << id << std::endl;
+  std::cout << "glGenBuffers() -> " << id << std::endl;
 #endif
     }
 
@@ -64,11 +60,7 @@ struct BufferObjectPolicy
   void
   Bind( Id_t id )
     {
-#if OTB_DEBUG
-      std::cout << "glBindBuffer( " << id << " )" << std::endl;
-#endif
-
-      glBindBuffer( static_cast< GLenum >( E ), id );
+    glBindBuffer( static_cast< GLenum >( E ), id );
     }
 
   static
