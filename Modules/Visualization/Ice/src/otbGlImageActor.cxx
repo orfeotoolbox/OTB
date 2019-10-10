@@ -134,12 +134,12 @@ GlImageActor::Tile
 
   m_TextureId = GL_ZERO;
 
-#if 0
-  tile.m_Image = VectorImageType::Pointer();
+#if 1
+  m_Image = VectorImageType::Pointer();
 
-  tile.m_RescaleFilter = RescaleFilterType::Pointer();
+  m_RescaleFilter = RescaleFilterType::Pointer();
 
-  tile.m_Loaded = false;
+  m_Loaded = false;
 #endif
 }
 
@@ -420,13 +420,12 @@ void GlImageActor::UpdateData()
 
   SizeType tileSize;
   tileSize.Fill(m_TileSize);
-  Tile newTile;
 
    for(unsigned int i = 0; i < nbTilesX; ++i)
     {
     for(unsigned int j = 0; j<nbTilesY; ++j)
       {
-
+      Tile newTile;
       newTile.m_TextureId = 0;
 
       IndexType tileIndex;
@@ -574,6 +573,8 @@ void GlImageActor::Render()
 
       assert( it->m_TextureId );
 
+      glBindTexture(GL_TEXTURE_2D, it->m_TextureId);
+
       glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA8,
         it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[0],
@@ -646,7 +647,7 @@ void GlImageActor::Render()
     else
     {
       // Reset color before rendering
-      // glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
+      glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
 
       glBegin( GL_QUADS );
       {
@@ -687,7 +688,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
   assert( tile.Image() );
 
-  if( !m_SoftwareRendering )
+  if( !m_SoftwareRendering && !m_Shader.IsNull())
   {
     itk::ImageRegionConstIterator< VectorImageType > it(
       tile.Image(),
@@ -714,42 +715,8 @@ void GlImageActor::LoadTile(Tile& tile)
       ++idx;
     }
 
-#if 0
-    // Now load the texture
-    assert( tile.m_TextureId==0 );
 
-    glGenTextures( 1, &tile.m_TextureId );
-
-    // Following assert is sometimes false on some OpenGL systems for
-    // some unknown reason even though the glGenTexture() call has
-    // succeeded.
-    // assert( glGetError()==GL_NO_ERROR );
-
-    assert( tile.m_TextureId!=0 );
-
-    // std::cout << "Generated texture #" << tile.m_TextureId << std::endl;
-
-    glBindTexture(GL_TEXTURE_2D, tile.m_TextureId);
-#if defined(GL_TEXTURE_BASE_LEVEL) && defined(GL_TEXTURE_MAX_LEVEL)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
-#endif
-    //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-// #if defined(GL_CLAMP_TO_BORDER)
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
-// #elif defined (GL_CLAMP_TO_BORDER_EXT)
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
-// #elif defined (GL_MIRRORED_REPEAT)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
-// #endif
-
-#else
     tile.Acquire();
-
-#endif
 
     glTexImage2D(
       GL_TEXTURE_2D, 0, GL_RGB32F,
@@ -760,6 +727,10 @@ void GlImageActor::LoadTile(Tile& tile)
       );
 
     tile.m_Loaded = true;
+  }
+  else
+  {
+    tile.Acquire();
   }
 
   // And push to loaded texture
