@@ -43,19 +43,20 @@ void bands::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int a_
   mup::matrix_type a = a_pArg[0]->GetArray();
   mup::matrix_type b = a_pArg[1]->GetArray();
 
-  int nbcols = b.GetCols();
+  int a_cols = a.GetCols();
+  int b_cols = b.GetCols();
 
   assert(a.GetRows() == 1); // Bands selection is done on a row vector
   assert(b.GetRows() == 1); // Bands selection is done by a row vector
 
-  mup::matrix_type res(1, nbcols, 0.);
+  mup::matrix_type res(1, b_cols, 0.);
 
-  for (int k = 0; k < nbcols; ++k) {
+  for (int k = 0; k < b_cols; ++k) {
     int col  = b.At(0, k).GetInteger() - 1; //-1 : to make first band have rank #1 (and not 0)
-    if (col >= a.GetCols() || col < 0) {
+    if (col >= a_cols || col < 0) {
       itkGenericExceptionMacro(<< std::endl
                                << "Invalid band index " << col+1
-                               << ". Index must be between 1 and " << a.GetCols()
+                               << ". Index must be between 1 and " << a_cols
                                << "." << std::endl);
     }
     res.At(0, k) = a.At(0, col);
