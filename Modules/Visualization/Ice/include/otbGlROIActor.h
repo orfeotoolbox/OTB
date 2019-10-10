@@ -32,6 +32,11 @@
 namespace otb
 {
 
+namespace gl
+{
+struct Mesh;
+}
+
 class OTBIce_EXPORT GlROIActor 
   : public GlActor
 {
@@ -106,6 +111,7 @@ private:
 
   ColorType            m_Color;
   double               m_Alpha;
+  double               m_CurrentAlpha;
   bool                 m_Fill;
   
   RSTransformType::Pointer m_ViewportToImageTransform;
@@ -115,6 +121,9 @@ private:
   PointType            m_VpUR;
   PointType            m_VpLL;
   PointType            m_VpLR;
+
+  /** OpenGL quad. */
+  std::unique_ptr< gl::Mesh > m_Mesh;
 
 }; // End class GlROIActor
 

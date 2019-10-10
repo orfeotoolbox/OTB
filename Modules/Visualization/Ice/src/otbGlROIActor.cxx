@@ -19,6 +19,7 @@
  */
 
 #include "otbGlROIActor.h"
+#include "otbGlMesh.h"
 #include "otbViewSettings.h"
 #include "otbMinimalShader.h"
 #include "otbCast.h"
@@ -38,13 +39,15 @@ GlROIActor::GlROIActor()
     m_Kwl(),
     m_Color(),
     m_Alpha(1.0),
+    m_CurrentAlpha(1.0),
     m_Fill(false),
     m_ViewportToImageTransform(),
     m_ImageToViewportTransform(),
     m_VpUL(),
     m_VpUR(),
     m_VpLL(),
-    m_VpLR()
+    m_VpLR(),
+    m_Mesh()
 {
   m_UL.Fill( 0 );
   m_LR.Fill( 0 );
@@ -137,45 +140,94 @@ void GlROIActor::UpdateData()
 
 void GlROIActor::Render()
 {
-  m_Shader->LoadShader();
-  m_Shader->SetupShader();
+  bool useShader = !m_Shader.IsNull();
 
-  otb::MinimalShader::Pointer shader =
-    otb::DynamicCast< otb::MinimalShader >(m_Shader);
-  int colorIdx = shader->GetColorIdx();
-
-  glBegin(GL_LINE_LOOP);
-  glVertexAttrib4f(colorIdx, m_Color[0],m_Color[1],m_Color[2], 1.0);
-  glVertex2d(m_VpUL[0],m_VpUL[1]);
-  glVertex2d(m_VpUR[0],m_VpUR[1]);
-  glVertex2d(m_VpLR[0],m_VpLR[1]);
-  glVertex2d(m_VpLL[0],m_VpLL[1]);
-  glEnd();
-
-  if(m_Fill)
+  if (useShader)
     {
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
-    glBegin(GL_QUADS);
-    glVertexAttrib4f(colorIdx, m_Color[0],m_Color[1],m_Color[2], m_Alpha);
+    m_CurrentAlpha = 1.0;
+    m_Shader->LoadShader();
+    m_Shader->SetupShader();
+
+    assert( m_Mesh );
+    m_Mesh->Bind();
+
+    GLfloat vertexPosition[ 8 ] = {
+      -1.0f, -1.0f,
+      1.0f, -1.0f,
+      1.0f, 1.0f,
+      -1.0f, 1.0f
+      };
+
+    vertexPosition[0] = m_VpUL[0];
+    vertexPosition[1] = m_VpUL[1];
+    vertexPosition[2] = m_VpUR[0];
+    vertexPosition[3] = m_VpUR[1];
+    vertexPosition[4] = m_VpLR[0];
+    vertexPosition[5] = m_VpLR[1];
+    vertexPosition[6] = m_VpLL[0];
+    vertexPosition[7] = m_VpLL[1];
+
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertexPosition), vertexPosition);
+
+    glDrawElements( GL_LINE_LOOP, 4, GL_UNSIGNED_INT, 0);
+    
+    if(m_Fill)
+      {
+      m_CurrentAlpha = m_Alpha;
+      m_Shader->SetupShader();
+
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+      glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+      glDisable(GL_BLEND);
+      }
+  
+    m_Shader->UnloadShader();
+    }
+  else
+    {
+    glColor3d(m_Color[0],m_Color[1],m_Color[2]);
+
+    glBegin(GL_LINE_LOOP);
     glVertex2d(m_VpUL[0],m_VpUL[1]);
     glVertex2d(m_VpUR[0],m_VpUR[1]);
     glVertex2d(m_VpLR[0],m_VpLR[1]);
     glVertex2d(m_VpLL[0],m_VpLL[1]);
     glEnd();
-    glDisable(GL_BLEND);
+  
+    if(m_Fill)
+      {
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
+      glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
+      glBegin(GL_QUADS);
+      glVertex2d(m_VpUL[0],m_VpUL[1]);
+      glVertex2d(m_VpUR[0],m_VpUR[1]);
+      glVertex2d(m_VpLR[0],m_VpLR[1]);
+      glVertex2d(m_VpLL[0],m_VpLL[1]);
+      glEnd();
+      glDisable(GL_BLEND);
+      }
     }
-
-  m_Shader->UnloadShader();
 }
 
 void GlROIActor::CreateShader()
 {
-  if (m_Shader.IsNull())
-    {
-    MinimalShader::Pointer shader( MinimalShader::New() );
-    m_Shader = shader;
-    }
+  MinimalShader::Pointer shader( MinimalShader::New() );
+  m_Shader = shader;
+
+  // Check previous OpenGL error and clear error flag.
+  gl::CheckError< gl::error::clear >();
+
+  m_Mesh = std::make_unique< gl::Mesh >(
+    gl::MakeQuad(
+      shader->GetAttribIdx()[ 0 ]
+    )
+  );
+
+  shader->SetColor(m_Color.GetDataPointer(), &m_CurrentAlpha);
 }
 
 void GlROIActor::UpdateTransforms()
