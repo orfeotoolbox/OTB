@@ -98,6 +98,7 @@ Mesh MakeTexturedQuad( Id_t xy, Id_t uv );
 
 Mesh MakeInterleavedTexturedQuad( Id_t xy, Id_t uv );
 
+Mesh MakeQuad( Id_t xy);
 
 } // end namespace gl.
 

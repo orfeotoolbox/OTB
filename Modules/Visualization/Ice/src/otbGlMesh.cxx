@@ -80,6 +80,29 @@ MakeInterleavedTexturedQuad( Id_t xy,
   return std::move( mesh );
 }
 
+Mesh
+MakeQuad( Id_t xy)
+{
+  Mesh mesh(
+    //
+    // vertices: (x, y )
+    { -1.0f, -1.0f,
+      +1.0f, -1.0f,
+      +1.0f, +1.0f,
+      -1.0f, +1.0f},
+    //
+    // Components
+    2,
+    //
+    // indices compatible with triangles and line loop modes
+    { 0u, 1u, 2u,
+      3u, 0u, 2u }
+  );
+
+  mesh.VertexAttribPointer( xy, 2, 0 );
+
+  return std::move( mesh );
+}
 
 void
 Mesh

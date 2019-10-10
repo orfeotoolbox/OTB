@@ -43,7 +43,7 @@ namespace otb
 
 namespace gl
 {
-class Mesh;
+struct Mesh;
 }
 
 
