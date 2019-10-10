@@ -30,6 +30,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+
+
 namespace otb
 {
 
@@ -266,6 +268,7 @@ private:
     }
     Sink(typename TImage::ConstPointer inputImage, const std::string& filename);
     Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
+    Sink(typename otb::ImageFileWriterBase::Pointer writer);
 
     virtual ~Sink()
     {
@@ -278,10 +281,7 @@ private:
 
   private:
     /** Actual writer for this image */
-    typename otb::ImageFileWriter<TImage>::Pointer m_Writer;
-
-    /** An ImageIO used to actually write data to a file */
-    otb::ImageIOBase::Pointer m_ImageIO;
+    typename otb::ImageFileWriterBase::Pointer m_Writer;
   };
 
   /** The list of inputs and their associated parameters, built using AddInput */

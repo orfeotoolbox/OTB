@@ -30,31 +30,37 @@ namespace otb
 
 template <class TImage>
 MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImage, const std::string& fileName)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())), m_Writer(otb::ImageFileWriter<TImage>::New()), m_ImageIO(NULL)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer()))
 {
-  m_Writer->SetFileName(fileName);
-  m_Writer->SetInput(inputImage);
+  auto writer = otb::ImageFileWriter<TImage>::New();
+  writer->SetFileName(fileName);
+  writer->SetInput(inputImage);
+  
+  m_Writer = writer;
 }
 
 template <class TImage>
 MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())), m_Writer(writer), m_ImageIO(NULL)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())), m_Writer(writer)
+{
+}
+
+template <class TImage>
+MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriterBase::Pointer writer)
+  : SinkBase(const_cast<ImageBaseType*>(writer->GetImageBaseInput())), m_Writer(writer)
 {
 }
 
 template <class TImage>
 bool MultiImageFileWriter::Sink<TImage>::CanStreamWrite()
 {
-  if (m_ImageIO.IsNull())
-    return false;
-  return m_ImageIO->CanStreamWrite();
+  return m_Writer->CanStreamWrite();
 }
 
 template <class TImage>
 void MultiImageFileWriter::Sink<TImage>::WriteImageInformation()
 {
   m_Writer->UpdateOutputInformation();
-  m_ImageIO = m_Writer->GetImageIO();
 }
 
 template <class TImage>
@@ -67,7 +73,7 @@ void MultiImageFileWriter::Sink<TImage>::Write(const RegionType& streamRegion)
     ioRegion.SetSize(i, streamRegion.GetSize(i));
     ioRegion.SetIndex(i, streamRegion.GetIndex(i));
   }
-  m_ImageIO->SetIORegion(ioRegion);
+  m_Writer->SetIORegion(ioRegion);
   m_Writer->UpdateOutputData(nullptr);
 }
 

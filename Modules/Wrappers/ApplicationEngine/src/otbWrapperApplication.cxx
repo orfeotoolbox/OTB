@@ -49,6 +49,8 @@
 #include <set>
 #include <unordered_set>
 
+#include "otbMultiImageFileWriter.h"
+
 namespace otb
 {
 
@@ -869,6 +871,8 @@ void Application::WriteOutput()
     }
   }
 
+  auto multiWriter = otb::MultiImageFileWriter::New();
+
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
   {
     std::string key = *it;
@@ -889,10 +893,19 @@ void Application::WriteOutput()
           outputParam->SetRAMValue(ram);
         }
         outputParam->InitializeWriters();
+        
+        auto writer = dynamic_cast<otb::ImageFileWriterBase*>(outputParam->GetWriter());
+        if(writer)
+        {
+          //multiWriter->AddInputWriter(writer);
+        }
+        else
+        {
         std::ostringstream progressId;
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
         outputParam->Write();
+        }
       }
     }
     else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
