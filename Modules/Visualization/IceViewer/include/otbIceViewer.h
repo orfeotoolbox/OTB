@@ -147,6 +147,7 @@ private:
   std::map<std::string,GlVectorActor::ColorType>                 m_ColorMap;
   std::map<std::string,GlVectorActor::ColorType>::const_iterator m_ColorMapIterator;
 
+  bool m_UseGLSL;
 }; // End class IceViewer
 
 } // End namespace otb

@@ -55,7 +55,8 @@ IceViewer::IceViewer()
     m_DisplayHud(true),
     m_DisplayHelp(false),
     m_ColorMap(),
-    m_ColorMapIterator()
+    m_ColorMapIterator(),
+    m_UseGLSL(false)
 {
   // Fill color map
   // Sources for some colors value: http://prideout.net/archive/colors.php"
@@ -91,11 +92,7 @@ void IceViewer::AddImage(const std::string & fname, const std::string & key, con
   
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
 
-  const char * glVersion = nullptr;
-  const char * glslVersion = nullptr;
-
-  if( GlVersionChecker::CheckGLCapabilities( glVersion,
-					     glslVersion ) )
+  if( m_UseGLSL)
     actor->CreateShader();
 
   actor->Initialize(fname);
@@ -262,6 +259,10 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string & n
   // Create view
   m_View = GlView::New();
   m_View->Initialize(w,h);
+  
+  const char * glVersion = nullptr;
+  const char * glslVersion = nullptr;
+  m_UseGLSL = m_View->CheckGLCapabilities(glVersion, glslVersion);
 }
 
 void IceViewer::Refresh()
@@ -1226,7 +1227,8 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       roiActor->SetFill(true);
       roiActor->SetAlpha(0.2);
 
-      roiActor->CreateShader();
+      if (m_UseGLSL)
+        roiActor->CreateShader();
        
       m_View->AddActor(roiActor,tmpKey);
       m_View->MoveActorToEndOfRenderingOrder(tmpKey,true);
