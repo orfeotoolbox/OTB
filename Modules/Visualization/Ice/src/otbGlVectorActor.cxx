@@ -145,7 +145,7 @@ void GlVectorActor::CreateShader()
     {
     MinimalShader::Pointer shader( MinimalShader::New() );
     m_Shader = shader;
-    m_ColorIdx = shader->GetColorIdx();
+    shader->SetColor(m_Color.GetDataPointer(), &m_Alpha);
     }
 }
 
@@ -643,7 +643,6 @@ void GlVectorActor::Render()
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
    glEnable(GL_LINE_SMOOTH);
    glLineWidth(m_LineWidth);
-   glVertexAttrib4f(m_ColorIdx, m_Color[0],m_Color[1],m_Color[2], m_Alpha);
    
    glCallList(m_DisplayList);
 
