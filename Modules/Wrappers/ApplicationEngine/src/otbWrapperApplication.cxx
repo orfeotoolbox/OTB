@@ -897,7 +897,7 @@ void Application::WriteOutput()
         auto writer = dynamic_cast<otb::ImageFileWriterBase*>(outputParam->GetWriter());
         if(writer)
         {
-          //multiWriter->AddInputWriter(writer);
+          multiWriter->AddInputWriter(writer);
         }
         else
         {
@@ -922,6 +922,11 @@ void Application::WriteOutput()
       }
     }
   }
+  
+  std::ostringstream progressId;
+  progressId << "Updating the multiImageFileWriter ...";
+  AddProcess(multiWriter, progressId.str());
+  multiWriter->Update();
 }
 
 int Application::ExecuteAndWriteOutput()
