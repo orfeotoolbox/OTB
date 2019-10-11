@@ -163,29 +163,25 @@ QuicklookViewRenderer
   return;
 #endif
 
-  if( IsGLSLEnabled() )
+  // only add the ROIActor if there are other actors in the view
+  if (!m_GlView->IsEmpty())
     {
-    m_GlRoiActor->CreateShader();
+    if( IsGLSLEnabled() && m_GlRoiActor->GetShader() == nullptr )
+      {
+      // needs to be called only once
+      m_GlRoiActor->CreateShader();
+      }
+
+    std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
+
+    m_GlRoiActor->SetVisible( true );
+    m_GlRoiActor->SetOverlay( true );
+
+    m_GlRoiActor->SetFill( false );
+    m_GlRoiActor->SetAlpha( 0.2 );
+
+    m_GlView->MoveActorToEndOfRenderingOrder( key, true );
     }
-
-  std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
-
-  m_GlRoiActor->SetVisible( true );
-  m_GlRoiActor->SetOverlay( true );
-
-  // qDebug() << "Added roi-actor:" << FromStdString( key );
-
-  /*
-  ColorType color;
-
-  color.Fill( 1.0 );
-
-  m_GlRoiActor->SetColor( color ); 
-  */
-  m_GlRoiActor->SetFill( false );
-  m_GlRoiActor->SetAlpha( 0.2 );
-
-  m_GlView->MoveActorToEndOfRenderingOrder( key, true );
 }
 
 /*****************************************************************************/

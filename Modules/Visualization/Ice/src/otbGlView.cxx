@@ -39,7 +39,6 @@
 #include "otbImageFileWriter.h"
 #include "otbImportImageFilter.h"
 
-
 namespace otb
 {
 
@@ -71,8 +70,11 @@ GlView
 ::CheckGLCapabilities( char const * & glVersion,
 		       char const * & glslVersion )
 {
-  m_IsGLSLEnabled = m_IsGLSLAvailable =
+  m_IsGLSLAvailable =
     GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+
+  // by default, enable GLSL if available
+  SetGLSLEnabled(m_IsGLSLAvailable);
 
   if( !m_IsGLSLAvailable )
     return 0;

@@ -611,7 +611,11 @@ void GlImageActor::Render()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
-    glEnable( GL_TEXTURE_2D );
+    if(!isShaderMode)
+      {
+      glEnable( GL_TEXTURE_2D );
+      }
+
     glBindTexture(GL_TEXTURE_2D,it->m_TextureId);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -625,10 +629,10 @@ void GlImageActor::Render()
     if( isShaderMode )
     {
       GLfloat vertexPosition[ 8 ] = {
-	-1.0f, -1.0f,
-	1.0f, -1.0f,
-	1.0f, 1.0f,
-	-1.0f, 1.0f
+        -1.0f, -1.0f,
+        1.0f, -1.0f,
+        1.0f, 1.0f,
+        -1.0f, 1.0f
       };
 
       vertexPosition[0] = it->m_LL[0];
@@ -651,15 +655,15 @@ void GlImageActor::Render()
 
       glBegin( GL_QUADS );
       {
-	glTexCoord2f( 0.0, 1.0 ); glVertex2f( it->m_LL[ 0 ], it->m_LL[ 1 ] );
-	glTexCoord2f( 1.0, 1.0 ); glVertex2f( it->m_LR[ 0 ], it->m_LR[ 1 ] );
-	glTexCoord2f( 1.0, 0.0 ); glVertex2f( it->m_UR[ 0 ], it->m_UR[ 1 ] );
-	glTexCoord2f( 0.0, 0.0 ); glVertex2f( it->m_UL[ 0 ], it->m_UL[ 1 ] );
+        glTexCoord2f( 0.0, 1.0 ); glVertex2f( it->m_LL[ 0 ], it->m_LL[ 1 ] );
+        glTexCoord2f( 1.0, 1.0 ); glVertex2f( it->m_LR[ 0 ], it->m_LR[ 1 ] );
+        glTexCoord2f( 1.0, 0.0 ); glVertex2f( it->m_UR[ 0 ], it->m_UR[ 1 ] );
+        glTexCoord2f( 0.0, 0.0 ); glVertex2f( it->m_UL[ 0 ], it->m_UL[ 1 ] );
       }
       glEnd ();
+      glDisable( GL_TEXTURE_2D );
     }
 
-    glDisable( GL_TEXTURE_2D );
     glDisable( GL_BLEND );
   }
 
