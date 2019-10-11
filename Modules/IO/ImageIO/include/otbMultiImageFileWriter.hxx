@@ -39,14 +39,6 @@ MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImag
   m_Writer = writer;
 }
 
-template <class TImage>
-MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer)
-  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer()))
-{
-   m_Writer = writer;
-}
-
-
 } // end of namespace otb
 
 #endif // otbMultiImageFileWriter_hxx
