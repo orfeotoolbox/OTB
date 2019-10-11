@@ -154,7 +154,7 @@ void MultiImageFileWriter::InitializeStreaming()
     {
       unsigned int smallestNbDiv = m_NumberOfDivisions;
       for (unsigned int i = 0; i < m_SinkList.size(); ++i)
-      {
+      { 
         unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetInput()->GetLargestPossibleRegion(), m_NumberOfDivisions);
         smallestNbDiv    = std::min(div, smallestNbDiv);
       }
@@ -385,5 +385,29 @@ MultiImageFileWriter::RegionType MultiImageFileWriter::GetStreamRegion(int input
   m_StreamingManager->GetSplitter()->GetSplit(m_CurrentDivision, m_NumberOfDivisions, region);
   return region;
 }
+
+bool MultiImageFileWriter::SinkBase::CanStreamWrite()
+{
+  return m_Writer->CanStreamWrite();
+}
+
+void MultiImageFileWriter::SinkBase::WriteImageInformation()
+{
+  m_Writer->UpdateOutputInformation();
+}
+
+void MultiImageFileWriter::SinkBase::Write(const RegionType& streamRegion)
+{
+  // Write the image stream
+  itk::ImageIORegion ioRegion(ImageBaseType::ImageDimension);
+  for (unsigned int i = 0; i < ImageBaseType::ImageDimension; ++i)
+  {
+    ioRegion.SetSize(i, streamRegion.GetSize(i));
+    ioRegion.SetIndex(i, streamRegion.GetIndex(i));
+  }
+  m_Writer->SetIORegion(ioRegion);
+  m_Writer->UpdateOutputData(nullptr);
+}
+
 
 } // end of namespace otb

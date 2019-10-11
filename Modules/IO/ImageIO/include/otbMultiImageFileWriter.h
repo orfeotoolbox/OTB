@@ -135,19 +135,15 @@ public:
     unsigned int size = m_SinkList.size();
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
   }
-
-  /** Add a new ImageFileWriter to the multi-writer. This is an alternative method
-   *  when you already have an instanciated writer.
-   */
-  template <class TWriter>
-  void AddInputWriter(const TWriter* writer)
+  
+  void AddInputWriter(otb::ImageFileWriterBase* writer)
   {
-    Sink<typename TWriter::InputImageType>* sink = new Sink<typename TWriter::InputImageType>(writer);
+    SinkBase* sink = new SinkBase(writer);
     m_SinkList.push_back(SinkBase::Pointer(sink));
     unsigned int size = m_SinkList.size();
-    this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
+    this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetImageBaseInput())));
   }
-
+  
   virtual void UpdateOutputInformation() override;
 
   virtual void Update() override
@@ -233,6 +229,12 @@ private:
     SinkBase(ImageBaseType::ConstPointer inputImage) : m_InputImage(inputImage)
     {
     }
+    
+    SinkBase(typename otb::ImageFileWriterBase::Pointer writer) : m_InputImage(writer->GetImageBaseInput()), m_Writer(writer)
+    {
+      
+    }
+
     virtual ~SinkBase()
     {
     }
@@ -244,14 +246,17 @@ private:
     {
       return const_cast<ImageBaseType*>(m_InputImage.GetPointer());
     }
-    virtual void WriteImageInformation()                 = 0;
-    virtual void Write(const RegionType& streamRegion)   = 0;
-    virtual bool                        CanStreamWrite() = 0;
+    virtual void WriteImageInformation();
+    virtual void Write(const RegionType& streamRegion);
+    virtual bool                        CanStreamWrite();
     typedef boost::shared_ptr<SinkBase> Pointer;
 
   protected:
     /** The image on which streaming is performed */
     ImageBaseType::ConstPointer m_InputImage;
+
+    /** Actual writer for this image */
+    typename otb::ImageFileWriterBase::Pointer m_Writer;
   };
 
   /** \class Sink
@@ -268,20 +273,12 @@ private:
     }
     Sink(typename TImage::ConstPointer inputImage, const std::string& filename);
     Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
-    Sink(typename otb::ImageFileWriterBase::Pointer writer);
 
     virtual ~Sink()
     {
     }
 
-    virtual void WriteImageInformation();
-    virtual void Write(const RegionType& streamRegion);
-    virtual bool                    CanStreamWrite();
     typedef boost::shared_ptr<Sink> Pointer;
-
-  private:
-    /** Actual writer for this image */
-    typename otb::ImageFileWriterBase::Pointer m_Writer;
   };
 
   /** The list of inputs and their associated parameters, built using AddInput */
