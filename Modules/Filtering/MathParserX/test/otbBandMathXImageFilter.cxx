@@ -102,7 +102,6 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   FilterType::Pointer filter = FilterType::New();
   std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
 
-
   filter->SetNthInput(0, image1);
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
@@ -543,5 +542,54 @@ int otbBandMathXImageFilterWithIdx(int itkNotUsed(argc), char* argv[])
   writer2->SetFileName(outfname2);
   writer2->Update();
 
+  return EXIT_SUCCESS;
+}
+
+int otbBandMathXImageFilterBandsFailures(int itkNotUsed(argc), char* itkNotUsed(argv)[])
+{
+
+  typedef otb::VectorImage<double, 2> ImageType;
+  typedef otb::BandMathXImageFilter<ImageType> FilterType;
+
+  const unsigned int N = 100, D1 = 3;
+
+  ImageType::SizeType size;
+  size.Fill(N);
+  ImageType::IndexType index;
+  index.Fill(0);
+  ImageType::RegionType region;
+  region.SetSize(size);
+  region.SetIndex(index);
+
+  ImageType::Pointer image = ImageType::New();
+
+  image->SetLargestPossibleRegion(region);
+  image->SetBufferedRegion(region);
+  image->SetRequestedRegion(region);
+  image->SetNumberOfComponentsPerPixel(D1);
+  image->Allocate();
+
+  FilterType::Pointer filter = FilterType::New();
+
+  filter->SetNthInput(0, image);
+
+  std::vector<std::string> exps = { "bands(im1,{4,1})", "bands(im1,{1,-1})",
+                                    "bands(im1,{1,2,3,1,2,3,0})" };
+  for ( std::string exp: exps ) {
+    filter->SetExpression(exp);
+    try {
+      filter->Update();
+      throw ;
+    }
+    catch (::itk::RangeError& e)
+    {
+      std::cout << "INFO: Exception thrown as expected : " << e.what() << std::endl;
+      filter->ClearExpression();
+    }
+    catch (...) {
+      itkGenericExceptionMacro(<< "TEST FAILLED: " << exp
+                               << "should have raise a RangeError exception" << std::endl);
+    }
+  }
   return EXIT_SUCCESS;
 }
