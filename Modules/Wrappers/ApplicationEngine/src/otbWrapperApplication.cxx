@@ -871,7 +871,9 @@ void Application::WriteOutput()
     }
   }
 
-  auto multiWriter = otb::MultiImageFileWriter::New();
+  /* Map to store the writers to be added to the multiImageFileWriter. The map contains the parmaeter name as key
+  * a string containing the filename (for printing purposes) and a pointer to the writer. */
+  std::map<std::string, std::pair< std::string, otb::ImageFileWriterBase*> > multiWriterElements;
 
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
   {
@@ -897,7 +899,7 @@ void Application::WriteOutput()
         auto writer = dynamic_cast<otb::ImageFileWriterBase*>(outputParam->GetWriter());
         if(writer)
         {
-          multiWriter->AddInputWriter(writer);
+          multiWriterElements[key] = { outputParam->GetFileName(), writer};
         }
         else
         {
@@ -922,11 +924,27 @@ void Application::WriteOutput()
       }
     }
   }
-  
-  std::ostringstream progressId;
-  progressId << "Updating the multiImageFileWriter ...";
-  AddProcess(multiWriter, progressId.str());
-  multiWriter->Update();
+
+  if (!multiWriterElements.empty())
+  {
+    auto multiWriter = otb::MultiImageFileWriter::New();
+    multiWriter->SetAutomaticAdaptativeStreaming(ram);
+    
+    std::ostringstream progressId;
+    progressId << "Writing files ";
+    
+    // Add the writers to the multiImageFileWriter
+    for (const auto& kv : multiWriterElements)
+    {
+      // kv.second.first is the filename, kv.second.second is the writer
+      progressId << kv.second.first << " ";
+      multiWriter->AddInputWriter(kv.second.second);
+    }
+    
+    progressId << "...";
+    AddProcess(multiWriter, progressId.str());
+    multiWriter->Update();
+  }
 }
 
 int Application::ExecuteAndWriteOutput()
