@@ -140,13 +140,12 @@ void MultiImageFileWriter::InitializeStreaming()
   {
     /**
      * Determine of number of pieces to divide the input.  This will be the
-     * first estimated on the fake output, which has the same size as the
-     * first input. Then there is a check that each input can be split into
-     * this number of pieces.
+     * first estimated on the first output Then there is a check that each
+     * input can be split into this number of pieces.
      */
-    FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
-    RegionType      region  = fakeOut->GetLargestPossibleRegion();
-    m_StreamingManager->PrepareStreaming(fakeOut, region);
+    auto firstInput = static_cast<ImageBaseType*>(this->itk::ProcessObject::GetInput(0));
+    RegionType      region  = firstInput->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(firstInput, region);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
     // Check this number of division is compatible with all inputs
     bool nbDivValid = false;
