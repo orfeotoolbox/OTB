@@ -24,7 +24,7 @@
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
 
-typedef otb::VectorImage<float, 2>                      ImageType;
+typedef otb::VectorImage<float, 2> ImageType;
 typedef otb::KmzProductWriter<ImageType>                KmzProductWriterType;
 typedef otb::ImageFileReader<ImageType>                 ReaderType;
 typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
@@ -35,23 +35,22 @@ int otbKmzProductWriter(int argc, char* argv[])
 {
 
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname demPath kmzFileName "
-              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz"
-              << std::endl;
+              << "a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   else if ((argc - 4) % 5 != 0)
-    {
-    std::cout <<"argc " << argc << std::endl;
+  {
+    std::cout << "argc " << argc << std::endl;
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Get the cli arguments
-  const char * infname       = argv[1];
-  const char * demPath       = argv[2];
-  const char * kmzFileName   = argv[3];
+  const char* infname     = argv[1];
+  const char* demPath     = argv[2];
+  const char* kmzFileName = argv[3];
 
   // Instantiate reader
   ReaderType::Pointer reader = ReaderType::New();
@@ -67,7 +66,7 @@ int otbKmzProductWriter(int argc, char* argv[])
   std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
-    {
+  {
     Point2DType sensorPoint;
     sensorPoint[0] = std::stof(argv[4 + gcpId * 5]);
     sensorPoint[1] = std::stof(argv[5 + gcpId * 5]);
@@ -80,14 +79,14 @@ int otbKmzProductWriter(int argc, char* argv[])
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 #endif
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
-    }
+  }
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
 
   // Second part : Image To Kmz
-  KmzProductWriterType::Pointer    kmzWriter  = KmzProductWriterType::New();
+  KmzProductWriterType::Pointer kmzWriter = KmzProductWriterType::New();
 
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(kmzFileName);
@@ -102,20 +101,19 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
 {
 
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " input logo_path legend_path "
-              <<"DEM_path output "
-              <<"a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz"
-              << std::endl;
+              << "DEM_path output "
+              << "a1x a1y b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   else if ((argc - 6) % 5 != 0)
-    {
-    std::cout <<"argc " << argc << std::endl;
+  {
+    std::cout << "argc " << argc << std::endl;
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
-    }
-    
+  }
+
   // Instantiate reader
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -123,13 +121,13 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
   GCPsToSensorModelFilterType::Pointer rpcEstimator = GCPsToSensorModelFilterType::New();
   rpcEstimator->SetInput(reader->GetOutput());
 
-  unsigned int nbPoints = argc-6;
+  unsigned int nbPoints = argc - 6;
   std::cout << "Receiving " << nbPoints << " from command line." << std::endl;
 
-  unsigned int nbGCPs =  nbPoints/5;
+  unsigned int nbGCPs = nbPoints / 5;
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
-    {
+  {
     Point2DType sensorPoint;
     sensorPoint[0] = std::stof(argv[6 + 5 * gcpId]);
     sensorPoint[1] = std::stof(argv[7 + 5 * gcpId]);
@@ -142,24 +140,24 @@ int otbKmzProductWriterWithLogoAndLegend(int argc, char* argv[])
     std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
 #endif
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
-    }
+  }
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
   std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
 
   // Second part : Image To Kmz
-  KmzProductWriterType::Pointer    kmzWriter  = KmzProductWriterType::New();
+  KmzProductWriterType::Pointer kmzWriter = KmzProductWriterType::New();
   kmzWriter->SetInput(rpcEstimator->GetOutput());
   kmzWriter->SetPath(argv[5]);
 
   // Read the logo
-  ReaderType::Pointer logoReader  = ReaderType::New();
+  ReaderType::Pointer logoReader = ReaderType::New();
   logoReader->SetFileName(argv[2]);
   logoReader->Update();
   kmzWriter->SetLogo(logoReader->GetOutput());
 
   // Read the legend
-  ReaderType::Pointer legendReader  = ReaderType::New();
+  ReaderType::Pointer legendReader = ReaderType::New();
   legendReader->SetFileName(argv[3]);
   legendReader->Update();
   kmzWriter->AddLegend("Input Legend", legendReader->GetOutput());

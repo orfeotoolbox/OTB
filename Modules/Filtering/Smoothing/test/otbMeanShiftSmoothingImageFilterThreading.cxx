@@ -23,34 +23,33 @@
 #include "otbImageFileWriter.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
-int otbMeanShiftSmoothingImageFilterThreading(int argc, char * argv[])
+int otbMeanShiftSmoothingImageFilterThreading(int argc, char* argv[])
 {
   if (argc != 7)
-    {
-    std::cerr << "Usage: " << argv[0] <<
-    " inputFileName outputSingleThreadFileName outputMultiThreadFileName spatialBandwidth rangeBandwidth useModeSearch"
+  {
+    std::cerr << "Usage: " << argv[0] << " inputFileName outputSingleThreadFileName outputMultiThreadFileName spatialBandwidth rangeBandwidth useModeSearch"
               << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char *       inputFileName              = argv[1];
-  const char *       outputSingleThreadFileName = argv[2];
-  const char *       outputMultiThreadFileName  = argv[3];
-  const double       spatialBandwidth           = atof(argv[4]);
-  const double       rangeBandwidth             = atof(argv[5]);
-  bool               useModeSearch            = (atoi(argv[6])!=0);
+  const char*  inputFileName              = argv[1];
+  const char*  outputSingleThreadFileName = argv[2];
+  const char*  outputMultiThreadFileName  = argv[3];
+  const double spatialBandwidth           = atof(argv[4]);
+  const double rangeBandwidth             = atof(argv[5]);
+  bool         useModeSearch              = (atoi(argv[6]) != 0);
 
   const unsigned int Dimension = 2;
-  typedef float                                            PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>           ImageType;
-  typedef otb::ImageFileReader<ImageType>                  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                  WriterType;
+  typedef float      PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> FilterType;
 
   // Instantiating object
   FilterType::Pointer filterSingle = FilterType::New();
-  FilterType::Pointer filterMulti = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  FilterType::Pointer filterMulti  = FilterType::New();
+  ReaderType::Pointer reader       = ReaderType::New();
 
   reader->SetFileName(inputFileName);
 

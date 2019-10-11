@@ -46,68 +46,68 @@ namespace XML
 
 ImagePixelType GetPixelTypeFromString(std::string strType)
 {
-  if(strType == "uint8")
-    {
+  if (strType == "uint8")
+  {
     return ImagePixelType_uint8;
-    }
+  }
   else if (strType == "int16")
-    {
+  {
     return ImagePixelType_int16;
-    }
+  }
   else if (strType == "uint16")
-    {
+  {
     return ImagePixelType_uint16;
-    }
-  else if(strType == "int32")
-    {
+  }
+  else if (strType == "int32")
+  {
     return ImagePixelType_int32;
-    }
-  else if(strType == "uint32")
-    {
+  }
+  else if (strType == "uint32")
+  {
     return ImagePixelType_uint32;
-    }
-  else if(strType == "float")
-    {
+  }
+  else if (strType == "float")
+  {
     return ImagePixelType_float;
-    }
-  else if(strType == "double")
-    {
+  }
+  else if (strType == "double")
+  {
     return ImagePixelType_double;
-    }
+  }
   else
-    {
+  {
     /*by default return float. Eg: if strType is empty because of no pixtype
     node in xml which was the case earlier
     */
     return ImagePixelType_float;
-    }
+  }
 }
 
 const std::string GetChildNodeTextOf(TiXmlElement* parentElement, std::string key)
 {
-  std::string value="";
+  std::string value = "";
 
-  if(parentElement)
-    {
+  if (parentElement)
+  {
     TiXmlElement* childElement = nullptr;
-    childElement = parentElement->FirstChildElement(key.c_str());
+    childElement               = parentElement->FirstChildElement(key.c_str());
 
-    //same as childElement->GetText() does but that call is failing if there is
-    //no such node.
-    //but the below code works and is a replacement for GetText()
-    if(childElement)
-      {
+    // same as childElement->GetText() does but that call is failing if there is
+    // no such node.
+    // but the below code works and is a replacement for GetText()
+    if (childElement)
+    {
       const TiXmlNode* child = childElement->FirstChild();
-      if ( child )
-        {
+      if (child)
+      {
         const TiXmlText* childText = child->ToText();
-        if ( childText )
-          {
+        if (childText)
+        {
           value = childText->Value();
-          }
         }
       }
     }
+  }
   return value;
 }
 
@@ -116,36 +116,36 @@ int Read(const std::string& filename, Application::Pointer this_)
   // Open the xml file
   TiXmlDocument doc;
 
-  if (!doc.LoadFile(filename , TIXML_ENCODING_UTF8))
+  if (!doc.LoadFile(filename, TIXML_ENCODING_UTF8))
   {
     itkGenericExceptionMacro(<< "Can't open file " << filename);
   }
 
   TiXmlHandle handle(&doc);
 
-  TiXmlElement *n_OTB;
+  TiXmlElement* n_OTB;
   n_OTB = handle.FirstChild("OTB").Element();
 
-  if(!n_OTB)
+  if (!n_OTB)
   {
     std::string info = "Input XML file " + filename + " is invalid.";
   }
 
   std::string otb_Version;
-  otb_Version = GetChildNodeTextOf(n_OTB,"version");
+  otb_Version = GetChildNodeTextOf(n_OTB, "version");
 
-  if(otb_Version != OTB_VERSION_STRING)
+  if (otb_Version != OTB_VERSION_STRING)
     otbGenericMsgDebugMacro(<< "Input XML was generated with a different version of OTB (" << otb_Version << ") and current version is OTB ("
-                             << OTB_VERSION_STRING << ")");
+                            << OTB_VERSION_STRING << ")");
 
   int ret = 0;
 
-  TiXmlElement *n_AppNode   = n_OTB->FirstChildElement("application");
+  TiXmlElement* n_AppNode = n_OTB->FirstChildElement("application");
 
   std::string app_Name;
   app_Name = GetChildNodeTextOf(n_AppNode, "name");
 
-  if(this_->GetName() != app_Name)
+  if (this_->GetName() != app_Name)
   {
     itkGenericExceptionMacro(<< "Input XML was generated for a different application( " << app_Name << ") while application loaded is:" << this_->GetName());
   }
@@ -153,15 +153,14 @@ int Read(const std::string& filename, Application::Pointer this_)
   ParameterGroup::Pointer paramGroup = this_->GetParameterList();
 
   // Iterate through the parameter list
-  for( TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != nullptr;
-       n_Parameter = n_Parameter->NextSiblingElement() )
-    {
-    std::string key,typeAsString, value, paramName;
+  for (TiXmlElement* n_Parameter = n_AppNode->FirstChildElement("parameter"); n_Parameter != nullptr; n_Parameter = n_Parameter->NextSiblingElement())
+  {
+    std::string              key, typeAsString, value, paramName;
     std::vector<std::string> values;
-    key = GetChildNodeTextOf(n_Parameter, "key");
-    typeAsString = GetChildNodeTextOf(n_Parameter, "type");
-    value = GetChildNodeTextOf(n_Parameter, "value");
-    paramName = GetChildNodeTextOf(n_Parameter, "name");
+    key                = GetChildNodeTextOf(n_Parameter, "key");
+    typeAsString       = GetChildNodeTextOf(n_Parameter, "type");
+    value              = GetChildNodeTextOf(n_Parameter, "value");
+    paramName          = GetChildNodeTextOf(n_Parameter, "name");
     ParameterType type = paramGroup->GetParameterTypeFromString(typeAsString);
 
     Parameter* param = this_->GetParameterByKey(key);
@@ -170,131 +169,123 @@ int Read(const std::string& filename, Application::Pointer this_)
     param->SetActive(true);
 
     TiXmlElement* n_Values = nullptr;
-    n_Values = n_Parameter->FirstChildElement("values");
-    if(n_Values)
+    n_Values               = n_Parameter->FirstChildElement("values");
+    if (n_Values)
+    {
+      for (TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != nullptr; n_Value = n_Value->NextSiblingElement())
       {
-      for(TiXmlElement* n_Value = n_Values->FirstChildElement("value"); n_Value != nullptr;
-	  n_Value = n_Value->NextSiblingElement())
-	{
-	values.push_back(n_Value->GetText());
-	}
+        values.push_back(n_Value->GetText());
       }
+    }
 
-    if (type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData ||
-        type == ParameterType_String || type == ParameterType_Choice ||
+    if (type == ParameterType_OutputFilename || type == ParameterType_OutputVectorData || type == ParameterType_String || type == ParameterType_Choice ||
         type == ParameterType_RAM || type == ParameterType_Bool)
-      {
+    {
       this_->SetParameterString(key, value);
-      }
-    else if( type == ParameterType_OutputImage )
-      {
-      assert( dynamic_cast< OutputImageParameter * >( param )==param );
+    }
+    else if (type == ParameterType_OutputImage)
+    {
+      assert(dynamic_cast<OutputImageParameter*>(param) == param);
 
-      OutputImageParameter * outImageParam =
-	dynamic_cast< OutputImageParameter * >( param );
+      OutputImageParameter* outImageParam = dynamic_cast<OutputImageParameter*>(param);
 
-      assert( outImageParam!=nullptr );
+      assert(outImageParam != nullptr);
 
-      outImageParam->SetFileName( value );
+      outImageParam->SetFileName(value);
 
-      std::string pixelType(
-	GetChildNodeTextOf(n_Parameter, "pixtype" )
-      );
+      std::string pixelType(GetChildNodeTextOf(n_Parameter, "pixtype"));
 
-      if( pixelType.empty() )
-	std::runtime_error( "Invalid pixel type (empty string)." );
+      if (pixelType.empty())
+        std::runtime_error("Invalid pixel type (empty string).");
 
-      outImageParam->SetPixelType(
-	GetPixelTypeFromString( pixelType )
-      );
-      }
+      outImageParam->SetPixelType(GetPixelTypeFromString(pixelType));
+    }
     else if (type == ParameterType_Directory)
-      {
+    {
       DirectoryParameter* paramDown = dynamic_cast<DirectoryParameter*>(param);
-      if(paramDown!=nullptr)
-	paramDown->SetValue(value);
-      }
+      if (paramDown != nullptr)
+        paramDown->SetValue(value);
+    }
     else if (type == ParameterType_InputFilename)
-      {
+    {
       InputFilenameParameter* paramDown = dynamic_cast<InputFilenameParameter*>(param);
-      if(paramDown!=nullptr)
-	paramDown->SetValue(value);
-      }
+      if (paramDown != nullptr)
+        paramDown->SetValue(value);
+    }
     else if (type == ParameterType_InputImage)
+    {
+      if (itksys::SystemTools::FileExists(value))
       {
-      if(itksys::SystemTools::FileExists(value))
-	{
-	InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
-	if(paramDown!=nullptr)
-	  {
-	  paramDown->SetFromFileName(value);
-	  if (!paramDown->SetFromFileName(value))
-	    {
-	    ret= -1;
-	    }
-	  }
-	}
+        InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+        if (paramDown != nullptr)
+        {
+          paramDown->SetFromFileName(value);
+          if (!paramDown->SetFromFileName(value))
+          {
+            ret = -1;
+          }
+        }
+      }
       else
-	{
-	otbMsgDevMacro( << "InputImageFile saved in InputXML does not exists" );
-	}
+      {
+        otbMsgDevMacro(<< "InputImageFile saved in InputXML does not exists");
       }
+    }
     else if (dynamic_cast<InputVectorDataParameter*>(param))
+    {
+      if (itksys::SystemTools::FileExists(value))
       {
-      if(itksys::SystemTools::FileExists(value))
-	{
-	InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
-	if ( !paramDown->SetFromFileName(value) )
-	  {
-	  ret = -1;
-	  }
-	}
+        InputVectorDataParameter* paramDown = dynamic_cast<InputVectorDataParameter*>(param);
+        if (!paramDown->SetFromFileName(value))
+        {
+          ret = -1;
+        }
       }
+    }
     else if (dynamic_cast<InputImageListParameter*>(param))
-      {
+    {
       InputImageListParameter* paramDown = dynamic_cast<InputImageListParameter*>(param);
       paramDown->SetListFromFileName(values);
-      }
+    }
     else if (dynamic_cast<InputVectorDataListParameter*>(param))
-      {
+    {
       InputVectorDataListParameter* paramDown = dynamic_cast<InputVectorDataListParameter*>(param);
-      paramDown->SetListFromFileName( values );
-      }
+      paramDown->SetListFromFileName(values);
+    }
     else if (dynamic_cast<InputFilenameListParameter*>(param))
-      {
+    {
       InputFilenameListParameter* paramDown = dynamic_cast<InputFilenameListParameter*>(param);
-      paramDown->SetListFromFileName( values );
-      }
-    else if (type == ParameterType_Radius || type == ParameterType_Int ||
-	     typeAsString == "rand" )
-      {
+      paramDown->SetListFromFileName(values);
+    }
+    else if (type == ParameterType_Radius || type == ParameterType_Int || typeAsString == "rand")
+    {
       int intValue;
       std::stringstream(value) >> intValue;
       this_->SetParameterInt(key, intValue);
-      }
+    }
     else if (type == ParameterType_Float)
-      {
+    {
       float floatValue;
       std::stringstream(value) >> floatValue;
       this_->SetParameterFloat(key, floatValue);
-      }
+    }
     else if (type == ParameterType_StringList || type == ParameterType_ListView)
-      {
+    {
       this_->SetParameterStringList(key, values);
-      }
+    }
 
     // Call UpdateParameters after each parameter is set
     this_->UpdateParameters();
-    } //end updateFromXML
-  //choice also comes as setint and setstring why??
+  } // end updateFromXML
+  // choice also comes as setint and setstring why??
 
-  ret = 0; //resetting return to zero, we don't use it anyway for now.
+  ret = 0; // resetting return to zero, we don't use it anyway for now.
 
   return ret;
 }
 
 
 } // namespace XML
-} //end namespace wrapper
+} // end namespace wrapper
 
-} //end namespace otb
+} // end namespace otb

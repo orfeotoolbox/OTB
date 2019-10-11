@@ -30,37 +30,35 @@
 /*===========================================================================*/
 /*==============================[ other stuff ]==============================*/
 /*===========================================================================*/
-int otbGeometriesProjectionFilterFromMapToSensor(int argc, char * argv[])
+int otbGeometriesProjectionFilterFromMapToSensor(int argc, char* argv[])
 {
   if (argc < 4)
-    {
+  {
     std::cerr << argv[0] << " <input vector filename> <input image filename>"
               << " <output vector filename>\n";
     return EXIT_FAILURE;
-    }
+  }
 
   // Input Geometries set
-  typedef otb::GeometriesSet                InputGeometriesType;
-  typedef otb::GeometriesSet                OutputGeometriesType;
-  otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-    argv[1], otb::ogr::DataSource::Modes::Read);
-  InputGeometriesType::Pointer in_set = InputGeometriesType::New(input);
+  typedef otb::GeometriesSet    InputGeometriesType;
+  typedef otb::GeometriesSet    OutputGeometriesType;
+  otb::ogr::DataSource::Pointer input  = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::Read);
+  InputGeometriesType::Pointer  in_set = InputGeometriesType::New(input);
 
   // Input Keywordlist (from image)
   typedef otb::Image<unsigned short int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType>   ImageReaderType;
-  ImageReaderType::Pointer imageReader = ImageReaderType::New();
+  typedef otb::ImageFileReader<ImageType> ImageReaderType;
+  ImageReaderType::Pointer                imageReader = ImageReaderType::New();
   imageReader->SetFileName(argv[2]);
   imageReader->UpdateOutputInformation();
 
   // Output Geometries Set
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-    argv[3], otb::ogr::DataSource::Modes::Overwrite);
+  otb::ogr::DataSource::Pointer output  = otb::ogr::DataSource::New(argv[3], otb::ogr::DataSource::Modes::Overwrite);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   // Filter
-  typedef otb::GeometriesProjectionFilter   GeometriesFilterType;
-  GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
+  typedef otb::GeometriesProjectionFilter GeometriesFilterType;
+  GeometriesFilterType::Pointer           filter = GeometriesFilterType::New();
   filter->SetInput(in_set);
   filter->SetOutput(out_set);
   filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());

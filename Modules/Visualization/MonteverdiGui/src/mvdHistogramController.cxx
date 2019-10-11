@@ -57,22 +57,17 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-HistogramController
-::HistogramController( HistogramWidget* widget, QObject* p ) :
-  AbstractModelController( widget, p )
+HistogramController::HistogramController(HistogramWidget* widget, QObject* p) : AbstractModelController(widget, p)
 {
 }
 
 /*******************************************************************************/
-HistogramController
-::~HistogramController()
+HistogramController::~HistogramController()
 {
 }
 
 /*******************************************************************************/
-void
-HistogramController
-::Connect( AbstractModel * )
+void HistogramController::Connect(AbstractModel*)
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -84,9 +79,7 @@ HistogramController
 }
 
 /*******************************************************************************/
-void
-HistogramController
-::Disconnect( AbstractModel * )
+void HistogramController::Disconnect(AbstractModel*)
 {
   // HistogramWidget* widget = GetWidget< HistogramWidget >();
 
@@ -98,89 +91,82 @@ HistogramController
 }
 
 /*******************************************************************************/
-void
-HistogramController
-::ClearWidget()
+void HistogramController::ClearWidget()
 {
-  assert( GetWidget()==GetWidget< HistogramWidget >() );
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<HistogramWidget>());
+  HistogramWidget* widget = GetWidget<HistogramWidget>();
+  assert(widget != NULL);
 
   widget->Clear();
 }
 
 /*******************************************************************************/
-void
-HistogramController
-::virtual_ResetWidget( bool )
+void HistogramController::virtual_ResetWidget(bool)
 {
-  ResetWidget( RGBW_CHANNEL_ALL );
+  ResetWidget(RGBW_CHANNEL_ALL);
 }
 
 /*******************************************************************************/
-void
-HistogramController
-::ResetWidget( RgbwChannel channel )
+void HistogramController::ResetWidget(RgbwChannel channel)
 {
-  assert( GetModel()==GetModel< VectorImageModel >() );
-  VectorImageModel* imageModel = GetModel< VectorImageModel >();
-  assert( imageModel!=NULL );
+  assert(GetModel() == GetModel<VectorImageModel>());
+  VectorImageModel* imageModel = GetModel<VectorImageModel>();
+  assert(imageModel != NULL);
 
   HistogramModel* model = imageModel->GetHistogramModel();
-  assert( model!=NULL );
+  assert(model != NULL);
 
-  if( !model->IsValid() )
+  if (!model->IsValid())
     return;
 
-  assert( GetWidget()==GetWidget< HistogramWidget >() );
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<HistogramWidget>());
+  HistogramWidget* widget = GetWidget<HistogramWidget>();
+  assert(widget != NULL);
 
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if (!RgbwBounds(begin, end, channel))
     return;
 
-  const VectorImageSettings & settings = imageModel->GetSettings();
+  const VectorImageSettings& settings = imageModel->GetSettings();
 
-  widget->SetGrayscaleActivated( settings.IsGrayscaleActivated() );
+  widget->SetGrayscaleActivated(settings.IsGrayscaleActivated());
 
-  assert( std::numeric_limits< double >::has_quiet_NaN );
+  assert(std::numeric_limits<double>::has_quiet_NaN);
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    RgbwChannel chan = static_cast< RgbwChannel >( i );
+  for (CountType i = begin; i < end; ++i)
+  {
+    RgbwChannel chan = static_cast<RgbwChannel>(i);
 
-    VectorImageSettings::ChannelVector::value_type band =
-      settings.GetRgbwChannel( chan );
+    VectorImageSettings::ChannelVector::value_type band = settings.GetRgbwChannel(chan);
 
-    size_t size = model->GetDataCount( band );
+    size_t size = model->GetDataCount(band);
 
-    double* x = new double[ size ];
-    double* y = new double[ size ];
+    double* x = new double[size];
+    double* y = new double[size];
 
-    double xMin = std::numeric_limits< double >::quiet_NaN();
-    double yMin = std::numeric_limits< double >::quiet_NaN();
-    double xMax = std::numeric_limits< double >::quiet_NaN();
-    double yMax = std::numeric_limits< double >::quiet_NaN();
+    double xMin = std::numeric_limits<double>::quiet_NaN();
+    double yMin = std::numeric_limits<double>::quiet_NaN();
+    double xMax = std::numeric_limits<double>::quiet_NaN();
+    double yMax = std::numeric_limits<double>::quiet_NaN();
 
-    model->GetData( band, x, y, xMin, xMax, yMin, yMax );
+    model->GetData(band, x, y, xMin, xMax, yMin, yMax);
 
-    widget->SetData( chan, x, y, size, xMin, yMin, xMax, yMax );
+    widget->SetData(chan, x, y, size, xMin, yMin, xMax, yMax);
 
-    widget->SetPrecision( HistogramModel::GetEpsilon() );
-    widget->SetLowMarker( chan, settings.GetLowIntensity( chan ) );
-    widget->SetHighMarker( chan, settings.GetHighIntensity( chan ) );
+    widget->SetPrecision(HistogramModel::GetEpsilon());
+    widget->SetLowMarker(chan, settings.GetLowIntensity(chan));
+    widget->SetHighMarker(chan, settings.GetHighIntensity(chan));
 
     delete[] x;
     x = NULL;
 
     delete[] y;
     y = NULL;
-    }
+  }
 
-  widget->RefreshScale( true );
+  widget->RefreshScale(true);
 
   widget->Replot();
 }
@@ -188,9 +174,7 @@ HistogramController
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-HistogramController
-::OnRgbChannelIndexChanged( RgbwChannel channel, int )
+void HistogramController::OnRgbChannelIndexChanged(RgbwChannel channel, int)
 {
   /*
   qDebug()
@@ -200,13 +184,11 @@ HistogramController
     ")";
   */
 
-  ResetWidget( channel );
+  ResetWidget(channel);
 }
 
 /*****************************************************************************/
-void
-HistogramController
-::OnGrayChannelIndexChanged( int )
+void HistogramController::OnGrayChannelIndexChanged(int)
 {
   /*
   qDebug()
@@ -214,13 +196,11 @@ HistogramController
     << "::OnGrayChannelIndexChanged(" << band << ")";
   */
 
-  ResetWidget( RGBW_CHANNEL_WHITE );
+  ResetWidget(RGBW_CHANNEL_WHITE);
 }
 
 /*****************************************************************************/
-void
-HistogramController
-::OnGrayscaleActivated( bool activated )
+void HistogramController::OnGrayscaleActivated(bool activated)
 {
   /*
   qDebug()
@@ -228,52 +208,46 @@ HistogramController
     << "::OnGrayscaleActivated(" << activated << ")";
   */
 
-  assert( GetWidget()==GetWidget< HistogramWidget >() );
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<HistogramWidget>());
+  HistogramWidget* widget = GetWidget<HistogramWidget>();
+  assert(widget != NULL);
 
-  widget->SetGrayscaleActivated( activated );
+  widget->SetGrayscaleActivated(activated);
 
-  widget->RefreshScale( true );
+  widget->RefreshScale(true);
   widget->Replot();
 }
 
 /*****************************************************************************/
-void
-HistogramController
-::OnLowIntensityChanged( RgbwChannel channel, double value, bool refresh )
+void HistogramController::OnLowIntensityChanged(RgbwChannel channel, double value, bool refresh)
 {
-  assert( GetWidget()==GetWidget< HistogramWidget >() );
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<HistogramWidget>());
+  HistogramWidget* widget = GetWidget<HistogramWidget>();
+  assert(widget != NULL);
 
-  widget->SetLowMarker( channel, value );
+  widget->SetLowMarker(channel, value);
 
-  if( refresh )
+  if (refresh)
     widget->Replot();
 }
 
 /*****************************************************************************/
-void
-HistogramController
-::OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh )
+void HistogramController::OnHighIntensityChanged(RgbwChannel channel, double value, bool refresh)
 {
-  assert( GetWidget()==GetWidget< HistogramWidget >() );
-  HistogramWidget* widget = GetWidget< HistogramWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<HistogramWidget>());
+  HistogramWidget* widget = GetWidget<HistogramWidget>();
+  assert(widget != NULL);
 
-  widget->SetHighMarker( channel, value );
+  widget->SetHighMarker(channel, value);
 
-  if( refresh )
+  if (refresh)
     widget->Replot();
 }
 
 /*****************************************************************************/
-void
-HistogramController
-::OnHistogramRefreshed()
+void HistogramController::OnHistogramRefreshed()
 {
-  ResetWidget( RGBW_CHANNEL_ALL );
+  ResetWidget(RGBW_CHANNEL_ALL);
 }
 
 /*****************************************************************************/

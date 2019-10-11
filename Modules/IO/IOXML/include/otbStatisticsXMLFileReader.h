@@ -24,7 +24,8 @@
 #include "itkProcessObject.h"
 #include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class StatisticsXMLFileReader
  *  \brief   Read a xml file where are stored several statistics
@@ -37,16 +38,15 @@ namespace otb {
  *
  * \ingroup OTBIOXML
  */
-template < class TMeasurementVector>
-class  StatisticsXMLFileReader :
-    public itk::Object
+template <class TMeasurementVector>
+class StatisticsXMLFileReader : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef StatisticsXMLFileReader          Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer< Self >        Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef StatisticsXMLFileReader       Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(StatisticsXMLFileReader, itk::Object);
@@ -55,20 +55,20 @@ public:
   itkNewMacro(Self);
 
   /** InputSampleList typedefs */
-  typedef TMeasurementVector                             MeasurementVectorType;
-  typedef typename MeasurementVectorType::ValueType      InputValueType;
+  typedef TMeasurementVector                        MeasurementVectorType;
+  typedef typename MeasurementVectorType::ValueType InputValueType;
 
   /** Convenient typedef */
-  typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
-  typedef std::vector< InputDataType >                   MeasurementVectorContainer;
+  typedef std::pair<std::string, MeasurementVectorType> InputDataType;
+  typedef std::vector<InputDataType> MeasurementVectorContainer;
 
-  typedef std::map<std::string , std::string>           GenericMapType;
-  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
+  typedef std::map<std::string, std::string>    GenericMapType;
+  typedef std::map<std::string, GenericMapType> GenericMapContainer;
 
   void Modified() const override
-    {
-      m_IsUpdated = false;
-    }
+  {
+    m_IsUpdated = false;
+  }
 
   /** Set the output filename */
   itkSetStringMacro(FileName);
@@ -84,29 +84,30 @@ public:
   std::vector<std::string> GetStatisticMapNames();
 
   /** Method to get the MeasurementVector by name */
-  MeasurementVectorType GetStatisticVectorByName(const char * statisticName);
+  MeasurementVectorType GetStatisticVectorByName(const char* statisticName);
 
   /** Method to get a statistics map by name */
   template <typename MapType>
-  MapType GetStatisticMapByName(const char * statisticName);
+  MapType GetStatisticMapByName(const char* statisticName);
 
 protected:
-
   /** Read into the file and extract information in vector and map containers */
   virtual void Read();
 
   StatisticsXMLFileReader();
-  ~StatisticsXMLFileReader() override {}
+  ~StatisticsXMLFileReader() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StatisticsXMLFileReader(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  std::string                 m_FileName;
-  MeasurementVectorContainer  m_MeasurementVectorContainer;
-  mutable bool                m_IsUpdated;
-  GenericMapContainer         m_GenericMapContainer;
+  std::string                m_FileName;
+  MeasurementVectorContainer m_MeasurementVectorContainer;
+  mutable bool               m_IsUpdated;
+  GenericMapContainer        m_GenericMapContainer;
 
 }; // end of class StatisticsXMLFileReader
 

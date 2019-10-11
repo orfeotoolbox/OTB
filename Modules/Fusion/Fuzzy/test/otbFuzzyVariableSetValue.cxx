@@ -19,10 +19,9 @@
  */
 
 
-
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableSetValue(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbFuzzyVariableSetValue(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
   typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
@@ -38,13 +37,13 @@ int otbFuzzyVariableSetValue(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   FuzzyVarType::PrintMembershipValueType(std::cout, memValues);
 
-  if( memValues["Low"] != static_cast<PrecisionType>((0.75-0.5)/(0.75-0.25)) )
+  if (memValues["Low"] != static_cast<PrecisionType>((0.75 - 0.5) / (0.75 - 0.25)))
     return EXIT_FAILURE;
 
-  if( memValues["Medium"] != static_cast<PrecisionType>(1) )
+  if (memValues["Medium"] != static_cast<PrecisionType>(1))
     return EXIT_FAILURE;
 
-  if( memValues["High"] != static_cast<PrecisionType>((0.75-0.5)/(0.75-0.25)) )
+  if (memValues["High"] != static_cast<PrecisionType>((0.75 - 0.5) / (0.75 - 0.25)))
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

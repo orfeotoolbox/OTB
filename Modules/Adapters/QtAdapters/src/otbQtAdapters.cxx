@@ -62,153 +62,80 @@ namespace
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 /*****************************************************************************/
-QString
-GetExistingDirectory( QWidget * p,
-		      const QString& caption,
-		      const QString& dir,
-		      QFileDialog::Options options )
+QString GetExistingDirectory(QWidget* p, const QString& caption, const QString& dir, QFileDialog::Options options)
 {
-  QString dialogCaption(caption.isEmpty()
-    ? QObject::tr( "Select directory..." )
-    : caption);
-  QString dialogDir(dir.isEmpty()
-    ? RecentDirectory
-    : dir);
+  QString dialogCaption(caption.isEmpty() ? QObject::tr("Select directory...") : caption);
+  QString dialogDir(dir.isEmpty() ? RecentDirectory : dir);
 
-  QString path(
-    QFileDialog::getExistingDirectory(
-      p,
-      dialogCaption,
-      dialogDir,
-      options
-    )
-  );
+  QString path(QFileDialog::getExistingDirectory(p, dialogCaption, dialogDir, options));
 
-  if( !path.isNull() )
-    {
+  if (!path.isNull())
+  {
     // Absolute path expected from QFileDialog
-    SetWorkingDir( path );
-    }
+    SetWorkingDir(path);
+  }
 
   return path;
 }
 
 /*****************************************************************************/
-QString
-GetOpenFilename( QWidget * p,
-		 const QString& caption,
-		 const QString& dir,
-		 const QString& filter,
-		 QString* selectedFilter,
-		 QFileDialog::Options options )
+QString GetOpenFilename(QWidget* p, const QString& caption, const QString& dir, const QString& filter, QString* selectedFilter, QFileDialog::Options options)
 {
-  QString dialogCaption(caption.isEmpty()
-    ? QObject::tr( "Open file..." )
-    : caption);
-  QString dialogDir(dir.isEmpty()
-    ? RecentDirectory
-    : dir);
+  QString dialogCaption(caption.isEmpty() ? QObject::tr("Open file...") : caption);
+  QString dialogDir(dir.isEmpty() ? RecentDirectory : dir);
 
-  QString filename(
-    QFileDialog::getOpenFileName(
-      p,
-      dialogCaption,
-      dialogDir,
-      filter,
-      selectedFilter,
-      options
-    )
-  );
+  QString filename(QFileDialog::getOpenFileName(p, dialogCaption, dialogDir, filter, selectedFilter, options));
 
   // Absolute path expected from QFileDialog
-  if( !filename.isNull() )
-    SetWorkingDir( filename );
+  if (!filename.isNull())
+    SetWorkingDir(filename);
 
   return filename;
 }
 
 /*****************************************************************************/
-QStringList
-GetOpenFilenames( QWidget * p,
-		  const QString & caption,
-		  const QString & dir,
-		  const QString & filter,
-		  QString * selectedFilter,
-		  QFileDialog::Options options )
+QStringList GetOpenFilenames(QWidget* p, const QString& caption, const QString& dir, const QString& filter, QString* selectedFilter,
+                             QFileDialog::Options options)
 {
-  QString dialogCaption(caption.isEmpty()
-    ? QObject::tr( "Open file..." )
-    : caption);
-  QString dialogDir(dir.isEmpty()
-    ? RecentDirectory
-    : dir);
+  QString dialogCaption(caption.isEmpty() ? QObject::tr("Open file...") : caption);
+  QString dialogDir(dir.isEmpty() ? RecentDirectory : dir);
 
-  QStringList filenames(
-    QFileDialog::getOpenFileNames(
-      p,
-      dialogCaption,
-      dialogDir,
-      filter,
-      selectedFilter,
-      options
-    )
-  );
+  QStringList filenames(QFileDialog::getOpenFileNames(p, dialogCaption, dialogDir, filter, selectedFilter, options));
 
   // Absolute path expected from QFileDialog
-  if( !filenames.isEmpty() )
-    SetWorkingDir( filenames.back() );
+  if (!filenames.isEmpty())
+    SetWorkingDir(filenames.back());
 
   return filenames;
 }
 
 /*****************************************************************************/
-QString
-GetSaveFilename( QWidget * p,
-		 const QString & caption,
-		 const QString & dir,
-		 const QString & filter,
-		 QString * selectedFilter,
-		 QFileDialog::Options options )
+QString GetSaveFilename(QWidget* p, const QString& caption, const QString& dir, const QString& filter, QString* selectedFilter, QFileDialog::Options options)
 {
-  QString dialogCaption(caption.isEmpty()
-    ? QObject::tr( "Save file..." )
-    : caption);
-  QString dialogDir(dir.isEmpty()
-    ? RecentDirectory
-    : dir);
+  QString dialogCaption(caption.isEmpty() ? QObject::tr("Save file...") : caption);
+  QString dialogDir(dir.isEmpty() ? RecentDirectory : dir);
 
-  QString filename(
-    QFileDialog::getSaveFileName(
-      p,
-      dialogCaption,
-      dialogDir,
-      filter,
-      selectedFilter,
-      options
-    )
-  );
+  QString filename(QFileDialog::getSaveFileName(p, dialogCaption, dialogDir, filter, selectedFilter, options));
 
   // Absolute path expected from QFileDialog
-  if( !filename.isNull() )
-    SetWorkingDir( filename );
+  if (!filename.isNull())
+    SetWorkingDir(filename);
 
   return filename;
 }
 
 /*****************************************************************************/
-QString
-GetWorkingDir()
+QString GetWorkingDir()
 {
   return RecentDirectory;
 }
 
 /*****************************************************************************/
-bool
-SetWorkingDir( const QString & filepath )
+bool SetWorkingDir(const QString& filepath)
 {
-  assert( !filepath.isEmpty() );
+  assert(!filepath.isEmpty());
 
-  QFileInfo finfo( filepath );
+  QFileInfo finfo(filepath);
 
 #if 0
   return
@@ -221,7 +148,7 @@ SetWorkingDir( const QString & filepath )
 #else
   // TODO : add mutex if needed
   QString dir = finfo.isDir() ? filepath : finfo.path();
-  if ( !QFileInfo(dir).isDir() )
+  if (!QFileInfo(dir).isDir())
     return false;
   RecentDirectory = finfo.isDir() ? filepath : finfo.path();
   return true;

@@ -31,112 +31,92 @@
 
 namespace otb
 {
-template<class PrintCallbackType>
-StandardOneLineFilterWatcher<PrintCallbackType>
-::StandardOneLineFilterWatcher()
-  : m_StarsCount(50),
-    m_CurrentNbStars(-1)
+template <class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>::StandardOneLineFilterWatcher() : m_StarsCount(50), m_CurrentNbStars(-1)
 {
-  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
-  m_Callback = m_DefaultCallback.get();
+  m_DefaultCallback = std::make_shared<PrintCallbackType>();
+  m_Callback        = m_DefaultCallback.get();
 }
 
-template<class PrintCallbackType>
-StandardOneLineFilterWatcher<PrintCallbackType>
-::StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const char *comment)
-  : FilterWatcherBase(process, comment),
-    m_StarsCount(50),
-    m_CurrentNbStars(-1)
+template <class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>::StandardOneLineFilterWatcher(itk::ProcessObject* process, const char* comment)
+  : FilterWatcherBase(process, comment), m_StarsCount(50), m_CurrentNbStars(-1)
 {
-  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
-  m_Callback = m_DefaultCallback.get();
+  m_DefaultCallback = std::make_shared<PrintCallbackType>();
+  m_Callback        = m_DefaultCallback.get();
 }
 
-template<class PrintCallbackType>
-StandardOneLineFilterWatcher<PrintCallbackType>
-::StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const std::string& comment)
-  : FilterWatcherBase(process, comment.c_str()),
-    m_StarsCount(50),
-    m_CurrentNbStars(-1)
+template <class PrintCallbackType>
+StandardOneLineFilterWatcher<PrintCallbackType>::StandardOneLineFilterWatcher(itk::ProcessObject* process, const std::string& comment)
+  : FilterWatcherBase(process, comment.c_str()), m_StarsCount(50), m_CurrentNbStars(-1)
 {
-  m_DefaultCallback = std::make_shared<PrintCallbackType>() ;
-  m_Callback = m_DefaultCallback.get();
+  m_DefaultCallback = std::make_shared<PrintCallbackType>();
+  m_Callback        = m_DefaultCallback.get();
 }
 
-template<class PrintCallbackType>
-void
-StandardOneLineFilterWatcher<PrintCallbackType>
-::ShowProgress()
+template <class PrintCallbackType>
+void StandardOneLineFilterWatcher<PrintCallbackType>::ShowProgress()
 {
   if (m_Process)
-    {
+  {
     int progressPercent = static_cast<int>(m_Process->GetProgress() * 100);
-    int nbStars = static_cast<int>(m_Process->GetProgress() * m_StarsCount);
-    int nbBlanks = m_StarsCount - nbStars;
+    int nbStars         = static_cast<int>(m_Process->GetProgress() * m_StarsCount);
+    int nbBlanks        = m_StarsCount - nbStars;
 
     if (nbBlanks < 0)
-      {
+    {
       nbBlanks = 0;
-      }
+    }
 
     if (nbStars > m_StarsCount)
-      {
+    {
       nbStars = m_StarsCount;
-      }
+    }
 
     if (progressPercent > 100)
-      {
+    {
       progressPercent = 100;
-      }
+    }
 
     if (nbStars > m_CurrentNbStars)
-      {
-      std::string stars(nbStars, '*');
-      std::string blanks(nbBlanks, ' ');
+    {
+      std::string        stars(nbStars, '*');
+      std::string        blanks(nbBlanks, ' ');
       std::ostringstream oss;
-      oss << m_Comment
-          << ": "
-          << progressPercent << "% [" << stars << blanks << "]";
+      oss << m_Comment << ": " << progressPercent << "% [" << stars << blanks << "]";
       if (m_Callback->IsInteractive())
-        {
+      {
         m_Callback->Call("\r" + oss.str());
         m_Callback->Flush();
-        }
-      else
-        {
-        m_Buffer = oss.str();
-        }
       }
+      else
+      {
+        m_Buffer = oss.str();
+      }
+    }
 
     m_CurrentNbStars = nbStars;
-    }
+  }
 }
 
-template<class PrintCallbackType>
-void
-StandardOneLineFilterWatcher<PrintCallbackType>
-::StartFilter()
+template <class PrintCallbackType>
+void StandardOneLineFilterWatcher<PrintCallbackType>::StartFilter()
 {
   m_Stopwatch.Start();
 }
 
-template<class PrintCallbackType>
-void
-StandardOneLineFilterWatcher<PrintCallbackType>
-::EndFilter()
+template <class PrintCallbackType>
+void StandardOneLineFilterWatcher<PrintCallbackType>::EndFilter()
 {
   m_Stopwatch.Stop();
 
   if (m_Process && !m_Callback->IsInteractive())
-    {
+  {
     m_Callback->Call(m_Buffer);
     m_Buffer = std::string("");
-    }
+  }
 
   m_Callback->Call(" (" + m_Stopwatch.GetElapsedHumanReadableTime() + ")\n");
-
 }
 
 } // end namespace otb

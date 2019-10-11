@@ -29,21 +29,23 @@ namespace Utils
 
 bool IsLonLatValid(double lon, double lat)
 {
-  if (lon < -180.0) return false;
-  if (lon > 180.0) return false;
-  if (lat < -90.0) return false;
-  if (lat > 90.0) return false;
+  if (lon < -180.0)
+    return false;
+  if (lon > 180.0)
+    return false;
+  if (lat < -90.0)
+    return false;
+  if (lat > 90.0)
+    return false;
   return true;
 }
 
-void PrintNothing(const char * /* s */)
+void PrintNothing(const char* /* s */)
 {
 }
 
 bool const TrueConstant = true;
 
 bool const FalseConstant = false;
-
 }
-
 }

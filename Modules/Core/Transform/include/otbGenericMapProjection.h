@@ -34,10 +34,10 @@ namespace otb
 namespace TransformDirection
 {
 enum TransformationDirection
-  {
+{
   FORWARD = 0,
   INVERSE = 1
-  };
+};
 }
 
 /** \class GenericMapProjection
@@ -55,24 +55,20 @@ enum TransformationDirection
  * \ingroup OTBTransform
  **/
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping,
-    class TScalarType = double,
-    unsigned int NInputDimensions = 2,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT GenericMapProjection : public Transform<TScalarType,       // Data type for scalars
-      NInputDimensions,                                                         // Number of dimensions in the input space
-      NOutputDimensions>                                                         // Number of dimensions in the output space
+template <TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType = double, unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT       GenericMapProjection : public Transform<TScalarType, // Data type for scalars
+                                                         NInputDimensions,  // Number of dimensions in the input space
+                                                         NOutputDimensions> // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
-  typedef Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>                Superclass;
+  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef GenericMapProjection          Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::ScalarType           ScalarType;
+  typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -87,7 +83,7 @@ public:
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions + 1));
 
   /** Return the Wkt representation of the projection*/
   virtual std::string GetWkt();
@@ -98,7 +94,7 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
   bool IsProjectionDefined() const;
-  
+
 protected:
   GenericMapProjection();
   ~GenericMapProjection() override;
@@ -106,11 +102,10 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   std::unique_ptr<CoordinateTransformation> m_MapProjection;
-  
-private:
-  GenericMapProjection(const Self &) = delete;
-  void operator =(const Self&) = delete;
 
+private:
+  GenericMapProjection(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

@@ -52,31 +52,31 @@ namespace otb
 class ITK_EXPORT ExtendedFilenameToReaderOptions : public ExtendedFilenameHelper
 {
 public:
-/** Standard class typedefs. */
-  typedef ExtendedFilenameToReaderOptions        Self;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
-  typedef ExtendedFilenameHelper                 Superclass;
+  /** Standard class typedefs. */
+  typedef ExtendedFilenameToReaderOptions Self;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef ExtendedFilenameHelper          Superclass;
 
   itkTypeMacro(ExtendedFilenameToReaderOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
-  typedef Superclass                                FNameHelperType;
-  typedef FNameHelperType::OptionMapType            MapType;
-  typedef MapType::iterator                         MapIteratorType;
+  typedef Superclass                     FNameHelperType;
+  typedef FNameHelperType::OptionMapType MapType;
+  typedef MapType::iterator              MapIteratorType;
 
   /** The reader option structure. */
   struct OptionType
   {
-    std::pair< bool, std::string  >  simpleFileName;
-    std::pair< bool, std::string  >  extGEOMFileName;
-    std::pair< bool, unsigned int >  subDatasetIndex;
-    std::pair< bool, unsigned int >  resolutionFactor;
-    std::pair< bool, bool         >  skipCarto;
-    std::pair< bool, bool         >  skipGeom;
-    std::pair< bool, bool         >  skipRpcTag;
-    std::pair< bool, std::string  >  bandRange;
-    std::vector<std::string>         optionList;
+    std::pair<bool, std::string>  simpleFileName;
+    std::pair<bool, std::string>  extGEOMFileName;
+    std::pair<bool, unsigned int> subDatasetIndex;
+    std::pair<bool, unsigned int> resolutionFactor;
+    std::pair<bool, bool>         skipCarto;
+    std::pair<bool, bool>         skipGeom;
+    std::pair<bool, bool>         skipRpcTag;
+    std::pair<bool, std::string>  bandRange;
+    std::vector<std::string> optionList;
   };
 
   /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
@@ -85,34 +85,35 @@ public:
   void SetExtendedFileName(const std::string& extFname) override;
 
   /* Get Methods */
-  bool SimpleFileNameIsSet () const;
-  bool ExtGEOMFileNameIsSet () const;
-  const char* GetExtGEOMFileName () const;
-  bool SubDatasetIndexIsSet () const;
-  unsigned int GetSubDatasetIndex () const;
-  bool ResolutionFactorIsSet () const;
-  unsigned int GetResolutionFactor () const;
-  bool SkipCartoIsSet () const;
-  bool GetSkipCarto () const;
-  bool SkipGeomIsSet () const;
-  bool GetSkipGeom () const;
-  bool SkipRpcTagIsSet () const;
-  bool GetSkipRpcTag () const;
-  std::string GetBandRange () const;
+  bool         SimpleFileNameIsSet() const;
+  bool         ExtGEOMFileNameIsSet() const;
+  const char*  GetExtGEOMFileName() const;
+  bool         SubDatasetIndexIsSet() const;
+  unsigned int GetSubDatasetIndex() const;
+  bool         ResolutionFactorIsSet() const;
+  unsigned int GetResolutionFactor() const;
+  bool         SkipCartoIsSet() const;
+  bool         GetSkipCarto() const;
+  bool         SkipGeomIsSet() const;
+  bool         GetSkipGeom() const;
+  bool         SkipRpcTagIsSet() const;
+  bool         GetSkipRpcTag() const;
+  std::string  GetBandRange() const;
 
   /** Test if band range extended filename is set */
-  bool BandRangeIsSet () const;
+  bool BandRangeIsSet() const;
 
 protected:
   ExtendedFilenameToReaderOptions();
-  ~ExtendedFilenameToReaderOptions() override {}
+  ~ExtendedFilenameToReaderOptions() override
+  {
+  }
 
 private:
-  ExtendedFilenameToReaderOptions(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ExtendedFilenameToReaderOptions(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  OptionType               m_Options;
-
+  OptionType m_Options;
 };
 } // end namespace otb
 

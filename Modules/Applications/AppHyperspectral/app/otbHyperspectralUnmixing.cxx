@@ -32,7 +32,7 @@ namespace Wrapper
 {
 typedef otb::UnConstrainedLeastSquareImageFilter<DoubleVectorImageType, DoubleVectorImageType, double> UCLSUnmixingFilterType;
 typedef otb::ISRAUnmixingImageFilter<DoubleVectorImageType, DoubleVectorImageType, double>             ISRAUnmixingFilterType;
-typedef otb::MDMDNMFImageFilter<DoubleVectorImageType, DoubleVectorImageType>                          MDMDNMFUnmixingFilterType;
+typedef otb::MDMDNMFImageFilter<DoubleVectorImageType, DoubleVectorImageType> MDMDNMFUnmixingFilterType;
 
 typedef otb::VectorImageToMatrixImageFilter<DoubleVectorImageType> VectorImageToMatrixImageFilterType;
 
@@ -60,13 +60,15 @@ enum EndmembersEstimationMethod
 enum UnMixingMethod
 {
   UnMixingMethod_UCLS,
-  //UnMixingMethod_FCLS,
+  // UnMixingMethod_FCLS,
   // UnMixingMethod_NCLS,
   UnMixingMethod_ISRA,
   UnMixingMethod_MDMDNMF,
 };
 
-const char* UnMixingMethodNames [] = { "UCLS", "ISRA", "MDMDNMF", };
+const char* UnMixingMethodNames[] = {
+    "UCLS", "ISRA", "MDMDNMF",
+};
 
 
 class HyperspectralUnmixing : public Application
@@ -90,38 +92,40 @@ private:
     SetDescription("Estimate abundance maps from an hyperspectral image and a set of endmembers.");
 
     // Documentation
-    SetDocLongDescription("The application applies a linear unmixing algorithm "
-    "to an hyperspectral data cube. This method supposes that the mixture between "
-    "aterials in the scene is macroscopic and simulates a linear mixing model of "
-    "spectra.\n\n"
-    "The Linear Mixing Model (LMM) acknowledges that reflectance "
-    "spectrum associated with each pixel is a linear combination of pure "
-    "materials in the recovery area, commonly known as endmembers. Endmembers can "
-    "be estimated using the VertexComponentAnalysis application.\n\n"
-    "The application allows estimating the abundance maps with several algorithms:\n\n"
-    "* Unconstrained Least Square (ucls)\n"
-    "* Image Space Reconstruction Algorithm (isra)\n"
-    "* Least Square (ncls)\n"
-    "* Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF)."
-    );
+    SetDocLongDescription(
+        "The application applies a linear unmixing algorithm "
+        "to an hyperspectral data cube. This method supposes that the mixture between "
+        "aterials in the scene is macroscopic and simulates a linear mixing model of "
+        "spectra.\n\n"
+        "The Linear Mixing Model (LMM) acknowledges that reflectance "
+        "spectrum associated with each pixel is a linear combination of pure "
+        "materials in the recovery area, commonly known as endmembers. Endmembers can "
+        "be estimated using the VertexComponentAnalysis application.\n\n"
+        "The application allows estimating the abundance maps with several algorithms:\n\n"
+        "* Unconstrained Least Square (ucls)\n"
+        "* Image Space Reconstruction Algorithm (isra)\n"
+        "* Least Square (ncls)\n"
+        "* Minimum Dispersion Constrained Non Negative Matrix Factorization (MDMDNMF).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis");
 
     AddDocTag(Tags::Hyperspectral);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image Filename");
-    SetParameterDescription("in","The hyperspectral data cube input");
+    AddParameter(ParameterType_InputImage, "in", "Input Image Filename");
+    SetParameterDescription("in", "The hyperspectral data cube input");
 
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription("out","The output abundance map. The abundance "
-      "fraction are stored in a multispectral image where band N corresponds "
-      "to the fraction of endmembers N in each pixel.");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out",
+                            "The output abundance map. The abundance "
+                            "fraction are stored in a multispectral image where band N corresponds "
+                            "to the fraction of endmembers N in each pixel.");
 
-    AddParameter(ParameterType_InputImage,  "ie",   "Input endmembers");
-    SetParameterDescription("ie","The endmembers (estimated pure pixels) to "
-      "use for unmixing. Must be stored as a multispectral image, where "
-      "each pixel is interpreted as an endmember.");
+    AddParameter(ParameterType_InputImage, "ie", "Input endmembers");
+    SetParameterDescription("ie",
+                            "The endmembers (estimated pure pixels) to "
+                            "use for unmixing. Must be stored as a multispectral image, where "
+                            "each pixel is interpreted as an endmember.");
 
     AddParameter(ParameterType_Choice, "ua", "Unmixing algorithm");
     SetParameterDescription("ua", "The algorithm to use for unmixing");
@@ -153,7 +157,7 @@ private:
   {
     m_ProcessObjects.clear();
 
-    DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
+    DoubleVectorImageType::Pointer inputImage      = GetParameterDoubleVectorImage("in");
     DoubleVectorImageType::Pointer endmembersImage = GetParameterDoubleVectorImage("ie");
 
     /*
@@ -173,14 +177,13 @@ private:
      */
     DoubleVectorImageType::Pointer abundanceMap;
 
-    switch ( static_cast<UnMixingMethod>(GetParameterInt("ua")) )
+    switch (static_cast<UnMixingMethod>(GetParameterInt("ua")))
     {
     case UnMixingMethod_UCLS:
-      {
+    {
       otbAppLogINFO("UCLS Unmixing");
 
-      UCLSUnmixingFilterType::Pointer unmixer =
-          UCLSUnmixingFilterType::New();
+      UCLSUnmixingFilterType::Pointer unmixer = UCLSUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
       unmixer->GetModifiableFunctor().SetMatrix(endMembersMatrix);
@@ -188,48 +191,41 @@ private:
 
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
-
-      }
-      break;
+    }
+    break;
     case UnMixingMethod_ISRA:
-      {
+    {
       otbAppLogINFO("ISRA Unmixing");
 
-      ISRAUnmixingFilterType::Pointer unmixer =
-          ISRAUnmixingFilterType::New();
+      ISRAUnmixingFilterType::Pointer unmixer = ISRAUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
       unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMembersMatrix);
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
-
-      }
-      break;
+    }
+    break;
     case UnMixingMethod_MDMDNMF:
-      {
+    {
       otbAppLogINFO("MDMD-NMF Unmixing");
 
-      MDMDNMFUnmixingFilterType::Pointer unmixer =
-          MDMDNMFUnmixingFilterType::New();
+      MDMDNMFUnmixingFilterType::Pointer unmixer = MDMDNMFUnmixingFilterType::New();
 
       unmixer->SetInput(inputImage);
       unmixer->SetEndmembersMatrix(endMembersMatrix);
       abundanceMap = unmixer->GetOutput();
       m_ProcessObjects.push_back(unmixer.GetPointer());
-
-      }
-      break;
+    }
+    break;
     default:
       break;
     }
 
     SetParameterOutputImage<DoubleVectorImageType>("out", abundanceMap);
-
   }
 
   std::vector<itk::ProcessObject::Pointer> m_ProcessObjects;
 };
-
 }
 }
 

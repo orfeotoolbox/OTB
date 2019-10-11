@@ -44,7 +44,7 @@ public:
   ~QtWidgetBoolParameter() override;
 
 public slots:
-  void SetValue( bool value );
+  void SetValue(bool value);
 
 private:
   QtWidgetBoolParameter(const QtWidgetBoolParameter&) = delete;
@@ -54,10 +54,8 @@ private:
 
   void DoUpdateGUI() override;
 
-  QToolButton *m_Button;
+  QToolButton* m_Button;
 };
-
-
 }
 }
 

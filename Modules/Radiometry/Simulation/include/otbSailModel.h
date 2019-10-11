@@ -47,14 +47,14 @@ class OTBSimulation_EXPORT SailModel : public SimulationStep2Base
 {
 public:
   /** Standard class typedefs */
-  typedef SailModel Self;
-  typedef SimulationStep2Base   Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SailModel                     Self;
+  typedef SimulationStep2Base           Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef Superclass::SpectralResponseType      SpectralResponseType;
-  typedef std::vector<double>                   VectorType;
-  typedef Superclass::ParametersType   ParametersType;
+  typedef Superclass::SpectralResponseType SpectralResponseType;
+  typedef std::vector<double>              VectorType;
+  typedef Superclass::ParametersType       ParametersType;
 
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -64,11 +64,11 @@ public:
 
 
   /** Set Inputs */
-  void SetReflectance(const SpectralResponseType *object) override;
-  SpectralResponseType * GetReflectance();
+  void SetReflectance(const SpectralResponseType* object) override;
+  SpectralResponseType* GetReflectance();
 
-  void SetTransmittance(const SpectralResponseType *object) override;
-  SpectralResponseType * GetTransmittance();
+  void SetTransmittance(const SpectralResponseType* object) override;
+  SpectralResponseType* GetTransmittance();
 
   /** Set parameters */
   /** Set/Get leaf area index */
@@ -113,13 +113,13 @@ public:
   void GenerateData() override;
 
   /** Get Output */
-  virtual SpectralResponseType * GetViewingReflectance();
-  virtual SpectralResponseType * GetHemisphericalReflectance();
-  virtual SpectralResponseType * GetViewingAbsorptance();
-  virtual SpectralResponseType * GetHemisphericalAbsorptance();
+  virtual SpectralResponseType* GetViewingReflectance();
+  virtual SpectralResponseType* GetHemisphericalReflectance();
+  virtual SpectralResponseType* GetViewingAbsorptance();
+  virtual SpectralResponseType* GetHemisphericalAbsorptance();
 
-  const ParametersType  GetInput();
-  void SetInput(const ParametersType &);
+  const ParametersType GetInput();
+  void                 SetInput(const ParametersType&);
   using Superclass::SetInput;
 
 
@@ -135,35 +135,35 @@ protected:
   using Superclass::MakeOutput;
 
   /** Compute Leaf Angle Distribution */
-  void Calc_LIDF(const double a, VectorType &lidf) const;
-  void Campbell(const double ala, VectorType &freq) const;
+  void Calc_LIDF(const double a, VectorType& lidf) const;
+  void Campbell(const double ala, VectorType& freq) const;
 
   /** J functions */
   double Jfunc1(const double k, const double l, const double t) const;
   double Jfunc2(const double k, const double l, const double t) const;
   double Jfunc3(const double k, const double l, const double t) const;
   /** Volscatt */
-  void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType &result) const;
+  void Volscatt(const double tts, const double tto, const double psi, const double ttl, VectorType& result) const;
 
 private:
-  SailModel(const Self&) = delete; 
+  SailModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  double m_LAI; //leaf area index
-  double m_Angl; //average leaf angle
-  double m_PSoil; //soil coefficient
-  double m_Skyl; //diffuse/direct radiation
-  double m_HSpot; //hot spot
-  double m_TTS; //solar zenith angle
-  double m_TTO; //observer zenith angle
-  double m_PSI; //azimuth
-  double m_FCoverView; //fCover in the viewing direction
-  bool m_UseSoilFile; //use a soil file instead of DataSpecP5B
-  size_t m_SoilIndex; //which soil in the soil file
+  double                        m_LAI;         // leaf area index
+  double                        m_Angl;        // average leaf angle
+  double                        m_PSoil;       // soil coefficient
+  double                        m_Skyl;        // diffuse/direct radiation
+  double                        m_HSpot;       // hot spot
+  double                        m_TTS;         // solar zenith angle
+  double                        m_TTO;         // observer zenith angle
+  double                        m_PSI;         // azimuth
+  double                        m_FCoverView;  // fCover in the viewing direction
+  bool                          m_UseSoilFile; // use a soil file instead of DataSpecP5B
+  size_t                        m_SoilIndex;   // which soil in the soil file
   std::shared_ptr<SoilDataBase> m_SoilDataBase;
 };
 
-}// end namespace otb
+} // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION

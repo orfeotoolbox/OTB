@@ -37,11 +37,13 @@ namespace Function
  *
  * \ingroup OTBInterpolation
  */
-template<class TInput = double, class TOutput = double>
+template <class TInput = double, class TOutput = double>
 class CosineWindowFunction
 {
 public:
-  CosineWindowFunction(): m_Radius(1), m_Factor(CONST_PI / 2.0) {} // default radius is 1 at construction
+  CosineWindowFunction() : m_Radius(1), m_Factor(CONST_PI / 2.0)
+  {
+  } // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
@@ -56,19 +58,20 @@ public:
     return m_Factor;
   }
 
-  inline TOutput operator ()(const TInput& A) const
+  inline TOutput operator()(const TInput& A) const
   {
-    double x = static_cast<double>(A);
-    double px = CONST_PI * x;
+    double x    = static_cast<double>(A);
+    double px   = CONST_PI * x;
     double temp = std::cos(x * m_Factor);
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
+
 private:
   unsigned int m_Radius;
   // Equal to \f$ \frac{\pi}{2 m} \f$
-  double       m_Factor;
+  double m_Factor;
 };
-} //namespace Function
+} // namespace Function
 
 /**
  * \class WindowedSincInterpolateImageCosineFunction
@@ -85,24 +88,18 @@ private:
  *
  * \ingroup OTBInterpolation
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
-      double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageCosineFunction :
-  public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::CosineWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
+template <class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double,
+          class TInputInterpolator = double, class TOutputInterpolator = double>
+class ITK_EXPORT WindowedSincInterpolateImageCosineFunction
+    : public WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::CosineWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                      TBoundaryCondition, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageCosineFunction Self;
-  typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::CosineWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
-  Superclass;
+  typedef WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::CosineWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                   TBoundaryCondition, TCoordRep>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -127,16 +124,18 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
 protected:
-  WindowedSincInterpolateImageCosineFunction() {};
-  ~WindowedSincInterpolateImageCosineFunction() override {}
+  WindowedSincInterpolateImageCosineFunction(){};
+  ~WindowedSincInterpolateImageCosineFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageCosineFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WindowedSincInterpolateImageCosineFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

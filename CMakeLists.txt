@@ -213,11 +213,6 @@ endmacro()
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 mark_as_advanced(BUILD_SHARED_LIBS)
 
-# The following variable can be deleted and replace by BUILD_SHARED_LIBS
-# in otbConfigure.h.in
-set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
-
-
 if(MSVC)
   option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
   mark_as_advanced(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
@@ -403,6 +398,7 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/UseOTB.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
+              CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)

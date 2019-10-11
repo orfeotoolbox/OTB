@@ -27,20 +27,19 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbMeanFunctor.h"
 
-int otbMeanFunctorImageTest(int itkNotUsed(argc), char * argv[])
+int otbMeanFunctorImageTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  const unsigned int Dimension = 2;
-  typedef unsigned char                          PixelType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
   typedef otb::Image<PixelType, Dimension>       ImageType;
-  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>        WriterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
-  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType>
-  MeanFunctorType;
+  typedef otb::Functor::MeanFunctor<VectorImageType::PixelType, ImageType::PixelType> MeanFunctorType;
 
   typedef itk::UnaryFunctorImageFilter<VectorImageType, ImageType, MeanFunctorType> MeanFilterType;
   MeanFilterType::Pointer filter = MeanFilterType::New();

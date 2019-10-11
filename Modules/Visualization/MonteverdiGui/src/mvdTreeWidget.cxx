@@ -57,9 +57,7 @@ namespace mvd
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-const char*
-TreeWidget
-::ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
+const char* TreeWidget::ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
@@ -69,8 +67,7 @@ TreeWidget
 class StaticInitializer
 {
 public:
-  StaticInitializer() :
-    m_QTreeWidgetItemPtrMetaTypeId( -1 )
+  StaticInitializer() : m_QTreeWidgetItemPtrMetaTypeId(-1)
   {
     Initialize();
   }
@@ -81,30 +78,23 @@ public:
   }
 
 private:
-  inline
-  void
-  Initialize()
+  inline void Initialize()
   {
     //
     // Call qRegisterMetaType<>() to make type available in
     // non-template signatures and serialization.
-    m_QTreeWidgetItemPtrMetaTypeId =
-      qRegisterMetaType< QTreeWidgetItem* >( "QTreeWidgetItem*" );
+    m_QTreeWidgetItemPtrMetaTypeId = qRegisterMetaType<QTreeWidgetItem*>("QTreeWidgetItem*");
 
-    //
-    // Register serialization operators for custom meta-types.
-#if QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
-    qRegisterMetaTypeStreamOperators< QTreeWidgetItem* >();
-#else // QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
-    qRegisterMetaTypeStreamOperators< QTreeWidgetItem* >(
-      QMetaType::typeName( m_QTreeWidgetItemPtrMetaTypeId )
-    );
+//
+// Register serialization operators for custom meta-types.
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+    qRegisterMetaTypeStreamOperators<QTreeWidgetItem*>();
+#else  // QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
+    qRegisterMetaTypeStreamOperators<QTreeWidgetItem*>(QMetaType::typeName(m_QTreeWidgetItemPtrMetaTypeId));
 #endif // QT_VERSION >= QT_VERSION_CHECK( 4, 7, 0 )
   }
 
-  inline
-  void
-  Finalize()
+  inline void Finalize()
   {
   }
 
@@ -119,70 +109,64 @@ static const StaticInitializer STATIC_INITIALIZER;
 #endif // USE_CUSTOM_MIME_DATA
 
 /*****************************************************************************/
-QMimeData*
-EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
+QMimeData* EncodeMimeData(QMimeData* mimeData, const QList<QTreeWidgetItem*>& items)
 {
 #if USE_CUSTOM_MIME_DATA
 
-  assert( mimeData!=NULL );
+  assert(mimeData != NULL);
 
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+  typedef QList<QTreeWidgetItem*> QTreeWidgetItemList;
 
-  QByteArray byteArray;
-  QDataStream stream( &byteArray, QIODevice::WriteOnly );
+  QByteArray  byteArray;
+  QDataStream stream(&byteArray, QIODevice::WriteOnly);
 
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    /*
-    qDebug()
-      << "QTreeWidgetItem::parent()==" << ( *it )->parent();
-    qDebug()
-      << "Pointer:" << static_cast< void* >( *it );
-    qDebug()
-      << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    */
+  for (QTreeWidgetItemList::const_iterator it(items.begin()); it != items.end(); ++it)
+  {
+/*
+qDebug()
+  << "QTreeWidgetItem::parent()==" << ( *it )->parent();
+qDebug()
+  << "Pointer:" << static_cast< void* >( *it );
+qDebug()
+  << "Variant:" << QVariant::fromValue< QTreeWidgetItem* >( *it );
+*/
 
 #if 1
-    QTreeWidgetItem * item = *it;
+    QTreeWidgetItem* item = *it;
 
-    qDebug()
-      << "Item (encoded):"
-      << item << "\n"
-      << "text[ 0 ]:" << item->text( 0 ) << "\n"
-      << "text[ 1 ]:" << item->text( 1 ) << "\n"
-      << "text[ 2 ]:" << item->text( 2 );
+    qDebug() << "Item (encoded):" << item << "\n"
+             << "text[ 0 ]:" << item->text(0) << "\n"
+             << "text[ 1 ]:" << item->text(1) << "\n"
+             << "text[ 2 ]:" << item->text(2);
 
-    if( item->parent()!=NULL )
-      {
-      qDebug()
-        << "parent:" << item->parent() << "\n"
-        << "text[ 0 ]:" << item->parent()->text( 0 ) << "\n"
-        << "text[ 1 ]:" << item->parent()->text( 1 );
-      }
+    if (item->parent() != NULL)
+    {
+      qDebug() << "parent:" << item->parent() << "\n"
+               << "text[ 0 ]:" << item->parent()->text(0) << "\n"
+               << "text[ 1 ]:" << item->parent()->text(1);
+    }
 #endif
 
     // http://www.qtfr.org/viewtopic.php?id=9630
     // stream << *it;
-    stream << QVariant::fromValue< QTreeWidgetItem* >( *it );
-    }
+    stream << QVariant::fromValue<QTreeWidgetItem*>(*it);
+  }
 
-  mimeData->setData( TreeWidget::ITEM_MIME_TYPE, byteArray );
+  mimeData->setData(TreeWidget::ITEM_MIME_TYPE, byteArray);
 
-  /*
-  qDebug() << mimeData->formats();
+/*
+qDebug() << mimeData->formats();
 
-  for( QTreeWidgetItemList::const_iterator it( items.begin() );
-       it!=items.end();
-       ++it )
-    {
-    QTreeWidgetItem* item = *it;
+for( QTreeWidgetItemList::const_iterator it( items.begin() );
+     it!=items.end();
+     ++it )
+  {
+  QTreeWidgetItem* item = *it;
 
-    qDebug()
-      << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
-    }
-  */
+  qDebug()
+    << item->type() << item->text( 0 ) << item->text( 1 ) << item->text( 2 );
+  }
+*/
 
 #endif // USE_CUSTOM_MIME_DATA
 
@@ -190,31 +174,28 @@ EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items )
 }
 
 /*****************************************************************************/
-int
-DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
+int DecodeMimeData(QList<QTreeWidgetItem*>& items, const QMimeData* mimeData)
 {
-  assert( mimeData!=NULL );
+  assert(mimeData != NULL);
 
   int count = 0;
 
 #if USE_CUSTOM_MIME_DATA
 
-  if( !mimeData->hasFormat( TreeWidget::ITEM_MIME_TYPE ) )
+  if (!mimeData->hasFormat(TreeWidget::ITEM_MIME_TYPE))
     return 0;
 
-  QByteArray byteArray(
-    mimeData->data( TreeWidget::ITEM_MIME_TYPE )
-  );
+  QByteArray byteArray(mimeData->data(TreeWidget::ITEM_MIME_TYPE));
 
-  QDataStream stream( &byteArray, QIODevice::ReadOnly );
+  QDataStream stream(&byteArray, QIODevice::ReadOnly);
 
   //
   // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
 
   QTreeWidgetItem* item = NULL;
 
-  while( !stream.atEnd() )
-    {
+  while (!stream.atEnd())
+  {
     QVariant variant;
 
     stream >> variant;
@@ -223,55 +204,52 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 
     // http://www.qtfr.org/viewtopic.php?id=9630
 
-    item = variant.value< QTreeWidgetItem* >();
-    assert( item!=NULL );
+    item = variant.value<QTreeWidgetItem*>();
+    assert(item != NULL);
 
-    items.push_back( item );
+    items.push_back(item);
 
 #if 1
-    qDebug()
-      << "Item (decoded):"
-      << item << "\n"
-      << "text[ 0 ]:" << item->text( 0 ) << "\n"
-      << "text[ 1 ]:" << item->text( 1 ) << "\n"
-      << "text[ 2 ]:" << item->text( 2 );
+    qDebug() << "Item (decoded):" << item << "\n"
+             << "text[ 0 ]:" << item->text(0) << "\n"
+             << "text[ 1 ]:" << item->text(1) << "\n"
+             << "text[ 2 ]:" << item->text(2);
 
-      if( item->parent()!=NULL )
-        {
-        qDebug()
-          << "parent:" << item->parent() << "\n"
-          << "text[ 0 ]:" << item->parent()->text( 0 ) << "\n"
-          << "text[ 1 ]:" << item->parent()->text( 1 );
-        }
+    if (item->parent() != NULL)
+    {
+      qDebug() << "parent:" << item->parent() << "\n"
+               << "text[ 0 ]:" << item->parent()->text(0) << "\n"
+               << "text[ 1 ]:" << item->parent()->text(1);
+    }
 #endif
 
-    ++ count;
-    }
+    ++count;
+  }
 
-  // qDebug() << count2 << "items.";
+// qDebug() << count2 << "items.";
 
 #else // USE_CUSTOM_MIME_DATA
 
-  /*
-  if( !mimeData->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
-    return 0;
+/*
+if( !mimeData->hasFormat( "application/x-qabstractitemmodeldatalist" ) )
+  return 0;
 
-  QByteArray byteArray(
-    mimeData->data( "application/x-qabstractitemmodeldatalist" )
-  );
+QByteArray byteArray(
+  mimeData->data( "application/x-qabstractitemmodeldatalist" )
+);
 
-  QDataStream stream( &byteArray, QIODevice::ReadOnly );
+QDataStream stream( &byteArray, QIODevice::ReadOnly );
 
-  //
-  // http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
+//
+// http://www.qtcentre.org/threads/8756-QTreeWidgetItem-mime-type
 
-  QTreeWidgetItem* item = NULL;
+QTreeWidgetItem* item = NULL;
 
-  while( !stream.atEnd() )
-    {
-    ++ count;
-    }
-  */
+while( !stream.atEnd() )
+  {
+  ++ count;
+  }
+*/
 
 #endif // USE_CUSTOM_MIME_DATA
 
@@ -282,11 +260,9 @@ DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData )
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-TreeWidget
-::TreeWidget( QWidget* p  ):
-  QTreeWidget( p )
+TreeWidget::TreeWidget(QWidget* p) : QTreeWidget(p)
 {
-  setSelectionBehavior( QAbstractItemView::SelectRows );
+  setSelectionBehavior(QAbstractItemView::SelectRows);
 
   // MANTIS-929: Leave default behaviour
   //
@@ -299,26 +275,23 @@ TreeWidget
   // think it might change setting drag-enabled and accept-drop
   // behaviour.
   //
-  setDragDropMode( QAbstractItemView::InternalMove );
-  setDragEnabled( true );
-  setAcceptDrops( true );
-  setDragDropMode( QAbstractItemView::DragDrop );
+  setDragDropMode(QAbstractItemView::InternalMove);
+  setDragEnabled(true);
+  setAcceptDrops(true);
+  setDragDropMode(QAbstractItemView::DragDrop);
 }
 
 /*******************************************************************************/
-TreeWidget
-::~TreeWidget()
+TreeWidget::~TreeWidget()
 {
 }
 
 /*******************************************************************************/
-QStringList
-TreeWidget
-::mimeTypes() const
+QStringList TreeWidget::mimeTypes() const
 {
   // qDebug() << this << "::mimeTypes()";
 
-  QStringList mTypes( QTreeWidget::mimeTypes() );
+  QStringList mTypes(QTreeWidget::mimeTypes());
 
 #if USE_CUSTOM_MIME_DATA
 
@@ -330,19 +303,15 @@ TreeWidget
 }
 
 /*******************************************************************************/
-QMimeData*
-TreeWidget
-::mimeData( const QList< QTreeWidgetItem* > itemList ) const
+QMimeData* TreeWidget::mimeData(const QList<QTreeWidgetItem*> itemList) const
 {
   // qDebug() << this << "::mimeData(" << itemList << ")";
 
-  return EncodeMimeData( QTreeWidget::mimeData( itemList ), itemList );
+  return EncodeMimeData(QTreeWidget::mimeData(itemList), itemList);
 }
 
 /*******************************************************************************/
-Qt::DropActions
-TreeWidget
-::supportedDropActions() const
+Qt::DropActions TreeWidget::supportedDropActions() const
 {
   // This method is overloaded only to spy/debug Qt behavior.
 
@@ -354,59 +323,52 @@ TreeWidget
 }
 
 /*******************************************************************************/
-void
-TreeWidget
-::startDrag( Qt::DropActions supportedActions )
+void TreeWidget::startDrag(Qt::DropActions supportedActions)
 {
   // This method is overloaded only to spy/debug Qt behavior.
 
   qDebug() << this << "::startDrag(" << supportedActions << ")";
 
-  QTreeWidget::startDrag( supportedActions );
+  QTreeWidget::startDrag(supportedActions);
 }
 
 /*******************************************************************************/
-void
-TreeWidget
-::dragEnterEvent( QDragEnterEvent* e )
+void TreeWidget::dragEnterEvent(QDragEnterEvent* e)
 {
   qDebug() << this << "::dragEnterEvent(" << e << ")";
 
   // e->acceptProposedAction();
 
-  QTreeWidget::dragEnterEvent( e );
+  QTreeWidget::dragEnterEvent(e);
 }
 
 /*******************************************************************************/
-void
-TreeWidget
-::dragMoveEvent( QDragMoveEvent* e )
+void TreeWidget::dragMoveEvent(QDragMoveEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
   qDebug() << this << "::dragMoveEvent(" << e << ")";
-  qDebug() << this << itemAt( e->pos() );
+  qDebug() << this << itemAt(e->pos());
 
-  QTreeWidget::dragMoveEvent( e );
+  QTreeWidget::dragMoveEvent(e);
 
-  QTreeWidgetItem* item = itemAt( e->pos() );
-  // const QMimeData * mimeData = e->mimeData();
+  QTreeWidgetItem* item = itemAt(e->pos());
+// const QMimeData * mimeData = e->mimeData();
 
 #if USE_CUSTOM_MIME_DATA
-  if( e->mimeData()->hasFormat( TreeWidget::ITEM_MIME_TYPE ) &&
-      item!=NULL )
-#else // USE_CUSTOM_MIME_DATA
-  if( item!=NULL )
+  if (e->mimeData()->hasFormat(TreeWidget::ITEM_MIME_TYPE) && item != NULL)
+#else  // USE_CUSTOM_MIME_DATA
+  if (item != NULL)
 #endif // USE_CUSTOM_MIME_DATA
-    {
+  {
     qDebug() << "ACCEPT";
     e->accept();
-    }
+  }
   else
-    {
+  {
     qDebug() << "IGNORE";
     e->ignore();
-    }
+  }
 
   /*
   if( e->source()==this )
@@ -425,37 +387,33 @@ TreeWidget
 }
 
 /*******************************************************************************/
-void
-TreeWidget
-::dragLeaveEvent( QDragLeaveEvent* e )
+void TreeWidget::dragLeaveEvent(QDragLeaveEvent* e)
 {
   qDebug() << this << "::dragLeaveEvent(" << e << ")";
 
-  QTreeWidget::dragLeaveEvent( e );
+  QTreeWidget::dragLeaveEvent(e);
 }
 
 /*******************************************************************************/
-void
-TreeWidget
-::dropEvent( QDropEvent* e )
+void TreeWidget::dropEvent(QDropEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
   // qDebug() << this << "::dropEvent(" << e << ")";
 
   QTreeWidgetItemList itemList;
 
-  DecodeMimeData( itemList, e->mimeData() );
+  DecodeMimeData(itemList, e->mimeData());
 
-  if( e->source()==this )
-    {
-    e->setDropAction( Qt::MoveAction );
+  if (e->source() == this)
+  {
+    e->setDropAction(Qt::MoveAction);
     // e->accept();
-    }
+  }
 
   qDebug() << "dropAction:" << e->dropAction();
 
-  QTreeWidget::dropEvent( e );
+  QTreeWidget::dropEvent(e);
 
   qDebug() << "dropAction:" << e->dropAction();
 
@@ -498,15 +456,13 @@ TreeWidget
     }
   */
 
-  QTreeWidgetItem * target = itemAt( e->pos() );
+  QTreeWidgetItem* target = itemAt(e->pos());
 
   qDebug() << "itemAt(" << e->pos() << "):" << target;
 
-  if( e->source()==this )
-    for( QTreeWidgetItemList::const_iterator it = itemList.begin();
-         it!=itemList.end();
-         ++it )
-      emit ItemMoved( *it, target );
+  if (e->source() == this)
+    for (QTreeWidgetItemList::const_iterator it = itemList.begin(); it != itemList.end(); ++it)
+      emit ItemMoved(*it, target);
 }
 
 /*******************************************************************************/
@@ -523,20 +479,19 @@ TreeWidget
 #if TREE_WIDGET_ITEM_USE_STREAM_OPERATORS
 
 /*****************************************************************************/
-QDataStream&
-operator << ( QDataStream& out, QTreeWidgetItem const * item )
+QDataStream& operator<<(QDataStream& out, QTreeWidgetItem const* item)
 {
-  /*
-  qDebug() <<
-    "QDataStream& operator << ( QDataStream&, QTreeWidgetItem const * & );";
-  */
+/*
+qDebug() <<
+  "QDataStream& operator << ( QDataStream&, QTreeWidgetItem const * & );";
+*/
 
 #if 0 // operator >> is used in QT5 this lead to wrong call, fix: comment or
 // put operator >> def and decl in a specific namespace.
   return operator << < QTreeWidgetItem >( out, item );
 
 #else // DATA_STREAM_USE_TEMPLATE_OPERATORS
-  DATA_STREAM_OUT( out, QTreeWidgetItem, item );
+  DATA_STREAM_OUT(out, QTreeWidgetItem, item);
 
   return out;
 
@@ -544,24 +499,22 @@ operator << ( QDataStream& out, QTreeWidgetItem const * item )
 }
 
 /*****************************************************************************/
-QDataStream&
-operator >>( QDataStream& in, QTreeWidgetItem * & item )
+QDataStream& operator>>(QDataStream& in, QTreeWidgetItem*& item)
 {
-  /*
-  qDebug() <<
-    "QDataStream& operator >> ( QDataStream&, QTreeWidgetItem * & );";
-  */
+/*
+qDebug() <<
+  "QDataStream& operator >> ( QDataStream&, QTreeWidgetItem * & );";
+*/
 
 #if 0
   return operator >> < QTreeWidgetItem >( in, item );
 
 #else // DATA_STREAM_USE_TEMPLATE_OPERATORS
-  DATA_STREAM_IN( in, QTreeWidgetItem, item );
+  DATA_STREAM_IN(in, QTreeWidgetItem, item);
 
   return in;
 
 #endif // DATA_STREAM_USE_TEMPLATE_OPERATORS
-
 }
 
 #endif // TREE_WIDGET_ITEM_USE_STREAM_OPERATORS

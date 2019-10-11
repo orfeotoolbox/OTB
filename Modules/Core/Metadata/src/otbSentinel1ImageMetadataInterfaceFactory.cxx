@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,29 +30,22 @@
 
 namespace otb
 {
-Sentinel1ImageMetadataInterfaceFactory
-::Sentinel1ImageMetadataInterfaceFactory()
+Sentinel1ImageMetadataInterfaceFactory::Sentinel1ImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbSentinel1ImageMetadataInterface",
-                         "Sentinel1 Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbSentinel1ImageMetadataInterface", "Sentinel1 Metadata Interface", 1,
                          itk::CreateObjectFunction<Sentinel1ImageMetadataInterface>::New());
 }
 
-Sentinel1ImageMetadataInterfaceFactory
-::~Sentinel1ImageMetadataInterfaceFactory()
+Sentinel1ImageMetadataInterfaceFactory::~Sentinel1ImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-Sentinel1ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* Sentinel1ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-Sentinel1ImageMetadataInterfaceFactory::GetDescription() const
+const char* Sentinel1ImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Sentinel1 Metadata Interface Factory, handle Sentinel1 metadata in OTB";
 }

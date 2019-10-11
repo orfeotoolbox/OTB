@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
@@ -27,20 +26,20 @@
 #include "otbImageFileWriter.h"
 #include "otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.h"
 
-int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  InputPixelType;
-  const unsigned int Dimension = 2;
+  typedef double                  PixelType;
+  typedef std::complex<PixelType> InputPixelType;
+  const unsigned int              Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType, Dimension>  ImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> ImageType;
 
   typedef otb::ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter<ImageType, ImageType> FilterType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();

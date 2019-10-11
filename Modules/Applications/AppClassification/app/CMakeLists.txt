@@ -71,8 +71,8 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           PredictRegression
-  SOURCES        otbPredictRegression.cxx
+  NAME           ImageRegression
+  SOURCES        otbImageRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -113,6 +113,11 @@ otb_create_application(
 otb_create_application(
   NAME           VectorClassifier
   SOURCES        otbVectorClassifier.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           VectorRegression
+  SOURCES        otbVectorRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(

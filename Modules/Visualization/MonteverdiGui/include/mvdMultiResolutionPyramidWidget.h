@@ -81,8 +81,7 @@ class MultiResolutionPyramidWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT MultiResolutionPyramidWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT MultiResolutionPyramidWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -91,51 +90,47 @@ class OTBMonteverdiGUI_EXPORT MultiResolutionPyramidWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  MultiResolutionPyramidWidget( QWidget * p =NULL,
-				Qt::WindowFlags flags =0 );
+  MultiResolutionPyramidWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~MultiResolutionPyramidWidget() override;
 
   /**
    */
-  void SetBuilder( const otb::GDALOverviewsBuilder::Pointer & );
+  void SetBuilder(const otb::GDALOverviewsBuilder::Pointer&);
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
-  void BaseValueChanged( int );
-  void LevelsValueChanged( int );
-  void SizeValueChanged( int );
+  void BaseValueChanged(int);
+  void LevelsValueChanged(int);
+  void SizeValueChanged(int);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
@@ -147,25 +142,25 @@ private:
    */
   void UpdateSize();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
    */
-  Ui::MultiResolutionPyramidWidget * m_UI;
+  Ui::MultiResolutionPyramidWidget* m_UI;
   /**
    */
   otb::GDALOverviewsBuilder::Pointer m_GDALOverviewsBuilder;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
-  void on_baseSpinBox_valueChanged( int );
-  void on_levelsSpinBox_valueChanged( int );
-  void on_sizeSpinBox_valueChanged( int );
+  void on_baseSpinBox_valueChanged(int);
+  void on_levelsSpinBox_valueChanged(int);
+  void on_sizeSpinBox_valueChanged(int);
 };
 
 } // end namespace 'mvd'

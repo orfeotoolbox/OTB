@@ -28,79 +28,63 @@
 namespace otb
 {
 template <class TImage>
-void
-SarConcatenateBurstsImageFilter<TImage>
-::SetSLCImageKeyWorList(ImageKeywordlist sarImageKWL)
+void SarConcatenateBurstsImageFilter<TImage>::SetSLCImageKeyWorList(ImageKeywordlist sarImageKWL)
 {
   m_SLCImageKWL = sarImageKWL;
 }
 
 template <class TImage>
-bool 
-SarConcatenateBurstsImageFilter<TImage>
-::getDeburstLinesAndSamples(LinesRecordVectorType & linesRecord, LinesRecordVectorType & samplesRecord,
-			    unsigned int first_burstInd, bool inputWithInvalidPixels)
+bool SarConcatenateBurstsImageFilter<TImage>::getDeburstLinesAndSamples(LinesRecordVectorType& linesRecord, LinesRecordVectorType& samplesRecord,
+                                                                        unsigned int first_burstInd, bool inputWithInvalidPixels)
 {
   // Try to create a SarSensorModelAdapter
   SarSensorModelAdapter::Pointer sarSensorModel = SarSensorModelAdapter::New();
 
   bool loadOk = sarSensorModel->LoadState(m_SLCImageKWL);
 
-  if(!loadOk || !sarSensorModel->IsValidSensorModel())
-    itkExceptionMacro(<<"Input image does not contain a valid SAR sensor model.");
-    
+  if (!loadOk || !sarSensorModel->IsValidSensorModel())
+    itkExceptionMacro(<< "Input image does not contain a valid SAR sensor model.");
+
   LinesRecordVectorType lines;
 
   // Try to call the deburstAndConcatenate function
-  bool deburstAndConcatenateOk = sarSensorModel->DeburstAndConcatenate(linesRecord, samplesRecord, 
-								       m_Offset_OriginL, first_burstInd,
-								       inputWithInvalidPixels);
+  bool deburstAndConcatenateOk = sarSensorModel->DeburstAndConcatenate(linesRecord, samplesRecord, m_Offset_OriginL, first_burstInd, inputWithInvalidPixels);
 
-  if(!deburstAndConcatenateOk)
-    itkExceptionMacro(<<"Could not deburst or concatenate from input bursts");
+  if (!deburstAndConcatenateOk)
+    itkExceptionMacro(<< "Could not deburst or concatenate from input bursts");
 
   // Export the new keywordlist
   bool saveOk = sarSensorModel->SaveState(m_DeburstSLCImageKWL);
 
-  if(!saveOk)
-    itkExceptionMacro(<<"Could not export deburst SAR sensor model to keyword list");
+  if (!saveOk)
+    itkExceptionMacro(<< "Could not export deburst SAR sensor model to keyword list");
 
   return true;
 }
 
 template <class TImage>
-void
-SarConcatenateBurstsImageFilter<TImage>
-::GenerateOutputInformation()
+void SarConcatenateBurstsImageFilter<TImage>::GenerateOutputInformation()
 {
   // First, call superclass implementation
   Superclass::GenerateOutputInformation();
 
-  ImageType * outputPtr = this->GetOutput();
+  ImageType* outputPtr = this->GetOutput();
 
-  // Origin to (0.5, 0.5) : Metadata are already adjusted 
+  // Origin to (0.5, 0.5) : Metadata are already adjusted
   PointType origin;
   origin[0] = 0.5;
   origin[1] = 0.5 + m_Offset_OriginL;
-  
+
   outputPtr->SetOrigin(origin);
 
   // Output KeywordList
-  m_DeburstSLCImageKWL.AddKey("support_data.number_samples", std::to_string(this->GetOutput()->
-									    GetLargestPossibleRegion().
-									    GetSize()[0]));
-  m_DeburstSLCImageKWL.AddKey("support_data.number_lines", std::to_string(this->GetOutput()->
-									  GetLargestPossibleRegion().
-									  GetSize()[1]));
+  m_DeburstSLCImageKWL.AddKey("support_data.number_samples", std::to_string(this->GetOutput()->GetLargestPossibleRegion().GetSize()[0]));
+  m_DeburstSLCImageKWL.AddKey("support_data.number_lines", std::to_string(this->GetOutput()->GetLargestPossibleRegion().GetSize()[1]));
 
-  m_DeburstSLCImageKWL.AddKey("number_samples", std::to_string(this->GetOutput()->
-									    GetLargestPossibleRegion().
-									    GetSize()[0]));
-  m_DeburstSLCImageKWL.AddKey("number_lines", std::to_string(this->GetOutput()->
-									  GetLargestPossibleRegion().
-									  GetSize()[1]));
-  
-  // Set new keyword list to output image  
+  m_DeburstSLCImageKWL.AddKey("number_samples", std::to_string(this->GetOutput()->GetLargestPossibleRegion().GetSize()[0]));
+  m_DeburstSLCImageKWL.AddKey("number_lines", std::to_string(this->GetOutput()->GetLargestPossibleRegion().GetSize()[1]));
+
+  // Set new keyword list to output image
   outputPtr->SetImageKeywordList(m_DeburstSLCImageKWL);
 }
 

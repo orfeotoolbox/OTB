@@ -43,15 +43,14 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter
-  : public PersistentImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT FastICAInternalOptimizerVectorImageFilter : public PersistentImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef FastICAInternalOptimizerVectorImageFilter          Self;
+  typedef FastICAInternalOptimizerVectorImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -64,24 +63,24 @@ public:
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Template parameters typedefs */
-  typedef TInputImage  InputImageType;
+  typedef TInputImage                         InputImageType;
   typedef typename InputImageType::RegionType InputRegionType;
 
-  typedef TOutputImage OutputImageType;
+  typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   /** Filter types and related */
-  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
-  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
+  typedef StreamingStatisticsVectorImageFilter<InputImageType> CovarianceEstimatorFilterType;
+  typedef typename CovarianceEstimatorFilterType::Pointer      CovarianceEstimatorFilterPointerType;
 
-  typedef typename CovarianceEstimatorFilterType::RealType RealType;
-  typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
+  typedef typename CovarianceEstimatorFilterType::RealType         RealType;
+  typedef typename CovarianceEstimatorFilterType::RealPixelType    VectorType;
   typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
-  typedef typename MatrixObjectType::ComponentType MatrixType;
-  typedef typename MatrixType::InternalMatrixType InternalMatrixType;
-  typedef typename InternalMatrixType::element_type MatrixElementType;
+  typedef typename MatrixObjectType::ComponentType                 MatrixType;
+  typedef typename MatrixType::InternalMatrixType                  InternalMatrixType;
+  typedef typename InternalMatrixType::element_type                MatrixElementType;
 
-  typedef MatrixImageFilter< TInputImage, TOutputImage > TransformFilterType;
+  typedef MatrixImageFilter<TInputImage, TOutputImage> TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
   typedef std::function<double(double)> NonLinearityType;
@@ -92,27 +91,28 @@ public:
   itkGetMacro(W, InternalMatrixType);
   itkSetMacro(W, InternalMatrixType);
 
-  void SetNonLinearity(NonLinearityType NonLinearity,
-                            NonLinearityType NonLinearityDerivative)
+  void SetNonLinearity(NonLinearityType NonLinearity, NonLinearityType NonLinearityDerivative)
   {
-    m_NonLinearity = NonLinearity;
+    m_NonLinearity           = NonLinearity;
     m_NonLinearityDerivative = NonLinearityDerivative;
     this->Modified();
   }
-  
+
   itkGetMacro(Beta, double);
   itkGetMacro(Den, double);
 
   virtual void Reset() override;
-  
+
   virtual void Synthetize() override;
 
 protected:
   FastICAInternalOptimizerVectorImageFilter();
-  ~FastICAInternalOptimizerVectorImageFilter() override { }
+  ~FastICAInternalOptimizerVectorImageFilter() override
+  {
+  }
 
   void GenerateOutputInformation() override;
-  void ThreadedGenerateData ( const OutputRegionType &, itk::ThreadIdType ) override;
+  void ThreadedGenerateData(const OutputRegionType&, itk::ThreadIdType) override;
 
   unsigned int m_CurrentBandForLoop;
 
@@ -123,14 +123,15 @@ protected:
   double m_Beta;
   double m_Den;
 
-  InternalMatrixType m_W;
-  NonLinearityType m_NonLinearity;
-  NonLinearityType m_NonLinearityDerivative;
+  InternalMatrixType         m_W;
+  NonLinearityType           m_NonLinearity;
+  NonLinearityType           m_NonLinearityDerivative;
   TransformFilterPointerType m_TransformFilter;
+
 private:
-  FastICAInternalOptimizerVectorImageFilter( const Self & ); // not implemented
-  void operator= ( const Self & ); // not implemented
-}; // end of class
+  FastICAInternalOptimizerVectorImageFilter(const Self&); // not implemented
+  void operator=(const Self&);                            // not implemented
+};                                                        // end of class
 
 } // end of namespace otb
 
@@ -140,5 +141,3 @@ private:
 
 
 #endif
-
-

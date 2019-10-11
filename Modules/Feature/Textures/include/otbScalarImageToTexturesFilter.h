@@ -100,16 +100,15 @@ namespace otb
  *
  * \ingroup OTBTextures
  */
-template<class TInpuImage, class TOutputImage>
-class ScalarImageToTexturesFilter : public itk::ImageToImageFilter
-  <TInpuImage, TOutputImage>
+template <class TInpuImage, class TOutputImage>
+class ScalarImageToTexturesFilter : public itk::ImageToImageFilter<TInpuImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef ScalarImageToTexturesFilter                       Self;
+  typedef ScalarImageToTexturesFilter Self;
   typedef itk::ImageToImageFilter<TInpuImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -118,27 +117,27 @@ public:
   itkTypeMacro(ScalarImageToTexturesFilter, ImageToImageFilter);
 
   /** Template class typedefs */
-  typedef TInpuImage                           InputImageType;
-  typedef typename InputImageType::Pointer     InputImagePointerType;
-  typedef typename InputImageType::PixelType   InputPixelType;
-  typedef typename InputImageType::RegionType  InputRegionType;
-  typedef typename InputRegionType::SizeType   SizeType;
-  typedef typename InputImageType::OffsetType   OffsetType;
+  typedef TInpuImage                          InputImageType;
+  typedef typename InputImageType::Pointer    InputImagePointerType;
+  typedef typename InputImageType::PixelType  InputPixelType;
+  typedef typename InputImageType::RegionType InputRegionType;
+  typedef typename InputRegionType::SizeType  SizeType;
+  typedef typename InputImageType::OffsetType OffsetType;
 
   typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
-  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
-  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
-  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
-  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
-  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
-  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
+  typedef GreyLevelCooccurrenceIndexedList<InputPixelType>            CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer               CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer          CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType             CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType        PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType            VectorType;
 
-  typedef typename VectorType::iterator                    VectorIteratorType;
-  typedef typename VectorType::const_iterator              VectorConstIteratorType;
+  typedef typename VectorType::iterator       VectorIteratorType;
+  typedef typename VectorType::const_iterator VectorConstIteratorType;
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -182,28 +181,28 @@ public:
   itkGetMacro(SubsampleOffset, OffsetType);
 
   /** Get the energy output image */
-  OutputImageType * GetEnergyOutput();
+  OutputImageType* GetEnergyOutput();
 
   /** Get the entropy output image */
-  OutputImageType * GetEntropyOutput();
+  OutputImageType* GetEntropyOutput();
 
   /** Get the correlation output image */
-  OutputImageType * GetCorrelationOutput();
+  OutputImageType* GetCorrelationOutput();
 
   /** Get the inverse difference moment output image */
-  OutputImageType * GetInverseDifferenceMomentOutput();
+  OutputImageType* GetInverseDifferenceMomentOutput();
 
   /** Get the inertia output image */
-  OutputImageType * GetInertiaOutput();
+  OutputImageType* GetInertiaOutput();
 
   /** Get the cluster shade output image */
-  OutputImageType * GetClusterShadeOutput();
+  OutputImageType* GetClusterShadeOutput();
 
   /** Get the cluster prominence image */
-  OutputImageType * GetClusterProminenceOutput();
+  OutputImageType* GetClusterProminenceOutput();
 
   /** Get the Haralick correlation output image */
-  OutputImageType * GetHaralickCorrelationOutput();
+  OutputImageType* GetHaralickCorrelationOutput();
 
 protected:
   /** Constructor */
@@ -221,7 +220,7 @@ protected:
 
 private:
   ScalarImageToTexturesFilter(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Convenient method to compute union of 2 regions */
   static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);
@@ -244,8 +243,11 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
-  //TODO: should we use constexpr? only c++11 and problem for msvc
-  inline double GetPixelValueTolerance() const {return 0.0001; }
+  // TODO: should we use constexpr? only c++11 and problem for msvc
+  inline double GetPixelValueTolerance() const
+  {
+    return 0.0001;
+  }
 
   /** Sub-sampling factor */
   SizeType m_SubsampleFactor;

@@ -26,26 +26,23 @@
 namespace otb
 {
 /** Constructor */
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::WindowedSincInterpolateImageFunctionBase()
+template <class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>::WindowedSincInterpolateImageFunctionBase()
 {
 }
 
 /** Destructor */
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::~WindowedSincInterpolateImageFunctionBase()
+template <class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
+WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>::~WindowedSincInterpolateImageFunctionBase()
 {
 }
 
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
-void
-WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputImage, class TWindowFunction, class TBoundaryCondition, class TCoordRep>
+void WindowedSincInterpolateImageFunctionBase<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>::PrintSelf(std::ostream& os,
+                                                                                                                      itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
 
-} //namespace otb
+} // namespace otb
 #endif

@@ -23,9 +23,9 @@
 #include <iostream>
 #include <fstream>
 
-int otbRectangle(int itkNotUsed(argc), char * argv[])
+int otbRectangle(int itkNotUsed(argc), char* argv[])
 {
-  const char * outfname = argv[1];
+  const char* outfname = argv[1];
 
   typedef otb::Rectangle<>                   RectangleType;
   typedef RectangleType::ContinuousIndexType ContinuousIndexType;
@@ -54,9 +54,9 @@ int otbRectangle(int itkNotUsed(argc), char * argv[])
   std::ofstream outfile(outfname);
 
   if (rectangle1->IsInside(InsideVertex))
-    outfile << "The point " <<  InsideVertex << " Is Inside the rectangle"  <<
-    std::endl;
-  else outfile << "The point " <<  InsideVertex << " Is Outside the rectangle"  << std::endl;
+    outfile << "The point " << InsideVertex << " Is Inside the rectangle" << std::endl;
+  else
+    outfile << "The point " << InsideVertex << " Is Outside the rectangle" << std::endl;
 
   outfile << "region Size" << rectangle1->GetBoundingRegion().GetSize() << std::endl;
   outfile << "region Origin" << rectangle1->GetBoundingRegion().GetIndex() << std::endl;

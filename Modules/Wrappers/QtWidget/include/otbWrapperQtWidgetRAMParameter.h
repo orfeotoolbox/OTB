@@ -44,7 +44,7 @@ public:
   ~QtWidgetRAMParameter() override;
 
 protected slots:
-  void SetValue( int value );
+  void SetValue(int value);
 
 private:
   QtWidgetRAMParameter(const QtWidgetRAMParameter&) = delete;
@@ -54,13 +54,11 @@ private:
 
   void DoUpdateGUI() override;
 
-  QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QHBoxLayout* m_QHBoxLayout;
+  QSpinBox*    m_QSpinBox;
 
   RAMParameter::Pointer m_RAMParam;
 };
-
-
 }
 }
 

@@ -35,24 +35,19 @@ namespace otb
  * \ingroup OTBPointSet
  */
 
-template <class TInputImage,
-    class TOutputPointSet = itk::PointSet<typename TInputImage::PixelType, 2> >
-class ITK_EXPORT ThresholdImageToPointSetFilter :
-  public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+template <class TInputImage, class TOutputPointSet = itk::PointSet<typename TInputImage::PixelType, 2>>
+class ITK_EXPORT ThresholdImageToPointSetFilter : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
-
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   typedef TInputImage InputImageType;
 
-  typedef ThresholdImageToPointSetFilter                         Self;
+  typedef ThresholdImageToPointSetFilter Self;
   typedef ImageToPointSetFilter<InputImageType, TOutputPointSet> Superclass;
-  typedef typename Superclass::OutputPointSetType                OutputPointSetType;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef typename Superclass::OutputPointSetType OutputPointSetType;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
   itkNewMacro(Self);
 
@@ -72,8 +67,7 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(PixelConvertibleToPointSetDataType,
-                  (itk::Concept::Convertible<InputPixelType, typename PointDataContainerType::Element>));
+  itkConceptMacro(PixelConvertibleToPointSetDataType, (itk::Concept::Convertible<InputPixelType, typename PointDataContainerType::Element>));
 #endif
 
 
@@ -84,15 +78,17 @@ public:
 
 protected:
   ThresholdImageToPointSetFilter();
-  ~ThresholdImageToPointSetFilter() override {}
+  ~ThresholdImageToPointSetFilter() override
+  {
+  }
 
   void ThreadedGenerateData(const InputImageRegionType& inputRegionForThread, itk::ThreadIdType threadId) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ThresholdImageToPointSetFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ThresholdImageToPointSetFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputPixelType m_LowerThreshold;
   InputPixelType m_UpperThreshold;

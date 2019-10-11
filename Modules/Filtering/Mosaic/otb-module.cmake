@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2019 IRSTEA
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,21 +19,18 @@
 # limitations under the License.
 #
 
-# Deploy a qt.conf file in the specified
-# target build directory, as a pre-build step
-macro( deploy_qt_conf TARGET_NAME )
+set(DOCUMENTATION "This module provide components to enable the 
+generation of images mosaics, including some color/radiometric
+harmonization based on statistics of overlapping pixels.")
 
-  add_custom_command( 
-      TARGET ${TARGET_NAME}
-      PRE_BUILD 
-      COMMAND ${CMAKE_COMMAND}
-      ARGS -D QT_TRANSLATIONS_DIR:PATH=${QT_TRANSLATIONS_DIR}
-           -D QT_PLUGINS_DIR:PATH=${QT_PLUGINS_DIR}
-           -D Monteverdi_SOURCE_DIR:PATH=${Monteverdi_SOURCE_DIR}
-           -D TARGET_DIR:PATH=$<TARGET_FILE_DIR:${TARGET_NAME}>
-           -P ${Monteverdi_SOURCE_DIR}/CMake/DeployQtConfScript.cmake
-      COMMENT "Deploying qt.conf in ${TARGET_NAME} build dir"
-      VERBATIM
-  )
+otb_module(OTBMosaic
+  DEPENDS
+    OTBCommon
+    OTBConversion
+    OTBFunctor
 
-endmacro()
+  TEST_DEPENDS
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)

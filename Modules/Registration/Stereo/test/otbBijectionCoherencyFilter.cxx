@@ -25,36 +25,29 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"
 
-typedef otb::Image<float, 2>                    FloatImageType;
+typedef otb::Image<float, 2> FloatImageType;
 
-typedef otb::VectorImage<float, 2>              FloatVectorImageType;
+typedef otb::VectorImage<float, 2> FloatVectorImageType;
 
-typedef otb::BijectionCoherencyFilter
-  <FloatImageType,
-    FloatImageType>                             BijectionFilterType;
-
+typedef otb::BijectionCoherencyFilter<FloatImageType, FloatImageType> BijectionFilterType;
 
 
 int otbBijectionCoherencyFilter(int argc, char* argv[])
 {
 
-  typedef otb::ImageFileReader
-    <FloatVectorImageType>                        ReaderVectorType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ReaderVectorType;
 
-  typedef otb::ImageFileWriter
-    <FloatImageType>                              WriterScalarType;
+  typedef otb::ImageFileWriter<FloatImageType> WriterScalarType;
 
-  typedef otb::ImageList<FloatImageType>          ImageListType;
+  typedef otb::ImageList<FloatImageType> ImageListType;
 
-  typedef otb::VectorImageToImageListFilter
-    <FloatVectorImageType,
-     ImageListType>                               VectorToListFilterType;
+  typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
 
   if (argc < 8)
-    {
-    std::cout << "Usage: "<<argv[0]<<" left2right right2left minHDisp maxHDisp minVDisp maxVDisp output" << std::endl;
+  {
+    std::cout << "Usage: " << argv[0] << " left2right right2left minHDisp maxHDisp minVDisp maxVDisp output" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ReaderVectorType::Pointer l2rReader = ReaderVectorType::New();
   l2rReader->SetFileName(argv[1]);

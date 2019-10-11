@@ -101,16 +101,15 @@ namespace otb
  *
  * \ingroup OTBTextures
  */
-template<class TInpuImage, class TOutputImage>
-class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
-  <TInpuImage, TOutputImage>
+template <class TInpuImage, class TOutputImage>
+class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter<TInpuImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef ScalarImageToAdvancedTexturesFilter               Self;
+  typedef ScalarImageToAdvancedTexturesFilter Self;
   typedef itk::ImageToImageFilter<TInpuImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -129,16 +128,16 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
-  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
-  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
-  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
-  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
-  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
-  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
+  typedef GreyLevelCooccurrenceIndexedList<InputPixelType>            CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer               CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer          CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType             CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType        PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType            VectorType;
 
-  typedef typename VectorType::iterator                    VectorIteratorType;
-  typedef typename VectorType::const_iterator              VectorConstIteratorType;
+  typedef typename VectorType::iterator       VectorIteratorType;
+  typedef typename VectorType::const_iterator VectorConstIteratorType;
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -182,34 +181,34 @@ public:
   itkGetMacro(SubsampleOffset, OffsetType);
 
   /** Get the mean output image */
-  OutputImageType * GetMeanOutput();
+  OutputImageType* GetMeanOutput();
 
   /** Get the variance output image */
-  OutputImageType * GetVarianceOutput();
+  OutputImageType* GetVarianceOutput();
 
   /** Get the dissimilarity output image */
-  OutputImageType * GetDissimilarityOutput();
+  OutputImageType* GetDissimilarityOutput();
 
   /** Get the sum average output image */
-  OutputImageType * GetSumAverageOutput();
+  OutputImageType* GetSumAverageOutput();
 
   /** Get the sum of variances output image */
-  OutputImageType * GetSumVarianceOutput();
+  OutputImageType* GetSumVarianceOutput();
 
   /** Get the sum of entropies output image */
-  OutputImageType * GetSumEntropyOutput();
+  OutputImageType* GetSumEntropyOutput();
 
   /** Get the difference of entropies output image */
-  OutputImageType * GetDifferenceEntropyOutput();
+  OutputImageType* GetDifferenceEntropyOutput();
 
   /** Get the difference of variance output image */
-  OutputImageType * GetDifferenceVarianceOutput();
+  OutputImageType* GetDifferenceVarianceOutput();
 
   /** Get the IC1 image */
-  OutputImageType * GetIC1Output();
+  OutputImageType* GetIC1Output();
 
   /** Get the IC2 output image */
-  OutputImageType * GetIC2Output();
+  OutputImageType* GetIC2Output();
 
 protected:
   /** Constructor */
@@ -227,7 +226,7 @@ protected:
 
 private:
   ScalarImageToAdvancedTexturesFilter(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Convenient method to compute union of 2 regions */
   static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);

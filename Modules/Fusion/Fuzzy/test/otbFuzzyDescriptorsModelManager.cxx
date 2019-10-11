@@ -19,12 +19,10 @@
  */
 
 
-
 #include "otbFuzzyDescriptorsModelManager.h"
 #include <iostream>
 #include <stdlib.h>
 #include "itkMacro.h"
-
 
 
 int otbFuzzyDescriptorsModelManagerTest(int itkNotUsed(argc), char* argv[])
@@ -50,20 +48,20 @@ int otbFuzzyDescriptorsModelManagerTest(int itkNotUsed(argc), char* argv[])
   otb::FuzzyDescriptorsModelManager::Save(argv[1], model);
 
   otb::FuzzyDescriptorsModelManager::DescriptorsModelType modelRead;
-  modelRead =  otb::FuzzyDescriptorsModelManager::Read(argv[1]);
+  modelRead = otb::FuzzyDescriptorsModelManager::Read(argv[1]);
 
   otb::FuzzyDescriptorsModelManager::DescriptorListType list;
   list = otb::FuzzyDescriptorsModelManager::GetDescriptorList(model);
 
-  if(modelRead != model)
-    {
-      std::cout<<"Written model and read model from the written one differs."<<std::endl;
-      std::cout<<"Input is:"<<std::endl;
-      otb::FuzzyDescriptorsModelManager::Print(model);
-      std::cout<<"Output is:"<<std::endl;
-      otb::FuzzyDescriptorsModelManager::Print(modelRead);
-      return EXIT_FAILURE;
-    }
+  if (modelRead != model)
+  {
+    std::cout << "Written model and read model from the written one differs." << std::endl;
+    std::cout << "Input is:" << std::endl;
+    otb::FuzzyDescriptorsModelManager::Print(model);
+    std::cout << "Output is:" << std::endl;
+    otb::FuzzyDescriptorsModelManager::Print(modelRead);
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

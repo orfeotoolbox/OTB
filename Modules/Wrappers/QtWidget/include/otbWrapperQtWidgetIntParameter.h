@@ -57,13 +57,11 @@ private:
   void DoCreateWidget() override;
   void DoUpdateGUI() override;
 
-  QHBoxLayout *         m_QHBoxLayout;
+  QHBoxLayout*     m_QHBoxLayout;
   QtWidgetSpinBox* m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };
-
-
 }
 }
 

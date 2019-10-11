@@ -61,7 +61,7 @@
 #include "otbImage.h"
 #include "itkPoint.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   using ImageType = otb::Image<unsigned short, 2>;
 

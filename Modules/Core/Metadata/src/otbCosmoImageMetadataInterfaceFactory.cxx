@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,24 +30,18 @@
 
 namespace otb
 {
-CosmoImageMetadataInterfaceFactory
-::CosmoImageMetadataInterfaceFactory()
+CosmoImageMetadataInterfaceFactory::CosmoImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbCosmoImageMetadataInterface",
-                         "Cosmo Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbCosmoImageMetadataInterface", "Cosmo Metadata Interface", 1,
                          itk::CreateObjectFunction<CosmoImageMetadataInterface>::New());
 }
 
-const char*
-CosmoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* CosmoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-CosmoImageMetadataInterfaceFactory::GetDescription() const
+const char* CosmoImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Cosmo Metadata Interface Factory, handle Cosmo metadata in OTB";
 }

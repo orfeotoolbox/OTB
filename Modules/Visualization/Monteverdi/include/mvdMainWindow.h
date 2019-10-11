@@ -38,7 +38,7 @@
 
 
 #ifndef USE_OTB_APPS
-#  define USE_OTB_APPS 1
+#define USE_OTB_APPS 1
 #endif
 
 //
@@ -103,8 +103,7 @@ class MainWindow;
  *
  * \brief The application main-widow widget.
  */
-class OTBMonteverdi_EXPORT MainWindow
-  : public I18nMainWindow
+class OTBMonteverdi_EXPORT MainWindow : public I18nMainWindow
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -113,53 +112,51 @@ class OTBMonteverdi_EXPORT MainWindow
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** \brief Constructor. */
-  MainWindow( QWidget* p =0, Qt::WindowFlags flags =0 );
+  MainWindow(QWidget* p = 0, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~MainWindow() override;
 
   /**
    */
-  bool CheckGLCapabilities( bool forceNoGLSL = false );
+  bool CheckGLCapabilities(bool forceNoGLSL = false);
 
-  /**
-   */
+/**
+ */
 #if USE_OTB_APPS
   void SetupOTBApplications();
 #endif // USE_OTB_APPS
 
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
-//
-// Public slots.
+  //
+  // Public slots.
 public slots:
 
   /**
    */
-  CountType ImportImage( const QString & filename,
-			 StackedLayerModel::SizeType index );
+  CountType ImportImage(const QString& filename, StackedLayerModel::SizeType index);
 
   /**
    */
-  void ImportImages( const QStringList & filenames, bool enableOverviews = true );
+  void ImportImages(const QStringList& filenames, bool enableOverviews = true);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   void UserCoordinatesEditingFinished(const QString&);
 
-  void UserScaleEditingFinished(const QString &);
+  void UserScaleEditingFinished(const QString&);
 
   void UserZoomIn();
 
@@ -173,34 +170,32 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   using I18nMainWindow::ImportImage;
 
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) override;
+  void closeEvent(QCloseEvent* event) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
-//
-// Protected slots.
+  //
+  // Protected slots.
 protected slots:
 
   /**
    */
-  void OnAboutToChangeModel( const AbstractModel * ) override;
+  void OnAboutToChangeModel(const AbstractModel*) override;
 
   /**
    */
-  void OnModelChanged( AbstractModel * ) override;
+  void OnModelChanged(AbstractModel*) override;
 
   /**
    */
@@ -212,44 +207,40 @@ protected slots:
 
   /**
    */
-  void OnAboutToChangeSelectedLayerModel( const StackedLayerModel::KeyType & );
+  void OnAboutToChangeSelectedLayerModel(const StackedLayerModel::KeyType&);
 
   /**
    */
-  void OnSelectedLayerModelChanged( const StackedLayerModel::KeyType & );
+  void OnSelectedLayerModelChanged(const StackedLayerModel::KeyType&);
 
-  /**
-   */
-#if defined( OTB_USE_QT ) && USE_OTB_APPS
-  void OnApplicationToLaunchSelected( const QString & appName );
+/**
+ */
+#if defined(OTB_USE_QT) && USE_OTB_APPS
+  void OnApplicationToLaunchSelected(const QString& appName);
 #endif // defined( OTB_USE_QT ) && USE_OTB_APPS
 
   /** */
-  void OnOTBApplicationOutputImageChanged( const QString & appName,
-                                           const QString & outfname);
+  void OnOTBApplicationOutputImageChanged(const QString& appName, const QString& outfname);
 
   /**
    */
-  void OnExecutionDone( int status );
+  void OnExecutionDone(int status);
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
+  /**
+   */
+  ImageViewWidget* CreateImageViewWidget(QGLWidget* sharedGlWidget = NULL);
 
   /**
    */
-  ImageViewWidget* CreateImageViewWidget( QGLWidget* sharedGlWidget =NULL );
-
-  /**
-   */
-  ImageViewWidget* CreateQuicklookViewWidget( QGLWidget* sharedGlWidget =NULL );
+  ImageViewWidget* CreateQuicklookViewWidget(QGLWidget* sharedGlWidget = NULL);
 
   /**
    */
@@ -277,12 +268,10 @@ private:
 
   /**
    */
-  inline
-    const ImageViewWidget* GetQuicklookView() const;
+  inline const ImageViewWidget* GetQuicklookView() const;
   /**
    */
-  inline
-    ImageViewWidget* GetQuicklookView();
+  inline ImageViewWidget* GetQuicklookView();
 
   /**
    */
@@ -294,15 +283,15 @@ private:
 
   /**
    */
-  void ConnectReferenceLayerComboBox( StackedLayerModel * );
+  void ConnectReferenceLayerComboBox(StackedLayerModel*);
 
   /**
    */
-  void DisconnectReferenceLayerComboBox( StackedLayerModel * );
+  void DisconnectReferenceLayerComboBox(StackedLayerModel*);
 
   /**
    */
-  void SetupReferenceLayerComboBox( StackedLayerModel * );
+  void SetupReferenceLayerComboBox(StackedLayerModel*);
 
   /**
    */
@@ -316,17 +305,17 @@ private:
 
   /**
    */
-  void ConnectPixelDescriptionWidget( AbstractLayerModel * model);
+  void ConnectPixelDescriptionWidget(AbstractLayerModel* model);
 
   /**
    */
-  void DisconnectPixelDescriptionWidget( const AbstractLayerModel * model );
+  void DisconnectPixelDescriptionWidget(const AbstractLayerModel* model);
 
 #endif // USE_PIXEL_DESCRIPTION
 
   /**
    */
-  void SetGLSLEnabled( bool );
+  void SetGLSLEnabled(bool);
 
   //
   // I18nMainWindow methods.
@@ -337,8 +326,8 @@ private:
 
   void virtual_InitializeUI() override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -368,11 +357,11 @@ private:
   /**
    * \brief Layer-stack dock-widget.
    */
-  QDockWidget * m_LayerStackDock;
+  QDockWidget* m_LayerStackDock;
 
-  /**
-   * \brief Current Pixel Description dock-widget.
-   */
+/**
+ * \brief Current Pixel Description dock-widget.
+ */
 #if USE_PIXEL_DESCRIPTION
   QDockWidget* m_PixelDescriptionDock;
 #endif // USE_PIXEL_DESCRIPTION
@@ -406,7 +395,7 @@ private:
 
   /**
    */
-  ShaderWidget * m_ShaderWidget;
+  ShaderWidget* m_ShaderWidget;
 
   /**
    */
@@ -414,11 +403,11 @@ private:
 
   /**
    */
-  KeymapDialog * m_KeymapDialog;
+  KeymapDialog* m_KeymapDialog;
 
   /**
    */
-  ProjectionBarWidget * m_ProjectionBarWidget;
+  ProjectionBarWidget* m_ProjectionBarWidget;
 
   /**
    */
@@ -431,13 +420,13 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Private slots.
+  //
+  // Private slots.
 private slots:
 
   /**
    */
-  void on_action_GLSL_triggered( bool );
+  void on_action_GLSL_triggered(bool);
 
   /**
    * \brief Qt auto-connected slot which is called when Help/About
@@ -497,11 +486,11 @@ private slots:
 
   /**
    */
-  void OnReferenceLayerCurrentIndexChanged( int );
+  void OnReferenceLayerCurrentIndexChanged(int);
 
   /**
    */
-  void OnReferenceLayerChanged( size_t );
+  void OnReferenceLayerChanged(size_t);
 
   /**
    */
@@ -513,8 +502,7 @@ private slots:
 
   /**
    */
-  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
-
+  void OnPixelInfoChanged(const QPoint&, const PointType&, const PixelInfo::Vector&);
 };
 
 } // end namespace 'mvd'
@@ -542,21 +530,15 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const ImageViewWidget*
-MainWindow
-::GetQuicklookView() const
+inline const ImageViewWidget* MainWindow::GetQuicklookView() const
 {
-  return qobject_cast< const ImageViewWidget* >( m_QuicklookViewDock->widget() );
+  return qobject_cast<const ImageViewWidget*>(m_QuicklookViewDock->widget());
 }
 
 /*****************************************************************************/
-inline
-ImageViewWidget*
-MainWindow
-::GetQuicklookView()
+inline ImageViewWidget* MainWindow::GetQuicklookView()
 {
-  return qobject_cast< ImageViewWidget* >( m_QuicklookViewDock->widget() );
+  return qobject_cast<ImageViewWidget*>(m_QuicklookViewDock->widget());
 }
 
 } // end namespace 'mvd'

@@ -19,19 +19,18 @@
  */
 
 
-
 #include "otbObjectList.h"
 #include "otbPolygon.h"
 #include "otbMacro.h"
 #include <vector>
 
-int otbObjectList2(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbObjectList2(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
   typedef otb::Polygon<double>         PolygonType;
   typedef otb::ObjectList<PolygonType> PolygonListType;
 
-  PolygonType::Pointer     polygon = PolygonType::New();
+  PolygonType::Pointer     polygon     = PolygonType::New();
   PolygonListType::Pointer listPolygon = PolygonListType::New();
 
   otbTestingCheckNotValidCommand(listPolygon->Erase(1));

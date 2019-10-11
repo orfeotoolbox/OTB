@@ -142,7 +142,7 @@ This is strictly equivalent to:
 
 .. code-block:: cpp
 
-    void myFreeFunction(const itk::VariableLengthVector<double> & out ,
+    void myFreeFunction(itk::VariableLengthVector<double> & out ,
                         unsigned char a, 
                         const std::complex<float> & b,
                         const itk::VariableLengthVector<short> &c,

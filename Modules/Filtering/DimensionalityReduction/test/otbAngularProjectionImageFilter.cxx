@@ -28,7 +28,7 @@
 
 #include "otbAngularProjectionImageFilter.h"
 
-int otbAngularProjectionImageFilterTest ( int , char * argv[] )
+int otbAngularProjectionImageFilterTest(int, char* argv[])
 {
   std::string inputImageName1 = argv[1];
   std::string inputImageName2 = argv[2];
@@ -39,12 +39,12 @@ int otbAngularProjectionImageFilterTest ( int , char * argv[] )
 
   typedef float  PixelType;
   typedef double PrecisionType;
-  typedef itk::FixedArray< PrecisionType, 1 > AngleType;
-  typedef otb::Image< PixelType, Dimension >  ImageType;
+  typedef itk::FixedArray<PrecisionType, 1> AngleType;
+  typedef otb::Image<PixelType, Dimension>  ImageType;
 
   // Reading images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader1 = ReaderType::New();
+  ReaderType::Pointer                     reader1 = ReaderType::New();
   reader1->SetFileName(inputImageName1);
 
   ReaderType::Pointer reader2 = ReaderType::New();
@@ -55,22 +55,19 @@ int otbAngularProjectionImageFilterTest ( int , char * argv[] )
   angle[0] = otb::CONST_PI_2;
 
   // Filtering
-  typedef otb::AngularProjectionImageFilter<
-    ImageType, ImageType, AngleType, PrecisionType > FilterType;
+  typedef otb::AngularProjectionImageFilter<ImageType, ImageType, AngleType, PrecisionType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( 0, reader1->GetOutput() );
-  filter->SetInput( 1, reader2->GetOutput() );
-  filter->SetAngleArray( angle );
+  filter->SetInput(0, reader1->GetOutput());
+  filter->SetInput(1, reader2->GetOutput());
+  filter->SetAngleArray(angle);
 
   // Saving
-  typedef otb::ImageFileWriter< ImageType > WriterType;
-  WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( outputImageName );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> WriterType;
+  WriterType::Pointer                     writer = WriterType::New();
+  writer->SetFileName(outputImageName);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;
 }
-
-

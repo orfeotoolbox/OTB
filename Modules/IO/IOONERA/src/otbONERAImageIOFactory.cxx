@@ -29,25 +29,19 @@ namespace otb
 
 ONERAImageIOFactory::ONERAImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbONERAImageIO",
-                         "ONERA Image IO",
-                         1,
-                         itk::CreateObjectFunction<ONERAImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbONERAImageIO", "ONERA Image IO", 1, itk::CreateObjectFunction<ONERAImageIO>::New());
 }
 
 ONERAImageIOFactory::~ONERAImageIOFactory()
 {
 }
 
-const char*
-ONERAImageIOFactory::GetITKSourceVersion(void) const
+const char* ONERAImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-ONERAImageIOFactory::GetDescription() const
+const char* ONERAImageIOFactory::GetDescription() const
 {
   return "ONERA ImageIO Factory, permettant le chargement d'image au format ONERA dans l'OTB";
 }
@@ -59,11 +53,11 @@ static bool ONERAImageIOFactoryHasBeenRegistered;
 
 void ONERAImageIOFactoryRegister__Private(void)
 {
-  if( ! ONERAImageIOFactoryHasBeenRegistered )
-    {
+  if (!ONERAImageIOFactoryHasBeenRegistered)
+  {
     ONERAImageIOFactoryHasBeenRegistered = true;
     ONERAImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace otb

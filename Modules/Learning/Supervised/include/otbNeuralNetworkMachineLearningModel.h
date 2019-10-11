@@ -31,25 +31,24 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT NeuralNetworkMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT NeuralNetworkMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef NeuralNetworkMachineLearningModel           Self;
+  typedef NeuralNetworkMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
-  typedef std::map<TargetValueType, unsigned int>         MapOfLabelsType;
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
+  typedef std::map<TargetValueType, unsigned int> MapOfLabelsType;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -70,7 +69,7 @@ public:
    * The number of neuron in the first layer (input layer) must be equal
    * to the number of samples in the \c InputListSample
    */
-  void SetLayerSizes (const std::vector<unsigned int> layers);
+  void SetLayerSizes(const std::vector<unsigned int> layers);
 
 
   /** Setters/Getters to the neuron activation function
@@ -156,18 +155,18 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
 protected:
@@ -178,16 +177,16 @@ protected:
   ~NeuralNetworkMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
-  
-  void LabelsToMat(const TargetListSampleType * listSample, cv::Mat & output);
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
+
+  void LabelsToMat(const TargetListSampleType* listSample, cv::Mat& output);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NeuralNetworkMachineLearningModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  NeuralNetworkMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void CreateNetwork();
   void SetupNetworkAndTrain(cv::Mat& labels);
@@ -195,22 +194,23 @@ private:
   cv::Ptr<cv::ml::ANN_MLP> m_ANNModel;
 #else
   CvANN_MLP_TrainParams SetNetworkParameters();
-  CvANN_MLP * m_ANNModel;
+  CvANN_MLP*            m_ANNModel;
 #endif
-  int m_TrainMethod;
-  int m_ActivateFunction;
+  int                       m_TrainMethod;
+  int                       m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;
+
   double m_Alpha;
   double m_Beta;
   double m_BackPropDWScale;
   double m_BackPropMomentScale;
   double m_RegPropDW0;
   double m_RegPropDWMin;
-  int m_TermCriteriaType;
-  int m_MaxIter;
+  int    m_TermCriteriaType;
+  int    m_MaxIter;
   double m_Epsilon;
 
-  CvMat*             m_CvMatOfLabels;
+  cv::Mat            m_MatrixOfLabels;
   MapOfLabelsType    m_MapOfLabels;
 
 };

@@ -34,7 +34,7 @@
 #include "ossim/ossimTimeUtilities.h"
 #endif
 
-//useful constants
+// useful constants
 #include <otbMath.h>
 #include <iomanip>
 
@@ -42,204 +42,191 @@ namespace otb
 {
 
 
-bool
-CosmoImageMetadataInterface::CanRead() const
+bool CosmoImageMetadataInterface::CanRead() const
 {
-  const std::string sensorID = GetSensorID();  
+  const std::string sensorID = GetSensorID();
 
   return sensorID.find("CSK") != std::string::npos;
 }
 
-void
-CosmoImageMetadataInterface
-::ParseDateTime(std::string key, std::vector<int>& dateFields) const
+void CosmoImageMetadataInterface::ParseDateTime(std::string key, std::vector<int>& dateFields) const
 {
-  if(dateFields.empty())
-    {
-    //parse from keyword list
+  if (dateFields.empty())
+  {
+    // parse from keyword list
     if (!this->CanRead())
-      {
+    {
       itkExceptionMacro(<< "Invalid Metadata, not a valid product");
-      }
+    }
 
-    const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
+    const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
     if (!imageKeywordlist.HasKey(key))
-      {
-      itkExceptionMacro( << "no key named " << key );
-      }
+    {
+      itkExceptionMacro(<< "no key named " << key);
+    }
 
     const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
     Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
-    }
+  }
 }
 
-int
-CosmoImageMetadataInterface::GetYear() const
+int CosmoImageMetadataInterface::GetYear() const
 {
   int value = 0;
   if (m_AcquisitionDateFields.empty())
-    {
-      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-    }
-      
-  if(m_AcquisitionDateFields.size() > 0 )
-    {
-    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[0], "support_data.image_date:year(int)" );
-    }
+  {
+    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  }
+
+  if (m_AcquisitionDateFields.size() > 0)
+  {
+    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[0], "support_data.image_date:year(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid year" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid year");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetMonth() const
+int CosmoImageMetadataInterface::GetMonth() const
 {
   int value = 0;
   if (m_AcquisitionDateFields.empty())
-    {
-      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-    }
+  {
+    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  }
 
-  if(m_AcquisitionDateFields.size() > 1 )
-    {
-    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[1], "support_data.image_date:month(int)" );
-    }
+  if (m_AcquisitionDateFields.size() > 1)
+  {
+    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[1], "support_data.image_date:month(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid month" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid month");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetDay() const
+int CosmoImageMetadataInterface::GetDay() const
 {
   int value = 0;
   if (m_AcquisitionDateFields.empty())
-    {
-      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-    }
+  {
+    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  }
 
-  if(m_AcquisitionDateFields.size() > 2 )
-    {
-    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[2], "support_data.image_date:day(int)");
-    }
+  if (m_AcquisitionDateFields.size() > 2)
+  {
+    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[2], "support_data.image_date:day(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid day" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid day");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetHour() const
+int CosmoImageMetadataInterface::GetHour() const
 {
   int value = 0;
   if (m_AcquisitionDateFields.empty())
-    {
-      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-    }
+  {
+    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  }
 
-  if(m_AcquisitionDateFields.size() > 3 )
-    {
-    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[3], "support_data.image_date:hour(int)");
-    }
+  if (m_AcquisitionDateFields.size() > 3)
+  {
+    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[3], "support_data.image_date:hour(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid hour" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid hour");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetMinute() const
+int CosmoImageMetadataInterface::GetMinute() const
 {
   int value = 0;
   if (m_AcquisitionDateFields.empty())
-    {
-      ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-    }
-  
-  if(m_AcquisitionDateFields.size() > 4 )
-    {
-    value = Utils::LexicalCast<int>( m_AcquisitionDateFields[4], "support_data.image_date:minute(int)");
-    }
+  {
+    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
+  }
+
+  if (m_AcquisitionDateFields.size() > 4)
+  {
+    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[4], "support_data.image_date:minute(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid minute" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid minute");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetProductionYear() const
+int CosmoImageMetadataInterface::GetProductionYear() const
 {
   int value = 0;
   ParseDateTime("support_data.date", m_ProductionDateFields);
-  if(m_ProductionDateFields.size() > 0 )
-    {
-    value = Utils::LexicalCast<int>( m_ProductionDateFields[0], "support_data.date:year(int)" );
-    }
+  if (m_ProductionDateFields.size() > 0)
+  {
+    value = Utils::LexicalCast<int>(m_ProductionDateFields[0], "support_data.date:year(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid production year" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid production year");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetProductionMonth() const
+int CosmoImageMetadataInterface::GetProductionMonth() const
 {
   int value = 0;
   ParseDateTime("support_data.date", m_ProductionDateFields);
-  if(m_ProductionDateFields.size() > 1 )
-    {
-    value = Utils::LexicalCast<int>( m_ProductionDateFields[1], "support_data.date:month(int)" );
-    }
+  if (m_ProductionDateFields.size() > 1)
+  {
+    value = Utils::LexicalCast<int>(m_ProductionDateFields[1], "support_data.date:month(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid production month" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid production month");
+  }
   return value;
 }
 
-int
-CosmoImageMetadataInterface::GetProductionDay() const
+int CosmoImageMetadataInterface::GetProductionDay() const
 {
   int value = 0;
   ParseDateTime("support_data.date", m_ProductionDateFields);
-  if(m_ProductionDateFields.size() > 2 )
-    {
-    value = Utils::LexicalCast<int>( m_ProductionDateFields[2], "support_data.date:day(int)" );
-    }
+  if (m_ProductionDateFields.size() > 2)
+  {
+    value = Utils::LexicalCast<int>(m_ProductionDateFields[2], "support_data.date:day(int)");
+  }
   else
-    {
-    itkExceptionMacro( << "Invalid production day" );
-    }
+  {
+    itkExceptionMacro(<< "Invalid production day");
+  }
   return value;
 }
 
-double
-CosmoImageMetadataInterface::GetPRF() const
+double CosmoImageMetadataInterface::GetPRF() const
 {
-  double value = 0;
-  const ImageKeywordlistType imageKeywordlist  = this->GetImageKeywordlist();
+  double                     value            = 0;
+  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
   if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-    {
+  {
     return value;
-    }
+  }
 
-  value = Utils::LexicalCast<double>( imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
-                                      "support_data.pulse_repetition_frequency(double)" );
+  value = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
+                                     "support_data.pulse_repetition_frequency(double)");
 
   return value;
 }
 
 
-CosmoImageMetadataInterface::UIntVectorType
-CosmoImageMetadataInterface::GetDefaultDisplay() const
+CosmoImageMetadataInterface::UIntVectorType CosmoImageMetadataInterface::GetDefaultDisplay() const
 {
   UIntVectorType rgb(3);
   rgb[0] = 0;
@@ -248,20 +235,17 @@ CosmoImageMetadataInterface::GetDefaultDisplay() const
   return rgb;
 }
 
-double
-CosmoImageMetadataInterface::GetRSF() const
+double CosmoImageMetadataInterface::GetRSF() const
 {
   return 0;
 }
 
-double
-CosmoImageMetadataInterface::GetRadarFrequency() const
+double CosmoImageMetadataInterface::GetRadarFrequency() const
 {
   return 0;
 }
 
-double
-CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
+double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
 {
   return 0;
 }

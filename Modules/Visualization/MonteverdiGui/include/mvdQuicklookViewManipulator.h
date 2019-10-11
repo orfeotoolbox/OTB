@@ -75,8 +75,7 @@ namespace mvd
  *
  *  \brief TODO.
  */
-class OTBMonteverdiGUI_EXPORT QuicklookViewManipulator :
-    public ImageViewManipulator
+class OTBMonteverdiGUI_EXPORT QuicklookViewManipulator : public ImageViewManipulator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,16 +84,14 @@ class OTBMonteverdiGUI_EXPORT QuicklookViewManipulator :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
-  /** \brief Constructor. */
+/** \brief Constructor. */
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
-  QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                            QObject* p =NULL );
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  QuicklookViewManipulator( QObject* p =NULL );
+  QuicklookViewManipulator(const otb::ViewSettings::Pointer& viewSettings, QObject* p = NULL);
+#else  // USE_VIEW_SETTINGS_SIDE_EFFECT
+  QuicklookViewManipulator(QObject* p = NULL);
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
@@ -105,64 +102,58 @@ public:
 
   ZoomType GetFixedZoomType() const override;
 
-  
-    void
-    SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const override;
+
+  void SetupRenderingContext(AbstractImageViewRenderer::RenderingContext* const) const override;
 
 
-  void MousePressEvent( QMouseEvent* event ) override;
+  void MousePressEvent(QMouseEvent* event) override;
 
-  void MouseMoveEvent( QMouseEvent* event ) override;
+  void MouseMoveEvent(QMouseEvent* event) override;
 
   // virtual void MousePressEvent( QMouseEvent* event );
 
   // virtual void MouseReleaseEvent( QMouseEvent* event );
 
-  void MouseDoubleClickEvent( QMouseEvent * ) override {};
+  void MouseDoubleClickEvent(QMouseEvent*) override{};
 
-  void WheelEvent( QWheelEvent* event) override;
+  void WheelEvent(QWheelEvent* event) override;
 
-  void ResizeEvent( QResizeEvent * event ) override;
+  void ResizeEvent(QResizeEvent* event) override;
 
-  void KeyPressEvent( QKeyEvent* event ) override;
+  void KeyPressEvent(QKeyEvent* event) override;
 
-  void KeyReleaseEvent( QKeyEvent* event ) override;
+  void KeyReleaseEvent(QKeyEvent* event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -176,15 +167,12 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
-  void OnRoiChanged( const PointType& origin,
-                     const SizeType& size,
-                     const SpacingType& spacing,
-                     const PointType& center );
+  void OnRoiChanged(const PointType& origin, const SizeType& size, const SpacingType& spacing, const PointType& center);
 };
 
 } // end namespace 'mvd'

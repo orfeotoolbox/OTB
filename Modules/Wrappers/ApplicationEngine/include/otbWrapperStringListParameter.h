@@ -38,31 +38,30 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT StringListParameter :
-    public ParameterList< StringParameter >
+class OTBApplicationEngine_EXPORT StringListParameter : public ParameterList<StringParameter>
 {
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** Standard class typedef */
-  typedef StringListParameter Self;
-  typedef ParameterList< StringParameter > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef StringListParameter            Self;
+  typedef ParameterList<StringParameter> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   typedef StringListInterface::StringVector StringListType;
 
   /** Defining ::New() static method */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro( StringListParameter, ParameterList );
+  itkTypeMacro(StringListParameter, ParameterList);
 
   /** Set the value */
-  void SetValue( const StringListInterface::StringVector & );
+  void SetValue(const StringListInterface::StringVector&);
 
   /** */
-  void AddString( const std::string & value );
+  void AddString(const std::string& value);
 
   /** Get the value */
   StringListInterface::StringVector GetValue() const;
@@ -71,7 +70,7 @@ public:
   std::string GetNthElement(std::size_t) const;
 
   /** Get the value */
-  void SetNthElement( std::size_t, const std::string & );
+  void SetNthElement(std::size_t, const std::string&);
 
   /** */
   using StringListInterface::GetDirection;
@@ -94,12 +93,12 @@ protected:
   /** Destructor */
   ~StringListParameter() override;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  StringListParameter ( const StringListParameter & ) = delete;
+  StringListParameter(const StringListParameter&) = delete;
 
-  void operator = ( const StringListParameter & ) = delete;
+  void operator=(const StringListParameter&) = delete;
 
 }; // End class Parameter
 

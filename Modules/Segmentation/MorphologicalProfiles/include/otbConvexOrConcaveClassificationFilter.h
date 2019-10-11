@@ -55,7 +55,7 @@ namespace Functor
  *
  * \ingroup OTBMorphologicalProfiles
  */
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ConvexOrConcaveDecisionRule
 {
 
@@ -65,33 +65,35 @@ public:
    */
   ConvexOrConcaveDecisionRule()
   {
-    m_ConvexLabel = 1;
+    m_ConvexLabel  = 1;
     m_ConcaveLabel = 2;
-    m_FlatLabel = 0;
-    m_Sigma = 0.0;
+    m_FlatLabel    = 0;
+    m_Sigma        = 0.0;
   }
   /**
    * Destructor
    */
-  virtual ~ConvexOrConcaveDecisionRule() {}
+  virtual ~ConvexOrConcaveDecisionRule()
+  {
+  }
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
    * \param x The image value
    * \param xlevel The leveling value
    */
-  inline TOutput operator ()(const TInput& x, const TInput& xlevel)
+  inline TOutput operator()(const TInput& x, const TInput& xlevel)
   {
     TOutput resp = m_FlatLabel;
 
     if (static_cast<double>(x - xlevel) > m_Sigma)
-      {
+    {
       resp = m_ConvexLabel;
-      }
+    }
     else if (static_cast<double>(xlevel - x) > m_Sigma)
-      {
+    {
       resp = m_ConcaveLabel;
-      }
+    }
     return resp;
   }
   /**
@@ -158,6 +160,7 @@ public:
   {
     return m_Sigma;
   }
+
 private:
   /** Label of the convex class */
   TOutput m_ConvexLabel;
@@ -167,9 +170,8 @@ private:
   TOutput m_FlatLabel;
   /** Sigma (tolerance) parameter */
   double m_Sigma;
-
 };
-} //end namespace Functor
+} // end namespace Functor
 
 /** \class ConvexOrConcaveClassificationFilter
  *  \brief This filter apply the Convex, Concave and flat classification functor to the whole image.
@@ -183,17 +185,15 @@ private:
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ConvexOrConcaveClassificationFilter
-  : public itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
-      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
+    : public itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
+                                           Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard typedefs */
   typedef ConvexOrConcaveClassificationFilter Self;
   typedef itk::BinaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage,
-      Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
-  Superclass;
+                                        Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -207,15 +207,14 @@ public:
   typedef TInputImage                         InputImageType;
   typedef TOutputImage                        OutputImageType;
   typedef typename OutputImageType::PixelType LabelType;
-  typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> DecisionFunctorType;
+  typedef Functor::ConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType> DecisionFunctorType;
   /**
    * Set the input image
    * \param image the input image
    *
    */
   using Superclass::SetInput;
-  void SetInput(const TInputImage * image) override
+  void SetInput(const TInputImage* image) override
   {
     this->SetInput1(image);
   }
@@ -224,7 +223,7 @@ public:
    * \param leveling the input leveling image
    *
    */
-  void SetInputLeveling(const TInputImage * leveling)
+  void SetInputLeveling(const TInputImage* leveling)
   {
     this->SetInput2(leveling);
   }
@@ -253,14 +252,16 @@ public:
 protected:
   /** Constructor */
   ConvexOrConcaveClassificationFilter()
-    {
+  {
     m_ConvexLabel  = 1;
     m_ConcaveLabel = 2;
     m_FlatLabel    = 0;
     m_Sigma        = 0.0;
-    };
+  };
   /** Destructor */
-  ~ConvexOrConcaveClassificationFilter() override {}
+  ~ConvexOrConcaveClassificationFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -272,8 +273,8 @@ protected:
   }
 
 private:
-  ConvexOrConcaveClassificationFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ConvexOrConcaveClassificationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Label of the convex class */
   LabelType m_ConvexLabel;

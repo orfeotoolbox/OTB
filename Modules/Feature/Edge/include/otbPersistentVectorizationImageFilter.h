@@ -45,16 +45,15 @@ namespace otb
  *
  * \ingroup OTBEdge
  */
-template<class TInputImage, class TOutputPath>
-class ITK_EXPORT PersistentVectorizationImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage, class TOutputPath>
+class ITK_EXPORT PersistentVectorizationImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentVectorizationImageFilter              Self;
+  typedef PersistentVectorizationImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,14 +72,14 @@ public:
   typedef typename TInputImage::InternalPixelType InternalPixelType;
 
   // Output path type
-  typedef TOutputPath                                     PathType;
-  typedef otb::ObjectList<PathType>                       PathListType;
-  typedef typename PathListType::Pointer                  PathListPointerType;
-  typedef typename PathType::Pointer                      PathPointerType;
-  typedef itk::MinimumMaximumImageFilter<ImageType>       MinMaxFilterType;
-  typedef typename MinMaxFilterType::Pointer              MinMaxFilterPointerType;
+  typedef TOutputPath                               PathType;
+  typedef otb::ObjectList<PathType>                 PathListType;
+  typedef typename PathListType::Pointer            PathListPointerType;
+  typedef typename PathType::Pointer                PathPointerType;
+  typedef itk::MinimumMaximumImageFilter<ImageType> MinMaxFilterType;
+  typedef typename MinMaxFilterType::Pointer        MinMaxFilterPointerType;
   typedef otb::ImageToEdgePathFilter<ImageType, PathType> ImageToEdgePathFilterType;
-  typedef typename ImageToEdgePathFilterType::Pointer     ImageToEdgePathFilterPointerType;
+  typedef typename ImageToEdgePathFilterType::Pointer ImageToEdgePathFilterPointerType;
 
   void Reset(void) override;
   void Synthetize(void) override;
@@ -89,13 +88,15 @@ public:
 
 protected:
   PersistentVectorizationImageFilter();
-  ~PersistentVectorizationImageFilter() override {}
+  ~PersistentVectorizationImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void GenerateData() override;
 
 private:
-  PersistentVectorizationImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentVectorizationImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Min max filter (the mini-pipeline)
   MinMaxFilterPointerType m_MinMaxFilter;

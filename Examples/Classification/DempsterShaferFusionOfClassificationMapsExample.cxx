@@ -148,7 +148,7 @@ int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType& m
         if (mapOfClassesRefClX.count(labelProd) != 0)
         {
           // Indice of labelProd in mapOfClassesRefClX; itMapOfClassesRef->second elements are already SORTED
-          indiceLabelProd                                     = mapOfClassesRefClX[labelProd];
+          indiceLabelProd = mapOfClassesRefClX[labelProd];
           confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
         }
       }

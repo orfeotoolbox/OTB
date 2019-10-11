@@ -42,9 +42,9 @@ template <class TInputVectorPixel, class TOutputPixel>
 class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
 {
 public:
-  typedef WaterSqrtSpectralAngleFunctor                             Self;
+  typedef WaterSqrtSpectralAngleFunctor Self;
   typedef SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
-  typedef TInputVectorPixel                                         InputVectorPixelType;
+  typedef TInputVectorPixel InputVectorPixelType;
   WaterSqrtSpectralAngleFunctor()
   {
 
@@ -151,18 +151,15 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInputVectorImage, class TOutputImage,
-    class TFunction = Functor::WaterSqrtSpectralAngleFunctor <
-        typename TInputVectorImage::PixelType,
-        typename TOutputImage::PixelType> >
-class ITK_EXPORT WaterSqrtSpectralAngleImageFilter :
-  public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
+          class TFunction = Functor::WaterSqrtSpectralAngleFunctor<typename TInputVectorImage::PixelType, typename TOutputImage::PixelType>>
+class ITK_EXPORT WaterSqrtSpectralAngleImageFilter : public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
-  typedef WaterSqrtSpectralAngleImageFilter                                        Self;
+  typedef WaterSqrtSpectralAngleImageFilter Self;
   typedef itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction> Superclass;
-  typedef itk::SmartPointer<Self>                                                  Pointer;
-  typedef itk::SmartPointer<const Self>                                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -175,15 +172,18 @@ public:
   typedef TOutputImage                             OutputImageType;
 
 protected:
-  WaterSqrtSpectralAngleImageFilter() {}
-  ~WaterSqrtSpectralAngleImageFilter() override {}
+  WaterSqrtSpectralAngleImageFilter()
+  {
+  }
+  ~WaterSqrtSpectralAngleImageFilter() override
+  {
+  }
 
 private:
-  WaterSqrtSpectralAngleImageFilter(Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  WaterSqrtSpectralAngleImageFilter(Self&) = delete;
+  void operator=(const Self&) = delete;
 };
-}  // end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #endif

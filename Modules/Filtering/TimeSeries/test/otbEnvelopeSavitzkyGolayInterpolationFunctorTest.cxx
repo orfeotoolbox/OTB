@@ -19,48 +19,46 @@
  */
 
 
-
 #include "otbEnvelopeSavitzkyGolayInterpolationFunctor.h"
 #include "otbTimeSeries.h"
 
 int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
-  typedef float PixelType;
+  typedef float        PixelType;
   typedef unsigned int DoYType;
-  const unsigned int nbDates = 100;
-  typedef itk::FixedArray< PixelType, nbDates > SeriesType;
-  typedef itk::FixedArray< DoYType, nbDates > DatesType;
+  const unsigned int   nbDates = 100;
+  typedef itk::FixedArray<PixelType, nbDates> SeriesType;
+  typedef itk::FixedArray<DoYType, nbDates>   DatesType;
   const unsigned int Radius = 2;
-
 
 
   // Create a time series
   SeriesType inSeries;
   SeriesType cleanSeries;
   SeriesType weightSeries;
-  DatesType doySeries;
+  DatesType  doySeries;
 
-  for(unsigned int i=0; i<nbDates; ++i)
-    {
-    inSeries[i] = 10*std::cos(i/10.0);
-    cleanSeries[i] = inSeries[i];
-    doySeries[i] = i;
+  for (unsigned int i = 0; i < nbDates; ++i)
+  {
+    inSeries[i]     = 10 * std::cos(i / 10.0);
+    cleanSeries[i]  = inSeries[i];
+    doySeries[i]    = i;
     weightSeries[i] = 1;
-    }
+  }
 
   // Set artifacts
-  inSeries[nbDates/4] = 0.0;
-  inSeries[nbDates/2] = 0.0;
+  inSeries[nbDates / 4] = 0.0;
+  inSeries[nbDates / 2] = 0.0;
 
-  weightSeries[nbDates/4] = 100000.0;
-  weightSeries[nbDates/2] = 100000.0;
+  weightSeries[nbDates / 4] = 100000.0;
+  weightSeries[nbDates / 2] = 100000.0;
 
   typedef otb::Functor::EnvelopeSavitzkyGolayInterpolationFunctor<Radius, SeriesType, DatesType, SeriesType> FunctorType;
 
   FunctorType f;
-  f.SetWeights( weightSeries );
-  f.SetDates( doySeries );
+  f.SetWeights(weightSeries);
+  f.SetDates(doySeries);
   f.SetUpperEnvelope();
   f.SetDecreaseFactor(0.9);
   f.SetIterations(4);
@@ -69,21 +67,20 @@ int otbEnvelopeSavitzkyGolayInterpolationFunctorTest(int itkNotUsed(argc), char*
 
   double interpolError = 0.0;
 
-  for(unsigned int i=0; i<nbDates; ++i)
-    {
+  for (unsigned int i = 0; i < nbDates; ++i)
+  {
 
-    interpolError += std::fabs(outSeries[i]-cleanSeries[i]);
+    interpolError += std::fabs(outSeries[i] - cleanSeries[i]);
+  }
 
-    }
-
-  interpolError/=nbDates;
+  interpolError /= nbDates;
 
 
-  if(interpolError > 0.1)
-    {
+  if (interpolError > 0.1)
+  {
     std::cout << "Interpolation error = " << interpolError << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

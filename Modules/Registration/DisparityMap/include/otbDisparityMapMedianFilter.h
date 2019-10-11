@@ -39,7 +39,8 @@ namespace otb
  *
  * A detection of incoherences between the input disparity map and the median is performed (a pixel corresponds
  * to an incoherence if the absolute value of the difference between the pixel value in the disparity map and in the median
- * image is higher than the incoherence threshold (whose default value is 1). The input disparity map and mask are updated: their value on incoherences becomes 0.
+ * image is higher than the incoherence threshold (whose default value is 1). The input disparity map and mask are updated: their value on incoherences becomes
+ * 0.
  *
  * The median image is then computed again on incoherences using the updated disparity map and mask.
  *
@@ -70,15 +71,12 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template <class TInputImage, class TOutputImage, class TMask>
-class ITK_EXPORT DisparityMapMedianFilter :
-    public itk::ImageToImageFilter< TInputImage, TOutputImage>
+class ITK_EXPORT DisparityMapMedianFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract dimension from input and output image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
   typedef TInputImage  InputImageType;
@@ -87,10 +85,10 @@ public:
 
 
   /** Standard class typedefs. */
-  typedef DisparityMapMedianFilter                                  Self;
-  typedef itk::ImageToImageFilter< InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef DisparityMapMedianFilter Self;
+  typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -104,25 +102,25 @@ public:
   typedef typename MaskImageType::PixelType   MaskImagePixelType;
   typedef typename MaskImageType::Pointer     MaskImagePointerType;
 
-  typedef typename InputImageType::RegionType       InputImageRegionType;
-  typedef typename OutputImageType::RegionType      OutputImageRegionType;
-  typedef typename InputImageType::SizeType         SizeType;
-  typedef typename OutputImageType::IndexValueType  IndexValueType;
+  typedef typename InputImageType::RegionType      InputImageRegionType;
+  typedef typename OutputImageType::RegionType     OutputImageRegionType;
+  typedef typename InputImageType::SizeType        SizeType;
+  typedef typename OutputImageType::IndexValueType IndexValueType;
 
   /** Set input mask **/
-  void SetMaskInput( const TMask * inputmask); // mask corresponding to the subpixel disparity map
+  void SetMaskInput(const TMask* inputmask); // mask corresponding to the subpixel disparity map
 
   /** Get the input mask */
-  const TMask * GetMaskInput();
+  const TMask* GetMaskInput();
 
   /** Get the output mask  **/
-  TMask * GetOutputMask(); // mask corresponding to the median disparity map
+  TMask* GetOutputMask(); // mask corresponding to the median disparity map
 
   /** Get the updated disparity map **/
-  TOutputImage * GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
+  TOutputImage* GetOutputDisparityMap(); // input disparity map updated (incoherences between median and input disparity map are removed)
 
   /** Get the updated disparity mask **/
-  TMask * GetOutputDisparityMask();
+  TMask* GetOutputDisparityMask();
 
   /** Set/Get the radius of the neighborhood used to compute the median. */
   itkSetMacro(Radius, SizeType);
@@ -130,9 +128,9 @@ public:
 
   /** Set unsigned int radius */
   void SetRadius(unsigned int radius)
-    {
+  {
     m_Radius.Fill(radius);
-    }
+  }
 
   /** Set/Get the incoherence threshold */
   itkSetMacro(IncoherenceThreshold, double);
@@ -140,18 +138,17 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(SameDimensionCheck,
-                  (itk::Concept::SameDimension<InputImageDimension, OutputImageDimension>));
-  itkConceptMacro(InputConvertibleToOutputCheck,
-                  (itk::Concept::Convertible<InputPixelType, OutputPixelType>));
-  itkConceptMacro(InputLessThanComparableCheck,
-                  (itk::Concept::LessThanComparable<InputPixelType>));
-  /** End concept checking */
+  itkConceptMacro(SameDimensionCheck, (itk::Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(InputConvertibleToOutputCheck, (itk::Concept::Convertible<InputPixelType, OutputPixelType>));
+  itkConceptMacro(InputLessThanComparableCheck, (itk::Concept::LessThanComparable<InputPixelType>));
+/** End concept checking */
 #endif
 
 protected:
   DisparityMapMedianFilter();
-  ~DisparityMapMedianFilter() override {}
+  ~DisparityMapMedianFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** MedianImageFilter needs a larger input requested region than
@@ -160,7 +157,7 @@ protected:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** Generate output information */
   void GenerateOutputInformation(void) override;

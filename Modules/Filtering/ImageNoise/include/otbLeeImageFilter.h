@@ -33,39 +33,35 @@ namespace otb
  *
  * This class implements Lee's filter for despeckleing of SAR
  * images. The estimated reflectivity R is computed as follows:
- * 
+ *
  * R=I*W+E[I]*(1-W), where
  * W=1-Cu*Cu/(Ci*Ci)
  * Cu = 1/sqrt(nb of look)
  * Ci = sqrt(VAR[I])/E[I]
- * 
+ *
  * (http://www.isprs.org/proceedings/XXXV/congress/comm2/papers/110.pdf)
- * 
+ *
  *
  *
  * \ingroup OTBImageNoise
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT LeeImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT LeeImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** standard class typedefs */
-  typedef LeeImageFilter                                           Self;
+  typedef LeeImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Object factory management */
   itkNewMacro(Self);
@@ -97,12 +93,13 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   LeeImageFilter();
-  ~LeeImageFilter() override {}
+  ~LeeImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** LeeImageFilter can be multithreaded.
@@ -115,12 +112,11 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  LeeImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LeeImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the filter */
   SizeType m_Radius;

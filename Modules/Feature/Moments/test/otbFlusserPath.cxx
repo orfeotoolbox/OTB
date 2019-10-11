@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -28,11 +26,11 @@
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbFlusserPath(int itkNotUsed(argc), char * argv[])
+int otbFlusserPath(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int       Number;
-  const unsigned int Dimension = 2;
-  const char *       outputFilename  = argv[1];
+  unsigned int                                   Number;
+  const unsigned int                             Dimension      = 2;
+  const char*                                    outputFilename = argv[1];
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::FlusserPathFunction<PathType>     FunctionType;
   typedef FunctionType::RealType                 RealType;
@@ -57,7 +55,7 @@ int otbFlusserPath(int itkNotUsed(argc), char * argv[])
   pathElt->AddVertex(cindex);
 
   FunctionType::Pointer function = FunctionType::New();
-  //OTB-FA-00022-CS
+  // OTB-FA-00022-CS
   function->SetInputPath(pathElt);
 
   std::ofstream outputStream(outputFilename);
@@ -67,12 +65,12 @@ int otbFlusserPath(int itkNotUsed(argc), char * argv[])
   RealType Result;
 
   for (Number = 1; Number < 12; Number++)
-    {
-    //OTB-FA-00024-CS
+  {
+    // OTB-FA-00024-CS
     function->SetMomentNumber(Number);
     Result = function->Evaluate();
     outputStream << "Flusser(" << Number << ") = " << Result << std::endl;
-    }
+  }
 
   outputStream.close();
 

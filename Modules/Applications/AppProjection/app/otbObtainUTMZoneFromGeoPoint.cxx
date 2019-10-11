@@ -64,20 +64,20 @@ private:
 
     AddDocTag(Tags::Geometry);
 
-    AddParameter(ParameterType_Float,  "lat", "Latitude");
+    AddParameter(ParameterType_Float, "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");
 
-    AddParameter(ParameterType_Float,  "lon", "Longitude");
+    AddParameter(ParameterType_Float, "lon", "Longitude");
     SetParameterDescription("lon", "Longitude value of desired point.");
 
-    AddParameter(ParameterType_Int,"utm","UTMZone");
-    SetParameterDescription("utm","UTM Zone");
+    AddParameter(ParameterType_Int, "utm", "UTMZone");
+    SetParameterDescription("utm", "UTM Zone");
     MandatoryOff("utm");
     SetParameterRole("utm", Role_Output);
 
     SetExampleComment("Obtain a UTM Zone", 0);
-    SetDocExampleParameterValue("lat","10.0");
-    SetDocExampleParameterValue("lon","124.0");
+    SetDocExampleParameterValue("lat", "10.0");
+    SetDocExampleParameterValue("lon", "124.0");
 
     SetOfficialDocLink();
   }
@@ -89,18 +89,15 @@ private:
 
   void DoExecute() override
   {
-    unsigned int utmZone = 0;
+    unsigned int                      utmZone = 0;
     otb::SpatialReference::hemisphere hem;
 
 
-    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"),
-                                                     GetParameterFloat("lat"),utmZone,hem);
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"), GetParameterFloat("lat"), utmZone, hem);
 
-    SetParameterInt("utm",utmZone);
+    SetParameterInt("utm", utmZone);
   }
-
 };
-
 }
 }
 

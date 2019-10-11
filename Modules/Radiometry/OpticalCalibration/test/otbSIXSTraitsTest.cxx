@@ -21,9 +21,9 @@
 
 #include "otbSIXSTraits.h"
 
-int otbSIXSTraitsTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSIXSTraitsTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  otb::SIXSTraits *var(nullptr);
+  otb::SIXSTraits* var(nullptr);
   var = new otb::SIXSTraits();
   delete var;
   return EXIT_SUCCESS;

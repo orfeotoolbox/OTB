@@ -74,18 +74,17 @@ public:
   }
 
   // Open the file for reading and returns a smart dataset pointer
-  GDALDatasetWrapper::Pointer Open( std::string filename ) const;
+  GDALDatasetWrapper::Pointer Open(std::string filename) const;
 
   // Open the new  file for writing and returns a smart dataset pointer
-  GDALDatasetWrapper::Pointer Create( std::string driverShortName, std::string filename,
-                                      int nXSize, int nYSize, int nBands,
-                                      GDALDataType eType, char ** papszOptions ) const;
+  GDALDatasetWrapper::Pointer Create(std::string driverShortName, std::string filename, int nXSize, int nYSize, int nBands, GDALDataType eType,
+                                     char** papszOptions) const;
 
 
-  GDALDriver* GetDriverByName( std::string driverShortName ) const;
+  GDALDriver* GetDriverByName(std::string driverShortName) const;
 
-private :
-// private constructor so that this class is allocated only inside GetInstance
+private:
+  // private constructor so that this class is allocated only inside GetInstance
   GDALDriverManagerWrapper();
 
   ~GDALDriverManagerWrapper();

@@ -33,58 +33,49 @@ DateTimeAdapter::DateTimeAdapter()
 DateTimeAdapter::~DateTimeAdapter()
 {
   if (m_LocalTm != nullptr)
-    {
+  {
     delete m_LocalTm;
-    }
+  }
 }
 
-int
-DateTimeAdapter::GetYear()
+int DateTimeAdapter::GetYear()
 {
   return m_LocalTm->getYear();
 }
 
-int
-DateTimeAdapter::GetMonth()
+int DateTimeAdapter::GetMonth()
 {
   return m_LocalTm->getMonth();
 }
 
-int
-DateTimeAdapter::GetDay()
+int DateTimeAdapter::GetDay()
 {
   return m_LocalTm->getDay();
 }
 
-int
-DateTimeAdapter::GetHour()
+int DateTimeAdapter::GetHour()
 {
   return m_LocalTm->getHour();
 }
 
-int
-DateTimeAdapter::GetMinute()
+int DateTimeAdapter::GetMinute()
 {
   return m_LocalTm->getMin();
 }
 
-double
-DateTimeAdapter::GetSeconds() const
+double DateTimeAdapter::GetSeconds() const
 {
-  return static_cast<double>(m_LocalTm->getSec())
-    + m_LocalTm->getFractionalSecond();
+  return static_cast<double>(m_LocalTm->getSec()) + m_LocalTm->getFractionalSecond();
 }
 
-bool
-DateTimeAdapter::SetFromIso8601(const std::string &date)
+bool DateTimeAdapter::SetFromIso8601(const std::string& date)
 {
   return m_LocalTm->setIso8601(date);
 }
 
-double
-DateTimeAdapter::GetDeltaInSeconds(const DateTimeAdapter *pastDate)
+double DateTimeAdapter::GetDeltaInSeconds(const DateTimeAdapter* pastDate)
 {
-  return ( this->GetSeconds() - pastDate->GetSeconds() );
+  return (this->GetSeconds() - pastDate->GetSeconds());
 }
 
 

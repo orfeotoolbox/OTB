@@ -30,13 +30,13 @@ using namespace otb;
 
 typedef OGRExtendedFilenameToOptions FilenameHelperType;
 
-int otbOGRExtendedFileName(int , char* argv[])
+int otbOGRExtendedFileName(int, char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputExtendedFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputExtendedFilename = argv[1];
+  const char* outputFilename        = argv[2];
 
-  std::cout<< argv[1] <<"  "<<argv[2]<<std::endl;
+  std::cout << argv[1] << "  " << argv[2] << std::endl;
   FilenameHelperType::Pointer helper = FilenameHelperType::New();
 
   helper->SetExtendedFileName(inputExtendedFilename);
@@ -47,51 +47,49 @@ int otbOGRExtendedFileName(int , char* argv[])
   file << helper->SimpleFileNameIsSet() << std::endl;
   file << itksys::SystemTools::GetFilenameName(helper->GetSimpleFileName()) << std::endl;
 
-  file << "Open option :"<<std::endl;
+  file << "Open option :" << std::endl;
   FilenameHelperType::GDALOptionType open = helper->GetGDALOpenOptions();
-  for ( auto option : open )
-    {
-    file<< option << std::endl;
-    }
+  for (auto option : open)
+  {
+    file << option << std::endl;
+  }
 
-  file << "Create option :"<<std::endl;
+  file << "Create option :" << std::endl;
   FilenameHelperType::GDALOptionType create = helper->GetGDALOptions("creation");
-  for ( auto option : create )
-    {
-    file<< option << std::endl;
-    }
+  for (auto option : create)
+  {
+    file << option << std::endl;
+  }
 
-  file << "Layer option :"<<std::endl;
+  file << "Layer option :" << std::endl;
   FilenameHelperType::GDALOptionType layer = helper->GetGDALOptions("layer");
-  for ( auto option : layer )
-    {
-    file<< option << std::endl;
-    }
+  for (auto option : layer)
+  {
+    file << option << std::endl;
+  }
 
-  file<< "End of classic helper."<<std::endl;
+  file << "End of classic helper." << std::endl;
 
   layer.push_back("TOTO=first");
-  FilenameHelperType::Pointer layerHelper = 
-    FilenameHelperType::GetGDALLayerOptionsHelper ( layer );
-  std::cout<< layerHelper->GetGDALLayerOptions()[0] <<std::endl;
+  FilenameHelperType::Pointer layerHelper = FilenameHelperType::GetGDALLayerOptionsHelper(layer);
+  std::cout << layerHelper->GetGDALLayerOptions()[0] << std::endl;
   FilenameHelperType::GDALOptionType newOptions;
-    // std::vector< std::string> newOptions;
+  // std::vector< std::string> newOptions;
   newOptions.push_back("TOTO=second");
   newOptions.push_back("TiTi=option");
-  layerHelper->AddGDALLayerOptions( newOptions );
+  layerHelper->AddGDALLayerOptions(newOptions);
 
   file << layerHelper->SimpleFileNameIsSet() << std::endl;
   file << layerHelper->HasGDALLayerOption() << std::endl;
-  file << "Layer option from layer helper:"<<std::endl;
+  file << "Layer option from layer helper:" << std::endl;
   FilenameHelperType::GDALOptionType latestOptions = layerHelper->GetGDALOptions("layer");
   // need to sort for dummy windows
-  std::sort( latestOptions.begin() , latestOptions.end() );
-  for ( auto option : latestOptions ) 
-    {
-    file<< option << std::endl;
-    }
+  std::sort(latestOptions.begin(), latestOptions.end());
+  for (auto option : latestOptions)
+  {
+    file << option << std::endl;
+  }
 
   file.close();
   return EXIT_SUCCESS;
 }
-

@@ -43,7 +43,7 @@ public:
   ~QtWidgetChoiceParameter() override;
 
 protected slots:
-  void SetValue( int value );
+  void SetValue(int value);
 
 private:
   QtWidgetChoiceParameter(const QtWidgetChoiceParameter&) = delete;
@@ -55,19 +55,18 @@ private:
 
   ChoiceParameter::Pointer m_ChoiceParam;
 
-  QHBoxLayout*    m_MainHLayout;
+  QHBoxLayout* m_MainHLayout;
 
   QComboBox*      m_ComboBox;
   QStackedWidget* m_StackWidget;
 
-  QVBoxLayout*    m_VLayout;
-  QGroupBox*      m_VLayoutGroup;
+  QVBoxLayout* m_VLayout;
+  QGroupBox*   m_VLayoutGroup;
 
   typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
+  typedef WidgetListType::iterator            WidgetListIteratorType;
+  WidgetListType                              m_WidgetList;
 };
-
 }
 }
 

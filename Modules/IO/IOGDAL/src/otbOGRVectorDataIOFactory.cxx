@@ -31,26 +31,21 @@ namespace otb
 OGRVectorDataIOFactory::OGRVectorDataIOFactory()
 {
   static std::string classOverride = std::string("otbVectorDataIOBase");
-  static std::string subclass = std::string("otbOGRVectorDataIO");
+  static std::string subclass      = std::string("otbOGRVectorDataIO");
 
-  this->RegisterOverride(classOverride.c_str(),
-                         subclass.c_str(),
-                         "OGR Vectordata IO",
-                         1,
-                         itk::CreateObjectFunction<OGRVectorDataIO>::New());
+  this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "OGR Vectordata IO", 1, itk::CreateObjectFunction<OGRVectorDataIO>::New());
 }
 
 OGRVectorDataIOFactory::~OGRVectorDataIOFactory()
-{}
+{
+}
 
-const char*
-OGRVectorDataIOFactory::GetITKSourceVersion(void) const
+const char* OGRVectorDataIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-OGRVectorDataIOFactory::GetDescription() const
+const char* OGRVectorDataIOFactory::GetDescription() const
 {
   return "OGR VectorDataIO Factory, allows the loading of ogr supported vector data into OTB";
 }

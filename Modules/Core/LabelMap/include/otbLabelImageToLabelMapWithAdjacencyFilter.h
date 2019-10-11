@@ -26,7 +26,8 @@
 #include "otbLabelMapWithAdjacency.h"
 #include "itkLabelObject.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelImageToLabelMapWithAdjacencyFilter
  * \brief convert a labeled image to a label map with adjacency information.
@@ -34,26 +35,24 @@ namespace otb {
  *
  * \ingroup OTBLabelMap
  */
-template<class TInputImage, class TOutputImage=otb::LabelMapWithAdjacency< itk::LabelObject< typename TInputImage::PixelType, TInputImage::ImageDimension > > >
-class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter :
-    public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage = otb::LabelMapWithAdjacency<itk::LabelObject<typename TInputImage::PixelType, TInputImage::ImageDimension>>>
+class ITK_EXPORT LabelImageToLabelMapWithAdjacencyFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef LabelImageToLabelMapWithAdjacencyFilter Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef typename InputImageType::Pointer                      InputImagePointer;
-  typedef typename InputImageType::ConstPointer                 InputImageConstPointer;
-  typedef typename InputImageType::RegionType                   InputImageRegionType;
-  typedef typename InputImageType::PixelType                    InputImagePixelType;
-  typedef typename InputImageType::IndexType                    IndexType;
+  typedef TInputImage                           InputImageType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
+  typedef typename InputImageType::ConstPointer InputImageConstPointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename InputImageType::IndexType    IndexType;
 
   typedef typename OutputImageType::Pointer                     OutputImagePointer;
   typedef typename OutputImageType::ConstPointer                OutputImageConstPointer;
@@ -65,20 +64,17 @@ public:
   typedef typename OutputImageType::LabelType                   LabelType;
 
   /** Const iterator over LabelObject lines */
-  typedef typename LabelObjectType::ConstLineIterator           ConstLineIteratorType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelImageToLabelMapWithAdjacencyFilter,
-               ImageToImageFilter);
+  itkTypeMacro(LabelImageToLabelMapWithAdjacencyFilter, ImageToImageFilter);
 
   /**
    * Set/Get the value used as "background" in the output image.
@@ -91,7 +87,7 @@ protected:
   /** Constructor */
   LabelImageToLabelMapWithAdjacencyFilter();
   /** Destructor */
-  ~LabelImageToLabelMapWithAdjacencyFilter() override {};
+  ~LabelImageToLabelMapWithAdjacencyFilter() override{};
   /** Printself */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -106,11 +102,11 @@ protected:
     // Label
     unsigned long int label;
     // Constructor
-    RLE(const IndexType & w, long unsigned int l, unsigned long int la)
+    RLE(const IndexType& w, long unsigned int l, unsigned long int la)
     {
-      where = w;
+      where  = w;
       length = l;
-      label = la;
+      label  = la;
     }
 
   }; // end class RLE
@@ -124,7 +120,7 @@ protected:
   void GenerateInputRequestedRegion() override;
 
   /** LabelImageToLabelMapWithAdjacencyFilter will produce the entire output. */
-  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* itkNotUsed(output)) override;
 
   void BeforeThreadedGenerateData() override;
 
@@ -136,7 +132,7 @@ protected:
   void AddAdjacency(LabelType label1, LabelType label2, itk::ThreadIdType threadId);
 
   /** Parse one line for horizontal adjacency */
-  void ParseLine(const RLEVectorType & line, itk::ThreadIdType threadId);
+  void ParseLine(const RLEVectorType& line, itk::ThreadIdType threadId);
 
   /** Parse two consecutive lines for vertical adjacency */
   void ParseConsecutiveLines(const RLEVectorType& line1, const RLEVectorType& line2, itk::ThreadIdType threadId);
@@ -148,8 +144,8 @@ private:
 
   OutputImagePixelType m_BackgroundValue;
 
-  typename std::vector< OutputImagePointer > m_TemporaryImages;
-  typename std::vector<AdjacencyMapType>     m_TemporaryAdjacencyMaps;
+  typename std::vector<OutputImagePointer> m_TemporaryImages;
+  typename std::vector<AdjacencyMapType>   m_TemporaryAdjacencyMaps;
 
 }; // end of class
 
@@ -160,5 +156,3 @@ private:
 #endif
 
 #endif
-
-

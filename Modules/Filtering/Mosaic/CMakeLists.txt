@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2019 IRSTEA
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,6 +19,6 @@
 # limitations under the License.
 #
 
-configure_file(${Monteverdi_SOURCE_DIR}/CMake/qt.conf.in
-               ${TARGET_DIR}/qt.conf
-               @ONLY)
+
+project(OTBMosaic)
+otb_module_impl()

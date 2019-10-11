@@ -19,10 +19,9 @@
  */
 
 
-
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariableGetMaxVar(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbFuzzyVariableGetMaxVar(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
   typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
@@ -37,7 +36,7 @@ int otbFuzzyVariableGetMaxVar(int itkNotUsed(argc), char * itkNotUsed(argv)[])
 
   std::string maxVar = fv->GetMaxVar(0.4);
 
-  if( maxVar != "MediumLow" )
+  if (maxVar != "MediumLow")
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

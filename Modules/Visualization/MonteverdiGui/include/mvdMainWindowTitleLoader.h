@@ -72,7 +72,7 @@ class VectorImageModel;
  */
 class OTBMonteverdiGUI_EXPORT MainWindowTitleLoader : public QObject
 {
-    Q_OBJECT;
+  Q_OBJECT;
 
 public:
   /** \brief Constructor */
@@ -84,13 +84,12 @@ public slots:
 
 signals:
   /** \brief Triggered after model is ready */
-  void TitleLoaded( const QString& );
+  void TitleLoaded(const QString&);
 
   /** \brief Triggered when processing is finished */
   void Finished();
 
 private:
-
   VectorImageModel* m_Model;
 };
 

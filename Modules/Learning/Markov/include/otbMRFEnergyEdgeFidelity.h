@@ -46,12 +46,12 @@ namespace otb
  * \ingroup OTBMarkov
 */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyEdgeFidelity : public MRFEnergy<TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyEdgeFidelity         Self;
-  typedef MRFEnergy<TInput1, TInput2>   Superclass;
+  typedef MRFEnergyEdgeFidelity Self;
+  typedef MRFEnergy<TInput1, TInput2> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -73,8 +73,10 @@ public:
 
 protected:
   // The constructor and destructor.
-  MRFEnergyEdgeFidelity() {};
-  ~MRFEnergyEdgeFidelity() override {}
+  MRFEnergyEdgeFidelity(){};
+  ~MRFEnergyEdgeFidelity() override
+  {
+  }
 };
 }
 

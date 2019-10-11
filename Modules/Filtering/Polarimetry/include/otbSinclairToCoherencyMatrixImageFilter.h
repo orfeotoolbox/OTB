@@ -64,15 +64,14 @@ namespace Functor
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInput1, class TInput2, class TInput3,
-          class TInput4, class TOutput>
+template <class TInput1, class TInput2, class TInput3, class TInput4, class TOutput>
 class SinclairToCoherencyMatrixFunctor
 {
 public:
   /** Some typedefs. */
-  typedef double                                   RealType;
-  typedef std::complex <RealType>                  ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                      RealType;
+  typedef std::complex<RealType>      ComplexType;
+  typedef typename TOutput::ValueType OutputValueType;
   inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv) const
   {
     const ComplexType S_hh = static_cast<ComplexType>(Shh);
@@ -82,19 +81,19 @@ public:
 
     const ComplexType HHPlusVV   = S_hh + S_vv;
     const ComplexType HHMinusVV  = S_hh - S_vv;
-    const ComplexType HVPlusVH   =  S_hv + S_vh;
+    const ComplexType HVPlusVH   = S_hv + S_vh;
     const ComplexType jHVMinusVH = (S_hv - S_vh) * ComplexType(0., 1.);
 
-    result[0] = static_cast<OutputValueType>( std::norm(HHPlusVV) );
-    result[1] = static_cast<OutputValueType>( HHPlusVV * std::conj(HHMinusVV) );
-    result[2] = static_cast<OutputValueType>( HHPlusVV * std::conj(HVPlusVH) );
-    result[3] = static_cast<OutputValueType>( HHPlusVV * std::conj(jHVMinusVH) );
-    result[4] = static_cast<OutputValueType>( std::norm(HHMinusVV) );
-    result[5] = static_cast<OutputValueType>( HHMinusVV * std::conj(HVPlusVH) );
-    result[6] = static_cast<OutputValueType>( HHMinusVV * std::conj(jHVMinusVH) );
-    result[7] = static_cast<OutputValueType>( std::norm(HVPlusVH) );
-    result[8] = static_cast<OutputValueType>( HVPlusVH * std::conj(jHVMinusVH) );
-    result[9] = static_cast<OutputValueType>( std::norm(jHVMinusVH) );
+    result[0] = static_cast<OutputValueType>(std::norm(HHPlusVV));
+    result[1] = static_cast<OutputValueType>(HHPlusVV * std::conj(HHMinusVV));
+    result[2] = static_cast<OutputValueType>(HHPlusVV * std::conj(HVPlusVH));
+    result[3] = static_cast<OutputValueType>(HHPlusVV * std::conj(jHVMinusVH));
+    result[4] = static_cast<OutputValueType>(std::norm(HHMinusVV));
+    result[5] = static_cast<OutputValueType>(HHMinusVV * std::conj(HVPlusVH));
+    result[6] = static_cast<OutputValueType>(HHMinusVV * std::conj(jHVMinusVH));
+    result[7] = static_cast<OutputValueType>(std::norm(HVPlusVH));
+    result[8] = static_cast<OutputValueType>(HVPlusVH * std::conj(jHVMinusVH));
+    result[9] = static_cast<OutputValueType>(std::norm(jHVMinusVH));
 
     result /= 2.0;
   }
@@ -106,10 +105,14 @@ public:
   }
 
   /** Constructor */
-  SinclairToCoherencyMatrixFunctor() {}
+  SinclairToCoherencyMatrixFunctor()
+  {
+  }
 
   /** Destructor */
-  virtual ~SinclairToCoherencyMatrixFunctor() {}
+  virtual ~SinclairToCoherencyMatrixFunctor()
+  {
+  }
 };
 
 } // namespace Functor

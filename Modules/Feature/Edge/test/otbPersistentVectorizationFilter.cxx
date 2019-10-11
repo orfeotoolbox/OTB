@@ -26,18 +26,18 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbPersistentVectorizationFilter(int itkNotUsed(argc), char * argv[])
+int otbPersistentVectorizationFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname  = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  const unsigned int ImageDimension = 2;
+  const unsigned int     ImageDimension = 2;
   typedef unsigned short LabelType;
 
-  typedef otb::Image<LabelType, ImageDimension>                           ImageType;
-  typedef otb::Polygon <LabelType>                                        PolygonType;
+  typedef otb::Image<LabelType, ImageDimension> ImageType;
+  typedef otb::Polygon<LabelType> PolygonType;
   typedef otb::PersistentVectorizationImageFilter<ImageType, PolygonType> FilterType;
-  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -51,21 +51,16 @@ int otbPersistentVectorizationFilter(int itkNotUsed(argc), char * argv[])
   std::ofstream f;
   f.open(outfname);
 
-  for (PathListType::Iterator it = filter->GetPathList()->Begin();
-       it != filter->GetPathList()->End();
-       ++it)
-    {
+  for (PathListType::Iterator it = filter->GetPathList()->Begin(); it != filter->GetPathList()->End(); ++it)
+  {
     for (unsigned int i = 0; i < it.Get()->GetVertexList()->Size(); ++i)
-      {
-      f << "[ " << it.Get()->GetVertexList()->GetElement(i)[0]
-        << ", " << it.Get()->GetVertexList()->GetElement(i)[1]
-        << "] ";
-      }
-    f << std::endl;
+    {
+      f << "[ " << it.Get()->GetVertexList()->GetElement(i)[0] << ", " << it.Get()->GetVertexList()->GetElement(i)[1] << "] ";
     }
+    f << std::endl;
+  }
 
   f.close();
 
   return EXIT_SUCCESS;
-
 }

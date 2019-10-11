@@ -24,97 +24,74 @@
 namespace otb
 {
 
-SampleAugmentationFilter
-::SampleAugmentationFilter() : m_ClassFieldName{"class"}, m_Layer{0}, m_Label{1},
-                               m_Strategy{SampleAugmentationFilter::Strategy::Replicate},
-                               m_NumberOfSamples{100}, m_StdFactor{10.0}, 
-                               m_SmoteNeighbors{5}, m_Seed{0}
+SampleAugmentationFilter::SampleAugmentationFilter()
+  : m_ClassFieldName{"class"},
+    m_Layer{0},
+    m_Label{1},
+    m_Strategy{SampleAugmentationFilter::Strategy::Replicate},
+    m_NumberOfSamples{100},
+    m_StdFactor{10.0},
+    m_SmoteNeighbors{5},
+    m_Seed{0}
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
-  this->ProcessObject::SetNthOutput(0, this->MakeOutput(0) );
+  this->ProcessObject::SetNthOutput(0, this->MakeOutput(0));
 }
 
 
-typename SampleAugmentationFilter::DataObjectPointer
-SampleAugmentationFilter
-::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(idx))
+typename SampleAugmentationFilter::DataObjectPointer SampleAugmentationFilter::MakeOutput(DataObjectPointerArraySizeType itkNotUsed(idx))
 {
-  return static_cast< DataObjectPointer >(OGRDataSourceType::New().GetPointer());
+  return static_cast<DataObjectPointer>(OGRDataSourceType::New().GetPointer());
 }
 
-const typename SampleAugmentationFilter::OGRDataSourceType *
-SampleAugmentationFilter
-::GetOutput()
+const typename SampleAugmentationFilter::OGRDataSourceType* SampleAugmentationFilter::GetOutput()
 {
-  return static_cast< const OGRDataSourceType *>(
-    this->ProcessObject::GetOutput(0));
+  return static_cast<const OGRDataSourceType*>(this->ProcessObject::GetOutput(0));
 }
 
-void
-SampleAugmentationFilter
-::SetInput(const otb::ogr::DataSource* ds)
+void SampleAugmentationFilter::SetInput(const otb::ogr::DataSource* ds)
 {
-  this->Superclass::SetNthInput(0, const_cast<otb::ogr::DataSource *>(ds));
+  this->Superclass::SetNthInput(0, const_cast<otb::ogr::DataSource*>(ds));
 }
 
-const typename SampleAugmentationFilter::OGRDataSourceType *
-SampleAugmentationFilter
-::GetInput(unsigned int idx)
+const typename SampleAugmentationFilter::OGRDataSourceType* SampleAugmentationFilter::GetInput(unsigned int idx)
 {
-  return static_cast<const OGRDataSourceType *>
-    (this->itk::ProcessObject::GetInput(idx));
+  return static_cast<const OGRDataSourceType*>(this->itk::ProcessObject::GetInput(idx));
 }
 
-void
-SampleAugmentationFilter
-::SetOutputSamples(ogr::DataSource* data)
+void SampleAugmentationFilter::SetOutputSamples(ogr::DataSource* data)
 {
-  this->SetNthOutput(0,data);
+  this->SetNthOutput(0, data);
 }
 
 
-void
-SampleAugmentationFilter
-::GenerateData(void)
+void SampleAugmentationFilter::GenerateData(void)
 {
 
-  OGRDataSourcePointerType inputDS = dynamic_cast<OGRDataSourceType*>(this->itk::ProcessObject::GetInput(0));
-  auto outputDS = static_cast<ogr::DataSource *>(this->itk::ProcessObject::GetOutput(0));
-  auto inSamples = this->ExtractSamples(inputDS, m_Layer,
-                                        m_ClassFieldName,
-                                        m_Label,
-                                        m_ExcludedFields);
-  SampleVectorType newSamples;
+  OGRDataSourcePointerType inputDS   = dynamic_cast<OGRDataSourceType*>(this->itk::ProcessObject::GetInput(0));
+  auto                     outputDS  = static_cast<ogr::DataSource*>(this->itk::ProcessObject::GetOutput(0));
+  auto                     inSamples = this->ExtractSamples(inputDS, m_Layer, m_ClassFieldName, m_Label, m_ExcludedFields);
+  SampleVectorType         newSamples;
   switch (m_Strategy)
-    {
-    case Strategy::Replicate:
-    {
-    sampleAugmentation::ReplicateSamples(inSamples, m_NumberOfSamples,
-                                         newSamples);
-    }
-    break;
-    case Strategy::Jitter:
-    {
-    sampleAugmentation::JitterSamples(inSamples, m_NumberOfSamples,
-                                      newSamples,
-                                      m_StdFactor,
-                                      m_Seed);
-    }
-    break;
-    case Strategy::Smote:
-    {
-    sampleAugmentation::Smote(inSamples, m_NumberOfSamples,
-                              newSamples,
-                              m_SmoteNeighbors,
-                              m_Seed);
-    }
-    break;
-    }
-  this->SampleToOGRFeatures(inputDS, outputDS, newSamples, m_Layer,
-                            m_ClassFieldName,
-                            m_Label,
-                            m_ExcludedFields);
+  {
+  case Strategy::Replicate:
+  {
+    sampleAugmentation::ReplicateSamples(inSamples, m_NumberOfSamples, newSamples);
+  }
+  break;
+  case Strategy::Jitter:
+  {
+    sampleAugmentation::JitterSamples(inSamples, m_NumberOfSamples, newSamples, m_StdFactor, m_Seed);
+  }
+  break;
+  case Strategy::Smote:
+  {
+    sampleAugmentation::Smote(inSamples, m_NumberOfSamples, newSamples, m_SmoteNeighbors, m_Seed);
+  }
+  break;
+  }
+  this->SampleToOGRFeatures(inputDS, outputDS, newSamples, m_Layer, m_ClassFieldName, m_Label, m_ExcludedFields);
 
 
   //  this->SetNthOutput(0,outputDS);
@@ -123,159 +100,128 @@ SampleAugmentationFilter
 /** Extracts the samples of a single class from the vector data to a
 * vector and excludes some unwanted features.
 */
-SampleAugmentationFilter::SampleVectorType 
-SampleAugmentationFilter
-::ExtractSamples(const ogr::DataSource::Pointer vectors, 
-                 size_t layerName,
-                 const std::string& classField, const int label,
-                 const std::vector<std::string>& excludedFields)
+SampleAugmentationFilter::SampleVectorType SampleAugmentationFilter::ExtractSamples(const ogr::DataSource::Pointer vectors, size_t layerName,
+                                                                                    const std::string& classField, const int label,
+                                                                                    const std::vector<std::string>& excludedFields)
 {
-  ogr::Layer layer = vectors->GetLayer(layerName);
-  auto featureIt = layer.begin();
-  if(featureIt==layer.end())
-    {
+  ogr::Layer layer     = vectors->GetLayer(layerName);
+  auto       featureIt = layer.begin();
+  if (featureIt == layer.end())
+  {
     itkExceptionMacro("Layer " << layerName << " of input sample file is empty.\n");
-    }
-  int cFieldIndex = (*featureIt).ogr().GetFieldIndex( classField.c_str() );
-  if( cFieldIndex < 0 )
-    {
-    itkExceptionMacro( "The field name for class label (" << classField
-                       << ") has not been found in the vector file " );
-    }
+  }
+  int cFieldIndex = (*featureIt).ogr().GetFieldIndex(classField.c_str());
+  if (cFieldIndex < 0)
+  {
+    itkExceptionMacro("The field name for class label (" << classField << ") has not been found in the vector file ");
+  }
 
-  auto numberOfFields = (*featureIt).ogr().GetFieldCount();
-  auto excludedIds = this->GetExcludedFieldsIds(excludedFields, layer);
+  auto             numberOfFields = (*featureIt).ogr().GetFieldCount();
+  auto             excludedIds    = this->GetExcludedFieldsIds(excludedFields, layer);
   SampleVectorType samples;
-  int sampleCount{0};
-  while( featureIt!=layer.end() )
-    {
+  int              sampleCount{0};
+  while (featureIt != layer.end())
+  {
     // Retrieve all the features for each field in the ogr layer.
-    if((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
-      {
+    if ((*featureIt).ogr().GetFieldAsInteger(classField.c_str()) == label)
+    {
 
       SampleType mv;
-      for(auto idx=0; idx<numberOfFields; ++idx)
-        {
-        if(excludedIds.find(idx) == excludedIds.cend() &&
-           this->IsNumericField((*featureIt), idx))
+      for (auto idx = 0; idx < numberOfFields; ++idx)
+      {
+        if (excludedIds.find(idx) == excludedIds.cend() && this->IsNumericField((*featureIt), idx))
           mv.push_back((*featureIt).ogr().GetFieldAsDouble(idx));
-        }
-      samples.push_back(mv); 
-      ++sampleCount;
       }
+      samples.push_back(mv);
+      ++sampleCount;
+    }
     ++featureIt;
-    }
-  if(sampleCount==0)
-    {
-    itkExceptionMacro("Could not find any samples in layer " << layerName <<
-                      " with label " << label << '\n');
-    }
+  }
+  if (sampleCount == 0)
+  {
+    itkExceptionMacro("Could not find any samples in layer " << layerName << " with label " << label << '\n');
+  }
   return samples;
 }
 
-void 
-SampleAugmentationFilter
-::SampleToOGRFeatures(const ogr::DataSource::Pointer& vectors,
-                      ogr::DataSource* output, 
-                      const SampleAugmentationFilter::SampleVectorType& samples,
-                      const size_t layerName,
-                      const std::string& classField, int label,
-                      const std::vector<std::string>& excludedFields)
+void SampleAugmentationFilter::SampleToOGRFeatures(const ogr::DataSource::Pointer& vectors, ogr::DataSource* output,
+                                                   const SampleAugmentationFilter::SampleVectorType& samples, const size_t layerName,
+                                                   const std::string& classField, int label, const std::vector<std::string>& excludedFields)
 {
 
-  auto inputLayer = vectors->GetLayer(layerName);
+  auto inputLayer  = vectors->GetLayer(layerName);
   auto excludedIds = this->GetExcludedFieldsIds(excludedFields, inputLayer);
 
-  OGRSpatialReference * oSRS = nullptr;
+  OGRSpatialReference* oSRS = nullptr;
   if (inputLayer.GetSpatialRef())
-    {
+  {
     oSRS = inputLayer.GetSpatialRef()->Clone();
-    }
-  OGRFeatureDefn &layerDefn = inputLayer.GetLayerDefn();
+  }
+  OGRFeatureDefn& layerDefn = inputLayer.GetLayerDefn();
 
-  auto outputLayer = output->CreateLayer(inputLayer.GetName(), oSRS, 
-                                         inputLayer.GetGeomType());
-  for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
-    {
-    OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
+  auto outputLayer = output->CreateLayer(inputLayer.GetName(), oSRS, inputLayer.GetGeomType());
+  for (int k = 0; k < layerDefn.GetFieldCount(); k++)
+  {
+    OGRFieldDefn   originDefn(layerDefn.GetFieldDefn(k));
     ogr::FieldDefn fieldDefn(originDefn);
     outputLayer.CreateField(fieldDefn);
-    }
+  }
 
-  auto featureCount = outputLayer.GetFeatureCount(false);
+  auto featureCount    = outputLayer.GetFeatureCount(false);
   auto templateFeature = this->SelectTemplateFeature(inputLayer, classField, label);
 
   OGRErr err = outputLayer.ogr().StartTransaction();
   if (err != OGRERR_NONE)
-    {
+  {
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outputLayer.ogr().GetName() << ".");
-    }
+  }
 
-  for(const auto& sample : samples)
-    {
+  for (const auto& sample : samples)
+  {
     ogr::Feature dstFeature(outputLayer.GetLayerDefn());
-    dstFeature.SetFrom( templateFeature, TRUE );
+    dstFeature.SetFrom(templateFeature, TRUE);
     dstFeature.SetFID(++featureCount);
     auto sampleFieldCounter = 0;
-    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
+    for (int k = 0; k < layerDefn.GetFieldCount(); k++)
+    {
+      if (excludedIds.find(k) == excludedIds.cend() && this->IsNumericField(dstFeature, k))
       {
-      if(excludedIds.find(k) == excludedIds.cend() &&
-         this->IsNumericField(dstFeature, k))
-        {
         dstFeature.ogr().SetField(k, sample[sampleFieldCounter++]);
-        }
       }
-    outputLayer.CreateFeature( dstFeature );
     }
+    outputLayer.CreateFeature(dstFeature);
+  }
   err = outputLayer.ogr().CommitTransaction();
   if (err != OGRERR_NONE)
-    {
+  {
     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outputLayer.ogr().GetName() << ".");
-    }
+  }
 }
 
-std::set<size_t> 
-SampleAugmentationFilter
-::GetExcludedFieldsIds(const std::vector<std::string>& excludedFields,
-                       const ogr::Layer& inputLayer)
+std::set<size_t> SampleAugmentationFilter::GetExcludedFieldsIds(const std::vector<std::string>& excludedFields, const ogr::Layer& inputLayer)
 {
-  auto feature = *(inputLayer).begin();
+  auto             feature = *(inputLayer).begin();
   std::set<size_t> excludedIds;
-  if( excludedFields.size() != 0)
+  if (excludedFields.size() != 0)
+  {
+    for (const auto& fieldName : excludedFields)
     {
-    for(const auto& fieldName : excludedFields)
-      {
-      auto idx = feature.ogr().GetFieldIndex( fieldName.c_str() );
+      auto idx = feature.ogr().GetFieldIndex(fieldName.c_str());
       excludedIds.insert(idx);
-      }
     }
+  }
   return excludedIds;
 }
 
-bool 
-SampleAugmentationFilter
-::IsNumericField(const ogr::Feature& feature,
-                 const int idx)
+bool SampleAugmentationFilter::IsNumericField(const ogr::Feature& feature, const int idx)
 {
   OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(idx)->GetType();
-  return (fieldType == OFTInteger 
-          || fieldType == OFTInteger64
-          || fieldType == OFTReal);
+  return (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal);
 }
 
-ogr::Feature
-SampleAugmentationFilter
-::SelectTemplateFeature(const ogr::Layer& inputLayer, 
-                        const std::string& classField, int label)
+ogr::Feature SampleAugmentationFilter::SelectTemplateFeature(const ogr::Layer& inputLayer, const std::string& classField, int label)
 {
-  auto wh = std::find_if(inputLayer.begin(), inputLayer.end(),
-                         [&](auto& featureIt) 
-                         { 
-                           return featureIt.ogr().GetFieldAsInteger(classField.c_str()) == 
-                           label; 
-                         });
+  auto wh = std::find_if(inputLayer.begin(), inputLayer.end(), [&](auto& featureIt) { return featureIt.ogr().GetFieldAsInteger(classField.c_str()) == label; });
   return (wh == inputLayer.end()) ? *(inputLayer.begin()) : *wh;
-
 }
 } // end namespace otb
-

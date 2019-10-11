@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -31,18 +29,18 @@
 
 int otbPixelSuppressionByDirection(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[3];
 
-  unsigned int RadiusX((unsigned int) ::atoi(argv[4]));
-  float        AngularBeam((float) ::atof(argv[5]));
+  unsigned int RadiusX((unsigned int)::atoi(argv[4]));
+  float        AngularBeam((float)::atof(argv[5]));
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType1;
@@ -62,7 +60,7 @@ int otbPixelSuppressionByDirection(int itkNotUsed(argc), char* argv[])
 
   ReaderType1::Pointer reader1 = ReaderType1::New();
   ReaderType2::Pointer reader2 = ReaderType2::New();
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer  writer  = WriterType::New();
 
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);

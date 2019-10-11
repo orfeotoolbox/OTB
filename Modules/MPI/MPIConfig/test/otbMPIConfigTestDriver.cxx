@@ -22,6 +22,5 @@
 
 void RegisterTests()
 {
-   REGISTER_TEST(otbMPIConfigTest);
+  REGISTER_TEST(otbMPIConfigTest);
 }
-

@@ -86,38 +86,34 @@ enum GDALFormat
 class OTBIOGDAL_EXPORT GDALOverviewsBuilder : public itk::ProcessObject
 {
 public:
-  typedef GDALOverviewsBuilder Self;
-  typedef ProcessObject Superclass;
-  typedef itk::SmartPointer< Self> Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef GDALOverviewsBuilder          Self;
+  typedef ProcessObject                 Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::Size< 2 > Size;
-  typedef std::vector< Size > SizeVector;
+  typedef itk::Size<2>      Size;
+  typedef std::vector<Size> SizeVector;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /**
    */
-  static
-  bool CanGenerateOverviews( const std::string & filename );
+  static bool CanGenerateOverviews(const std::string& filename);
 
   /**
    * \brief Count the number of resolution levels larger than
-   * factor^n. 
+   * factor^n.
    */
-  unsigned int
-  CountResolutions( unsigned int factor, unsigned int size ) const;
+  unsigned int CountResolutions(unsigned int factor, unsigned int size) const;
 
-  unsigned int
-  CountResolutions( unsigned int size ) const;
+  unsigned int CountResolutions(unsigned int size) const;
 
-  unsigned int
-  CountResolutions() const;
+  unsigned int CountResolutions() const;
 
-  void ListResolutions( SizeVector &, unsigned int factor, unsigned int count );
+  void ListResolutions(SizeVector&, unsigned int factor, unsigned int count);
 
-  void ListResolutions( SizeVector & );
+  void ListResolutions(SizeVector&);
 
   unsigned int GetOverviewsCount() const;
 
@@ -126,10 +122,10 @@ public:
 
   GDALResampling GetResamplingMethod() const;
 
-  void SetResamplingMethod( GDALResampling );
+  void SetResamplingMethod(GDALResampling);
 
 
-  void SetBypassEnabled( bool );
+  void SetBypassEnabled(bool);
 
   bool IsBypassEnabled() const;
 
@@ -139,26 +135,26 @@ public:
 
   GDALCompression GetCompressionMethod() const;
 
-  void SetCompressionMethod( GDALCompression );
+  void SetCompressionMethod(GDALCompression);
 
 
   GDALFormat GetFormat() const;
 
-  void SetFormat( GDALFormat );
+  void SetFormat(GDALFormat);
 
 
   unsigned int GetNbResolutions() const;
 
-  void SetNbResolutions( unsigned int );
+  void SetNbResolutions(unsigned int);
 
   unsigned int GetResolutionFactor() const;
 
-  void SetResolutionFactor( unsigned int );
+  void SetResolutionFactor(unsigned int);
 
 
-  const std::string & GetInputFileName() const;
+  const std::string& GetInputFileName() const;
 
-  void SetInputFileName( const std::string & str );
+  void SetInputFileName(const std::string& str);
 
 
   void Update() override;
@@ -167,29 +163,29 @@ public:
 protected:
   GDALOverviewsBuilder();
 
-  ~GDALOverviewsBuilder() override {};
+  ~GDALOverviewsBuilder() override{};
 
-  void PrintSelf( std::ostream & os, itk::Indent indent ) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  GDALOverviewsBuilder( const Self & ) = delete;
+  GDALOverviewsBuilder(const Self&) = delete;
 
-  void operator = ( const Self & ) = delete;
+  void operator=(const Self&) = delete;
 
   // void GetGDALResamplingMethod( std::string & resamplingMethod );
 
-  void OpenDataset( const std::string & filename );
+  void OpenDataset(const std::string& filename);
 
 
   GDALDatasetWrapper::Pointer m_GDALDataset;
-  std::string m_InputFileName;
-  unsigned int m_NbResolutions;
-  unsigned int m_ResolutionFactor;
-  GDALResampling m_ResamplingMethod;
-  GDALCompression m_CompressionMethod;
-  GDALFormat m_Format;
-  bool m_IsBypassEnabled : 1;
+  std::string                 m_InputFileName;
+  unsigned int                m_NbResolutions;
+  unsigned int                m_ResolutionFactor;
+  GDALResampling              m_ResamplingMethod;
+  GDALCompression             m_CompressionMethod;
+  GDALFormat                  m_Format;
+  bool                        m_IsBypassEnabled : 1;
 
 }; // end of GDALOverviewsBuilder
 

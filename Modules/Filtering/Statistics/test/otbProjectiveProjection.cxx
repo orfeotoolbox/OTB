@@ -30,35 +30,34 @@
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
-typedef double PrecisionType;
+typedef double     PixelType;
+typedef double     PrecisionType;
 
-typedef otb::Image<PixelType, Dimension> ImageType;
+typedef otb::Image<PixelType, Dimension>       ImageType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
 typedef otb::MatrixImageFilter<VectorImageType, VectorImageType> MatrixImageFilterType;
-typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
-typedef otb::ImageFileWriter<VectorImageType> WriterType;
+typedef otb::VectorImageToMatrixImageFilter<VectorImageType>       VectorImageToMatrixImageFilterType;
+typedef otb::ImageFileWriter<VectorImageType>                      WriterType;
 typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType> StreamingStatisticsVectorImageFilterType;
-typedef otb::StreamingStatisticsImageFilter<ImageType> StreamingStatisticsImageFilterType;
+typedef otb::StreamingStatisticsImageFilter<ImageType>             StreamingStatisticsImageFilterType;
 
 typedef StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
 
-int otbProjectiveProjectionTestHighSNR(int itkNotUsed(argc), char * argv[])
+int otbProjectiveProjectionTestHighSNR(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputImage = argv[1];
+  const char*        inputImage   = argv[1];
   const unsigned int nbEndmembers = atoi(argv[2]);
-  const char * outputImage = argv[3];
+  const char*        outputImage  = argv[3];
 
 
   ReaderType::Pointer readerImage = ReaderType::New();
   readerImage->SetFileName(inputImage);
 
   std::cout << "Computing image stats" << std::endl;
-  StreamingStatisticsVectorImageFilterType::Pointer statsInput = \
-      StreamingStatisticsVectorImageFilterType::New();
+  StreamingStatisticsVectorImageFilterType::Pointer statsInput = StreamingStatisticsVectorImageFilterType::New();
 
   statsInput->SetInput(readerImage->GetOutput());
   statsInput->Update();
@@ -69,7 +68,7 @@ int otbProjectiveProjectionTestHighSNR(int itkNotUsed(argc), char * argv[])
 
   // Apply SVD
   vnl_svd<PrecisionType>    svd(R);
-  vnl_matrix<PrecisionType> U = svd.U();
+  vnl_matrix<PrecisionType> U  = svd.U();
   vnl_matrix<PrecisionType> Ud = U.get_n_columns(0, nbEndmembers).transpose();
 
   std::cout << "Apply dimensionnality reduction" << std::endl;
@@ -84,8 +83,7 @@ int otbProjectiveProjectionTestHighSNR(int itkNotUsed(argc), char * argv[])
 
   // Compute mean(Xd)
   std::cout << "Compute mean(Xd)" << std::endl;
-  StreamingStatisticsVectorImageFilterType::Pointer statsXd = \
-      StreamingStatisticsVectorImageFilterType::New();
+  StreamingStatisticsVectorImageFilterType::Pointer statsXd = StreamingStatisticsVectorImageFilterType::New();
   statsXd->SetInput(Xd);
   statsXd->Update();
   VectorImageType::PixelType Xdmean = statsXd->GetMean();

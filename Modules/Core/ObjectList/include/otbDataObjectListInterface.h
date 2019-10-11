@@ -29,25 +29,25 @@ namespace otb
 
 class DataObjectListInterface : private boost::noncopyable
 {
-/** \class DataObjectListInterface
- *  \brief This non template class is an interface that wrapp ObjectList
- *  
- *  New method that do not need the template parameter of ObjectList 
- *  should be declare here.
- *
- * \ingroup OTBObjectList
- */
+  /** \class DataObjectListInterface
+   *  \brief This non template class is an interface that wrapp ObjectList
+   *
+   *  New method that do not need the template parameter of ObjectList
+   *  should be declare here.
+   *
+   * \ingroup OTBObjectList
+   */
 public:
   /**
   Get the nth element of the list as a DataObject *.
   */
-  virtual itk::DataObject * GetNthDataObject(unsigned int index) const = 0;
+  virtual itk::DataObject* GetNthDataObject(unsigned int index) const = 0;
 
   virtual std::size_t Size(void) const = 0;
 
 protected:
-  DataObjectListInterface() = default ;
-  virtual ~DataObjectListInterface() = default ;
+  DataObjectListInterface()          = default;
+  virtual ~DataObjectListInterface() = default;
 };
 
 } // end of otb namespace

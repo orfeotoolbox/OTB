@@ -23,7 +23,8 @@
 
 #include "otbOSMDataToVectorDataGenerator.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class ImageToOSMVectorDataGenerator
  *
@@ -39,16 +40,15 @@ namespace otb {
  *
  * \ingroup OTBCarto
  */
-template < class TImage>
-class ImageToOSMVectorDataGenerator :
-    public OSMDataToVectorDataGenerator
+template <class TImage>
+class ImageToOSMVectorDataGenerator : public OSMDataToVectorDataGenerator
 {
 public:
   /** Standard class typedefs */
-  typedef ImageToOSMVectorDataGenerator          Self;
-  typedef OSMDataToVectorDataGenerator           Superclass;
-  typedef itk::SmartPointer< Self >              Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef ImageToOSMVectorDataGenerator Self;
+  typedef OSMDataToVectorDataGenerator  Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ImageToOSMVectorDataGenerator, OSMDataToVectorDataGenerator);
@@ -57,16 +57,17 @@ public:
   itkNewMacro(Self);
 
   // Image typedef
-  typedef TImage                                ImageType;
-  typedef typename ImageType::SizeType          SizeType;
-  typedef typename ImageType::IndexType         IndexType;
-  typedef typename ImageType::PointType         PointType;
+  typedef TImage                        ImageType;
+  typedef typename ImageType::SizeType  SizeType;
+  typedef typename ImageType::IndexType IndexType;
+  typedef typename ImageType::PointType PointType;
 
   // VectorData
-  typedef Superclass::VectorDataType            VectorDataType;
+  typedef Superclass::VectorDataType VectorDataType;
 
   // Struct to store the extent of the image
-  struct ImageExtentType{
+  struct ImageExtentType
+  {
     double minX;
     double maxX;
     double minY;
@@ -75,9 +76,9 @@ public:
 
   /** Method to set/get the input image */
   using Superclass::SetInput;
-  void SetInput( const ImageType  * input);
+  void SetInput(const ImageType* input);
 
-   /** Returns the input image */
+  /** Returns the input image */
   const ImageType* GetInput() const;
 
 protected:
@@ -87,13 +88,15 @@ protected:
   void EstimateImageExtent();
 
   ImageToOSMVectorDataGenerator();
-  ~ImageToOSMVectorDataGenerator() override {}
+  ~ImageToOSMVectorDataGenerator() override
+  {
+  }
 
 private:
   ImageToOSMVectorDataGenerator(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ImageExtentType                            m_ImageExtent;
+  ImageExtentType m_ImageExtent;
 
 }; // end of class
 

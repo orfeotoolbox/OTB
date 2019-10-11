@@ -64,47 +64,41 @@ class AboutDialog;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class OTBMonteverdiGUI_EXPORT AboutDialog :
-    public QDialog
+class OTBMonteverdiGUI_EXPORT AboutDialog : public QDialog
 {
   Q_OBJECT;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor */
-  AboutDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  AboutDialog(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** Destructor */
   ~AboutDialog() override;
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
   Ui::AboutDialog* m_UI;
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 

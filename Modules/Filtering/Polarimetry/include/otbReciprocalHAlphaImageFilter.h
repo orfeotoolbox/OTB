@@ -31,9 +31,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class otbHAlphaFunctor
  * \brief Evaluate the H-Alpha parameters from the reciprocal coherency matrix image.
@@ -60,14 +61,14 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalHAlphaFunctor
 {
 public:
   typedef typename std::complex<double> ComplexType;
   typedef vnl_matrix<ComplexType>       VNLMatrixType;
   typedef vnl_vector<ComplexType>       VNLVectorType;
-  typedef vnl_vector<double>           VNLDoubleVectorType;
+  typedef vnl_vector<double>            VNLDoubleVectorType;
   typedef std::vector<double>           VectorType;
   typedef typename TOutput::ValueType   OutputValueType;
 
@@ -79,20 +80,20 @@ public:
     const double T2 = static_cast<double>(Coherency[5].real());
 
     VNLMatrixType vnlMat(3, 3, 0.);
-    vnlMat[0][0] = ComplexType(T0,  0.);
+    vnlMat[0][0] = ComplexType(T0, 0.);
     vnlMat[0][1] = ComplexType(Coherency[1]);
     vnlMat[0][2] = ComplexType(Coherency[2]);
     vnlMat[1][0] = std::conj(ComplexType(Coherency[1]));
-    vnlMat[1][1] = ComplexType(T1,  0.);
+    vnlMat[1][1] = ComplexType(T1, 0.);
     vnlMat[1][2] = ComplexType(Coherency[4]);
     vnlMat[2][0] = std::conj(ComplexType(Coherency[2]));
     vnlMat[2][1] = std::conj(ComplexType(Coherency[4]));
-    vnlMat[2][2] = ComplexType(T2,  0.);
+    vnlMat[2][2] = ComplexType(T2, 0.);
 
     // Only compute the left symmetry to respect the previous Hermitian Analisys code
     vnl_complex_eigensystem syst(vnlMat, false, true);
-    const VNLMatrixType eigenVectors( syst.L );
-    const VNLVectorType eigenValues(syst.W);
+    const VNLMatrixType     eigenVectors(syst.L);
+    const VNLVectorType     eigenValues(syst.W);
 
     // Entropy estimation
     double totalEigenValues(0.0);
@@ -103,80 +104,79 @@ public:
     double anisotropy;
 
     // Sort eigen values in decreasing order
-    VectorType sortedRealEigenValues(3,  eigenValues[0].real());
+    VectorType sortedRealEigenValues(3, eigenValues[0].real());
     sortedRealEigenValues[1] = eigenValues[1].real();
     sortedRealEigenValues[2] = eigenValues[2].real();
-    std::sort( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
-    std::reverse( sortedRealEigenValues.begin(), sortedRealEigenValues.end() );
+    std::sort(sortedRealEigenValues.begin(), sortedRealEigenValues.end());
+    std::reverse(sortedRealEigenValues.begin(), sortedRealEigenValues.end());
 
     // Extract the first component of each the eigen vector sorted by eigen value decrease order
     VNLVectorType sortedGreaterEigenVector(3, eigenVectors[0][0]);
-    for(unsigned int i=0; i<3; ++i)
+    for (unsigned int i = 0; i < 3; ++i)
+    {
+      if (std::abs(eigenValues[1].real() - sortedRealEigenValues[i]) < m_Epsilon)
       {
-        if( std::abs( eigenValues[1].real()-sortedRealEigenValues[i] ) < m_Epsilon )
-          {
-            sortedGreaterEigenVector[i] = eigenVectors[1][0];
-          }
-        else if( std::abs( eigenValues[2].real()-sortedRealEigenValues[i] ) < m_Epsilon )
-          {
-            sortedGreaterEigenVector[i] = eigenVectors[2][0];
-          }
+        sortedGreaterEigenVector[i] = eigenVectors[1][0];
       }
+      else if (std::abs(eigenValues[2].real() - sortedRealEigenValues[i]) < m_Epsilon)
+      {
+        sortedGreaterEigenVector[i] = eigenVectors[2][0];
+      }
+    }
 
     totalEigenValues = 0.0;
     for (unsigned int k = 0; k < 3; ++k)
-      {
-        sortedRealEigenValues[k] = std::max(sortedRealEigenValues[k], 0.);
-        totalEigenValues += sortedRealEigenValues[k];
-      }
+    {
+      sortedRealEigenValues[k] = std::max(sortedRealEigenValues[k], 0.);
+      totalEigenValues += sortedRealEigenValues[k];
+    }
 
 
     for (unsigned int k = 0; k < 3; ++k)
-      {
-        p[k] = sortedRealEigenValues[k] / totalEigenValues;
+    {
+      p[k] = sortedRealEigenValues[k] / totalEigenValues;
 
-        if (p[k]<m_Epsilon) //n=log(n)-->0 when n-->0
-			plog[k]=0.0;
-		else
-			plog[k]=-p[k]*log(p[k])/log(3.0);
+      if (p[k] < m_Epsilon) // n=log(n)-->0 when n-->0
+        plog[k] = 0.0;
+      else
+        plog[k] = -p[k] * log(p[k]) / log(3.0);
+    }
 
-      }
-
-	entropy = 0.0;
-	for (unsigned int k = 0; k < 3; ++k)
-			entropy += plog[k];
+    entropy = 0.0;
+    for (unsigned int k = 0; k < 3; ++k)
+      entropy += plog[k];
 
     // alpha estimation
     double val0, val1, val2;
     double a0, a1, a2;
 
     val0 = std::abs(sortedGreaterEigenVector[0]);
-    a0=acos(std::abs(val0)) * CONST_180_PI;
+    a0   = acos(std::abs(val0)) * CONST_180_PI;
 
     val1 = std::abs(sortedGreaterEigenVector[1]);
-    a1=acos(std::abs(val1)) * CONST_180_PI;
+    a1   = acos(std::abs(val1)) * CONST_180_PI;
 
-    val2= std::abs(sortedGreaterEigenVector[2]);
-    a2=acos(std::abs(val2)) * CONST_180_PI;
+    val2 = std::abs(sortedGreaterEigenVector[2]);
+    a2   = acos(std::abs(val2)) * CONST_180_PI;
 
-    alpha=p[0]*a0 + p[1]*a1 + p[2]*a2;
+    alpha = p[0] * a0 + p[1] * a1 + p[2] * a2;
 
     // Anisotropy estimation
-    anisotropy=(sortedRealEigenValues[1] - sortedRealEigenValues[2])/(sortedRealEigenValues[1] + sortedRealEigenValues[2] + m_Epsilon);
+    anisotropy = (sortedRealEigenValues[1] - sortedRealEigenValues[2]) / (sortedRealEigenValues[1] + sortedRealEigenValues[2] + m_Epsilon);
 
     result[0] = static_cast<OutputValueType>(entropy);
     result[1] = static_cast<OutputValueType>(alpha);
     result[2] = static_cast<OutputValueType>(anisotropy);
-    }
+  }
 
-    constexpr size_t OutputSize(...) const
-    {
-      // Size of the result (entropy, alpha, anisotropy)
-      return 3;
-    }
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result (entropy, alpha, anisotropy)
+    return 3;
+  }
 
-  private:
-    static constexpr double m_Epsilon = 1e-6;
+private:
+  static constexpr double m_Epsilon = 1e-6;
 };
 } // namespace Functor
 

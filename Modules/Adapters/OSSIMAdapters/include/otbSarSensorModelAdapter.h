@@ -52,19 +52,19 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class OTBOSSIMAdapters_EXPORT SarSensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT SarSensorModelAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  using Self                 = SarSensorModelAdapter;
-  using Superclass           = itk::Object;
-  using Pointer              = itk::SmartPointer<Self>;
-  using ConstPointer         = itk::SmartPointer<const Self>;
+  using Self         = SarSensorModelAdapter;
+  using Superclass   = itk::Object;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   using InternalModelPointer = std::unique_ptr<ossimplugins::ossimSarSensorModel>;
 
-  using Point2DType = itk::Point<double,2>;
-  using Point3DType = itk::Point<double,3>;
+  using Point2DType = itk::Point<double, 2>;
+  using Point3DType = itk::Point<double, 3>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -76,57 +76,49 @@ public:
   bool LoadState(const ImageKeywordlist& image_kwl);
 
   /** Save keyword list from model */
-  bool SaveState(ImageKeywordlist & image_kwl);
+  bool SaveState(ImageKeywordlist& image_kwl);
 
   /** Is sensor model valid method. return false if the m_SensorModel is null*/
   bool IsValidSensorModel() const;
 
   /** Deburst metadata if possible and return lines to keep in image file */
-  bool Deburst(std::vector<std::pair<unsigned long, unsigned long> > & lines,
-         std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long>>& lines, std::pair<unsigned long, unsigned long>& samples, bool onlyValidSample = false);
 
   /** Burst extraction and return lines/samples to keep into image file (the required burst) */
-  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines,
-           std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
+  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long, unsigned long>& lines, std::pair<unsigned long, unsigned long>& samples,
+                       bool allPixels = false);
 
 
   /** Deburst metadata if possible and prepare the burst concatenation */
-  bool DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long> > & linesBursts,
-           std::vector<std::pair<unsigned long,unsigned long> > & samplesBursts,
-           unsigned int & linesOffset, unsigned int first_burstInd,
-           bool inputWithInvalidPixels=false);
+  bool DeburstAndConcatenate(std::vector<std::pair<unsigned long, unsigned long>>& linesBursts,
+                             std::vector<std::pair<unsigned long, unsigned long>>& samplesBursts, unsigned int& linesOffset, unsigned int first_burstInd,
+                             bool inputWithInvalidPixels = false);
 
   /** Specify overlap area between two bursts */
-  bool Overlap(std::pair<unsigned long,unsigned long> & linesUp,
-    std::pair<unsigned long,unsigned long> & linesLow,
-    std::pair<unsigned long,unsigned long> & samplesUp,
-    std::pair<unsigned long,unsigned long> & samplesLow,
-    unsigned int burstIndUp,
-    bool inputWithInvalidPixels=false);
+  bool Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
+               std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
+               bool inputWithInvalidPixels = false);
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) and YZ frame */
-  bool WorldToLineSampleYZ(const Point3DType & inGeoPoint, Point2DType & cr, Point2DType & yz) const;
+  bool WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const;
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */
-  bool WorldToLineSample(const Point3DType & inGEoPOint, Point2DType & cr) const;
+  bool WorldToLineSample(const Point3DType& inGEoPOint, Point2DType& cr) const;
 
-/** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
-  bool WorldToSatPositionAndVelocity(const Point3DType & inGeoPoint, Point3DType & satellitePosition,
-             Point3DType & satelliteVelocity) const;
+  /** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
+  bool WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
 
   /** Transform line index to satellite position (x,y,z) and satellite velocity */
-  bool LineToSatPositionAndVelocity(const double line, Point3DType &  satellitePosition,
-            Point3DType & satelliteVelocity) const;
+  bool LineToSatPositionAndVelocity(const double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
 
   /** Transform world point (lat,lon,hgt) to cartesian point (x,y,z) */
-  static bool WorldToCartesian(const Point3DType & inGeoPoint, Point3DType & outCartesianPoint);
+  static bool WorldToCartesian(const Point3DType& inGeoPoint, Point3DType& outCartesianPoint);
 
-  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long imageLine, unsigned long & deburstLine);
+  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long, unsigned long>>& lines, unsigned long imageLine, unsigned long& deburstLine);
 
-  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
-
+  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long, unsigned long>>& lines, unsigned long deburstLine, unsigned long& imageLine);
 
 
 protected:
@@ -134,8 +126,8 @@ protected:
   virtual ~SarSensorModelAdapter() override;
 
 private:
-  SarSensorModelAdapter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SarSensorModelAdapter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InternalModelPointer m_SensorModel;
 };

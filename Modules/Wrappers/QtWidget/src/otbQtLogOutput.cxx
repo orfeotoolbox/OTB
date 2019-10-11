@@ -19,8 +19,8 @@
  */
 
 
-#include<iostream>
-#include"otbQtLogOutput.h"
+#include <iostream>
+#include "otbQtLogOutput.h"
 
 
 namespace otb
@@ -47,30 +47,28 @@ void QtLogOutput::Flush()
 void QtLogOutput::Write(double timestamp)
 {
   std::ostringstream oss;
-  oss<<timestamp;
-  emit NewContentLog( QString(oss.str().c_str()) );
+  oss << timestamp;
+  emit NewContentLog(QString(oss.str().c_str()));
 }
 
 
 /** Write to a buffer */
-void QtLogOutput::Write(std::string const &content)
+void QtLogOutput::Write(std::string const& content)
 {
-  emit NewContentLog( QString(content.c_str()) );
+  emit NewContentLog(QString(content.c_str()));
 }
 
 
 /** Write to a buffer */
-void QtLogOutput::Write(std::string const &content, double timestamp)
+void QtLogOutput::Write(std::string const& content, double timestamp)
 {
   std::ostringstream oss;
-  oss<<timestamp << "  :  " << content;
-  emit NewContentLog( QString(oss.str().c_str()) );
+  oss << timestamp << "  :  " << content;
+  emit NewContentLog(QString(oss.str().c_str()));
 }
 
-void QtLogOutput::PrintSelf(std::ostream &os, itk::Indent indent) const
+void QtLogOutput::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-
 }
-

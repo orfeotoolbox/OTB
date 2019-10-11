@@ -56,14 +56,12 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ModifiableInterface
-::ModifiableInterface()
+ModifiableInterface::ModifiableInterface()
 {
 }
 
 /*******************************************************************************/
-ModifiableInterface
-::~ModifiableInterface()
+ModifiableInterface::~ModifiableInterface()
 {
 }
 

@@ -28,9 +28,9 @@
 #include <cassert>
 #include <boost/version.hpp>
 #if BOOST_VERSION >= 104800
-#   include <boost/move/move.hpp> // since 1.48
+#include <boost/move/move.hpp> // since 1.48
 #else
-#   include <boost/interprocess/detail/move.hpp>
+#include <boost/interprocess/detail/move.hpp>
 #endif
 
 namespace otb
@@ -45,28 +45,24 @@ using boost::interprocess::move;
 /*===========================================================================*/
 /*================================[ Feature ]================================*/
 /*===========================================================================*/
-inline
-void otb::ogr::Feature::CheckInvariants() const
+inline void otb::ogr::Feature::CheckInvariants() const
 {
   assert(m_Feature && "OGRFeature can't be null");
 }
 
-inline
-otb::ogr::Feature otb::ogr::Feature::Clone() const
+inline otb::ogr::Feature otb::ogr::Feature::Clone() const
 {
   CheckInvariants();
   return UncheckedClone();
 }
 
-inline
-void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
+inline void otb::ogr::Feature::SetFrom(Feature const& rhs, bool mustForgive)
 {
   CheckInvariants();
   UncheckedSetFrom(rhs, mustForgive);
 }
 
-inline
-void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
+inline void otb::ogr::Feature::SetFrom(Feature const& rhs, int* map, bool mustForgive)
 {
   CheckInvariants();
   UncheckedSetFrom(rhs, map, mustForgive);
@@ -75,48 +71,41 @@ void otb::ogr::Feature::SetFrom(Feature const& rhs, int * map, bool mustForgive)
 /*===========================================================================*/
 /*================================[ Fields ]=================================*/
 /*===========================================================================*/
-inline
-otb::ogr::Field otb::ogr::Feature::operator[](int index)
+inline otb::ogr::Field otb::ogr::Feature::operator[](int index)
 {
   assert(index < GetSize() && "out of range field-index."); // also calls CheckInvariants();
   return UncheckedGetElement(index);
 }
 
-inline
-otb::ogr::Field const otb::ogr::Feature::operator[](int index) const
+inline otb::ogr::Field const otb::ogr::Feature::operator[](int index) const
 {
   return const_cast<Feature*>(this)->operator[](index);
 }
 
-inline
-otb::ogr::Field otb::ogr::Feature::operator[](std::string const& name)
+inline otb::ogr::Field otb::ogr::Feature::operator[](std::string const& name)
 {
   CheckInvariants();
   return UncheckedGetElement(name);
 }
 
-inline
-otb::ogr::Field const otb::ogr::Feature::operator[](std::string const& name) const
+inline otb::ogr::Field const otb::ogr::Feature::operator[](std::string const& name) const
 {
   return const_cast<Feature*>(this)->operator[](name);
 }
 
-inline
-otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(int index) const
+inline otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(int index) const
 {
   assert(index < GetSize() && "out of range field-index."); // also calls CheckInvariants();
   return UncheckedGetFieldDefn(index);
 }
 
-inline
-otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(std::string const& name) const
+inline otb::ogr::FieldDefn otb::ogr::Feature::GetFieldDefn(std::string const& name) const
 {
   CheckInvariants();
   return UncheckedGetFieldDefn(name);
 }
 
-inline
-int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
+inline int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
 {
   CheckInvariants();
   return UncheckedGetFieldIndex(name);
@@ -125,22 +114,19 @@ int otb::ogr::Feature::GetFieldIndex(std::string const& name) const
 /*===========================================================================*/
 /*==============================[ Properties ]===============================*/
 /*===========================================================================*/
-inline
-long otb::ogr::Feature::GetFID() const
+inline long otb::ogr::Feature::GetFID() const
 {
   CheckInvariants();
   return UncheckedGetFID();
 }
 
-inline
-void otb::ogr::Feature::SetFID(long fid)
+inline void otb::ogr::Feature::SetFID(long fid)
 {
   CheckInvariants();
   UncheckedSetFID(fid);
 }
 
-inline
-OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
+inline OGRFeatureDefn& otb::ogr::Feature::GetDefn() const
 {
   CheckInvariants();
   return UncheckedGetDefn();
@@ -149,20 +135,18 @@ OGRFeatureDefn&  otb::ogr::Feature::GetDefn() const
 /*===========================================================================*/
 /*==============================[ Geometries ]===============================*/
 /*===========================================================================*/
-inline
-void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
+inline void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 {
   CheckInvariants();
 #if !defined(NDEBUG)
-  OGRGeometry * g = geometry.get();
+  OGRGeometry* g = geometry.get();
 #endif
   UncheckedSetGeometryDirectly(otb::move(geometry));
   assert((m_Feature->GetGeometryRef() == g) && "The new geometry hasn't been set as expected");
   assert(!geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
 
-inline
-otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
+inline otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
 {
   CheckInvariants();
   UniqueGeometryPtr res = UncheckedStealGeometry();
@@ -170,15 +154,13 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
   return otb::move(res);
 }
 
-inline
-void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
+inline void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
 {
   CheckInvariants();
   UncheckedSetGeometry(geometry);
 }
 
-inline
-OGRGeometry const* otb::ogr::Feature::GetGeometry() const
+inline OGRGeometry const* otb::ogr::Feature::GetGeometry() const
 {
   CheckInvariants();
   return UncheckedGetGeometry();
@@ -187,22 +169,19 @@ OGRGeometry const* otb::ogr::Feature::GetGeometry() const
 /*===========================================================================*/
 /*=================================[ Misc ]==================================*/
 /*===========================================================================*/
-inline
-OGRFeature & otb::ogr::Feature::ogr() const
+inline OGRFeature& otb::ogr::Feature::ogr() const
 { // not returning a OGRFeature const& because OGR is not const-correct
   CheckInvariants();
   return *m_Feature;
 }
 
-inline
-OGRFeature & otb::ogr::Feature::ogr()
+inline OGRFeature& otb::ogr::Feature::ogr()
 {
   CheckInvariants();
   return *m_Feature;
 }
 
-inline
-void otb::ogr::Feature::PrintSelf(std::ostream & os, itk::Indent indent) const
+inline void otb::ogr::Feature::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   CheckInvariants();
   UncheckedPrintSelf(os, indent);

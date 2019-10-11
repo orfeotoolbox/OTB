@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
 #ifdef OTB_MUPARSER_HAS_CXX_LOGICAL_OPERATORS
   std::string leftExpr = "inleft != 0 ? 255 : 0";
 #else
-  std::string leftExpr  = "if(inleft != 0,255,0)";
+  std::string leftExpr = "if(inleft != 0,255,0)";
 #endif
 
   m_LBandMathFilter->SetExpression(leftExpr);

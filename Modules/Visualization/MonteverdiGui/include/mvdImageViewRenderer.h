@@ -86,8 +86,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT ImageViewRenderer :
-    public AbstractImageViewRenderer
+class OTBMonteverdiGUI_EXPORT ImageViewRenderer : public AbstractImageViewRenderer
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -96,14 +95,12 @@ class OTBMonteverdiGUI_EXPORT ImageViewRenderer :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
   /**
    */
-  struct RenderingContext :
-    public AbstractImageViewRenderer::RenderingContext
+  struct RenderingContext : public AbstractImageViewRenderer::RenderingContext
   {
     /**
      */
@@ -122,18 +119,18 @@ public:
     int m_TileSize;
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+#else  // USE_VIEW_SETTINGS_SIDE_EFFECT
     /**
      */
     otb::ViewSettings::Pointer m_ViewSettings;
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** Constructor */
-  ImageViewRenderer( QObject* p = NULL );
+  ImageViewRenderer(QObject* p = NULL);
 
   /** Destructor */
   ~ImageViewRenderer() override;
@@ -152,51 +149,35 @@ public:
   //
   // AbstractImageViewRenderer overloads.
 
-  bool GetLayerDynamics( const StackedLayerModel::KeyType & key,
-				 ParametersType & params,
-				 bool isGlobal ) const override;
+  bool GetLayerDynamics(const StackedLayerModel::KeyType& key, ParametersType& params, bool isGlobal) const override;
 
   const AbstractLayerModel* GetReferenceModel() const override;
 
-  AbstractLayerModel * GetReferenceModel() override;
+  AbstractLayerModel* GetReferenceModel() override;
 
-  void GetLayerExtent( const StackedLayerModel::KeyType & key,
-                               PointType& origin,
-                               PointType& extent ) const override;
+  void GetLayerExtent(const StackedLayerModel::KeyType& key, PointType& origin, PointType& extent) const override;
 
-  void GetReferenceExtent( PointType& origin,
-                                   PointType& extent ) const override;
+  void GetReferenceExtent(PointType& origin, PointType& extent) const override;
 
-  void GetViewExtent( PointType& origin,
-                              PointType& extent ) const override;
-
+  void GetViewExtent(PointType& origin, PointType& extent) const override;
 
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const override;
 
   void InitializeGL() override;
 
-  void ResizeGL( int width, int height ) override;
+  void ResizeGL(int width, int height) override;
 
+  void PaintGL(const AbstractImageViewRenderer::RenderingContext* context) override;
 
-  void PaintGL( const AbstractImageViewRenderer::RenderingContext* context ) override;
+  void Pick(const PointType& view, PixelInfo::Vector& pixels) const override;
 
-  void Pick( const PointType & view,
-                     PixelInfo::Vector & pixels ) const override;
+  void GetResolutions(PixelInfo::Vector& pixels) const override;
 
-  void GetResolutions( PixelInfo::Vector & pixels ) const override;
+  bool TransformToView(PointType& point, const StackedLayerModel::KeyType&, const IndexType&, bool isPhysical) const override;
 
-  bool TransformToView( PointType & point,
-				const StackedLayerModel::KeyType &,
-				const IndexType &,
-				bool isPhysical ) const override;
+  void SaveScreenshot(const QString&) const override;
 
-  void SaveScreenshot( const QString & ) const override;
-
-  bool
-    Reproject( PointType & center,
-               SpacingType & spacing,
-               const PointType & vcenter,
-               const SpacingType & vspacing ) const;
+  bool Reproject(PointType& center, SpacingType& spacing, const PointType& vcenter, const SpacingType& vspacing) const;
 
   bool IsEffectsEnabled() const override;
 
@@ -208,16 +189,14 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-// public slots
+  // public slots
 public slots:
-  void UpdatePixelInfo( const QPoint & screen,
-				const PointType & view,
-				const PixelInfo::Vector & pixels ) override;
+  void UpdatePixelInfo(const QPoint& screen, const PointType& view, const PixelInfo::Vector& pixels) override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
   void ClearProjectionRequired();
   void SetProjectionRequired();
@@ -226,78 +205,67 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
   /**
    */
   inline otb::GlActor::Pointer GetReferenceActor();
   /**
    */
-  template< typename T >
-    inline typename T::Pointer GetReferenceActor();
+  template <typename T>
+  inline typename T::Pointer GetReferenceActor();
   /**
    */
-  template< typename T >
-    inline typename T::ConstPointer GetReferenceActor() const;
+  template <typename T>
+  inline typename T::ConstPointer GetReferenceActor() const;
   /**
    */
-  virtual
-  void UpdateActors( const AbstractImageViewRenderer::RenderingContext * );
+  virtual void UpdateActors(const AbstractImageViewRenderer::RenderingContext*);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
   /**
    */
   otb::GlView::Pointer m_GlView;
   /**
    */
-  bool m_EffectsEnabled: 1;
+  bool m_EffectsEnabled : 1;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types
+  //
+  // Private types
 private:
   /**
    */
-  typedef
-    std::pair< AbstractLayerModel *, otb::GlActor::Pointer >
-    ModelActorPair;
+  typedef std::pair<AbstractLayerModel*, otb::GlActor::Pointer> ModelActorPair;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-  virtual void virtual_ClearProjection() {};
-  virtual void virtual_SetProjection() {};
-  virtual void virtual_UpdateProjection() {};
+  virtual void virtual_ClearProjection(){};
+  virtual void virtual_SetProjection(){};
+  virtual void virtual_UpdateProjection(){};
 
   //
   // AbstractImageViewRenderer overloads.
 
-  void virtual_ClearScene( bool ) override;
+  void virtual_ClearScene(bool) override;
   void virtual_UpdateScene() override;
   void virtual_RefreshScene() override;
 
-  bool virtual_ZoomToRegion( const PointType & origin,
-				     const PointType & extent,
-				     PointType & center,
-				     SpacingType & spacing ) const override;
+  bool virtual_ZoomToRegion(const PointType& origin, const PointType& extent, PointType& center, SpacingType& spacing) const override;
 
-  bool virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const override;
+  bool virtual_ZoomToExtent(PointType& center, SpacingType& spacing) const override;
 
-  bool virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
-				    PointType & center,
-				    SpacingType & spacing ) const override;
+  bool virtual_ZoomToLayer(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const override;
 
-  bool virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
-				   PointType & center,
-				   SpacingType & spacing ) const override;
+  bool virtual_ZoomToFull(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -305,8 +273,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 
@@ -319,54 +287,39 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const otb::ViewSettings::Pointer
-ImageViewRenderer
-::GetViewSettings() const
+inline const otb::ViewSettings::Pointer ImageViewRenderer::GetViewSettings() const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   return m_GlView->GetSettings();
 }
 
 /*****************************************************************************/
-inline
-otb::ViewSettings::Pointer
-ImageViewRenderer
-::GetViewSettings()
+inline otb::ViewSettings::Pointer ImageViewRenderer::GetViewSettings()
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   return m_GlView->GetSettings();
 }
 
 /*****************************************************************************/
-inline
-otb::GlActor::Pointer
-ImageViewRenderer
-::GetReferenceActor()
+inline otb::GlActor::Pointer ImageViewRenderer::GetReferenceActor()
 {
   return m_ReferencePair.second;
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-typename T::Pointer
-ImageViewRenderer
-::GetReferenceActor()
+template <typename T>
+inline typename T::Pointer ImageViewRenderer::GetReferenceActor()
 {
-  return otb::DynamicCast< T >( m_ReferencePair.second );
+  return otb::DynamicCast<T>(m_ReferencePair.second);
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-typename T::ConstPointer
-ImageViewRenderer
-::GetReferenceActor() const
+template <typename T>
+inline typename T::ConstPointer ImageViewRenderer::GetReferenceActor() const
 {
-  return otb::DynamicCast< const T >( m_ReferencePair.second );
+  return otb::DynamicCast<const T>(m_ReferencePair.second);
 }
 
 } // end namespace 'mvd'

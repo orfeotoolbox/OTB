@@ -46,7 +46,7 @@
 
 #include "otbVectorImage.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   // The VectorImage class is templated over the type used to represent
   // the coordinate in space and over the dimension of the space.  In

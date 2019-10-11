@@ -41,15 +41,13 @@ class StringListInterface;
  *
  * \brief WIP.
  */
-class OTBQtWidget_EXPORT ListEditItemModel :
-    public QAbstractItemModel
+class OTBQtWidget_EXPORT ListEditItemModel : public QAbstractItemModel
 {
 
   Q_OBJECT;
 
-// Public types
+  // Public types
 public:
-
   enum Columns
   {
     COLUMN_NONE = -1,
@@ -67,12 +65,10 @@ public:
     USER_ROLE_FILTER,
   };
 
-// Public methods
+  // Public methods
 public:
-
   /** \brief Constructor. */
-  ListEditItemModel( StringListInterface *,
-		     QObject * p = nullptr );
+  ListEditItemModel(StringListInterface*, QObject* p = nullptr);
 
   /** \brief Destructor. */
   ~ListEditItemModel() override;
@@ -82,81 +78,64 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
+  int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
-  QVariant
-    data( const QModelIndex & index,
-	  int role = Qt::DisplayRole ) const override;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const override;
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
+  bool hasChildren(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
-  QVariant headerData( int section,
-                               Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */
-  QModelIndex
-    index( int row,
-           int column,
-           const QModelIndex & p = QModelIndex() ) const override;
+  QModelIndex index(int row, int column, const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
    */
-  bool
-    insertRow( int row, const QModelIndex & parent = QModelIndex() );
+  bool insertRow(int row, const QModelIndex& parent = QModelIndex());
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
    */
-  bool
-    insertRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool insertRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const override;
+  QModelIndex parent(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
    */
-  bool
-    removeRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool removeRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
+  int rowCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
    */
-  bool
-    setData( const QModelIndex & index,
-             const QVariant & value,
-             int role = Qt::EditRole ) override;
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  virtual bool Swap( int, int );
+  virtual bool Swap(int, int);
 
   virtual bool IsInput() const;
 
@@ -164,10 +143,9 @@ public:
 
   virtual bool IsBrowsable() const;
 
-// Private attributes
+  // Private attributes
 private:
-  StringListInterface * m_StringList;
-
+  StringListInterface* m_StringList;
 };
 
 } // end namespace 'Wrapper'.
