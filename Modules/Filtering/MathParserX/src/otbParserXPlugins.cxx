@@ -23,6 +23,7 @@
 
 #include "otbMath.h"
 #include "itkNumericTraits.h"
+#include <itkExceptionObject.h>
 
 #include <vector>
 
@@ -54,10 +55,11 @@ void bands::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int a_
   for (int k = 0; k < b_cols; ++k) {
     int col  = b.At(0, k).GetInteger() - 1; //-1 : to make first band have rank #1 (and not 0)
     if (col >= a_cols || col < 0) {
-      itkGenericExceptionMacro(<< std::endl
-                               << "Invalid band index " << col+1
-                               << ". Index must be between 1 and " << a_cols
-                               << "." << std::endl);
+      itkSpecializedMessageExceptionMacro(RangeError,
+                                          << std::endl
+                                          << "Invalid band index " << col+1
+                                          << ". Index must be between 1 and " << a_cols
+                                          << "." << std::endl);
     }
     res.At(0, k) = a.At(0, col);
   }

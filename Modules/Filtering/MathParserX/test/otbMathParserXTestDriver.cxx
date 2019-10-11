@@ -27,4 +27,5 @@ void RegisterTests()
   REGISTER_TEST(otbBandMathXImageFilterConv);
   REGISTER_TEST(otbBandMathXImageFilterTxt);
   REGISTER_TEST(otbBandMathXImageFilterWithIdx);
+  REGISTER_TEST(otbBandMathXImageFilterBandsFailures);
 }
