@@ -24,8 +24,7 @@
 namespace otb { namespace gl {
 
 Mesh
-MakeTexturedQuad( Id_t xy,
-		  Id_t uv )
+MakeTexturedQuad( Id_t xy, Id_t uv )
 {
   Mesh mesh(
     { // vertices (x, y)
@@ -55,8 +54,7 @@ MakeTexturedQuad( Id_t xy,
 
 
 Mesh
-MakeInterleavedTexturedQuad( Id_t xy,
-			     id_t uv )
+MakeInterleavedTexturedQuad( Id_t xy, Id_t uv )
 {
   Mesh mesh(
     //
