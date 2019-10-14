@@ -50,10 +50,6 @@ struct BufferObjectPolicy
   Generate( Id_t & id )
     {
     glGenBuffers( 1, &id );
-
-#if OTB_DEBUG
-  std::cout << "glGenBuffers() -> " << id << std::endl;
-#endif
     }
 
   static
@@ -67,11 +63,7 @@ struct BufferObjectPolicy
   void
   Release( Id_t & id )
     {
-#if OTB_DEBUG
-      std::cout << "glDeleteBuffers( " << id << " )" << std::endl;
-#endif
-
-      glDeleteBuffers( 1, &id );
+    glDeleteBuffers( 1, &id );
     }
 };
 
@@ -167,10 +159,6 @@ private:
   std::size_t m_Components = 0;
   GLenum m_GlType = GL_ZERO;
 };
-
-
-// template<> class BufferObject< element::vertex >;
-// template<> class BufferObject< element::index >;
 
 
 using VertexBufferObject = BufferObject< element::vertex >;
