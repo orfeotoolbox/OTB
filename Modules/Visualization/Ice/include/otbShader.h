@@ -36,7 +36,7 @@ class OTBIce_EXPORT Shader
 {
 friend class GlView;
 public:
-  typedef Shader                                  Self;
+  typedef Shader                                          Self;
   typedef itk::Object                                     Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
@@ -48,15 +48,6 @@ public:
   virtual void SetupShader();
 
   void UnloadShader();
-
-  //~ itkSetMacro(UL,PointType);
-  //~ itkSetMacro(UR,PointType);
-  //~ itkSetMacro(LL,PointType);
-  //~ itkSetMacro(LR,PointType);
-  //~ itkGetConstReferenceMacro(UL,PointType);
-  //~ itkGetConstReferenceMacro(UR,PointType);
-  //~ itkGetConstReferenceMacro(LL,PointType);
-  //~ itkGetConstReferenceMacro(LR,PointType);
 
   const std::vector<int> & GetAttribIdx();
 
@@ -89,11 +80,6 @@ private:
   // prevent implementation
   Shader(const Self&);
   void operator=(const Self&);
-
-  //~ PointType m_UL;
-  //~ PointType m_UR;
-  //~ PointType m_LL;
-  //~ PointType m_LR;
 
 }; // End class Shader
 

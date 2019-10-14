@@ -21,16 +21,13 @@
 set(OTBICE_SRCS
   otbGeoInterface.cxx
   otbGlActor.cxx
-  otbGlBufferObject.cxx
   otbGlError.cxx
-  otbGlHandle.cxx
   otbGlImageActor.cxx
   otbGlMesh.cxx
   otbGlROIActor.cxx
   otbGlView.cxx
   otbGlVectorActor.cxx
   otbGlVersionChecker.cxx
-  otbGlTypeTraits.cxx
   otbGlVersionChecker.cxx
   otbGlVertexArrayObject.cxx
   otbImageSettings.cxx
