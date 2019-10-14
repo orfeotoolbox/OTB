@@ -28,10 +28,6 @@ VertexArrayObjectPolicy
 ::Generate( Id_t & id )
 {
   glGenVertexArrays( 1, &id );
-
-#if OTB_DEBUG
-  std::cout << "glGenVertexArrays() -> " << id << std::endl;
-#endif
 }
 
 
@@ -47,10 +43,6 @@ void
 VertexArrayObjectPolicy
 ::Release( Id_t & id )
 {
-#if OTB_DEBUG
-  std::cout << "glDeleteArrays( " << id << " )" << std::endl;
-#endif
-
   glDeleteVertexArrays( 1, &id );
 }
 

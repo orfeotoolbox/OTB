@@ -187,7 +187,13 @@ ImageViewRenderer
   //
   // Construct message.
   QString message(
-    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nTo run at best performances, this application needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe application will automatically switch to a rendering mode which does not make use of OpenGL shaders and GLSL.\nIf you are running this application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform." )
+    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language "
+      "(GLSL) version '%2'.\nTo run at best performances, this application "
+      "needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe "
+      "application will automatically switch to a rendering mode which does "
+      "not make use of OpenGL shaders and GLSL.\nIf you are running this "
+      "application under some remote-desktop service, runtime OpenGL and GLSL "
+      "versions may differ from those running directly on remote platform." )
     .arg( glVersion )
     .arg( glslVersion )
     .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
@@ -846,7 +852,7 @@ void ImageViewRenderer::virtual_UpdateScene()
           //   << "\tQString:" << vectorImageModel->GetFilename()
           //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
 
-          if( IsGLSLEnabled() )
+          if(IsGLSLEnabled())
           {
             // qDebug() << "Created shader for" << FromStdString( it->first );
         
@@ -869,7 +875,7 @@ void ImageViewRenderer::virtual_UpdateScene()
         }
         else
         {
-          assert( false && "Unhandled AbstractLayerModel derived type." );
+          assert(false && "Unhandled AbstractLayerModel derived type.");
         }
       }
 
@@ -1077,7 +1083,7 @@ void ImageViewRenderer::UpdatePixelInfo(const QPoint& screen, const PointType& /
       // Get shader.
       otb::Shader::Pointer ishader( glImageActor->GetShader() );
 
-      if( !ishader.IsNull() )
+      if(!ishader.IsNull())
       {
       otb::StandardShader::Pointer shader(
         otb::DynamicCast< otb::StandardShader >(

@@ -247,13 +247,6 @@ GlView
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    // std::cout
-    //   << "glOrtho( "
-    //   << ulx << ", " << lrx << ", "
-    //   << lry << ", " << uly
-    //   << ", -1, 1 )"
-    //   << std::endl;
-
     glOrtho(ulx, lrx, lry, uly, -1, 1);
 
     glMatrixMode(GL_MODELVIEW);
@@ -561,11 +554,11 @@ GlView
   if( glGetError()!=GL_NO_ERROR )
     throw std::runtime_error(
       std::string(
-	reinterpret_cast< const char * >(
-	  gluErrorString(
-	    glGetError()
-	  )
-	)
+        reinterpret_cast< const char * >(
+          gluErrorString(
+            glGetError()
+          )
+        )
       )
     );
 
@@ -593,11 +586,11 @@ GlView
   if( glGetError()!=GL_NO_ERROR )
     throw std::runtime_error(
       std::string(
-	reinterpret_cast< const char * >(
-	  gluErrorString(
-	    glGetError()
-	  )
-	)
+        reinterpret_cast< const char * >(
+          gluErrorString(
+            glGetError()
+          )
+        )
       )
     );
 
@@ -655,11 +648,5 @@ GlView
   // delete[] itkBuffer;
   // itkBuffer = NULL;
 }
-
-
-  //~ m_Settings->m_VertexShader = vShader;
-  //~ m_Settings->m_TextureCoordIdx = glGetAttribLocation(m_VertexProgram , "in_coord");
-
-
 
 }

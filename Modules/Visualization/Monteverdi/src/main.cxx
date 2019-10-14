@@ -227,9 +227,6 @@ int main(int argc, char* argv[])
 
   //
   // 6. Let's go: run the application and return exit code.
-#if OTB_DEBUG
-  std::cout << "QCoreApplication::instance()->exec();" << std::endl;
-#endif
   int result = QCoreApplication::instance()->exec();
 
   // Coverity-14835
