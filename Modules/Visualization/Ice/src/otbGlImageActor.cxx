@@ -28,12 +28,7 @@
 
 #include <GL/glew.h>
 
-// #include "otbGlBufferObject.h"
-// #include "otbGlError.h"
 #include "otbGlMesh.h"
-// #include "otbGlObject.h"
-// #include "otbGlTypeTraits.h"
-// #include "otbGlVertexArrayObject.h"
 
 #include "otbStandardShader.h"
 
@@ -43,35 +38,33 @@
 
 #include <stdexcept>
 
-
 namespace otb
 {
 
-
-namespace gl
+GlImageActor::Tile()
+  : m_Loaded(false)
+  , m_TextureId(0)
+  , m_ImageRegion()
+  , m_TileSize(0)
+  , m_UL()
+  , m_UR()
+  , m_LL()
+  , m_LR()
+  , m_Resolution(1)
+  , m_RedIdx(1)
+  , m_GreenIdx(2)
+  , m_BlueIdx(3)
+  , m_RescaleFilter(nullptr)
 {
-
-
-// struct Dummy
-// {
-//   virtual ~Dummy() = default;
-// };
-
-
-} // end namespace 'gl'.
-
-} // end of namespace 'otb'.
-
-
-namespace otb
-{
-
+  m_UL.Fill(0);
+  m_UR.Fill(0);
+  m_LL.Fill(0);
+  m_LR.Fill(0);
+}
 
 GlImageActor::Tile
 ::~Tile()
-{
-  // Release();
-}
+{}
 
 
 void
@@ -104,21 +97,8 @@ GlImageActor::Tile
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 #endif
 
-  //glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-
-// #if defined(GL_CLAMP_TO_BORDER)
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
-
-// #elif defined (GL_CLAMP_TO_BORDER_EXT)
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER_EXT);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER_EXT);
-
-// #elif defined (GL_MIRRORED_REPEAT)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
-
-// #endif
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,GL_MIRRORED_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,GL_MIRRORED_REPEAT);
 }
 
 
@@ -133,14 +113,9 @@ GlImageActor::Tile
   // std::cout << "Deleted texture #" << m_TextureId << std::endl;
 
   m_TextureId = GL_ZERO;
-
-#if 1
   m_Image = VectorImageType::Pointer();
-
   m_RescaleFilter = RescaleFilterType::Pointer();
-
   m_Loaded = false;
-#endif
 }
 
 
@@ -165,9 +140,7 @@ GlImageActor::Tile
   extract->SetChannel( m_GreenIdx );
   extract->SetChannel( m_BlueIdx );
 
-  // std::cout << "ExtractROIFilter::Update()...";
   extract->Update();
-  // std::cout << "\tDONE\n";
 
   m_Image = extract->GetOutput();
 }
@@ -213,8 +186,6 @@ GlImageActor
 ::CreateShader()
 {
   assert( m_Shader.IsNull() );
-
-  std::cerr << "GlImageActor::CreateShader()" << std::endl;
 
   StandardShader::Pointer shader( StandardShader::New() );
 
@@ -314,22 +285,7 @@ void GlImageActor::Initialize(const std::string & filename)
 
   unsigned int ovrCount = m_FileReader->GetOverviewsCount();
 
-  // std::cout << "overview-count: " << ovrCount << std::endl;
-
   assert( ovrCount>0 );
-
-  // {
-  // typedef std::vector< std::string > StringVector;
-
-  // StringVector info(
-  //   m_FileReader->GetOverviewsInfo()
-  // );
-
-  // for( StringVector::const_iterator it( info.begin() );
-  //      it!=info.end();
-  //      ++it )
-  //   std::cout << *it << std::endl;
-  // }
 
   m_AvailableResolutions.clear();
 
@@ -340,8 +296,6 @@ void GlImageActor::Initialize(const std::string & filename)
 
   // Update transforms once data is read
   UpdateTransforms();
-
-  // std::cout<<"Number of resolutions in file: "<<m_AvailableResolutions.size()<<std::endl;
 }
 
 
@@ -501,7 +455,7 @@ void GlImageActor::Render()
       {
         it->m_RescaleFilter = RescaleFilterType::New();
         it->m_RescaleFilter->AutomaticInputMinMaxComputationOff();
-        it->m_RescaleFilter->SetInput( it->Image() );
+        it->m_RescaleFilter->SetInput(it->Image());
       }
 
       VectorImageType::PixelType mins(3),maxs(3),omins(3),omaxs(3);
@@ -525,7 +479,7 @@ void GlImageActor::Render()
       double gamma = m_ImageSettings->GetGamma();
 
       gamma =
-	gamma == 0.0
+        gamma == 0.0
         ? std::numeric_limits< double >::max()
         : 1.0 / gamma;
       // }
@@ -551,9 +505,9 @@ void GlImageActor::Render()
       itk::ImageRegionConstIterator<VectorImageType> inIt(it->Image(),it->Image()->GetLargestPossibleRegion());
 
       auto buffer =
-	std::make_unique< GLubyte[] >(
-	  4 * it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
-	  );
+        std::make_unique< GLubyte[] >(
+        4 * it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
+        );
 
       unsigned int idx = 0;
 
@@ -563,12 +517,12 @@ void GlImageActor::Render()
         buffer[ idx++ ] = static_cast< GLubyte >(imIt.Get()[1]);
         buffer[ idx++ ] = static_cast< GLubyte >(imIt.Get()[0]);
         buffer[ idx++ ] =
-	  ( m_ImageSettings->GetUseNoData() &&
-	    ( inIt.Get()[ 0 ] == noData ||
-	      inIt.Get()[ 1 ] == noData ||
-	      inIt.Get()[ 2 ] == noData ) )
-	  ? 0
-	  : 255;
+          ( m_ImageSettings->GetUseNoData() &&
+          ( inIt.Get()[ 0 ] == noData ||
+            inIt.Get()[ 1 ] == noData ||
+            inIt.Get()[ 2 ] == noData ) )
+          ? 0
+          : 255;
       }
 
       assert( it->m_TextureId );
@@ -581,7 +535,7 @@ void GlImageActor::Render()
         it->m_RescaleFilter->GetOutput()->GetLargestPossibleRegion().GetSize()[1],
         0, GL_BGRA, GL_UNSIGNED_BYTE,
         buffer.get()
-	);
+      );
 
       it->m_Loaded = true;
     }
@@ -590,24 +544,6 @@ void GlImageActor::Render()
   for(TileVectorType::iterator it = m_LoadedTiles.begin();
       it != m_LoadedTiles.end(); ++it)
   {
-    // std::cout << it->m_LL[ 0 ] << ", " << it->m_LL[ 1 ] << std::endl;
-    // std::cout << it->m_LR[ 0 ] << ", " << it->m_LR[ 1 ] << std::endl;
-    // std::cout << it->m_UR[ 0 ] << ", " << it->m_UR[ 1 ] << std::endl;
-    // std::cout << it->m_UL[ 0 ] << ", " << it->m_UL[ 1 ] << std::endl;
-
-    // glDisable( GL_BLEND );
-
-    // glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
-
-    // glBegin( GL_QUADS );
-    // {
-    //   glVertex2f( it->m_LL[ 0 ], it->m_LL[ 1 ] );
-    //   glVertex2f( it->m_LR[ 0 ], it->m_LR[ 1 ] );
-    //   glVertex2f( it->m_UR[ 0 ], it->m_UR[ 1 ] );
-    //   glVertex2f( it->m_UL[ 0 ], it->m_UL[ 1 ] );
-    // }
-    // glEnd();
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 
@@ -650,6 +586,7 @@ void GlImageActor::Render()
     }
     else
     {
+      // Compatibility mode
       // Reset color before rendering
       glColor4d( 1.0f, 1.0f, 1.0f, m_ImageSettings->GetAlpha() );
 
@@ -668,24 +605,13 @@ void GlImageActor::Render()
   }
 
   if( isShaderMode )
+    {
     m_Shader->UnloadShader();
+    }
 }
 
 void GlImageActor::LoadTile(Tile& tile)
 {
-  // std::cout
-  //   << std::hex << this
-  //   << "::LoadTile(" << &tile << ")"
-  //   << std::dec << std::endl;
-
-  // std::cout
-  //   << "[ " << tile.m_ImageRegion.GetIndex()[ 0 ]
-  //   << ", " << tile.m_ImageRegion.GetIndex()[ 1 ]
-  //   << " ]-[ " << tile.m_ImageRegion.GetSize()[ 0 ]
-  //   << ", " << tile.m_ImageRegion.GetSize()[ 1 ]
-  //   << "]"
-  //   << std::endl;
-
   assert( !m_FileReader.IsNull() );
 
   tile.Link( m_FileReader->GetOutput() );
@@ -700,8 +626,8 @@ void GlImageActor::LoadTile(Tile& tile)
 
     auto buffer =
       std::make_unique< float[] >(
-	4 * tile.Image()->GetLargestPossibleRegion().GetNumberOfPixels()
-	);
+      4 * tile.Image()->GetLargestPossibleRegion().GetNumberOfPixels()
+      );
 
     assert( buffer );
 
@@ -968,7 +894,7 @@ GlImageActor::PointType GlImageActor::ImageToViewportTransform(const PointType &
 bool
 GlImageActor
 ::GetPixelFromViewport( const PointType & in,
-			PixelType & pixel ) const
+                        PixelType & pixel ) const
 {
   PointType p;
   IndexType i;
@@ -980,9 +906,9 @@ GlImageActor
 bool
 GlImageActor
 ::GetPixelFromViewport( const PointType & ptView,
-			PixelType & pixel,
-			PointType & ptPhysical,
-			IndexType & index ) const
+                        PixelType & pixel,
+                        PointType & ptPhysical,
+                        IndexType & index ) const
 {
   ptPhysical = ViewportToImageTransform( ptView );
 
@@ -993,25 +919,10 @@ GlImageActor
 bool
 GlImageActor
 ::GetPixel( const PointType & physical,
-	    PixelType & pixel,
-	    IndexType & index ) const
+            PixelType & pixel,
+            IndexType & index ) const
 {
-
-  // std::cout << std::endl;
-
-  // std::cout << "O: (" << m_Origin[ 0 ] << ", " << m_Origin[ 1 ] << ")";
-  // std::cout << "\tS: (" << m_Spacing[ 1 ] << ", " << m_Spacing[ 1 ] << ")";
-  // std::cout << std::endl;
-
-  // std::cout << "P: (" << physical[ 0 ] << ", " << physical[ 1 ] << ")";
-  // std::cout << std::endl;
-
   // First, we need to return index in full img (not in overviews)
-#if 0
-  index[ 0 ] = static_cast<unsigned int>((physical[0]-m_Origin[0])/m_Spacing[0]);
-  index[ 1 ] = static_cast<unsigned int>((physical[1]-m_Origin[1])/m_Spacing[1]);
-
-#else
   index[ 0 ] =
     static_cast< IndexType::IndexValueType >(
       ( physical[ 0 ] + 0.5 * m_Spacing[0] - m_Origin[ 0 ] ) /
@@ -1024,40 +935,15 @@ GlImageActor
       m_Spacing[ 1 ]
     );
 
-#endif
-
-  // std::cout << "I: (" << index[ 0 ] << ", " << index[ 1 ] << ")";
-  // std::cout
-  //   << "\tI: ("
-  //   << ( ( physical[ 0 ] - m_Origin[ 0 ] ) / m_Spacing[ 0 ] )
-  //   << ", "
-  //   << ( ( physical[ 1 ] - m_Origin[ 1 ] ) / m_Spacing[ 1 ] )
-  //   << ")";
-  // std::cout << std::endl;
-
   // Then, we need to find the index in the currently loaded overview
   IndexType ovrIndex;
   m_FileReader->GetOutput()->TransformPhysicalPointToIndex( physical, ovrIndex );
-
-  // std::cout << "O: (" << ovrIndex[ 0 ] << ", " << ovrIndex[ 1 ] << ")";
-  // std::cout << std::endl;
 
   // And look it up in loaded tiles
   for (TileVectorType::const_iterator it = m_LoadedTiles.begin();
        it!=m_LoadedTiles.end();
        ++it)
     {
-    // std::cout
-    //   << "R: ("
-    //   << it->m_ImageRegion.GetIndex()[ 0 ]
-    //   << ", "
-    //   << it->m_ImageRegion.GetIndex()[ 1 ]
-    //   << ")-("
-    //   << it->m_ImageRegion.GetSize()[ 0 ]
-    //   << ", "
-    //   << it->m_ImageRegion.GetSize()[ 1 ]
-    //   << ")";
-
     if(it->m_ImageRegion.IsInside(ovrIndex))
       {
       IndexType idx;
@@ -1065,19 +951,14 @@ GlImageActor
       idx[ 0 ] = ovrIndex[ 0 ] - it->m_ImageRegion.GetIndex()[ 0 ];
       idx[ 1 ] = ovrIndex[ 1 ] - it->m_ImageRegion.GetIndex()[ 1 ];
 
-      // std::cout << "\tIr: (" << idx[ 0 ] << ", " << idx[ 1 ] << ")";
-
       pixel = it->Image()->GetPixel( idx );
 
       return true;
       }
-
-    // std::cout << std::endl;
     }
 
   return false;
 }
-
 
 
 void GlImageActor::UpdateResolution()
@@ -1119,7 +1000,6 @@ void GlImageActor::UpdateResolution()
 
   double resolution = std::min(100/distAB,100/distAC);
 
-  // std::cout << std::endl;
   // std::cout << "resolution: " << resolution << std::endl;
 
   // Arbitrary higher than any distance we will compute here
@@ -1137,29 +1017,29 @@ void GlImageActor::UpdateResolution()
 
     // Compute the diff and keep the index that minimize the distance
     for (ResolutionVectorType::iterator it = m_AvailableResolutions.begin();
-	 it != m_AvailableResolutions.end(); ++it)
+         it != m_AvailableResolutions.end(); ++it)
       {
       double diff = 1/((double)(1<<(*it))) - resolution;
 
       // std::cout << "diff: " << diff << std::endl;
 
       if( ( ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Lower &&
-	      diff <= 0 )
-	    ||
-	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
-	      diff >= 0 )
-	    ||
-	    ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
-	  &&
-	  std::abs(diff) < minDist )
-	{
-	isFound = true;
+          diff <= 0 )
+          ||
+          ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest_Upper &&
+            diff >= 0 )
+          ||
+          ( m_ResolutionAlgorithm == ResolutionAlgorithm::Nearest ) )
+        &&
+        std::abs(diff) < minDist )
+        {
+        isFound = true;
 
-	minDist = std::abs(diff);
-	newResolution = std::distance(m_AvailableResolutions.begin(),it);
+        minDist = std::abs(diff);
+        newResolution = std::distance(m_AvailableResolutions.begin(),it);
 
-	// std::cout << "found: " << newResolution << std::endl;
-	}
+        // std::cout << "found: " << newResolution << std::endl;
+        }
       }
 
     // MANTIS-1147: Cap current-resolution.
@@ -1276,12 +1156,13 @@ void GlImageActor::UpdateTransforms()
   // std::cout << "}" << std::endl;
 }
 
-void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
-					double & minGreen, double & maxGreen,
-					double & minBlue, double & maxBlue,
-					bool full,
-					unsigned int refSize,
-					double lcp, double hcp )
+void GlImageActor::AutoColorAdjustment(
+  double & minRed, double & maxRed,
+  double & minGreen, double & maxGreen,
+  double & minBlue, double & maxBlue,
+  bool full,
+  unsigned int refSize,
+  double lcp, double hcp )
 {
   typedef itk::Statistics::ListSample<VectorImageType::PixelType> ListSampleType;
   typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
@@ -1361,27 +1242,27 @@ void GlImageActor::AutoColorAdjustment( double & minRed, double & maxRed,
     {
     // Retrieve all tiles
     for(TileVectorType::iterator it = m_LoadedTiles.begin();it!=m_LoadedTiles.end();++it)
-    {
-      itk::ImageRegionConstIterator< VectorImageType > imIt(
-	it->Image(),
-	it->Image()->GetLargestPossibleRegion()
-	);
-
-    for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
       {
-      bool nonan = true;
+      itk::ImageRegionConstIterator< VectorImageType > imIt(
+        it->Image(),
+        it->Image()->GetLargestPossibleRegion()
+        );
 
-      for(unsigned int i = 0; i < imIt.Get().Size();++i)
+      for(imIt.GoToBegin();!imIt.IsAtEnd();++imIt)
         {
-        nonan = nonan && !vnl_math_isnan(imIt.Get()[i]);
-        }
+        bool nonan = true;
+  
+        for(unsigned int i = 0; i < imIt.Get().Size();++i)
+          {
+          nonan = nonan && !vnl_math_isnan(imIt.Get()[i]);
+          }
 
-      if(nonan)
-        {
-        listSample->PushBack(imIt.Get());
+        if(nonan)
+          {
+          listSample->PushBack(imIt.Get());
+          }
         }
       }
-    }
     }
 
     // Compute the histogram

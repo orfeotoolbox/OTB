@@ -182,8 +182,6 @@ private:
   RigidTransformType::Pointer m_ViewportForwardRotationTransform;
   RigidTransformType::Pointer m_ViewportBackwardRotationTransform;
 
-  int m_ColorIdx;
-
 }; // End class GlVectorActor
 
 } // End namespace otb

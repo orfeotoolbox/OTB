@@ -56,7 +56,7 @@ class OTBIce_EXPORT StandardShader
 {
 public:
   typedef StandardShader                                  Self;
-  typedef Shader                                  Superclass;
+  typedef Shader                                          Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 

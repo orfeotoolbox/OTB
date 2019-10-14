@@ -215,26 +215,7 @@ protected:
   class Tile
   {
   public:
-    Tile()
-      : m_Loaded(false),
-        m_TextureId(0),
-        m_ImageRegion(),
-        m_TileSize(0),
-        m_UL(),
-        m_UR(),
-        m_LL(),
-        m_LR(),
-        m_Resolution(1),
-        m_RedIdx(1),
-        m_GreenIdx(2),
-        m_BlueIdx(3),
-        m_RescaleFilter(nullptr)
-    {
-      m_UL.Fill(0);
-      m_UR.Fill(0);
-      m_LL.Fill(0);
-      m_LR.Fill(0);
-    }
+    Tile();
 
     ~Tile();
 
