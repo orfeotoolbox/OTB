@@ -146,9 +146,9 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
         << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl; */
 
 
-    error1 = (result1 - expected1) * (result1 - expected1) / (result1 + expected1);
-    error2 = (result2 - expected2) * (result2 - expected2) / (result2 + expected2);
-    error3 = (result3 - expected3) * (result3 - expected3) / (result3 + expected3);
+    error1 = (result1 - expected1) * (result1 - expected1) / abs(result1 + expected1);
+    error2 = (result2 - expected2) * (result2 - expected2) / abs(result2 + expected2);
+    error3 = (result3 - expected3) * (result3 - expected3) / abs(result3 + expected3);
 
     if ((error1 > 1E-9) || (error2 > 1E-9) || (error3 > 1E-9))
     {
