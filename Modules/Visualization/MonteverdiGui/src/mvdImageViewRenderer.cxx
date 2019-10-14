@@ -125,7 +125,9 @@ ImageViewRenderer::~ImageViewRenderer()
 }
 
 /*****************************************************************************/
-bool ImageViewRenderer::CheckGLCapabilities(int* glsl140)
+bool
+ImageViewRenderer
+::CheckGLCapabilities( int * glsl140 ) const
 {
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   return true;
@@ -134,10 +136,12 @@ bool ImageViewRenderer::CheckGLCapabilities(int* glsl140)
 
   //
   // Trace required OpenGL and GLSL versions.
-  qWarning() << ToStdString(tr("Required OpenGL version '%1' with GLSL version '%2'.")
-                                .arg(otb::GlVersionChecker::REQUIRED_GL_VERSION)
-                                .arg(otb::GlVersionChecker::REQUIRED_GLSL_VERSION))
-                    .c_str();
+  qWarning() <<
+    ToStdString(
+      tr( "Required OpenGL version '%1' with GLSL version '%2'." )
+      .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
+      .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
+      ).c_str();
 
   //
   // Get and check OpenGL and GLSL versions.
@@ -145,27 +149,35 @@ bool ImageViewRenderer::CheckGLCapabilities(int* glsl140)
   const char* glVersion   = NULL;
   const char* glslVersion = NULL;
 
+  assert( !m_GlView.IsNull() );
+
   bool isOk = false;
 
   try
   {
-    isOk = otb::GlVersionChecker::CheckGLCapabilities(glVersion, glslVersion);
+    std::size_t glslVer = m_GlView->CheckGLCapabilities( glVersion, glslVersion );
 
+    isOk = glslVer>0;
     if (glsl140 != NULL)
       *glsl140 = otb::GlVersionChecker::VerCmp(glslVersion, "1.40");
 
     //
     // Trace runtime OpenGL and GLSL versions.
-    qWarning() << ToStdString(tr("Runtime OpenGL version '%1' with GLSL version '%2'.").arg(glVersion).arg(glslVersion)).c_str();
+    qWarning() <<
+      ToStdString(
+        tr( "Runtime OpenGL version '%1' with GLSL version '%2'." )
+        .arg( glVersion )
+        .arg( glslVersion )
+        ).c_str();
   }
-  catch (std::exception& exc)
+  catch( std::exception& exc )
   {
-    QMessageBox::critical(qobject_cast<QWidget*>(parent()), tr("Critical error!"), ToQString(exc.what()));
+    QMessageBox::critical(
+      qobject_cast< QWidget* >( parent() ),
+      tr( "Critical error!"),
+      ToQString( exc.what() )
+      );
   }
-
-  //
-  // Set GLSL effects state.
-  SetGLSLEnabled(isOk);
 
   //
   // Return if check has succeeded.
@@ -174,14 +186,19 @@ bool ImageViewRenderer::CheckGLCapabilities(int* glsl140)
 
   //
   // Construct message.
-  QString message(tr("Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nTo run at best performances, this application "
-                     "needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe application will automatically switch to a rendering mode which does "
-                     "not make use of OpenGL shaders and GLSL.\nIf you are running this application under some remote-desktop service, runtime OpenGL and GLSL "
-                     "versions may differ from those running directly on remote platform.")
-                      .arg(glVersion)
-                      .arg(glslVersion)
-                      .arg(otb::GlVersionChecker::REQUIRED_GL_VERSION)
-                      .arg(otb::GlVersionChecker::REQUIRED_GLSL_VERSION));
+  QString message(
+    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language "
+      "(GLSL) version '%2'.\nTo run at best performances, this application "
+      "needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe "
+      "application will automatically switch to a rendering mode which does "
+      "not make use of OpenGL shaders and GLSL.\nIf you are running this "
+      "application under some remote-desktop service, runtime OpenGL and GLSL "
+      "versions may differ from those running directly on remote platform." )
+    .arg( glVersion )
+    .arg( glslVersion )
+    .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
+    .arg( otb::GlVersionChecker::REQUIRED_GLSL_VERSION )
+    );
 
   //
   // Warn user is check has failed.
@@ -192,7 +209,7 @@ bool ImageViewRenderer::CheckGLCapabilities(int* glsl140)
     qobject_cast< QWidget* >( parent() ),
     tr( "Critical error!" ),
     message
-  );
+    );
 #endif
 
   //
@@ -615,136 +632,118 @@ void ImageViewRenderer::UpdateActors(const AbstractImageViewRenderer::RenderingC
         //
         // Must use local variable to cast from T* to T::Pointer because
         // of ITK set/get macros...
-        otb::FragmentShader::Pointer fragmentShader(imageActor->GetShader());
+        otb::Shader::Pointer imageShader( imageActor->GetShader() );
 
-        if (!fragmentShader.IsNull())
-        {
-          // If this point is reached, shader is not null which means
+        if( !imageShader.IsNull() )
+          {
+          // If this point is reached, imageShader is not null which means
           // that isGLSLEnabled() is true.
-          assert(IsGLSLEnabled());
-
-          otb::StandardShader::Pointer shader(otb::DynamicCast<otb::StandardShader>(fragmentShader));
-
-          assert(!shader.IsNull());
-
-          if (m_EffectsEnabled)
-            switch (settings.GetEffect())
-            {
-            case EFFECT_CHESSBOARD:
-              shader->SetShaderType(otb::SHADER_ALPHA_GRID);
-              shader->SetChessboardSize(settings.GetSize());
-              break;
-
-            case EFFECT_GRADIENT:
-              shader->SetShaderType(otb::SHADER_GRADIENT);
-              shader->SetRadius(settings.GetSize());
-              break;
-
-            case EFFECT_LOCAL_CONTRAST:
-              shader->SetShaderType(otb::SHADER_LOCAL_CONTRAST);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(
-#if 0
-		  settings.GetValue() *
-		  std::max(
-		    std::max(
-		      shader->GetMaxRed() - shader->GetMinRed(),
-		      shader->GetMaxGreen() - shader->GetMinGreen()
-		    ),
-		    shader->GetMaxBlue() - shader->GetMinBlue()
-		  )
-#else
-                  settings.GetValue()
-#endif
-                  );
-              break;
-
-            case EFFECT_LOCAL_TRANSLUCENCY:
-              shader->SetShaderType(otb::SHADER_LOCAL_ALPHA);
-              shader->SetRadius(settings.GetSize());
-              break;
-
-            case EFFECT_NONE:
-            case EFFECT_NORMAL:
-              shader->SetShaderType(otb::SHADER_STANDARD);
-              break;
-
-            case EFFECT_SPECTRAL_ANGLE:
-              shader->SetShaderType(otb::SHADER_SPECTRAL_ANGLE);
-              shader->SetRadius(settings.GetSize());
-              shader->SetSpectralAngleRange(settings.GetValue());
-              break;
-
-            case EFFECT_SWIPE_H:
-              shader->SetShaderType(otb::SHADER_ALPHA_SLIDER);
-              shader->SetVerticalSlider(false);
-              break;
-
-            case EFFECT_SWIPE_V:
-              shader->SetShaderType(otb::SHADER_ALPHA_SLIDER);
-              shader->SetVerticalSlider(true);
-              break;
-
-            case EFFECT_LUT_JET:
-              shader->SetShaderType(otb::SHADER_LUT_JET);
-              break;
-
-            case EFFECT_LUT_LOCAL_JET:
-              shader->SetShaderType(otb::SHADER_LUT_LOCAL_JET);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(settings.GetValue());
-
-              break;
-
-            case EFFECT_LUT_HOT:
-              shader->SetShaderType(otb::SHADER_LUT_HOT);
-              break;
-
-            case EFFECT_LUT_LOCAL_HOT:
-              shader->SetShaderType(otb::SHADER_LUT_LOCAL_HOT);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(settings.GetValue());
-
-              break;
-
-            case EFFECT_LUT_SUMMER:
-              shader->SetShaderType(otb::SHADER_LUT_SUMMER);
-              break;
-
-            case EFFECT_LUT_LOCAL_SUMMER:
-              shader->SetShaderType(otb::SHADER_LUT_LOCAL_SUMMER);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(settings.GetValue());
-
-              break;
-
-            case EFFECT_LUT_WINTER:
-              shader->SetShaderType(otb::SHADER_LUT_WINTER);
-              break;
-
-            case EFFECT_LUT_LOCAL_WINTER:
-              shader->SetShaderType(otb::SHADER_LUT_LOCAL_WINTER);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(settings.GetValue());
-
-              break;
-
-            case EFFECT_LUT_COOL:
-              shader->SetShaderType(otb::SHADER_LUT_COOL);
-              break;
-
-            case EFFECT_LUT_LOCAL_COOL:
-              shader->SetShaderType(otb::SHADER_LUT_LOCAL_COOL);
-              shader->SetRadius(settings.GetSize());
-              shader->SetLocalContrastRange(settings.GetValue());
-
-              break;
-
-
-            default:
-              assert(false && "Unhandled mvd::Effect value!");
-              break;
-            }
+          assert( IsGLSLEnabled() );
+        
+          otb::StandardShader::Pointer shader(
+            otb::DynamicCast< otb::StandardShader >( imageShader )
+          );
+        
+          assert( !shader.IsNull() );
+        
+          if( m_EffectsEnabled )
+            switch( settings.GetEffect() )
+              {
+              case EFFECT_CHESSBOARD:
+          shader->SetShaderType( otb::SHADER_ALPHA_GRID );
+          shader->SetChessboardSize( settings.GetSize() );
+          break;
+        
+              case EFFECT_GRADIENT:
+          shader->SetShaderType( otb::SHADER_GRADIENT );
+          shader->SetRadius( settings.GetSize() );
+          break;
+        
+              case EFFECT_LOCAL_CONTRAST:
+          shader->SetShaderType( otb::SHADER_LOCAL_CONTRAST );
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+      
+              case EFFECT_LOCAL_TRANSLUCENCY:
+          shader->SetShaderType( otb::SHADER_LOCAL_ALPHA );
+          shader->SetRadius( settings.GetSize() );
+          break;
+          
+              case EFFECT_NONE:
+              case EFFECT_NORMAL:
+          shader->SetShaderType( otb::SHADER_STANDARD );
+          break;
+          
+              case EFFECT_SPECTRAL_ANGLE:
+          shader->SetShaderType( otb::SHADER_SPECTRAL_ANGLE );
+          shader->SetRadius( settings.GetSize() );
+          shader->SetSpectralAngleRange( settings.GetValue() );
+          break;
+          
+              case EFFECT_SWIPE_H:
+          shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+          shader->SetVerticalSlider( false );
+          break;
+          
+              case EFFECT_SWIPE_V:
+          shader->SetShaderType( otb::SHADER_ALPHA_SLIDER );
+          shader->SetVerticalSlider( true );
+          break;
+      
+              case EFFECT_LUT_JET:
+          shader->SetShaderType(otb::SHADER_LUT_JET);
+          break;
+      
+              case EFFECT_LUT_LOCAL_JET:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_JET);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+          
+              case EFFECT_LUT_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_HOT);
+          break;
+          
+              case EFFECT_LUT_LOCAL_HOT:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_HOT);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+          
+              case EFFECT_LUT_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_SUMMER);
+          break;
+          
+              case EFFECT_LUT_LOCAL_SUMMER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_SUMMER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+          
+              case EFFECT_LUT_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_WINTER);
+          break;
+          
+              case EFFECT_LUT_LOCAL_WINTER:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_WINTER);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+          
+              case EFFECT_LUT_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_COOL);
+          break;
+          
+              case EFFECT_LUT_LOCAL_COOL:
+          shader->SetShaderType(otb::SHADER_LUT_LOCAL_COOL);
+          shader->SetRadius( settings.GetSize() );
+          shader->SetLocalContrastRange(settings.GetValue());
+          break;
+              default:
+          assert( false && "Unhandled mvd::Effect value!" );
+          break;
+              }
         }
       }
       //
@@ -805,30 +804,33 @@ void ImageViewRenderer::virtual_UpdateScene()
   else
   {
     {
-      otb::GlView::StringVectorType keys(m_GlView->GetActorsKeys());
+      otb::GlView::StringVectorType keys( m_GlView->GetActorsKeys() );
 
-      for (otb::GlView::StringVectorType::const_iterator it(keys.begin()); it != keys.end(); ++it)
-        if (!stackedLayerModel->Contains(*it))
-        {
-          // qDebug()
-          //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
-
-          m_GlView->RemoveActor(*it);
-        }
+      for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
+         it!=keys.end();
+         ++it )
+      if( !stackedLayerModel->Contains( *it ) )
+      {
+        // qDebug()
+        //   << QString( "Removing image-actor '%1'..." ).arg( it->c_str() );
+      
+        m_GlView->RemoveActor( *it );
+      }
     }
-
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 
-    for (StackedLayerModel::ConstIterator it(stackedLayerModel->Begin()); it != stackedLayerModel->End(); ++it)
-      if (!m_GlView->ContainsActor(it->first))
+    for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
+         it!=stackedLayerModel->End();
+         ++it )
+      if( !m_GlView->ContainsActor( it->first ) )
       {
-        assert(it->second != NULL);
+        assert( it->second!=NULL );
 
-        if (it->second->inherits(VectorImageModel::staticMetaObject.className()))
-        {
-          otb::GlImageActor::Pointer glImageActor(otb::GlImageActor::New());
+        if( it->second->inherits( VectorImageModel::staticMetaObject.className()))
+          {
+          otb::GlImageActor::Pointer glImageActor( otb::GlImageActor::New() );
 
           // Should all AbstractLayerModel have a ::GetFilename()
           // method?
@@ -850,14 +852,19 @@ void ImageViewRenderer::virtual_UpdateScene()
           //   << "\tQString:" << vectorImageModel->GetFilename()
           //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
 
-          if (IsGLSLEnabled())
+          if(IsGLSLEnabled())
           {
             // qDebug() << "Created shader for" << FromStdString( it->first );
-
+        
             glImageActor->CreateShader();
           }
 
-          glImageActor->Initialize(QFile::encodeName(vectorImageModel->GetFilename()).constData());
+          glImageActor->Initialize(
+            QFile::encodeName(
+              vectorImageModel->GetFilename()
+              )
+            .constData()
+            );
 
           m_GlView->AddActor(glImageActor, it->first);
 
@@ -1074,32 +1081,43 @@ void ImageViewRenderer::UpdatePixelInfo(const QPoint& screen, const PointType& /
 
       //
       // Get shader.
-      otb::FragmentShader::Pointer fshader(glImageActor->GetShader());
+      otb::Shader::Pointer ishader( glImageActor->GetShader() );
 
-      if (!fshader.IsNull())
+      if(!ishader.IsNull())
       {
-        otb::StandardShader::Pointer shader(otb::DynamicCast<otb::StandardShader>(fshader));
-
-        assert(!shader.IsNull());
-
-        //
-        // Update cursor position of shader.
-        PointType p_screen;
-
-        assert(m_GlView->GetSettings() != NULL);
-
-        p_screen[0] = screen.x();
-        p_screen[1] = m_GlView->GetSettings()->GetViewportSize()[1] - screen.y();
-
-        // qDebug()
-        //   << "otb::StandardShader::SetCenter("
-        //   << p_screen[ 0 ] << "," << p_screen[ 1 ]
-        //   << ")";
-
-        shader->SetCenter(p_screen);
-
-        if (shader->GetShaderType() == otb::SHADER_ALPHA_SLIDER)
-          shader->SetSliderPosition(p_screen[shader->GetVerticalSlider() ? 1 : 0]);
+      otb::StandardShader::Pointer shader(
+        otb::DynamicCast< otb::StandardShader >(
+          ishader
+        )
+      );
+      
+      assert( !shader.IsNull() );
+      
+      //
+      // Update cursor position of shader.
+      PointType p_screen;
+      
+      assert( m_GlView->GetSettings()!=NULL );
+      
+      p_screen[ 0 ] = screen.x();
+      p_screen[ 1 ] =
+        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
+      
+      // qDebug()
+      //   << "otb::StandardShader::SetCenter("
+      //   << p_screen[ 0 ] << "," << p_screen[ 1 ]
+      //   << ")";
+      
+      shader->SetCenter( p_screen );
+      
+      if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
+        shader->SetSliderPosition(
+          p_screen[
+            shader->GetVerticalSlider()
+            ? 1
+            : 0
+          ]
+        );
       }
     }
   }
@@ -1152,6 +1170,42 @@ bool ImageViewRenderer::virtual_ZoomToFull(const StackedLayerModel::KeyType& key
   assert(!m_GlView.IsNull());
 
   return m_GlView->ZoomToFull(key, center, spacing);
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::IsGLSLAvailable() const noexcept
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->IsGLSLAvailable();
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::IsGLSLEnabled() const noexcept
+{
+  assert( !m_GlView.IsNull() );
+
+  return m_GlView->IsGLSLEnabled();
+}
+
+/******************************************************************************/
+bool
+ImageViewRenderer
+::SetGLSLEnabled( bool isEnabled )
+{
+  assert( !m_GlView.IsNull() );
+
+  bool wasGLSLEnabled = m_GlView->IsGLSLEnabled();
+
+  assert( m_GlView->IsEmpty() );
+
+  m_GlView->SetGLSLEnabled( isEnabled );
+
+  return wasGLSLEnabled;
 }
 
 /******************************************************************************/
