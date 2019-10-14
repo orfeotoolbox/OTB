@@ -188,7 +188,13 @@ ImageViewRenderer
   //
   // Construct message.
   QString message(
-    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language (GLSL) version '%2'.\nTo run at best performances, this application needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe application will automatically switch to a rendering mode which does not make use of OpenGL shaders and GLSL.\nIf you are running this application under some remote-desktop service, runtime OpenGL and GLSL versions may differ from those running directly on remote platform." )
+    tr( "Current OpenGL version is '%1' supporting OpenGL Shading-Language "
+      "(GLSL) version '%2'.\nTo run at best performances, this application "
+      "needs, at least, OpenGL version '%3' with GLSL version '%4'.\nThe "
+      "application will automatically switch to a rendering mode which does "
+      "not make use of OpenGL shaders and GLSL.\nIf you are running this "
+      "application under some remote-desktop service, runtime OpenGL and GLSL "
+      "versions may differ from those running directly on remote platform." )
     .arg( glVersion )
     .arg( glslVersion )
     .arg( otb::GlVersionChecker::REQUIRED_GL_VERSION )
@@ -870,12 +876,12 @@ void ImageViewRenderer::virtual_UpdateScene()
           //   << "\tQString:" << vectorImageModel->GetFilename()
           //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
 
-	  if( IsGLSLEnabled() )
-	  {
-	    // qDebug() << "Created shader for" << FromStdString( it->first );
-
-	    glImageActor->CreateShader();
-	  }
+          if(IsGLSLEnabled())
+          {
+            // qDebug() << "Created shader for" << FromStdString( it->first );
+        
+            glImageActor->CreateShader();
+          }
 
           glImageActor->Initialize(
             QFile::encodeName(
@@ -892,9 +898,9 @@ void ImageViewRenderer::virtual_UpdateScene()
 	  //   .arg( vectorImageModel->GetFilename() );
 	}
         else
-	{
-          assert( false && "Unhandled AbstractLayerModel derived type." );
-	}
+        {
+          assert(false && "Unhandled AbstractLayerModel derived type.");
+        }
       }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
@@ -1101,42 +1107,41 @@ void ImageViewRenderer::UpdatePixelInfo(const QPoint& screen, const PointType& /
       // Get shader.
       otb::Shader::Pointer ishader( glImageActor->GetShader() );
 
-      if( !ishader.IsNull() )
-	{
-	otb::StandardShader::Pointer shader(
-	  otb::DynamicCast< otb::StandardShader >(
-	    ishader
-	  )
-	);
-
-	assert( !shader.IsNull() );
-
-	//
-	// Update cursor position of shader.
-	PointType p_screen;
-
-	assert( m_GlView->GetSettings()!=NULL );
-
-	p_screen[ 0 ] = screen.x();
-	p_screen[ 1 ] =
-	  m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
-
-	// qDebug()
-	//   << "otb::StandardShader::SetCenter("
-	//   << p_screen[ 0 ] << "," << p_screen[ 1 ]
-	//   << ")";
-
-	shader->SetCenter( p_screen );
-
-	if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
-	  shader->SetSliderPosition(
-	    p_screen[
-	      shader->GetVerticalSlider()
-	      ? 1
-	      : 0
-	    ]
-	  );
-	}
+      if(!ishader.IsNull())
+      {
+      otb::StandardShader::Pointer shader(
+        otb::DynamicCast< otb::StandardShader >(
+          ishader
+        )
+      );
+      
+      assert( !shader.IsNull() );
+      
+      //
+      // Update cursor position of shader.
+      PointType p_screen;
+      
+      assert( m_GlView->GetSettings()!=NULL );
+      
+      p_screen[ 0 ] = screen.x();
+      p_screen[ 1 ] =
+        m_GlView->GetSettings()->GetViewportSize()[ 1 ] - screen.y();
+      
+      // qDebug()
+      //   << "otb::StandardShader::SetCenter("
+      //   << p_screen[ 0 ] << "," << p_screen[ 1 ]
+      //   << ")";
+      
+      shader->SetCenter( p_screen );
+      
+      if( shader->GetShaderType()==otb::SHADER_ALPHA_SLIDER )
+        shader->SetSliderPosition(
+          p_screen[
+            shader->GetVerticalSlider()
+            ? 1
+            : 0
+          ]
+        );
       }
     }
   }

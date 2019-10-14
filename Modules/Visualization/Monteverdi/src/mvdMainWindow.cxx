@@ -225,10 +225,6 @@ bool MainWindow::CheckGLCapabilities(bool forceNoGLSL)
 /*****************************************************************************/
 void MainWindow::SetGLSLEnabled(bool enabled)
 {
-#if OTB_DEBUG
-  std::cout << "MainWindow::SetGLSLEnabled( " << enabled << " )" << std::endl;
-#endif
-
   //
   // Image view
   assert( m_ImageView );
@@ -1204,7 +1200,7 @@ void MainWindow::on_action_GLSL_triggered(bool checked)
 {
   // qDebug() << this << "::on_action_GLSL_triggered(" << checked << ")";
 
-  SetGLSLEnabled( /* m_isGLSLAvailable && !m_ForceNoGLSL && */ checked );
+  SetGLSLEnabled(checked);
 }
 
 /*****************************************************************************/
