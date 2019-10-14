@@ -108,8 +108,7 @@ GlVectorActor::GlVectorActor()
     m_OptimizedRenderingActive(false),
     m_PointMarkerSize(5),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
-    m_ViewportBackwardRotationTransform(RigidTransformType::New()),
-    m_ColorIdx(0)
+    m_ViewportBackwardRotationTransform(RigidTransformType::New())
 {
   m_Color.Fill(0);
   m_Color[0]=1.0;

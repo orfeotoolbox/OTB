@@ -41,7 +41,8 @@
 namespace otb
 {
 
-GlImageActor::Tile()
+GlImageActor::Tile
+::Tile()
   : m_Loaded(false)
   , m_TextureId(0)
   , m_ImageRegion()
