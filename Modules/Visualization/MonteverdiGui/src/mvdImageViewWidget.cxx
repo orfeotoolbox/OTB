@@ -754,8 +754,7 @@ void ImageViewWidget::ListGlVersions() const
 
   if (glVersionFlags & QGLFormat::OpenGL_Version_4_0)
     qWarning() << "QGLFormat::OpenGL_Version_4_0";
-  //
-  if( glVersionFlags & QGLFormat::OpenGL_Version_3_3 )
+  if(glVersionFlags & QGLFormat::OpenGL_Version_3_3)
     qWarning() << "- QGLFormat::OpenGL_Version_3_3";
   if (glVersionFlags & QGLFormat::OpenGL_Version_3_2)
     qWarning() << "- QGLFormat::OpenGL_Version_3_2";
@@ -763,13 +762,11 @@ void ImageViewWidget::ListGlVersions() const
     qWarning() << "- QGLFormat::OpenGL_Version_3_1";
   if (glVersionFlags & QGLFormat::OpenGL_Version_3_0)
     qWarning() << "- QGLFormat::OpenGL_Version_3_0";
-  //
-  if( glVersionFlags & QGLFormat::OpenGL_Version_2_1 )
+  if(glVersionFlags & QGLFormat::OpenGL_Version_2_1)
     qWarning() << "- QGLFormat::OpenGL_Version_2_1";
   if (glVersionFlags & QGLFormat::OpenGL_Version_2_0)
     qWarning() << "- QGLFormat::OpenGL_Version_2_0";
-  //
-  if( glVersionFlags & QGLFormat::OpenGL_Version_1_5 )
+  if(glVersionFlags & QGLFormat::OpenGL_Version_1_5)
     qWarning() << "- QGLFormat::OpenGL_Version_1_5";
   if (glVersionFlags & QGLFormat::OpenGL_Version_1_4)
     qWarning() << "- QGLFormat::OpenGL_Version_1_4";
@@ -1072,7 +1069,7 @@ void
 ImageViewWidget
 ::OnResetEffectsRequested()
 {
-  StackedLayerModel * layerStack = m_Renderer->GetLayerStack();
+  StackedLayerModel* layerStack = m_Renderer->GetLayerStack();
 
   for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
        it!=layerStack->End();
@@ -1083,8 +1080,8 @@ ImageViewWidget
       VectorImageModel * imageModel =
         qobject_cast< VectorImageModel * >( it->second );
 
-      VectorImageSettings & settings = imageModel->GetSettings();
-      settings.SetEffect( EFFECT_NORMAL );
+      VectorImageSettings& settings = imageModel->GetSettings();
+      settings.SetEffect(EFFECT_NORMAL);
     }
   }
 
@@ -1096,10 +1093,10 @@ void ImageViewWidget::OnClearProjectionRequired()
 {
   // qDebug() << this << "::OnClearProjectionRequested()";
 
-  assert( m_Manipulator!=NULL );
+  assert(m_Manipulator!=NULL);
 
-  m_Manipulator->SetWkt( std::string() );
-  m_Manipulator->SetKeywordList( otb::ViewSettings::KeywordListType() );
+  m_Manipulator->SetWkt(std::string());
+  m_Manipulator->SetKeywordList(otb::ViewSettings::KeywordListType());
 
   // m_Manipulator->SetOrigin( imageModel->GetOrigin() );
   // m_Manipulator->SetSpacing( imageModel->GetSpacing() );
@@ -1826,12 +1823,7 @@ void ImageViewWidget::SaveScreenshot(bool isQuickMode)
     {
       filename += ".png";
     }
-
-  makeCurrent();
-
-  assert( m_Renderer!=NULL );
-
-  try
+    else if (selectedFilter.startsWith("JPEG"))
     {
       filename += ".jpg";
     }
@@ -1841,6 +1833,7 @@ void ImageViewWidget::SaveScreenshot(bool isQuickMode)
     }
   }
 
+  makeCurrent();
 
   assert(m_Renderer != NULL);
 
