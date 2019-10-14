@@ -479,7 +479,7 @@ void GlImageActor::Render()
   //   << "\tresolution: " << m_ResolutionAlgorithm << std::endl
   //   << "\ttile: " << m_TileSize << std::endl;
 
-  bool isShaderMode = !m_SoftwareRendering && !m_Shader.IsNull();
+  bool isShaderMode = !m_Shader.IsNull();
 
   if( isShaderMode )
   {
@@ -692,7 +692,7 @@ void GlImageActor::LoadTile(Tile& tile)
 
   assert( tile.Image() );
 
-  if( !m_SoftwareRendering && !m_Shader.IsNull())
+  if(!m_Shader.IsNull())
   {
     itk::ImageRegionConstIterator< VectorImageType > it(
       tile.Image(),

@@ -131,10 +131,6 @@ public:
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
 
-  itkBooleanMacro(SoftwareRendering );
-  itkSetMacro(SoftwareRendering, bool );
-  itkGetMacro(SoftwareRendering, bool );
-
   void CreateShader() override;
 
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
@@ -335,8 +331,6 @@ private:
 
   /** OpenGL quad. */
   std::unique_ptr< gl::Mesh > m_Mesh;
-
-  bool m_SoftwareRendering = false;
 
 }; // End class GlImageActor
 
