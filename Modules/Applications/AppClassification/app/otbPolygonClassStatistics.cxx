@@ -32,12 +32,6 @@ namespace otb
 namespace Wrapper
 {
 
-/** Utility function to negate std::isalnum */
-bool IsNotAlphaNum(char c)
-  {
-  return !std::isalnum(c);
-  }
-
 class PolygonClassStatistics : public Application
 {
 public:
@@ -53,7 +47,7 @@ public:
   itkTypeMacro(PolygonClassStatistics, otb::Application);
 
   /** Filters typedef */
-  typedef otb::OGRDataToClassStatisticsFilter<FloatVectorImageType,UInt8ImageType> FilterType;
+  typedef otb::OGRDataToClassStatisticsFilter<FloatVectorImageType, UInt8ImageType> FilterType;
 
   typedef otb::StatisticsXMLFileWriter<FloatVectorImageType::PixelType> StatWriterType;
 
@@ -63,8 +57,8 @@ public:
 
 private:
   PolygonClassStatistics()
-    {
-    }
+  {
+  }
 
   void DoInit() override
   {
@@ -72,17 +66,18 @@ private:
     SetDescription("Computes statistics on a training polygon set.");
 
     // Documentation
-    SetDocLongDescription("Process a set of geometries intended for training (they should have a field giving the associated "
-      "class). The geometries are analyzed against a support image to compute statistics:\n\n"
-      "* Number of samples per class\n"
-      "* Number of samples per geometry\n\n"
+    SetDocLongDescription(
+        "Process a set of geometries intended for training (they should have a field giving the associated "
+        "class). The geometries are analyzed against a support image to compute statistics:\n\n"
+        "* Number of samples per class\n"
+        "* Number of samples per geometry\n\n"
 
-      "An optional raster mask can be used to discard samples. Different types"
-      " of geometry are supported: polygons, lines, points. The behaviour is "
-      "different for each type of geometry:\n\n"
-      "* Polygon: select pixels whose center is inside the polygon\n"
-      "* Lines: select pixels intersecting the line\n"
-      "* Points: select closest pixel to the point");
+        "An optional raster mask can be used to discard samples. Different types"
+        " of geometry are supported: polygons, lines, points. The behaviour is "
+        "different for each type of geometry:\n\n"
+        "* Polygon: select pixels whose center is inside the polygon\n"
+        "* Lines: select pixels intersecting the line\n"
+        "* Points: select closest pixel to the point");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -90,27 +85,27 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input image");
+    AddParameter(ParameterType_InputImage, "in", "Input image");
     SetParameterDescription("in", "Support image that will be classified");
 
-    AddParameter(ParameterType_InputImage,  "mask",   "Input validity mask");
+    AddParameter(ParameterType_InputImage, "mask", "Input validity mask");
     SetParameterDescription("mask", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for statistics)");
     MandatoryOff("mask");
 
     AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
-    SetParameterDescription("vec","Input geometries to analyze");
+    SetParameterDescription("vec", "Input geometries to analyze");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output XML statistics file");
-    SetParameterDescription("out","Output file to store statistics (XML format)");
+    SetParameterDescription("out", "Output file to store statistics (XML format)");
 
     AddParameter(ParameterType_ListView, "field", "Field Name");
-    SetParameterDescription("field","Name of the field carrying the class name in the input vectors.");
-    SetListViewSingleSelectionMode("field",true);
+    SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
+    SetListViewSingleSelectionMode("field", true);
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
     MandatoryOff("layer");
-    SetDefaultParameterInt("layer",0);
+    SetDefaultParameterInt("layer", 0);
 
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
@@ -120,55 +115,54 @@ private:
     SetDocExampleParameterValue("in", "support_image.tif");
     SetDocExampleParameterValue("vec", "variousVectors.sqlite");
     SetDocExampleParameterValue("field", "CLASS");
-    SetDocExampleParameterValue("out","polygonStat.xml");
+    SetDocExampleParameterValue("out", "polygonStat.xml");
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters() override
   {
-     if ( HasValue("vec") )
-      {
-      std::string vectorFile = GetParameterString("vec");
-      ogr::DataSource::Pointer ogrDS =
-        ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
-      ogr::Layer layer = ogrDS->GetLayer(this->GetParameterInt("layer"));
-      ogr::Feature feature = layer.ogr().GetNextFeature();
+    if (HasValue("vec"))
+    {
+      std::string              vectorFile = GetParameterString("vec");
+      ogr::DataSource::Pointer ogrDS      = ogr::DataSource::New(vectorFile, ogr::DataSource::Modes::Read);
+      ogr::Layer               layer      = ogrDS->GetLayer(this->GetParameterInt("layer"));
+      ogr::Feature             feature    = layer.ogr().GetNextFeature();
 
       ClearChoices("field");
 
-      for(int iField=0; iField<feature.ogr().GetFieldCount(); iField++)
-        {
+      for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
+      {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
-        key = item;
-        std::string::iterator end = std::remove_if(key.begin(),key.end(),IsNotAlphaNum);
+        key                       = item;
+        std::string::iterator end = std::remove_if(key.begin(), key.end(), [](char c) { return !std::isalnum(c); });
         std::transform(key.begin(), end, key.begin(), tolower);
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        if(fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
-          {
-          std::string tmpKey="field."+key.substr(0, end - key.begin());
-          AddChoice(tmpKey,item);
-          }
+        if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
+        {
+          std::string tmpKey = "field." + key.substr(0, end - key.begin());
+          AddChoice(tmpKey, item);
         }
       }
+    }
 
-     // Check that the extension of the output parameter is XML (mandatory for
-     // StatisticsXMLFileWriter)
-     // Check it here to trigger the error before polygons analysis
+    // Check that the extension of the output parameter is XML (mandatory for
+    // StatisticsXMLFileWriter)
+    // Check it here to trigger the error before polygons analysis
 
-     if ( HasValue("out") )
-       {
-       // Store filename extension
-       // Check that the right extension is given : expected .xml
-       const std::string extension = itksys::SystemTools::GetFilenameLastExtension(this->GetParameterString("out"));
+    if (HasValue("out"))
+    {
+      // Store filename extension
+      // Check that the right extension is given : expected .xml
+      const std::string extension = itksys::SystemTools::GetFilenameLastExtension(this->GetParameterString("out"));
 
-       if (itksys::SystemTools::LowerCase(extension) != ".xml")
-         {
-         otbAppLogFATAL( << extension << " is a wrong extension for parameter \"out\": Expected .xml" );
-         }
-       }
+      if (itksys::SystemTools::LowerCase(extension) != ".xml")
+      {
+        otbAppLogFATAL(<< extension << " is a wrong extension for parameter \"out\": Expected .xml");
+      }
+    }
   }
 
   void DoExecute() override
@@ -180,7 +174,7 @@ private:
 
     if (selectedCFieldIdx.empty())
     {
-    otbAppLogFATAL(<<"No field has been selected for data labelling!");
+      otbAppLogFATAL(<< "No field has been selected for data labelling!");
     }
 
     std::vector<std::string> cFieldNames = GetChoiceNames("field");
@@ -207,46 +201,45 @@ private:
 
     if (doReproj)
     {
-    inputGeomSet = GeometriesType::New(vectors);
-    reprojVector = otb::ogr::DataSource::New();
-    outputGeomSet = GeometriesType::New(reprojVector);
-    // Filter instantiation
-    geometriesProjFilter = ProjectionFilterType::New();
-    geometriesProjFilter->SetInput(inputGeomSet);
-    if (imageProjectionRef.empty())
+      inputGeomSet  = GeometriesType::New(vectors);
+      reprojVector  = otb::ogr::DataSource::New();
+      outputGeomSet = GeometriesType::New(reprojVector);
+      // Filter instantiation
+      geometriesProjFilter = ProjectionFilterType::New();
+      geometriesProjFilter->SetInput(inputGeomSet);
+      if (imageProjectionRef.empty())
       {
-      geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
+        geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
       }
-    geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
-    geometriesProjFilter->SetOutput(outputGeomSet);
-    otbAppLogINFO("Reprojecting input vectors...");
-    geometriesProjFilter->Update();
+      geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
+      geometriesProjFilter->SetOutput(outputGeomSet);
+      otbAppLogINFO("Reprojecting input vectors...");
+      geometriesProjFilter->Update();
     }
 
-  FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(this->GetParameterImage("in"));
-  if (IsParameterEnabled("mask") && HasValue("mask"))
+    FilterType::Pointer filter = FilterType::New();
+    filter->SetInput(this->GetParameterImage("in"));
+    if (IsParameterEnabled("mask") && HasValue("mask"))
     {
       filter->SetMask(this->GetParameterUInt8Image("mask"));
     }
-  filter->SetOGRData(reprojVector);
-  filter->SetFieldName(fieldName);
-  filter->SetLayerIndex(this->GetParameterInt("layer"));
-  filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
+    filter->SetOGRData(reprojVector);
+    filter->SetFieldName(fieldName);
+    filter->SetLayerIndex(this->GetParameterInt("layer"));
+    filter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
-  AddProcess(filter->GetStreamer(),"Analyze polygons...");
-  filter->Update();
+    AddProcess(filter->GetStreamer(), "Analyze polygons...");
+    filter->Update();
 
-  FilterType::ClassCountMapType &classCount = filter->GetClassCountOutput()->Get();
-  FilterType::PolygonSizeMapType &polySize = filter->GetPolygonSizeOutput()->Get();
+    FilterType::ClassCountMapType&  classCount = filter->GetClassCountOutput()->Get();
+    FilterType::PolygonSizeMapType& polySize   = filter->GetPolygonSizeOutput()->Get();
 
-  StatWriterType::Pointer statWriter = StatWriterType::New();
-  statWriter->SetFileName(this->GetParameterString("out"));
-  statWriter->AddInputMap<FilterType::ClassCountMapType>("samplesPerClass",classCount);
-  statWriter->AddInputMap<FilterType::PolygonSizeMapType>("samplesPerVector",polySize);
-  statWriter->Update();
+    StatWriterType::Pointer statWriter = StatWriterType::New();
+    statWriter->SetFileName(this->GetParameterString("out"));
+    statWriter->AddInputMap<FilterType::ClassCountMapType>("samplesPerClass", classCount);
+    statWriter->AddInputMap<FilterType::PolygonSizeMapType>("samplesPerVector", polySize);
+    statWriter->Update();
   }
-
 };
 
 } // end of namespace Wrapper

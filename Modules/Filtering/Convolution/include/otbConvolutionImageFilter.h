@@ -63,28 +63,24 @@ namespace otb
  *
  * \ingroup OTBConvolution
  */
-template <class TInputImage, class TOutputImage, class TBoundaryCondition =
-      itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
-    class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
-class ITK_EXPORT ConvolutionImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
+          class TFilterPrecision = typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>
+class ITK_EXPORT ConvolutionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract dimension from input and output image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Convenient typedefs for simplifying declarations. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef ConvolutionImageFilter                                   Self;
+  typedef ConvolutionImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -108,17 +104,17 @@ public:
   {
     itkDebugMacro("setting radius to " << rad);
     if (this->m_Radius != rad)
-      {
-      this->m_Radius = rad;
+    {
+      this->m_Radius         = rad;
       unsigned int arraySize = 1;
       for (unsigned int i = 0; i < m_Radius.GetSizeDimension(); ++i)
-        {
+      {
         arraySize *= 2 * this->m_Radius[i] + 1;
-        }
+      }
       this->m_Filter.SetSize(arraySize);
       this->m_Filter.Fill(1);
       this->Modified();
-      }
+    }
   }
 
   /** Get the radius of the neighborhood of the filter*/
@@ -128,15 +124,13 @@ public:
   virtual void SetFilter(ArrayType filter)
   {
     if (filter.Size() != m_Filter.Size())
-      {
-      itkExceptionMacro(
-        "Error in SetFilter, invalid filter size:" << filter.Size() <<
-        " instead of (2*m_Radius[0]+1)*(2*m_Radius[1]+1): " << m_Filter.Size());
-      }
+    {
+      itkExceptionMacro("Error in SetFilter, invalid filter size:" << filter.Size() << " instead of (2*m_Radius[0]+1)*(2*m_Radius[1]+1): " << m_Filter.Size());
+    }
     else
-      {
+    {
       m_Filter = filter;
-      }
+    }
     this->Modified();
   }
   itkGetConstReferenceMacro(Filter, ArrayType);
@@ -150,14 +144,15 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(InputHasNumericTraitsCheck,
-                  (itk::Concept::HasNumericTraits<InputPixelType>));
-  /** End concept checking */
+  itkConceptMacro(InputHasNumericTraitsCheck, (itk::Concept::HasNumericTraits<InputPixelType>));
+/** End concept checking */
 #endif
 
 protected:
   ConvolutionImageFilter();
-  ~ConvolutionImageFilter() override {}
+  ~ConvolutionImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ConvolutionImageFilter can be implemented as a multithreaded filter.
@@ -170,8 +165,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** ConvolutionImageFilter needs a larger input requested region than
    * the output requested region.  As such, ConvolutionImageFilter needs
@@ -179,12 +173,11 @@ protected:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
 private:
-  ConvolutionImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ConvolutionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;

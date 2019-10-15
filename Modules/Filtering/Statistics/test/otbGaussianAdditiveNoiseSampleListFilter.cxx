@@ -19,38 +19,34 @@
  */
 
 
-
-
 #include "itkListSample.h"
 #include "otbGaussianAdditiveNoiseSampleListFilter.h"
 #include <fstream>
 
-typedef itk::VariableLengthVector<double> DoubleSampleType;
+typedef itk::VariableLengthVector<double>             DoubleSampleType;
 typedef itk::Statistics::ListSample<DoubleSampleType> DoubleSampleListType;
 
-typedef itk::VariableLengthVector<float> FloatSampleType;
+typedef itk::VariableLengthVector<float>             FloatSampleType;
 typedef itk::Statistics::ListSample<FloatSampleType> FloatSampleListType;
-typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
-<FloatSampleListType, DoubleSampleListType> GaussianFilterType;
+typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter<FloatSampleListType, DoubleSampleListType> GaussianFilterType;
 
 
-
-int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
+int otbGaussianAdditiveNoiseSampleListFilter(int argc, char* argv[])
 {
   if (argc < 4)
-    {
+  {
     std::cout << "Usage : test_driver output_filename sample_size samples... " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   // Compute the number of samples
-  const char * outfname = argv[1];
+  const char*  outfname   = argv[1];
   unsigned int sampleSize = atoi(argv[2]);
   if (sampleSize == 0)
-    {
+  {
     std::cerr << "Sample size is null!" << std::endl;
     return EXIT_FAILURE;
-    }
-  unsigned int nbSamples = (argc-3)/sampleSize;
+  }
+  unsigned int nbSamples = (argc - 3) / sampleSize;
 
   FloatSampleListType::Pointer inputSampleList = FloatSampleListType::New();
   inputSampleList->SetMeasurementVectorSize(sampleSize);
@@ -65,32 +61,32 @@ int otbGaussianAdditiveNoiseSampleListFilter(int argc, char * argv[])
 
   std::ofstream ofs(outfname);
 
-  ofs<<"Sample size: "<<sampleSize<<std::endl;
-  ofs<<"Nb samples : "<<nbSamples<<std::endl;
+  ofs << "Sample size: " << sampleSize << std::endl;
+  ofs << "Nb samples : " << nbSamples << std::endl;
 
   // InputSampleList
-  for(unsigned int sampleId = 0; sampleId<nbSamples; ++sampleId)
+  for (unsigned int sampleId = 0; sampleId < nbSamples; ++sampleId)
+  {
+    for (unsigned int i = 0; i < sampleSize; ++i)
     {
-    for(unsigned int i = 0; i<sampleSize; ++i)
-      {
-      sample[i]=atof(argv[index]);
+      sample[i] = atof(argv[index]);
       ++index;
-      }
-    ofs<<sample<<std::endl;
-    inputSampleList->PushBack(sample);
     }
+    ofs << sample << std::endl;
+    inputSampleList->PushBack(sample);
+  }
 
   filter->Update();
 
   DoubleSampleListType::ConstIterator outIt = filter->GetOutput()->Begin();
 
-  ofs<<"Output samples: "<<std::endl;
+  ofs << "Output samples: " << std::endl;
 
-  while(outIt != filter->GetOutput()->End())
-    {
-    ofs<<outIt.GetMeasurementVector()<<std::endl;
+  while (outIt != filter->GetOutput()->End())
+  {
+    ofs << outIt.GetMeasurementVector() << std::endl;
     ++outIt;
-    }
+  }
 
   ofs.close();
 

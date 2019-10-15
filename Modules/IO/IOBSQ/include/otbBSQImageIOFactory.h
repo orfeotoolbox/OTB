@@ -45,7 +45,10 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
-  static BSQImageIOFactory * FactoryNew() { return new BSQImageIOFactory; }
+  static BSQImageIOFactory* FactoryNew()
+  {
+    return new BSQImageIOFactory;
+  }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSQImageIOFactory, itk::ObjectFactoryBase);
@@ -62,9 +65,8 @@ protected:
   ~BSQImageIOFactory() override;
 
 private:
-  BSQImageIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  BSQImageIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

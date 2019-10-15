@@ -45,7 +45,10 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
-  static LUMImageIOFactory * FactoryNew() { return new LUMImageIOFactory; }
+  static LUMImageIOFactory* FactoryNew()
+  {
+    return new LUMImageIOFactory;
+  }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(LUMImageIOFactory, itk::ObjectFactoryBase);
@@ -62,9 +65,8 @@ protected:
   ~LUMImageIOFactory() override;
 
 private:
-  LUMImageIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  LUMImageIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -102,7 +102,7 @@ reset_qt_i18n_sources()
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 # Find python stuff
-# Version 3 is prefered before 2
+# Version 3 is preferred before 2
 set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
@@ -132,8 +132,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "7")
+set(OTB_VERSION_MAJOR "7")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -403,6 +403,7 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/UseOTB.cmake
               CMake/GenerateExportHeaderCustom.cmake
               CMake/exportheader.cmake.in
+              CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)

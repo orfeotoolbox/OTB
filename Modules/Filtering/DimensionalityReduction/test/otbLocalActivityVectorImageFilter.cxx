@@ -27,7 +27,7 @@
 #include "otbLocalActivityVectorImageFilter.h"
 
 
-int otbLocalActivityVectorImageFilterTest ( int, char* argv[] )
+int otbLocalActivityVectorImageFilterTest(int, char* argv[])
 {
   unsigned int radiusX = 1;
   unsigned int radiusY = 1;
@@ -35,30 +35,30 @@ int otbLocalActivityVectorImageFilterTest ( int, char* argv[] )
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  ReaderType::Pointer                     reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
 
   // Image filtering
-  typedef otb::LocalActivityVectorImageFilter< ImageType, ImageType > FilterType;
+  typedef otb::LocalActivityVectorImageFilter<ImageType, ImageType> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  FilterType::RadiusType radius = {{ radiusX, radiusY }};
-  filter->SetRadius( radius );
+  FilterType::RadiusType radius = {{radiusX, radiusY}};
+  filter->SetRadius(radius);
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+  ImageWriterType::Pointer                writer = ImageWriterType::New();
+  writer->SetFileName(argv[2]);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

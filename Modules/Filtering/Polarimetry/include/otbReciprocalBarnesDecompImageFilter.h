@@ -29,9 +29,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class otbBarnesDecompFunctor
  *
@@ -41,14 +42,14 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalBarnesDecompFunctor
 {
 public:
   typedef typename std::complex<double> ComplexType;
   typedef vnl_matrix<ComplexType>       VNLMatrixType;
   typedef vnl_vector<ComplexType>       VNLVectorType;
-  typedef vnl_vector<double>           VNLDoubleVectorType;
+  typedef vnl_vector<double>            VNLDoubleVectorType;
   typedef std::vector<double>           VectorType;
   typedef typename TOutput::ValueType   OutputValueType;
 
@@ -75,9 +76,9 @@ public:
     qi[2][0]           = ComplexType(0., 0.);
     ComplexType   norm = (qi.conjugate_transpose() * cov * qi)[0][0];
     VNLMatrixType ki   = cov * qi / std::sqrt(norm);
-    result[0] = static_cast<OutputValueType>(ki[0][0]);
-    result[1] = static_cast<OutputValueType>(ki[1][0]);
-    result[2] = static_cast<OutputValueType>(ki[2][0]);
+    result[0]          = static_cast<OutputValueType>(ki[0][0]);
+    result[1]          = static_cast<OutputValueType>(ki[1][0]);
+    result[2]          = static_cast<OutputValueType>(ki[2][0]);
 
 
     qi[0][0]  = ComplexType(0., 0.);
@@ -90,7 +91,7 @@ public:
     result[5] = static_cast<OutputValueType>(ki[2][0]);
 
 
-    qi[0][0]=ComplexType(0.,0.);
+    qi[0][0]  = ComplexType(0., 0.);
     qi[1][0]  = ComplexType(0., 1. / std::sqrt(2.));
     qi[2][0]  = ComplexType(1. / std::sqrt(2.), 0.);
     norm      = (qi.conjugate_transpose() * cov * qi)[0][0];

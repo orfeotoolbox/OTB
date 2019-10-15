@@ -38,10 +38,10 @@ class ITK_EXPORT KNearestNeighborsMachineLearningModelFactory : public itk::Obje
 {
 public:
   /** Standard class typedefs. */
-  typedef KNearestNeighborsMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef KNearestNeighborsMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase                       Superclass;
+  typedef itk::SmartPointer<Self>                      Pointer;
+  typedef itk::SmartPointer<const Self>                ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -65,9 +65,8 @@ protected:
   ~KNearestNeighborsMachineLearningModelFactory() override;
 
 private:
-  KNearestNeighborsMachineLearningModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  KNearestNeighborsMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

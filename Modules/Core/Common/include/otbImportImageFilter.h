@@ -42,8 +42,7 @@ namespace otb
  */
 
 template <typename TOutputImageType>
-class ITK_EXPORT ImportImageFilter :
-  public itk::ImageSource<TOutputImageType>
+class ITK_EXPORT ImportImageFilter : public itk::ImageSource<TOutputImageType>
 {
 public:
   /** Typedef for the output image.   */
@@ -78,7 +77,7 @@ public:
   typedef typename OutputImageType::PixelType TPixel;
 
   /** Get the pointer from which the image data is imported. */
-  TPixel *GetImportPointer();
+  TPixel* GetImportPointer();
 
   /** Set the pointer from which the image data is imported.  "num" is
    * the number of pixels in the block of memory. If
@@ -87,8 +86,7 @@ public:
    * buffer retains the responsibility of freeing the memory for this image
    * data.  If "LetFilterManageMemory" is true, then this class
    * will free the memory when this object is destroyed. */
-  void SetImportPointer(TPixel *ptr, unsigned long num,
-                        bool LetFilterManageMemory);
+  void SetImportPointer(TPixel* ptr, unsigned long num, bool LetFilterManageMemory);
 
   /** Set the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
@@ -97,10 +95,10 @@ public:
   void SetRegion(const RegionType& region)
   {
     if (m_Region != region)
-      {
+    {
       m_Region = region;
       this->Modified();
-      }
+    }
   }
 
   /** Get the region object that defines the size and starting index
@@ -162,11 +160,11 @@ protected:
    * given.)
    *
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-  void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* output) override;
 
 private:
-  ImportImageFilter(const ImportImageFilter &) = delete;
-  void operator =(const ImportImageFilter&) = delete;
+  ImportImageFilter(const ImportImageFilter&) = delete;
+  void operator=(const ImportImageFilter&) = delete;
 
   RegionType    m_Region;
   double        m_Spacing[OutputImageType::ImageDimension];

@@ -73,50 +73,31 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ImageViewRenderer::RenderingContext
-::RenderingContext() :
-  AbstractImageViewRenderer::RenderingContext(),
-  m_Resolution( RESOLUTION_NEAREST ),
-  m_TileSize( 256 )
+ImageViewRenderer::RenderingContext::RenderingContext() : AbstractImageViewRenderer::RenderingContext(), m_Resolution(RESOLUTION_NEAREST), m_TileSize(256)
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+#else  // USE_VIEW_SETTINGS_SIDE_EFFECT
   ,m_ViewSettings()
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 {
-  assert( I18nCoreApplication::ConstInstance()!=NULL );
+  assert(I18nCoreApplication::ConstInstance() != NULL);
 
   //
   // Rendering settings.
   {
-  QVariant value(
-    I18nCoreApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_RESOLUTION
-    )
-  );
+    QVariant value(I18nCoreApplication::Instance()->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_RESOLUTION));
 
-  m_Resolution =
-    !value.isValid()
-    ? RESOLUTION_DEFAULT
-    : static_cast< Resolution >( value.toInt() );
+    m_Resolution = !value.isValid() ? RESOLUTION_DEFAULT : static_cast<Resolution>(value.toInt());
   }
 
   {
-  QVariant value(
-    I18nCoreApplication::Instance()->RetrieveSettingsKey(
-      I18nCoreApplication::SETTINGS_KEY_TILE_SIZE
-    )
-  );
+    QVariant value(I18nCoreApplication::Instance()->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_TILE_SIZE));
 
-  m_TileSize =
-    !value.isValid()
-    ? TILE_SIZE_VALUE[ TILE_SIZE_DEFAULT ]
-    : value.toInt();
+    m_TileSize = !value.isValid() ? TILE_SIZE_VALUE[TILE_SIZE_DEFAULT] : value.toInt();
   }
 }
 
 /*****************************************************************************/
-ImageViewRenderer::RenderingContext
-::~RenderingContext()
+ImageViewRenderer::RenderingContext::~RenderingContext()
 {
 }
 
@@ -124,27 +105,22 @@ ImageViewRenderer::RenderingContext
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ImageViewRenderer
-::ImageViewRenderer( QObject* p ) :
-  AbstractImageViewRenderer( p ),
-  m_GlView( otb::GlView::New() ),
-  m_EffectsEnabled( true )
+ImageViewRenderer::ImageViewRenderer(QObject* p) : AbstractImageViewRenderer(p), m_GlView(otb::GlView::New()), m_EffectsEnabled(true)
 #ifdef _WIN32
-#else // _WIN32
+#else  // _WIN32
   ,  m_ReferencePair( NULL, otb::GlActor::Pointer() )
 #endif // _WIN32
-  // m_ModelActorPairs(),
+// m_ModelActorPairs(),
 {
 #ifdef _WIN32
   m_ReferencePair.first = NULL;
-  // m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
-#else // _WIN32
+// m_ReferencePair.second is initialized by otb::GlActor::Pointer default constructor.
+#else  // _WIN32
 #endif // _WIN32
 }
 
 /*****************************************************************************/
-ImageViewRenderer
-::~ImageViewRenderer()
+ImageViewRenderer::~ImageViewRenderer()
 {
 }
 
@@ -170,8 +146,8 @@ ImageViewRenderer
   //
   // Get and check OpenGL and GLSL versions.
 
-  const char * glVersion = NULL;
-  const char * glslVersion = NULL;
+  const char* glVersion   = NULL;
+  const char* glslVersion = NULL;
 
   assert( !m_GlView.IsNull() );
 
@@ -183,8 +159,8 @@ ImageViewRenderer
 
     isOk = glslVer>0;
 
-    if( glsl140!=NULL )
-      *glsl140 = otb::GlVersionChecker::VerCmp( glslVersion, "1.40" );
+    if (glsl140 != NULL)
+      *glsl140 = otb::GlVersionChecker::VerCmp(glslVersion, "1.40");
 
     //
     // Trace runtime OpenGL and GLSL versions.
@@ -205,12 +181,8 @@ ImageViewRenderer
   }
 
   //
-  // Set GLSL effects state.
-  // SetGLSLEnabled( isOk );
-
-  //
   // Return if check has succeeded.
-  if( isOk )
+  if (isOk)
     return true;
 
   //
@@ -225,7 +197,7 @@ ImageViewRenderer
 
   //
   // Warn user is check has failed.
-  qWarning() << ToStdString( message ).c_str();
+  qWarning() << ToStdString(message).c_str();
 
 #if 0
   QMessageBox::critical(
@@ -243,15 +215,13 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
-AbstractImageViewRenderer::RenderingContext*
-ImageViewRenderer
-::NewRenderingContext() const
+AbstractImageViewRenderer::RenderingContext* ImageViewRenderer::NewRenderingContext() const
 {
   RenderingContext* context = new ImageViewRenderer::RenderingContext();
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   //
   // Share otb::GlViewRendering settings with manipulator using
@@ -264,74 +234,56 @@ ImageViewRenderer
 }
 
 /*****************************************************************************/
-const AbstractLayerModel *
-ImageViewRenderer
-::GetReferenceModel() const
+const AbstractLayerModel* ImageViewRenderer::GetReferenceModel() const
 {
   return m_ReferencePair.first;
 }
 
 /*****************************************************************************/
-AbstractLayerModel*
-ImageViewRenderer
-::GetReferenceModel()
+AbstractLayerModel* ImageViewRenderer::GetReferenceModel()
 {
   return m_ReferencePair.first;
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::GetLayerExtent( const StackedLayerModel::KeyType & key,
-                  PointType & origin,
-                  PointType & extent  ) const
+void ImageViewRenderer::GetLayerExtent(const StackedLayerModel::KeyType& key, PointType& origin, PointType& extent) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  otb::GlActor::Pointer actor( m_GlView->GetActor( key ) );
+  otb::GlActor::Pointer actor(m_GlView->GetActor(key));
 
-  if( actor.IsNull() )
-    {
-    origin[ 0 ] = origin[ 1 ] = 0;
+  if (actor.IsNull())
+  {
+    origin[0] = origin[1] = 0;
 
-    extent[ 0 ] = extent[ 1 ] = 0;
+    extent[0] = extent[1] = 0;
 
     return;
-    }
+  }
 
-  actor->GetExtent( origin[ 0 ], origin[ 1 ], extent[ 0 ], extent[ 1 ] );
+  actor->GetExtent(origin[0], origin[1], extent[0], extent[1]);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::GetReferenceExtent( PointType& origin, PointType& extent  ) const
+void ImageViewRenderer::GetReferenceExtent(PointType& origin, PointType& extent) const
 {
-  assert( GetLayerStack()!=NULL );
+  assert(GetLayerStack() != NULL);
 
-  GetLayerExtent(
-    GetLayerStack()->GetKey( GetLayerStack()->GetReferenceIndex() ),
-    origin,
-    extent
-  );
+  GetLayerExtent(GetLayerStack()->GetKey(GetLayerStack()->GetReferenceIndex()), origin, extent);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::GetViewExtent( PointType & origin, PointType & extent ) const
+void ImageViewRenderer::GetViewExtent(PointType& origin, PointType& extent) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  m_GlView->GetExtent( origin, extent );
+  m_GlView->GetExtent(origin, extent);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::InitializeGL()
+void ImageViewRenderer::InitializeGL()
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   //
   // WARNING: This call to otb::GlView::Initialize() allocates a new
@@ -339,49 +291,45 @@ ImageViewRenderer
   // renderer and manipulator may be unshated depending on order of
   // calls.
   //
-  m_GlView->Initialize( 0, 0 );
+  m_GlView->Initialize(0, 0);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::ResizeGL( int width, int height )
+void ImageViewRenderer::ResizeGL(int width, int height)
 {
   // qDebug() << this << "::ResizeGL(" << width << "," << height << ")";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   // qDebug() << m_GlView.GetPointer();
 
-  m_GlView->Resize( width, height );
+  m_GlView->Resize(width, height);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::PaintGL( const AbstractImageViewRenderer::RenderingContext* c )
+void ImageViewRenderer::PaintGL(const AbstractImageViewRenderer::RenderingContext* c)
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  // qDebug() << this << "::PaintGL(" << c << ")";
+// qDebug() << this << "::PaintGL(" << c << ")";
 
-  // qDebug() << m_GlView.GetPointer();
+// qDebug() << m_GlView.GetPointer();
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING && 0
 
 #else // USE_REMOTE_DESKTOP_DISABLED_RENDERING
   //
   // Apply VectorImageSettings to otb::GlImageActor.
-  UpdateActors( c );
+  UpdateActors(c);
 
   //
   // Bypass rendering if needed.
-  if( IsBypassRenderingEnabled() )
-    {
+  if (IsBypassRenderingEnabled())
+  {
     // qDebug() << "}\n";
 
     return;
-    }
+  }
 
   // qDebug() << m_GlView.GetPointer() << "::BeforeRendering()";
   // qDebug() << "{";
@@ -390,9 +338,9 @@ ImageViewRenderer
   // Pre-render scene.
   m_GlView->BeforeRendering();
   {
-  //
-  // Render scene.
-  switch( c->m_RenderMode )
+    //
+    // Render scene.
+    switch (c->m_RenderMode)
     {
     case RenderingContext::RENDER_MODE_LIGHT:
       // qDebug() << "otb::GlView::LightRender()";
@@ -405,7 +353,7 @@ ImageViewRenderer
       break;
 
     default:
-      assert( false && "Unhandled RenderingContext::RenderModel value!" );
+      assert(false && "Unhandled RenderingContext::RenderModel value!");
       break;
     }
   }
@@ -413,314 +361,269 @@ ImageViewRenderer
   // Post-render scene.
   m_GlView->AfterRendering();
 
-  // qDebug() << "}";
-  // qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
+// qDebug() << "}";
+// qDebug() << m_GlView.GetPointer() << "::AfterRendering()";
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::Pick( const PointType & ptView,
-	PixelInfo::Vector & pixels ) const
+void ImageViewRenderer::Pick(const PointType& ptView, PixelInfo::Vector& pixels) const
 {
   // qDebug()
   //   << this << "::Pick("
   //   << ptView[ 0 ] << "," << ptView[ 1 ]
   //   << ")";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   //
   // Get actor keys.
-  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+  otb::GlView::StringVectorType keys(m_GlView->GetRenderingOrder());
 
   // Prepare picked pixels container.
-  pixels.resize( keys.size() );
+  pixels.resize(keys.size());
 
   // Pick each layer.
   size_t i = 0;
 
-  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
-       it != keys.end();
-       ++ it, ++ i )
-    {
+  for (otb::GlView::StringVectorType::const_iterator it(keys.begin()); it != keys.end(); ++it, ++i)
+  {
     // Register layer key.
-    pixels[ i ].m_Key = *it;
+    pixels[i].m_Key = *it;
 
     // Get actor.
-    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
-    assert( !actor.IsNull() );
+    otb::GlActor::Pointer actor(m_GlView->GetActor(*it));
+    assert(!actor.IsNull());
 
     // Get geo-interface.
-    const otb::GeoInterface * geoInterface =
-      dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+    const otb::GeoInterface* geoInterface = dynamic_cast<const otb::GeoInterface*>(actor.GetPointer());
 
     // If geo-interface...
-    if( geoInterface!=NULL )
-      {
+    if (geoInterface != NULL)
+    {
       // ...compute physical point.
-      pixels[ i ].m_HasPoint =
-	geoInterface->TransformFromViewport( pixels[ i ].m_Point, ptView, true );
-      }
+      pixels[i].m_HasPoint = geoInterface->TransformFromViewport(pixels[i].m_Point, ptView, true);
+    }
     else
-      {
-      pixels[ i ].m_HasPoint = false;
-      pixels[ i ].m_Point = PointType();
-      }
+    {
+      pixels[i].m_HasPoint = false;
+      pixels[i].m_Point    = PointType();
+    }
 
     // If image-actor...
-    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+    otb::GlImageActor::Pointer imageActor(otb::DynamicCast<otb::GlImageActor>(actor));
 
-    if( !imageActor.IsNull() )
-      {
+    if (!imageActor.IsNull())
+    {
       // ...get pixel and it's index...
-      pixels[ i ].m_HasIndex =
-      pixels[ i ].m_HasPixel =
-	imageActor->GetPixel(
-	  pixels[ i ].m_Point,
-	  pixels[ i ].m_Pixel,
-	  pixels[ i ].m_Index
-	);
+      pixels[i].m_HasIndex = pixels[i].m_HasPixel = imageActor->GetPixel(pixels[i].m_Point, pixels[i].m_Pixel, pixels[i].m_Index);
 
       // ...and get resolutions.
-      pixels[ i ].m_HasResolution = true;
-      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
-      }
+      pixels[i].m_HasResolution = true;
+      pixels[i].m_Resolution    = imageActor->GetCurrentResolution();
     }
+  }
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::GetResolutions( PixelInfo::Vector & pixels ) const
+void ImageViewRenderer::GetResolutions(PixelInfo::Vector& pixels) const
 {
   // qDebug() << this << "::GetResolutions()";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   //
   // Get actor keys.
-  otb::GlView::StringVectorType keys( m_GlView->GetRenderingOrder() );
+  otb::GlView::StringVectorType keys(m_GlView->GetRenderingOrder());
 
-  if( keys.empty() )
+  if (keys.empty())
     return;
 
   // Resize pixels container, if needed.
-  if( keys.size()!=pixels.size() )
-    pixels.resize( keys.size() );
+  if (keys.size() != pixels.size())
+    pixels.resize(keys.size());
 
   // Pick each layer.
   size_t i = 0;
 
-  for( otb::GlView::StringVectorType::const_iterator it( keys.begin() );
-       it != keys.end();
-       ++ it, ++ i )
-    {
+  for (otb::GlView::StringVectorType::const_iterator it(keys.begin()); it != keys.end(); ++it, ++i)
+  {
     // Check layer key.
-    pixels[ i ].m_Key = *it;
+    pixels[i].m_Key = *it;
 
     // Get actor.
-    otb::GlActor::Pointer actor( m_GlView->GetActor( *it ) );
-    assert( !actor.IsNull() );
+    otb::GlActor::Pointer actor(m_GlView->GetActor(*it));
+    assert(!actor.IsNull());
 
     // If image-actor...
-    otb::GlImageActor::Pointer imageActor( otb::DynamicCast< otb::GlImageActor >( actor ) );
+    otb::GlImageActor::Pointer imageActor(otb::DynamicCast<otb::GlImageActor>(actor));
 
-    if( !imageActor.IsNull() )
-      {
-      pixels[ i ].m_HasResolution = true;
-      pixels[ i ].m_Resolution = imageActor->GetCurrentResolution();
-      }
-    else
-      {
-      pixels[ i ].m_HasResolution = false;
-      }
+    if (!imageActor.IsNull())
+    {
+      pixels[i].m_HasResolution = true;
+      pixels[i].m_Resolution    = imageActor->GetCurrentResolution();
     }
+    else
+    {
+      pixels[i].m_HasResolution = false;
+    }
+  }
 }
 
 /*****************************************************************************/
-bool
-ImageViewRenderer
-::TransformToView( PointType & point,
-		   const StackedLayerModel::KeyType & key,
-		   const IndexType & index,
-		   bool isPhysical ) const
+bool ImageViewRenderer::TransformToView(PointType& point, const StackedLayerModel::KeyType& key, const IndexType& index, bool isPhysical) const
 {
-  assert( !m_GlView.IsNull() );
-  assert( !key.empty() );
+  assert(!m_GlView.IsNull());
+  assert(!key.empty());
 
-  otb::GlActor::Pointer actor( m_GlView->GetActor( key ) );
-  assert( !actor.IsNull() );
+  otb::GlActor::Pointer actor(m_GlView->GetActor(key));
+  assert(!actor.IsNull());
 
-  const otb::GeoInterface * geo =
-    dynamic_cast< const otb::GeoInterface * >( actor.GetPointer() );
+  const otb::GeoInterface* geo = dynamic_cast<const otb::GeoInterface*>(actor.GetPointer());
 
-  if( geo==NULL )
+  if (geo == NULL)
     return false;
 
-  point[ 0 ] = static_cast< double >( index[ 0 ] );
-  point[ 1 ] = static_cast< double >( index[ 1 ] );
+  point[0] = static_cast<double>(index[0]);
+  point[1] = static_cast<double>(index[1]);
 
-  return geo->TransformToViewport( point, point, isPhysical );
+  return geo->TransformToViewport(point, point, isPhysical);
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::UpdateActors( const AbstractImageViewRenderer::RenderingContext * context )
+void ImageViewRenderer::UpdateActors(const AbstractImageViewRenderer::RenderingContext* context)
 {
   // qDebug() << this << "::virtual_UpdateActors()";
 
-  assert( !m_GlView.IsNull() );
-  assert( context!=NULL );
+  assert(!m_GlView.IsNull());
+  assert(context != NULL);
 
-  StackedLayerModel * stackedLayerModel = GetLayerStack();
+  StackedLayerModel* stackedLayerModel = GetLayerStack();
 
-  if( stackedLayerModel==NULL )
+  if (stackedLayerModel == NULL)
     return;
 
-  for( StackedLayerModel::ConstIterator it( stackedLayerModel->Begin() );
-       it!=stackedLayerModel->End();
-       ++it )
-    {
-    assert( !it->first.empty() );
-    assert( it->second!=NULL );
+  for (StackedLayerModel::ConstIterator it(stackedLayerModel->Begin()); it != stackedLayerModel->End(); ++it)
+  {
+    assert(!it->first.empty());
+    assert(it->second != NULL);
 
-    if( m_GlView->ContainsActor( it->first ) )
+    if (m_GlView->ContainsActor(it->first))
+    {
+      if (it->second->inherits(VectorImageModel::staticMetaObject.className()))
       {
-      if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
-        {
         //
         // Get vector image-model.
-        VectorImageModel * vectorImageModel =
-          dynamic_cast< VectorImageModel * >( it->second );
+        VectorImageModel* vectorImageModel = dynamic_cast<VectorImageModel*>(it->second);
 
-        assert( vectorImageModel!=NULL );
+        assert(vectorImageModel != NULL);
 
         //
         // Get vector image-model data.
-        const VectorImageSettings & settings =
-          vectorImageModel->GetSettings();
+        const VectorImageSettings& settings = vectorImageModel->GetSettings();
 
-        const ImageProperties * properties =
-          vectorImageModel->GetProperties();
+        const ImageProperties* properties = vectorImageModel->GetProperties();
 
         //
         // Get GL image-actor.
-        assert(
-          m_GlView->GetActor( it->first )==
-          otb::DynamicCast< otb::GlImageActor >(
-            m_GlView->GetActor( it->first )
-          )
-        );
+        assert(m_GlView->GetActor(it->first) == otb::DynamicCast<otb::GlImageActor>(m_GlView->GetActor(it->first)));
 
-        otb::GlImageActor::Pointer imageActor(
-          otb::DynamicCast< otb::GlImageActor >(
-            m_GlView->GetActor( it->first )
-          )
-        );
-        assert( !imageActor.IsNull() );
+        otb::GlImageActor::Pointer imageActor(otb::DynamicCast<otb::GlImageActor>(m_GlView->GetActor(it->first)));
+        assert(!imageActor.IsNull());
 
-	//
-	// Apply rendering parameters.
-	{
-	const RenderingContext * ctxt = static_cast< const RenderingContext * >( context );
+        //
+        // Apply rendering parameters.
+        {
+          const RenderingContext* ctxt = static_cast<const RenderingContext*>(context);
 
-	// Resolution
-	switch( ctxt->m_Resolution )
-	  {
-	  case RESOLUTION_NEAREST:
-	    imageActor->SetResolutionAlgorithm(
-	      otb::GlImageActor::ResolutionAlgorithm::Nearest
-	    );
-	    break;
+          // Resolution
+          switch (ctxt->m_Resolution)
+          {
+          case RESOLUTION_NEAREST:
+            imageActor->SetResolutionAlgorithm(otb::GlImageActor::ResolutionAlgorithm::Nearest);
+            break;
 
-	  case RESOLUTION_LOWER:
-	    imageActor->SetResolutionAlgorithm(
-	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Lower
-	    );
-	    break;
+          case RESOLUTION_LOWER:
+            imageActor->SetResolutionAlgorithm(otb::GlImageActor::ResolutionAlgorithm::Nearest_Lower);
+            break;
 
-	  case RESOLUTION_UPPER:
-	    imageActor->SetResolutionAlgorithm(
-	      otb::GlImageActor::ResolutionAlgorithm::Nearest_Upper
-	    );
-	    break;
+          case RESOLUTION_UPPER:
+            imageActor->SetResolutionAlgorithm(otb::GlImageActor::ResolutionAlgorithm::Nearest_Upper);
+            break;
 
-	  default:
-	    assert( false && "Unexpected Resolution enum value." );
-	    break;
-	  }
+          default:
+            assert(false && "Unexpected Resolution enum value.");
+            break;
+          }
 
-	// Tile-size
-	imageActor->SetTileSize( ctxt->m_TileSize );
-	}
+          // Tile-size
+          imageActor->SetTileSize(ctxt->m_TileSize);
+        }
 
-	//
-	// Apply visibility.
-        imageActor->SetVisible( vectorImageModel->IsVisible() );
+        //
+        // Apply visibility.
+        imageActor->SetVisible(vectorImageModel->IsVisible());
 
         //
         // Apply color-setup.
         VectorImageSettings::ChannelVector channels;
 
-        settings.GetSmartChannels( channels );
+        settings.GetSmartChannels(channels);
 
-        imageActor->SetRedIdx( channels[ RGBW_CHANNEL_RED ] + 1 );
-        imageActor->SetGreenIdx( channels[ RGBW_CHANNEL_GREEN ] + 1 );
-        imageActor->SetBlueIdx( channels[ RGBW_CHANNEL_BLUE ] + 1 );
+        imageActor->SetRedIdx(channels[RGBW_CHANNEL_RED] + 1);
+        imageActor->SetGreenIdx(channels[RGBW_CHANNEL_GREEN] + 1);
+        imageActor->SetBlueIdx(channels[RGBW_CHANNEL_BLUE] + 1);
 
         //
         // Apply color-dynamics.
-	otb::ImageSettings::Pointer imageSettings( imageActor->GetImageSettings() );
-	assert( !imageSettings.IsNull() );
+        otb::ImageSettings::Pointer imageSettings(imageActor->GetImageSettings());
+        assert(!imageSettings.IsNull());
 
-        if( settings.IsGrayscaleActivated() )
-          {
-          imageSettings->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          imageSettings->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_WHITE  ) );
+        if (settings.IsGrayscaleActivated())
+        {
+          imageSettings->SetMinRed(settings.GetLowIntensity(RGBW_CHANNEL_WHITE));
+          imageSettings->SetMaxRed(settings.GetHighIntensity(RGBW_CHANNEL_WHITE));
 
-          imageSettings->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          imageSettings->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
+          imageSettings->SetMinGreen(settings.GetLowIntensity(RGBW_CHANNEL_WHITE));
+          imageSettings->SetMaxGreen(settings.GetHighIntensity(RGBW_CHANNEL_WHITE));
 
-          imageSettings->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_WHITE ) );
-          imageSettings->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_WHITE ) );
-          }
+          imageSettings->SetMinBlue(settings.GetLowIntensity(RGBW_CHANNEL_WHITE));
+          imageSettings->SetMaxBlue(settings.GetHighIntensity(RGBW_CHANNEL_WHITE));
+        }
         else
-          {
-          imageSettings->SetMinRed( settings.GetLowIntensity( RGBW_CHANNEL_RED ) );
-          imageSettings->SetMaxRed( settings.GetHighIntensity(RGBW_CHANNEL_RED  ) );
+        {
+          imageSettings->SetMinRed(settings.GetLowIntensity(RGBW_CHANNEL_RED));
+          imageSettings->SetMaxRed(settings.GetHighIntensity(RGBW_CHANNEL_RED));
 
-          imageSettings->SetMinGreen( settings.GetLowIntensity( RGBW_CHANNEL_GREEN ) );
-          imageSettings->SetMaxGreen( settings.GetHighIntensity(RGBW_CHANNEL_GREEN ) );
+          imageSettings->SetMinGreen(settings.GetLowIntensity(RGBW_CHANNEL_GREEN));
+          imageSettings->SetMaxGreen(settings.GetHighIntensity(RGBW_CHANNEL_GREEN));
 
-          imageSettings->SetMinBlue( settings.GetLowIntensity( RGBW_CHANNEL_BLUE ) );
-          imageSettings->SetMaxBlue( settings.GetHighIntensity(RGBW_CHANNEL_BLUE ) );
-          }
+          imageSettings->SetMinBlue(settings.GetLowIntensity(RGBW_CHANNEL_BLUE));
+          imageSettings->SetMaxBlue(settings.GetHighIntensity(RGBW_CHANNEL_BLUE));
+        }
 
-	// qDebug() << this << " gamma: " << settings.GetGamma();
+        // qDebug() << this << " gamma: " << settings.GetGamma();
 
-        imageSettings->SetGamma( settings.GetGamma() );
+        imageSettings->SetGamma(settings.GetGamma());
 
-        if( properties==NULL )
-          imageSettings->SetUseNoData( false );
+        if (properties == NULL)
+          imageSettings->SetUseNoData(false);
 
         else
-          {
-          imageSettings->SetUseNoData( properties->IsNoDataEnabled() );
-          imageSettings->SetNoData( properties->GetNoData() );
-          }
+        {
+          imageSettings->SetUseNoData(properties->IsNoDataEnabled());
+          imageSettings->SetNoData(properties->GetNoData());
+        }
 
-	//
-	// qDebug()
-	//   << "alpha:" << settings.GetAlpha()
-	//   << "'" << it->first << "'";
-	imageSettings->SetAlpha( settings.GetAlpha() );
+        //
+        // qDebug()
+        //   << "alpha:" << settings.GetAlpha()
+        //   << "'" << it->first << "'";
+        imageSettings->SetAlpha(settings.GetAlpha());
 
-	//
-	// Apply shader properties.
+        //
+        // Apply shader properties.
         //
         // Must use local variable to cast from T* to T::Pointer because
         // of ITK set/get macros...
@@ -765,7 +668,7 @@ ImageViewRenderer
 		    shader->GetMaxBlue() - shader->GetMinBlue()
 		  )
 #else
-		  settings.GetValue()
+                  settings.GetValue()
 #endif
 		);
 		break;
@@ -863,22 +766,18 @@ ImageViewRenderer
 	}
       //
       else
-        {
-        qDebug()
-          << __FILE__ << ":" << __LINE__
-          << ": Unhandled AbstractLayerModel derived class.";
-        }
+      {
+        qDebug() << __FILE__ << ":" << __LINE__ << ": Unhandled AbstractLayerModel derived class.";
       }
     }
+  }
 
-  m_GlView->SetRenderingOrder( stackedLayerModel->GetKeys(), false );
+  m_GlView->SetRenderingOrder(stackedLayerModel->GetKeys(), false);
 }
 
 
 /*******************************************************************************/
-void
-ImageViewRenderer
-::virtual_ClearScene( bool keepViewport )
+void ImageViewRenderer::virtual_ClearScene(bool keepViewport)
 {
   // qDebug() << this << "::virtual_ClearScene()";
 
@@ -889,7 +788,7 @@ ImageViewRenderer
   m_ReferencePair.second = otb::GlActor::Pointer();
 
   // Nothing more if keep viewport is enabled.
-  if( keepViewport )
+  if (keepViewport)
     return;
 
   // Clear reference layer.
@@ -903,23 +802,21 @@ ImageViewRenderer
 }
 
 /*******************************************************************************/
-void
-ImageViewRenderer
-::virtual_UpdateScene()
+void ImageViewRenderer::virtual_UpdateScene()
 {
   // qDebug() << this << "::virtual_UpdateScene()";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
 #if DISABLE_QUICKLOOK_VIEW
-  if( objectName()=="QuicklookViewRenderer" )
+  if (objectName() == "QuicklookViewRenderer")
     return;
 #endif
 
-  StackedLayerModel * stackedLayerModel = GetLayerStack();
+  StackedLayerModel* stackedLayerModel = GetLayerStack();
 
 
-  if( stackedLayerModel==NULL || stackedLayerModel->IsEmpty() )
+  if (stackedLayerModel == NULL || stackedLayerModel->IsEmpty())
     ClearScene();
 
   else
@@ -957,22 +854,21 @@ ImageViewRenderer
           // method?
           // -> Not sure: AbstractImageModel coud be derived as a
           // in-memory image-model.
-          VectorImageModel * vectorImageModel =
-            dynamic_cast< VectorImageModel * >( it->second );
+          VectorImageModel* vectorImageModel = dynamic_cast<VectorImageModel*>(it->second);
 
-	  // Coverity-19839
-	  // {
-	  assert( vectorImageModel!=NULL );
-	  // }
+          // Coverity-19839
+          // {
+          assert(vectorImageModel != NULL);
+          // }
 
-	  // qDebug()
-	  //   << QString( "Adding image-actor from file '%1'..." )
-	  //   .arg( vectorImageModel->GetFilename() );
+          // qDebug()
+          //   << QString( "Adding image-actor from file '%1'..." )
+          //   .arg( vectorImageModel->GetFilename() );
 
-	  // qDebug()
-	  //   << this << "\n"
-	  //   << "\tQString:" << vectorImageModel->GetFilename()
-	  //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
+          // qDebug()
+          //   << this << "\n"
+          //   << "\tQString:" << vectorImageModel->GetFilename()
+          //   << "\tstd::string" << QFile::encodeName( vectorImageModel->GetFilename() );
 
 	  if( IsGLSLEnabled() )
 	  {
@@ -988,7 +884,7 @@ ImageViewRenderer
 	    .constData()
 	    );
 
-          m_GlView->AddActor( glImageActor, it->first );
+          m_GlView->AddActor(glImageActor, it->first);
 
           // qDebug() <<
 	  //   QString( "Added image-actor '%1' from file '%2'" )
@@ -1008,22 +904,19 @@ ImageViewRenderer
 }
 
 /*******************************************************************************/
-void
-ImageViewRenderer
-::virtual_RefreshScene()
+void ImageViewRenderer::virtual_RefreshScene()
 {
   // qDebug() << this << "::virtual_RefreshScene()";
 
   //
   // Get layer-stack.
-  StackedLayerModel * stackedLayerModel = GetLayerStack();
+  StackedLayerModel* stackedLayerModel = GetLayerStack();
 
   //
   // Check if empty.
-  if( stackedLayerModel==NULL ||
-      stackedLayerModel->IsEmpty() )
-    {
-    m_ReferencePair.first = NULL;
+  if (stackedLayerModel == NULL || stackedLayerModel->IsEmpty())
+  {
+    m_ReferencePair.first  = NULL;
     m_ReferencePair.second = otb::GlActor::Pointer();
 
     // virtual_ClearProjection();
@@ -1036,48 +929,44 @@ ImageViewRenderer
     // emit ClearProjectionRequired();
 
     return;
-    }
+  }
 
   //
   // Check if non-projected mode.
-  if( !stackedLayerModel->HasReference() )
-    {
-    m_ReferencePair.first = NULL;
+  if (!stackedLayerModel->HasReference())
+  {
+    m_ReferencePair.first  = NULL;
     m_ReferencePair.second = otb::GlActor::Pointer();
 
     virtual_ClearProjection();
 
-    assert( !m_GlView.IsNull() );
-    assert( m_GlView->GetSettings() );
+    assert(!m_GlView.IsNull());
+    assert(m_GlView->GetSettings());
 
-    m_GlView->GetSettings()->SetUseProjection( false );
+    m_GlView->GetSettings()->SetUseProjection(false);
 
     emit ClearProjectionRequired();
 
     return;
-    }
+  }
 
   //
   // Otherwise, it's projected mode.
-  assert( !m_GlView.IsNull() );
-  assert( m_GlView->GetSettings()!=NULL );
+  assert(!m_GlView.IsNull());
+  assert(m_GlView->GetSettings() != NULL);
 
-  m_GlView->GetSettings()->SetUseProjection( true );
+  m_GlView->GetSettings()->SetUseProjection(true);
 
 
   //
   // Store reference-pair.
-  ModelActorPair referencePair( m_ReferencePair );
+  ModelActorPair referencePair(m_ReferencePair);
 
   //
   // Remember first layer-model as projection reference.
   m_ReferencePair.first = stackedLayerModel->GetReference();
 
-  StackedLayerModel::KeyType referenceKey(
-    stackedLayerModel->GetKey(
-      stackedLayerModel->GetReferenceIndex()
-    )
-  );
+  StackedLayerModel::KeyType referenceKey(stackedLayerModel->GetKey(stackedLayerModel->GetReferenceIndex()));
 
 #if USE_REMOTE_DESKTOP_DISABLED_RENDERING
   m_ReferencePair.second = otb::GlActor::Pointer();
@@ -1087,168 +976,126 @@ ImageViewRenderer
   //
   // Remember reference actor.
   {
-  otb::GlActor::Pointer glActor( m_GlView->GetActor( referenceKey ) );
-  // assert( !glActor.IsNull() );
+    otb::GlActor::Pointer glActor(m_GlView->GetActor(referenceKey));
+    // assert( !glActor.IsNull() );
 
-  assert( glActor==otb::DynamicCast< otb::GlImageActor >( glActor ) );
-  m_ReferencePair.second = otb::DynamicCast< otb::GlImageActor >( glActor );
-  // assert( !m_ReferencePair.second.IsNull() );
+    assert(glActor == otb::DynamicCast<otb::GlImageActor>(glActor));
+    m_ReferencePair.second = otb::DynamicCast<otb::GlImageActor>(glActor);
+    // assert( !m_ReferencePair.second.IsNull() );
   }
 
-  if( m_ReferencePair.first!=NULL )
+  if (m_ReferencePair.first != NULL)
+  {
+    if (referencePair.first == NULL)
     {
-    if( referencePair.first==NULL )
-      {
       virtual_SetProjection();
 
       emit SetProjectionRequired();
-      }
-    else if( m_ReferencePair.first!=referencePair.first )
-      {
+    }
+    else if (m_ReferencePair.first != referencePair.first)
+    {
       virtual_UpdateProjection();
 
       emit UpdateProjectionRequired();
-      }
     }
+  }
 
 #endif // USE_REMOTE_DESKTOP_DISABLED_RENDERING
 }
 
 /*****************************************************************************/
-bool
-ImageViewRenderer
-::Reproject( PointType & center,
-             SpacingType & spacing,
-             const PointType & vcenter,
-             const SpacingType & vspacing ) const
+bool ImageViewRenderer::Reproject(PointType& center, SpacingType& spacing, const PointType& vcenter, const SpacingType& vspacing) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  const StackedLayerModel * stackedLayerModel = GetLayerStack();
+  const StackedLayerModel* stackedLayerModel = GetLayerStack();
 
-  if( stackedLayerModel==NULL )
+  if (stackedLayerModel == NULL)
     return false;
 
-  return
-    m_GlView->ReprojectFromView(
-      center,
-      spacing,
-      stackedLayerModel->GetKey( stackedLayerModel->GetReferenceIndex() ),
-      vcenter,
-      vspacing
-    );
+  return m_GlView->ReprojectFromView(center, spacing, stackedLayerModel->GetKey(stackedLayerModel->GetReferenceIndex()), vcenter, vspacing);
 }
 
 /*****************************************************************************/
-bool
-ImageViewRenderer
-::GetLayerDynamics( const StackedLayerModel::KeyType & key,
-		    ParametersType & params,
-		    bool isGlobal ) const
+bool ImageViewRenderer::GetLayerDynamics(const StackedLayerModel::KeyType& key, ParametersType& params, bool isGlobal) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   // Get actor.
-  otb::GlImageActor::Pointer imageActor(
-    otb::DynamicCast< otb::GlImageActor >(
-      m_GlView->GetActor( key )
-    )
-  );
+  otb::GlImageActor::Pointer imageActor(otb::DynamicCast<otb::GlImageActor>(m_GlView->GetActor(key)));
 
-  if( imageActor.IsNull() )
+  if (imageActor.IsNull())
     return false;
 
   // Get dynamics.
-  imageActor->AutoColorAdjustment(
-    params[ 0 ], params[ 1 ],
-    params[ 2 ], params[ 3 ],
-    params[ 4 ], params[ 5 ],
-    isGlobal,
-    VectorImageModel::DEFAULT_LOD_SIZE,
-    0.02,
-    0.02
-  );
+  imageActor->AutoColorAdjustment(params[0], params[1], params[2], params[3], params[4], params[5], isGlobal, VectorImageModel::DEFAULT_LOD_SIZE, 0.02, 0.02);
 
   return true;
 }
 
 /*****************************************************************************/
-void
-ImageViewRenderer
-::SaveScreenshot( const QString & filename ) const
+void ImageViewRenderer::SaveScreenshot(const QString& filename) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  m_GlView->SaveScreenshot( QFile::encodeName( filename ).constData() );
+  m_GlView->SaveScreenshot(QFile::encodeName(filename).constData());
 }
 
 /*****************************************************************************/
-bool
-ImageViewRenderer
-::IsEffectsEnabled() const
+bool ImageViewRenderer::IsEffectsEnabled() const
 {
-    return m_EffectsEnabled;
+  return m_EffectsEnabled;
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-ImageViewRenderer
-::UpdatePixelInfo( const QPoint & screen,
-		   const PointType & /* view */,
-		   const PixelInfo::Vector & pixels )
+void ImageViewRenderer::UpdatePixelInfo(const QPoint& screen, const PointType& /* view */, const PixelInfo::Vector& pixels)
 {
   // qDebug()
   //   << this << "::UpdatePixelInfo("
   //   << screen << ", [" << view[ 0 ] << ";" << view[ 1 ]
   //   << "] )";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  if( !m_EffectsEnabled )
+  if (!m_EffectsEnabled)
     return;
 
-  for( PixelInfo::Vector::const_iterator it( pixels.begin() );
-       it != pixels.end();
-       ++ it )
-    {
-    assert( !it->m_Key.empty() );
+  for (PixelInfo::Vector::const_iterator it(pixels.begin()); it != pixels.end(); ++it)
+  {
+    assert(!it->m_Key.empty());
 
     //
     // Check GL-view.
-    assert( m_GlView->ContainsActor( it->m_Key ) );
+    assert(m_GlView->ContainsActor(it->m_Key));
 
     //
     // Get GL image-actor.
-    otb::GlImageActor::Pointer glImageActor(
-      otb::DynamicCast< otb::GlImageActor >(
-	m_GlView->GetActor( it->m_Key )
-      )
-    );
+    otb::GlImageActor::Pointer glImageActor(otb::DynamicCast<otb::GlImageActor>(m_GlView->GetActor(it->m_Key)));
 
-    if( !glImageActor.IsNull() )
-      {
+    if (!glImageActor.IsNull())
+    {
       //
       // Get image-settings.
-      otb::ImageSettings::Pointer imageSettings( glImageActor->GetImageSettings() );
-      assert( !imageSettings.IsNull() );
+      otb::ImageSettings::Pointer imageSettings(glImageActor->GetImageSettings());
+      assert(!imageSettings.IsNull());
 
       //
       // Update pixel-info of shader.
-      if( it->m_HasPixel )
-	{
-	assert( it->m_Pixel.Size()>0 );
+      if (it->m_HasPixel)
+      {
+        assert(it->m_Pixel.Size() > 0);
 
-	// qDebug()
-	//   << "R:" << it->m_Pixel[ 0 ]
-	//   << "G:" << it->m_Pixel[ 1 ]
-	//   << "B:" << it->m_Pixel[ 2 ];
+        // qDebug()
+        //   << "R:" << it->m_Pixel[ 0 ]
+        //   << "G:" << it->m_Pixel[ 1 ]
+        //   << "B:" << it->m_Pixel[ 2 ];
 
-	imageSettings->SetCurrentRed( it->m_Pixel[ 0 ] );
-	imageSettings->SetCurrentGreen( it->m_Pixel[ 1 ] );
-	imageSettings->SetCurrentBlue( it->m_Pixel[ 2 ] );
-	}
+        imageSettings->SetCurrentRed(it->m_Pixel[0]);
+        imageSettings->SetCurrentGreen(it->m_Pixel[1]);
+        imageSettings->SetCurrentBlue(it->m_Pixel[2]);
+      }
 
       //
       // Get shader.
@@ -1292,88 +1139,56 @@ ImageViewRenderer
 	}
       }
     }
+  }
 }
 
 /******************************************************************************/
-bool
-ImageViewRenderer
-::virtual_ZoomToRegion( const PointType & origin,
-			const PointType & extent,
-			PointType & center,
-			SpacingType & spacing ) const
+bool ImageViewRenderer::virtual_ZoomToRegion(const PointType& origin, const PointType& extent, PointType& center, SpacingType& spacing) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   // Use spacing of viewport as native spacing of reference layer
   // because it has already been set for projection.
   //
   // Same as of Ice-viewer.
 
-  return
-    m_GlView->ZoomToRegion(
-      origin,
-      extent,
-      m_GlView->GetSettings()->GetSpacing(),
-      center,
-      spacing
-    );
+  return m_GlView->ZoomToRegion(origin, extent, m_GlView->GetSettings()->GetSpacing(), center, spacing);
 }
 
 /******************************************************************************/
-bool
-ImageViewRenderer
-::virtual_ZoomToExtent( PointType & center, SpacingType & spacing ) const
+bool ImageViewRenderer::virtual_ZoomToExtent(PointType& center, SpacingType& spacing) const
 {
   // qDebug() << this << "::virtual_ZoomToExtent()";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   // Use spacing of viewport as native spacing of reference layer
   // because it has already been set for projection.
   //
   // Same as of Ice-viewer.
 
-  return
-    m_GlView->ZoomToExtent(
-      m_GlView->GetSettings()->GetSpacing(),
-      center,
-      spacing
-    );
+  return m_GlView->ZoomToExtent(m_GlView->GetSettings()->GetSpacing(), center, spacing);
 }
 
 /******************************************************************************/
-bool
-ImageViewRenderer
-::virtual_ZoomToLayer( const StackedLayerModel::KeyType & key,
-		       PointType & center,
-		       SpacingType & spacing ) const
+bool ImageViewRenderer::virtual_ZoomToLayer(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   // Use spacing of viewport as native spacing of reference layer
   // because it has already been set for projection.
   //
   // Same as of Ice-viewer.
 
-  return
-    m_GlView->ZoomToLayer(
-      key,
-      m_GlView->GetSettings()->GetSpacing(),
-      center,
-      spacing
-    );
+  return m_GlView->ZoomToLayer(key, m_GlView->GetSettings()->GetSpacing(), center, spacing);
 }
 
 /******************************************************************************/
-bool
-ImageViewRenderer
-::virtual_ZoomToFull( const StackedLayerModel::KeyType & key,
-		      PointType & center,
-		      SpacingType & spacing ) const
+bool ImageViewRenderer::virtual_ZoomToFull(const StackedLayerModel::KeyType& key, PointType& center, SpacingType& spacing) const
 {
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
-  return m_GlView->ZoomToFull( key, center, spacing );
+  return m_GlView->ZoomToFull(key, center, spacing);
 }
 
 /******************************************************************************/

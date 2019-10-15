@@ -41,7 +41,6 @@ template <class TOutputLabelMap>
 class ITK_EXPORT LabelMapSource : public itk::ProcessObject
 {
 public:
-
   /** Standard class typedefs. */
   typedef LabelMapSource                Self;
   typedef itk::ProcessObject            Superclass;
@@ -55,8 +54,8 @@ public:
   itkTypeMacro(LabelMapSource, itk::ProcessObject);
 
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
-  typedef TOutputLabelMap                   OutputLabelMapType;
-  typedef typename TOutputLabelMap::Pointer OutputLabelMapPointer;
+  typedef TOutputLabelMap                                    OutputLabelMapType;
+  typedef typename TOutputLabelMap::Pointer                  OutputLabelMapPointer;
 
   /** Overriding GetOutput() method */
   virtual OutputLabelMapType* GetOutput(void);
@@ -69,12 +68,11 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output vector data are cleared before processing */
-  virtual void  AllocateOutputs();
+  virtual void AllocateOutputs();
 
 private:
-  LabelMapSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  LabelMapSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

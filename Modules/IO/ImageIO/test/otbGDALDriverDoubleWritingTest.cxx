@@ -23,22 +23,22 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbGDALDriverDoubleWritingTest(int itkNotUsed(argc), char * argv[])
+int otbGDALDriverDoubleWritingTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname1 = argv[1];
-  const char * infname2 = argv[2];
-  const char * outfname1 = argv[3];
-  const char * outfname2 = argv[4];
-  const char * outfname3 = argv[5];
-  const char * outfname4 = argv[6];
+  const char* infname1  = argv[1];
+  const char* infname2  = argv[2];
+  const char* outfname1 = argv[3];
+  const char* outfname2 = argv[4];
+  const char* outfname3 = argv[5];
+  const char* outfname4 = argv[6];
 
-  typedef otb::VectorImage<double, 2>              ImageType;
-  typedef otb::ImageFileReader<ImageType>          ReaderType;
-  typedef otb::ImageFileWriter<ImageType>          WriterType;
+  typedef otb::VectorImage<double, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::ImageFileWriter<ImageType> StreamingWriterType;
 
-  ReaderType::Pointer          reader = ReaderType::New();
-  WriterType::Pointer          writer = WriterType::New();
+  ReaderType::Pointer          reader          = ReaderType::New();
+  WriterType::Pointer          writer          = WriterType::New();
   StreamingWriterType::Pointer streamingWriter = StreamingWriterType::New();
 
   reader->SetFileName(infname1);

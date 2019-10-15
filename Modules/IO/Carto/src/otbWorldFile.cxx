@@ -21,31 +21,30 @@
 #include "otbWorldFile.h"
 #include <fstream>
 
-namespace otb {
+namespace otb
+{
 
 void WorldFile::Update()
+{
+  if (m_ImageFilename.empty())
   {
-    if (m_ImageFilename.empty())
-      {
-      itkExceptionMacro(<< "The image filename must be provided");
-      }
-
-    std::string worldFilename;
-    int         i = m_ImageFilename.find_last_of('.');
-    worldFilename = m_ImageFilename.substr(0, i) + ".wld";
-
-    std::ofstream file(worldFilename);
-
-    if(!file)
-      itkExceptionMacro(<<"Can not open file "<<worldFilename<<" for output");
-    file << std::setprecision(15);
-    file << m_LonSpacing << "\n";
-    file << m_LatRotation << "\n"; //yes, in this order
-    file << m_LonRotation << "\n";
-    file << m_LatSpacing << "\n";
-    file << m_LonOrigin << "\n";
-    file << m_LatOrigin << "\n";
+    itkExceptionMacro(<< "The image filename must be provided");
   }
 
+  std::string worldFilename;
+  int         i = m_ImageFilename.find_last_of('.');
+  worldFilename = m_ImageFilename.substr(0, i) + ".wld";
 
+  std::ofstream file(worldFilename);
+
+  if (!file)
+    itkExceptionMacro(<< "Can not open file " << worldFilename << " for output");
+  file << std::setprecision(15);
+  file << m_LonSpacing << "\n";
+  file << m_LatRotation << "\n"; // yes, in this order
+  file << m_LonRotation << "\n";
+  file << m_LatSpacing << "\n";
+  file << m_LonOrigin << "\n";
+  file << m_LatOrigin << "\n";
+}
 }

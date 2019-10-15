@@ -45,18 +45,14 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TOutputPrecision = double, class TCoordRep = double>
-class OTBImageBase_EXPORT_TEMPLATE MetaImageFunction
-: public itk::FunctionBase<itk::Point<TCoordRep, 2>,
-  itk::VariableLengthVector<TOutputPrecision> >
+class OTBImageBase_EXPORT_TEMPLATE MetaImageFunction : public itk::FunctionBase<itk::Point<TCoordRep, 2>, itk::VariableLengthVector<TOutputPrecision>>
 {
 public:
   // Standard class typedefs
-  typedef MetaImageFunction                           Self;
-  typedef itk::FunctionBase<
-        itk::Point<TCoordRep, 2>,
-        itk::VariableLengthVector<TOutputPrecision> > Superclass;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
+  typedef MetaImageFunction Self;
+  typedef itk::FunctionBase<itk::Point<TCoordRep, 2>, itk::VariableLengthVector<TOutputPrecision>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   // New macro
   itkNewMacro(Self);
@@ -65,24 +61,24 @@ public:
   itkTypeMacro(MetaImageFunction, itk::FunctionBase);
 
   // Input and output typedef
-  typedef TCoordRep                                   CoordRepType;
-  typedef itk::Point<CoordRepType, 2>                  PointType;
-  typedef TOutputPrecision                            ValueType;
-  typedef itk::VariableLengthVector<ValueType>        OutputType;
+  typedef TCoordRep CoordRepType;
+  typedef itk::Point<CoordRepType, 2> PointType;
+  typedef TOutputPrecision                     ValueType;
+  typedef itk::VariableLengthVector<ValueType> OutputType;
 
   // Compatible functions typedefs
-  typedef Superclass                                  FunctionType;
-  typedef typename FunctionType::Pointer              FunctionPointerType;
-  typedef std::vector<FunctionPointerType>            FunctionContainerType;
+  typedef Superclass                       FunctionType;
+  typedef typename FunctionType::Pointer   FunctionPointerType;
+  typedef std::vector<FunctionPointerType> FunctionContainerType;
 
   /** Evaluate the function at the given location */
-  OutputType Evaluate(const PointType & point) const override;
+  OutputType Evaluate(const PointType& point) const override;
 
   /** Add a new function to the functions vector */
-  void AddFunction(FunctionType * function);
+  void AddFunction(FunctionType* function);
 
   /** Add a new function the functions vector (compatibility via adapters) */
-//  template <typename T1, typename T2> void AddFunction(itk::ImageFunction<T1, T2, TCoordRep> * function);
+  //  template <typename T1, typename T2> void AddFunction(itk::ImageFunction<T1, T2, TCoordRep> * function);
 
   /** Clear functions vector */
   void ClearFunctions();
@@ -91,7 +87,7 @@ public:
   unsigned int GetNumberOfFunctions() const;
 
   /** Retrieve the nth function */
-  FunctionType * GetNthFunction(unsigned int index);
+  FunctionType* GetNthFunction(unsigned int index);
 
   /** Remove the nth function */
   void RemoveNthFunction(unsigned int index);
@@ -107,8 +103,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MetaImageFunction(const Self& ) = delete;
-  void operator=(const Self& ) = delete;
+  MetaImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctionContainerType m_FunctionContainer;
 };

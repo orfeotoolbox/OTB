@@ -44,8 +44,7 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TFilter>
-class ITK_EXPORT PersistentFilterStreamingDecorator
-  : public itk::ProcessObject
+class ITK_EXPORT PersistentFilterStreamingDecorator : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
@@ -79,7 +78,9 @@ protected:
   /** Constructor */
   PersistentFilterStreamingDecorator();
   /** Destructor */
-  ~PersistentFilterStreamingDecorator() override {}
+  ~PersistentFilterStreamingDecorator() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -92,9 +93,8 @@ protected:
   FilterPointerType m_Filter;
 
 private:
-  PersistentFilterStreamingDecorator(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  PersistentFilterStreamingDecorator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

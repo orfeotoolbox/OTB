@@ -23,20 +23,20 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbGeodesicMorphologyLevelingFilter(int itkNotUsed(argc), char * argv[])
+int otbGeodesicMorphologyLevelingFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname     = argv[1];
-  const char * inconvfname = argv[2];
-  const char * inconcfname = argv[3];
-  const char * outfname    = argv[4];
+  const char* infname     = argv[1];
+  const char* inconvfname = argv[2];
+  const char* inconcfname = argv[3];
+  const char* outfname    = argv[4];
 
-  typedef otb::Image<double, 2>                                                  ImageType;
+  typedef otb::Image<double, 2> ImageType;
   typedef otb::GeodesicMorphologyLevelingFilter<ImageType, ImageType, ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType>                                        ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                        WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer convreader, concreader, reader;
-  reader = ReaderType::New();
+  reader     = ReaderType::New();
   convreader = ReaderType::New();
   concreader = ReaderType::New();
 

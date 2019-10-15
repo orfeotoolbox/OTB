@@ -1,3 +1,446 @@
+OTB-v.7.0.0 - Changes since version 6.6.0 (September 20th, 2019)
+----------------------------------------------------------------
+
+Features added:
+
+   * !596: Move Mosaic in OTB by Rémi Cresson
+   * !586: Add a new metadata (azimuthAnxTime) to Sentinel 1 Model by Gaëlle USSEGLIO
+   * !566: Package Python wrappers sources by Guillaume Pasero
+   * !565: Application VectorRegression by Cédric Traizet
+   * !508: New mode (SpotLight) for Cosmo sensor model by Gaëlle USSEGLIO
+   * !487: Refactor XML parameters by Victor Poughon
+   * !470: KMeans input centroids by Cédric Traizet
+   * !468: Design improvements of applications Qt Wrapper by Victor Poughon
+   * !454: Filter mouse wheel event in QComboBox of app parameters by Victor Poughon
+   * !452: ENH: Improve errors messages when loading app fail by Luc Hermitte
+   * !426: ENH: add GeoJSON driver and simplify driver selection by Jordi Inglada
+   * !414: Qgis parameter by Antoine Regimbeau
+   * !405: Logging in python wrapper by Cédric Traizet
+   * !396: Fix issue on reduced OTB-data by Stéphane Albert
+   * !386: New SAR sensor Model (CosmoSkymed) by Gaëlle USSEGLIO
+   * !371: Specify the overlap area for two S1_IW Bursts by Gaëlle USSEGLIO
+   * !370: Add a solar distance parameter in the optical calibration module by Aurélie Emilien
+   * !355: Enhance SARConcatenateBursts by Gaëlle USSEGLIO
+   * !353: Local Rx detector by Cédric Traizet
+   * !344: Number of endmember estimation application by Cédric Traizet
+   * !331: Constexpr in otbMath.h by Manuel Grizonnet
+   * !327: Switch for  application connections by Guillaume Pasero
+   * !315: Enhance SARDeburst by Gaëlle USSEGLIO
+   * !310: Add DefaultConstructibleFunctorImageFilter in OTBFunctor module by Julien Michel
+   * !299: Add Functor module with FunctorImageFilter by Julien Michel
+   * !298: ENH : Add metadata to Sentinel 1 Model by Gaëlle USSEGLIO
+   * !290: Named inputs in FunctorImageFilter by Julien Michel
+   * !289: enhance SarSensorModelAdapter by Gaëlle USSEGLIO
+   * !286: Add class probability output for RF classifiers by Jordi Inglada
+   * !241: Implementation of the raster output for Zonalstatistics by Jordi Inglada
+   * !240: ENH: add support for GDAL's ALL_TOUCHED mode by Laurențiu Nicola
+   * !227: REFAC: allow vector/xml/raster output regardless of the input type by Jordi Inglada
+   * !226: ENH: Add option to allow to always trigger otb build step from superbuild tree by Manuel Grizonnet
+   * !223: StreamingStatisticsMapFromLabelImageFilter no data support by Laurențiu Nicola
+   * !222: Zonalstatistics by Rémi Cresson
+   * !191: Parameter Refactoring : String Parameter by Antoine Regimbeau
+   * !184: Resolve "Move otbExternalModuleTemplate repository from GitHub to gitlab.orfeo-toolbox.org" by Manuel Grizonnet
+   * !179: Resolve "Display Pixel type of Image in ReadImageInfo application" by David Youssefi
+   * !176: Resolve "Output time of otbcli applications in minutes, seconds instead of scientific notation" by Emmanuelle Sarrazin
+   * !158: ENH: Add box kernel to morphological operations apps by Laurențiu Nicola
+   * !154: ENH: Allow to compute modulus and phase from 2 bands scalar image by Manuel Grizonnet
+   * !77: Nodata extended filename by @CSSI_OTB
+
+Bugs fixed:
+
+   * !592: Fix StreamingWarpImageFilter issue with empty region by Julien Michel
+   * !585: Fix PCA in Dimensionality reduction by Cédric Traizet
+   * !583: Revert Merge branch 'bugfix-streamingwarpfilter-empty-region' into 'develop'" by Julien Michel
+   * !576: BUG: fix potential TopologyException in GDAL by Guillaume Pasero
+   * !575: Fix build with Ossim >= 2.8 by Guillaume Pasero
+   * !573: Remove cookbook pdf target by Victor Poughon
+   * !572: Remove CVFold parameter from decision tree classifier in OpenCV 3 by Cédric Traizet
+   * !571: BUG: fix parameter expansion in otbenv by Guillaume Pasero
+   * !570: Packaging tweaks by Guillaume Pasero
+   * !569: Better cleaning of logger objects in the Python Swig wrapper by Cédric Traizet
+   * !568: BUG: files missing to use ENABLE_SHARED in remote modules by Guillaume Pasero
+   * !567: Crash bandmathx by Antoine Regimbeau
+   * !562: Undefined variable in cmake by Antoine Regimbeau
+   * !561: Resolve "PROJ linking to GDAL in Superbuild" by Rashad Kanavath
+   * !557: Do not return empty requested region in case StreamingWarpImageFilter by Julien Michel
+   * !552: Remove false NCLS by Antoine Regimbeau
+   * !549: COMP: master branch of diapotb breaks on windows by Guillaume Pasero
+   * !545: BUG: fix URL in OSMDataToVectorDataGenerator by Victor Poughon
+   * !537: Bug in ExtractROI (radius and extent modes) by Cédric Traizet
+   * !534: DOC: fix missing import & clarify python doc example by Victor Poughon
+   * !530: Resolve "UpdateParameters has to be called manually from the python API" by Victor Poughon
+   * !527: BUG dltest not available on macOS by Guillaume Pasero
+   * !525: BUG #1920: fix Qt 5.10.1 broken link by Guillaume Pasero
+   * !515: Type assertion in OGRFieldWrapper GetValue() by Cédric Traizet
+   * !512: Fix error : Invalid index -1 by Cédric Traizet
+   * !497: Resolve "pipeline containing a BandMath failed" by Victor Poughon
+   * !494: Add virtual descructor to RadiometricIndex abstract base class by Victor Poughon
+   * !490: Missing include in otbStackIndiceFunctor.h by Cédric Traizet
+   * !482: Fix assert in new radiometric indices by Victor Poughon
+   * !480: BUG: remove .Fixup() for GDAL 2.5 compatibility (develop fix) by Victor Poughon
+   * !478: Resolve "Assertion error on Sentinel1 product in debug build" by Victor Poughon
+   * !469: Fix spinbox locale issue (force C locale) by Victor Poughon
+   * !457: COMP: fix parenthesis warning in debug mode by Victor Poughon
+   * !455: Fix name of USE_SYSTEM_QT5 cmake var by Victor Poughon
+   * !453: BUG: sort Shark labels before encoding so that we know the order for the probability image by Jordi Inglada
+   * !450: Patch for S1 localization problems by Gaëlle USSEGLIO
+   * !448: Update mosaic git tag to include the functorImageFilter fix by Cédric Traizet
+   * !444: Fix OTBApplicationOutputImageChanged and ExecutionDone slots not being called by Victor Poughon
+   * !437: Fix assert in DotProductImageFilter by Cédric Traizet
+   * !433: Fix missing braces warning on clang by Victor Poughon
+   * !428: Fix CookBook build inside a virtualenv & add "Compiling documentation" subsection by Victor Poughon
+   * !422: Fix doxygen test by Antoine Regimbeau
+   * !420: Warning on GetJacobian with GitlabCI by Guillaume Pasero
+   * !419: Bugs in Virtual Dimensionality by Cédric Traizet
+   * !417: COMP: fix build error (missing include) by Victor Poughon
+   * !412: Refactor application parameters dynamic_cast pattern by Victor Poughon
+   * !409: Test using numpy by Antoine Regimbeau
+   * !407: Fix typo in python error message by Victor Poughon
+   * !406: BUG: #1825: use GetParameterName to get real names on composite apps by Guillaume Pasero
+   * !404: Fix bug in extract roi by Antoine Regimbeau
+   * !403: FIX: correct a minor bug in Superimpose application by Rémi Cresson
+   * !400: Fix ImageFileReader error message & add back otb::Logger::BuildFormattedEntry by Victor Poughon
+   * !391: COMP: allow Qt5 to compile on old kernels by Guillaume Pasero
+   * !388: 1808: Fix error in solar distance test by Aurélie Emilien
+   * !382: Fix warnings on Windows for the Local Rx Filter by Cédric Traizet
+   * !381: Fix FastICA by Cédric Traizet
+   * !379: Logger bug by Antoine Regimbeau
+   * !378: Resolve "otb::TestHelper::RegressionTestOgrFile() always says Yes" by Guillaume Pasero
+   * !376: Resolve "Building cookbook fails with ninja" by Guillaume Pasero
+   * !364: No progress to file by Guillaume Pasero
+   * !358: Lower threshold even more for SIFTFast to make the test pass on raoul by Julien Michel
+   * !340: Revert Merge branch '1769_drop_support_gdal_1' into 'develop'" by Cédric Traizet
+   * !339: COMP: Set boost configure specific options when building with clang on unix systems by Julien Michel
+   * !335: Add Haralick features formulas in software guide by Manuel Grizonnet
+   * !333: Remove Version installation in build_dir by Antoine Regimbeau
+   * !313: BUG : clean fftw threads only if fftw is used by Cédric Traizet
+   * !308: BUG: fix verbosity of libsvm by Guillaume Pasero
+   * !305: BUG: compat of QgisDescriptor with old params by Guillaume Pasero
+   * !304: BUG:  Quick fix for Mellin test by Antoine Regimbeau
+   * !303: BUG: missing ComplexImage params in QGis wrapper by Guillaume Pasero
+   * !302: TEST: use different test output names by Guillaume Pasero
+   * !297: COMP: fix compilation of examples with clang 7 by Guillaume Pasero
+   * !294: PKG: declare libomp as system lib in macOS package by Guillaume Pasero
+   * !293: COMP: fix OverlapSave filter on Windows by Guillaume Pasero
+   * !292: FFTW upgrade by Guillaume Pasero
+   * !288: BUG: #1761: make sure OpenMP runtime is loaded by the main executable by Guillaume Pasero
+   * !285: SuperBuild: the Ossim issue 2354 now affects all platforms by Guillaume Pasero
+   * !284: COMP: fix ossim to build with clang7 by Guillaume Pasero
+   * !283: OpenMP fixes by Guillaume Pasero
+   * !279: BUG: #1623: fix doxygen search bar by Guillaume Pasero
+   * !278: BUG #1757 fix installation of Siftfast by Guillaume Pasero
+   * !277: Resolve "Orthorectification regression in v6.6" by Julien Michel
+   * !274: BUG: #1734: warn users when producing an ENVI dataset with positive Y spacing by Guillaume Pasero
+   * !272: BUG: #1753: adding options OTB_USE_MPI and OTB_USE_SPTW for superbuild by Guillaume Pasero
+   * !271: Monteverdi: fix band numbering in color setup widget by Victor Poughon
+   * !266: BUG: #1734: replace envi format with TIF by Guillaume Pasero
+   * !265: Resolve "OTB QGIS plugin documentation is outdated" by Guillaume Pasero
+   * !263: BUG: update hdf5 url by Antoine Regimbeau
+   * !262: Composite application bugfix by Antoine Regimbeau
+   * !258: Add a BUILD_COOKBOOK cmake option to control cookbook build targets by Manuel Grizonnet
+   * !257: BUG: dict.iteritems() not supported in python 3 by Guillaume Pasero
+   * !253: BUG: clear temporary validation filename when validation ratio is set to 0 by Manuel Grizonnet
+   * !252: Resolve "error C2039: 'min': is not a member of 'std'" by Rashad Kanavath
+   * !250: BUG: fix ITK version number for packaging by Guillaume Pasero
+   * !249: Resolve "macros without proper semi-colon" by Rashad Kanavath
+   * !248: Resolve "undefined method GetResolutionsInfo in otbImageFileReader" by Rashad Kanavath
+   * !247: Resolve "update patch for opencv in superbuild" by Rashad Kanavath
+   * !239: ENH: Update superbuild to ITK 4.13.1 so that it builds with gcc 8 by Jordi Inglada
+   * !234: BUG: fix qt5 compilation on ubuntu 18.04 by Manuel Grizonnet
+   * !232: BUG: #1582: detect empty training data by Guillaume Pasero
+   * !231: BUG: fix markdown syntax in MR template by Guillaume Pasero
+   * !218: Resolve "Build fails on OtbQgisDescriptor usage if OTB_INSTALL_APP_DIR is set to lib64/otb/applications" by Guillaume Pasero
+   * !216: Resolve "OTB does not compile with GCC 8.1" by Manuel Grizonnet
+   * !210: #1652 Fine Registration correction to handle the warping option by Yannick TANGUY
+   * !205: Resolve "Orthorectification of Spot 6/7 raster sensor products leads to wrong output with lambert93 projection" by Guillaume Pasero
+   * !204: Resolve "Extract ROI extent mode produces wrong output" by Guillaume Pasero
+   * !203: Resolve "SampleAugmentation field list" by Guillaume Pasero
+   * !202: Metadata reading from compound datasets by Guillaume Pasero
+   * !201: Resolve "Fail computing KMeans Classification on image with NaN pixels" by Guillaume Pasero
+   * !198: Resolve "segfault in DEMConvert" by Antoine Regimbeau
+   * !196: Resolve "Module which generates QGIS descriptor is called Qgis while the source directory is QGIS (upper case)" by Manuel Grizonnet
+   * !195: Resolve "Monteverdi build error (superbuild)" by Manuel Grizonnet
+   * !188: Fix compilation GDALImageIO by Emmanuelle Sarrazin
+   * !187: Resolve "QLayout: Attempting to add QLayout "" to otb::Wrapper::QtWidgetParameterGroup "", which already has a layout" by Victor Poughon
+   * !186: PKG: install openCV libraries to lib by Guillaume Pasero
+   * !182: Resolve "VectorDataReprojection app does not output VectorData in physical space when using a reference image in sensor geometry" by Julien Michel
+   * !181: Resolve "OTB_APPLICATIONS_NAME_LIST is not updated when modules are activated/deactivated" by Rashad Kanavath
+   * !180: Resolve "Linux self extracting binary does not install correctly on Debian Stretch" by Rashad Kanavath
+   * !177: Remove mantis 1427 workaround by Victor Poughon
+   * !169: Resolve "apTvClMethodDTImageClassifierQB1 failing after SuperBuild OpenCV upgrade" by Victor Poughon
+   * !168: Resolve "Generation of Qgis plugin descriptors fails with latest develop" by Julien Michel
+   * !159: BUG: Improve Convert and DynamicConvert mask handling (fix #1647) by Victor Poughon
+   * !157: Resolve "install qgis descriptors into <PREFIX>/share/ on all platforms" by Rashad Kanavath
+   * !156: BUG fix issue 1656 related to eratic behavior of cmake configuration by Manuel Grizonnet
+   * !155: BUG: Be compliant with new cmake policy CMP0072 with cmake > 3.11 by Manuel Grizonnet
+   * !142: BUG: fix issue #1639 Update UserValue flag in QtWidgetParameterList by Manuel Grizonnet
+   * !126: BUG: Remove workaround for QT bug 22829 by Victor Poughon
+   * !125: BUG: Fix missing QWidget parents by Victor Poughon
+
+Refactoring:
+
+   * !595: Apply clang-format to the whole library by Cédric Traizet
+   * !593: Compatibility with OpenCV 4 by Cédric Traizet
+   * !587: Image regression application by Cédric Traizet
+   * !554: Upgrade boost by Antoine Regimbeau
+   * !551: Remove unused files in OssimPlugins by Julien Michel
+   * !548: Warning and Test fixes by Guillaume Pasero
+   * !544: Cmake 3.10.2 by Antoine Regimbeau
+   * !542: Fix some sonar qube issues by Victor Poughon
+   * !535: Remove spatial objects module by Cédric Traizet
+   * !531: Comment bfTvOverlapSaveConvolutionImageFilter on Win x86 by Guillaume Pasero
+   * !517: Fix Superbuild default OTB_DATA_ROOT by Cédric Traizet
+   * !511: Compatibility with gdal 3 by Cédric Traizet
+   * !510: Update libkml link in Superbuild by Cédric Traizet
+   * !506: Update Remote Module tags for Mosaic and SertitObject by Cédric Traizet
+   * !500: Upgrade gdal version in superbuild by Cédric Traizet
+   * !498: Prefer 'using' to 'typedef' in examples by Victor Poughon
+   * !496: Regression refactoring : Train images regression by Cédric Traizet
+   * !493: Remove java wrapping 2 by Cédric Traizet
+   * !488: Regression refactoring : TrainVectorRegression by Cédric Traizet
+   * !487: Refactor XML parameters by Victor Poughon
+   * !484: Remove docname by Victor Poughon
+   * !474: Fix sphinx warning on sphinx v1.4 by Victor Poughon
+   * !471: Clean-up of unused or low quality modules and filters by Julien Michel
+   * !464: Large refactoring of radiometric indices by Julien Michel
+   * !460: COMP: set remote module to follow master by Jordi Inglada
+   * !447: PERF: Improve convolution performances by Luc Hermitte
+   * !445: Improve build time of OTBApplicationEngine by Stéphane Albert
+   * !442: Remove complex image parameters by Cédric Traizet
+   * !441: Remove ApplicationHtmlDocGenerator by Victor Poughon
+   * !432: Remove the RAnd* family of filters by Julien Michel
+   * !427: Remove UnaryFunctorImageFilter by Cédric Traizet
+   * !424: REFAC: Drop swig/java support by Julien Michel
+   * !413: PERF: Improve FunctorImageFilter performances by Luc Hermitte
+   * !412: Refactor application parameters dynamic_cast pattern by Victor Poughon
+   * !410: PERF: Optimize compare image by Luc Hermitte
+   * !408: REFACT: Deprecate `auto_ptr` by Luc Hermitte
+   * !400: Fix ImageFileReader error message & add back otb::Logger::BuildFormattedEntry by Victor Poughon
+   * !398: Migrate developer's guide to the cookbook by Victor Poughon
+   * !395: Render examples in the CookBook by Victor Poughon
+   * !390: Catch otbImageFileReaderException in otbTestMain by Victor Poughon
+   * !387: Import OTB-Data test data under git lfs by Stéphane Albert
+   * !384: Remove stale examples by Victor Poughon
+   * !383: Move otb-data/Examples/* to otb-data/Input/ by Victor Poughon
+   * !380: Massive Software Guide clean-up by Julien Michel
+   * !377: Start usage of extern templates by Guillaume Pasero
+   * !373: Refactor FunctorImageFilter with neighborhood by Cédric Traizet
+   * !372: Make Shark Optional for the "OTBDimensionalityReductionLearning" module by Cédric Traizet
+   * !369: REFAC: 1778: Reduced input-data of MeanShiftSmoothingImageFilterQBRoad. by Stéphane Albert
+   * !366: REFAC: 1778: Reduced input-data of hyTvMDMDNMFImageFilterTest2. by Stéphane Albert
+   * !362: Remove GradientBoostedTree as done in OpenCV 3 by Guillaume Pasero
+   * !360: Faster segmentation tests by Guillaume Pasero
+   * !359: Update GIT_TAG for mosaic remote module by Rémi Cresson
+   * !357: Faster SampleAugmentation tests by Guillaume Pasero
+   * !356: WRG: Filter out remaining warnings on unknown pragmas by Julien Michel
+   * !354: REFAC: 1778: Reduced size of input-data for dmTvFineRegistrationImageFilterTestWithMeanSquare by Stéphane Albert
+   * !352: Drop python2 by Antoine Regimbeau
+   * !351: Increase default ram limit to 256MB by Victor Poughon
+   * !350: Remove const char* SetFilename overloads by Victor Poughon
+   * !349: owTvQtWidgetShow refactoring by Stéphane Albert
+   * !348: Update insource build error message by Victor Poughon
+   * !345: Refactor all keypoints tests into a single test by Julien Michel
+   * !343: Fix current warnings on dashboard by Julien Michel
+   * !342: Remove support for GDAL 1.X by Cédric Traizet
+   * !341: Updating superbuild GDAL configuration by Antoine Regimbeau
+   * !337: Update git tag for TemporalGapfilling module by Jordi Inglada
+   * !336: Remove CommandLineParser submodule by Antoine Regimbeau
+   * !335: Add Haralick features formulas in software guide by Manuel Grizonnet
+   * !334: Drop support for gdal 1.X by Cédric Traizet
+   * !331: Constexpr in otbMath.h by Manuel Grizonnet
+   * !329: Remove spurious UnaryFunctorImageFilter includes by Julien Michel
+   * !328: Rename Get/Set Variadic[Named]Input[s]() by Get/SetInput() for easier reading in FunctorImageFilter by Julien Michel
+   * !326: Replace use of TernaryFunctorImageFilter by use of FunctorImageFilter in ComplexImage by Julien Michel
+   * !325: Refactor PanSharpening module to use FunctorImageFilter everywhere by Julien Michel
+   * !324: Remove convert app by Cédric Traizet
+   * !323: ENH: declare constants in otbMath.h as constexpr by Manuel Grizonnet
+   * !321: Use FunctorImageFilter to refactor filters in MorphologicalProfiles module by Julien Michel
+   * !320: Remove OTB_USE_DEPRECATED, TileMapImageIO and VectorDataRendering by Victor Poughon
+   * !319: Use functor filter in app image utils by Yannick TANGUY
+   * !318: Refactor filters in Polarimetry module to use new FunctorFilter by Manuel Grizonnet
+   * !311: ENH: update cmake minimum required in tutorial by Victor Poughon
+   * !309: REFAC: use FunctorFilter in DomainTransform by Julien Michel
+   * !307: Remove ParameterType_Empty by Victor Poughon
+   * !301: ENH: initialize the number of openMP threads after any modification by command line by Guillaume Pasero
+   * !300: PKG: enable diapotb in SuperBuild with RemoteModules by Guillaume Pasero
+   * !299: Add Functor module with FunctorImageFilter by Julien Michel
+   * !296: Integrate diapotb as official remote module by Guillaume Pasero
+   * !295: Update deprecated cmake policies to NEW by Manuel Grizonnet
+   * !287: Filtering warnings for clang7 by Guillaume Pasero
+   * !275: Review applications parameter order by Victor Poughon
+   * !273: Update .clang-format by Victor Poughon
+   * !269: Remove LARGEINPUT dependency of SoftwareGuide build by Victor Poughon
+   * !264: Bug fixes and refactors from clang-tidy by Victor Poughon
+   * !245: ENH: update phenotb remote module git tag by Jordi Inglada
+   * !244: Deprecated TileMap and prTeCoordinateToNameExampleTest by Antoine Regimbeau
+   * !243: Remove `Modules/Adapters/OpenThreads` by Laurențiu Nicola
+   * !236: Deprecate mapnik in 7.0 by Guillaume Pasero
+   * !235: Make the CookBook a CMake target by Victor Poughon
+   * !233: Refactor small region merging by Cédric Traizet
+   * !230: REFAC: move code to functions so that DoExecute logic is readable by Jordi Inglada
+   * !229: ImageIOBase AsString functions should be static by Guillaume Pasero
+   * !227: REFAC: allow vector/xml/raster output regardless of the input type by Jordi Inglada
+   * !225: WRG: fix warnings declaration shadows a previous local seen with gcc 8 by Manuel Grizonnet
+   * !224: Change map projections backend to use Gdal instead of OSSIM by Julien Michel
+   * !221: Remove unused OSSIM based classes by Julien Michel
+   * !219: Warnings fixes (clang and OSSIM) by Guillaume Pasero
+   * !208: More warning fixes for Shark by Guillaume Pasero
+   * !206: Some warning fixes by Guillaume Pasero
+   * !199: Remove more c_str with itk::ExceptionObject string constructor by Victor Poughon
+   * !192: Revert Merge branch 'new_contributors' into 'develop'" by Manuel Grizonnet
+   * !190: WRG: fix unused parameter warning by Victor Poughon
+   * !189: Remove more c_str with SetFileName string overload by Victor Poughon
+   * !173: Remove  all *New tests by Julien Michel
+   * !172: REFAC: remove unnecessary calls to c_str (2nd attempt) by Victor Poughon
+   * !171: fstream and iostream clean-up by Julien Michel
+   * !170: WRG: add missing overrides by Victor Poughon
+   * !167: Refactor WrapperParameter code to avoid method bodies in header by Julien Michel
+   * !163: ENH: Use std math instead of vcl by Laurențiu Nicola
+   * !162: Fix warnings on OTB develop branches by Manuel Grizonnet
+   * !161: Refactor in Modules/Wrappers/QtWidget by Victor Poughon
+   * !160: Merge release-6.6 into develop without the shark revert by Victor Poughon
+   * !152: rename files with txx extension to hxx by Manuel Grizonnet
+   * !150: Refactor of otbWrapperApplication.h by Victor Poughon
+   * !145: Resolve "Debug mode without try {} catch(...) in otbApplicationLauncherCommandLine" by Julien Michel
+   * !144: Resolve "Warn otbcli user about unused parameters" by Julien Michel
+   * !139: SuperBuild: Upgrade to OpenCV 3.4.1 by Victor Poughon
+   * !138: REFAC: include-what-you-use in Modules/Core/ by Victor Poughon
+   * !133: C++14: Replace comments by '= delete' by Victor Poughon
+   * !131: C++14: Replace ITK_OVERRIDE by override by Victor Poughon
+   * !130: C++14: Replace ITK_NULLPTR by nullptr by Victor Poughon
+   * !127: COMP: fix gcc 7 'defined' warnings by Victor Poughon
+   * !123: New custom widgets for Float and Int parameters by Victor Poughon
+
+CI:
+
+   * !589: Mentions of copyright check by Sébastien Dinot
+   * !584: Fixes for NamespaceHandler by Guillaume Pasero
+   * !582: Script to setup a namespace for OTB imported targets by Guillaume Pasero
+   * !581: Contributors check by Sébastien Dinot
+   * !571: BUG: fix parameter expansion in otbenv by Guillaume Pasero
+   * !563: CI move Superbuild Artifact repository by Guillaume Pasero
+   * !559: DOC: add badges for CI and coverage by Guillaume Pasero
+   * !558: CI: fixing cdash links on forks by Guillaume Pasero
+   * !556: CI simple contributing by Guillaume Pasero
+   * !550: CI Artifacts by Guillaume Pasero
+   * !543: CI coverage by Guillaume Pasero
+   * !539: Add QA related jobs to CI pipeline by Sébastien Dinot
+   * !538: Ci contributing update by Guillaume Pasero
+   * !536: CI Fixes episode N by Guillaume Pasero
+   * !526: CI Fix CDash error report by Guillaume Pasero
+   * !524: CI Windows by Guillaume Pasero
+   * !523: CI: deploy by Antoine Regimbeau
+   * !522: CI: add large input test by Antoine Regimbeau
+   * !521: CI improvements for QA by Guillaume Pasero
+   * !520: CI: Pipelines for develop and release branches by Guillaume Pasero
+   * !519: Update HowToRelease by Guillaume Pasero
+   * !513: CI: Enable diapotb by Guillaume Pasero
+   * !507: CI Merge Ubuntus by Guillaume Pasero
+   * !505: CI: Enable ccache macos by Guillaume Pasero
+   * !504: CI: fix fast build by Guillaume Pasero
+   * !499: CI Add MacOS by Antoine Regimbeau
+   * !491: CI: packaging by Antoine Regimbeau
+   * !489: CI: change git and ssh setup by Guillaume Pasero
+   * !486: CI Use single token for API by Guillaume Pasero
+   * !483: CI: fixed architecture by Antoine Regimbeau
+   * !476: CI: fix image name to satisfy regexp by Guillaume Pasero
+   * !475: CI: use official registry by Guillaume Pasero
+   * !473: CI fixes for documentation by Guillaume Pasero
+   * !466: Superbuild CI on Centos 6 by Stéphane Albert
+   * !465: CI: add fast precheck step by Guillaume Pasero
+   * !463: Ci local builds by Guillaume Pasero
+   * !462: CI: only 1 bionic build needed by Guillaume Pasero
+   * !461: CI: enable documentation build by Guillaume Pasero
+   * !459: Superbuild CI by Antoine Regimbeau
+   * !456: Various CI fixes for a lighter dashboard by Guillaume Pasero
+   * !449: CI: change build name and export short SHA to cdash by Guillaume Pasero
+   * !443: Link with CDASH by Antoine Regimbeau
+   * !438: Fix CI failing fetch by Antoine Regimbeau
+   * !436: Add Debian to CI by Antoine Regimbeau
+   * !430: Improve Git LFS performances by Guilhem Bonnefille
+   * !429: Factorize build images specification by Guilhem Bonnefille
+   * !423: CI: need to simplify CI scripts by Guillaume Pasero
+   * !418: CI: enable ccache on ubuntu-llvm by Guillaume Pasero
+   * !416: CI setup all pipelines by Guillaume Pasero
+   * !399: CI: use lld linker on ubuntu by Guillaume Pasero
+   * !397: CI: use docker images from gbonnefille registry by Guillaume Pasero
+   * !394: CI: allow per site configuration by Guillaume Pasero
+   * !389: CI: use ninja by Guillaume Pasero
+   * !385: Allow CI to fail by Antoine Regimbeau
+   * !374: New CI for OTB by Antoine Regimbeau
+
+Documentation:
+
+   * !594: Fix typo in ossimCosmoSkymedModel by Laurențiu Nicola
+   * !591: Fix non compliant headers by Cédric Traizet
+   * !590: Error in FunctorImageFilter.rst example by Julien Michel
+   * !588: MultivariateAlterationDetector: consistency between doc and code by Cédric Traizet
+   * !587: Image regression application by Cédric Traizet
+   * !580: Refactoring of the BandMathX documentation, and fix OpticalCalibration documentation by Cédric Traizet
+   * !578: DOC: fix documentation_changes template by Guillaume Pasero
+   * !577: Add a mailmap file by Sébastien Dinot
+   * !564: Simplify the QGIS documentation by Antoine Regimbeau
+   * !560: Add Agustin Lobo to PSC by Victor Poughon
+   * !547: Update version of compiler and add sb version by Antoine Regimbeau
+   * !538: Ci contributing update by Guillaume Pasero
+   * !534: DOC: fix missing import & clarify python doc example by Victor Poughon
+   * !532: DOC: updates to parts of the documentation within the apps by Daniel McInerney
+   * !514: DOC: review recipe residual registration by Victor Poughon
+   * !509: Update PSC.md to add Julien Radoux as a PSC member by Julien Michel
+   * !503: Small update in documentation of step parameter in BlockMatching application by Julien Michel
+   * !502: Remove Travis and Coverity badges from README.md by Julien Michel
+   * !501: Review change detection examples by Victor Poughon
+   * !495: Fix BandMathX documentation by Cédric Traizet
+   * !492: Display deprecation status in application wrappers by Cédric Traizet
+   * !485: Add Archlinux installation documentation by Victor Poughon
+   * !481: Add a section on functor filter in new C++ cookbook part by Julien Michel
+   * !477: Examples review (part 1) by Victor Poughon
+   * !472: Add clang-format-diff command line to MR checklist by Julien Michel
+   * !451: Documentation for atmoshperic correction parameters in OpticalCalibration by Cédric Traizet
+   * !441: Remove ApplicationHtmlDocGenerator by Victor Poughon
+   * !440: No data documentation in Segmentation by Cédric Traizet
+   * !439: DOC: use double quotes for string parameter examples by Victor Poughon
+   * !435: Remove Software Guide by Victor Poughon
+   * !431: Show alternative versions in the CookBook by Victor Poughon
+   * !428: Fix CookBook build inside a virtualenv & add "Compiling documentation" subsection by Victor Poughon
+   * !425: Hypserspectral image processing recipe by Cédric Traizet
+   * !415: Reorder cookbook sections and update style by Victor Poughon
+   * !411: DOC: remove the OTB-Data-Examples step from how-to-release by Guillaume Pasero
+   * !398: Migrate developer's guide to the cookbook by Victor Poughon
+   * !395: Render examples in the CookBook by Victor Poughon
+   * !380: Massive Software Guide clean-up by Julien Michel
+   * !375: Cookbook FAQ updates & Contributors section by Victor Poughon
+   * !363: Migrate 'Compiling from source' documentation to CookBook by Victor Poughon
+   * !347: Bump copyright date by Julien Michel
+   * !335: Add Haralick features formulas in software guide by Manuel Grizonnet
+   * !332: Fix cookbook warnings and formatting by Victor Poughon
+   * !322: DOC: improve documentation on how to pass multiple additional options to otb cmake cache by Manuel Grizonnet
+   * !316: Christmas CookBook by Victor Poughon
+   * !312: Add missing listview to doxygen by Victor Poughon
+   * !291: Qt-Qwt dependency in superbuild by Antoine Regimbeau
+   * !282: DOC: suggested changes to the documentation by Daniel McInerney
+   * !265: Resolve "OTB QGIS plugin documentation is outdated" by Guillaume Pasero
+   * !256: Small Typo by Jee Roen
+   * !254: ENH: Redispatch applications tagged as Misc to more user oriented tag available… by Manuel Grizonnet
+   * !246: Add install section to README.md by Victor Poughon
+   * !238: Typo in cookbook by Victor Poughon
+   * !228: Document output of training applications by Guillaume Pasero
+   * !217: DOC: dmci edits to cookbook and installation tex file by Daniel McInerney
+   * !207: DOC: add missing packages needed to compile otb with superbuild on ubuntu 18.04 by Manuel Grizonnet
+   * !200: Resolve "Possible confusion when using single-value-mode parameter-lists in CLI" by Victor Poughon
+   * !185: DOC: update list of contributors by Manuel Grizonnet
+   * !178: Resolve "Some ITK paths are wrong in the SoftwareGuide" by Yannick TANGUY
+   * !175: #1611 - Document ParameterType_Bool by Yannick TANGUY
+   * !174: Adopt SemVer for 7.0.0 and migrate release template to a gitlab issue template by Victor Poughon
+   * !153: ENH: Document that conversion applications in otb don't support complex pixel types as output by Manuel Grizonnet
+   * !149: ENH: display parameter description as tool tip for the QtWidgetBoolParameter by Manuel Grizonnet
+   * !140: DOC: Minor fixes in Software Guide by Victor Poughon
+   * !137: DOC: Set of proposed edits to the documentation by Daniel McInerney
+   * !136: DOC: add checklist to MR template by Victor Poughon
+   * !132: ENH: Add comments to MR template by Victor Poughon
+   * !129: Update screenshots in Monteverdi Cookbook section with wrong RGB color composition by Manuel Grizonnet
+   * !124: Document third party environment variables by Julien Michel
+
 OTB-v.6.6.0 - Changes since version 6.4.0 (June 20th, 2018)
 -----------------------------------------------------------
 

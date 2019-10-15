@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -32,24 +30,23 @@
 #include "otbStreamingResampleImageFilter.h"
 
 
-
-int otbComplexMomentsImageFunction(int itkNotUsed(argc), char * argv[])
+int otbComplexMomentsImageFunction(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  unsigned int p((unsigned int) ::atoi(argv[2]));
-  unsigned int q((unsigned int) ::atoi(argv[3]));
-  const char * outputFilename  = argv[4];
+  const char*  inputFilename = argv[1];
+  unsigned int p((unsigned int)::atoi(argv[2]));
+  unsigned int q((unsigned int)::atoi(argv[3]));
+  const char*  outputFilename = argv[4];
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   typedef otb::ComplexMomentsImageFunction<InputImageType> CMType;
   typedef CMType::OutputType                               OutputType;
 
-  ReaderType::Pointer reader         = ReaderType::New();
+  ReaderType::Pointer reader   = ReaderType::New();
   CMType::Pointer     function = CMType::New();
 
   reader->SetFileName(inputFilename);
@@ -71,42 +68,39 @@ int otbComplexMomentsImageFunction(int itkNotUsed(argc), char * argv[])
 
   function->SetNeighborhoodRadius(3);
   Result = function->EvaluateAtIndex(index);
-  for (unsigned int k=0; k<=p; ++k)
+  for (unsigned int k = 0; k <= p; ++k)
+  {
+    for (unsigned int l = 0; l <= q; ++l)
     {
-    for (unsigned int l=0; l<=q; ++l)
-      {
       outputStream << "ComplexMoment c(" << k << l << ") : " << Result.at(k).at(l) << std::endl;
-      }
     }
+  }
   outputStream.close();
 
   return EXIT_SUCCESS;
 }
 
 
-int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * argv[])
+int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  unsigned int p((unsigned int) ::atoi(argv[2]));
-  unsigned int q((unsigned int) ::atoi(argv[3]));
+  const char*  inputFilename = argv[1];
+  unsigned int p((unsigned int)::atoi(argv[2]));
+  unsigned int q((unsigned int)::atoi(argv[3]));
 
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType,  Dimension>                          InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
-  typedef otb::StreamingResampleImageFilter<InputImageType,
-    InputImageType,
-    double>                                                               StreamingResampleImageFilterType;
-  typedef otb::BCOInterpolateImageFunction<InputImageType,
-    double>                                                               InterpolatorType;
-  typedef otb::ComplexMomentsImageFunction<InputImageType>                FunctionType;
-  typedef FunctionType::OutputType                                        OutputType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::StreamingResampleImageFilter<InputImageType, InputImageType, double> StreamingResampleImageFilterType;
+  typedef otb::BCOInterpolateImageFunction<InputImageType, double> InterpolatorType;
+  typedef otb::ComplexMomentsImageFunction<InputImageType> FunctionType;
+  typedef FunctionType::OutputType                         OutputType;
 
-  ReaderType::Pointer                         reader = ReaderType::New();
-  StreamingResampleImageFilterType::Pointer   resampler = StreamingResampleImageFilterType::New();
-  InterpolatorType::Pointer                   interpolator = InterpolatorType::New();
-  FunctionType::Pointer                       function1 = FunctionType::New();
-  FunctionType::Pointer                       function2 = FunctionType::New();
+  ReaderType::Pointer                       reader       = ReaderType::New();
+  StreamingResampleImageFilterType::Pointer resampler    = StreamingResampleImageFilterType::New();
+  InterpolatorType::Pointer                 interpolator = InterpolatorType::New();
+  FunctionType::Pointer                     function1    = FunctionType::New();
+  FunctionType::Pointer                     function2    = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
@@ -146,28 +140,23 @@ int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char * ar
 
   error = 0.0;
 
-  for (unsigned int k=0; k<=p; ++k)
+  for (unsigned int k = 0; k <= p; ++k)
+  {
+    for (unsigned int l = 0; l <= q; ++l)
     {
-    for (unsigned int l=0; l<=q; ++l)
-      {
-      error += std::pow(std::abs( Result1.at(k).at(l) - Result2.at(k).at(l) ), 2);
+      error += std::pow(std::abs(Result1.at(k).at(l) - Result2.at(k).at(l)), 2);
 
-      std::cout << "Original - C" << k << l
-                << " : " << Result1.at(k).at(l)
-                << "  /  Scaled - C" << k << l
-                << " : " << Result2.at(k).at(l) << std::endl;
-      }
+      std::cout << "Original - C" << k << l << " : " << Result1.at(k).at(l) << "  /  Scaled - C" << k << l << " : " << Result2.at(k).at(l) << std::endl;
     }
+  }
 
-  error = std::sqrt(error)/(q+p);
-  std::cout << "Error : " << error << std::endl
-            << std::endl;
+  error = std::sqrt(error) / (q + p);
+  std::cout << "Error : " << error << std::endl << std::endl;
 
   if (error > 1E-3)
-    {
-    itkGenericExceptionMacro( << "Error = " << error
-                              << "  > 1E-3     -> TEST FAILLED" << std::endl );
-    }
+  {
+    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-3     -> TEST FAILLED" << std::endl);
+  }
 
   return EXIT_SUCCESS;
 }

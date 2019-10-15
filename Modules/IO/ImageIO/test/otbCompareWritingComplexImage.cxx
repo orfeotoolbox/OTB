@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
@@ -35,29 +33,29 @@
 int otbCompareWritingComplexImageTest(int argc, char* argv[])
 {
   if (argc < 7)
-    {
-    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>"  << std::endl;
+  {
+    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
-  unsigned int startX = (unsigned int)(::atoi(argv[3]));
-  unsigned int startY = (unsigned int)(::atoi(argv[4]));
-  unsigned int sizeX = (unsigned int)(::atoi(argv[5]));
-  unsigned int sizeY = (unsigned int)(::atoi(argv[6]));
+  const char*  inputFilename  = argv[1];
+  const char*  outputFilename = argv[2];
+  unsigned int startX         = (unsigned int)(::atoi(argv[3]));
+  unsigned int startY         = (unsigned int)(::atoi(argv[4]));
+  unsigned int sizeX          = (unsigned int)(::atoi(argv[5]));
+  unsigned int sizeY          = (unsigned int)(::atoi(argv[6]));
 
   typedef std::complex<float> ComplexPixelType;
   typedef float               PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int          Dimension = 2;
 
-  typedef otb::Image<ComplexPixelType,  Dimension> ComplexImageType;
-  typedef otb::Image<PixelType,  Dimension>        ImageType;
-  typedef otb::ImageFileReader<ComplexImageType>   ReaderType;
-  typedef otb::ImageFileWriter<ComplexImageType>   WriterType;
-  typedef otb::ExtractROI<ComplexPixelType, ComplexPixelType>  ExtractROIFilterType;
-  typedef otb::StreamingCompareImageFilter<ImageType>          CompareFilterType;
-  typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType>     RealExtractorType;
+  typedef otb::Image<ComplexPixelType, Dimension> ComplexImageType;
+  typedef otb::Image<PixelType, Dimension>        ImageType;
+  typedef otb::ImageFileReader<ComplexImageType> ReaderType;
+  typedef otb::ImageFileWriter<ComplexImageType> WriterType;
+  typedef otb::ExtractROI<ComplexPixelType, ComplexPixelType> ExtractROIFilterType;
+  typedef otb::StreamingCompareImageFilter<ImageType> CompareFilterType;
+  typedef itk::ComplexToRealImageFilter<ComplexImageType, ImageType>      RealExtractorType;
   typedef itk::ComplexToImaginaryImageFilter<ComplexImageType, ImageType> ImaginaryExtractorType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -83,7 +81,7 @@ int otbCompareWritingComplexImageTest(int argc, char* argv[])
   readerAfterWrite->Update();
 
   /* Compare Real Part */
-  RealExtractorType::Pointer realExtractor = RealExtractorType::New();
+  RealExtractorType::Pointer realExtractor           = RealExtractorType::New();
   RealExtractorType::Pointer realExtractorAfterWrite = RealExtractorType::New();
 
   realExtractor->SetInput(extractROIFilter->GetOutput());
@@ -95,7 +93,7 @@ int otbCompareWritingComplexImageTest(int argc, char* argv[])
   compareRealPartFilter->Update();
 
   /* Compare Imaginary Part */
-  ImaginaryExtractorType::Pointer imagExtractor = ImaginaryExtractorType::New();
+  ImaginaryExtractorType::Pointer imagExtractor           = ImaginaryExtractorType::New();
   ImaginaryExtractorType::Pointer imagExtractorAfterWrite = ImaginaryExtractorType::New();
 
   imagExtractor->SetInput(extractROIFilter->GetOutput());
@@ -106,21 +104,21 @@ int otbCompareWritingComplexImageTest(int argc, char* argv[])
   compareImagPartFilter->SetInput2(imagExtractorAfterWrite->GetOutput());
   compareImagPartFilter->Update();
 
-  std::cout << " Real Part comparison : " << compareRealPartFilter->GetMSE()<< std::endl;
-  std::cout << " Imaginary Part comparison : " << compareImagPartFilter->GetMSE()<< std::endl;
+  std::cout << " Real Part comparison : " << compareRealPartFilter->GetMSE() << std::endl;
+  std::cout << " Imaginary Part comparison : " << compareImagPartFilter->GetMSE() << std::endl;
 
 
-  if( compareRealPartFilter->GetMSE() > 0.0 )
-    {
+  if (compareRealPartFilter->GetMSE() > 0.0)
+  {
     std::cout << " Real part not the same " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  if( compareImagPartFilter->GetMSE() > 0.0 )
-    {
+  if (compareImagPartFilter->GetMSE() > 0.0)
+  {
     std::cout << " Imaginary part not the same" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
 
   return EXIT_SUCCESS;

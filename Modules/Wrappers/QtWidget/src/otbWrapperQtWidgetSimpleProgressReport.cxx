@@ -36,12 +36,12 @@ QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QWidget* parent) : it
 
 void QtWidgetSimpleProgressReport::SetModel(QtWidgetModel* model)
 {
-  connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show );
-  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init );
-  connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess );
+  connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show);
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init);
+  connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess);
 
   m_AddProcessCommand = AddProcessCommandType::New();
-  m_AddProcessCommand->SetCallbackFunction( this, &QtWidgetSimpleProgressReport::ProcessEvent );
+  m_AddProcessCommand->SetCallbackFunction(this, &QtWidgetSimpleProgressReport::ProcessEvent);
 
   connect(this, &itk::QtProgressBar::SetValueChanged, this, &itk::QtProgressBar::setValue);
   connect(model, &QtWidgetModel::SetProgressReportDone, this, &itk::QtProgressBar::reset);
@@ -53,21 +53,19 @@ QtWidgetSimpleProgressReport::~QtWidgetSimpleProgressReport()
 {
 }
 
-void
-QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
-                                      const itk::EventObject & event2 )
+void QtWidgetSimpleProgressReport::ProcessEvent(itk::Object* itkNotUsed(caller), const itk::EventObject& event2)
 {
-  if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event2 ) )
-    {
-    const AddProcessToWatchEvent* eventToWatch = dynamic_cast< const  AddProcessToWatchEvent*> ( &event2 );
+  if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid(event2))
+  {
+    const AddProcessToWatchEvent* eventToWatch = dynamic_cast<const AddProcessToWatchEvent*>(&event2);
 
-    if(eventToWatch)
-      {
-      m_CurrentProcess = eventToWatch->GetProcess();
-      m_CurrentDescription =  eventToWatch->GetProcessDescription();
+    if (eventToWatch)
+    {
+      m_CurrentProcess     = eventToWatch->GetProcess();
+      m_CurrentDescription = eventToWatch->GetProcessDescription();
       emit AddNewProcessToReport();
-      }
     }
+  }
 }
 
 void QtWidgetSimpleProgressReport::ReportProcess()
@@ -81,6 +79,5 @@ void QtWidgetSimpleProgressReport::Init()
   this->setValue(0);
   emit SetText(QString(""));
 }
-
 }
 }

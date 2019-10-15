@@ -76,39 +76,34 @@ class OTBMonteverdiCore_EXPORT ProgressInterface
 {
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   virtual ~ProgressInterface();
 
   /**
    */
-  virtual void SetProgress( double ) = 0;
+  virtual void SetProgress(double) = 0;
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   ProgressInterface();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
 };
 

@@ -19,7 +19,6 @@
  */
 
 
-
 #include <fstream>
 #include <iostream>
 
@@ -40,35 +39,35 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
 
   PointType geoPoint;
 
-  geoPoint[0] = atof(argv[1]);
-  geoPoint[1] = atof(argv[2]);
-  const char * outfname = argv[3];
+  geoPoint[0]          = atof(argv[1]);
+  geoPoint[1]          = atof(argv[2]);
+  const char* outfname = argv[3];
 
-  TransformType::Pointer wgs2utm        = TransformType::New();
+  TransformType::Pointer wgs2utm = TransformType::New();
   wgs2utm->SetInputProjectionRef("EPSG:4326");   // WGS 84
   wgs2utm->SetOutputProjectionRef("EPSG:32631"); // UTM 31 N
   wgs2utm->InstantiateTransform();
 
-  TransformType::Pointer utm2wgs        = TransformType::New();
+  TransformType::Pointer utm2wgs = TransformType::New();
   wgs2utm->GetInverse(utm2wgs);
 
-  TransformType::Pointer wgs2lambert    = TransformType::New();
-  wgs2lambert->SetInputProjectionRef("EPSG:4326");   // WGS 84
+  TransformType::Pointer wgs2lambert = TransformType::New();
+  wgs2lambert->SetInputProjectionRef("EPSG:4326"); // WGS 84
   wgs2lambert->SetOutputProjectionRef("EPSG:27572");
 
   wgs2lambert->InstantiateTransform();
 
-  TransformType::Pointer lambert2wgs    = TransformType::New();
+  TransformType::Pointer lambert2wgs = TransformType::New();
   wgs2lambert->GetInverse(lambert2wgs);
 
-  TransformType::Pointer wgs2wgs        = TransformType::New();
-  wgs2wgs->SetInputProjectionRef("EPSG:4326");   // WGS 84
-  wgs2wgs->SetOutputProjectionRef("EPSG:4326");  // WGS 84
+  TransformType::Pointer wgs2wgs = TransformType::New();
+  wgs2wgs->SetInputProjectionRef("EPSG:4326");  // WGS 84
+  wgs2wgs->SetOutputProjectionRef("EPSG:4326"); // WGS 84
   wgs2wgs->InstantiateTransform();
 
-  TransformType::Pointer utm2utm        = TransformType::New();
-  utm2utm->SetInputProjectionRef("EPSG:32631");   // UTM 31 N
-  utm2utm->SetOutputProjectionRef("EPSG:32631");  // UTM 31 N
+  TransformType::Pointer utm2utm = TransformType::New();
+  utm2utm->SetInputProjectionRef("EPSG:32631");  // UTM 31 N
+  utm2utm->SetOutputProjectionRef("EPSG:32631"); // UTM 31 N
   utm2utm->InstantiateTransform();
 
   TransformType::Pointer lambert2lambert = TransformType::New();
@@ -76,14 +75,14 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
   lambert2lambert->SetOutputProjectionRef("EPSG:27572");
 
   lambert2lambert->InstantiateTransform();
-  
-  TransformType::Pointer utm2lambert    = TransformType::New();
-  utm2lambert->SetInputProjectionRef("EPSG:32631");  // UTM
+
+  TransformType::Pointer utm2lambert = TransformType::New();
+  utm2lambert->SetInputProjectionRef("EPSG:32631"); // UTM
   utm2lambert->SetOutputProjectionRef("EPSG:27572");
 
   utm2lambert->InstantiateTransform();
 
-  TransformType::Pointer lambert2utm    = TransformType::New();
+  TransformType::Pointer lambert2utm = TransformType::New();
   utm2lambert->GetInverse(lambert2utm);
 
   std::ofstream ofs;
@@ -99,14 +98,12 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
 
   PointType utmPoint, lambertPoint, tmtPoint;
 
-  utmPoint = wgs2utm->TransformPoint(geoPoint);
+  utmPoint     = wgs2utm->TransformPoint(geoPoint);
   lambertPoint = wgs2lambert->TransformPoint(geoPoint);
   ofs.precision(3);
 
-  ofs << "Testing utm 31 north to utm 31 north: " << utmPoint << " -> " << utm2utm->TransformPoint(utmPoint) <<
-  std::endl;
-  ofs << "Testing lambert 93 to lambert 93: " << lambertPoint << " -> " <<
-  lambert2lambert->TransformPoint(lambertPoint) << std::endl;
+  ofs << "Testing utm 31 north to utm 31 north: " << utmPoint << " -> " << utm2utm->TransformPoint(utmPoint) << std::endl;
+  ofs << "Testing lambert 93 to lambert 93: " << lambertPoint << " -> " << lambert2lambert->TransformPoint(lambertPoint) << std::endl;
 
   ofs << std::endl << "Testing geo 2 carto ..." << std::endl << std::endl;
 
@@ -130,11 +127,9 @@ int otbGenericRSTransformWithSRID(int itkNotUsed(argc), char* argv[])
 
   ofs.precision(3);
 
-  ofs << "Testing lambert 93 to utm 31 north: " << lambertPoint << " -> " <<
-  lambert2utm->TransformPoint(lambertPoint) << std::endl;
-  ofs << "Testing utm 31 north to lambert 93: " << utmPoint << " -> " << utm2lambert->TransformPoint(utmPoint) <<
-  std::endl;
-  
+  ofs << "Testing lambert 93 to utm 31 north: " << lambertPoint << " -> " << lambert2utm->TransformPoint(lambertPoint) << std::endl;
+  ofs << "Testing utm 31 north to lambert 93: " << utmPoint << " -> " << utm2lambert->TransformPoint(utmPoint) << std::endl;
+
 
   ofs.close();
 

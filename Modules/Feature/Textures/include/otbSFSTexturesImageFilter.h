@@ -55,17 +55,16 @@ namespace otb
 */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SFSTexturesImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT SFSTexturesImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef SFSTexturesImageFilter                             Self;
-  typedef TInputImage                                        InputImageType;
-  typedef TOutputImage                                       OutputImageType;
+  typedef SFSTexturesImageFilter Self;
+  typedef TInputImage            InputImageType;
+  typedef TOutputImage           OutputImageType;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,18 +73,18 @@ public:
   itkTypeMacro(UnaryFunctorNeighborhoodImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef typename InputImageType::ConstPointer                                       InputImagePointerType;
-  typedef typename InputImageType::RegionType                                         InputImageRegionType;
-  typedef typename InputImageType::PixelType                                          InputImagePixelType;
-  typedef typename InputImageType::SizeType                                           InputImageSizeType;
-  typedef typename OutputImageType::Pointer                                           OutputImagePointerType;
-  typedef typename OutputImageType::RegionType                                        OutputImageRegionType;
-  typedef typename OutputImageType::PixelType                                         OutputImagePixelType;
-  typedef itk::ConstNeighborhoodIterator<TInputImage>                                 NeighborhoodIteratorType;
-  typedef typename NeighborhoodIteratorType::RadiusType                               RadiusType;
+  typedef typename InputImageType::ConstPointer         InputImagePointerType;
+  typedef typename InputImageType::RegionType           InputImageRegionType;
+  typedef typename InputImageType::PixelType            InputImagePixelType;
+  typedef typename InputImageType::SizeType             InputImageSizeType;
+  typedef typename OutputImageType::Pointer             OutputImagePointerType;
+  typedef typename OutputImageType::RegionType          OutputImageRegionType;
+  typedef typename OutputImageType::PixelType           OutputImagePixelType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
   typedef Functor::SFSTexturesFunctor<NeighborhoodIteratorType, OutputImagePixelType> FunctorType;
-  typedef typename FunctorType::OutputType                                            FunctorOutputType;
-  typedef itk::ProcessObject                                                          ProcessObjectType;
+  typedef typename FunctorType::OutputType FunctorOutputType;
+  typedef itk::ProcessObject               ProcessObjectType;
 
   /**Set/Get the radius of neighborhood.*/
   itkGetMacro(Radius, unsigned int);
@@ -167,19 +166,18 @@ public:
    *  6: SD
    *  Set to 1 means the texture will be computed.
    **/
-  typedef enum {LENGTH = 1, WIDTH, PSI, WMEAN, RATIO, SD} FeatureType;
+  typedef enum { LENGTH = 1, WIDTH, PSI, WMEAN, RATIO, SD } FeatureType;
 
   void SetFeatureStatus(FeatureType id, bool isSelected)
   {
     if (static_cast<unsigned int>(id) > this->GetTexturesStatus().size() || id == 0)
-      {
-      itkExceptionMacro(
-        << "Invalid texture index " << id << ", must be in [1;" << this->GetTexturesStatus().size() << "]");
-      }
+    {
+      itkExceptionMacro(<< "Invalid texture index " << id << ", must be in [1;" << this->GetTexturesStatus().size() << "]");
+    }
     else
-      {
+    {
       this->GetFunctor().SetTextureStatus(id - 1, isSelected);
-      }
+    }
   }
 
   std::vector<bool> GetTexturesStatus()
@@ -190,35 +188,37 @@ public:
   void InitFeatureStatus(bool status);
 
   /** Return output length image */
-  const OutputImageType * GetLengthOutput() const;
-  OutputImageType * GetLengthOutput();
+  const OutputImageType* GetLengthOutput() const;
+  OutputImageType*       GetLengthOutput();
 
   /** Return output width image */
-  const OutputImageType * GetWidthOutput() const;
-  OutputImageType * GetWidthOutput();
+  const OutputImageType* GetWidthOutput() const;
+  OutputImageType*       GetWidthOutput();
 
   /** Return output PSI image */
-  const OutputImageType * GetPSIOutput() const;
-  OutputImageType * GetPSIOutput();
+  const OutputImageType* GetPSIOutput() const;
+  OutputImageType*       GetPSIOutput();
 
   /** Return output WMean image */
-  const OutputImageType * GetWMeanOutput() const;
-  OutputImageType * GetWMeanOutput();
+  const OutputImageType* GetWMeanOutput() const;
+  OutputImageType*       GetWMeanOutput();
 
   /** Return output ratio image */
-  const OutputImageType * GetRatioOutput() const;
-  OutputImageType * GetRatioOutput();
+  const OutputImageType* GetRatioOutput() const;
+  OutputImageType*       GetRatioOutput();
 
   /** Return output SD image */
-  const OutputImageType * GetSDOutput() const;
-  OutputImageType * GetSDOutput();
+  const OutputImageType* GetSDOutput() const;
+  OutputImageType*       GetSDOutput();
 
-  void GenerateOutputInformation() override;
+  void                     GenerateOutputInformation() override;
   std::vector<FunctorType> m_FunctorList;
 
 protected:
   SFSTexturesImageFilter();
-  ~SFSTexturesImageFilter() override{}
+  ~SFSTexturesImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void BeforeThreadedGenerateData() override;
@@ -227,12 +227,11 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  SFSTexturesImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SFSTexturesImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Radius;
   FunctorType  m_Functor;
-
 };
 
 } // end namespace otb

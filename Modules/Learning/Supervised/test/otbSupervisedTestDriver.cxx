@@ -33,15 +33,15 @@ void RegisterTests()
   REGISTER_TEST(otbConfusionMatrixMeasurementsTest);
   REGISTER_TEST(otbConfusionMatrixConcatenateTest);
   REGISTER_TEST(otbExhaustiveExponentialOptimizerTest);
-  
-  #ifdef OTB_USE_LIBSVM
+
+#ifdef OTB_USE_LIBSVM
   REGISTER_TEST(otbLibSVMMachineLearningModelCanRead);
   REGISTER_TEST(otbLibSVMMachineLearningModel);
   REGISTER_TEST(otbLibSVMRegressionTests);
   REGISTER_TEST(otbLabelMapClassifier);
-  #endif
-  
-  #ifdef OTB_USE_OPENCV
+#endif
+
+#ifdef OTB_USE_OPENCV
   // can read tests
   REGISTER_TEST(otbSVMMachineLearningModelCanRead);
   REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);

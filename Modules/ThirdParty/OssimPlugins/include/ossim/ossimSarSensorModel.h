@@ -159,12 +159,16 @@ public:
       unsigned long endLine;
       unsigned long startSample;
       unsigned long endSample;
+      double        azimuthAnxTime;
       friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
       {
          return os << "{ azimuthStartTime: " << v.azimuthStartTime
             <<        ", azimuthStopTime: "  << v.azimuthStopTime
             <<        ", startLine: "        << v.startLine
             <<        ", stopLine: "         << v.endLine
+	    <<        ", startSample: "      << v.startSample
+            <<        ", stopSample: "       << v.endSample
+	    <<        ", azimuthAnxTime:"    << v.azimuthAnxTime
             <<        "}";
       }
    };
@@ -517,6 +521,8 @@ protected:
    
    TimeType                                    theFirstLineTime;
    TimeType                                    theLastLineTime;
+
+   unsigned int                                theGeomVersion; // version of input geom
 
    unsigned long                                theNumberOfLinesPerBurst;
    unsigned long                                theNumberOfSamplesPerBurst;

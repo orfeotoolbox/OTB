@@ -53,24 +53,19 @@ The interest points can then be extracted with a thresholding filter.
  */
 
 template <class TInputImage, class TOutputImage>
-class HarrisImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class HarrisImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef HarrisImageFilter                                        Self;
+  typedef HarrisImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
 
@@ -81,17 +76,14 @@ public:
 
   typedef typename OutputImageType::PixelType OutputPixelType;
 
-//  typedef typename InputImageType::SizeType SizeType;
+  //  typedef typename InputImageType::SizeType SizeType;
 
-  typedef itk::Image<itk::SymmetricSecondRankTensor<
-                             typename itk::NumericTraits<InputPixelType>::RealType,
-                             InputImageDimension>,
-                     InputImageDimension>  TensorType;
+  typedef itk::Image<itk::SymmetricSecondRankTensor<typename itk::NumericTraits<InputPixelType>::RealType, InputImageDimension>, InputImageDimension>
+      TensorType;
 
   typedef itk::HessianRecursiveGaussianImageFilter<InputImageType, TensorType> HessianFilterType;
 
-  typedef itk::RecursiveGaussianImageFilter<TensorType,
-      TensorType>                     GaussianFilterType;
+  typedef itk::RecursiveGaussianImageFilter<TensorType, TensorType>          GaussianFilterType;
   typedef otb::HessianToScalarImageFilter<TensorType, OutputImageType>       HessianToScalarFilterType;
   typedef otb::MultiplyByScalarImageFilter<OutputImageType, OutputImageType> MultiplyScalarFilterType;
 
@@ -104,7 +96,9 @@ public:
 
 protected:
   HarrisImageFilter();
-  ~HarrisImageFilter() override {}
+  ~HarrisImageFilter() override
+  {
+  }
 
   void GenerateData() override;
 
@@ -112,17 +106,17 @@ protected:
 
 private:
   HarrisImageFilter(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_SigmaD;
   double m_SigmaI;
   double m_Alpha;
 
-  typename HessianFilterType::Pointer m_HessianFilter;
-  typename GaussianFilterType::Pointer m_GaussianFilter0;
-  typename GaussianFilterType::Pointer m_GaussianFilter1;
+  typename HessianFilterType::Pointer         m_HessianFilter;
+  typename GaussianFilterType::Pointer        m_GaussianFilter0;
+  typename GaussianFilterType::Pointer        m_GaussianFilter1;
   typename HessianToScalarFilterType::Pointer m_HessianToScalarFilter;
-  typename MultiplyScalarFilterType::Pointer m_MultiplyScalarFilter;
+  typename MultiplyScalarFilterType::Pointer  m_MultiplyScalarFilter;
 };
 } // end namespace otb
 

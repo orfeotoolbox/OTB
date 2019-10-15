@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbMSTARImageIO.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -28,12 +26,12 @@
 int otbMSTARImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::MSTARImageIO::Pointer lMSTARImageIO = otb::MSTARImageIO::New();
-  bool                       lCanRead = lMSTARImageIO->CanReadFile(argv[1]);
+  bool                       lCanRead      = lMSTARImageIO->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::MSTARImageIO : impossible d'ouvrir l'image MSTAR " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

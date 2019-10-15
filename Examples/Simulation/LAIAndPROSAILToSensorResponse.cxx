@@ -209,7 +209,7 @@ public:
     if ((!mask && !m_InvertedMask) || (mask && m_InvertedMask))
     {
       for (unsigned int i = 0; i < m_SatRSR->GetNbBands(); i++)
-        pix[i] = static_cast<typename OutputPixelType::ValueType>(0);
+        pix[i]            = static_cast<typename OutputPixelType::ValueType>(0);
       return pix;
     }
 
@@ -254,13 +254,13 @@ public:
     // or the spectra has been set from outside the functor (ex. bare soil, etc.)
     else if (m_LabelSpectra.find(label) != m_LabelSpectra.end())
     {
-      for (unsigned int i = 0; i < SimNbBands; i++)
+      for (unsigned int i    = 0; i < SimNbBands; i++)
         hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>(m_LabelSpectra[label][i]);
     }
     // or the class does not exist
     else
     {
-      for (unsigned int i = 0; i < SimNbBands; i++)
+      for (unsigned int i    = 0; i < SimNbBands; i++)
         hxSpectrum[i].second = static_cast<typename OutputPixelType::ValueType>(0);
     }
     // Spectral response \code{aResponse} is set using \code{hxSpectrum}.
@@ -285,7 +285,7 @@ public:
     // \code{pix} value is returned for desired Satellite bands
 
     for (unsigned int i = 0; i < m_SatRSR->GetNbBands(); i++)
-      pix[i] = static_cast<typename OutputPixelType::ValueType>(reducedResponse[i].second);
+      pix[i]            = static_cast<typename OutputPixelType::ValueType>(reducedResponse[i].second);
     return pix;
   }
 
@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
 
   using SimuFunctorType = otb::Functor::ProsailSimulatorFunctor<LAIPixelType, LabelType, MaskPixelType, SimulatedImageType::PixelType, SpectraParameterType,
                                                                 LabelParameterMapType, AcquistionParsType, SatRSRType>;
-  using SimulatorType   = otb::TernaryFunctorImageFilterWithNBands<LAIImageType, LabelImageType, MaskImageType, SimulatedImageType, SimuFunctorType>;
+  using SimulatorType = otb::TernaryFunctorImageFilterWithNBands<LAIImageType, LabelImageType, MaskImageType, SimulatedImageType, SimuFunctorType>;
 
   // Read the acquisition parameter file which is like
   // Angl val

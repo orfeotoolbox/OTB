@@ -49,7 +49,7 @@
 
 namespace mvd
 {
-  
+
 /*
   TRANSLATOR mvd::I18nMainWindow
 
@@ -74,22 +74,17 @@ namespace
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-I18nMainWindow
-::I18nMainWindow( QWidget* p, Qt::WindowFlags flags ) :
-  QMainWindow( p, flags )
+I18nMainWindow::I18nMainWindow(QWidget* p, Qt::WindowFlags flags) : QMainWindow(p, flags)
 {
 }
 
 /*****************************************************************************/
-I18nMainWindow
-::~I18nMainWindow()
+I18nMainWindow::~I18nMainWindow()
 {
 }
 
 /*****************************************************************************/
-void
-I18nMainWindow
-::Initialize()
+void I18nMainWindow::Initialize()
 {
   /*
   // Default setup.
@@ -101,21 +96,11 @@ I18nMainWindow
 
   // Connect Appllication and MainWindow when selected model is about
   // to change.
-  QObject::connect(
-    I18nApplication::Instance(),
-    SIGNAL( AboutToChangeModel( const AbstractModel* ) ),
-    this,
-    SLOT( OnAboutToChangeModel( const AbstractModel* ) )
-  );
+  QObject::connect(I18nApplication::Instance(), SIGNAL(AboutToChangeModel(const AbstractModel*)), this, SLOT(OnAboutToChangeModel(const AbstractModel*)));
 
   // Connect Application and MainWindow when selected model has been
   // changed.
-  QObject::connect(
-    I18nApplication::Instance(),
-    SIGNAL( ModelChanged( AbstractModel* ) ),
-    this,
-    SLOT( OnModelChanged( AbstractModel* ) )
-  );
+  QObject::connect(I18nApplication::Instance(), SIGNAL(ModelChanged(AbstractModel*)), this, SLOT(OnModelChanged(AbstractModel*)));
 
   virtual_ConnectUI();
 
@@ -123,135 +108,104 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
-QDockWidget*
-I18nMainWindow
-::AddWidgetToDock( QWidget* widget,
-                   const QString& dockName,
-                   const QString& dockTitle,
-                   Qt::DockWidgetArea dockArea,
-                   DockLayoutFlags flags )
+QDockWidget* I18nMainWindow::AddWidgetToDock(QWidget* widget, const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea,
+                                             DockLayoutFlags flags)
 {
   // New dock.
-  QDockWidget* dockWidget = new QDockWidget( dockTitle, this );
+  QDockWidget* dockWidget = new QDockWidget(dockTitle, this);
 
   // You can use findChild( dockName ) to get dock-widget.
-  dockWidget->setObjectName( dockName );
-  dockWidget->setWidget( widget );
+  dockWidget->setObjectName(dockName);
+  dockWidget->setWidget(widget);
 
   // Features.
-  dockWidget->setFloating( flags.testFlag( DOCK_LAYOUT_FLOATING ) );
-  dockWidget->setFeatures(
-    QDockWidget::DockWidgetMovable |
-    QDockWidget::DockWidgetFloatable |
-    QDockWidget::DockWidgetClosable
-  );
+  dockWidget->setFloating(flags.testFlag(DOCK_LAYOUT_FLOATING));
+  dockWidget->setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetClosable);
 
   // dockWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
   // dockWidget->adjustSize();
 
   // Add dock.
-  addDockWidget( dockArea, dockWidget );
+  addDockWidget(dockArea, dockWidget);
 
   //
   return dockWidget;
 }
 
 /*****************************************************************************/
-VectorImageModel *
-I18nMainWindow
-::ImportImage( const QString& filename,
-               int widthVal,
-               int heightVal )
+VectorImageModel* I18nMainWindow::ImportImage(const QString& filename, int widthVal, int heightVal)
 {
-  return
-    QObjectCast< VectorImageModel * >(
-      Import(
-        // New dataset-importer worker.
-        // It will be auto-deleted by background-task.
-        new ImageImporter(
-          filename,
-          widthVal, heightVal
-        )
-      ),
-      "QObject is not a VectorImageModel."
-    );
+  return QObjectCast<VectorImageModel*>(Import(
+                                            // New dataset-importer worker.
+                                            // It will be auto-deleted by background-task.
+                                            new ImageImporter(filename, widthVal, heightVal)),
+                                        "QObject is not a VectorImageModel.");
 }
 
 /*****************************************************************************/
-bool
-I18nMainWindow
-::BuildGDALOverviews( const QStringList & filenames )
+bool I18nMainWindow::BuildGDALOverviews(const QStringList& filenames)
 {
-  ImportImagesDialog * importDialog = new ImportImagesDialog( filenames, this );
+  ImportImagesDialog* importDialog = new ImportImagesDialog(filenames, this);
   // The import dialog should be deleted before leaving this function
 
-  if( importDialog->GetEffectiveCount()<1 )
-    {
+  if (importDialog->GetEffectiveCount() < 1)
+  {
     delete importDialog;
     importDialog = NULL;
     return true;
-    }
+  }
 
   int result = importDialog->exec();
 
-  if( result== QDialog::Rejected )
-    {
+  if (result == QDialog::Rejected)
+  {
     delete importDialog;
     importDialog = NULL;
     return false;
-    }
+  }
 
-  if( result==QDialog::Accepted )
-    {
+  if (result == QDialog::Accepted)
+  {
     // AbstractWorker will be automatically deleted by BackgroundTask in
     // ::Import().
-    OverviewBuilder * builder =
-      new OverviewBuilder(
-	importDialog->GetGDALOverviewsBuilders()
-      );
+    OverviewBuilder* builder = new OverviewBuilder(importDialog->GetGDALOverviewsBuilders());
 
     delete importDialog;
     importDialog = NULL;
 
-    Import( builder );
-    }
+    Import(builder);
+  }
 
   if (importDialog)
-    {
+  {
     delete importDialog;
     importDialog = NULL;
-    }
+  }
   return true;
 }
 
 /*****************************************************************************/
-QObject *
-I18nMainWindow
-::Import( AbstractWorker * importer )
+QObject* I18nMainWindow::Import(AbstractWorker* importer)
 {
-  assert( importer );
+  assert(importer);
 
   //
   // Background task.
 
   // New background-task running worker.
   // Will be self auto-deleted when worker has finished.
-  BackgroundTask* task = new BackgroundTask( importer, false, this );
+  BackgroundTask* task = new BackgroundTask(importer, false, this);
 
   //
   // Progress dialog.
-  TaskProgressDialog progress(
-    task,
-    this,
-    Qt::CustomizeWindowHint | Qt::WindowTitleHint
-  );
+  TaskProgressDialog progress(task, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 
-  progress.setWindowModality( Qt::WindowModal );
-  progress.setAutoReset( false );
-  progress.setAutoClose( false );
-  progress.setCancelButton( NULL );
-  progress.setMinimumDuration( 0 );
+  progress.setWindowModality(Qt::WindowModal);
+  progress.setAutoReset(false);
+  progress.setAutoClose(false);
+  progress.setCancelButton(NULL);
+  progress.setMinimumDuration(0);
 
   //
   // Result.
@@ -263,12 +217,12 @@ I18nMainWindow
   task = NULL;
 
   // MANTIS-921 (then, process result).
-  if( button!=QDialog::Accepted )
-    {
-    assert( progress.GetObject()==NULL );
+  if (button != QDialog::Accepted)
+  {
+    assert(progress.GetObject() == NULL);
 
     return NULL;
-    }
+  }
 
   // qDebug() << "object:" << progress.GetObject< DatasetModel >();
 
@@ -278,93 +232,71 @@ I18nMainWindow
 }
 
 /*****************************************************************************/
-void
-I18nMainWindow
-::closeEvent( QCloseEvent * e )
+void I18nMainWindow::closeEvent(QCloseEvent* e)
 {
-  QMainWindow::closeEvent( e );
+  QMainWindow::closeEvent(e);
 }
 
 /*****************************************************************************/
-void
-I18nMainWindow
-::virtual_InitializeUI()
+void I18nMainWindow::virtual_InitializeUI()
 {
   // Change to NULL model to force emitting GUI signals when GUI is
   // instantiated. So, GUI will be initialized and controller-widgets
   // disabled.
-  I18nApplication::Instance()->SetModel( NULL );
+  I18nApplication::Instance()->SetModel(NULL);
 }
 
 /*****************************************************************************/
-void
-I18nMainWindow
-::SaveLayout( int version ) const
+void I18nMainWindow::SaveLayout(int version) const
 {
   // qDebug() << this << "::SaveLayout()";
 
-  assert( I18nCoreApplication::Instance()!=NULL );
+  assert(I18nCoreApplication::Instance() != NULL);
 
-  QString name( objectName() );
+  QString name(objectName());
 
-  I18nCoreApplication::Instance()
-    ->StoreSettingsKey( name + "Geometry", saveGeometry() );
+  I18nCoreApplication::Instance()->StoreSettingsKey(name + "Geometry", saveGeometry());
 
-  I18nCoreApplication::Instance()
-    ->StoreSettingsKey( name + "State", saveState( version ) );
+  I18nCoreApplication::Instance()->StoreSettingsKey(name + "State", saveState(version));
 }
 
 /*****************************************************************************/
-bool
-I18nMainWindow
-::RestoreLayout( int version )
+bool I18nMainWindow::RestoreLayout(int version)
 {
   // qDebug() << this << "::RestoreLayout()";
 
-  I18nCoreApplication * application = I18nCoreApplication::Instance();
-  assert( application!=NULL );
+  I18nCoreApplication* application = I18nCoreApplication::Instance();
+  assert(application != NULL);
 
-  QString name( objectName() );
-  assert( !name.isEmpty() );
+  QString name(objectName());
+  assert(!name.isEmpty());
 
-  if( !restoreGeometry(
-	application->RetrieveSettingsKey( name + "Geometry" ).toByteArray() ) )
+  if (!restoreGeometry(application->RetrieveSettingsKey(name + "Geometry").toByteArray()))
     return false;
 
-  return
-    restoreState(
-      application->RetrieveSettingsKey( name + "State" ).toByteArray(),
-      version
-    );
+  return restoreState(application->RetrieveSettingsKey(name + "State").toByteArray(), version);
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-I18nMainWindow
-::on_action_Quit_triggered()
+void I18nMainWindow::on_action_Quit_triggered()
 {
   close();
 }
 
 /*****************************************************************************/
-void
-I18nMainWindow
-::on_action_About_triggered()
+void I18nMainWindow::on_action_About_triggered()
 {
-  AboutDialog aboutDialog( this );
+  AboutDialog aboutDialog(this);
 
   aboutDialog.exec();
 }
 
-void
-I18nMainWindow
-::on_action_Documentation_triggered()
+void I18nMainWindow::on_action_Documentation_triggered()
 {
   QDesktopServices::openUrl(QUrl("https://www.orfeo-toolbox.org/CookBook/"));
 }
-
 
 
 /*****************************************************************************/

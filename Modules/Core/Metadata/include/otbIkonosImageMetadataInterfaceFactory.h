@@ -62,9 +62,8 @@ protected:
   ~IkonosImageMetadataInterfaceFactory() override;
 
 private:
-  IkonosImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  IkonosImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -58,120 +58,107 @@
 
 enum ERROR_CODE
 {
-  ERROR_CODE_I18N = -1,
-  ERROR_CODE_CACHE_DIR = -2,
-  ERROR_CODE_DATABASE = -3,
+  ERROR_CODE_I18N       = -1,
+  ERROR_CODE_CACHE_DIR  = -2,
+  ERROR_CODE_DATABASE   = -3,
   ERROR_CODE_GL_VERSION = -4,
-  ERROR_CODE_USAGE = -5,
+  ERROR_CODE_USAGE      = -5,
 };
 
 
 struct Flags
 {
-  Flags() :
-    loadOTBApplications( false ),
-    forceNoGLSL( false ),
-    forceNoOverviews( false )
+  Flags() : loadOTBApplications(false), forceNoGLSL(false), forceNoOverviews(false)
   {
   }
 
-  bool loadOTBApplications: 1;
-  bool forceNoGLSL: 1;
-  bool forceNoOverviews: 1;
+  bool loadOTBApplications : 1;
+  bool forceNoGLSL : 1;
+  bool forceNoOverviews : 1;
 };
 
 
 /*****************************************************************************/
 /* FUNCTIONS DECLARATION                                                     */
 /*****************************************************************************/
-void
-DisplayUsage( const char * );
+void DisplayUsage(const char*);
 
-void
-AppendFromTextFile( QStringList &, const QString & );
+void AppendFromTextFile(QStringList&, const QString&);
 
 /*****************************************************************************/
 /* MAIN                                                                      */
 /*****************************************************************************/
-int
-main( int argc, char * argv[] )
+int main(int argc, char* argv[])
 {
-  QApplication qtApp( argc, argv );
+  QApplication qtApp(argc, argv);
 
   otb::ConfigurationManager::InitOpenMPThreads();
 
-  //
-  // 0. Splash-screen.
+//
+// 0. Splash-screen.
 #if USE_SPLASH_SCREEN
-  QPixmap pixmap( QLatin1String( ":/images/application_splash" ) );
-  QSplashScreen splash( pixmap );
+  QPixmap       pixmap(QLatin1String(":/images/application_splash"));
+  QSplashScreen splash(pixmap);
   splash.show();
-  qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
+  qtApp.processEvents(); // This is used to accept a click on the screen so that user can cancel the screen
 #endif
 
   //
   // 0bis. Parse pre-initialization command-line arguments.
-  QStringList args( qtApp.arguments() );
-  Flags flags;
+  QStringList args(qtApp.arguments());
+  Flags       flags;
   {
-  QStringList filenames;
+    QStringList filenames;
 
-  for( QStringList::iterator it( args.begin() );
-       it!=args.end(); )
-    if( it->compare( "-h" )==0 ||
-	it->compare( "--help" )==0 )
+    for (QStringList::iterator it(args.begin()); it != args.end();)
+      if (it->compare("-h") == 0 || it->compare("--help") == 0)
       {
-      DisplayUsage( argv[ 0 ] );
+        DisplayUsage(argv[0]);
 
-      return ERROR_CODE_USAGE;
+        return ERROR_CODE_USAGE;
       }
 
-    else if( it->compare( "-a" )==0 ||
-	     it->compare( "--applications" )==0 )
+      else if (it->compare("-a") == 0 || it->compare("--applications") == 0)
       {
-      flags.loadOTBApplications = true;
+        flags.loadOTBApplications = true;
 
-      it = args.erase( it );
+        it = args.erase(it);
       }
 
-    else if(it->compare( "-g" )==0 ||
-	    it->compare( "--no-glsl" )==0 )
+      else if (it->compare("-g") == 0 || it->compare("--no-glsl") == 0)
       {
-      flags.forceNoGLSL = true;
+        flags.forceNoGLSL = true;
 
-      it = args.erase( it );
+        it = args.erase(it);
       }
 
-    else if(it->compare( "-o" )==0 ||
-	    it->compare( "--no-overviews" )==0 )
+      else if (it->compare("-o") == 0 || it->compare("--no-overviews") == 0)
       {
-      flags.forceNoOverviews = true;
+        flags.forceNoOverviews = true;
 
-      it = args.erase( it );
+        it = args.erase(it);
       }
 
-    else if(it->compare( "-t" )==0 ||
-	    it->compare( "--txt-file" )==0 )
+      else if (it->compare("-t") == 0 || it->compare("--txt-file") == 0)
       {
-      it = args.erase( it );
+        it = args.erase(it);
 
-      if( it==args.end() ||
-	  it->startsWith( '-' ) )
-	{
-	DisplayUsage( argv[ 0 ] );
+        if (it == args.end() || it->startsWith('-'))
+        {
+          DisplayUsage(argv[0]);
 
-	return ERROR_CODE_USAGE;
-	}
+          return ERROR_CODE_USAGE;
+        }
 
-      AppendFromTextFile( filenames, *it );
+        AppendFromTextFile(filenames, *it);
 
-      it = args.erase( it );
+        it = args.erase(it);
       }
 
-    else
-      ++ it;
+      else
+        ++it;
 
-  args << filenames;
+    args << filenames;
   }
 
   //
@@ -179,38 +166,29 @@ main( int argc, char * argv[] )
   //
   // Coverity-14835
   // {
-  mvd::Application * application = NULL;
+  mvd::Application* application = NULL;
 
   try
-    {
-    application = new mvd::Application( &qtApp );
-    assert( application!=NULL );
+  {
+    application = new mvd::Application(&qtApp);
+    assert(application != NULL);
 
     application->Initialize();
-    }
-  catch( std::exception & exc )
-    {
+  }
+  catch (std::exception& exc)
+  {
     QMessageBox::StandardButton button =
-      QMessageBox::question(
-	NULL,
-	QCoreApplication::translate(
-	  PROJECT_NAME,
-	  "Question!"
-	),
-	QCoreApplication::translate(
-	  PROJECT_NAME,
-	  "The following exception has been caught while initializing the software:\n\n"
-	  "%1\n\n"
-	  "The application may not function as expected. Do you want to continue?"
-	)
-	.arg( exc.what() ),
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::Yes
-      );
+        QMessageBox::question(NULL, QCoreApplication::translate(PROJECT_NAME, "Question!"),
+                              QCoreApplication::translate(PROJECT_NAME,
+                                                          "The following exception has been caught while initializing the software:\n\n"
+                                                          "%1\n\n"
+                                                          "The application may not function as expected. Do you want to continue?")
+                                  .arg(exc.what()),
+                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-    if( button==QMessageBox::No )
+    if (button == QMessageBox::No)
       return ERROR_CODE_I18N;
-    }
+  }
   // }
   // Coverity-14835
 
@@ -224,7 +202,7 @@ main( int argc, char * argv[] )
   mainWindow.show();
 
 #if USE_SPLASH_SCREEN
-  splash.finish( &mainWindow );
+  splash.finish(&mainWindow);
 #endif // USE_SPLASH_SCREEN
 
   //
@@ -237,11 +215,11 @@ main( int argc, char * argv[] )
 
   //
   // 5. Load OTB-applications.
-  if( flags.loadOTBApplications )
+  if (flags.loadOTBApplications)
 #if USE_OTB_APPS
     mainWindow.SetupOTBApplications();
-#else // USE_OTB_APPS
-  qWarning() << "OTB-applications support is not included in this build.";
+#else  // USE_OTB_APPS
+    qWarning() << "OTB-applications support is not included in this build.";
 #endif // USE_OTB_APPS
 
   //
@@ -274,63 +252,51 @@ main( int argc, char * argv[] )
 /*****************************************************************************/
 /* FUNCTIONS IMPLEMENTATION                                                  */
 /*****************************************************************************/
-void
-DisplayUsage( const char * argv0 )
+void DisplayUsage(const char* argv0)
 {
-  std::cout
-    << mvd::ToLocalStdString(
-      QCoreApplication::translate(
-	PROJECT_NAME,
-	"Usage: %1 "
-	"[-h|--help] "
-	"[-a|--applications] "
-	"[-g|--no-glsl] "
-	"[-o|--no-overviews] "
-	"[-t|--txt-file <filename>] "
-	"[<filename>...]\n"
-	"  -a, --applications    load OTB-applications from OTB_APPLICATIONS_PATH.\n"
+  std::cout << mvd::ToLocalStdString(QCoreApplication::translate(PROJECT_NAME,
+                                                                 "Usage: %1 "
+                                                                 "[-h|--help] "
+                                                                 "[-a|--applications] "
+                                                                 "[-g|--no-glsl] "
+                                                                 "[-o|--no-overviews] "
+                                                                 "[-t|--txt-file <filename>] "
+                                                                 "[<filename>...]\n"
+                                                                 "  -a, --applications    load OTB-applications from OTB_APPLICATIONS_PATH.\n"
 #if 0
 	"  -f, --file            load Monteverdi project file.\n"
 #endif
-	"  -h, --help            display this help message.\n"
-	"  -g, --no-glsl         force OpenGL 1.x compatible rendering.\n"
-	"  -o, --no-overviews    ignore build GDAL overviews step.\n"
+                                                                 "  -h, --help            display this help message.\n"
+                                                                 "  -g, --no-glsl         force OpenGL 1.x compatible rendering.\n"
+                                                                 "  -o, --no-overviews    ignore build GDAL overviews step.\n"
 #if 0
 	"  -O, --force-overviews force build GDAL overviews step.\n"
 #endif
-	"  -t, --txt-file        read layer filenames from text file.\n"
+                                                                 "  -t, --txt-file        read layer filenames from text file.\n"
 #if 0
 	"  -c, --csv-file        read layer filenames & settings from CSV file.\n"
 	"  -x, --xml-file        read layer filenames & settings from XML file.\n"
 #endif
-      )
-      .arg( QFileInfo( argv0 ).baseName() )
-    )
-    << std::endl;
+                                                                 )
+                                         .arg(QFileInfo(argv0).baseName()))
+            << std::endl;
 }
 
 /*****************************************************************************/
-void
-AppendFromTextFile( QStringList & strings,
-		    const QString & filename )
+void AppendFromTextFile(QStringList& strings, const QString& filename)
 {
-  QFile file( filename );
+  QFile file(filename);
 
-  if( !file.open( QFile::ReadOnly | QFile::Text  ) )
-    throw mvd::SystemError(
-      mvd::ToStdString(
-	QCoreApplication::translate( "mvd::", "Failed to open '%1'" )
-	.arg( filename )
-      )
-    );
+  if (!file.open(QFile::ReadOnly | QFile::Text))
+    throw mvd::SystemError(mvd::ToStdString(QCoreApplication::translate("mvd::", "Failed to open '%1'").arg(filename)));
 
-  QTextStream is( &file );
+  QTextStream is(&file);
 
-  while( !is.atEnd() )
-    {
-    QString line( is.readLine() );
+  while (!is.atEnd())
+  {
+    QString line(is.readLine());
 
-    if( !line.isNull() )
+    if (!line.isNull())
       strings << line;
-    }
+  }
 }

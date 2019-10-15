@@ -21,15 +21,15 @@
 #include "mvdHistogramWidget.h"
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-# pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
 #include "ui_mvdHistogramWidget.h"
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #endif
 
 
@@ -44,13 +44,13 @@
 // Qwt includes
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-# pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
 #if QWT_IS_ABOVE_6_1
-# include <qwt_plot_canvas.h>
+#include <qwt_plot_canvas.h>
 #endif // QWT_IS_ABOVE_6_1
 #include <qwt_plot_curve.h>
 #include <qwt_plot_grid.h>
@@ -61,7 +61,7 @@
 #include <qwt_scale_engine.h>
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #endif
 
 //
@@ -99,57 +99,33 @@ namespace mvd
  *
  * It is defined (statically) as a constant for translation purposes.
  */
-const char*
-HistogramWidget::CURVE_NAMES[ HistogramWidget::CURVE_COUNT ] =
-{
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Red" ),
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Green" ),
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Blue" ),
-  QT_TRANSLATE_NOOP( "mvd::HistogramWidget", "Gray" ),
+const char* HistogramWidget::CURVE_NAMES[HistogramWidget::CURVE_COUNT] = {
+    QT_TRANSLATE_NOOP("mvd::HistogramWidget", "Red"), QT_TRANSLATE_NOOP("mvd::HistogramWidget", "Green"), QT_TRANSLATE_NOOP("mvd::HistogramWidget", "Blue"),
+    QT_TRANSLATE_NOOP("mvd::HistogramWidget", "Gray"),
 };
 
-const QColor
-HistogramWidget::CURVE_COLORS[ HistogramWidget::CURVE_COUNT ] =
-{
-  QColor( 0xFF, 0x44, 0x44/*, 0x66*/ ),
-  QColor( 0x44, 0xFF, 0x44/*, 0x66*/ ),
-  QColor( 0x44, 0x44, 0xFF/*, 0x66*/ ),
-  QColor( 0xBB, 0xBB, 0xBB/*, 0x66*/ ),
+const QColor HistogramWidget::CURVE_COLORS[HistogramWidget::CURVE_COUNT] = {
+    QColor(0xFF, 0x44, 0x44 /*, 0x66*/), QColor(0x44, 0xFF, 0x44 /*, 0x66*/), QColor(0x44, 0x44, 0xFF /*, 0x66*/), QColor(0xBB, 0xBB, 0xBB /*, 0x66*/),
 };
 
-const QColor
-HistogramWidget::BAR_COLORS[ HistogramWidget::CURVE_COUNT ] =
-{
-  QColor( 0xFF, 0x44, 0x44, 0x66 ),
-  QColor( 0x44, 0xFF, 0x44, 0x66 ),
-  QColor( 0x44, 0x44, 0xFF, 0x66 ),
-  QColor( 0xBB, 0xBB, 0xBB, 0x66 ),
+const QColor HistogramWidget::BAR_COLORS[HistogramWidget::CURVE_COUNT] = {
+    QColor(0xFF, 0x44, 0x44, 0x66), QColor(0x44, 0xFF, 0x44, 0x66), QColor(0x44, 0x44, 0xFF, 0x66), QColor(0xBB, 0xBB, 0xBB, 0x66),
 };
 
-const QColor
-HistogramWidget::MARKER_COLORS[ HistogramWidget::CURVE_COUNT ] =
-{
-  QColor( 0xFF, 0x77, 0x77/*, 0x00*/ ),
-  QColor( 0x77, 0xFF, 0x77/*, 0x77*/ ),
-  QColor( 0x77, 0x77, 0xFF/*, 0x00*/ ),
-  QColor( 0xFF, 0xFF, 0xFF/*, 0x00*/ ),
+const QColor HistogramWidget::MARKER_COLORS[HistogramWidget::CURVE_COUNT] = {
+    QColor(0xFF, 0x77, 0x77 /*, 0x00*/), QColor(0x77, 0xFF, 0x77 /*, 0x77*/), QColor(0x77, 0x77, 0xFF /*, 0x00*/), QColor(0xFF, 0xFF, 0xFF /*, 0x00*/),
 };
 
-const QColor
-HistogramWidget::RUBBER_BAND_COLORS[ HistogramWidget::CURVE_COUNT ] =
-{
-  QColor( 0xFF, 0x77, 0x77/*, 0xAA */ ),
-  QColor( 0x77, 0xFF, 0x77/*, 0xAA */ ),
-  QColor( 0x77, 0x77, 0xFF/*, 0xAA */ ),
-  QColor( 0xFF, 0xFF, 0xFF/*, 0xAA */ ),
+const QColor HistogramWidget::RUBBER_BAND_COLORS[HistogramWidget::CURVE_COUNT] = {
+    QColor(0xFF, 0x77, 0x77 /*, 0xAA */), QColor(0x77, 0xFF, 0x77 /*, 0xAA */), QColor(0x77, 0x77, 0xFF /*, 0xAA */), QColor(0xFF, 0xFF, 0xFF /*, 0xAA */),
 };
 
 namespace
 {
-const QColor CANVAS_BACKGROUND( 0x33, 0x33, 0x33 );
-const QColor GRID_MAJ_PEN_COLOR( 0x66, 0x66, 0x66 );
-const QColor GRID_MIN_PEN_COLOR( 0x44, 0x44, 0x44 );
-const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
+const QColor CANVAS_BACKGROUND(0x33, 0x33, 0x33);
+const QColor GRID_MAJ_PEN_COLOR(0x66, 0x66, 0x66);
+const QColor GRID_MIN_PEN_COLOR(0x44, 0x44, 0x44);
+const QColor RUBBER_BAND_COLOR(0xFF, 0xFF, 0x00, 0xAA);
 }
 
 
@@ -161,40 +137,39 @@ const QColor RUBBER_BAND_COLOR( 0xFF, 0xFF, 0x00, 0xAA );
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-HistogramWidget
-::HistogramWidget( QWidget* p, Qt::WindowFlags flags  ) :
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::HistogramWidget() ),
-  m_PlotGrid( NULL ),
-  m_PlotPicker( NULL ),
-  // m_PlotZoomer( NULL ),
-  m_PlotMagnifier( NULL ),
-  m_PlotPanner( NULL ),
-  // m_PlotCurves(),
-  // m_LowPlotMarkers(),
-  // m_HighPlotMarkers(),
-  m_Bounds(),
-  m_Precision( 0.0 ),
-  m_IsGrayscaleActivated( false )
+HistogramWidget::HistogramWidget(QWidget* p, Qt::WindowFlags flags)
+  : QWidget(p, flags),
+    m_UI(new mvd::Ui::HistogramWidget()),
+    m_PlotGrid(NULL),
+    m_PlotPicker(NULL),
+    // m_PlotZoomer( NULL ),
+    m_PlotMagnifier(NULL),
+    m_PlotPanner(NULL),
+    // m_PlotCurves(),
+    // m_LowPlotMarkers(),
+    // m_HighPlotMarkers(),
+    m_Bounds(),
+    m_Precision(0.0),
+    m_IsGrayscaleActivated(false)
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
-  m_UI->histogramPlot->setCanvasBackground( CANVAS_BACKGROUND  );
+  m_UI->histogramPlot->setCanvasBackground(CANVAS_BACKGROUND);
 
 
   //
   // GRID.
 
   m_PlotGrid = new QwtPlotGrid();
-  m_PlotGrid->attach( m_UI->histogramPlot );
+  m_PlotGrid->attach(m_UI->histogramPlot);
 
 #if QWT_IS_ABOVE_6_1
-  m_PlotGrid->setMajorPen( GRID_MAJ_PEN_COLOR );
-  m_PlotGrid->setMinorPen( GRID_MIN_PEN_COLOR );
+  m_PlotGrid->setMajorPen(GRID_MAJ_PEN_COLOR);
+  m_PlotGrid->setMinorPen(GRID_MIN_PEN_COLOR);
 
-#else // QWT_IS_ABOVE_6_1
-  m_PlotGrid->setMajPen( GRID_MAJ_PEN_COLOR );
-  m_PlotGrid->setMinPen( GRID_MIN_PEN_COLOR );
+#else  // QWT_IS_ABOVE_6_1
+  m_PlotGrid->setMajPen(GRID_MAJ_PEN_COLOR);
+  m_PlotGrid->setMinPen(GRID_MIN_PEN_COLOR);
 #endif // QWT_IS_ABOVE_6_1
 
   //
@@ -208,150 +183,115 @@ HistogramWidget
   m_PlotZoomer->setRubberBandPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
   m_PlotZoomer->setTrackerPen( QPen( QColor( 0xFF, 0x44, 0xFF ) ) );
   */
-  m_PlotMagnifier = new QwtPlotMagnifier( m_UI->histogramPlot->canvas() );
-  m_PlotMagnifier->setAxisEnabled( QwtPlot::yLeft, false );
-  m_PlotMagnifier->setWheelFactor( 1.0 / m_PlotMagnifier->wheelFactor() );
-  m_PlotMagnifier->setMouseButton( Qt::MidButton );
+  m_PlotMagnifier = new QwtPlotMagnifier(m_UI->histogramPlot->canvas());
+  m_PlotMagnifier->setAxisEnabled(QwtPlot::yLeft, false);
+  m_PlotMagnifier->setWheelFactor(1.0 / m_PlotMagnifier->wheelFactor());
+  m_PlotMagnifier->setMouseButton(Qt::MidButton);
   // m_PlotMagnifier->setZoomInKey( Qt::Key_Plus, Qt::NoModifier );
   // m_PlotMagnifier->setZoomOutKey( Qt::Key_Minus, Qt::NoModifier );
 
-  m_PlotPanner = new QwtPlotPanner( m_UI->histogramPlot->canvas() );
+  m_PlotPanner = new QwtPlotPanner(m_UI->histogramPlot->canvas());
   // m_PlotPanner->setAxisEnabled( QwtPlot::yLeft, false );
-  m_PlotPanner->setMouseButton( Qt::RightButton );
-  m_PlotPanner->setOrientations( Qt::Horizontal );
+  m_PlotPanner->setMouseButton(Qt::RightButton);
+  m_PlotPanner->setOrientations(Qt::Horizontal);
 
   //
   // CURVES.
 
-  HistogramPlotPicker::PlotCurveVector curves( HistogramWidget::CURVE_COUNT );
+  HistogramPlotPicker::PlotCurveVector curves(HistogramWidget::CURVE_COUNT);
 
-  for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
-    {
+  for (CountType i = 0; i < HistogramWidget::CURVE_COUNT; ++i)
+  {
     //
     // Curve
 
-    curves[ i ] =
-    m_PlotCurves[ i ] =
-      new QwtPlotCurve( tr( HistogramWidget::CURVE_NAMES[ i ] ) );
+    curves[i] = m_PlotCurves[i] = new QwtPlotCurve(tr(HistogramWidget::CURVE_NAMES[i]));
 
-#if HISTOGRAM_CURVE_TYPE==0
+#if HISTOGRAM_CURVE_TYPE == 0
 
-#elif HISTOGRAM_CURVE_TYPE==1
-    m_PlotCurves[ i ]->setStyle( QwtPlotCurve::Steps );
+#elif HISTOGRAM_CURVE_TYPE == 1
+    m_PlotCurves[i]->setStyle(QwtPlotCurve::Steps);
 
-#elif HISTOGRAM_CURVE_TYPE==2
+#elif HISTOGRAM_CURVE_TYPE == 2
 
 #else
 #endif
 
-    m_PlotCurves[ i ]->setPen( QPen( CURVE_COLORS[ i ] ) );
-    m_PlotCurves[ i ]->setBrush( QBrush( BAR_COLORS[ i ] ) );
+    m_PlotCurves[i]->setPen(QPen(CURVE_COLORS[i]));
+    m_PlotCurves[i]->setBrush(QBrush(BAR_COLORS[i]));
 
-    m_PlotCurves[ i ]->attach( m_UI->histogramPlot );
+    m_PlotCurves[i]->attach(m_UI->histogramPlot);
 
     //
     // Markers
 
-    m_LowPlotMarkers[ i ] = new QwtPlotMarker();
-    m_LowPlotMarkers[ i ]->setLineStyle( QwtPlotMarker::VLine );
-    m_LowPlotMarkers[ i ]->setLinePen(
-      QPen( HistogramWidget::MARKER_COLORS[ i ] )
-    );
-    m_LowPlotMarkers[ i ]->attach( m_UI->histogramPlot );
+    m_LowPlotMarkers[i] = new QwtPlotMarker();
+    m_LowPlotMarkers[i]->setLineStyle(QwtPlotMarker::VLine);
+    m_LowPlotMarkers[i]->setLinePen(QPen(HistogramWidget::MARKER_COLORS[i]));
+    m_LowPlotMarkers[i]->attach(m_UI->histogramPlot);
 
-    m_HighPlotMarkers[ i ] = new QwtPlotMarker();
-    m_HighPlotMarkers[ i ]->setLineStyle( QwtPlotMarker::VLine );
-    m_HighPlotMarkers[ i ]->setLinePen(
-      QPen( HistogramWidget::MARKER_COLORS[ i ] )
-    );
-    m_HighPlotMarkers[ i ]->attach( m_UI->histogramPlot );
-    }
+    m_HighPlotMarkers[i] = new QwtPlotMarker();
+    m_HighPlotMarkers[i]->setLineStyle(QwtPlotMarker::VLine);
+    m_HighPlotMarkers[i]->setLinePen(QPen(HistogramWidget::MARKER_COLORS[i]));
+    m_HighPlotMarkers[i]->attach(m_UI->histogramPlot);
+  }
 
   //
   // PICKER.
-  assert(
-    dynamic_cast< QwtPlotCanvas * >( m_UI->histogramPlot->canvas() )!=nullptr
-  );
+  assert(dynamic_cast<QwtPlotCanvas*>(m_UI->histogramPlot->canvas()) != nullptr);
 
-  m_PlotPicker =
-    new HistogramPlotPicker(
-      curves,
+  m_PlotPicker = new HistogramPlotPicker(curves,
 #if QWT_IS_ABOVE_6_1
-      dynamic_cast< QwtPlotCanvas * >(
+                                         dynamic_cast<QwtPlotCanvas*>(
 #endif // QWT_IS_ABOVE_6_1
-	m_UI->histogramPlot->canvas()
+                                             m_UI->histogramPlot->canvas()
 #if QWT_IS_ABOVE_6_1
-        )
+                                                 )
 #endif // QWT_IS_ABOVE_6_1
-      );
+                                             );
 
-  m_PlotPicker->setTrackerMode( QwtPicker::ActiveOnly );
-  m_PlotPicker->setRubberBandPen( RUBBER_BAND_COLOR );
-  m_PlotPicker->setTrackerPen( QColor( Qt::yellow ) );
+  m_PlotPicker->setTrackerMode(QwtPicker::ActiveOnly);
+  m_PlotPicker->setRubberBandPen(RUBBER_BAND_COLOR);
+  m_PlotPicker->setTrackerPen(QColor(Qt::yellow));
 
-  for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
-    {
-    m_PlotPicker->SetRubberBandPen(
-      static_cast< RgbwChannel >( i ),
-      QPen( HistogramWidget::RUBBER_BAND_COLORS[ i ] )
-    );
-    }
+  for (CountType i = 0; i < HistogramWidget::CURVE_COUNT; ++i)
+  {
+    m_PlotPicker->SetRubberBandPen(static_cast<RgbwChannel>(i), QPen(HistogramWidget::RUBBER_BAND_COLORS[i]));
+  }
 
   //
   // CONNECTIONS.
 
   //
   //
-  QObject::connect(
-    m_PlotPicker, SIGNAL( appended( const QPointF& ) ),
-    this, SLOT( OnAppended( const QPointF& ) )
-  );
-  QObject::connect(
-    m_PlotPicker, SIGNAL( appended( const QPoint& ) ),
-    this, SLOT( OnAppended( const QPoint& ) )
-  );
+  QObject::connect(m_PlotPicker, SIGNAL(appended(const QPointF&)), this, SLOT(OnAppended(const QPointF&)));
+  QObject::connect(m_PlotPicker, SIGNAL(appended(const QPoint&)), this, SLOT(OnAppended(const QPoint&)));
   //
-  QObject::connect(
-    m_PlotPicker, SIGNAL( changed( const QPolygon& ) ),
-    this, SLOT( OnChanged( const QPolygon& ) )
-  );
+  QObject::connect(m_PlotPicker, SIGNAL(changed(const QPolygon&)), this, SLOT(OnChanged(const QPolygon&)));
   //
-  QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QPointF& ) ),
-    this, SLOT( OnSelected( const QPointF& ) )
-  );
-  QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QRectF& ) ),
-    this, SLOT( OnSelected( const QRectF& ) )
-  );
-  QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QPolygon& ) ),
-    this, SLOT( OnSelected( const QPolygon& ) )
-  );
-  QObject::connect(
-    m_PlotPicker, SIGNAL( selected( const QVector< QPointF >& ) ),
-    this, SLOT( OnSelected( const QVector< QPointF >& ) )
-  );
+  QObject::connect(m_PlotPicker, SIGNAL(selected(const QPointF&)), this, SLOT(OnSelected(const QPointF&)));
+  QObject::connect(m_PlotPicker, SIGNAL(selected(const QRectF&)), this, SLOT(OnSelected(const QRectF&)));
+  QObject::connect(m_PlotPicker, SIGNAL(selected(const QPolygon&)), this, SLOT(OnSelected(const QPolygon&)));
+  QObject::connect(m_PlotPicker, SIGNAL(selected(const QVector<QPointF>&)), this, SLOT(OnSelected(const QVector<QPointF>&)));
 }
 
 /*******************************************************************************/
-HistogramWidget
-::~HistogramWidget()
+HistogramWidget::~HistogramWidget()
 {
   delete m_PlotPicker;
   m_PlotPicker = NULL;
 
-  for( CountType i=0; i<HistogramWidget::CURVE_COUNT; ++i )
-    {
-    delete m_PlotCurves[ i ];
-    m_PlotCurves[ i ] = NULL;
+  for (CountType i = 0; i < HistogramWidget::CURVE_COUNT; ++i)
+  {
+    delete m_PlotCurves[i];
+    m_PlotCurves[i] = NULL;
 
-    delete m_LowPlotMarkers[ i ];
-    m_LowPlotMarkers[ i ] = NULL;
+    delete m_LowPlotMarkers[i];
+    m_LowPlotMarkers[i] = NULL;
 
-    delete m_HighPlotMarkers[ i ];
-    m_HighPlotMarkers[ i ] = NULL;
-    }
+    delete m_HighPlotMarkers[i];
+    m_HighPlotMarkers[i] = NULL;
+  }
 
   delete m_PlotPanner;
   m_PlotPanner = NULL;
@@ -372,72 +312,58 @@ HistogramWidget
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::SetPrecision( double p )
+void HistogramWidget::SetPrecision(double p)
 {
   m_Precision = p;
 }
 
 /*******************************************************************************/
-double
-HistogramWidget
-::GetPrecision() const
+double HistogramWidget::GetPrecision() const
 {
   return m_Precision;
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::SetBounds( RgbwChannel channel,
-	     double xMin, double xMax,
-	     double yMin, double yMax )
+void HistogramWidget::SetBounds(RgbwChannel channel, double xMin, double xMax, double yMin, double yMax)
 {
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if (!RgbwBounds(begin, end, channel))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    m_Bounds[ i ].m_XMin = xMin;
-    m_Bounds[ i ].m_XMax = xMax;
+  for (CountType i = begin; i < end; ++i)
+  {
+    m_Bounds[i].m_XMin = xMin;
+    m_Bounds[i].m_XMax = xMax;
 
-    m_Bounds[ i ].m_YMin = yMin;
-    m_Bounds[ i ].m_YMax = yMax;
-    }
+    m_Bounds[i].m_YMin = yMin;
+    m_Bounds[i].m_YMax = yMax;
+  }
 
   // RefreshScale();
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::SetData( RgbwChannel channel,
-	   double * const xVal, double * const yVal, size_t sizeVal,
-	   double xMin, double yMin,
-	   double xMax, double yMax )
+void HistogramWidget::SetData(RgbwChannel channel, double* const xVal, double* const yVal, size_t sizeVal, double xMin, double yMin, double xMax, double yMax)
 {
-  assert( ( xVal==NULL && yVal==NULL && sizeVal==0 ) ||
-	  ( xVal!=NULL && yVal!=NULL && sizeVal!=0 ) );
+  assert((xVal == NULL && yVal == NULL && sizeVal == 0) || (xVal != NULL && yVal != NULL && sizeVal != 0));
 
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if (!RgbwBounds(begin, end, channel))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    assert( i<HistogramWidget::CURVE_COUNT );
-    assert( m_PlotCurves[ i ]!=NULL );
+  for (CountType i = begin; i < end; ++i)
+  {
+    assert(i < HistogramWidget::CURVE_COUNT);
+    assert(m_PlotCurves[i] != NULL);
 
-    m_PlotCurves[ i ]->setSamples( xVal, yVal, sizeVal );
+    m_PlotCurves[i]->setSamples(xVal, yVal, sizeVal);
 
-    if( xVal==NULL && yVal==NULL )
-      m_PlotCurves[ i ]->setVisible( false );
+    if (xVal == NULL && yVal == NULL)
+      m_PlotCurves[i]->setVisible(false);
 
     /*
     qDebug()
@@ -446,19 +372,16 @@ HistogramWidget
       << "xVal [" << yMin << "; " << yMax << "]";
     */
 
-    m_Bounds[ i ].m_XMin = xMin;
-    m_Bounds[ i ].m_XMax = xMax;
+    m_Bounds[i].m_XMin = xMin;
+    m_Bounds[i].m_XMax = xMax;
 
-    m_Bounds[ i ].m_YMin = yMin;
-    m_Bounds[ i ].m_YMax = yMax;
-    }
+    m_Bounds[i].m_YMin = yMin;
+    m_Bounds[i].m_YMax = yMax;
+  }
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::SetLowMarker( RgbwChannel channel,
-		double low )
+void HistogramWidget::SetLowMarker(RgbwChannel channel, double low)
 {
   /*
   qDebug()
@@ -467,24 +390,21 @@ HistogramWidget
   */
 
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if (!RgbwBounds(begin, end, channel))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    m_LowPlotMarkers[ i ]->setXValue( low );
+  for (CountType i = begin; i < end; ++i)
+  {
+    m_LowPlotMarkers[i]->setXValue(low);
 
-    m_Bounds[ i ].m_QMin = low;
-    }
+    m_Bounds[i].m_QMin = low;
+  }
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::SetHighMarker( RgbwChannel channel,
-		 double high )
+void HistogramWidget::SetHighMarker(RgbwChannel channel, double high)
 {
   /*
   qDebug()
@@ -493,23 +413,21 @@ HistogramWidget
   */
 
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, channel ) )
+  if (!RgbwBounds(begin, end, channel))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    m_HighPlotMarkers[ i ]->setXValue( high );
+  for (CountType i = begin; i < end; ++i)
+  {
+    m_HighPlotMarkers[i]->setXValue(high);
 
-    m_Bounds[ i ].m_QMax = high;
-    }
+    m_Bounds[i].m_QMax = high;
+  }
 }
 
 /*****************************************************************************/
-void
-HistogramWidget
-::SetGrayscaleActivated( bool activated )
+void HistogramWidget::SetGrayscaleActivated(bool activated)
 {
   m_IsGrayscaleActivated = activated;
 
@@ -528,21 +446,16 @@ HistogramWidget
     }
   */
 
-  m_UI->channelComboBox->setEnabled( !activated );
+  m_UI->channelComboBox->setEnabled(!activated);
 
-  bool areSignalsBlocked = m_UI->channelComboBox->blockSignals( true );
+  bool areSignalsBlocked = m_UI->channelComboBox->blockSignals(true);
   {
-  m_UI->channelComboBox->setItemText(
-    3,
-    activated
-    ? tr( "White" )
-    : tr( "RGB" )
-  );
-  m_UI->channelComboBox->setCurrentIndex( 3 );
-  UpdateCurvesVisibility( 3 );
+    m_UI->channelComboBox->setItemText(3, activated ? tr("White") : tr("RGB"));
+    m_UI->channelComboBox->setCurrentIndex(3);
+    UpdateCurvesVisibility(3);
   }
-  m_UI->channelComboBox->blockSignals( areSignalsBlocked );
-  m_PlotPicker->SetGrayscaleActivated( activated );
+  m_UI->channelComboBox->blockSignals(areSignalsBlocked);
+  m_PlotPicker->SetGrayscaleActivated(activated);
 }
 
 /*****************************************************************************/
@@ -558,9 +471,7 @@ HistogramWidget
 */
 
 /*******************************************************************************/
-void
-HistogramWidget
-::Replot()
+void HistogramWidget::Replot()
 {
   // RefreshScale( true );
 
@@ -568,113 +479,102 @@ HistogramWidget
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::UpdateCurvesVisibility( CountType index )
+void HistogramWidget::UpdateCurvesVisibility(CountType index)
 {
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+  if (!RgbwBounds(begin, end, RGBW_CHANNEL_ALL))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    bool isCurveVisible =
-      m_IsGrayscaleActivated
-      ? i==RGBW_CHANNEL_WHITE
-      : ( index==RGBW_CHANNEL_WHITE
-	  ? i<RGBW_CHANNEL_WHITE
-	  : i==index );
+  for (CountType i = begin; i < end; ++i)
+  {
+    bool isCurveVisible = m_IsGrayscaleActivated ? i == RGBW_CHANNEL_WHITE : (index == RGBW_CHANNEL_WHITE ? i < RGBW_CHANNEL_WHITE : i == index);
 
-    assert( i<HistogramWidget::CURVE_COUNT );
+    assert(i < HistogramWidget::CURVE_COUNT);
 
-    m_PlotCurves[ i ]->setVisible( isCurveVisible );
-    m_LowPlotMarkers[ i ]->setVisible( isCurveVisible );
-    m_HighPlotMarkers[ i ]->setVisible( isCurveVisible );
-    }
+    m_PlotCurves[i]->setVisible(isCurveVisible);
+    m_LowPlotMarkers[i]->setVisible(isCurveVisible);
+    m_HighPlotMarkers[i]->setVisible(isCurveVisible);
+  }
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::RefreshScale( bool iqr )
+void HistogramWidget::RefreshScale(bool iqr)
 {
-  assert( std::numeric_limits< double >::has_infinity );
+  assert(std::numeric_limits<double>::has_infinity);
 
-  double xMin = +std::numeric_limits< double >::infinity();
-  double xMax = -std::numeric_limits< double >::infinity();
+  double xMin = +std::numeric_limits<double>::infinity();
+  double xMax = -std::numeric_limits<double>::infinity();
 
-  double yMin = +std::numeric_limits< double >::infinity();
-  double yMax = -std::numeric_limits< double >::infinity();
+  double yMin = +std::numeric_limits<double>::infinity();
+  double yMax = -std::numeric_limits<double>::infinity();
 
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+  if (!RgbwBounds(begin, end, RGBW_CHANNEL_ALL))
     return;
 
-  for( CountType i=begin; i<end; ++i )
+  for (CountType i = begin; i < end; ++i)
+  {
+    if (iqr)
     {
-    if( iqr )
-      {
-      if( m_Bounds[ i ].m_QMin<xMin )
-	xMin = m_Bounds[ i ].m_QMin;
+      if (m_Bounds[i].m_QMin < xMin)
+        xMin = m_Bounds[i].m_QMin;
 
-      if( m_Bounds[ i ].m_QMax>xMax )
-	xMax = m_Bounds[ i ].m_QMax;
-      }
+      if (m_Bounds[i].m_QMax > xMax)
+        xMax = m_Bounds[i].m_QMax;
+    }
     else
-      {
-      if( m_Bounds[ i ].m_XMin<xMin )
-	xMin = m_Bounds[ i ].m_XMin;
+    {
+      if (m_Bounds[i].m_XMin < xMin)
+        xMin = m_Bounds[i].m_XMin;
 
-      if( m_Bounds[ i ].m_XMax>xMax )
-	xMax = m_Bounds[ i ].m_XMax;
-      }
-
-    if( m_Bounds[ i ].m_YMin<yMin )
-      yMin = m_Bounds[ i ].m_YMin;
-
-    if( m_Bounds[ i ].m_YMax>yMax )
-      yMax = m_Bounds[ i ].m_YMax;
+      if (m_Bounds[i].m_XMax > xMax)
+        xMax = m_Bounds[i].m_XMax;
     }
 
-  if( xMin==xMax )
-    {
+    if (m_Bounds[i].m_YMin < yMin)
+      yMin = m_Bounds[i].m_YMin;
+
+    if (m_Bounds[i].m_YMax > yMax)
+      yMax = m_Bounds[i].m_YMax;
+  }
+
+  if (xMin == xMax)
+  {
     double epsilon = PRECISION_MARGIN * m_Precision;
 
-    if( xMin >= std::numeric_limits< double >::min() + epsilon )
+    if (xMin >= std::numeric_limits<double>::min() + epsilon)
       xMin -= epsilon;
 
-    if( xMax <= std::numeric_limits< double >::max() - epsilon )
+    if (xMax <= std::numeric_limits<double>::max() - epsilon)
       xMax += epsilon;
-    }
+  }
 
   // qDebug()
   //   << "[" << xMin << "; " << xMax << "]"
   //   << "x [" << yMin << "; " << yMax << "]";
 
-  m_UI->histogramPlot->setAxisScale( QwtPlot::xBottom, xMin, xMax );
-  m_UI->histogramPlot->setAxisScale( QwtPlot::yLeft, yMin, yMax );
+  m_UI->histogramPlot->setAxisScale(QwtPlot::xBottom, xMin, xMax);
+  m_UI->histogramPlot->setAxisScale(QwtPlot::yLeft, yMin, yMax);
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::Clear()
+void HistogramWidget::Clear()
 {
   CountType begin = 0;
-  CountType end = 0;
+  CountType end   = 0;
 
-  if( !RgbwBounds( begin, end, RGBW_CHANNEL_ALL ) )
+  if (!RgbwBounds(begin, end, RGBW_CHANNEL_ALL))
     return;
 
-  for( CountType i=begin; i<end; ++i )
-    {
-    m_PlotCurves[ i ]->setVisible( false );
-    m_LowPlotMarkers[ i ]->setVisible( false );
-    m_HighPlotMarkers[ i ]->setVisible( false );
+  for (CountType i = begin; i < end; ++i)
+  {
+    m_PlotCurves[i]->setVisible(false);
+    m_LowPlotMarkers[i]->setVisible(false);
+    m_HighPlotMarkers[i]->setVisible(false);
     /*
     qDebug()
       << RGBW_CHANNEL_NAMES[ i ]
@@ -682,17 +582,17 @@ HistogramWidget
       << "x [" << yMin << "; " << yMax << "]";
     */
 
-    m_Bounds[ i ].m_XMin = 0.0;
-    m_Bounds[ i ].m_XMax = 1000.0;
+    m_Bounds[i].m_XMin = 0.0;
+    m_Bounds[i].m_XMax = 1000.0;
 
-    m_Bounds[ i ].m_YMin = 0.0;
-    m_Bounds[ i ].m_YMax = 1000.0;
+    m_Bounds[i].m_YMin = 0.0;
+    m_Bounds[i].m_YMax = 1000.0;
 
-    m_Bounds[ i ].m_QMin = 0.0;
-    m_Bounds[ i ].m_QMax = 1000.0;
-    }
+    m_Bounds[i].m_QMin = 0.0;
+    m_Bounds[i].m_QMax = 1000.0;
+  }
 
-  RefreshScale( false );
+  RefreshScale(false);
 
   Replot();
 }
@@ -700,101 +600,77 @@ HistogramWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-HistogramWidget
-::on_zoom1Button_clicked()
+void HistogramWidget::on_zoom1Button_clicked()
 {
-  RefreshScale( false );
+  RefreshScale(false);
   Replot();
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::on_zoomQButton_clicked()
+void HistogramWidget::on_zoomQButton_clicked()
 {
-  RefreshScale( true );
+  RefreshScale(true);
   Replot();
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::on_channelComboBox_currentIndexChanged( int /*index*/ )
+void HistogramWidget::on_channelComboBox_currentIndexChanged(int /*index*/)
 {
-  UpdateCurvesVisibility( m_UI->channelComboBox->currentIndex() );
+  UpdateCurvesVisibility(m_UI->channelComboBox->currentIndex());
 
   Replot();
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnAppended( const QPointF & )
+void HistogramWidget::OnAppended(const QPointF&)
 {
   // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnAppended( const QPoint & )
+void HistogramWidget::OnAppended(const QPoint&)
 {
   // qDebug() << this << "::OnAppended(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnChanged( const QPolygon & )
+void HistogramWidget::OnChanged(const QPolygon&)
 {
   // qDebug() << this << "::OnChanged(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnMoved( const QPointF & )
+void HistogramWidget::OnMoved(const QPointF&)
 {
   // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnMoved( const QPoint & )
+void HistogramWidget::OnMoved(const QPoint&)
 {
   // qDebug() << this << "::OnMoved(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnSelected( const QPointF & )
+void HistogramWidget::OnSelected(const QPointF&)
 {
   // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnSelected( const QRectF & )
+void HistogramWidget::OnSelected(const QRectF&)
 {
   // qDebug() << this << "::OnSelected(" << r << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnSelected( const QPolygon & )
+void HistogramWidget::OnSelected(const QPolygon&)
 {
   // qDebug() << this << "::OnSelected(" << p << ")";
 }
 
 /*******************************************************************************/
-void
-HistogramWidget
-::OnSelected( const QVector< QPointF > & )
+void HistogramWidget::OnSelected(const QVector<QPointF>&)
 {
   // qDebug() << this << "::OnSelected(" << v << ")";
 }

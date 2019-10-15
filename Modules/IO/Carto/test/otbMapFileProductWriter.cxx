@@ -26,18 +26,18 @@
 
 int otbMapFileProductWriter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * path = argv[2];
-  const char * shapepath = argv[3];
-  const char * cgipath = argv[4];
-  unsigned int tileSize = atoi(argv[5]);
+  const char*  infname   = argv[1];
+  const char*  path      = argv[2];
+  const char*  shapepath = argv[3];
+  const char*  cgipath   = argv[4];
+  unsigned int tileSize  = atoi(argv[5]);
 
-  typedef otb::VectorImage<double>               ImageType;
-  typedef otb::MapFileProductWriter<ImageType>   MapFileProductWriterType;
-  typedef otb::ImageFileReader<ImageType>        ImageFileReaderType;
+  typedef otb::VectorImage<double>             ImageType;
+  typedef otb::MapFileProductWriter<ImageType> MapFileProductWriterType;
+  typedef otb::ImageFileReader<ImageType>      ImageFileReaderType;
 
-  MapFileProductWriterType::Pointer    mapWriter  = MapFileProductWriterType::New();
-  ImageFileReaderType::Pointer         reader     = ImageFileReaderType::New();
+  MapFileProductWriterType::Pointer mapWriter = MapFileProductWriterType::New();
+  ImageFileReaderType::Pointer      reader    = ImageFileReaderType::New();
 
   // Read the image
   reader->SetFileName(infname);

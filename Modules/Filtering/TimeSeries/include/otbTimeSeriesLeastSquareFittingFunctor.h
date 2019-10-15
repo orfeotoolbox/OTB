@@ -59,36 +59,37 @@ template <class TSeriesType, class TTimeFunction, class TDateType = TSeriesType,
 class TimeSeriesLeastSquareFittingFunctor
 {
 public:
-
   typedef typename TTimeFunction::CoefficientsType CoefficientsType;
 
   /// Constructor
   TimeSeriesLeastSquareFittingFunctor()
   {
-    for(unsigned int i=0; i<m_WeightSeries.Size(); ++i)
+    for (unsigned int i = 0; i < m_WeightSeries.Size(); ++i)
       m_WeightSeries[i] = 1.0;
   }
   /// Destructor
-  virtual ~TimeSeriesLeastSquareFittingFunctor() {}
+  virtual ~TimeSeriesLeastSquareFittingFunctor()
+  {
+  }
 
-  inline TSeriesType operator ()(const TSeriesType& series)
+  inline TSeriesType operator()(const TSeriesType& series)
   {
     TTimeFunction estFunction = this->EstimateTimeFunction(series);
-    TSeriesType outSeries;
-    for(unsigned int i = 0; i < m_DoySeries.Size(); ++i)
-      outSeries[i] = estFunction.GetValue( m_DoySeries[i] );
+    TSeriesType   outSeries;
+    for (unsigned int i = 0; i < m_DoySeries.Size(); ++i)
+      outSeries[i]      = estFunction.GetValue(m_DoySeries[i]);
     return outSeries;
   }
 
   inline void SetDates(const TDateType& doy)
   {
-    for(unsigned int i = 0; i < doy.Size(); ++i)
-      m_DoySeries[i] = doy[i];
+    for (unsigned int i = 0; i < doy.Size(); ++i)
+      m_DoySeries[i]    = doy[i];
   }
 
   inline void SetWeights(const TWeightType& weights)
   {
-    for(unsigned int i=0; i<weights.Size(); ++i)
+    for (unsigned int i = 0; i < weights.Size(); ++i)
       m_WeightSeries[i] = weights[i];
   }
 
@@ -100,8 +101,8 @@ public:
   inline TTimeFunction EstimateTimeFunction(const TSeriesType& series) const
   {
     TTimeFunction estFunction;
-    unsigned int nbDates = m_DoySeries.Size();
-    unsigned int nbCoefs = estFunction.GetCoefficients().Size();
+    unsigned int  nbDates = m_DoySeries.Size();
+    unsigned int  nbCoefs = estFunction.GetCoefficients().Size();
 
     // b = A * c
     vnl_matrix<double> A(nbDates, nbCoefs);
@@ -110,29 +111,29 @@ public:
     // fill the matrices
 
     typename TTimeFunction::CoefficientsType tmpCoefs;
-    for(unsigned int j = 0; j < nbCoefs; ++j)
-      tmpCoefs[j] = 0.0;
+    for (unsigned int j = 0; j < nbCoefs; ++j)
+      tmpCoefs[j]       = 0.0;
 
-    for(unsigned int i = 0; i < nbDates; ++i)
-      {
+    for (unsigned int i = 0; i < nbDates; ++i)
+    {
       b.put(i, 0, series[i] / m_WeightSeries[i]);
-      for(unsigned int j = 0; j < nbCoefs; ++j)
-        {
+      for (unsigned int j = 0; j < nbCoefs; ++j)
+      {
         tmpCoefs[j] = 1.0;
         estFunction.SetCoefficients(tmpCoefs);
         A.put(i, j, estFunction.GetValue(m_DoySeries[i]) / m_WeightSeries[i]);
         tmpCoefs[j] = 0.0;
-        }
       }
+    }
     // solve the problem c = (At * A)^-1*At*b
 
-    vnl_matrix<double> atainv =  vnl_matrix_inverse<double>(vnl_transpose(A) * A);
+    vnl_matrix<double> atainv = vnl_matrix_inverse<double>(vnl_transpose(A) * A);
 
     vnl_matrix<double> atainvat = atainv * vnl_transpose(A);
-    vnl_matrix<double> c = atainvat * b;
+    vnl_matrix<double> c        = atainvat * b;
 
-    for(unsigned int j = 0; j < nbCoefs; ++j)
-      tmpCoefs[j] = c.get(j, 0);
+    for (unsigned int j = 0; j < nbCoefs; ++j)
+      tmpCoefs[j]       = c.get(j, 0);
     estFunction.SetCoefficients(tmpCoefs);
 
     return estFunction;
@@ -140,9 +141,9 @@ public:
 
 private:
   ///
-  TDateType m_DoySeries;
+  TDateType   m_DoySeries;
   TWeightType m_WeightSeries;
 };
 }
-} //namespace otb
+} // namespace otb
 #endif

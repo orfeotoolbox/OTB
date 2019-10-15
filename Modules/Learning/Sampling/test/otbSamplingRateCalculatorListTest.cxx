@@ -31,19 +31,19 @@ int otbSamplingRateCalculatorList(int itkNotUsed(argc), char* argv[])
   std::ofstream file(argv[1], std::ios::out | std::ios::trunc);
 
   if (!file)
-    {
+  {
     std::cout << " Couldn't open " << argv[1];
     return EXIT_FAILURE;
-    }
+  }
 
   itk::Indent indent_1(1);
 
-  typedef otb::SamplingRateCalculatorList::ClassCountMapType  ClassCountMapType;
-  typedef otb::SamplingRateCalculatorList::PartitionType      PartitionType;
+  typedef otb::SamplingRateCalculatorList::ClassCountMapType ClassCountMapType;
+  typedef otb::SamplingRateCalculatorList::PartitionType     PartitionType;
 
   PartitionType typeProportional = otb::SamplingRateCalculatorList::PROPORTIONAL;
-  PartitionType typeEqual = otb::SamplingRateCalculatorList::EQUAL;
-  PartitionType typeCustom = otb::SamplingRateCalculatorList::CUSTOM;
+  PartitionType typeEqual        = otb::SamplingRateCalculatorList::EQUAL;
+  PartitionType typeCustom       = otb::SamplingRateCalculatorList::CUSTOM;
 
   std::string c1("1");
   std::string c2("2");
@@ -107,115 +107,115 @@ int otbSamplingRateCalculatorList(int itkNotUsed(argc), char* argv[])
   nbByClassCustom.push_back(needed4);
 
   typedef otb::SamplingRateCalculatorList RateCalculatorListType;
-  RateCalculatorListType::Pointer rateCalcList = RateCalculatorListType::New();
-  rateCalcList->SetNthClassCount(0,classCount1);
-  rateCalcList->SetNthClassCount(2,classCount3);
-  rateCalcList->SetNthClassCount(1,classCount2);
+  RateCalculatorListType::Pointer         rateCalcList = RateCalculatorListType::New();
+  rateCalcList->SetNthClassCount(0, classCount1);
+  rateCalcList->SetNthClassCount(2, classCount3);
+  rateCalcList->SetNthClassCount(1, classCount2);
 
   file << "# Test the strategy : smallest - equal" << std::endl;
   rateCalcList->SetMinimumNbOfSamplesByClass(typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : smallest - custom" << std::endl;
   rateCalcList->SetMinimumNbOfSamplesByClass(typeCustom);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : constant - proportional" << std::endl;
-  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCst,typeProportional);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCst, typeProportional);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : constant - equal" << std::endl;
-  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCst,typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCst, typeEqual);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : constant - custom" << std::endl;
-  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCstCustom,typeCustom);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesAllClasses(nbSamplesCstCustom, typeCustom);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : byClass - proportional" << std::endl;
-  rateCalcList->SetNbOfSamplesByClass(nbByClass,typeProportional);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesByClass(nbByClass, typeProportional);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : byClass - equal" << std::endl;
-  rateCalcList->SetNbOfSamplesByClass(nbByClass,typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesByClass(nbByClass, typeEqual);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : byClass - custom" << std::endl;
-  rateCalcList->SetNbOfSamplesByClass(nbByClassCustom,typeCustom);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  rateCalcList->SetNbOfSamplesByClass(nbByClassCustom, typeCustom);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
   file << "# Test the strategy : all - equal" << std::endl;
   rateCalcList->SetAllSamples(typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
-  file <<"#Test the strategy : percent - proportional"<<std::endl;
-  rateCalcList->SetPercentageOfSamples(percent,typeProportional);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  file << "#Test the strategy : percent - proportional" << std::endl;
+  rateCalcList->SetPercentageOfSamples(percent, typeProportional);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
-  
-  file <<"#Test the strategy : percent - equal"<<std::endl;
-  rateCalcList->SetPercentageOfSamples(percent,typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
-    rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
+  }
 
-  file <<"#Test the strategy : total - proportional"<<std::endl;
-  rateCalcList->SetTotalNumberOfSamples(total,typeProportional);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  file << "#Test the strategy : percent - equal" << std::endl;
+  rateCalcList->SetPercentageOfSamples(percent, typeEqual);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
-  
-  file <<"#Test the strategy : total - equal"<<std::endl;
-  rateCalcList->SetTotalNumberOfSamples(total,typeEqual);
-  for (unsigned int i=0 ; i<rateCalcList->Size() ; i++)
-    {
-    file << "# Input "<< i << std::endl;
+  }
+
+  file << "#Test the strategy : total - proportional" << std::endl;
+  rateCalcList->SetTotalNumberOfSamples(total, typeProportional);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
     rateCalcList->GetNthElement(i)->Print(file, indent_1);
-    }
-  
+  }
+
+  file << "#Test the strategy : total - equal" << std::endl;
+  rateCalcList->SetTotalNumberOfSamples(total, typeEqual);
+  for (unsigned int i = 0; i < rateCalcList->Size(); i++)
+  {
+    file << "# Input " << i << std::endl;
+    rateCalcList->GetNthElement(i)->Print(file, indent_1);
+  }
+
   file.close();
   return EXIT_SUCCESS;
 }

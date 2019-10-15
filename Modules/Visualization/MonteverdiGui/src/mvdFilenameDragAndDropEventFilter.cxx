@@ -65,57 +65,49 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-FilenameDragAndDropEventFilter
-::FilenameDragAndDropEventFilter( QObject* p  ) :
-  AbstractDragAndDropEventFilter( p )
+FilenameDragAndDropEventFilter::FilenameDragAndDropEventFilter(QObject* p) : AbstractDragAndDropEventFilter(p)
 {
 }
 
 /*****************************************************************************/
-FilenameDragAndDropEventFilter
-::~FilenameDragAndDropEventFilter()
+FilenameDragAndDropEventFilter::~FilenameDragAndDropEventFilter()
 {
 }
 
 /*****************************************************************************/
-bool
-FilenameDragAndDropEventFilter
-::DragEnterEvent( QObject * watched, QDragEnterEvent* e )
+bool FilenameDragAndDropEventFilter::DragEnterEvent(QObject* watched, QDragEnterEvent* e)
 {
   // qDebug() << this << "::DragEnterEvent(" << object << "," << e << ")";
   // qDebug() << e->mimeData()->formats();
 
   //
   // Bypass event its MIME data does not contain any URL(s).
-  if( !e->mimeData()->hasUrls() )
+  if (!e->mimeData()->hasUrls())
     return false;
 
   //
   // Bypass event if MIME data URL(s) are not all local filenames.
-  typedef QList< QUrl > QUrlList;
+  typedef QList<QUrl> QUrlList;
 
-  QUrlList urls( e->mimeData()->urls() );
+  QUrlList urls(e->mimeData()->urls());
 
-  for( QUrlList::const_iterator it( urls.begin() );
-       it!=urls.end();
-       ++it )
-    {
+  for (QUrlList::const_iterator it(urls.begin()); it != urls.end(); ++it)
+  {
     // qDebug() << *it;
     // qDebug() << it->scheme()
     // 	     << it->scheme().compare( "file", Qt::CaseInsensitive );
 
-    if(
-#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      it->scheme().compare( "file", Qt::CaseInsensitive )!=0
-#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      !it->isLocalFile()
-#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-      || e->source()==watched
-    )
-      {
+    if (
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 0)
+        it->scheme().compare("file", Qt::CaseInsensitive) != 0
+#else  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+        !it->isLocalFile()
+#endif // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+        || e->source() == watched)
+    {
       return false;
-      }
     }
+  }
 
   //
   // Accept event if its MIME data contains some URL(s) and they are
@@ -128,9 +120,7 @@ FilenameDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-FilenameDragAndDropEventFilter
-::DragLeaveEvent( QObject * /* object */, QDragLeaveEvent * /* e */ )
+bool FilenameDragAndDropEventFilter::DragLeaveEvent(QObject* /* object */, QDragLeaveEvent* /* e */)
 {
   // qDebug() << this << "::DragLeaveEvent(" << object << "," << event << ")";
 
@@ -140,9 +130,7 @@ FilenameDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-FilenameDragAndDropEventFilter
-::DragMoveEvent( QObject *, QDragMoveEvent * )
+bool FilenameDragAndDropEventFilter::DragMoveEvent(QObject*, QDragMoveEvent*)
 {
   // qDebug() << this << "::DragMoveEvent(" << object << "," << event << ");";
 
@@ -151,52 +139,48 @@ FilenameDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-FilenameDragAndDropEventFilter
-::DropEvent( QObject * watched, QDropEvent * e )
+bool FilenameDragAndDropEventFilter::DropEvent(QObject* watched, QDropEvent* e)
 {
   // qDebug() << this << "::DropEvent(" << object << "," << e << ")";
 
-  assert( e!=NULL );
-  assert( e->mimeData()!=NULL );
+  assert(e != NULL);
+  assert(e->mimeData() != NULL);
 
   //
   // Bypass event its MIME data does not contain not URL(s).
-  if( !e->mimeData()->hasUrls() )
+  if (!e->mimeData()->hasUrls())
     return false;
 
   //
   // Bypass event if MIME data URL(s) are not all local filenames.
-  typedef QList< QUrl > QUrlList;
+  typedef QList<QUrl> QUrlList;
 
-  QUrlList urls( e->mimeData()->urls() );
+  QUrlList urls(e->mimeData()->urls());
 
   QStringList filenames;
 
-  for( QUrlList::const_iterator it( urls.begin() );
-       it!=urls.end();
-       ++it )
+  for (QUrlList::const_iterator it(urls.begin()); it != urls.end(); ++it)
+  {
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 0)
+    if (it->scheme().compare("file", Qt::CaseInsensitive) == 0)
+#else  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+    if (it->isLocalFile())
+#endif // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
     {
-#if QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( it->scheme().compare( "file", Qt::CaseInsensitive )==0 )
-#else // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
-    if( it->isLocalFile() )
-#endif  // QT_VERSION < QT_VERSION_CHECK( 4, 8, 0 )
+      if (e->source() != watched)
       {
-      if( e->source()!=watched )
-	{
-	filenames.push_back( it->toLocalFile() );
+        filenames.push_back(it->toLocalFile());
 
-	emit FilenameDropped( filenames.back() );
-	}
-      }
-    else
-      {
-      qWarning() << "Dropped URL is not a local filename:" << *it;
+        emit FilenameDropped(filenames.back());
       }
     }
- 
-  emit FilenamesDropped( filenames );
+    else
+    {
+      qWarning() << "Dropped URL is not a local filename:" << *it;
+    }
+  }
+
+  emit FilenamesDropped(filenames);
 
   //
   // Eatup event.

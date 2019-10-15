@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  **/
 
-class OTBOSSIMAdapters_EXPORT EllipsoidAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT EllipsoidAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -58,20 +58,18 @@ public:
   itkTypeMacro(EllipsoidAdapter, itk::Object);
 
   /** Convert a XYZ coordinate into a lon, lat, height on the ellipsoid */
-  void XYZToLonLatHeight(double x, double y, double z,
-                         double& lon, double& lat, double& h) const;
+  void XYZToLonLatHeight(double x, double y, double z, double& lon, double& lat, double& h) const;
 
   /** Convert a lon, lat, height on the ellipsoid into a XYZ geocentric system*/
-  void LonLatHeightToXYZ(double lon, double lat, double h,
-                         double& x, double& y, double& z) const;
+  void LonLatHeightToXYZ(double lon, double lat, double h, double& x, double& y, double& z) const;
 
 protected:
   EllipsoidAdapter();
   ~EllipsoidAdapter() override;
 
 private:
-  EllipsoidAdapter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  EllipsoidAdapter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ossimEllipsoid* m_Ellipsoid;
 };

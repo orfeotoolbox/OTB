@@ -69,34 +69,28 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-QuicklookViewRenderer
-::QuicklookViewRenderer( QObject* p ) :
-  ImageViewRenderer( p ),
-  m_GlRoiActor( otb::GlROIActor::New() )
+QuicklookViewRenderer::QuicklookViewRenderer(QObject* p) : ImageViewRenderer(p), m_GlRoiActor(otb::GlROIActor::New())
 {
-  assert( !m_GlRoiActor.IsNull() );
+  assert(!m_GlRoiActor.IsNull());
 
-  setObjectName( "QuicklookViewRenderer" );
+  setObjectName("QuicklookViewRenderer");
 
   m_EffectsEnabled = false;
 }
 
 /*****************************************************************************/
-QuicklookViewRenderer
-::~QuicklookViewRenderer()
+QuicklookViewRenderer::~QuicklookViewRenderer()
 {
 }
 
 /*****************************************************************************/
-AbstractImageViewRenderer::RenderingContext*
-QuicklookViewRenderer
-::NewRenderingContext() const
+AbstractImageViewRenderer::RenderingContext* QuicklookViewRenderer::NewRenderingContext() const
 {
   RenderingContext* context = new QuicklookViewRenderer::RenderingContext();
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 #else
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
   //
   // Share otb::GlViewRendering settings with manipulator using
@@ -109,55 +103,45 @@ QuicklookViewRenderer
 }
 
 /*******************************************************************************/
-void
-QuicklookViewRenderer
-::virtual_SetProjection()
+void QuicklookViewRenderer::virtual_SetProjection()
 {
   SetWktAndKwl();
 }
 
 /*******************************************************************************/
-void
-QuicklookViewRenderer
-::virtual_UpdateProjection()
+void QuicklookViewRenderer::virtual_UpdateProjection()
 {
   SetWktAndKwl();
 }
 
 /*******************************************************************************/
-void
-QuicklookViewRenderer
-::SetWktAndKwl()
+void QuicklookViewRenderer::SetWktAndKwl()
 {
-  // qDebug() << this << "::SetWktAndKwl()";
+// qDebug() << this << "::SetWktAndKwl()";
 
 #if DISABLE_QUICKLOOK_VIEW
   return;
 #endif
 
-  assert( GetLayerStack()!=NULL );
+  assert(GetLayerStack() != NULL);
 
-  if( GetLayerStack()->IsEmpty() )
+  if (GetLayerStack()->IsEmpty())
     return;
 
-  otb::GlImageActor::Pointer referenceGlImageActor(
-    GetReferenceActor< otb::GlImageActor >()
-  );
+  otb::GlImageActor::Pointer referenceGlImageActor(GetReferenceActor<otb::GlImageActor>());
 
-  assert( !referenceGlImageActor.IsNull() );
+  assert(!referenceGlImageActor.IsNull());
 
-  m_GlRoiActor->SetKwl( referenceGlImageActor->GetKwl() );
-  m_GlRoiActor->SetWkt( referenceGlImageActor->GetWkt() );
+  m_GlRoiActor->SetKwl(referenceGlImageActor->GetKwl());
+  m_GlRoiActor->SetWkt(referenceGlImageActor->GetWkt());
 }
 
 /*******************************************************************************/
-void
-QuicklookViewRenderer
-::virtual_FinishScene()
+void QuicklookViewRenderer::virtual_FinishScene()
 {
   // qDebug() << this << "::virtual_FinishScene()";
 
-  assert( !m_GlView.IsNull() );
+  assert(!m_GlView.IsNull());
 
 #if DISABLE_QUICKLOOK_VIEW
   return;
@@ -170,8 +154,8 @@ QuicklookViewRenderer
 
   std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
-  m_GlRoiActor->SetVisible( true );
-  m_GlRoiActor->SetOverlay( true );
+  m_GlRoiActor->SetVisible(true);
+  m_GlRoiActor->SetOverlay(true);
 
   // qDebug() << "Added roi-actor:" << FromStdString( key );
 
@@ -180,35 +164,30 @@ QuicklookViewRenderer
 
   color.Fill( 1.0 );
 
-  m_GlRoiActor->SetColor( color ); 
+  m_GlRoiActor->SetColor( color );
   */
-  m_GlRoiActor->SetFill( false );
-  m_GlRoiActor->SetAlpha( 0.2 );
+  m_GlRoiActor->SetFill(false);
+  m_GlRoiActor->SetAlpha(0.2);
 
-  m_GlView->MoveActorToEndOfRenderingOrder( key, true );
+  m_GlView->MoveActorToEndOfRenderingOrder(key, true);
 }
 
 /*****************************************************************************/
-void
-QuicklookViewRenderer
-::UpdateActors( const AbstractImageViewRenderer::RenderingContext* c )
+void QuicklookViewRenderer::UpdateActors(const AbstractImageViewRenderer::RenderingContext* c)
 {
   // qDebug() << this << "::UpdateActors()";
 
-  assert( c!=NULL );
+  assert(c != NULL);
 
-  ImageViewRenderer::UpdateActors( c );
+  ImageViewRenderer::UpdateActors(c);
 
-  assert(
-    c==dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c )
-  );
+  assert(c == dynamic_cast<const QuicklookViewRenderer::RenderingContext*>(c));
 
-  const QuicklookViewRenderer::RenderingContext * context =
-    dynamic_cast< const QuicklookViewRenderer::RenderingContext * >( c );
+  const QuicklookViewRenderer::RenderingContext* context = dynamic_cast<const QuicklookViewRenderer::RenderingContext*>(c);
 
   // Coverity-19842
   // {
-  assert( context!=NULL );
+  assert(context != NULL);
   // }
 
   /*
@@ -219,8 +198,8 @@ QuicklookViewRenderer
     << context->m_RoiExtent[ 0 ] << "," << context->m_RoiExtent[ 1 ];
   */
 
-  m_GlRoiActor->SetUL( context->m_RoiOrigin );
-  m_GlRoiActor->SetLR( context->m_RoiExtent );
+  m_GlRoiActor->SetUL(context->m_RoiOrigin);
+  m_GlRoiActor->SetLR(context->m_RoiExtent);
 }
 
 /*****************************************************************************/

@@ -31,7 +31,7 @@
 
 #include "otbImage.h"
 
-int main(int, char*[])
+int main(int, char* [])
 {
   // Then we must decide with what type to represent the pixels
   // and what the dimension of the image will be. With these two

@@ -43,7 +43,7 @@ namespace otb
  *
  * \ingroup OTBFuzzy
  */
-template <class TLabel = unsigned short, class TPrecision=double>
+template <class TLabel = unsigned short, class TPrecision = double>
 class ITK_EXPORT FuzzyVariable : public itk::DataObject
 {
 public:
@@ -58,56 +58,48 @@ public:
   itkTypeMacro(FuzzyVariable, DataObject);
 
   /** Label typedef */
-  typedef TLabel     LabelType;
+  typedef TLabel LabelType;
 
   /** Precision typedef */
   typedef TPrecision PrecisionType;
 
   /** Type to hold the membership values */
-  typedef std::map<LabelType, PrecisionType>        MembershipValueType;
-  typedef itk::FixedArray< PrecisionType, 6>        ParametersType;
-  typedef std::map<LabelType, ParametersType>       ParametersMapType;
+  typedef std::map<LabelType, PrecisionType>  MembershipValueType;
+  typedef itk::FixedArray<PrecisionType, 6>   ParametersType;
+  typedef std::map<LabelType, ParametersType> ParametersMapType;
 
   /** Get the membership related to one label */
-  PrecisionType GetMembership(const LabelType & var, const PrecisionType & value) const;
+  PrecisionType GetMembership(const LabelType& var, const PrecisionType& value) const;
 
   /** Get all the memberships */
-  MembershipValueType GetMembership(const PrecisionType & value) const;
+  MembershipValueType GetMembership(const PrecisionType& value) const;
 
   /** Get the label with the highest membership */
-  LabelType GetMaxVar(const PrecisionType & value) const;
+  LabelType GetMaxVar(const PrecisionType& value) const;
 
   /** Set the membership for a given Label */
-  void SetMembership(const LabelType & var,
-                     const PrecisionType & v1,
-                     const PrecisionType & v2,
-                     const PrecisionType & v3,
-                     const PrecisionType & v4);
+  void SetMembership(const LabelType& var, const PrecisionType& v1, const PrecisionType& v2, const PrecisionType& v3, const PrecisionType& v4);
 
-  void SetMembership(const LabelType & var,
-                     const PrecisionType & v1,
-                     const PrecisionType & v2,
-                     const PrecisionType & v3,
-                     const PrecisionType & v4,
-                     const PrecisionType & min,
-                     const PrecisionType & max);
+  void SetMembership(const LabelType& var, const PrecisionType& v1, const PrecisionType& v2, const PrecisionType& v3, const PrecisionType& v4,
+                     const PrecisionType& min, const PrecisionType& max);
 
   /** Remove a given label from the membership table */
-  void RemoveMembership(const LabelType & var);
+  void RemoveMembership(const LabelType& var);
 
   /** Clear all memberships */
   void Clear();
 
   /** Print a MembershipValueType */
-  static std::ostream& PrintMembershipValueType(std::ostream & out,
-                                                const MembershipValueType& membership);
+  static std::ostream& PrintMembershipValueType(std::ostream& out, const MembershipValueType& membership);
 
 
 protected:
   /** Constructor */
   FuzzyVariable();
   /** Destructor */
-  ~FuzzyVariable() override {}
+  ~FuzzyVariable() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbImageFileReader.h"
 
 #include "itkMacro.h"
@@ -28,19 +27,19 @@
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilter(int itkNotUsed(argc), char * argv[])
+int otbPrintableImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension>   InputImageType;
-  typedef otb::ImageFileReader<InputImageType>           ReaderType;
-  typedef otb::PrintableImageFilter<InputImageType>      FilterType;
-  typedef FilterType::OutputImageType                    OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>      ReaderType;
+  typedef otb::PrintableImageFilter<InputImageType> FilterType;
+  typedef FilterType::OutputImageType               OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType>     WriterType;
 
   FilterType::Pointer printableImageFilter = FilterType::New();
 

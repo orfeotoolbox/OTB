@@ -24,7 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSOMModelCanRead);
   REGISTER_TEST(otbSOMModeTrain);
-  
+
 #ifdef OTB_USE_SHARK
   REGISTER_TEST(otbAutoencoderModelCanRead);
   REGISTER_TEST(otbAutoencoderModeTrain);

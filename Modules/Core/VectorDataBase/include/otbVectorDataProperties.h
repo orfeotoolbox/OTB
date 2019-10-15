@@ -70,35 +70,47 @@ public:
   itkTypeMacro(VectorDataProperties, LightObject);
 
   /** Number of dimensions. */
-  itkStaticConstMacro(VectorDataDimension, unsigned int,
-                      TVectorData::Dimension);
+  itkStaticConstMacro(VectorDataDimension, unsigned int, TVectorData::Dimension);
 
   /** Get/Set the VectorData. */
-//      itkGetObjectMacro(VectorDataObject, VectorDataType);
-  void SetVectorDataObject(const VectorDataType * v) {m_VectorDataObject = const_cast <VectorDataType *>(v); }
-//
-  RegionType GetBoundingRegion() {return m_BoundingRegion; }
-  void SetBoundingRegion(RegionType& region) {m_BoundingRegion = region; }
+  //      itkGetObjectMacro(VectorDataObject, VectorDataType);
+  void SetVectorDataObject(const VectorDataType* v)
+  {
+    m_VectorDataObject = const_cast<VectorDataType*>(v);
+  }
+  //
+  RegionType GetBoundingRegion()
+  {
+    return m_BoundingRegion;
+  }
+  void SetBoundingRegion(RegionType& region)
+  {
+    m_BoundingRegion = region;
+  }
 
   void AddRegion(const RegionType& region);
   void ComputeBoundingRegion();
+
 protected:
   /** Constructor */
-  VectorDataProperties() : m_VectorDataObject(nullptr) {};
+  VectorDataProperties() : m_VectorDataObject(nullptr){};
   /** Destructor */
-  ~VectorDataProperties() override {}
+  ~VectorDataProperties() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ProcessNode(InternalTreeNodeType * source);
+  void ProcessNode(InternalTreeNodeType* source);
   bool IsBoundingRegionNull();
-private:
-  VectorDataProperties(const Self &) = delete;
-  void operator =(const Self&) = delete;
 
-  //Pointer to the VectorData
-  VectorDataType * m_VectorDataObject;
-  RegionType       m_BoundingRegion;
+private:
+  VectorDataProperties(const Self&) = delete;
+  void operator=(const Self&) = delete;
+
+  // Pointer to the VectorData
+  VectorDataType* m_VectorDataObject;
+  RegionType      m_BoundingRegion;
 
 }; // end class
 } // end namespace otb

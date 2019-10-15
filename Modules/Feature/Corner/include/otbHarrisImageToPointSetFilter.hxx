@@ -30,8 +30,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPointSet>
-HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
-::HarrisImageToPointSetFilter()
+HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>::HarrisImageToPointSetFilter()
 {
   m_SigmaD = 1.0;
   m_SigmaI = 1.0;
@@ -40,14 +39,12 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
   m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
   m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
 
-  m_HarrisFilter     = HarrisImageFilterType::New();
-  m_ThresholdFilter  = ThresholdImageToPointSetType::New();
+  m_HarrisFilter    = HarrisImageFilterType::New();
+  m_ThresholdFilter = ThresholdImageToPointSetType::New();
 }
 
 template <class TInputImage, class TOutputPointSet>
-void
-HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
-::GenerateData()
+void HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>::GenerateData()
 {
 
   typename OutputPointSetType::Pointer pointList = this->GetOutput();
@@ -63,21 +60,18 @@ HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
 
   m_ThresholdFilter->SetOutput(pointList);
   m_ThresholdFilter->Update();
-
 }
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutputPointSet>
-void
-HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void HarrisImageToPointSetFilter<TInputImage, TOutputPointSet>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Sigma_D    : " << this->m_SigmaD    << std::endl;
-  os << indent << "Sigma_I    : " << this->m_SigmaI    << std::endl;
-  os << indent << "Alpha      : " << this->m_Alpha     << std::endl;
+  os << indent << "Sigma_D    : " << this->m_SigmaD << std::endl;
+  os << indent << "Sigma_I    : " << this->m_SigmaI << std::endl;
+  os << indent << "Alpha      : " << this->m_Alpha << std::endl;
   os << indent << "LowerThreshold  : " << this->m_LowerThreshold << std::endl;
   os << indent << "UpperThreshold  : " << this->m_UpperThreshold << std::endl;
 }

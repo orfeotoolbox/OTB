@@ -41,17 +41,16 @@ namespace otb
  */
 
 
-//RGBA to Scalar
+// RGBA to Scalar
 template <class TInternalInputPixelType, class TOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter :
-public itk::ProcessObject
+class ITK_EXPORT RGBAPixelConverter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef RGBAPixelConverter                           Self;
-  typedef itk::ProcessObject                           Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef RGBAPixelConverter            Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
@@ -59,14 +58,18 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
-  typedef TOutputPixelType                                   OutputPixelType;
+  typedef typename itk::RGBAPixel<TInternalInputPixelType> InputPixelType;
+  typedef TOutputPixelType                                 OutputPixelType;
 
-  OutputPixelType Convert (InputPixelType input);
+  OutputPixelType Convert(InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
+  RGBAPixelConverter()
+  {
+  }
+  ~RGBAPixelConverter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -77,18 +80,16 @@ private:
   void operator=(const Self&) = delete;
 };
 
-//RGBA to RGBA
+// RGBA to RGBA
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType,
-                                    typename itk::RGBAPixel<TInternalOutputPixelType> > :
-public itk::ProcessObject
+class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBAPixel<TInternalOutputPixelType>> : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef RGBAPixelConverter                           Self;
-  typedef itk::ProcessObject                           Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef RGBAPixelConverter            Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
@@ -96,14 +97,18 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
-  typedef typename itk::RGBAPixel<TInternalOutputPixelType>  OutputPixelType;
+  typedef typename itk::RGBAPixel<TInternalInputPixelType>  InputPixelType;
+  typedef typename itk::RGBAPixel<TInternalOutputPixelType> OutputPixelType;
 
-  OutputPixelType Convert (InputPixelType input);
+  OutputPixelType Convert(InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
+  RGBAPixelConverter()
+  {
+  }
+  ~RGBAPixelConverter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
@@ -114,18 +119,16 @@ private:
   void operator=(const Self&) = delete;
 };
 
-//RGBA to RGB
+// RGBA to RGB
 template <class TInternalInputPixelType, class TInternalOutputPixelType>
-class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType,
-                                    typename itk::RGBPixel<TInternalOutputPixelType> > :
-public itk::ProcessObject
+class ITK_EXPORT RGBAPixelConverter<TInternalInputPixelType, typename itk::RGBPixel<TInternalOutputPixelType>> : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef RGBAPixelConverter                           Self;
-  typedef itk::ProcessObject                           Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef RGBAPixelConverter            Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RGBAPixelConverter, ProcessObject);
@@ -133,14 +136,18 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef typename itk::RGBAPixel<TInternalInputPixelType>   InputPixelType;
-  typedef typename itk::RGBPixel<TInternalOutputPixelType>  OutputPixelType;
+  typedef typename itk::RGBAPixel<TInternalInputPixelType> InputPixelType;
+  typedef typename itk::RGBPixel<TInternalOutputPixelType> OutputPixelType;
 
-  OutputPixelType Convert (InputPixelType input);
+  OutputPixelType Convert(InputPixelType input);
 
 protected:
-  RGBAPixelConverter(){}
-  ~RGBAPixelConverter() override{}
+  RGBAPixelConverter()
+  {
+  }
+  ~RGBAPixelConverter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);

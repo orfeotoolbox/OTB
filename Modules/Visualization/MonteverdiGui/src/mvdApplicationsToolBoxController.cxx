@@ -63,76 +63,58 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ApplicationsToolBoxController
-::ApplicationsToolBoxController( ApplicationsToolBox* widget, QObject* p ) :
-  AbstractModelController( widget, p )
+ApplicationsToolBoxController::ApplicationsToolBoxController(ApplicationsToolBox* widget, QObject* p) : AbstractModelController(widget, p)
 {
 }
 
 /*******************************************************************************/
-ApplicationsToolBoxController
-::~ApplicationsToolBoxController()
+ApplicationsToolBoxController::~ApplicationsToolBoxController()
 {
 }
 
 /*******************************************************************************/
-void
-ApplicationsToolBoxController
-::Connect( AbstractModel* model )
+void ApplicationsToolBoxController::Connect(AbstractModel* model)
 {
   //
   // Access widget
-  ApplicationsToolBox* widget = GetWidget< ApplicationsToolBox >();
+  ApplicationsToolBox* widget = GetWidget<ApplicationsToolBox>();
 
   //
   // Access model.
-  OTBApplicationsModel* appModel = qobject_cast< OTBApplicationsModel* >(model);
-  assert( appModel!=NULL );
+  OTBApplicationsModel* appModel = qobject_cast<OTBApplicationsModel*>(model);
+  assert(appModel != NULL);
 
   //
   // connections
-  QObject::connect(
-    appModel->GetBrowser(),
-    SIGNAL( AvailableApplicationsTagsChanged( const ApplicationsTagContainer&) ),
-    widget,
-    SLOT( OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& ) )
-  );
+  QObject::connect(appModel->GetBrowser(), SIGNAL(AvailableApplicationsTagsChanged(const ApplicationsTagContainer&)), widget,
+                   SLOT(OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer&)));
 }
 
 /*******************************************************************************/
-void
-ApplicationsToolBoxController
-::Disconnect( AbstractModel* model )
+void ApplicationsToolBoxController::Disconnect(AbstractModel* model)
 {
   //
   // Access widget
-  ApplicationsToolBox* widget = GetWidget< ApplicationsToolBox >();
+  ApplicationsToolBox* widget = GetWidget<ApplicationsToolBox>();
 
   //
   // Access model.
-  OTBApplicationsModel* appModel = qobject_cast< OTBApplicationsModel* >(model);
-  assert( appModel!=NULL );
+  OTBApplicationsModel* appModel = qobject_cast<OTBApplicationsModel*>(model);
+  assert(appModel != NULL);
 
   //
   // disconnect app browser
-  QObject::disconnect(
-    appModel->GetBrowser(),
-    SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer&) ),
-    widget,
-    SLOT( OnAvailableApplicationsTagsChanged( const ApplicationsTagContainer& ) ));
+  QObject::disconnect(appModel->GetBrowser(), SIGNAL(AvailableApplicationsTagsChanged(const ApplicationsTagContainer&)), widget,
+                      SLOT(OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer&)));
 }
 
 /*******************************************************************************/
-void
-ApplicationsToolBoxController
-::ClearWidget()
+void ApplicationsToolBoxController::ClearWidget()
 {
 }
 
 /*******************************************************************************/
-void
-ApplicationsToolBoxController
-::virtual_ResetWidget( bool )
+void ApplicationsToolBoxController::virtual_ResetWidget(bool)
 {
   // Reset widget.
   ResetDatasetTree();
@@ -142,16 +124,14 @@ ApplicationsToolBoxController
 }
 
 /*******************************************************************************/
-void
-ApplicationsToolBoxController
-::ResetDatasetTree()
+void ApplicationsToolBoxController::ResetDatasetTree()
 {
   //
   // Access model.
-  OTBApplicationsModel* model = GetModel< OTBApplicationsModel >();
-  assert( model!=NULL );
+  OTBApplicationsModel* model = GetModel<OTBApplicationsModel>();
+  assert(model != NULL);
 
-  // 
+  //
   // Fill the widget. It also reset the datatree before filling the
   // tree...
   model->FillTree();

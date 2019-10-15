@@ -73,8 +73,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class OTBMonteverdiGUI_EXPORT DoubleValidator :
-    public QDoubleValidator
+class OTBMonteverdiGUI_EXPORT DoubleValidator : public QDoubleValidator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -83,20 +82,16 @@ class OTBMonteverdiGUI_EXPORT DoubleValidator :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  DoubleValidator( QObject* p =NULL );
+  DoubleValidator(QObject* p = NULL);
 
   /**
    * \brief Constructor.
    */
-  DoubleValidator( double bottom,
-		   double top,
-		   int decimals,
-		   QObject *p = 0 );
+  DoubleValidator(double bottom, double top, int decimals, QObject* p = 0);
 
   /** \brief Destructor. */
   ~DoubleValidator() override;
@@ -104,45 +99,40 @@ public:
   //
   // QDoubleValidator overloads.
 
-  void fixup( QString& input ) const override;
+  void fixup(QString& input) const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

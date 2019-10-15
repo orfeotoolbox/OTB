@@ -29,7 +29,7 @@ namespace otb
 namespace Wrapper
 {
 
-class  SplitImage : public Application
+class SplitImage : public Application
 {
 
 public:
@@ -45,8 +45,7 @@ public:
   itkTypeMacro(SplitImage, Application);
 
   /** Filters typedef */
-  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,
-                                            FloatVectorImageType::InternalPixelType> FilterType;
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> FilterType;
 
 private:
   void DoInit() override
@@ -54,10 +53,11 @@ private:
     SetName("SplitImage");
     SetDescription("Split a N multiband image into N images.");
 
-    SetDocLongDescription("This application splits a N-bands image into N mono-band images. "
-      "The output images filename will be generated from the output parameter. "
-      "Thus, if the input image has 2 channels, and the user has set as output parameter, outimage.tif, "
-      "the generated images will be outimage_0.tif and outimage_1.tif.");
+    SetDocLongDescription(
+        "This application splits a N-bands image into N mono-band images. "
+        "The output images filename will be generated from the output parameter. "
+        "Thus, if the input image has 2 channels, and the user has set as output parameter, outimage.tif, "
+        "the generated images will be outimage_0.tif and outimage_1.tif.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ConcatenateImages");
@@ -65,17 +65,18 @@ private:
     AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in","Input multiband image filename.");
+    SetParameterDescription("in", "Input multiband image filename.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out", "The output filename will be used to get the prefix "
-    "an the extension of the output written's image. For example with outimage.tif as output filename, "
-    "the generated images will had an indice (corresponding at each bands) "
-    "between the prefix and the extension, such as: outimage_0.tif  and outimage_1.tif (if 2 bands).");
+    SetParameterDescription("out",
+                            "The output filename will be used to get the prefix "
+                            "an the extension of the output written's image. For example with outimage.tif as output filename, "
+                            "the generated images will had an indice (corresponding at each bands) "
+                            "between the prefix and the extension, such as: outimage_0.tif  and outimage_1.tif (if 2 bands).");
 
     AddRAMParameter();
 
-  // Doc example parameter settings
+    // Doc example parameter settings
     SetDocExampleParameterValue("in", "VegetationIndex.hd");
     SetDocExampleParameterValue("out", "splitImage.tif");
 
@@ -106,35 +107,35 @@ private:
     filter->SetInput(inImage);
 
     for (unsigned int i = 0; i < inImage->GetNumberOfComponentsPerPixel(); ++i)
-      {
+    {
       // Set the channel to extract
-      filter->SetChannel(i+1);
+      filter->SetChannel(i + 1);
 
       // build the current output filename
       std::ostringstream oss;
       if (!path.empty())
-        {
-        oss <<path<<"/";
-        }
-      oss <<fname<<"_"<<i<<ext;
+      {
+        oss << path << "/";
+      }
+      oss << fname << "_" << i << ext;
 
       // Create an output parameter to write the current output image
       OutputImageParameter::Pointer paramOut = OutputImageParameter::New();
 
       // writer label
       std::ostringstream osswriter;
-      osswriter<< "writer (Channel : "<< i<<")";
+      osswriter << "writer (Channel : " << i << ")";
 
       // Set the filename of the current output image
       paramOut->SetFileName(oss.str());
-      otbAppLogINFO(<< "File: "<<paramOut->GetFileName() << " will be written.");
+      otbAppLogINFO(<< "File: " << paramOut->GetFileName() << " will be written.");
       paramOut->SetValue(filter->GetOutput());
       paramOut->SetPixelType(this->GetParameterOutputImagePixelType("out"));
       // Add the current level to be written
       paramOut->InitializeWriters();
       AddProcess(paramOut->GetWriter(), osswriter.str());
       paramOut->Write();
-      }
+    }
 
     // Disable the output Image parameter to avoid writing
     // the last image (Application::ExecuteAndWriteOutput method)
@@ -146,4 +147,3 @@ private:
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::SplitImage)
-

@@ -48,7 +48,7 @@ namespace internal
  * \since OTB v 3.14.0
  */
 struct OTBProjection_EXPORT ReprojectTransformationFunctor
-  {
+{
   typedef OGRGeometry TransformedElementType;
 
   /**\ingroup Projection GeometriesFilters
@@ -56,60 +56,67 @@ struct OTBProjection_EXPORT ReprojectTransformationFunctor
    * \since OTB v 3.14.0
    */
   struct ByCopy
+  {
+    ByCopy(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector)
     {
-    ByCopy(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector){}
+    }
     template <typename TGeometry>
-      ogr::UniqueGeometryPtr operator()(TGeometry const* in) const;
+    ogr::UniqueGeometryPtr operator()(TGeometry const* in) const;
+
   private:
     ReprojectTransformationFunctor const& m_Reprojector;
-    };
+  };
 
   /**\ingroup Projection GeometriesFilters
    * Internal functor used to reproject a \c OGRGeometry: \em In-Place transformation policy.
    * \since OTB v 3.14.0
    */
   struct InPlace
+  {
+    InPlace(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector)
     {
-    InPlace(ReprojectTransformationFunctor const& reprojector) : m_Reprojector(reprojector){}
+    }
     template <typename TGeometry>
-      void operator()(TGeometry * inout) const;
+    void operator()(TGeometry* inout) const;
+
   private:
     ReprojectTransformationFunctor const& m_Reprojector;
-    };
+  };
 
 
   ogr::UniqueGeometryPtr operator()(OGRGeometry const* in) const;
-  void apply_inplace          (OGRGeometry * inout) const;
+  void apply_inplace(OGRGeometry* inout) const;
 
-  typedef otb::GenericRSTransform<double, 2, 2>   InternalTransformType;
-  typedef InternalTransformType::Pointer          InternalTransformPointerType;
+  typedef otb::GenericRSTransform<double, 2, 2> InternalTransformType;
+  typedef InternalTransformType::Pointer InternalTransformPointerType;
   /**
    * Setter for the 1-point transformation functor.
    * \param[in] transform  transformation functor to apply on single points.
    * \throw None
    */
   void SetOnePointTransformation(InternalTransformPointerType transform);
+
 private:
   /**
    * Transforms one single point thanks to \c m_Transform.
    * \param[in,out] g  point to transform
    * \throw Whatever is thrown by \c m_Transform::operator()
    */
-  void do_transform(OGRPoint              & g) const;
+  void do_transform(OGRPoint& g) const;
   // void do_transform(OGRLinearRing         & g) const;
   /**
    * Transforms all the points from a line-string, thanks to \c m_Transform.
    * \param[in,out] g  line-string to transform
    * \throw Whatever is thrown by \c m_Transform::operator()
    */
-  void do_transform(OGRLineString         & g) const;
+  void do_transform(OGRLineString& g) const;
   // void do_transform(OGRCurve              & g) const;
   /**
    * Transforms all the rings from a polygon.
    * \param[in,out] g  polygon to transform
    * \throw Whatever is thrown by \c m_Transform::operator()
    */
-  void do_transform(OGRPolygon            & g) const;
+  void do_transform(OGRPolygon& g) const;
 #if 0
   void do_transform(OGRSurface            & g) const;
   void do_transform(OGRMultiLineString    & g) const;
@@ -121,12 +128,12 @@ private:
    * \param[in,out] g  polygon to transform
    * \throw Whatever is thrown by \c m_Transform::operator()
    */
-  void do_transform(OGRGeometryCollection & g) const;
+  void do_transform(OGRGeometryCollection& g) const;
 
   /** Transformation functor that operates on one single \c OGRPoint.
    */
   InternalTransformPointerType m_Transform;
-  };
+};
 } // internal namespace
 
 
@@ -179,11 +186,11 @@ public:
 
   /**\name I/O typedefs */
   //@{
-  typedef Superclass::InputGeometriesType        InputGeometriesType;
+  typedef Superclass::InputGeometriesType InputGeometriesType;
   // typedef Superclass::InputGeometriesPointer  InputGeometriesPointer;
-  typedef Superclass::OutputGeometriesType       OutputGeometriesType;
+  typedef Superclass::OutputGeometriesType OutputGeometriesType;
   // typedef Superclass::OutputGeometriesPointer OutputGeometriesPointer;
-  typedef ogr::ImageReference<double>            ImageReference;
+  typedef ogr::ImageReference<double> ImageReference;
 
   //@}
 
@@ -208,14 +215,14 @@ private:
    * inner-filter working on \c ogr::DataSource cannot be globally configured
    * once and for all.
    */
-  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const override;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer& destination) const override;
   /** Hook used to conclude the initialization phase.
    * Global \c ogr::DataSource settings for the \c m_Transform functor are
    * forwarded to the functor. \c ogr::Layer specific settings will be set at
    * the last moment from \c DoProcessLayer().
    */
   void DoFinalizeInitialization() override;
-  
+
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference
@@ -224,7 +231,7 @@ private:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * encapsuled in the \c TransformationFunctorDispatcherType.
    */
-  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const override;
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer& dest) const override;
 
 protected:
   /** Default constructor. */
@@ -267,12 +274,11 @@ public:
 private:
   /**\name Functor definition */
   //@{
-  typedef internal::ReprojectTransformationFunctor                TransformationFunctorType;
-  typedef TransformationFunctorType::TransformedElementType       TransformedElementType;
-  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldCopyTransformation>
-                                                                  TransformationFunctorDispatcherType;
+  typedef internal::ReprojectTransformationFunctor          TransformationFunctorType;
+  typedef TransformationFunctorType::TransformedElementType TransformedElementType;
+  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldCopyTransformation> TransformationFunctorDispatcherType;
 
-  TransformationFunctorDispatcherType             m_TransformationFunctor;
+  TransformationFunctorDispatcherType m_TransformationFunctor;
   //@}
 
   /**\name 1 Point Transformation definition */
@@ -280,18 +286,18 @@ private:
   typedef TransformationFunctorType::InternalTransformType        InternalTransformType;
   typedef TransformationFunctorType::InternalTransformPointerType InternalTransformPointerType;
 
-  InternalTransformPointerType                    m_Transform;
+  InternalTransformPointerType m_Transform;
   //@}
 
   /**\name Image Reference (origin, spacing) */
   //@{
-  ImageReference                                  m_InputImageReference;
-  ImageReference                                  m_OutputImageReference;
+  ImageReference m_InputImageReference;
+  ImageReference m_OutputImageReference;
   //@}
 
-  std::string                                     m_OutputProjectionRef; // in WKT format!
-  ImageKeywordlist                                m_InputKeywordList;
-  ImageKeywordlist                                m_OutputKeywordList;
+  std::string      m_OutputProjectionRef; // in WKT format!
+  ImageKeywordlist m_InputKeywordList;
+  ImageKeywordlist m_OutputKeywordList;
 };
 } // end namespace otb
 

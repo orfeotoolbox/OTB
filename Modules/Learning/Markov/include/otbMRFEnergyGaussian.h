@@ -48,12 +48,12 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyGaussian : public MRFEnergy<TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyGaussian             Self;
-  typedef MRFEnergy<TInput1, TInput2>   Superclass;
+  typedef MRFEnergyGaussian Self;
+  typedef MRFEnergy<TInput1, TInput2> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -70,19 +70,19 @@ public:
 
   double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
-    return vnl_math_sqr((static_cast<double>(value1))
-                        - (static_cast<double>(value2)));
+    return vnl_math_sqr((static_cast<double>(value1)) - (static_cast<double>(value2)));
   }
 
 protected:
   // The constructor and destructor.
   MRFEnergyGaussian()
-    {
+  {
     this->m_NumberOfParameters = 0;
     this->m_Parameters.SetSize(this->m_NumberOfParameters);
-    };
-  ~MRFEnergyGaussian() override {}
-
+  };
+  ~MRFEnergyGaussian() override
+  {
+  }
 };
 }
 

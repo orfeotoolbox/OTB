@@ -82,16 +82,15 @@ namespace otb
  */
 
 template <class TInputImage, class TClassifiedImage>
-class ITK_EXPORT MarkovRandomFieldFilter :
-  public itk::ImageToImageFilter<TInputImage, TClassifiedImage>
+class ITK_EXPORT MarkovRandomFieldFilter : public itk::ImageToImageFilter<TInputImage, TClassifiedImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MarkovRandomFieldFilter                                Self;
+  typedef MarkovRandomFieldFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TClassifiedImage> Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
-  typedef typename Superclass::OutputImagePointer                OutputImagePointer;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef typename Superclass::OutputImagePointer OutputImagePointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(MarkovRandomFieldFilter, itk::ImageToImageFilter);
@@ -145,15 +144,12 @@ public:
   typedef typename TClassifiedImage::OffsetType LabelledImageOffsetType;
 
   /** Type definition for the input image region iterator */
-  typedef itk::ImageRegionIterator<TClassifiedImage>
-  LabelledImageRegionIterator;
+  typedef itk::ImageRegionIterator<TClassifiedImage> LabelledImageRegionIterator;
 
-  typedef itk::ImageRegionConstIterator<TClassifiedImage>
-  LabelledImageRegionConstIterator;
+  typedef itk::ImageRegionConstIterator<TClassifiedImage> LabelledImageRegionConstIterator;
 
   /** Labelled Image dimension */
-  itkStaticConstMacro(ClassifiedImageDimension, unsigned int,
-                      TClassifiedImage::ImageDimension);
+  itkStaticConstMacro(ClassifiedImageDimension, unsigned int, TClassifiedImage::ImageDimension);
 
   /** Size and value typedef support. */
   typedef typename TInputImage::SizeType SizeType;
@@ -162,36 +158,26 @@ public:
   typedef typename TInputImage::SizeType NeighborhoodRadiusType;
 
   /** Input image neighborhood iterator and kernel size typedef */
-  typedef itk::ConstNeighborhoodIterator<TInputImage>
-  InputImageNeighborhoodIterator;
+  typedef itk::ConstNeighborhoodIterator<TInputImage> InputImageNeighborhoodIterator;
 
-  typedef typename InputImageNeighborhoodIterator::RadiusType
-  InputImageNeighborhoodRadiusType;
+  typedef typename InputImageNeighborhoodIterator::RadiusType InputImageNeighborhoodRadiusType;
 
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage>
-  InputImageFacesCalculator;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TInputImage> InputImageFacesCalculator;
 
-  typedef typename InputImageFacesCalculator::FaceListType
-  InputImageFaceListType;
+  typedef typename InputImageFacesCalculator::FaceListType InputImageFaceListType;
 
-  typedef typename InputImageFaceListType::iterator
-  InputImageFaceListIterator;
+  typedef typename InputImageFaceListType::iterator InputImageFaceListIterator;
 
   /** Labelled image neighborhood iterator typedef */
-  typedef itk::NeighborhoodIterator<TClassifiedImage>
-  LabelledImageNeighborhoodIterator;
+  typedef itk::NeighborhoodIterator<TClassifiedImage> LabelledImageNeighborhoodIterator;
 
-  typedef typename LabelledImageNeighborhoodIterator::RadiusType
-  LabelledImageNeighborhoodRadiusType;
+  typedef typename LabelledImageNeighborhoodIterator::RadiusType LabelledImageNeighborhoodRadiusType;
 
-  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TClassifiedImage>
-  LabelledImageFacesCalculator;
+  typedef itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<TClassifiedImage> LabelledImageFacesCalculator;
 
-  typedef typename LabelledImageFacesCalculator::FaceListType
-  LabelledImageFaceListType;
+  typedef typename LabelledImageFacesCalculator::FaceListType LabelledImageFaceListType;
 
-  typedef typename LabelledImageFaceListType::iterator
-  LabelledImageFaceListIterator;
+  typedef typename LabelledImageFaceListType::iterator LabelledImageFaceListIterator;
 
   /** Typedef for random values. */
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
@@ -204,7 +190,7 @@ public:
   typedef typename EnergyFidelityType::Pointer       EnergyFidelityPointer;
 
   typedef MRFSampler<TInputImage, TClassifiedImage> SamplerType;
-  typedef typename SamplerType::Pointer             SamplerPointer;
+  typedef typename SamplerType::Pointer SamplerPointer;
 
   typedef MRFOptimizer                    OptimizerType;
   typedef typename OptimizerType::Pointer OptimizerPointer;
@@ -255,14 +241,14 @@ public:
    * radius, and allocates storage. */
 
   void SetNeighborhoodRadius(const unsigned long);
-  void SetNeighborhoodRadius(const unsigned long *radiusArray);
+  void SetNeighborhoodRadius(const unsigned long* radiusArray);
 
   /** Get the neighborhood radius */
   const NeighborhoodRadiusType GetNeighborhoodRadius() const
   {
     NeighborhoodRadiusType neighborhoodRadius;
 
-    for (int i = 0; i < InputImageDimension; ++i)
+    for (int i              = 0; i < InputImageDimension; ++i)
       neighborhoodRadius[i] = m_InputImageNeighborhoodRadius[i];
 
     return neighborhoodRadius;
@@ -275,15 +261,11 @@ public:
    * image should contain values corresponding to the class number (consecutive
    * integers).
   */
-  virtual void SetTrainingInput(const TrainingImageType * trainingImage);
+  virtual void SetTrainingInput(const TrainingImageType* trainingImage);
   const TrainingImageType* GetTrainingInput(void);
 
-  //Enum to get the stopping condition of the MRF filter
-  typedef enum
-    {
-    MaximumNumberOfIterations = 1,
-    ErrorTolerance
-    } StopConditionType;
+  // Enum to get the stopping condition of the MRF filter
+  typedef enum { MaximumNumberOfIterations = 1, ErrorTolerance } StopConditionType;
 
   /** Get condition that stops the MRF filter (Number of Iterations
    * / Error tolerance ) */
@@ -294,17 +276,12 @@ public:
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(UnsignedIntConvertibleToClassifiedCheck,
-                  (itk::Concept::Convertible<unsigned int, LabelledImagePixelType>));
-  itkConceptMacro(ClassifiedConvertibleToUnsignedIntCheck,
-                  (itk::Concept::Convertible<LabelledImagePixelType, unsigned int> ));
-  itkConceptMacro(ClassifiedConvertibleToIntCheck,
-                  (itk::Concept::Convertible<LabelledImagePixelType, int> ));
-  itkConceptMacro(IntConvertibleToClassifiedCheck,
-                  (itk::Concept::Convertible<int, LabelledImagePixelType>));
-  itkConceptMacro(SameDimensionCheck,
-                  (itk::Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
-  /** End concept checking */
+  itkConceptMacro(UnsignedIntConvertibleToClassifiedCheck, (itk::Concept::Convertible<unsigned int, LabelledImagePixelType>));
+  itkConceptMacro(ClassifiedConvertibleToUnsignedIntCheck, (itk::Concept::Convertible<LabelledImagePixelType, unsigned int>));
+  itkConceptMacro(ClassifiedConvertibleToIntCheck, (itk::Concept::Convertible<LabelledImagePixelType, int>));
+  itkConceptMacro(IntConvertibleToClassifiedCheck, (itk::Concept::Convertible<int, LabelledImagePixelType>));
+  itkConceptMacro(SameDimensionCheck, (itk::Concept::SameDimension<InputImageDimension, ClassifiedImageDimension>));
+/** End concept checking */
 #endif
 
   /** Methods to cancel random effects.*/
@@ -319,7 +296,9 @@ public:
 
 protected:
   MarkovRandomFieldFilter();
-  ~MarkovRandomFieldFilter() override{}
+  ~MarkovRandomFieldFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Allocate memory for labelled images. This is automatically called
@@ -330,18 +309,17 @@ protected:
   /** Connect the pipeline and propagate the required parameters. This
   * is automatically called in GenerateData().
   */
-  void Initialize()
-    throw (itk::ExceptionObject);
+  void Initialize() throw(itk::ExceptionObject);
 
   virtual void ApplyMarkovRandomFieldFilter();
 
   void GenerateData() override;
   void GenerateInputRequestedRegion() override;
-  void EnlargeOutputRequestedRegion(itk::DataObject *) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject*) override;
   void GenerateOutputInformation() override;
 
-  MarkovRandomFieldFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MarkovRandomFieldFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typedef typename TInputImage::SizeType InputImageSizeType;
 
@@ -384,7 +362,6 @@ protected:
   virtual void MinimizeOnce();
 
 private:
-
 }; // class MarkovRandomFieldFilter
 
 } // namespace otb

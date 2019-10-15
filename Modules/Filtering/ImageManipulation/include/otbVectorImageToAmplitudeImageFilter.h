@@ -33,16 +33,19 @@ template <class TInput, class TOutput>
 class VectorToAmplitudeFunctor
 {
 public:
-  VectorToAmplitudeFunctor() {}
-  virtual ~VectorToAmplitudeFunctor() {}
+  VectorToAmplitudeFunctor()
+  {
+  }
+  virtual ~VectorToAmplitudeFunctor()
+  {
+  }
 
-  inline TOutput operator ()(const TInput& A)
+  inline TOutput operator()(const TInput& A)
   {
     return static_cast<TOutput>(A.GetNorm());
   }
 
-  itkConceptMacro(OutputShouldNotBeVectorImageCheck,
-                  (itk::Concept::Convertible<TOutput, double>));
+  itkConceptMacro(OutputShouldNotBeVectorImageCheck, (itk::Concept::Convertible<TOutput, double>));
 
 }; // end namespace Functor
 }
@@ -58,19 +61,15 @@ public:
 
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT VectorImageToAmplitudeImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::VectorToAmplitudeFunctor<
-          typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::VectorToAmplitudeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard typedefs */
   typedef VectorImageToAmplitudeImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter<
-      TInputImage,
-      TOutputImage,
-      Functor::VectorToAmplitudeFunctor<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> > Superclass;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Functor::VectorToAmplitudeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -82,9 +81,11 @@ public:
 
 protected:
   /** Constructor */
-  VectorImageToAmplitudeImageFilter() {};
+  VectorImageToAmplitudeImageFilter(){};
   /** Destructor */
-  ~VectorImageToAmplitudeImageFilter() override {}
+  ~VectorImageToAmplitudeImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -92,8 +93,8 @@ protected:
   }
 
 private:
-  VectorImageToAmplitudeImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorImageToAmplitudeImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // End namespace otb

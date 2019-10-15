@@ -57,21 +57,22 @@ public:
 
   virtual int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const = 0;
 
-  virtual int RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                                const std::vector<std::string>& listFiles,
-                                int maxConnect) const = 0;
+  virtual int RetrieveFileMulti(const std::vector<std::string>& listURLs, const std::vector<std::string>& listFiles, int maxConnect) const = 0;
 
   static bool IsCurlAvailable();
   static bool IsCurlMultiAvailable();
 
 protected:
-  CurlHelperInterface() {}
-  ~CurlHelperInterface() override {}
+  CurlHelperInterface()
+  {
+  }
+  ~CurlHelperInterface() override
+  {
+  }
 
 private:
-  CurlHelperInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  CurlHelperInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 }
 #endif

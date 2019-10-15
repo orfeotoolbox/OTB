@@ -34,29 +34,25 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-VarianceImageFilter<TInputImage, TOutputImage>
-::VarianceImageFilter()
+VarianceImageFilter<TInputImage, TOutputImage>::VarianceImageFilter()
 {
   m_Radius.Fill(1);
 }
 
 template <class TInputImage, class TOutputImage>
-void
-VarianceImageFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion() throw (itk::InvalidRequestedRegionError)
-  {
+void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+{
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the input and output
-  typename Superclass::InputImagePointer inputPtr =
-    const_cast<TInputImage *>(this->GetInput());
+  typename Superclass::InputImagePointer  inputPtr  = const_cast<TInputImage*>(this->GetInput());
   typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
 
   if (!inputPtr || !outputPtr)
-    {
+  {
     return;
-    }
+  }
 
   // get a copy of the input requested region (should equal the output
   // requested region)
@@ -68,12 +64,12 @@ VarianceImageFilter<TInputImage, TOutputImage>
 
   // crop the input requested region at the input's largest possible region
   if (inputRequestedRegion.Crop(inputPtr->GetLargestPossibleRegion()))
-    {
+  {
     inputPtr->SetRequestedRegion(inputRequestedRegion);
     return;
-    }
+  }
   else
-    {
+  {
     // Couldn't crop the region (requested region is outside the largest
     // possible region).  Throw an exception.
 
@@ -86,14 +82,11 @@ VarianceImageFilter<TInputImage, TOutputImage>
     e.SetDescription("Requested region is (at least partially) outside the largest possible region.");
     e.SetDataObject(inputPtr);
     throw e;
-    }
   }
+}
 
-template<class TInputImage, class TOutputImage>
-void
-VarianceImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputImage, class TOutputImage>
+void VarianceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   unsigned int                                          i;
   itk::ZeroFluxNeumannBoundaryCondition<InputImageType> nbc;
@@ -121,24 +114,23 @@ VarianceImageFilter<TInputImage, TOutputImage>
   // Process each of the boundary faces.  These are N-d regions which border
   // the edge of the buffer.
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
-    {
-    bit = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius,
-                                                         input, *fit);
+  {
+    bit                           = itk::ConstNeighborhoodIterator<InputImageType>(m_Radius, input, *fit);
     unsigned int neighborhoodSize = bit.Size();
-    it = itk::ImageRegionIterator<OutputImageType>(output, *fit);
+    it                            = itk::ImageRegionIterator<OutputImageType>(output, *fit);
     bit.OverrideBoundaryCondition(&nbc);
     bit.GoToBegin();
 
     while (!bit.IsAtEnd())
-      {
-      sum = itk::NumericTraits<InputRealType>::Zero;
+    {
+      sum          = itk::NumericTraits<InputRealType>::Zero;
       sumOfSquares = itk::NumericTraits<InputRealType>::Zero;
       for (i = 0; i < neighborhoodSize; ++i)
-        {
+      {
         const InputRealType value = static_cast<InputRealType>(bit.GetPixel(i));
         sum += value;
         sumOfSquares += value * value;
-        }
+      }
 
       // get the mean value
       const double num = static_cast<double>(neighborhoodSize);
@@ -147,23 +139,18 @@ VarianceImageFilter<TInputImage, TOutputImage>
       ++bit;
       ++it;
       progress.CompletedPixel();
-      }
     }
+  }
 }
 
 /**
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void
-VarianceImageFilter<TInputImage, TOutput>
-::PrintSelf(
-  std::ostream& os,
-  itk::Indent indent) const
+void VarianceImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Radius: " << m_Radius << std::endl;
-
 }
 
 } // end namespace otb

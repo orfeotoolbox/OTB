@@ -32,7 +32,8 @@
 #include "otbMultiToMonoChannelExtractROI.h"
 #include "OTBImageIOExport.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
   * \class ImageSeriesFileReader
@@ -48,15 +49,14 @@ namespace otb {
  * \ingroup OTBImageIO
  */
 template <class TImage, class TInternalImage = TImage>
-class OTBImageIO_EXPORT_TEMPLATE ImageSeriesFileReader
-  : public ImageSeriesFileReaderBase<TImage, TInternalImage>
+class OTBImageIO_EXPORT_TEMPLATE ImageSeriesFileReader : public ImageSeriesFileReaderBase<TImage, TInternalImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageSeriesFileReader                             Self;
+  typedef ImageSeriesFileReader Self;
   typedef ImageSeriesFileReaderBase<TImage, TInternalImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -99,7 +99,7 @@ public:
   // typedef MultiToMonoChannelExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
   // typedef ExtractROI< InternalPixelType, PixelType > ExtractSelectionType;
   typedef itk::ImageToImageFilter<InternalImageType, OutputImageType> ExtractSelectionType;
-  typedef typename ExtractSelectionType::Pointer                      ExtractSelectionPointerType;
+  typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
@@ -108,12 +108,16 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader () {}
+  virtual ~ImageSeriesFileReader()
+  {
+  }
 
   /** TestBandSelection
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands))
+  {
+  }
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -143,8 +147,8 @@ protected:
   ExtractSelectionListPointerType m_ExtractorList;
 
 private:
-  ImageSeriesFileReader (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReader(const Self&);
+  void operator=(const Self&);
 }; // end of class
 
 /**
@@ -161,15 +165,15 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2> >
-  : public ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> >
+class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, Image<TInternalPixel, 2>>
+    : public ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2>>
 {
 public:
   /** Standard typedefs */
-  typedef ImageSeriesFileReader                                                  Self;
-  typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                                Pointer;
-  typedef itk::SmartPointer<const Self>                                          ConstPointer;
+  typedef ImageSeriesFileReader Self;
+  typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, Image<TInternalPixel, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -206,7 +210,7 @@ public:
    * Here TExtractSelection is a ExtractROI class since TImage and TInternalImage are of Image type.
    */
   typedef ExtractROI<InternalPixelType, PixelType> ExtractSelectionType;
-  typedef typename ExtractSelectionType::Pointer   ExtractSelectionPointerType;
+  typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
@@ -215,7 +219,9 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader () {}
+  virtual ~ImageSeriesFileReader()
+  {
+  }
 
   /** TestBandSelection
    * Tests the coherency of the Meta File (especifically band selection) with the image types
@@ -250,8 +256,8 @@ protected:
   ExtractSelectionListPointerType m_ExtractorList;
 
 private:
-  ImageSeriesFileReader (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReader(const Self&);
+  void operator=(const Self&);
 }; // end of class specialized for image
 
 /** \class ImageSeriesFileReader
@@ -267,15 +273,15 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
-  : public ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> >
+class ITK_EXPORT ImageSeriesFileReader<Image<TPixel, 2>, VectorImage<TInternalPixel, 2>>
+    : public ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2>>
 {
 public:
   /** Standard typedefs */
-  typedef ImageSeriesFileReader                                                        Self;
-  typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                ConstPointer;
+  typedef ImageSeriesFileReader Self;
+  typedef ImageSeriesFileReaderBase<Image<TPixel, 2>, VectorImage<TInternalPixel, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -312,7 +318,7 @@ public:
    * MultiToMonoChannelExtractROI since TImage is an Image and TInteranalImage is a VectorImage
    */
   typedef MultiToMonoChannelExtractROI<InternalPixelType, PixelType> ExtractSelectionType;
-  typedef typename ExtractSelectionType::Pointer                     ExtractSelectionPointerType;
+  typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
@@ -321,7 +327,9 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader () {}
+  virtual ~ImageSeriesFileReader()
+  {
+  }
 
   /**
    * Tests the coherency of the Meta File (especifically band selection) with the image types
@@ -356,8 +364,8 @@ protected:
   ExtractSelectionListPointerType m_ExtractorList;
 
 private:
-  ImageSeriesFileReader (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReader(const Self&);
+  void operator=(const Self&);
 
 }; // end of class specialized for Image and VectorImage
 
@@ -374,15 +382,15 @@ private:
  * \ingroup OTBImageIO
  */
 template <class TPixel, class TInternalPixel>
-class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
-  : public ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> >
+class ITK_EXPORT ImageSeriesFileReader<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2>>
+    : public ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2>>
 {
 public:
   /** Standard typedefs */
-  typedef ImageSeriesFileReader                                                              Self;
-  typedef ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                                            Pointer;
-  typedef itk::SmartPointer<const Self>                                                      ConstPointer;
+  typedef ImageSeriesFileReader Self;
+  typedef ImageSeriesFileReaderBase<VectorImage<TPixel, 2>, VectorImage<TInternalPixel, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -420,7 +428,7 @@ public:
    * MultiChannelExtractROI if TImage is a VectorImage
    */
   typedef MultiChannelExtractROI<InternalPixelType, PixelType> ExtractSelectionType;
-  typedef typename ExtractSelectionType::Pointer               ExtractSelectionPointerType;
+  typedef typename ExtractSelectionType::Pointer ExtractSelectionPointerType;
 
   typedef ObjectList<ExtractSelectionType>           ExtractSelectionListType;
   typedef typename ExtractSelectionListType::Pointer ExtractSelectionListPointerType;
@@ -429,12 +437,16 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  ~ImageSeriesFileReader () override {}
+  ~ImageSeriesFileReader() override
+  {
+  }
 
   /**
    * Tests the coherency of the Meta File (especifically band selection) with the image types
    */
-  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) override{}
+  void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) override
+  {
+  }
 
   /** GenerateData
    * This method will be specialised if template definitions follow:
@@ -464,8 +476,8 @@ protected:
   ExtractSelectionListPointerType m_ExtractorList;
 
 private:
-  ImageSeriesFileReader (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReader(const Self&);
+  void operator=(const Self&);
 }; // end of class specialized for VectorImage
 
 } // end of namespace otb

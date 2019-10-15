@@ -42,8 +42,9 @@
  */
 struct otb::internal::ProcessVisitor : boost::static_visitor<>
 {
-  ProcessVisitor(otb::GeometriesToGeometriesFilter const& filter)
-    : m_filter(filter) {}
+  ProcessVisitor(otb::GeometriesToGeometriesFilter const& filter) : m_filter(filter)
+  {
+  }
   /**
    * Processes layers (\em by-copy).
    * \param[in] source  source layer
@@ -53,10 +54,10 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    * This is the \em leaf operation that forwards the call to the polymorphic
    * \c GeometriesToGeometriesFilter::DoProcessLayer() function.
    */
-  void operator()(otb::ogr::Layer const& source, otb::ogr::Layer & destination) const
-    {
+  void operator()(otb::ogr::Layer const& source, otb::ogr::Layer& destination) const
+  {
     m_filter.DoProcessLayer(source, destination);
-    }
+  }
 
   /**
    * Processes data sources (\em by-copy).
@@ -75,26 +76,19 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    *   GeometriesToGeometriesFilter::DoProcessLayer() function.
    */
   void operator()(otb::ogr::DataSource::Pointer source, otb::ogr::DataSource::Pointer destination) const
-    {
+  {
     assert(source && "can't filter a nil datasource");
     assert(destination && "can't filter to a nil datasource");
-    for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end()
-; b != e
-; ++b
-    )
-      {
+    for (otb::ogr::DataSource::const_iterator b = source->begin(), e = source->end(); b != e; ++b)
+    {
       otb::ogr::Layer const& sourceLayer = *b;
       assert(sourceLayer && "unexpected nil source layer");
-      otb::ogr::Layer destLayer = destination->CreateLayer(
-        sourceLayer.GetName(),
-        m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
-        m_filter.DoDefineNewLayerGeometryType(sourceLayer),
-        m_filter.DoDefineNewLayerOptions(sourceLayer)
-      );
+      otb::ogr::Layer destLayer = destination->CreateLayer(sourceLayer.GetName(), m_filter.DoDefineNewLayerSpatialReference(sourceLayer),
+                                                           m_filter.DoDefineNewLayerGeometryType(sourceLayer), m_filter.DoDefineNewLayerOptions(sourceLayer));
       m_filter.DoDefineNewLayerFields(sourceLayer, destLayer);
       m_filter.DoProcessLayer(sourceLayer, destLayer);
-      }
     }
+  }
 
   /**
    * Processes layers (\em in-place).
@@ -104,10 +98,10 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    * This is the \em leaf operation that forwards the call to the polymorphic
    * \c GeometriesToGeometriesFilter::DoProcessLayer() function.
    */
-  void operator()(otb::ogr::Layer & inout) const
-    {
+  void operator()(otb::ogr::Layer& inout) const
+  {
     m_filter.DoProcessLayer(inout, inout);
-    }
+  }
 
   /**
    * Processes data sources (\em in-place).
@@ -118,15 +112,15 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    * polymorphic \c GeometriesToGeometriesFilter::DoProcessLayer() function.
    */
   void operator()(otb::ogr::DataSource::Pointer inout) const
-    {
+  {
     assert(inout && "can't filter a nil datasource");
     for (otb::ogr::DataSource::iterator b = inout->begin(), e = inout->end(); b != e; ++b)
-      {
+    {
       otb::ogr::Layer layer = *b;
       assert(layer && "unexpected nil source layer");
       m_filter.DoProcessLayer(layer, layer);
-      }
     }
+  }
 
   /**
    * Fall-back visiting function for invalid mixed transformations (layer ->
@@ -135,11 +129,13 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    * - layer -> layer,
    * - and data source -> data source.
    */
-  template <typename GT1, typename GT2> void operator()(GT1 const&, GT2 &) const
-    {
+  template <typename GT1, typename GT2>
+  void operator()(GT1 const&, GT2&) const
+  {
     assert(!"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
-    itkGenericExceptionMacro(<<"You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
-    }
+    itkGenericExceptionMacro(<< "You shall not mix DataSources and Layers in GeometriesToGeometriesFilter");
+  }
+
 private:
   otb::GeometriesToGeometriesFilter const& m_filter;
 };
@@ -157,31 +153,25 @@ otb::GeometriesToGeometriesFilter::~GeometriesToGeometriesFilter()
 {
 }
 
-/*virtual*/ void otb::GeometriesToGeometriesFilter::SetInput(
-  const InputGeometriesType * input)
+/*virtual*/ void otb::GeometriesToGeometriesFilter::SetInput(const InputGeometriesType* input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(
-    0,
-    const_cast<InputGeometriesType *>(input));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<InputGeometriesType*>(input));
 }
 
-const otb::GeometriesToGeometriesFilter::InputGeometriesType *
-otb::GeometriesToGeometriesFilter::GetInput(void )
+const otb::GeometriesToGeometriesFilter::InputGeometriesType* otb::GeometriesToGeometriesFilter::GetInput(void)
 {
-  return static_cast <InputGeometriesType*>(Superclass::GetInput(0));
+  return static_cast<InputGeometriesType*>(Superclass::GetInput(0));
 }
 
-/*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
-  InputGeometriesType const& source, OutputGeometriesType & destination)
+/*virtual*/ void otb::GeometriesToGeometriesFilter::Process(InputGeometriesType const& source, OutputGeometriesType& destination)
 {
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
   source.apply(internal::ProcessVisitor(*this), destination);
 }
 
-/*virtual*/ void otb::GeometriesToGeometriesFilter::Process(
-  OutputGeometriesType & inout)
+/*virtual*/ void otb::GeometriesToGeometriesFilter::Process(OutputGeometriesType& inout)
 {
   // si layer, appelle virt process layer
   // si DS, loop et appelle virt process layer
@@ -189,48 +179,45 @@ otb::GeometriesToGeometriesFilter::GetInput(void )
 }
 
 /*virtual*/
-void otb::GeometriesToGeometriesFilter::GenerateData(void )
+void otb::GeometriesToGeometriesFilter::GenerateData(void)
 {
   this->DoAllocateOutputs();
   this->DoFinalizeInitialization();
 
-  InputGeometriesType::ConstPointer  input  = this->GetInput();
+  InputGeometriesType::ConstPointer input = this->GetInput();
   // assert(input && "Cann't filter to a nil geometries set");
-  OutputGeometriesType::Pointer      output = this->GetOutput();
+  OutputGeometriesType::Pointer output = this->GetOutput();
   assert(output && "Cann't filter a nil geometries set");
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();
   if (input)
-    {
+  {
     this->Process(*input, *output);
-    }
+  }
   else
-    {
+  {
     this->Process(*output);
-    }
+  }
 
   chrono.Stop();
   otbMsgDevMacro(<< "GeometriesToGeometriesFilter: geometries processed in " << chrono.GetElapsedMilliseconds() << " ms.");
 }
 
 /*virtual*/
-OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(
-  ogr::Layer const& itkNotUsed(source)) const
+OGRSpatialReference* otb::GeometriesToGeometriesFilter::DoDefineNewLayerSpatialReference(ogr::Layer const& itkNotUsed(source)) const
 {
   return nullptr;
 }
 
 /*virtual*/
-OGRwkbGeometryType otb::GeometriesToGeometriesFilter::DoDefineNewLayerGeometryType(
-  ogr::Layer const& source) const
+OGRwkbGeometryType otb::GeometriesToGeometriesFilter::DoDefineNewLayerGeometryType(ogr::Layer const& source) const
 {
   return source.GetGeomType();
 }
 
 /*virtual*/
-std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOptions(
-  ogr::Layer const& itkNotUsed(source)) const
+std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOptions(ogr::Layer const& itkNotUsed(source)) const
 {
   return std::vector<std::string>();
 }
@@ -238,32 +225,30 @@ std::vector<std::string> otb::GeometriesToGeometriesFilter::DoDefineNewLayerOpti
 /*===========================================================================*/
 /*========================[ FieldCopyTransformation ]========================*/
 /*===========================================================================*/
-void otb::FieldCopyTransformation::DefineFields(
-  otb::ogr::Layer const& source, otb::ogr::Layer & dest) const
+void otb::FieldCopyTransformation::DefineFields(otb::ogr::Layer const& source, otb::ogr::Layer& dest) const
 {
-  OGRFeatureDefn & inDefinition = source.GetLayerDefn();
-  OGRFeatureDefn & outDefinition = dest.GetLayerDefn();
-  for (int i=0,N=inDefinition.GetFieldCount(); i!=N; ++i)
-    {
+  OGRFeatureDefn& inDefinition  = source.GetLayerDefn();
+  OGRFeatureDefn& outDefinition = dest.GetLayerDefn();
+  for (int i = 0, N = inDefinition.GetFieldCount(); i != N; ++i)
+  {
     dest.CreateField(*inDefinition.GetFieldDefn(i));
     // assume the definition is updated automatically
-    m_SourceToDestFieldIndicesMap[i] = outDefinition.GetFieldCount()-1;
-    }
+    m_SourceToDestFieldIndicesMap[i] = outDefinition.GetFieldCount() - 1;
+  }
 }
 
 
-void otb::FieldCopyTransformation::fieldsTransform(
-  otb::ogr::Feature const& inFeature, otb::ogr::Feature & outFeature) const
+void otb::FieldCopyTransformation::fieldsTransform(otb::ogr::Feature const& inFeature, otb::ogr::Feature& outFeature) const
 {
   // default => copy all fields for copy transformation
 
   // The following can't be assumed because of Drivers like KML that always add
   // two fields: "Description" and "Name"
-  //assert(inFeature.GetSize() == outFeature.GetSize());
+  // assert(inFeature.GetSize() == outFeature.GetSize());
 
-  for (int i=0,N=inFeature.GetSize(); i!=N; ++i)
-    {
+  for (int i = 0, N = inFeature.GetSize(); i != N; ++i)
+  {
     int const indexNewField = m_SourceToDestFieldIndicesMap[i];
     outFeature[indexNewField].Assign(inFeature[i]);
-    }
+  }
 }

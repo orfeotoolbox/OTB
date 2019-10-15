@@ -55,8 +55,7 @@ namespace otb
  */
 
 template <class TVectorData, class TLabelMap>
-class ITK_EXPORT VectorDataToLabelMapFilter :
-  public LabelMapSource <TLabelMap>
+class ITK_EXPORT VectorDataToLabelMapFilter : public LabelMapSource<TLabelMap>
 
 {
 public:
@@ -64,7 +63,7 @@ public:
    * Standard "Self" & Superclass typedef.
    */
   typedef VectorDataToLabelMapFilter Self;
-  typedef LabelMapSource <TLabelMap> Superclass;
+  typedef LabelMapSource<TLabelMap>  Superclass;
 
   /** Some convenient typedefs. */
   typedef TVectorData                                InputVectorDataType;
@@ -93,8 +92,7 @@ public:
   typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
 
   /** Number of dimensions. */
-  itkStaticConstMacro(VectorDataDimension, unsigned int,
-                      TVectorData::Dimension);
+  itkStaticConstMacro(VectorDataDimension, unsigned int, TVectorData::Dimension);
 
   /** Image size typedef. */
   typedef itk::Size<itkGetStaticConstMacro(VectorDataDimension)> SizeType;
@@ -108,13 +106,13 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Set the size of the output image. */
-//   itkSetMacro( Size, SizeType );
+  //   itkSetMacro( Size, SizeType );
 
   /** Set the starting index of the output image. */
-//   itkSetMacro( StartIndex, IndexType );
-/**
- * Run-time type information (and related methods)
- */
+  //   itkSetMacro( StartIndex, IndexType );
+  /**
+   * Run-time type information (and related methods)
+   */
   itkTypeMacro(VectorDataToLabelMapFilter, ImageToImageFilter);
 
   /**
@@ -156,16 +154,18 @@ public:
 
   /** Set/Get the Vector data input of this process object.  */
   using Superclass::SetInput;
-  virtual void SetInput(const InputVectorDataType *input);
-  virtual void SetInput(unsigned int idx, const InputVectorDataType *input);
-  const InputVectorDataType * GetInput(void);
-  const InputVectorDataType * GetInput(unsigned int idx);
+  virtual void SetInput(const InputVectorDataType* input);
+  virtual void SetInput(unsigned int idx, const InputVectorDataType* input);
+  const InputVectorDataType* GetInput(void);
+  const InputVectorDataType* GetInput(unsigned int idx);
 
   void GenerateOutputInformation() override;
 
 protected:
   VectorDataToLabelMapFilter();
-  ~VectorDataToLabelMapFilter() override {}
+  ~VectorDataToLabelMapFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
@@ -177,24 +177,24 @@ protected:
   /** VectorDataToLabelMapFilter needs the entire input. Therefore
    * it must provide an implementation GenerateInputRequestedRegion().
    * \sa ProcessObject::GenerateInputRequestedRegion(). */
-//   void GenerateInputRequestedRegion();
+  //   void GenerateInputRequestedRegion();
 
   /** VectorDataToLabelMapFilter will produce all of the output.
    * Therefore it must provide an implementation of
    * EnlargeOutputRequestedRegion().
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-//   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
+  //   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output));
 
 private:
-  VectorDataToLabelMapFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataToLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  void ProcessNode(InternalTreeNodeType * source);
+  void ProcessNode(InternalTreeNodeType* source);
 
   /** Current label value incremented after the vectorization of a layer*/
   LabelType m_lab;
 
-  //TODO donc need this attribute now compute with VectorDataProperties
+  // TODO donc need this attribute now compute with VectorDataProperties
   SpacingType   m_Spacing;
   OriginType    m_Origin;
   SizeType      m_Size;

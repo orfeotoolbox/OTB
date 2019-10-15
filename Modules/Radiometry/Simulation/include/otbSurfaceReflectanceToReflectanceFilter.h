@@ -45,24 +45,23 @@ template <class TInput, class TOutput>
 class ReflectanceToSurfaceReflectanceImageFunctor
 {
 public:
-
   /** "typedef" for standard classes. */
-  typedef ReflectanceToSurfaceReflectanceImageFunctor   Self;
+  typedef ReflectanceToSurfaceReflectanceImageFunctor Self;
 
   ReflectanceToSurfaceReflectanceImageFunctor()
   {
-    m_Coefficient = 1.;
-    m_Residu = 1.;
+    m_Coefficient     = 1.;
+    m_Residu          = 1.;
     m_SphericalAlbedo = 1.;
   };
-  virtual ~ReflectanceToSurfaceReflectanceImageFunctor() {};
+  virtual ~ReflectanceToSurfaceReflectanceImageFunctor(){};
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
    */
   void SetSphericalAlbedo(double albedo)
   {
-    m_SphericalAlbedo=albedo;
+    m_SphericalAlbedo = albedo;
   };
   double GetSphericalAlbedo()
   {
@@ -93,52 +92,52 @@ public:
     return m_Residu;
   };
 
-  inline TOutput operator() (const TInput & inPixel)
+  inline TOutput operator()(const TInput& inPixel)
   {
-//     std::cout << "m_Coefficient "<< m_Coefficient << std::endl;
-//     std::cout << "m_Residu "<< m_Residu << std::endl;
+    //     std::cout << "m_Coefficient "<< m_Coefficient << std::endl;
+    //     std::cout << "m_Residu "<< m_Residu << std::endl;
 
     TOutput outPixel;
-//     outPixel.first = inPixel.first;
+    //     outPixel.first = inPixel.first;
     double temp, temp1, temp2;
-//     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
-//     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
+    //     temp = static_cast<double>(inPixel)*m_Coefficient + m_Residu;
+    //     temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
 
     temp = 1. - (static_cast<double>(inPixel) * m_SphericalAlbedo);
-    //temp1 =  1/temp;
+    // temp1 =  1/temp;
 
-//     std::cout << "------------------------------" << std::endl;
-//     std::cout << "B "<< temp << std::endl;
-//     std::cout << "B*residu "<< temp*m_Residu << std::endl;
-//     std::cout << "m_Coefficient*static_cast<double>(inPixel) "<< m_Coefficient*static_cast<double>(inPixel) << std::endl;
-//     std::cout << "albedo "<< m_SphericalAlbedo << std::endl;
-//     std::cout << "all gaz "<< m_Coefficient << std::endl;
-//     std::cout << "residu "<< m_Residu << std::endl;
-    //std::cout << "temp2 "<< temp2 << std::endl;
+    //     std::cout << "------------------------------" << std::endl;
+    //     std::cout << "B "<< temp << std::endl;
+    //     std::cout << "B*residu "<< temp*m_Residu << std::endl;
+    //     std::cout << "m_Coefficient*static_cast<double>(inPixel) "<< m_Coefficient*static_cast<double>(inPixel) << std::endl;
+    //     std::cout << "albedo "<< m_SphericalAlbedo << std::endl;
+    //     std::cout << "all gaz "<< m_Coefficient << std::endl;
+    //     std::cout << "residu "<< m_Residu << std::endl;
+    // std::cout << "temp2 "<< temp2 << std::endl;
     temp2 = m_Residu;
-//     std::cout << "temp2 "<< temp2 << std::endl;
+    //     std::cout << "temp2 "<< temp2 << std::endl;
     temp1 = 1. / temp;
-//     std::cout << "temp1 "<< temp1 << std::endl;
-    temp2 += temp1*m_Coefficient*static_cast<double>(inPixel);
-//     std::cout << "1-row*S "<< temp << std::endl;
-//     outPixel = std::fabs (static_cast<TOutput>(temp2));
+    //     std::cout << "temp1 "<< temp1 << std::endl;
+    temp2 += temp1 * m_Coefficient * static_cast<double>(inPixel);
+    //     std::cout << "1-row*S "<< temp << std::endl;
+    //     outPixel = std::fabs (static_cast<TOutput>(temp2));
     outPixel = static_cast<TOutput>(temp2);
 
-//     std::cout << "in out "<< static_cast<double>(inPixel) << "; " << static_cast<double>(outPixel)<< std::endl;
-//     std::cout <<"plot " << m_Residu << "+" << m_Coefficient << "*(x/(1-x*" << m_SphericalAlbedo << "))" << std::endl;
-//     std::cout << "------------------------------" << std::endl;
+    //     std::cout << "in out "<< static_cast<double>(inPixel) << "; " << static_cast<double>(outPixel)<< std::endl;
+    //     std::cout <<"plot " << m_Residu << "+" << m_Coefficient << "*(x/(1-x*" << m_SphericalAlbedo << "))" << std::endl;
+    //     std::cout << "------------------------------" << std::endl;
     return outPixel;
   }
   /** Compare two indices. */
-  bool operator==(const Self &func) const
+  bool operator==(const Self& func) const
   {
-    return ( (m_SphericalAlbedo == func.m_SphericalAlbedo) && (m_Coefficient == func.m_Coefficient) && (m_Residu == func.m_Residu) );
+    return ((m_SphericalAlbedo == func.m_SphericalAlbedo) && (m_Coefficient == func.m_Coefficient) && (m_Residu == func.m_Residu));
   }
 
   /** Compare two indices. */
-  bool operator!=(const Self &func) const
+  bool operator!=(const Self& func) const
   {
-    return ( (m_SphericalAlbedo != func.m_SphericalAlbedo) && (m_Coefficient != func.m_Coefficient) && (m_Residu != func.m_Residu) );
+    return ((m_SphericalAlbedo != func.m_SphericalAlbedo) && (m_Coefficient != func.m_Coefficient) && (m_Residu != func.m_Residu));
   }
 
 private:
@@ -159,28 +158,27 @@ private:
  *
  * \ingroup OTBSimulation
  */
-template <class TInputImage, class TOutputImage >
-class ITK_EXPORT SurfaceReflectanceToReflectanceFilter :
-      public UnaryImageFunctorWithVectorImageFilter< TInputImage,
-      TOutputImage,
-      typename Functor::ReflectanceToSurfaceReflectanceImageFunctor< typename TInputImage::InternalPixelType,
-      typename TOutputImage::InternalPixelType > >
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT SurfaceReflectanceToReflectanceFilter
+    : public UnaryImageFunctorWithVectorImageFilter<
+          TInputImage, TOutputImage,
+          typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename TInputImage::InternalPixelType, typename TOutputImage::InternalPixelType>>
 {
 public:
   /** Extract input and output images dimensions.*/
-  itkStaticConstMacro( InputImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro( OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef TInputImage         InputImageType;
-  typedef TOutputImage        OutputImageType;
-  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType,
-  typename OutputImageType::InternalPixelType> FunctorType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
+  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType, typename OutputImageType::InternalPixelType>
+      FunctorType;
   /** "typedef" for standard classes. */
-  typedef SurfaceReflectanceToReflectanceFilter                                                     Self;
-  typedef UnaryImageFunctorWithVectorImageFilter< InputImageType, OutputImageType, FunctorType >    Superclass;
-  typedef itk::SmartPointer<Self>                                                                        Pointer;
-  typedef itk::SmartPointer<const Self>                                                                  ConstPointer;
+  typedef SurfaceReflectanceToReflectanceFilter Self;
+  typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -189,30 +187,30 @@ public:
   itkTypeMacro(SurfaceReflectanceToReflectanceFilter, UnaryImageFunctorWithVectorImageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType                            InputPixelType;
-  typedef typename InputImageType::InternalPixelType                    InputInternalPixelType;
-  typedef typename InputImageType::RegionType                           InputImageRegionType;
-  typedef typename OutputImageType::PixelType                           OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType                   OutputInternalPixelType;
-  typedef typename OutputImageType::RegionType                          OutputImageRegionType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
-  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
 
-  typedef otb::AtmosphericCorrectionParameters                               AtmoCorrectionParametersType;
-  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+  typedef otb::AtmosphericCorrectionParameters           AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer AtmoCorrectionParametersPointerType;
 
-  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+  typedef otb::ImageMetadataCorrectionParameters          AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer AcquiCorrectionParametersPointerType;
 
-  typedef otb::AtmosphericRadiativeTerms                                     AtmosphericRadiativeTermsType;
-  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+  typedef otb::AtmosphericRadiativeTerms                  AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer AtmosphericRadiativeTermsPointerType;
 
 
-  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
-  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+  typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;        // float
+  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType; // std::vector<float>
 
-  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
 
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
@@ -263,7 +261,7 @@ protected:
   /** Constructor */
   SurfaceReflectanceToReflectanceFilter();
   /** Destructor */
-  ~SurfaceReflectanceToReflectanceFilter() override {};
+  ~SurfaceReflectanceToReflectanceFilter() override{};
 
 
   /** Initialize the functor vector */
@@ -277,15 +275,14 @@ protected:
   void Modified() const override;
 
 private:
-
   bool m_IsSetAtmosphericRadiativeTerms;
   bool m_IsSetAtmoCorrectionParameters;
   bool m_IsSetAcquiCorrectionParameters;
 
   /** Radiative terms object */
-  AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
-  AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
-  AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
+  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
+  AtmoCorrectionParametersPointerType  m_AtmoCorrectionParameters;
+  AcquiCorrectionParametersPointerType m_AcquiCorrectionParameters;
 
   bool m_UseGenerateParameters;
 

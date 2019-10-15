@@ -32,65 +32,55 @@
 namespace otb
 {
 
-template <class TInputImage, class TOutputImage,
-            class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
-void
-NAPCAImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
-::GenerateTransformationMatrix ()
+template <class TInputImage, class TOutputImage, class TNoiseImageFilter, Transform::TransformDirection TDirectionOfTransformation>
+void NAPCAImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation>::GenerateTransformationMatrix()
 {
   InternalMatrixType An = this->GetNoiseCovarianceMatrix().GetVnlMatrix();
   InternalMatrixType Fn;
   vnl_vector<double> vectValPn;
-  vnl_symmetric_eigensystem_compute( An, Fn, vectValPn );
+  vnl_symmetric_eigensystem_compute(An, Fn, vectValPn);
 
   /* We used normalized PCA */
-  InternalMatrixType valPn ( vectValPn.size(), vectValPn.size(), vnl_matrix_null );
-  for ( unsigned int i = 0; i < valPn.rows(); ++i )
+  InternalMatrixType valPn(vectValPn.size(), vectValPn.size(), vnl_matrix_null);
+  for (unsigned int i = 0; i < valPn.rows(); ++i)
   {
-    if (  vectValPn[i] > 0. )
+    if (vectValPn[i] > 0.)
     {
-      valPn(i, i) = 1. / std::sqrt( vectValPn[i] );
+      valPn(i, i) = 1. / std::sqrt(vectValPn[i]);
     }
-    else if ( vectValPn[i] < 0. )
+    else if (vectValPn[i] < 0.)
     {
-      otbMsgDebugMacro( << "ValPn(" << i << ") neg : " << vectValPn[i] << " taking abs value" );
-      valPn(i, i) = 1. / std::sqrt( std::abs( vectValPn[i] ) );
+      otbMsgDebugMacro(<< "ValPn(" << i << ") neg : " << vectValPn[i] << " taking abs value");
+      valPn(i, i) = 1. / std::sqrt(std::abs(vectValPn[i]));
     }
     else
     {
-      throw itk::ExceptionObject( __FILE__, __LINE__,
-            "Null Eigen value !!", ITK_LOCATION );
+      throw itk::ExceptionObject(__FILE__, __LINE__, "Null Eigen value !!", ITK_LOCATION);
     }
   }
   Fn = Fn * valPn;
 
-  InternalMatrixType Ax
-    = vnl_matrix_inverse< MatrixElementType > ( this->GetCovarianceMatrix().GetVnlMatrix() );
+  InternalMatrixType Ax   = vnl_matrix_inverse<MatrixElementType>(this->GetCovarianceMatrix().GetVnlMatrix());
   InternalMatrixType Aadj = Fn.transpose() * Ax * Fn;
 
   InternalMatrixType Fadj;
   vnl_vector<double> vectValPadj;
-  vnl_symmetric_eigensystem_compute( Aadj, Fadj, vectValPadj );
+  vnl_symmetric_eigensystem_compute(Aadj, Fadj, vectValPadj);
 
   InternalMatrixType transf = Fn * Fadj;
   transf.inplace_transpose();
 
-  if ( this->GetNumberOfPrincipalComponentsRequired()
-      != this->GetInput()->GetNumberOfComponentsPerPixel() )
-    this->m_TransformationMatrix = transf.get_n_rows( 0, this->GetNumberOfPrincipalComponentsRequired() );
+  if (this->GetNumberOfPrincipalComponentsRequired() != this->GetInput()->GetNumberOfComponentsPerPixel())
+    this->m_TransformationMatrix = transf.get_n_rows(0, this->GetNumberOfPrincipalComponentsRequired());
   else
     this->m_TransformationMatrix = transf;
 
-  this->m_EigenValues.SetSize( this->GetNumberOfPrincipalComponentsRequired() );
-  for ( unsigned int i = 0; i < this->GetNumberOfPrincipalComponentsRequired(); ++i )
-    this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired()-1-i]
-      = static_cast< RealType >( vectValPadj[i] );
+  this->m_EigenValues.SetSize(this->GetNumberOfPrincipalComponentsRequired());
+  for (unsigned int i                                                           = 0; i < this->GetNumberOfPrincipalComponentsRequired(); ++i)
+    this->m_EigenValues[this->GetNumberOfPrincipalComponentsRequired() - 1 - i] = static_cast<RealType>(vectValPadj[i]);
 }
 
 
 } // end of namespace otb
 
 #endif
-
-

@@ -26,50 +26,44 @@
 
 #include <iostream>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 2)
-    {
-    std::cout << "Usage : "<< argv[0] << "  library_file" << std::endl;
+  {
+    std::cout << "Usage : " << argv[0] << "  library_file" << std::endl;
     return 1;
-    }
+  }
   const char* input = argv[1];
 #if defined(_WIN32) && !defined(__CYGWIN__)
   HMODULE library = LoadLibrary(input);
   if (library == NULL)
+  {
+    std::cout << "Failed to load " << input << std::endl;
+    LPVOID lpMsgBuf = NULL;
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(),
+                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                  (LPTSTR)&lpMsgBuf, 0, NULL);
+    if (lpMsgBuf)
     {
-    std::cout << "Failed to load "<< input << std::endl;
-    LPVOID lpMsgBuf=NULL;
-    FormatMessage(
-      FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
-      NULL,
-      GetLastError(),
-      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-      (LPTSTR) &lpMsgBuf,
-      0,
-      NULL
-      );
-    if(lpMsgBuf)
-      {
       std::cout << (char*)lpMsgBuf << std::endl;
-      LocalFree( lpMsgBuf );
-      }
+      LocalFree(lpMsgBuf);
     }
+  }
   else
-    {
+  {
     FreeLibrary(library);
-    }
+  }
 #else
   void* library = dlopen(input, RTLD_LAZY);
   if (library == NULL)
-    {
-    std::cout << "Failed to load "<< input << std::endl;
+  {
+    std::cout << "Failed to load " << input << std::endl;
     std::cout << dlerror() << std::endl;
-    }
+  }
   else
-    {
+  {
     dlclose(library);
-    }
+  }
 #endif
   return 0;
 }

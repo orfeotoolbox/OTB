@@ -64,47 +64,41 @@ class KeymapDialog;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class OTBMonteverdiGUI_EXPORT KeymapDialog :
-    public QDialog
+class OTBMonteverdiGUI_EXPORT KeymapDialog : public QDialog
 {
   Q_OBJECT;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor */
-  KeymapDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  KeymapDialog(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** Destructor */
   ~KeymapDialog() override;
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
   Ui::KeymapDialog* m_UI;
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 

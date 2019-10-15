@@ -26,12 +26,12 @@
 
 int otbEdgeDetectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                          PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
+  typedef double PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef itk::SobelEdgeDetectionImageFilter<ImageType, ImageType>               SobelDetectionType;
+  typedef itk::SobelEdgeDetectionImageFilter<ImageType, ImageType> SobelDetectionType;
   typedef otb::EdgeDetectorImageFilter<ImageType, ImageType, SobelDetectionType> DetectorType;
 
   /**Instantiation of an object*/

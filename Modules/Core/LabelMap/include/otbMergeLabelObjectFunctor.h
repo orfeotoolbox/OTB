@@ -44,7 +44,7 @@ namespace Functor
  *
  * \ingroup OTBLabelMap
  */
-template <class TLabelObject >
+template <class TLabelObject>
 class MergeLabelObjectFunctor
 {
 public:
@@ -62,7 +62,7 @@ public:
    * \param l2 Second label object to merge
    * \return The merged label object
    */
-  inline LabelObjectPointerType operator()(const LabelObjectType * l1, const LabelObjectType * l2) const
+  inline LabelObjectPointerType operator()(const LabelObjectType* l1, const LabelObjectType* l2) const
   {
     // Retrieve the two input line containers
     LineContainerType lines1 = l1->GetLineContainer();
@@ -73,7 +73,7 @@ public:
     stable_sort(lines2.begin(), lines2.end(), &LexicographicalLineCompare);
 
     // Merge the two containers
-    LineContainerType linesOut1(lines1.size()+lines2.size());
+    LineContainerType linesOut1(lines1.size() + lines2.size());
     merge(lines1.begin(), lines1.end(), lines2.begin(), lines2.end(), linesOut1.begin(), &LexicographicalLineCompare);
 
     // Merge consecutive and overlapping lines
@@ -85,27 +85,27 @@ public:
     ++lit;
 
     // Walk the merged line container
-    while(lit!=linesOut1.end())
-      {
+    while (lit != linesOut1.end())
+    {
       // Test if next line overlaps with current
-      if(LinesOverlap(linesOut2.back(), *lit))
-   {
-   // Merge lines
-   LineType mline = MergesLines(linesOut2.back(), *lit);
+      if (LinesOverlap(linesOut2.back(), *lit))
+      {
+        // Merge lines
+        LineType mline = MergesLines(linesOut2.back(), *lit);
 
-   // Replace the last line by the merged line
-   linesOut2.pop_back();
-   linesOut2.push_back(mline);
-  }
+        // Replace the last line by the merged line
+        linesOut2.pop_back();
+        linesOut2.push_back(mline);
+      }
       else
-   {
+      {
         // Push back the new line
-  linesOut2.push_back(*lit);
-   }
+        linesOut2.push_back(*lit);
+      }
 
       // fetch next line
       ++lit;
-      }
+    }
 
     // Create the output label object
     LabelObjectPointerType resp = LabelObjectType::New();
@@ -119,33 +119,32 @@ public:
 private:
   /// Compare two line in the lexicographical order with respect to
   /// their start index.
-  static bool LexicographicalLineCompare(const LineType &  l1, const LineType & l2)
+  static bool LexicographicalLineCompare(const LineType& l1, const LineType& l2)
   {
-    bool resp = l2.GetIndex()[1]> l1.GetIndex()[1];
-    resp = resp
-      || (l2.GetIndex()[1] == l1.GetIndex()[1] && (l1.GetIndex()[0] < l2.GetIndex()[0]));
+    bool resp = l2.GetIndex()[1] > l1.GetIndex()[1];
+    resp      = resp || (l2.GetIndex()[1] == l1.GetIndex()[1] && (l1.GetIndex()[0] < l2.GetIndex()[0]));
     return resp;
   }
 
   /// Check if lines overlap (same row and one of the run end inside the
   /// other run)
-  static bool LinesOverlap(const LineType & l1, const LineType & l2)
+  static bool LinesOverlap(const LineType& l1, const LineType& l2)
   {
     // Test if we are in same row
-    bool sameRow = l2.GetIndex()[1] == l1.GetIndex()[1];
-    bool leftEndInside  = (l2.GetIndex()[0]>= l1.GetIndex()[0] && l2.GetIndex()[0]<=l1.GetIndex()[0]+static_cast<long>(l1.GetLength()));
-    bool rightEndInside = (l1.GetIndex()[0]>= l2.GetIndex()[0] && l1.GetIndex()[0]<=l2.GetIndex()[0]+static_cast<long>(l2.GetLength()));
+    bool sameRow        = l2.GetIndex()[1] == l1.GetIndex()[1];
+    bool leftEndInside  = (l2.GetIndex()[0] >= l1.GetIndex()[0] && l2.GetIndex()[0] <= l1.GetIndex()[0] + static_cast<long>(l1.GetLength()));
+    bool rightEndInside = (l1.GetIndex()[0] >= l2.GetIndex()[0] && l1.GetIndex()[0] <= l2.GetIndex()[0] + static_cast<long>(l2.GetLength()));
 
     return (sameRow && (leftEndInside || rightEndInside));
   }
 
   /// Merge two lines. l1 and l2 are supposed to be in the same row
   /// and to overlap. l1 is supposed to appear before l2
-  static const LineType MergesLines(const LineType & l1, const LineType & l2)
+  static const LineType MergesLines(const LineType& l1, const LineType& l2)
   {
     LineType resp;
     resp.SetIndex(l1.GetIndex());
-    unsigned long length = std::max(l1.GetLength(), l2.GetIndex()[0]+l2.GetLength()-l1.GetIndex()[0]);
+    unsigned long length = std::max(l1.GetLength(), l2.GetIndex()[0] + l2.GetLength() - l1.GetIndex()[0]);
     resp.SetLength(length);
     return resp;
   }
@@ -157,5 +156,3 @@ private:
 } // end namespace otb
 
 #endif
-
-

@@ -42,44 +42,39 @@ namespace otb
 class ITK_EXPORT SimulationStep2Base : public itk::ProcessObject
 {
 public:
-
   /**Standard "Self" & Superclass typedef*/
-  typedef SimulationStep2Base Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SimulationStep2Base           Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
   typedef SpectralResponse<double, double> SpectralResponseType;
-  typedef double ParametersValueType;
+  typedef double                          ParametersValueType;
   typedef itk::Array<ParametersValueType> ParametersType;
 
   /** Standard Macro*/
   itkTypeMacro(SimulationStep2Base, ProcessObject);
-;
+  ;
 
   itkSetMacro(Parameters, ParametersType);
   itkGetMacro(Parameters, ParametersType);
- //;
+  //;
 
-  virtual void SetReflectance(const SpectralResponseType *) = 0;
-  virtual void SetTransmittance(const SpectralResponseType *) = 0;
+  virtual void SetReflectance(const SpectralResponseType*)   = 0;
+  virtual void SetTransmittance(const SpectralResponseType*) = 0;
 
 protected:
-  SimulationStep2Base()
-  {
-  }
-;
+  SimulationStep2Base(){};
   ~SimulationStep2Base() override
   {
   }
 
 private:
-  SimulationStep2Base(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SimulationStep2Base(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ParametersType m_Parameters;
-
 };
 
 } // end namespace otb

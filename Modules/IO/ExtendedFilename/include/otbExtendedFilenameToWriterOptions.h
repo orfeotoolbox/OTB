@@ -47,41 +47,41 @@ namespace otb
 class ITK_EXPORT ExtendedFilenameToWriterOptions : public ExtendedFilenameHelper
 {
 public:
-/** Standard class typedefs. */
-  typedef ExtendedFilenameToWriterOptions        Self;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
-  typedef ExtendedFilenameHelper                 Superclass;
+  /** Standard class typedefs. */
+  typedef ExtendedFilenameToWriterOptions Self;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef ExtendedFilenameHelper          Superclass;
 
   itkTypeMacro(ExtendedFilenameToWriterOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
 
-  typedef Superclass                                FNameHelperType;
-  typedef FNameHelperType::OptionMapType            MapType;
-  typedef MapType::iterator                         MapIteratorType;
+  typedef Superclass                     FNameHelperType;
+  typedef FNameHelperType::OptionMapType MapType;
+  typedef MapType::iterator              MapIteratorType;
 
   /** The writer option structure. */
-  typedef GDALImageIO::GDALCreationOptionsType      GDALCOType;
+  typedef GDALImageIO::GDALCreationOptionsType GDALCOType;
 
 
   struct OptionType
   {
-    std::pair< bool, std::string  >              simpleFileName;
-    std::pair< bool, bool  >                     writeGEOMFile;
-    std::pair< bool, bool  >                     writeRPCTags;
-    std::pair< bool, GDALCOType >                gdalCreationOptions;
-    std::pair<bool,  std::string>                streamingType;
-    std::pair<bool,  std::string>                streamingSizeMode;
-    std::pair<bool,  double>                     streamingSizeValue;
-    std::pair<bool,  std::string>                box;
-    std::pair< bool, std::string>                bandRange;
-    std::vector<std::string>                     optionList;
+    std::pair<bool, std::string> simpleFileName;
+    std::pair<bool, bool>        writeGEOMFile;
+    std::pair<bool, bool>        writeRPCTags;
+    std::pair<bool, GDALCOType>  gdalCreationOptions;
+    std::pair<bool, std::string> streamingType;
+    std::pair<bool, std::string> streamingSizeMode;
+    std::pair<bool, double>      streamingSizeValue;
+    std::pair<bool, std::string> box;
+    std::pair<bool, std::string> bandRange;
+    std::vector<std::string> optionList;
   };
 
   typedef std::pair<int, double> NoDataPairType;
   typedef std::vector<NoDataPairType> NoDataListType;
-  NoDataListType m_NoDataList;
-  bool has_noDataValue;
+  NoDataListType                      m_NoDataList;
+  bool                                has_noDataValue;
 
   /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
   void SetExtendedFileName(const char* extFname) override;
@@ -89,42 +89,44 @@ public:
   void SetExtendedFileName(const std::string& extFname) override;
 
   /* Get Methods */
-  bool SimpleFileNameIsSet () const;
-  bool NoDataValueIsSet () const;
-  bool WriteGEOMFileIsSet () const;
-  bool WriteRPCTagsIsSet() const;
-  NoDataListType GetNoDataList () const {
+  bool           SimpleFileNameIsSet() const;
+  bool           NoDataValueIsSet() const;
+  bool           WriteGEOMFileIsSet() const;
+  bool           WriteRPCTagsIsSet() const;
+  NoDataListType GetNoDataList() const
+  {
     return m_NoDataList;
   }
 
-  bool GetWriteGEOMFile () const;
-  bool GetWriteRPCTags() const;
-  bool gdalCreationOptionsIsSet () const;
-  GDALCOType GetgdalCreationOptions () const;
-  bool StreamingTypeIsSet () const;
+  bool        GetWriteGEOMFile() const;
+  bool        GetWriteRPCTags() const;
+  bool        gdalCreationOptionsIsSet() const;
+  GDALCOType  GetgdalCreationOptions() const;
+  bool        StreamingTypeIsSet() const;
   std::string GetStreamingType() const;
-  bool StreamingSizeModeIsSet() const;
+  bool        StreamingSizeModeIsSet() const;
   std::string GetStreamingSizeMode() const;
-  bool StreamingSizeValueIsSet() const;
-  double GetStreamingSizeValue() const;
-  std::string GetBandRange () const;
+  bool        StreamingSizeValueIsSet() const;
+  double      GetStreamingSizeValue() const;
+  std::string GetBandRange() const;
 
-  bool BoxIsSet() const;
+  bool        BoxIsSet() const;
   std::string GetBox() const;
 
   /** Test if band range extended filename is set */
-  bool BandRangeIsSet () const;
+  bool BandRangeIsSet() const;
 
 protected:
   ExtendedFilenameToWriterOptions();
-  ~ExtendedFilenameToWriterOptions() override {}
+  ~ExtendedFilenameToWriterOptions() override
+  {
+  }
 
 private:
-  ExtendedFilenameToWriterOptions(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ExtendedFilenameToWriterOptions(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  OptionType               m_Options;
-
+  OptionType m_Options;
 };
 } // end namespace otb
 

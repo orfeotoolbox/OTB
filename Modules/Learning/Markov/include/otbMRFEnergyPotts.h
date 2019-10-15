@@ -46,12 +46,12 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergyPotts : public MRFEnergy<TInput1, TInput2>
 {
 public:
-  typedef MRFEnergyPotts                Self;
-  typedef MRFEnergy<TInput1, TInput2>   Superclass;
+  typedef MRFEnergyPotts Self;
+  typedef MRFEnergy<TInput1, TInput2> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -69,25 +69,26 @@ public:
   double GetSingleValue(const InputImagePixelType& value1, const LabelledImagePixelType& value2) override
   {
     if (value1 != value2)
-      {
+    {
       return this->m_Parameters[0];
-      }
+    }
     else
-      {
+    {
       return -this->m_Parameters[0];
-      }
+    }
   }
 
 protected:
   // The constructor and destructor.
   MRFEnergyPotts()
-    {
+  {
     this->m_NumberOfParameters = 1;
     this->m_Parameters.SetSize(this->m_NumberOfParameters);
     this->m_Parameters[0] = 1.0;
-    };
-  ~MRFEnergyPotts() override {}
-
+  };
+  ~MRFEnergyPotts() override
+  {
+  }
 };
 }
 

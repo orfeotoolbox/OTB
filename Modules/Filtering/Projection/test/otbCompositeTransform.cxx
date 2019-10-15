@@ -19,7 +19,6 @@
  */
 
 
-
 #include <iostream>
 #include <iomanip>
 
@@ -34,37 +33,36 @@ int otbCompositeTransform(int argc, char* argv[])
 {
 
   if (argc != 3)
-    {
-    std::cout << argv[0] << " <input filename> <output filename>"
-              << std::endl;
+  {
+    std::cout << argv[0] << " <input filename> <output filename>" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
-  char * filename = argv[1];
-  char * outFilename = argv[2];
+  char* filename    = argv[1];
+  char* outFilename = argv[2];
 
-  typedef otb::Image<double, 2>           ImageType;
+  typedef otb::Image<double, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
   typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
-  
+
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
   // UTM31N
   mapProjection->SetWkt(otb::SpatialReference::FromEPSG(32631).ToWkt());
-  
+
   typedef otb::InverseSensorModel<double> SensorModelType;
-  SensorModelType::Pointer sensorModel = SensorModelType::New();
+  SensorModelType::Pointer                sensorModel = SensorModelType::New();
   sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-  if( sensorModel->IsValidSensorModel() == false )
-   {
-     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
-     return EXIT_FAILURE;
-   }
+  if (sensorModel->IsValidSensorModel() == false)
+  {
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();

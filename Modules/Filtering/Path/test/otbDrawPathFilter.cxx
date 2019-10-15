@@ -25,25 +25,25 @@
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbDrawPathFilter(int argc, char * argv[])
+int otbDrawPathFilter(int argc, char* argv[])
 {
   if (argc != 5)
-    {
+  {
     std::cout << "Usgage: " << argv[0] << " sizex sizey nbpoints outfname" << std::endl;
     return EXIT_SUCCESS;
-    }
-  const unsigned int sizex = atoi(argv[1]);
-  const unsigned int sizey = atoi(argv[2]);
-  const unsigned int nbpoints  = atoi(argv[3]);
-  const char *       outfname = argv[4];
+  }
+  const unsigned int sizex    = atoi(argv[1]);
+  const unsigned int sizey    = atoi(argv[2]);
+  const unsigned int nbpoints = atoi(argv[3]);
+  const char*        outfname = argv[4];
 
-  const unsigned int Dimension = 2;
-  typedef unsigned char                                       PixelType;
-  typedef otb::Image<PixelType, Dimension>                    ImageType;
-  typedef itk::PolyLineParametricPath<Dimension>              PathType;
-  typedef PathType::VertexType                                VertexType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef PathType::VertexType                   VertexType;
   typedef otb::DrawPathFilter<ImageType, PathType, ImageType> DrawPathFilterType;
-  typedef otb::ImageFileWriter<ImageType>                     WriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ImageType::SizeType size;
   size[0] = sizex;
@@ -61,7 +61,7 @@ int otbDrawPathFilter(int argc, char * argv[])
   PathType::Pointer path = PathType::New();
 
   for (unsigned int i = 1; i < nbpoints; ++i)
-    {
+  {
     VertexType vertex1, vertex2;
     vertex1[0] = 0;
     vertex1[1] = i * sizey / nbpoints;
@@ -69,9 +69,9 @@ int otbDrawPathFilter(int argc, char * argv[])
     vertex2[1] = 0;
     path->AddVertex(vertex1);
     path->AddVertex(vertex2);
-    }
+  }
   for (unsigned int i = 1; i < nbpoints; ++i)
-    {
+  {
     VertexType vertex1, vertex2;
     vertex1[0] = i * sizex / nbpoints;
     vertex1[1] = sizey - 1;
@@ -79,7 +79,7 @@ int otbDrawPathFilter(int argc, char * argv[])
     vertex2[1] = i * sizey / nbpoints;
     path->AddVertex(vertex1);
     path->AddVertex(vertex2);
-    }
+  }
 
   DrawPathFilterType::Pointer filter = DrawPathFilterType::New();
   filter->SetImageInput(image);

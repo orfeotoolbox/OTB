@@ -62,10 +62,9 @@ public:
   virtual void SetParameters(const ParametersType& parameters)
   {
     if (parameters.GetSize() != m_NumberOfParameters)
-      {
-      itkExceptionMacro(
-        << "Invalid number of parameters (" << parameters.GetSize() << " , " << m_NumberOfParameters << ")");
-      }
+    {
+      itkExceptionMacro(<< "Invalid number of parameters (" << parameters.GetSize() << " , " << m_NumberOfParameters << ")");
+    }
     m_Parameters = parameters;
     this->Modified();
   }
@@ -73,13 +72,14 @@ public:
   virtual bool Compute(double deltaEnergy) = 0;
 
 protected:
-  MRFOptimizer() :
-    m_NumberOfParameters(1),
-    m_Parameters(1) {}
-  ~MRFOptimizer() override {}
+  MRFOptimizer() : m_NumberOfParameters(1), m_Parameters(1)
+  {
+  }
+  ~MRFOptimizer() override
+  {
+  }
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
-
 };
 }
 

@@ -27,33 +27,33 @@
 #include <iomanip>
 #include <cstdlib>
 
-int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char * argv[])
+int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " wavelenghFile outputFile " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * wavelenghFile  = argv[1];
-  const char * outputFile     = argv[2];
+  const char* wavelenghFile = argv[1];
+  const char* outputFile    = argv[2];
 
   typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
-  typedef otb::AtmosphericCorrectionParameters                              AtmoCorrectionParametersType;
-  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef otb::AtmosphericRadiativeTerms                                    RadiativeTermsType;
-  typedef AtmoCorrectionParametersType::AerosolModelType                        AerosolModelType;
-  typedef otb::FilterFunctionValues                                         FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType              ValueType;
-  typedef FilterFunctionValuesType::ValuesVectorType                        ValuesVectorType;
+  typedef otb::AtmosphericCorrectionParameters                           AtmoCorrectionParametersType;
+  typedef otb::ImageMetadataCorrectionParameters                         AcquiCorrectionParametersType;
+  typedef otb::AtmosphericRadiativeTerms                                 RadiativeTermsType;
+  typedef AtmoCorrectionParametersType::AerosolModelType                 AerosolModelType;
+  typedef otb::FilterFunctionValues                                      FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType           ValueType;
+  typedef FilterFunctionValuesType::ValuesVectorType                     ValuesVectorType;
 
   // Instantiating object
-  AtmoCorrectionParametersType::Pointer                   paramAtmo          = AtmoCorrectionParametersType::New();
-  AcquiCorrectionParametersType::Pointer                  paramAcqui         = AcquiCorrectionParametersType::New();
-  AerosolModelType                                    aerosolModel;
-  FilterFunctionValuesType::Pointer                   functionValues = FilterFunctionValuesType::New();
-  ValuesVectorType                                    vect;
+  AtmoCorrectionParametersType::Pointer  paramAtmo  = AtmoCorrectionParametersType::New();
+  AcquiCorrectionParametersType::Pointer paramAcqui = AcquiCorrectionParametersType::New();
+  AerosolModelType                       aerosolModel;
+  FilterFunctionValuesType::Pointer      functionValues = FilterFunctionValuesType::New();
+  ValuesVectorType                       vect;
 
   ValueType val = 0.0025;
 
@@ -77,31 +77,31 @@ int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char 
 
   std::ifstream fin;
   std::ofstream fout;
-  //Read input file parameters
+  // Read input file parameters
   fin.open(wavelenghFile);
-  fin >> solarZenithalAngle; //asol;
-  fin >> solarAzimutalAngle; //phi0;
-  fin >> viewingZenithalAngle; //avis;
-  fin >> viewingAzimutalAngle; //phiv;
-  fin >> month; //month;
-  fin >> day; //jday;
-  fin >> atmosphericPressure; //pressure;
-  fin >> waterVaporAmount; //uw;
-  fin >> ozoneAmount; //uo3;
+  fin >> solarZenithalAngle;   // asol;
+  fin >> solarAzimutalAngle;   // phi0;
+  fin >> viewingZenithalAngle; // avis;
+  fin >> viewingAzimutalAngle; // phiv;
+  fin >> month;                // month;
+  fin >> day;                  // jday;
+  fin >> atmosphericPressure;  // pressure;
+  fin >> waterVaporAmount;     // uw;
+  fin >> ozoneAmount;          // uo3;
   unsigned int aer(0);
-  fin >> aer; //iaer;
+  fin >> aer; // iaer;
   aerosolModel = static_cast<AerosolModelType>(aer);
-  fin >> aerosolOptical; //taer55;
-  fin >> minSpectralValue; //wlinf;
-  fin >> maxSpectralValue; //wlsup;
+  fin >> aerosolOptical;   // taer55;
+  fin >> minSpectralValue; // wlinf;
+  fin >> maxSpectralValue; // wlsup;
 
   std::string line;
   std::getline(fin, line);
   while (std::getline(fin, line))
-    {
+  {
     value = atof(line.c_str());
     vect.push_back(value);
-    }
+  }
 
   fin.close();
   functionValues->SetFilterFunctionValues(vect);
@@ -123,7 +123,7 @@ int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char 
   paramAtmo->SetAerosolModel(aerosolModel);
   paramAtmo->SetAerosolOptical(static_cast<double>(aerosolOptical));
 
-  RadiativeTermsType::Pointer  radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo,paramAcqui);
+  RadiativeTermsType::Pointer radiative = CorrectionParametersToRadiativeTermsType::Compute(paramAtmo, paramAcqui);
 
 
   fout.open(outputFile);
@@ -145,41 +145,29 @@ int otbRadiometryCorrectionParametersToAtmosphericRadiativeTerms(int argc, char 
   fout << "   ----->  UserStep :                                        " << functionValues->GetUserStep() << std::endl;
   fout << " ---------------------------------------------------------" << std::endl;
   fout << "Outputs values:" << std::endl;
-  fout << "   ----->  atmospheric reflectance :                         " <<
-  radiative->GetIntrinsicAtmosphericReflectance(0) << std::endl;
-  fout << "   ----->  atmospheric spherical albedo :                    " << radiative->GetSphericalAlbedo(0) <<
-  std::endl;
-  fout << "   ----->  total gaseous transmission :                      " <<
-  radiative->GetTotalGaseousTransmission(0) << std::endl;
-  fout << "   ----->  downward transmittance :                          " << radiative->GetDownwardTransmittance(0) <<
-  std::endl;
-  fout << "   ----->  upward transmittance :                            " << radiative->GetUpwardTransmittance(0) <<
-  std::endl;
-  fout << "   ----->  upward diffuse transmittance :                    " <<
-  radiative->GetUpwardDiffuseTransmittance(0) << std::endl;
-  fout << "   ----->  upward direct transmittance :                     " <<
-  radiative->GetUpwardDirectTransmittance(0) << std::endl;
-  fout << "   ----->  upward diffuse transmittance for rayleigh :       " <<
-  radiative->GetUpwardDiffuseTransmittanceForRayleigh(0) << std::endl;
-  fout << "   ----->  upward diffuse transmittance for aerosols :       " <<
-  radiative->GetUpwardDiffuseTransmittanceForAerosol(0) << std::endl;
-  fout << "   ----->  MinSpectralValue update:                          " << functionValues->GetMinSpectralValue() <<
-  std::endl;
-  fout << "   ----->  MaxSpectralValue update :                         " << functionValues->GetMaxSpectralValue() <<
-  std::endl;
+  fout << "   ----->  atmospheric reflectance :                         " << radiative->GetIntrinsicAtmosphericReflectance(0) << std::endl;
+  fout << "   ----->  atmospheric spherical albedo :                    " << radiative->GetSphericalAlbedo(0) << std::endl;
+  fout << "   ----->  total gaseous transmission :                      " << radiative->GetTotalGaseousTransmission(0) << std::endl;
+  fout << "   ----->  downward transmittance :                          " << radiative->GetDownwardTransmittance(0) << std::endl;
+  fout << "   ----->  upward transmittance :                            " << radiative->GetUpwardTransmittance(0) << std::endl;
+  fout << "   ----->  upward diffuse transmittance :                    " << radiative->GetUpwardDiffuseTransmittance(0) << std::endl;
+  fout << "   ----->  upward direct transmittance :                     " << radiative->GetUpwardDirectTransmittance(0) << std::endl;
+  fout << "   ----->  upward diffuse transmittance for rayleigh :       " << radiative->GetUpwardDiffuseTransmittanceForRayleigh(0) << std::endl;
+  fout << "   ----->  upward diffuse transmittance for aerosols :       " << radiative->GetUpwardDiffuseTransmittanceForAerosol(0) << std::endl;
+  fout << "   ----->  MinSpectralValue update:                          " << functionValues->GetMinSpectralValue() << std::endl;
+  fout << "   ----->  MaxSpectralValue update :                         " << functionValues->GetMaxSpectralValue() << std::endl;
   fout << " ---------------------------------------------------------" << std::endl;
   fout << "Input wavelength band values [" << functionValues->GetFilterFunctionValues().size() << "]:" << std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues().size(); ++i)
-    {
+  {
     fout << "    " << functionValues->GetFilterFunctionValues()[i] << std::endl;
-    }
+  }
   fout << " ---------------------------------------------------------" << std::endl;
-  fout << "Output wavelength band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" <<
-  std::endl;
+  fout << "Output wavelength band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" << std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues6S().size(); ++i)
-    {
+  {
     fout << "            " << functionValues->GetFilterFunctionValues6S()[i] << std::endl;
-    }
+  }
   fout << std::endl;
   fout.close();
   return EXIT_SUCCESS;

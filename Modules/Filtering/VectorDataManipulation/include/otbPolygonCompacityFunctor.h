@@ -60,27 +60,27 @@ public:
   {
     m_Threshold = 0.2;
   }
-  ~PolygonCompacityFunctor() {}
-
-  inline bool operator ()(const TInput1& input)
+  ~PolygonCompacityFunctor()
   {
-    double circularityRatio = 4*CONST_PI*input->GetArea()
-                              / vnl_math_sqr(input->GetLength());
+  }
+
+  inline bool operator()(const TInput1& input)
+  {
+    double circularityRatio = 4 * CONST_PI * input->GetArea() / vnl_math_sqr(input->GetLength());
 
     if (circularityRatio > m_Threshold)
-      {
+    {
       return true;
-      }
+    }
     else
-      {
+    {
       return false;
-      }
+    }
   }
 
 private:
   double m_Threshold;
 };
-
 }
 
 #endif

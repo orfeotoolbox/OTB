@@ -29,9 +29,7 @@ namespace otb
 {
 
 template <class TImage>
-StreamingManager<TImage>::StreamingManager()
-  : m_ComputedNumberOfSplits(0)
-  , m_DefaultRAM(0)
+StreamingManager<TImage>::StreamingManager() : m_ComputedNumberOfSplits(0), m_DefaultRAM(0)
 {
 }
 
@@ -41,38 +39,34 @@ StreamingManager<TImage>::~StreamingManager()
 }
 
 template <class TImage>
-const typename StreamingManager<TImage>::AbstractSplitterType *
-StreamingManager<TImage>::GetSplitter() const
+const typename StreamingManager<TImage>::AbstractSplitterType* StreamingManager<TImage>::GetSplitter() const
 {
   return m_Splitter;
 }
 
 template <class TImage>
-typename StreamingManager<TImage>::MemoryPrintType
-StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
+typename StreamingManager<TImage>::MemoryPrintType StreamingManager<TImage>::GetActualAvailableRAMInBytes(MemoryPrintType availableRAMInMB)
 {
   MemoryPrintType availableRAMInBytes = availableRAMInMB * 1024 * 1024;
 
   if (availableRAMInBytes == 0)
-    {
+  {
     if (m_DefaultRAM != 0)
-      {
-      availableRAMInBytes = 1024*1024*m_DefaultRAM;
-      }
-    else
-      {
-      // Retrieve it from the configuration
-      availableRAMInBytes = 1024*1024*ConfigurationManager::GetMaxRAMHint();
-      }
+    {
+      availableRAMInBytes = 1024 * 1024 * m_DefaultRAM;
     }
+    else
+    {
+      // Retrieve it from the configuration
+      availableRAMInBytes = 1024 * 1024 * ConfigurationManager::GetMaxRAMHint();
+    }
+  }
   return availableRAMInBytes;
 }
 
 template <class TImage>
-unsigned int
-StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * input, const RegionType &region,
-                                                           MemoryPrintType availableRAM,
-                                                           double bias)
+unsigned int StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject* input, const RegionType& region, MemoryPrintType availableRAM,
+                                                                        double bias)
 {
   MemoryPrintType availableRAMInBytes = GetActualAvailableRAMInBytes(availableRAM);
 
@@ -82,11 +76,11 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
   // Trick to avoid having the resampler compute the whole
   // displacement field
   double     regionTrickFactor = 1;
-  ImageType* inputImage = dynamic_cast<ImageType*>(input);
+  ImageType* inputImage        = dynamic_cast<ImageType*>(input);
 
   MemoryPrintType pipelineMemoryPrint;
   if (inputImage)
-    {
+  {
 
     typedef itk::ExtractImageFilter<ImageType, ImageType> ExtractFilterType;
     typename ExtractFilterType::Pointer extractFilter = ExtractFilterType::New();
@@ -97,8 +91,8 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
     SizeType smallSize;
     smallSize.Fill(100);
     IndexType index;
-    index[0] = region.GetIndex()[0] + region.GetSize()[0]/2 - 50;
-    index[1] = region.GetIndex()[1] + region.GetSize()[1]/2 - 50;
+    index[0] = region.GetIndex()[0] + region.GetSize()[0] / 2 - 50;
+    index[1] = region.GetIndex()[1] + region.GetSize()[1] / 2 - 50;
 
     RegionType smallRegion;
     smallRegion.SetSize(smallSize);
@@ -112,38 +106,36 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
     bool smallRegionSuccess = smallRegion.Crop(region);
 
     if (smallRegionSuccess)
-      {
+    {
       // the region is well behaved, inside the largest possible region
-      memoryPrintCalculator->SetDataToWrite(extractFilter->GetOutput() );
+      memoryPrintCalculator->SetDataToWrite(extractFilter->GetOutput());
 
-      regionTrickFactor = static_cast<double>( region.GetNumberOfPixels() )
-        / static_cast<double>(smallRegion.GetNumberOfPixels() );
+      regionTrickFactor = static_cast<double>(region.GetNumberOfPixels()) / static_cast<double>(smallRegion.GetNumberOfPixels());
 
       memoryPrintCalculator->SetBiasCorrectionFactor(regionTrickFactor * bias);
-      }
+    }
     else
-      {
+    {
       // the region is not well behaved
       // use the full region
       memoryPrintCalculator->SetDataToWrite(input);
       memoryPrintCalculator->SetBiasCorrectionFactor(bias);
-      }
+    }
 
     memoryPrintCalculator->Compute();
 
     pipelineMemoryPrint = memoryPrintCalculator->GetMemoryPrint();
 
     if (smallRegionSuccess)
-      {
+    {
       // remove the contribution of the ExtractImageFilter
-      MemoryPrintType extractContrib =
-          memoryPrintCalculator->EvaluateDataObjectPrint(extractFilter->GetOutput());
+      MemoryPrintType extractContrib = memoryPrintCalculator->EvaluateDataObjectPrint(extractFilter->GetOutput());
 
       pipelineMemoryPrint -= extractContrib;
-      }
     }
+  }
   else
-    {
+  {
     // Use the original object to estimate memory footprint
     memoryPrintCalculator->SetDataToWrite(input);
     memoryPrintCalculator->SetBiasCorrectionFactor(1.0);
@@ -151,28 +143,27 @@ StreamingManager<TImage>::EstimateOptimalNumberOfDivisions(itk::DataObject * inp
     memoryPrintCalculator->Compute();
 
     pipelineMemoryPrint = memoryPrintCalculator->GetMemoryPrint();
-    }
+  }
 
-  unsigned int optimalNumberOfDivisions =
-      otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
+  unsigned int optimalNumberOfDivisions = otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(pipelineMemoryPrint, availableRAMInBytes);
 
-  otbLogMacro(Info,<<"Estimated memory for full processing: "<<pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<"MB (avail.: "<<availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte<<" MB), optimal image partitioning: "<<optimalNumberOfDivisions<<" blocks");
-  
+  otbLogMacro(Info, << "Estimated memory for full processing: " << pipelineMemoryPrint * otb::PipelineMemoryPrintCalculator::ByteToMegabyte
+                    << "MB (avail.: " << availableRAMInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte
+                    << " MB), optimal image partitioning: " << optimalNumberOfDivisions << " blocks");
+
   return optimalNumberOfDivisions;
 }
 
 template <class TImage>
-unsigned int
-StreamingManager<TImage>::GetNumberOfSplits()
+unsigned int StreamingManager<TImage>::GetNumberOfSplits()
 {
   return m_ComputedNumberOfSplits;
 }
 
 template <class TImage>
-typename StreamingManager<TImage>::RegionType
-StreamingManager<TImage>::GetSplit(unsigned int i)
+typename StreamingManager<TImage>::RegionType StreamingManager<TImage>::GetSplit(unsigned int i)
 {
-  typename StreamingManager<TImage>::RegionType region( m_Region );
+  typename StreamingManager<TImage>::RegionType region(m_Region);
   m_Splitter->GetSplit(i, m_ComputedNumberOfSplits, region);
   return region;
 }
@@ -180,4 +171,3 @@ StreamingManager<TImage>::GetSplit(unsigned int i)
 } // End namespace otb
 
 #endif
-

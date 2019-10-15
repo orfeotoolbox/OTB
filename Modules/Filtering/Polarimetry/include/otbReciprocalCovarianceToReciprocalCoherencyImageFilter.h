@@ -25,9 +25,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ReciprocalCovarianceToReciprocalCoherencyFunctor
  * \brief Evaluate the Coherency matrix from the Covariance image
@@ -55,40 +56,40 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalCovarianceToReciprocalCoherencyFunctor
 {
 public:
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename TOutput::ValueType   OutputValueType;
 
   inline void operator()(TOutput& result, const TInput& Covariance) const
   {
-    const ComplexType C11 =  static_cast<ComplexType>(Covariance[0]);
-    const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
-    const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    const ComplexType C22 =  static_cast<ComplexType>(Covariance[3]);
-    const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    const ComplexType C33 =  static_cast<ComplexType>(Covariance[5]);
+    const ComplexType C11 = static_cast<ComplexType>(Covariance[0]);
+    const ComplexType C12 = static_cast<ComplexType>(Covariance[1]);
+    const ComplexType C13 = static_cast<ComplexType>(Covariance[2]);
+    const ComplexType C22 = static_cast<ComplexType>(Covariance[3]);
+    const ComplexType C23 = static_cast<ComplexType>(Covariance[4]);
+    const ComplexType C33 = static_cast<ComplexType>(Covariance[5]);
 
-    const ComplexType two = ComplexType(2.0, 0.0);
+    const ComplexType two     = ComplexType(2.0, 0.0);
     const ComplexType rootTwo = ComplexType(std::sqrt(2.0), 0.0);
 
-    result[0] = static_cast<OutputValueType>( C33 + C13 + std::conj(C13) + C11 );
-    result[1] = static_cast<OutputValueType>( -C33 - C13 + std::conj(C13) + C11 );
-    result[2] = static_cast<OutputValueType>( rootTwo*C12 + rootTwo*std::conj(C23) );
-    result[3] = static_cast<OutputValueType>( C33 - C13 - std::conj(C13) + C11 );
-    result[4] = static_cast<OutputValueType>( rootTwo*C12 - rootTwo*std::conj(C23) );
-    result[5] = static_cast<OutputValueType>( two * C22 );
+    result[0] = static_cast<OutputValueType>(C33 + C13 + std::conj(C13) + C11);
+    result[1] = static_cast<OutputValueType>(-C33 - C13 + std::conj(C13) + C11);
+    result[2] = static_cast<OutputValueType>(rootTwo * C12 + rootTwo * std::conj(C23));
+    result[3] = static_cast<OutputValueType>(C33 - C13 - std::conj(C13) + C11);
+    result[4] = static_cast<OutputValueType>(rootTwo * C12 - rootTwo * std::conj(C23));
+    result[5] = static_cast<OutputValueType>(two * C22);
 
     result /= 2.0;
-    }
+  }
 
-    constexpr size_t OutputSize(...) const
-    {
-      // Size of the result
-      return 6;
-    }
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 6;
+  }
 };
 } // namespace Functor
 

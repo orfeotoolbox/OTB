@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbMassOfBelief.h"
 
 #include "otbFuzzyVariable.h"
@@ -27,19 +26,17 @@
 #include "otbMacro.h"
 
 
-typedef float                           PrecisionType;
-typedef otb::FuzzyVariable<std::string, PrecisionType>
-                                        FuzzyVarType;
-typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
-typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
-                                        JointMassOfBeliefFilterType;
+typedef float PrecisionType;
+typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
+typedef otb::MassOfBelief<std::string>                         MassOfBeliefFunctionType;
+typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
 
 int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
 {
-  const char * hyp_1  = argv[1];
-  const char * hyp_2  = argv[2];
-  double desc1Val = atof(argv[3]);
-  double desc2Val = atof(argv[4]);
+  const char* hyp_1    = argv[1];
+  const char* hyp_2    = argv[2];
+  double      desc1Val = atof(argv[3]);
+  double      desc2Val = atof(argv[4]);
 
 
   // Descriptors and associated fuzzy variables
@@ -53,8 +50,8 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   desc2->SetMembership("H2_", 0.68, 0.98, 1.0, 1.0, 0, 0.99);
 
   // Corresponding masses
-  MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
-  MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer mass1     = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer mass2     = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer jointMass = MassOfBeliefFunctionType::New();
 
   MassOfBeliefFunctionType::LabelSetType H1, H1_, H2, H2_, universe, Hyp;
@@ -91,27 +88,27 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   jointMassFilter->Update();
   jointMass = jointMassFilter->GetOutput();
 
-  otbLogMacro(Debug,<< "Mass 1:" <<mass1);
+  otbLogMacro(Debug, << "Mass 1:" << mass1);
 
-  otbLogMacro(Debug,<< "Mass 2:"<<mass2);
+  otbLogMacro(Debug, << "Mass 2:" << mass2);
 
-  otbLogMacro(Debug,<< "Joint mass :" << jointMass);
+  otbLogMacro(Debug, << "Joint mass :" << jointMass);
 
   std::ostringstream oss;
   MassOfBeliefFunctionType::PrintLabelSet(oss, Hyp);
   otbLogMacro(Info, << "Considered Hypothesis : " << oss.str());
-  
+
   otbLogMacro(Info, << "Belief(Hyp) : " << jointMass->GetBelief(Hyp));
   otbLogMacro(Info, << "Plausibility(Hyp) : " << jointMass->GetPlausibility(Hyp));
-  otbLogMacro(Info, << "Score(Hyp) : " << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp))/2.0);
+  otbLogMacro(Info, << "Score(Hyp) : " << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp)) / 2.0);
 
   if (jointMass->GetBelief(Hyp) > jointMass->GetPlausibility(Hyp))
-    {
+  {
     otbLogMacro(Warning, << "Belief > Plausibility");
     return EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     return EXIT_SUCCESS;
-    }
+  }
 }

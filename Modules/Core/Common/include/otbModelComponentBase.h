@@ -61,9 +61,8 @@ namespace Statistics
  * \ingroup OTBCommon
  */
 
-template<class TSample>
-class ITK_EXPORT ModelComponentBase :
-  public itk::Object
+template <class TSample>
+class ITK_EXPORT ModelComponentBase : public itk::Object
 {
 public:
   /**Standard class typedefs. */
@@ -80,8 +79,7 @@ public:
   typedef typename TSample::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** typedef for the MembershipFunctionBase */
-  typedef itk::Statistics::MembershipFunctionBase<MeasurementVectorType>
-  MembershipFunctionType;
+  typedef itk::Statistics::MembershipFunctionBase<MeasurementVectorType> MembershipFunctionType;
 
   typedef itk::Array<double> ParametersType;
 
@@ -130,7 +128,9 @@ public:
 
 protected:
   ModelComponentBase();
-  ~ModelComponentBase() override {}
+  ~ModelComponentBase() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void GenerateData();
@@ -147,8 +147,8 @@ protected:
   ParametersType m_Parameters;
 
 private:
-  ModelComponentBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ModelComponentBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** target sample data pointer */
   const TSample* m_Sample;
 

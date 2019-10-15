@@ -25,13 +25,13 @@
 int otbKMLVectorDataIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::KMLVectorDataIO KMLVectorDataIOType;
-  KMLVectorDataIOType::Pointer object = KMLVectorDataIOType::New();
+  KMLVectorDataIOType::Pointer object   = KMLVectorDataIOType::New();
   bool                         lCanRead = object->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::KMLVectorDataIO : impossible to open the file " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

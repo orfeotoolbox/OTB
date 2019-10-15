@@ -42,31 +42,30 @@ class SARDecompositions : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef SARDecompositions                   Self;
-  typedef Application                         Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef SARDecompositions             Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
 
-  typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleImageType::PixelType,
-                                    ComplexDoubleVectorImageType::PixelType>								FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCoherencyMatrixFunctor<ComplexDoubleImageType::PixelType, ComplexDoubleImageType::PixelType,
+                                                                   ComplexDoubleImageType::PixelType, ComplexDoubleVectorImageType::PixelType>
+      FunctorType;
 
 
   using SRFilterType = otb::SinclairToReciprocalCoherencyMatrixImageFilter<ComplexDoubleImageType, ComplexDoubleVectorImageType>;
 
-  typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType>                                         MeanFilterType;
-  typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType>    PerBandMeanFilterType;
-  //typedef otb::NRIBandImagesToOneNComplexBandsImage<DoubleVectorImageType, ComplexDoubleVectorImageType>               NRITOOneCFilterType;
-  typedef otb::ImageList<ComplexDoubleImageType>                                                                       ImageListType;
-  typedef ImageListToVectorImageFilter<ImageListType, ComplexDoubleVectorImageType >                                   ListConcatenerFilterType;
+  typedef itk::MeanImageFilter<ComplexDoubleImageType, ComplexDoubleImageType> MeanFilterType;
+  typedef otb::PerBandVectorImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType, MeanFilterType> PerBandMeanFilterType;
+  // typedef otb::NRIBandImagesToOneNComplexBandsImage<DoubleVectorImageType, ComplexDoubleVectorImageType>               NRITOOneCFilterType;
+  typedef otb::ImageList<ComplexDoubleImageType> ImageListType;
+  typedef ImageListToVectorImageFilter<ImageListType, ComplexDoubleVectorImageType> ListConcatenerFilterType;
 
 
-  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> 			       HAFilterType;
-  typedef otb::ReciprocalBarnesDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           BarnesFilterType;
-  typedef otb::ReciprocalHuynenDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>           HuynenFilterType;
-  typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>            PauliFilterType;
+  typedef otb::ReciprocalHAlphaImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>       HAFilterType;
+  typedef otb::ReciprocalBarnesDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> BarnesFilterType;
+  typedef otb::ReciprocalHuynenDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType> HuynenFilterType;
+  typedef otb::ReciprocalPauliDecompImageFilter<ComplexDoubleVectorImageType, ComplexDoubleVectorImageType>  PauliFilterType;
 
 
   /** Standard macro */
@@ -92,43 +91,44 @@ private:
         "thanks to the parameter inco.kernelsize.");
 
 
-    SetDocLimitations("Some decompositions output real images, while this application outputs complex images for general purpose.\n"
-                      "Users should pay attention to extract the real part of the results provided by this application.\n");
+    SetDocLimitations(
+        "Some decompositions output real images, while this application outputs complex images for general purpose.\n"
+        "Users should pay attention to extract the real part of the results provided by this application.\n");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("SARPolarMatrixConvert, SARPolarSynth");
 
     AddDocTag(Tags::SAR);
 
-    AddParameter(ParameterType_InputImage,  "inhh",   "Input Image");
+    AddParameter(ParameterType_InputImage, "inhh", "Input Image");
     SetParameterDescription("inhh", "Input image (HH)");
 
-    AddParameter(ParameterType_InputImage,  "inhv",   "Input Image");
+    AddParameter(ParameterType_InputImage, "inhv", "Input Image");
     SetParameterDescription("inhv", "Input image (HV)");
     MandatoryOff("inhv");
 
-    AddParameter(ParameterType_InputImage,  "invh",   "Input Image");
+    AddParameter(ParameterType_InputImage, "invh", "Input Image");
     SetParameterDescription("invh", "Input image (VH)");
     MandatoryOff("invh");
 
-    AddParameter(ParameterType_InputImage,  "invv",   "Input Image");
+    AddParameter(ParameterType_InputImage, "invv", "Input Image");
     SetParameterDescription("invv", "Input image (VV)");
 
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output image");
 
     AddParameter(ParameterType_Choice, "decomp", "Decompositions");
-    AddChoice("decomp.haa","H-alpha-A incoherent decomposition");
-    SetParameterDescription("decomp.haa","H-alpha-A incoherent decomposition");
-    AddChoice("decomp.barnes","Barnes incoherent decomposition");
-    SetParameterDescription("decomp.barnes","Barnes incoherent decomposition");
-    AddChoice("decomp.huynen","Huynen incoherent decomposition");
-    SetParameterDescription("decomp.huynen","Huynen incoherent decomposition");
-    AddChoice("decomp.pauli","Pauli coherent decomposition");
-    SetParameterDescription("decomp.pauli","Pauli coherent decomposition");
+    AddChoice("decomp.haa", "H-alpha-A incoherent decomposition");
+    SetParameterDescription("decomp.haa", "H-alpha-A incoherent decomposition");
+    AddChoice("decomp.barnes", "Barnes incoherent decomposition");
+    SetParameterDescription("decomp.barnes", "Barnes incoherent decomposition");
+    AddChoice("decomp.huynen", "Huynen incoherent decomposition");
+    SetParameterDescription("decomp.huynen", "Huynen incoherent decomposition");
+    AddChoice("decomp.pauli", "Pauli coherent decomposition");
+    SetParameterDescription("decomp.pauli", "Pauli coherent decomposition");
 
-    AddParameter(ParameterType_Group,"inco","Incoherent decompositions");
-    SetParameterDescription("inco","This group allows setting parameters related to the incoherent decompositions.");
-    AddParameter(ParameterType_Int, "inco.kernelsize",   "Kernel size for spatial incoherent averaging");
+    AddParameter(ParameterType_Group, "inco", "Incoherent decompositions");
+    SetParameterDescription("inco", "This group allows setting parameters related to the incoherent decompositions.");
+    AddParameter(ParameterType_Int, "inco.kernelsize", "Kernel size for spatial incoherent averaging");
     SetParameterDescription("inco.kernelsize", "Minute (0-59)");
     SetMinimumParameterIntValue("inco.kernelsize", 1);
     SetDefaultParameterInt("inco.kernelsize", 3);
@@ -141,9 +141,9 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inhh", "HH.tif");
-	SetDocExampleParameterValue("invh", "VH.tif");
-	SetDocExampleParameterValue("invv", "VV.tif");
-	SetDocExampleParameterValue("decomp", "haa");
+    SetDocExampleParameterValue("invh", "VH.tif");
+    SetDocExampleParameterValue("invv", "VV.tif");
+    SetDocExampleParameterValue("decomp", "haa");
     SetDocExampleParameterValue("out", "HaA.tif");
 
     SetOfficialDocLink();
@@ -157,28 +157,28 @@ private:
   void DoExecute() override
   {
 
-  bool inhv = HasUserValue("inhv");
-	bool invh = HasUserValue("invh");
+    bool inhv = HasUserValue("inhv");
+    bool invh = HasUserValue("invh");
 
-  if ( (!inhv) && (!invh) )
-	  otbAppLogFATAL( << "Parameter inhv or invh not set. Please provide a HV or a VH complex image.");
+    if ((!inhv) && (!invh))
+      otbAppLogFATAL(<< "Parameter inhv or invh not set. Please provide a HV or a VH complex image.");
 
-    m_SRFilter = SRFilterType::New();
+    m_SRFilter   = SRFilterType::New();
     m_HAFilter   = HAFilterType::New();
     m_MeanFilter = PerBandMeanFilterType::New();
     MeanFilterType::InputSizeType radius;
     m_BarnesFilter = BarnesFilterType::New();
     m_HuynenFilter = HuynenFilterType::New();
-    m_PauliFilter = PauliFilterType::New();
-    m_Concatener = ListConcatenerFilterType::New();
+    m_PauliFilter  = PauliFilterType::New();
+    m_Concatener   = ListConcatenerFilterType::New();
     m_ImageList    = ImageListType::New();
 
     switch (GetParameterInt("decomp"))
-      {
-		case 0: // H-alpha-A
+    {
+    case 0: // H-alpha-A
 
-    if (inhv)
-      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      if (inhv)
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
         m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
@@ -196,8 +196,8 @@ private:
 
     case 1: // Barnes
 
-		if (inhv)
-      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      if (inhv)
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
         m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
@@ -215,8 +215,8 @@ private:
 
     case 2: // Huynen
 
-		if (inhv)
-      m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
+      if (inhv)
+        m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("inhv"));
       else if (invh)
         m_SRFilter->SetInput<polarimetry_tags::hv_or_vh>(GetParameterComplexDoubleImage("invh"));
 
@@ -234,35 +234,35 @@ private:
 
     case 3: // Pauli
 
-        m_ImageList->PushBack(GetParameterComplexDoubleImage("inhh"));
+      m_ImageList->PushBack(GetParameterComplexDoubleImage("inhh"));
 
-		if (inhv)
-		  m_ImageList->PushBack(GetParameterComplexDoubleImage("inhv"));
-	    else if (invh)
-		  m_ImageList->PushBack(GetParameterComplexDoubleImage("invh"));
+      if (inhv)
+        m_ImageList->PushBack(GetParameterComplexDoubleImage("inhv"));
+      else if (invh)
+        m_ImageList->PushBack(GetParameterComplexDoubleImage("invh"));
 
-		m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
+      m_ImageList->PushBack(GetParameterComplexDoubleImage("invv"));
 
-    m_Concatener->SetInput(m_ImageList);
-    m_PauliFilter->SetInput<0>(m_Concatener->GetOutput());
+      m_Concatener->SetInput(m_ImageList);
+      m_PauliFilter->SetInput<0>(m_Concatener->GetOutput());
 
-    SetParameterOutputImage("out", m_PauliFilter->GetOutput() );
+      SetParameterOutputImage("out", m_PauliFilter->GetOutput());
 
-    break;
-	  }
+      break;
+    }
   }
 
-  SRFilterType::Pointer m_SRFilter;
-  HAFilterType::Pointer m_HAFilter;
-  BarnesFilterType::Pointer m_BarnesFilter;
-  HuynenFilterType::Pointer m_HuynenFilter;
-  PauliFilterType::Pointer m_PauliFilter;
-  PerBandMeanFilterType::Pointer m_MeanFilter;
-  ListConcatenerFilterType::Pointer  m_Concatener;
-  ImageListType::Pointer        m_ImageList;
+  SRFilterType::Pointer             m_SRFilter;
+  HAFilterType::Pointer             m_HAFilter;
+  BarnesFilterType::Pointer         m_BarnesFilter;
+  HuynenFilterType::Pointer         m_HuynenFilter;
+  PauliFilterType::Pointer          m_PauliFilter;
+  PerBandMeanFilterType::Pointer    m_MeanFilter;
+  ListConcatenerFilterType::Pointer m_Concatener;
+  ImageListType::Pointer            m_ImageList;
 };
 
-} //end namespace Wrapper
-} //end namespace otb
+} // end namespace Wrapper
+} // end namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::SARDecompositions)

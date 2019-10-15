@@ -29,34 +29,28 @@
 namespace otb
 {
 template <class TInputValue, class TOutputValue, class NeuronType>
-AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::AutoencoderModelFactory()
+AutoencoderModelFactory<TInputValue, TOutputValue, NeuronType>::AutoencoderModelFactory()
 {
   std::string classOverride = std::string("DimensionalityReductionModel");
-  std::string subclass = std::string("AutoencoderModel");
+  std::string subclass      = std::string("AutoencoderModel");
 
-  this->RegisterOverride(
-    classOverride.c_str(),
-    subclass.c_str(),
-    "Shark AE ML Model",
-    1,
-    itk::CreateObjectFunction<AutoencoderModel<TInputValue,NeuronType > >::New());
+  this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "Shark AE ML Model", 1,
+                         itk::CreateObjectFunction<AutoencoderModel<TInputValue, NeuronType>>::New());
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::~AutoencoderModelFactory()
+AutoencoderModelFactory<TInputValue, TOutputValue, NeuronType>::~AutoencoderModelFactory()
 {
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-const char*
-AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::GetITKSourceVersion(void) const
+const char* AutoencoderModelFactory<TInputValue, TOutputValue, NeuronType>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 template <class TInputValue, class TOutputValue, class NeuronType>
-const char*
-AutoencoderModelFactory<TInputValue,TOutputValue, NeuronType>::GetDescription() const
+const char* AutoencoderModelFactory<TInputValue, TOutputValue, NeuronType>::GetDescription() const
 {
   return "Autoencoder model factory";
 }

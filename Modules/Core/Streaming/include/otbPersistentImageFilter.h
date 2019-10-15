@@ -44,15 +44,14 @@ namespace otb
  * \ingroup OTBStreaming
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT PersistentImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT PersistentImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef PersistentImageFilter                              Self;
+  typedef PersistentImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkTypeMacro(PersistentImageFilter, ImageToImageFilter);
@@ -71,9 +70,13 @@ public:
 
 protected:
   /** Constructor */
-  PersistentImageFilter() {}
+  PersistentImageFilter()
+  {
+  }
   /** Destructor */
-  ~PersistentImageFilter() override {}
+  ~PersistentImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -81,8 +84,8 @@ protected:
   }
 
 private:
-  PersistentImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 

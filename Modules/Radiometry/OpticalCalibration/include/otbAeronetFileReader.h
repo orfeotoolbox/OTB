@@ -38,23 +38,22 @@ class AeronetData;
  *
  * \ingroup OTBOpticalCalibration
  */
-class OTBOpticalCalibration_EXPORT AeronetFileReaderException
-  : public itk::ExceptionObject
+class OTBOpticalCalibration_EXPORT AeronetFileReaderException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
   itkTypeMacro(AeronetFileReaderException, ExceptionObject);
 
   /** Constructor. */
-  AeronetFileReaderException(const char *file, unsigned int line,
-                             const char* message = "Error in Radiometry IO",
-                             const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc) {}
+  AeronetFileReaderException(const char* file, unsigned int line, const char* message = "Error in Radiometry IO", const char* loc = "Unknown")
+    : ExceptionObject(file, line, message, loc)
+  {
+  }
   /** Constructor. */
-  AeronetFileReaderException(const std::string & file, unsigned int line,
-                             const char* message = "Error in Radiometry IO",
-                             const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc) {}
+  AeronetFileReaderException(const std::string& file, unsigned int line, const char* message = "Error in Radiometry IO", const char* loc = "Unknown")
+    : ExceptionObject(file, line, message, loc)
+  {
+  }
 };
 
 /**
@@ -91,7 +90,7 @@ public:
   itkTypeMacro(AeronetFileReader, itk::ProcessObject);
 
   /** Overriding of the GetOutput() method */
-  virtual AeronetData * GetOutput(void);
+  virtual AeronetData* GetOutput(void);
 
   /** Set the filename  */
   itkSetStringMacro(FileName);
@@ -134,7 +133,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
   /** Standards privates typedefs */
   typedef std::vector<std::string>  VectorString;
   typedef std::vector<double>       VectorDouble;
@@ -143,20 +141,15 @@ private:
   /** Parse the string and return a list of strings which separated by ',' char */
   VectorString ParseLine(const std::string& line) const;
 
-/**
- * Parse valid line method
- */
-  void ParseValidLine(const double& ref_date,
-                      const VectorString& line,
-                      const double& epsilon,
-                      VectorDouble& water,
-                      VectorDouble& angst,
-                      VectorDouble& tau_day,
+  /**
+   * Parse valid line method
+   */
+  void ParseValidLine(const double& ref_date, const VectorString& line, const double& epsilon, VectorDouble& water, VectorDouble& angst, VectorDouble& tau_day,
                       VectorDouble& solarZenithAngle) const;
 
-/**
- * Compute statistics method (mean and stddev)
- */
+  /**
+   * Compute statistics method (mean and stddev)
+   */
   void GetStatistics(const VectorDouble& vec, double& mean, double& stddev) const;
 
   /** File name */
