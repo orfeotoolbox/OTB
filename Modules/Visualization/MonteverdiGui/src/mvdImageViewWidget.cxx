@@ -1880,9 +1880,6 @@ void ImageViewWidget::OnUpdateGammaRequested(double factor)
 
   assert(m_Renderer != NULL);
 
-  StackedLayerModel * stackedLayerModel = m_Renderer->GetLayerStack();
-  assert( stackedLayerModel!=NULL );
-
   StackedLayerModel* stackedLayerModel = m_Renderer->GetLayerStack();
   assert(stackedLayerModel != NULL);
 
