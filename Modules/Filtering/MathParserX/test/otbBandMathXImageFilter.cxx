@@ -52,6 +52,7 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   ImageType::Pointer image1 = ImageType::New();
   ImageType::Pointer image2 = ImageType::New();
   ImageType::Pointer image3 = ImageType::New();
+  ImageType::Pointer image4 = ImageType::New();
 
   image1->SetLargestPossibleRegion(region);
   image1->SetBufferedRegion(region);
@@ -71,17 +72,25 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   image3->SetNumberOfComponentsPerPixel(D3);
   image3->Allocate();
 
+  image4->SetLargestPossibleRegion(region);
+  image4->SetBufferedRegion(region);
+  image4->SetRequestedRegion(region);
+  image4->SetNumberOfComponentsPerPixel(D2);
+  image4->Allocate();
+
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
   IteratorType                                         it1(image1, region);
   IteratorType                                         it2(image2, region);
   IteratorType                                         it3(image3, region);
+  IteratorType                                         it4(image4, region);
 
-  ImageType::PixelType val1, val2, val3;
+  ImageType::PixelType val1, val2, val3, val4;
   val1.SetSize(D1);
   val2.SetSize(D2);
   val3.SetSize(D3);
+  val4.SetSize(D2);
 
-  for (it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(); !it1.IsAtEnd(); ++it1, ++it2, ++it3)
+  for (i=0, it1.GoToBegin(), it2.GoToBegin(), it3.GoToBegin(), it4.GoToBegin(); !it1.IsAtEnd(); ++i, ++it1, ++it2, ++it3, ++it4)
   {
     ImageType::IndexType i1 = it1.GetIndex();
     ImageType::IndexType i2 = it2.GetIndex();
@@ -92,10 +101,12 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     val1[2] = i1[0] / (i1[1] + 1) + 5;
     val2[0] = i2[0] * i2[1];
     val3[0] = i3[0] + i3[1] * i3[1];
+    val4[0] = 2e-4 * i;
 
     it1.Set(val1);
     it2.Set(val2);
     it3.Set(val3);
+    it4.Set(val4);
   }
 
 
@@ -105,15 +116,20 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   filter->SetNthInput(0, image1);
   filter->SetNthInput(1, image2);
   filter->SetNthInput(2, image3, "canal3");
+  filter->SetNthInput(3, image4);
 
-  filter->SetExpression("vcos(2 * pi * im1) div (2 * pi * bands(im2,{1,1,1}) + {3.38,3.38,3.38}) mult vsin(pi * bands(canal3,{1,1,1}))"); // Sub-test 1
+  filter->SetExpression( // Sub-test 1
+      "vcos(2 * pi * im1) div (2 * pi * (bands(im2,{1,1,1}) pw 2) + {3.38,3.38,3.38} pow {2.1,3.2,4}) mult (vsin(pi * bands(canal3,{1,1,1})) dv 2.0)");
+
   filter->SetExpression("im1b1 / im2b1"); // Sub-test 2 (Edge Effect Handling)
+  filter->SetExpression("im2 pow im4"); // Sub-test 3 (element-wise power)
   filter->Update();
 
   // if (filter->GetNumberOfOutputs() != 2)
 
   ImageType::Pointer output1 = filter->GetOutput(0);
   ImageType::Pointer output2 = filter->GetOutput(1);
+  ImageType::Pointer output3 = filter->GetOutput(2);
 
   std::cout << "\n---  Standard Use\n";
   std::cout << "Parsed Expression :   " << filter->GetExpression(0) << std::endl;
@@ -138,9 +154,9 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     double error1, error2, error3;
 
 
-    double expected1 = std::cos(2 * otb::CONST_PI * px1[0]) / (2 * otb::CONST_PI * px2[0] + 3.38) * std::sin(otb::CONST_PI * px3[0]);
-    double expected2 = std::cos(2 * otb::CONST_PI * px1[1]) / (2 * otb::CONST_PI * px2[0] + 3.38) * std::sin(otb::CONST_PI * px3[0]);
-    double expected3 = std::cos(2 * otb::CONST_PI * px1[2]) / (2 * otb::CONST_PI * px2[0] + 3.38) * std::sin(otb::CONST_PI * px3[0]);
+    double expected1 = std::cos(2 * otb::CONST_PI * px1[0]) / (2 * otb::CONST_PI * px2[0] * px2[0] + pow(3.38,2.1)) * std::sin(otb::CONST_PI * px3[0]) / 2;
+    double expected2 = std::cos(2 * otb::CONST_PI * px1[1]) / (2 * otb::CONST_PI * px2[0] * px2[0] + pow(3.38,3.2)) * std::sin(otb::CONST_PI * px3[0]) / 2;
+    double expected3 = std::cos(2 * otb::CONST_PI * px1[2]) / (2 * otb::CONST_PI * px2[0] * px2[0] + pow(3.38,4)) * std::sin(otb::CONST_PI * px3[0]) / 2;
 
     /*std::cout << "Pixel_1 =  " << it1.Get()[0] << "     Pixel_2 =  " << it2.Get()[0] << "     Pixel_3 =  " << it3.Get()[0]
         << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl; */
@@ -187,6 +203,28 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
                              << "     Expected =  nan\n");
   std::cout << std::endl;
 
+  // Sub-test 3
+  /** ElementWisePower */
+
+  IteratorType itoutput3(output3, region);
+  for (i=0, it2.GoToBegin(); !it2.IsAtEnd(); ++i, ++it2, ++itoutput3)
+  {
+    ImageType::IndexType i2 = it2.GetIndex();
+
+    double expected = pow(i2[0] * i2[1], 2e-4 * i);
+    double result = itoutput3.Get()[0];
+    double error;
+
+    error = abs(result - expected);
+
+    if (error > 1e-9) {
+      itkGenericExceptionMacro(<< std::endl
+                               << "Result = " << itoutput3.Get()[0]
+                               << " Expected = " << expected
+                               << " Error = " << error << "  > 1E-9     -> TEST FAILLED"
+                               << std::endl);
+    }
+  }
 
   return EXIT_SUCCESS;
 }
@@ -586,10 +624,14 @@ int otbBandMathXImageFilterBandsFailures(int itkNotUsed(argc), char* itkNotUsed(
       std::cout << "INFO: Exception thrown as expected : " << e.what() << std::endl;
       filter->ClearExpression();
     }
-    catch (...) {
-      itkGenericExceptionMacro(<< "TEST FAILLED: " << exp
-                               << "should have raise a RangeError exception" << std::endl);
+    catch (const std::exception& e) {
+      itkGenericExceptionMacro(<< "TEST FAILED: " << exp
+                               << "should have raise a RangeError exception."
+                               << e.what() << std::endl);
     }
+
+    filter->ClearExpression(); // clean-up filter for next test string
+
   }
   return EXIT_SUCCESS;
 }

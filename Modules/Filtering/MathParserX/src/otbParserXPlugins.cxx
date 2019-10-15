@@ -34,9 +34,7 @@ namespace otb
 void bands::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int a_iArgc)
 {
 
-  if (a_iArgc != 2)
-    return;
-
+  assert (a_iArgc == 2);
   assert(a_pArg[0]->GetType() == 'm');
   assert(a_pArg[1]->GetType() == 'm');
 
