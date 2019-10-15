@@ -67,6 +67,7 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+    - ci-gpernot-custom
   stage: build
   artifacts:
     when: always
@@ -90,6 +91,7 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
+    - ci-gpernot-custom
   stage: prepare
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
@@ -267,6 +269,7 @@ ubuntu-xdk-qa-code-coverage:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
+      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -289,6 +292,7 @@ ubuntu-xdk-qa-static-analysis:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
+      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -316,6 +320,7 @@ ubuntu-xdk-report:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
+      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   script:
@@ -348,10 +353,10 @@ deploy:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   dependencies:
     - ubuntu-xdk-build-doc
-    - centos-xdk-build
-    - macos-xdk-build
-    - windows-8-build
-    - windows-10-build
+    #- centos-xdk-build
+    #- macos-xdk-build
+    #- windows-8-build
+    #- windows-10-build
 
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
