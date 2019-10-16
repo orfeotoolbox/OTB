@@ -86,7 +86,7 @@ Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Note: On some distibutions, gcc 5+ is not available by default. For example in CentOS 7 the default version 
-is 4.8 and gcc 7 this can be installed using devtoolset.
+is 4.8 (gcc 7 can be installed using devtoolset).
 
 The first thing to do is to create a directory for working with OTB.
 This guide will use ``~/OTB`` but you are free to choose something
