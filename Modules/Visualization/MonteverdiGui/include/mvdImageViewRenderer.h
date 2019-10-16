@@ -137,7 +137,7 @@ public:
 
   /**
    */
-  bool CheckGLCapabilities(int*) override;
+  bool CheckGLCapabilities( int * ) const override;
 
   /**
    */
@@ -161,13 +161,11 @@ public:
 
   void GetViewExtent(PointType& origin, PointType& extent) const override;
 
-
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const override;
 
   void InitializeGL() override;
 
   void ResizeGL(int width, int height) override;
-
 
   void PaintGL(const AbstractImageViewRenderer::RenderingContext* context) override;
 
@@ -182,6 +180,12 @@ public:
   bool Reproject(PointType& center, SpacingType& spacing, const PointType& vcenter, const SpacingType& vspacing) const;
 
   bool IsEffectsEnabled() const override;
+
+  bool IsGLSLAvailable() const noexcept override;
+
+  bool SetGLSLEnabled( bool ) override;
+
+  bool IsGLSLEnabled() const noexcept override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 

@@ -28,6 +28,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
+#include <QGLFormat>
 
 //
 // System includes (sorted by alphabetic order)
@@ -183,6 +184,8 @@ void ImageViewWidget::SetLayerStack(StackedLayerModel* stackedLayerModel)
 
   // Set projection parameters of manipulator from layer data.
   OnSetProjectionRequired();
+
+  makeCurrent();
 
   // Insert image-models into image-view renderer.
   m_Renderer->SetLayerStack(stackedLayerModel);
@@ -716,17 +719,42 @@ void ImageViewWidget::ListGlVersions() const
                     .constData();
 
 #else
-  qWarning()
-      << tr("Runtime version of OpenGL used by Qt %1: %2.%3.").arg(qVersion()).arg(format().majorVersion()).arg(format().minorVersion()).toLatin1().constData();
+  qWarning() <<
+    tr( "Runtime version of OpenGL used by Qt %1: %2.%3." )
+    .arg( qVersion() )
+    .arg( format().majorVersion() )
+    .arg( format().minorVersion() )
+    .toLatin1()
+    .constData();
 
-  QGLFormat::OpenGLVersionFlags glVersionFlags(QGLFormat::openGLVersionFlags());
+  switch( format().profile() )
+  {
+  case QGLFormat::NoProfile:
+    qWarning() << "QGLFormat::NoProfile";
+    break;
+
+  case QGLFormat::CoreProfile:
+    qWarning() << "QGLFormat::CoreProfile";
+    break;
+
+  case QGLFormat::CompatibilityProfile:
+    qWarning() << "QGLFormat::CompatibilityProfile";
+    break;
+
+  default:
+    assert( false && "Unexpected QGLFormat::profile()." );
+    break;
+  }
+
+  QGLFormat::OpenGLVersionFlags glVersionFlags(
+    QGLFormat::openGLVersionFlags()
+  );
 
   qWarning() << tr("Version(s) of OpenGL supported by Qt %1:").arg(qVersion()).toLatin1().constData();
 
   if (glVersionFlags & QGLFormat::OpenGL_Version_4_0)
     qWarning() << "QGLFormat::OpenGL_Version_4_0";
-
-  if (glVersionFlags & QGLFormat::OpenGL_Version_3_3)
+  if(glVersionFlags & QGLFormat::OpenGL_Version_3_3)
     qWarning() << "- QGLFormat::OpenGL_Version_3_3";
   if (glVersionFlags & QGLFormat::OpenGL_Version_3_2)
     qWarning() << "- QGLFormat::OpenGL_Version_3_2";
@@ -734,13 +762,11 @@ void ImageViewWidget::ListGlVersions() const
     qWarning() << "- QGLFormat::OpenGL_Version_3_1";
   if (glVersionFlags & QGLFormat::OpenGL_Version_3_0)
     qWarning() << "- QGLFormat::OpenGL_Version_3_0";
-
-  if (glVersionFlags & QGLFormat::OpenGL_Version_2_1)
+  if(glVersionFlags & QGLFormat::OpenGL_Version_2_1)
     qWarning() << "- QGLFormat::OpenGL_Version_2_1";
   if (glVersionFlags & QGLFormat::OpenGL_Version_2_0)
     qWarning() << "- QGLFormat::OpenGL_Version_2_0";
-
-  if (glVersionFlags & QGLFormat::OpenGL_Version_1_5)
+  if(glVersionFlags & QGLFormat::OpenGL_Version_1_5)
     qWarning() << "- QGLFormat::OpenGL_Version_1_5";
   if (glVersionFlags & QGLFormat::OpenGL_Version_1_4)
     qWarning() << "- QGLFormat::OpenGL_Version_1_4";
@@ -1038,15 +1064,21 @@ void ImageViewWidget::OnApplyAllRequested()
   }
 }
 
-void ImageViewWidget::OnResetEffectsRequested()
+/******************************************************************************/
+void
+ImageViewWidget
+::OnResetEffectsRequested()
 {
   StackedLayerModel* layerStack = m_Renderer->GetLayerStack();
 
-  for (StackedLayerModel::ConstIterator it(layerStack->Begin()); it != layerStack->End(); ++it)
+  for( StackedLayerModel::ConstIterator it( layerStack->Begin() );
+       it!=layerStack->End();
+       ++it )
   {
-    if (it->second->inherits(VectorImageModel::staticMetaObject.className()))
+    if( it->second->inherits( VectorImageModel::staticMetaObject.className() ) )
     {
-      VectorImageModel* imageModel = qobject_cast<VectorImageModel*>(it->second);
+      VectorImageModel * imageModel =
+	qobject_cast< VectorImageModel * >( it->second );
 
       VectorImageSettings& settings = imageModel->GetSettings();
       settings.SetEffect(EFFECT_NORMAL);
@@ -1061,7 +1093,7 @@ void ImageViewWidget::OnClearProjectionRequired()
 {
   // qDebug() << this << "::OnClearProjectionRequested()";
 
-  assert(m_Manipulator != NULL);
+  assert(m_Manipulator!=NULL);
 
   m_Manipulator->SetWkt(std::string());
   m_Manipulator->SetKeywordList(otb::ViewSettings::KeywordListType());
@@ -1086,6 +1118,8 @@ void ImageViewWidget::OnContentChanged()
 {
   // qDebug() << this << "::OnContentChanged()";
 
+  makeCurrent();
+
   UpdateScene();
 
   if (!ApplyFixedZoomType())
@@ -1096,6 +1130,8 @@ void ImageViewWidget::OnContentChanged()
 void ImageViewWidget::OnContentReset()
 {
   // qDebug() << this << "::OnContentReset()";
+
+  makeCurrent();
 
   UpdateScene();
 
@@ -1797,8 +1833,9 @@ void ImageViewWidget::SaveScreenshot(bool isQuickMode)
     }
   }
 
+  makeCurrent();
 
-  assert(m_Renderer != NULL);
+  assert( m_Renderer!=NULL );
 
   try
   {
@@ -1842,7 +1879,6 @@ void ImageViewWidget::OnUpdateGammaRequested(double factor)
   // qDebug() << this << "::OnUpdateGammaRequested(" << factor << ")";
 
   assert(m_Renderer != NULL);
-
 
   StackedLayerModel* stackedLayerModel = m_Renderer->GetLayerStack();
   assert(stackedLayerModel != NULL);
@@ -1927,7 +1963,63 @@ void ImageViewWidget::OnUpdateProjectionRequired()
 }
 
 /******************************************************************************/
-void ImageViewWidget::UpdateScene()
+bool
+ImageViewWidget
+::CheckGLCapabilities( int * glsl140 )
+{
+  assert( m_Renderer );
+
+  makeCurrent();
+
+  return m_Renderer->CheckGLCapabilities( glsl140 );
+}
+
+/******************************************************************************/
+bool
+ImageViewWidget
+::SetGLSLEnabled( bool isEnabled ) noexcept
+{
+  assert( m_Renderer );
+
+  bool glslEnabled = m_Renderer->IsGLSLAvailable() && isEnabled;
+
+  if( m_Renderer->IsGLSLEnabled()==glslEnabled )
+    return m_Renderer->IsGLSLEnabled();
+
+  makeCurrent();
+
+  ClearScene( true );
+
+#if OTB_DEBUG
+  std::cout
+    << "ImageViewRenderer( 0x" << std::hex << m_Renderer << std::dec
+    << " )::SetGLSLEnabled( " << glslEnabled << " )"
+    << std::endl;
+#endif
+
+  m_Renderer->SetGLSLEnabled( glslEnabled );
+
+  UpdateScene();
+
+  updateGL();
+
+  return glslEnabled;
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::ClearScene( bool keepViewport )
+{
+  assert( m_Renderer!=NULL );
+
+  m_Renderer->ClearScene( keepViewport );
+}
+
+/******************************************************************************/
+void
+ImageViewWidget
+::UpdateScene()
 {
   assert(m_Renderer != NULL);
 

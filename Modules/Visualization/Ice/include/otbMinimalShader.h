@@ -18,66 +18,63 @@
  * limitations under the License.
  */
 
-#ifndef otb_FragmentShader_h
-#define otb_FragmentShader_h
+#ifndef otb_MinimalShader_h
+#define otb_MinimalShader_h
 
-#include "OTBIceExport.h"
-
-#include <itkObject.h>
-#include <itkPoint.h>
+#include <itkObjectFactory.h>
+#include "otbShader.h"
+#include <string>
 
 namespace otb
 {
 
-class OTBIce_EXPORT FragmentShader
-  : public itk::Object
+class OTBIce_EXPORT MinimalShader
+  : public Shader
 {
 public:
-  typedef FragmentShader                                  Self;
-  typedef itk::Object                                     Superclass;
+  typedef MinimalShader                                   Self;
+  typedef Shader                                          Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef itk::Point<float,2>                             PointType;
 
-  void LoadShader();
+  void SetupShader() override;
 
-  virtual void SetupShader();
+  itkNewMacro(Self);
 
-  void UnloadShader();
-
-  itkSetMacro(UL,PointType);
-  itkSetMacro(UR,PointType);
-  itkSetMacro(LL,PointType);
-  itkSetMacro(LR,PointType);
-  itkGetConstReferenceMacro(UL,PointType);
-  itkGetConstReferenceMacro(UR,PointType);
-  itkGetConstReferenceMacro(LL,PointType);
-  itkGetConstReferenceMacro(LR,PointType);
+  void SetColor(const double *rgb, const double *a);
 
 protected:
-  FragmentShader();
+  MinimalShader();
 
-  ~FragmentShader() override;
+  ~MinimalShader() override;
 
-  void BuildShader();
+  std::string GetVertexSource() const override;
 
-  virtual std::string GetSource() const = 0;
+  std::string GetFragmentSource() const override;
 
-  virtual std::string GetName() const = 0;
+  std::string GetName() const override;
 
 private:
   // prevent implementation
-  FragmentShader(const Self&);
+  MinimalShader(const Self&);
   void operator=(const Self&);
 
-  PointType m_UL;
-  PointType m_UR;
-  PointType m_LL;
-  PointType m_LR;
+  const double *m_ColorRGB;
+  const double *m_ColorA;
+  
+  struct UniformLocs
+    {
+    int proj;
+    int modelview;
+    int color;
+    };
 
-}; // End class FragmentShader
+  UniformLocs m_Loc;
+}; // End class MinimalShader
 
 } // End namespace otb
 
 #endif
+
