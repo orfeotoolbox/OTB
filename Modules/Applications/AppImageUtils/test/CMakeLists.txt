@@ -107,8 +107,9 @@ otb_test_application(NAME apTvUtExtractROIStandard
                              -starty 14
                              -sizex 5
                              -sizey 5
+                             -cl Channel2 Channel3
                      VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
+                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif?&bands=2,3
                              ${TEMP}/apTvUtExtractROIStandard.tif)
 
 otb_test_application(NAME apTvUtExtractROIRadiusPxl
