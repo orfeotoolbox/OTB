@@ -19,6 +19,21 @@
 #
 
 otb_module_test()
+
+set(OTBExtractROIAppTest
+otbExtractROIAppTests.cxx
+)
+
+add_executable(OTBExtractROIAppTest ${OTBExtractROIAppTest})
+target_link_libraries(OTBExtractROIAppTest ${OTBAppImageUtils-Test_LIBRARIES})
+otb_module_target_label(OTBExtractROIAppTest)
+
+otb_add_test(NAME apTvUtExtractROI COMMAND OTBExtractROIAppTest
+  $<TARGET_FILE_DIR:otbapp_ExtractROI>
+  )
+
+
+
 #----------- DownloadSRTMTiles TESTS ----------------
 otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
@@ -93,116 +108,6 @@ otb_test_application(NAME apTvUtDynamicConvertMask
 
 
 #----------- PixelInfo TESTS ----------------
-
-#----------- ExtractROI TESTS ----------------
-
-# ---------- Valid configuration tests -------
-
-otb_test_application(NAME apTvUtExtractROIStandard
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIStandard.tif
-                             -mode standard
-                             -startx 29
-                             -starty 14
-                             -sizex 5
-                             -sizey 5
-                             -cl Channel2 Channel3
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif?&bands=2,3
-                             ${TEMP}/apTvUtExtractROIStandard.tif)
-
-otb_test_application(NAME apTvUtExtractROIRadiusPxl
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIRadiusPxl.tif
-                             -mode radius
-                             -mode.radius.cx 31
-                             -mode.radius.cy 16
-                             -mode.radius.r 2
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIRadiusPxl.tif)
-
-otb_test_application(NAME apTvUtExtractROIRadiusPhy
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIRadiusPhy.tif
-                             -mode radius
-                             -mode.radius.unitr phy
-                             -mode.radius.r 1.2
-                             -mode.radius.unitc phy
-                             -mode.radius.cx 374169.881
-                             -mode.radius.cy 4829174.094
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIRadiusPhy.tif)
-
-otb_test_application(NAME apTvUtExtractROIRadiusLonLat
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIRadiusLonLat.tif
-                             -mode radius
-                             -mode.radius.unitr pxl
-                             -mode.radius.r 2
-                             -mode.radius.unitc lonlat
-                             -mode.radius.cx 1.4408488
-                             -mode.radius.cy 43.6049153
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIRadiusLonLat.tif)
-
-otb_test_application(NAME apTvUtExtractROIExtentPix
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIExtentPix.tif
-                             -mode extent
-                             -mode.extent.ulx 29
-                             -mode.extent.uly 14
-                             -mode.extent.lrx 33
-                             -mode.extent.lry 18
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIExtentPix.tif)
-
-
-otb_test_application(NAME apTvUtExtractROIExtentPhy
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIExtentPhy.tif
-                             -mode extent
-                             -mode.extent.unit phy
-                             -mode.extent.ulx 374167.881
-                             -mode.extent.uly 4829172.8
-                             -mode.extent.lrx 374170
-                             -mode.extent.lry 4829175
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIExtentPhy.tif)
-
-otb_test_application(NAME apTvUtExtractROIExtentLonLat
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIExtentLonLat.tif
-                             -mode extent
-                             -mode.extent.unit lonlat
-                             -mode.extent.ulx 1.4408328
-                             -mode.extent.uly 43.6049036
-                             -mode.extent.lrx 1.4408596
-                             -mode.extent.lry 43.6049231
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIExtentLonLat.tif)
-
-otb_test_application(NAME apTvUtExtractROIExtentFitIm
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtExtractROIExtentFitIm.tif
-                             -mode fit
-                             -mode.fit.im ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
-                             ${TEMP}/apTvUtExtractROIExtentFitIm.tif)
 
 otb_test_application(NAME apTvUtExtractROIExtentFitVect
                      APP  ExtractROI
