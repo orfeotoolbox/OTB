@@ -571,8 +571,8 @@ private:
       }
       else if (GetParameterString("mode.radius.unitc") == "phy")
       {
-        centerp[0] = GetParameterInt("mode.radius.cx");
-        centerp[1] = GetParameterInt("mode.radius.cy");
+        centerp[0] = GetParameterFloat("mode.radius.cx");
+        centerp[1] = GetParameterFloat("mode.radius.cy");
       }
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
