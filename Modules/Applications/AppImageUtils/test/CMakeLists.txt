@@ -29,13 +29,6 @@ add_executable(otbAppImageUtilsTestDriver ${OTBAppImageUtilsTests})
 target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppImageUtils-Test_LIBRARIES})
 otb_module_target_label(otbAppImageUtilsTestDriver)
 
-otb_add_test(NAME apTvUtExtractROI COMMAND otbAppImageUtilsTestDriver
-  otbExtractROIAppTests
-  $<TARGET_FILE_DIR:otbapp_ExtractROI>
-  )
-
-
-
 #----------- DownloadSRTMTiles TESTS ----------------
 otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
@@ -110,6 +103,12 @@ otb_test_application(NAME apTvUtDynamicConvertMask
 
 
 #----------- Extract ROI tests  ----------------
+
+otb_add_test(NAME apTvUtExtractROI COMMAND otbAppImageUtilsTestDriver
+  otbExtractROIAppTests
+  $<TARGET_FILE_DIR:otbapp_ExtractROI>
+  10 3 2 3 4
+  )
 
 otb_test_application(NAME apTvUtExtractROIExtentFitVect
                      APP  ExtractROI
