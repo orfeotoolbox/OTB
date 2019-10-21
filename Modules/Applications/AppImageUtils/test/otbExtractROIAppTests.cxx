@@ -134,7 +134,7 @@ void extract_roi_radius(ApplicationPointerType app, std::string unitc, std::stri
   app->Execute();
 }
 
-int main(int argc, char * argv[])
+int otbExtractROIAppTests(int argc, char * argv[])
 {
   unsigned int imageSize = 10;
   

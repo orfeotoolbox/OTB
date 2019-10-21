@@ -20,15 +20,17 @@
 
 otb_module_test()
 
-set(OTBExtractROIAppTest
+set(OTBAppImageUtilsTests
+otbAppImageUtilsTestDriver.cxx
 otbExtractROIAppTests.cxx
 )
 
-add_executable(OTBExtractROIAppTest ${OTBExtractROIAppTest})
-target_link_libraries(OTBExtractROIAppTest ${OTBAppImageUtils-Test_LIBRARIES})
-otb_module_target_label(OTBExtractROIAppTest)
+add_executable(otbAppImageUtilsTestDriver ${OTBAppImageUtilsTests})
+target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppImageUtils-Test_LIBRARIES})
+otb_module_target_label(otbAppImageUtilsTestDriver)
 
-otb_add_test(NAME apTvUtExtractROI COMMAND OTBExtractROIAppTest
+otb_add_test(NAME apTvUtExtractROI COMMAND otbAppImageUtilsTestDriver
+  otbExtractROIAppTests
   $<TARGET_FILE_DIR:otbapp_ExtractROI>
   )
 
