@@ -56,6 +56,7 @@ string(TOLOWER ${filter} lfilter)
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 if(NOT (${filter} STREQUAL "Meanshift" AND ${mode} STREQUAL "Raster"))
+
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
                      OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
@@ -64,6 +65,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                               -mode ${lmode}
                               -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
+			      --add-before-env ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS 4
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}

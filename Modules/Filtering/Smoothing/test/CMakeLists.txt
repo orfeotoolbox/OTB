@@ -33,11 +33,6 @@ otb_module_target_label(otbSmoothingTestDriver)
 
 # Tests Declaration
 
-
-
-
-
-
 otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterOptim COMMAND otbSmoothingTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvMeanShiftFilterSpectralOutputOptim.tif
@@ -50,6 +45,10 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterOptim COMMAND otbSmoothingTes
   ${TEMP}/bfTvMeanShiftSmoothingImageFilterLabelOutputOptim.tif
   2 10 0.1 10 1
   )
+
+set_tests_properties(bfTvMeanShiftSmoothingImageFilterOptim PROPERTIES
+  ENVIRONMENT ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=4)
+
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSPOT5 COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilter
