@@ -131,6 +131,18 @@ to manage dependencies. Both methods rely on CMake.
 If you do not know which method to use and just want to compile OTB with
 all its modules, use the SuperBuild.
 
++------------+------------+-----------+
+| Header 1   | Header 2   | Header 3  |
++============+============+===========+
+| body row 1 | column 2   | column 3  |
++------------+------------+-----------+
+| body row 2 | Cells may span columns.|
++------------+------------+-----------+
+| body row 3 | Cells may  | - Cells   |
++------------+ span rows. | - contain |
+| body row 4 |            | - blocks. |
++------------+------------+-----------+
+
 Important CMake configuration variables:
 
 * ``CMAKE_INSTALL_PREFIX``: Installation directory, target for ``make install``
@@ -392,9 +404,6 @@ To build the CookBook documentation, the following python packages are required:
 
     pip install numpy sphinx sphinx_rtd_theme
 
-A working installation of ``latex`` is
-required for building the PDF version.
-
 Enable Python bindings and set ``BUILD_COOKBOOK``:
 
 ::
@@ -407,6 +416,3 @@ Then, build the target:
 
     make CookbookHTML
 
-::
-
-    make CookBookPDF
