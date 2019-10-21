@@ -181,7 +181,25 @@ int main(int argc, char * argv[])
   std::cout << "Test: input Image set with no other parameters" << std::endl;
 
   if (!check_roi(app, 0,0,imageSize,imageSize))
-    return EXIT_FAILURE;;
+    return EXIT_FAILURE;
+  
+  std::cout <<"Test: standard mode with too big size" << std::endl;
+  
+  extract_roi_standard(app, 0, 0, 10000000, imageSize);
+  if (!check_roi( app, 0,0, imageSize, imageSize))
+    return EXIT_FAILURE;
+   
+  std::cout << "Test: extent mode with too big extent" << std::endl;
+  extract_roi_extent(app, "pxl", 0, 0, imageSize+1000000, imageSize);
+  if (!check_roi( app, 0,0, imageSize, imageSize))
+    return EXIT_FAILURE;
+   
+  std::cout << "Test: radius mode with too big radius" << std::endl;
+  
+  extract_roi_radius( app, "pxl", "pxl", 10000000, imageSize/2, imageSize/2);
+  if (!check_roi( app, 0,0, imageSize, imageSize))
+    return EXIT_FAILURE;
+
   
   std::cout << "Test: standard mode" << std::endl;
   extract_roi_standard(app, startx, starty, sizex, sizey);
@@ -202,6 +220,7 @@ int main(int argc, char * argv[])
   extract_roi_extent(app, "pxl", uli[0], uli[1], lri[0], lri[1]);
   if (!check_roi( app, startx, starty,  sizex, sizey) )
     return EXIT_FAILURE;
+  
   
   std::cout << "Test: extent mode with physical unit" << std::endl;
   // Find cartographic coordinated corresponding to the input image coordinates.
