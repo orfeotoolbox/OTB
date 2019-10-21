@@ -51,6 +51,8 @@ stages:
     when:
       - runner_system_failure
       - stuck_or_timeout_failure
+  tags:
+    - pcgpernot
 
 .common:
   extends: .general
@@ -63,11 +65,6 @@ stages:
 
 .common-build:
   extends: .common
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
-    - ci-gpernot-custom
   stage: build
   artifacts:
     when: always
@@ -87,11 +84,6 @@ stages:
 
 .common-prepare:
   extends: .general
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
-    - ci-gpernot-custom
   stage: prepare
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
@@ -265,11 +257,6 @@ ubuntu-xdk-build-doc:
 ubuntu-xdk-qa-code-coverage:
   extends: .common-build
   only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -288,11 +275,6 @@ ubuntu-xdk-qa-code-coverage:
 ubuntu-xdk-qa-static-analysis:
   extends: .common-build
   only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -316,11 +298,6 @@ ubuntu-xdk-report:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   stage: report
   only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-      - ci-gpernot-custom
     variables:
       - $SONAR_OTB_TOKEN
   script:
