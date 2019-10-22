@@ -19,16 +19,21 @@
 #
 
 set(OTBICE_SRCS
-  otbFragmentShader.cxx
-  otbFragmentShaderRegistry.cxx
   otbGeoInterface.cxx
   otbGlActor.cxx
+  otbGlError.cxx
   otbGlImageActor.cxx
+  otbGlMesh.cxx
   otbGlROIActor.cxx
+  otbGlView.cxx
   otbGlVectorActor.cxx
   otbGlVersionChecker.cxx
-  otbGlView.cxx
+  otbGlVersionChecker.cxx
+  otbGlVertexArrayObject.cxx
   otbImageSettings.cxx
+  otbMinimalShader.cxx
+  otbShader.cxx
+  otbShaderRegistry.cxx
   otbStandardShader.cxx
   otbViewSettings.cxx
   )

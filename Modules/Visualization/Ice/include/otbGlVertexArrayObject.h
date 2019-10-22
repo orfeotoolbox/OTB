@@ -18,32 +18,36 @@
  * limitations under the License.
  */
 
-#include "otbImageSettings.h"
+#ifndef otb_GlVertexArrayObject_h
+#define otb_GlVertexArrayObject_h
 
-namespace otb
+#include "OTBIceExport.h"
+
+
+#include "otbGlHandle.h"
+#include "otbGlTypeTraits.h"
+
+
+namespace otb { namespace gl {
+
+/**
+ * @class OpenGL vertex-arary object handle policy.
+ */
+struct OTBIce_EXPORT VertexArrayObjectPolicy
 {
-
-ImageSettings::ImageSettings()
-  : m_MinRed( 0 ),
-    m_MaxRed( 255 ),
-    m_MinGreen( 0 ),
-    m_MaxGreen( 255 ),
-    m_MinBlue( 0 ),
-    m_MaxBlue( 255 ),
-    m_UseNoData( false ),
-    m_NoData( 0 ),
-    m_Gamma( 1. ),
-    m_Alpha( 1. ),
-    m_CurrentRed( 0 ),
-    m_CurrentGreen( 0 ),
-    m_CurrentBlue( 0 )
-{
-}
+  static void Generate( Id_t & );
+  static void Bind( Id_t );
+  static void Release( Id_t & );
+};
 
 
-ImageSettings::~ImageSettings()
-{
-}
+/** VertexArrayObject type definition. */
+using VertexArrayObject = Handle< VertexArrayObjectPolicy >;
 
 
-} // End namespace otb
+} // end namespace gl.
+
+} // end namespace otb.
+
+
+#endif // otb_GlVetexArrayObject_h

@@ -207,7 +207,10 @@ int main(int argc, char* argv[])
 
   //
   // 4. Check OpenGL capabilities
-  if (!mainWindow.CheckGLCapabilities(flags.forceNoGLSL))
+#if OTB_DEBUG
+  std::cout << "mainWindow.CheckGLCapabilities();" << std::endl;
+#endif
+  if( !mainWindow.CheckGLCapabilities( flags.forceNoGLSL ) )
     return ERROR_CODE_GL_VERSION;
 
   //
@@ -223,7 +226,10 @@ int main(int argc, char* argv[])
   // 6. Load command-line filenames.
   args.pop_front();
 
-  mainWindow.ImportImages(args, !flags.forceNoOverviews);
+#if OTB_DEBUG
+  std::cout << "mainWindow.ImportImages();" << std::endl;
+#endif
+  mainWindow.ImportImages( args, !flags.forceNoOverviews );
 
   //
   // 6. Let's go: run the application and return exit code.

@@ -18,32 +18,35 @@
  * limitations under the License.
  */
 
-#include "otbImageSettings.h"
+#include "otbGlError.h"
 
+#include <sstream>
+
+
+// This
 namespace otb
 {
 
-ImageSettings::ImageSettings()
-  : m_MinRed( 0 ),
-    m_MaxRed( 255 ),
-    m_MinGreen( 0 ),
-    m_MaxGreen( 255 ),
-    m_MinBlue( 0 ),
-    m_MaxBlue( 255 ),
-    m_UseNoData( false ),
-    m_NoData( 0 ),
-    m_Gamma( 1. ),
-    m_Alpha( 1. ),
-    m_CurrentRed( 0 ),
-    m_CurrentGreen( 0 ),
-    m_CurrentBlue( 0 )
+namespace gl
+{
+
+Error
+::Error( GLenum code ) :
+  std::runtime_error(
+    [ code ]()
+    {
+      std::ostringstream oss;
+
+      oss << "OpenGL error #" << code << ": '" << gluErrorString( code ) << "'";
+
+      return std::move( oss.str() );
+    }()
+  )
 {
 }
 
 
-ImageSettings::~ImageSettings()
-{
-}
+} // End namespace 'gl'.
 
 
-} // End namespace otb
+} // End namespace 'otb'.
