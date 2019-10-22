@@ -372,11 +372,16 @@ hours to run them all, depending on compilation options
 To run the tests, first make sure to set the option
 ``BUILD_TESTING`` to ``ON`` before building the library.
 
-For some of the tests, you also need the test data and the baselines (~1GB):
+For some of the tests, you also need the test data and the baselines (~1GB). These files are stored 
+using `git-lfs` in the `Data` folder at the root of otb sources. To download them, you have to make
+sure `git-lfs` is installed before cloning otb (binaries for `git lfs` are available for different 
+OS `here <https://github.com/git-lfs/git-lfs/releases>`_).
+
+After downloading, add the binary to $PATH and run `git lfs install`. You can then clone otb sources :
 
 ::
 
-    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git
+    git clone https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb.git
 
 Once OTB is built with the tests, you just have to go to the binary
 directory where you built OTB and run ``ctest -N`` to have a list of all
