@@ -868,7 +868,10 @@ void Application::WriteOutput()
       }
     }
   }
-
+  
+  auto multiWriter = otb::MultiImageFileWriter::New();
+  multiWriter->SetAutomaticAdaptativeStreaming(ram);
+  
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
   {
     std::string key = *it;
@@ -888,11 +891,17 @@ void Application::WriteOutput()
         {
           outputParam->SetRAMValue(ram);
         }
+        outputParam->SetMultiWriting(true);
+        outputParam->SetMultiWriter(multiWriter);
         outputParam->InitializeWriters();
         std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
+        
+        if (!outputParam->GetMultiWritingEnabled())
+        {
+          progressId << "Writing " << outputParam->GetFileName() << "...";
+          AddProcess(outputParam->GetWriter(), progressId.str());
+          outputParam->Write();
+        }
       }
     }
     else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
@@ -908,6 +917,14 @@ void Application::WriteOutput()
         outputParam->Write();
       }
     }
+  }
+  
+  if (multiWriter->GetNumberOfInputs() > 0)
+  {
+    std::ostringstream progressId;
+    progressId << "Update the MultiWriter with " << multiWriter->GetNumberOfInputs() << " inputs ...";
+    AddProcess(multiWriter, progressId.str());
+    multiWriter->Update();
   }
 }
 

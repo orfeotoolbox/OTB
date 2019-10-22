@@ -63,7 +63,7 @@ template <>
 void OutputImageParameter::SwitchInput(UInt8RGBImageType*);
 
 
-OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float), m_DefaultPixelType(ImagePixelType_float), m_RAMValue(0)
+OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float), m_DefaultPixelType(ImagePixelType_float), m_RAMValue(0), m_MultiWriting(false), m_MultiWritingEnabled(false)
 {
   SetName("Output Image");
   SetKey("out");
@@ -302,6 +302,12 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
   m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
+  
+  if (m_MultiWriting && m_MultiWriter)
+  {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<TOutputImage>>(writer);
+    m_MultiWritingEnabled = true;
+  }
 }
 
 
@@ -449,7 +455,12 @@ void OutputImageParameter::SwitchInput(UInt8RGBAImageType* img)
   writer->SetFileName(GetFileName());
   writer->SetInput(img);
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-
+  
+  if (m_MultiWriting && m_MultiWriter)
+  {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBAImageType>>(writer);
+    m_MultiWritingEnabled = true;
+  }
   m_Writer = writer;
 }
 
@@ -467,6 +478,12 @@ void OutputImageParameter::SwitchInput(UInt8RGBImageType* img)
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
 
   m_Writer = writer;
+  
+  if (m_MultiWriting && m_MultiWriter)
+  {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBImageType>>(writer);
+    m_MultiWritingEnabled = true;
+  }
 }
 
 void OutputImageParameter::SetFileName(const char* filename)

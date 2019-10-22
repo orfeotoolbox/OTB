@@ -26,7 +26,7 @@
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
 #include <string>
-
+#include "otbMultiImageFileWriter.h"
 
 namespace otb
 {
@@ -76,6 +76,17 @@ public:
   /** Set/Get available RAM value */
   itkSetMacro(RAMValue, unsigned int);
   itkGetMacro(RAMValue, unsigned int);
+
+  /** Set/Get MultiWriter  */
+  itkSetMacro(MultiWriter, otb::MultiImageFileWriter::Pointer);
+  itkGetMacro(MultiWriter, otb::MultiImageFileWriter::Pointer);
+  
+  /** Set/Get MultiWriting  */
+  itkSetMacro(MultiWriting, bool);
+  itkGetMacro(MultiWriting, bool);
+
+  /** Get MultiWritingEnabled  */
+  itkGetMacro(MultiWritingEnabled, bool);
 
   /** Implement the reset method (replace pixel type by default type) */
   void Reset() override
@@ -154,6 +165,10 @@ private:
 
   unsigned int m_RAMValue;
 
+  // TODO document, multiwriter parameters;
+  bool m_MultiWriting;
+  bool m_MultiWritingEnabled;
+  otb::MultiImageFileWriter::Pointer m_MultiWriter;
 }; // End class OutputImage Parameter
 
 } // End namespace Wrapper
