@@ -49,6 +49,8 @@
 #include <set>
 #include <unordered_set>
 
+#include "otbMultiImageFileWriter.h"
+
 namespace otb
 {
 
@@ -869,6 +871,10 @@ void Application::WriteOutput()
     }
   }
 
+  /* Map to store the writers to be added to the multiImageFileWriter. The map contains the parmaeter name as key
+  * a string containing the filename (for printing purposes) and a pointer to the writer. */
+  std::map<std::string, std::pair< std::string, otb::ImageFileWriterBase*> > multiWriterElements;
+
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
   {
     std::string key = *it;
@@ -889,10 +895,19 @@ void Application::WriteOutput()
           outputParam->SetRAMValue(ram);
         }
         outputParam->InitializeWriters();
+        
+        auto writer = dynamic_cast<otb::ImageFileWriterBase*>(outputParam->GetWriter());
+        if(writer)
+        {
+          multiWriterElements[key] = { outputParam->GetFileName(), writer};
+        }
+        else
+        {
         std::ostringstream progressId;
         progressId << "Writing " << outputParam->GetFileName() << "...";
         AddProcess(outputParam->GetWriter(), progressId.str());
         outputParam->Write();
+        }
       }
     }
     else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
@@ -908,6 +923,27 @@ void Application::WriteOutput()
         outputParam->Write();
       }
     }
+  }
+
+  if (!multiWriterElements.empty())
+  {
+    auto multiWriter = otb::MultiImageFileWriter::New();
+    multiWriter->SetAutomaticAdaptativeStreaming(ram);
+    
+    std::ostringstream progressId;
+    progressId << "Writing files ";
+    
+    // Add the writers to the multiImageFileWriter
+    for (const auto& kv : multiWriterElements)
+    {
+      // kv.second.first is the filename, kv.second.second is the writer
+      progressId << kv.second.first << " ";
+      multiWriter->AddInputWriter(kv.second.second);
+    }
+    
+    progressId << "...";
+    AddProcess(multiWriter, progressId.str());
+    multiWriter->Update();
   }
 }
 

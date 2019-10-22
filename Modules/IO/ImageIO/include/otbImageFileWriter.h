@@ -29,6 +29,8 @@
 #include <string>
 #include "OTBImageIOExport.h"
 
+#include "otbImageFileWriterBase.h"
+
 namespace otb
 {
 
@@ -62,12 +64,12 @@ namespace otb
  * \ingroup OTBImageIO
  */
 template <class TInputImage>
-class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter : public itk::ProcessObject
+class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter : public otb::ImageFileWriterBase
 {
 public:
   /** Standard class typedefs. */
   typedef ImageFileWriter               Self;
-  typedef itk::ProcessObject            Superclass;
+  typedef otb::ImageFileWriterBase            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -75,7 +77,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ImageFileWriter, itk::ProcessObject);
+  itkTypeMacro(ImageFileWriter, otb::ImageFileWriterBase);
 
   /** Some typedefs for the input and output. */
   typedef TInputImage                            InputImageType;
@@ -91,6 +93,8 @@ public:
 
   /** The Filename Helper. */
   typedef ExtendedFilenameToWriterOptions FNameHelperType;
+
+  using ImageBaseType = Superclass::ImageBaseType;
 
   /** Dimension of input image. */
   itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
@@ -176,10 +180,12 @@ public:
 
   virtual const char* GetFileName() const;
 
+  bool CanStreamWrite() const override;
+
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
-  void SetIORegion(const itk::ImageIORegion& region);
-  itkGetConstReferenceMacro(IORegion, itk::ImageIORegion);
+  //void SetIORegion(const itk::ImageIORegion& region) override;
+  //itkGetConstReferenceMacro(IORegion, itk::ImageIORegion);
 
   /** Set the compression On or Off */
   itkSetMacro(UseCompression, bool);
@@ -204,6 +210,8 @@ public:
   const bool& GetAbortGenerateData() const override;
 
   void SetAbortGenerateData(const bool val) override;
+
+  const ImageBaseType * GetImageBaseInput();
 
 protected:
   ImageFileWriter();
@@ -251,9 +259,10 @@ private:
   otb::ImageIOBase::Pointer m_ImageIO;
 
   bool m_UserSpecifiedImageIO; // track whether the ImageIO is user specified
-
+/*
   itk::ImageIORegion m_IORegion;
   bool               m_UserSpecifiedIORegion;   // track whether the region is user specified
+  * */
   bool               m_FactorySpecifiedImageIO; // track whether the factory mechanism set the ImageIO
   bool               m_UseCompression;
   bool               m_UseInputMetaDataDictionary; // whether to use the

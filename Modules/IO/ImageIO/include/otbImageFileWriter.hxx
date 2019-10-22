@@ -63,7 +63,7 @@ ImageFileWriter<TInputImage>::ImageFileWriter()
     m_CurrentDivision(0),
     m_DivisionProgress(0.0),
     m_UserSpecifiedImageIO(true),
-    m_UserSpecifiedIORegion(false),
+   
     m_FactorySpecifiedImageIO(false),
     m_UseCompression(false),
     m_UseInputMetaDataDictionary(false),
@@ -76,11 +76,13 @@ ImageFileWriter<TInputImage>::ImageFileWriter()
   // Init output index shift
   m_ShiftOutputIndex.Fill(0);
 
+   m_UserSpecifiedIORegion = false;
   // By default, we use tiled streaming, with automatic tile size
   // We don't set any parameter, so the memory size is retrieved from the OTB configuration options
   this->SetAutomaticAdaptativeStreaming();
 
   m_FilenameHelper = FNameHelperType::New();
+  
 }
 
 /**
@@ -208,6 +210,7 @@ void ImageFileWriter<TInputImage>::PrintSelf(std::ostream& os, itk::Indent inden
 }
 
 //---------------------------------------------------------
+/*
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::SetIORegion(const itk::ImageIORegion& region)
 {
@@ -216,9 +219,11 @@ void ImageFileWriter<TInputImage>::SetIORegion(const itk::ImageIORegion& region)
     m_IORegion = region;
     this->Modified();
     m_UserSpecifiedIORegion = true;
+    
+    //m_ImageIO->SetIORegion(region);
   }
 }
-
+*/
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::SetInput(const InputImageType* input)
 {
@@ -616,8 +621,8 @@ void ImageFileWriter<TInputImage>::Update()
       // Set the ioRegion index using the shifted index ( (0,0 without box parameter))
       ioRegion.SetIndex(i, streamRegion.GetIndex(i) - m_ShiftOutputIndex[i]);
     }
-    this->SetIORegion(ioRegion);
-    m_ImageIO->SetIORegion(m_IORegion);
+    Superclass::SetIORegion(ioRegion);
+    //m_ImageIO->SetIORegion(m_IORegion);
 
     // Start writing stream region in the image file
     this->GenerateData();
@@ -668,6 +673,13 @@ void ImageFileWriter<TInputImage>::Update()
   m_ShiftOutputIndex = inputPtr->GetLargestPossibleRegion().GetIndex();
 }
 
+template <class TInputImage>
+bool ImageFileWriter<TInputImage>::CanStreamWrite() const
+{
+  if (m_ImageIO.IsNull())
+    return false;
+  return m_ImageIO->CanStreamWrite();
+}
 
 /**
  *
@@ -677,6 +689,8 @@ void ImageFileWriter<TInputImage>::GenerateData(void)
 {
   const InputImageType* input = this->GetInput();
   InputImagePointer     cacheImage;
+  
+  m_ImageIO->SetIORegion(m_IORegion);
 
   // Make sure that the image is the right type and no more than
   // four components.
@@ -828,6 +842,14 @@ void ImageFileWriter<TInputImage>::SetAbortGenerateData(bool val)
   Superclass::SetAbortGenerateData(val);
   m_Lock.Unlock();
 }
+
+template <class TInputImage>
+const typename ImageFileWriter<TInputImage>::ImageBaseType *
+ImageFileWriter<TInputImage>::GetImageBaseInput()
+{
+  return static_cast<const ImageBaseType *> (this->GetInput());
+}
+
 
 } // end namespace otb
 
