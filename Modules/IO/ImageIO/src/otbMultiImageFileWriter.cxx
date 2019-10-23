@@ -125,6 +125,9 @@ void MultiImageFileWriter::InitializeStreaming()
   {
     otbWarningMacro(<< "One of the selected ImageIO does not support streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
+    FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
+    RegionType      region  = fakeOut->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(fakeOut, region);
   }
 
   /** Compare the buffered region  with the inputRegion which is the largest
@@ -135,6 +138,9 @@ void MultiImageFileWriter::InitializeStreaming()
     otbMsgDevMacro(<< "Buffered region is the largest possible region, there is"
                       " no need for streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
+    FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
+    RegionType      region  = fakeOut->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(fakeOut, region);
   }
   else
   {
