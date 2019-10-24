@@ -36,7 +36,7 @@ add_executable(otbOGRTestsIO otbOGRDataSourceWrapperIO.cxx)
 target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 
 otb_add_test(NAME coTuOGRDataSourceWrapperIO
-         COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
+         COMMAND otbOGRTestsIO ${INPUTDATA}/toulousepoints_examples.shp )
 
 set(OTBOGRTests
 otbOGRTestDriver.cxx
@@ -61,7 +61,7 @@ otb_add_test(NAME TvOGRExtendedFilename
 # otb_add_test(NAME TvOGRExtendedFilenameGDALOpen
 #          COMMAND otbOGRTestDriver
 #          otbOGRExtendedFileNameGDALOpen
-#          ${INPUTDATA}/ToulousePoints-examples.shp?&gdal:oo:openOption=OPTION
+#          ${INPUTDATA}/toulousepoints_examples.shp?&gdal:oo:openOption=OPTION
 #           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALCreate

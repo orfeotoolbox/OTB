@@ -75,7 +75,7 @@ private:
     SetParameterDescription("out", "Output conctenated vector data file.");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
+    SetDocExampleParameterValue("vd", "toulousepoints_examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
 
     SetOfficialDocLink();
