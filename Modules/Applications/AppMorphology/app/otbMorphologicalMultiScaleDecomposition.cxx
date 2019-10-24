@@ -174,13 +174,13 @@ private:
       itkExceptionMacro(<< "The specified channel index for input image is invalid.");
     }
 
-    m_ExtractorFilter = ExtractorFilterType::New();
-    m_ExtractorFilter->SetInput(inImage);
-    m_ExtractorFilter->SetStartX(static_cast<unsigned int>(inImage->GetLargestPossibleRegion().GetIndex(0)));
-    m_ExtractorFilter->SetStartY(static_cast<unsigned int>(inImage->GetLargestPossibleRegion().GetIndex(1)));
-    m_ExtractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
-    m_ExtractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
-    m_ExtractorFilter->SetChannel(static_cast<unsigned int>(GetParameterInt("channel")));
+    auto extractorFilter = ExtractorFilterType::New();
+    extractorFilter->SetInput(inImage);
+    extractorFilter->SetStartX(static_cast<unsigned int>(inImage->GetLargestPossibleRegion().GetIndex(0)));
+    extractorFilter->SetStartY(static_cast<unsigned int>(inImage->GetLargestPossibleRegion().GetIndex(1)));
+    extractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
+    extractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
+    extractorFilter->SetChannel(static_cast<unsigned int>(GetParameterInt("channel")));
 
     unsigned int numberOfLevels = static_cast<unsigned int>(GetParameterInt("levels"));
     unsigned int initValue      = static_cast<unsigned int>(GetParameterInt("radius"));
@@ -189,16 +189,16 @@ private:
 
     if (GetParameterString("structype") == "ball")
     {
-      performDecomposition<BallStructuringElementType>(numberOfLevels, step, initValue);
+      performDecomposition<BallStructuringElementType>(extractorFilter->GetOutput(), numberOfLevels, step, initValue);
     }
     else // Cross
     {
-      performDecomposition<CrossStructuringElementType>(numberOfLevels, step, initValue);
+      performDecomposition<CrossStructuringElementType>(extractorFilter->GetOutput(), numberOfLevels, step, initValue);
     }
   }
 
   template <typename StructuringElement>
-  void performDecomposition(unsigned int numberOfLevels, unsigned int step, unsigned int initValue)
+  void performDecomposition(FloatImageType* input, unsigned int numberOfLevels, unsigned int step, unsigned int initValue)
   {
 
     typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<FloatImageType, StructuringElement> TDecompositionImageFilter;
@@ -207,7 +207,7 @@ private:
 
     typename TDecompositionImageFilter::Pointer decompositionImageFilter;
     decompositionImageFilter = TDecompositionImageFilter::New();
-    decompositionImageFilter->SetInput(m_ExtractorFilter->GetOutput());
+    decompositionImageFilter->SetInput(input);
     decompositionImageFilter->SetNumberOfIterations(numberOfLevels);
     decompositionImageFilter->SetInitialValue(initValue);
     decompositionImageFilter->SetStep(step);
@@ -229,9 +229,8 @@ private:
     convexListToVectorImageFilter->SetInput(decompositionImageFilter->GetConvexOutput());
     convexListToVectorImageFilter->Update();
     SetParameterOutputImage("outconvex", convexListToVectorImageFilter->GetOutput());
+    RegisterPipeline();
   }
-
-  ExtractorFilterType::Pointer m_ExtractorFilter;
 };
 }
 }
