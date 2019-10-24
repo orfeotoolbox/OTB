@@ -322,6 +322,7 @@ ubuntu-xdk-report:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
+                    -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
                     `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
                     -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
