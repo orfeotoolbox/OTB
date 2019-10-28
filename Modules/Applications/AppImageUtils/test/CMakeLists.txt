@@ -120,24 +120,6 @@ otb_test_application(NAME apTvUtExtractROIExtentFitVect
                              ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
                              ${TEMP}/apTvUtExtractROIExtentFitVect.tif)
 
-# ---------- Invalid configuration tests ----------------
-
-otb_test_application(NAME apTvUtExtractROIRightInputFile
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROIRightInputFile.tif
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROIRightInputFile.tif)
-
-otb_test_application(NAME apTvUtExtractROIComplexInputFile
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/complexInputCfloat.tif
-                             -out ${TEMP}/apTvUtExtractROIComplexInputFile.tif cfloat
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/complexInputCfloat.tif
-                             ${TEMP}/apTvUtExtractROIComplexInputFile.tif)
-
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest
                      APP  Rescale
