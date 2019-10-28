@@ -19,6 +19,16 @@
 #
 
 otb_module_test()
+
+set(OTBAppImageUtilsTests
+otbAppImageUtilsTestDriver.cxx
+otbExtractROIAppTests.cxx
+)
+
+add_executable(otbAppImageUtilsTestDriver ${OTBAppImageUtilsTests})
+target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppImageUtils-Test_LIBRARIES})
+otb_module_target_label(otbAppImageUtilsTestDriver)
+
 #----------- DownloadSRTMTiles TESTS ----------------
 otb_test_application(NAME apTuUtDownloadSRTMTiles
                      APP  DownloadSRTMTiles
@@ -92,63 +102,23 @@ otb_test_application(NAME apTvUtDynamicConvertMask
                              ${TEMP}/apTvUtDynamicConvertMaskOutput.tif)
 
 
-#----------- PixelInfo TESTS ----------------
+#----------- Extract ROI tests  ----------------
 
-#----------- ExtractROI TESTS ----------------
-otb_test_application(NAME apTvUtExtractROISizeTooBig
+otb_add_test(NAME apTvUtExtractROI COMMAND otbAppImageUtilsTestDriver
+  otbExtractROIAppTests
+  $<TARGET_FILE_DIR:otbapp_ExtractROI>
+  10 3 2 3 4
+  )
+
+otb_test_application(NAME apTvUtExtractROIExtentFitVect
                      APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                 			 -out ${TEMP}/apTvUtExtractROISizeTooBig.tif
-                 			 -sizex 1000000
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
+                             -out ${TEMP}/apTvUtExtractROIExtentFitVect.tif
+                             -mode fit
+                             -mode.fit.vect ${INPUTDATA}/apTvUtExtractROIExtentFitVect.shp
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeTooBig.tif)
-
-otb_test_application(NAME apTvUtExtractROISizeTooBigExtent
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif
-                             -mode extent
-                             -mode.extent.lrx 1000000
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeTooBigExtent.tif)
-
-otb_test_application(NAME apTvUtExtractROISizeTooBigRadius
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif
-                             -mode radius
-                             -mode.radius.r 1000000
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeTooBigRadius.tif)
-
-otb_test_application(NAME apTvUtExtractROISizeNULL
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                 			 -out ${TEMP}/apTvUtExtractROISizeNULL.tif
-                 			 -sizex 0
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROISizeNULL.tif)
-
-otb_test_application(NAME apTvUtExtractROIRightInputFile
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/couleurs_extrait.png
-                             -out ${TEMP}/apTvUtExtractROIRightInputFile.tif
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/couleurs_extrait.png
-                             ${TEMP}/apTvUtExtractROIRightInputFile.tif)
-
-otb_test_application(NAME apTvUtExtractROIComplexInputFile
-                     APP  ExtractROI
-                     OPTIONS -in ${INPUTDATA}/complexInputCfloat.tif
-                             -out ${TEMP}/apTvUtExtractROIComplexInputFile.tif cfloat
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/complexInputCfloat.tif
-                             ${TEMP}/apTvUtExtractROIComplexInputFile.tif)
-
+                             ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
+                             ${TEMP}/apTvUtExtractROIExtentFitVect.tif)
 
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest
