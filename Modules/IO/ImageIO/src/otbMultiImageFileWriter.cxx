@@ -257,8 +257,12 @@ void MultiImageFileWriter::UpdateOutputData(itk::DataObject* itkNotUsed(output))
     command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
 
     itk::ProcessObject* src = this->GetInput(0)->GetSource();
-    m_ObserverID            = src->AddObserver(itk::ProgressEvent(), command);
-    m_IsObserving           = true;
+    // The first input might not have a source (e.g. in memory image)
+    if (src)
+    {
+      m_ObserverID            = src->AddObserver(itk::ProgressEvent(), command);
+      m_IsObserving           = true;
+    }
   }
 
   for (m_CurrentDivision = 0; m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
