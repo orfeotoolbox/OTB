@@ -411,7 +411,6 @@ private:
       lrp[1]                                  = GetParameterFloat("mode.extent.lry");
       m_IsExtentInverted                      = (lrp[0] < ulp[0] || lrp[1] < ulp[1]);
       ImageType*                      inImage = GetParameterImage("in");
-      FloatVectorImageType::IndexType raw_uli, raw_lri;
       inImage->TransformPhysicalPointToIndex(ulp, raw_uli);
       inImage->TransformPhysicalPointToIndex(lrp, raw_lri);
     }
@@ -572,8 +571,8 @@ private:
       }
       else if (GetParameterString("mode.radius.unitc") == "phy")
       {
-        centerp[0] = GetParameterInt("mode.radius.cx");
-        centerp[1] = GetParameterInt("mode.radius.cy");
+        centerp[0] = GetParameterFloat("mode.radius.cx");
+        centerp[1] = GetParameterFloat("mode.radius.cy");
       }
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
@@ -714,13 +713,12 @@ private:
                               "using mod.fit");
           }
         }
-
         RSTransformType::Pointer rsTransform = RSTransformType::New();
         rsTransform->SetInputProjectionRef(inputProjectionRef);
         rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
-        itk::Point<float, 2> ulp_in, urp_in, llp_in, lrp_in, ulp_out, urp_out, llp_out, lrp_out;
+        itk::Point<float, 2> ulp_in, urp_in, llp_in, lrp_in;
         ulp_in[0] = ulx;
         ulp_in[1] = uly;
         urp_in[0] = ulx;
