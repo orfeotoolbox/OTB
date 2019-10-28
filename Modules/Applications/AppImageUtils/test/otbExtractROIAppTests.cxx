@@ -30,7 +30,7 @@ using VectorImageType        = otb::VectorImage<unsigned char>;
 using PixelType              = VectorImageType::PixelType;
 using ApplicationPointerType = otb::Wrapper::Application::Pointer;
 
-/* This function is creating and filling a vector image */
+/* This function is creating and filling a georeferenced vector image */
 VectorImageType::Pointer create_vector_image(VectorImageType::SizeType size, int nb_comp, unsigned char value, const OGRSpatialReference& projRef,
                                              VectorImageType::PointType origin, VectorImageType::SpacingType spacing)
 {
@@ -64,6 +64,7 @@ VectorImageType::Pointer create_vector_image(VectorImageType::SizeType size, int
   return image;
 }
 
+// Compare the ROI computed by the application with a reference
 bool check_roi(ApplicationPointerType app, int ref_startx, int ref_starty, int ref_sizex, int ref_sizey)
 {
   auto app_startx = app->GetParameterInt("startx");
@@ -85,6 +86,7 @@ bool check_roi(ApplicationPointerType app, int ref_startx, int ref_starty, int r
   return true;
 }
 
+// App configuration with the standard mode
 void extract_roi_standard(ApplicationPointerType app, unsigned int startx, unsigned int starty, unsigned int sizex, unsigned int sizey)
 {
   app->SetParameterString("mode", "standard");
@@ -100,6 +102,7 @@ void extract_roi_standard(ApplicationPointerType app, unsigned int startx, unsig
   app->Execute();
 }
 
+// App configuration with the extent mode
 void extract_roi_extent(ApplicationPointerType app, std::string unit, double ulx, double uly, double lrx, double lry)
 {
   app->SetParameterString("mode", "extent");
@@ -117,6 +120,7 @@ void extract_roi_extent(ApplicationPointerType app, std::string unit, double ulx
   app->Execute();
 }
 
+// App configuration with the radius mode
 void extract_roi_radius(ApplicationPointerType app, std::string unitc, std::string unitr, double r, double cx, double cy)
 {
   app->SetParameterString("mode", "radius");
@@ -133,6 +137,25 @@ void extract_roi_radius(ApplicationPointerType app, std::string unitc, std::stri
   app->UpdateParameters();
   app->Execute();
 }
+
+/** This function tests the ExtractROI application. It verifies that, for different sets of parameters,
+ * the ROI computed by the application (startx, starty,sizex and sizey) is correct. The tested mode are :
+ * - Standard mode with invalid size (output is the full image)
+ * - Extent mode with invalid size (output is the full image)
+ * - Radius mode with invalid size (output is the full image)
+ * - Standard mode
+ * - Extent mode with pixel units
+ * - Extent mode with lonlat unit
+ * - Extent mode with phy unit
+ * - radius mode with pixel center and radius
+ * - radius mode with phy center and radius
+ * - radius mode with lonlat center and pixel radius
+ * - fit mode with image input
+ * For all these tests the application executed, but nothing is written to disk, and the output image is not updated.
+ * This means that the multiChannelExtractROI filter is not updated.
+ * Finally, in a last test, the channel option is set and the output is updated.
+ * Note that this test does not test the fit mode with vector data, which is tested in another test.
+*/
 
 int otbExtractROIAppTests(int, char* argv[])
 {
@@ -314,6 +337,7 @@ int otbExtractROIAppTests(int, char* argv[])
   auto output = app->GetParameterImageBase("out");
   output->Update();
 
+  // Check that the output has the requested number of bands
   if (output->GetNumberOfComponentsPerPixel() != 2)
   {
     std::cout << "Wrong number of components after ExtractROI" << std::endl;
