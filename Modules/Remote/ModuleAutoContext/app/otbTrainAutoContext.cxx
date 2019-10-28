@@ -288,10 +288,9 @@ namespace otb
         VectorTrainer->SetParameterStringList("feat", in_ref_features);
         UpdateInternalParameters("train");
         VectorTrainer->SetParameterString("cfield", REF_FIELD_NAME);
-        VectorTrainer->SetParameterString("classifier","rf");
 
-        VectorTrainer->SetParameterString("classifier.rf.min","5");
-        VectorTrainer->SetParameterString("classifier.rf.max","25");
+        VectorTrainer->SetParameterString("classifier","sharkrf");
+        VectorTrainer->SetParameterString("classifier.sharkrf.nbtrees","100");
 
         VectorTrainer->SetParameterString("rand","0");
         UpdateInternalParameters("train");
