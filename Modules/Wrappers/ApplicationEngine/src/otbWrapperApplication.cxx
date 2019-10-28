@@ -870,7 +870,7 @@ void Application::WriteOutput()
   }
   
   auto multiWriter = otb::MultiImageFileWriter::New();
-  multiWriter->SetAutomaticAdaptativeStreaming(ram);
+  multiWriter->SetAutomaticStrippedStreaming(ram);
   
   for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
   {
