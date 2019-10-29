@@ -224,9 +224,9 @@ int Parameter::ToInt() const
   TypeError("int");
 }
 
-float Parameter::ToFloat() const
+double Parameter::ToFloat() const
 {
-  TypeError("float");
+  TypeError("double");
 }
 
 std::string Parameter::ToString() const
@@ -244,9 +244,9 @@ void Parameter::FromInt(int)
   TypeError("int");
 }
 
-void Parameter::FromFloat(float)
+void Parameter::FromFloat(double)
 {
-  TypeError("float");
+  TypeError("double");
 }
 
 void Parameter::FromString(const std::string&)

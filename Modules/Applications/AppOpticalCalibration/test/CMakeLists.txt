@@ -35,7 +35,7 @@ otb_test_application(NAME apTvRaOpticalCalibration_SolarDistance
                      OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -level toa
                              -clamp false
-                             -acqui.solardistance 0.9987593
+                             -acqui.solardistance 0.998759349626676229405575213605
                              -out ${TEMP}/apTvRaOpticalCalibration_SolarDistance.tif
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoQuickbirdXS.tif

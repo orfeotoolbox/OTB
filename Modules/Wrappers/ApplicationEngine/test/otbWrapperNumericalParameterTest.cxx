@@ -45,7 +45,7 @@ int otbWrapperFloatParameterTest(int, char* [])
   assert_equal(param->GetType(), ParameterType_Float);
 
   { // SetValue
-    const float val = 42.005;
+    const double val = 42.005;
     param->SetValue(val);
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
@@ -54,7 +54,7 @@ int otbWrapperFloatParameterTest(int, char* [])
   }
 
   { // FromFloat
-    const float val = -6.5;
+    const double val = -6.5;
     param->FromFloat(val);
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
@@ -64,7 +64,7 @@ int otbWrapperFloatParameterTest(int, char* [])
 
   { // FromString
     const std::string str = "-100.01";
-    const float       val = -100.01;
+    const double       val = -100.01;
     param->FromString(str);
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
@@ -89,7 +89,7 @@ int otbWrapperIntParameterTest(int, char* [])
     param->SetValue(val);
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), val);
-    assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToFloat(), double(val));
     assert_equal(param->ToString(), std::string("42"));
   }
 
@@ -99,7 +99,7 @@ int otbWrapperIntParameterTest(int, char* [])
     param->FromString(str);
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), val);
-    assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToFloat(), double(val));
     assert_equal(param->ToString(), std::string("-100"));
   }
 
