@@ -159,7 +159,7 @@ bool testMatchingFilter()
 }
 
 
-/** Generate a pair of images, one beeing slightly warped wrt the
+/** Generate a pair of images, one being slightly warped wrt the
  * other */
 auto generateImagePair(const std::string& infname, double rotation, double scaling)
 {

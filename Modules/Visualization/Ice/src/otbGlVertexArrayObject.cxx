@@ -18,32 +18,35 @@
  * limitations under the License.
  */
 
-#include "otbImageSettings.h"
+#include "otbGlVertexArrayObject.h"
 
-namespace otb
-{
+namespace otb { namespace gl {
 
-ImageSettings::ImageSettings()
-  : m_MinRed( 0 ),
-    m_MaxRed( 255 ),
-    m_MinGreen( 0 ),
-    m_MaxGreen( 255 ),
-    m_MinBlue( 0 ),
-    m_MaxBlue( 255 ),
-    m_UseNoData( false ),
-    m_NoData( 0 ),
-    m_Gamma( 1. ),
-    m_Alpha( 1. ),
-    m_CurrentRed( 0 ),
-    m_CurrentGreen( 0 ),
-    m_CurrentBlue( 0 )
+
+void
+VertexArrayObjectPolicy
+::Generate( Id_t & id )
 {
+  glGenVertexArrays( 1, &id );
 }
 
 
-ImageSettings::~ImageSettings()
+void
+VertexArrayObjectPolicy
+::Bind( Id_t id )
 {
+  glBindVertexArray( id );
 }
 
 
-} // End namespace otb
+void
+VertexArrayObjectPolicy
+::Release( Id_t & id )
+{
+  glDeleteVertexArrays( 1, &id );
+}
+
+
+} // End namespace 'gl'.
+
+} // End namespace 'otb'.

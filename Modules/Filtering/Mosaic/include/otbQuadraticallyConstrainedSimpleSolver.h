@@ -206,7 +206,7 @@ private:
   // Output correction models
   RealVectorType m_OutputCorrectionModel;
 
-  // objective funciton type (enum)
+  // objective function type (enum)
   ObjectiveFunctionType oft;
 };
 

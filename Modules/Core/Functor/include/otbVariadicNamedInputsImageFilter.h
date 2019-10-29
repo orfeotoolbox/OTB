@@ -33,7 +33,7 @@ namespace internal
  * \struct tuple_index
  * \brief retrieve index of a type in tuple if exists
  *
- * This struct allows to retrieve the index of the first occurence of type
+ * This struct allows to retrieve the index of the first occurrence of type
  * Arg in tuple Tuple. If type Arg can not be found, compilation will
  * end with a static_assert failing.
  *

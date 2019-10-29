@@ -42,7 +42,7 @@ namespace otb
  *
  * The filter implements the multiband blending strategy. Laplacian
  * of input images is computed, then each frequency is mosaiced using
- * a StreamingFeatherMosaicFilter. Finaly the summing of all frequencies
+ * a StreamingFeatherMosaicFilter. Finally the summing of all frequencies
  * is performed to get the final mosaic image.
  *
  * Mandatory inputs : images to mosaic + alpha channels

@@ -38,8 +38,8 @@ git shortlog -es HEAD | cut -f 2- \
 curl -s ${GITLAB_PROJECT_URL}/raw/master/CI/contributors/known-contributors.txt \
     | sort -u > ${KNOWN_CONTRIBUTORS}
 
-diff ${KNOWN_CONTRIBUTORS} ${GIT_CONTRIBUTORS} > ${UNKNOWN_CONTRIBUTORS}
-if [ "$?" -ne "0" ] ; then
+diff ${KNOWN_CONTRIBUTORS} ${GIT_CONTRIBUTORS} | grep '^>' > ${UNKNOWN_CONTRIBUTORS}
+if [ -s "${UNKNOWN_CONTRIBUTORS}" ] ; then
     echo ""
     echo "WARNING: ***************************************************************"
     echo "WARNING: Unknown contributors found:"

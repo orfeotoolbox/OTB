@@ -237,7 +237,7 @@ class Handler:
     K8S_SECRET_API_TOKEN      -> Token for Gitlab API
     CI_MERGE_REQUEST_REF_PATH -> Ref name to push the status (only for merge request pipeline)
     CI_COMMIT_REF_NAME        -> Ref name to push the status
-  They can be overriden by a full command line :
+  They can be overridden by a full command line :
     cdash_handler.py commit_sha1  project_id  project_directory  token  ref_name
 """
 if __name__ == "__main__":

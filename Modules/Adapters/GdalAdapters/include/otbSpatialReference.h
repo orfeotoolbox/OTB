@@ -67,7 +67,7 @@ OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1, const Spatia
  * either they fail or they provide a definitive, valid object.
  *
  * Building a SpatialReference requires to call one of the From*()
- * method. There are no public constructors (appart from copy and
+ * method. There are no public constructors (apart from copy and
  * assignment)
  *
  * \ingroup OTBGdalAdapters
@@ -167,7 +167,7 @@ public:
    * \pre -180<=lon<=180
    * \pre -90<=lat<=90
    * \param lon Point longitude
-   * \param lat Point lattitude
+   * \param lat Point latitude
    * \param zone Output UTM zone
    * \param hem output hemisphere
    */
