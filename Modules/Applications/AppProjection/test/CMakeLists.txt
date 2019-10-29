@@ -25,8 +25,8 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM_OutXML1
                      OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                 		     -outputs.ulx  374100.8
-                 			 -outputs.uly  4829184.8
+                 		     -outputs.ulx  374100.8125
+                 			 -outputs.uly  4829185.0
                  			 -outputs.sizex 500
                  			 -outputs.sizey 500
                  			 -outputs.spacingx  0.5
@@ -66,8 +66,8 @@ otb_test_application(NAME  apTvPrOrthorectification_WGS84
                      OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                        -io.out ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
                        -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                       -outputs.ulx  1.35404
-                       -outputs.uly  43.65414
+                       -outputs.ulx  1.354040026664734
+                       -outputs.uly  43.654140472412109
                        -outputs.sizex 500
                        -outputs.sizey 500
                        -outputs.spacingx  0.00000621314
@@ -85,8 +85,8 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
                      OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
                  			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM.tif
                  			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                 		     -outputs.ulx  374100.8
-                 			 -outputs.uly  4829184.8
+                 		     -outputs.ulx  374100.8125
+                 			 -outputs.uly  4829185.0
                  			 -outputs.sizex 500
                  			 -outputs.sizey 500
                  			 -outputs.spacingx  0.5

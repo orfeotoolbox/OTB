@@ -118,13 +118,13 @@ public:
     return static_cast<int>(*m_Value);
   }
 
-  float ToFloat() const override
+  double ToFloat() const override
   {
     if (!HasValue())
     {
       itkExceptionMacro("Cannot convert parameter " << GetKey() << " to float (no value).");
     }
-    return static_cast<float>(*m_Value);
+    return static_cast<double>(*m_Value);
   }
 
   void FromInt(int value) override
@@ -174,7 +174,7 @@ private:
 
 }; // End class Numerical Parameter
 
-class OTBApplicationEngine_EXPORT FloatParameter : public NumericalParameter<float>
+class OTBApplicationEngine_EXPORT FloatParameter : public NumericalParameter<double>
 {
 public:
   /** Standard class typedef */
@@ -190,7 +190,7 @@ public:
     return ParameterType_Float;
   }
 
-  void FromFloat(float value) override
+  void FromFloat(double value) override
   {
     SetValue(value);
   }
