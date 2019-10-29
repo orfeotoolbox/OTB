@@ -48,6 +48,11 @@ Features added:
 
 Bugs fixed:
 
+   * !612: Ice OpenGL refactoring by Guillaume Pasero & Stéphane Albert
+   * !605: Resolve "ZonalStatistics app inbv parameter is not taken into account in stats filter" by Julien Michel
+   * !603: BUG: disable non relevant output parameters in zonal statistics depending on the output type chosen by Cédric Traizet
+   * !601: Fix OTB_ADDITIONAL_CACHE by Cédric Traizet
+   * !597: Fix the diapotb remote module by Cédric Traizet
    * !592: Fix StreamingWarpImageFilter issue with empty region by Julien Michel
    * !585: Fix PCA in Dimensionality reduction by Cédric Traizet
    * !583: Revert Merge branch 'bugfix-streamingwarpfilter-empty-region' into 'develop'" by Julien Michel
@@ -313,6 +318,7 @@ Refactoring:
 
 CI:
 
+   * !598: Fix the otbGRM remote module by Cédric Traizet
    * !589: Mentions of copyright check by Sébastien Dinot
    * !584: Fixes for NamespaceHandler by Guillaume Pasero
    * !582: Script to setup a namespace for OTB imported targets by Guillaume Pasero
@@ -371,6 +377,7 @@ CI:
 
 Documentation:
 
+   * !599: Fix spelling errors by Bas Couwenberg
    * !594: Fix typo in ossimCosmoSkymedModel by Laurențiu Nicola
    * !591: Fix non compliant headers by Cédric Traizet
    * !590: Error in FunctorImageFilter.rst example by Julien Michel
