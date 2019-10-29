@@ -1,4 +1,4 @@
-OTB-v.7.0.0 - Changes since version 6.6.0 (September 20th, 2019)
+OTB-v.7.0.0 - Changes since version 6.6.0 (October 29th, 2019)
 ----------------------------------------------------------------
 
 Features added:
