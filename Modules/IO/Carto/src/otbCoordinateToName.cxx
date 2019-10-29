@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include <sstream>
 
 #include "otbCoordinateToName.h"
@@ -37,9 +36,7 @@ namespace otb
 /**
  * Constructor
  */
-CoordinateToName::CoordinateToName() :
-  m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false),
-  m_PlaceName(""), m_CountryName("")
+CoordinateToName::CoordinateToName() : m_Lon(-1000.0), m_Lat(-1000.0), m_Multithread(false), m_IsValid(false), m_PlaceName(""), m_CountryName("")
 {
   /*
   //Avoid collision between different instance of the class
@@ -59,53 +56,50 @@ CoordinateToName::CoordinateToName() :
 
   m_Threader = itk::MultiThreader::New();
 
-  m_UpdateDistance = 0.01; //about 1km at equator
-
+  m_UpdateDistance = 0.01; // about 1km at equator
 }
 
 /**
  * PrintSelf
  */
-void
-CoordinateToName
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void CoordinateToName::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-  os << indent << " m_Lon "  << m_Lon << std::endl;
-  os << indent << " m_Lat "  << m_Lat << std::endl;
-  os << indent << " m_PlaceName "  << m_PlaceName << std::endl;
+  os << indent << " m_Lon " << m_Lon << std::endl;
+  os << indent << " m_Lat " << m_Lat << std::endl;
+  os << indent << " m_PlaceName " << m_PlaceName << std::endl;
 }
 
 bool CoordinateToName::Evaluate()
 {
   if (m_Multithread)
-    {
+  {
     m_Threader->SpawnThread(ThreadFunction, this);
-    }
+  }
   else
-    {
+  {
     DoEvaluate();
-    }
+  }
   return true;
 }
 
 ITK_THREAD_RETURN_TYPE
-CoordinateToName::ThreadFunction(void *arg)
+CoordinateToName::ThreadFunction(void* arg)
 {
-  struct itk::MultiThreader::ThreadInfoStruct * pInfo = (itk::MultiThreader::ThreadInfoStruct *) (arg);
-  CoordinateToName::Pointer  lThis = (CoordinateToName*) (pInfo->UserData);
+  struct itk::MultiThreader::ThreadInfoStruct* pInfo = (itk::MultiThreader::ThreadInfoStruct*)(arg);
+  CoordinateToName::Pointer                    lThis = (CoordinateToName*)(pInfo->UserData);
   lThis->DoEvaluate();
   return ITK_THREAD_RETURN_VALUE;
 }
 
 void CoordinateToName::DoEvaluate()
 {
-    m_PlaceName = "";
-    m_CountryName = "";
-    m_IsValid = false;
+  m_PlaceName   = "";
+  m_CountryName = "";
+  m_IsValid     = false;
 
   if (Utils::IsLonLatValid(m_Lon, m_Lat))
-    {
+  {
     std::ostringstream urlStream;
     urlStream << "http://api.geonames.org/findNearbyPlaceName?lat=";
     urlStream << m_Lat;
@@ -115,24 +109,24 @@ void CoordinateToName::DoEvaluate()
     otbMsgDevMacro("CoordinateToName: retrieve url " << urlStream.str());
 
     try
-      {
+    {
       m_Curl->RetrieveUrlInMemory(urlStream.str(), m_CurlOutput);
       m_IsValid = true;
-      }
-    catch(itk::ExceptionObject)
-      {
+    }
+    catch (itk::ExceptionObject&)
+    {
       m_IsValid = false;
-      }
+    }
 
-    if(m_IsValid)
-      {
-      std::string placeName = "";
+    if (m_IsValid)
+    {
+      std::string placeName   = "";
       std::string countryName = "";
       ParseXMLGeonames(placeName, countryName);
-      m_PlaceName = placeName;
+      m_PlaceName   = placeName;
       m_CountryName = countryName;
-      }
     }
+  }
 }
 
 void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& countryName) const
@@ -141,23 +135,21 @@ void CoordinateToName::ParseXMLGeonames(std::string& placeName, std::string& cou
   doc.Parse(m_CurlOutput.c_str());
 
   if (!doc.Error())
-    {
+  {
     TiXmlHandle docHandle(&doc);
 
-    TiXmlElement* childName = docHandle.FirstChild("geonames").FirstChild("geoname").
-                              FirstChild("name").Element();
+    TiXmlElement* childName = docHandle.FirstChild("geonames").FirstChild("geoname").FirstChild("name").Element();
     if (childName)
-      {
+    {
       placeName = childName->GetText();
-      }
-    TiXmlElement* childCountryName = docHandle.FirstChild("geonames").FirstChild("geoname").
-                                     FirstChild("countryName").Element();
-    if (childCountryName)
-      {
-      countryName = childCountryName->GetText();
-      }
-    otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
     }
+    TiXmlElement* childCountryName = docHandle.FirstChild("geonames").FirstChild("geoname").FirstChild("countryName").Element();
+    if (childCountryName)
+    {
+      countryName = childCountryName->GetText();
+    }
+    otbMsgDevMacro(<< "Near " << placeName << " in " << countryName);
+  }
 }
 
 } // namespace otb

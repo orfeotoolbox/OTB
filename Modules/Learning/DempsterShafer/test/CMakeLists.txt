@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,12 +24,10 @@ set(OTBDempsterShaferTests
 otbDempsterShaferTestDriver.cxx
 otbMassOfBeliefDSApplied.cxx
 otbConfusionMatrixToMassOfBeliefTest.cxx
-otbVectorDataToDSValidatedVectorDataFilter.cxx
 otbDempsterShaferFusionTests.cxx
 otbDSFusionOfClassifiersImageFilterTest.cxx
 otbJointMassOfBeliefFilter.cxx
 otbMassOfBelief.cxx
-otbStandardDSCostFunction.cxx
 )
 
 add_executable(otbDempsterShaferTestDriver ${OTBDempsterShaferTests})
@@ -74,9 +72,6 @@ otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestAccuracy COMMAND otbDemps
   otbConfusionMatrixToMassOfBeliefTest
   ACCURACY)
 
-otb_add_test(NAME fzTuConfusionMatrixToMassOfBeliefNew COMMAND otbDempsterShaferTestDriver
-  otbConfusionMatrixToMassOfBeliefNew)
-
 otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestPrecision COMMAND otbDempsterShaferTestDriver
   otbConfusionMatrixToMassOfBeliefTest
   PRECISION)
@@ -88,19 +83,6 @@ otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestKappa COMMAND otbDempster
 otb_add_test(NAME fzTvConfusionMatrixToMassOfBeliefTestRecall COMMAND otbDempsterShaferTestDriver
   otbConfusionMatrixToMassOfBeliefTest
   RECALL)
-
-otb_add_test(NAME fzTvVectorDataToDSValidatedVectorDataFilter COMMAND otbDempsterShaferTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/fzTvDSValidatedRoadVectorDataOutput.shp
-  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
-  otbVectorDataToDSValidatedVectorDataFilter
-  ${TEMP}/fzTvVectorDataToRoadDescriptionFilterOutput.shp
-  ${TEMP}/fzTvDSValidatedRoadVectorDataOutput.shp
-  )
-set_property(TEST fzTvVectorDataToDSValidatedVectorDataFilter PROPERTY DEPENDS fzTvVectorDataToRoadDescriptionFilter)
-
-otb_add_test(NAME fzTuVectorDataToDSValidatedVectorDataFilterNew COMMAND otbDempsterShaferTestDriver
-  otbVectorDataToDSValidatedVectorDataFilterNew)
 
 otb_add_test(NAME fzDSFusionTestConfMatFileVCMTestPrecision COMMAND otbDempsterShaferTestDriver
   otbDempsterShaferFusionConfMatFileTest
@@ -335,9 +317,6 @@ otb_add_test(NAME fzTvDSFusionOfClassifiersImageFilterRecall COMMAND otbDempster
   ${TEMP}/QB_1_ortho_DS_FUSED_RECALL.tif
   )
 
-otb_add_test(NAME fzTuDSFusionOfClassifiersImageFilterNew COMMAND otbDempsterShaferTestDriver
-  otbDSFusionOfClassifiersImageFilterNew)
-
 otb_add_test(NAME fzTvDSFusionOfClassifiersImageFilterAccuracy COMMAND otbDempsterShaferTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
@@ -369,7 +348,4 @@ otb_add_test(NAME fzTvJointMassOfBeliefFilter COMMAND otbDempsterShaferTestDrive
 
 otb_add_test(NAME fzTvMassOfBelief COMMAND otbDempsterShaferTestDriver
   otbMassOfBelief)
-
-otb_add_test(NAME fzTuStandardDSCostFunctionNew COMMAND otbDempsterShaferTestDriver
-  otbStandardDSCostFunctionNew)
 

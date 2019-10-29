@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,6 +25,7 @@
 #include "itkMultiThreader.h"
 #include "otbCurlHelperInterface.h"
 #include "OTBCartoExport.h"
+#include <string>
 
 namespace otb
 {
@@ -68,44 +69,44 @@ public:
    */
   bool SetLonLat(PointType point)
   {
-    if ((vcl_abs(point[0] - m_Lon) > m_UpdateDistance) || (vcl_abs(point[1] - m_Lat) > m_UpdateDistance))
-      {
-//      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
+    if ((std::abs(point[0] - m_Lon) > m_UpdateDistance) || (std::abs(point[1] - m_Lat) > m_UpdateDistance))
+    {
+      //      std::cout << "Update lon/lat " << m_Lon << ", " << m_Lat << " -> " << point << std::endl;
       m_Lon = point[0];
       m_Lat = point[1];
-      //TODO Check whether it is better to have something imprecise or nothing at all
+      // TODO Check whether it is better to have something imprecise or nothing at all
       m_IsValid = false;
       return true;
-      }
+    }
     else
-      {
-//      std::cout << "Keeping lon/lat" << std::endl;
+    {
+      //      std::cout << "Keeping lon/lat" << std::endl;
       return false;
-      }
+    }
   }
 
   std::string GetPlaceName() const
   {
     if (m_IsValid)
-      {
+    {
       return m_PlaceName;
-      }
+    }
     else
-      {
+    {
       return "";
-      }
+    }
   }
 
   std::string GetCountryName() const
   {
     if (m_IsValid)
-      {
+    {
       return m_CountryName;
-      }
+    }
     else
-      {
+    {
       return "";
-      }
+    }
   }
 
   itkGetMacro(Multithread, bool);
@@ -118,7 +119,9 @@ public:
 
 protected:
   CoordinateToName();
-  ~CoordinateToName() override {}
+  ~CoordinateToName() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void ParseXMLGeonames(std::string& placeName, std::string& countryName) const;
 
@@ -127,8 +130,8 @@ protected:
   static ITK_THREAD_RETURN_TYPE ThreadFunction(void*);
 
 private:
-  CoordinateToName(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CoordinateToName(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_Lon;
   double m_Lat;
@@ -136,8 +139,8 @@ private:
   bool m_Multithread;
   bool m_IsValid;
 
-  //Minimum distance to trigger an update of the coordinates
-  //specified in degrees
+  // Minimum distance to trigger an update of the coordinates
+  // specified in degrees
   double m_UpdateDistance;
 
   std::string m_PlaceName;

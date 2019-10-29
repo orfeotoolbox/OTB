@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -30,8 +30,8 @@ ADD_SUPERBUILD_CMAKE_VAR(SHARK BOOST_LIBRARYDIR)
 
 ExternalProject_Add(SHARK
   PREFIX SHARK
-  URL "https://github.com/Shark-ML/Shark/archive/v3.1.4.zip"
-  URL_MD5 149e7d2e458cbe65c6373c2e89876b3e
+  URL "https://github.com/Shark-ML/Shark/archive/67990bcd2c4a90a27be97d933b3740931e9da141.zip"
+  URL_MD5 9ad7480a4f9832b63086b9a683566187
   SOURCE_DIR ${SHARK_SB_SRC}
   BINARY_DIR ${SHARK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

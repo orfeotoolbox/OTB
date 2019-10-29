@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,9 +22,7 @@
 #define otbWrapperQtWidgetParameterLabel_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameter.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBQtWidgetExport.h"
 
@@ -42,15 +40,13 @@ class OTBQtWidget_EXPORT QtWidgetParameterLabel : public QWidget
 {
   Q_OBJECT
 public:
-  QtWidgetParameterLabel(Parameter*);
+  QtWidgetParameterLabel(Parameter*, QWidget*);
   ~QtWidgetParameterLabel() override;
 
 private:
-  QtWidgetParameterLabel(const QtWidgetParameterLabel&); //purposely not implemented
-  void operator=(const QtWidgetParameterLabel&); //purposely not implemented
+  QtWidgetParameterLabel(const QtWidgetParameterLabel&) = delete;
+  void operator=(const QtWidgetParameterLabel&) = delete;
 };
-
-
 }
 }
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,23 +22,23 @@ otb_module_test()
 #----------- VectorDataTransform TESTS ----------------
 otb_test_application(NAME apTvUtVectorDataTransform_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_rotation.shp
                              -transform.ro 15
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_rotation.shp)
 
 otb_test_application(NAME apTvUtVectorDataTransform_Translation_Rotation
                      APP VectorDataTransform
-                     OPTIONS -in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
                              -vd ${INPUTDATA}/ToulouseRoad-examples.shp
                              -out ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp
                              -transform.ro 15
                              -transform.tx  5
                              -transform.ty  6
-                     VALID   --compare-ogr ${NOTOL}
+                     VALID   --compare-ogr ${EPSILON_9}
                              ${OTBAPP_BASELINE_FILES}/utTvVectorDataTransformFilter_Translation_rotation.shp
                              ${TEMP}/apTvUtVectorDataTransform_Translation_rotation.shp)
 

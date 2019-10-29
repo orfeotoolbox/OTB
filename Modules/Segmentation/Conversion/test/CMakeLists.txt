@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,8 +24,6 @@ set(OTBConversionTests
 otbConversionTestDriver.cxx
 otbVectorDataToLabelMapFilter.cxx
 otbOGRDataSourceToLabelImageFilter.cxx
-otbVectorDataToLabelMapFilterNew.cxx
-otbLabelImageToVectorDataFilterNew.cxx
 otbLabelImageToVectorDataFilter.cxx
 otbLabelImageToOGRDataSourceFilter.cxx
 otbVectorDataToLabelImageFilter.cxx
@@ -34,7 +32,6 @@ otbVectorDataRasterizeFilter.cxx
 otbLabelImageRegionPruningFilter.cxx
 otbLabelImageRegionMergingFilter.cxx
 otbLabelMapToVectorDataFilter.cxx
-otbLabelMapToVectorDataFilterNew.cxx
 )
 
 add_executable(otbConversionTestDriver ${OTBConversionTests})
@@ -48,9 +45,6 @@ otb_add_test(NAME obTvVectorDataToLabelMapFilter COMMAND otbConversionTestDriver
   ${INPUTDATA}/vectorIOexample_gis_to_vec.shp
   ${TEMP}/vectordataToLabelMap.png)
 
-otb_add_test(NAME coTuOGRDataSourceToLabelImageFilterNew COMMAND otbConversionTestDriver
-  otbOGRDataSourceToLabelImageFilterNew
-  )
 
 otb_add_test(NAME coTvOGRDataSourceToLabelImageFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0
@@ -74,32 +68,20 @@ otb_add_test(NAME bfTvOGRDataSourceToLabelImageFilterSHPForegroundMode COMMAND o
   0 0 255
   )
 
-otb_add_test(NAME obTuVectorDataToLabelMapFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataToLabelMapFilterNew)
-
-otb_add_test(NAME obTuLabelImageToVectorDataFilterNew COMMAND otbConversionTestDriver
-  otbLabelImageToVectorDataFilterNew)
-
 otb_add_test(NAME obTvLabelImageToVectorDataFilter COMMAND otbConversionTestDriver
   --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/obTuLabelImageToVectorDataFilter.shp
-  ${TEMP}/obTuLabelImageToVectorDataFilter.shp
+  ${BASELINE_FILES}/obTvLabelImageToVectorDataFilter.shp
+  ${TEMP}/obTvLabelImageToVectorDataFilter.shp
   otbLabelImageToVectorDataFilter
   ${INPUTDATA}/labelImage_UnsignedChar.tif
-  ${TEMP}/obTuLabelImageToVectorDataFilter.shp
+  ${TEMP}/obTvLabelImageToVectorDataFilter.shp
   )
-
-otb_add_test(NAME obTuLabelImageToOGRDataSourceFilterNew COMMAND otbConversionTestDriver
-  otbLabelImageToOGRDataSourceFilterNew)
 
 otb_add_test(NAME obTvLabelImageToOGRDataSourceFilter COMMAND otbConversionTestDriver
   otbLabelImageToOGRDataSourceFilter
   ${INPUTDATA}/labelImage_UnsignedChar.tif
   )
 
-otb_add_test(NAME bfTuVectorDataToLabelImageFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataToLabelImageFilterNew
-  )
 
 otb_add_test(NAME bfTvVectorDataToLabelImageFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0
@@ -141,14 +123,12 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterKML COMMAND otbConversionTestDriv
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputKML.tif
   )
 
-otb_add_test(NAME bfTuVectorDataRasterizeFilterNew COMMAND otbConversionTestDriver
-  otbVectorDataRasterizeFilterNew
-  )
 
 otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriver
   --compare-image 0.0001
   ${BASELINE}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
   ${TEMP}/bfTvVectorDataRasterizeFilter_OutputSHP.tif
+  --tolerance-ratio 0.01
   otbVectorDataRasterizeFilter
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
   ${INPUTDATA}/Capitole-Shadows.shp
@@ -215,22 +195,11 @@ otb_add_test(NAME bfTvVectorDataRasterizeFilterSHP COMMAND otbConversionTestDriv
   #4 25 0.1 100
   #)
 
-otb_add_test(NAME obTvLabelMapToVectorDataFilter2 COMMAND otbConversionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
-  ${TEMP}/obTvLabelMapToVectorDataFilter2.shp
-  otbLabelMapToVectorDataFilter
-  ${INPUTDATA}/rcc8_mire5.png
-  ${TEMP}/obTvLabelMapToVectorDataFilter2.shp)
-
 otb_add_test(NAME obTvLabelMapToVectorDataFilter COMMAND otbConversionTestDriver
   --compare-ogr ${NOTOL}
   ${BASELINE_FILES}/obTvLabelMapToVectorDataFilter.shp
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp
   otbLabelMapToVectorDataFilter
-  ${INPUTDATA}/rcc8_mire1.png
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/obTvLabelMapToVectorDataFilter.shp)
-
-otb_add_test(NAME obTuLabelMapToVectorDataFilterNew COMMAND otbConversionTestDriver
-  otbLabelMapToVectorDataFilterNew)
 

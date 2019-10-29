@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -35,7 +35,6 @@
 #include <ossim/base/ossimDpt.h>
 #include <EnvisatAsar/EnvisatAsarData.h>
 
-#include <iostream>
 
 namespace ossimplugins
 {

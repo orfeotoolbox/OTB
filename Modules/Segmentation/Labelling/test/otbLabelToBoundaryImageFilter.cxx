@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,11 +24,11 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbLabelToBoundaryImageFilter(int argc, char * argv [])
+int otbLabelToBoundaryImageFilter(int argc, char* argv[])
 {
-  typedef unsigned int InputPixelType;
+  typedef unsigned int  InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
@@ -36,13 +36,12 @@ int otbLabelToBoundaryImageFilter(int argc, char * argv [])
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::LabelToBoundaryImageFilter
-  <InputImageType, OutputImageType> BoundaryFilterType;
+  typedef otb::LabelToBoundaryImageFilter<InputImageType, OutputImageType> BoundaryFilterType;
   typedef BoundaryFilterType::Pointer BoundaryFilterPointerType;
 
   if (argc != 3)
   {
-    std::cerr << "Usage : "<<argv[0]<<"  input_label_image  output_boundary"<< std::endl;
+    std::cerr << "Usage : " << argv[0] << "  input_label_image  output_boundary" << std::endl;
     return EXIT_FAILURE;
   }
 

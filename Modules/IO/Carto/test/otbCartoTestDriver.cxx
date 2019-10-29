@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,11 +22,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbMapFileProductWriterNew);
-  REGISTER_TEST(otbImageToOSMVectorDataGeneratorNew);
   REGISTER_TEST(otbImageToOSMVectorDataGenerator);
   REGISTER_TEST(otbMapFileProductWriter);
-  REGISTER_TEST(otbOSMToVectorDataGeneratorNew);
   REGISTER_TEST(otbOSMToVectorDataGeneratorTest);
   REGISTER_TEST(otbOSMToVectorDataGeneratorByName);
   REGISTER_TEST(otbCoordinateToNameTest);

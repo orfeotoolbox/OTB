@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,16 +34,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TCountFunction>
-class ITK_EXPORT BinaryImageToDensityImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT BinaryImageToDensityImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
   /** Standard typedefs */
-  typedef BinaryImageToDensityImageFilter                    Self;
+  typedef BinaryImageToDensityImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -90,19 +88,18 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BinaryImageToDensityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   CountFunctionPointerType m_CountFunction;
 
   /** The shrink factor */
   RadiusType m_NeighborhoodRadius;
-
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBinaryImageToDensityImageFilter.txx"
+#include "otbBinaryImageToDensityImageFilter.hxx"
 #endif
 
 #endif

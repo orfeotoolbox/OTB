@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -83,8 +83,7 @@ namespace mvd
  *
  * \see I18nCoreApplication.
  */
-class OTBMonteverdiGUI_EXPORT I18nApplication
-  : public I18nCoreApplication
+class OTBMonteverdiGUI_EXPORT I18nApplication : public I18nCoreApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -93,16 +92,15 @@ class OTBMonteverdiGUI_EXPORT I18nApplication
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param qtApp The parent Qt application of this MVD2 application.
    */
-  I18nApplication( QApplication* qtApp );
+  I18nApplication(QApplication* qtApp);
 
   /** \brief Destructor. */
   ~I18nApplication() override;
@@ -127,47 +125,41 @@ public:
    */
   inline static const I18nApplication* ConstInstance();
 
-//
-// Public attributes.
+  //
+  // Public attributes.
 public:
-
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   void virtual_InitializeCore() override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS
+  //
+  // SLOTS
 private slots:
 };
 
@@ -180,19 +172,15 @@ namespace mvd
 {
 
 /*****************************************************************************/
-I18nApplication*
-I18nApplication
-::Instance()
+I18nApplication* I18nApplication::Instance()
 {
-  return I18nCoreApplication::Instance< I18nApplication >();
+  return I18nCoreApplication::Instance<I18nApplication>();
 }
 
 /*****************************************************************************/
-const I18nApplication*
-I18nApplication
-::ConstInstance()
+const I18nApplication* I18nApplication::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< I18nApplication >();
+  return I18nCoreApplication::ConstInstance<I18nApplication>();
 }
 
 } // end namespace 'mvd'

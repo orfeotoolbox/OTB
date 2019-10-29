@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,6 @@
 #ifndef otbImageKeywordlist_h
 #define otbImageKeywordlist_h
 
-#include <iostream>
 #include <map>
 
 #include "gdal.h"
@@ -31,7 +30,7 @@
 
 #include "OTBOSSIMAdaptersExport.h"
 
-//forward declaration
+// forward declaration
 class ossimKeywordlist;
 
 namespace otb
@@ -39,29 +38,29 @@ namespace otb
 
 namespace internal
 {
-  /**
-   * Converts index coordinates from OTB into OSSIM. It is intended for sensor
-   * images where the centre of the top-left pixel is expected to be :
-   *   [0.5,0.5] in OTB physical space
-   *   [ 0 , 0 ] in OSSIM
-   * \param[in] val  coordinate value to modify (along X or Y)
-   */
-  inline double ConvertToOSSIMFrame(double val)
-    {
-    return (val - 0.5);
-    }
+/**
+ * Converts index coordinates from OTB into OSSIM. It is intended for sensor
+ * images where the centre of the top-left pixel is expected to be :
+ *   [0.5,0.5] in OTB physical space
+ *   [ 0 , 0 ] in OSSIM
+ * \param[in] val  coordinate value to modify (along X or Y)
+ */
+inline double ConvertToOSSIMFrame(double val)
+{
+  return (val - 0.5);
+}
 
-  /**
-   * Converts index coordinates from OSSIM into OTB. It is intended for sensor
-   * images where the centre of the top-left pixel is expected to be :
-   *   [0.5,0.5] in OTB physical space
-   *   [ 0 , 0 ] in OSSIM
-    * \param[in] val  coordinate value to modify (along X or Y)
-   */
-  inline double ConvertFromOSSIMFrame(double val)
-    {
-    return (val + 0.5);
-    }
+/**
+ * Converts index coordinates from OSSIM into OTB. It is intended for sensor
+ * images where the centre of the top-left pixel is expected to be :
+ *   [0.5,0.5] in OTB physical space
+ *   [ 0 , 0 ] in OSSIM
+  * \param[in] val  coordinate value to modify (along X or Y)
+ */
+inline double ConvertFromOSSIMFrame(double val)
+{
+  return (val + 0.5);
+}
 
 } // namespace internal
 
@@ -82,7 +81,7 @@ public:
   /** Standard class typedefs. */
   typedef ImageKeywordlist Self;
 
-  //virtual const char *GetNameOfClass() const
+  // virtual const char *GetNameOfClass() const
   //{return "ImageKeywordlist"; }
 
   typedef std::map<std::string, std::string> KeywordlistMap;
@@ -126,18 +125,18 @@ public:
 
   /** try to convert the image keywordlist into a GDALRpcInfo structure
    *  return true if successful, false otherwise */
-  virtual bool convertToGDALRPC(GDALRPCInfo &rpc) const;
+  virtual bool convertToGDALRPC(GDALRPCInfo& rpc) const;
 
   virtual void Print(std::ostream& os, itk::Indent indent = 0) const;
 
   ImageKeywordlist();
   virtual ~ImageKeywordlist();
 
-  ImageKeywordlist(const Self &);
-  void operator =(const Self&);
+  ImageKeywordlist(const Self&);
+  void operator=(const Self&);
 
-  bool operator ==(const Self&) const;
-  inline bool operator != ( const Self & ) const;
+  bool        operator==(const Self&) const;
+  inline bool operator!=(const Self&) const;
 
 protected:
   /** Methods invoked by Print() to print information about the object
@@ -150,36 +149,27 @@ private:
   /** Geo information are in this map */
   KeywordlistMap m_Keywordlist;
 
-//  char m_Delimiter;
+  //  char m_Delimiter;
 
-//  void operator=(const Self&); //purposely not implemented
-
+  //  void operator=(const Self&) = delete;
 };
 
-OTBOSSIMAdapters_EXPORT
-std::ostream & operator <<(std::ostream& os, const ImageKeywordlist& kwl);
+OTBOSSIMAdapters_EXPORT std::ostream& operator<<(std::ostream& os, const ImageKeywordlist& kwl);
 
 // Free function to handle the keywordlist <-> files
-OTBOSSIMAdapters_EXPORT
-ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag=true);
+OTBOSSIMAdapters_EXPORT ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag = true);
 
-OTBOSSIMAdapters_EXPORT
-ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
+OTBOSSIMAdapters_EXPORT ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename);
 
-OTBOSSIMAdapters_EXPORT
-ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
+OTBOSSIMAdapters_EXPORT ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
 
-OTBOSSIMAdapters_EXPORT
-void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
+OTBOSSIMAdapters_EXPORT void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
-inline
-bool
-ImageKeywordlist
-::operator !=( const Self & p ) const
+inline bool ImageKeywordlist::operator!=(const Self& p) const
 {
-  return !this->operator == ( p );
+  return !this->operator==(p);
 }
 
-} //namespace otb
+} // namespace otb
 
 #endif // otbImageKeywordlist_h

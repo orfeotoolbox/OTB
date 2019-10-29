@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,12 +26,7 @@ otbScalarImageToHigherOrderTexturesFilter.cxx
 otbHaralickTexturesImageFunction.cxx
 otbGreyLevelCooccurrenceIndexedList.cxx
 otbScalarImageToTexturesFilter.cxx
-otbScalarImageToTexturesFilterNew.cxx
 otbSFSTexturesImageFilterTest.cxx
-otbSFSTexturesImageFilterNew.cxx
-otbScalarImageToPanTexTextureFilterNew.cxx
-otbScalarImageToAdvancedTexturesFilterNew.cxx
-otbGreyLevelCooccurrenceIndexedListNew.cxx
 otbScalarImageToAdvancedTexturesFilter.cxx
 otbScalarImageToPanTexTextureFilter.cxx
 )
@@ -40,17 +35,11 @@ add_executable(otbTexturesTestDriver ${OTBTexturesTests})
 target_link_libraries(otbTexturesTestDriver ${OTBTextures-Test_LIBRARIES})
 otb_module_target_label(otbTexturesTestDriver)
 
-otb_add_test(NAME feTuScalarImageToHigherOrderTexturesFilterNew COMMAND otbTexturesTestDriver
-  otbScalarImageToHigherOrderTexturesFilterNew
-  )
 
 otb_add_test(NAME feTvScalarImageToHigherOrderTexturesFilter COMMAND otbTexturesTestDriver
   otbScalarImageToHigherOrderTexturesFilter
   ${INPUTDATA}/Mire_Cosinus.png)
 
-otb_add_test(NAME feTuHaralickTexturesImageFunctionNew COMMAND otbTexturesTestDriver
-  otbHaralickTexturesImageFunctionNew
-  )
 
 otb_add_test(NAME feTvHaralickTexturesImageFunction COMMAND otbTexturesTestDriver
   --compare-ascii ${EPSILON_8}
@@ -89,9 +78,6 @@ otb_add_test(NAME feTvScalarImageToTexturesFilter COMMAND otbTexturesTestDriver
   ${TEMP}/feTvScalarImageToTexturesFilterOutput
   8 3 2 2)
 
-otb_add_test(NAME feTuScalarImageToTexturesFilterNew COMMAND otbTexturesTestDriver
-  otbScalarImageToTexturesFilterNew
-  )
 
 otb_add_test(NAME feTvSFSTexturesImageFilterTest COMMAND otbTexturesTestDriver
   --compare-n-images ${EPSILON_8}
@@ -120,20 +106,8 @@ otb_add_test(NAME feTvSFSTexturesImageFilterTest COMMAND otbTexturesTestDriver
   0.6 # alpha value
   )
 
-otb_add_test(NAME feTuSFSTexturesImageFilterNew COMMAND otbTexturesTestDriver
-  otbSFSTexturesImageFilterNew)
 
-otb_add_test(NAME feTuScalarImageToPanTexTextureFilterNew COMMAND otbTexturesTestDriver
-  otbScalarImageToPanTexTextureFilterNew
-  )
 
-otb_add_test(NAME feTuScalarImageToAdvancedTexturesFilterNew COMMAND otbTexturesTestDriver
-  otbScalarImageToAdvancedTexturesFilterNew
-  )
-
-otb_add_test(NAME feTuGreyLevelCooccurrenceIndexedListNew COMMAND otbTexturesTestDriver
-  otbGreyLevelCooccurrenceIndexedListNew
-  )
 
 otb_add_test(NAME feTvScalarImageToAdvancedTexturesFilter COMMAND otbTexturesTestDriver
   --compare-n-images ${NOTOL} 10

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,29 +43,29 @@ namespace Wrapper
  *
  * Training of a dimensionality reduction model
  */
-class TrainDimensionalityReduction : public TrainDimensionalityReductionApplicationBase<float,float>
+class TrainDimensionalityReduction : public TrainDimensionalityReductionApplicationBase<float, float>
 {
 public:
   typedef TrainDimensionalityReduction Self;
   typedef TrainDimensionalityReductionApplicationBase<float, float> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  
+
   itkNewMacro(Self);
   itkTypeMacro(TrainDimensionalityReduction, otb::Application);
 
-  typedef Superclass::SampleType              SampleType;
-  typedef Superclass::ListSampleType          ListSampleType;
-  typedef Superclass::SampleImageType         SampleImageType;
+  typedef Superclass::SampleType      SampleType;
+  typedef Superclass::ListSampleType  ListSampleType;
+  typedef Superclass::SampleImageType SampleImageType;
 
-  typedef float ValueType;
+  typedef float                                ValueType;
   typedef itk::VariableLengthVector<ValueType> MeasurementType;
 
   typedef otb::StatisticsXMLFileReader<SampleType> StatisticsReader;
 
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
-  typedef otb::DimensionalityReductionModelFactory<ValueType, ValueType>  ModelFactoryType;
+  typedef otb::DimensionalityReductionModelFactory<ValueType, ValueType> ModelFactoryType;
 
 private:
   void DoInit() override
@@ -73,12 +73,12 @@ private:
     SetName("TrainDimensionalityReduction");
     SetDescription("Train a dimensionality reduction model");
 
-    SetDocName("Train Dimensionality Reduction");
-    SetDocLongDescription("Trainer for dimensionality reduction algorithms "
-      "(autoencoders, PCA, SOM). All input samples are used to compute the "
-      "model, like other machine learning models.\n"
-      "The model can be used in the ImageDimensionalityReduction and "
-      "VectorDimensionalityReduction applications.");
+    SetDocLongDescription(
+        "Trainer for dimensionality reduction algorithms "
+        "(autoencoders, PCA, SOM). All input samples are used to compute the "
+        "model, like other machine learning models.\n"
+        "The model can be used in the ImageDimensionalityReduction and "
+        "VectorDimensionalityReduction applications.");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -88,8 +88,7 @@ private:
     SetParameterDescription("io", "This group of parameters allows setting input and output data.");
 
     AddParameter(ParameterType_InputVectorData, "io.vd", "Input Vector Data");
-    SetParameterDescription("io.vd", "Input geometries used for training (note "
-      ": all geometries from the layer will be used)");
+    SetParameterDescription("io.vd", "Input geometries used for training (note: all geometries from the layer will be used)");
 
     AddParameter(ParameterType_OutputFilename, "io.out", "Output model");
     SetParameterDescription("io.out", "Output file containing the estimated model (.txt format).");
@@ -98,9 +97,8 @@ private:
     MandatoryOff("io.stats");
     SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training."); //
-    SetParameterDescription("feat","List of field names in the input vector data"
-      " used as features for training."); //
+    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training");
+    SetParameterDescription("feat", "List of field names in the input vector data used as features for training.");
 
     Superclass::DoInit();
 
@@ -108,11 +106,17 @@ private:
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.vd", "cuprite_samples.sqlite");
-    SetDocExampleParameterValue("io.out", "mode.ae");
-    SetDocExampleParameterValue("algorithm", "pca");
-    SetDocExampleParameterValue("algorithm.pca.dim", "8");
-    SetDocExampleParameterValue("feat","value_0 value_1 value_2 value_3 value_4"
-      " value_5 value_6 value_7 value_8 value_9");
+    SetDocExampleParameterValue("io.out", "model.som");
+    SetDocExampleParameterValue("algorithm", "som");
+    SetDocExampleParameterValue("algorithm.som.s", "10 10");
+    SetDocExampleParameterValue("algorithm.som.n", "3 3");
+    SetDocExampleParameterValue("algorithm.som.ni", "5");
+    SetDocExampleParameterValue("algorithm.som.bi", "1");
+    SetDocExampleParameterValue("algorithm.som.bf", "0.1");
+    SetDocExampleParameterValue("algorithm.som.iv", "10");
+    SetDocExampleParameterValue("feat",
+                                "value_0 value_1 value_2 value_3 value_4"
+                                " value_5 value_6 value_7 value_8 value_9");
   }
 
   void DoUpdateParameters() override
@@ -123,44 +127,58 @@ private:
   {
     std::string shapefile = GetParameterString("io.vd");
 
-    otb::ogr::DataSource::Pointer source =
-      otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
-    otb::ogr::Layer layer = source->GetLayer(0);
-    ListSampleType::Pointer input = ListSampleType::New();
-    const int nbFeatures = GetParameterStringList("feat").size();
+    otb::ogr::DataSource::Pointer source = otb::ogr::DataSource::New(shapefile, otb::ogr::DataSource::Modes::Read);
+    otb::ogr::Layer               layer  = source->GetLayer(0);
+    ListSampleType::Pointer       input  = ListSampleType::New();
+
+    const auto inputIndexes = GetParameterStringList("feat");
+    const int  nbFeatures   = inputIndexes.size();
 
     input->SetMeasurementVectorSize(nbFeatures);
-    otb::ogr::Layer::const_iterator it = layer.cbegin();
+    otb::ogr::Layer::const_iterator it    = layer.cbegin();
     otb::ogr::Layer::const_iterator itEnd = layer.cend();
-    for( ; it!=itEnd ; ++it)
-      {
+    for (; it != itEnd; ++it)
+    {
       MeasurementType mv;
       mv.SetSize(nbFeatures);
-      for(int idx=0; idx < nbFeatures; ++idx)
+      for (int idx = 0; idx < nbFeatures; ++idx)
+      {
+        switch ((*it)[inputIndexes[idx]].GetType())
         {
-        mv[idx] = (*it)[GetParameterStringList("feat")[idx]].GetValue<double>();
+        case OFTInteger:
+          mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+          break;
+        case OFTInteger64:
+          mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<int>());
+          break;
+        case OFTReal:
+          mv[idx] = static_cast<ValueType>((*it)[inputIndexes[idx]].GetValue<double>());
+          break;
+        default:
+          itkExceptionMacro(<< "incorrect field type: " << (*it)[inputIndexes[idx]].GetType() << ".");
         }
-      input->PushBack(mv);
       }
+      input->PushBack(mv);
+    }
 
     MeasurementType meanMeasurementVector;
     MeasurementType stddevMeasurementVector;
 
     if (HasValue("io.stats") && IsParameterEnabled("io.stats"))
-      {
+    {
       StatisticsReader::Pointer statisticsReader = StatisticsReader::New();
-      std::string XMLfile = GetParameterString("io.stats");
+      std::string               XMLfile          = GetParameterString("io.stats");
       statisticsReader->SetFileName(XMLfile);
-      meanMeasurementVector = statisticsReader->GetStatisticVectorByName("mean");
+      meanMeasurementVector   = statisticsReader->GetStatisticVectorByName("mean");
       stddevMeasurementVector = statisticsReader->GetStatisticVectorByName("stddev");
-      }
+    }
     else
-      {
+    {
       meanMeasurementVector.SetSize(nbFeatures);
       meanMeasurementVector.Fill(0.);
       stddevMeasurementVector.SetSize(nbFeatures);
       stddevMeasurementVector.Fill(1.);
-      }
+    }
 
     ShiftScaleFilterType::Pointer trainingShiftScaleFilter = ShiftScaleFilterType::New();
     trainingShiftScaleFilter->SetInput(input);
@@ -168,11 +186,10 @@ private:
     trainingShiftScaleFilter->SetScales(stddevMeasurementVector);
     trainingShiftScaleFilter->Update();
 
-    ListSampleType::Pointer trainingListSample= trainingShiftScaleFilter->GetOutput();
+    ListSampleType::Pointer trainingListSample = trainingShiftScaleFilter->GetOutput();
 
-    this->Train(trainingListSample,GetParameterString("io.out"));
+    this->Train(trainingListSample, GetParameterString("io.out"));
   }
-
 };
 
 } // end of namespace Wrapper

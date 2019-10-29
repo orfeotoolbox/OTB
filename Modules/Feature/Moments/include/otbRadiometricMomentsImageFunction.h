@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,25 +44,16 @@ namespace otb
  */
 
 
-template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT RadiometricMomentsImageFunction :
-  public itk::ImageFunction< TInputImage,
-    itk::FixedArray<
-    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-    4 >,
-    TCoordRep >
+template <class TInputImage, class TCoordRep = double>
+class ITK_EXPORT RadiometricMomentsImageFunction
+    : public itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 4>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef RadiometricMomentsImageFunction                                 Self;
-  typedef itk::ImageFunction< TInputImage,
-                   itk::FixedArray<
-                   typename itk::NumericTraits<
-                   typename TInputImage::PixelType>::RealType,
-                   4 >,
-                   TCoordRep >                                            Superclass;
-  typedef itk::SmartPointer<Self>                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                   ConstPointer;
+  typedef RadiometricMomentsImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 4>, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RadiometricMomentsImageFunction, ImageFunction);
@@ -76,17 +67,15 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename OutputType::ValueType           ScalarRealType;
+  typedef typename Superclass::OutputType OutputType;
+  typedef typename OutputType::ValueType  ScalarRealType;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
-  typedef Functor::RadiometricMomentsFunctor< itk::ConstNeighborhoodIterator<InputImageType>, ScalarRealType>
-                                                   FunctorType;
+  typedef Functor::RadiometricMomentsFunctor<itk::ConstNeighborhoodIterator<InputImageType>, ScalarRealType> FunctorType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -98,8 +87,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -109,26 +97,28 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
 protected:
   RadiometricMomentsImageFunction();
-  ~RadiometricMomentsImageFunction() override {}
+  ~RadiometricMomentsImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RadiometricMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  RadiometricMomentsImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NeighborhoodRadius;
-  FunctorType m_Functor;
+  FunctorType  m_Functor;
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRadiometricMomentsImageFunction.txx"
+#include "otbRadiometricMomentsImageFunction.hxx"
 #endif
 
 #endif

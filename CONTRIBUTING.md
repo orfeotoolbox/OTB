@@ -17,7 +17,7 @@ use a self-hosted GitLab instance:
 
 [`https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb`](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 
-Remember to check out also our [developers mailing list](https://groups.google.com/forum/?hl=fr#!forum/otb-developers/join),
+Remember to check out also our [forum](https://forum.orfeo-toolbox.org/),
 where we discuss some features, improvements and high level project planning.
 You are welcome to ask questions there as a beginner or future OTB contributor!
 
@@ -39,14 +39,14 @@ template for in depth description called 'Request for Comments'.
 
 ## Documentation improvements
 
-The two main OTB documentations are the [Software Guide](https://www.orfeo-toolbox.org/SoftwareGuide/index.html)
-and the [CookBook](https://www.orfeo-toolbox.org/CookBook/).  Their sources are
+The main OTB documentation is
+the [CookBook](https://www.orfeo-toolbox.org/CookBook/).  The source is
 hosted in the main OTB repository in the `Documentation/` directory. Then, to
 contribute documentation use the same workflow as for code contributions (see
 below).
 
-See also the [Compiling documentation](https://wiki.orfeo-toolbox.org/index.php/Compiling_documentation)
-wiki page for help on building the Sphinx and Latex source.
+See also the "Compiling documentation" section of the CookBook
+for help on building the Sphinx source.
 
 ## Code contribution
 
@@ -58,9 +58,10 @@ then send a merge request.
 Note that we also accept PRs on our [GitHub mirror](https://github.com/orfeotoolbox/OTB)
 which we will manually merge.
 
-Feature branches are tested on multiple platforms on the OTB test infrastructure (a.k.a the [Dashboard](https://dash.orfeo-toolbox.org/)). They appear in the FeatureBranches section. 
+Feature branches are tested on multiple platforms on the OTB
+[CI infrastructure](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/pipelines). 
 
-Caveat: even if the Dashboard build on develop branch is broken, it is not
+Caveat: even if the CI build on develop branch is broken, it is not
 allowed to push fixes directly on develop. The developer trying to fix the
 build should create a merge request and submit it for review. Direct push to
 develop without review must be avoided.
@@ -100,33 +101,30 @@ OTB team.
 * Merge requests **must receive at least 2 positives votes from core developers** (members of Main Repositories group in Gitlab with at least "Developer" level; this includes PSC members) before being merged
 * The merger is responsible for checking that the branch is up-to-date with develop
 * Merge requests can be merged by anyone (not just PSC or RM) with push access to develop
-* Merge requests can be merged once the dashboard is proven green for this branch.
-  This condition is mandatory unless reviewers and authors explicitely agree that
-  it can be skipped (for instance in case of documentation merges or compilation
-  fixes on develop). Branches of that sort can be identified with the ~patch label, 
-  which tells the reviewer that the author would like to merge without dashboard testing.
+* Merge requests can be merged once the CI pipeline passes successfully. See
+  next section for details on the CI pipelines.
 
-Branches can be registered for dashboard testing by adding one line in `Config/feature_branches.txt` in [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git).
 
-For branches in the main repository, the syntax is the following:
+### Using the CI platform
 
-```
-branch_name [otb-data_branch_name]
+There isn't much to do in order to use the CI platform. The CI pipelines are
+triggered automatically when pushing commits. However, if you push to a fork,
+you will first need an access to the Runners from main repository. You
+can request it when doing your first MergeRequest. During code review, someone
+from CI admins will assign the runners to your fork.
 
-```
-The second branch name is optional. It can be set if you need to modify [otb-data](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data.git) according to your changes.
+When your pipeline ends, there are two cases:
 
-For branches in forks, the syntax is the following:
-```
-user/branch_name [user/otb-data_branch_name]
-```
-Again, the second branch name is optional.
+* if all the jobs succeed, you see a green pipeline, which means no problem was
+  found on your commit.
+* if one job fails, you see a red pipeline, which means something is broken in
+  your commit. The pipeline widget on Gitlab will tell you which job failed, so
+  you can check the logs. There, you may also find links to
+  [CDash](https://cdash.orfeo-toolbox.org/index.php?project=OTB) submissions
+  where compilation errors and failed test can be investigated more easily.
 
-For users without push access to [otb-devutils repository](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils.git), the modification can be asked through a merge requests to this repository.
-
-Once the feature branch is registered for testing, it should appear in the *FeatureBranches* section of the [OTB dashboard](https://dash.orfeo-toolbox.org/index.php?project=OTB) next day (remember tests are run on a nightly basis).
-
-Do not forget to remove the feature branch for testing once it has been merged.
+More details on the CI platform can be found
+[here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/OTB-Continuous-Integration-platform).
 
 ### Contribution license agreement
 
@@ -177,3 +175,21 @@ Regarding labels, we use the following set:
 * ~"To Do": action is planned
 * ~Doing: work in progress
 * ~api ~app ~documentation ~monteverdi ~packaging ~qgis: optional context information
+
+## Versioning
+
+Starting from OTB 7.0.0, we use [semantic versioning](https://semver.org/). See the website for the full spec, in summary:
+
+> Given a version number MAJOR.MINOR.PATCH, increment the:
+>
+>  1. MAJOR version when you make incompatible API changes,
+>  2. MINOR version when you add functionality in a backwards-compatible manner, and
+>  3. PATCH version when you make backwards-compatible bug fixes.
+>
+> Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+The develop branch is always the place where the upcoming major or minor release is worked on. Patch releases are done on release branches, for example 7.0.1 and 7.0.2 could be found on the release-7.0 branch.
+
+For the purpose of defining backwards compatibility, the OTB API covers (not an exhaustive list): the C++ API, the Python bindings, application names, application parameters, output format and interpretation of input data.
+
+When we deprecate part of our public API, we should do two things: (1) update our documentation to let users know about the change, (2) issue a new minor or major release with the deprecation in place.

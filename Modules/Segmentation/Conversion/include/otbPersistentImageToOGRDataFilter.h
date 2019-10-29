@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,16 +48,15 @@ namespace otb
  *
  * \ingroup OTBConversion
  */
-template<class TImage>
-class ITK_EXPORT PersistentImageToOGRDataFilter :
-  public PersistentImageFilter<TImage, TImage>
+template <class TImage>
+class ITK_EXPORT PersistentImageToOGRDataFilter : public PersistentImageFilter<TImage, TImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToOGRDataFilter                  Self;
-  typedef PersistentImageFilter<TImage, TImage>           Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentImageToOGRDataFilter Self;
+  typedef PersistentImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information support. */
   itkTypeMacro(PersistentImageToOGRDataFilter, PersistentImageFilter);
@@ -70,13 +69,13 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
-  typedef ogr::Layer                                 OGRLayerType;
-  typedef ogr::Feature                               OGRFeatureType;
+  typedef ogr::DataSource                     OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer OGRDataSourcePointerType;
+  typedef ogr::Layer                          OGRLayerType;
+  typedef ogr::Feature                        OGRFeatureType;
 
 
-  void AllocateOutputs();
+  void         AllocateOutputs();
   virtual void Reset(void);
   virtual void Synthetize(void);
 
@@ -105,17 +104,17 @@ public:
    * for fusioning streaming tiles.
    */
   itkGetMacro(StreamSize, SizeType);
-  
+
   /** Set the geometry type */
-  itkSetMacro(GeometryType,OGRwkbGeometryType);
-  
+  itkSetMacro(GeometryType, OGRwkbGeometryType);
+
   /** Get the geometry type */
-  itkGetMacro(GeometryType,OGRwkbGeometryType);
+  itkGetMacro(GeometryType, OGRwkbGeometryType);
 
   /** Set the \c ogr::DataSource in which the layer LayerName will be created. */
-  void SetOGRDataSource( OGRDataSourcePointerType ogrDS );
+  void SetOGRDataSource(OGRDataSourcePointerType ogrDS);
   /** Get the \c ogr::DataSource output. */
-  OGRDataSourceType * GetOGRDataSource( void );
+  OGRDataSourceType* GetOGRDataSource(void);
 
   /** Add one option for OGR layer creation */
   void AddOGRLayerCreationOption(const std::string& option);
@@ -124,16 +123,16 @@ public:
   void ClearOGRLayerCreationOptions();
 
   /** Set the OGR layer creation options */
-  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
-  
+  void SetOGRLayerCreationOptions(const std::vector<std::string>& options);
+
   /** Get the OGR layer creation options */
-  const std::vector<std::string> & GetOGRLayerCreationOptions(void);
+  const std::vector<std::string>& GetOGRLayerCreationOptions(void);
 
   /** Set the field type for class label */
-  itkSetMacro(FieldType,OGRFieldType);
+  itkSetMacro(FieldType, OGRFieldType);
 
   /** Get the field type for class label */
-  itkGetMacro(FieldType,OGRFieldType);
+  itkGetMacro(FieldType, OGRFieldType);
 
 protected:
   PersistentImageToOGRDataFilter();
@@ -145,23 +144,23 @@ protected:
 
 
 private:
-  PersistentImageToOGRDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToOGRDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   virtual OGRDataSourcePointerType ProcessTile() = 0;
 
-  std::string m_FieldName;
-  std::string m_LayerName;
-  OGRwkbGeometryType m_GeometryType;
-  SizeType m_StreamSize;
+  std::string              m_FieldName;
+  std::string              m_LayerName;
+  OGRwkbGeometryType       m_GeometryType;
+  SizeType                 m_StreamSize;
   std::vector<std::string> m_OGRLayerCreationOptions;
-  OGRFieldType m_FieldType;
+  OGRFieldType             m_FieldType;
 
 }; // end of class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToOGRDataFilter.txx"
+#include "otbPersistentImageToOGRDataFilter.hxx"
 #endif
 
 #endif

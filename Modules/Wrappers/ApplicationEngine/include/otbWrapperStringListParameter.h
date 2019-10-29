@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,40 +38,39 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT StringListParameter :
-    public ParameterList< StringParameter >
+class OTBApplicationEngine_EXPORT StringListParameter : public ParameterList<StringParameter>
 {
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** Standard class typedef */
-  typedef StringListParameter Self;
-  typedef ParameterList< StringParameter > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef StringListParameter            Self;
+  typedef ParameterList<StringParameter> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   typedef StringListInterface::StringVector StringListType;
 
   /** Defining ::New() static method */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro( StringListParameter, ParameterList );
+  itkTypeMacro(StringListParameter, ParameterList);
 
   /** Set the value */
-  void SetValue( const StringListInterface::StringVector & );
+  void SetValue(const StringListInterface::StringVector&);
 
   /** */
-  void AddString( const std::string & value );
+  void AddString(const std::string& value);
 
   /** Get the value */
   StringListInterface::StringVector GetValue() const;
 
   /** Get the value */
-  const std::string & GetNthElement( std::size_t ) const;
+  std::string GetNthElement(std::size_t) const;
 
   /** Get the value */
-  void SetNthElement( std::size_t, const std::string & );
+  void SetNthElement(std::size_t, const std::string&);
 
   /** */
   using StringListInterface::GetDirection;
@@ -80,8 +79,13 @@ public:
   /** */
   bool IsFilename() const override;
 
-//
-// Protected methods.
+  ParameterType GetType() const override
+  {
+    return ParameterType_StringList;
+  }
+
+  //
+  // Protected methods.
 protected:
   /** Constructor */
   StringListParameter();
@@ -89,23 +93,12 @@ protected:
   /** Destructor */
   ~StringListParameter() override;
 
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  // Purposely not implemented
-  StringListParameter ( const StringListParameter & );
+  StringListParameter(const StringListParameter&) = delete;
 
-  // Purposely not implemented
-  void operator = ( const StringListParameter & );
+  void operator=(const StringListParameter&) = delete;
 
 }; // End class Parameter
 

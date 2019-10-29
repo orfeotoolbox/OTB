@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbRADImageIO.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -28,12 +26,12 @@
 int otbRADImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::RADImageIO::Pointer lRADImageIO = otb::RADImageIO::New();
-  bool                     lCanRead = lRADImageIO->CanReadFile(argv[1]);
+  bool                     lCanRead    = lRADImageIO->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::RADImageIO : impossible to read file: " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,33 +30,28 @@ namespace Wrapper
 
 
 const std::string FILENAME_FILTER(
-  "All files (*);;"
-  "CSV files (.csv);;"
-  "Text files (.txt);;"
-  "XML files (.xml)"
-);
+    "All files (*);;"
+    "CSV files (.csv);;"
+    "Text files (.txt);;"
+    "XML files (.xml)");
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::InputFilenameListParameter()
+InputFilenameListParameter::InputFilenameListParameter()
 {
-  SetName( "Input Filename List" );
-  SetKey( "inList" );
+  SetName("Input Filename List");
+  SetKey("inList");
 }
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::~InputFilenameListParameter()
+InputFilenameListParameter::~InputFilenameListParameter()
 {
 }
 
 
 /*****************************************************************************/
-Role
-InputFilenameListParameter
-::GetDirection( std::size_t ) const
+Role InputFilenameListParameter::GetDirection(std::size_t) const
 {
 #if 0
   assert( i<m_FilenameList->Size() );
@@ -74,55 +69,28 @@ InputFilenameListParameter
 
 
 /*****************************************************************************/
-Role
-InputFilenameListParameter
-::GetDirection() const
+Role InputFilenameListParameter::GetDirection() const
 {
   return Role_Input;
 }
 
 
 /*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::GetFilenameFilter( std::size_t ) const
+const std::string& InputFilenameListParameter::GetFilenameFilter(std::size_t) const
 {
   return GetFilenameFilter();
 }
 
 
 /*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::GetFilenameFilter() const
+const std::string& InputFilenameListParameter::GetFilenameFilter() const
 {
   return FILENAME_FILTER;
 }
 
-
-/*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::ToString( const ParameterType::Pointer & p ) const
+ParameterType InputFilenameListParameter::GetType() const
 {
-  assert( !p.IsNull() );
-
-  return p->GetValue();
+  return ParameterType_InputFilenameList;
 }
-
-/*****************************************************************************/
-const InputFilenameListParameter::ParameterType::Pointer &
-InputFilenameListParameter
-::FromString( const ParameterType::Pointer & p,
-	      const std::string & s ) const
-{
-  assert( !p.IsNull() );
-
-  p->SetValue( s );
-
-  return p;
 }
-
-}
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,16 +68,13 @@ namespace otb
  *
  * \ingroup OTBDisparityMap
  */
-template<class TFixedImage, class TMovingImage, class TDisplacementField>
-class ITK_EXPORT NCCRegistrationFilter :
-  public itk::PDEDeformableRegistrationFilter<TFixedImage, TMovingImage,
-      TDisplacementField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+class ITK_EXPORT NCCRegistrationFilter : public itk::PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFilter Self;
-  typedef itk::PDEDeformableRegistrationFilter<
-      TFixedImage, TMovingImage, TDisplacementField>    Superclass;
+  typedef itk::PDEDeformableRegistrationFilter<TFixedImage, TMovingImage, TDisplacementField> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -85,8 +82,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NCCRegistrationFilter,
-               itk::PDEDeformableRegistrationFilter);
+  itkTypeMacro(NCCRegistrationFilter, itk::PDEDeformableRegistrationFilter);
 
   /** Inherit types from superclass. */
   typedef typename Superclass::TimeStepType TimeStepType;
@@ -100,18 +96,14 @@ public:
   typedef typename Superclass::MovingImagePointer MovingImagePointer;
 
   /** Displacement field type. */
-  typedef typename Superclass::DisplacementFieldType
-  DisplacementFieldType;
-  typedef typename Superclass::DisplacementFieldPointer
-  DisplacementFieldPointer;
+  typedef typename Superclass::DisplacementFieldType    DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldPointer DisplacementFieldPointer;
 
   /** FiniteDifferenceFunction type. */
-  typedef typename Superclass::FiniteDifferenceFunctionType
-  FiniteDifferenceFunctionType;
+  typedef typename Superclass::FiniteDifferenceFunctionType FiniteDifferenceFunctionType;
 
   /** NCCRegistrationFilterFunction type. */
-  typedef NCCRegistrationFunction<FixedImageType, MovingImageType,
-      DisplacementFieldType>  NCCRegistrationFunctionType;
+  typedef NCCRegistrationFunction<FixedImageType, MovingImageType, DisplacementFieldType> NCCRegistrationFunctionType;
 
   typedef typename NCCRegistrationFunctionType::RadiusType RadiusType;
 
@@ -137,7 +129,9 @@ public:
 
 protected:
   NCCRegistrationFilter();
-  ~NCCRegistrationFilter() override {}
+  ~NCCRegistrationFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the state of filter and equation before each iteration. */
@@ -151,15 +145,14 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  NCCRegistrationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  NCCRegistrationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFilter.txx"
+#include "otbNCCRegistrationFilter.hxx"
 #endif
 
 #endif

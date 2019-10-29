@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT InputFilenameParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT InputFilenameParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -57,16 +56,16 @@ public:
   }
 
   // Get Value
-  otbGetObjectMemberMacro(StringParam, Value , std::string);
+  otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Set Value
   virtual void SetValue(const std::string value)
-    {
+  {
     itkDebugMacro("setting member m_StringParam to " << value);
     this->m_StringParam->SetValue(value);
     SetActive(true);
     this->Modified();
-    }
+  }
 
   // Clear Value
   void ClearValue() override
@@ -74,24 +73,37 @@ public:
     m_StringParam->ClearValue();
   }
 
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_InputFilename;
+  }
+
+  std::string ToString() const override
+  {
+    return GetValue();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
 protected:
   /** Constructor */
   InputFilenameParameter()
   {
     // Initialize the String Parameter
-    m_StringParam= StringParameter::New();
-
-
+    m_StringParam = StringParameter::New();
   }
 
   /** Destructor */
   ~InputFilenameParameter() override
-  {}
+  {
+  }
 
 private:
-  InputFilenameParameter(const InputFilenameParameter &); //purposely not implemented
-  void operator =(const InputFilenameParameter&); //purposely not
-                                                  //implemented
+  InputFilenameParameter(const InputFilenameParameter&) = delete;
+  void operator=(const InputFilenameParameter&) = delete;
 
   StringParameter::Pointer m_StringParam;
 

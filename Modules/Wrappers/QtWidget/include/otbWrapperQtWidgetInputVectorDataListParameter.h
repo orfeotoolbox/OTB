@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 #include <QtWidgets>
 
 
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#  include "otbWrapperQtWidgetParameterList.h"
-#endif //tag=QT4-boost-compatibility
+#include "otbWrapperQtWidgetParameterList.h"
 
 namespace otb
 {
@@ -45,31 +43,24 @@ class InputVectorDataListParameter;
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
-  : public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetParameterList
 {
   Q_OBJECT;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel * );
+  QtWidgetInputVectorDataListParameter(InputVectorDataListParameter*, QtWidgetModel*, QWidget*);
 
   ~QtWidgetInputVectorDataListParameter() override;
 
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputVectorDataListParameter & );
+  QtWidgetInputVectorDataListParameter(const QtWidgetInputVectorDataListParameter&) = delete;
+  void operator=(const QtWidgetInputVectorDataListParameter&) = delete;
 };
-
-
 }
 }
 

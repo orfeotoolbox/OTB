@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,25 +29,19 @@ namespace otb
 
 GDALImageIOFactory::GDALImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbGDALImageIO",
-                         "GDAL Image IO",
-                         1,
-                         itk::CreateObjectFunction<GDALImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbGDALImageIO", "GDAL Image IO", 1, itk::CreateObjectFunction<GDALImageIO>::New());
 }
 
 GDALImageIOFactory::~GDALImageIOFactory()
 {
 }
 
-const char*
-GDALImageIOFactory::GetITKSourceVersion(void) const
+const char* GDALImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-GDALImageIOFactory::GetDescription() const
+const char* GDALImageIOFactory::GetDescription() const
 {
   return "GDAL ImageIO Factory, enabling loading gdal images in OTB";
 }
@@ -59,10 +53,10 @@ static bool GDALImageIOFactoryHasBeenRegistered;
 
 void GDALImageIOFactoryRegister__Private(void)
 {
-  if( ! GDALImageIOFactoryHasBeenRegistered )
-    {
+  if (!GDALImageIOFactoryHasBeenRegistered)
+  {
     GDALImageIOFactoryHasBeenRegistered = true;
     GDALImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 } // end namespace otb

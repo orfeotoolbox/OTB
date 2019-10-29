@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -125,7 +125,7 @@ namespace ossimplugins
        * Opening and test of the file
        */
       ossimFilename Filename = file;
-      ifstream dataFile(Filename.c_str(), ios::in | ios::binary);
+      std::ifstream dataFile(Filename.c_str(), std::ios::in | std::ios::binary);
       if (dataFile.eof())
       {
          dataFile.close();
@@ -368,7 +368,7 @@ namespace ossimplugins
       // Capture the original flags.
       std::ios_base::fmtflags f = out.flags();
 
-      out << setprecision(15) << setiosflags(ios::fixed)
+      out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
           << "\nossimEnvisatAsarModel data members:\n"
           << "_pixel_spacing: " << _pixel_spacing << "\n"
           << "_n_srgr: " << _n_srgr << "\n";

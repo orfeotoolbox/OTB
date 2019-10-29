@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,17 +46,15 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TDetector>
-class ITK_EXPORT KeyPointDensityImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT KeyPointDensityImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef KeyPointDensityImageFilter                         Self;
+  typedef KeyPointDensityImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -79,7 +77,7 @@ public:
 
   /** PointSetToDensityImageFilter support*/
   typedef otb::PointSetToDensityImageFilter<PointSetType, OutputImageType> PointSetToDensityImageType;
-  typedef typename PointSetToDensityImageType::Pointer                     PointSetToDensityImagePointerType;
+  typedef typename PointSetToDensityImageType::Pointer PointSetToDensityImagePointerType;
 
   /** Get/Set the radius of the neighborhood over which the
   statistics are evaluated */
@@ -91,7 +89,6 @@ public:
   virtual DetectorType* GetDetector();
 
 protected:
-
   /**
    * Constructor.
    */
@@ -107,13 +104,12 @@ protected:
   /**
    * Main computation method.
    */
-  //virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
+  // virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId );
   void GenerateData() override;
 
 private:
-
-  KeyPointDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KeyPointDensityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   DetectorPointerType               m_Detector;
   PointSetToDensityImagePointerType m_PointSetToDensityImageFilter;
@@ -121,7 +117,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKeyPointDensityImageFilter.txx"
+#include "otbKeyPointDensityImageFilter.hxx"
 #endif
 
 #endif

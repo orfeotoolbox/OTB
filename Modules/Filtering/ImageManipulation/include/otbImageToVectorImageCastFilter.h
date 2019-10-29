@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,18 +42,22 @@ class VectorCast
 {
 public:
   typedef typename TOutput::ValueType OutputValueType;
-  VectorCast() {}
-  virtual ~VectorCast() {}
+  VectorCast()
+  {
+  }
+  virtual ~VectorCast()
+  {
+  }
 
-  bool operator !=(const VectorCast&) const
+  bool operator!=(const VectorCast&) const
   {
     return false;
   }
-  bool operator ==(const VectorCast& other) const
+  bool operator==(const VectorCast& other) const
   {
     return (*this != other);
   }
-  inline TOutput operator ()(const TInput& A)
+  inline TOutput operator()(const TInput& A)
   {
     TOutput output;
     output.SetSize(1);
@@ -62,27 +66,25 @@ public:
   }
 };
 } // End namespace Functor
-/**
- * \class ImageToVectorImageCastFilter
- * \brief This is a helper class that convert an otb::Image into a single-channel otb::VectorImage.
- * \ingroup Singlethreaded
- *
- *
- * \ingroup OTBImageManipulation
- */
+  /**
+   * \class ImageToVectorImageCastFilter
+   * \brief This is a helper class that convert an otb::Image into a single-channel otb::VectorImage.
+   * \ingroup Singlethreaded
+   *
+   *
+   * \ingroup OTBImageManipulation
+   */
 template <class TInputImage, class TOutputVectorImage>
 class ITK_EXPORT ImageToVectorImageCastFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-      Functor::VectorCast<typename TInputImage::PixelType,
-          typename TOutputVectorImage::PixelType> >
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
+                                          Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::PixelType>>
 {
 public:
   /// Standard class typedefs
   typedef ImageToVectorImageCastFilter Self;
   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputVectorImage,
-      Functor::VectorCast<typename TInputImage::PixelType,
-          typename TOutputVectorImage
-          ::PixelType> > Superclass;
+                                       Functor::VectorCast<typename TInputImage::PixelType, typename TOutputVectorImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -94,9 +96,13 @@ public:
 
 protected:
   /// Constructor
-  ImageToVectorImageCastFilter() {}
+  ImageToVectorImageCastFilter()
+  {
+  }
   /// Detructor
-  ~ImageToVectorImageCastFilter() override {}
+  ~ImageToVectorImageCastFilter() override
+  {
+  }
   /// Additional output information for allocation
   void GenerateOutputInformation(void) override
   {
@@ -107,17 +113,17 @@ protected:
   void GenerateInputRequestedRegion(void) override
   {
     if (this->GetInput())
-      {
-      typename TInputImage::Pointer input = const_cast<TInputImage *>(this->GetInput());
+    {
+      typename TInputImage::Pointer    input = const_cast<TInputImage*>(this->GetInput());
       typename TInputImage::RegionType inputRegion;
       this->CallCopyOutputRegionToInputRegion(inputRegion, this->GetOutput()->GetRequestedRegion());
       input->SetRequestedRegion(inputRegion);
-      }
+    }
   }
 
 private:
-  ImageToVectorImageCastFilter(const Self &); //purposely not implemented
-  void operator =(const Self&);  // purposely not implemented
+  ImageToVectorImageCastFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 #endif

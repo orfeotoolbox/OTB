@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +22,8 @@
 #include "otbMacro.h"
 
 #include <cassert>
+
+#include "otb_ossim.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -47,50 +49,44 @@
 #endif
 
 
-
 namespace otb
 {
 /** Initialize the singleton */
-DEMHandler::Pointer DEMHandler::m_Singleton = ITK_NULLPTR;
+DEMHandler::Pointer DEMHandler::m_Singleton = nullptr;
 
 DEMHandler::Pointer DEMHandler::Instance()
 {
-  if(m_Singleton.GetPointer() == ITK_NULLPTR)
-    {
+  if (m_Singleton.GetPointer() == nullptr)
+  {
     m_Singleton = itk::ObjectFactory<Self>::Create();
 
-    if(m_Singleton.GetPointer() == ITK_NULLPTR)
-      {
+    if (m_Singleton.GetPointer() == nullptr)
+    {
       m_Singleton = new DEMHandler;
-      }
-    m_Singleton->UnRegister();
     }
+    m_Singleton->UnRegister();
+  }
 
   return m_Singleton;
 }
 
-DEMHandler
-::DEMHandler() :
-  m_GeoidFile(""),
-  m_DefaultHeightAboveEllipsoid(0)
+DEMHandler::DEMHandler() : m_GeoidFile(""), m_DefaultHeightAboveEllipsoid(0)
 {
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(m_DefaultHeightAboveEllipsoid);
   // Force geoid fallback
   ossimElevManager::instance()->setUseGeoidIfNullFlag(true);
 }
 
-void
-DEMHandler
-::OpenDEMDirectory(const char* DEMDirectory)
+void DEMHandler::OpenDEMDirectory(const char* DEMDirectory)
 {
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
-  ossimFilename ossimDEMDir( DEMDirectory );
+  ossimFilename ossimDEMDir(DEMDirectory);
 
   if (!ossimElevManager::instance()->loadElevationPath(ossimDEMDir))
-    {
+  {
     // In ossim elevation database factory code, the
     // ossimImageElevationDatabase is explicitly disabled by a #if 0
     // guard, because it causes problem when loading ossim related
@@ -99,66 +95,58 @@ DEMHandler
     // images support.
     ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
 
-    if(!imageElevationDatabase->open(DEMDirectory))
-      {
+    if (!imageElevationDatabase->open(DEMDirectory))
+    {
       itkExceptionMacro("Failed to open DEM Directory: " << ossimDEMDir);
-      }
+    }
     else
-      {
+    {
       otbMsgDevMacro(<< "DEM directory contains general elevation image files: " << ossimDEMDir);
       ossimElevManager::instance()->addDatabase(imageElevationDatabase.get());
-      }
     }
+  }
 }
 
 
-void
-DEMHandler
-::ClearDEMs()
+void DEMHandler::ClearDEMs()
 {
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   ossimElevManager::instance()->clear();
 }
 
 
-void
-DEMHandler
-::OpenDEMDirectory(const std::string& DEMDirectory)
+void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
   OpenDEMDirectory(DEMDirectory.c_str());
 }
 
-bool
-DEMHandler
-::IsValidDEMDirectory(const char* DEMDirectory)
+bool DEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
 {
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
-  //Try to load elevation source
+  // Try to load elevation source
   bool result = ossimElevManager::instance()->loadElevationPath(DEMDirectory);
 
   if (!result)
-    {
-      // we explicitly call ossimImageElevationDatabase here to allow for general elevation
-      // images support and test the open method to check if the directory .
-      ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
-      result = imageElevationDatabase->open(DEMDirectory);
-    }
+  {
+    // we explicitly call ossimImageElevationDatabase here to allow for general elevation
+    // images support and test the open method to check if the directory .
+    ossimRefPtr<ossimElevationDatabase> imageElevationDatabase = new ossimImageElevationDatabase;
+    result                                                     = imageElevationDatabase->open(DEMDirectory);
+  }
   return result;
 }
 
-bool
-DEMHandler
-::OpenGeoidFile(const char* geoidFile)
+bool DEMHandler::OpenGeoidFile(const char* geoidFile)
 {
-  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == ITK_NULLPTR)
-    {
+  if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == nullptr)
+  {
     otbMsgDevMacro(<< "Opening geoid: " << geoidFile);
     ossimFilename           geoid(geoidFile);
     ossimRefPtr<ossimGeoid> geoidPtr = new ossimGeoidEgm96(geoid);
     if (geoidPtr->getErrorStatus() == ossimErrorCodes::OSSIM_OK)
-      {
+    {
       // Ossim does not allow retrieving the geoid file path
       // We therefore must keep it on our side
       m_GeoidFile = geoidFile;
@@ -168,36 +156,32 @@ DEMHandler
 
       // The previous flag will be ignored if
       // defaultHeightAboveEllipsoid is not NaN
-      assert( ossimElevManager::instance()!=NULL );
+      assert(ossimElevManager::instance() != NULL);
 
       ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(ossim::nan());
 
       return true;
-      }
+    }
     else
-      {
+    {
       otbMsgDevMacro(<< "Failure opening geoid");
       geoidPtr.release();
 
-      itkExceptionMacro( << "Failed to open geoid file: '" << geoidFile << "'" );
+      itkExceptionMacro(<< "Failed to open geoid file: '" << geoidFile << "'");
 
       return false;
-      }
     }
+  }
 
   return false;
 }
 
-bool
-DEMHandler
-::OpenGeoidFile(const std::string& geoidFile)
+bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {
   return OpenGeoidFile(geoidFile.c_str());
 }
 
-double
-DEMHandler
-::GetHeightAboveMSL(double lon, double lat) const
+double DEMHandler::GetHeightAboveMSL(double lon, double lat) const
 {
   double   height;
   ossimGpt ossimWorldPoint;
@@ -205,23 +189,19 @@ DEMHandler
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
 
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   height = ossimElevManager::instance()->getHeightAboveMSL(ossimWorldPoint);
 
   return height;
 }
 
-double
-DEMHandler
-::GetHeightAboveMSL(const PointType& geoPoint) const
+double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
 {
   return GetHeightAboveMSL(geoPoint[0], geoPoint[1]);
 }
 
-double
-DEMHandler
-::GetHeightAboveEllipsoid(double lon, double lat) const
+double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
 {
   double   height;
   ossimGpt ossimWorldPoint;
@@ -229,47 +209,39 @@ DEMHandler
   ossimWorldPoint.lon = lon;
   ossimWorldPoint.lat = lat;
 
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   height = ossimElevManager::instance()->getHeightAboveEllipsoid(ossimWorldPoint);
 
   return height;
 }
 
-double
-DEMHandler
-::GetHeightAboveEllipsoid(const PointType& geoPoint) const
+double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint) const
 {
   return GetHeightAboveEllipsoid(geoPoint[0], geoPoint[1]);
 }
 
-void
-DEMHandler
-::SetDefaultHeightAboveEllipsoid(double h)
+void DEMHandler::SetDefaultHeightAboveEllipsoid(double h)
 {
   // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   m_DefaultHeightAboveEllipsoid = h;
 
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(h);
 }
 
-double
-DEMHandler
-::GetDefaultHeightAboveEllipsoid() const
+double DEMHandler::GetDefaultHeightAboveEllipsoid() const
 {
   // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   return m_DefaultHeightAboveEllipsoid;
 }
 
-unsigned int
-DEMHandler
-::GetDEMCount() const
+unsigned int DEMHandler::GetDEMCount() const
 {
-  assert( ossimElevManager::instance()!=NULL );
+  assert(ossimElevManager::instance() != NULL);
 
   return ossimElevManager::instance()->getNumberOfElevationDatabases();
 }
@@ -278,12 +250,12 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   std::string demDir = "";
 
-  if(ossimElevManager::instance()->getNumberOfElevationDatabases() > 0)
-    {
-    assert( ossimElevManager::instance()!=NULL );
+  if (ossimElevManager::instance()->getNumberOfElevationDatabases() > 0)
+  {
+    assert(ossimElevManager::instance() != NULL);
 
     demDir = ossimElevManager::instance()->getElevationDatabase(idx)->getConnectionString().string();
-    }
+  }
   return demDir;
 }
 
@@ -294,9 +266,7 @@ std::string DEMHandler::GetGeoidFile() const
   return m_GeoidFile;
 }
 
-void
-DEMHandler
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void DEMHandler::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "DEMHandler" << std::endl;

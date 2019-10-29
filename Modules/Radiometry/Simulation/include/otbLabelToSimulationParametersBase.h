@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,47 +63,47 @@ template <class TLabel>
 class ITK_EXPORT LabelToSimulationParametersBase : public itk::ProcessObject
 {
 public:
+  /**Standard "Self" & Superclass typedef*/
+  typedef LabelToSimulationParametersBase Self;
+  typedef itk::ProcessObject              Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
-   /**Standard "Self" & Superclass typedef*/
-   typedef LabelToSimulationParametersBase     Self;
-   typedef itk::ProcessObject                  Superclass;
-   typedef itk::SmartPointer<Self>             Pointer;
-   typedef itk::SmartPointer<const Self>       ConstPointer;
-
-   /** Some convenient typedefs. */
-   typedef TLabel                                LabelType;
-   typedef double                                ParametersValueType;
-   typedef itk::Array<ParametersValueType>       ParametersType;
+  /** Some convenient typedefs. */
+  typedef TLabel                          LabelType;
+  typedef double                          ParametersValueType;
+  typedef itk::Array<ParametersValueType> ParametersType;
 
 
-   /** Standard Macro*/
-   itkTypeMacro(LabelToSimulationParametersBase, ProcessObject);
+  /** Standard Macro*/
+  itkTypeMacro(LabelToSimulationParametersBase, ProcessObject);
 
-   itkSetMacro(Label, LabelType);
-   itkGetMacro(Label, LabelType);
+  itkSetMacro(Label, LabelType);
+  itkGetMacro(Label, LabelType);
 
-   itkSetMacro(Step1Parameters, ParametersType);
-   itkGetMacro(Step1Parameters, ParametersType);
+  itkSetMacro(Step1Parameters, ParametersType);
+  itkGetMacro(Step1Parameters, ParametersType);
 
-   itkSetMacro(Step2Parameters, ParametersType);
-   itkGetMacro(Step2Parameters, ParametersType);
+  itkSetMacro(Step2Parameters, ParametersType);
+  itkGetMacro(Step2Parameters, ParametersType);
 
-   //virtual const ParametersType & GetStep1Parameters() = 0;
-   //virtual const ParametersType & GetStep2Parameters() = 0;
+  // virtual const ParametersType & GetStep1Parameters() = 0;
+  // virtual const ParametersType & GetStep2Parameters() = 0;
 
 protected:
-   LabelToSimulationParametersBase(){};
-   ~LabelToSimulationParametersBase() override {}
+  LabelToSimulationParametersBase(){};
+  ~LabelToSimulationParametersBase() override
+  {
+  }
 
 
 private:
-   LabelToSimulationParametersBase(const Self &); //purposely not implemented
-   void operator =(const Self&); //purposely not implemented
+  LabelToSimulationParametersBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-   ParametersType m_Step1Parameters;
-   ParametersType m_Step2Parameters;
-   LabelType m_Label;
-
+  ParametersType m_Step1Parameters;
+  ParametersType m_Step2Parameters;
+  LabelType      m_Label;
 };
 
 } // end namespace otb

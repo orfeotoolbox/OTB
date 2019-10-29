@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,12 +23,9 @@ otb_module_test()
 set(OTBConvolutionTests
 otbConvolutionTestDriver.cxx
 otbConvolutionImageFilter.cxx
-otbConvolutionImageFilterNew.cxx
-otbOverlapSaveConvolutionImageFilterNew.cxx
 otbOverlapSaveConvolutionImageFilter.cxx
 otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter.cxx
 otbGaborFilterGenerator.cxx
-otbGaborFilterGeneratorNew.cxx
 )
 
 add_executable(otbConvolutionTestDriver ${OTBConvolutionTests})
@@ -46,13 +43,11 @@ otb_add_test(NAME bfTvConvolutionImageFilter COMMAND otbConvolutionTestDriver
   ${TEMP}/bfTvConvolutionImageFilter.tif
   )
 
-otb_add_test(NAME bfTuConvolutionImageFilterNew COMMAND otbConvolutionTestDriver
-  otbConvolutionImageFilterNew)
-
-otb_add_test(NAME bfTuOverlapSaveConvolutionImageFilterNew COMMAND otbConvolutionTestDriver
-  otbOverlapSaveConvolutionImageFilterNew)
-
 if(ITK_USE_FFTWD)
+
+if(MSVC AND (CMAKE_SIZEOF_VOID_P EQUAL "4"))
+  message(WARNING "Disable OverlapSaveConvolution tests")
+else()
 otb_add_test(NAME bfTvOverlapSaveConvolutionImageFilter COMMAND otbConvolutionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvConvolutionImageFilter.tif
@@ -67,15 +62,17 @@ otb_add_test(NAME bfTvCompareOverlapSaveAndClassicalConvolutionWithGaborFilter C
   ${TEMP}/bfTvCompareConvolutionOutput.tif
   ${TEMP}/bfTvCompareOSConvolutionoutput.tif
   otbCompareOverlapSaveAndClassicalConvolutionWithGaborFilter
-  ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub.tif
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/bfTvCompareConvolutionOutput.tif
   ${TEMP}/bfTvCompareOSConvolutionoutput.tif
-  64 64 #Radius
+  32 32 #Radius
   0.02 0.025 # a b
   -45 # theta
   0.0125 0.0125 #u0 v0
   0
   )
+endif()
+
 endif()
 
 otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver
@@ -89,7 +86,4 @@ otb_add_test(NAME bfTvGaborFilterGenerator COMMAND otbConvolutionTestDriver
   -45 # theta
   0.0125 0.0125 #u0 v0
   0
-  )
-otb_add_test(NAME bfTuGaborFilterGeneratorNew COMMAND otbConvolutionTestDriver
-  otbGaborFilterGeneratorNew
   )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,51 +21,45 @@
 #include "otbPCAModel.h"
 #include "otbReadDataFile.h"
 
-typedef otb::PCAModel<double> PCAModelType;
-typedef PCAModelType::InputListSampleType InputListSampleType;
+typedef otb::PCAModel<double>              PCAModelType;
+typedef PCAModelType::InputListSampleType  InputListSampleType;
 typedef PCAModelType::TargetListSampleType TargetListSampleType;
 
-int otbPCAModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  PCAModelType::Pointer model = PCAModelType::New();
 
-  return EXIT_SUCCESS;
-}
-
-int otbPCAModelCanRead(int argc, char * argv [])
+int otbPCAModelCanRead(int argc, char* argv[])
 {
   if (argc < 2)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <model>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   PCAModelType::Pointer model = PCAModelType::New();
-  std::string filename(argv[1]);
-  if (! model->CanReadFile(filename) )
-    {
-    std::cerr << "Failed to read model file : "<< filename << std::endl;
+  std::string           filename(argv[1]);
+  if (!model->CanReadFile(filename))
+  {
+    std::cerr << "Failed to read model file : " << filename << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   return EXIT_SUCCESS;
 }
 
-int otbPCAModeTrain(int argc, char * argv [])
+int otbPCAModeTrain(int argc, char* argv[])
 {
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " letter.scale  model.out" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Extract data from letter.scale
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer target = TargetListSampleType::New();
+  InputListSampleType::Pointer  samples = InputListSampleType::New();
+  TargetListSampleType::Pointer target  = TargetListSampleType::New();
   if (!otb::ReadDataFile(argv[1], samples, target))
-    {
+  {
     std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   PCAModelType::Pointer model = PCAModelType::New();
   model->SetDimension(14);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,11 +38,10 @@ namespace otb
 class OTBMetadata_EXPORT SarDefaultImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
   typedef SarDefaultImageMetadataInterface Self;
-  typedef SarImageMetadataInterface    Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SarImageMetadataInterface        Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,16 +49,16 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SarDefaultImageMetadataInterface, SarImageMetadataInterface);
 
-  typedef Superclass::ImageType                      ImageType;
-  typedef ImageType::IndexType                       IndexType;
-  typedef Superclass::MetaDataDictionaryType         MetaDataDictionaryType;
-  typedef Superclass::VectorType                     VectorType;
-  typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
-  typedef itk::PointSet<double, 2>                   PointSetType;
-  typedef PointSetType::Pointer                      PointSetPointer;
-  typedef double                                     RealType;
-  typedef PointSetType::PointType                    PointType;
+  typedef Superclass::ImageType                ImageType;
+  typedef ImageType::IndexType                 IndexType;
+  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
+  typedef Superclass::VectorType               VectorType;
+  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
+  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
+  typedef itk::PointSet<double, 2> PointSetType;
+  typedef PointSetType::Pointer   PointSetPointer;
+  typedef double                  RealType;
+  typedef PointSetType::PointType PointType;
 
   RealType GetRadiometricCalibrationScale() const override
   {
@@ -93,12 +92,14 @@ public:
 
   IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro(
+        "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro(
+        "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
@@ -196,7 +197,7 @@ public:
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-    UIntVectorType GetDefaultDisplay() const override
+  UIntVectorType GetDefaultDisplay() const override
   {
     UIntVectorType rgb(3);
     rgb[0] = 0;
@@ -207,13 +208,13 @@ public:
 
 protected:
   SarDefaultImageMetadataInterface(){};
-  ~SarDefaultImageMetadataInterface() override {}
+  ~SarDefaultImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  SarDefaultImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  SarDefaultImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

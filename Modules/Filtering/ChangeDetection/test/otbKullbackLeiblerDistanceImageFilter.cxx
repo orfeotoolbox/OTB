@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,28 +24,27 @@
 #include "otbImageFileWriter.h"
 #include "otbKullbackLeiblerDistanceImageFilter.h"
 
-int otbKullbackLeiblerDistanceImageFilter(int argc, char * argv[])
+int otbKullbackLeiblerDistanceImageFilter(int argc, char* argv[])
 {
   if (argc != 5)
-    {
-    std::cerr <<
-    "Detection de changements par mesure de Kullback-Leibler, optimisee par un development de Edgeworth\n";
+  {
+    std::cerr << "Detection de changements par mesure de Kullback-Leibler, optimisee par un development de Edgeworth\n";
     std::cerr << argv[0] << " imgAv imgAp imgResu winSize\n";
     return 1;
-    }
+  }
 
-  char * fileName1 = argv[1];
-  char * fileName2 = argv[2];
-  char * fileNameOut = argv[3];
-  int    winSize = atoi(argv[4]);
+  char* fileName1   = argv[1];
+  char* fileName2   = argv[2];
+  char* fileNameOut = argv[3];
+  int   winSize     = atoi(argv[4]);
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
-  typedef otb::Image<PixelType, Dimension>                                         ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
   typedef otb::KullbackLeiblerDistanceImageFilter<ImageType, ImageType, ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType>                                          ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                          WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();
   reader1->SetFileName(fileName1);

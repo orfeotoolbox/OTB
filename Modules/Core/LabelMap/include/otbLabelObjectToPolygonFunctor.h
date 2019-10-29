@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,8 +23,8 @@
 
 #include <vector>
 
-//TODO change this include  have to define from what inherate this class
-#include "otbPolyLineParametricPathWithValue.h" //for vcl_abs
+// TODO change this include  have to define from what inherate this class
+#include "otbPolyLineParametricPathWithValue.h" //for std::abs
 
 #include "itkPoint.h"
 #include "itkIndex.h"
@@ -63,30 +63,30 @@ class LabelObjectToPolygonFunctor
 {
 public:
   /** Template parameters typedefs */
-  typedef TLabelObject                                LabelObjectType;
+  typedef TLabelObject LabelObjectType;
   /** Const iterator over LabelObject lines */
-  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
 
-  typedef typename LabelObjectType::LineType          LineType;
-  typedef typename LineType::IndexType                IndexType;
-  typedef TPolygon                                    PolygonType;
-  typedef typename PolygonType::Pointer               PolygonPointerType;
-  typedef typename PolygonType::VertexType            VertexType;
-  typedef itk::Point<double, 2>                       PointType;
-  typedef itk::Vector<double, 2>                      SpacingType;
-  typedef itk::Index<2>                               RegionIndexType;
+  typedef typename LabelObjectType::LineType LineType;
+  typedef typename LineType::IndexType       IndexType;
+  typedef TPolygon                           PolygonType;
+  typedef typename PolygonType::Pointer      PolygonPointerType;
+  typedef typename PolygonType::VertexType   VertexType;
+  typedef itk::Point<double, 2>  PointType;
+  typedef itk::Vector<double, 2> SpacingType;
+  typedef itk::Index<2> RegionIndexType;
 
   /**
    * \param labelObject the label object to vectorize
    * \return The vectorized label object as a polygon.
    */
-  inline PolygonType * operator ()(LabelObjectType * labelObject);
+  inline PolygonType* operator()(LabelObjectType* labelObject);
 
   /** Get  name of class. */
-  const char * GetNameOfClass()
-    {
-      return "LabelObjectToPolygonFunctor";
-    }
+  const char* GetNameOfClass()
+  {
+    return "LabelObjectToPolygonFunctor";
+  }
 
   /** Set the start index of the underlying image */
   void SetStartIndex(const RegionIndexType& index)
@@ -120,28 +120,31 @@ public:
   }
 
   /** Constructor */
-  LabelObjectToPolygonFunctor() : m_Polygon(ITK_NULLPTR),
-    m_CurrentState(UP_LEFT),
-    m_PositionFlag(LEFT_END),
-    m_StartingPoint(),
-    m_CurrentPoint(),
-    m_CurrentRun(),
-    m_CurrentLine(0),
-    m_Solution(),
-    m_LineOffset(0),
-    m_StartIndex(),
-    m_Origin(),
-    m_Spacing(1.)
+  LabelObjectToPolygonFunctor()
+    : m_Polygon(nullptr),
+      m_CurrentState(UP_LEFT),
+      m_PositionFlag(LEFT_END),
+      m_StartingPoint(),
+      m_CurrentPoint(),
+      m_CurrentRun(),
+      m_CurrentLine(0),
+      m_Solution(),
+      m_LineOffset(0),
+      m_StartIndex(),
+      m_Origin(),
+      m_Spacing(1.)
   {
     m_StartingPoint.Fill(0);
     m_CurrentPoint.Fill(0);
     m_CurrentRun.Fill(0);
     m_StartIndex.Fill(0);
     m_Origin.Fill(0);
-}
+  }
 
   /** Destructor */
-  virtual ~LabelObjectToPolygonFunctor(){}
+  virtual ~LabelObjectToPolygonFunctor()
+  {
+  }
 
 private:
   /// Internal structures
@@ -150,11 +153,21 @@ private:
   typedef std::vector<IndexType>       IndexVectorType;
 
   /// Internal enums
-  enum StateType {UP_LEFT, UP_RIGHT, DOWN_LEFT, DOWN_RIGHT};
-  enum PositionFlagType {LEFT_END, RIGHT_END};
+  enum StateType
+  {
+    UP_LEFT,
+    UP_RIGHT,
+    DOWN_LEFT,
+    DOWN_RIGHT
+  };
+  enum PositionFlagType
+  {
+    LEFT_END,
+    RIGHT_END
+  };
 
   /// Compare two line in the lexicographical order
-  static bool LexicographicalLineCompare(const LineType&  l1, const LineType& l2);
+  static bool LexicographicalLineCompare(const LineType& l1, const LineType& l2);
 
   /// Check if the given run index (index in line, line) is valid
   inline bool IsRunIndexValid(const IndexType& index) const;
@@ -179,18 +192,10 @@ private:
   inline IndexType LeftMostRightEndInside(unsigned int line, const IndexType& point, const IndexType& run) const;
 
   /// Walk left to update the finite states machine.
-  inline void WalkLeft(unsigned int line,
-                       const IndexType& startPoint,
-                       const IndexType& endPoint,
-                       PolygonType * polygon,
-                       const StateType state);
+  inline void WalkLeft(unsigned int line, const IndexType& startPoint, const IndexType& endPoint, PolygonType* polygon, const StateType state);
 
   /// Walk right to update the finite states machine.
-  inline void WalkRight(unsigned int line,
-                        const IndexType& startPoint,
-                        const IndexType& endPoint,
-                        PolygonType * polygon,
-                        const StateType state);
+  inline void WalkRight(unsigned int line, const IndexType& startPoint, const IndexType& endPoint, PolygonType* polygon, const StateType state);
 
   // Apply origin and spacing
   VertexType IndexToPoint(const VertexType& index) const;
@@ -235,7 +240,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelObjectToPolygonFunctor.txx"
+#include "otbLabelObjectToPolygonFunctor.hxx"
 #endif
 
 #endif

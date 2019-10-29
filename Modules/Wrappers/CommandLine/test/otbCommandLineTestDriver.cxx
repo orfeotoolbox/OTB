@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,9 +22,7 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbWrapperCommandLineLauncherNew);
   REGISTER_TEST(otbWrapperCommandLineLauncherTest);
-  REGISTER_TEST(otbWrapperCommandLineParserNew);
   REGISTER_TEST(otbWrapperCommandLineParserTest1);
   REGISTER_TEST(otbWrapperCommandLineParserTest2);
   REGISTER_TEST(otbWrapperCommandLineParserTest3);

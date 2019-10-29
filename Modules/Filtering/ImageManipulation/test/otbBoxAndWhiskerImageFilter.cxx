@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbBoxAndWhiskerImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -27,20 +26,20 @@
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 #include "itkImageRegionIterator.h"
 
-int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])
+int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
-  unsigned int RadiusY((unsigned int) ::atoi(argv[4]));
+  unsigned int RadiusX((unsigned int)::atoi(argv[3]));
+  unsigned int RadiusY((unsigned int)::atoi(argv[4]));
 
-  typedef double PixelType;
+  typedef double     PixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<PixelType,  Dimension> ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::BoxAndWhiskerImageFilter<ImageType> FilterType;
@@ -60,7 +59,7 @@ int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])
   reader->UpdateOutputInformation();
   writer->SetFileName(outputFilename);
 
-  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<ImageType::PixelType>   OutlierType;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<ImageType::PixelType> OutlierType;
 
   filter->SetInput(reader->GetOutput());
   filter->Update();
@@ -75,30 +74,29 @@ int otbBoxAndWhiskerImageFilter(int itkNotUsed(argc), char * argv[])
   p.Fill(0.0);
   binaryImage->FillBuffer(p);
 
-  typedef itk :: ImageRegionConstIterator<ImageType > ConstIteratorType;
-  typedef itk :: ImageRegionIterator <ImageType > IteratorType;
+  typedef itk::ImageRegionConstIterator<ImageType> ConstIteratorType;
+  typedef itk::ImageRegionIterator<ImageType>      IteratorType;
 
 
-  ConstIteratorType inputIt (filter->GetOutput(), filter->GetOutput()->GetRequestedRegion());
-  IteratorType outputIt (binaryImage , filter->GetOutput()->GetRequestedRegion());
+  ConstIteratorType inputIt(filter->GetOutput(), filter->GetOutput()->GetRequestedRegion());
+  IteratorType      outputIt(binaryImage, filter->GetOutput()->GetRequestedRegion());
 
-  for (inputIt .GoToBegin (), outputIt .GoToBegin (); ! inputIt.IsAtEnd ();
-  ++inputIt , ++ outputIt )
-    {
-    const FilterType::PixelType pixel = inputIt.Get();
-    ImageType::PixelType outputPixel = outputIt.Get();
+  for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
+  {
+    const FilterType::PixelType pixel       = inputIt.Get();
+    ImageType::PixelType        outputPixel = outputIt.Get();
 
     const unsigned int vectorSize = pixel.Size();
     for (unsigned i = 0; i < vectorSize; ++i)
+    {
+      if (OutlierType::IsMissingValue(pixel[i]))
       {
-      if ( OutlierType::IsMissingValue(pixel[i]) )
-        {
         outputPixel[i] = 1.0;
-        }
       }
-    outputIt.Set(outputPixel);
     }
-  writer->SetInput(binaryImage );
+    outputIt.Set(outputPixel);
+  }
+  writer->SetInput(binaryImage);
   writer->Update();
 
   return EXIT_SUCCESS;

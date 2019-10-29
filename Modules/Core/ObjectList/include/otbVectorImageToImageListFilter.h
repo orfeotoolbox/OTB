@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,14 +41,12 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TVectorImageType, class TImageList>
-class ITK_EXPORT VectorImageToImageListFilter
-  : public ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType>
+class ITK_EXPORT VectorImageToImageListFilter : public ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef VectorImageToImageListFilter Self;
-  typedef ImageToImageListFilter<TVectorImageType,
-      typename TImageList::ImageType>         Superclass;
+  typedef ImageToImageListFilter<TVectorImageType, typename TImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -73,24 +71,25 @@ public:
   void GenerateOutputInformation(void) override;
 
 protected:
-
   /** Main computation method */
   void GenerateData(void) override;
 
   /** Constructor */
-  VectorImageToImageListFilter() {};
+  VectorImageToImageListFilter(){};
   /** Destructor */
-  ~VectorImageToImageListFilter() override {}
+  ~VectorImageToImageListFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorImageToImageListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToImageListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImageToImageListFilter.txx"
+#include "otbVectorImageToImageListFilter.hxx"
 #endif
 
 #endif

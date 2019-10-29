@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,34 +29,32 @@
 #include "itkVariableSizeMatrix.h"
 #include "otbCvRTreesWrapper.h"
 
-class CvRTreesWrapper;
-
 namespace otb
 {
+
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT RandomForestsMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT RandomForestsMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomForestsMachineLearningModel               Self;
+  typedef RandomForestsMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   // Other
-  typedef itk::VariableSizeMatrix<float>                VariableImportanceMatrixType;
+  typedef itk::VariableSizeMatrix<float> VariableImportanceMatrixType;
 
 
-  //opencv typedef
+  // opencv typedef
   typedef CvRTreesWrapper RFType;
 
   /** Run-time type information (and related methods). */
@@ -67,21 +65,21 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
-  //Setters of RT parameters (documentation get from opencv doxygen 2.4)
+  // Setters of RT parameters (documentation get from opencv doxygen 2.4)
   itkGetMacro(MaxDepth, int);
   itkSetMacro(MaxDepth, int);
 
@@ -102,11 +100,11 @@ public:
     return m_Priors;
   }
 
-  void SetPriors(const std::vector<float> & priors)
+  void SetPriors(const std::vector<float>& priors)
   {
     m_Priors = priors;
   }
-  
+
   itkGetMacro(CalculateVariableImportance, bool);
   itkSetMacro(CalculateVariableImportance, bool);
 
@@ -127,7 +125,7 @@ public:
 
   /** Returns a matrix containing variable importance */
   VariableImportanceMatrixType GetVariableImportance();
-  
+
   float GetTrainError();
 
 protected:
@@ -138,9 +136,8 @@ protected:
   ~RandomForestsMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
-  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -151,13 +148,13 @@ protected:
   /* typename TargetListSampleType::Pointer m_TargetListSample; */
 
 private:
-  RandomForestsMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RandomForestsMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 #ifdef OTB_OPENCV_3
   cv::Ptr<CvRTreesWrapper> m_RFModel;
 #else
-  CvRTreesWrapper * m_RFModel;
+  CvRTreesWrapper* m_RFModel;
 #endif
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
@@ -170,9 +167,9 @@ private:
    * between an estimated value in a node and values of train samples in this node
    * are less than this parameter then the node will not be split */
   float m_RegressionAccuracy;
-  bool m_ComputeSurrogateSplit;
-  /** Cluster possible values of a categorical variable into 
-   * \f$ K \leq MaxCategories \f$ 
+  bool  m_ComputeSurrogateSplit;
+  /** Cluster possible values of a categorical variable into
+   * \f$ K \leq MaxCategories \f$
    * clusters to find a suboptimal split. If a discrete variable,
    * on which the training procedure tries to make a split, takes more than
    * max_categories values, the precise best subset estimation may take a very
@@ -226,7 +223,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRandomForestsMachineLearningModel.txx"
+#include "otbRandomForestsMachineLearningModel.hxx"
 #endif
 
 #endif

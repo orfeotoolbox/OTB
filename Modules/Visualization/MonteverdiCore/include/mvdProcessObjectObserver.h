@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -77,8 +75,7 @@ class ProgressInterface;
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
-    public itk::Command
+class OTBMonteverdiCore_EXPORT ProcessObjectObserver : public itk::Command
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,76 +84,70 @@ class OTBMonteverdiCore_EXPORT ProcessObjectObserver :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-  typedef ProcessObjectObserver Self;
-  typedef itk::Command Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
+  typedef ProcessObjectObserver   Self;
+  typedef itk::Command            Superclass;
+  typedef itk::SmartPointer<Self> Pointer;
 
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   ~ProcessObjectObserver() override;
 
-  const ProgressInterface * GetProgressInterface() const;
-  ProgressInterface * GetProgressInterface();
+  const ProgressInterface* GetProgressInterface() const;
+  ProgressInterface*       GetProgressInterface();
 
-  void SetProgressInterface( ProgressInterface * );
+  void SetProgressInterface(ProgressInterface*);
 
   //
   // itk::Command overloads.
 
-  void Execute( itk::Object * caller,
-			const itk::EventObject & event ) override;
+  void Execute(itk::Object* caller, const itk::EventObject& event) override;
 
-  void Execute( const itk::Object * caller,
-			const itk::EventObject & event ) override;
+  void Execute(const itk::Object* caller, const itk::EventObject& event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   ProcessObjectObserver();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  ProgressInterface * m_ProgressInterface;
+  ProgressInterface* m_ProgressInterface;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -35,8 +35,8 @@ if(NOT GDAL_CONFIG_CHECKING)
   return()
 endif()
 
-set(MIN_MAJOR_VERSION 1)
-set(MIN_MINOR_VERSION 10)
+set(MIN_MAJOR_VERSION 2)
+set(MIN_MINOR_VERSION 0)
 
 # Ensure that the temporary dir always exists before starting tests
 if(NOT EXISTS ${TEMP})
@@ -53,38 +53,37 @@ endmacro(error_message)
 
 #------------------- Helper Macro ---------------------
 macro(gdal_try_run msg_type var source_file)
-message(STATUS "Performing Test ${var}")
-set(${var})
-try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
-${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
-COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
-RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
-ARGS ${ARGN}
-)
-
-if(NOT COMPILE_${var})
-  error_message("Compiling Test ${var} - Failed \n
-COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
-endif()
-if(RUN_${var})
-  set(${var} FALSE)
-  #if msg_type is STATUS (ie "okay" if test is failing),
-  #then we don't need to give an run-output and exit status.
-  if("${msg_type}" STREQUAL "STATUS")
-    message(${msg_type} "Performing Test ${var} - Failed")
-  else()
-    error_message("Performing Test ${var} - Failed \n
-            Exit status: '${RUN_${var}}' \n
-            RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+  message(STATUS "Performing Test ${var}")
+  set(${var})
+  try_run(RUN_${var} COMPILE_${var} ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/${source_file}
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+  COMPILE_OUTPUT_VARIABLE COMPILE_OUTPUT_${var}
+  RUN_OUTPUT_VARIABLE RUN_OUTPUT_${var}
+  ARGS ${ARGN}
+  )
+  if(NOT COMPILE_${var})
+    error_message("Compiling Test ${var} - Failed \n"
+                  "COMPILE_OUTPUT_${var}: '${COMPILE_OUTPUT_${var}}'")
   endif()
-else()
-  set(${var} TRUE)
-  message(STATUS "Performing Test ${var} - Success")
-endif()
-unset(RUN_OUTPUT_${var})
-unset(COMPILE_OUTPUT_${var})
-unset(COMPILE_${var})
+  if(RUN_${var})
+    set(${var} FALSE)
+    #if msg_type is STATUS (ie "okay" if test is failing),
+    #then we don't need to give an run-output and exit status.
+    if("${msg_type}" STREQUAL "STATUS")
+      message(${msg_type} "Performing Test ${var} - Failed")
+    else()
+      error_message("Performing Test ${var} - Failed \n"
+              "Exit status: '${RUN_${var}}' \n"
+              "RUN_OUTPUT_${var}: '${RUN_OUTPUT_${var}}'")
+    endif()
+  else()
+    set(${var} TRUE)
+    message(STATUS "Performing Test ${var} - Success")
+  endif()
+  unset(RUN_OUTPUT_${var})
+  unset(COMPILE_OUTPUT_${var})
+  unset(COMPILE_${var})
 endmacro()
 
 #------------------- TESTS ---------------------
@@ -95,11 +94,6 @@ if(EXISTS "${TEMP}/gdalVersion.txt")
   file(READ "${TEMP}/gdalVersion.txt" _GDAL_VERSION_STRING)
   #can't we use GDAL_VERSION_NUM ?
   string(SUBSTRING ${_GDAL_VERSION_STRING} 0 2 VER2)
-  if("${VER2}" STREQUAL "2.")
-    set(OTB_USE_GDAL_20 true CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
-  else()
-    set(OTB_USE_GDAL_20 false CACHE INTERNAL "True if GDAL >= 2.0.0 has been detected" FORCE )
-  endif()
   set(GDAL_VERSION_STRING "${_GDAL_VERSION_STRING}" CACHE INTERNAL "" FORCE)
 else()
   error_message( "${TEMP}/gdalVersion.txt does not exist. Cannot continue.")
@@ -109,7 +103,8 @@ endif()
 #gdal_try_run(FATAL_ERROR GDAL_HAS_OGR gdalOGRTest.cxx)
 try_compile(COMPILE_GDAL_HAS_OGR ${CMAKE_CURRENT_BINARY_DIR}
 ${CMAKE_SOURCE_DIR}/Modules/ThirdParty/GDAL/gdalOGRTest.cxx
-CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-w" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${GDAL_INCLUDE_DIR}" "-DLINK_LIBRARIES:STRING=${GDAL_LIBRARY}"
+COMPILE_DEFINITIONS "-std=c++14" "-w"
 OUTPUT_VARIABLE COMPILE_OUTPUT_GDAL_HAS_OGR
 )
 if(NOT COMPILE_GDAL_HAS_OGR)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.3.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 project(OTB-SuperBuild)
 
@@ -40,9 +40,6 @@ endif()
 
 include(ExternalProject)
 
-# Not needed as OTB Superbuild requires c++14 since version 6.2
-# include(OTBCheckCpp11Keywords)
-
 include(OTBCheckTargetSystemArch)
 
 set(LINUX FALSE)
@@ -50,16 +47,17 @@ if( "${CMAKE_SYSTEM_NAME}"  MATCHES "Linux")
   set(LINUX TRUE)
 endif()
 
-option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
-option(BUILD_STATIC_LIBS "Build with static libraries." OFF)
+option(BUILD_SHARED_LIBS "Build Superbuild with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
+option(BUILD_GEOS_STATIC_LIBS "Build GEOS with static libraries." OFF)
+mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
+option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake option for OTB -DVAR:TYPE=VALUE ...")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
+
 
 if(APPLE)
-  if(POLICY CMP0042)
-    cmake_policy(SET CMP0042 NEW)
-  endif()
   set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
@@ -116,6 +114,14 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
+# Special setting for low kernel versions
+if(UNIX)
+  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
+  mark_as_advanced(USE_LOW_KERNEL_VERSION)
+endif()
+
+
+# Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
   set (CMAKE_INSTALL_PREFIX
@@ -250,6 +256,9 @@ if(CMAKE_MODULE_LINKER_FLAGS)
   list(APPEND SB_ENV_CONFIGURE_CMD "LDFLAGS=${CMAKE_MODULE_LINKER_FLAGS}")
 endif()
 
+# This is needed for gdal 2.4 in order to find OpenJPEG
+list(APPEND SB_ENV_CONFIGURE_CMD "PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig")
+
 list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
@@ -285,7 +294,7 @@ option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
 option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
 option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
 option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_QT "Use a system build of QT5"  OFF)
+option(USE_SYSTEM_QT5 "Use a system build of QT5"  OFF)
 option(USE_SYSTEM_QWT  "Use a system build of Qwt" OFF)
 option(USE_SYSTEM_GLEW  "Use a system build of GLEW" OFF)
 option(USE_SYSTEM_GLFW  "Use a system build of glfw" OFF)
@@ -307,7 +316,6 @@ else()
   option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
 endif()
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
-option(OTB_USE_MAPNIK "Enable module Mapnik in OTB" OFF)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
 option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
@@ -317,7 +325,7 @@ option(OTB_USE_OPENGL "Enable module OpenGL in OTB" ON)
 option(OTB_USE_GLEW "Enable module GLEW in OTB" ON)
 
 #Cannot activate GLUT on OSX. See Mantis issue #1194")
-# do not activate GLFW by default on osx. see failing test 
+# do not activate GLFW by default on osx. see failing test
 # https://dash.orfeo-toolbox.org/testDetails.php?test=59844554&build=287120
 if(APPLE)
   option(OTB_USE_GLUT "Enable module GLUT in OTB" OFF)
@@ -328,19 +336,21 @@ else()
 endif()
 
 option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-option(OTB_USE_QWT "Enable module QWT in OTB" ON)
+include (CMakeDependentOption)
+CMAKE_DEPENDENT_OPTION( OTB_USE_QWT "Enable module QWT in OTB" ON "OTB_USE_QT" OFF)
 option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 
+option(OTB_USE_MPI "Enable MPI in OTB" OFF)
+option(OTB_USE_SPTW "Enable Simple Parallel Tiff Writer in OTB" OFF)
+
 # set OTB_DATA_ROOT to run test
-find_path(OTB_DATA_ROOT README-OTB-Data
-  PATHS
-  $ENV{OTB_DATA_ROOT}
-  ${OTB-SuperBuild_SOURCE_DIR}/../../OTB-Data)
+find_path(OTB_DATA_ROOT
+  NAMES README-OTB-Data
+  HINTS ${OTB-SuperBuild_SOURCE_DIR}/../Data
+  )
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
-option(OTB_WRAP_PYTHON3 "Enable python 3 wrappers for OTB applications (requires SWIG)" OFF)
-option(OTB_WRAP_JAVA "Enable java wrappers for OTB applications (requires SWIG)" OFF)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
@@ -364,6 +374,22 @@ foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
   message(STATUS "| ${lib}")
   message(STATUS "|----------------------------------------------------------")
 endforeach()
+
+# Python
+# This should set the following variables (and more):
+#   -PYTHON_EXECUTABLE
+#   -PYTHON_INCLUDE_DIR
+#   -PYTHON_LIBRARY
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
 
 include(External_otb)
 

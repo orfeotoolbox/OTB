@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -31,29 +30,22 @@
 
 namespace otb
 {
-PleiadesImageMetadataInterfaceFactory
-::PleiadesImageMetadataInterfaceFactory()
+PleiadesImageMetadataInterfaceFactory::PleiadesImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbPleiadesImageMetadataInterface",
-                         "Pleiades Metadata Interface",
-                         1,
+  this->RegisterOverride("OpticalImageMetadataInterface", "otbPleiadesImageMetadataInterface", "Pleiades Metadata Interface", 1,
                          itk::CreateObjectFunction<PleiadesImageMetadataInterface>::New());
 }
 
-PleiadesImageMetadataInterfaceFactory
-::~PleiadesImageMetadataInterfaceFactory()
+PleiadesImageMetadataInterfaceFactory::~PleiadesImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-PleiadesImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* PleiadesImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-PleiadesImageMetadataInterfaceFactory::GetDescription() const
+const char* PleiadesImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Pleiades Metadata Interface Factory, handle Pleiades metadata in OTB";
 }

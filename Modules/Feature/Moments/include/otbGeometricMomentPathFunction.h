@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,18 +35,15 @@ namespace otb
  * \ingroup OTBMoments
  */
 
-template <class TInputPath,
-    class TOutput,
-    class TPrecision = double>
-class ITK_EXPORT GeometricMomentPathFunction :
-  public PathFunction<TInputPath, TOutput>
+template <class TInputPath, class TOutput, class TPrecision = double>
+class ITK_EXPORT GeometricMomentPathFunction : public PathFunction<TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef GeometricMomentPathFunction       Self;
+  typedef GeometricMomentPathFunction Self;
   typedef PathFunction<TInputPath, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GeometricMomentPathFunction, PathFunction);
@@ -62,16 +59,18 @@ public:
   typedef TPrecision PrecisionType;
 
 protected:
-  GeometricMomentPathFunction() {};
-  ~GeometricMomentPathFunction() override {}
+  GeometricMomentPathFunction(){};
+  ~GeometricMomentPathFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  GeometricMomentPathFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);                //purposely not implemented
+  GeometricMomentPathFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

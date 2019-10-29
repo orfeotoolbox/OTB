@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,11 +26,11 @@
 #ifndef ErsSarPlatformPositionData_h
 #define ErsSarPlatformPositionData_h
 
-#include <iostream>
 #include "erssar/ErsSarRecord.h"
 #include "erssar/ErsSarRecordHeader.h"
 
 #include "erssar/ErsSarPositionVectorRecord.h"
+#include <string>
 
 
 namespace ossimplugins

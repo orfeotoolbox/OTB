@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,14 +39,13 @@ namespace otb
  * \ingroup OTBMetrics
  */
 
-template< class TLabelMap >
-class ITK_EXPORT HooverMatrixFilter :
-    public itk::LabelMapFilter< TLabelMap, TLabelMap >
+template <class TLabelMap>
+class ITK_EXPORT HooverMatrixFilter : public itk::LabelMapFilter<TLabelMap, TLabelMap>
 {
 public:
   /** Standard class typedefs. */
-  typedef HooverMatrixFilter   Self;
-  typedef itk::LabelMapFilter< TLabelMap, TLabelMap >      Superclass;
+  typedef HooverMatrixFilter Self;
+  typedef itk::LabelMapFilter<TLabelMap, TLabelMap> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -56,22 +55,22 @@ public:
   itkTypeMacro(HooverMatrixFilter, LabelMapFilter);
 
   /** Some convenient typedefs. */
-  typedef TLabelMap                                LabelMapType;
-  typedef typename LabelMapType::LabelObjectType   LabelObjectType;
-  typedef typename LabelMapType::LabelVectorType   LabelVectorType;
+  typedef TLabelMap                              LabelMapType;
+  typedef typename LabelMapType::LabelObjectType LabelObjectType;
+  typedef typename LabelMapType::LabelVectorType LabelVectorType;
 
-  //typedef typename LabelObjectType::LineContainerType   LineContainerType;
-  typedef typename LabelObjectType::IndexType           IndexType;
-  typedef typename LabelObjectType::LabelType           LabelType;
+  // typedef typename LabelObjectType::LineContainerType   LineContainerType;
+  typedef typename LabelObjectType::IndexType IndexType;
+  typedef typename LabelObjectType::LabelType LabelType;
 
-  typedef unsigned long                                 CoefficientType;
-  typedef itk::VariableSizeMatrix<CoefficientType>      MatrixType;
+  typedef unsigned long                            CoefficientType;
+  typedef itk::VariableSizeMatrix<CoefficientType> MatrixType;
 
   /** Set the ground truth label map */
-  void SetGroundTruthLabelMap(const LabelMapType *gt);
+  void SetGroundTruthLabelMap(const LabelMapType* gt);
 
   /** Set the machine segmentation label map */
-  void SetMachineSegmentationLabelMap(const LabelMapType *ms);
+  void SetMachineSegmentationLabelMap(const LabelMapType* ms);
 
   /** Get the ground truth label map */
   const LabelMapType* GetGroundTruthLabelMap();
@@ -80,7 +79,7 @@ public:
   const LabelMapType* GetMachineSegmentationLabelMap();
 
   /** Get the output Hoover confusion matrix */
-  MatrixType & GetHooverConfusionMatrix()
+  MatrixType& GetHooverConfusionMatrix()
   {
     return m_Matrix;
   }
@@ -89,7 +88,7 @@ protected:
   /** Constructor */
   HooverMatrixFilter();
 
-  ~HooverMatrixFilter() override {};
+  ~HooverMatrixFilter() override{};
 
   /** Action :  Resize the matrix
    */
@@ -98,28 +97,25 @@ protected:
   /** Action : fill the line of the confusion matrix corresponding to
    * the given label object
    */
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 
 private:
-
   /** Number of label objects found in the ground truth (GT) label maps */
-  unsigned long     m_NumberOfRegionsGT;
+  unsigned long m_NumberOfRegionsGT;
 
   /** Number of label objects found in the machine segmentation (MS) label maps */
-  unsigned long     m_NumberOfRegionsMS;
+  unsigned long m_NumberOfRegionsMS;
 
   /** List of labels in GT label map */
-  LabelVectorType   m_LabelsGT;
+  LabelVectorType m_LabelsGT;
 
   /** Hoover confusion matrix */
-  MatrixType        m_Matrix;
+  MatrixType m_Matrix;
 };
-
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverMatrixFilter.txx"
+#include "otbHooverMatrixFilter.hxx"
 #endif
 
 #endif

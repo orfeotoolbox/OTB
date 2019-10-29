@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,7 +25,6 @@ ENABLE_SHARED
   DEPENDS
     OTBBoost
     OTBITK
-    #Add dependency to OTBGDAL as GDAL module need to set OTB_USE_GDAL_20 before configuring otbConfigure.h
     OTBGDAL
     #Add dependency for extended filename helper class
     OTBBoostAdapters

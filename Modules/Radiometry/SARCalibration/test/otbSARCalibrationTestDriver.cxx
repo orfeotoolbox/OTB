@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,6 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessToImageFilterTestWithoutNoise);
   REGISTER_TEST(otbTerraSarBrightnessImageFilterTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithRealPixelTest);
-  REGISTER_TEST(otbTerraSarBrightnessImageFilterNew);
   REGISTER_TEST(otbSarParametricMapFunctionToImageFilter);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithExtractROIBeforeTest);
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTestWithoutNoise);
@@ -43,4 +42,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest);
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
   REGISTER_TEST(otbSarDeburstFilterTest);
+  REGISTER_TEST(otbSarBurstExtractionFilterTest);
 }

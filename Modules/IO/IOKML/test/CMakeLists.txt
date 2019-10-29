@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBIOKMLTests
 otbIOKMLTestDriver.cxx
-otbKMLVectorDataIONew.cxx
 otbKMLVectorDataIOTestFileReader.cxx
 otbKMLVectorDataIOTestCanWrite.cxx
 otbKMLVectorDataIOTestCanRead.cxx
@@ -33,9 +32,6 @@ target_link_libraries(otbIOKMLTestDriver ${OTBIOKML-Test_LIBRARIES})
 otb_module_target_label(otbIOKMLTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME ioTuKMLVectorDataIO COMMAND otbIOKMLTestDriver
-  otbKMLVectorDataIONew )
 
 otb_add_test(NAME ioTvKMLVectorDataIOFileReaderExample COMMAND otbIOKMLTestDriver
   otbKMLVectorDataIOTestFileReader
@@ -59,4 +55,3 @@ otb_add_test(NAME ioTuKMLVectorDataIOCanWrite COMMAND otbIOKMLTestDriver
 otb_add_test(NAME ioTuKMLVectorDataIOCanRead COMMAND otbIOKMLTestDriver
   otbKMLVectorDataIOTestCanRead
   ${INPUTDATA}/MODIS20040214212340.kml)
-

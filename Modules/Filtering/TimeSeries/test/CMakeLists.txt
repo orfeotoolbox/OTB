@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,9 +22,7 @@ otb_module_test()
 set(OTBTimeSeriesTests
   otbEnvelopeSavitzkyGolayInterpolationFunctorTest.cxx
   otbPolynomialTimeSeriesTest.cxx
-  otbSavitzkyGolayInterpolationFunctorNew.cxx
   otbSavitzkyGolayInterpolationFunctorTest.cxx
-  otbTimeSeriesLeastSquareFittingFunctorNew.cxx
   otbTimeSeriesLeastSquareFittingFunctorTest.cxx
   otbTimeSeriesLeastSquareFittingFunctorWeightsTest.cxx
   otbTimeSeriesTestDriver.cxx  )
@@ -38,14 +36,8 @@ otb_add_test(NAME mtTvEnvelopeSavitzkyGolayInterpolationFunctorTest COMMAND otbT
 otb_add_test(NAME mtTvPolynomialTimeSeriesTest1 COMMAND otbTimeSeriesTestDriver
   otbPolynomialTimeSeriesTest
   )
-otb_add_test(NAME mtTuSavitzkyGolayInterpolationFunctor COMMAND otbTimeSeriesTestDriver
-  otbSavitzkyGolayInterpolationFunctorNew
-  )
 otb_add_test(NAME mtTvSavitzkyGolayInterpolationFunctorTest COMMAND otbTimeSeriesTestDriver
   otbSavitzkyGolayInterpolationFunctorTest
-  )
-otb_add_test(NAME mtTuTimeSeriesLeastSquaresFittingFunctor COMMAND otbTimeSeriesTestDriver
-  otbTimeSeriesLeastSquareFittingFunctorNew
   )
 otb_add_test(NAME mtTvTimeSeriesLeastSquaresFittingFunctor2 COMMAND otbTimeSeriesTestDriver
   otbTimeSeriesLeastSquareFittingFunctorTest

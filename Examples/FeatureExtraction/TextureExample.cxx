@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,13 +18,9 @@
  * limitations under the License.
  */
 
-
-
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {ADS40RoiSmall.png}
-//    OUTPUTS: {TextureOutput.tif}, {pretty_TextureOutput.png}
-//    2 1 1
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./TextureExample Input/ADS40RoiSmall.png Output/TextureOutput.tif Output/pretty_TextureOutput.png 2 1 1
+*/
 
 #include "itkMacro.h"
 #include "otbImage.h"
@@ -36,75 +32,48 @@
 #include "otbImageToVectorImageCastFilter.h"
 #include "otbVectorRescaleIntensityImageFilter.h"
 
-// Software Guide : BeginLatex
-//
-// The first step required to use the filter is to include the header file.
-//
-// Software Guide : EndLatex
-
-// Software Guide : BeginCodeSnippet
 #include "otbScalarImageToTexturesFilter.h"
-// Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   // Parse command line parameters
   if (argc != 7)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <inputImage> ";
     std::cerr << " <outputImage> <outputRescaled> ";
     std::cerr << " <radius> <xOffset> <yOffset> ";
     std::cerr << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char* infname   = argv[1];
-  const char* outfname  = argv[2];
-  const char* outprettyfname  = argv[3];
+  const char* infname        = argv[1];
+  const char* outfname       = argv[2];
+  const char* outprettyfname = argv[3];
 
-  const unsigned int radius  =  static_cast<unsigned int>(atoi(argv[4]));
-  const unsigned int xOffset =  static_cast<unsigned int>(atoi(argv[5]));
-  const unsigned int yOffset =  static_cast<unsigned int>(atoi(argv[6]));
+  const unsigned int radius  = static_cast<unsigned int>(atoi(argv[4]));
+  const unsigned int xOffset = static_cast<unsigned int>(atoi(argv[5]));
+  const unsigned int yOffset = static_cast<unsigned int>(atoi(argv[6]));
 
-  typedef double PixelType;
+  using PixelType     = double;
   const int Dimension = 2;
-  typedef otb::Image<PixelType, Dimension> ImageType;
+  using ImageType     = otb::Image<PixelType, Dimension>;
 
-  // Software Guide : BeginLatex
-  //
   // After defining the types for the pixels and the images used in the
   // example, we define the types for the textures filter. It is
   // templated by the input and output image types.
-  //
-  // Software Guide : EndLatex
+  using TexturesFilterType = otb::ScalarImageToTexturesFilter<ImageType, ImageType>;
+  using ReaderType         = otb::ImageFileReader<ImageType>;
+  using WriterType         = otb::ImageFileWriter<ImageType>;
 
-  // Software Guide : BeginCodeSnippet
-  typedef otb::ScalarImageToTexturesFilter
-  <ImageType, ImageType> TexturesFilterType;
-  // Software Guide : EndCodeSnippet
-
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ImageFileWriter<ImageType> WriterType;
-
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-  // Software Guide : BeginLatex
-  //
   // We can now instantiate the filters.
-  //
-  // Software Guide : EndLatex
+  TexturesFilterType::Pointer texturesFilter = TexturesFilterType::New();
 
-  // Software Guide : BeginCodeSnippet
-  TexturesFilterType::Pointer texturesFilter
-    = TexturesFilterType::New();
-  // Software Guide : EndCodeSnippet
-
-  // Software Guide : BeginLatex
-  //
   // The texture filters takes at least 2 parameters: the radius of the
   // neighborhood on which the texture will be computed and the offset
   // used. Texture features are bivariate statistics, that is, they are
@@ -117,84 +86,47 @@ int main(int argc, char * argv[])
   //
   // The offset is always an array of N values, where N is the number of
   // dimensions of the image.
-  //
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
-  typedef ImageType::SizeType SizeType;
+
+  using SizeType = ImageType::SizeType;
   SizeType sradius;
   sradius.Fill(radius);
 
   texturesFilter->SetRadius(sradius);
 
-  typedef ImageType::OffsetType OffsetType;
+  using OffsetType = ImageType::OffsetType;
   OffsetType offset;
-  offset[0] =  xOffset;
-  offset[1] =  yOffset;
+  offset[0] = xOffset;
+  offset[1] = yOffset;
 
   texturesFilter->SetOffset(offset);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // The textures filter will automatically derive the optimal
   // bin size for co-occurences histogram, but they need to know
   // the input image minimum and maximum. These values can be set
   // like this :
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
+
   texturesFilter->SetInputImageMinimum(0);
   texturesFilter->SetInputImageMaximum(255);
-  // Software Guide : EndCodeSnippet
 
-  // Software Guide : BeginLatex
-  //
   // To tune co-occurence histogram resolution, you can use
   // the SetNumberOfBinsPerAxis() method.
-  //
-  // Software Guide : EndLatex
 
-  // Software Guide : BeginLatex
-  //
   // We can now plug the pipeline.
-  //
-  // Software Guide : EndLatex
-  // Software Guide : BeginCodeSnippet
   texturesFilter->SetInput(reader->GetOutput());
-
   writer->SetInput(texturesFilter->GetInertiaOutput());
   writer->Update();
-  // Software Guide : EndCodeSnippet
-
-  //  Software Guide : BeginLatex
-  // Figure~\ref{fig:TEXTUREFUNCTOR} shows the result of applying
-  // the contrast texture computation.
-  // \begin{figure}
-  // \center
-  // \includegraphics[width=0.40\textwidth]{ADS40RoiSmall.eps}
-  // \includegraphics[width=0.40\textwidth]{pretty_TextureOutput.eps}
-  // \itkcaption[Results of applying Haralick contrast]{Result of applying the
-  // \doxygen{otb}{ScalarImageToTexturesFilter} to an image. From left to right :
-  // original image, contrast.}
-  // \label{fig:TEXTUREFUNCTOR}
-  // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   // Pretty image creation for printing
+  using VectorImageType        = otb::VectorImage<double, 2>;
+  using PrettyVectorImageType  = otb::VectorImage<unsigned char, 2>;
+  using WriterPrettyOutputType = otb::ImageFileWriter<PrettyVectorImageType>;
 
-  typedef otb::VectorImage<double, 2>        VectorImageType;
-  typedef otb::VectorImage<unsigned char, 2> PrettyVectorImageType;
-  typedef otb::ImageFileWriter<PrettyVectorImageType>
-  WriterPrettyOutputType;
-
-  typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorCastFilterType;
-  typedef otb::VectorRescaleIntensityImageFilter<VectorImageType, PrettyVectorImageType>
-  RescalerOutputType;
+  using VectorCastFilterType = otb::ImageToVectorImageCastFilter<ImageType, VectorImageType>;
+  using RescalerOutputType   = otb::VectorRescaleIntensityImageFilter<VectorImageType, PrettyVectorImageType>;
 
   RescalerOutputType::Pointer     outputRescaler     = RescalerOutputType::New();
-  WriterPrettyOutputType::Pointer prettyOutputWriter =
-    WriterPrettyOutputType::New();
-  VectorCastFilterType::Pointer vectorCastFilter = VectorCastFilterType::New();
+  WriterPrettyOutputType::Pointer prettyOutputWriter = WriterPrettyOutputType::New();
+  VectorCastFilterType::Pointer   vectorCastFilter   = VectorCastFilterType::New();
   vectorCastFilter->SetInput(texturesFilter->GetInertiaOutput());
   outputRescaler->SetInput(vectorCastFilter->GetOutput());
 
@@ -209,5 +141,4 @@ int main(int argc, char * argv[])
   prettyOutputWriter->SetInput(outputRescaler->GetOutput());
 
   prettyOutputWriter->Update();
-  return EXIT_SUCCESS;
 }

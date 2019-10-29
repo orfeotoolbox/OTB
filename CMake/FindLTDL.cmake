@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -39,7 +39,7 @@ find_library( LTDL_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set LTDL_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( LTDL DEFAULT_MSG LTDL_LIBRARY LTDL_INCLUDE_DIR )
+find_package_handle_standard_args( LTDL DEFAULT_MSG LTDL_LIBRARY LTDL_INCLUDE_DIR )
 
 mark_as_advanced( LTDL_INCLUDE_DIR LTDL_LIBRARY )
 

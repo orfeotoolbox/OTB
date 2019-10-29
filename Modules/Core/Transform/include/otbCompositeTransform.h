@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,6 @@
 #ifndef otbCompositeTransform_h
 #define otbCompositeTransform_h
 
-#include <iostream>
 #include <sstream>
 #include <stdio.h>
 #include "otbTransform.h"
@@ -42,7 +41,7 @@ namespace otb
  * \ingroup OTBTransform
 */
 
-//typedef enum
+// typedef enum
 //{
 //  PROJDEFAULT=0,
 //  PROJIDENTITY=1,
@@ -52,21 +51,16 @@ namespace otb
 //  PROJSENSORINVERSE=5
 //} ProjectionTypeEnum;
 
-template <class TFirstTransform,
-    class TSecondTransform,
-    class TScalarType = typename TFirstTransform::ScalarType,
-    unsigned int NInputDimensions = TFirstTransform::InputSpaceDimension,
-    unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
-class ITK_EXPORT CompositeTransform : public Transform<TScalarType,  // Data type for scalars
-      NInputDimensions,                                                       // Number of dimensions in the input space
-      NOutputDimensions>                                                       // Number of dimensions in the output space
+template <class TFirstTransform, class TSecondTransform, class TScalarType = typename TFirstTransform::ScalarType,
+          unsigned int NInputDimensions  = TFirstTransform::InputSpaceDimension,
+          unsigned int NOutputDimensions = TSecondTransform::OutputSpaceDimension>
+class ITK_EXPORT       CompositeTransform : public Transform<TScalarType, // Data type for scalars
+                                                       NInputDimensions,  // Number of dimensions in the input space
+                                                       NOutputDimensions> // Number of dimensions in the output space
 {
 public:
-
   /** Standard class typedefs */
-  typedef Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>         Superclass;
+  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef CompositeTransform            Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -104,8 +98,8 @@ public:
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-  itkStaticConstMacro(SpaceDimension,      unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
+  itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions + 1));
 
   /** Set first transformation */
   itkSetObjectMacro(FirstTransform, FirstTransformType);
@@ -113,7 +107,7 @@ public:
   /** Set second transformation */
   itkSetObjectMacro(SecondTransform, SecondTransformType);
 
-/** Get First and second transform*/
+  /** Get First and second transform*/
   itkGetConstReferenceMacro(FirstTransform, FirstTransformPointerType);
   itkGetConstReferenceMacro(SecondTransform, SecondTransformPointerType);
 
@@ -137,15 +131,14 @@ protected:
   SecondTransformPointerType m_SecondTransform;
 
 private:
-  CompositeTransform(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  CompositeTransform(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbCompositeTransform.txx"
+#include "otbCompositeTransform.hxx"
 #endif
 
 #endif

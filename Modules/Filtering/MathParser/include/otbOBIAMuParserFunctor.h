@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,6 +25,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
+#include <string>
 
 
 namespace otb
@@ -55,12 +56,12 @@ namespace otb
 namespace Functor
 {
 
-template<class TLabelObject>
-//class ITK_EXPORT OBIAMuParserFunctor : public itk::LightObject
+template <class TLabelObject>
+// class ITK_EXPORT OBIAMuParserFunctor : public itk::LightObject
 class ITK_EXPORT OBIAMuParserFunctor
 {
 public:
-  typedef Parser ParserType;
+  typedef Parser              ParserType;
   typedef OBIAMuParserFunctor Self;
 
   std::string GetNameOfClass()
@@ -68,33 +69,32 @@ public:
     return "OBIAMuParserFunctor";
   }
 
-  inline bool operator()(const TLabelObject &a)
+  inline bool operator()(const TLabelObject& a)
   {
 
     double value;
 
     if (a.GetNumberOfAttributes() != m_AAttributes.size())
-      {
+    {
       this->SetAttributes(a);
-      }
+    }
 
     for (unsigned int i = 0; i < m_AAttributes.size(); ++i)
-      {
+    {
 
       std::string name = (m_AttributesName[i]);
       m_AAttributes[i] = a.GetAttribute(name.c_str());
-      }
+    }
 
     try
-      {
+    {
       value = m_Parser->Eval();
-      }
+    }
     catch (itk::ExceptionObject& err)
-      {
+    {
       itkExceptionMacro(<< err);
-      }
-    return static_cast<bool> (value);
-
+    }
+    return static_cast<bool>(value);
   }
 
   void SetExpression(const std::string expression)
@@ -109,23 +109,22 @@ public:
     return m_Expression;
   }
 
-  void ParseAttributeName(std::string &attributeName)
+  void ParseAttributeName(std::string& attributeName)
   {
 
     for (unsigned int i = 0; i < attributeName.size(); ++i)
-      {
+    {
       if (attributeName[i] == ':')
-        {
+      {
         attributeName.erase(i, 1);
         attributeName[i] = '_';
-        }
       }
+    }
     // TODO JGU
     // replace "Band" by "b" for homogeneity with other functors
-
   }
 
-  void SetAttributes(const TLabelObject &a)
+  void SetAttributes(const TLabelObject& a)
   {
 
     unsigned int nbOfAttributes = a.GetNumberOfAttributes();
@@ -134,25 +133,23 @@ public:
     m_AttributesName.resize(nbOfAttributes, "");
     m_AttributesName = a.GetAvailableAttributes();
     for (unsigned int i = 0; i < nbOfAttributes; ++i)
-      {
+    {
       std::string attributeName = m_AttributesName.at(i);
-      ParseAttributeName(attributeName); //eliminate '::' from string name
+      ParseAttributeName(attributeName); // eliminate '::' from string name
       m_Parser->DefineVar(attributeName, &(m_AAttributes[i]));
-      }
-
+    }
   }
 
-  void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes,
-                     unsigned int nbOfBands)
+  void SetAttributes(std::vector<std::string> shapeAttributes, std::vector<std::string> statAttributes, unsigned int nbOfBands)
   {
-    int index = 0;
+    int          index          = 0;
     unsigned int nbOfAttributes = shapeAttributes.size() + statAttributes.size() * nbOfBands;
 
     m_AAttributes.resize(nbOfAttributes, 0.0);
     m_AttributesName.resize(nbOfAttributes, "");
     std::ostringstream varName;
     for (unsigned int i = 0; i < shapeAttributes.size(); ++i)
-      {
+    {
 
       varName << "SHAPE::" << shapeAttributes.at(i);
       m_AttributesName.at(index) = varName.str();
@@ -162,11 +159,11 @@ public:
       m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
       varName.str("");
       index++;
-      }
+    }
     for (unsigned int i = 0; i < statAttributes.size(); ++i)
-      {
+    {
       for (unsigned int bandIndex = 1; bandIndex <= nbOfBands; bandIndex++)
-        {
+      {
         varName << "STATS::Band" << bandIndex << "::" << statAttributes.at(i);
         m_AttributesName.at(index) = varName.str();
         varName.str("");
@@ -174,8 +171,8 @@ public:
         m_Parser->DefineVar(varName.str(), &(m_AAttributes[index]));
         varName.str("");
         index++;
-        }
       }
+    }
   }
 
   /** Check the expression */
@@ -198,32 +195,25 @@ public:
   {
     m_Parser = ParserType::New();
     m_AAttributes.resize(0);
-  }
-;
+  };
 
-  ~OBIAMuParserFunctor()
-  {
-  }
-;
+  ~OBIAMuParserFunctor(){};
 
 protected:
-
 private:
+  OBIAMuParserFunctor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  OBIAMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
-
-  std::string m_Expression;
-  ParserType::Pointer m_Parser;
-  std::vector<double> m_AAttributes;
+  std::string              m_Expression;
+  ParserType::Pointer      m_Parser;
+  std::vector<double>      m_AAttributes;
   std::vector<std::string> m_AttributesName;
-  double m_ParserResult;
-
+  double                   m_ParserResult;
 };
 } // end of Functor namespace
 
 
-}//end namespace otb
+} // end namespace otb
 
 
 #endif

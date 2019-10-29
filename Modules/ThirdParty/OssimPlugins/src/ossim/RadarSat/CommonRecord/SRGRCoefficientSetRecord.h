@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,8 +26,8 @@
 #ifndef SRGRCoefficientSetRecord_h
 #define SRGRCoefficientSetRecord_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

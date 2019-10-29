@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,28 +68,22 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-SearchableTreeWidget
-::SearchableTreeWidget( QWidget* p, Qt::WindowFlags flags ) :
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::SearchableTreeWidget() )
+SearchableTreeWidget::SearchableTreeWidget(QWidget* p, Qt::WindowFlags flags) : QWidget(p, flags), m_UI(new mvd::Ui::SearchableTreeWidget())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
   SetupUI();
 }
 
 /*******************************************************************************/
-SearchableTreeWidget
-::~SearchableTreeWidget()
+SearchableTreeWidget::~SearchableTreeWidget()
 {
   delete m_UI;
   m_UI = NULL;
 }
 
 /*****************************************************************************/
-void
-SearchableTreeWidget
-::SetupUI()
+void SearchableTreeWidget::SetupUI()
 {
 }
 

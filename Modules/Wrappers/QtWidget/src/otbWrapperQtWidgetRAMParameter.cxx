@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_RAMParam(param)
+QtWidgetRAMParameter::QtWidgetRAMParameter(RAMParameter* param, QtWidgetModel* m, QWidget* parent) : QtWidgetParameterBase(param, m, parent), m_RAMParam(param)
 {
 }
 
@@ -42,13 +40,11 @@ void QtWidgetRAMParameter::DoCreateWidget()
   m_QHBoxLayout->setSpacing(0);
   m_QHBoxLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_QSpinBox = new QSpinBox;
-  m_QSpinBox->setToolTip(
-    QString::fromStdString( m_RAMParam->GetDescription() )
-  );
+  m_QSpinBox = new QSpinBox(this);
+  m_QSpinBox->setToolTip(QString::fromStdString(m_RAMParam->GetDescription()));
 
-  connect( m_QSpinBox, SIGNAL(valueChanged(int)), this, SLOT(SetValue(int)) );
-  connect( m_QSpinBox, SIGNAL(valueChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  connect(m_QSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &QtWidgetRAMParameter::SetValue);
+  connect(m_QSpinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), GetModel(), &QtWidgetModel::NotifyUpdate);
 
   // Set a valid range
   // Using m_UnsignedIntParam->GetMaximum() to set the maximum range
@@ -56,8 +52,12 @@ void QtWidgetRAMParameter::DoCreateWidget()
   // integer and m_UnsignedIntParam->GetMaximum() returns an unsigned
   // integer which is 2 times the itk::NumericTraits<int>::max().
   // static_cast<int>(m_UnsignedIntParam->GetMaximum()) = 0 then.
-  m_QSpinBox->setRange(itk::NumericTraits<int>::Zero,
-                       itk::NumericTraits<int>::max());
+  m_QSpinBox->setRange(itk::NumericTraits<int>::Zero, itk::NumericTraits<int>::max());
+
+  // Block mouse wheel events to the QSpinBox
+  // this is to avoid grabbing focus when scrolling the parent QScrollArea
+  m_QSpinBox->setFocusPolicy(Qt::StrongFocus);
+  m_QSpinBox->installEventFilter(this);
 
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
@@ -67,23 +67,23 @@ void QtWidgetRAMParameter::DoCreateWidget()
 
 void QtWidgetRAMParameter::DoUpdateGUI()
 {
-  bool blocked = m_QSpinBox->blockSignals( true );
+  bool blocked = m_QSpinBox->blockSignals(true);
 
   if (m_RAMParam->HasValue())
-    {
+  {
     m_QSpinBox->setValue(static_cast<int>(m_RAMParam->GetValue()));
-    }
-  m_QSpinBox->blockSignals( blocked );
+  }
+  m_QSpinBox->blockSignals(blocked);
 
   QFont f = m_QSpinBox->font();
   if (m_RAMParam->HasUserValue())
-    {
+  {
     f.setBold(true);
-    }
+  }
   else
-    {
+  {
     f.setBold(false);
-    }
+  }
   m_QSpinBox->setFont(f);
 }
 
@@ -93,6 +93,5 @@ void QtWidgetRAMParameter::SetValue(int value)
   m_RAMParam->SetUserValue(true);
   m_RAMParam->SetAutomaticValue(false);
 }
-
 }
 }

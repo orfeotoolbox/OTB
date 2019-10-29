@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,16 +28,15 @@ namespace otb
 /**
  * Constructor
  */
-ExhaustiveExponentialOptimizer
-::ExhaustiveExponentialOptimizer()
+ExhaustiveExponentialOptimizer::ExhaustiveExponentialOptimizer()
 {
   itkDebugMacro("Constructor");
 
   m_GeometricProgression = 2.0;
-  m_StepLength = 1.0;
-  m_CurrentIteration   =   0;
-  m_CurrentValue = 0;
-  m_CurrentParameter = 0;
+  m_StepLength           = 1.0;
+  m_CurrentIteration     = 0;
+  m_CurrentValue         = 0;
+  m_CurrentParameter     = 0;
   m_CurrentIndex.Fill(0);
   m_Stop = false;
   m_NumberOfSteps.Fill(0);
@@ -52,20 +51,18 @@ void ExhaustiveExponentialOptimizer::StartOptimization(void)
   this->StartWalking();
 }
 
-void
-ExhaustiveExponentialOptimizer
-::StartWalking(void)
+void ExhaustiveExponentialOptimizer::StartWalking(void)
 {
   itkDebugMacro("StartWalking");
   this->InvokeEvent(itk::StartEvent());
 
-  ParametersType initialPos = this->GetInitialPosition();
+  ParametersType initialPos    = this->GetInitialPosition();
   m_MinimumMetricValuePosition = initialPos;
   m_MaximumMetricValuePosition = initialPos;
 
   MeasureType initialValue = this->GetValue(this->GetInitialPosition());
-  m_MaximumMetricValue = initialValue;
-  m_MinimumMetricValue = initialValue;
+  m_MaximumMetricValue     = initialValue;
+  m_MinimumMetricValue     = initialValue;
 
   m_CurrentIteration          = 0;
   m_MaximumNumberOfIterations = 1;
@@ -73,9 +70,9 @@ ExhaustiveExponentialOptimizer
   const unsigned int spaceDimension = this->GetInitialPosition().GetSize();
 
   for (unsigned int i = 0; i < spaceDimension; ++i)
-    {
+  {
     m_MaximumNumberOfIterations *= (2 * m_NumberOfSteps[i] + 1);
-    }
+  }
 
   m_CurrentIndex.SetSize(spaceDimension);
   m_CurrentIndex.Fill(0);
@@ -84,21 +81,16 @@ ExhaustiveExponentialOptimizer
 
   // Make sure the scales have been set properly
   if (scales.size() != spaceDimension)
-    {
-    itkExceptionMacro(<< "The size of Scales is "
-                      << scales.size()
-                      << ", but the NumberOfParameters is "
-                      << spaceDimension
-                      << ".");
-    }
+  {
+    itkExceptionMacro(<< "The size of Scales is " << scales.size() << ", but the NumberOfParameters is " << spaceDimension << ".");
+  }
 
   // Setup first grid position.
   ParametersType position(spaceDimension);
   for (unsigned int i = 0; i < spaceDimension; ++i)
-    {
-    position[i] = this->GetInitialPosition()[i] *
-                  vcl_pow(m_GeometricProgression, -static_cast<double>(m_NumberOfSteps[i]) * m_StepLength) * scales[i];
-    }
+  {
+    position[i] = this->GetInitialPosition()[i] * std::pow(m_GeometricProgression, -static_cast<double>(m_NumberOfSteps[i]) * m_StepLength) * scales[i];
+  }
   this->SetCurrentPosition(position);
 
   itkDebugMacro("Calling ResumeWalking");
@@ -109,51 +101,47 @@ ExhaustiveExponentialOptimizer
 /**
  * Resume the optimization
  */
-void
-ExhaustiveExponentialOptimizer
-::ResumeWalking(void)
+void ExhaustiveExponentialOptimizer::ResumeWalking(void)
 {
   itkDebugMacro("ResumeWalk");
   m_Stop = false;
 
   while (!m_Stop)
-    {
+  {
     ParametersType currentPosition = this->GetCurrentPosition();
 
     if (m_Stop)
-      {
+    {
       StopWalking();
       break;
-      }
+    }
 
     m_CurrentValue = this->GetValue(currentPosition);
 
     if (m_CurrentValue > m_MaximumMetricValue)
-      {
-      m_MaximumMetricValue = m_CurrentValue;
+    {
+      m_MaximumMetricValue         = m_CurrentValue;
       m_MaximumMetricValuePosition = currentPosition;
-      }
+    }
     if (m_CurrentValue < m_MinimumMetricValue)
-      {
-      m_MinimumMetricValue = m_CurrentValue;
+    {
+      m_MinimumMetricValue         = m_CurrentValue;
       m_MinimumMetricValuePosition = currentPosition;
-      }
+    }
 
     if (m_Stop)
-      {
+    {
       this->StopWalking();
       break;
-      }
+    }
 
     this->InvokeEvent(itk::IterationEvent());
     this->AdvanceOneStep();
     m_CurrentIteration++;
-    }
+  }
 }
 
-void
-ExhaustiveExponentialOptimizer
-::StopWalking(void)
+void ExhaustiveExponentialOptimizer::StopWalking(void)
 {
   itkDebugMacro("StopWalking");
 
@@ -161,9 +149,7 @@ ExhaustiveExponentialOptimizer
   this->InvokeEvent(itk::EndEvent());
 }
 
-void
-ExhaustiveExponentialOptimizer
-::AdvanceOneStep(void)
+void ExhaustiveExponentialOptimizer::AdvanceOneStep(void)
 {
   itkDebugMacro("AdvanceOneStep");
 
@@ -177,45 +163,39 @@ ExhaustiveExponentialOptimizer
   this->SetCurrentPosition(newPosition);
 }
 
-void
-ExhaustiveExponentialOptimizer
-::IncrementIndex(ParametersType& newPosition)
+void ExhaustiveExponentialOptimizer::IncrementIndex(ParametersType& newPosition)
 {
-  unsigned int       idx = 0;
+  unsigned int       idx            = 0;
   const unsigned int spaceDimension = m_CostFunction->GetNumberOfParameters();
 
   while (idx < spaceDimension)
-    {
+  {
     m_CurrentIndex[idx]++;
 
     if (m_CurrentIndex[idx] > (2 * m_NumberOfSteps[idx]))
-      {
+    {
       m_CurrentIndex[idx] = 0;
       ++idx;
-      }
-    else
-      {
-      break;
-      }
     }
+    else
+    {
+      break;
+    }
+  }
 
   if (idx == spaceDimension)
-    {
+  {
     m_Stop = true;
-    }
+  }
 
   for (unsigned int i = 0; i < spaceDimension; ++i)
-    {
-    newPosition[i] = this->GetInitialPosition()[i]
-                     * this->GetScales()[i]
-                     * vcl_pow(m_GeometricProgression,
-                               static_cast<double>(m_CurrentIndex[i] - m_NumberOfSteps[i]) * m_StepLength);
-    }
+  {
+    newPosition[i] = this->GetInitialPosition()[i] * this->GetScales()[i] *
+                     std::pow(m_GeometricProgression, static_cast<double>(m_CurrentIndex[i] - m_NumberOfSteps[i]) * m_StepLength);
+  }
 }
 
-void
-ExhaustiveExponentialOptimizer
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ExhaustiveExponentialOptimizer::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 

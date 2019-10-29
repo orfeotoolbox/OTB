@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,17 +25,17 @@
 #include "otbImageList.h"
 #include "otbImage.h"
 
-int otbImageList(int itkNotUsed(argc), char * argv[])
+int otbImageList(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename = argv[1];
-  const char *       outputFilename = argv[2];
-  const unsigned int Dimension = 2;
+  const char*        inputFilename  = argv[1];
+  const char*        outputFilename = argv[2];
+  const unsigned int Dimension      = 2;
 
-  typedef unsigned char                         InputPixelType;
+  typedef unsigned char InputPixelType;
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>  WriterType;
-  typedef otb::ImageList<InputImageType>        ImageListType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
+  typedef otb::ImageList<InputImageType>       ImageListType;
 
   // Reading image
   ReaderType::Pointer reader = ReaderType::New();

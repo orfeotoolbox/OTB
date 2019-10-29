@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -41,33 +41,33 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const ImageOptionsFileDescriptor& data)
    {
-      os<<"ascii_flag:"<<data._ascii_flag.c_str()<<std::endl;
+      os<<"ascii_flag:"<<data._ascii_flag <<std::endl;
 
-      os<<"format_doc:"<<data._format_doc.c_str()<<std::endl;
+      os<<"format_doc:"<<data._format_doc <<std::endl;
 
-      os<<"format_rev:"<<data._format_rev.c_str()<<std::endl;
+      os<<"format_rev:"<<data._format_rev <<std::endl;
 
-      os<<"design_rev:"<<data._design_rev.c_str()<<std::endl;
+      os<<"design_rev:"<<data._design_rev <<std::endl;
 
-      os<<"software_id:"<<data._software_id.c_str()<<std::endl;
+      os<<"software_id:"<<data._software_id <<std::endl;
 
       os<<"file_num:"<<data._file_num<<std::endl;
 
-      os<<"file_name:"<<data._file_name.c_str()<<std::endl;
+      os<<"file_name:"<<data._file_name <<std::endl;
 
-      os<<"rec_seq:"<<data._rec_seq.c_str()<<std::endl;
+      os<<"rec_seq:"<<data._rec_seq <<std::endl;
 
       os<<"seq_loc:"<<data._seq_loc<<std::endl;
 
       os<<"seq_len:"<<data._seq_len<<std::endl;
 
-      os<<"rec_code:"<<data._rec_code.c_str()<<std::endl;
+      os<<"rec_code:"<<data._rec_code <<std::endl;
 
       os<<"code_loc:"<<data._code_loc<<std::endl;
 
       os<<"code_len:"<<data._code_len<<std::endl;
 
-      os<<"rec_len:"<<data._rec_len.c_str()<<std::endl;
+      os<<"rec_len:"<<data._rec_len <<std::endl;
 
       os<<"rlen_loc:"<<data._rlen_loc<<std::endl;
 
@@ -83,7 +83,7 @@ namespace ossimplugins
 
       os<<"nbyte:"<<data._nbyte<<std::endl;
 
-      os<<"justify:"<<data._justify.c_str()<<std::endl;
+      os<<"justify:"<<data._justify <<std::endl;
 
       os<<"nchn:"<<data._nchn<<std::endl;
 
@@ -99,7 +99,7 @@ namespace ossimplugins
 
       os<<"nbott:"<<data._nbott<<std::endl;
 
-      os<<"intleav:"<<data._intleav.c_str()<<std::endl;
+      os<<"intleav:"<<data._intleav <<std::endl;
 
       os<<"nrec_lin:"<<data._nrec_lin<<std::endl;
 
@@ -111,29 +111,29 @@ namespace ossimplugins
 
       os<<"n_suffix:"<<data._n_suffix<<std::endl;
 
-      os<<"lin_loc:"<<data._lin_loc.c_str()<<std::endl;
+      os<<"lin_loc:"<<data._lin_loc <<std::endl;
 
-      os<<"chn_loc:"<<data._chn_loc.c_str()<<std::endl;
+      os<<"chn_loc:"<<data._chn_loc <<std::endl;
 
-      os<<"tim_loc:"<<data._tim_loc.c_str()<<std::endl;
+      os<<"tim_loc:"<<data._tim_loc <<std::endl;
 
-      os<<"left_loc:"<<data._left_loc.c_str()<<std::endl;
+      os<<"left_loc:"<<data._left_loc <<std::endl;
 
-      os<<"right_loc:"<<data._right_loc.c_str()<<std::endl;
+      os<<"right_loc:"<<data._right_loc <<std::endl;
 
-      os<<"pad_ind:"<<data._pad_ind.c_str()<<std::endl;
+      os<<"pad_ind:"<<data._pad_ind <<std::endl;
 
-      os<<"qual_loc:"<<data._qual_loc.c_str()<<std::endl;
+      os<<"qual_loc:"<<data._qual_loc <<std::endl;
 
-      os<<"cali_loc:"<<data._cali_loc.c_str()<<std::endl;
+      os<<"cali_loc:"<<data._cali_loc <<std::endl;
 
-      os<<"gain_loc:"<<data._gain_loc.c_str()<<std::endl;
+      os<<"gain_loc:"<<data._gain_loc <<std::endl;
 
-      os<<"bias_loc:"<<data._bias_loc.c_str()<<std::endl;
+      os<<"bias_loc:"<<data._bias_loc <<std::endl;
 
-      os<<"type_id:"<<data._type_id.c_str()<<std::endl;
+      os<<"type_id:"<<data._type_id <<std::endl;
 
-      os<<"type_code:"<<data._type_code.c_str()<<std::endl;
+      os<<"type_code:"<<data._type_code <<std::endl;
 
       os<<"left_fill:"<<data._left_fill<<std::endl;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,16 +32,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template<class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT ConcatenateVectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
+template <class TInputImage1, class TInputImage2, class TOutputImage>
+class ITK_EXPORT ConcatenateVectorImageFilter : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ConcatenateVectorImageFilter                        Self;
+  typedef ConcatenateVectorImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage1, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,8 +57,8 @@ public:
   typedef typename InputImage2Type::Pointer InputImage2PointerType;
   typedef typename OutputImageType::Pointer OutputImagePointerType;
 
-  typedef typename InputImage1Type::PixelType         InputPixel1Type;
-  typedef typename InputImage2Type::PixelType         InputPixel2Type;
+  typedef typename InputImage1Type::PixelType InputPixel1Type;
+  typedef typename InputImage2Type::PixelType InputPixel2Type;
 
   typedef typename OutputImageType::PixelType         OutputPixelType;
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
@@ -69,22 +68,22 @@ public:
    * Set The first input image.
    * \param image The first input image.
    */
-  void SetInput1(const TInputImage1 * image);
+  void SetInput1(const TInputImage1* image);
   /**
    * Get the first input image.
    * \return The first input image.
    */
-  InputImage1Type * GetInput1(void);
+  InputImage1Type* GetInput1(void);
   /**
    * Set The second input image.
    * \param image The second input image.
    */
-  void SetInput2(const TInputImage2 * image);
+  void SetInput2(const TInputImage2* image);
   /**
    * Get the second input image.
    * \return The second input image.
    */
-  InputImage2Type * GetInput2(void);
+  InputImage2Type* GetInput2(void);
 
   /** ImageDimension constant */
   itkStaticConstMacro(InputImage1Dimension, unsigned int, TInputImage1::ImageDimension);
@@ -104,11 +103,11 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ConcatenateVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConcatenateVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateVectorImageFilter.txx"
+#include "otbConcatenateVectorImageFilter.hxx"
 #endif
 #endif

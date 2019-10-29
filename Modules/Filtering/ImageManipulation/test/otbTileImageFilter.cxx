@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,29 +24,21 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-typedef otb::Image<unsigned char>                     ImageType;
-typedef otb::VectorImage<unsigned char>               VectorImageType;
-typedef otb::TileImageFilter<ImageType>                TileImageFilterType;
-typedef otb::TileImageFilter<VectorImageType>          TileVectorImageFilterType;
-typedef otb::ImageFileReader<VectorImageType>          VectorImageReaderType;
+typedef otb::Image<unsigned char>             ImageType;
+typedef otb::VectorImage<unsigned char>       VectorImageType;
+typedef otb::TileImageFilter<ImageType>       TileImageFilterType;
+typedef otb::TileImageFilter<VectorImageType> TileVectorImageFilterType;
+typedef otb::ImageFileReader<VectorImageType> VectorImageReaderType;
 typedef otb::ImageFileWriter<VectorImageType> VectorImageWriterType;
 
 
-int otbTileImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  TileImageFilterType::Pointer tileFilter = TileImageFilterType::New();
-  TileVectorImageFilterType::Pointer tileVectorFilter = TileVectorImageFilterType::New();
-
-  return EXIT_SUCCESS;
-}
-
-int otbTileImageFilter(int argc, char * argv[])
+int otbTileImageFilter(int argc, char* argv[])
 {
   TileVectorImageFilterType::SizeType layout;
-  layout[0]=atoi(argv[1]);
-  layout[1]=atoi(argv[2]);
+  layout[0] = atoi(argv[1]);
+  layout[1] = atoi(argv[2]);
 
-  const char * outfname = argv[3];
+  const char* outfname = argv[3];
 
   unsigned int numberOfImages = layout[0] * layout[1];
 
@@ -55,21 +47,21 @@ int otbTileImageFilter(int argc, char * argv[])
   TileVectorImageFilterType::Pointer tileFilter = TileVectorImageFilterType::New();
   tileFilter->SetLayout(layout);
 
-  for(unsigned int i = 0; i<numberOfImages; ++i)
+  for (unsigned int i = 0; i < numberOfImages; ++i)
+  {
+    if (i + 4 > (unsigned int)argc)
     {
-    if(i+4 > (unsigned int)argc)
-      {
-      std::cerr<<"Not enough images to support layout!"<<std::endl;
+      std::cerr << "Not enough images to support layout!" << std::endl;
       return EXIT_FAILURE;
-      }
+    }
 
     VectorImageReaderType::Pointer reader = VectorImageReaderType::New();
-    reader->SetFileName(argv[i+4]);
+    reader->SetFileName(argv[i + 4]);
 
     readersVector.push_back(reader);
 
-    tileFilter->SetInput(i,reader->GetOutput());
-    }
+    tileFilter->SetInput(i, reader->GetOutput());
+  }
 
 
   VectorImageWriterType::Pointer writer = VectorImageWriterType::New();

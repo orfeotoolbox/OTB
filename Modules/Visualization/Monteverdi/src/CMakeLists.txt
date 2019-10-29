@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -44,7 +44,7 @@ set( OTBMonteverdi_RESOURCES
   )
 
 #############################################################################
-qt5_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMonteverdi_SRC_MOC ${OTBMonteverdi_HEADERS_MOC} OPTIONS -p "." )
 qt5_wrap_ui( OTBMonteverdi_FORMS_HEADERS ${OTBMonteverdi_FORMS}  )
 qt5_add_resources( OTBMonteverdi_RESOURCES_RCC ${OTBMonteverdi_RESOURCES} OPTIONS "-no-compress")
 

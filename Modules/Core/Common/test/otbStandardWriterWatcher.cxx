@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,19 +27,19 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-int otbStandardWriterWatcher(int itkNotUsed(argc), char * argv[])
+int otbStandardWriterWatcher(int itkNotUsed(argc), char* argv[])
 {
-  const char *       infname = argv[1];
-  const char *       outfname = argv[2];
-  const unsigned int nbsd = atoi(argv[3]);
+  const char*        infname  = argv[1];
+  const char*        outfname = argv[2];
+  const unsigned int nbsd     = atoi(argv[3]);
 
-  const unsigned int Dimension = 2;
-  typedef unsigned char                                           PixelType;
-  typedef otb::Image<PixelType, Dimension>                        ImageType;
-  typedef otb::ImageFileReader<ImageType>                         ReaderType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef itk::GradientMagnitudeImageFilter<ImageType, ImageType> FilterType;
-  typedef otb::ImageFileWriter<ImageType>                StreamingWriterType;
-  typedef otb::ImageFileWriter<ImageType>                         WriterType;
+  typedef otb::ImageFileWriter<ImageType> StreamingWriterType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -54,13 +54,13 @@ int otbStandardWriterWatcher(int itkNotUsed(argc), char * argv[])
   writer1->SetFileName(outfname);
 
   typedef otb::StandardWriterWatcher WatcherType;
-  WatcherType watcher1(writer1, "Gradient (streaming)");
+  WatcherType                        watcher1(writer1, "Gradient (streaming)");
 
-//  otb::StandardWriterWatcher watcher3(writer1, gradient, "Gradient");
-//
-//  otb::StandardWriterWatcher watcher4(watcher1);
-//
-//  otb::StandardWriterWatcher watcher5 = watcher1;
+  //  otb::StandardWriterWatcher watcher3(writer1, gradient, "Gradient");
+  //
+  //  otb::StandardWriterWatcher watcher4(watcher1);
+  //
+  //  otb::StandardWriterWatcher watcher5 = watcher1;
 
   writer1->Update();
 
@@ -72,27 +72,25 @@ int otbStandardWriterWatcher(int itkNotUsed(argc), char * argv[])
   writer2->Update();
 
   // Test copy constructor.
-  WatcherType watcher3( watcher1 );
-  if ( watcher1.GetNameOfClass() != watcher3.GetNameOfClass()
-       || watcher1.GetProcess() != watcher3.GetProcess()
-       || watcher1.GetComment() != watcher3.GetComment() )
-    {
+  WatcherType watcher3(watcher1);
+  if (watcher1.GetNameOfClass() != watcher3.GetNameOfClass() || watcher1.GetProcess() != watcher3.GetProcess() ||
+      watcher1.GetComment() != watcher3.GetComment())
+  {
     std::cout << "Copy constructor failed." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Test default constructor.
   WatcherType watcher4;
 
   // Test assignment operator.
   watcher4 = watcher3;
-  if ( watcher4.GetNameOfClass() != watcher3.GetNameOfClass()
-       || watcher4.GetProcess() != watcher3.GetProcess()
-       || watcher4.GetComment() != watcher3.GetComment() )
-    {
+  if (watcher4.GetNameOfClass() != watcher3.GetNameOfClass() || watcher4.GetProcess() != watcher3.GetProcess() ||
+      watcher4.GetComment() != watcher3.GetComment())
+  {
     std::cout << "Operator= failed." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

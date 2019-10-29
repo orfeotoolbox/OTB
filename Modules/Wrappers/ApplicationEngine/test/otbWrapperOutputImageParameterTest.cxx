@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperOutputImageParameter.h"
@@ -28,28 +28,21 @@
 #include "otbWrapperTypes.h"
 #include <vector>
 
-int otbWrapperOutputImageParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
-  OutputImageParameterType::Pointer parameter = OutputImageParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::OutputImageParameter OutputImageParameterType;
-  OutputImageParameterType::Pointer param = OutputImageParameterType::New();
+  OutputImageParameterType::Pointer          param = OutputImageParameterType::New();
 
-  typedef otb::ImageFileReader< otb::Wrapper::FloatVectorImageType > ReaderType;
+  typedef otb::ImageFileReader<otb::Wrapper::FloatVectorImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
   param->SetValue(reader->GetOutput());
-  param->SetFileName( argv[2] );
+  param->SetFileName(argv[2]);
 
   param->SetKey(argv[3]);
   param->SetDescription(argv[4]);
@@ -67,9 +60,9 @@ int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 // {
 //   otb::Wrapper::InputImageParameter::Pointer paramIn (
 //     otb::Wrapper::InputImageParameter::New() );
-//   paramIn->SetFromFileName( inputfilename ); 
-//   otb::Wrapper::OutputImageParameter::Pointer paramOut( 
-//     otb::Wrapper::OutputImageParameter::New() ); 
+//   paramIn->SetFromFileName( inputfilename );
+//   otb::Wrapper::OutputImageParameter::Pointer paramOut(
+//     otb::Wrapper::OutputImageParameter::New() );
 //   paramOut->SetFileName( outputfilename );
 //   paramOut->SetImage(paramIn->GetImage<ImageType>());
 //   paramOut->InitializeWriters();
@@ -88,7 +81,7 @@ int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
 
 //   for ( int i = otb::Wrapper::ImagePixelType_uint8 ; i < 11 ; i++ )
 //     {
-//       std::string type = 
+//       std::string type =
 //       otb::Wrapper::OutputImageParameter::ConvertPixelTypeToString(
 //         static_cast<otb::Wrapper::ImagePixelType>(i) );
 //       Cross< otb::Wrapper::UInt8ImageType > (i , filenamein , filenameout+"_UInt8_"+ type + extension ) ;

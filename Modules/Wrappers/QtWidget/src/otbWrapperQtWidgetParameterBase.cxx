@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,12 +25,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m)
-  : m_Model(m)
-  , m_Param(param)
-  , m_IsChecked( false )
+QtWidgetParameterBase::QtWidgetParameterBase(Parameter* param, QtWidgetModel* m, QWidget* parent)
+  : QWidget(parent), m_Model(m), m_Param(param), m_IsChecked(false)
 {
-
 }
 
 QtWidgetParameterBase::~QtWidgetParameterBase()
@@ -40,10 +37,10 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 
 void QtWidgetParameterBase::CreateWidget()
 {
-  this->DoCreateWidget();
+  // Connect the model update gui signal to this widget update gui slot
+  connect(GetModel(), &QtWidgetModel::UpdateGui, this, &QtWidgetParameterBase::UpdateGUI);
 
-  // connect the update signal to this widget
-  connect( GetModel(), SIGNAL(UpdateGui()), this, SLOT(UpdateGUI() ) );
+  this->DoCreateWidget();
 }
 
 void QtWidgetParameterBase::UpdateGUI()
@@ -53,19 +50,19 @@ void QtWidgetParameterBase::UpdateGUI()
 
   // Emit State of the Parameter to update this parameter checkbox
   if (!m_Param->GetMandatory())
-    {
+  {
     bool state = m_Param->GetActive();
     emit ParameterActiveStatus(state);
-   }
+  }
   else
-    {
+  {
     // Activate the Mandatory param and the Mandatory subparam in an
     // activated Group
-   if (m_Param->GetRoot()->GetActive())
-     {
-     emit ParameterActiveStatus(true);
-     }
+    if (m_Param->GetRoot()->GetActive())
+    {
+      emit ParameterActiveStatus(true);
     }
+  }
 }
 
 void QtWidgetParameterBase::ParameterChanged(const QString& itkNotUsed(key))
@@ -80,46 +77,32 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 
 // Slot connected to the signal emitted the checkBox relative to
 // current widget
-void QtWidgetParameterBase::SetActivationState( bool value )
+void QtWidgetParameterBase::SetActivationState(bool value)
 {
-  //filter out EmptyParameter
-  if(strcmp(m_Param->GetNameOfClass(), "EmptyParameter") == 0)
-    {
-    //only set user value if there is a change
-    if(value != m_Param->GetActive())
-      m_Param->SetUserValue(true);
-    }
-
   this->setEnabled(value);
   this->SetChecked(value);
   m_Param->SetActive(value);
-
 }
 
-// Slot connected to the signal emitted by the Reset Button
-void QtWidgetParameterBase::Reset(  )
-{
-  m_Param->Reset();
-  m_Param->SetUserValue(false);
-  m_Param->SetAutomaticValue(false);
-  this->UpdateGUI();
-}
-
-const Parameter *
-QtWidgetParameterBase
-::GetParam() const
+const Parameter* QtWidgetParameterBase::GetParam() const
 {
   return m_Param;
 }
 
-Parameter *
-QtWidgetParameterBase
-::GetParam()
+Parameter* QtWidgetParameterBase::GetParam()
 {
   return m_Param;
 }
 
-
+// Used to block mouse wheel events to avoid conflict with scrolling in the parent QScrollArea
+bool QtWidgetParameterBase::eventFilter(QObject* o, QEvent* e)
+{
+  if (e->type() == QEvent::Wheel)
+  {
+    e->ignore();
+    return true;
+  }
+  return QWidget::eventFilter(o, e);
 }
-
+}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -47,165 +47,165 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const sph& data)
    {
-      os<<"sph_desc_title:"<<data._sph_desc_title.c_str()<<std::endl;
+      os<<"sph_desc_title:"<<data._sph_desc_title <<std::endl;
 
-      os<<"sph_desc:"<<data._sph_desc.c_str()<<std::endl;
+      os<<"sph_desc:"<<data._sph_desc <<std::endl;
 
-      os<<"strip_cont_ind_title:"<<data._strip_cont_ind_title.c_str()<<std::endl;
+      os<<"strip_cont_ind_title:"<<data._strip_cont_ind_title <<std::endl;
 
-      os<<"strip_cont_ind	std::string:"<<data._strip_cont_ind.c_str()<<std::endl;
+      os<<"strip_cont_ind	std::string:"<<data._strip_cont_ind <<std::endl;
 
-      os<<"slice_pos_title:"<<data._slice_pos_title.c_str()<<std::endl;
+      os<<"slice_pos_title:"<<data._slice_pos_title <<std::endl;
 
-      os<<"slice_position:"<<data._slice_position.c_str()<<std::endl;
+      os<<"slice_position:"<<data._slice_position <<std::endl;
 
-      os<<"num_slices_title:"<<data._num_slices_title.c_str()<<std::endl;
+      os<<"num_slices_title:"<<data._num_slices_title <<std::endl;
 
-      os<<"num_slices:"<<data._num_slices.c_str()<<std::endl;
+      os<<"num_slices:"<<data._num_slices <<std::endl;
 
-      os<<"first_line_time_title:"<<data._first_line_time_title.c_str()<<std::endl;
+      os<<"first_line_time_title:"<<data._first_line_time_title <<std::endl;
 
-      os<<"first_line_time:"<<data._first_line_time.c_str()<<std::endl;
+      os<<"first_line_time:"<<data._first_line_time <<std::endl;
 
-      os<<"last_line_time_title:"<<data._last_line_time_title.c_str()<<std::endl;
+      os<<"last_line_time_title:"<<data._last_line_time_title <<std::endl;
 
-      os<<"last_line_time:"<<data._last_line_time.c_str()<<std::endl;
+      os<<"last_line_time:"<<data._last_line_time <<std::endl;
 
-      os<<"first_near_lat_title:"<<data._first_near_lat_title.c_str()<<std::endl;
+      os<<"first_near_lat_title:"<<data._first_near_lat_title <<std::endl;
 
-      os<<"first_near_lat:"<<data._first_near_lat.c_str()<<std::endl;
+      os<<"first_near_lat:"<<data._first_near_lat <<std::endl;
 
-      os<<"first_near_lat_units:"<<data._first_near_lat_units.c_str()<<std::endl;
+      os<<"first_near_lat_units:"<<data._first_near_lat_units <<std::endl;
 
-      os<<"first_near_long_title:"<<data._first_near_long_title.c_str()<<std::endl;
+      os<<"first_near_long_title:"<<data._first_near_long_title <<std::endl;
 
-      os<<"first_near_long:"<<data._first_near_long.c_str()<<std::endl;
+      os<<"first_near_long:"<<data._first_near_long <<std::endl;
 
-      os<<"first_near_long_units:"<<data._first_near_long_units.c_str()<<std::endl;
+      os<<"first_near_long_units:"<<data._first_near_long_units <<std::endl;
 
-      os<<"first_mid_lat_title:"<<data._first_mid_lat_title.c_str()<<std::endl;
+      os<<"first_mid_lat_title:"<<data._first_mid_lat_title <<std::endl;
 
-      os<<"first_mid_lat:"<<data._first_mid_lat.c_str()<<std::endl;
+      os<<"first_mid_lat:"<<data._first_mid_lat <<std::endl;
 
-      os<<"first_mid_lat_units:"<<data._first_mid_lat_units.c_str()<<std::endl;
+      os<<"first_mid_lat_units:"<<data._first_mid_lat_units <<std::endl;
 
-      os<<"first_mid_long_title:"<<data._first_mid_long_title.c_str()<<std::endl;
+      os<<"first_mid_long_title:"<<data._first_mid_long_title <<std::endl;
 
-      os<<"first_mid_long:"<<data._first_mid_long.c_str()<<std::endl;
+      os<<"first_mid_long:"<<data._first_mid_long <<std::endl;
 
-      os<<"first_mid_long_units:"<<data._first_mid_long_units.c_str()<<std::endl;
+      os<<"first_mid_long_units:"<<data._first_mid_long_units <<std::endl;
 
-      os<<"first_far_lat_title:"<<data._first_far_lat_title.c_str()<<std::endl;
+      os<<"first_far_lat_title:"<<data._first_far_lat_title <<std::endl;
 
-      os<<"first_far_lat:"<<data._first_far_lat.c_str()<<std::endl;
+      os<<"first_far_lat:"<<data._first_far_lat <<std::endl;
 
-      os<<"first_far_lat_units:"<<data._first_far_lat_units.c_str()<<std::endl;
+      os<<"first_far_lat_units:"<<data._first_far_lat_units <<std::endl;
 
-      os<<"first_far_long_title:"<<data._first_far_long_title.c_str()<<std::endl;
+      os<<"first_far_long_title:"<<data._first_far_long_title <<std::endl;
 
-      os<<"first_far_long:"<<data._first_far_long.c_str()<<std::endl;
+      os<<"first_far_long:"<<data._first_far_long <<std::endl;
 
-      os<<"first_far_long_units:"<<data._first_far_long_units.c_str()<<std::endl;
+      os<<"first_far_long_units:"<<data._first_far_long_units <<std::endl;
 
-      os<<"last_near_lat_title:"<<data._last_near_lat_title.c_str()<<std::endl;
+      os<<"last_near_lat_title:"<<data._last_near_lat_title <<std::endl;
 
-      os<<"last_near_lat:"<<data._last_near_lat.c_str()<<std::endl;
+      os<<"last_near_lat:"<<data._last_near_lat <<std::endl;
 
-      os<<"last_near_lat_units:"<<data._last_near_lat_units.c_str()<<std::endl;
+      os<<"last_near_lat_units:"<<data._last_near_lat_units <<std::endl;
 
-      os<<"last_near_long_title:"<<data._last_near_long_title.c_str()<<std::endl;
+      os<<"last_near_long_title:"<<data._last_near_long_title <<std::endl;
 
-      os<<"last_near_long:"<<data._last_near_long.c_str()<<std::endl;
+      os<<"last_near_long:"<<data._last_near_long <<std::endl;
 
-      os<<"last_near_long_units:"<<data._last_near_long_units.c_str()<<std::endl;
+      os<<"last_near_long_units:"<<data._last_near_long_units <<std::endl;
 
-      os<<"last_mid_lat_title:"<<data._last_mid_lat_title.c_str()<<std::endl;
+      os<<"last_mid_lat_title:"<<data._last_mid_lat_title <<std::endl;
 
-      os<<"last_mid_lat:"<<data._last_mid_lat.c_str()<<std::endl;
+      os<<"last_mid_lat:"<<data._last_mid_lat <<std::endl;
 
-      os<<"last_mid_lat_units:"<<data._last_mid_lat_units.c_str()<<std::endl;
+      os<<"last_mid_lat_units:"<<data._last_mid_lat_units <<std::endl;
 
-      os<<"last_mid_long_title:"<<data._last_mid_long_title.c_str()<<std::endl;
+      os<<"last_mid_long_title:"<<data._last_mid_long_title <<std::endl;
 
-      os<<"last_mid_long:"<<data._last_mid_long.c_str()<<std::endl;
+      os<<"last_mid_long:"<<data._last_mid_long <<std::endl;
 
-      os<<"last_mid_long_units:"<<data._last_mid_long_units.c_str()<<std::endl;
+      os<<"last_mid_long_units:"<<data._last_mid_long_units <<std::endl;
 
-      os<<"last_far_lat_title:"<<data._last_far_lat_title.c_str()<<std::endl;
+      os<<"last_far_lat_title:"<<data._last_far_lat_title <<std::endl;
 
-      os<<"last_far_lat:"<<data._last_far_lat.c_str()<<std::endl;
+      os<<"last_far_lat:"<<data._last_far_lat <<std::endl;
 
-      os<<"last_far_lat_units:"<<data._last_far_lat_units.c_str()<<std::endl;
+      os<<"last_far_lat_units:"<<data._last_far_lat_units <<std::endl;
 
-      os<<"last_far_long_title:"<<data._last_far_long_title.c_str()<<std::endl;
+      os<<"last_far_long_title:"<<data._last_far_long_title <<std::endl;
 
-      os<<"last_far_long:"<<data._last_far_long.c_str()<<std::endl;
+      os<<"last_far_long:"<<data._last_far_long <<std::endl;
 
-      os<<"last_far_long_units:"<<data._last_far_long_units.c_str()<<std::endl;
+      os<<"last_far_long_units:"<<data._last_far_long_units <<std::endl;
 
-      os<<"swath_title:"<<data._swath_title.c_str()<<std::endl;
+      os<<"swath_title:"<<data._swath_title <<std::endl;
 
-      os<<"swath:"<<data._swath.c_str()<<std::endl;
+      os<<"swath:"<<data._swath <<std::endl;
 
-      os<<"pass_title:"<<data._pass_title.c_str()<<std::endl;
+      os<<"pass_title:"<<data._pass_title <<std::endl;
 
-      os<<"pass:"<<data._pass.c_str()<<std::endl;
+      os<<"pass:"<<data._pass <<std::endl;
 
-      os<<"sample_type_title:"<<data._sample_type_title.c_str()<<std::endl;
+      os<<"sample_type_title:"<<data._sample_type_title <<std::endl;
 
-      os<<"sample_type:"<<data._sample_type.c_str()<<std::endl;
+      os<<"sample_type:"<<data._sample_type <<std::endl;
 
-      os<<"algo_title:"<<data._algo_title.c_str()<<std::endl;
+      os<<"algo_title:"<<data._algo_title <<std::endl;
 
-      os<<"algorithm:"<<data._algorithm.c_str()<<std::endl;
+      os<<"algorithm:"<<data._algorithm <<std::endl;
 
-      os<<"mds1_tx_rx_polar_title:"<<data._mds1_tx_rx_polar_title.c_str()<<std::endl;
+      os<<"mds1_tx_rx_polar_title:"<<data._mds1_tx_rx_polar_title <<std::endl;
 
-      os<<"mds1_tx_rx_polar:"<<data._mds1_tx_rx_polar.c_str()<<std::endl;
+      os<<"mds1_tx_rx_polar:"<<data._mds1_tx_rx_polar <<std::endl;
 
-      os<<"mds2_tx_rx_polar_title:"<<data._mds2_tx_rx_polar_title.c_str()<<std::endl;
+      os<<"mds2_tx_rx_polar_title:"<<data._mds2_tx_rx_polar_title <<std::endl;
 
-      os<<"mds2_tx_rx_polar:"<<data._mds2_tx_rx_polar.c_str()<<std::endl;
+      os<<"mds2_tx_rx_polar:"<<data._mds2_tx_rx_polar <<std::endl;
 
-      os<<"compression_title:"<<data._compression_title.c_str()<<std::endl;
+      os<<"compression_title:"<<data._compression_title <<std::endl;
 
-      os<<"compression:"<<data._compression.c_str()<<std::endl;
+      os<<"compression:"<<data._compression <<std::endl;
 
-      os<<"azimut_looks_title:"<<data._azimut_looks_title.c_str()<<std::endl;
+      os<<"azimut_looks_title:"<<data._azimut_looks_title <<std::endl;
 
-      os<<"azimut_looks:"<<data._azimut_looks.c_str()<<std::endl;
+      os<<"azimut_looks:"<<data._azimut_looks <<std::endl;
 
-      os<<"range_looks_title:"<<data._range_looks_title.c_str()<<std::endl;
+      os<<"range_looks_title:"<<data._range_looks_title <<std::endl;
 
-      os<<"range_looks:"<<data._range_looks.c_str()<<std::endl;
+      os<<"range_looks:"<<data._range_looks <<std::endl;
 
-      os<<"range_spacing_title:"<<data._range_spacing_title.c_str()<<std::endl;
+      os<<"range_spacing_title:"<<data._range_spacing_title <<std::endl;
 
-      os<<"range_spacing:"<<data._range_spacing.c_str()<<std::endl;
+      os<<"range_spacing:"<<data._range_spacing <<std::endl;
 
-      os<<"range_spacing_unit:"<<data._range_spacing_unit.c_str()<<std::endl;
+      os<<"range_spacing_unit:"<<data._range_spacing_unit <<std::endl;
 
-      os<<"azimut_spacing_title:"<<data._azimut_spacing_title.c_str()<<std::endl;
+      os<<"azimut_spacing_title:"<<data._azimut_spacing_title <<std::endl;
 
-      os<<"azimut_spacing:"<<data._azimut_spacing.c_str()<<std::endl;
+      os<<"azimut_spacing:"<<data._azimut_spacing <<std::endl;
 
-      os<<"azimut_spacing_unit:"<<data._azimut_spacing_unit.c_str()<<std::endl;
+      os<<"azimut_spacing_unit:"<<data._azimut_spacing_unit <<std::endl;
 
-      os<<"line_time_interval_title:"<<data._line_time_interval_title.c_str()<<std::endl;
+      os<<"line_time_interval_title:"<<data._line_time_interval_title <<std::endl;
 
-      os<<"line_time_interval:"<<data._line_time_interval.c_str()<<std::endl;
+      os<<"line_time_interval:"<<data._line_time_interval <<std::endl;
 
-      os<<"line_time_interv_units:"<<data._line_time_interv_units.c_str()<<std::endl;
+      os<<"line_time_interv_units:"<<data._line_time_interv_units <<std::endl;
 
-      os<<"line_length_title:"<<data._line_length_title.c_str()<<std::endl;
+      os<<"line_length_title:"<<data._line_length_title <<std::endl;
 
-      os<<"line_length:"<<data._line_length.c_str()<<std::endl;
+      os<<"line_length:"<<data._line_length <<std::endl;
 
-      os<<"line_length_units:"<<data._line_length_units.c_str()<<std::endl;
+      os<<"line_length_units:"<<data._line_length_units <<std::endl;
 
-      os<<"data_type_title:"<<data._data_type_title.c_str()<<std::endl;
+      os<<"data_type_title:"<<data._data_type_title <<std::endl;
 
-      os<<"data_type:"<<data._data_type.c_str()<<std::endl;
+      os<<"data_type:"<<data._data_type <<std::endl;
 
       return os;
 

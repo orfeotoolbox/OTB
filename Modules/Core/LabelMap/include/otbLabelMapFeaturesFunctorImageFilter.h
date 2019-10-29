@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,8 @@
 
 #include "itkInPlaceLabelMapFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelMapFeaturesFunctorImageFilter
  *  \brief This class applies a functor to compute new features
@@ -48,9 +49,8 @@ namespace otb {
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage, class TFunctor>
-class ITK_EXPORT LabelMapFeaturesFunctorImageFilter :
-  public itk::InPlaceLabelMapFilter<TImage>
+template <class TImage, class TFunctor>
+class ITK_EXPORT LabelMapFeaturesFunctorImageFilter : public itk::InPlaceLabelMapFilter<TImage>
 {
 public:
   /** Standard class typedefs. */
@@ -60,9 +60,9 @@ public:
   typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TImage                               ImageType;
-  typedef typename  ImageType::LabelObjectType LabelObjectType;
-  typedef TFunctor                             FunctorType;
+  typedef TImage                              ImageType;
+  typedef typename ImageType::LabelObjectType LabelObjectType;
+  typedef TFunctor                            FunctorType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -74,10 +74,10 @@ public:
   void SetFunctor(FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
   /** Get the functor (const version) */
@@ -94,13 +94,17 @@ public:
 
 protected:
   /** Constructor */
-  LabelMapFeaturesFunctorImageFilter() : m_Functor() {}
+  LabelMapFeaturesFunctorImageFilter() : m_Functor()
+  {
+  }
 
   /** Destructor */
-  ~LabelMapFeaturesFunctorImageFilter() override {}
+  ~LabelMapFeaturesFunctorImageFilter() override
+  {
+  }
 
   /** Threaded generate data */
-  void ThreadedProcessLabelObject(LabelObjectType * labelObject) override
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override
   {
     // Call the functor
     m_Functor(labelObject);
@@ -114,8 +118,8 @@ protected:
   }
 
 private:
-  LabelMapFeaturesFunctorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelMapFeaturesFunctorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The functor */
   FunctorType m_Functor;

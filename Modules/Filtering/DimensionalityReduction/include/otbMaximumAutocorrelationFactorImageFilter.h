@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -66,15 +66,14 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MaximumAutocorrelationFactorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT MaximumAutocorrelationFactorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MaximumAutocorrelationFactorImageFilter             Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef MaximumAutocorrelationFactorImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,23 +82,22 @@ public:
   itkTypeMacro(MaximumAutocorrelationFactorImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                                             InputImageType;
-  typedef typename InputImageType::Pointer                        InputImagePointer;
-  typedef typename InputImageType::ConstPointer                   InputImageConstPointer;
-  typedef typename InputImageType::RegionType                     InputImageRegionType;
-  typedef typename InputImageRegionType::SizeType                 InputImageSizeType;
-  typedef typename InputImageRegionType::IndexType                InputImageIndexType;
-  typedef typename InputImageType::PixelType                      InputImagePixelType;
-  typedef typename InputImageType::ValueType                      InputImageValueType;
-  typedef TOutputImage                                            OutputImageType;
-  typedef typename OutputImageType::Pointer                       OutputImagePointer;
-  typedef typename OutputImageType::RegionType                    OutputImageRegionType;
-  typedef typename OutputImageType::PixelType                     OutputImagePixelType;
-  typedef typename InputImageType::InternalPixelType              InputInternalPixelType;
-  typedef typename
-    itk::NumericTraits<InputInternalPixelType>::RealType          InternalPixelType;
+  typedef TInputImage                                                   InputImageType;
+  typedef typename InputImageType::Pointer                              InputImagePointer;
+  typedef typename InputImageType::ConstPointer                         InputImageConstPointer;
+  typedef typename InputImageType::RegionType                           InputImageRegionType;
+  typedef typename InputImageRegionType::SizeType                       InputImageSizeType;
+  typedef typename InputImageRegionType::IndexType                      InputImageIndexType;
+  typedef typename InputImageType::PixelType                            InputImagePixelType;
+  typedef typename InputImageType::ValueType                            InputImageValueType;
+  typedef TOutputImage                                                  OutputImageType;
+  typedef typename OutputImageType::Pointer                             OutputImagePointer;
+  typedef typename OutputImageType::RegionType                          OutputImageRegionType;
+  typedef typename OutputImageType::PixelType                           OutputImagePixelType;
+  typedef typename InputImageType::InternalPixelType                    InputInternalPixelType;
+  typedef typename itk::NumericTraits<InputInternalPixelType>::RealType InternalPixelType;
 
-  typedef VectorImage<InternalPixelType, 2>                        InternalImageType;
+  typedef VectorImage<InternalPixelType, 2> InternalImageType;
 
 
   /** Internal filters types */
@@ -110,9 +108,9 @@ public:
   typedef typename MatrixType::InternalMatrixType                 InternalMatrixType;
   typedef typename CovarianceEstimatorType::RealPixelType         VectorType;
 
-  typedef typename VectorType::ValueType                          RealType;
-  typedef vnl_vector<RealType>                                    VnlVectorType;
-  typedef vnl_matrix<RealType>                                    VnlMatrixType;
+  typedef typename VectorType::ValueType RealType;
+  typedef vnl_vector<RealType>           VnlVectorType;
+  typedef vnl_matrix<RealType>           VnlMatrixType;
 
   /** Get the linear combination used to compute Maf */
   itkGetMacro(V, VnlMatrixType);
@@ -134,15 +132,17 @@ public:
 
 protected:
   MaximumAutocorrelationFactorImageFilter();
-  ~MaximumAutocorrelationFactorImageFilter() override {}
+  ~MaximumAutocorrelationFactorImageFilter() override
+  {
+  }
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void GenerateOutputInformation() override;
 
 private:
-  MaximumAutocorrelationFactorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MaximumAutocorrelationFactorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The covariance estimator for the image */
   CovarianceEstimatorPointer m_CovarianceEstimator;
@@ -168,7 +168,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaximumAutocorrelationFactorImageFilter.txx"
+#include "otbMaximumAutocorrelationFactorImageFilter.hxx"
 #endif
 
 #endif

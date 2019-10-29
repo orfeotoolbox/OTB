@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetListViewParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -41,10 +39,10 @@ class OTBQtWidget_EXPORT QtWidgetListViewParameter : public QtWidgetParameterBas
 {
   Q_OBJECT
 public:
-  QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*);
+  QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetListViewParameter() override;
 
-  std::vector<int>  GetSelectedItems()
+  std::vector<int> GetSelectedItems()
   {
     return m_SelectedItems;
   }
@@ -53,8 +51,8 @@ protected slots:
   void SelectedItems();
 
 private:
-  QtWidgetListViewParameter(const QtWidgetListViewParameter&); //purposely not implemented
-  void operator=(const QtWidgetListViewParameter&); //purposely not implemented
+  QtWidgetListViewParameter(const QtWidgetListViewParameter&) = delete;
+  void operator=(const QtWidgetListViewParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -62,15 +60,14 @@ private:
 
   ListViewParameter::Pointer m_ListViewParam;
 
-  QListWidget*               m_ListView;
+  QListWidget* m_ListView;
 
-  QHBoxLayout*               m_VLayout;
+  QHBoxLayout* m_VLayout;
 
-  std::vector<int>           m_SelectedItems;
+  std::vector<int> m_SelectedItems;
 
-  int                        m_LineHeight;
+  int m_LineHeight;
 };
-
 }
 }
 

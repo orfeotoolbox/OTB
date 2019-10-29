@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,34 +27,19 @@
 #include <fstream>
 #include "otbStreamingTraits.h"
 
-int otbStreamingCompareImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+
+int otbStreamingCompareImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension = 2;
-  typedef unsigned char PixelType;
-
-  typedef otb::Image<PixelType, Dimension>               ImageType;
-  typedef otb::StreamingCompareImageFilter<ImageType> StreamingCompareImageFilterType;
-
-  // Instantiating object
-  StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-int otbStreamingCompareImageFilter(int itkNotUsed(argc), char * argv[])
-{
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double PixelType;
+  typedef double     PixelType;
 
-  typedef otb::Image<PixelType, Dimension>               ImageType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>             ReaderType;
   typedef otb::StreamingCompareImageFilter<ImageType> StreamingCompareImageFilterType;
-  typedef itk::ShiftScaleImageFilter <ImageType , ImageType > ShiftFilterType;
+  typedef itk::ShiftScaleImageFilter<ImageType, ImageType> ShiftFilterType;
 
   // Instantiating object
   StreamingCompareImageFilterType::Pointer filter = StreamingCompareImageFilterType::New();
@@ -63,7 +48,7 @@ int otbStreamingCompareImageFilter(int itkNotUsed(argc), char * argv[])
   reader->SetFileName(infname);
 
   ShiftFilterType::Pointer shiftFilter = ShiftFilterType::New();
-  shiftFilter->SetInput (reader->GetOutput());
+  shiftFilter->SetInput(reader->GetOutput());
   shiftFilter->SetScale(1);
   shiftFilter->SetShift(10);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,7 +68,6 @@ void RegisterTests()
   REGISTER_TEST(otbPipelineMetadataHandlingTest);
   REGISTER_TEST(otbMultiResolutionReadingInfo);
   REGISTER_TEST(otbImageFileReaderTestFloat);
-  REGISTER_TEST(otbVectorImageComplexNew);
   REGISTER_TEST(otbVectorImageComplexFloatTest);
   REGISTER_TEST(otbVectorImageComplexDoubleTest);
   REGISTER_TEST(otbImageComplexFloatTest);
@@ -76,7 +75,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageComplexIntoRealFloatTest);
   REGISTER_TEST(otbVectorImageComplexIntoRealDoubleTest);
   REGISTER_TEST(otbImageFileReaderRADChar);
-  REGISTER_TEST(otbScalarBufferToImageFileWriterNew);
   REGISTER_TEST(otbShortImageIOTest);
   REGISTER_TEST(otbImageSeriesFileReader);
   REGISTER_TEST(otbStreamingShortImageFileWriterTest);
@@ -87,7 +85,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageFileReaderWriterTest);
   REGISTER_TEST(otbIntImageIOTest);
   REGISTER_TEST(otbImageFileReaderONERATest);
-  REGISTER_TEST(otbImageFileReaderServerName);
   REGISTER_TEST(otbPNGIndexedNbBandsTest);
   REGISTER_TEST(otbImageFileReaderTest);
   REGISTER_TEST(otbVectorImageFileWriterScalarTestWithoutInputShort);
@@ -150,9 +147,9 @@ void RegisterTests()
   REGISTER_TEST(otbMultibandComplexToImageScalarShort);
   REGISTER_TEST(otbMultibandComplexToImageScalarInt);
   REGISTER_TEST(otbImageFileWriterTest);
-  REGISTER_TEST(otbImageIOFactoryNew);
   REGISTER_TEST(otbCompareWritingComplexImageTest);
   REGISTER_TEST(otbImageFileReaderOptBandTest);
   REGISTER_TEST(otbImageFileWriterOptBandTest);
   REGISTER_TEST(otbMultiImageFileWriterTest);
+  REGISTER_TEST(otbWriteGeomFile);
 }

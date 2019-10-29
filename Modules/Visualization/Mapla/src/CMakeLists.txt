@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -61,7 +61,7 @@ if (WIN32)
 endif()
 
 #############################################################################
-qt5_wrap_cpp( OTBMapla_SRC_MOC ${OTBMapla_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMapla_SRC_MOC ${OTBMapla_HEADERS_MOC} OPTIONS -p "." )
 qt5_wrap_ui( OTBMapla_FORMS_HEADERS ${OTBMapla_FORMS}  )
 qt5_add_resources( OTBMapla_RESOURCES_RCC ${OTBMapla_RESOURCES} OPTIONS "-no-compress")
 

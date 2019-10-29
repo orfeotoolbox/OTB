@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +22,7 @@
 #define otbCurlHelper_h
 
 #include "otbCurlHelperInterface.h"
+#include <string>
 
 namespace otb
 {
@@ -58,24 +59,27 @@ public:
 
   int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const override;
 
-  int RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                        const std::vector<std::string>& listFiles,
-                        int maxConnect) const override;
+  int RetrieveFileMulti(const std::vector<std::string>& listURLs, const std::vector<std::string>& listFiles, int maxConnect) const override;
 
-  itkGetMacro(Timeout,long int);
+  itkGetMacro(Timeout, long int);
 
-  itkSetMacro(Timeout,long int);
+  itkSetMacro(Timeout, long int);
 
 protected:
-  CurlHelper() :
-    m_Browser("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
-              "Gecko/20071127 Firefox/2.0.0.11"),
-    m_Timeout(10) {}
-  ~CurlHelper() override {}
+  CurlHelper()
+    : m_Browser(
+          "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-GB; rv:1.8.1.11) "
+          "Gecko/20071127 Firefox/2.0.0.11"),
+      m_Timeout(10)
+  {
+  }
+  ~CurlHelper() override
+  {
+  }
 
 private:
-  CurlHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  CurlHelper(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Need to use our writing function to handle windows segfaults
   // Need to be static cause the CURL_OPT is expecting a pure C

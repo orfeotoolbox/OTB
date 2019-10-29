@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,11 @@
 #ifndef otbWriterWatcherBase_h
 #define otbWriterWatcherBase_h
 
-#include "otbStopwatch.h"
+#include <string>
 
 #include "itkCommand.h"
 #include "itkProcessObject.h"
+#include "otbStopwatch.h"
 
 #include "OTBCommonExport.h"
 
@@ -50,15 +51,13 @@ namespace otb
 class OTBCommon_EXPORT WriterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  WriterWatcherBase(itk::ProcessObject* process,
-                    const char *comment = "");
+  WriterWatcherBase(itk::ProcessObject* process, const char* comment = "");
 
   /** This other constructor is provided so that the user can set a different processing filter than the one
   just before process in the pipeline */
-  WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject * source, const char *comment = "");
+  WriterWatcherBase(itk::ProcessObject* process, itk::ProcessObject* source, const char* comment = "");
 
   /** Default constructor */
   WriterWatcherBase();
@@ -67,19 +66,19 @@ public:
   WriterWatcherBase(const WriterWatcherBase&);
 
   /** operator=  */
-  void operator =(const WriterWatcherBase&);
+  void operator=(const WriterWatcherBase&);
 
   /** Destructor. */
   virtual ~WriterWatcherBase();
 
-  const char *GetNameOfClass()
-    {
+  const char* GetNameOfClass()
+  {
     return (m_Process.GetPointer() ? m_Process->GetNameOfClass() : "None");
-    }
+  }
 
   /** Methods to access member data */
   /** Get a pointer to the process object being watched. */
-  itk::ProcessObject *GetProcess()
+  itk::ProcessObject* GetProcess()
   {
     return m_Process.GetPointer();
   }
@@ -97,7 +96,6 @@ public:
   }
 
 protected:
-
   /** Callback method to show the ProgressEvent from the writer */
   virtual void ShowWriterProgress() = 0;
 
@@ -168,7 +166,6 @@ protected:
   unsigned long m_ProgressFilterTag;
 
 private:
-
 };
 
 } // end namespace otb

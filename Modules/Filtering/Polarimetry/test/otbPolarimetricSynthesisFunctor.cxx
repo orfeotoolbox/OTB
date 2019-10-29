@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#include "vcl_complex.h"
-#include "vcl_cmath.h"
+#include <complex>
+#include <cmath>
 #include "otbPolarimetricSynthesisFunctor.h"
 
-int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef std::complex<double>                   ComplexType;
+  typedef std::complex<double> ComplexType;
 
-  typedef otb::Functor::PolarimetricSynthesisFunctor<ComplexType, ComplexType, ComplexType, ComplexType, double >         FunctorType;
+  typedef otb::Functor::PolarimetricSynthesisFunctor<ComplexType, ComplexType, ComplexType, ComplexType, double> FunctorType;
 
-  double result(449.);
-  double outputFunct(0.);
-  FunctorType funct;
+  double                        result(449.);
+  double                        outputFunct(0.);
+  FunctorType                   funct;
   FunctorType::ComplexArrayType l_Ei;
   FunctorType::ComplexArrayType l_Er;
 
@@ -42,15 +42,15 @@ int otbPolarimetricSynthesisFunctor(int itkNotUsed(argc), char * itkNotUsed(argv
   funct.SetEi(l_Ei);
   funct.SetEi(l_Er);
 
-  outputFunct = funct.operator ()( ComplexType(1.5, 4.5), ComplexType(2.5, 3.5), ComplexType(3.5, 2.5), ComplexType(4.5, 1.5) );
+  outputFunct = funct.operator()(ComplexType(1.5, 4.5), ComplexType(2.5, 3.5), ComplexType(3.5, 2.5), ComplexType(4.5, 1.5));
 
 
-  if( vcl_abs(result-outputFunct) > 1e-10 )
+  if (std::abs(result - outputFunct) > 1e-10)
   {
-    std::cout<<"Test gives :"<<std::endl;
-    std::cout<<outputFunct<<std::endl;
-    std::cout<<"Wanted results are :"<<std::endl;
-    std::cout<<result<<std::endl;
+    std::cout << "Test gives :" << std::endl;
+    std::cout << outputFunct << std::endl;
+    std::cout << "Wanted results are :" << std::endl;
+    std::cout << result << std::endl;
 
     return EXIT_FAILURE;
   }

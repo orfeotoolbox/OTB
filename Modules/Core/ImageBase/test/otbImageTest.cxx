@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 #include <fstream>
@@ -32,18 +30,18 @@
 int otbImageTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputAsciiFilename  = argv[2];
+  const char* inputFilename       = argv[1];
+  const char* outputAsciiFilename = argv[2];
   //  unsigned int  GCPnum((unsigned int)::atoi(argv[2]));
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   std::ofstream file;
 
   file.open(outputAsciiFilename);
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
   InputImageType::Pointer image = InputImageType::New();
 
@@ -69,7 +67,7 @@ int otbImageTest(int itkNotUsed(argc), char* argv[])
   file << "GCP Count " << image->GetGCPCount() << std::endl;
 
   for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++)
-    {
+  {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
@@ -78,44 +76,44 @@ int otbImageTest(int itkNotUsed(argc), char* argv[])
     file << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
     file << "----------------" << std::endl;
-    }
+  }
 
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " " << i << " -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " UL[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetUpperRightCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " UR[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetLowerLeftCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " LL[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetLowerRightCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " LR[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   file.close();

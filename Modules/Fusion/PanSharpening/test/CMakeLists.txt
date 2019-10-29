@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,11 +23,7 @@ otb_module_test()
 set(OTBPanSharpeningTests
 otbPanSharpeningTestDriver.cxx
 otbSimpleRcsPanSharpeningFusionImageFilter.cxx
-otbLmvmPanSharpeningFusionImageFilterNew.cxx
-otbBayesianFusionFilterNew.cxx
 otbBayesianFusionFilter.cxx
-otbFusionImageBaseNew.cxx
-otbSimpleRcsPanSharpeningFusionImageFilterNew.cxx
 otbLmvmPanSharpeningFusionImageFilter.cxx
 )
 
@@ -46,13 +42,7 @@ otb_add_test(NAME fuTvSimpleRcsPanSharpeningFusionImageFilter COMMAND otbPanShar
   ${TEMP}/fuTvRcsPanSharpeningFusion.tif
   )
 
-otb_add_test(NAME fuTuLmvmPanSharpeningFusionImageFilterNew COMMAND otbPanSharpeningTestDriver
-  otbLmvmPanSharpeningFusionImageFilterNew
-  )
 
-otb_add_test(NAME fuTuBayesianFusionFilterNew COMMAND otbPanSharpeningTestDriver
-  otbBayesianFusionFilterNew
-  )
 
 otb_add_test(NAME fuTvBayesianFusionFilter COMMAND otbPanSharpeningTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/fuTvBayesianFusion.tif
@@ -64,13 +54,7 @@ otb_add_test(NAME fuTvBayesianFusionFilter COMMAND otbPanSharpeningTestDriver
   ${TEMP}/fuTvBayesianFusion.tif
   )
 
-otb_add_test(NAME fuTuFusionImageBaseNew COMMAND otbPanSharpeningTestDriver
-  otbFusionImageBaseNew
-  )
 
-otb_add_test(NAME fuTuSimpleRcsPanSharpeningFusionImageFilterNew COMMAND otbPanSharpeningTestDriver
-  otbSimpleRcsPanSharpeningFusionImageFilterNew
-  )
 
 otb_add_test(NAME fuTvLmvmPanSharpeningFusionImageFilter COMMAND otbPanSharpeningTestDriver
   --compare-image ${EPSILON_8}  ${BASELINE}/fuTvLmvmPanSharpeningFusion.tif

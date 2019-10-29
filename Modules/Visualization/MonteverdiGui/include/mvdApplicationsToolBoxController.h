@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -48,9 +46,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModelController.h"
-#endif //tag=QT4-boost-compatibility
 //#include "mvdGui.h"
 
 
@@ -79,8 +75,7 @@ class ApplicationsToolBox;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class OTBMonteverdiGUI_EXPORT ApplicationsToolBoxController :
-    public AbstractModelController
+class OTBMonteverdiGUI_EXPORT ApplicationsToolBoxController : public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -89,18 +84,16 @@ class OTBMonteverdiGUI_EXPORT ApplicationsToolBoxController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  ApplicationsToolBoxController( ApplicationsToolBox* widget,
-			     QObject* p =NULL );
+  ApplicationsToolBoxController(ApplicationsToolBox* widget, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -113,51 +106,46 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) override;
+  void Connect(AbstractModel*) override;
 
   void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) override;
+  void virtual_ResetWidget(bool) override;
 
-  void Disconnect( AbstractModel* ) override;
+  void Disconnect(AbstractModel*) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
   void ResetDatasetTree();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
-
 };
 
 } // end namespace 'mvd'.

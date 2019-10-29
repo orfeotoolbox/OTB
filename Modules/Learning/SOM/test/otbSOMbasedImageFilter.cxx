@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,24 +25,24 @@
 #include "otbImageFileWriter.h"
 
 
-int otbSOMbasedImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbSOMbasedImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * somfname = argv[2];
-  const char * outfname = argv[3];
+  const char* infname  = argv[1];
+  const char* somfname = argv[2];
+  const char* outfname = argv[3];
 
   const unsigned int Dimension = 2;
 
-  typedef double                                          ComponentType;
-  typedef itk::VariableLengthVector<ComponentType>         PixelType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
-  typedef otb::VectorImage<ComponentType, Dimension>      ImageType;
-  typedef otb::ImageFileReader<ImageType>                 ReaderType;
-  typedef otb::SOMMap<ImageType::PixelType>                                            SOMMapType;
-  typedef otb::SOMbasedImageFilter<ImageType, ImageType, DistanceType, SOMMapType>     SOMbasedImageFilterType;
-  typedef otb::ImageFileReader<ImageType>                                              ReaderType;
-  typedef otb::ImageFileReader<SOMMapType>                                             SOMReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                     WriterType;
+  typedef double                                              ComponentType;
+  typedef itk::VariableLengthVector<ComponentType>            PixelType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
+  typedef otb::VectorImage<ComponentType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType>   ReaderType;
+  typedef otb::SOMMap<ImageType::PixelType> SOMMapType;
+  typedef otb::SOMbasedImageFilter<ImageType, ImageType, DistanceType, SOMMapType> SOMbasedImageFilterType;
+  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<SOMMapType> SOMReaderType;
+  typedef otb::ImageFileWriter<ImageType>  WriterType;
 
   // Instantiating object
   SOMbasedImageFilterType::Pointer filter = SOMbasedImageFilterType::New();

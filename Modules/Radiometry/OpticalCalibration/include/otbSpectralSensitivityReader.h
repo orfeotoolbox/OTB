@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,6 +26,7 @@
 #include "otbObjectList.h"
 #include "otbFilterFunctionValues.h"
 #include "OTBOpticalCalibrationExport.h"
+#include <string>
 
 namespace otb
 {
@@ -70,8 +71,8 @@ public:
   itkSetStringMacro(DataPath);
 
   /** Override of the GetOutput() method */
-  virtual WavelengthSpectralBandVectorType * GetOutput(void);
-  virtual const WavelengthSpectralBandVectorType * GetOutput(void) const;
+  virtual WavelengthSpectralBandVectorType*       GetOutput(void);
+  virtual const WavelengthSpectralBandVectorType* GetOutput(void) const;
 
   /** Image */
   itkSetObjectMacro(Image, ImageType);
@@ -92,19 +93,21 @@ protected:
 
   /** Struct use to remove multiple spaces in file */
   struct BothAre
-{
+  {
     char c;
-    BothAre(char r) : c(r) {}
+    BothAre(char r) : c(r)
+    {
+    }
     bool operator()(char l, char r) const
     {
-            return r == c && l == c;
+      return r == c && l == c;
     }
-};
+  };
 
 
 private:
-  SpectralSensitivityReader(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SpectralSensitivityReader(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string      m_FileName;
   std::string      m_DataPath;

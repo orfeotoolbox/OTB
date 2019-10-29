@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -17,6 +17,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This is the list( FIND list value matched )
+# To be removed
 function(setif_value_in_list matched VALUE list)
   set(${matched} FALSE  PARENT_SCOPE)
   string(TOLOWER ${VALUE} value)

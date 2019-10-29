@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -95,7 +95,7 @@ DataHistogramRecord& DataHistogramRecord::operator=(const DataHistogramRecord& r
 
 std::ostream& operator<<(std::ostream& os, const DataHistogramRecord& data)
 {
-	os<<"hist_desc:"<<data._hist_desc.c_str()<<std::endl;
+	os<<"hist_desc:"<<data._hist_desc <<std::endl;
 
     os<<"nrec:"<<data._nrec<<std::endl;
 

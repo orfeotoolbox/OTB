@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,28 +45,22 @@ class InputImageListParameter;
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputImageListParameter :
-    public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetInputImageListParameter : public QtWidgetParameterList
 {
   Q_OBJECT;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetInputImageListParameter( InputImageListParameter *, QtWidgetModel * );
+  QtWidgetInputImageListParameter(InputImageListParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputImageListParameter() override;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  // Purposely not implemented
-  QtWidgetInputImageListParameter( const QtWidgetInputImageListParameter & );
-
-  // Purposely not implemented
-  void operator = ( const QtWidgetInputImageListParameter & );
+  QtWidgetInputImageListParameter(const QtWidgetInputImageListParameter&) = delete;
+  void operator=(const QtWidgetInputImageListParameter&) = delete;
 };
-
-
 }
 }
 

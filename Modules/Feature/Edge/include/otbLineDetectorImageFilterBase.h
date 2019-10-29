@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,27 +51,20 @@ namespace otb
  * \ingroup OTBEdge
  */
 
-template <class TInputImage,
-    class TOutputImage,
-    class TOutputImageDirection = TOutputImage,
-    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineDetectorImageFilterBase :  public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage,
-      TOutputImageDirection>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage>>
+class ITK_EXPORT LineDetectorImageFilterBase : public ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef LineDetectorImageFilterBase                                                             Self;
+  typedef LineDetectorImageFilterBase Self;
   typedef ImageToModulusAndDirectionImageFilter<TInputImage, TOutputImage, TOutputImageDirection> Superclass;
-  typedef itk::SmartPointer<Self>                                                                 Pointer;
-  typedef itk::SmartPointer<const Self>                                                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -131,12 +124,13 @@ public:
   /** Get the numbero of drections for line detection. */
   itkGetConstReferenceMacro(NumberOfDirections, unsigned int);
 
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   LineDetectorImageFilterBase();
-  ~LineDetectorImageFilterBase() override {}
+  ~LineDetectorImageFilterBase() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void BeforeThreadedGenerateData() override;
@@ -150,8 +144,7 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData()
    * \sa    ImageToImageFilter::GenerateData()
   */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   virtual double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3);
 
@@ -170,15 +163,15 @@ protected:
   OutputPixelType m_Threshold;
 
   unsigned int m_NumberOfDirections;
-private:
-  LineDetectorImageFilterBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
 
+private:
+  LineDetectorImageFilterBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineDetectorImageFilterBase.txx"
+#include "otbLineDetectorImageFilterBase.hxx"
 #endif
 
 #endif

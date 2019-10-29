@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,16 +50,15 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentMinMaxVectorImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentMinMaxVectorImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentMinMaxVectorImageFilter               Self;
+  typedef PersistentMinMaxVectorImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -86,7 +85,7 @@ public:
   typedef itk::VariableLengthVector<RealType>                      RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type of DataObjects used for scalar outputs */
@@ -130,7 +129,7 @@ public:
   {
     return this->GetMinimumOutput()->Get();
   }
-  PixelObjectType* GetMinimumOutput();
+  PixelObjectType*       GetMinimumOutput();
   const PixelObjectType* GetMinimumOutput() const;
 
   /** Return the computed Maximum. */
@@ -138,7 +137,7 @@ public:
   {
     return this->GetMaximumOutput()->Get();
   }
-  PixelObjectType* GetMaximumOutput();
+  PixelObjectType*       GetMaximumOutput();
   const PixelObjectType* GetMaximumOutput() const;
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -157,19 +156,21 @@ public:
 
 protected:
   PersistentMinMaxVectorImageFilter();
-  ~PersistentMinMaxVectorImageFilter() override {}
+  ~PersistentMinMaxVectorImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMinMaxVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentMinMaxVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ArrayPixelType     m_ThreadMin;
-  ArrayPixelType     m_ThreadMax;
-  bool               m_NoDataFlag;
-  InternalPixelType  m_NoDataValue;
+  ArrayPixelType    m_ThreadMin;
+  ArrayPixelType    m_ThreadMax;
+  bool              m_NoDataFlag;
+  InternalPixelType m_NoDataValue;
 
 }; // end of class PersistentStatisticsVectorImageFilter
 
@@ -195,17 +196,15 @@ private:
  * \ingroup OTBStatistics
  */
 
-template<class TInputImage>
-class ITK_EXPORT StreamingMinMaxVectorImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentMinMaxVectorImageFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT StreamingMinMaxVectorImageFilter : public PersistentFilterStreamingDecorator<PersistentMinMaxVectorImageFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingMinMaxVectorImageFilter   Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentMinMaxVectorImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef StreamingMinMaxVectorImageFilter                                                   Self;
+  typedef PersistentFilterStreamingDecorator<PersistentMinMaxVectorImageFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                            Pointer;
+  typedef itk::SmartPointer<const Self>                                                      ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -230,11 +229,11 @@ public:
   typedef typename StatFilterType::MatrixObjectType    MatrixObjectType;
 
   using Superclass::SetInput;
-  void SetInput(InputImageType * input)
+  void SetInput(InputImageType* input)
   {
     this->GetFilter()->SetInput(input);
   }
-  const InputImageType * GetInput()
+  const InputImageType* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -269,19 +268,21 @@ public:
 
 protected:
   /** Constructor */
-  StreamingMinMaxVectorImageFilter() {};
+  StreamingMinMaxVectorImageFilter(){};
   /** Destructor */
-  ~StreamingMinMaxVectorImageFilter() override {}
+  ~StreamingMinMaxVectorImageFilter() override
+  {
+  }
 
 private:
-  StreamingMinMaxVectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingMinMaxVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingMinMaxVectorImageFilter.txx"
+#include "otbStreamingMinMaxVectorImageFilter.hxx"
 #endif
 
 #endif

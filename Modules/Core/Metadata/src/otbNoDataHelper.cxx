@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,20 +27,20 @@
 namespace otb
 {
 
-bool ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values)
+bool ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool>& flags, std::vector<double>& values)
 {
-  bool ret = itk::ExposeMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,flags);
+  bool ret = itk::ExposeMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, flags);
 
   if (ret)
-    ret = itk::ExposeMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,values);
-  
+    ret = itk::ExposeMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, values);
+
   return ret;
 }
 
-void WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict)
+void WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, itk::MetaDataDictionary& dict)
 {
- itk::EncapsulateMetaData<std::vector<bool> >(dict,MetaDataKey::NoDataValueAvailable,flags);
- itk::EncapsulateMetaData<std::vector<double> >(dict,MetaDataKey::NoDataValue,values);
+  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, flags);
+  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, values);
 }
 
 } // End namespace otb

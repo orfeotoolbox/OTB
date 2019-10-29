@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -130,7 +130,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << UTC_TIME << " in "<<pfx.c_str()<<" path.\n";
+         << MODULE << " Keyword not found: " << UTC_TIME << " in "<<pfx <<" path.\n";
     result = false;
   }
   pfx2 = pfx + NOISE_ESTIMATE;
@@ -143,7 +143,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MIN << " in "<<pfx2.c_str()<<" path.\n";
+         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MIN << " in "<<pfx2 <<" path.\n";
     result = false;
   }
   lookup = kwl.find(pfx2.c_str(), VALIDITY_RANGE_MAX);
@@ -155,7 +155,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MAX << " in "<<pfx2.c_str()<<" path\n";
+         << MODULE << " Keyword not found: " << VALIDITY_RANGE_MAX << " in "<<pfx2 <<" path\n";
     result = false;
   }
   lookup = kwl.find(pfx2.c_str(), REFERENCE_POINT);
@@ -167,7 +167,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << REFERENCE_POINT << " in "<<pfx2.c_str()<<" path\n";
+         << MODULE << " Keyword not found: " << REFERENCE_POINT << " in "<<pfx2 <<" path\n";
     result = false;
   }
   lookup = kwl.find(pfx2.c_str(), POLYNOMIAL_DEGREE);
@@ -179,7 +179,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
   else
   {
     ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << POLYNOMIAL_DEGREE << " in "<<pfx2.c_str()<<" path\n";
+         << MODULE << " Keyword not found: " << POLYNOMIAL_DEGREE << " in "<<pfx2 <<" path\n";
     result = false;
   }
 
@@ -196,7 +196,7 @@ bool ImageNoise::loadState(const ossimKeywordlist& kwl, const char* prefix)
       else
       {
         ossimNotify(ossimNotifyLevel_WARN)
-         << MODULE << " Keyword not found: " << kw.c_str() << " in "<<pfx2.c_str()<<" path\n";
+         << MODULE << " Keyword not found: " << kw << " in "<<pfx2.c_str()<<" path\n";
         result = false;
       }
   }

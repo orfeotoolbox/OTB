@@ -1,0 +1,1384 @@
+---
+Label        : 1
+Position     : [152, 25]
+Measurements : [1740.18, 229993, -0.0504632, -0.839413]
+---
+Label        : 2
+Position     : [709, 34]
+Measurements : [1141.82, 9577.27, -0.253645, -0.330243]
+---
+Label        : 1
+Position     : [480, 57]
+Measurements : [2449.61, 326165, -0.832912, 0.400822]
+---
+Label        : 0
+Position     : [92, 78]
+Measurements : [1109.44, 7506.35, -1.04267, 1.00777]
+---
+Label        : 0
+Position     : [95, 78]
+Measurements : [1108.25, 13396.4, 0.482908, 2.23481]
+---
+Label        : 0
+Position     : [109, 79]
+Measurements : [1071.97, 37925.4, 0.685131, 0.956957]
+---
+Label        : 0
+Position     : [87, 80]
+Measurements : [1150.49, 9287.65, -2.39312, 5.91688]
+---
+Label        : 0
+Position     : [118, 104]
+Measurements : [1242.47, 30363.2, 3.0769, 10.8863]
+---
+Label        : 1
+Position     : [161, 104]
+Measurements : [1332.32, 429633, 0.306074, -1.41704]
+---
+Label        : 2
+Position     : [857, 110]
+Measurements : [1207.47, 5757.58, -0.681211, -0.493908]
+---
+Label        : 0
+Position     : [111, 111]
+Measurements : [1132.23, 45687.3, -0.693308, 1.8718]
+---
+Label        : 0
+Position     : [81, 121]
+Measurements : [1105.47, 10824.7, 0.584296, 0.979848]
+---
+Label        : 0
+Position     : [111, 121]
+Measurements : [973.243, 48617, -0.721266, -0.840469]
+---
+Label        : 0
+Position     : [129, 121]
+Measurements : [760.452, 15625.3, 0.0282606, 1.66524]
+---
+Label        : 0
+Position     : [95, 122]
+Measurements : [897.204, 40152.7, 0.103602, -1.7928]
+---
+Label        : 0
+Position     : [126, 138]
+Measurements : [971.829, 62864.1, -0.530778, -1.04523]
+---
+Label        : 1
+Position     : [326, 138]
+Measurements : [1112.45, 656777, 0.633723, -1.27182]
+---
+Label        : 0
+Position     : [100, 151]
+Measurements : [964.573, 24883.9, 0.241763, -1.53948]
+---
+Label        : 0
+Position     : [93, 154]
+Measurements : [1190, 42335.4, 0.741809, -0.136511]
+---
+Label        : 0
+Position     : [116, 158]
+Measurements : [1020.36, 27234.7, -1.59742, 1.84507]
+---
+Label        : 0
+Position     : [80, 163]
+Measurements : [1146.21, 8771.87, 0.102303, -1.03749]
+---
+Label        : 0
+Position     : [85, 165]
+Measurements : [1088.24, 17474.6, -1.2738, 1.97941]
+---
+Label        : 0
+Position     : [115, 169]
+Measurements : [846.398, 16393.4, 0.466025, -0.546362]
+---
+Label        : 0
+Position     : [87, 170]
+Measurements : [904.53, 31835.2, -0.157591, -1.63508]
+---
+Label        : 0
+Position     : [100, 171]
+Measurements : [752.345, 4246.94, 0.00409903, 1.81988]
+---
+Label        : 0
+Position     : [130, 173]
+Measurements : [1041.78, 13687.9, -1.06755, 0.613121]
+---
+Label        : 0
+Position     : [118, 176]
+Measurements : [947.783, 25016.6, 1.87238, 9.26613]
+---
+Label        : 0
+Position     : [84, 180]
+Measurements : [962.054, 19438, -0.666317, -1.0598]
+---
+Label        : 0
+Position     : [119, 182]
+Measurements : [1034.32, 35375, 2.20187, 6.84498]
+---
+Label        : 0
+Position     : [78, 183]
+Measurements : [1011.36, 3655.02, 0.373185, -0.928352]
+---
+Label        : 0
+Position     : [87, 183]
+Measurements : [1015.35, 69459.9, 0.914419, 0.550633]
+---
+Label        : 0
+Position     : [124, 185]
+Measurements : [1051.73, 78638.7, 0.59633, 0.921091]
+---
+Label        : 0
+Position     : [64, 200]
+Measurements : [1033.71, 10272.1, 0.797339, 4.29059]
+---
+Label        : 0
+Position     : [106, 200]
+Measurements : [1029.8, 16500.3, -1.30319, 1.23472]
+---
+Label        : 0
+Position     : [108, 201]
+Measurements : [1033.13, 17517, -1.16156, 1.03798]
+---
+Label        : 0
+Position     : [133, 203]
+Measurements : [1015.21, 19261.5, -2.2191, 4.98905]
+---
+Label        : 0
+Position     : [103, 208]
+Measurements : [1044.9, 5652.95, -1.27797, 4.6118]
+---
+Label        : 0
+Position     : [65, 209]
+Measurements : [1141.98, 18419.1, 1.57678, 2.24398]
+---
+Label        : 0
+Position     : [88, 218]
+Measurements : [1005.05, 11746.3, 3.01618, 13.4804]
+---
+Label        : 0
+Position     : [108, 218]
+Measurements : [1065.29, 12187.3, -0.513496, 0.415816]
+---
+Label        : 0
+Position     : [133, 219]
+Measurements : [915.083, 13643.5, -0.846548, 1.17435]
+---
+Label        : 1
+Position     : [362, 220]
+Measurements : [1706.83, 1.06901e+006, 0.0373254, -1.65875]
+---
+Label        : 0
+Position     : [128, 221]
+Measurements : [951.459, 16191.8, -0.296294, -0.532626]
+---
+Label        : 0
+Position     : [67, 223]
+Measurements : [1176.23, 47964.9, 1.78288, 3.78042]
+---
+Label        : 0
+Position     : [123, 226]
+Measurements : [1068.52, 3217.49, -1.00626, 3.16216]
+---
+Label        : 0
+Position     : [60, 228]
+Measurements : [1064.9, 6211.3, 0.60023, -0.0306526]
+---
+Label        : 0
+Position     : [56, 233]
+Measurements : [986.829, 7168.76, 0.00846685, -0.22224]
+---
+Label        : 0
+Position     : [60, 242]
+Measurements : [971.734, 29827.2, -0.779773, 0.373738]
+---
+Label        : 0
+Position     : [69, 243]
+Measurements : [812.667, 19641.8, -0.0692841, -0.810869]
+---
+Label        : 0
+Position     : [89, 245]
+Measurements : [1048.57, 22865.6, 1.52316, 6.60573]
+---
+Label        : 0
+Position     : [61, 246]
+Measurements : [958.351, 50894.5, -0.00415467, -0.677129]
+---
+Label        : 0
+Position     : [56, 248]
+Measurements : [1115.22, 21316.3, -1.19701, 3.65595]
+---
+Label        : 0
+Position     : [148, 248]
+Measurements : [854.813, 21760, -1.06542, 0.133153]
+---
+Label        : 0
+Position     : [109, 249]
+Measurements : [1040.92, 10459.9, -1.00389, 0.317522]
+---
+Label        : 0
+Position     : [126, 252]
+Measurements : [1016.3, 14954.5, -0.048602, -0.46863]
+---
+Label        : 0
+Position     : [96, 255]
+Measurements : [1132.96, 4614.7, -1.08726, 0.881292]
+---
+Label        : 0
+Position     : [128, 255]
+Measurements : [1109.3, 10061.8, -0.0638821, -1.40931]
+---
+Label        : 0
+Position     : [60, 256]
+Measurements : [1113.98, 5532.94, -0.270312, 0.848228]
+---
+Label        : 0
+Position     : [121, 258]
+Measurements : [1088.5, 3613.66, 0.00197447, -0.0827409]
+---
+Label        : 0
+Position     : [126, 258]
+Measurements : [1129.71, 9506.17, -0.0137887, -1.38408]
+---
+Label        : 0
+Position     : [106, 261]
+Measurements : [1206.28, 1061.79, -0.410888, 0.180622]
+---
+Label        : 0
+Position     : [109, 261]
+Measurements : [1190.55, 1282.52, -0.0150936, -0.135875]
+---
+Label        : 0
+Position     : [68, 269]
+Measurements : [1072.21, 3184.61, -1.33882, 3.11863]
+---
+Label        : 0
+Position     : [95, 269]
+Measurements : [1213.82, 658.775, -0.438727, 2.60562]
+---
+Label        : 0
+Position     : [101, 273]
+Measurements : [1149.28, 9386.47, -1.92092, 4.36196]
+---
+Label        : 0
+Position     : [90, 275]
+Measurements : [1140.01, 16565.8, -1.24683, 1.16419]
+---
+Label        : 0
+Position     : [58, 280]
+Measurements : [1092.19, 4189, -1.46914, 1.92006]
+---
+Label        : 0
+Position     : [99, 285]
+Measurements : [1137.23, 5584.55, -1.27538, 1.00551]
+---
+Label        : 0
+Position     : [134, 285]
+Measurements : [881.613, 33029.8, 0.190826, -0.832184]
+---
+Label        : 0
+Position     : [82, 287]
+Measurements : [1124.65, 5412.04, -0.83463, 2.52339]
+---
+Label        : 0
+Position     : [53, 288]
+Measurements : [1084.23, 3188.59, -1.87187, 7.62871]
+---
+Label        : 0
+Position     : [88, 289]
+Measurements : [1087.09, 18243.3, -2.03716, 4.80537]
+---
+Label        : 0
+Position     : [103, 293]
+Measurements : [1152.1, 969.171, 0.477588, 0.25307]
+---
+Label        : 0
+Position     : [107, 293]
+Measurements : [1138.94, 1207.44, 0.129752, 0.0825713]
+---
+Label        : 0
+Position     : [88, 294]
+Measurements : [1098.51, 11313.5, -3.58635, 13.8647]
+---
+Label        : 1
+Position     : [17, 295]
+Measurements : [1984.09, 677352, -0.407561, -1.23782]
+---
+Label        : 0
+Position     : [60, 296]
+Measurements : [1116.95, 1229.84, -1.56664, 3.49758]
+---
+Label        : 0
+Position     : [69, 298]
+Measurements : [1089.44, 758.82, 0.398235, 0.174431]
+---
+Label        : 0
+Position     : [83, 301]
+Measurements : [1035.29, 17717.4, -1.12875, -0.0603737]
+---
+Label        : 0
+Position     : [73, 302]
+Measurements : [1063.72, 1571.58, -1.30126, 2.84423]
+---
+Label        : 0
+Position     : [141, 305]
+Measurements : [1002.69, 8849.39, -0.255284, -1.37972]
+---
+Label        : 2
+Position     : [830, 306]
+Measurements : [1299.8, 5817.43, -0.00828514, -0.953249]
+---
+Label        : 0
+Position     : [73, 307]
+Measurements : [1036.37, 4929.06, -2.51853, 7.21282]
+---
+Label        : 0
+Position     : [97, 309]
+Measurements : [1058.1, 69435.8, 1.18385, 3.79824]
+---
+Label        : 0
+Position     : [101, 313]
+Measurements : [1005.03, 34591.4, -1.2708, 0.688471]
+---
+Label        : 0
+Position     : [107, 313]
+Measurements : [1136.26, 34082.8, 2.67994, 10.7748]
+---
+Label        : 0
+Position     : [126, 316]
+Measurements : [1013.5, 6676.78, -0.423331, -0.903568]
+---
+Label        : 0
+Position     : [125, 319]
+Measurements : [1040.87, 4890.14, -0.827509, -0.402262]
+---
+Label        : 0
+Position     : [76, 324]
+Measurements : [1036.07, 2884.28, -1.72646, 3.59258]
+---
+Label        : 0
+Position     : [128, 347]
+Measurements : [966.241, 9470.65, -0.427983, -0.896549]
+---
+Label        : 0
+Position     : [116, 352]
+Measurements : [1058.12, 12116.4, -2.85104, 9.29506]
+---
+Label        : 0
+Position     : [75, 354]
+Measurements : [1166.54, 15632.4, 0.894411, 0.616058]
+---
+Label        : 0
+Position     : [116, 356]
+Measurements : [1029.76, 17913.7, -1.57809, 2.68615]
+---
+Label        : 1
+Position     : [250, 362]
+Measurements : [1652.11, 636603, -0.068354, -1.55314]
+---
+Label        : 0
+Position     : [81, 364]
+Measurements : [1063.34, 5854.01, 1.05216, 1.8461]
+---
+Label        : 0
+Position     : [77, 372]
+Measurements : [1079.98, 4207.35, 1.0146, 1.71099]
+---
+Label        : 0
+Position     : [150, 372]
+Measurements : [1229.14, 32996.4, 0.494297, -0.745172]
+---
+Label        : 0
+Position     : [84, 374]
+Measurements : [1094.08, 3891.08, 1.58465, 3.49479]
+---
+Label        : 0
+Position     : [78, 375]
+Measurements : [1096, 2134.87, 0.634839, 0.533664]
+---
+Label        : 0
+Position     : [100, 375]
+Measurements : [1008.28, 2170.33, -0.190925, 0.356895]
+---
+Label        : 0
+Position     : [120, 375]
+Measurements : [1059.57, 5005.6, -1.1571, 1.0382]
+---
+Label        : 0
+Position     : [76, 376]
+Measurements : [1086.16, 2849, 0.236747, 0.129677]
+---
+Label        : 0
+Position     : [92, 377]
+Measurements : [1097.99, 23128, 1.60171, 2.06603]
+---
+Label        : 0
+Position     : [130, 377]
+Measurements : [803.267, 33189.8, 0.0741495, -1.07347]
+---
+Label        : 1
+Position     : [344, 378]
+Measurements : [2202.68, 451150, -0.163249, -1.17874]
+---
+Label        : 0
+Position     : [83, 381]
+Measurements : [1159.53, 12281.8, 1.15369, 0.567158]
+---
+Label        : 0
+Position     : [88, 381]
+Measurements : [1182.13, 22355.7, 0.821427, 0.160565]
+---
+Label        : 0
+Position     : [128, 383]
+Measurements : [964.54, 14395.5, -0.909606, 0.452174]
+---
+Label        : 0
+Position     : [158, 384]
+Measurements : [1111.14, 3448.12, 1.253, 2.86972]
+---
+Label        : 0
+Position     : [139, 386]
+Measurements : [947.557, 10998, -0.0164515, 0.296629]
+---
+Label        : 0
+Position     : [91, 389]
+Measurements : [1046.18, 19292.2, -1.00928, 1.27428]
+---
+Label        : 0
+Position     : [120, 394]
+Measurements : [1030.67, 2088.07, -0.00292882, 0.536204]
+---
+Label        : 1
+Position     : [724, 396]
+Measurements : [1179.36, 616934, 0.783153, -0.864531]
+---
+Label        : 0
+Position     : [154, 402]
+Measurements : [1092.67, 22119.1, -1.14498, 1.42765]
+---
+Label        : 0
+Position     : [117, 404]
+Measurements : [1114.43, 17962.6, -0.886597, 1.18863]
+---
+Label        : 1
+Position     : [77, 430]
+Measurements : [1784.79, 774675, -0.140916, -1.53039]
+---
+Label        : 0
+Position     : [557, 606]
+Measurements : [996.762, 12374.8, 1.36408, 1.58708]
+---
+Label        : 0
+Position     : [553, 612]
+Measurements : [908.398, 1915.39, -0.588395, 2.46765]
+---
+Label        : 2
+Position     : [837, 614]
+Measurements : [1065.39, 2119.61, 1.51738, 5.82572]
+---
+Label        : 0
+Position     : [517, 618]
+Measurements : [905.346, 10356.9, 1.09423, 6.74397]
+---
+Label        : 0
+Position     : [547, 621]
+Measurements : [858.335, 12813.8, -1.24825, 2.37543]
+---
+Label        : 0
+Position     : [503, 622]
+Measurements : [1289.92, 77478, 0.527279, -0.703087]
+---
+Label        : 0
+Position     : [547, 624]
+Measurements : [838.306, 16471.2, -0.594663, 0.551508]
+---
+Label        : 0
+Position     : [515, 628]
+Measurements : [879.467, 5137.89, 1.44959, 7.48975]
+---
+Label        : 0
+Position     : [515, 628]
+Measurements : [879.467, 5137.89, 1.44959, 7.48975]
+---
+Label        : 0
+Position     : [527, 630]
+Measurements : [838.26, 11052.5, -0.579509, 0.0756377]
+---
+Label        : 0
+Position     : [527, 633]
+Measurements : [809.132, 12263.1, -0.249287, -0.605208]
+---
+Label        : 0
+Position     : [540, 634]
+Measurements : [953.967, 12861.9, 0.655317, -0.783391]
+---
+Label        : 0
+Position     : [481, 643]
+Measurements : [1278.77, 75714.6, 0.499343, -0.533136]
+---
+Label        : 0
+Position     : [487, 643]
+Measurements : [872.865, 130906, 0.678553, -0.488235]
+---
+Label        : 0
+Position     : [526, 644]
+Measurements : [800.554, 7117.08, -1.27835, 1.38297]
+---
+Label        : 0
+Position     : [538, 656]
+Measurements : [877.367, 68801.9, 1.44427, 3.37491]
+---
+Label        : 0
+Position     : [556, 656]
+Measurements : [795.135, 39279.8, 1.82693, 7.55009]
+---
+Label        : 0
+Position     : [483, 658]
+Measurements : [854.813, 3977.18, -0.266403, -0.294176]
+---
+Label        : 0
+Position     : [518, 660]
+Measurements : [783.345, 17212.2, -0.228475, -1.30841]
+---
+Label        : 0
+Position     : [537, 661]
+Measurements : [790.204, 19786, -0.135555, 0.571849]
+---
+Label        : 0
+Position     : [536, 662]
+Measurements : [797.187, 14836.7, -0.85645, 0.644137]
+---
+Label        : 0
+Position     : [515, 668]
+Measurements : [883.445, 8828.79, -0.8104, -0.0532019]
+---
+Label        : 0
+Position     : [588, 670]
+Measurements : [1422.8, 29963.7, 2.69111, 11.7876]
+---
+Label        : 0
+Position     : [579, 671]
+Measurements : [1431.96, 106078, 2.46061, 6.13458]
+---
+Label        : 0
+Position     : [547, 672]
+Measurements : [778.818, 37190.3, -0.0268415, -0.167969]
+---
+Label        : 0
+Position     : [527, 674]
+Measurements : [1096.82, 117395, 1.82919, 2.56327]
+---
+Label        : 0
+Position     : [534, 674]
+Measurements : [919.752, 4337.91, 0.87782, 2.11114]
+---
+Label        : 0
+Position     : [515, 675]
+Measurements : [943.436, 54382.4, 2.37623, 6.52189]
+---
+Label        : 0
+Position     : [517, 676]
+Measurements : [1079.21, 166704, 1.74736, 2.69667]
+---
+Label        : 0
+Position     : [534, 676]
+Measurements : [936.045, 5261.81, 0.805183, 1.68575]
+---
+Label        : 0
+Position     : [574, 679]
+Measurements : [1168.51, 40995.7, -0.122898, -0.763841]
+---
+Label        : 0
+Position     : [576, 679]
+Measurements : [1225.92, 27986.3, 0.01316, -1.15928]
+---
+Label        : 0
+Position     : [487, 680]
+Measurements : [906.276, 4556.15, -0.882028, 0.577918]
+---
+Label        : 0
+Position     : [548, 685]
+Measurements : [980.933, 42147.1, 1.13393, 3.13981]
+---
+Label        : 0
+Position     : [485, 686]
+Measurements : [887.81, 19268.9, 0.995044, 2.67467]
+---
+Label        : 0
+Position     : [524, 686]
+Measurements : [1162.19, 101653, 2.18648, 6.96006]
+---
+Label        : 0
+Position     : [543, 686]
+Measurements : [1041.13, 52347.5, 1.95783, 4.51984]
+---
+Label        : 0
+Position     : [571, 688]
+Measurements : [901.792, 4547.6, -0.731337, 1.4039]
+---
+Label        : 0
+Position     : [551, 689]
+Measurements : [884.593, 30976, 1.06188, 3.67884]
+---
+Label        : 0
+Position     : [477, 690]
+Measurements : [798.826, 8898.81, 0.203135, 0.557101]
+---
+Label        : 0
+Position     : [490, 690]
+Measurements : [989.34, 15028.7, 0.0997386, 1.83382]
+---
+Label        : 0
+Position     : [524, 690]
+Measurements : [1113.43, 104904, 2.49195, 7.80539]
+---
+Label        : 0
+Position     : [448, 691]
+Measurements : [1044.07, 17306.6, 0.694973, -0.20513]
+---
+Label        : 0
+Position     : [469, 691]
+Measurements : [856.655, 9324.99, -1.14346, 0.142251]
+---
+Label        : 0
+Position     : [505, 691]
+Measurements : [1017.56, 93842.1, 3.18601, 10.3167]
+---
+Label        : 0
+Position     : [503, 693]
+Measurements : [956.55, 54666.3, 3.53276, 13.4114]
+---
+Label        : 0
+Position     : [440, 697]
+Measurements : [1089.97, 25064.2, 0.78966, -0.1101]
+---
+Label        : 0
+Position     : [490, 697]
+Measurements : [1123.08, 113316, 1.94013, 3.9328]
+---
+Label        : 0
+Position     : [488, 699]
+Measurements : [1108.09, 122490, 1.81843, 3.34549]
+---
+Label        : 0
+Position     : [498, 701]
+Measurements : [868.608, 8156.59, 0.150489, -0.898373]
+---
+Label        : 0
+Position     : [574, 702]
+Measurements : [905.362, 28444.8, 3.08757, 9.50173]
+---
+Label        : 0
+Position     : [519, 705]
+Measurements : [873.83, 8245.93, -0.699065, 0.38047]
+---
+Label        : 0
+Position     : [520, 705]
+Measurements : [871.161, 8660.73, -0.560863, 0.205994]
+---
+Label        : 0
+Position     : [546, 707]
+Measurements : [927.314, 878.759, 0.900077, 0.942395]
+---
+Label        : 0
+Position     : [542, 708]
+Measurements : [955.462, 8109.82, 3.30465, 15.8433]
+---
+Label        : 0
+Position     : [533, 710]
+Measurements : [1010.07, 54411.4, 1.10119, 2.35511]
+---
+Label        : 0
+Position     : [536, 710]
+Measurements : [1029.55, 50313.8, 1.05986, 2.76013]
+---
+Label        : 0
+Position     : [546, 711]
+Measurements : [912.763, 631.624, 0.515326, 0.425384]
+---
+Label        : 0
+Position     : [510, 712]
+Measurements : [951.179, 9523.27, 0.350709, 1.27443]
+---
+Label        : 0
+Position     : [452, 715]
+Measurements : [1007.5, 3226.47, -0.743682, 6.73847]
+---
+Label        : 0
+Position     : [463, 716]
+Measurements : [917.118, 6401.58, -2.20401, 5.22719]
+---
+Label        : 0
+Position     : [479, 717]
+Measurements : [887.859, 3070.38, 0.126614, -0.179796]
+---
+Label        : 0
+Position     : [398, 718]
+Measurements : [1079.88, 9404.83, -0.785823, 3.18214]
+---
+Label        : 0
+Position     : [435, 718]
+Measurements : [946.567, 4530.59, 0.241578, 0.757157]
+---
+Label        : 0
+Position     : [479, 718]
+Measurements : [888.926, 3277.37, 0.109919, -0.451952]
+---
+Label        : 0
+Position     : [426, 720]
+Measurements : [902.532, 3949.37, 0.506826, 2.43821]
+---
+Label        : 0
+Position     : [483, 720]
+Measurements : [864.603, 4307.41, 0.452438, -0.605493]
+---
+Label        : 0
+Position     : [516, 721]
+Measurements : [919.769, 1646.43, -4.1801, 19.9773]
+---
+Label        : 0
+Position     : [396, 722]
+Measurements : [1089.46, 18536.5, 1.01886, 5.31848]
+---
+Label        : 0
+Position     : [407, 722]
+Measurements : [1074.67, 14572.7, 0.539467, 0.894414]
+---
+Label        : 0
+Position     : [400, 723]
+Measurements : [1081.19, 16669.1, 0.725756, 4.98747]
+---
+Label        : 0
+Position     : [539, 723]
+Measurements : [883.911, 3124.93, -0.836513, 1.71221]
+---
+Label        : 0
+Position     : [466, 725]
+Measurements : [877.945, 9238.56, -0.168896, 1.45514]
+---
+Label        : 0
+Position     : [554, 725]
+Measurements : [837.309, 7230.07, -1.25863, 1.34441]
+---
+Label        : 0
+Position     : [402, 727]
+Measurements : [1049.48, 22114.9, 0.479931, 0.00627351]
+---
+Label        : 0
+Position     : [472, 727]
+Measurements : [887.559, 14798.6, 1.63847, 4.70775]
+---
+Label        : 0
+Position     : [581, 727]
+Measurements : [923.717, 56879, 2.01018, 4.93828]
+---
+Label        : 0
+Position     : [567, 728]
+Measurements : [821.142, 12877.4, -0.094109, 0.473949]
+---
+Label        : 0
+Position     : [610, 728]
+Measurements : [1068.94, 9102.36, 0.0778781, -0.422164]
+---
+Label        : 0
+Position     : [404, 730]
+Measurements : [987.636, 11928.6, 1.2798, 1.84055]
+---
+Label        : 0
+Position     : [441, 733]
+Measurements : [917.017, 7418.56, -1.11122, 1.63796]
+---
+Label        : 0
+Position     : [449, 735]
+Measurements : [785.06, 7171.23, 1.24803, 1.18435]
+---
+Label        : 0
+Position     : [404, 736]
+Measurements : [934.788, 2440.22, 0.395013, 2.19353]
+---
+Label        : 2
+Position     : [33, 739]
+Measurements : [1162.92, 16587.5, 1.56578, 9.79401]
+---
+Label        : 0
+Position     : [566, 739]
+Measurements : [756.121, 8821.46, 0.228477, 0.574167]
+---
+Label        : 0
+Position     : [406, 741]
+Measurements : [951.874, 1633.05, -0.336642, 0.0556783]
+---
+Label        : 0
+Position     : [527, 741]
+Measurements : [770.698, 8427.35, 0.645325, -0.762257]
+---
+Label        : 0
+Position     : [555, 741]
+Measurements : [745.614, 14617.6, -0.559165, -0.338662]
+---
+Label        : 0
+Position     : [436, 742]
+Measurements : [929.375, 3476.89, -2.89425, 9.90368]
+---
+Label        : 0
+Position     : [608, 743]
+Measurements : [676.344, 20690.8, 1.16242, 1.8409]
+---
+Label        : 0
+Position     : [377, 744]
+Measurements : [795.482, 8235.47, 0.619007, 0.212924]
+---
+Label        : 0
+Position     : [448, 744]
+Measurements : [916.978, 55301.6, 3.14786, 11.2395]
+---
+Label        : 0
+Position     : [409, 746]
+Measurements : [965.738, 13623.5, 0.15015, 7.06839]
+---
+Label        : 0
+Position     : [405, 747]
+Measurements : [968.589, 828.08, -0.212032, 0.319205]
+---
+Label        : 0
+Position     : [572, 751]
+Measurements : [868.874, 42944, -0.252169, -1.00631]
+---
+Label        : 0
+Position     : [453, 765]
+Measurements : [770.904, 4723.78, 1.27278, 0.867494]
+---
+Label        : 0
+Position     : [430, 767]
+Measurements : [891.728, 9875.54, 0.0311174, -1.52266]
+---
+Label        : 0
+Position     : [411, 770]
+Measurements : [816.374, 7840.96, -0.848821, 0.660832]
+---
+Label        : 0
+Position     : [398, 773]
+Measurements : [891.812, 4488.79, -0.721596, -0.157861]
+---
+Label        : 2
+Position     : [1028, 773]
+Measurements : [1196.08, 4742.14, -0.599402, -0.939824]
+---
+Label        : 0
+Position     : [423, 778]
+Measurements : [873.206, 9689.22, 0.719962, -0.391072]
+---
+Label        : 0
+Position     : [398, 782]
+Measurements : [750.757, 3018.91, -0.243828, 3.54585]
+---
+Label        : 2
+Position     : [405, 817]
+Measurements : [1207.67, 5776.6, -0.267026, -0.460336]
+---
+Label        : 2
+Position     : [82, 915]
+Measurements : [1078.34, 1925.02, -1.27575, 1.69689]
+---
+Label        : 0
+Position     : [282, 1003]
+Measurements : [1252.8, 25843.1, -0.0383469, 0.362406]
+---
+Label        : 0
+Position     : [284, 1010]
+Measurements : [1175.09, 34992.5, 0.439273, -0.52895]
+---
+Label        : 0
+Position     : [295, 1015]
+Measurements : [942.082, 26170.4, -1.51034, 2.19124]
+---
+Label        : 0
+Position     : [257, 1027]
+Measurements : [1244.32, 27589.8, -0.135492, -0.0876443]
+---
+Label        : 0
+Position     : [272, 1027]
+Measurements : [1038.38, 48306.7, 0.966819, 0.267208]
+---
+Label        : 0
+Position     : [251, 1028]
+Measurements : [1301.12, 23487.7, -0.680369, 0.843609]
+---
+Label        : 0
+Position     : [269, 1029]
+Measurements : [1007.05, 33156.2, 1.00998, 0.401464]
+---
+Label        : 0
+Position     : [242, 1030]
+Measurements : [1255, 17424.4, 0.972226, 1.28589]
+---
+Label        : 0
+Position     : [238, 1031]
+Measurements : [1242.49, 20201.5, 1.26403, 1.00798]
+---
+Label        : 0
+Position     : [286, 1032]
+Measurements : [809.406, 62497.4, -0.102264, -1.50675]
+---
+Label        : 0
+Position     : [239, 1036]
+Measurements : [1293.66, 16028.4, 1.08529, 0.360448]
+---
+Label        : 0
+Position     : [289, 1038]
+Measurements : [1082.72, 22752.4, -2.76782, 7.6198]
+---
+Label        : 2
+Position     : [200, 1045]
+Measurements : [1279.61, 7061, -0.193501, 1.30761]
+---
+Label        : 0
+Position     : [258, 1050]
+Measurements : [1095.94, 8304.45, -0.799745, 0.674058]
+---
+Label        : 0
+Position     : [288, 1051]
+Measurements : [1109.3, 5293.05, -0.468844, -0.386417]
+---
+Label        : 0
+Position     : [289, 1055]
+Measurements : [1135.28, 5788.38, -0.00519308, -0.0597098]
+---
+Label        : 0
+Position     : [207, 1058]
+Measurements : [962.915, 7884.55, 0.396345, 0.364765]
+---
+Label        : 0
+Position     : [264, 1062]
+Measurements : [947.521, 9754.69, -2.22606, 6.17138]
+---
+Label        : 0
+Position     : [231, 1066]
+Measurements : [848.298, 35588, 0.140787, -0.506194]
+---
+Label        : 0
+Position     : [289, 1066]
+Measurements : [1471.52, 60326.6, 0.474587, -1.09782]
+---
+Label        : 0
+Position     : [180, 1068]
+Measurements : [1071.55, 18919.2, 0.469124, -0.0707115]
+---
+Label        : 0
+Position     : [276, 1069]
+Measurements : [1030.63, 44566, -1.1906, 0.792699]
+---
+Label        : 0
+Position     : [286, 1073]
+Measurements : [1494.5, 107251, 0.528237, -1.1887]
+---
+Label        : 0
+Position     : [214, 1078]
+Measurements : [721.977, 29834.3, -0.0459263, -1.38373]
+---
+Label        : 0
+Position     : [257, 1082]
+Measurements : [1124.28, 24691.8, -0.74802, 1.9546]
+---
+Label        : 0
+Position     : [219, 1085]
+Measurements : [1206.72, 30036.2, -0.773169, -0.764504]
+---
+Label        : 0
+Position     : [192, 1088]
+Measurements : [928.518, 48296.5, 0.110534, -0.0699811]
+---
+Label        : 0
+Position     : [142, 1091]
+Measurements : [1070, 9078.42, -0.88087, 0.923298]
+---
+Label        : 0
+Position     : [259, 1094]
+Measurements : [753.567, 68497.3, 0.272122, -1.48026]
+---
+Label        : 0
+Position     : [96, 1096]
+Measurements : [1269.01, 17415.6, 0.752649, 1.23866]
+---
+Label        : 0
+Position     : [247, 1096]
+Measurements : [1293.76, 71110.3, 0.607419, -0.764484]
+---
+Label        : 0
+Position     : [168, 1098]
+Measurements : [752.491, 43880, 0.0205883, -1.39981]
+---
+Label        : 0
+Position     : [253, 1098]
+Measurements : [895.033, 67286.7, -0.435044, -1.11304]
+---
+Label        : 0
+Position     : [134, 1099]
+Measurements : [973.458, 6331.39, -0.52856, -0.335983]
+---
+Label        : 0
+Position     : [270, 1099]
+Measurements : [1096.86, 10493.4, 0.281709, 0.572445]
+---
+Label        : 0
+Position     : [107, 1103]
+Measurements : [1285.44, 109878, 1.12114, 0.730062]
+---
+Label        : 0
+Position     : [108, 1103]
+Measurements : [1269.7, 112492, 1.16842, 0.816407]
+---
+Label        : 0
+Position     : [160, 1103]
+Measurements : [724.351, 44779.5, -0.059758, -1.40541]
+---
+Label        : 0
+Position     : [207, 1103]
+Measurements : [1796.71, 54799.9, -0.671429, -0.369486]
+---
+Label        : 0
+Position     : [130, 1113]
+Measurements : [984.168, 59335, 0.30838, -1.12156]
+---
+Label        : 0
+Position     : [248, 1114]
+Measurements : [1113.12, 11579.1, -1.39855, 3.19304]
+---
+Label        : 0
+Position     : [260, 1115]
+Measurements : [823.993, 24804.4, -0.332099, -0.353432]
+---
+Label        : 0
+Position     : [162, 1118]
+Measurements : [1046.11, 3723.81, -0.18434, -0.555536]
+---
+Label        : 0
+Position     : [107, 1119]
+Measurements : [1004.92, 15855.4, -0.504019, 1.26513]
+---
+Label        : 0
+Position     : [224, 1120]
+Measurements : [1030.74, 2676.05, -2.31253, 8.00231]
+---
+Label        : 0
+Position     : [230, 1122]
+Measurements : [929.305, 11586.8, -0.75956, -0.103885]
+---
+Label        : 0
+Position     : [157, 1124]
+Measurements : [1056.4, 38740.7, 0.247114, 1.08397]
+---
+Label        : 0
+Position     : [151, 1126]
+Measurements : [1303.66, 157811, 0.0185304, -1.25052]
+---
+Label        : 0
+Position     : [120, 1127]
+Measurements : [928.118, 13857.8, -1.64526, 1.98989]
+---
+Label        : 0
+Position     : [100, 1128]
+Measurements : [969.132, 17879.2, -1.87672, 3.23088]
+---
+Label        : 0
+Position     : [159, 1130]
+Measurements : [1085.67, 24078.9, -1.41563, 0.937455]
+---
+Label        : 0
+Position     : [205, 1131]
+Measurements : [1024.32, 12456.4, -2.56799, 8.61018]
+---
+Label        : 0
+Position     : [108, 1135]
+Measurements : [983.519, 5901.38, 0.460685, -1.0713]
+---
+Label        : 0
+Position     : [138, 1135]
+Measurements : [853.322, 12556.1, -1.76641, 2.77119]
+---
+Label        : 0
+Position     : [200, 1135]
+Measurements : [828.799, 54698.7, -0.23034, -1.74816]
+---
+Label        : 0
+Position     : [132, 1137]
+Measurements : [872.972, 4561.19, -0.534553, -0.715854]
+---
+Label        : 0
+Position     : [141, 1137]
+Measurements : [1042.07, 130453, 0.966673, -0.26523]
+---
+Label        : 0
+Position     : [156, 1140]
+Measurements : [1283.51, 161811, 0.675848, -0.56946]
+---
+Label        : 0
+Position     : [228, 1140]
+Measurements : [1232.22, 46859.2, 0.371178, -1.35799]
+---
+Label        : 0
+Position     : [169, 1141]
+Measurements : [1308.13, 58658.9, 0.526328, -0.868855]
+---
+Label        : 0
+Position     : [171, 1141]
+Measurements : [1435.59, 59089.7, 0.149777, -1.40351]
+---
+Label        : 0
+Position     : [129, 1142]
+Measurements : [919.733, 933.24, -0.472886, 0.434218]
+---
+Label        : 0
+Position     : [240, 1143]
+Measurements : [843.451, 43046.5, -0.0668802, -1.1608]
+---
+Label        : 0
+Position     : [126, 1144]
+Measurements : [918.687, 3970.85, -0.876945, 3.51086]
+---
+Label        : 0
+Position     : [136, 1145]
+Measurements : [905.554, 1004.83, 0.788542, -0.0894318]
+---
+Label        : 0
+Position     : [165, 1146]
+Measurements : [1149.03, 11686.3, 0.378348, -0.73669]
+---
+Label        : 0
+Position     : [95, 1148]
+Measurements : [1043.14, 4039.13, 0.34265, -0.976442]
+---
+Label        : 0
+Position     : [192, 1149]
+Measurements : [1209.73, 54018, 0.352959, -1.42971]
+---
+Label        : 0
+Position     : [220, 1150]
+Measurements : [1406.21, 45677.3, -0.887135, -0.654873]
+---
+Label        : 0
+Position     : [230, 1150]
+Measurements : [1163.99, 13498.4, 0.267976, 0.623753]
+---
+Label        : 0
+Position     : [91, 1151]
+Measurements : [1173.03, 21051.2, 1.37188, 2.70561]
+---
+Label        : 0
+Position     : [227, 1151]
+Measurements : [1181.88, 21940.6, 0.713167, 0.331678]
+---
+Label        : 0
+Position     : [229, 1153]
+Measurements : [1206.73, 15553.6, -0.114988, 1.07142]
+---
+Label        : 0
+Position     : [145, 1154]
+Measurements : [1221.8, 217789, 0.157037, -1.34233]
+---
+Label        : 0
+Position     : [146, 1154]
+Measurements : [1310.59, 242056, -0.125762, -1.39595]
+---
+Label        : 0
+Position     : [174, 1154]
+Measurements : [1427.73, 47665.8, -0.630245, 0.509506]
+---
+Label        : 0
+Position     : [102, 1155]
+Measurements : [1118.24, 13183, 2.62639, 11.1511]
+---
+Label        : 0
+Position     : [171, 1157]
+Measurements : [1355.3, 47895.1, -0.920909, 0.891197]
+---
+Label        : 0
+Position     : [115, 1158]
+Measurements : [994.761, 21197.4, -1.6234, 1.83583]
+---
+Label        : 0
+Position     : [179, 1159]
+Measurements : [1205.49, 43796.6, -0.0434319, -0.203013]
+---
+Label        : 0
+Position     : [118, 1161]
+Measurements : [943.731, 18417.6, -1.08217, -0.117994]
+---
+Label        : 0
+Position     : [93, 1162]
+Measurements : [1360.46, 232997, 0.935395, -0.174343]
+---
+Label        : 0
+Position     : [178, 1166]
+Measurements : [1201.14, 27570.1, 1.00641, 1.99209]
+---
+Label        : 0
+Position     : [166, 1169]
+Measurements : [1096.64, 6676.84, 1.02148, 1.16828]
+---
+Label        : 0
+Position     : [139, 1170]
+Measurements : [930.684, 4478.8, 0.844888, -0.191425]
+---
+Label        : 0
+Position     : [118, 1171]
+Measurements : [1020.45, 12099.2, -0.818138, 1.12655]
+---
+Label        : 0
+Position     : [147, 1175]
+Measurements : [1016.22, 5487.3, -0.104575, 1.26667]
+---
+Label        : 0
+Position     : [173, 1176]
+Measurements : [1160.75, 9792.88, -0.58472, 0.246237]
+---
+Label        : 0
+Position     : [127, 1183]
+Measurements : [948.533, 20332.5, -0.523438, -0.341544]
+---
+Label        : 0
+Position     : [185, 1183]
+Measurements : [1177.2, 5451.08, -0.058732, -0.683641]
+---
+Label        : 0
+Position     : [232, 1183]
+Measurements : [1189.62, 27441.2, 0.0170941, -0.820611]
+---
+Label        : 0
+Position     : [107, 1187]
+Measurements : [974.298, 18497, -0.1773, -0.0338076]
+---
+Label        : 0
+Position     : [196, 1192]
+Measurements : [1607.13, 44011.5, 0.123893, -1.41548]
+---
+Label        : 0
+Position     : [161, 1195]
+Measurements : [1050.87, 5899.31, -0.303962, -0.044112]
+---
+Label        : 0
+Position     : [132, 1200]
+Measurements : [1081.44, 27934, 0.356593, 4.06093]
+---
+Label        : 0
+Position     : [186, 1202]
+Measurements : [1372.58, 147226, -0.363546, -1.33675]
+---
+Label        : 0
+Position     : [160, 1204]
+Measurements : [808.898, 44084.3, 0.00983514, -1.36082]
+---
+Label        : 0
+Position     : [162, 1204]
+Measurements : [812.26, 45876.6, 0.0554185, -1.4658]
+---
+Label        : 0
+Position     : [172, 1205]
+Measurements : [701.565, 6990.93, 2.07489, 5.58847]
+---
+Label        : 0
+Position     : [131, 1214]
+Measurements : [936.518, 20172.8, -0.304679, 1.13836]
+---
+Label        : 0
+Position     : [178, 1214]
+Measurements : [766.149, 4079.33, 1.56613, 1.86491]
+---
+Label        : 0
+Position     : [119, 1215]
+Measurements : [973.622, 44681.7, 0.4596, 0.253037]
+---
+Label        : 0
+Position     : [128, 1215]
+Measurements : [926.183, 28247.1, 0.260325, 2.06074]
+---
+Label        : 0
+Position     : [131, 1216]
+Measurements : [909.844, 13797, -0.984392, 1.27645]
+---
+Label        : 0
+Position     : [140, 1222]
+Measurements : [967.235, 2961.46, 0.860597, 0.738803]
+---
+Label        : 0
+Position     : [150, 1226]
+Measurements : [945.835, 2810.44, -1.40093, 3.20244]
+---
+Label        : 0
+Position     : [156, 1228]
+Measurements : [946.406, 18109.5, -0.191883, 0.487]
+---
+Label        : 0
+Position     : [135, 1230]
+Measurements : [1132.88, 24218.5, 1.04485, 0.947635]
+---
+Label        : 0
+Position     : [172, 1231]
+Measurements : [764.245, 6700.82, 1.10045, 2.44211]
+---
+Label        : 0
+Position     : [171, 1237]
+Measurements : [881.646, 10935, 0.0708465, -1.03185]
+---
+Label        : 0
+Position     : [131, 1242]
+Measurements : [931.007, 23518.6, -0.398983, -0.302945]
+---
+Label        : 0
+Position     : [134, 1243]
+Measurements : [936.617, 24021.8, -0.364755, -0.597952]
+---
+Label        : 0
+Position     : [168, 1245]
+Measurements : [1064.65, 7322.56, 0.328272, 0.563073]
+---
+Label        : 0
+Position     : [122, 1246]
+Measurements : [1202.03, 43292.8, -0.825552, 0.087116]
+---
+Label        : 0
+Position     : [126, 1249]
+Measurements : [1154.42, 43557.8, -0.491892, -0.90433]
+---
+Label        : 0
+Position     : [131, 1251]
+Measurements : [1068.91, 54518.2, -0.125231, -1.21105]
+---
+Label        : 0
+Position     : [141, 1260]
+Measurements : [1161.23, 14197.5, -0.856282, 0.146767]
+---
+Label        : 0
+Position     : [162, 1261]
+Measurements : [1024.62, 8851.47, -0.999245, 1.00363]
+---
+Label        : 0
+Position     : [143, 1267]
+Measurements : [1126.34, 5577.71, 0.00119126, 0.066821]
+---
+Label        : 0
+Position     : [155, 1272]
+Measurements : [998.884, 9513.87, -0.615159, -1.08871]
+---
+Label        : 0
+Position     : [128, 1276]
+Measurements : [991.299, 7790.14, 0.064431, -0.870962]
+---
+Label        : 0
+Position     : [129, 1277]
+Measurements : [1003.63, 7396.67, -0.209893, -1.03153]
+---
+Label        : 0
+Position     : [147, 1278]
+Measurements : [1004.62, 10409.4, -0.395005, -0.081651]
+---
+Label        : 0
+Position     : [138, 1281]
+Measurements : [1078.39, 4122.25, -1.31527, 2.95209]
+---
+Label        : 0
+Position     : [149, 1285]
+Measurements : [937.225, 14747.5, 0.690499, -0.914493]
+---
+Label        : 0
+Position     : [129, 1292]
+Measurements : [1101.52, 4788.56, -0.57896, 2.62287]

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -33,16 +33,13 @@ otbSimulationTestDriver.cxx
 otbReduceSpectralResponseSVMClassifier.cxx
 otbProspectTransTest.cxx
 otbReduceSpectralResponseClassifierRAndNIR.cxx
-otbSpectralResponseNew.cxx
 otbSatelliteRSR.cxx
-otbSurfaceReflectanceToReflectanceFilterNew.cxx
+otbSurfaceReflectanceToReflectanceFilter.cxx
 otbImageSimulationMethodWithSpatialisationTest.cxx
 otbImageSimulationMethodSVMClassif.cxx
-otbReduceSpectralResponseNew.cxx
 otbReduceSpectralResponse.cxx
 otbAtmosphericEffects.cxx
 otbProspectReflTest.cxx
-otbSpatialisationTestNew.cxx
 otbLabelMapToSimulatedImageFilterTest.cxx
 otbImageSimulationMethodKMeansClassif.cxx
 otbSpectralResponse.cxx
@@ -50,7 +47,6 @@ otbAtmosphericCorrectionsRSRSVMClassifier.cxx
 otbSpatialisationTest.cxx
 otbImageSimulationMethodWithVectorDataTest.cxx
 otbSailReflVTest.cxx
-otbSatelliteRSRNew.cxx
 otbSailReflHTest.cxx
 otbFilterFunctionValues.cxx
 otbSoilDBTest.cxx
@@ -96,10 +92,6 @@ otb_add_test(NAME siTuReduceSpectralResponseClassifierRAndNIR COMMAND otbSimulat
   2 #NIR index
   )
 
-otb_add_test(NAME siTuSpectralResponseNew COMMAND otbSimulationTestDriver
-  otbSpectralResponseNew
-  )
-
 otb_add_test(NAME siTuSatelliteRSRCheckValue COMMAND otbSimulationTestDriver
   otbSatelliteRSRCheckValue
   ${INPUTDATA}/Radiometry/SPOT5/HRG2/rep6S.dat
@@ -115,7 +107,7 @@ otb_add_test(NAME siTuSatelliteRSRSolarIrradianceCheckValue2 COMMAND otbSimulati
   4 #nb band
   1.7525000e+00  #lambda
   1.8526000e+02 #expected
-  )      
+  )
 
 otb_add_test(NAME siTuSatelliteRSRSolarIrradianceCheckValue COMMAND otbSimulationTestDriver
   otbSatelliteRSRSolarIrradianceCheckValue
@@ -123,7 +115,7 @@ otb_add_test(NAME siTuSatelliteRSRSolarIrradianceCheckValue COMMAND otbSimulatio
   4 #nb band
   0.45 #lambda
   2.0573899e3 #expected
-  )      
+  )
 
 otb_add_test(NAME siTuSatelliteRSR COMMAND otbSimulationTestDriver
   otbSatelliteRSR
@@ -140,10 +132,7 @@ otb_add_test(NAME siTuSatelliteRSRCheckValue2 COMMAND otbSimulationTestDriver
   0.68 #lambda
   1 #num band
   0.717 #expected
-  )            
-
-otb_add_test(NAME siTuReflectanceToSurfaceReflectanceFilterNew COMMAND otbSimulationTestDriver
-  otbSurfaceReflectanceToReflectanceFilterNew )
+  )
 
 otb_add_test(NAME siTuImageSimulationMethodWithSpatialisationTest COMMAND otbSimulationTestDriver
   otbImageSimulationMethodWithSpatialisationTest
@@ -153,10 +142,6 @@ otb_add_test(NAME siTuImageSimulationMethodWithSpatialisationTest COMMAND otbSim
   3 #prolate radius
   ${TEMP}/ImageSimulationMethodWithSpatialisationTest.tif
   ${TEMP}/LabelImageSimulationMethodWithSpatialisationTest.tif
-  )
-
-otb_add_test(NAME siTuReduceSpectralResponseNew COMMAND otbSimulationTestDriver
-  otbReduceSpectralResponseNew
   )
 
 otb_add_test(NAME siTuReduceSpectralResponseReflectanceMode COMMAND otbSimulationTestDriver
@@ -194,7 +179,7 @@ otb_add_test(NAME siTvReduceSpectralResponseReflectanceMode COMMAND otbSimulatio
   4 #nb band
   1 #reflectance mode
   ${TEMP}/siTvReduceSpectralResponseReflectanceMode.txt
-  )      
+  )
 
 otb_add_test(NAME siTvProspectReflTest COMMAND otbSimulationTestDriver
   --compare-ascii ${EPSILON_3} ${BASELINE_FILES}/Simulation/siTvProspectReflTest.txt
@@ -207,10 +192,6 @@ otb_add_test(NAME siTvProspectReflTest COMMAND otbSimulationTestDriver
   0.009 #Cm
   1.2 #N
   ${TEMP}/siTvProspectReflTest.txt
-  )
-
-otb_add_test(NAME siTuSpatialisationTestNew COMMAND otbSimulationTestDriver
-  otbSpatialisationTestNew
   )
 
 otb_add_test(NAME siTuLabelMapToSimulatedImageFilterTest COMMAND otbSimulationTestDriver
@@ -275,10 +256,6 @@ otb_add_test(NAME siTvSailReflVTest COMMAND otbSimulationTestDriver
   0 #TTO
   0 #PSI
   ${TEMP}/siTvSailReflVTest.txt
-  )
-
-otb_add_test(NAME siTuSatelliteRSRNew COMMAND otbSimulationTestDriver
-  otbSatelliteRSRNew
   )
 
 otb_add_test(NAME siTvSailReflHTest COMMAND otbSimulationTestDriver

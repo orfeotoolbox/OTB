@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,15 +38,14 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputList, class TOutputList, class TFunction>
-class ITK_EXPORT UnaryFunctorObjectListFilter :
-  public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
+class ITK_EXPORT UnaryFunctorObjectListFilter : public otb::ObjectListToObjectListFilter<TInputList, TOutputList>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorObjectListFilter                               Self;
+  typedef UnaryFunctorObjectListFilter Self;
   typedef otb::ObjectListToObjectListFilter<TInputList, TOutputList> Superclass;
-  typedef itk::SmartPointer<Self>                                    Pointer;
-  typedef itk::SmartPointer<const Self>                              ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -86,15 +85,17 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
 
 protected:
   UnaryFunctorObjectListFilter();
-  ~UnaryFunctorObjectListFilter() override {}
+  ~UnaryFunctorObjectListFilter() override
+  {
+  }
 
   /** Multi-threading implementation */
 
@@ -107,17 +108,16 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  UnaryFunctorObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  UnaryFunctorObjectListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbUnaryFunctorObjectListFilter.txx"
+#include "otbUnaryFunctorObjectListFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -83,8 +83,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT HistogramPlotPicker :
-    public QwtPlotPicker
+class OTBMonteverdiGUI_EXPORT HistogramPlotPicker : public QwtPlotPicker
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -93,100 +92,84 @@ class OTBMonteverdiGUI_EXPORT HistogramPlotPicker :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types and constants.
+  //
+  // Public types and constants.
 public:
-
   /**
    * \brief
    */
-  typedef std::vector< QwtPlotCurve* > PlotCurveVector;
+  typedef std::vector<QwtPlotCurve*> PlotCurveVector;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
+  /** \brief Constructor. */
+  HistogramPlotPicker(const PlotCurveVector& curves, QwtPlotCanvas* canvas);
 
   /** \brief Constructor. */
-  HistogramPlotPicker( const PlotCurveVector& curves, QwtPlotCanvas* canvas );
+  HistogramPlotPicker(const PlotCurveVector& curves, int xAxis, int yAxis, QwtPlotCanvas* canvas);
 
   /** \brief Constructor. */
-  HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xAxis,
-		       int yAxis,
-		       QwtPlotCanvas* canvas );
-
-  /** \brief Constructor. */
-  HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xAxis,
-		       int yAxis,
-		       DisplayMode trackerMode,
-		       QwtPlotCanvas* canvas );
+  HistogramPlotPicker(const PlotCurveVector& curves, int xAxis, int yAxis, DisplayMode trackerMode, QwtPlotCanvas* canvas);
 
   /** \brief Destructor. */
   ~HistogramPlotPicker() override;
 
   /**
    */
-  void SetRubberBandPen( RgbwChannel channel, const QPen& pen );
+  void SetRubberBandPen(RgbwChannel channel, const QPen& pen);
 
   /**
    */
-  void SetGrayscaleActivated( bool isGrayscale );
+  void SetGrayscaleActivated(bool isGrayscale);
 
   //
   // QwtPlotPicker methods.
 
-  void drawRubberBand( QPainter* painter ) const override;
+  void drawRubberBand(QPainter* painter) const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // QwtPlotPicker methods.
 
   using QwtPlotPicker::trackerText;
 
-  QwtText trackerTextF( const QPointF & ) const override;
+  QwtText trackerTextF(const QPointF&) const override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
+  /**
+   */
+  double Find(const QwtPlotCurve* curve, double x) const;
 
   /**
    */
-  double Find( const QwtPlotCurve* curve, double x ) const;
+  CountType Find(const QwtPlotCurve* curve, double x, double& xmin, double& xmax, double& y) const;
 
-  /**
-   */
-  CountType Find( const QwtPlotCurve* curve,
-		  double x,
-		  double& xmin,
-		  double& xmax,
-		  double& y ) const;
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief
@@ -200,7 +183,7 @@ private:
 
   /**
    */
-  QPen m_RubberBandPens[ CURVE_COUNT ];
+  QPen m_RubberBandPens[CURVE_COUNT];
 
   /**
    */
@@ -208,8 +191,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

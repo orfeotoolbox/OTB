@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -28,7 +28,7 @@
 #    message("Mercurial version is ${Mercurial_VERSION_HG}")
 #  endif()
 
-
+# This file can be deleted  as we no longer use mercurial
 set(Mercurial_FOUND FALSE)
 set(Mercurial_HG_FOUND FALSE)
 

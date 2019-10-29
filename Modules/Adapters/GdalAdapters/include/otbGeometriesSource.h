@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,8 +28,10 @@
 #include "OTBGdalAdaptersExport.h"
 
 // Forward declarations
-namespace otb {
-namespace ogr {
+namespace otb
+{
+namespace ogr
+{
 class DataSource;
 class Layer;
 } // ogr namespace
@@ -68,20 +70,20 @@ namespace otb
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT GeometriesSource : public itk::ProcessObject, boost::noncopyable
-  {
+{
 public:
   /**\name Standard ITK typedefs */
   //@{
-  typedef GeometriesSource                     Self;
-  typedef itk::ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef GeometriesSource                                   Self;
+  typedef itk::ProcessObject                                 Superclass;
+  typedef itk::SmartPointer<Self>                            Pointer;
+  typedef itk::SmartPointer<const Self>                      ConstPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
   //@}
 
   /**\name I/O typedefs */
   //@{
-  typedef GeometriesSet                        OutputGeometriesType;
+  typedef GeometriesSet OutputGeometriesType;
   // typedef GeometriesSet::Pointer               OutputGeometriesPointer;
   //@}
 
@@ -136,8 +138,8 @@ protected:
    * set will be an <em>in-memory</em> \c ogr::DataSource.
    * \post <tt>GetOutput() != NULL</tt>
    */
-  virtual void  DoAllocateOutputs();
-  };
+  virtual void DoAllocateOutputs();
+};
 } // end namespace otb
 
 #endif // otbGeometriesSource_h

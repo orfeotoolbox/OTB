@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,9 +25,11 @@
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class SOMbasedImageFilterFunctor
  * \brief This class implements the functor that perform substitution between
@@ -53,18 +55,28 @@ public:
   typedef typename DistanceType::Pointer DistancePointerType;
 
   /** Standard Constructor */
-  SOMbasedImageFilterFunctor () {}
-  virtual ~SOMbasedImageFilterFunctor () {}
+  SOMbasedImageFilterFunctor()
+  {
+  }
+  virtual ~SOMbasedImageFilterFunctor()
+  {
+  }
 
   /** Functor */
-  TOutput operator ()(const TInput& input);
+  TOutput operator()(const TInput& input);
 
   /** Get/Set the Map */
-  MapType * GetMap() const { return this->m_Map; }
-  void SetMap(const MapType * theMap);
+  MapType* GetMap() const
+  {
+    return this->m_Map;
+  }
+  void SetMap(const MapType* theMap);
 
   /** Get the DistanceMetric */
-  DistanceType *  GetDistance() { return this->m_Distance; }
+  DistanceType* GetDistance()
+  {
+    return this->m_Distance;
+  }
 
 protected:
   /** GetWinner redefinition by using its own TDistanceMetric that
@@ -75,8 +87,8 @@ protected:
   DistancePointerType m_Distance;
 
 private:
-  SOMbasedImageFilterFunctor (const Self &);     // not implemented
-  void operator =(const Self&);      // not implemented
+  SOMbasedImageFilterFunctor(const Self&); // not implemented
+  void operator=(const Self&);             // not implemented
 };
 
 } // end of namespace Functor
@@ -99,22 +111,18 @@ private:
  *
  * \ingroup OTBSOM
  */
-template <class TInputImage, class TOutputImage,
-    class TDistanceMetric, class TMap>
+template <class TInputImage, class TOutputImage, class TDistanceMetric, class TMap>
 class ITK_EXPORT SOMbasedImageFilter
-  : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType,
-          TDistanceMetric, TMap> >
+    : public itk::UnaryFunctorImageFilter<
+          TInputImage, TOutputImage,
+          Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TDistanceMetric, TMap>>
 {
 public:
   /** Standard class typedefs. */
   typedef SOMbasedImageFilter Self;
-  typedef typename itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::SOMbasedImageFilterFunctor<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType,
-          TDistanceMetric, TMap> >  Superclass;
+  typedef typename itk::UnaryFunctorImageFilter<
+      TInputImage, TOutputImage, Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TDistanceMetric, TMap>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -131,27 +139,26 @@ public:
   typedef TMap                      MapType;
   typedef typename MapType::Pointer MapPointerType;
 
-  typedef Functor::SOMbasedImageFilterFunctor<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType,
-      TDistanceMetric, TMap> FunctorType;
+  typedef Functor::SOMbasedImageFilterFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TDistanceMetric, TMap> FunctorType;
 
   /** Vectors that hold the training area */
   typedef typename TInputImage::PixelType MeasurementType;
 
   /** Set the SOM map (or VectorImage) */
-  void SetMap(const MapType * theMap);
+  void SetMap(const MapType* theMap);
 
 protected:
   // throw the Map to the functor
   void BeforeThreadedGenerateData(void) override;
 
-  SOMbasedImageFilter ();
-  ~SOMbasedImageFilter () override {}
+  SOMbasedImageFilter();
+  ~SOMbasedImageFilter() override
+  {
+  }
 
 private:
-  SOMbasedImageFilter (const Self &);
-  void operator =(const Self&); //purposely not implemented
+  SOMbasedImageFilter(const Self&);
+  void operator=(const Self&) = delete;
 
   MapPointerType m_Map;
 
@@ -160,7 +167,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMbasedImageFilter.txx"
+#include "otbSOMbasedImageFilter.hxx"
 #endif
 
 #endif

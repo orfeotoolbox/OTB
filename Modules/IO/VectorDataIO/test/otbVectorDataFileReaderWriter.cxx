@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,17 +25,17 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataFileReader.h"
 
-int otbVectorDataFileReaderWriter(int itkNotUsed(argc), char * argv[])
+int otbVectorDataFileReaderWriter(int itkNotUsed(argc), char* argv[])
 {
 
-  typedef otb::VectorData<double, 2>                VectorDataType;
+  typedef otb::VectorData<double, 2> VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> ReaderType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
 
-  //Instantiation
+  // Instantiation
   ReaderType::Pointer     reader = ReaderType::New();
   WriterType::Pointer     writer = WriterType::New();
-  VectorDataType::Pointer data = VectorDataType::New();
+  VectorDataType::Pointer data   = VectorDataType::New();
 
   reader->SetFileName(argv[1]);
 

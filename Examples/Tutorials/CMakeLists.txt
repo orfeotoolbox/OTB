@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -37,10 +37,6 @@ target_link_libraries(Pipeline ${OTB_LIBRARIES})
 
 add_executable(ScalingPipeline ScalingPipeline.cxx)
 target_link_libraries(ScalingPipeline ${OTB_LIBRARIES})
-
-add_executable(SmarterFilteringPipeline SmarterFilteringPipeline.cxx)
-target_link_libraries(SmarterFilteringPipeline ${OTB_LIBRARIES})
-
 
 if(BUILD_TESTING)
   add_subdirectory(test)

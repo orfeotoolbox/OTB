@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,7 @@
 #include "itkArray.h"
 
 #include "otbParser.h"
+#include <string>
 
 namespace otb
 {
@@ -78,16 +79,15 @@ namespace otb
  * \ingroup OTBMathParser
  */
 
-template< class TImage >
-class ITK_EXPORT BandMathImageFilter
-  : public itk::InPlaceImageFilter< TImage >
+template <class TImage>
+class ITK_EXPORT BandMathImageFilter : public itk::InPlaceImageFilter<TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BandMathImageFilter< TImage >                 Self;
-  typedef itk::InPlaceImageFilter< TImage >             Superclass;
-  typedef itk::SmartPointer< Self >                     Pointer;
-  typedef itk::SmartPointer< const Self >               ConstPointer;
+  typedef BandMathImageFilter<TImage>     Self;
+  typedef itk::InPlaceImageFilter<TImage> Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -96,20 +96,20 @@ public:
   itkTypeMacro(BandMathImageFilter, InPlaceImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TImage                                  ImageType;
-  typedef typename ImageType::ConstPointer        ImagePointer;
-  typedef typename ImageType::RegionType          ImageRegionType;
-  typedef typename ImageType::PixelType           PixelType;
-  typedef typename ImageType::IndexType           IndexType;
-  typedef typename ImageType::PointType           OrigineType;
-  typedef typename ImageType::SpacingType         SpacingType;
-  typedef Parser                                  ParserType;
+  typedef TImage                                             ImageType;
+  typedef typename ImageType::ConstPointer                   ImagePointer;
+  typedef typename ImageType::RegionType                     ImageRegionType;
+  typedef typename ImageType::PixelType                      PixelType;
+  typedef typename ImageType::IndexType                      IndexType;
+  typedef typename ImageType::PointType                      OrigineType;
+  typedef typename ImageType::SpacingType                    SpacingType;
+  typedef Parser                                             ParserType;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Set the nth filter input with or without a specified associated variable name */
   using Superclass::SetNthInput;
-  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image);
-  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName);
+  void SetNthInput(DataObjectPointerArraySizeType idx, const ImageType* image);
+  void SetNthInput(DataObjectPointerArraySizeType idx, const ImageType* image, const std::string& varName);
 
   /** Change the nth filter input associated variable name */
   void SetNthInputName(DataObjectPointerArraySizeType idx, const std::string& expression);
@@ -124,40 +124,40 @@ public:
   std::string GetNthInputName(DataObjectPointerArraySizeType idx) const;
 
   /** Return a pointer on the nth filter input */
-  ImageType * GetNthInput(DataObjectPointerArraySizeType idx);
+  ImageType* GetNthInput(DataObjectPointerArraySizeType idx);
 
-protected :
+protected:
   BandMathImageFilter();
   ~BandMathImageFilter() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void BeforeThreadedGenerateData() override;
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void AfterThreadedGenerateData() override;
 
-private :
-  BandMathImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+private:
+  BandMathImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  std::string                           m_Expression;
-  std::vector<ParserType::Pointer>      m_VParser;
-  std::vector< std::vector<double> >    m_AImage;
-  std::vector< std::string >            m_VVarName;
-  unsigned int                          m_NbVar;
+  std::string                      m_Expression;
+  std::vector<ParserType::Pointer> m_VParser;
+  std::vector<std::vector<double>> m_AImage;
+  std::vector<std::string>         m_VVarName;
+  unsigned int                     m_NbVar;
 
-  SpacingType                           m_Spacing;
-  OrigineType                           m_Origin;
+  SpacingType m_Spacing;
+  OrigineType m_Origin;
 
-  long                                  m_UnderflowCount;
-  long                                  m_OverflowCount;
-  itk::Array<long>                      m_ThreadUnderflow;
-  itk::Array<long>                      m_ThreadOverflow;
+  long             m_UnderflowCount;
+  long             m_OverflowCount;
+  itk::Array<long> m_ThreadUnderflow;
+  itk::Array<long> m_ThreadOverflow;
 };
 
-}//end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathImageFilter.txx"
+#include "otbBandMathImageFilter.hxx"
 #endif
 
 #endif

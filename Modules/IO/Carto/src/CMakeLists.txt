@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,6 +21,7 @@
 set(OTBCarto_SRC
   otbCoordinateToName.cxx
   otbOSMDataToVectorDataGenerator.cxx
+  otbWorldFile.cxx
   otbPlaceNameToLonLat.cxx
   )
 
@@ -36,7 +37,6 @@ target_link_libraries(OTBCarto
   ${OTBCurlAdapters_LIBRARIES}
   ${OTBVectorDataIO_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
-
   )
 
 otb_module_target(OTBCarto)

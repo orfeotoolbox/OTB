@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,9 +26,9 @@
 #include "otbObjectList.h"
 #include "otbVectorDataKeywordlist.h"
 
-#include <iostream>
 
 #include "ogrsf_frmts.h"
+#include <string>
 
 namespace otb
 {
@@ -36,20 +36,18 @@ namespace otb
  * This enumeration describes the type of nodes used to represent a tree of vector data in the Orfeo ToolBox.
  */
 
-typedef
-enum
-  {
-  ROOT = 0,
-  DOCUMENT = 1,
-  FOLDER = 2,
-  FEATURE_POINT = 3,
-  FEATURE_LINE = 4,
-  FEATURE_POLYGON = 5,
-  FEATURE_MULTIPOINT = 6,
-  FEATURE_MULTILINE = 7,
+typedef enum {
+  ROOT                 = 0,
+  DOCUMENT             = 1,
+  FOLDER               = 2,
+  FEATURE_POINT        = 3,
+  FEATURE_LINE         = 4,
+  FEATURE_POLYGON      = 5,
+  FEATURE_MULTIPOINT   = 6,
+  FEATURE_MULTILINE    = 7,
   FEATURE_MULTIPOLYGON = 8,
-  FEATURE_COLLECTION = 9
-  } NodeType;
+  FEATURE_COLLECTION   = 9
+} NodeType;
 
 /** \class DataNode
  *  \brief This class represents a node of data in a vector data hierarchy.
@@ -72,8 +70,7 @@ enum
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned VDimension = 2, class TValuePrecision = double>
-class DataNode
-  : public itk::Object
+class DataNode : public itk::Object
 {
 public:
   /** Standard class typedef */
@@ -94,20 +91,20 @@ public:
   /** Internal data typedef */
   typedef itk::Point<PrecisionType, VDimension>                                PointType;
   typedef otb::PolyLineParametricPathWithValue<ValuePrecisionType, VDimension> LineType;
-  typedef typename LineType::Pointer                                           LinePointerType;
-  typedef typename LineType::ConstPointer                                      LineConstPointerType;
-  typedef Polygon<ValuePrecisionType>                                          PolygonType;
-  typedef typename PolygonType::VertexListType                                 VertexListType;
-  typedef typename VertexListType::ConstPointer                                VertexListConstPointerType;
-  typedef typename PolygonType::Pointer                                        PolygonPointerType;
-  typedef typename PolygonType::ConstPointer                                   PolygonConstPointerType;
-  typedef ObjectList<PolygonType>                                              PolygonListType;
-  typedef typename PolygonListType::Pointer                                    PolygonListPointerType;
-  typedef typename PolygonListType::ConstPointer                               PolygonListConstPointerType;
+  typedef typename LineType::Pointer             LinePointerType;
+  typedef typename LineType::ConstPointer        LineConstPointerType;
+  typedef Polygon<ValuePrecisionType>            PolygonType;
+  typedef typename PolygonType::VertexListType   VertexListType;
+  typedef typename VertexListType::ConstPointer  VertexListConstPointerType;
+  typedef typename PolygonType::Pointer          PolygonPointerType;
+  typedef typename PolygonType::ConstPointer     PolygonConstPointerType;
+  typedef ObjectList<PolygonType>                PolygonListType;
+  typedef typename PolygonListType::Pointer      PolygonListPointerType;
+  typedef typename PolygonListType::ConstPointer PolygonListConstPointerType;
 
   /** Fields typedef */
-//   typedef std::map<std::string, std::string>          FieldMapType;
-//   typedef std::pair<std::string, std::string>         FieldType;
+  //   typedef std::map<std::string, std::string>          FieldMapType;
+  //   typedef std::pair<std::string, std::string>         FieldType;
 
   /** Accessors */
   itkGetConstMacro(NodeType, NodeType);
@@ -127,12 +124,12 @@ public:
    * Get the point data, when valid.
    * \return The point.
    */
-  PointType         GetPoint() const;
+  PointType GetPoint() const;
   /**
    * Get the line data, when valid.
    * \return The line.
    */
-  LinePointerType    GetLine() const;
+  LinePointerType GetLine() const;
   /**
    * Get the polygon exterior ring data, when valid.
    * \return The polygon exterior ring.
@@ -249,17 +246,17 @@ public:
   //  * \param key The name of the field.
   //  */
   //   void RemoveField(const std::string& key);
-/**
- * \return True if the node contains the field named after the given key.
- * \param key The name of the field.
- */
+  /**
+   * \return True if the node contains the field named after the given key.
+   * \param key The name of the field.
+   */
   bool HasField(const std::string& key) const;
 
   /**
    * Copy the field list from a DataNode
    * \param dataNode datanode where to get the keywordlist to copy.
    */
-  void CopyFieldList(const DataNode * dataNode);
+  void CopyFieldList(const DataNode* dataNode);
 
   /**
     * \return the field list in the node.
@@ -271,42 +268,44 @@ public:
 
   double EuclideanDistanceMetric(const PointType point);
 
-   /**
-    * \return true if the two datanodes intersects
-    */
+  /**
+   * \return true if the two datanodes intersects
+   */
   bool Intersects(const DataNode* node);
 
-   /**
-    * \return true if the two datanodes intersects
-    */
+  /**
+   * \return true if the two datanodes intersects
+   */
   bool Within(const DataNode* node);
 
-/**
- * Clear all fields.
- */
-//   void ClearFields();
+  /**
+   * Clear all fields.
+   */
+  //   void ClearFields();
 
 protected:
   /** Constructor */
   DataNode();
   /** Destructor */
-  ~DataNode() override {}
+  ~DataNode() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   OGRGeometry* ConvertDataNodeToOGRGeometry(const DataNode* dataNode);
 
 private:
-  DataNode(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DataNode(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** typedef of the data associated with the node */
   typedef struct
   {
-    bool valid;
-    PointType point;
-    LinePointerType line;
-    PolygonPointerType exteriorRing;
+    bool                   valid;
+    PointType              point;
+    LinePointerType        line;
+    PolygonPointerType     exteriorRing;
     PolygonListPointerType interiorRings;
   } DataType;
 
@@ -320,12 +319,12 @@ private:
   DataType m_Data;
 
   /** The fields map */
-//   FieldMapType         m_FieldMap;
+  //   FieldMapType         m_FieldMap;
 };
 } // end namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDataNode.txx"
+#include "otbDataNode.hxx"
 #endif
 
 #endif

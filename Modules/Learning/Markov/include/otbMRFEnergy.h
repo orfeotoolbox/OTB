@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,7 +39,7 @@ namespace otb
  *
  * \ingroup OTBMarkov
  */
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFEnergy : public itk::Object
 {
 public:
@@ -53,10 +53,8 @@ public:
   typedef typename InputImageType::PixelType    InputImagePixelType;
   typedef typename LabelledImageType::PixelType LabelledImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator
-  <LabelledImageType>     LabelledNeighborhoodIterator;
-  typedef itk::ConstNeighborhoodIterator
-  <InputImageType>        InputNeighborhoodIterator;
+  typedef itk::ConstNeighborhoodIterator<LabelledImageType> LabelledNeighborhoodIterator;
+  typedef itk::ConstNeighborhoodIterator<InputImageType>    InputNeighborhoodIterator;
 
   typedef itk::Array<double> ParametersType;
 
@@ -76,9 +74,9 @@ public:
   void SetParameters(const ParametersType& parameters)
   {
     if (parameters.Size() != m_NumberOfParameters)
-      {
+    {
       itkExceptionMacro(<< "Invalid number of parameters");
-      }
+    }
     m_Parameters = parameters;
     this->Modified();
   }
@@ -95,59 +93,59 @@ public:
 
   virtual double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
-    double              result = 0.0;
+    double              result      = 0.0;
     unsigned int        centerIndex = it.GetCenterNeighborhoodIndex();
-    InputImagePixelType value1; //TODO put also the other neighborhood ?
-    bool                isInside = false;
+    InputImagePixelType value1; // TODO put also the other neighborhood ?
+    bool                isInside        = false;
     unsigned int        insideNeighbors = 0;
     for (unsigned long pos = 0; pos < it.Size(); ++pos)
+    {
+      if (pos != centerIndex) // TODO put outside loop for faster access ?
       {
-      if (pos !=  centerIndex) //TODO put outside loop for faster access ?
-        {
         value1 = it.GetPixel(pos, isInside);
         if (isInside)
-          {
+        {
           result += GetSingleValue(value1, value2);
           ++insideNeighbors;
-          }
         }
       }
+    }
     return result / insideNeighbors;
   }
 
   virtual double GetValue(const InputNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
-    double              result = 0.0;
+    double              result      = 0.0;
     unsigned int        centerIndex = it.GetCenterNeighborhoodIndex();
-    InputImagePixelType value1; //TODO put also the other neighborhood ?
-    bool                isInside = false;
+    InputImagePixelType value1; // TODO put also the other neighborhood ?
+    bool                isInside        = false;
     unsigned int        insideNeighbors = 0;
     for (unsigned long pos = 0; pos < it.Size(); ++pos)
+    {
+      if (pos != centerIndex) // TODO put outside loop for faster access ?
       {
-      if (pos !=  centerIndex) //TODO put outside loop for faster access ?
-        {
         value1 = it.GetPixel(pos, isInside);
         if (isInside)
-          {
+        {
           result += GetSingleValue(value1, value2);
           ++insideNeighbors;
-          }
         }
       }
+    }
     return result / insideNeighbors;
   }
 
 protected:
   // The constructor and destructor.
-  MRFEnergy() :
-    m_NumberOfParameters(1),
-    m_Parameters(0) {};
-  ~MRFEnergy() override {}
+  MRFEnergy() : m_NumberOfParameters(1), m_Parameters(0){};
+  ~MRFEnergy() override
+  {
+  }
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 };
 
-template<class TInput2>
+template <class TInput2>
 class ITK_EXPORT MRFEnergy<TInput2, TInput2> : public itk::Object
 {
 public:
@@ -159,9 +157,8 @@ public:
   typedef TInput2                               LabelledImageType;
   typedef typename LabelledImageType::PixelType LabelledImagePixelType;
 
-  typedef itk::ConstNeighborhoodIterator
-  <LabelledImageType>     LabelledNeighborhoodIterator;
-  typedef itk::Array<double> ParametersType;
+  typedef itk::ConstNeighborhoodIterator<LabelledImageType> LabelledNeighborhoodIterator;
+  typedef itk::Array<double>                                ParametersType;
 
   itkNewMacro(Self);
 
@@ -179,9 +176,9 @@ public:
   void SetParameters(const ParametersType& parameters)
   {
     if (parameters.Size() != m_NumberOfParameters)
-      {
+    {
       itkExceptionMacro(<< "Invalid number of parameters");
-      }
+    }
     m_Parameters = parameters;
     this->Modified();
   }
@@ -198,33 +195,32 @@ public:
 
   virtual double GetValue(const LabelledNeighborhoodIterator& it, const LabelledImagePixelType& value2)
   {
-    double                 result = 0.0;
+    double                 result      = 0.0;
     unsigned int           centerIndex = it.GetCenterNeighborhoodIndex();
-    LabelledImagePixelType value1; //TODO put also the other neighborhood ?
-    bool                   isInside = false;
+    LabelledImagePixelType value1; // TODO put also the other neighborhood ?
+    bool                   isInside        = false;
     unsigned int           insideNeighbors = 0;
     for (unsigned long pos = 0; pos < it.Size(); ++pos)
+    {
+      if (pos != centerIndex) // TODO put outside loop for faster access ?
       {
-      if (pos !=  centerIndex) //TODO put outside loop for faster access ?
-        {
         value1 = it.GetPixel(pos, isInside);
         if (isInside)
-          {
+        {
           result += GetSingleValue(value1, value2);
           ++insideNeighbors;
-          }
         }
       }
+    }
     return result / insideNeighbors;
   }
 
 protected:
   // The constructor and destructor.
-  MRFEnergy() :
-    m_NumberOfParameters(1),
-    m_Parameters(0)
-      {};
-  ~MRFEnergy() override {}
+  MRFEnergy() : m_NumberOfParameters(1), m_Parameters(0){};
+  ~MRFEnergy() override
+  {
+  }
   unsigned int   m_NumberOfParameters;
   ParametersType m_Parameters;
 };

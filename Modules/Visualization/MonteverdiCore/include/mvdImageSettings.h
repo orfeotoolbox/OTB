@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -81,20 +79,18 @@ class OTBMonteverdiCore_EXPORT ImageSettings
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types & constants.
+  //
+  // Public types & constants.
 public:
-
   /** */
   typedef unsigned int SizeType;
 
   /** */
   typedef double ValueType;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
   ImageSettings();
 
@@ -119,7 +115,7 @@ public:
 
   /**
    */
-  inline void SetEffect( Effect );
+  inline void SetEffect(Effect);
 
   /**
    */
@@ -127,7 +123,7 @@ public:
 
   /**
    */
-  const char * GetEffectName() const;
+  const char* GetEffectName() const;
 
   /**
    */
@@ -139,7 +135,7 @@ public:
 
   /**
    */
-  inline void SetSize( unsigned int );
+  inline void SetSize(unsigned int);
 
   /**
    */
@@ -147,7 +143,7 @@ public:
 
   /**
    */
-  void SetValue( double );
+  void SetValue(double);
 
   /**
    */
@@ -155,11 +151,11 @@ public:
 
   /**
    */
-  inline const char * GetValueName() const;
+  inline const char* GetValueName() const;
 
   /**
    */
-  inline void SetAlpha( double );
+  inline void SetAlpha(double);
 
   /**
    */
@@ -167,46 +163,41 @@ public:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /**
    */
   inline void SetModified();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /**
    */
-  static char const * const  EFFECT_VALUE_NAME[ EFFECT_COUNT ];
+  static char const* const EFFECT_VALUE_NAME[EFFECT_COUNT];
 
   /**
    * \brief Flag which notices that rendering settings have been
    * edited.
    */
   // TODO: Optimize using C++ bitset bool foo:1;
-  bool m_IsModified: 1;
+  bool m_IsModified : 1;
 
   /**
    * \brief Flag which notices that rendering settings have been
    * applied to display.
    */
   // TODO: Optimize using C++ bitset bool foo:1;
-  bool m_IsApplied: 1;
+  bool m_IsApplied : 1;
 
   /**
    */
@@ -251,40 +242,28 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-bool
-ImageSettings
-::IsApplied() const
+inline bool ImageSettings::IsApplied() const
 {
   return m_IsApplied;
 }
 
 /*****************************************************************************/
-inline
-bool
-ImageSettings
-::IsModified() const
+inline bool ImageSettings::IsModified() const
 {
   return m_IsModified;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::SetModified()
+inline void ImageSettings::SetModified()
 {
   // qDebug() << this << "::SetModified()";
 
   m_IsModified = true;
-  m_IsApplied = false;
+  m_IsApplied  = false;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::ClearModified()
+inline void ImageSettings::ClearModified()
 {
   // qDebug() << this << "::ClearModified()";
 
@@ -292,10 +271,7 @@ ImageSettings
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::SetApplied()
+inline void ImageSettings::SetApplied()
 {
   // qDebug() << this << "::SetApplied()";
 
@@ -303,10 +279,7 @@ ImageSettings
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::SetEffect( Effect effect )
+inline void ImageSettings::SetEffect(Effect effect)
 {
   m_Effect = effect;
 
@@ -314,70 +287,36 @@ ImageSettings
 }
 
 /*****************************************************************************/
-inline
-Effect
-ImageSettings
-::GetEffect() const
+inline Effect ImageSettings::GetEffect() const
 {
   return m_Effect;
 }
 
 /*****************************************************************************/
-inline
-const char *
-ImageSettings
-::GetValueName() const
+inline const char* ImageSettings::GetValueName() const
 {
-  assert( qApp!=NULL );
+  assert(qApp != NULL);
 
-  return
-    qApp->translate(
-      "mvd::ImageSettings",
-      ImageSettings::EFFECT_VALUE_NAME[ m_Effect ]
-    )
-    .toLocal8Bit().constData();
+  return qApp->translate("mvd::ImageSettings", ImageSettings::EFFECT_VALUE_NAME[m_Effect]).toLocal8Bit().constData();
 }
 
 /*****************************************************************************/
-inline
-bool
-ImageSettings
-::HasSize() const
+inline bool ImageSettings::HasSize() const
 {
-  return
-    m_Effect==EFFECT_CHESSBOARD ||
-    m_Effect==EFFECT_GRADIENT ||
-    m_Effect==EFFECT_LOCAL_CONTRAST ||
-    m_Effect==EFFECT_LOCAL_TRANSLUCENCY ||
-    m_Effect==EFFECT_SPECTRAL_ANGLE ||
-    m_Effect==EFFECT_LUT_LOCAL_JET ||
-    m_Effect==EFFECT_LUT_LOCAL_HOT ||
-    m_Effect==EFFECT_LUT_LOCAL_WINTER ||
-    m_Effect==EFFECT_LUT_LOCAL_SUMMER ||
-    m_Effect==EFFECT_LUT_LOCAL_COOL;
+  return m_Effect == EFFECT_CHESSBOARD || m_Effect == EFFECT_GRADIENT || m_Effect == EFFECT_LOCAL_CONTRAST || m_Effect == EFFECT_LOCAL_TRANSLUCENCY ||
+         m_Effect == EFFECT_SPECTRAL_ANGLE || m_Effect == EFFECT_LUT_LOCAL_JET || m_Effect == EFFECT_LUT_LOCAL_HOT || m_Effect == EFFECT_LUT_LOCAL_WINTER ||
+         m_Effect == EFFECT_LUT_LOCAL_SUMMER || m_Effect == EFFECT_LUT_LOCAL_COOL;
 }
 
 /*****************************************************************************/
-inline
-bool
-ImageSettings
-::HasValue() const
+inline bool ImageSettings::HasValue() const
 {
-  return
-    m_Effect==EFFECT_LOCAL_CONTRAST ||
-    m_Effect==EFFECT_SPECTRAL_ANGLE ||
-    m_Effect==EFFECT_LUT_LOCAL_JET ||
-    m_Effect==EFFECT_LUT_LOCAL_HOT ||
-    m_Effect==EFFECT_LUT_LOCAL_WINTER ||
-    m_Effect==EFFECT_LUT_LOCAL_SUMMER ||
-    m_Effect==EFFECT_LUT_LOCAL_COOL;
+  return m_Effect == EFFECT_LOCAL_CONTRAST || m_Effect == EFFECT_SPECTRAL_ANGLE || m_Effect == EFFECT_LUT_LOCAL_JET || m_Effect == EFFECT_LUT_LOCAL_HOT ||
+         m_Effect == EFFECT_LUT_LOCAL_WINTER || m_Effect == EFFECT_LUT_LOCAL_SUMMER || m_Effect == EFFECT_LUT_LOCAL_COOL;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::SetSize( unsigned int size )
+inline void ImageSettings::SetSize(unsigned int size)
 {
   m_Size = size;
 
@@ -385,36 +324,27 @@ ImageSettings
 }
 
 /*****************************************************************************/
-inline
-unsigned int
-ImageSettings
-::GetSize() const
+inline unsigned int ImageSettings::GetSize() const
 {
   return m_Size;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageSettings
-::SetAlpha( double alpha )
+inline void ImageSettings::SetAlpha(double alpha)
 {
   m_Alpha = alpha;
 
-  if( m_Alpha>1.0 )
+  if (m_Alpha > 1.0)
     m_Alpha = 1.0;
 
-  if( m_Alpha<0.0 )
+  if (m_Alpha < 0.0)
     m_Alpha = 0.0;
 
   SetModified();
 }
 
 /*****************************************************************************/
-inline
-double
-ImageSettings
-::GetAlpha() const
+inline double ImageSettings::GetAlpha() const
 {
   return m_Alpha;
 }

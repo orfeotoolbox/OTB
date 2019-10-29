@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
@@ -81,63 +79,58 @@ class OTBMonteverdiCore_EXPORT SerializableInterface
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   /**
    */
   enum Mode
   {
     MODE_BINARY = 0,
-    MODE_TEXT = 1,
+    MODE_TEXT   = 1,
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   virtual ~SerializableInterface();
 
   /**
    */
-  void Write( const QString& filename, Mode mode ) const;
+  void Write(const QString& filename, Mode mode) const;
 
   /**
    */
-  void Read( const QString& filename, Mode mode );
+  void Read(const QString& filename, Mode mode);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   SerializableInterface();
 
   /**
    */
-  virtual void virtual_Read( QIODevice* device ) =0;
+  virtual void virtual_Read(QIODevice* device) = 0;
 
   /**
    */
-  virtual void virtual_Write( QIODevice& device ) const =0;
+  virtual void virtual_Write(QIODevice& device) const = 0;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
 };
 
 } // end namespace 'mvd'.

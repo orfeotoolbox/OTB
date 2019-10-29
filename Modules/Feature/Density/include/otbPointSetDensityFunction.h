@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,10 +40,10 @@ class ITK_EXPORT PointSetDensityFunction : public PointSetFunction<TPointSet, TO
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetDensityFunction              Self;
+  typedef PointSetDensityFunction Self;
   typedef PointSetFunction<TPointSet, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PointSetDensityFunction, PointSetFunction);
@@ -52,9 +52,9 @@ public:
   itkNewMacro(Self);
 
   /** PointSet Type typedef Support*/
-  typedef TPointSet                       PointSetType;
-  typedef typename Superclass::InputType  InputType;
-  typedef typename  PointSetType::Pointer PointSetPointerType;
+  typedef TPointSet                      PointSetType;
+  typedef typename Superclass::InputType InputType;
+  typedef typename PointSetType::Pointer PointSetPointerType;
 
   /** TOutput typedef support*/
   typedef TOutput OutputType;
@@ -67,14 +67,16 @@ public:
   OutputType Evaluate(const InputType& input) const override;
 
 protected:
-  PointSetDensityFunction() : m_Radius(1) {};
-  ~PointSetDensityFunction() override {}
+  PointSetDensityFunction() : m_Radius(1){};
+  ~PointSetDensityFunction() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PointSetDensityFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  PointSetDensityFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Radius;
 };
@@ -82,7 +84,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetDensityFunction.txx"
+#include "otbPointSetDensityFunction.hxx"
 #endif
 
 #endif

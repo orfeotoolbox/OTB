@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,15 +55,14 @@ namespace otb
  * \ingroup OTBSupervised
  */
 template <class TRefListLabel, class TProdListLabel>
-class ITK_EXPORT ConfusionMatrixCalculator :
-  public itk::Object
+class ITK_EXPORT ConfusionMatrixCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ConfusionMatrixCalculator                 Self;
-  typedef itk::Object                               Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ConfusionMatrixCalculator     Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConfusionMatrixCalculator, itk::Object);
@@ -72,24 +71,24 @@ public:
   itkNewMacro(Self);
 
   /** List to store the corresponding labels */
-  typedef TRefListLabel                                                         RefListLabelType;
-  typedef typename RefListLabelType::Pointer                                    RefListLabelPointerType;
+  typedef TRefListLabel                      RefListLabelType;
+  typedef typename RefListLabelType::Pointer RefListLabelPointerType;
 
-  typedef TProdListLabel                                                        ProdListLabelType;
-  typedef typename ProdListLabelType::Pointer                                   ProdListLabelPointerType;
+  typedef TProdListLabel                      ProdListLabelType;
+  typedef typename ProdListLabelType::Pointer ProdListLabelPointerType;
 
-  typedef typename RefListLabelType::ValueType::ValueType                       ClassLabelType;
-  typedef std::map<ClassLabelType, int>                                         MapOfClassesType;
-  typedef std::map<int, ClassLabelType>                                         MapOfIndicesType;
+  typedef typename RefListLabelType::ValueType::ValueType ClassLabelType;
+  typedef std::map<ClassLabelType, int> MapOfClassesType;
+  typedef std::map<int, ClassLabelType> MapOfIndicesType;
 
   /** Type for the confusion matrix */
-  typedef itk::VariableSizeMatrix<unsigned long>                                ConfusionMatrixType;
+  typedef itk::VariableSizeMatrix<unsigned long> ConfusionMatrixType;
 
   /** Type for the confusion matrix measurements calculator*/
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
 
   /** Type for the measurement */
-  typedef itk::VariableLengthVector<double>                                     MeasurementType;
+  typedef itk::VariableLengthVector<double> MeasurementType;
 
   /** Computes m_ConfusionMatrix and then the measurements over it. */
   void Compute(void);
@@ -137,13 +136,15 @@ public:
 
 protected:
   ConfusionMatrixCalculator();
-  ~ConfusionMatrixCalculator() override {}
+  ~ConfusionMatrixCalculator() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  ConfusionMatrixCalculator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ConfusionMatrixCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_KappaIndex;
   double m_OverallAccuracy;
@@ -172,17 +173,16 @@ private:
   unsigned short m_NumberOfClasses;
   unsigned long  m_NumberOfSamples;
 
-  ConfusionMatrixType m_ConfusionMatrix;
+  ConfusionMatrixType                               m_ConfusionMatrix;
   typename ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
 
   RefListLabelPointerType  m_ReferenceLabels;
   ProdListLabelPointerType m_ProducedLabels;
-
 };
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixCalculator.txx"
+#include "otbConfusionMatrixCalculator.hxx"
 #endif
 
 #endif

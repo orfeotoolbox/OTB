@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,16 +39,14 @@ namespace otb
  * \ingroup OTBLabelMap
  */
 
-template< class TInputImage, class TOutputImage , class TAttributeAccessor=
-    typename Functor::AttributesMapLabelObjectAccessor< typename TInputImage::LabelObjectType > >
-class ITK_EXPORT LabelMapToAttributeImageFilter :
-    public itk::LabelMapFilter< TInputImage , TOutputImage >
+template <class TInputImage, class TOutputImage,
+          class TAttributeAccessor = typename Functor::AttributesMapLabelObjectAccessor<typename TInputImage::LabelObjectType>>
+class ITK_EXPORT LabelMapToAttributeImageFilter : public itk::LabelMapFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToAttributeImageFilter   Self;
-  typedef itk::LabelMapFilter
-    < TInputImage , TOutputImage >      Superclass;
+  typedef LabelMapToAttributeImageFilter Self;
+  typedef itk::LabelMapFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -58,19 +56,19 @@ public:
   itkTypeMacro(LabelMapToAttributeImageFilter, LabelMapFilter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                                       InputImageType;
-  typedef typename InputImageType::LabelObjectType          LabelObjectType;
-  typedef typename LabelObjectType::ConstLineIterator       ConstLineIteratorType;
-  typedef typename LabelObjectType::AttributesMapType       AttributesMapType;
+  typedef TInputImage                                 InputImageType;
+  typedef typename InputImageType::LabelObjectType    LabelObjectType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
+  typedef typename LabelObjectType::AttributesMapType AttributesMapType;
 
-  typedef TOutputImage                                OutputImageType;
-  typedef typename OutputImageType::PixelType         OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
-  typedef typename OutputImageType::IndexType         IndexType;
+  typedef TOutputImage                                       OutputImageType;
+  typedef typename OutputImageType::PixelType                OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType        OutputInternalPixelType;
+  typedef typename OutputImageType::IndexType                IndexType;
   typedef itk::VariableLengthVector<OutputInternalPixelType> VectorPixelType;
 
-  typedef std::vector< std::string >  AttributeListType;
-  typedef TAttributeAccessor          AttributeAccessorType;
+  typedef std::vector<std::string>                           AttributeListType;
+  typedef TAttributeAccessor                                 AttributeAccessorType;
   typedef typename AttributeAccessorType::AttributeValueType AttributeValueType;
 
   /** Get macro for background value */
@@ -80,19 +78,19 @@ public:
   itkSetMacro(BackgroundValue, OutputInternalPixelType);
 
   /** Get the current chosen attributes */
-  const AttributeListType & GetChosenAttributes()
+  const AttributeListType& GetChosenAttributes()
   {
     return m_ChosenAttributes;
   }
 
   /** Set the chosen attributes */
-  void SetChosenAttributes(AttributeListType & newAttributes);
+  void SetChosenAttributes(AttributeListType& newAttributes);
 
   /** Get the number of components of the output image */
   unsigned int GetNumberOfComponentsPerPixel();
 
   /** Fill the given channel with value from the given attribute */
-  bool SetAttributeForNthChannel(unsigned int channel, const char *attribute);
+  bool SetAttributeForNthChannel(unsigned int channel, const char* attribute);
 
   /** Fill the given channel with value from the given attribute */
   bool SetAttributeForNthChannel(unsigned int channel, const std::string& attribute)
@@ -102,13 +100,13 @@ public:
 
 protected:
   LabelMapToAttributeImageFilter();
-  ~LabelMapToAttributeImageFilter() override {};
+  ~LabelMapToAttributeImageFilter() override{};
 
   void GenerateOutputInformation() override;
 
   void BeforeThreadedGenerateData() override;
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 
 private:
   /** Background pixel value */
@@ -117,11 +115,10 @@ private:
   /** List of chosen attributes */
   AttributeListType m_ChosenAttributes;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapToAttributeImageFilter.txx"
+#include "otbLabelMapToAttributeImageFilter.hxx"
 #endif
 
 #endif

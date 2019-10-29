@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -80,23 +78,22 @@ class OTBMonteverdiCore_EXPORT ImageSettingsInterface
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   virtual ~ImageSettingsInterface();
 
   /** */
-  inline const ImageSettings * GetSettings() const;
+  inline const ImageSettings* GetSettings() const;
 
   /** */
-  inline ImageSettings * GetSettings();
+  inline ImageSettings* GetSettings();
 
   /** */
   inline bool HasSettings() const;
 
-  /** */
+/** */
 #if 0
   inline
     template< typename T >
@@ -108,40 +105,37 @@ public:
   void UpdateSettings();
 
   /** */
-  void SetSettings( ImageSettings * );
+  void SetSettings(ImageSettings*);
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   ImageSettingsInterface();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
   virtual void virtual_UpdateSettings();
   /**
    */
-  virtual void virtual_SetSettings( ImageSettings * );
+  virtual void virtual_SetSettings(ImageSettings*);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /** */
-  ImageSettings * m_Settings;
+  ImageSettings* m_Settings;
 };
 
 } // end namespace 'mvd'.
@@ -169,19 +163,13 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const ImageSettings *
-ImageSettingsInterface
-::GetSettings() const
+inline const ImageSettings* ImageSettingsInterface::GetSettings() const
 {
   return m_Settings;
 }
 
 /*****************************************************************************/
-inline
-ImageSettings *
-ImageSettingsInterface
-::GetSettings()
+inline ImageSettings* ImageSettingsInterface::GetSettings()
 {
   return m_Settings;
 }
@@ -201,12 +189,9 @@ ImageSettingsInterface
 #endif
 
 /*****************************************************************************/
-inline
-bool
-ImageSettingsInterface
-::HasSettings() const
+inline bool ImageSettingsInterface::HasSettings() const
 {
-  return m_Settings!=0;
+  return m_Settings != 0;
 }
 
 } // end namespace 'mvd'

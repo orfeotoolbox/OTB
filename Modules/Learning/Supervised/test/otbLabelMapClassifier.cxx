@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,57 +35,50 @@
 #include "otbLabelMapClassifier.h"
 #include "otbLabelMapWithClassLabelToClassLabelImageFilter.h"
 
-const unsigned int Dimension = 2;
+const unsigned int     Dimension = 2;
 typedef unsigned short LabelType;
 typedef double         DoublePixelType;
 
 typedef otb::AttributesMapLabelObjectWithClassLabel<LabelType, Dimension, double, LabelType> LabelObjectType;
-typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
-typedef otb::VectorImage<DoublePixelType, Dimension>                                  VectorImageType;
-typedef otb::Image<unsigned int, 2>                                              LabeledImageType;
+typedef itk::LabelMap<LabelObjectType> LabelMapType;
+typedef otb::VectorImage<DoublePixelType, Dimension> VectorImageType;
+typedef otb::Image<unsigned int, 2>                  LabeledImageType;
 
-typedef otb::ImageFileReader<VectorImageType>                                   ReaderType;
-typedef otb::ImageFileReader<LabeledImageType>                                  LabeledReaderType;
-typedef otb::ImageFileWriter<VectorImageType>                                   WriterType;
-typedef otb::ImageFileWriter<LabeledImageType>                                  LabeledWriterType;
+typedef otb::ImageFileReader<VectorImageType>  ReaderType;
+typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
+typedef otb::ImageFileWriter<VectorImageType>  WriterType;
+typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
-typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>          LabelMapFilterType;
-typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
-typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType>  BandsStatisticsFilterType;
+typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+typedef otb::ShapeAttributesLabelMapFilter<LabelMapType> ShapeFilterType;
+typedef otb::BandsStatisticsAttributesLabelMapFilter<LabelMapType, VectorImageType> BandsStatisticsFilterType;
 
 // SVM model estimation
-typedef itk::VariableLengthVector<double>                      VectorType;
-typedef itk::FixedArray<LabelType, 1>                           TrainingVectorType;
-typedef itk::Statistics::ListSample<VectorType>                ListSampleType;
-typedef itk::Statistics::ListSample<TrainingVectorType>        TrainingListSampleType;
-typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType>
-                                                               ListSampleFilterType;
-typedef otb::LibSVMMachineLearningModel<double,LabelType> SVMType;
+typedef itk::VariableLengthVector<double> VectorType;
+typedef itk::FixedArray<LabelType, 1> TrainingVectorType;
+typedef itk::Statistics::ListSample<VectorType>         ListSampleType;
+typedef itk::Statistics::ListSample<TrainingVectorType> TrainingListSampleType;
+typedef otb::LabelMapWithClassLabelToLabeledSampleListFilter<LabelMapType, ListSampleType, TrainingListSampleType> ListSampleFilterType;
+typedef otb::LibSVMMachineLearningModel<double, LabelType> SVMType;
 
-typedef otb::LabelMapClassifier<LabelMapType>                                ClassifierType;
-typedef otb::LabelMapWithClassLabelToClassLabelImageFilter
-          <LabelMapType, LabeledImageType>                                       ClassifImageGeneratorType;
+typedef otb::LabelMapClassifier<LabelMapType> ClassifierType;
+typedef otb::LabelMapWithClassLabelToClassLabelImageFilter<LabelMapType, LabeledImageType> ClassifImageGeneratorType;
 
 
 LabelObjectType::Pointer makeTrainingSample(LabelMapType* labelMap, LabelType labelObjectId, LabelType classLabel)
 {
   LabelObjectType::Pointer newLabelObject = LabelObjectType::New();
-  newLabelObject->CopyAllFrom( labelMap->GetLabelObject(labelObjectId) );
+  newLabelObject->CopyAllFrom(labelMap->GetLabelObject(labelObjectId));
   newLabelObject->SetClassLabel(classLabel);
   return newLabelObject;
 }
 
-int otbLabelMapClassifierNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  ClassifierType::Pointer classifier = ClassifierType::New();
-  return EXIT_SUCCESS;
-}
 
-int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
+int otbLabelMapClassifier(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname  = argv[1];
-  const char * lfname   = argv[2];
-  const char * outfname = argv[3];
+  const char* infname  = argv[1];
+  const char* lfname   = argv[2];
+  const char* outfname = argv[3];
 
   // Filters instantiation
   ReaderType::Pointer                reader              = ReaderType::New();
@@ -108,7 +101,7 @@ int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
   filter->SetInput(labeledReader->GetOutput());
   filter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
 
-  //Compute shape and radimometric attributes
+  // Compute shape and radimometric attributes
   shapeFilter->SetInput(filter->GetOutput());
   radiometricFilter->SetInput(shapeFilter->GetOutput());
   radiometricFilter->SetFeatureImage(reader->GetOutput());
@@ -140,12 +133,12 @@ int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
   // Make a ListSample out of trainingLabelMap
   labelMap2SampleList->SetInputLabelMap(trainingLabelMap);
 
-  std::vector<std::string> attributes = labelMap->GetLabelObject(0)->GetAvailableAttributes();
+  std::vector<std::string>                 attributes = labelMap->GetLabelObject(0)->GetAvailableAttributes();
   std::vector<std::string>::const_iterator attrIt;
   for (attrIt = attributes.begin(); attrIt != attributes.end(); ++attrIt)
-    {
+  {
     labelMap2SampleList->GetMeasurementFunctor().AddAttribute((*attrIt).c_str());
-    }
+  }
 
   labelMap2SampleList->Update();
 
@@ -159,9 +152,9 @@ int otbLabelMapClassifier(int itkNotUsed(argc), char * argv[])
   classifier->SetModel(model);
 
   for (attrIt = attributes.begin(); attrIt != attributes.end(); ++attrIt)
-    {
+  {
     classifier->GetMeasurementFunctor().AddAttribute((*attrIt).c_str());
-    }
+  }
 
   classifier->Update();
 

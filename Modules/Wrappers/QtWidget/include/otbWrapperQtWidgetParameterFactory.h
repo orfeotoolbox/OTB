@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetFactory_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkObject.h"
 #include "itkObjectFactory.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBQtWidgetExport.h"
 
@@ -48,7 +46,7 @@ class OTBQtWidget_EXPORT QtWidgetParameterFactory : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef QtWidgetParameterFactory     Self;
+  typedef QtWidgetParameterFactory      Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -59,19 +57,17 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(QtWidgetParameterFactory, Object);
 
-  /** Create the appropriate ImageIO depending on the particulars of the file. */
-  static QtWidgetParameterBase* CreateQtWidget( Parameter* param, QtWidgetModel* model );
+  /** Create the appropriate QtWidget depending on the particulars of the parameter */
+  static QtWidgetParameterBase* CreateQtWidget(Parameter* param, QtWidgetModel* model, QWidget* parent);
 
 protected:
   QtWidgetParameterFactory();
   ~QtWidgetParameterFactory() override;
 
 private:
-  QtWidgetParameterFactory(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  QtWidgetParameterFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
-
 }
 }
 

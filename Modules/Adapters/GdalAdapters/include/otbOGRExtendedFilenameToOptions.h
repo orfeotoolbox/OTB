@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,14 +40,14 @@ class OTBGdalAdapters_EXPORT OGRExtendedFilenameToOptions : public ExtendedFilen
 {
 public:
   /** Standard class typedefs. */
-  typedef OGRExtendedFilenameToOptions Self;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef OGRExtendedFilenameToOptions  Self;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef ExtendedFilenameHelper Superclass;
+  typedef ExtendedFilenameHelper        Superclass;
 
-  typedef Superclass::OptionMapType OptionMapType;
+  typedef Superclass::OptionMapType     OptionMapType;
   typedef OptionMapType::const_iterator ConstMapIteratorType;
-  typedef std::vector<std::string> GDALOptionType;
+  typedef std::vector<std::string>      GDALOptionType;
 
   itkTypeMacro(OGRExtendedFilenameToOptions, otb::ExtendedFilenameHelper);
   itkNewMacro(Self);
@@ -68,49 +68,51 @@ public:
 
   struct LayerOptionType
   {
-    std::unordered_map< std::string , std::string > gdalOptions;
+    std::unordered_map<std::string, std::string> gdalOptions;
   };
 
-  /** Set extended filename */
-  void SetExtendedFileName(const char * extFname) override;
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
+  void SetExtendedFileName(const char* extFname) override;
+
+  void SetExtendedFileName(const std::string& extFname) override;
 
   /** Get the GDAL option for type operation */
-  GDALOptionType GetGDALOptions( const std::string & type ) const ;
+  GDALOptionType GetGDALOptions(const std::string& type) const;
 
   /** Get the deffierent GDAL options*/
-  GDALOptionType GetGDALOpenOptions() const ;
-  GDALOptionType GetGDALCreationOptions() const ;
-  GDALOptionType GetGDALLayerOptions() const ;
+  GDALOptionType GetGDALOpenOptions() const;
+  GDALOptionType GetGDALCreationOptions() const;
+  GDALOptionType GetGDALLayerOptions() const;
 
   bool SimpleFileNameIsSet() const;
   bool HasGDALLayerOption() const;
 
   /** Set GDAL layer option through a vector of string */
-  void SetGDALLayerOptions( const GDALOptionType & options );
+  void SetGDALLayerOptions(const GDALOptionType& options);
 
   /** Add GDAL layer option to existing one */
-  void AddGDALLayerOptions( const GDALOptionType & options );
+  void AddGDALLayerOptions(const GDALOptionType& options);
 
-  /** Constructor that return a pointer to an OGRExtendedFilename with 
+  /** Constructor that return a pointer to an OGRExtendedFilename with
    * GDAL layer option as options
    */
-  static Pointer GetGDALLayerOptionsHelper( const GDALOptionType & options );
+  static Pointer GetGDALLayerOptionsHelper(const GDALOptionType& options);
 
 protected:
   OGRExtendedFilenameToOptions();
-  OGRExtendedFilenameToOptions( const GDALOptionType & options );
-  ~OGRExtendedFilenameToOptions() override {};
+  OGRExtendedFilenameToOptions(const GDALOptionType& options);
+  ~OGRExtendedFilenameToOptions() override{};
 
 private:
-  OGRExtendedFilenameToOptions(const Self &) = delete ;
-  void operator =(const Self&) = delete ;
+  OGRExtendedFilenameToOptions(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  OpenOptionType m_OpenOptions;
+  OpenOptionType     m_OpenOptions;
   CreationOptionType m_CreationOptions;
-  LayerOptionType m_LayerOptions;
-  bool m_HasFileName;
+  LayerOptionType    m_LayerOptions;
+  bool               m_HasFileName;
 };
 
-} //end namespace otb
+} // end namespace otb
 
 #endif // otbOGRExtendedFilenameToOptions_h

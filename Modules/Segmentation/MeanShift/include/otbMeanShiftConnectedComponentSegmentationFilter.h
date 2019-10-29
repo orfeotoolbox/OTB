@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,8 +29,10 @@
 #include "itkRelabelComponentImageFilter.h"
 
 #include "otbMeanShiftSmoothingImageFilter.h"
+#include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class MeanShiftConnectedComponentSegmentationFilter
 *   \brief [internal] Helper class to perform connected component segmentation on an input image,
@@ -53,7 +55,7 @@ namespace otb {
 */
 
 
-template <class TVInputImage, class TMaskImage,class TLabelImage>
+template <class TVInputImage, class TMaskImage, class TLabelImage>
 class MeanShiftConnectedComponentSegmentationFilter : public itk::ImageToImageFilter<TVInputImage, TLabelImage>
 {
 public:
@@ -70,9 +72,9 @@ public:
   /** Some convenient typedefs. */
   typedef TVInputImage VectorImageType;
   typedef TMaskImage   MaskImageType;
-  typedef TLabelImage LabelImageType;
+  typedef TLabelImage  LabelImageType;
 
-  typedef typename VectorImageType::Pointer VectorImagePointerType;
+  typedef typename VectorImageType::Pointer   VectorImagePointerType;
   typedef typename VectorImageType::PixelType VectorImagePixelType;
 
   /** Method for creation through the object factory. */
@@ -82,25 +84,20 @@ public:
   itkTypeMacro(MeanShiftConnectedComponentSegmentationFilter, ImageToImageFilter);
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,TVInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TVInputImage::ImageDimension);
 
   // Mask generation
   typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter
-      <VectorImageType, LabelImageType, FunctorType, MaskImageType>
-      ConnectedComponentFilterType;
+  typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType, LabelImageType, FunctorType, MaskImageType> ConnectedComponentFilterType;
 
   // mask typedef
   typedef otb::MaskMuParserFilter<VectorImageType, MaskImageType> MaskMuParserFilterType;
 
   // Labelization
-  typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType>
-  RelabelComponentFilterType;
+  typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
 
   typedef double KernelType;
-  typedef otb::MeanShiftSmoothingImageFilter
-      <VectorImageType, VectorImageType>
-  MeanShiftFilterType;
+  typedef otb::MeanShiftSmoothingImageFilter<VectorImageType, VectorImageType> MeanShiftFilterType;
 
   typedef typename MeanShiftFilterType::Pointer MeanShiftFilterPointerType;
 
@@ -136,7 +133,6 @@ protected:
   void GenerateData() override;
 
 private:
-
   MeanShiftFilterPointerType m_MeanShiftFilter;
 
   /* CC parameters */
@@ -144,14 +140,13 @@ private:
   std::string    m_MaskExpression;
   std::string    m_ConnectedComponentExpression;
   /* */
-
 };
 
 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftConnectedComponentSegmentationFilter.txx"
+#include "otbMeanShiftConnectedComponentSegmentationFilter.hxx"
 #endif
 
 #endif

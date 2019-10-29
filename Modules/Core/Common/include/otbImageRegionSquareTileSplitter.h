@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -72,11 +72,11 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class ITK_EXPORT       ImageRegionSquareTileSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageRegionSquareTileSplitter                Self;
+  typedef ImageRegionSquareTileSplitter             Self;
   typedef itk::ImageRegionSplitter<VImageDimension> Superclass;
   typedef itk::SmartPointer<Self>                   Pointer;
   typedef itk::SmartPointer<const Self>             ConstPointer;
@@ -112,14 +112,12 @@ public:
    *  instance, if the numberOfPieces exceeds the number of pixels along
    *  a certain dimensions, then some splits will not be possible.
    */
-  unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) override;
+  unsigned int GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) override;
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region) override;
 
   itkGetMacro(TileSizeAlignment, unsigned int);
   itkSetMacro(TileSizeAlignment, unsigned int);
@@ -127,13 +125,17 @@ public:
   itkGetMacro(TileDimension, unsigned int);
 
 protected:
-  ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16) {}
-  ~ImageRegionSquareTileSplitter() override {}
+  ImageRegionSquareTileSplitter() : m_SplitsPerDimension(0U), m_TileDimension(0), m_TileSizeAlignment(16)
+  {
+  }
+  ~ImageRegionSquareTileSplitter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter &); //purposely not implemented
-  void operator =(const ImageRegionSquareTileSplitter&); //purposely not implemented
+  ImageRegionSquareTileSplitter(const ImageRegionSquareTileSplitter&) = delete;
+  void operator=(const ImageRegionSquareTileSplitter&) = delete;
 
   itk::FixedArray<unsigned int, VImageDimension> m_SplitsPerDimension;
   unsigned int m_TileDimension;
@@ -143,7 +145,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionSquareTileSplitter.txx"
+#include "otbImageRegionSquareTileSplitter.hxx"
 #endif
 
 #endif

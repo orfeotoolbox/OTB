@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetOutputFilenameParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,21 +40,21 @@ class OTBQtWidget_EXPORT QtWidgetOutputFilenameParameter : public QtWidgetParame
 {
   Q_OBJECT
 public:
-  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*);
+  QtWidgetOutputFilenameParameter(OutputFilenameParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputFilenameParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit*       GetInput();
 
 public slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
 
 protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputFilenameParameter&); //purposely not implemented
+  QtWidgetOutputFilenameParameter(const QtWidgetOutputFilenameParameter&) = delete;
+  void operator=(const QtWidgetOutputFilenameParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -65,29 +63,10 @@ private:
 
   OutputFilenameParameter::Pointer m_FilenameParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
-
-
-inline
-const QLineEdit*
-QtWidgetOutputFilenameParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputFilenameParameter
-::GetInput()
-{
-  return m_Input;
-}
-
-
 }
 }
 

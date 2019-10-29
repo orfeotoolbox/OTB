@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,47 +67,40 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-DoubleValidator
-::DoubleValidator( QObject* p ) :
-  QDoubleValidator( p )
+DoubleValidator::DoubleValidator(QObject* p) : QDoubleValidator(p)
 {
 }
 
 /*******************************************************************************/
-DoubleValidator
-::DoubleValidator( double bottomVal, double topVal, int decim, QObject* p ) :
-  QDoubleValidator( bottomVal, topVal, decim, p )
+DoubleValidator::DoubleValidator(double bottomVal, double topVal, int decim, QObject* p) : QDoubleValidator(bottomVal, topVal, decim, p)
 {
 }
 
 /*******************************************************************************/
-DoubleValidator
-::~DoubleValidator()
+DoubleValidator::~DoubleValidator()
 {
 }
 
 /*******************************************************************************/
-void
-DoubleValidator
-::fixup( QString& input ) const
+void DoubleValidator::fixup(QString& input) const
 {
   int pos = input.length();
 
-  if( validate( input, pos )!=QValidator::Intermediate )
+  if (validate(input, pos) != QValidator::Intermediate)
     return;
 
-  bool isOk;
-  double value = input.toDouble( &isOk );
+  bool   isOk;
+  double value = input.toDouble(&isOk);
 
-  if( !isOk )
-    {
-    }
+  if (!isOk)
+  {
+  }
 
-  if( value<bottom() )
-    input = QString::number( bottom(), 'g', decimals() );
+  if (value < bottom())
+    input = QString::number(bottom(), 'g', decimals());
 
-  else if( value>top() )
-    input = QString::number( top(), 'g', decimals() );
+  else if (value > top())
+    input = QString::number(top(), 'g', decimals());
 }
 
 /*******************************************************************************/

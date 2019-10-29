@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,8 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m)
-  : QtWidgetParameterBase(boolParam, m)
+QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m, QWidget* parent) : QtWidgetParameterBase(boolParam, m, parent)
 {
 }
 
@@ -34,17 +33,17 @@ QtWidgetBoolParameter::~QtWidgetBoolParameter()
 {
 }
 
-void QtWidgetBoolParameter::SetValue( bool value )
+void QtWidgetBoolParameter::SetValue(bool value)
 {
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue() != value)
-    {
+  {
     paramDown->SetValue(value);
 
-    QString key( paramDown->GetKey() );
-    emit ParameterChanged(key);
-    }
+    QString key(paramDown->GetKey());
+    emit    ParameterChanged(key);
+  }
 }
 
 void QtWidgetBoolParameter::DoUpdateGUI()
@@ -52,44 +51,46 @@ void QtWidgetBoolParameter::DoUpdateGUI()
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue() != m_Button->isChecked())
-    {
+  {
     m_Button->setChecked(paramDown->GetValue());
-    }
-  QString buttonText(paramDown->GetValue()?"On":"Off");
+  }
+  QString buttonText(paramDown->GetValue() ? "On" : "Off");
   if (m_Button->text() != buttonText)
-    {
+  {
     m_Button->setText(buttonText);
-    }
+  }
 }
 
 void QtWidgetBoolParameter::DoCreateWidget()
 {
-  QHBoxLayout *hLayout = new QHBoxLayout;
+  QHBoxLayout* hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 
-  m_Button = new QToolButton;
+  m_Button = new QToolButton(this);
   m_Button->setCheckable(true);
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue())
-    {
+  {
     m_Button->setText("On");
     m_Button->setChecked(true);
-    }
+  }
   else
-    {
+  {
     m_Button->setText("Off");
-    }
+  }
 
-  connect( m_Button, SIGNAL(toggled(bool)), this, SLOT(SetValue(bool)) );
-  connect( m_Button, SIGNAL(toggled(bool)), GetModel(), SLOT(NotifyUpdate()) );
+  // Set the tool tip associated to the parameter
+  m_Button->setToolTip(QString::fromStdString(paramDown->GetDescription()));
+
+  connect(m_Button, &QToolButton::toggled, this, &QtWidgetBoolParameter::SetValue);
+  connect(m_Button, &QToolButton::toggled, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   hLayout->addWidget(m_Button);
   hLayout->addStretch();
-  
+
   this->setLayout(hLayout);
 }
-
 }
 }

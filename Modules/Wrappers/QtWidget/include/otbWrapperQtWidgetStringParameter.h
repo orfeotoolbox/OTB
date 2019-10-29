@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetStringParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperStringParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -41,26 +39,24 @@ class OTBQtWidget_EXPORT QtWidgetStringParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetStringParameter(StringParameter*, QtWidgetModel*);
+  QtWidgetStringParameter(StringParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetStringParameter() override;
 
 protected slots:
-  void SetValue( const QString& value );
+  void SetValue(const QString& value);
 
 private:
-  QtWidgetStringParameter(const QtWidgetStringParameter&); //purposely not implemented
-  void operator=(const QtWidgetStringParameter&); //purposely not implemented
+  QtWidgetStringParameter(const QtWidgetStringParameter&) = delete;
+  void operator=(const QtWidgetStringParameter&) = delete;
 
   void DoCreateWidget() override;
 
   void DoUpdateGUI() override;
 
   StringParameter::Pointer m_StringParam;
-  QHBoxLayout *            m_HLayout;
+  QHBoxLayout*             m_HLayout;
   QLineEdit*               m_Input;
 };
-
-
 }
 }
 

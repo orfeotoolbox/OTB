@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,24 +25,24 @@
 
 int otbStreamingInnerProductVectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName = argv[1];
-  const char * outfname = argv[2];
-  const bool   centerdata = atoi(argv[3]);
+  const char* inputFileName = argv[1];
+  const char* outfname      = argv[2];
+  const bool  centerdata    = atoi(argv[3]);
 
-  typedef double PixelType;
+  typedef double     PixelType;
   const unsigned int Dimension = 2;
 
   // Typedef
-  typedef otb::VectorImage<PixelType, Dimension>                 ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::ImageFileReader<ImageType>                        ReaderType;
   typedef otb::StreamingInnerProductVectorImageFilter<ImageType> FilterType;
 
-  ReaderType::Pointer reader     = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
 
   // Instantiation object
   FilterType::Pointer filter = FilterType::New();
-  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming( 10 );
+  filter->GetStreamer()->SetNumberOfLinesStrippedStreaming(10);
   filter->SetCenterData(centerdata);
   filter->SetInput(reader->GetOutput());
   filter->Update();

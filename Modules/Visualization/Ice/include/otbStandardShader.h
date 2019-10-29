@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,8 +22,9 @@
 #define otb_StandardShader_h
 
 #include <itkObjectFactory.h>
-#include "otbFragmentShader.h"
+#include "otbShader.h"
 #include "otbImageSettings.h"
+#include <string>
 
 namespace otb
 {
@@ -51,11 +52,11 @@ typedef enum
 
 
 class OTBIce_EXPORT StandardShader
-  : public FragmentShader
+  : public Shader
 {
 public:
   typedef StandardShader                                  Self;
-  typedef FragmentShader                                  Superclass;
+  typedef Shader                                          Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
@@ -98,7 +99,9 @@ protected:
 
   ~StandardShader() override;
 
-  std::string GetSource() const override;
+  std::string GetVertexSource() const override;
+
+  std::string GetFragmentSource() const override;
 
   std::string GetName() const override;
 
@@ -123,6 +126,31 @@ private:
   bool m_VerticalSlider;
 
   ShaderType m_ShaderType;
+
+  bool m_HasGLSL140;
+
+  struct UniformLocs
+    {
+    int proj;
+    int modelview;
+    int a;
+    int b;
+    int use_no_data;
+    int no_data;
+    int gamma;
+    int alpha;
+    int radius;
+    int center;
+    int type;
+    int current;
+    int localc_range;
+    int spectral_angle_range;
+    int chessboard_size;
+    int slider_pos;
+    int vertical_slider_flag;
+    };
+
+  UniformLocs m_Loc;
 }; // End class StandardShader
 
 } // End namespace otb

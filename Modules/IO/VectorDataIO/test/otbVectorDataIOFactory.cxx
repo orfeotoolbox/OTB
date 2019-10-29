@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,9 +22,9 @@
 #include "otbVectorDataIOFactory.h"
 #include "otbVectorData.h"
 
-int otbVectorDataIOFactory(int itkNotUsed(argc), char * argv[])
+int otbVectorDataIOFactory(int itkNotUsed(argc), char* argv[])
 {
-  typedef otb::VectorDataIOFactory VectorData1IOFactoryType;
+  typedef otb::VectorDataIOFactory                              VectorData1IOFactoryType;
   typedef VectorData1IOFactoryType::VectorDataIOBasePointerType VectorData1IOBasePointerType;
 
   VectorData1IOBasePointerType io1 = VectorData1IOFactoryType::CreateVectorDataIO(argv[1], VectorData1IOFactoryType::ReadMode);

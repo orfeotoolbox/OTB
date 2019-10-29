@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,7 +26,6 @@
 #ifndef ProcessingParameters_h
 #define ProcessingParameters_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 #include <RadarSat/RadarSatRecordHeader.h>
 
@@ -35,6 +34,7 @@
 #include "BeamPixelCountRecord.h"
 #include "SRGRCoefficientSetRecord.h"
 #include "TemperatureSettingsRecord.h"
+#include <string>
 
 namespace ossimplugins
 {

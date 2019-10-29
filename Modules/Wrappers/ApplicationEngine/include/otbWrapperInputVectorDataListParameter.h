@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,39 +38,38 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT InputVectorDataListParameter :
-    public ParameterList< InputVectorDataParameter >
+class OTBApplicationEngine_EXPORT InputVectorDataListParameter : public ParameterList<InputVectorDataParameter>
 {
 public:
   /** Standard class typedef */
-  typedef InputVectorDataListParameter Self;
-  typedef ParameterList< InputVectorDataParameter > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef InputVectorDataListParameter            Self;
+  typedef ParameterList<InputVectorDataParameter> Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
   /** Defining ::New() static method */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro( InputVectorDataListParameter, ParameterList );
+  itkTypeMacro(InputVectorDataListParameter, ParameterList);
 
   /** Get one list of the stored image. */
-  const VectorDataListType * GetVectorDataList() const;
-  VectorDataListType * GetVectorDataList();
+  const VectorDataListType* GetVectorDataList() const;
+  VectorDataListType*       GetVectorDataList();
 
   /** Get one specific stored image. */
   //
   // FIXME: Definition is not const-correct because
   // InputVectorDataParameter::GetVectorData() is not const-correct!
-  const VectorDataType * GetNthVectorData( std::size_t );
+  const VectorDataType* GetNthVectorData(std::size_t);
 
   /** Set the list of image. */
-  void SetVectorDataList( VectorDataListType * );
+  void SetVectorDataList(VectorDataListType*);
 
   /** Add an image to the list. */
-  void AddVectorData( VectorDataType * );
+  void AddVectorData(VectorDataType*);
 
- /** Clear all the list. */
+  /** Clear all the list. */
   void ClearValue() override;
 
   /** */
@@ -79,8 +78,12 @@ public:
 
   /** */
   using StringListInterface::GetFilenameFilter;
-  const std::string & GetFilenameFilter() const override;
+  const std::string& GetFilenameFilter() const override;
 
+  ParameterType GetType() const override
+  {
+    return ParameterType_InputVectorDataList;
+  }
 
 protected:
   /** Constructor */
@@ -89,30 +92,16 @@ protected:
   /** Destructor */
   ~InputVectorDataListParameter() override;
 
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
-
 private:
-  // Purposely not implemented
-  InputVectorDataListParameter( const Parameter & );
+  InputVectorDataListParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
-  // Purposely not implemented
-  void operator = ( const Parameter & );
+  InputVectorDataParameter::Pointer FromVectorData(VectorDataType*);
 
-  InputVectorDataParameter::Pointer
-    FromVectorData( VectorDataType * );
+  InputVectorDataParameter::Pointer& FromVectorData(InputVectorDataParameter::Pointer&, VectorDataType*);
 
-  InputVectorDataParameter::Pointer &
-    FromVectorData( InputVectorDataParameter::Pointer &, VectorDataType * );
-
-//
-// Private attributes
+  //
+  // Private attributes
 private:
   VectorDataListType::Pointer m_VectorDataList;
 

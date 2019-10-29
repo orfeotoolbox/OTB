@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,11 +29,11 @@ set( OTBQtAdapters_HEADERS_MOC
 add_to_qt_i18n_sources( ${OTBQtAdapters_SRCS} )
 add_to_qt_i18n_headers( "../include" ${OTBQtAdapters_SRCS} )
 
-qt5_wrap_cpp( OTBQtAdapters_SRC_MOC ${OTBQtAdapters_HEADERS_MOC} )
+qt5_wrap_cpp( OTBQtAdapters_SRC_MOC ${OTBQtAdapters_HEADERS_MOC} OPTIONS -p "." )
 
 add_library( OTBQtAdapters ${OTBQtAdapters_SRC} ${OTBQtAdapters_SRC_MOC})
 
-target_link_libraries( OTBQtAdapters 
+target_link_libraries( OTBQtAdapters
   ${OTBQt_LIBRARIES}
   )
 

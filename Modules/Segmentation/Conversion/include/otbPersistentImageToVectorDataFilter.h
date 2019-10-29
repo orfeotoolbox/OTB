@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,7 @@
 #include "otbConcatenateVectorDataFilter.h"
 #include "otbOGRVectorDataIO.h"
 #include "itkMacro.h"
+#include <string>
 
 namespace otb
 {
@@ -47,16 +48,15 @@ namespace otb
  *
  * \ingroup OTBConversion
  */
-template<class TImage, class TOutputVectorData>
-class ITK_EXPORT PersistentImageToVectorDataFilter :
-  public PersistentImageFilter<TImage, TImage>
+template <class TImage, class TOutputVectorData>
+class ITK_EXPORT PersistentImageToVectorDataFilter : public PersistentImageFilter<TImage, TImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToVectorDataFilter               Self;
-  typedef PersistentImageFilter<TImage, TImage>            Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentImageToVectorDataFilter Self;
+  typedef PersistentImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information support. */
   itkTypeMacro(PersistentImageToVectorDataFilter, PersistentImageFilter);
@@ -69,17 +69,17 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
-  typedef TOutputVectorData                          OutputVectorDataType;
-  typedef typename TOutputVectorData::Pointer        OutputVectorDataPointerType;
+  typedef TOutputVectorData                   OutputVectorDataType;
+  typedef typename TOutputVectorData::Pointer OutputVectorDataPointerType;
 
   typedef itk::ExtractImageFilter<InputImageType, InputImageType> ExtractImageFilterType;
-  typedef typename ExtractImageFilterType::Pointer                ExtractImageFilterPointerType;
+  typedef typename ExtractImageFilterType::Pointer ExtractImageFilterPointerType;
 
   typedef otb::ConcatenateVectorDataFilter<OutputVectorDataType> ConcatenateVectorDataFilterType;
   typedef typename ConcatenateVectorDataFilterType::Pointer      ConcatenateVectorDataFilterPointerType;
 
-  typedef otb::OGRVectorDataIO       OGRVectorDataIOType;
-  typedef typename OGRVectorDataIOType::Pointer   OGRVectorDataIOPointerType;
+  typedef otb::OGRVectorDataIO                  OGRVectorDataIOType;
+  typedef typename OGRVectorDataIOType::Pointer OGRVectorDataIOPointerType;
 
   /** Smart Pointer type to a DataObject. */
   typedef itk::DataObject::Pointer DataObjectPointer;
@@ -98,30 +98,32 @@ public:
 
 protected:
   PersistentImageToVectorDataFilter();
-  ~PersistentImageToVectorDataFilter() override {}
+  ~PersistentImageToVectorDataFilter() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateData() override;
 
-  ExtractImageFilterPointerType          m_ExtractFilter;
+  ExtractImageFilterPointerType m_ExtractFilter;
 
   OutputVectorDataPointerType m_OutputVectorData;
 
 private:
-  PersistentImageToVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   virtual OutputVectorDataPointerType ProcessTile() = 0;
 
   OGRVectorDataIOPointerType m_VectorDataIO;
-  std::string m_FileName;
+  std::string                m_FileName;
 
 }; // end of class
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToVectorDataFilter.txx"
+#include "otbPersistentImageToVectorDataFilter.hxx"
 #endif
 
 #endif

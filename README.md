@@ -1,4 +1,8 @@
 # ![OTB](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/master/Utilities/Doxygen/logoVectoriel.png) Orfeo Toolbox
+
+[![pipeline status](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/badges/develop/pipeline.svg)](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/commits/develop)
+[![coverage status](https://sonar.orfeo-toolbox.org/api/project_badges/measure?project=orfeotoolbox-otb&metric=coverage)](https://sonar.orfeo-toolbox.org/dashboard?id=orfeotoolbox-otb)
+
 ## Open Source processing of remote sensing images
 
 Orfeo ToolBox (OTB) is an open-source project for state-of-the-art remote
@@ -16,19 +20,23 @@ to high performance MPI clusters, OTB is available on Windows, Linux and Mac.
 It is community driven, extensible and heavily documented.  Orfeo ToolBox is
 not a black box!
 
-[![Travis Build Status](https://travis-ci.org/orfeotoolbox/OTB.png?branch=develop)](https://travis-ci.org/orfeotoolbox/OTB)
-[![Coverity Scan Build Status](https://scan.coverity.com/projects/2405/badge.svg)](https://scan.coverity.com/projects/orfeotoolbox)
-
 ### Resources
 * [OTB's website](https://www.orfeo-toolbox.org/)
 * [Documentation](https://www.orfeo-toolbox.org/documentation/)
 * [Downloads](https://www.orfeo-toolbox.org/download/)
 * [Public git repositories](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb)
 * [GitHub mirror](https://github.com/orfeotoolbox/)
-* [Build status](http://dash.orfeo-toolbox.org/index.php?project=OTB)
+* [Build status](http://cdash.orfeo-toolbox.org/index.php?project=OTB)
 * [Bug tracker](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues?label_name%5B%5D=bug)
 * [Wiki](http://wiki.orfeo-toolbox.org/index.php/Main_Page)
 * [Task tracking](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues)
+
+### Installation
+
+We provide ready-to-use packages for Windows, Mac and Linux. [Download them here](https://www.orfeo-toolbox.org/download/) on our website, and see instructions for your platform [here in the Cookbook](https://www.orfeo-toolbox.org/CookBook/Installation.html).
+
+If you're interested, you can also [compile from source](https://www.orfeo-toolbox.org/SoftwareGuide/SoftwareGuidech2.html#x16-190002).
+
 
 ### Join the community
 Get help, share your experience and contribute to the Orfeo-Toolbox project by

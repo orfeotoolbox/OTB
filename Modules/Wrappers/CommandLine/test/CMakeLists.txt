@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -31,9 +31,6 @@ target_link_libraries(otbCommandLineTestDriver ${OTBCommandLine-Test_LIBRARIES})
 otb_module_target_label(otbCommandLineTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME clTuWrapperCommandLineLauncherNew
-  COMMAND otbCommandLineTestDriver otbWrapperCommandLineLauncherNew )
 
 otb_add_test(NAME clTvWrapperCommandLineLauncherTest_WrongParam
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineLauncherTest
@@ -96,9 +93,6 @@ otb_add_test(NAME clTvWrapperCommandLineParserTest_IsAttExistsEndNoParam
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserTest4
   "-m"
   "TrainImagesClassifier" "test" "-il" "QB_1_ortho.tif" "-vd" "vd" ".shape" "test" "-m")
-
-otb_add_test(NAME clTuWrapperCommandLineParserNew
-  COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserNew )
 
 otb_add_test(NAME clTvWrapperCommandLineParserTest_MultiplePathOneWrong
   COMMAND otbCommandLineTestDriver otbWrapperCommandLineParserTest2

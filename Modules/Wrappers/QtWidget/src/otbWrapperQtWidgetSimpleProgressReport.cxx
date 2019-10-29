@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,72 +30,54 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QtWidgetModel * model)
-  : m_CurrentProcess()
+QtWidgetSimpleProgressReport::QtWidgetSimpleProgressReport(QWidget* parent) : itk::QtProgressBar(parent), m_CurrentProcess()
 {
-  m_Model = model;
-  connect(model, SIGNAL(SetProgressReportBegin()), this, SLOT(show()) );
-  connect(model, SIGNAL(SetProgressReportDone()), this, SLOT(Init()) );
-  connect(this, SIGNAL(AddNewProcessToReport()), this, SLOT(ReportProcess()) );
+}
 
-  m_Layout = new QVBoxLayout;
-  this->setLayout(m_Layout);
+void QtWidgetSimpleProgressReport::SetModel(QtWidgetModel* model)
+{
+  connect(model, &QtWidgetModel::SetProgressReportBegin, this, &QtWidgetSimpleProgressReport::show);
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &QtWidgetSimpleProgressReport::Init);
+  connect(this, &QtWidgetSimpleProgressReport::AddNewProcessToReport, this, &QtWidgetSimpleProgressReport::ReportProcess);
 
   m_AddProcessCommand = AddProcessCommandType::New();
-  m_AddProcessCommand->SetCallbackFunction( this, &QtWidgetSimpleProgressReport::ProcessEvent );
+  m_AddProcessCommand->SetCallbackFunction(this, &QtWidgetSimpleProgressReport::ProcessEvent);
 
-  m_Bar =  new itk::QtProgressBar(this);
+  connect(this, &itk::QtProgressBar::SetValueChanged, this, &itk::QtProgressBar::setValue);
+  connect(model, &QtWidgetModel::SetProgressReportDone, this, &itk::QtProgressBar::reset);
 
-  m_Label = new QLabel("No process");
-  m_Label->setWordWrap(true);
-  connect( m_Bar, SIGNAL(SetValueChanged(int)), m_Bar, SLOT(setValue(int)) );
-  connect( m_Model, SIGNAL(SetProgressReportDone()), m_Bar, SLOT(reset()) );
-
-  m_Layout->addWidget(m_Label);
-  m_Layout->addWidget(m_Bar);
-
-  this->show();
+  model->GetApplication()->AddObserver(AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer());
 }
 
 QtWidgetSimpleProgressReport::~QtWidgetSimpleProgressReport()
 {
 }
 
-void QtWidgetSimpleProgressReport::SetApplication(Application::Pointer app)
+void QtWidgetSimpleProgressReport::ProcessEvent(itk::Object* itkNotUsed(caller), const itk::EventObject& event2)
 {
-  m_Application = app;
-  m_Application->AddObserver( AddProcessToWatchEvent(), m_AddProcessCommand.GetPointer() );
-}
+  if (typeid(otb::Wrapper::AddProcessToWatchEvent) == typeid(event2))
+  {
+    const AddProcessToWatchEvent* eventToWatch = dynamic_cast<const AddProcessToWatchEvent*>(&event2);
 
-void
-QtWidgetSimpleProgressReport::ProcessEvent( itk::Object * itkNotUsed(caller),
-                                      const itk::EventObject & event2 )
-{
-  if( typeid( otb::Wrapper::AddProcessToWatchEvent ) == typeid( event2 ) )
+    if (eventToWatch)
     {
-    const AddProcessToWatchEvent* eventToWatch = dynamic_cast< const  AddProcessToWatchEvent*> ( &event2 );
-
-    if(eventToWatch)
-      {
-      m_CurrentProcess = eventToWatch->GetProcess();
-      m_CurrentDescription =  eventToWatch->GetProcessDescription();
+      m_CurrentProcess     = eventToWatch->GetProcess();
+      m_CurrentDescription = eventToWatch->GetProcessDescription();
       emit AddNewProcessToReport();
-      }
     }
+  }
 }
 
 void QtWidgetSimpleProgressReport::ReportProcess()
 {
-  m_Bar->Observe(m_CurrentProcess);
-  m_Label->setText(QString(m_CurrentDescription.c_str()));
+  this->Observe(m_CurrentProcess);
+  emit SetText(QString::fromStdString(m_CurrentDescription));
 }
-
 
 void QtWidgetSimpleProgressReport::Init()
 {
-  m_Bar->setValue(0);
-  m_Label->setText("No process");
+  this->setValue(0);
+  emit SetText(QString(""));
 }
-
 }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,8 +37,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TOutputImage>
-class ITK_EXPORT ImageListSource
-  : public itk::ProcessObject
+class ITK_EXPORT ImageListSource : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
@@ -59,23 +58,25 @@ public:
   typedef typename OutputImageListType::Pointer      OutputImageListPointerType;
   typedef typename OutputImageListType::ConstPointer OutputImageListConstPointerType;
   /** Overriding of the GetOutput() method */
-  virtual OutputImageListType * GetOutput(void);
+  virtual OutputImageListType* GetOutput(void);
 
 protected:
   /** Constructor */
   ImageListSource();
   /** Destructor */
-  ~ImageListSource() override {}
+  ~ImageListSource() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListSource.txx"
+#include "otbImageListSource.hxx"
 #endif
 #endif

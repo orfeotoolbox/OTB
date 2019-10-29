@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,8 +76,7 @@ class AbstractImageViewManipulator;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class OTBMonteverdiGUI_EXPORT ImageViewWidget :
-    public QGLWidget
+class OTBMonteverdiGUI_EXPORT ImageViewWidget : public QGLWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,57 +85,42 @@ class OTBMonteverdiGUI_EXPORT ImageViewWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
+  /** \brief Constructor. */
+  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p = NULL, const QGLWidget* shareWidget = NULL,
+                  Qt::WindowFlags f = 0);
 
   /** \brief Constructor. */
-  ImageViewWidget( AbstractImageViewManipulator* manipulator,
-                   AbstractImageViewRenderer* renderer,
-                   QWidget* p =NULL,
-                   const QGLWidget* shareWidget =NULL,
-                   Qt::WindowFlags f =0 );
+  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QGLContext* context, QWidget* p = NULL,
+                  const QGLWidget* shareWidget = NULL, Qt::WindowFlags f = 0);
 
   /** \brief Constructor. */
-  ImageViewWidget( AbstractImageViewManipulator* manipulator,
-                   AbstractImageViewRenderer* renderer,
-                   QGLContext* context,
-                   QWidget* p =NULL,
-                   const QGLWidget* shareWidget =NULL,
-                   Qt::WindowFlags f =0 );
-
-  /** \brief Constructor. */
-  ImageViewWidget( AbstractImageViewManipulator* manipulator,
-                   AbstractImageViewRenderer* renderer,
-                   const QGLFormat& format,
-                   QWidget* p =NULL,
-                   const QGLWidget *shareWidget =NULL,
-                   Qt::WindowFlags f =0 );
+  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, const QGLFormat& format, QWidget* p = NULL,
+                  const QGLWidget* shareWidget = NULL, Qt::WindowFlags f = 0);
 
   /** \brief Destructor. */
   ~ImageViewWidget() override;
 
   /**
    */
-  void SetLayerStack( StackedLayerModel * stackedLayerModel,
-                      const PointType& center,
-                      double scale );
+  void SetLayerStack(StackedLayerModel* stackedLayerModel, const PointType& center, double scale);
 
   /**
    */
-  void SetLayerStack( StackedLayerModel * );
+  void SetLayerStack(StackedLayerModel*);
 
   /**
    */
-  inline const StackedLayerModel * GetLayerStack() const;
+  inline const StackedLayerModel* GetLayerStack() const;
 
   /**
    */
-  inline StackedLayerModel * GetLayerStack();
+  inline StackedLayerModel* GetLayerStack();
 
   /**
    * \brief Access the abstract view-manipualtor of this image-view.
@@ -150,44 +134,54 @@ public:
    *
    * \return A pointer to the abstract model-renderer of this image-view.
    */
-  inline const AbstractImageViewRenderer * GetRenderer() const;
-  inline AbstractImageViewRenderer * GetRenderer();
+  inline const AbstractImageViewRenderer* GetRenderer() const;
+  inline AbstractImageViewRenderer*       GetRenderer();
 
   /**
    */
-  bool SetBypassRenderingEnabled( bool );
+  bool SetBypassRenderingEnabled(bool);
   /**
    */
   bool IsBypassRenderingEnabled() const;
   /**
    */
-  void SetPickingEnabled( bool );
+  void SetPickingEnabled(bool);
 
   /**
    * This allows setting the fallback behaviour for picking
    */
-  void SetPickingDefaultStatus( bool );
+  void SetPickingDefaultStatus(bool);
   /**
    */
   bool IsPickingEnabled() const;
 
+  /**
+   */
+  bool CheckGLCapabilities( int * );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
+  /**
+   */
+  bool SetGLSLEnabled( bool ) noexcept;
+  /**
+   */
+  void ClearScene( bool );
   /**
    */
   void UpdateScene();
   /**
    */
-  void CenterOnSelected( const IndexType& index );
+  void CenterOnSelected(const IndexType& index);
   /**
    */
-  void CenterOn( const PointType& center, double scale );
+  void CenterOn(const PointType& center, double scale);
   /**
    */
-  void SaveScreenshot( bool );
+  void SaveScreenshot(bool);
   /**
    */
   void ZoomToExtent();
@@ -206,75 +200,66 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
   /**
    */
-  void PhysicalCursorPositionChanged( const QPoint & screen,
-                                      const PointType & view,
-                                      const PointType & physical,
-                                      const DefaultImageType::PixelType & );
+  void PhysicalCursorPositionChanged(const QPoint& screen, const PointType& view, const PointType& physical, const DefaultImageType::PixelType&);
 
   /**
    */
-  void PixelInfoChanged( const QPoint & screen,
-			 const PointType & view,
-			 const PixelInfo::Vector & pixels );
+  void PixelInfoChanged(const QPoint& screen, const PointType& view, const PixelInfo::Vector& pixels);
 
   /**
    */
-  void ReferenceActorShaderModeChanged(const std::string & mode);
+  void ReferenceActorShaderModeChanged(const std::string& mode);
   /**
    */
-  void CenterRoiRequested( const PointType& center );
+  void CenterRoiRequested(const PointType& center);
   /**
    */
-  void RoiChanged( const PointType& origin,
-                   const SizeType& size,
-                   const SpacingType& spacing,
-                   const PointType& center );
+  void RoiChanged(const PointType& origin, const SizeType& size, const SpacingType& spacing, const PointType& center);
   /**
    */
-  void RoiChanged( const PointType& center, double sx, double sy );
+  void RoiChanged(const PointType& center, double sx, double sy);
   /**
    */
-  void CenterChanged( const PointType& center );
+  void CenterChanged(const PointType& center);
   /**
    */
-  void ScaleChanged( double sx, double sy );
+  void ScaleChanged(double sx, double sy);
   /**
    */
   void ModelUpdated();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // Qt overloads.
 
   void initializeGL() override;
-  void resizeGL( int widgth, int height ) override;
+  void resizeGL(int widgth, int height) override;
   void paintGL() override;
 
-  void mouseMoveEvent( QMouseEvent* event ) override;
-  void mouseReleaseEvent( QMouseEvent* event ) override;
-  void mousePressEvent( QMouseEvent* event ) override;
-  void mouseDoubleClickEvent( QMouseEvent * event ) override;
+  void mouseMoveEvent(QMouseEvent* event) override;
+  void mouseReleaseEvent(QMouseEvent* event) override;
+  void mousePressEvent(QMouseEvent* event) override;
+  void mouseDoubleClickEvent(QMouseEvent* event) override;
 
-  void wheelEvent( QWheelEvent* event) override;
+  void wheelEvent(QWheelEvent* event) override;
 
-  void keyPressEvent( QKeyEvent* event ) override;
-  void keyReleaseEvent( QKeyEvent* event ) override;
+  void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
 
-  void resizeEvent( QResizeEvent* event ) override;
+  void resizeEvent(QResizeEvent* event) override;
 
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
   /**
    */
@@ -283,17 +268,14 @@ protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /** Construction code (factorizes constructors initializations). */
-  void Initialize( AbstractImageViewManipulator* manipulator,
-                   AbstractImageViewRenderer* renderer );
+  void Initialize(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer);
 
   /**
    */
@@ -301,26 +283,26 @@ private:
 
   /**
    */
-  void Center( const PointType& point, double sx, double sy );
+  void Center(const PointType& point, double sx, double sy);
 
   /**
    */
-  void Center( ZoomType zoom =ZOOM_TYPE_NONE );
+  void Center(ZoomType zoom = ZOOM_TYPE_NONE);
 
   /**
    */
-  void Connect( AbstractLayerModel * );
+  void Connect(AbstractLayerModel*);
 
   /**
    */
-  void Disconnect( AbstractLayerModel * );
+  void Disconnect(AbstractLayerModel*);
 
   /**
    */
   bool ApplyFixedZoomType();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /** Event handler pointer */
   AbstractImageViewManipulator* m_Manipulator;
@@ -328,7 +310,7 @@ private:
   /** Model Renderer pointer */
   AbstractImageViewRenderer* m_Renderer;
 
-  /** */
+/** */
 #if USE_XP_REGION_OPTIM
   PointType m_Position;
 #endif // USE_XP_REGION_OPTIM
@@ -337,10 +319,7 @@ private:
 private slots:
   /**
    */
-  void OnRoiChanged( const PointType&,
-                     const SizeType&,
-                     const SpacingType&,
-                     const PointType& );
+  void OnRoiChanged(const PointType&, const SizeType&, const SpacingType&, const PointType&);
   /**
    */
   void OnSelectFirstLayerRequested();
@@ -367,7 +346,7 @@ private slots:
   void OnDeleteSelectedRequested();
   /**
    */
-  void OnReferenceChanged( size_t );
+  void OnReferenceChanged(size_t);
   /**
    */
   void OnClearProjectionRequired();
@@ -379,37 +358,37 @@ private slots:
   void OnUpdateProjectionRequired();
   /**
    */
-  void OnLayerAdded( size_t );
+  void OnLayerAdded(size_t);
   /**
    */
-  void OnLayerAboutToBeDeleted( size_t );
+  void OnLayerAboutToBeDeleted(size_t);
   /**
    */
-  void OnToggleLayerVisibilityRequested( bool );
+  void OnToggleLayerVisibilityRequested(bool);
   /**
    */
-  void OnResizeShaderRequested( double );
+  void OnResizeShaderRequested(double);
   /**
    */
-  void OnReparamShaderRequested( double );
+  void OnReparamShaderRequested(double);
   /**
    */
-  void OnShiftAlphaRequested( double );
+  void OnShiftAlphaRequested(double);
   /**
    */
-  void OnUpdateGammaRequested( double );
+  void OnUpdateGammaRequested(double);
   /**
    */
-  void OnShiftDynamicsRequested( double );
+  void OnShiftDynamicsRequested(double);
   /**
    */
-  void OnScaleDynamicsRequested( double );
+  void OnScaleDynamicsRequested(double);
   /**
    */
-  void OnResetQuantilesRequested( bool );
+  void OnResetQuantilesRequested(bool);
   /**
    */
-  void OnShaderEffectRequested( Effect );
+  void OnShaderEffectRequested(Effect);
   /**
    */
   void OnApplyAllRequested();
@@ -431,7 +410,7 @@ private slots:
   void OnResetViewport();
 };
 
-}// end namespace 'mvd'
+} // end namespace 'mvd'
 
 /*****************************************************************************/
 /* INLINE SECTION                                                            */
@@ -451,50 +430,35 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const AbstractImageViewManipulator*
-ImageViewWidget
-::GetManipulator() const
+inline const AbstractImageViewManipulator* ImageViewWidget::GetManipulator() const
 {
   return m_Manipulator;
 }
 
 /*****************************************************************************/
-inline
-const AbstractImageViewRenderer*
-ImageViewWidget
-::GetRenderer() const
+inline const AbstractImageViewRenderer* ImageViewWidget::GetRenderer() const
 {
   return m_Renderer;
 }
 
 /*****************************************************************************/
-inline
-AbstractImageViewRenderer*
-ImageViewWidget
-::GetRenderer()
+inline AbstractImageViewRenderer* ImageViewWidget::GetRenderer()
 {
   return m_Renderer;
 }
 
 /*****************************************************************************/
-inline
-const StackedLayerModel *
-ImageViewWidget
-::GetLayerStack() const
+inline const StackedLayerModel* ImageViewWidget::GetLayerStack() const
 {
-  assert( m_Renderer!=NULL );
+  assert(m_Renderer != NULL);
 
   return m_Renderer->GetLayerStack();
 }
 
 /*****************************************************************************/
-inline
-StackedLayerModel *
-ImageViewWidget
-::GetLayerStack()
+inline StackedLayerModel* ImageViewWidget::GetLayerStack()
 {
-  assert( m_Renderer!=NULL );
+  assert(m_Renderer != NULL);
 
   return m_Renderer->GetLayerStack();
 }

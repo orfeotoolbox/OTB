@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,16 +27,16 @@
 int otbSarBrightnessFunction(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * infname  = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
-  typedef otb::Image<PixelType, Dimension>                InputImageType;
-  typedef InputImageType::IndexType                       IndexType;
-  typedef otb::ImageFileReader<InputImageType>            ReaderType;
-  typedef otb::SarBrightnessFunction<InputImageType>      FunctionType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef InputImageType::IndexType                  IndexType;
+  typedef otb::ImageFileReader<InputImageType>       ReaderType;
+  typedef otb::SarBrightnessFunction<InputImageType> FunctionType;
 
   /**Instantiation ofa Smart Pointer*/
   FunctionType::Pointer filter = FunctionType::New();
@@ -66,7 +66,7 @@ int otbSarBrightnessFunction(int itkNotUsed(argc), char* argv[])
 
   pDst[0] = static_cast<unsigned int>(size[0] / 4.);
   pDst[1] = static_cast<unsigned int>(size[1] / 8.);
-  outfile << "Sar Brightness value computed for the point : " <<  pDst << " is " << filter->Evaluate(pDst) << std::endl;
+  outfile << "Sar Brightness value computed for the point : " << pDst << " is " << filter->Evaluate(pDst) << std::endl;
 
   outfile.close();
 

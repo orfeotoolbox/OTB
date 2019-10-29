@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbFormosatImageMetadataInterfaceFactory.h"
 #include "otbFormosatImageMetadataInterface.h"
 
@@ -28,29 +27,22 @@
 
 namespace otb
 {
-FormosatImageMetadataInterfaceFactory
-::FormosatImageMetadataInterfaceFactory()
+FormosatImageMetadataInterfaceFactory::FormosatImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbFormosatImageMetadataInterface",
-                         "Formosat Metadata Interface",
-                         1,
+  this->RegisterOverride("OpticalImageMetadataInterface", "otbFormosatImageMetadataInterface", "Formosat Metadata Interface", 1,
                          itk::CreateObjectFunction<FormosatImageMetadataInterface>::New());
 }
 
-FormosatImageMetadataInterfaceFactory
-::~FormosatImageMetadataInterfaceFactory()
+FormosatImageMetadataInterfaceFactory::~FormosatImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-FormosatImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* FormosatImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-FormosatImageMetadataInterfaceFactory::GetDescription() const
+const char* FormosatImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Formosat Metadata Interface Factory, handle Formosat metadata in OTB";
 }

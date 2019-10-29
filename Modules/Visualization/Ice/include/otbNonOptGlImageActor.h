@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,7 @@
 #include "otbGenericRSTransform.h"
 
 #include "otbGlActor.h"
+#include <string>
 
 namespace otb
 {
@@ -55,16 +56,16 @@ public:
   void Initialize(const std::string & filename);
 
   // Retrieve the full extent of the actor
-  virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const;
+  void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const override;
 
   // Update internal actor state with respect to ViewSettings
-  virtual void ProcessViewSettings();
+  void ProcessViewSettings() override;
 
   // Heavy load/unload operations of data
-  virtual void UpdateData();
+  void UpdateData() override;
 
   // Gl rendering of current state
-  virtual void Render();
+  void Render() override;
 
   const PointType & GetOrigin() const;
 

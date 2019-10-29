@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -90,25 +90,16 @@ namespace otb
  */
 
 
-template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT HaralickTexturesImageFunction :
-  public itk::ImageFunction< TInputImage,
-    itk::FixedArray<
-    typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-    8 >,
-    TCoordRep >
+template <class TInputImage, class TCoordRep = double>
+class ITK_EXPORT HaralickTexturesImageFunction
+    : public itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 8>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef HaralickTexturesImageFunction                                   Self;
-  typedef itk::ImageFunction< TInputImage,
-                   itk::FixedArray<
-                   typename itk::NumericTraits<
-                   typename TInputImage::PixelType>::RealType,
-                   8 >,
-                   TCoordRep >                                            Superclass;
-  typedef itk::SmartPointer<Self>                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                   ConstPointer;
+  typedef HaralickTexturesImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, itk::FixedArray<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, 8>, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(HaralickTexturesImageFunction, ImageFunction);
@@ -124,29 +115,28 @@ public:
   typedef typename InputImageType::Pointer         InputImagePointerType;
   typedef typename InputImageType::PixelType       InputPixelType;
   typedef typename InputImageType::RegionType      InputRegionType;
-  typedef typename InputImageType::OffsetType   OffsetType;
+  typedef typename InputImageType::OffsetType      OffsetType;
   typedef typename InputRegionType::SizeType       SizeType;
 
   // Output typedef support
-  typedef typename Superclass::OutputType          OutputType;
-  typedef typename OutputType::ValueType           ScalarRealType;
+  typedef typename Superclass::OutputType OutputType;
+  typedef typename OutputType::ValueType  ScalarRealType;
   // Textures tools
-  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
-  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
-  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
-  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
-  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
-  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
-  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
+  typedef GreyLevelCooccurrenceIndexedList<InputPixelType>            CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer               CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer          CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType             CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType        PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType            VectorType;
 
-  typedef typename VectorType::iterator                    VectorIteratorType;
-  typedef typename VectorType::const_iterator              VectorConstIteratorType;
+  typedef typename VectorType::iterator       VectorIteratorType;
+  typedef typename VectorType::const_iterator VectorConstIteratorType;
   // Coord rep
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -158,8 +148,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -170,51 +159,53 @@ public:
    * Set the radius of the neighborhood over which the
    * statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
   /**
      * Get the radius of the neighborhood over which the
      * statistics are evaluated
      */
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
   /** Set the offset for co-occurence computation */
   itkSetMacro(Offset, OffsetType);
 
-    /** Get the offset for co-occurence computation */
-    itkGetMacro(Offset, OffsetType);
+  /** Get the offset for co-occurence computation */
+  itkGetMacro(Offset, OffsetType);
 
-    /** Set the number of bin per axis */
-    itkSetMacro(NumberOfBinsPerAxis, unsigned int);
+  /** Set the number of bin per axis */
+  itkSetMacro(NumberOfBinsPerAxis, unsigned int);
 
-    /** Get the number of bin per axis */
-    itkGetMacro(NumberOfBinsPerAxis, unsigned int);
+  /** Get the number of bin per axis */
+  itkGetMacro(NumberOfBinsPerAxis, unsigned int);
 
-    /** Set the input image minimum */
-    itkSetMacro(InputImageMinimum, InputPixelType);
+  /** Set the input image minimum */
+  itkSetMacro(InputImageMinimum, InputPixelType);
 
-    /** Get the input image minimum */
-    itkGetMacro(InputImageMinimum, InputPixelType);
+  /** Get the input image minimum */
+  itkGetMacro(InputImageMinimum, InputPixelType);
 
-    /** Set the input image maximum */
-    itkSetMacro(InputImageMaximum, InputPixelType);
+  /** Set the input image maximum */
+  itkSetMacro(InputImageMaximum, InputPixelType);
 
-    /** Get the input image maximum */
-    itkGetMacro(InputImageMaximum, InputPixelType);
+  /** Get the input image maximum */
+  itkGetMacro(InputImageMaximum, InputPixelType);
 
 protected:
   HaralickTexturesImageFunction();
-  ~HaralickTexturesImageFunction() override {}
+  ~HaralickTexturesImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HaralickTexturesImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  HaralickTexturesImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the neighborhood over which to compute the textures */
   unsigned int m_NeighborhoodRadius;
 
   /** Offset for co-occurences generation */
-  OffsetType   m_Offset;
+  OffsetType m_Offset;
 
   /** Number of bins per axis */
   unsigned int m_NumberOfBinsPerAxis;
@@ -225,15 +216,17 @@ private:
   /** Input image maximum */
   InputPixelType m_InputImageMaximum;
 
-  //TODO: should we use constexpr? only c++11 and problem for msvc
-  inline double GetPixelValueTolerance() const {return 0.0001; }
-
+  // TODO: should we use constexpr? only c++11 and problem for msvc
+  inline double GetPixelValueTolerance() const
+  {
+    return 0.0001;
+  }
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHaralickTexturesImageFunction.txx"
+#include "otbHaralickTexturesImageFunction.hxx"
 #endif
 
 #endif

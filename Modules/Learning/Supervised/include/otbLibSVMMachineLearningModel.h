@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,24 +30,23 @@
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT LibSVMMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT LibSVMMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef LibSVMMachineLearningModel           Self;
+  typedef LibSVMMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   /** enum to choose the way confidence is computed
    *   CM_INDEX : compute the difference between highest and second highest probability
    *   CM_PROBA : returns probabilities for all classes
@@ -57,7 +56,7 @@ public:
    *      The given pointer needs to store 'nbClass * (nbClass-1) / 2'  values
    *      This mode requires that ConfidenceValueType is double
    */
-  typedef enum {CM_INDEX,CM_PROBA,CM_HYPER} ConfidenceMode;
+  typedef enum { CM_INDEX, CM_PROBA, CM_HYPER } ConfidenceMode;
 
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
@@ -67,73 +66,73 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string &filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
-  //@}
+  bool CanWriteFile(const std::string&) override;
+//@}
 
-#define otbSetSVMParameterMacro(name, alias, type) \
-  void Set##name (const type _arg)                                \
-    {                                                             \
+#define otbSetSVMParameterMacro(name, alias, type)  \
+  void Set##name(const type _arg)                   \
+  {                                                 \
     itkDebugMacro("setting " #name " to " << _arg); \
-    if ( this->m_Parameters.alias != _arg )                      \
-      {                                                           \
-      this->m_Parameters.alias = _arg;                           \
-      this->Modified();                                           \
-      }                                                           \
-    }
+    if (this->m_Parameters.alias != _arg)           \
+    {                                               \
+      this->m_Parameters.alias = _arg;              \
+      this->Modified();                             \
+    }                                               \
+  }
 
   /** Set the SVM type to C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR */
-  otbSetSVMParameterMacro(SVMType, svm_type, int)
+  otbSetSVMParameterMacro(SVMType, svm_type, int);
 
   /** Get the SVM type (C_SVC, NU_SVC, ONE_CLASS, EPSILON_SVR, NU_SVR) */
   int GetSVMType(void) const
-    {
+  {
     return m_Parameters.svm_type;
-    }
+  }
 
   /** Set the kernel type to LINEAR, POLY, RBF, SIGMOID
   linear: u'*v
   polynomial: (gamma*u'*v + coef0)^degree
   radial basis function: exp(-gamma*|u-v|^2)
   sigmoid: tanh(gamma*u'*v + coef0)*/
-  otbSetSVMParameterMacro(KernelType, kernel_type, int)
+  otbSetSVMParameterMacro(KernelType, kernel_type, int);
 
   /** Get the kernel type */
   int GetKernelType(void) const
-    {
+  {
     return m_Parameters.kernel_type;
-    }
+  }
 
   /** Set the degree of the polynomial kernel */
-  otbSetSVMParameterMacro(PolynomialKernelDegree,degree,int)
+  otbSetSVMParameterMacro(PolynomialKernelDegree, degree, int);
 
   /** Get the degree of the polynomial kernel */
   int GetPolynomialKernelDegree(void) const
-    {
+  {
     return m_Parameters.degree;
-    }
+  }
 
   /** Set the gamma parameter for poly/rbf/sigmoid kernels */
-  otbSetSVMParameterMacro(KernelGamma,gamma,double)
+  otbSetSVMParameterMacro(KernelGamma, gamma, double);
 
   /** Get the gamma parameter for poly/rbf/sigmoid kernels */
   double GetKernelGamma(void) const
-    {
+  {
     return m_Parameters.gamma;
-    }
+  }
 
   /** Set the coef0 parameter for poly/sigmoid kernels */
-  otbSetSVMParameterMacro(KernelCoef0,coef0,double)
+  otbSetSVMParameterMacro(KernelCoef0, coef0, double);
 
   /** Get the coef0 parameter for poly/sigmoid kernels */
   double GetKernelCoef0(void) const
@@ -142,34 +141,34 @@ public:
   }
 
   /** Set the C parameter for the training for C_SVC, EPSILON_SVR and C_SVR */
-  otbSetSVMParameterMacro(C,C,double)
+  otbSetSVMParameterMacro(C, C, double);
 
   /** Get the C parameter for the training for C_SVC, EPSILON_SVR and NU_SVR */
   double GetC(void) const
-    {
+  {
     return m_Parameters.C;
-    }
+  }
 
   itkSetMacro(ParameterOptimization, bool);
   itkGetMacro(ParameterOptimization, bool);
 
   /** Do probability estimates */
   void SetDoProbabilityEstimates(bool prob)
-    {
+  {
     m_Parameters.probability = static_cast<int>(prob);
-    }
+  }
 
   /** Get Do probability estimates boolean */
   bool GetDoProbabilityEstimates(void) const
-    {
+  {
     return static_cast<bool>(m_Parameters.probability);
-    }
+  }
 
   /** Test if the model has probabilities */
   bool HasProbabilities(void) const;
 
   /** Set the tolerance for the stopping criterion for the training*/
-  otbSetSVMParameterMacro(Epsilon,eps,double)
+  otbSetSVMParameterMacro(Epsilon, eps, double);
 
   /** Get the tolerance for the stopping criterion for the training*/
   double GetEpsilon(void) const
@@ -178,7 +177,7 @@ public:
   }
 
   /** Set the value of p for EPSILON_SVR */
-  otbSetSVMParameterMacro(P,p,double)
+  otbSetSVMParameterMacro(P, p, double);
 
   /** Get the value of p for EPSILON_SVR */
   double GetP(void) const
@@ -187,7 +186,7 @@ public:
   }
 
   /** Set the Nu parameter for the training */
-  otbSetSVMParameterMacro(Nu,nu,double)
+  otbSetSVMParameterMacro(Nu, nu, double);
 
   /** Set the Nu parameter for the training */
   double GetNu(void) const
@@ -237,14 +236,14 @@ public:
   itkGetMacro(FineOptimizationNumberOfSteps, unsigned int);
 
   void SetConfidenceMode(unsigned int mode)
+  {
+    if (m_ConfidenceMode != static_cast<ConfidenceMode>(mode))
     {
-    if (m_ConfidenceMode != static_cast<ConfidenceMode>(mode) )
-      {
-      m_ConfidenceMode = static_cast<ConfidenceMode>(mode);
+      m_ConfidenceMode        = static_cast<ConfidenceMode>(mode);
       this->m_ConfidenceIndex = this->HasProbabilities();
       this->Modified();
-      }
     }
+  }
   itkGetMacro(ConfidenceMode, unsigned int);
 
   unsigned int GetNumberOfKernelParameters();
@@ -254,15 +253,17 @@ public:
   /** Return number of support vectors */
   unsigned int GetNumberOfSupportVectors(void) const
   {
-    if (m_Model) return m_Model->l;
+    if (m_Model)
+      return m_Model->l;
     return 0;
   }
 
   unsigned int GetNumberOfClasses(void) const
-    {
-    if (m_Model) return m_Model->nr_class;
+  {
+    if (m_Model)
+      return m_Model->nr_class;
     return 0;
-    }
+  }
 
 protected:
   /** Constructor */
@@ -272,14 +273,14 @@ protected:
   ~LibSVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LibSVMMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LibSVMMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void BuildProblem(void);
 
@@ -323,12 +324,11 @@ private:
 
   /** Temporary array to store cross-validation results */
   std::vector<double> m_TmpTarget;
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLibSVMMachineLearningModel.txx"
+#include "otbLibSVMMachineLearningModel.hxx"
 #endif
 
 #endif

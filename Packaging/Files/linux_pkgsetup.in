@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -39,8 +39,6 @@ cd  "$DIRNAME_0"
 
 OUT_DIR=$(pwd)
 
-PATCH_ELF_EXE="$OUT_DIR/patchelf"
-
 #do not move below block. it must be before "unset LD_LIBRARY_PATH" code
 #check if we have any python bindings
 if [ -f "$OUT_DIR/lib/python/_otbApplication.so" ] ; then
@@ -52,13 +50,11 @@ fi
 unset LD_LIBRARY_PATH
 
 # we remove files in $OUT_DIR/lib/gtk which we CANNOT add new rpath
-BINARY_FILES=$(find "$OUT_DIR/lib" "$OUT_DIR/bin" "$OUT_DIR/plugins" -type f -exec file {} \; | grep -v '/lib/gtk/' | grep -i elf|cut -f1 -d':')
+BINARY_FILES=$(find "./lib" "./bin" "./plugins" -type f -exec file {} \; | grep -v '/lib/gtk/' | grep -i ': elf ' | cut -f1 -d':')
 # run patchelf
 for bin_file in $BINARY_FILES; do
     #echo "adding rpath to $bin_file"
-    if [ -f "$bin_file" ]; then
-        "$PATCH_ELF_EXE" "--set-rpath" "$OUT_DIR/lib" "$bin_file"
-    fi
+    ./patchelf "--set-rpath" "$OUT_DIR/lib" "$bin_file"
 done
 
 #install uninstall_otb script

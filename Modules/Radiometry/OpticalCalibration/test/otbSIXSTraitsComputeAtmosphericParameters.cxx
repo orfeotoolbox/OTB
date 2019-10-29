@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,33 +19,32 @@
  */
 
 
-
 #include "otbSIXSTraits.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
 
-int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char * argv[])
+int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inname   = argv[1];
-  const char * outname  = argv[2];
+  const char* inname  = argv[1];
+  const char* outname = argv[2];
 
   typedef otb::AtmosphericCorrectionParameters AtmosphericCorrectionParametersType;
   // Instantiating object
-  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+  typedef otb::FilterFunctionValues          FilterFunctionValuesType;
   FilterFunctionValuesType::Pointer          functionValues = FilterFunctionValuesType::New();
   FilterFunctionValuesType::ValuesVectorType vect;
 
-  double       SolarZenithalAngle(0.);
-  double       SolarAzimutalAngle(0.);
-  double       ViewingZenithalAngle(0.);
-  double       ViewingAzimutalAngle(0.);
-  unsigned int Month(0);
-  unsigned int Day(0);
-  double       AtmosphericPressure(0.);
-  double       WaterVaporAmount(0.);
-  double       OzoneAmount(0.);
+  double                                                        SolarZenithalAngle(0.);
+  double                                                        SolarAzimutalAngle(0.);
+  double                                                        ViewingZenithalAngle(0.);
+  double                                                        ViewingAzimutalAngle(0.);
+  unsigned int                                                  Month(0);
+  unsigned int                                                  Day(0);
+  double                                                        AtmosphericPressure(0.);
+  double                                                        WaterVaporAmount(0.);
+  double                                                        OzoneAmount(0.);
   typedef AtmosphericCorrectionParametersType::AerosolModelType AerosolModelType;
 
   AerosolModelType AerosolModel;
@@ -63,38 +62,38 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char * a
   std::ifstream fin;
   std::ofstream fout;
 
-  //Read input file parameters
+  // Read input file parameters
   fin.open(inname);
-  fin >> SolarZenithalAngle; //asol;
-  fin >> SolarAzimutalAngle; //phi0;
-  fin >> ViewingZenithalAngle; //avis;
-  fin >> ViewingAzimutalAngle; //phiv;
-  fin >> Month; //month;
-  fin >> Day; //jday;
+  fin >> SolarZenithalAngle;   // asol;
+  fin >> SolarAzimutalAngle;   // phi0;
+  fin >> ViewingZenithalAngle; // avis;
+  fin >> ViewingAzimutalAngle; // phiv;
+  fin >> Month;                // month;
+  fin >> Day;                  // jday;
 
-  fin >> AtmosphericPressure; //pressure;
-  fin >> WaterVaporAmount; //uw;
-  fin >> OzoneAmount; //uo3;
+  fin >> AtmosphericPressure; // pressure;
+  fin >> WaterVaporAmount;    // uw;
+  fin >> OzoneAmount;         // uo3;
   unsigned int aer(0);
-  fin >> aer; //iaer;
+  fin >> aer; // iaer;
   AerosolModel = static_cast<AerosolModelType>(aer);
-  fin >> AerosolOptical; //taer55;
+  fin >> AerosolOptical; // taer55;
 
   float MinSpectralValue(0.);
   float MaxSpectralValue(0.);
   float value(0.);
 
-  fin >> MinSpectralValue; //wlinf;
-  fin >> MaxSpectralValue; //wlsup;
+  fin >> MinSpectralValue; // wlinf;
+  fin >> MaxSpectralValue; // wlsup;
 
   std::string line;
   std::getline(fin, line);
 
   while (std::getline(fin, line))
-    {
+  {
     value = atof(line.c_str());
     vect.push_back(value);
-    }
+  }
   fin.close();
 
   functionValues->SetFilterFunctionValues(vect);
@@ -103,27 +102,9 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char * a
   functionValues->SetUserStep(.0025);
 
   otb::SIXSTraits::ComputeAtmosphericParameters(
-    SolarZenithalAngle,
-    SolarAzimutalAngle,
-    ViewingZenithalAngle,
-    ViewingAzimutalAngle,
-    Month,
-    Day,
-    AtmosphericPressure,
-    WaterVaporAmount,
-    OzoneAmount,
-    AerosolModel,
-    AerosolOptical,
-    functionValues,
-    AtmosphericReflectance,
-    AtmosphericSphericalAlbedo,
-    TotalGaseousTransmission,
-    DownwardTransmittance,
-    UpwardTransmittance,
-    UpwardDiffuseTransmittance,
-    UpwardDirectTransmittance,
-    UpwardDiffuseTransmittanceForRayleigh,
-    UpwardDiffuseTransmittanceForAerosol);
+      SolarZenithalAngle, SolarAzimutalAngle, ViewingZenithalAngle, ViewingAzimutalAngle, Month, Day, AtmosphericPressure, WaterVaporAmount, OzoneAmount,
+      AerosolModel, AerosolOptical, functionValues, AtmosphericReflectance, AtmosphericSphericalAlbedo, TotalGaseousTransmission, DownwardTransmittance,
+      UpwardTransmittance, UpwardDiffuseTransmittance, UpwardDirectTransmittance, UpwardDiffuseTransmittanceForRayleigh, UpwardDiffuseTransmittanceForAerosol);
 
   fout.open(outname);
   fout << " ---------------------------------------------------------" << std::endl;
@@ -151,27 +132,22 @@ int otbSIXSTraitsComputeAtmosphericParametersTest(int itkNotUsed(argc), char * a
   fout << "   ----->  upward transmittance :                      " << UpwardTransmittance << std::endl;
   fout << "   ----->  upward diffuse transmittance :              " << UpwardDiffuseTransmittance << std::endl;
   fout << "   ----->  upward direct transmittance :               " << UpwardDirectTransmittance << std::endl;
-  fout << "   ----->  upward diffuse transmittance for rayleigh : " << UpwardDiffuseTransmittanceForRayleigh <<
-  std::endl;
-  fout << "   ----->  upward diffuse transmittance for aerosols : " << UpwardDiffuseTransmittanceForAerosol <<
-  std::endl;
-  fout << "   ----->  MinSpectralValue update:                    " << functionValues->GetMinSpectralValue() <<
-  std::endl;
-  fout << "   ----->  MaxSpectralValue update :                   " << functionValues->GetMaxSpectralValue() <<
-  std::endl;
+  fout << "   ----->  upward diffuse transmittance for rayleigh : " << UpwardDiffuseTransmittanceForRayleigh << std::endl;
+  fout << "   ----->  upward diffuse transmittance for aerosols : " << UpwardDiffuseTransmittanceForAerosol << std::endl;
+  fout << "   ----->  MinSpectralValue update:                    " << functionValues->GetMinSpectralValue() << std::endl;
+  fout << "   ----->  MaxSpectralValue update :                   " << functionValues->GetMaxSpectralValue() << std::endl;
   fout << " ---------------------------------------------------------" << std::endl;
   fout << "Input wavelength band values [" << functionValues->GetFilterFunctionValues().size() << "]:" << std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues().size(); ++i)
-    {
+  {
     fout << "    " << functionValues->GetFilterFunctionValues()[i] << std::endl;
-    }
+  }
   fout << " ---------------------------------------------------------" << std::endl;
-  fout << "Output wavelength band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" <<
-  std::endl;
+  fout << "Output wavelength band values 6S [" << functionValues->GetFilterFunctionValues6S().size() << "]:" << std::endl;
   for (unsigned int i = 0; i < functionValues->GetFilterFunctionValues6S().size(); ++i)
-    {
+  {
     fout << "    " << functionValues->GetFilterFunctionValues6S()[i] << std::endl;
-    }
+  }
   fout << std::endl;
   fout.close();
   return EXIT_SUCCESS;

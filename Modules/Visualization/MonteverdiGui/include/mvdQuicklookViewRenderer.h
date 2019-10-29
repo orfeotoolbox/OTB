@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,8 +77,7 @@ namespace mvd
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT QuicklookViewRenderer :
-    public ImageViewRenderer
+class OTBMonteverdiGUI_EXPORT QuicklookViewRenderer : public ImageViewRenderer
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,38 +86,34 @@ class OTBMonteverdiGUI_EXPORT QuicklookViewRenderer :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
   /**
    */
-  struct RenderingContext :
-    public ImageViewRenderer::RenderingContext
+  struct RenderingContext : public ImageViewRenderer::RenderingContext
   {
     /**
      */
-    inline
-    RenderingContext() :
-      ImageViewRenderer::RenderingContext(),
-      m_RoiOrigin(),
-      m_RoiExtent()
+    inline RenderingContext() : ImageViewRenderer::RenderingContext(), m_RoiOrigin(), m_RoiExtent()
     {
-      m_RoiOrigin.Fill( 0 );
-      m_RoiOrigin.Fill( 0 );
+      m_RoiOrigin.Fill(0);
+      m_RoiOrigin.Fill(0);
     }
 
-    ~RenderingContext() override {}
+    ~RenderingContext() override
+    {
+    }
 
     PointType m_RoiOrigin;
     PointType m_RoiExtent;
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** Constructor */
-  QuicklookViewRenderer( QObject* p = NULL );
+  QuicklookViewRenderer(QObject* p = NULL);
 
   /** Destructor */
   ~QuicklookViewRenderer() override;
@@ -126,46 +121,42 @@ public:
   //
   // ImageViewRenderer overloads.
 
-  
+
   AbstractImageViewRenderer::RenderingContext* NewRenderingContext() const override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-// public slots
+  // public slots
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // ImageViewRenderer overloads.
 
-  
-  void UpdateActors( const AbstractImageViewRenderer::RenderingContext* c ) override;
 
-//
-// Protected attributes.
+  void UpdateActors(const AbstractImageViewRenderer::RenderingContext* c) override;
+
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types
+  //
+  // Private types
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   void SetWktAndKwl();
 
   //
@@ -178,8 +169,8 @@ private:
   // TODO: Move virtual_*Scene() methods to protected section.
   void virtual_FinishScene() override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -187,8 +178,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 

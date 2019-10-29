@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -34,7 +34,6 @@
 #include <ossim/base/ossimGpt.h>
 #include <ossim/base/ossimDpt.h>
 #include <ossim/base/ossimString.h>
-#include <iostream>
 #include <list>
 
 #include <otb/CivilDateTime.h>
@@ -119,7 +118,7 @@ namespace ossimplugins
       //---
    	  // Convenient method to print important image info:
       //---
-      void  printInfo (ostream& os) const;
+      void  printInfo (std::ostream& os) const;
    
       private:
 

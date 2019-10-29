@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbSarDefaultImageMetadataInterfaceFactory.h"
 #include "otbSarDefaultImageMetadataInterface.h"
 
@@ -29,29 +28,22 @@
 namespace otb
 {
 
-SarDefaultImageMetadataInterfaceFactory
-::SarDefaultImageMetadataInterfaceFactory()
+SarDefaultImageMetadataInterfaceFactory::SarDefaultImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("SarImageMetadataInterface",
-                         "otbSarDefaultImageMetadataInterface",
-                         "Default Sar Metadata Interface",
-                         1,
+  this->RegisterOverride("SarImageMetadataInterface", "otbSarDefaultImageMetadataInterface", "Default Sar Metadata Interface", 1,
                          itk::CreateObjectFunction<SarDefaultImageMetadataInterface>::New());
 }
 
-SarDefaultImageMetadataInterfaceFactory
-::~SarDefaultImageMetadataInterfaceFactory()
+SarDefaultImageMetadataInterfaceFactory::~SarDefaultImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-SarDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* SarDefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-SarDefaultImageMetadataInterfaceFactory::GetDescription() const
+const char* SarDefaultImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Default Sar Metadata Interface Factory, handle Default Sar metadata in OTB";
 }

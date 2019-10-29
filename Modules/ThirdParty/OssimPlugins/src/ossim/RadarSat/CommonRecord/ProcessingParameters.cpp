@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -39,26 +39,26 @@ namespace ossimplugins
    {
       os<<"rec_seq:"<<data._rec_seq<<std::endl;
 
-      os<<"inp_media:"<<data._inp_media.c_str()<<std::endl;
+      os<<"inp_media:"<<data._inp_media <<std::endl;
 
       os<<"n_tape_id:"<<data._n_tape_id<<std::endl;
 
       for (int i=0;i<10;i++)
       {
-         os<<"tape_id["<<i<<"]:"<<data._tape_id[i].c_str()<<std::endl;
+         os<<"tape_id["<<i<<"]:"<<data._tape_id[i] <<std::endl;
       }
 
-      os<<"exp_ing_start:"<<data._exp_ing_start.c_str()<<std::endl;
+      os<<"exp_ing_start:"<<data._exp_ing_start <<std::endl;
 
-      os<<"exp_ing_stop:"<<data._exp_ing_stop.c_str()<<std::endl;
+      os<<"exp_ing_stop:"<<data._exp_ing_stop <<std::endl;
 
-      os<<"act_ing_start:"<<data._act_ing_start.c_str()<<std::endl;
+      os<<"act_ing_start:"<<data._act_ing_start <<std::endl;
 
-      os<<"act_ing_stop:"<<data._act_ing_stop.c_str()<<std::endl;
+      os<<"act_ing_stop:"<<data._act_ing_stop <<std::endl;
 
-      os<<"proc_start:"<<data._proc_start.c_str()<<std::endl;
+      os<<"proc_start:"<<data._proc_start <<std::endl;
 
-      os<<"proc_stop:"<<data._proc_stop.c_str()<<std::endl;
+      os<<"proc_stop:"<<data._proc_stop <<std::endl;
 
       for (int i=0;i<10;i++)
       {
@@ -97,13 +97,13 @@ namespace ossimplugins
 
       os<<"rej_rec_type:"<<data._rej_rec_type<<std::endl;
 
-      os<<"sens_config:"<<data._sens_config.c_str()<<std::endl;
+      os<<"sens_config:"<<data._sens_config <<std::endl;
 
-      os<<"sens_orient:"<<data._sens_orient.c_str()<<std::endl;
+      os<<"sens_orient:"<<data._sens_orient <<std::endl;
 
-      os<<"sych_marker:"<<data._sych_marker.c_str()<<std::endl;
+      os<<"sych_marker:"<<data._sych_marker <<std::endl;
 
-      os<<"rng_ref_src:"<<data._rng_ref_src.c_str()<<std::endl;
+      os<<"rng_ref_src:"<<data._rng_ref_src <<std::endl;
 
       for (int i=0;i<4;i++)
       {
@@ -128,7 +128,7 @@ namespace ossimplugins
       os<<"pulse_bandw:"<<data._pulse_bandw<<std::endl;
 
 
-      os<<"adc_samp_rate:"<<data._adc_samp_rate.c_str()<<std::endl;
+      os<<"adc_samp_rate:"<<data._adc_samp_rate <<std::endl;
 
       os<<"rep_agc_attn:"<<data._rep_agc_attn<<std::endl;
 
@@ -136,13 +136,13 @@ namespace ossimplugins
 
       os<<"rep_energy_gn:"<<data._rep_energy_gn<<std::endl;
 
-      os<<"orb_data_src:"<<data._orb_data_src.c_str()<<std::endl;
+      os<<"orb_data_src:"<<data._orb_data_src <<std::endl;
 
       os<<"pulse_cnt_1:"<<data._pulse_cnt_1<<std::endl;
 
       os<<"pulse_cnt_2:"<<data._pulse_cnt_2<<std::endl;
 
-      os<<"beam_edge_rqd:"<<data._beam_edge_rqd.c_str()<<std::endl;
+      os<<"beam_edge_rqd:"<<data._beam_edge_rqd <<std::endl;
 
       os<<"beam_edge_conf:"<<data._beam_edge_conf<<std::endl;
 
@@ -166,7 +166,7 @@ namespace ossimplugins
 
       os<<"pwin_end:"<<data._pwin_end<<std::endl;
 
-      os<<"recd_type:"<<data._recd_type.c_str()<<std::endl;
+      os<<"recd_type:"<<data._recd_type <<std::endl;
 
       os<<"temp_set_inc:"<<data._temp_set_inc<<std::endl;
 
@@ -212,7 +212,7 @@ namespace ossimplugins
          os<<"eph_orb_data["<<i<<"]:"<<data._eph_orb_data[i]<<std::endl;
       }
 
-      os<<"appl_type:"<<data._appl_type.c_str()<<std::endl;
+      os<<"appl_type:"<<data._appl_type <<std::endl;
 
       for (int i=0;i<5;i++)
       {
@@ -228,31 +228,31 @@ namespace ossimplugins
 
       os<<"pixel_spacing:"<<data._pixel_spacing<<std::endl;
 
-      os<<"gics_reqd:"<<data._gics_reqd.c_str()<<std::endl;
+      os<<"gics_reqd:"<<data._gics_reqd <<std::endl;
 
-      os<<"wo_number:"<<data._wo_number.c_str()<<std::endl;
+      os<<"wo_number:"<<data._wo_number <<std::endl;
 
-      os<<"wo_date:"<<data._wo_date.c_str()<<std::endl;
+      os<<"wo_date:"<<data._wo_date <<std::endl;
 
-      os<<"satellite_id:"<<data._satellite_id.c_str()<<std::endl;
+      os<<"satellite_id:"<<data._satellite_id <<std::endl;
 
-      os<<"user_id:"<<data._user_id.c_str()<<std::endl;
+      os<<"user_id:"<<data._user_id <<std::endl;
 
-      os<<"complete_msg:"<<data._complete_msg.c_str()<<std::endl;
+      os<<"complete_msg:"<<data._complete_msg <<std::endl;
 
-      os<<"scene_id:"<<data._scene_id.c_str()<<std::endl;
+      os<<"scene_id:"<<data._scene_id <<std::endl;
 
-      os<<"density_in:"<<data._density_in.c_str()<<std::endl;
+      os<<"density_in:"<<data._density_in <<std::endl;
 
-      os<<"media_id:"<<data._media_id.c_str()<<std::endl;
+      os<<"media_id:"<<data._media_id <<std::endl;
 
       os<<"angle_first:"<<data._angle_first<<std::endl;
 
       os<<"angle_last:"<<data._angle_last<<std::endl;
 
-      os<<"prod_type:"<<data._prod_type.c_str()<<std::endl;
+      os<<"prod_type:"<<data._prod_type <<std::endl;
 
-      os<<"map_system:"<<data._map_system.c_str()<<std::endl;
+      os<<"map_system:"<<data._map_system <<std::endl;
 
       os<<"centre_lat:"<<data._centre_lat<<std::endl;
 
@@ -262,11 +262,11 @@ namespace ossimplugins
 
       os<<"span_y:"<<data._span_y<<std::endl;
 
-      os<<"apply_dtm:"<<data._apply_dtm.c_str()<<std::endl;
+      os<<"apply_dtm:"<<data._apply_dtm <<std::endl;
 
-      os<<"density_out:"<<data._density_out.c_str()<<std::endl;
+      os<<"density_out:"<<data._density_out <<std::endl;
 
-      os<<"state_time:"<<data._state_time.c_str()<<std::endl;
+      os<<"state_time:"<<data._state_time <<std::endl;
 
       os<<"num_state_vectors:"<<data._num_state_vectors<<std::endl;
 

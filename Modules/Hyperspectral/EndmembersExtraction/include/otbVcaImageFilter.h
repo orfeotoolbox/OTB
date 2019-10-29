@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,6 @@
 #define otbVCAImageFilter_h
 
 #include "otbImage.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkAbsImageFilter.h"
 #include "otbDotProductImageFilter.h"
 #include "otbProjectiveProjectionImageFilter.h"
@@ -37,7 +36,8 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "vnl/algo/vnl_svd.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class VCAImageFilter
  * \brief Estimates the endmembers present in a hyperspectral image
@@ -67,52 +67,51 @@ template <class TVectorImage>
 class ITK_EXPORT VCAImageFilter : public itk::ImageToImageFilter<TVectorImage, TVectorImage>
 {
 public:
-  typedef VCAImageFilter                                            Self;
-  typedef itk::ImageToImageFilter<TVectorImage, TVectorImage>       Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef VCAImageFilter Self;
+  typedef itk::ImageToImageFilter<TVectorImage, TVectorImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TVectorImage                                 VectorImageType;
-  typedef typename VectorImageType::IndexType          IndexType;
-  typedef typename VectorImageType::SizeType           SizeType;
-  typedef typename VectorImageType::RegionType         RegionType;
-  typedef typename VectorImageType::PixelType          PixelType;
-  typedef typename VectorImageType::InternalPixelType  InternalPixelType;
-  typedef InternalPixelType                            PrecisionType;
+  typedef TVectorImage                                VectorImageType;
+  typedef typename VectorImageType::IndexType         IndexType;
+  typedef typename VectorImageType::SizeType          SizeType;
+  typedef typename VectorImageType::RegionType        RegionType;
+  typedef typename VectorImageType::PixelType         PixelType;
+  typedef typename VectorImageType::InternalPixelType InternalPixelType;
+  typedef InternalPixelType                           PrecisionType;
 
-  typedef otb::Image<InternalPixelType>                ImageType;
+  typedef otb::Image<InternalPixelType> ImageType;
 
-  typedef itk::AbsImageFilter<ImageType, ImageType>                                             AbsImageFilterType;
+  typedef itk::AbsImageFilter<ImageType, ImageType> AbsImageFilterType;
   typedef otb::ProjectiveProjectionImageFilter<VectorImageType, VectorImageType, PrecisionType> ProjectiveProjectionImageFilterType;
-  typedef otb::DotProductImageFilter<VectorImageType, ImageType>                                DotProductImageFilterType;
-  typedef otb::MatrixImageFilter<VectorImageType, VectorImageType>                              MatrixImageFilterType;
-  typedef otb::VectorImageToMatrixImageFilter<VectorImageType>                                  VectorImageToMatrixImageFilterType;
-  typedef otb::StreamingMinMaxImageFilter<ImageType>                                            StreamingMinMaxImageFilterType;
-  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType>             StreamingStatisticsVectorImageFilterType;
-  typedef otb::StreamingStatisticsImageFilter<ImageType>                                        StreamingStatisticsImageFilterType;
-  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator                                RandomVariateGeneratorType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::FORWARD >      ForwardPCAImageFilterType;
-  typedef otb::PCAImageFilter< VectorImageType, VectorImageType, otb::Transform::INVERSE >      InversePCAImageFilterType;
-  typedef otb::VectorImageToAmplitudeImageFilter< VectorImageType, ImageType >                  VectorImageToAmplitudeImageFilterType;
-  typedef otb::ConcatenateScalarValueImageFilter< VectorImageType, VectorImageType >            ConcatenateScalarValueImageFilterType;
+  typedef otb::DotProductImageFilter<VectorImageType, ImageType>   DotProductImageFilterType;
+  typedef otb::MatrixImageFilter<VectorImageType, VectorImageType> MatrixImageFilterType;
+  typedef otb::VectorImageToMatrixImageFilter<VectorImageType> VectorImageToMatrixImageFilterType;
+  typedef otb::StreamingMinMaxImageFilter<ImageType>           StreamingMinMaxImageFilterType;
+  typedef otb::StreamingStatisticsVectorImageFilter<VectorImageType, PrecisionType> StreamingStatisticsVectorImageFilterType;
+  typedef otb::StreamingStatisticsImageFilter<ImageType>         StreamingStatisticsImageFilterType;
+  typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomVariateGeneratorType;
+  typedef otb::PCAImageFilter<VectorImageType, VectorImageType, otb::Transform::FORWARD> ForwardPCAImageFilterType;
+  typedef otb::PCAImageFilter<VectorImageType, VectorImageType, otb::Transform::INVERSE> InversePCAImageFilterType;
+  typedef otb::VectorImageToAmplitudeImageFilter<VectorImageType, ImageType>       VectorImageToAmplitudeImageFilterType;
+  typedef otb::ConcatenateScalarValueImageFilter<VectorImageType, VectorImageType> ConcatenateScalarValueImageFilterType;
 
   // creation of SmartPointer
   itkNewMacro(Self);
   // runtime type information
   itkTypeMacro(VCAImageFilter, itk::ImageToImageFilter);
 
-  itkGetMacro( NumberOfEndmembers, unsigned int );
-  itkSetMacro( NumberOfEndmembers, unsigned int );
+  itkGetMacro(NumberOfEndmembers, unsigned int);
+  itkSetMacro(NumberOfEndmembers, unsigned int);
 
   void Update() override
   {
     this->GenerateData();
   }
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)) override
+  void EnlargeOutputRequestedRegion(itk::DataObject* itkNotUsed(output)) override
   {
-    this->GetOutput()
-      ->SetRequestedRegion( this->GetOutput()->GetLargestPossibleRegion() );
+    this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
   }
 
 protected:
@@ -127,14 +126,14 @@ protected:
   void GenerateData() override;
 
 private:
-  VCAImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VCAImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NumberOfEndmembers;
 };
 
 } // end namesapce otb
 
-#include "otbVcaImageFilter.txx"
+#include "otbVcaImageFilter.hxx"
 
 #endif /* otbVCAImageFilter_h */

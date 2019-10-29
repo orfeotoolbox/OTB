@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,8 +36,8 @@ class MachineLearningModelFactory : public MachineLearningModelFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef MachineLearningModelFactory                Self;
-  typedef itk::Object           Superclass;
+  typedef MachineLearningModelFactory   Self;
+  typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -47,7 +47,7 @@ public:
   itkTypeMacro(MachineLearningModelFactory, itk::Object);
 
   /** Convenient typedefs. */
-  typedef otb::MachineLearningModel<TInputValue,TOutputValue> MachineLearningModelType;
+  typedef otb::MachineLearningModel<TInputValue, TOutputValue> MachineLearningModelType;
   typedef typename MachineLearningModelType::Pointer MachineLearningModelTypePointer;
 
   /** Mode in which the files is intended to be used */
@@ -63,22 +63,21 @@ protected:
   ~MachineLearningModelFactory() override;
 
 private:
-  MachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
 
   /** Register a single factory, ensuring it has not been registered
     * twice */
-  static void RegisterFactory(itk::ObjectFactoryBase * factory);
-
+  static void RegisterFactory(itk::ObjectFactoryBase* factory);
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMachineLearningModelFactory.txx"
+#include "otbMachineLearningModelFactory.hxx"
 #endif
 
 #endif

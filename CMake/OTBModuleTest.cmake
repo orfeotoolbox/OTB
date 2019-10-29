@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -142,32 +142,6 @@ endmacro()
 # OTB wrapper for add_test that automatically sets the test's LABELS property
 # to the value of its containing module.
 #
-# function(otb_add_test)
-#   # Add tests with data in the OTBData group.
-#   ExternalData_add_test(OTBData ${ARGN})
-
-#   if("NAME" STREQUAL "${ARGV0}")
-#     set(_iat_testname ${ARGV1})
-#   else()
-#     set(_iat_testname ${ARGV0})
-#   endif()
-
-#   if(otb-module)
-#     set(_label ${otb-module})
-#     if(TARGET ${otb-module}-all AND "${ARGN}" MATCHES "DATA{")
-#       add_dependencies(${otb-module}-all OTBData)
-#     endif()
-#   else()
-#     set(_label ${main_project_name})
-#   endif()
-
-#   set_property(TEST ${_iat_testname} PROPERTY LABELS ${_label})
-# endfunction()
-
-#-----------------------------------------------------------------------------
-# OTB wrapper for add_test that automatically sets the test's LABELS property
-# to the value of its containing module.
-#
 function(otb_add_test)
   set(largeinput_regex "LARGEINPUT{([^;{}\r\n]*)}")
 
@@ -224,7 +198,7 @@ endfunction()
 function(otb_add_test_mpi)
    set( _OPTIONS_ARGS )
    set( _ONE_VALUE_ARGS NAME NBPROCS COMMAND)
-   set( _MULTI_VALUE_ARGS )
+   set( _MULTI_VALUE_ARGS EXTRA_OPT)
    cmake_parse_arguments( TEST_MPI "${_OPTIONS_ARGS}" "${_ONE_VALUE_ARGS}" "${_MULTI_VALUE_ARGS}" ${ARGN} )
 
    # Test nb procs
@@ -235,6 +209,6 @@ function(otb_add_test_mpi)
    foreach(arg IN LISTS TEST_MPI_UNPARSED_ARGUMENTS)
      list(APPEND ARGS ${arg})
    endforeach()
-   set (test_parameters -np ${TEST_MPI_NBPROCS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
+   set (test_parameters -n ${TEST_MPI_NBPROCS} ${OTB_MPIEXEC_OPT} ${TEST_MPI_EXTRA_OPT} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${TEST_MPI_COMMAND} ${ARGS})
    otb_add_test(NAME ${TEST_MPI_NAME} COMMAND ${MPIEXEC} ${test_parameters})
 endfunction()

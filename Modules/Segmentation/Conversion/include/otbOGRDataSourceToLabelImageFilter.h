@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,8 +28,10 @@
 #include "gdal.h"
 #include "gdal_alg.h"
 #include "otbOGRDataSourceWrapper.h"
+#include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class OGRDataSourceToLabelImageFilter
  *  \brief Burn geometries from the specified VectorData into raster
@@ -53,16 +55,15 @@ namespace otb {
  *
  * \ingroup OTBConversion
  */
-template < class TOutputImage >
-class  ITK_EXPORT OGRDataSourceToLabelImageFilter :
-    public itk::ImageSource<TOutputImage>
+template <class TOutputImage>
+class ITK_EXPORT OGRDataSourceToLabelImageFilter : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef OGRDataSourceToLabelImageFilter       Self;
-  typedef itk::ImageSource<TOutputImage>        Superclass;
-  typedef itk::SmartPointer< Self >             Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef OGRDataSourceToLabelImageFilter Self;
+  typedef itk::ImageSource<TOutputImage>  Superclass;
+  typedef itk::SmartPointer<Self>         Pointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(OGRDataSourceToLabelImageFilter, itk::ImageSource);
@@ -81,14 +82,14 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** VectorData typedefs*/
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
-  typedef ogr::Layer                                 OGRLayerType;
+  typedef ogr::DataSource                     OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer OGRDataSourcePointerType;
+  typedef ogr::Layer                          OGRLayerType;
 
-  typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
+  typedef itk::ImageBase<OutputImageType::ImageDimension> ImageBaseType;
 
   /** Get Nth input \c OGRDataSource */
-  const OGRDataSourceType*  GetInput(unsigned int idx);
+  const OGRDataSourceType* GetInput(unsigned int idx);
 
   /** Method for adding a \c OGRDataSource to rasterize  */
   virtual void AddOGRDataSource(const OGRDataSourceType* ds);
@@ -124,57 +125,65 @@ public:
   itkGetStringMacro(BurnAttribute);
 
   /** Set/Get the background value */
-  itkSetMacro(BackgroundValue,OutputImageInternalPixelType);
-  itkGetConstReferenceMacro(BackgroundValue,OutputImageInternalPixelType);
+  itkSetMacro(BackgroundValue, OutputImageInternalPixelType);
+  itkGetConstReferenceMacro(BackgroundValue, OutputImageInternalPixelType);
 
   /** Set/Get the foreground value */
-  itkSetMacro(ForegroundValue,OutputImageInternalPixelType);
-  itkGetConstReferenceMacro(ForegroundValue,OutputImageInternalPixelType);
+  itkSetMacro(ForegroundValue, OutputImageInternalPixelType);
+  itkGetConstReferenceMacro(ForegroundValue, OutputImageInternalPixelType);
 
   /** Set/Get the BurnAttributeMode flag */
-  itkSetMacro(BurnAttributeMode,bool);
-  itkGetConstReferenceMacro(BurnAttributeMode,bool);
+  itkSetMacro(BurnAttributeMode, bool);
+  itkGetConstReferenceMacro(BurnAttributeMode, bool);
   itkBooleanMacro(BurnAttributeMode);
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode, bool);
+  itkGetConstReferenceMacro(AllTouchedMode, bool);
+  itkBooleanMacro(AllTouchedMode);
+
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const ImageBaseType * image);
+  void SetOutputParametersFromImage(const ImageBaseType* image);
 
 protected:
   void GenerateData() override;
 
   OGRDataSourceToLabelImageFilter();
-  ~OGRDataSourceToLabelImageFilter() override {}
+  ~OGRDataSourceToLabelImageFilter() override
+  {
+  }
 
   void GenerateOutputInformation() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OGRDataSourceToLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  OGRDataSourceToLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  std::vector< OGRLayerH >    m_SrcDataSetLayers;
-  std::vector<int>            m_BandsToBurn;
+  std::vector<OGRLayerH> m_SrcDataSetLayers;
+  std::vector<int>       m_BandsToBurn;
 
   // Field used to extract the burn value
-  std::string                   m_BurnAttribute;
+  std::string m_BurnAttribute;
 
   // Output params
-  std::string                   m_OutputProjectionRef;
-  OutputSpacingType             m_OutputSpacing;
-  OutputOriginType              m_OutputOrigin;
-  OutputSizeType                m_OutputSize;
-  OutputIndexType               m_OutputStartIndex;
-  OutputImageInternalPixelType  m_BackgroundValue;
-  OutputImageInternalPixelType  m_ForegroundValue;
-  bool                          m_BurnAttributeMode;
+  std::string                  m_OutputProjectionRef;
+  OutputSpacingType            m_OutputSpacing;
+  OutputOriginType             m_OutputOrigin;
+  OutputSizeType               m_OutputSize;
+  OutputIndexType              m_OutputStartIndex;
+  OutputImageInternalPixelType m_BackgroundValue;
+  OutputImageInternalPixelType m_ForegroundValue;
+  bool                         m_BurnAttributeMode;
+  bool                         m_AllTouchedMode;
 }; // end of class VectorDataToLabelImageFilter
 
 } // end of namespace otb
 
 
-#ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbOGRDataSourceToLabelImageFilter.txx"
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbOGRDataSourceToLabelImageFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,33 +25,16 @@
 #include "otbImageFileWriter.h"
 #include "otbRadiometricMomentsImageFilter.h"
 
-int otbRadiometricMomentsImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+
+int otbRadiometricMomentsImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef float InputPixelType;
-  const unsigned int Dimension = 2;
-
-  /** Typedefs */
-  typedef otb::Image<InputPixelType,  Dimension>       ImageType;
-  typedef otb::VectorImage<InputPixelType,  Dimension> VectorImageType;
-
-  typedef otb::RadiometricMomentsImageFilter<ImageType, VectorImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-int otbRadiometricMomentsImageFilter(int itkNotUsed(argc), char * argv[])
-{
-  typedef float InputPixelType;
+  typedef float      InputPixelType;
   const unsigned int Dimension = 2;
 
   // Typedefs
-  typedef otb::Image<InputPixelType,  Dimension>         ImageType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::VectorImage<InputPixelType,  Dimension>   VectorImageType;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
   typedef otb::RadiometricMomentsImageFilter<ImageType, VectorImageType> FilterType;
 

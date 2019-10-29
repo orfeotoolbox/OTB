@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,33 +26,33 @@
 #include "otbImageFileWriter.h"
 
 
-int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char * argv[])
+int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef float                                                                     PixelType;
-  typedef otb::Image<PixelType, Dimension>                                          InputImageType;
-  typedef InputImageType::IndexType                                                 IndexType;
-  typedef otb::Image<PixelType, Dimension>                                          OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
-  typedef otb::SarParametricMapFunction<InputImageType>                             FunctionType;
+  typedef float      PixelType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef InputImageType::IndexType IndexType;
+  typedef otb::Image<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>          ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>         WriterType;
+  typedef otb::SarParametricMapFunction<InputImageType> FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
-  typedef FunctionType::PointSetType                                                PointSetType;
+  typedef FunctionType::PointSetType PointSetType;
 
   // Instantiating object
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  FilterType::Pointer   filter = FilterType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
+  WriterType::Pointer   writer = WriterType::New();
   PointSetType::Pointer points = PointSetType::New();
 
   InputImageType::Pointer image = InputImageType::New();
 
   InputImageType::RegionType region;
-  InputImageType::IndexType index;
-  InputImageType::SizeType size;
+  InputImageType::IndexType  index;
+  InputImageType::SizeType   size;
 
-  size[0] = (unsigned int)( ::atoi(argv[2]) );
-  size[1] = (unsigned int)( ::atoi(argv[3]) );
+  size[0] = (unsigned int)(::atoi(argv[2]));
+  size[1] = (unsigned int)(::atoi(argv[3]));
   region.SetSize(size);
 
   index[0] = 0;
@@ -71,8 +71,8 @@ int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char * argv[]
   function->SetInputImage(image);
 
   /** Test on some indexes and some physical coordinates*/
-  FunctionType::PointType  p0;
-  PixelType                value;
+  FunctionType::PointType p0;
+  PixelType               value;
 
   p0[0] = static_cast<unsigned int>(0);
   p0[1] = static_cast<unsigned int>(0);
@@ -95,14 +95,14 @@ int otbSarParametricMapFunctionToImageFilter(int itkNotUsed(argc), char * argv[]
 
   function->SetPointSet(points);
 
-  IndexType       polynomalSize;
+  IndexType polynomalSize;
   polynomalSize[0] = 2;
   polynomalSize[1] = 0;
   function->SetPolynomalSize(polynomalSize);
 
   function->EvaluateParametricCoefficient();
   function->Print(std::cout);
-//  FunctionType::IndexType index;
+  //  FunctionType::IndexType index;
   index[0] = 0;
   index[1] = 0;
   std::cout << index << " -> " << function->EvaluateAtIndex(index) << std::endl;

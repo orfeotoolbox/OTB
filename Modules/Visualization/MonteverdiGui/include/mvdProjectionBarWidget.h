@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,7 +30,6 @@
 
 /*****************************************************************************/
 /* INCLUDE SECTION                                                           */
-#include <iostream>
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -74,12 +73,11 @@ class ProjectionBarWidget;
 class OTBMonteverdiGUI_EXPORT ProjectionBarWidget : public QWidget
 {
 
-Q_OBJECT;
+  Q_OBJECT;
 
 public:
-
   /** \brief Constructor. */
-  explicit ProjectionBarWidget(QWidget *p = NULL, Qt::WindowFlags flags = Qt::Widget );
+  explicit ProjectionBarWidget(QWidget* p = NULL, Qt::WindowFlags flags = Qt::Widget);
 
   /** \brief Destructor. */
   ~ProjectionBarWidget() override;
@@ -88,11 +86,10 @@ public slots:
   void SetProjectionScale(double scale_x, double scale_y);
 
 private:
-
   /**
    * \brief uic generated.
    */
-  Ui::ProjectionBarWidget *m_UI;
+  Ui::ProjectionBarWidget* m_UI;
 
   /**
    * emit a signal to change the scale if projectionScaleLineEdit is changed
@@ -113,11 +110,10 @@ private slots:
 signals:
   /**
    */
-  void ProjectionScaleChanged( double );
-
+  void ProjectionScaleChanged(double);
 };
 
 } // end namespace mvd
 
 
-#endif //mvdProjectionBarWidget_h
+#endif // mvdProjectionBarWidget_h

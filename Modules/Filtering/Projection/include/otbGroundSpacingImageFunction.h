@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,9 +42,7 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT GroundSpacingImageFunction :
-    public itk::ImageFunction<TInputImage, itk::Vector<float, 2>,
-      TCoordRep>
+class ITK_EXPORT GroundSpacingImageFunction : public itk::ImageFunction<TInputImage, itk::Vector<float, 2>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
@@ -52,11 +50,10 @@ public:
 
   /** Datatype used for the density */
   typedef float ValueType;
-  //typedef std::pair<ValueType, ValueType> FloatType;
+  // typedef std::pair<ValueType, ValueType> FloatType;
   typedef itk::Vector<ValueType, 2> FloatType;
 
-  typedef itk::ImageFunction<TInputImage, FloatType ,
-      TCoordRep>                                          Superclass;
+  typedef itk::ImageFunction<TInputImage, FloatType, TCoordRep> Superclass;
 
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -91,8 +88,7 @@ public:
     return this->EvaluateAtIndex(index);
   }
 
-  FloatType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  FloatType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -103,21 +99,23 @@ public:
 
 protected:
   GroundSpacingImageFunction();
-  ~GroundSpacingImageFunction() override{}
+  ~GroundSpacingImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GroundSpacingImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  GroundSpacingImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ValueType              m_R;
-  ValueType              m_Deg2radCoef;
+  ValueType m_R;
+  ValueType m_Deg2radCoef;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbGroundSpacingImageFunction.txx"
+#include "otbGroundSpacingImageFunction.hxx"
 #endif
 
 #endif

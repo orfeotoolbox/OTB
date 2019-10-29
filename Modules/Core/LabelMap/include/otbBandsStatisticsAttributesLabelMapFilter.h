@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,8 +64,7 @@ public:
   typedef typename TFeatureImage::ConstPointer FeatureImageConstPointer;
 
   /// Statistics functor
-  typedef StatisticsAttributesLabelObjectFunctor
-  <TLabelObject, TFeatureImage>                           StatsFunctorType;
+  typedef StatisticsAttributesLabelObjectFunctor<TLabelObject, TFeatureImage> StatsFunctorType;
 
   /// Map to store the functors
   typedef std::map<std::string, StatsFunctorType> StatsFunctorsMapType;
@@ -77,22 +76,22 @@ public:
   virtual ~BandStatsAttributesLabelObjectFunctor();
 
   /** The comparators */
-  bool operator !=(const Self& self);
-  bool operator ==(const Self& self);
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
 
   /** This is the functor implementation
    *  Calling the functor on a label object
    *  will update its statistics attributes */
-  inline void operator ()(LabelObjectType * lo) const;
+  inline void operator()(LabelObjectType* lo) const;
 
   /** Add a feature with the given name */
-  void AddFeature(const std::string& name, const TFeatureImage * img);
+  void AddFeature(const std::string& name, const TFeatureImage* img);
 
   /** Remove the feature with this name if it exists */
   bool RemoveFeature(const std::string& name);
 
   /** Get the feature image with this name */
-  const TFeatureImage * GetFeatureImage(const std::string& name) const;
+  const TFeatureImage* GetFeatureImage(const std::string& name) const;
 
   /** Clear all the features */
   void ClearAllFeatures();
@@ -135,34 +134,30 @@ private:
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage, class TFeatureImage>
+template <class TImage, class TFeatureImage>
 class ITK_EXPORT BandsStatisticsAttributesLabelMapFilter
-  : public LabelMapFeaturesFunctorImageFilter
-  <TImage,
-      typename Functor::BandStatsAttributesLabelObjectFunctor
-      <typename TImage::LabelObjectType, otb::Image<double, 2> > >
+    : public LabelMapFeaturesFunctorImageFilter<
+          TImage, typename Functor::BandStatsAttributesLabelObjectFunctor<typename TImage::LabelObjectType, otb::Image<double, 2>>>
 {
 public:
   /** Some convenient typedefs. */
   typedef TImage                                       ImageType;
-  typedef typename ImageType::RegionType     InputImageRegionType;
+  typedef typename ImageType::RegionType               InputImageRegionType;
   typedef typename ImageType::LabelObjectType          LabelObjectType;
   typedef TFeatureImage                                FeatureImageType;
   typedef typename FeatureImageType::InternalPixelType FeatureInternalPixelType;
   typedef double                                       InternalPrecisionType;
-  typedef Image<InternalPrecisionType, 2>              InternalImageType;
+  typedef Image<InternalPrecisionType, 2> InternalImageType;
 
   /** Functor typedef */
-  typedef Functor::BandStatsAttributesLabelObjectFunctor
-  <LabelObjectType, InternalImageType>                    FunctorType;
+  typedef Functor::BandStatsAttributesLabelObjectFunctor<LabelObjectType, InternalImageType> FunctorType;
 
   /** Standard class typedefs. */
   typedef BandsStatisticsAttributesLabelMapFilter Self;
-  typedef LabelMapFeaturesFunctorImageFilter
-  <ImageType, FunctorType>                                Superclass;
+  typedef LabelMapFeaturesFunctorImageFilter<ImageType, FunctorType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef typename ImageType::Pointer         ImagePointer;
+  typedef typename ImageType::Pointer   ImagePointer;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -174,10 +169,10 @@ public:
   itkTypeMacro(BandsStatisticsAttributesLabelMapFilter, LabelMapFeaturesFunctorImageFilter);
 
   /** Set the feature image */
-  void SetFeatureImage(const TFeatureImage *input);
+  void SetFeatureImage(const TFeatureImage* input);
 
   /** Get the feature image */
-  const FeatureImageType * GetFeatureImage() const;
+  const FeatureImageType* GetFeatureImage() const;
 
   /** Set the reduced attribute set */
   void SetReducedAttributeSet(bool flag);
@@ -191,13 +186,15 @@ protected:
   /** Constructor */
   BandsStatisticsAttributesLabelMapFilter();
   /** Destructor */
-  ~BandsStatisticsAttributesLabelMapFilter() override {}
+  ~BandsStatisticsAttributesLabelMapFilter() override
+  {
+  }
 
   void AllocateOutputs() override;
 
   void GenerateInputRequestedRegion() override;
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *) override{};
+  void EnlargeOutputRequestedRegion(itk::DataObject*) override{};
 
   /** Before threaded data generation */
   void BeforeThreadedGenerateData() override;
@@ -206,15 +203,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BandsStatisticsAttributesLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  BandsStatisticsAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandsStatisticsAttributesLabelMapFilter.txx"
+#include "otbBandsStatisticsAttributesLabelMapFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,8 +74,7 @@ class PreferencesDialog;
  * \ingroup OTBMonteverdi
  *
  */
-class OTBMonteverdi_EXPORT PreferencesDialog :
-    public QDialog
+class OTBMonteverdi_EXPORT PreferencesDialog : public QDialog
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,53 +83,49 @@ class OTBMonteverdi_EXPORT PreferencesDialog :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor */
-  PreferencesDialog( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  PreferencesDialog(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** Destructor */
   ~PreferencesDialog() override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
   Ui::PreferencesDialog* m_UI;
 
-  bool m_ResultsDirModified: 1;
-  bool m_GeoidFileModified: 1;
-  bool m_SrtmDirModified: 1;
+  bool m_ResultsDirModified : 1;
+  bool m_GeoidFileModified : 1;
+  bool m_SrtmDirModified : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 
   /**
@@ -140,14 +135,14 @@ private slots:
   void on_buttonBox_accepted();
 
 
-  void on_srtmCheckbox_toggled( bool );
-  void on_geoidCheckbox_toggled( bool );
+  void on_srtmCheckbox_toggled(bool);
+  void on_geoidCheckbox_toggled(bool);
 
   void on_srtmButton_clicked();
   void on_geoidButton_clicked();
 
-  void on_srtmLineEdit_textChanged( const QString & );
-  void on_geoidLineEdit_textChanged( const QString & );
+  void on_srtmLineEdit_textChanged(const QString&);
+  void on_geoidLineEdit_textChanged(const QString&);
 
   void on_resultDirButton_clicked();
 };

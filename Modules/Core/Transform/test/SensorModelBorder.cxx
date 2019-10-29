@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,14 +31,14 @@
 int main(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cout << argv[0] << " <input filename> <output filename>" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
-  char * filename = argv[1];
-  char*  outFilename = argv[2];
+  char* filename    = argv[1];
+  char* outFilename = argv[2];
 
 
   typedef otb::VectorImage<double, 2> ImageType;
@@ -50,28 +50,28 @@ int main(int argc, char* argv[])
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
-  ImageType::Pointer image = reader->GetOutput();
+  ImageType::Pointer    image  = reader->GetOutput();
   ImageType::RegionType region = image->GetLargestPossibleRegion();
 
   typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
-  ForwardSensorModelType::Pointer forwardSensorModel = ForwardSensorModelType::New();
+  ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
   forwardSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
   if (forwardSensorModel->IsValidSensorModel() == false)
-    {
+  {
     std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef otb::InverseSensorModel<double> InverseSensorModelType;
-  InverseSensorModelType::Pointer inverseSensorModel = InverseSensorModelType::New();
+  InverseSensorModelType::Pointer         inverseSensorModel = InverseSensorModelType::New();
   inverseSensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
   if (inverseSensorModel->IsValidSensorModel() == false)
-    {
+  {
     std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const int radius = 10;
+  const int    radius   = 10;
   const double gridstep = 0.1;
 
   itk::Point<double, 2> imagePoint;
@@ -79,19 +79,19 @@ int main(int argc, char* argv[])
   // Test upper left corner
   std::cout << " --- upper left corner ---" << std::endl;
   for (imagePoint[0] = region.GetIndex(0) - radius; imagePoint[0] < region.GetIndex(0) + radius; imagePoint[0] += gridstep)
-    {
+  {
 
     for (imagePoint[1] = region.GetIndex(1) - radius; imagePoint[1] < region.GetIndex(1) + radius; imagePoint[1] += gridstep)
-      {
+    {
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
       std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
 
       if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
+      }
 
       itk::Point<double, 2> reversedImagePoint;
       reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
@@ -99,27 +99,28 @@ int main(int argc, char* argv[])
       std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
       if (vnl_math_isnan(reversedImagePoint[0]) || vnl_math_isnan(reversedImagePoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
       }
     }
+  }
 
   // Test lower left corner
   std::cout << " --- lower left corner ---" << std::endl;
   for (imagePoint[0] = region.GetIndex(0) - radius; imagePoint[0] < region.GetIndex(0) + radius; imagePoint[0] += gridstep)
+  {
+    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius;
+         imagePoint[1] += gridstep)
     {
-    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius; imagePoint[1] += gridstep)
-      {
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
       std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
 
       if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
+      }
 
       itk::Point<double, 2> reversedImagePoint;
       reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
@@ -127,27 +128,29 @@ int main(int argc, char* argv[])
       std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
       if (vnl_math_isnan(reversedImagePoint[0]) || vnl_math_isnan(reversedImagePoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
       }
     }
+  }
 
   // Test lower right corner
   std::cout << " --- lower right corner ---" << std::endl;
-  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius; imagePoint[0] += gridstep)
+  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius;
+       imagePoint[0] += gridstep)
+  {
+    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius;
+         imagePoint[1] += gridstep)
     {
-    for (imagePoint[1] = region.GetIndex(1) + region.GetSize(1) - radius; imagePoint[1] < region.GetIndex(1) + region.GetSize(1) + radius; imagePoint[1] += gridstep)
-      {
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
       std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
 
       if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
+      }
 
       itk::Point<double, 2> reversedImagePoint;
       reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
@@ -155,27 +158,28 @@ int main(int argc, char* argv[])
       std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
       if (vnl_math_isnan(reversedImagePoint[0]) || vnl_math_isnan(reversedImagePoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
       }
     }
+  }
 
   // Test upper right corner
   std::cout << " --- upper right corner ---" << std::endl;
-  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius; imagePoint[0] += gridstep)
-    {
+  for (imagePoint[0] = region.GetIndex(0) + region.GetSize(0) - radius; imagePoint[0] < region.GetIndex(0) + region.GetSize(0) + radius;
+       imagePoint[0] += gridstep)
+  {
     for (imagePoint[1] = region.GetIndex(1) - radius; imagePoint[1] < region.GetIndex(1) + radius; imagePoint[1] += gridstep)
-      {
+    {
 
       itk::Point<double, 2> geoPoint;
       geoPoint = forwardSensorModel->TransformPoint(imagePoint);
       std::cout << "Image to geo: " << imagePoint << " -> " << geoPoint << "\n";
 
       if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
+      }
 
       itk::Point<double, 2> reversedImagePoint;
       reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
@@ -183,22 +187,21 @@ int main(int argc, char* argv[])
       std::cout << "Geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
 
       if (vnl_math_isnan(reversedImagePoint[0]) || vnl_math_isnan(reversedImagePoint[1]))
-        {
+      {
         return EXIT_FAILURE;
-        }
       }
     }
-
+  }
 
 
   // generat the output value along a segment crossing the lower image border
   // at the center position
   itk::Point<double, 2> imagePoint1;
-  imagePoint1[0] = region.GetIndex(0) + region.GetSize(0)/2;
+  imagePoint1[0] = region.GetIndex(0) + region.GetSize(0) / 2;
   imagePoint1[1] = region.GetIndex(1) + region.GetSize(1) - radius;
 
   itk::Point<double, 2> imagePoint2;
-  imagePoint2[0] = region.GetIndex(0) + region.GetSize(0)/2;
+  imagePoint2[0] = region.GetIndex(0) + region.GetSize(0) / 2;
   imagePoint2[1] = region.GetIndex(1) + region.GetSize(1) + radius;
 
   itk::Point<double, 2> geoPoint1, geoPoint2;
@@ -219,7 +222,7 @@ int main(int argc, char* argv[])
   file << std::setprecision(15);
 
   for (int i = 0; i < nbStep; ++i)
-    {
+  {
     itk::Point<double, 2> geoPoint;
     geoPoint[0] = geoPoint1[0] + geoStep[0] * i;
     geoPoint[1] = geoPoint1[1] + geoStep[1] * i;
@@ -227,14 +230,13 @@ int main(int argc, char* argv[])
     itk::Point<double, 2> reversedImagePoint;
     reversedImagePoint = inverseSensorModel->TransformPoint(geoPoint);
 
-    file << geoPoint[0] << "\t" << geoPoint[1]  << "\t"
-         << reversedImagePoint[0] << "\t" << reversedImagePoint[1] << std::endl;
+    file << geoPoint[0] << "\t" << geoPoint[1] << "\t" << reversedImagePoint[0] << "\t" << reversedImagePoint[1] << std::endl;
 
     if (vnl_math_isnan(geoPoint[0]) || vnl_math_isnan(geoPoint[1]))
-      {
+    {
       return EXIT_FAILURE;
-      }
     }
+  }
 
   file.close();
 

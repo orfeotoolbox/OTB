@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,45 +25,39 @@
 #include <fstream>
 
 
-int otbOGRExtendedFileNameGDALOpen(int , char* argv[])
+int otbOGRExtendedFileNameGDALOpen(int, char* argv[])
 {
-  auto test = otb::ogr::DataSource::New( argv[1] );
-  std::string  error = CPLGetLastErrorMsg();
+  auto        test  = otb::ogr::DataSource::New(argv[1]);
+  std::string error = CPLGetLastErrorMsg();
   return 0;
 }
 
-int otbOGRExtendedFileNameGDALCreate(int , char* argv[])
+int otbOGRExtendedFileNameGDALCreate(int, char* argv[])
 {
-  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Overwrite);
+  auto        test  = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::Overwrite);
   std::string error = CPLGetLastErrorMsg();
-  if ( error.find( "does not support creation option creationOption" ) )
+  if (error.find("does not support creation option creationOption"))
     return EXIT_SUCCESS;
   return EXIT_FAILURE;
 }
 
-int otbOGRExtendedFileNameGDALLayer(int , char* argv[])
+int otbOGRExtendedFileNameGDALLayer(int, char* argv[])
 {
-  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
-  test->CreateLayer( "2layertest" , 
-      ITK_NULLPTR , 
-      wkbUnknown );
+  auto test = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+  test->CreateLayer("2layertest", nullptr, wkbUnknown);
   std::string error = CPLGetLastErrorMsg();
-  if ( error.find( "does not support layer creation option layeroption" ) )
+  if (error.find("does not support layer creation option layeroption"))
     return EXIT_SUCCESS;
   return EXIT_FAILURE;
 }
 
-int otbOGRExtendedFileNameGDALLayerOption(int , char* argv[])
+int otbOGRExtendedFileNameGDALLayerOption(int, char* argv[])
 {
-  auto test = otb::ogr::DataSource::New( argv[1] , otb::ogr::DataSource::Modes::Update_LayerOverwrite);
-  std::vector<std::string> option { "vectorlayeroption=OPTION" }; 
-  test->CreateLayer( "2layertest" , 
-      ITK_NULLPTR , 
-      wkbUnknown ,
-      option );
+  auto                     test = otb::ogr::DataSource::New(argv[1], otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+  std::vector<std::string> option{"vectorlayeroption=OPTION"};
+  test->CreateLayer("2layertest", nullptr, wkbUnknown, option);
   std::string error = CPLGetLastErrorMsg();
-  if ( error.find( "does not support layer creation option vectorlayeroption" ) )
+  if (error.find("does not support layer creation option vectorlayeroption"))
     return EXIT_SUCCESS;
   return EXIT_FAILURE;
 }
-

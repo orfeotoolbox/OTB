@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,8 +23,10 @@
 
 #include "itkObject.h"
 #include "otbGenericRSTransform.h"
+#include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class ImageToGenericRSOutputParameters
  *  \brief This class is a helper class to estimate the output
@@ -50,15 +52,14 @@ namespace otb {
  * \ingroup OTBTransform
  **/
 
-template<class TImage>
-class  ImageToGenericRSOutputParameters :
-    public itk::Object
+template <class TImage>
+class ImageToGenericRSOutputParameters : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef ImageToGenericRSOutputParameters      Self;
-  typedef itk::Object                                Superclass;
-  typedef itk::SmartPointer< Self >        Pointer;
+  typedef ImageToGenericRSOutputParameters Self;
+  typedef itk::Object                      Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
   typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Run-time type information (and related methods). */
@@ -68,20 +69,21 @@ public:
   itkNewMacro(Self);
 
   /** InputImage typedefs */
-  typedef TImage                                     ImageType;
-  typedef typename ImageType::SizeType               SizeType;
-  typedef typename ImageType::IndexType              IndexType;
-  typedef typename ImageType::SpacingType            SpacingType;
-  typedef typename ImageType::PointType              PointType;
+  typedef TImage                          ImageType;
+  typedef typename ImageType::SizeType    SizeType;
+  typedef typename ImageType::IndexType   IndexType;
+  typedef typename ImageType::SpacingType SpacingType;
+  typedef typename ImageType::PointType   PointType;
 
   /** GenericRSTransform typedef */
-  typedef GenericRSTransform<>                       GenericRSTransformType;
-  typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
+  typedef GenericRSTransform<>                     GenericRSTransformType;
+  typedef typename GenericRSTransformType::Pointer GenericRSTransformPointerType;
 
   /** Struct to store the extent of the output image when using the
    *  methods SetOutputParameters.
    */
-  struct OutputImageExtentType{
+  struct OutputImageExtentType
+  {
     double minX;
     double maxX;
     double minY;
@@ -135,7 +137,7 @@ public:
    * SetOutputProjectionRef calls actually the method
    * SetInputProjectionRef of the GenericRSTransform class.
    */
-  void SetOutputProjectionRef(const std::string&  ref)
+  void SetOutputProjectionRef(const std::string& ref)
   {
     m_Transform->SetInputProjectionRef(ref);
     this->Modified();
@@ -163,11 +165,13 @@ public:
 
 protected:
   ImageToGenericRSOutputParameters();
-  ~ImageToGenericRSOutputParameters() override {}
+  ~ImageToGenericRSOutputParameters() override
+  {
+  }
 
 private:
-  ImageToGenericRSOutputParameters(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ImageToGenericRSOutputParameters(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void UpdateTransform();
   void EstimateOutputImageExtent();
@@ -175,24 +179,24 @@ private:
   void EstimateOutputSize();
   void EstimateOutputOrigin();
 
-  typename ImageType::ConstPointer   m_Input;
-  PointType                     m_OutputOrigin;
-  SpacingType                   m_OutputSpacing;
-  SizeType                      m_OutputSize;
-  OutputImageExtentType         m_OutputExtent;
+  typename ImageType::ConstPointer m_Input;
+  PointType                        m_OutputOrigin;
+  SpacingType                      m_OutputSpacing;
+  SizeType                         m_OutputSize;
+  OutputImageExtentType            m_OutputExtent;
 
   GenericRSTransformPointerType m_Transform;
 
-  bool                          m_ForceSpacing;
-  bool                          m_ForceSize;
-  bool                          m_EstimateIsotropicSpacing;
+  bool m_ForceSpacing;
+  bool m_ForceSize;
+  bool m_EstimateIsotropicSpacing;
 
 }; // end of class ImageToGenericRSOutputParameters
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToGenericRSOutputParameters.txx"
+#include "otbImageToGenericRSOutputParameters.hxx"
 #endif
 
 #endif

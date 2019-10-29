@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -51,18 +51,16 @@ unset DYLD_FALLBACK_LIBRARY_PATH
 
 echo "Configuring..."
 
-LIB_FILES=$(find "$OUT_DIR/lib" "$OUT_DIR/plugins" -type f -exec file {} \; | grep -i "Mach-O"|cut -d ':' -f1)
-BIN_FILES=$(find "$OUT_DIR/bin" -type f -exec file {} \; | grep -i "Mach-O*.*executable"|cut -d ':' -f1)
+LIB_FILES=$(find "./lib" "./plugins" -type f -exec file {} \; | grep -i ": Mach-O "|cut -d ':' -f1)
+BIN_FILES=$(find "./bin" -type f -exec file {} \; | grep -i ": Mach-O .*executable"|cut -d ':' -f1)
 # run install_name_tool
 for input_file in $LIB_FILES $BIN_FILES; do
     #echo "adding rpath to $OUT_DIR/$lib_file"
-    if [ -f "$input_file" ]; then
-      input_file_old_rpaths=$(otool -l "$input_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
-      for rpath_old in $input_file_old_rpaths; do
-        install_name_tool "-delete_rpath" "$rpath_old" "$input_file"
-      done
-      install_name_tool "-add_rpath" "$OUT_DIR/lib" "$input_file"
-    fi
+    input_file_old_rpaths=$(otool -l "$input_file" | grep -A 3 "LC_RPATH" | grep -oE 'path .* \(offset' | cut -d ' ' -f 2)
+    for rpath_old in $input_file_old_rpaths; do
+      install_name_tool "-delete_rpath" "$rpath_old" "$input_file"
+    done
+    install_name_tool "-add_rpath" "$OUT_DIR/lib" "$input_file"
 done
 
 #install uninstall_otb script

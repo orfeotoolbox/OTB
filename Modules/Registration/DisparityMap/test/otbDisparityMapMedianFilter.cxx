@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,31 +23,23 @@
 #include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 
- const unsigned int Dimension = 2;
- typedef float                                                         PixelType;
- typedef otb::Image<PixelType, Dimension>                              FloatImageType;
- typedef otb::ImageFileReader<FloatImageType>                          ReaderType;
- typedef otb::ImageFileWriter<FloatImageType>                 FloatWriterType;
+const unsigned int Dimension = 2;
+typedef float      PixelType;
+typedef otb::Image<PixelType, Dimension> FloatImageType;
+typedef otb::ImageFileReader<FloatImageType> ReaderType;
+typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
 
- typedef otb::DisparityMapMedianFilter<FloatImageType,FloatImageType,FloatImageType>   DisparityMapMedianFilterType;
+typedef otb::DisparityMapMedianFilter<FloatImageType, FloatImageType, FloatImageType> DisparityMapMedianFilterType;
 
-
-int otbDisparityMapMedianFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-   // Instantiation
-  DisparityMapMedianFilterType::Pointer filter = DisparityMapMedianFilterType::New();
-
-   return EXIT_SUCCESS;
-}
 
 int otbDisparityMapMedianFilter(int argc, char* argv[])
 {
 
   if ((argc != 5) && (argc != 6))
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " hdispinput_fname output_fname radius incoherencethres (maskinput_fname) ";
     return EXIT_FAILURE;
-    }
+  }
 
   // Instantiation
   DisparityMapMedianFilterType::Pointer filter = DisparityMapMedianFilterType::New();
@@ -62,10 +54,10 @@ int otbDisparityMapMedianFilter(int argc, char* argv[])
   ReaderType::Pointer maskReader = ReaderType::New();
 
   if (argc > 5)
-    {
+  {
     maskReader->SetFileName(argv[5]);
     filter->SetMaskInput(maskReader->GetOutput());
-    }
+  }
 
   FloatWriterType::Pointer writer = FloatWriterType::New();
   writer->SetInput(filter->GetOutput());

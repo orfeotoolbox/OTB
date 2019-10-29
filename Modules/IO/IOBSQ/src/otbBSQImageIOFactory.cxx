@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,25 +29,19 @@ namespace otb
 
 BSQImageIOFactory::BSQImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbBSQImageIO",
-                         "BSQ Image IO",
-                         1,
-                         itk::CreateObjectFunction<BSQImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbBSQImageIO", "BSQ Image IO", 1, itk::CreateObjectFunction<BSQImageIO>::New());
 }
 
 BSQImageIOFactory::~BSQImageIOFactory()
 {
 }
 
-const char*
-BSQImageIOFactory::GetITKSourceVersion(void) const
+const char* BSQImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-BSQImageIOFactory::GetDescription() const
+const char* BSQImageIOFactory::GetDescription() const
 {
   return "BSQ ImageIO Factory, permettant le chargement d'image au format BSQ dans l'OTB";
 }
@@ -59,11 +53,11 @@ static bool BSQImageIOFactoryHasBeenRegistered;
 
 void BSQImageIOFactoryRegister__Private(void)
 {
-  if( ! BSQImageIOFactoryHasBeenRegistered )
-    {
+  if (!BSQImageIOFactoryHasBeenRegistered)
+  {
     BSQImageIOFactoryHasBeenRegistered = true;
     BSQImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 
 } // end namespace otb

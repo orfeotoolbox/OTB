@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,9 +19,6 @@
  */
 
 
-
-//  SoftwareGuide: BeginLatex
-//
 //  This example illustrates the access to metadata image information
 //  with OTB. By metadata, we mean data which is typically stored with
 //  remote sensing images, like geographical coordinates of pixels,
@@ -35,8 +32,6 @@
 //  is accessible through the \doxygen{otb}{Image} and
 //  \doxygen{otb}{VectorImage} classes. You should avoid using the
 //  \doxygen{itk}{Image} class if you want to have metadata support.
-//
-//  SoftwareGuide: EndLatex
 
 #include "itkMacro.h"
 #include <iostream>
@@ -50,72 +45,49 @@ int main(int itkNotUsed(argc), char* argv[])
 {
 
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputAsciiFilename  = argv[2];
+  const char* inputFilename       = argv[1];
+  const char* outputAsciiFilename = argv[2];
 
-//  SoftwareGuide: BeginLatex
-//
-//  This simple example will consist on reading an image from a file
-//  and writing the metadata to an output ASCII file. As usual we
-//  start by defining the types needed for the image to be read.
-//
-//  SoftwareGuide: EndLatex
+  //  This simple example will consist on reading an image from a file
+  //  and writing the metadata to an output ASCII file. As usual we
+  //  start by defining the types needed for the image to be read.
 
-// SoftwareGuide : BeginCodeSnippet
-  typedef unsigned char InputPixelType;
+  using InputPixelType         = unsigned char;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  using InputImageType = otb::Image<InputPixelType, Dimension>;
 
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
-// SoftwareGuide : EndCodeSnippet
+  using ReaderType = otb::ImageFileReader<InputImageType>;
 
-//  SoftwareGuide: BeginLatex
-//
-//  We can now instantiate the reader and get a pointer to the input image.
-//
-//  SoftwareGuide: EndLatex
+  //  We can now instantiate the reader and get a pointer to the input image.
 
-// SoftwareGuide : BeginCodeSnippet
   ReaderType::Pointer     reader = ReaderType::New();
-  InputImageType::Pointer image = InputImageType::New();
+  InputImageType::Pointer image  = InputImageType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
 
   image = reader->GetOutput();
-// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: BeginLatex
-//
-//  Once the image has been read, we can access the metadata
-//  information. We will copy this information to an ASCII file, so we
-//  create an output file stream for this purpose.
-//
-//  SoftwareGuide: EndLatex
+  //  Once the image has been read, we can access the metadata
+  //  information. We will copy this information to an ASCII file, so we
+  //  create an output file stream for this purpose.
 
-// SoftwareGuide : BeginCodeSnippet
   std::ofstream file;
 
   file.open(outputAsciiFilename);
-// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: BeginLatex
-//
-//  We can now call the different available methods for accessing the
-//  metadata. Useful methods are :
-//  \begin{itemize}
-//      \item \code{GetSpacing}: the sampling step;
-//      \item \code{GetOrigin}: the coordinates of the origin of the image;
-//      \item \code{GetProjectionRef}: the image projection reference;
-//      \item \code{GetGCPProjection}: the projection for the eventual
-//  ground control points;
-//      \item \code{GetGCPCount}: the number of GCPs available;
-//  \end{itemize}
-//
-//  SoftwareGuide: EndLatex
+  //  We can now call the different available methods for accessing the
+  //  metadata. Useful methods are :
+  //  \begin{itemize}
+  //      \item \code{GetSpacing}: the sampling step;
+  //      \item \code{GetOrigin}: the coordinates of the origin of the image;
+  //      \item \code{GetProjectionRef}: the image projection reference;
+  //      \item \code{GetGCPProjection}: the projection for the eventual
+  //  ground control points;
+  //      \item \code{GetGCPCount}: the number of GCPs available;
+  //  \end{itemize}
 
-// SoftwareGuide : BeginCodeSnippet
   file << "Spacing " << image->GetSignedSpacing() << std::endl;
   file << "Origin " << image->GetOrigin() << std::endl;
 
@@ -125,80 +97,64 @@ int main(int itkNotUsed(argc), char* argv[])
 
   unsigned int GCPCount = image->GetGCPCount();
   file << "GCP Count " << image->GetGCPCount() << std::endl;
-// SoftwareGuide : EndCodeSnippet
 
-//  SoftwareGuide: BeginLatex
-//
-//  One can also get the GCPs by number, as well as their coordinates
-//  in image and geographical space.
-//
-//  SoftwareGuide: EndLatex
+  //  One can also get the GCPs by number, as well as their coordinates
+  //  in image and geographical space.
 
-// SoftwareGuide : BeginCodeSnippet
   for (unsigned int GCPnum = 0; GCPnum < GCPCount; GCPnum++)
-    {
+  {
     file << "GCP[" << GCPnum << "] Id " << image->GetGCPId(GCPnum) << std::endl;
-    file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) <<
-    std::endl;
-    file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) <<
-    std::endl;
-    file << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) <<
-    std::endl;
+    file << "GCP[" << GCPnum << "] Info " << image->GetGCPInfo(GCPnum) << std::endl;
+    file << "GCP[" << GCPnum << "] Row " << image->GetGCPRow(GCPnum) << std::endl;
+    file << "GCP[" << GCPnum << "] Col " << image->GetGCPCol(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] X " << image->GetGCPX(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Y " << image->GetGCPY(GCPnum) << std::endl;
     file << "GCP[" << GCPnum << "] Z " << image->GetGCPZ(GCPnum) << std::endl;
     file << "----------------" << std::endl;
-    }
-// SoftwareGuide : EndCodeSnippet
+  }
 
-//  SoftwareGuide: BeginLatex
-//
-//  If a geographical transformation is available, it can be recovered
-//  as follows.
-//
-//  SoftwareGuide: EndLatex
+  //  If a geographical transformation is available, it can be recovered
+  //  as follows.
 
-// SoftwareGuide : BeginCodeSnippet
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " " << i << " -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetUpperLeftCorner();
   file << "Corners " << std::endl;
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " UL[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetUpperRightCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " UR[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetLowerLeftCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " LL[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   tab = image->GetLowerRightCorner();
   for (unsigned int i = 0; i < tab.size(); ++i)
-    {
+  {
     file << " LR[" << i << "] -> " << tab[i] << std::endl;
-    }
+  }
   tab.clear();
 
   file.close();
-  // SoftwareGuide : EndCodeSnippet
 
   return EXIT_SUCCESS;
 }

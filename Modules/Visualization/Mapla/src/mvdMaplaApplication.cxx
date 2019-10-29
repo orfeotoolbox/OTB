@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,42 +67,30 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-MaplaApplication
-::MaplaApplication( QApplication* qtApp ) :
-  I18nApplication( qtApp )
+MaplaApplication::MaplaApplication(QApplication* qtApp) : I18nApplication(qtApp)
 {
 }
 
 /*******************************************************************************/
-MaplaApplication
-::~MaplaApplication()
+MaplaApplication::~MaplaApplication()
 {
   otb::Wrapper::ApplicationRegistry::CleanRegistry();
 }
 
 /*******************************************************************************/
-void
-MaplaApplication
-::virtual_InitializeCore()
+void MaplaApplication::virtual_InitializeCore()
 {
   I18nApplication::virtual_InitializeCore();
 
-  setObjectName( "MaplaApplication" );
+  setObjectName("MaplaApplication");
 
-  InitializeCore(
-    "Monteverdi Application Launcher",
-    QString( "OTB %1" ).arg( OTB_VERSION_STRING ),
-    "OrfeoToolBox",
-    "orfeo-toolbox.org"
-  );
+  InitializeCore("Monteverdi Application Launcher", QString("OTB %1").arg(OTB_VERSION_STRING), "OrfeoToolBox", "orfeo-toolbox.org");
 }
 
 /*******************************************************************************/
-void
-MaplaApplication
-::Foo()
+void MaplaApplication::Foo()
 {
-  SetModel( new OTBApplicationsModel( this ) );
+  SetModel(new OTBApplicationsModel(this));
 }
 
 /*******************************************************************************/

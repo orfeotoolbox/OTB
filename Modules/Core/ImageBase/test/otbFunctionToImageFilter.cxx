@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,15 +25,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbFunctionToImageFilter(int itkNotUsed(argc), char * argv[])
+int otbFunctionToImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                                    PixelType;
-  typedef otb::Image<PixelType, Dimension>                                          InputImageType;
-  typedef otb::Image<PixelType, Dimension>                                          OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                      ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                            WriterType;
-  typedef itk::VarianceImageFunction<InputImageType>                                FunctionType;
+  typedef double     PixelType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef otb::Image<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>       ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>      WriterType;
+  typedef itk::VarianceImageFunction<InputImageType> FunctionType;
   typedef otb::FunctionToImageFilter<InputImageType, OutputImageType, FunctionType> FilterType;
 
   // Instantiating object

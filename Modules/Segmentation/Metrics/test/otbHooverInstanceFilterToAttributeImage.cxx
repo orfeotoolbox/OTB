@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,27 +32,25 @@
 int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])
 {
   typedef otb::AttributesMapLabelObject<unsigned int, 2, float> LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>            LabelMapType;
-  typedef otb::HooverMatrixFilter<LabelMapType>     HooverMatrixFilterType;
-  typedef otb::Image<unsigned int, 2>               ImageType;
-  typedef otb::VectorImage<float, 2>                VectorImageType;
-  typedef itk::LabelImageToLabelMapFilter
-    <ImageType, LabelMapType>                       ImageToLabelMapFilterType;
-  typedef otb::ImageFileReader<ImageType>           ImageReaderType;
-  typedef HooverMatrixFilterType::MatrixType        MatrixType;
+  typedef itk::LabelMap<LabelObjectType>        LabelMapType;
+  typedef otb::HooverMatrixFilter<LabelMapType> HooverMatrixFilterType;
+  typedef otb::Image<unsigned int, 2>                              ImageType;
+  typedef otb::VectorImage<float, 2>                               VectorImageType;
+  typedef itk::LabelImageToLabelMapFilter<ImageType, LabelMapType> ImageToLabelMapFilterType;
+  typedef otb::ImageFileReader<ImageType>    ImageReaderType;
+  typedef HooverMatrixFilterType::MatrixType MatrixType;
 
-  typedef otb::HooverInstanceFilter<LabelMapType>   InstanceFilterType;
-  typedef otb::LabelMapToAttributeImageFilter
-      <LabelMapType, VectorImageType>               AttributeImageFilterType;
+  typedef otb::HooverInstanceFilter<LabelMapType> InstanceFilterType;
+  typedef otb::LabelMapToAttributeImageFilter<LabelMapType, VectorImageType> AttributeImageFilterType;
 
-  typedef otb::ImageFileWriter<VectorImageType>     WriterType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
-  if(argc != 4)
-    {
+  if (argc != 4)
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " segmentationGT segmentationMS outputAttributeImage" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ImageReaderType::Pointer gt_reader = ImageReaderType::New();
   gt_reader->SetFileName(argv[1]);
@@ -74,7 +72,7 @@ int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])
 
   hooverFilter->Update();
 
-  MatrixType &mat = hooverFilter->GetHooverConfusionMatrix();
+  MatrixType& mat = hooverFilter->GetHooverConfusionMatrix();
 
   InstanceFilterType::Pointer instances = InstanceFilterType::New();
   instances->SetGroundTruthLabelMap(gt_filter->GetOutput());
@@ -96,11 +94,11 @@ int otbHooverInstanceFilterToAttributeImage(int argc, char* argv[])
 
   writer->Update();
 
-  std::cout << "Mean RC ="<< instances->GetMeanRC() << std::endl;
-  std::cout << "Mean RF ="<< instances->GetMeanRF() << std::endl;
-  std::cout << "Mean RA ="<< instances->GetMeanRA() << std::endl;
-  std::cout << "Mean RM ="<< instances->GetMeanRM() << std::endl;
-  std::cout << "Mean RN ="<< instances->GetMeanRN() << std::endl;
+  std::cout << "Mean RC =" << instances->GetMeanRC() << std::endl;
+  std::cout << "Mean RF =" << instances->GetMeanRF() << std::endl;
+  std::cout << "Mean RA =" << instances->GetMeanRA() << std::endl;
+  std::cout << "Mean RM =" << instances->GetMeanRM() << std::endl;
+  std::cout << "Mean RN =" << instances->GetMeanRN() << std::endl;
 
   return EXIT_SUCCESS;
 }

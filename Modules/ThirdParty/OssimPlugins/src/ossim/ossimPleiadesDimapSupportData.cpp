@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -99,7 +99,7 @@ namespace ossimplugins
                               ossimString xpath,
                               ossimString& nodeValue)
    {
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       xmlDocument->findNodes(xpath, xml_nodes);
       if (xml_nodes.size() == 0)
@@ -286,7 +286,7 @@ namespace ossimplugins
       theSwathLastCol = 0;
    }
 
-   void ossimPleiadesDimapSupportData::printInfo(ostream& os) const
+   void ossimPleiadesDimapSupportData::printInfo(std::ostream& os) const
    {
 
       os << "\n----------------- Info on Pleiades Image -------------------"
@@ -1249,7 +1249,7 @@ namespace ossimplugins
       ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
       ossimString xpath;
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
       // Fetch the Image ID:
@@ -1292,7 +1292,7 @@ namespace ossimplugins
       ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
       ossimString xpath, nodeValue;
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
       // Corner points:
@@ -1574,7 +1574,7 @@ namespace ossimplugins
    {
       static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRPCMetadata";
       ossimString xpath, nodeValue;
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
       // Fetch the Global RFM - Direct Model - Bias:
@@ -1919,7 +1919,7 @@ namespace ossimplugins
    {
       // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
 
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
       theXmlDocumentRoot = "/PHR_Dimap_Document";
 
@@ -1971,7 +1971,7 @@ namespace ossimplugins
    {
       // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseMetadataIdentification";
 
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
       theXmlDocumentRoot = "/DIMAP_Document";
 
@@ -1990,7 +1990,7 @@ namespace ossimplugins
          theXmlDocumentRoot = "/PHR_DIMAP_Document";
          if (traceDebug())
          {
-            ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the old root: " << theXmlDocumentRoot << endl;
+            ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the old root: " << theXmlDocumentRoot << std::endl;
          }
 
          xml_nodes.clear();
@@ -2005,7 +2005,7 @@ namespace ossimplugins
             theXmlDocumentRoot = "/Dimap_Document";
             if (traceDebug())
             {
-               ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the new root: " << theXmlDocumentRoot << endl;
+               ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nTry to use the new root: " << theXmlDocumentRoot << std::endl;
             }
 
             xml_nodes.clear();
@@ -2017,7 +2017,7 @@ namespace ossimplugins
                setErrorStatus();
                if (traceDebug())
                {
-                  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << endl;
+                  ossimNotify(ossimNotifyLevel_DEBUG) << "DEBUG:\nCould not find: " << xpath << std::endl;
                }
                return false;
             }
@@ -2113,7 +2113,7 @@ namespace ossimplugins
    {
       // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseProcessingInformation";
 
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
 
       //---
@@ -2156,7 +2156,7 @@ namespace ossimplugins
    bool  ossimPleiadesDimapSupportData::parseRasterData(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
       static const char MODULE[] = "ossimPleiadesDimapSupportData::parseRasterData";
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
       ossimString xpath, nodeValue;
       //---
       // Fetch if the product file is linked to one or many JP2 files:
@@ -2471,7 +2471,7 @@ namespace ossimplugins
    bool  ossimPleiadesDimapSupportData::parseGeometricData(ossimRefPtr<ossimXmlDocument> xmlDocument)
    {
       ossimString xpath, nodeValue;
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       xml_nodes.clear();
       if (theDIMAPVersion == OSSIM_PLEIADES_DIMAPv1)
@@ -2760,7 +2760,7 @@ namespace ossimplugins
    {
       // static const char MODULE[] = "ossimPleiadesDimapSupportData::parseDatasetSources";
       ossimString xpath, nodeValue;
-      vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+      std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
       //---
       // Fetch the mission index (1A or 1B) ?

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -49,9 +47,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdTypes.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -82,33 +78,28 @@ namespace mvd
 #define IMAGE_PROPERTIES_IS_QOBJECT 0
 class OTBMonteverdiCore_EXPORT ImageProperties
 #if IMAGE_PROPERTIES_IS_QOBJECT
-  : public QObject
+    : public QObject
 #endif
 {
 
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
+/*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
 #if IMAGE_PROPERTIES_IS_QOBJECT
   Q_OBJECT;
 
-  Q_PROPERTY( bool isNoDataEnabled
-	      READ IsNoDataEnabled
-	      WRITE SetNoDataEnabled );
+  Q_PROPERTY(bool isNoDataEnabled READ IsNoDataEnabled WRITE SetNoDataEnabled);
 
-  Q_PROPERTY( ComponentType NoData
-	      READ GetNoData
-	      WRITE SetNoData );
+  Q_PROPERTY(ComponentType NoData READ GetNoData WRITE SetNoData);
 #endif
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
-  /** \brief Constructor. */
+/** \brief Constructor. */
 #if IMAGE_PROPERTIES_IS_QOBJECT
-  ImageProperties( QObject* p =NULL );
+  ImageProperties(QObject* p = NULL);
 #else
   ImageProperties();
 #endif
@@ -130,11 +121,11 @@ public:
 
   /**
    */
-  inline void SetNoDataEnabled( bool enabled );
+  inline void SetNoDataEnabled(bool enabled);
 
   /**
    */
-  void SetNoData( ComponentType value = ComponentType( 0 ) );
+  void SetNoData(ComponentType value = ComponentType(0));
 
   /**
    */
@@ -142,54 +133,49 @@ public:
 
   /**
    */
-  bool operator == ( const ImageProperties & ) const;
+  bool operator==(const ImageProperties&) const;
 
   /**
    */
-  bool operator != ( const ImageProperties & ) const;
+  bool operator!=(const ImageProperties&) const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
   inline void SetModified();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   //
   // Group bitfield bool flags together.
   struct Flags
   {
-    Flags() :
-      m_IsModified( false ),
-      m_NoData( false )
+    Flags() : m_IsModified(false), m_NoData(false)
     {
     }
 
@@ -208,8 +194,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -238,37 +224,25 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-bool
-ImageProperties
-::IsModified() const
+inline bool ImageProperties::IsModified() const
 {
   return m_Flags.m_IsModified;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageProperties
-::SetModified()
+inline void ImageProperties::SetModified()
 {
   m_Flags.m_IsModified = true;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageProperties
-::ClearModified()
+inline void ImageProperties::ClearModified()
 {
   m_Flags.m_IsModified = false;
 }
 
 /*****************************************************************************/
-inline
-void
-ImageProperties
-::SetNoDataEnabled( bool enabled )
+inline void ImageProperties::SetNoDataEnabled(bool enabled)
 {
   m_Flags.m_NoData = enabled;
 
@@ -276,10 +250,7 @@ ImageProperties
 }
 
 /*****************************************************************************/
-inline
-void
-ImageProperties
-::SetNoData( ComponentType value )
+inline void ImageProperties::SetNoData(ComponentType value)
 {
   m_NoData = value;
 
@@ -287,19 +258,13 @@ ImageProperties
 }
 
 /*****************************************************************************/
-inline
-bool
-ImageProperties
-::IsNoDataEnabled() const
+inline bool ImageProperties::IsNoDataEnabled() const
 {
   return m_Flags.m_NoData;
 }
 
 /*****************************************************************************/
-inline
-ComponentType
-ImageProperties
-::GetNoData() const
+inline ComponentType ImageProperties::GetNoData() const
 {
   return m_NoData;
 }

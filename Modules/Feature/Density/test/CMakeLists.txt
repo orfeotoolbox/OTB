@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,14 +22,9 @@ otb_module_test()
 
 set(OTBDensityTests
 otbDensityTestDriver.cxx
-otbPointSetDensityFunctionNew.cxx
-otbPointSetDensityGaussianFunctionNew.cxx
-otbPointSetToDensityImageFilterNew.cxx
 otbPointSetDensityGaussianFunctionTest.cxx
-otbPointSetDensityEpanechnikovFunctionNew.cxx
 otbPointSetDensityEpanechnikovFunctionTest.cxx
 otbKeyPointDensityImageFilterTest.cxx
-otbKeyPointDensityImageFilterNew.cxx
 otbPointSetToDensityImageFilterTest.cxx
 otbPointSetDensityFunctionTest.cxx
 )
@@ -40,16 +35,7 @@ otb_module_target_label(otbDensityTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME bfTuPointSetDensityFunctionNew COMMAND otbDensityTestDriver
-  otbPointSetDensityFunctionNew
-  )
 
-otb_add_test(NAME bfTuPointSetDensityGaussianFunctionNew COMMAND otbDensityTestDriver
-  otbPointSetDensityGaussianFunctionNew
-  )
-
-otb_add_test(NAME bfTuPointSetToDensityImageFilterNew COMMAND otbDensityTestDriver
-  otbPointSetToDensityImageFilterNew)
 
 otb_add_test(NAME bfTvPointSetDensityGaussianFunctionTest COMMAND otbDensityTestDriver
   --compare-ascii ${NOTOL}
@@ -59,9 +45,6 @@ otb_add_test(NAME bfTvPointSetDensityGaussianFunctionTest COMMAND otbDensityTest
   ${TEMP}/bfTvPointSetDensityGaussianFunctionOutputAscii.txt
   )
 
-otb_add_test(NAME bfTuPointSetDensityEpanechnikovFunctionNew COMMAND otbDensityTestDriver
-  otbPointSetDensityEpanechnikovFunctionNew
-  )
 
 otb_add_test(NAME bfTvPointSetDensityEpanechnikovFunctionTest COMMAND otbDensityTestDriver
   --compare-ascii ${NOTOL}
@@ -81,9 +64,6 @@ otb_add_test(NAME bfTvKeyPointDensityImageFilterOutputImage COMMAND otbDensityTe
   3 5 10
   )
 
-otb_add_test(NAME bfTuKeyPointDensityImageFilterNew COMMAND otbDensityTestDriver
-  otbKeyPointDensityImageFilterNew
-  )
 
 otb_add_test(NAME bfTvPointSetToDensityImageFilterTest COMMAND otbDensityTestDriver
   --compare-image ${NOTOL}

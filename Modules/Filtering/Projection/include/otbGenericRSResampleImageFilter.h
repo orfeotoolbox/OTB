@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 
 #include "otbStreamingResampleImageFilter.h"
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
+#include <string>
 
 namespace otb
 {
@@ -52,15 +53,14 @@ namespace otb
  **/
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT GenericRSResampleImageFilter :
-    public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT GenericRSResampleImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef GenericRSResampleImageFilter                          Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>    Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef GenericRSResampleImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -69,26 +69,25 @@ public:
   itkTypeMacro(GenericRSResampleImageFilter, itk::ImageToImageFilter);
 
   /** Typedef parameters*/
-  typedef TInputImage                                     InputImageType;
-  typedef TOutputImage                                    OutputImageType;
-  typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
-  typedef typename OutputImageType::PointType             OutputPointType;
+  typedef TInputImage                                 InputImageType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
+  typedef typename OutputImageType::PointType         OutputPointType;
 
   /** Internal filters typedefs*/
-  typedef StreamingResampleImageFilter<InputImageType,
-                                 OutputImageType>          ResamplerType;
-  typedef typename ResamplerType::Pointer                  ResamplerPointerType;
-  typedef typename ResamplerType::TransformType            TransformType;
-  typedef typename ResamplerType::SizeType                 SizeType;
-  typedef typename ResamplerType::SpacingType              SpacingType;
-  typedef typename ResamplerType::OriginType               OriginType;
-  typedef typename ResamplerType::IndexType                IndexType;
-  typedef typename ResamplerType::RegionType               RegionType;
-  typedef typename ResamplerType::InterpolatorType         InterpolatorType;
+  typedef StreamingResampleImageFilter<InputImageType, OutputImageType> ResamplerType;
+  typedef typename ResamplerType::Pointer          ResamplerPointerType;
+  typedef typename ResamplerType::TransformType    TransformType;
+  typedef typename ResamplerType::SizeType         SizeType;
+  typedef typename ResamplerType::SpacingType      SpacingType;
+  typedef typename ResamplerType::OriginType       OriginType;
+  typedef typename ResamplerType::IndexType        IndexType;
+  typedef typename ResamplerType::RegionType       RegionType;
+  typedef typename ResamplerType::InterpolatorType InterpolatorType;
 
   /** Estimate the rpc model */
-  typedef PhysicalToRPCSensorModelImageFilter<InputImageType>  InputRpcModelEstimatorType;
-  typedef typename InputRpcModelEstimatorType::Pointer         InputRpcModelEstimatorPointerType;
+  typedef PhysicalToRPCSensorModelImageFilter<InputImageType> InputRpcModelEstimatorType;
+  typedef typename InputRpcModelEstimatorType::Pointer        InputRpcModelEstimatorPointerType;
 
   typedef PhysicalToRPCSensorModelImageFilter<OutputImageType> OutputRpcModelEstimatorType;
   typedef typename OutputRpcModelEstimatorType::Pointer        OutputRpcModelEstimatorPointerType;
@@ -97,21 +96,19 @@ public:
   /** Specialisation of OptResampleFilter with a remote
     * sensing  transform
     */
-  typedef GenericRSTransform<>                       GenericRSTransformType;
-  typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
+  typedef GenericRSTransform<>                     GenericRSTransformType;
+  typedef typename GenericRSTransformType::Pointer GenericRSTransformPointerType;
 
-  typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
+  typedef itk::ImageBase<OutputImageType::ImageDimension> ImageBaseType;
 
   /** The Displacement field spacing & size */
   otbSetObjectMemberMacro(Resampler, DisplacementFieldSpacing, SpacingType);
 
-  otbGetObjectMemberConstReferenceMacro(Resampler,
-                                        DisplacementFieldSpacing,
-                                        SpacingType);
+  otbGetObjectMemberConstReferenceMacro(Resampler, DisplacementFieldSpacing, SpacingType);
 
   /** The resampled image parameters */
   /** Output Origin */
-  void SetOutputOrigin(const OriginType & origin)
+  void SetOutputOrigin(const OriginType& origin)
   {
     m_Resampler->SetOutputOrigin(origin);
     this->Modified();
@@ -131,20 +128,16 @@ public:
   otbGetObjectMemberConstReferenceMacro(Resampler, OutputSpacing, SpacingType);
 
   /** Methods to Set/Get the interpolator */
-  void SetInterpolator(InterpolatorType * interpolator)
+  void SetInterpolator(InterpolatorType* interpolator)
   {
     m_Resampler->SetInterpolator(interpolator);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType *);
+  otbGetObjectMemberConstMacro(Resampler, Interpolator, const InterpolatorType*);
 
   /** Default Edge padding value */
-  otbSetObjectMemberMacro(Resampler,
-                          EdgePaddingValue,
-                          typename OutputImageType::PixelType);
-  otbGetObjectMemberMacro(Resampler,
-                          EdgePaddingValue,
-                          typename OutputImageType::PixelType);
+  otbSetObjectMemberMacro(Resampler, EdgePaddingValue, typename OutputImageType::PixelType);
+  otbGetObjectMemberMacro(Resampler, EdgePaddingValue, typename OutputImageType::PixelType);
 
   /**
    * Set/Get input & output projections.
@@ -152,7 +145,7 @@ public:
    * The macro are not used here cause the input and the output are
    * inversed.
    */
-  void SetInputProjectionRef(const std::string&  ref)
+  void SetInputProjectionRef(const std::string& ref)
   {
     m_Transform->SetOutputProjectionRef(ref);
     this->Modified();
@@ -163,10 +156,10 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  void SetOutputProjectionRef(const std::string&  ref)
+  void SetOutputProjectionRef(const std::string& ref)
   {
-  m_Transform->SetInputProjectionRef(ref);
-  this->Modified();
+    m_Transform->SetInputProjectionRef(ref);
+    this->Modified();
   }
 
   std::string GetOutputProjectionRef() const
@@ -198,12 +191,13 @@ public:
   }
 
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const ImageBaseType * image);
+  void SetOutputParametersFromImage(const ImageBaseType* image);
 
   /** Useful to set output parmaters form an existing image with type
     * different from input or output image
     */
-  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image);
+  template <class TImageType>
+  void SetOutputParametersFromImage(const TImageType* image);
 
   /** Useful to set the output parameters using a map (UTM|WGS84) and
    * a spacing set by the user
@@ -228,7 +222,7 @@ public:
     this->Modified();
   }
   /** Get the input rpc model estimator  grid size used */
-  const SizeType & GetInputRpcGridSize() const
+  const SizeType& GetInputRpcGridSize() const
   {
     return m_InputRpcEstimator->GetGridSize();
   }
@@ -251,7 +245,7 @@ public:
     this->Modified();
   }
   /** Get the output rpc model estimator grid size used */
-  const SizeType & GetOutputRpcGridSize() const
+  const SizeType& GetOutputRpcGridSize() const
   {
     return m_OutputRpcEstimator->GetGridSize();
   }
@@ -268,12 +262,12 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  void PropagateRequestedRegion(itk::DataObject *output) override;
+  void PropagateRequestedRegion(itk::DataObject* output) override;
 
 protected:
   GenericRSResampleImageFilter();
   /** Destructor */
-  ~GenericRSResampleImageFilter() override {};
+  ~GenericRSResampleImageFilter() override{};
 
   void GenerateData() override;
 
@@ -284,17 +278,17 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GenericRSResampleImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GenericRSResampleImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Method to estimate the input & output rpc model
   void EstimateOutputRpcModel();
   void EstimateInputRpcModel();
 
   // boolean that allow the estimation of the input rpc model
-  bool                               m_EstimateInputRpcModel;
-  bool                               m_EstimateOutputRpcModel;
-  bool                               m_RpcEstimationUpdated;
+  bool m_EstimateInputRpcModel;
+  bool m_EstimateOutputRpcModel;
+  bool m_RpcEstimationUpdated;
 
   // Filters pointers
   ResamplerPointerType               m_Resampler;
@@ -306,7 +300,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGenericRSResampleImageFilter.txx"
+#include "otbGenericRSResampleImageFilter.hxx"
 #endif
 
 #endif

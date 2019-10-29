@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,13 +23,12 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetModel.cxx
   otbWrapperQtWidgetParameterLabel.cxx
   otbWrapperQtWidgetView.cxx
-  otbWrapperQtWidgetInputProcessXMLParameter.cxx
+  otbWrapperQtWidgetMainWindow.cxx
   otbWrapperQtWidgetIntParameter.cxx
   otbWrapperQtWidgetInputVectorDataListParameter.cxx
   otbWrapperQtWidgetSimpleProgressReport.cxx
   otbWrapperQtWidgetFloatParameter.cxx
   otbWrapperQtWidgetChoiceParameter.cxx
-  otbWrapperQtWidgetComplexOutputImageParameter.cxx
   otbWrapperQtWidgetOutputFilenameParameter.cxx
   otbQtStringSelectionWidget.cxx
   itkQtProgressBar.cxx
@@ -43,14 +42,10 @@ set(OTBQtWidget_SRC
   otbQtFileSelectionWidget.cxx
   otbWrapperQtWidgetParameterGroup.cxx
   otbWrapperQtWidgetInputFilenameListParameter.cxx
-  otbWrapperQtWidgetComplexInputImageParameter.cxx
   otbWrapperQtWidgetRAMParameter.cxx
-  otbWrapperQtWidgetProgressReport.cxx
-  otbWrapperQtWidgetOutputProcessXMLParameter.cxx
   otbWrapperQtWidgetParameterBase.cxx
   otbWrapperQtWidgetInputImageParameter.cxx
   otbWrapperQtWidgetStringListParameter.cxx
-  otbWrapperQtWidgetEmptyParameter.cxx
   otbWrapperQtWidgetOutputVectorDataParameter.cxx
   otbWrapperQtWidgetInputFilenameParameter.cxx
   otbWrapperQtWidgetInputImageListParameter.cxx
@@ -58,31 +53,27 @@ set(OTBQtWidget_SRC
   otbWrapperQtWidgetListEditItemModel.cxx
   otbWrapperQtWidgetParameterList.cxx
   otbWrapperQtWidgetBoolParameter.cxx
+  otbWrapperQtWidgetSpinBoxes.cxx
   )
 
 set(OTBQtWidget_MOC_HDR
-  ../include/otbWrapperQtWidgetEmptyParameter.h
   ../include/otbWrapperQtWidgetFloatParameter.h
   ../include/otbWrapperQtWidgetIntParameter.h
   ../include/otbWrapperQtWidgetStringParameter.h
   ../include/otbWrapperQtWidgetStringListParameter.h
   ../include/otbWrapperQtWidgetChoiceParameter.h
   ../include/otbWrapperQtWidgetInputImageParameter.h
-  ../include/otbWrapperQtWidgetComplexInputImageParameter.h
-  ../include/otbWrapperQtWidgetComplexOutputImageParameter.h
   ../include/otbWrapperQtWidgetInputImageListParameter.h
   ../include/otbWrapperQtWidgetInputVectorDataListParameter.h
   ../include/otbWrapperQtWidgetInputVectorDataParameter.h
   ../include/otbWrapperQtWidgetOutputImageParameter.h
   ../include/otbWrapperQtWidgetOutputVectorDataParameter.h
-  ../include/otbWrapperQtWidgetOutputProcessXMLParameter.h
-  ../include/otbWrapperQtWidgetInputProcessXMLParameter.h
   ../include/otbWrapperQtWidgetParameterGroup.h
   ../include/otbWrapperQtWidgetParameterLabel.h
   ../include/otbWrapperQtWidgetParameterBase.h
   ../include/otbWrapperQtWidgetModel.h
   ../include/otbWrapperQtWidgetView.h
-  ../include/otbWrapperQtWidgetProgressReport.h
+  ../include/otbWrapperQtWidgetMainWindow.h
   ../include/otbWrapperQtWidgetListViewParameter.h
   ../include/otbQtFileSelectionWidget.h
   ../include/otbQtStringSelectionWidget.h
@@ -99,19 +90,27 @@ set(OTBQtWidget_MOC_HDR
   ../include/otbWrapperQtWidgetListEditItemModel.h
   ../include/otbWrapperQtWidgetParameterList.h
   ../include/otbWrapperQtWidgetBoolParameter.h
+  ../include/otbWrapperQtWidgetSpinBoxes.h
   )
 
 set( OTBQtWidget_FORMS
   otbWrapperQtWidgetListEditWidget.ui
+  appmainwindow.ui
   )
 
-qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} )
+set( OTBQtWidget_RESOURCES
+  otbWrapperQtWidgetIcons.qrc
+  )
+
+qt5_wrap_cpp( OTBQtWidget_MOC_SRC ${OTBQtWidget_MOC_HDR} OPTIONS -p "." )
 qt5_wrap_ui( OTBQtWidget_FORMS_HEADERS ${OTBQtWidget_FORMS} )
+qt5_add_resources( OTBQtWidget_RESOURCES_RCC ${OTBQtWidget_RESOURCES} OPTIONS "-no-compress")
 
 add_library( OTBQtWidget
   ${OTBQtWidget_SRC}
   ${OTBQtWidget_FORMS_HEADERS}
   ${OTBQtWidget_MOC_SRC}
+  ${OTBQtWidget_RESOURCES_RCC}
   )
 
 target_link_libraries( OTBQtWidget

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,69 +19,56 @@
  */
 
 
-
 #include "itkMacro.h"
 
 #include "otbImage.h"
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
-#include "otbReciprocalPauliDecompImageFilter.h"
+
 #include "otbNRIBandImagesToOneNComplexBandsImage.h"
 
-int otbReciprocalPauliDecompImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+#include "otbReciprocalPauliDecompImageFilter.h"
+
+
+int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension = 2;
-
-  typedef std::complex<double>   PixelType;
-  typedef otb::VectorImage<PixelType, Dimension> ImageType;
-
-  typedef otb::ReciprocalPauliDecompImageFilter<ImageType, ImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
+  const char* inputFilenameHH = argv[1];
+  const char* inputFilenameHV = argv[2];
+  const char* inputFilenameVV = argv[3];
+  const char* outputFilename  = argv[4];
 
 
-int otbReciprocalPauliDecompImageFilter(int itkNotUsed(argc), char * argv[])
-{
-  const char * inputFilenameHH = argv[1];
-  const char * inputFilenameHV = argv[2];
-  const char * inputFilenameVV = argv[3];
-  const char * outputFilename = argv[4];
+  typedef std::complex<double> ComplexPixelType;
+  const unsigned int           Dimension = 2;
 
 
-  typedef std::complex<double>  ComplexPixelType;
-  const unsigned int Dimension = 2;
-
-
-  typedef otb::VectorImage<ComplexPixelType, Dimension>  ComplexVectorImageType;
-  typedef otb::VectorImage<double, Dimension>          RealVectorImageType;
+  typedef otb::VectorImage<ComplexPixelType, Dimension> ComplexVectorImageType;
+  typedef otb::VectorImage<double, Dimension>           RealVectorImageType;
 
   typedef otb::NRIBandImagesToOneNComplexBandsImage<RealVectorImageType, ComplexVectorImageType> NRITOOneCFilterType;
 
-  typedef otb::ImageFileReader<RealVectorImageType>  ReaderType;
+  typedef otb::ImageFileReader<RealVectorImageType>    ReaderType;
   typedef otb::ImageFileWriter<ComplexVectorImageType> WriterType;
-  
+
   typedef otb::ReciprocalPauliDecompImageFilter<ComplexVectorImageType, ComplexVectorImageType> FilterType;
-  
-  ReaderType::Pointer readerHH = ReaderType::New();
-  ReaderType::Pointer readerHV = ReaderType::New();
-  ReaderType::Pointer readerVV = ReaderType::New();
+
+  ReaderType::Pointer          readerHH        = ReaderType::New();
+  ReaderType::Pointer          readerHV        = ReaderType::New();
+  ReaderType::Pointer          readerVV        = ReaderType::New();
   NRITOOneCFilterType::Pointer nriToOneCfilter = NRITOOneCFilterType::New();
-  WriterType::Pointer writer = WriterType::New();
-  FilterType::Pointer paulifilter = FilterType::New();
-        
+  WriterType::Pointer          writer          = WriterType::New();
+  FilterType::Pointer          paulifilter     = FilterType::New();
+
   readerHH->SetFileName(inputFilenameHH);
   readerHV->SetFileName(inputFilenameHV);
   readerVV->SetFileName(inputFilenameVV);
-  
-  nriToOneCfilter->SetInput(0,readerHH->GetOutput());
-  nriToOneCfilter->SetInput(1,readerHV->GetOutput());
-  nriToOneCfilter->SetInput(2,readerVV->GetOutput());
- 
-  paulifilter->SetInput(nriToOneCfilter->GetOutput());
+
+  nriToOneCfilter->SetInput(0, readerHH->GetOutput());
+  nriToOneCfilter->SetInput(1, readerHV->GetOutput());
+  nriToOneCfilter->SetInput(2, readerVV->GetOutput());
+
+  paulifilter->SetInput<0>(nriToOneCfilter->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(paulifilter->GetOutput());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,8 +44,7 @@ namespace otb
  *
  * \ingroup OTBSupervised
  */
-class ITK_ABI_EXPORT ExhaustiveExponentialOptimizer :
-  public itk::SingleValuedNonLinearOptimizer
+class ITK_ABI_EXPORT ExhaustiveExponentialOptimizer : public itk::SingleValuedNonLinearOptimizer
 {
 public:
   /** Standard "Self" typedef. */
@@ -59,9 +58,9 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ExhaustiveExponentialOptimizer,itk::SingleValuedNonLinearOptimizer);
+  itkTypeMacro(ExhaustiveExponentialOptimizer, itk::SingleValuedNonLinearOptimizer);
 
-  void    StartOptimization(void) override;
+  void StartOptimization(void) override;
 
   void StartWalking(void);
   void ResumeWalking(void);
@@ -72,7 +71,7 @@ public:
   itkSetMacro(StepLength, double);
   itkGetConstReferenceMacro(GeometricProgression, double);
   itkGetConstReferenceMacro(NumberOfSteps, StepsType);
-  itkGetConstReferenceMacro(StepLength,   double);
+  itkGetConstReferenceMacro(StepLength, double);
   itkGetConstReferenceMacro(CurrentValue, MeasureType);
   itkGetConstReferenceMacro(MaximumMetricValue, MeasureType);
   itkGetConstReferenceMacro(MinimumMetricValue, MeasureType);
@@ -83,7 +82,9 @@ public:
 
 protected:
   ExhaustiveExponentialOptimizer();
-  ~ExhaustiveExponentialOptimizer() override {}
+  ~ExhaustiveExponentialOptimizer() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Advance to the next grid position. */
@@ -106,9 +107,8 @@ protected:
   ParametersType m_MaximumMetricValuePosition;
 
 private:
-  ExhaustiveExponentialOptimizer(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  ExhaustiveExponentialOptimizer(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

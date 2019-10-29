@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2008-2010 by Centre for Remote Imaging, Sensing and Processing (CRISP)
  *
  * This file is licensed under MIT license:
@@ -28,7 +28,6 @@
 #define AlosPalsarSignalData_h
 
 
-#include <iostream>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 #include <AlosPalsar/AlosPalsarRecord.h>

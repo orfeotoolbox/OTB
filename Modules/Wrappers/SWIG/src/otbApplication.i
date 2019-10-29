@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,9 +31,6 @@
 
 // Language specific extension
 %include "Python.i"
-%include "Java.i"
-%include "Ruby.i"
-%include "Lua.i"
 %include "itkMacro.i"
 %include "itkBase.i"
 
@@ -79,7 +76,6 @@ namespace Wrapper
 
   typedef enum
   {
-    ParameterType_Empty,
     ParameterType_Int,
     ParameterType_Float,
     ParameterType_String,
@@ -98,11 +94,7 @@ namespace Wrapper
     ParameterType_Radius,
     ParameterType_Group,
     ParameterType_ListView,
-    ParameterType_ComplexInputImage,
-    ParameterType_ComplexOutputImage,
     ParameterType_RAM,
-    ParameterType_OutputProcessXML,
-    ParameterType_InputProcessXML,
     ParameterType_Bool
   } ParameterType;
 
@@ -204,6 +196,42 @@ public:
 
 } // end of namespace otb
 
+#if SWIGPYTHON
+
+
+%include "otbPythonLogOutput.i"
+#endif
+
+
+#if SWIGPYTHON
+
+// We want all SetParameterXXX functions to call UpdateParameters automaticaly
+// so that using it is not required from the Python API
+// for more discussion about this see gitlab issue #1842
+
+%pythonappend Application::SetParameterInt %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterFloat %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterString %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterStringList %{
+    self.UpdateParameters()
+%}
+
+%pythonappend Application::SetParameterOutputImagePixelType %{
+    self.UpdateParameters()
+%}
+
+#endif
+
+
 class Application: public itkObject
 {
 public:
@@ -216,7 +244,41 @@ public:
   void Init();
   void UpdateParameters();
   int Execute();
+  void WriteOutput();
   int ExecuteAndWriteOutput();
+  bool ConnectImage(std::string in, Application* app, std::string out);
+  void PropagateConnectMode(bool isMem);
+
+  void LoadParametersFromXML(const std::string& filename);
+  void SaveParametersToXML(const std::string& filename);
+
+#if SWIGPYTHON
+  Logger* GetLogger();
+#endif
+  unsigned long itk::Object::AddObserver(const EventObject & event, 
+                                          Command * command);
+
+  bool IsDeprecated();
+
+#if SWIGPYTHON
+  %extend 
+    {
+    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+     * reporting for the application */
+    %pythoncode
+      {
+      def SetupLogger(self):
+          logger = self.GetLogger()
+          logger.AddLogOutput(_libraryLogOutput.GetPointer())
+          
+          self.progressReportManager = ProgressReporterManager_New()
+          self.progressReportManager.SetLogOutputCallback(_libraryLogCallback)
+          self.AddObserver(AddProcessToWatchEvent(),
+                           self.progressReportManager.GetAddProcessCommand()
+                          )
+      }
+    }
+#endif // SWIGPYTHON
 
   std::vector<std::string> GetParametersKeys(bool recursive = true);
   Parameter* Application::GetParameterByKey(std::string name);
@@ -247,13 +309,10 @@ public:
   void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
-  void SetParameterEmpty(std::string parameter, bool value, bool hasUserValueFlag = true);
 
   void SetParameterOutputImagePixelType(std::string parameter, otb::Wrapper::ImagePixelType pixelType);
-  void SetParameterComplexOutputImagePixelType(std::string parameter, otb::Wrapper::ComplexImagePixelType cpixelType);
 
   otb::Wrapper::ImagePixelType GetParameterOutputImagePixelType(std::string parameter);
-  otb::Wrapper::ComplexImagePixelType GetParameterComplexOutputImagePixelType(std::string parameter);
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
@@ -261,10 +320,10 @@ public:
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
 
+  bool GetListViewSingleSelectionMode(const std::string& paramKey);
+
   ImageBaseType * GetParameterOutputImage(std::string parameter);
   void SetParameterInputImage(std::string parameter, ImageBaseType * inputImage);
-  ImageBaseType * GetParameterComplexOutputImage(std::string parameter);
-  void SetParameterComplexInputImage(std::string parameter, ImageBaseType * inputImage);
   void AddImageToParameterInputImageList(std::string parameter,ImageBaseType * img);
   void AddParameterStringList(std::string parameter,const std::string & str);
   void SetNthParameterInputImageList(std::string parameter, const unsigned int &id, ImageBaseType * img);
@@ -289,8 +348,6 @@ public:
 
   void FreeRessources();
 
-  itkSetStringMacro(DocName);
-  itkGetStringMacro(DocName);
   itkSetStringMacro(DocLongDescription);
   itkGetStringMacro(DocLongDescription);
   itkSetStringMacro(DocAuthors);
@@ -483,14 +540,10 @@ public:
 
 protected:
   Application();
-#if SWIGJAVA
-  virtual ~Application();
-#endif
 private:
   Application(const Application &);
   void operator =(const Application&);
 };
-
 
 DECLARE_REF_COUNT_CLASS( Application )
 
@@ -554,157 +607,149 @@ class ApplicationProxy(object):
   %pythoncode
     {
 
-		def __str__(self):
-			s  = self.GetDocName()
+    def GetParameterTypeAsString(self, parameter_type):
+      return {
+        ParameterType_String : 'ParameterType_String',
+        ParameterType_InputFilename : 'ParameterType_InputFilename',
+        ParameterType_OutputImage : 'ParameterType_OutputImage',
+        ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
+        ParameterType_OutputFilename : 'ParameterType_OutputFilename',
+        ParameterType_Directory : 'ParameterType_Directory',
+        ParameterType_InputImage : 'ParameterType_InputImage',
+        ParameterType_InputVectorData : 'ParameterType_InputVectorData',
+        ParameterType_InputImageList : 'ParameterType_InputImageList',
+        ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
+        ParameterType_InputFilenameList : 'ParameterType_InputFilenameList',
+        ParameterType_StringList : 'ParameterType_StringList',
+        ParameterType_ListView : 'ParameterType_ListView',
+        ParameterType_Int : 'ParameterType_Int',
+        ParameterType_Radius : 'ParameterType_Radius',
+        ParameterType_RAM : 'ParameterType_RAM',
+        ParameterType_Float : 'ParameterType_Float',
+        ParameterType_Choice : 'ParameterType_Choice',
+        ParameterType_Group : 'ParameterType_Group',
+        ParameterType_Bool : 'ParameterType_Bool'
+      }.get(parameter_type, 'ParameterType_UNKNOWN')
 
-		def GetParameterTypeAsString(self, parameter_type):
-			return {
-				ParameterType_InputProcessXML : 'ParameterType_InputProcessXML',
-				ParameterType_String : 'ParameterType_String',
-				ParameterType_InputFilename : 'ParameterType_InputFilename',
-				ParameterType_OutputImage : 'ParameterType_OutputImage',
-				ParameterType_OutputVectorData : 'ParameterType_OutputVectorData',
-				ParameterType_OutputProcessXML : 'ParameterType_OutputProcessXML',
-				ParameterType_OutputFilename : 'ParameterType_OutputFilename',
-				ParameterType_Directory : 'ParameterType_Directory',
-				ParameterType_InputImage : 'ParameterType_InputImage',
-				ParameterType_ComplexInputImage : 'ParameterType_ComplexInputImage',
-				ParameterType_InputVectorData : 'ParameterType_InputVectorData',
-				ParameterType_InputImageList : 'ParameterType_InputImageList',
-				ParameterType_InputVectorDataList : 'ParameterType_InputImageList',
-				ParameterType_InputFilenameList : 'ParameterType_InputFilenameList',
-				ParameterType_StringList : 'ParameterType_StringList',
-				ParameterType_ListView : 'ParameterType_ListView',
-				ParameterType_Int : 'ParameterType_Int',
-				ParameterType_Radius : 'ParameterType_Radius',
-				ParameterType_RAM : 'ParameterType_RAM',
-				ParameterType_Float : 'ParameterType_Float',
-				ParameterType_Empty : 'ParameterType_Empty',
-				ParameterType_Choice : 'ParameterType_Choice',
-				ParameterType_Group : 'ParameterType_Group',
-				ParameterType_Bool : 'ParameterType_Bool'
-			}.get(parameter_type, 'ParameterType_UNKNOWN')
+    def __str__(self):
+      s  = self.GetName()
+      s += '\n'
+      s += self.GetDocLongDescription()
+      return s
 
-		def __str__(self):
-			s  = self.GetDocName()
-			s += '\n'
-			s += self.GetDocLongDescription()
-			return s
+    def SetParameters(self, dict_params):
+      for param_key, param_value in dict_params.items():
+        self.SetParameterValue(param_key, param_value)
 
-		def SetParameters(self, dict_params):
-			for param_key, param_value in dict_params.iteritems():
-				self.SetParameterValue(param_key, param_value)
+    def SetParameterValue(self, paramKey, value):
+      paramType = self.GetParameterType(paramKey)
+      if paramType in [ParameterType_RAM,
+                       ParameterType_String, ParameterType_InputFilename,
+                       ParameterType_OutputImage, ParameterType_OutputVectorData,
+                       ParameterType_OutputFilename,
+                       ParameterType_Directory, ParameterType_InputImage,
+                       ParameterType_InputVectorData]:
+        return self.SetParameterString(paramKey, value)
+      elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+                         ParameterType_InputFilenameList, ParameterType_StringList,
+                         ParameterType_ListView]:
+        return self.SetParameterStringList(paramKey, value)
+      elif paramType in [ParameterType_Int, ParameterType_Radius]:
+        return self.SetParameterInt(paramKey, value)
+      elif paramType in [ParameterType_Float]:
+        return self.SetParameterFloat(paramKey, value)
+      elif paramType in [ParameterType_Bool]:
+        return self.SetParameterString(paramKey, str(value) )
+      elif paramType in [ParameterType_Group]:
+        return ApplicationProxy(self, paramKey)
+      elif paramType in [ParameterType_Choice]:
+        return ApplicationProxy(self, paramKey, value)
+      else:
+        print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
+      return
 
-		def SetParameterValue(self, paramKey, value):
-			paramType = self.GetParameterType(paramKey)
-			if paramType in [ParameterType_InputProcessXML, ParameterType_RAM,
-											 ParameterType_String, ParameterType_InputFilename,
-											 ParameterType_OutputImage, ParameterType_OutputVectorData,
-											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-			  return self.SetParameterString(paramKey, value)
-			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-												 ParameterType_InputFilenameList, ParameterType_StringList,
-												 ParameterType_ListView]:
-			  return self.SetParameterStringList(paramKey, value)
-			elif paramType in [ParameterType_Int, ParameterType_Radius]:
-			  return self.SetParameterInt(paramKey, value)
-			elif paramType in [ParameterType_Float]:
-			  return self.SetParameterFloat(paramKey, value)
-			elif paramType in [ParameterType_Empty]:
-			  return self.EnableParameter(paramKey)
-			elif paramType in [ParameterType_Bool]:
-			  return self.SetParameterString(paramKey, str(value) )
-			elif paramType in [ParameterType_Group]:
-			  return ApplicationProxy(self, paramKey)
-			elif paramType in [ParameterType_Choice]:
-			  return ApplicationProxy(self, paramKey, value)
-			else:
-			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
-			return
+    def GetParameters(self):
+      ret = {}
+      for key in self.GetParametersKeys():
+        if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
+          ret[key] = self.GetParameterValue(key)
+      return ret
 
-		def GetParameters(self):
-			ret = {}
-			for key in self.GetParametersKeys():
-				if self.HasValue(key) and self.IsParameterEnabled(key) and self.GetParameterRole(key) == 0:
-					ret[key] = self.GetParameterValue(key)
-			return ret
+    def GetParameterValue(self, paramKey):
+      paramType = self.GetParameterType(paramKey)
+      if paramType in [
+                       ParameterType_String, ParameterType_InputFilename,
+                       ParameterType_OutputImage, ParameterType_OutputVectorData,
+                       ParameterType_OutputFilename,
+                       ParameterType_Directory, ParameterType_InputImage,
+                       ParameterType_InputVectorData]:
+        return self.GetParameterString(paramKey)
+      elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
+                         ParameterType_InputFilenameList, ParameterType_StringList,
+                         ParameterType_ListView]:
+        return self.GetParameterStringList(paramKey)
+      elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+        return self.GetParameterInt(paramKey)
+      elif paramType in [ParameterType_Float]:
+        return self.GetParameterFloat(paramKey)
+      elif paramType in [ParameterType_Bool]:
+        return bool(self.GetParameterInt(paramKey))
+      elif paramType in [ParameterType_Group, ParameterType_Choice]:
+        return ApplicationProxy(self, paramKey)
+      else:
+        print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
+      return None
 
-		def GetParameterValue(self, paramKey):
-			paramType = self.GetParameterType(paramKey)
-			if paramType in [ParameterType_InputProcessXML,
-											 ParameterType_String, ParameterType_InputFilename,
-											 ParameterType_OutputImage, ParameterType_OutputVectorData,
-											 ParameterType_OutputProcessXML, ParameterType_OutputFilename,
-											 ParameterType_Directory, ParameterType_InputImage,
-											 ParameterType_ComplexInputImage, ParameterType_InputVectorData]:
-			  return self.GetParameterString(paramKey)
-			elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
-												 ParameterType_InputFilenameList, ParameterType_StringList,
-												 ParameterType_ListView]:
-			  return self.GetParameterStringList(paramKey)
-			elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
-			  return self.GetParameterInt(paramKey)
-			elif paramType in [ParameterType_Float]:
-			  return self.GetParameterFloat(paramKey)
-			elif paramType in [ParameterType_Empty]:
-			  return self.IsParameterEnabled(paramKey)
-			elif paramType in [ParameterType_Bool]:
-			  return bool(self.GetParameterInt(paramKey))
-			elif paramType in [ParameterType_Group, ParameterType_Choice]:
-			  return ApplicationProxy(self, paramKey)
-			else:
-			  print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
-			return None
+    def __getattr__(self,name):
+      """
+      __get_attribute__ is called whenever an instance request an attribute.
+      eg: App.SetParameterString(), App.GetName() ..
+      __getattr__ is only called if the attribute is not found by __get_attribute__ call
+      So we keep hide the GetParameter** calls within this method so that it seems like
+      an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
+      parameters in the 'otb application' with instance App
+      Since SWIG also uses this function, we have to copy their code before
+      using custom OTB behaviour
+      """
+      if (name == "thisown"):
+        return self.this.own()
+      method = Application.__swig_getmethods__.get(name, None)
+      if method:
+        return method(self)
+      key_list = [k.upper() for k in self.GetParametersKeys(True)]
+      if name in key_list:
+        return self.GetParameterValue(name.lower())
+      raise AttributeError("'%s' object has no attribute '%s'" % (Application.__name__, name))
 
-		def __getattr__(self,name):
-			"""
-			__get_attribute__ is called whenever an instance request an attribute.
-			eg: App.SetParameterString(), App.GetName() ..
-			__getattr__ is only called if the attribute is not found by __get_attribute__ call
-			So we keep hide the GetParameter** calls within this method so that it seems like
-			an obivous call for users. App.IN , App.OUT , where 'in' and 'out' are
-			parameters in the 'otb application' with instance App
-			Since SWIG also uses this function, we have to copy their code before
-			using custom OTB behaviour
-			"""
-			if (name == "thisown"):
-				return self.this.own()
-			method = Application.__swig_getmethods__.get(name, None)
-			if method:
-				return method(self)
-			key_list = [k.upper() for k in self.GetParametersKeys(True)]
-			if name in key_list:
-				return self.GetParameterValue(name.lower())
-			raise AttributeError("'%s' object has no attribute '%s'" % (Application.__name__, name))
-
-		def __setattr__(self, name, value):
-			"""
-			__setattr__ is called if the attribute requested is not found in the attribute list.
-			So these attributes are supposed to be 'key' of parameters used. Here we
-			keep hide the SetParameter** calls within this method so that it seems like
-			an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
-			here 'in' and 'out' are    parameters in the 'otb application' with instance App
-			Ofcourse, we don't blindly accept any attributes as python, we check them against
-			list of existing parameters for application with 'self.GetParametersKeys(True)'
-			Since SWIG also uses this function, we have to copy their code before
-			using custom OTB behaviour
-			"""
-			if (name == "thisown"):
-				return self.this.own(value)
-			if (name == "this"):
-				if type(value).__name__ == 'SwigPyObject':
-					self.__dict__[name] = value
-					return
-			method = Application.__swig_setmethods__.get(name, None)
-			if method:
-				return method(self, value)
-			key_list = [k.upper() for k in self.GetParametersKeys(True)]
-			if name in key_list:
-				self.SetParameterValue(name.lower(), value)
-			else:
-				raise AttributeError("You cannot add attributes to %s" % self)
+    def __setattr__(self, name, value):
+      """
+      __setattr__ is called if the attribute requested is not found in the attribute list.
+      So these attributes are supposed to be 'key' of parameters used. Here we
+      keep hide the SetParameter** calls within this method so that it seems like
+      an obivous call for users. App.IN='my-input-file-name' , App.OUT='my-output-file-name'w
+      here 'in' and 'out' are    parameters in the 'otb application' with instance App
+      Ofcourse, we don't blindly accept any attributes as python, we check them against
+      list of existing parameters for application with 'self.GetParametersKeys(True)'
+      Since SWIG also uses this function, we have to copy their code before
+      using custom OTB behaviour
+      """
+      if (name == "thisown"):
+        return self.this.own(value)
+      if (name == "this"):
+        if type(value).__name__ == 'SwigPyObject':
+          self.__dict__[name] = value
+          return
+      if (name == "progressReportManager"):
+        super().__setattr__(name, value)
+        return
+      method = Application.__swig_setmethods__.get(name, None)
+      if method:
+        return method(self, value)
+      key_list = [k.upper() for k in self.GetParametersKeys(True)]
+      if name in key_list:
+        self.SetParameterValue(name.lower(), value)
+      else:
+        raise AttributeError("You cannot add attributes to %s" % self)
 
     }
 }
@@ -836,9 +881,9 @@ class ApplicationProxy(object):
       array = self.NumpyExporterMap[pixT](self,paramKey)
       if array.shape[2] > 1:
         raise ValueError("array.shape[2] > 1\n"
-                         "Output image from application has more than 1 band\n"
-                         "GetImageFromNumpyArray only returns the first band, which will result in a loss of data.\n"
-                         "In this case you must use GetVectorImageFromNumpyArray which is capable of return a 3 dimension image.\n")
+                         "Output image from application has more than 1 band.\n"
+                         "GetImageAsNumpyArray only returns the first band, which will result in a loss of data.\n"
+                         "In this case you must use GetVectorImageAsNumpyArray which can return a 3 dimension image.\n")
       array = array[:,:,0]
       return array
 
@@ -882,7 +927,23 @@ class Registry : public itkObject
 public:
 
   static std::vector<std::string> GetAvailableApplications();
+  #if SWIGPYTHON
+  %rename("CreateApplicationWithoutLogger") CreateApplication;
   static Application_Pointer CreateApplication(const std::string& name);
+  %pythoncode
+  {
+    @staticmethod
+    def CreateApplication(name):
+        application = _otbApplication.Registry_CreateApplicationWithoutLogger(name)
+        if application is not None:
+            application.SetupLogger()
+            if application.IsDeprecated():
+                application.GetLogger().Warning("This application is deprecated and will be removed in a future OTB release")
+        return application
+  }
+  #else
+  static Application_Pointer CreateApplication(const std::string& name);
+  #endif
   static void AddApplicationPath(std::string newpath);
   static void SetApplicationPath(std::string newpath);
   static void CleanRegistry();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,8 +36,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT DirectoryParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT DirectoryParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -58,8 +57,8 @@ public:
   }
 
   // Set/Get Value
-  otbSetObjectMemberMacro(StringParam, Value , std::string);
-  otbGetObjectMemberMacro(StringParam, Value , std::string);
+  otbSetObjectMemberMacro(StringParam, Value, std::string);
+  otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Clear Value
   void ClearValue() override
@@ -68,14 +67,29 @@ public:
   }
 
   // Reimplement the SetActive method
-  void SetActive(  const bool value ) override
+  void SetActive(bool value) override
   {
-    Superclass::SetActive( value );
-    m_StringParam->SetActive( value );
+    Superclass::SetActive(value);
+    m_StringParam->SetActive(value);
   }
 
   // GetActive method
   otbGetObjectMemberConstMacro(StringParam, Active, bool);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Directory;
+  }
+
+  std::string ToString() const override
+  {
+    return GetValue();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
 
 protected:
   /** Constructor */
@@ -86,14 +100,15 @@ protected:
 
   /** Destructor */
   ~DirectoryParameter() override
-  {}
+  {
+  }
 
 private:
-  DirectoryParameter(const DirectoryParameter &); //purposely not implemented
-  void operator =(const DirectoryParameter&); //purposely not
-                                              //implemented
+  DirectoryParameter(const DirectoryParameter&) = delete;
+  void operator                                 =(const DirectoryParameter&); // purposely not
+  // implemented
 
-  StringParameter::Pointer   m_StringParam;
+  StringParameter::Pointer m_StringParam;
 
 }; // End class Parameter
 

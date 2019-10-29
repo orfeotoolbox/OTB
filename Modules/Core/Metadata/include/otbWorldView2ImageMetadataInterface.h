@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,7 +35,6 @@ namespace otb
 class OTBMetadata_EXPORT WorldView2ImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef WorldView2ImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase       Superclass;
   typedef itk::SmartPointer<Self>          Pointer;
@@ -106,20 +105,20 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
   /** Get the enhanced band names from band names collected by ossim */
   std::vector<std::string> GetEnhancedBandNames() const override;
 
 protected:
   WorldView2ImageMetadataInterface();
-  ~WorldView2ImageMetadataInterface() override {}
+  ~WorldView2ImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  WorldView2ImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  WorldView2ImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

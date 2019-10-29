@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,25 +29,25 @@
 
 int otbSOMActivationBuilder(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension = 2;
-  char *             vectorSetFileName = argv[1];
-  char *             mapFileName = argv[2];
-  char *             outputFileName = argv[3];
+  const unsigned int Dimension         = 2;
+  char*              vectorSetFileName = argv[1];
+  char*              mapFileName       = argv[2];
+  char*              outputFileName    = argv[3];
 
-  typedef float                                         ComponentType;
-  typedef unsigned char                                 OutputPixelType;
-  typedef itk::VariableLengthVector<ComponentType>      PixelType;
+  typedef float                                               ComponentType;
+  typedef unsigned char                                       OutputPixelType;
+  typedef itk::VariableLengthVector<ComponentType>            PixelType;
   typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
 
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> MapType;
-  typedef otb::ImageFileReader<MapType>                   MapReaderType;
+  typedef otb::ImageFileReader<MapType> MapReaderType;
 
   typedef otb::VectorImage<ComponentType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>       ReaderType;
-  typedef itk::Statistics::ListSample<PixelType>     ListSampleType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef itk::Statistics::ListSample<PixelType> ListSampleType;
 
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef otb::SOMActivationBuilder<ListSampleType, MapType, OutputImageType> SOMActivationBuilderType;
 
@@ -63,10 +63,10 @@ int otbSOMActivationBuilder(int itkNotUsed(argc), char* argv[])
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     listSample->PushBack(it.Get());
     ++it;
-    }
+  }
 
   MapReaderType::Pointer mapReader = MapReaderType::New();
   mapReader->SetFileName(mapFileName);

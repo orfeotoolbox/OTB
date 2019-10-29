@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,7 +26,6 @@
 #ifndef Leader_h
 #define Leader_h
 
-#include <iostream>
 #include <RadarSat/CommonRecord/FileDescriptor.h>
 #include <RadarSat/CommonRecord/DataSetSummary.h>
 #include <RadarSat/CommonRecord/DataQuality.h>

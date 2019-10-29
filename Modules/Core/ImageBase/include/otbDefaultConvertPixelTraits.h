@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,62 +22,59 @@
 #define otbDefaultConvertPixelTraits_h
 
 #include "itkDefaultConvertPixelTraits.h"
+#include "OTBImageBaseExport.h"
 
-namespace otb 
+namespace otb
 {
 
 
-template < typename PixelType>
-class DefaultConvertPixelTraits 
-: public itk::DefaultConvertPixelTraits < PixelType >
+template <typename PixelType>
+class OTBImageBase_EXPORT_TEMPLATE DefaultConvertPixelTraits : public itk::DefaultConvertPixelTraits<PixelType>
 {
 public:
-  typedef itk::DefaultConvertPixelTraits < PixelType > SuperClass;
+  typedef itk::DefaultConvertPixelTraits<PixelType> SuperClass;
   using typename SuperClass::ComponentType;
 
   using SuperClass::SetNthComponent;
 
-  static void SetNthComponent(int , PixelType & pixel, const PixelType & v)
-    {
-      pixel = v;
-    }  
+  static void SetNthComponent(int, PixelType& pixel, const PixelType& v)
+  {
+    pixel = v;
+  }
 };
 
-template < typename T >
-class DefaultConvertPixelTraits < ::std::complex < T > > 
-: public itk::DefaultConvertPixelTraits < ::std::complex < T > >
+template <typename T>
+class DefaultConvertPixelTraits<::std::complex<T>> : public itk::DefaultConvertPixelTraits<::std::complex<T>>
 {
 public:
+  typedef itk::DefaultConvertPixelTraits<::std::complex<T>> SuperClass;
+  using typename SuperClass::TargetType;
+  using typename SuperClass::ComponentType;
 
-  typedef itk::DefaultConvertPixelTraits < ::std::complex < T > > SuperClass;
-  using typename SuperClass::TargetType ;
-  using typename SuperClass::ComponentType ;
+  using SuperClass::SetNthComponent;
 
-  using SuperClass::SetNthComponent ;
+  static void SetNthComponent(int, TargetType& pixel, const TargetType& v)
+  {
+    pixel = v;
+  }
 
-  static void SetNthComponent(int , TargetType & pixel, const TargetType & v)
-    {
-      pixel = v;
-    }
-
-  static TargetType GetNthComponent ( int , const TargetType & pixel )
-    {
+  static TargetType GetNthComponent(int, const TargetType& pixel)
+  {
     return pixel;
-    }
+  }
 
   static ComponentType GetScalarValue(const TargetType& pixel)
-    {
-       /*
-       * This seems to be dead code, since the complex to scalar
-       * conversion is done by ConvertPixelBuffer
-       *
-       * Historically, it was returning std::norm, which causes
-       * compilation error on MacOSX 10.9.
-       * Now returns the equivalent implementation of std::norm.
-       */
-      return static_cast<ComponentType>( pixel.real()*pixel.real()
-                                         + pixel.imag()*pixel.imag() );
-    }
+  {
+    /*
+    * This seems to be dead code, since the complex to scalar
+    * conversion is done by ConvertPixelBuffer
+    *
+    * Historically, it was returning std::norm, which causes
+    * compilation error on MacOSX 10.9.
+    * Now returns the equivalent implementation of std::norm.
+    */
+    return static_cast<ComponentType>(pixel.real() * pixel.real() + pixel.imag() * pixel.imag());
+  }
 };
 
 } // end namespace

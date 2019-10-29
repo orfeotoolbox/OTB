@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -856,7 +856,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
    
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\nossimTerraSarModelclass data members:\n"
        << SR_GR_R0_KW << _SrToGr_R0 << "\n";
 
@@ -887,7 +887,7 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
        << ALT_SR_GR_COEFFICIENT0_KW << ": " << _alt_srgr_coefset[0] << "\n"
        << ALT_SR_GR_COEFFICIENT1_KW << ": " <<_alt_srgr_coefset[1] << "\n"
        << ALT_SR_GR_COEFFICIENT2_KW << ": " <<_alt_srgr_coefset[2] << "\n"
-       << PRODUCT_XML_FILE_KW << ": " << _productXmlFile.c_str() << "\n";
+       << PRODUCT_XML_FILE_KW << ": " << _productXmlFile << "\n";
    
    ossimGeometricSarSensorModel::print(out);
    for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
@@ -929,17 +929,17 @@ std::ostream& ossimplugins::ossimTerraSarModel::print(std::ostream& out) const
 
    ossimString kw = ACQUISITION_INFO;
    ossimString kw2 = kw + IMAGING_MODE;
-   out << kw2 <<  ": " << _imagingMode.c_str()<< "\n";
+   out << kw2 <<  ": " << _imagingMode << "\n";
    kw2 = kw + SENSOR;
-   out << kw2<<  ": " <<  _acquisitionSensor.c_str()<< "\n";
+   out << kw2<<  ": " <<  _acquisitionSensor << "\n";
    kw2 = kw + LOOK_DIRECTION;
-   out << kw2<<  ": " <<  _lookDirection.c_str()<< "\n";
+   out << kw2<<  ": " <<  _lookDirection << "\n";
    kw2 = kw + POLARISATION_MODE;
-   out << kw2<<  ": " <<  _polarisationMode.c_str()<< "\n";
+   out << kw2<<  ": " <<  _polarisationMode << "\n";
 /*   kw2 = kw + POLARISATION_LIST;
      for(ossim_uint32 i = 0; i < _numberOfLayers; ++i)
      {	
-     out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i].c_str()<< "\n";
+     out << kw2 <<  "["<< i <<"] : " <<  _polLayer[i] << "\n";
      if ( _noise[i]->print(out) == false )
      {
      if (traceDebug())
@@ -1546,7 +1546,7 @@ bool ossimplugins::ossimTerraSarModel::initSensorParams(const ossimXmlDocument* 
    if (traceDebug())
    {
       ossimNotify(ossimNotifyLevel_DEBUG)
-         << "result for  tsDoc.initSensorParams " << result << endl;
+         << "result for  tsDoc.initSensorParams " << result << std::endl;
    }
 
    if (!result)
@@ -2436,7 +2436,7 @@ bool ossimplugins::ossimTerraSarModel::findTSXLeader(const ossimFilename& file,
 }
 
 
-void ossimplugins::ossimTerraSarModel::printInfo(ostream& os) const
+void ossimplugins::ossimTerraSarModel::printInfo(std::ostream& os) const
 {
    os << "\n----------------- General Info on TSX-1 Image -------------------"
       << "\n  "

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,7 +29,9 @@ ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL PNG_ROOT      --with-png)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL JPEG_ROOT     --with-jpeg)
-ADD_SUPERBUILD_CONFIGURE_VAR(GDAL OPENJPEG_ROOT --with-openjpeg)
+# This is not needed as from GDAL 2.4 it uses pkg-config to find openjpeg.
+# It is found thanks to the $PKG_CONFIG_PATH in SB_ENV_CONFIGURE_CMD
+# ADD_SUPERBUILD_CONFIGURE_VAR(GDAL OPENJPEG_ROOT --with-openjpeg)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL SQLITE_ROOT   --with-sqlite3)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL ZLIB_ROOT     --with-libz)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL EXPAT_ROOT    --with-expat)
@@ -52,6 +54,7 @@ if(UNIX)
   #we don't do any framework build on osx. So let's be sure on case of gdal
   if(APPLE)
     list(APPEND GDAL_SB_CONFIG "--with-macosx-framework=no")
+    list(APPEND GDAL_SB_CONFIG "LDFLAGS=-headerpad_max_install_names")
   endif()
 
   # PATCH_COMMAND ${CMAKE_COMMAND} -E touch ${GDAL_SB_SRC}/config.rpath
@@ -87,11 +90,11 @@ if(UNIX)
     --with-odbc=no
     --with-ogdi=no
     --with-pam
+    --with-openjpeg
     --with-pcidsk=yes
     --with-pcraster=no
     --with-pcre=no
     --with-perl=no
-    --with-php=no
     --with-python=no
     --with-qhull=internal
     --with-sde=no
@@ -101,11 +104,20 @@ if(UNIX)
     --with-pg=no
     --with-webp=no
     --with-threads=yes
+    --with-freexl=no
+    --with-proj=yes
+    --with-libjson-c=internal
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
     )
-  #set(GDAL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
-  #set(GDAL_INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install)
+
+  # For now gdal is built if Superbuild has find python... And only on UNIX 
+  # That might be a problem
+  # User will not be able to override this...
+  if ( OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
+    list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
+  endif()
+
 
 else(MSVC)
   configure_file(
@@ -136,8 +148,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/2.2.1/gdal-2.2.1.tar.gz"
-  URL_MD5 785acf2b0cbf9d56d37c9044d0ee2505
+  URL "http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz"
+  URL_MD5 8bc93c7ae4d3a46916918a52c7f5f10f
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

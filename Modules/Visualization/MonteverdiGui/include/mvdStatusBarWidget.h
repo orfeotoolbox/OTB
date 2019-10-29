@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -79,8 +79,7 @@ class StatusBarWidget;
  * \brief Status Bar widget
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT StatusBarWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT StatusBarWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -89,77 +88,73 @@ class OTBMonteverdiGUI_EXPORT StatusBarWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  StatusBarWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  StatusBarWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~StatusBarWidget() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /**
    */
-  void SetPixelIndex( const IndexType &, bool isInside );
+  void SetPixelIndex(const IndexType&, bool isInside);
 
   /**
    */
-  void SetText( const QString & );
+  void SetText(const QString&);
 
   /**
    */
-  void SetScale( double sx, double sy );
+  void SetScale(double sx, double sy);
 
   /**
    */
-  void SetGLSLEnabled( bool );
+  void SetGLSLEnabled(bool);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
-  void ScaleChanged( double );
+  void ScaleChanged(double);
   /**
    */
-  void PixelIndexChanged( const IndexType & );
+  void PixelIndexChanged(const IndexType&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  static QString ZoomLevel( double scale );
+  static QString ZoomLevel(double scale);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /**
    * \brief uic generated.
    */
-  Ui::StatusBarWidget * m_UI;
+  Ui::StatusBarWidget* m_UI;
 
   /**
    * \brief Change the scale when scaleLineEdit is pressed or editing is finished with change.
@@ -168,8 +163,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -30,11 +30,7 @@ otb_module_target_label(otbMathParserXTestDriver)
 otb_add_test(NAME coTvParserX COMMAND otbMathParserXTestDriver
   otbParserXTest
   )
-otb_add_test(NAME coTuParserX COMMAND otbMathParserXTestDriver
-  otbParserXTestNew
-  )
-otb_add_test(NAME bfTuBandMathXImageFilterNew COMMAND otbMathParserXTestDriver
-  otbBandMathXImageFilterNew)
+
 otb_add_test(NAME bfTvBandMathXImageFilterConv COMMAND otbMathParserXTestDriver
   otbBandMathXImageFilterConv
   ${BASELINE_FILES}/bfTvExportBandMathX.txt

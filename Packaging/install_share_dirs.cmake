@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,35 +27,11 @@ function(install_share_dirs)
 
   set(PKG_SHARE_SOURCE_DIR ${SUPERBUILD_INSTALL_DIR}/share)
 
-
   ####################### install mvd i18N ############################
-  # OTB i18n directory is different from qt's i18N directory
-  #which is <prefix>/share/qt4/translations by default on linux.
-
-  # To install otb i18n directory correctly, we need to find
-  #Monteverdi_INSTALL_DATA_DIR. Value of this is a defined in  ConfigureMonteverdi.h
-  # and default value is "share/OTB-X.Y"
-  #...
-  # #define Monteverdi_INSTALL_DATA_DIR
-  #...
-  #Instead of parsing ConfigureMonteverdi.h,
-  #we simply use default and add a check for this directory!
-
-  #define Monteverdi_INSTALL_DATA_DIR "share/OTB-X.Y"
-
-  set(OTB_I18N_DIRNAME OTB-${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/i18n)  
-  set(MVD_I18N_SOURCE_DIR ${PKG_SHARE_SOURCE_DIR}/${OTB_I18N_DIRNAME})
+  set(MVD_I18N_SOURCE_DIR ${PKG_SHARE_SOURCE_DIR}/otb/i18n)
   if(NOT EXISTS "${MVD_I18N_SOURCE_DIR}")
     message(FATAL_ERROR "Error ${MVD_I18N_SOURCE_DIR} not exists")
   endif()
-  set(MVD_I18N_DEST_DIR ${PKG_SHARE_DEST_DIR}/${OTB_I18N_DIRNAME})
-  file(GLOB MVD_APP_TS_FILES ${PACKAGE_OTB_SRC_DIR}/i18n/*.ts) # qm files
-  foreach(APP_TS_FILE ${MVD_APP_TS_FILES})
-    get_filename_component(APP_TS_FILENAME ${APP_TS_FILE} NAME_WE)
-    install(FILES ${MVD_I18N_SOURCE_DIR}/${APP_TS_FILENAME}.qm
-      DESTINATION ${MVD_I18N_DEST_DIR}
-      )
-  endforeach()
 
   ####################### install GDAL data ############################
   set(GDAL_DATA_DIR ${PKG_SHARE_SOURCE_DIR}/gdal)
@@ -83,15 +59,11 @@ function(install_share_dirs)
   ####################### Install copyrights ##########################
   #install license for packages
   install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
-  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE
+  install(FILES ${OTBPackaging_SOURCE_DIR}/LICENSE
     DESTINATION ${PKG_STAGE_DIR})
 
-  ####################### Install VERSION ##########################
-  set(PKG_VERSION_FILE
-    "${SUPERBUILD_INSTALL_DIR}/share/doc/${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}/VERSION")
-  if(EXISTS ${PKG_VERSION_FILE} )
-    install(FILES ${PKG_VERSION_FILE} DESTINATION ${PKG_STAGE_DIR})
-  endif()
- 
+  ####################### install share/otb ###########################
+  install_without_message("${PKG_SHARE_SOURCE_DIR}/otb" "share" )
+
 endfunction()
 

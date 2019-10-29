@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,9 +34,9 @@ namespace otb
  */
 class OTBSupervised_EXPORT CvRTreesWrapper
 #ifdef OTB_OPENCV_3
-  : public cv::ml::RTrees
+    : public cv::ml::RTrees
 #else
-  : public CvRTrees
+    : public CvRTrees
 #endif
 {
 public:
@@ -45,16 +45,12 @@ public:
   ~CvRTreesWrapper() override;
 
   /** Compute the number of votes for each class. */
-  void get_votes(const cv::Mat& sample,
-                 const cv::Mat& missing,
-                 VotesVectorType& vote_count) const;
+  void get_votes(const cv::Mat& sample, const cv::Mat& missing, VotesVectorType& vote_count) const;
 
   /** Predict the confidence of the classifcation by computing the proportion
       of trees which voted for the majority class.
   */
-  float predict_confidence(const cv::Mat& sample,
-                           const cv::Mat& missing =
-                           cv::Mat()) const;
+  float predict_confidence(const cv::Mat& sample, const cv::Mat& missing = cv::Mat()) const;
 
   /** Predict the confidence margin of the classifcation by computing the
       difference in votes between the first and second most voted classes.
@@ -62,29 +58,26 @@ public:
       class, since it provides information about the conflict between the
       most likely classes.
   */
-  float predict_margin(const cv::Mat& sample,
-                          const cv::Mat& missing =
-                          cv::Mat()) const;
+  float predict_margin(const cv::Mat& sample, const cv::Mat& missing = cv::Mat()) const;
 
 #ifdef OTB_OPENCV_3
 
-#define OTB_CV_WRAP_PROPERTY(type,name) \
-  virtual type get##name() const; \
-  virtual void set##name(type val);
+#define OTB_CV_WRAP_PROPERTY(type, name)   \
+  virtual type get##name() const override; \
+  virtual void set##name(type val) override;
 
-#define OTB_CV_WRAP_PROPERTY_REF(type,name) \
-  virtual type get##name() const; \
-  virtual void set##name(const type &val);
+#define OTB_CV_WRAP_PROPERTY_REF(type, name) \
+  virtual type get##name() const override;   \
+  virtual void set##name(const type& val) override;
 
-#define OTB_CV_WRAP_CSTREF_GET(type, name) \
-  virtual const type& get##name() const;
+#define OTB_CV_WRAP_CSTREF_GET(type, name) virtual const type& get##name() const override;
 
   // TODO : wrap all method used
-  virtual int getVarCount() const;
+  virtual int getVarCount() const override;
 
-  virtual bool isTrained() const;
+  virtual bool isTrained() const override;
 
-  virtual bool isClassifier() const;
+  virtual bool isClassifier() const override;
 
   OTB_CV_WRAP_PROPERTY(int, MaxCategories)
   OTB_CV_WRAP_PROPERTY(int, MaxDepth)
@@ -92,34 +85,38 @@ public:
   OTB_CV_WRAP_PROPERTY(bool, UseSurrogates)
   OTB_CV_WRAP_PROPERTY(int, CVFolds)
   OTB_CV_WRAP_PROPERTY(bool, Use1SERule)
-  OTB_CV_WRAP_PROPERTY(bool,TruncatePrunedTree)
+  OTB_CV_WRAP_PROPERTY(bool, TruncatePrunedTree)
   OTB_CV_WRAP_PROPERTY(float, RegressionAccuracy)
   OTB_CV_WRAP_PROPERTY(bool, CalculateVarImportance)
   OTB_CV_WRAP_PROPERTY(int, ActiveVarCount)
   OTB_CV_WRAP_PROPERTY_REF(cv::Mat, Priors)
   OTB_CV_WRAP_PROPERTY_REF(cv::TermCriteria, TermCriteria)
-  
+
   OTB_CV_WRAP_CSTREF_GET(std::vector<int>, Roots)
   OTB_CV_WRAP_CSTREF_GET(std::vector<cv::ml::DTrees::Node>, Nodes)
   OTB_CV_WRAP_CSTREF_GET(std::vector<cv::ml::DTrees::Split>, Splits)
   OTB_CV_WRAP_CSTREF_GET(std::vector<int>, Subsets)
 
-  virtual cv::Mat getVarImportance() const;
+#ifdef OTB_OPENCV_4
+  virtual void getVotes(cv::InputArray samples, cv::OutputArray results, int flags) const override;
+#endif
 
-  virtual cv::String 	getDefaultName () const;
+  virtual cv::Mat getVarImportance() const override;
 
-  virtual void 	read (const cv::FileNode &fn);
+  virtual cv::String getDefaultName() const override;
 
-  virtual void write (cv::FileStorage &fs) const;
+  virtual void read(const cv::FileNode& fn) override;
 
-  virtual void 	save (const cv::String &filename) const;
+  virtual void write(cv::FileStorage& fs) const override;
 
-  virtual bool train(cv::InputArray samples, int layout, cv::InputArray responses);
+  virtual void save(const cv::String& filename) const override;
 
-  virtual bool train( const cv::Ptr<cv::ml::TrainData>& trainData, int flags=0 );
+  virtual bool train(cv::InputArray samples, int layout, cv::InputArray responses) override;
 
-  virtual float predict (cv::InputArray samples, cv::OutputArray results=cv::noArray(), int flags=0) const;
-  
+  virtual bool train(const cv::Ptr<cv::ml::TrainData>& trainData, int flags = 0) override;
+
+  virtual float predict(cv::InputArray samples, cv::OutputArray results = cv::noArray(), int flags = 0) const override;
+
   static cv::Ptr<CvRTreesWrapper> create();
 
 #undef OTB_CV_WRAP_PROPERTY
@@ -130,7 +127,6 @@ private:
   cv::Ptr<cv::ml::RTrees> m_Impl;
 #endif // OTB_OPENCV_3
 };
-
 }
 
 #endif

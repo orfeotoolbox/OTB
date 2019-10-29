@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -141,6 +141,7 @@ set(APPLE_SYSTEM_DLLS
   OpenGL.framework
   libgcc_s.*dylib
   libcups.*dylib
+  libomp.dylib
   )
 
 if(WIN32)
@@ -185,6 +186,4 @@ set(GTK_LIB_LIST_1
 #   libpng12.so.0
 #   )
 
-
-#set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1} ${GTK_LIB_LIST_2})
 set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1}) # ${GTK_LIB_LIST_2})

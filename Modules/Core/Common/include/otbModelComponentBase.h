@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -61,9 +61,8 @@ namespace Statistics
  * \ingroup OTBCommon
  */
 
-template<class TSample>
-class ITK_EXPORT ModelComponentBase :
-  public itk::Object
+template <class TSample>
+class ITK_EXPORT ModelComponentBase : public itk::Object
 {
 public:
   /**Standard class typedefs. */
@@ -80,8 +79,7 @@ public:
   typedef typename TSample::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** typedef for the MembershipFunctionBase */
-  typedef itk::Statistics::MembershipFunctionBase<MeasurementVectorType>
-  MembershipFunctionType;
+  typedef itk::Statistics::MembershipFunctionBase<MeasurementVectorType> MembershipFunctionType;
 
   typedef itk::Array<double> ParametersType;
 
@@ -130,7 +128,9 @@ public:
 
 protected:
   ModelComponentBase();
-  ~ModelComponentBase() override {}
+  ~ModelComponentBase() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void GenerateData();
@@ -147,8 +147,8 @@ protected:
   ParametersType m_Parameters;
 
 private:
-  ModelComponentBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ModelComponentBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** target sample data pointer */
   const TSample* m_Sample;
 
@@ -166,7 +166,7 @@ protected:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbModelComponentBase.txx"
+#include "otbModelComponentBase.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,9 +35,8 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-template<class TValue = double>
-class ITK_EXPORT Rectangle
-  : public itk::Object
+template <class TValue = double>
+class ITK_EXPORT Rectangle : public itk::Object
 {
 public:
   /** Standard typedefs */
@@ -55,11 +54,11 @@ public:
   itkTypeMacro(Rectangle, itk::Object);
 
   /** Derived typedefs */
-  typedef itk::ContinuousIndex<ValueType, 2>         ContinuousIndexType;
-  typedef ContinuousIndexType                        VertexType;
+  typedef itk::ContinuousIndex<ValueType, 2> ContinuousIndexType;
+  typedef ContinuousIndexType VertexType;
   typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
-  typedef typename VertexListType::Pointer           VertexListPointerType;
-  typedef typename VertexListType::ConstIterator     VertexListConstIteratorType;
+  typedef typename VertexListType::Pointer       VertexListPointerType;
+  typedef typename VertexListType::ConstIterator VertexListConstIteratorType;
 
   /*       typedef typename Superclass::VertexType                    VertexType; */
   /*       typedef typename Superclass::VertexListType                VertexListType; */
@@ -87,7 +86,7 @@ public:
    */
   bool IsInside(VertexType point) const;
 
-  virtual void  AddVertex(const ContinuousIndexType& vertex);
+  virtual void AddVertex(const ContinuousIndexType& vertex);
 
   /** GetBounding region*/
   virtual RegionType GetBoundingRegion() const;
@@ -95,12 +94,14 @@ public:
 protected:
   /** Constructor */
   Rectangle()
-    {
+  {
     m_VertexList = VertexListType::New();
-    };
+  };
 
   /** Destructor */
-  ~Rectangle() override {}
+  ~Rectangle() override
+  {
+  }
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -111,8 +112,8 @@ protected:
   /** */
 
 private:
-  Rectangle(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  Rectangle(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ValueType m_Orientation;
   ValueType m_Width;
@@ -122,6 +123,6 @@ private:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRectangle.txx"
+#include "otbRectangle.hxx"
 #endif
 #endif

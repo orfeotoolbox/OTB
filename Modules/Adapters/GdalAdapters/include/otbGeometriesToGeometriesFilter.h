@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,8 @@
 /**\ingroup GeometriesFilters
  * \file    otbGeometriesToGeometriesFilter.h
  * \since   OTB v 3.14.0
- * Commons definitions for geometries filter definition.
- * This file contains all the main classes required to define new geometries
+ * Common definitions for geometry filter definitions.
+ * This file contains all the main classes required to define new geometry
  * transformations.
  */
 
@@ -38,34 +38,38 @@
 #include "otbMacro.h"
 
 // forward declarations
-namespace otb { namespace internal {
+namespace otb
+{
+namespace internal
+{
 struct ProcessVisitor;
-} } // otb::internal namespace
+}
+} // otb::internal namespace
 
 namespace otb
 {
 /**\ingroup GeometriesFilters
  * \class GeometriesToGeometriesFilter
- * Root abstract class for all geometries to geometries filters.
+ * Root abstract class for all geometry to geometry filters.
  * \since OTB v 3.14.0
  *
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT GeometriesToGeometriesFilter : public GeometriesSource
-  {
+{
 public:
   /**\name Standard ITK typedefs */
   //@{
-  typedef GeometriesToGeometriesFilter         Self;
-  typedef itk::ProcessObject                   Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef GeometriesToGeometriesFilter  Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   //@}
 
   /**\name I/O typedefs */
   //@{
-  typedef GeometriesSet                        InputGeometriesType;
-  typedef GeometriesSet                        OutputGeometriesType;
+  typedef GeometriesSet InputGeometriesType;
+  typedef GeometriesSet OutputGeometriesType;
   // typedef GeometriesSet::Pointer               InputGeometriesPointer;
   // typedef GeometriesSet::Pointer               OutputGeometriesPointer;
   //@}
@@ -79,8 +83,8 @@ public:
   /**\name Single input GeometriesSet property */
   //@{
   using Superclass::SetInput;
-  virtual void SetInput(const InputGeometriesType *input);
-  const InputGeometriesType * GetInput(void);
+  virtual void SetInput(const InputGeometriesType* input);
+  const InputGeometriesType* GetInput(void);
   //@}
 
 protected:
@@ -104,14 +108,14 @@ private:
    * \param[in,out] inout the geometries set that'll be modified by the filter.
    * \pre The filter must have been initialized
    */
-  void Process(OutputGeometriesType &inout);
+  void Process(OutputGeometriesType& inout);
   /** \e By-copy processing function.
    * \param[in] source the geometries set to transform
    * \param[out] destination the resulting geometries set.
    * \pre The filter must have been initialized
    * \pre The \c destination must be ready to receive a result.
    */
-  void Process(InputGeometriesType const& source, OutputGeometriesType &destination);
+  void Process(InputGeometriesType const& source, OutputGeometriesType& destination);
 
   /**\name Filter specialization hooks.
    * Filter specialization hooks.
@@ -126,7 +130,7 @@ private:
    * \note When <tt>source == destination</tt>, it means this is an inplace
    * filter.
    */
-  virtual void                     DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const=0;
+  virtual void DoProcessLayer(ogr::Layer const& source, ogr::Layer& destination) const = 0;
 
   /**
    * Hook used to determine the \c OGRSpatialReference when creating a new layer.
@@ -137,14 +141,14 @@ private:
    * \return 0 by default.
    * \todo Return a <tt>unique_ptr<OGRSpatialReference></tt>.
    */
-  virtual OGRSpatialReference*     DoDefineNewLayerSpatialReference(ogr::Layer const& source) const;
+  virtual OGRSpatialReference* DoDefineNewLayerSpatialReference(ogr::Layer const& source) const;
 
   /**
    * Hook used to determine the type of the new layer.
    * \param[in] source  source \c Layer.
    * \return by default the same type as the one from the \c source \c Layer.
    */
-  virtual OGRwkbGeometryType       DoDefineNewLayerGeometryType(ogr::Layer const& source) const;
+  virtual OGRwkbGeometryType DoDefineNewLayerGeometryType(ogr::Layer const& source) const;
 
   /**
    * Hook used to determine the options for  creating a new layer.
@@ -159,7 +163,7 @@ private:
    * \param[in] source  source \c Layer -- for reference
    * \param[in,out] dest  destination \c Layer
    */
-  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const = 0;
+  virtual void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer& dest) const = 0;
 
   /** Hook used to conclude the initialization phase.
    * As ITK doesn't follow a <em>the constructor set the object in a final, and
@@ -168,30 +172,32 @@ private:
    *
    * The default implementation does nothing.
    */
-  virtual void                     DoFinalizeInitialization() {}
+  virtual void DoFinalizeInitialization()
+  {
+  }
   //@}
-  
+
   friend struct otb::internal::ProcessVisitor;
-  };
+};
 
 /**\ingroup GeometriesFilters
  * Helper class to operate an exact copy of the fields from a source layer.
  * \since OTB v 3.14.0
  */
 struct OTBGdalAdapters_EXPORT FieldCopyTransformation
+{
+  OGRFeatureDefn& getDefinition(ogr::Layer& outLayer) const
   {
-  OGRFeatureDefn & getDefinition(ogr::Layer & outLayer) const
-    {
     return outLayer.GetLayerDefn();
-    }
+  }
   /**
    * In-place transformation: does nothing.
    * \throw Nothing
    */
-    void fieldsTransform(ogr::Feature const& itkNotUsed(inoutFeature)) const
-    {
+  void fieldsTransform(ogr::Feature const& itkNotUsed(inoutFeature)) const
+  {
     // default => do nothing for in-place transformation
-    }
+  }
   /**
    * By-Copy transformation: copies all fields.
    * \param [in] inFeature  input \c Feature
@@ -199,16 +205,17 @@ struct OTBGdalAdapters_EXPORT FieldCopyTransformation
    *
    * \throw itk::ExceptionObject if the fields cannot be copied.
    */
-  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature & outFeature) const;
+  void fieldsTransform(ogr::Feature const& inFeature, ogr::Feature& outFeature) const;
 
   /**
    * Defines the fields in the destination layer.
-   * The default action is to copy all fieds from one layer to another.
+   * The default action is to copy all fields from one layer to another.
    * \param [in] source  source \c Layer
    * \param [in,out] dest  destination \c Layer
-   * \throw itk::ExceptionObject in case the operation can't succeed.
+   * \throw itk::ExceptionObject in case the operation cannot succeed.
    */
-  void DefineFields(ogr::Layer const& source, ogr::Layer & dest) const;
+  void DefineFields(ogr::Layer const& source, ogr::Layer& dest) const;
+
 private:
   /** Associative table to know how fields are mapped from one layer to another.
    * This table is necessary as:
@@ -220,8 +227,8 @@ private:
    * (sorted?) vector of pairs of ints, and search with a simple \c std::find
    * (as we can expect the number of fields to be quite low).
    */
-  mutable std::map<int,int> m_SourceToDestFieldIndicesMap;
-  };
+  mutable std::map<int, int> m_SourceToDestFieldIndicesMap;
+};
 
 
 /**\ingroup GeometriesFilters
@@ -252,8 +259,8 @@ private:
  */
 template <class TransformationFunctor, class TransformedElementType, class FieldTransformationPolicy = FieldCopyTransformation>
 struct TransformationFunctorDispatcher
-  {
-  };
+{
+};
 
 /**\ingroup GeometriesFilters
  * Specialization for \c ogr::Layer.
@@ -267,19 +274,26 @@ struct TransformationFunctorDispatcher
  * \since OTB v 3.14.0
  */
 template <class TransformationFunctor, class FieldTransformationPolicy>
-struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer, FieldTransformationPolicy>
-: FieldTransformationPolicy
-  {
+struct TransformationFunctorDispatcher<TransformationFunctor, ogr::Layer, FieldTransformationPolicy> : FieldTransformationPolicy
+{
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<ogr::Layer, TransformedElementType>));
-  TransformationFunctorDispatcher() { }
-  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){ }
-  void operator()(ogr::Layer const& in, ogr::Layer & out) const;
-  void operator()(ogr::Layer & inout) const;
-  TransformationFunctor * operator->() { return &m_functor; }
+  TransformationFunctorDispatcher()
+  {
+  }
+  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor)
+  {
+  }
+  void operator()(ogr::Layer const& in, ogr::Layer& out) const;
+  void operator()(ogr::Layer& inout) const;
+  TransformationFunctor* operator->()
+  {
+    return &m_functor;
+  }
+
 private:
   TransformationFunctor m_functor;
-  };
+};
 
 /**\ingroup GeometriesFilters
  * Specialization for \c OGRGeometry.
@@ -300,20 +314,27 @@ private:
  * \since OTB v 3.14.0
  */
 template <class TransformationFunctor, class FieldTransformationPolicy>
-struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry, FieldTransformationPolicy>
-: FieldTransformationPolicy
-  {
+struct TransformationFunctorDispatcher<TransformationFunctor, OGRGeometry, FieldTransformationPolicy> : FieldTransformationPolicy
+{
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
   BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, TransformedElementType>));
-  TransformationFunctorDispatcher() { }
-  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor){}
+  TransformationFunctorDispatcher()
+  {
+  }
+  TransformationFunctorDispatcher(TransformationFunctor functor) : m_functor(functor)
+  {
+  }
 
-  void operator()(ogr::Layer const& in, ogr::Layer & out) const;
-  void operator()(ogr::Layer & inout) const;
-  TransformationFunctor * operator->() { return &m_functor; }
+  void operator()(ogr::Layer const& in, ogr::Layer& out) const;
+  void operator()(ogr::Layer& inout) const;
+  TransformationFunctor* operator->()
+  {
+    return &m_functor;
+  }
+
 private:
   TransformationFunctor m_functor;
-  };
+};
 
 
 /**\ingroup GeometriesFilters
@@ -332,23 +353,22 @@ private:
  */
 template <class TransformationFunctor, class FieldTransformationPolicy = FieldCopyTransformation>
 class ITK_EXPORT DefaultGeometriesToGeometriesFilter
-: public GeometriesToGeometriesFilter
-, public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType, FieldTransformationPolicy>
+    : public GeometriesToGeometriesFilter,
+      public TransformationFunctorDispatcher<TransformationFunctor, typename TransformationFunctor::TransformedElementType, FieldTransformationPolicy>
 {
 public:
   /**\name Standard ITK typedefs */
   //@{
-  typedef DefaultGeometriesToGeometriesFilter                    Self;
-  typedef GeometriesToGeometriesFilter                           Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef DefaultGeometriesToGeometriesFilter Self;
+  typedef GeometriesToGeometriesFilter        Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
   //@}
   /**\name Class typedefs */
   //@{
   typedef TransformationFunctor                                  TransformationFunctorType;
   typedef typename TransformationFunctor::TransformedElementType TransformedElementType;
-  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldTransformationPolicy>
-                                                                 TransformationFunctorDispatcherType;
+  typedef TransformationFunctorDispatcher<TransformationFunctorType, TransformedElementType, FieldTransformationPolicy> TransformationFunctorDispatcherType;
   //@}
 
   /**\name Standard macros */
@@ -376,7 +396,7 @@ protected:
    * \note When <tt>source == destination</tt>, it means this is an \em in-place
    * filter.
    */
-  void DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const override;
+  void DoProcessLayer(ogr::Layer const& source, ogr::Layer& destination) const override;
   /**
    * Hook used to define the fields of the new layer.
    * \param[in] source  source \c Layer -- for reference
@@ -385,16 +405,16 @@ protected:
    * Just forwards the fields definition to the \c FieldTransformationPolicy
    * inherited from the \c TransformationFunctorDispatcherType.
    */
-  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const override
-    {
+  void DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer& dest) const override
+  {
     this->DefineFields(source, dest);
-    }
+  }
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeometriesToGeometriesFilter.txx"
+#include "otbGeometriesToGeometriesFilter.hxx"
 #endif
 
 #endif // otbGeometriesToGeometriesFilter_h

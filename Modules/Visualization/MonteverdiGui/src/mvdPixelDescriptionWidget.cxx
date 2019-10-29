@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,38 +65,34 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-PixelDescriptionWidget
-::PixelDescriptionWidget( QWidget* p, Qt::WindowFlags flags  ):
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::PixelDescriptionWidget() ),
-  m_CartographicRootItem( NULL ),
-  m_GeographicRootItem( NULL ),
-  m_PixelValueRootItem( NULL ),
-  m_CartographicItem( NULL ),
-  m_GeographicItem( NULL )
+PixelDescriptionWidget::PixelDescriptionWidget(QWidget* p, Qt::WindowFlags flags)
+  : QWidget(p, flags),
+    m_UI(new mvd::Ui::PixelDescriptionWidget()),
+    m_CartographicRootItem(NULL),
+    m_GeographicRootItem(NULL),
+    m_PixelValueRootItem(NULL),
+    m_CartographicItem(NULL),
+    m_GeographicItem(NULL)
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
   SetupUI();
 }
 
 /*******************************************************************************/
-PixelDescriptionWidget
-::~PixelDescriptionWidget()
+PixelDescriptionWidget::~PixelDescriptionWidget()
 {
   delete m_UI;
   m_UI = NULL;
 }
 
 /*******************************************************************************/
-void
-PixelDescriptionWidget
-::SetupUI()
+void PixelDescriptionWidget::SetupUI()
 {
   //
   // Cartographic coordiantes
-  m_CartographicRootItem = new QTreeWidgetItem( GetDescriptionTree() ); 
-  //m_CartographicRootItem->setText(0, tr("Cartographic"));
+  m_CartographicRootItem = new QTreeWidgetItem(GetDescriptionTree());
+  // m_CartographicRootItem->setText(0, tr("Cartographic"));
   m_CartographicRootItem->setExpanded(true);
 
   // m_CartographicItem = new QTreeWidgetItem( m_CartographicRootItem );
@@ -104,24 +100,22 @@ PixelDescriptionWidget
 
   //
   // Geographic coordinates
-  m_GeographicRootItem = new QTreeWidgetItem( GetDescriptionTree() );
+  m_GeographicRootItem = new QTreeWidgetItem(GetDescriptionTree());
   m_GeographicRootItem->setText(0, tr("Geographic"));
   m_GeographicRootItem->setExpanded(true);
 
-  //m_GeographicItem = new QTreeWidgetItem( m_GeographicRootItem );  
-  //m_GeographicItem->setText(0, tr("Coordinates"));
+  // m_GeographicItem = new QTreeWidgetItem( m_GeographicRootItem );
+  // m_GeographicItem->setText(0, tr("Coordinates"));
 
   //
   // Child items will be created + updated in a dedicated slot
-  m_PixelValueRootItem = new QTreeWidgetItem( GetDescriptionTree() ); 
+  m_PixelValueRootItem = new QTreeWidgetItem(GetDescriptionTree());
   m_PixelValueRootItem->setText(0, tr("Pixel Values"));
   m_PixelValueRootItem->setExpanded(true);
 }
 
 /*******************************************************************************/
-QTreeWidget *
-PixelDescriptionWidget
-::GetDescriptionTree()
+QTreeWidget* PixelDescriptionWidget::GetDescriptionTree()
 {
   return m_UI->m_DescriptionTree;
 }
@@ -129,104 +123,91 @@ PixelDescriptionWidget
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-PixelDescriptionWidget
-::OnCurrentPhysicalUpdated(const QStringList & currentPhysical)
-{ 
+void PixelDescriptionWidget::OnCurrentPhysicalUpdated(const QStringList& currentPhysical)
+{
   // qDebug() << this << "::OnCurrentPhysicalUpdated(" << currentPhysical << ")";
 
-  //m_CartographicItem->setText(1, currentPhysical);
+  // m_CartographicItem->setText(1, currentPhysical);
 
   if (!currentPhysical.empty())
-    {
+  {
     // remove the previous QTreeWidgetItem  of m_GeographicRootItem
-    while( m_CartographicRootItem->childCount()>0 )
-      {
+    while (m_CartographicRootItem->childCount() > 0)
+    {
       // Remove QTreeWidgetItem
-      QTreeWidgetItem* child = m_CartographicRootItem->takeChild( 0 );
+      QTreeWidgetItem* child = m_CartographicRootItem->takeChild(0);
 
       // Delete it from memory.
       delete child;
       child = NULL;
-      }
- 
-    m_CartographicRootItem->setText( 0, currentPhysical[ 0 ] );
+    }
+
+    m_CartographicRootItem->setText(0, currentPhysical[0]);
 
     // fill with the new values
-    QTreeWidgetItem * iCartoXItem = new QTreeWidgetItem( m_CartographicRootItem );
-    iCartoXItem->setText( 0, tr( "X" ) );
-    iCartoXItem->setText( 1, currentPhysical[ 1 ] );
+    QTreeWidgetItem* iCartoXItem = new QTreeWidgetItem(m_CartographicRootItem);
+    iCartoXItem->setText(0, tr("X"));
+    iCartoXItem->setText(1, currentPhysical[1]);
 
-    QTreeWidgetItem * iCartoYItem = new QTreeWidgetItem( m_CartographicRootItem );
-    iCartoYItem->setText( 0, tr( "Y" ) );
-    iCartoYItem->setText( 1, currentPhysical[ 2 ] );
-    }
+    QTreeWidgetItem* iCartoYItem = new QTreeWidgetItem(m_CartographicRootItem);
+    iCartoYItem->setText(0, tr("Y"));
+    iCartoYItem->setText(1, currentPhysical[2]);
+  }
 }
 
 /*******************************************************************************/
-void
-PixelDescriptionWidget
-::OnCurrentGeographicUpdated(const QStringList&/*const QString &*/ currentGeo)
+void PixelDescriptionWidget::OnCurrentGeographicUpdated(const QStringList& /*const QString &*/ currentGeo)
 {
   // qDebug() << this << "::OnCurrentGeographicUpdated(" << currentGeo << ")";
 
   if (!currentGeo.empty())
-    {
+  {
     // remove the previous QTreeWidgetItem  of m_GeographicRootItem
-    while( m_GeographicRootItem->childCount()>0 )
-      {
+    while (m_GeographicRootItem->childCount() > 0)
+    {
       // Remove QTreeWidgetItem
-      QTreeWidgetItem* child = m_GeographicRootItem->takeChild( 0 );
+      QTreeWidgetItem* child = m_GeographicRootItem->takeChild(0);
 
       // Delete it from memory.
       delete child;
       child = NULL;
-      }
+    }
 
-    m_GeographicRootItem->setText( 0, currentGeo[ 0 ] );
+    m_GeographicRootItem->setText(0, currentGeo[0]);
 
     // fill with the new values
-    QTreeWidgetItem * iGeoLongItem = new QTreeWidgetItem( m_GeographicRootItem );
-    iGeoLongItem->setText( 0, tr( "Long" ) );
-    iGeoLongItem->setText( 1, currentGeo[ 1 ] );
+    QTreeWidgetItem* iGeoLongItem = new QTreeWidgetItem(m_GeographicRootItem);
+    iGeoLongItem->setText(0, tr("Long"));
+    iGeoLongItem->setText(1, currentGeo[1]);
 
-    QTreeWidgetItem * iGeoLatItem = new QTreeWidgetItem( m_GeographicRootItem );
-    iGeoLatItem->setText( 0, tr( "Lat" ) );
-    iGeoLatItem->setText( 1, currentGeo[ 2 ] );
+    QTreeWidgetItem* iGeoLatItem = new QTreeWidgetItem(m_GeographicRootItem);
+    iGeoLatItem->setText(0, tr("Lat"));
+    iGeoLatItem->setText(1, currentGeo[2]);
 
-    QTreeWidgetItem * iGeoElevationItem =
-      new QTreeWidgetItem( m_GeographicRootItem );
-    iGeoElevationItem->setText( 0, tr( "Elevation" ) );
-    iGeoElevationItem->setText(
-      1,
-      currentGeo.size() > 3
-      ? currentGeo[ 3 ]
-      : tr( "Not available" )
-    );
-    }
+    QTreeWidgetItem* iGeoElevationItem = new QTreeWidgetItem(m_GeographicRootItem);
+    iGeoElevationItem->setText(0, tr("Elevation"));
+    iGeoElevationItem->setText(1, currentGeo.size() > 3 ? currentGeo[3] : tr("Not available"));
+  }
 }
 
 /*******************************************************************************/
-void
-PixelDescriptionWidget
-::OnCurrentPixelValueUpdated(const VectorImageType::PixelType & currentPixel, 
-                             const QStringList& bandNames)
+void PixelDescriptionWidget::OnCurrentPixelValueUpdated(const VectorImageType::PixelType& currentPixel, const QStringList& bandNames)
 {
   // qDebug() << this << "::OnCurrentPixelValueUpdated(" << bandNames << ")";
 
   if (!bandNames.empty() || currentPixel.GetSize() != 0)
-    {
+  {
     //
     // remove the previous QTreeWidgetItem  of m_PixelValueRootItem
-    while( m_PixelValueRootItem->childCount()>0 )
-      {
+    while (m_PixelValueRootItem->childCount() > 0)
+    {
       // Remove QTreeWidgetItem
-      QTreeWidgetItem* child = m_PixelValueRootItem->takeChild( 0 );
+      QTreeWidgetItem* child = m_PixelValueRootItem->takeChild(0);
 
       // Delete it from memory.
       delete child;
       child = NULL;
-      }
+    }
 
     // qDebug() << "Bands:" << bandNames;
 
@@ -234,23 +215,22 @@ PixelDescriptionWidget
 
     // fill with the new values
     for (unsigned int idx = 0; idx < currentPixel.GetSize(); idx++)
-      {
-      QTreeWidgetItem * iBandItem = new QTreeWidgetItem( m_PixelValueRootItem );
+    {
+      QTreeWidgetItem* iBandItem = new QTreeWidgetItem(m_PixelValueRootItem);
 
       // figure out if a band name is available, if not use Band idx
-      if( !bandNames[ idx ].isEmpty() &&
-          static_cast< unsigned int >( bandNames.size() )==currentPixel.GetSize() )
-        {
-        iBandItem->setText(0, bandNames[ idx ] );
-        }
-      else
-        {
-	iBandItem->setText( 0, tr( "Band %1" ).arg( idx+1 ) );
-        }
-      // set the value
-      iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement( idx )) );
+      if (!bandNames[idx].isEmpty() && static_cast<unsigned int>(bandNames.size()) == currentPixel.GetSize())
+      {
+        iBandItem->setText(0, bandNames[idx]);
       }
+      else
+      {
+        iBandItem->setText(0, tr("Band %1").arg(idx + 1));
+      }
+      // set the value
+      iBandItem->setText(1, QString("%1").arg(currentPixel.GetElement(idx)));
     }
+  }
 }
 
 /*******************************************************************************/

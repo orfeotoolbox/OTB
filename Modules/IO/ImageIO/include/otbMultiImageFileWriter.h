@@ -1,5 +1,5 @@
 /*
- * Copyright (C) CS SI
+ * Copyright (C) 2017-2019 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,13 +44,13 @@ namespace otb
  *
  * \ingroup OTBImageIO
  */
-class OTBImageIO_EXPORT MultiImageFileWriter: public itk::ProcessObject
+class OTBImageIO_EXPORT MultiImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiImageFileWriter Self;
-  typedef itk::ProcessObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef MultiImageFileWriter          Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
@@ -58,12 +58,12 @@ public:
   itkTypeMacro(MultiImageFileWriter, itk::ProcessObject);
 
   /** Public typedefs */
-  typedef itk::ImageBase<2> ImageBaseType;
-  typedef ImageBaseType::RegionType RegionType;
-  typedef ImageBaseType::IndexType  IndexType;
-  typedef ImageBaseType::IndexValueType  IndexValueType;
-  typedef ImageBaseType::SizeType   SizeType;
-  typedef ImageBaseType::SizeValueType   SizeValueType;
+  typedef itk::ImageBase<2>             ImageBaseType;
+  typedef ImageBaseType::RegionType     RegionType;
+  typedef ImageBaseType::IndexType      IndexType;
+  typedef ImageBaseType::IndexValueType IndexValueType;
+  typedef ImageBaseType::SizeType       SizeType;
+  typedef ImageBaseType::SizeValueType  SizeValueType;
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
@@ -113,7 +113,7 @@ public:
    *   is set from the CMake configuration option */
   void SetAutomaticAdaptativeStreaming(unsigned int availableRAM = 0, double bias = 1.0);
 
-  virtual void UpdateOutputData(itk::DataObject * itkNotUsed(output));
+  virtual void UpdateOutputData(itk::DataObject* itkNotUsed(output)) override;
 
   /** Connect a new input to the multi-writer. Only the input pointer is
    *  required. If the filename list is empty,
@@ -126,9 +126,9 @@ public:
    *  You may specify top and bottom margins that will be removed from the input image, according to its largest possible region.
    */
   template <class TImage>
-  void AddInputImage(const TImage* inputPtr, const std::string & fileName)
+  void AddInputImage(const TImage* inputPtr, const std::string& fileName)
   {
-    Sink<TImage> * sink = new Sink<TImage>(inputPtr, fileName);
+    Sink<TImage>* sink = new Sink<TImage>(inputPtr, fileName);
     m_SinkList.push_back(SinkBase::Pointer(sink));
     unsigned int size = m_SinkList.size();
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
@@ -140,45 +140,34 @@ public:
   template <class TWriter>
   void AddInputWriter(const TWriter* writer)
   {
-    Sink<typename TWriter::InputImageType > * sink =
-      new Sink<typename TWriter::InputImageType >(writer);
+    Sink<typename TWriter::InputImageType>* sink = new Sink<typename TWriter::InputImageType>(writer);
     m_SinkList.push_back(SinkBase::Pointer(sink));
     unsigned int size = m_SinkList.size();
     this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
   }
 
-  virtual void UpdateOutputInformation();
+  virtual void UpdateOutputInformation() override;
 
-  virtual void Update()
+  virtual void Update() override
   {
     this->UpdateOutputInformation();
     this->UpdateOutputData(NULL);
   }
 
 protected:
-  /** SetInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetInput(const itk::ProcessObject::DataObjectIdentifierType & key, itk::DataObject* image)
-    { this->Superclass::SetInput(key, image); }
-
-  /** SetNthInput is changed to protected. Use AddInputImage to connect the
-   *  pipeline to the writer
-   */
-  virtual void SetNthInput(itk::ProcessObject::DataObjectPointerArraySizeType i, itk::DataObject* image)
-    { this->Superclass::SetNthInput(i, image); }
-
   MultiImageFileWriter();
-  virtual ~MultiImageFileWriter() {}
+  virtual ~MultiImageFileWriter()
+  {
+  }
 
   /** GenerateData calls the Write method for each connected input */
-  virtual void GenerateData(void);
+  virtual void GenerateData(void) override;
 
   /** GenerateInputRequestedRegion can predict approximate input regions
    *  based on the requested region of the fake output. Only useful for
    *  pipeline memory print estimation
    */
-  virtual void GenerateInputRequestedRegion();
+  virtual void GenerateInputRequestedRegion() override;
 
   /** Computes the number of divisions */
   virtual void InitializeStreaming();
@@ -191,20 +180,20 @@ protected:
   /** Returns the current stream region of the given input */
   virtual RegionType GetStreamRegion(int inputIndex);
 
-  void operator =(const MultiImageFileWriter&); //purposely not implemented
+  void operator=(const MultiImageFileWriter&) = delete;
 
-  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event)
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject& event)
   {
     if (typeid(event) != typeid(itk::ProgressEvent))
-      {
+    {
       return;
-      }
+    }
 
     itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
     if (processObject)
-      {
+    {
       m_DivisionProgress = processObject->GetProgress();
-      }
+    }
 
     this->UpdateFilterProgress();
   }
@@ -216,16 +205,16 @@ protected:
 
 private:
   typedef otb::Image<unsigned char, 2> FakeOutputType;
-  typedef StreamingManager<FakeOutputType>        StreamingManagerType;
+  typedef StreamingManager<FakeOutputType> StreamingManagerType;
   /** Streaming manager used for the N inputs */
   StreamingManagerType::Pointer m_StreamingManager;
 
-  //Division parameters
+  // Division parameters
   unsigned int m_NumberOfDivisions;
   unsigned int m_CurrentDivision;
-  float m_DivisionProgress;
+  float        m_DivisionProgress;
 
-  bool m_IsObserving;
+  bool          m_IsObserving;
   unsigned long m_ObserverID;
 
   /** \class SinkBase
@@ -236,17 +225,28 @@ private:
   class SinkBase
   {
   public:
-    SinkBase() {}
-    SinkBase(ImageBaseType::ConstPointer inputImage) :
-      m_InputImage(inputImage)
-    {}
-    virtual ~SinkBase() {}
-    virtual ImageBaseType::ConstPointer GetInput() const { return m_InputImage; }
-    virtual ImageBaseType::Pointer GetInput() { return const_cast<ImageBaseType*>(m_InputImage.GetPointer()); }
-    virtual void WriteImageInformation() = 0;
-    virtual void Write(const RegionType & streamRegion) = 0;
-    virtual bool CanStreamWrite() = 0;
+    SinkBase()
+    {
+    }
+    SinkBase(ImageBaseType::ConstPointer inputImage) : m_InputImage(inputImage)
+    {
+    }
+    virtual ~SinkBase()
+    {
+    }
+    virtual ImageBaseType::ConstPointer GetInput() const
+    {
+      return m_InputImage;
+    }
+    virtual ImageBaseType::Pointer GetInput()
+    {
+      return const_cast<ImageBaseType*>(m_InputImage.GetPointer());
+    }
+    virtual void WriteImageInformation()                 = 0;
+    virtual void Write(const RegionType& streamRegion)   = 0;
+    virtual bool                        CanStreamWrite() = 0;
     typedef boost::shared_ptr<SinkBase> Pointer;
+
   protected:
     /** The image on which streaming is performed */
     ImageBaseType::ConstPointer m_InputImage;
@@ -261,17 +261,21 @@ private:
   class Sink : public SinkBase
   {
   public:
-    Sink() {}
-    Sink(typename TImage::ConstPointer inputImage,
-         const std::string & filename);
+    Sink()
+    {
+    }
+    Sink(typename TImage::ConstPointer inputImage, const std::string& filename);
     Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
 
-    virtual ~Sink() {}
+    virtual ~Sink()
+    {
+    }
 
     virtual void WriteImageInformation();
-    virtual void Write(const RegionType & streamRegion);
-    virtual bool CanStreamWrite();
+    virtual void Write(const RegionType& streamRegion);
+    virtual bool                    CanStreamWrite();
     typedef boost::shared_ptr<Sink> Pointer;
+
   private:
     /** Actual writer for this image */
     typename otb::ImageFileWriter<TImage>::Pointer m_Writer;
@@ -281,8 +285,8 @@ private:
   };
 
   /** The list of inputs and their associated parameters, built using AddInput */
-  typedef std::vector<boost::shared_ptr<SinkBase> > SinkListType;
-  SinkListType m_SinkList;
+  typedef std::vector<boost::shared_ptr<SinkBase>> SinkListType;
+  SinkListType                                     m_SinkList;
 
   std::vector<RegionType> m_StreamRegionList;
 };
@@ -290,7 +294,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiImageFileWriter.txx"
+#include "otbMultiImageFileWriter.hxx"
 #endif
 
 #endif // otbMultiImageFileWriter_h

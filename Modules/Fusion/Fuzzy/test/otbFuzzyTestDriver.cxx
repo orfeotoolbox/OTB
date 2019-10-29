@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbFuzzyVariableSetValue);
   REGISTER_TEST(otbFuzzyVariable2Values);
-  REGISTER_TEST(otbFuzzyVariableNew);
   REGISTER_TEST(otbFuzzyVariableDSApplied);
   REGISTER_TEST(otbFuzzyVariableGetMaxVar);
-  REGISTER_TEST(otbFuzzyDescriptorsModelManagerNew);
   REGISTER_TEST(otbFuzzyDescriptorsModelManagerTest);
 }

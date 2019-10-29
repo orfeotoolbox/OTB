@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,42 +31,37 @@
 #include "otbMinMaxAttributesLabelMapFilter.h"
 #include "otbNormalizeAttributesLabelMapFilter.h"
 
-const unsigned int Dimension = 2;
+const unsigned int     Dimension = 2;
 typedef unsigned short LabelType;
 typedef double         PixelType;
 
-typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
-typedef otb::LabelMapWithAdjacency<LabelObjectType>                             LabelMapType;
-typedef otb::VectorImage<PixelType, Dimension>                                  VectorImageType;
-typedef otb::Image<unsigned int, 2>                                              LabeledImageType;
+typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+typedef otb::LabelMapWithAdjacency<LabelObjectType> LabelMapType;
+typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+typedef otb::Image<unsigned int, 2>            LabeledImageType;
 
-typedef otb::ImageFileReader<VectorImageType>                                   ReaderType;
-typedef otb::ImageFileReader<LabeledImageType>                                  LabeledReaderType;
+typedef otb::ImageFileReader<VectorImageType>  ReaderType;
+typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
 typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
-typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>                        ShapeFilterType;
-typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>                       MinMaxAttributesLabelMapFilterType;
-typedef otb::NormalizeAttributesLabelMapFilter<LabelMapType>                    NormalizeAttributesLabelMapFilterType;
+typedef otb::ShapeAttributesLabelMapFilter<LabelMapType>     ShapeFilterType;
+typedef otb::MinMaxAttributesLabelMapFilter<LabelMapType>    MinMaxAttributesLabelMapFilterType;
+typedef otb::NormalizeAttributesLabelMapFilter<LabelMapType> NormalizeAttributesLabelMapFilterType;
 
-int otbNormalizeAttributesLabelMapFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  NormalizeAttributesLabelMapFilterType::Pointer normalizeLabelMapFilter = NormalizeAttributesLabelMapFilterType::New();
-  return EXIT_SUCCESS;
-}
 
-int otbNormalizeAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
+int otbNormalizeAttributesLabelMapFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname  = argv[1];
-  const char * lfname   = argv[2];
-  const char * outfname = argv[3];
+  const char* infname  = argv[1];
+  const char* lfname   = argv[2];
+  const char* outfname = argv[3];
 
   // SmartPointer instantiation
-  ReaderType::Pointer         reader = ReaderType::New();
-  LabeledReaderType::Pointer  labeledReader = LabeledReaderType::New();
-  LabelMapFilterType::Pointer filter = LabelMapFilterType::New();
-  ShapeFilterType::Pointer    shapeFilter = ShapeFilterType::New();
-  MinMaxAttributesLabelMapFilterType::Pointer minmaxLabelMapFilter = MinMaxAttributesLabelMapFilterType::New();
-  NormalizeAttributesLabelMapFilterType::Pointer normalizeLabelMapFilter = NormalizeAttributesLabelMapFilterType::New();
-  MinMaxAttributesLabelMapFilterType::Pointer minmaxAfterLabelMapFilter = MinMaxAttributesLabelMapFilterType::New();
+  ReaderType::Pointer                            reader                    = ReaderType::New();
+  LabeledReaderType::Pointer                     labeledReader             = LabeledReaderType::New();
+  LabelMapFilterType::Pointer                    filter                    = LabelMapFilterType::New();
+  ShapeFilterType::Pointer                       shapeFilter               = ShapeFilterType::New();
+  MinMaxAttributesLabelMapFilterType::Pointer    minmaxLabelMapFilter      = MinMaxAttributesLabelMapFilterType::New();
+  NormalizeAttributesLabelMapFilterType::Pointer normalizeLabelMapFilter   = NormalizeAttributesLabelMapFilterType::New();
+  MinMaxAttributesLabelMapFilterType::Pointer    minmaxAfterLabelMapFilter = MinMaxAttributesLabelMapFilterType::New();
 
   // Inputs
   reader->SetFileName(infname);
@@ -86,22 +81,22 @@ int otbNormalizeAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
   std::ofstream outfile(outfname);
 
   {
-  MinMaxAttributesLabelMapFilterType::AttributesMapType minimum = minmaxLabelMapFilter->GetMinimum();
-  MinMaxAttributesLabelMapFilterType::AttributesMapType::const_iterator it;
-  outfile<< "Minimum before normalization : " << std::endl;
-  for (it = minimum.begin(); it != minimum.end(); ++it)
+    MinMaxAttributesLabelMapFilterType::AttributesMapType                 minimum = minmaxLabelMapFilter->GetMinimum();
+    MinMaxAttributesLabelMapFilterType::AttributesMapType::const_iterator it;
+    outfile << "Minimum before normalization : " << std::endl;
+    for (it = minimum.begin(); it != minimum.end(); ++it)
     {
-    outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
+      outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
     }
-  outfile << std::endl;
+    outfile << std::endl;
 
-  MinMaxAttributesLabelMapFilterType::AttributesMapType maximum = minmaxLabelMapFilter->GetMaximum();
-  outfile << "Maximum before normalization : " << std::endl;
-  for (it = maximum.begin(); it != maximum.end(); ++it)
+    MinMaxAttributesLabelMapFilterType::AttributesMapType maximum = minmaxLabelMapFilter->GetMaximum();
+    outfile << "Maximum before normalization : " << std::endl;
+    for (it = maximum.begin(); it != maximum.end(); ++it)
     {
-    outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
+      outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
     }
-  outfile << std::endl;
+    outfile << std::endl;
   }
 
   normalizeLabelMapFilter->SetInput(shapeFilter->GetOutput());
@@ -113,22 +108,22 @@ int otbNormalizeAttributesLabelMapFilter(int itkNotUsed(argc), char * argv[])
   minmaxAfterLabelMapFilter->Update();
 
   {
-  MinMaxAttributesLabelMapFilterType::AttributesMapType minimum = minmaxAfterLabelMapFilter->GetMinimum();
-  MinMaxAttributesLabelMapFilterType::AttributesMapType::const_iterator it;
-  outfile << "Minimum after normalization : " << std::endl;
-  for (it = minimum.begin(); it != minimum.end(); ++it)
+    MinMaxAttributesLabelMapFilterType::AttributesMapType                 minimum = minmaxAfterLabelMapFilter->GetMinimum();
+    MinMaxAttributesLabelMapFilterType::AttributesMapType::const_iterator it;
+    outfile << "Minimum after normalization : " << std::endl;
+    for (it = minimum.begin(); it != minimum.end(); ++it)
     {
-    outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
+      outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
     }
-  outfile << std::endl;
+    outfile << std::endl;
 
-  MinMaxAttributesLabelMapFilterType::AttributesMapType maximum = minmaxAfterLabelMapFilter->GetMaximum();
-  outfile << "Maximum after normalization : " << std::endl;
-  for (it = maximum.begin(); it != maximum.end(); ++it)
+    MinMaxAttributesLabelMapFilterType::AttributesMapType maximum = minmaxAfterLabelMapFilter->GetMaximum();
+    outfile << "Maximum after normalization : " << std::endl;
+    for (it = maximum.begin(); it != maximum.end(); ++it)
     {
-    outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
+      outfile << "  " << (*it).first << " : " << std::fixed << std::setprecision(6) << (*it).second << std::endl;
     }
-  outfile << std::endl;
+    outfile << std::endl;
   }
   outfile.close();
 

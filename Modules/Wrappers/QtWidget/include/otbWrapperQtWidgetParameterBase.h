@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetParameterBase_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameter.h"
 #include "otbWrapperQtWidgetModel.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
 
 namespace otb
@@ -44,8 +42,9 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
   friend class QtWidgetParameterGroup;
+
 public:
-  QtWidgetParameterBase( Parameter *, QtWidgetModel * );
+  QtWidgetParameterBase(Parameter*, QtWidgetModel*, QWidget* parent);
   ~QtWidgetParameterBase() override;
 
   void CreateWidget();
@@ -64,9 +63,8 @@ public:
   }
 
 public slots:
-  void UpdateGUI();
-  virtual void SetActivationState( bool value );
-  void Reset();
+  void         UpdateGUI();
+  virtual void SetActivationState(bool value);
 
 protected slots:
   void ParameterChanged(const QString& key);
@@ -77,28 +75,28 @@ signals:
 protected:
   QtWidgetModel* GetModel();
 
-  const Parameter * GetParam() const;
+  const Parameter* GetParam() const;
 
-  Parameter * GetParam();
+  Parameter* GetParam();
+
+  bool eventFilter(QObject* o, QEvent* e) override;
 
 private:
-  QtWidgetParameterBase(const QtWidgetParameterBase&); //purposely not implemented
-  void operator=(const QtWidgetParameterBase&); //purposely not implemented
+  QtWidgetParameterBase(const QtWidgetParameterBase&) = delete;
+  void operator=(const QtWidgetParameterBase&) = delete;
 
   virtual void DoUpdateGUI() = 0;
 
   virtual void DoCreateWidget() = 0;
 
 private:
-  QtWidgetModel * m_Model;
+  QtWidgetModel* m_Model;
 
-  Parameter * m_Param;
+  Parameter* m_Param;
 
   /** Store the status of the checkbox */
   bool m_IsChecked;
 };
-
-
 }
 }
 

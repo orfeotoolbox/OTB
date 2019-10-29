@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -38,9 +38,9 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const ErsSarFacilityData& data)
    {
-      os << "last_release_qc_date:" << data._last_release_qc_date.c_str() << std::endl;
+      os << "last_release_qc_date:" << data._last_release_qc_date << std::endl;
 
-      os << "last_release_cal_date:" << data._last_release_cal_date.c_str() << std::endl;
+      os << "last_release_cal_date:" << data._last_release_cal_date << std::endl;
 
       os << "qa_summary_flag:" << data._qa_summary_flag << std::endl;
 
@@ -146,9 +146,9 @@ namespace ossimplugins
 
       os << "proc_noise_scale_fact:" << data._proc_noise_scale_fact << std::endl;
 
-      os << "K_gen_date:" << data._K_gen_date.c_str() << std::endl;
+      os << "K_gen_date:" << data._K_gen_date << std::endl;
 
-      os << "K_vers_num:" << data._K_vers_num.c_str() << std::endl;
+      os << "K_vers_num:" << data._K_vers_num << std::endl;
 
       os << "num_duplic_input_lines:" << data._num_duplic_input_lines << std::endl;
 
@@ -160,21 +160,21 @@ namespace ossimplugins
 
       os << "out_image_max_value:" << data._out_image_max_value << std::endl;
 
-      os << "time_raw_data_first_input:" << data._time_raw_data_first_input.c_str() << std::endl;
+      os << "time_raw_data_first_input:" << data._time_raw_data_first_input << std::endl;
 
-      os << "time_asc_node_state_vectors:" << data._time_asc_node_state_vectors.c_str() << std::endl;
+      os << "time_asc_node_state_vectors:" << data._time_asc_node_state_vectors << std::endl;
 
-      os << "asc_node_pos_X_comp:" << data._asc_node_pos_X_comp.c_str() << std::endl;
+      os << "asc_node_pos_X_comp:" << data._asc_node_pos_X_comp << std::endl;
 
-      os << "asc_node_pos_Y_comp:" << data._asc_node_pos_Y_comp.c_str() << std::endl;
+      os << "asc_node_pos_Y_comp:" << data._asc_node_pos_Y_comp << std::endl;
 
-      os << "asc_node_pos_Z_comp:" << data._asc_node_pos_Z_comp.c_str() << std::endl;
+      os << "asc_node_pos_Z_comp:" << data._asc_node_pos_Z_comp << std::endl;
 
-      os << "asc_node_vel_X_comp:" << data._asc_node_vel_X_comp.c_str() << std::endl;
+      os << "asc_node_vel_X_comp:" << data._asc_node_vel_X_comp << std::endl;
 
-      os << "asc_node_vel_Y_comp:" << data._asc_node_vel_Y_comp.c_str() << std::endl;
+      os << "asc_node_vel_Y_comp:" << data._asc_node_vel_Y_comp << std::endl;
 
-      os << "asc_node_vel_Z_comp:" << data._asc_node_vel_Z_comp.c_str() << std::endl;
+      os << "asc_node_vel_Z_comp:" << data._asc_node_vel_Z_comp << std::endl;
 
       os << "out_pixel_bit_length:" << data._out_pixel_bit_length << std::endl;
 
@@ -208,19 +208,19 @@ namespace ossimplugins
 
       os << "range_lines_skip_factor:" << data._range_lines_skip_factor << std::endl;
 
-      os << "time_of_inp_state_vectors:" << data._time_of_inp_state_vectors.c_str() << std::endl;
+      os << "time_of_inp_state_vectors:" << data._time_of_inp_state_vectors << std::endl;
 
-      os << "inp_state_vect_pos_X_comp:" << data._inp_state_vect_pos_X_comp.c_str() << std::endl;
+      os << "inp_state_vect_pos_X_comp:" << data._inp_state_vect_pos_X_comp << std::endl;
 
-      os << "inp_state_vect_pos_Y_comp:" << data._inp_state_vect_pos_Y_comp.c_str() << std::endl;
+      os << "inp_state_vect_pos_Y_comp:" << data._inp_state_vect_pos_Y_comp << std::endl;
 
-      os << "inp_state_vect_pos_Z_comp:" << data._inp_state_vect_pos_Z_comp.c_str() << std::endl;
+      os << "inp_state_vect_pos_Z_comp:" << data._inp_state_vect_pos_Z_comp << std::endl;
 
-      os << "inp_state_vect_vel_Vx_comp:" << data._inp_state_vect_vel_Vx_comp.c_str() << std::endl;
+      os << "inp_state_vect_vel_Vx_comp:" << data._inp_state_vect_vel_Vx_comp << std::endl;
 
-      os << "inp_state_vect_vel_Vy_comp:" << data._inp_state_vect_vel_Vy_comp.c_str() << std::endl;
+      os << "inp_state_vect_vel_Vy_comp:" << data._inp_state_vect_vel_Vy_comp << std::endl;
 
-      os << "inp_state_vect_vel_Vz_comp:" << data._inp_state_vect_vel_Vz_comp.c_str() << std::endl;
+      os << "inp_state_vect_vel_Vz_comp:" << data._inp_state_vect_vel_Vz_comp << std::endl;
 
       os << "inp_state_vector_type_flag:" << data._inp_state_vector_type_flag << std::endl;
 

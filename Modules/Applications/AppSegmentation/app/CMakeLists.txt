@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -56,4 +56,9 @@ otb_create_application(
 otb_create_application(
   NAME           LargeScaleMeanShift
   SOURCES        otbLargeScaleMeanShift.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SmallRegionsMerging
+  SOURCES        otbSmallRegionsMerging.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

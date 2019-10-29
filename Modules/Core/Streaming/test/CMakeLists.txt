@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -64,9 +64,6 @@ otb_add_test(NAME coTvRAMDrivenTiledStreamingManager COMMAND otbStreamingTestDri
   ${TEMP}/coTvRAMDrivenTiledStreamingManager.txt
   )
 
-otb_add_test(NAME coTuStreamingManagerNew COMMAND otbStreamingTestDriver
-  otbStreamingManagerNew
-  )
 
 otb_add_test(NAME coTvTileDimensionTiledStreamingManager COMMAND otbStreamingTestDriver
   --compare-ascii ${NOTOL}
@@ -83,7 +80,4 @@ otb_add_test(NAME coTvPipelineMemoryPrintCalculator COMMAND otbStreamingTestDriv
   otbPipelineMemoryPrintCalculatorTest
   ${INPUTDATA}/qb_RoadExtract.img
   ${TEMP}/coTvPipelineMemoryPrintCalculatorOutput.txt
-  )
-otb_add_test(NAME coTuPipelineMemoryPrintCalculatorNew COMMAND otbStreamingTestDriver
-  otbPipelineMemoryPrintCalculatorNew
   )

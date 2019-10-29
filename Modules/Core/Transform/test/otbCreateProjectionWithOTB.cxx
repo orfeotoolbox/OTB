@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 /*!
@@ -39,7 +38,6 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileWriter.h"
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkExtractImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 #include "itkImageRegionIteratorWithIndex.h"
@@ -67,17 +65,17 @@
 int otbCreateProjectionWithOTB(int argc, char* argv[])
 {
   if (argc != 2)
-    {
+  {
     std::cout << argv[0] << " <input filename> " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  typedef otb::Image<unsigned int, 2>     ImageType;
+  typedef otb::Image<unsigned int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
-  //Read meta data (ossimKeywordlist)
+  // Read meta data (ossimKeywordlist)
   reader->GenerateOutputInformation();
 
   otbGenericMsgDebugMacro(<< "Read ossim Keywordlist...");
@@ -88,23 +86,22 @@ int otbCreateProjectionWithOTB(int argc, char* argv[])
 
   otbGenericMsgDebugMacro(<< "ossim Keywordlist:" << geom);
 
-  ossimGpt          ossimGPoint(0, 0);
-  ossimDpt          ossimDPoint;
-  ossimProjection * model = ITK_NULLPTR;
+  ossimGpt         ossimGPoint(0, 0);
+  ossimDpt         ossimDPoint;
+  ossimProjection* model = nullptr;
   otbGenericMsgDebugMacro(<< "Creating projection...");
   model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
-  if (model == ITK_NULLPTR)
-    {
+  if (model == nullptr)
+  {
     itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
-    }
+  }
 
   otbGenericMsgDebugMacro(<< "Creating RefPtr of projection...");
   ossimRefPtr<ossimProjection> ptrmodel = model;
   if (ptrmodel.valid() == false)
-    {
+  {
     itkGenericExceptionMacro(<< "Invalid Model pointer .valid() == false !");
-    }
+  }
 
   return EXIT_SUCCESS;
-
 }

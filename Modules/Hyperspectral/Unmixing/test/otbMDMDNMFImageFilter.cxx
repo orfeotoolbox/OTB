@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,27 +24,17 @@
 #include "otbMDMDNMFImageFilter.h"
 #include "otbStandardWriterWatcher.h"
 
-int otbMDMDNMFImageFilterNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbMDMDNMFImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                                                    PixelType;
-  typedef otb::VectorImage<PixelType, 2>                            VectorImageType;
-  typedef otb::MDMDNMFImageFilter<VectorImageType, VectorImageType> MDMDNMFImageFilterType;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType, 2>                ImageType;
+  typedef otb::MDMDNMFImageFilter<ImageType, ImageType> MDMDNMFImageFilterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  MDMDNMFImageFilterType::Pointer mdmd = MDMDNMFImageFilterType::New();
-  return EXIT_SUCCESS;
-}
-
-int otbMDMDNMFImageFilterTest(int itkNotUsed(argc), char * argv[])
-{
-  typedef double                                         PixelType;
-  typedef otb::VectorImage<PixelType, 2>                 ImageType;
-  typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
-
-  const char * inputImage = argv[1];
-  const char * outputImage = argv[2];
-  const unsigned int maxIter = atoi(argv[3]);
+  const char*        inputImage  = argv[1];
+  const char*        outputImage = argv[2];
+  const unsigned int maxIter     = atoi(argv[3]);
 
   ReaderType::Pointer readerImage = ReaderType::New();
   readerImage->SetFileName(inputImage);
@@ -68,25 +58,25 @@ int otbMDMDNMFImageFilterTest(int itkNotUsed(argc), char * argv[])
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
 
-  otb::StandardWriterWatcher w4(writer, unmixer,"MDMDNMFImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer, "MDMDNMFImageFilter");
   writer->Update();
 
   return EXIT_SUCCESS;
 }
 
-int otbMDMDNMFImageFilterTest2(int itkNotUsed(argc), char * argv[])
+int otbMDMDNMFImageFilterTest2(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                                         PixelType;
-  typedef otb::VectorImage<PixelType, 2>                 ImageType;
-  typedef otb::MDMDNMFImageFilter<ImageType, ImageType>  MDMDNMFImageFilterType;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType, 2>                ImageType;
+  typedef otb::MDMDNMFImageFilter<ImageType, ImageType> MDMDNMFImageFilterType;
   typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
+  typedef otb::ImageFileWriter<ImageType>                WriterType;
   typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
 
-  const char * inputImage = argv[1];
-  const char * inputEndmembers = argv[2];
-  const char * outputImage = argv[3];
-  const unsigned int maxIter = atoi(argv[4]);
+  const char*        inputImage      = argv[1];
+  const char*        inputEndmembers = argv[2];
+  const char*        outputImage     = argv[3];
+  const unsigned int maxIter         = atoi(argv[4]);
 
   ReaderType::Pointer readerImage = ReaderType::New();
   readerImage->SetFileName(inputImage);
@@ -100,7 +90,7 @@ int otbMDMDNMFImageFilterTest2(int itkNotUsed(argc), char * argv[])
   endMember2Matrix->Update();
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
-  MatrixType endMembers = endMember2Matrix->GetMatrix();
+  MatrixType                                             endMembers = endMember2Matrix->GetMatrix();
 
   MDMDNMFImageFilterType::Pointer unmixer = MDMDNMFImageFilterType::New();
 
@@ -113,7 +103,7 @@ int otbMDMDNMFImageFilterTest2(int itkNotUsed(argc), char * argv[])
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
 
-  otb::StandardWriterWatcher w4(writer, unmixer,"MDMDNMFImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer, "MDMDNMFImageFilter");
   writer->Update();
 
   return EXIT_SUCCESS;

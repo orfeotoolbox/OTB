@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -42,13 +42,13 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "sar_chn:" << data._sar_chn << std::endl;
 
-  os << "scene_id:" << data._scene_id.c_str() << std::endl;
+  os << "scene_id:" << data._scene_id << std::endl;
 
-  os << "scene_des:" << data._scene_des.c_str() << std::endl;
+  os << "scene_des:" << data._scene_des << std::endl;
 
-  os << "inp_sctim:" << data._inp_sctim.c_str() << std::endl;
+  os << "inp_sctim:" << data._inp_sctim << std::endl;
 
-  os << "asc_des:" << data._asc_des.c_str() << std::endl;
+  os << "asc_des:" << data._asc_des << std::endl;
 
   os << "pro_lat:" << data._pro_lat << std::endl;
 
@@ -56,7 +56,7 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "pro_head:" << data._pro_head << std::endl;
 
-  os << "ellip_des:" << data._ellip_des.c_str() << std::endl;
+  os << "ellip_des:" << data._ellip_des << std::endl;
 
   os << "ellip_maj:" << data._ellip_maj << std::endl;
 
@@ -72,9 +72,9 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
   os << "scene_len:" << data._scene_len << std::endl;
   os << "scene_wid:" << data._scene_wid << std::endl;
   os << "nchn:" << data._nchn << std::endl;
-  os << "mission_id:" << data._mission_id.c_str() << std::endl;
-  os << "sensor_id:" << data._sensor_id.c_str() << std::endl;
-  os << "orbit_num:" << data._orbit_num.c_str() << std::endl;
+  os << "mission_id:" << data._mission_id << std::endl;
+  os << "sensor_id:" << data._sensor_id << std::endl;
+  os << "orbit_num:" << data._orbit_num << std::endl;
 
   os << "plat_lat:" << data._plat_lat << std::endl;
 
@@ -89,9 +89,9 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "wave_length:" << data._wave_length << std::endl;
 
-  os << "motion_comp:" << data._motion_comp.c_str() << std::endl;
+  os << "motion_comp:" << data._motion_comp << std::endl;
 
-  os << "pulse_code:" << data._pulse_code.c_str() << std::endl;
+  os << "pulse_code:" << data._pulse_code << std::endl;
 
   for (int i = 0; i < 5; i++)
   {
@@ -111,9 +111,9 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "rng_length:" << data._rng_length << std::endl;
 
-  os << "baseband_f:" << data._baseband_f.c_str() << std::endl;
+  os << "baseband_f:" << data._baseband_f << std::endl;
 
-  os << "rngcmp_f:" << data._rngcmp_f.c_str() << std::endl;
+  os << "rngcmp_f:" << data._rngcmp_f << std::endl;
 
   os << "gn_polar:" << data._gn_polar << std::endl;
 
@@ -121,7 +121,7 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "chn_bits:" << data._chn_bits << std::endl;
 
-  os << "quant_desc:" << data._quant_desc.c_str() << std::endl;
+  os << "quant_desc:" << data._quant_desc << std::endl;
 
   os << "i_bias:" << data._i_bias << std::endl;
 
@@ -133,21 +133,21 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "fa:" << data._fa << std::endl;
 
-  os << "sat_bintim:" << data._sat_bintim.c_str() << std::endl;
+  os << "sat_bintim:" << data._sat_bintim << std::endl;
 
-  os << "sat_clktim:" << data._sat_clktim.c_str() << std::endl;
+  os << "sat_clktim:" << data._sat_clktim << std::endl;
 
-  os << "sat_clkinc:" << data._sat_clkinc.c_str() << std::endl;
+  os << "sat_clkinc:" << data._sat_clkinc << std::endl;
 
-  os << "fac_id:" << data._fac_id.c_str() << std::endl;
+  os << "fac_id:" << data._fac_id << std::endl;
 
-  os << "sys_id:" << data._sys_id.c_str() << std::endl;
+  os << "sys_id:" << data._sys_id << std::endl;
 
-  os << "ver_id:" << data._ver_id.c_str() << std::endl;
+  os << "ver_id:" << data._ver_id << std::endl;
 
-  os << "prod_type:" << data._prod_type.c_str() << std::endl;
+  os << "prod_type:" << data._prod_type << std::endl;
 
-  os << "algor_id:" << data._algor_id.c_str() << std::endl;
+  os << "algor_id:" << data._algor_id << std::endl;
 
   os << "n_azilok:" << data._n_azilok << std::endl;
 
@@ -161,11 +161,11 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "bnd_rng:" << data._bnd_rng << std::endl;
 
-  os << "azi_weight:" << data._azi_weight.c_str() << std::endl;
+  os << "azi_weight:" << data._azi_weight << std::endl;
 
-  os << "rng_weight:" << data._rng_weight.c_str() << std::endl;
+  os << "rng_weight:" << data._rng_weight << std::endl;
 
-  os << "data_inpsrc:" << data._data_inpsrc.c_str() << std::endl;
+  os << "data_inpsrc:" << data._data_inpsrc << std::endl;
 
   os << "rng_res:" << data._rng_res << std::endl;
 
@@ -179,9 +179,9 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
   os << "crt_dopcen[1]:" << data._crt_dopcen[1] << std::endl;
   os << "crt_dopcen[2]:" << data._crt_dopcen[2] << std::endl;
 
-  os << "time_dir_pix:" << data._time_dir_pix.c_str() << std::endl;
+  os << "time_dir_pix:" << data._time_dir_pix << std::endl;
 
-  os << "time_dir_lin:" << data._time_dir_lin.c_str() << std::endl;
+  os << "time_dir_lin:" << data._time_dir_lin << std::endl;
 
   os << "alt_rate[0]:" << data._alt_rate[0] << std::endl;
   os << "alt_rate[1]:" << data._alt_rate[1] << std::endl;
@@ -191,17 +191,17 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
   os << "crt_rate[1]:" << data._crt_rate[1] << std::endl;
   os << "crt_rate[2]:" << data._crt_rate[2] << std::endl;
 
-  os << "clutter_lock:" << data._line_cont.c_str() << std::endl;
+  os << "clutter_lock:" << data._line_cont << std::endl;
 
-  os << "clutter_lock:" << data._clutter_lock.c_str() << std::endl;
+  os << "clutter_lock:" << data._clutter_lock << std::endl;
 
-  os << "auto_focus:" << data._auto_focus.c_str() << std::endl;
+  os << "auto_focus:" << data._auto_focus << std::endl;
 
   os << "line_spacing:" << data._line_spacing << std::endl;
 
   os << "pix_spacing:" << data._pix_spacing << std::endl;
 
-  os << "rngcmp_desg:" << data._rngcmp_desg.c_str() << std::endl;
+  os << "rngcmp_desg:" << data._rngcmp_desg << std::endl;
 
   os << "zero_dop_range_time_f_pixel:" << data._zero_dop_range_time_f_pixel << std::endl;
 
@@ -209,11 +209,11 @@ std::ostream& operator<<(std::ostream& os, const ErsSarDataSetSummary& data)
 
   os << "zero_dop_range_time_l_pixel:" << data._zero_dop_range_time_l_pixel << std::endl;
 
-  os << "zero_dop_az_time_f_pixel :" << data._zero_dop_az_time_f_pixel.c_str() << std::endl;
+  os << "zero_dop_az_time_f_pixel :" << data._zero_dop_az_time_f_pixel << std::endl;
 
-  os << " zero_dop_az_time_c_pixel:" << data._zero_dop_az_time_c_pixel.c_str() << std::endl;
+  os << " zero_dop_az_time_c_pixel:" << data._zero_dop_az_time_c_pixel << std::endl;
 
-  os << " zero_dop_az_time_l_pixel:" << data._zero_dop_az_time_l_pixel.c_str() << std::endl;
+  os << " zero_dop_az_time_l_pixel:" << data._zero_dop_az_time_l_pixel << std::endl;
 
   return os;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,9 @@
 #define otbWrapperQtWidgetOutputVectorDataParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+#include <string>
 
 
 namespace otb
@@ -42,58 +41,38 @@ class OTBQtWidget_EXPORT QtWidgetOutputVectorDataParameter : public QtWidgetPara
 {
   Q_OBJECT
 public:
-  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*);
+  QtWidgetOutputVectorDataParameter(OutputVectorDataParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetOutputVectorDataParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit*       GetInput();
 
   /** Get the PixelType*/
-  //itkGetMacro(PixelType, int);
+  // itkGetMacro(PixelType, int);
 
 public slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
 
 protected slots:
   void SelectFile();
 
 private:
-  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
-  void operator=(const QtWidgetOutputVectorDataParameter&); //purposely not implemented
+  QtWidgetOutputVectorDataParameter(const QtWidgetOutputVectorDataParameter&) = delete;
+  void operator=(const QtWidgetOutputVectorDataParameter&) = delete;
 
   void DoCreateWidget() override;
 
   void DoUpdateGUI() override;
 
-  std::string m_FileName;
+  std::string                        m_FileName;
   OutputVectorDataParameter::Pointer m_OutputVectorDataParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
-  QComboBox*    m_ComboBox;
-  int           m_PixelType;
-
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
+  QComboBox*   m_ComboBox;
+  int          m_PixelType;
 };
-
-
-
-inline
-const QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput()
-{
-  return m_Input;
-}
-
 }
 }
 

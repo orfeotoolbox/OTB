@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,16 +24,16 @@
 #include "otbImageFileWriter.h"
 #include "otbConcatenateVectorImageFilter.h"
 
-int otbConcatenateVectorImageFilter(int itkNotUsed(argc), char * argv[])
+int otbConcatenateVectorImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       filename1 = argv[1];
-  const char *       filename2 = argv[2];
-  const char *       outputfilename = argv[3];
-  const unsigned int Dimension = 2;
-  typedef unsigned char                                                                        InputPixelType;
-  typedef otb::VectorImage<InputPixelType, Dimension>                                          VectorImageType;
-  typedef otb::ImageFileReader<VectorImageType>                                                ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>                                       WriterType;
+  const char*           filename1      = argv[1];
+  const char*           filename2      = argv[2];
+  const char*           outputfilename = argv[3];
+  const unsigned int    Dimension      = 2;
+  typedef unsigned char InputPixelType;
+  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
   typedef otb::ConcatenateVectorImageFilter<VectorImageType, VectorImageType, VectorImageType> FilterType;
 
   ReaderType::Pointer reader1 = ReaderType::New();

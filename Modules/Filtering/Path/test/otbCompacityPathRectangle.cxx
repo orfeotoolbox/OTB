@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,19 +19,18 @@
  */
 
 
-
 #include <cstdlib>
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 #include "otbMath.h"
 
-int otbCompacityPathRectangle(int itkNotUsed(argc), char * argv[])
+int otbCompacityPathRectangle(int itkNotUsed(argc), char* argv[])
 {
-  double A ((double) ::atof(argv[1]));
-  double B ((double) ::atof(argv[2]));
+  double A((double)::atof(argv[1]));
+  double B((double)::atof(argv[2]));
 
-  const unsigned int Dimension = 2;
+  const unsigned int                             Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::CompacityPathFunction<PathType>   FunctionType;
   typedef FunctionType::RealType                 RealType;
@@ -40,16 +39,16 @@ int otbCompacityPathRectangle(int itkNotUsed(argc), char * argv[])
   PathType::Pointer             pathElt = PathType::New();
 
   if (A < 0)
-    {
+  {
     std::cout << "retangle must be greater than 0.0 !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   if (B < 0)
-    {
+  {
     std::cout << "rectangle must be greater than 0.0 !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   pathElt->Initialize();
 
@@ -73,13 +72,13 @@ int otbCompacityPathRectangle(int itkNotUsed(argc), char * argv[])
   std::cout << "Compacity result: " << Result << std::endl;
 
   RealType Error;
-  Error = vcl_abs(Result - static_cast<RealType>(otb::CONST_PI * A * B / (A + B) / (A + B)));
+  Error = std::abs(Result - static_cast<RealType>(otb::CONST_PI * A * B / (A + B) / (A + B)));
 
   if (Error > 1.E-9)
-    {
+  {
     std::cout << "Error in estimation !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

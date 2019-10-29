@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,15 +25,15 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
+QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param, QWidget* parent) : QWidget(parent)
 {
   // Set up label
-  QLabel *label = new QLabel;
+  QLabel* label = new QLabel(this);
 
   label->setText(param->GetName());
   label->setToolTip(param->GetKey());
 
-  QVBoxLayout *labelLayout = new QVBoxLayout;
+  QVBoxLayout* labelLayout = new QVBoxLayout;
   labelLayout->setSpacing(0);
   labelLayout->setContentsMargins(0, 0, 0, 0);
   labelLayout->addWidget(label, 0);
@@ -44,6 +44,5 @@ QtWidgetParameterLabel::QtWidgetParameterLabel(Parameter* param)
 QtWidgetParameterLabel::~QtWidgetParameterLabel()
 {
 }
-
 }
 }

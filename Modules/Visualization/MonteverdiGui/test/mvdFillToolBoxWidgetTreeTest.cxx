@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,30 +36,27 @@
 #include "mvdApplicationLauncher.h"
 
 int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
-{ 
+{
   //
   // instantiate the algorithms toolbox widget
-  QApplication app(argc, argv);
-  mvd::ApplicationsToolBox *  appToolBox = new mvd::ApplicationsToolBox();
+  QApplication              app(argc, argv);
+  mvd::ApplicationsToolBox* appToolBox = new mvd::ApplicationsToolBox();
 
   //
   // instantiate applications browser
-  mvd::ApplicationsBrowser *  browser = new mvd::ApplicationsBrowser();
+  mvd::ApplicationsBrowser* browser = new mvd::ApplicationsBrowser();
 
   //
   // connections
-  QObject::connect(browser, 
-                   SIGNAL( AvailableApplicationsTagsChanged(const ApplicationsTagContainer& ) ),
-                   appToolBox,
-                   SLOT( OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& ) )
-    );
+  QObject::connect(browser, SIGNAL(AvailableApplicationsTagsChanged(const ApplicationsTagContainer&)), appToolBox,
+                   SLOT(OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer&)));
 
   //
   // is search path set
   if (argc > 1)
-    {
+  {
     browser->SetAutoLoadPath(argv[1]);
-    }
+  }
 
   //
   // get the tags/algs map container in the widget
@@ -67,18 +64,14 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
 
   //
   // instantiate Application launcher
-  mvd::ApplicationLauncher * launcher = new mvd::ApplicationLauncher();
-    
+  mvd::ApplicationLauncher* launcher = new mvd::ApplicationLauncher();
+
   //
   // connections
-  QObject::connect(appToolBox, 
-                   SIGNAL( ApplicationToLaunchSelected(const QString& ) ),
-                   launcher,
-                   SLOT( OnApplicationToLaunchSelected(const QString& ) )
-    );
+  QObject::connect(appToolBox, SIGNAL(ApplicationToLaunchSelected(const QString&)), launcher, SLOT(OnApplicationToLaunchSelected(const QString&)));
 
   // add quit
-  // QObject::connect(appToolBox, 
+  // QObject::connect(appToolBox,
   //                  SIGNAL( (const QString& ) ),
   //                  launcher,
   //                  SLOT( OnQuit() )
@@ -87,9 +80,9 @@ int mvdFillToolBoxWidgetTreeTest(int argc, char* argv[])
   //
   // show the application for a while
   appToolBox->show();
-  if ( argc <= 2 )
-    {
+  if (argc <= 2)
+  {
     QTimer::singleShot(1000, &app, SLOT(quit()));
-    }
+  }
   return app.exec();
 }

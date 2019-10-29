@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,15 +38,14 @@ namespace otb
  * \ingroup OTBSOM
  */
 template <class TListSample, class TInputMap, class TOutputImage>
-class ITK_EXPORT SOMActivationBuilder
-  : public itk::ImageToImageFilter<TInputMap, TOutputImage>
+class ITK_EXPORT SOMActivationBuilder : public itk::ImageToImageFilter<TInputMap, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef SOMActivationBuilder                             Self;
+  typedef SOMActivationBuilder Self;
   typedef itk::ImageToImageFilter<TInputMap, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory */
   itkNewMacro(Self);
@@ -81,15 +80,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMActivationBuilder(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  SOMActivationBuilder(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** ListSample object */
   ListSamplePointerType m_ListSample;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMActivationBuilder.txx"
+#include "otbSOMActivationBuilder.hxx"
 #endif
 
 #endif

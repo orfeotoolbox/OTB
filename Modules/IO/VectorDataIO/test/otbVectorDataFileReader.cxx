@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,13 +24,13 @@
 #include <fstream>
 
 
-int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
+int otbVectorDataFileReader(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::VectorData<>                         VectorDataType;
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
-  VectorDataFileReaderType::Pointer reader = VectorDataFileReaderType::New();
+  VectorDataFileReaderType::Pointer                 reader = VectorDataFileReaderType::New();
 
-  typedef otb::DataNode<double, 2, double>        DataNodeType;
+  typedef otb::DataNode<double, 2, double> DataNodeType;
   typedef DataNodeType::Pointer                   DataNodePointerType;
   typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
 
@@ -39,27 +39,27 @@ int otbVectorDataFileReader(int itkNotUsed(argc), char * argv[])
   reader->SetFileName(argv[1]);
   reader->Update();
 
-  VectorDataType::Pointer data = reader->GetOutput();
+  VectorDataType::Pointer data     = reader->GetOutput();
   DataTreeType::Pointer   dataTree = DataTreeType::New();
-  dataTree = data->GetDataTree();
+  dataTree                         = data->GetDataTree();
 
-  std::ofstream fout (argv[2]);
+  std::ofstream fout(argv[2]);
 
   itk::PreOrderTreeIterator<DataTreeType> it(dataTree);
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool                                    goesOn = true;
+    bool                                    goesOn   = true;
     while (itParent.HasParent() && goesOn)
-      {
+    {
       fout << indent;
       goesOn = itParent.GoToParent();
-      }
+    }
     fout << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
     ++it;
-    }
+  }
   /*added PrintSelf*/
 
   fout.close();

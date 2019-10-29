@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,7 +37,7 @@ SRGRCoefficientSetRecord::~SRGRCoefficientSetRecord()
 
 std::ostream& operator<<(std::ostream& os, const SRGRCoefficientSetRecord& data)
 {
-	os<<"srgr_update:"<<data._srgr_update.c_str()<<std::endl;
+	os<<"srgr_update:"<<data._srgr_update <<std::endl;
 	for (int i=0;i<6;i++)
 	{
 		os<<"srgr_coef["<<i<<"]:"<<data._srgr_coef[i]<<std::endl;

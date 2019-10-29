@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetDirectoryParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperDirectoryParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,16 +40,16 @@ class OTBQtWidget_EXPORT QtWidgetDirectoryParameter : public QtWidgetParameterBa
 {
   Q_OBJECT
 public:
-  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*);
+  QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetDirectoryParameter() override;
 
 protected slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
   void SelectFile();
 
 private:
-  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&); //purposely not implemented
-  void operator=(const QtWidgetDirectoryParameter&); //purposely not implemented
+  QtWidgetDirectoryParameter(const QtWidgetDirectoryParameter&) = delete;
+  void operator=(const QtWidgetDirectoryParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -60,12 +58,10 @@ private:
 
   DirectoryParameter::Pointer m_DirectoryParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
-
-
 }
 }
 

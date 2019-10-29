@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,15 +39,14 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TPrecision = float, class TLabel = int>
-class ITK_EXPORT LineOfSightOptimizer :
-  public itk::Object
+class ITK_EXPORT LineOfSightOptimizer : public itk::Object
 {
 public:
   /** Standard class typedef */
-  typedef LineOfSightOptimizer                      Self;
-  typedef itk::Object                               Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef LineOfSightOptimizer          Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -56,16 +55,16 @@ public:
   itkTypeMacro(LineOfSightOptimizer, itk::Object);
 
   /** Useful typedefs */
-  typedef TPrecision  PrecisionType;
-  typedef TLabel      LabelType;
-  typedef itk::DefaultStaticMeshTraits<TLabel,3,3,TPrecision> MeshType;
-  typedef itk::PointSet<TLabel,3, MeshType >        PointSetType;
-  typedef typename PointSetType::PointType        PointType;
-  typedef typename PointSetType::Pointer          PointSetPointerType;
+  typedef TPrecision PrecisionType;
+  typedef TLabel     LabelType;
+  typedef itk::DefaultStaticMeshTraits<TLabel, 3, 3, TPrecision> MeshType;
+  typedef itk::PointSet<TLabel, 3, MeshType> PointSetType;
+  typedef typename PointSetType::PointType                    PointType;
+  typedef typename PointSetType::Pointer                      PointSetPointerType;
   typedef typename PointSetType::PointsContainerConstIterator PointSetConstIteratorType;
-  typedef typename PointSetType::PointDataContainerIterator LabelIteratorType;
+  typedef typename PointSetType::PointDataContainerIterator   LabelIteratorType;
 
-  typedef std::vector<TPrecision>                 ResidueType;
+  typedef std::vector<TPrecision> ResidueType;
 
   /** Compute the best intersection between N lines of sight.
    *  Starting points of every line of sight are stored in the point set 'pointA'
@@ -73,14 +72,14 @@ public:
   PointType Compute(PointSetPointerType pointA, PointSetPointerType pointB);
 
   /** Get the residues from last computation */
-  //itkGetMacro(Residues,ResidueType);
+  // itkGetMacro(Residues,ResidueType);
   ResidueType GetResidues()
   {
     return m_Residues;
   }
 
   /** Get the global residue from last computation */
-  itkGetMacro(GlobalResidue,PrecisionType);
+  itkGetMacro(GlobalResidue, PrecisionType);
 
 protected:
   /** Constructor */
@@ -91,8 +90,8 @@ protected:
 
 
 private:
-  LineOfSightOptimizer(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LineOfSightOptimizer(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** residues from the last computation on each line of sight */
   ResidueType m_Residues;
@@ -104,12 +103,11 @@ private:
   vnl_matrix<PrecisionType> m_InvCumul;
   vnl_matrix<PrecisionType> m_Identity;
   vnl_vector<PrecisionType> m_SecCumul;
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineOfSightOptimizer.txx"
+#include "otbLineOfSightOptimizer.hxx"
 #endif
 
 #endif

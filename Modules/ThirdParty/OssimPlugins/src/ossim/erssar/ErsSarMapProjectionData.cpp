@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -38,7 +38,7 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const ErsSarMapProjectionData& data)
    {
-      os << "map_proj_des:" << data._map_proj_des.c_str() << std::endl;
+      os << "map_proj_des:" << data._map_proj_des << std::endl;
 
       os << "num_pix_in_line:" << data._num_pix_in_line << std::endl;
 
@@ -56,7 +56,7 @@ namespace ossimplugins
 
       os << "platform_heading:" << data._platform_heading << std::endl;
 
-      os << "name_of_ref_ellipsoid:" << data._name_of_ref_ellipsoid.c_str() << std::endl;
+      os << "name_of_ref_ellipsoid:" << data._name_of_ref_ellipsoid << std::endl;
 
       os << "semi_maj_axis:" << data._semi_maj_axis << std::endl;
 

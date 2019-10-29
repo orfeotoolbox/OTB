@@ -1,0 +1,13 @@
+ENVI
+description = {
+/home/poulain/local/megawave2/test/results/Format_hdr/Median}
+samples = 512
+lines   = 512
+bands   = 1
+header offset = 0
+file type = ENVI Standard
+data type = 5
+interleave = bsq
+byte order = 0
+band names = {
+Band 1}

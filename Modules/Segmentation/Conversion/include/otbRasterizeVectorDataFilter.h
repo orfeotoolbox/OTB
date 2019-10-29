@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,9 +31,9 @@
 #include "gdal.h"
 #include "gdal_alg.h"
 #include "ogr_srs_api.h"
-#include "otbOGRVersionProxy.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class RasterizeVectorDataFilter
  *  \brief Burn geometries from the specified VectorData into raster
@@ -59,47 +59,51 @@ namespace otb {
  *
  * \ingroup OTBConversion
  */
-template <class TVectorData, class TInputImage, class TOutputImage = TInputImage  >
-class  ITK_EXPORT RasterizeVectorDataFilter :
-    public itk::CastImageFilter< TInputImage, TOutputImage>
+template <class TVectorData, class TInputImage, class TOutputImage = TInputImage>
+class ITK_EXPORT RasterizeVectorDataFilter : public itk::CastImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef RasterizeVectorDataFilter                           Self;
-  typedef itk::CastImageFilter<TInputImage, TOutputImage>     Superclass;
-  typedef itk::SmartPointer< Self >                           Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef RasterizeVectorDataFilter Self;
+  typedef itk::CastImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
-  //itkTypeMacro(RasterizeVectorDataFilter, itk::InPlaceImageFilter);
+  // itkTypeMacro(RasterizeVectorDataFilter, itk::InPlaceImageFilter);
   itkTypeMacro(RasterizeVectorDataFilter, itk::CastImageFilter);
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef TInputImage                            InputImageType;
-  typedef typename  InputImageType::ConstPointer InputImagePointer;
-  typedef typename  InputImageType::RegionType   InputImageRegionType;
-  typedef typename  InputImageType::PixelType    InputImagePixelType;
-  typedef typename  InputImageType::IndexType    InputIndexType;
-  typedef typename  InputImageType::PointType    InputPointType;
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::ConstPointer InputImagePointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef typename InputImageType::IndexType    InputIndexType;
+  typedef typename InputImageType::PointType    InputPointType;
 
-  typedef TOutputImage    OutputImageType;
-  typedef typename  OutputImageType::Pointer     OutputImagePointer;
-  typedef typename  OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename  OutputImageType::PixelType   OutputImagePixelType;
-  typedef typename  OutputImageType::InternalPixelType   OutputImageInternalPixelType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** VectorData typedefs*/
-  typedef TVectorData                            VectorDataType;
-  typedef typename VectorDataType::DataTreeType  DataTreeType;
-  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename DataTreeType::Pointer         DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
+  typedef TVectorData                           VectorDataType;
+  typedef typename VectorDataType::DataTreeType DataTreeType;
+  typedef typename DataTreeType::TreeNodeType   InternalTreeNodeType;
+  typedef typename DataTreeType::Pointer        DataTreePointerType;
+  typedef typename DataTreeType::ConstPointer   DataTreeConstPointerType;
 
-  typedef itk::DataObject                        DataObjectType;
+  typedef itk::DataObject DataObjectType;
 
-  const InputImageType * GetInput();
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode, bool);
+  itkGetConstReferenceMacro(AllTouchedMode, bool);
+  itkBooleanMacro(AllTouchedMode);
+
+  const InputImageType* GetInput();
   const DataObjectType* GetInput(unsigned int idx);
 
   /** Add VectorData Input */
@@ -115,24 +119,24 @@ public:
     // colors with the same size.
     unsigned int previousBandVectorSize = m_BandsToBurn.size();
     if (previousBandVectorSize != 0)
-      {
+    {
       if (burnValuesPix.Size() != previousBandVectorSize)
-        {
+      {
         itkExceptionMacro(<< "The color added does not have the same number of elements than the previous "
-                          << "added one." << "( Previous color size : "<< previousBandVectorSize
-                          << ", new one size :"<< burnValuesPix.Size() << ")");
-        }
+                          << "added one."
+                          << "( Previous color size : " << previousBandVectorSize << ", new one size :" << burnValuesPix.Size() << ")");
       }
+    }
 
     // Add the value stored in the output image pixel type to
     // the burn values vector
     // Add all the bands to be burned and clear previous bands.
     m_BandsToBurn.clear();
     for (unsigned int idx = 0; idx < burnValuesPix.Size(); ++idx)
-      {
-      m_BandsToBurn.push_back(idx + 1 ); // Gdal bands count begins from 1
+    {
+      m_BandsToBurn.push_back(idx + 1); // Gdal bands count begins from 1
       m_BurnValues.push_back(static_cast<double>(burnValuesPix.GetElement(idx)));
-      }
+    }
   }
 
 protected:
@@ -141,10 +145,10 @@ protected:
   RasterizeVectorDataFilter();
   ~RasterizeVectorDataFilter() override
   {
-    if (m_OGRDataSourcePointer != ITK_NULLPTR)
-      {
-      ogr::version_proxy::Close(m_OGRDataSourcePointer);
-      }
+    if (m_OGRDataSourcePointer != nullptr)
+    {
+      GDALClose(m_OGRDataSourcePointer);
+    }
   }
 
   void GenerateOutputInformation() override;
@@ -152,25 +156,26 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RasterizeVectorDataFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  RasterizeVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset* m_OGRDataSourcePointer;
 
   // Vector Of LayersH
-  std::vector< OGRLayerH >    m_SrcDataSetLayers;
+  std::vector<OGRLayerH> m_SrcDataSetLayers;
 
-  std::vector<double>         m_BurnValues;
-  std::vector<double>         m_FullBurnValues;
-  std::vector<int>            m_BandsToBurn;
+  std::vector<double> m_BurnValues;
+  std::vector<double> m_FullBurnValues;
+  std::vector<int>    m_BandsToBurn;
+  bool                m_AllTouchedMode;
 
 }; // end of class RasterizeVectorDataFilter
 
 } // end of namespace otb
 
 
-#ifndef  OTB_MANUAL_INSTANTIATION
-#include "otbRasterizeVectorDataFilter.txx"
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbRasterizeVectorDataFilter.hxx"
 #endif
 
 #endif

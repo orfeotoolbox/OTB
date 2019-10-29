@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,14 +22,10 @@
 #define otbWrapperQtWidgetParameterGroup_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperParameterGroup.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#include "otbWrapperInputProcessXMLParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
-#endif //tag=QT4-boost-compatibility
+#include "otbWrapperInputXML.h"
+#include "otbWrapperOutputXML.h"
 
 namespace otb
 {
@@ -45,15 +41,15 @@ class OTBQtWidget_EXPORT QtWidgetParameterGroup : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*);
+  QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*, QWidget*);
   ~QtWidgetParameterGroup() override;
 
 public slots:
-  void SetActivationState( bool value ) override;
+  void SetActivationState(bool value) override;
 
 private:
-  QtWidgetParameterGroup(const QtWidgetParameterGroup&); //purposely not implemented
-  void operator=(const QtWidgetParameterGroup&); //purposely not implemented
+  QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
+  void operator=(const QtWidgetParameterGroup&) = delete;
 
   void DoCreateWidget() override;
 
@@ -64,12 +60,9 @@ private:
   ParameterGroup::Pointer m_ParamList;
 
   typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
-
+  typedef WidgetListType::iterator            WidgetListIteratorType;
+  WidgetListType                              m_WidgetList;
 };
-
-
 }
 }
 

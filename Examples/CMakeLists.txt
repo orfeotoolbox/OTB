@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -20,11 +20,7 @@
 
 ##### check if standalone project ######
 if(NOT PROJECT_NAME)
-  if(WIN32)
-    cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
-  else()
-    cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
-  endif()
+  cmake_minimum_required(VERSION 3.1.0)
   project(OTBExamples)
 endif()
 
@@ -93,7 +89,6 @@ if(PROJECT_NAME STREQUAL "OTBExamples")
   set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
   set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
   set(TEMP           ${CMAKE_BINARY_DIR}/Testing/Temporary)
-  set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
   set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
   set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
@@ -167,7 +162,7 @@ endif()
 add_subdirectory(BasicFilters)
 add_subdirectory(ChangeDetection)
 add_subdirectory(Classification)
-add_subdirectory(DataRepresentation)
+add_subdirectory(Image)
 add_subdirectory(DimensionReduction)
 add_subdirectory(DisparityMap)
 add_subdirectory(FeatureExtraction)
@@ -179,12 +174,9 @@ add_subdirectory(IO)
 add_subdirectory(Iterators)
 add_subdirectory(Learning)
 add_subdirectory(Markov)
-add_subdirectory(MultiScale)
 add_subdirectory(OBIA)
 add_subdirectory(Patented)
 add_subdirectory(Projections)
 add_subdirectory(Radiometry)
-add_subdirectory(Registration)
-add_subdirectory(Segmentation)
 add_subdirectory(Simulation)
 add_subdirectory(Tutorials)

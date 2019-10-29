@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,30 +23,30 @@
 #include "otbImageFileWriter.h"
 #include "itkImageRegionIterator.h"
 
-int otbGaborFilterGenerator(int argc, char * argv[])
+int otbGaborFilterGenerator(int argc, char* argv[])
 {
   if (argc != 10)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << "outfname xradius yradius a b theta u0 v0 phi" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char *       outfname = argv[1];
-  const unsigned int xradius = atoi(argv[2]);
-  const unsigned int yradius = atoi(argv[3]);
-  const double       a = atof(argv[4]);
-  const double       b = atof(argv[5]);
-  const double       theta = atof(argv[6]);
-  const double       u0 = atof(argv[7]);
-  const double       v0 = atof(argv[8]);
-  const double       phi = atof(argv[9]);
+  const char*        outfname = argv[1];
+  const unsigned int xradius  = atoi(argv[2]);
+  const unsigned int yradius  = atoi(argv[3]);
+  const double       a        = atof(argv[4]);
+  const double       b        = atof(argv[5]);
+  const double       theta    = atof(argv[6]);
+  const double       u0       = atof(argv[7]);
+  const double       v0       = atof(argv[8]);
+  const double       phi      = atof(argv[9]);
 
   typedef double                                   PrecisionType;
   typedef otb::GaborFilterGenerator<PrecisionType> GaborGeneratorType;
   typedef GaborGeneratorType::RadiusType           RadiusType;
   typedef GaborGeneratorType::ArrayType            ArrayType;
 
-  typedef otb::Image<PrecisionType, 2>    ImageType;
+  typedef otb::Image<PrecisionType, 2> ImageType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Gabor filter generation
@@ -82,9 +82,9 @@ int otbGaborFilterGenerator(int argc, char * argv[])
   unsigned int                        k = 0;
 
   for (it.GoToBegin(); !it.IsAtEnd(); ++it, ++k)
-    {
+  {
     it.Set(filter[k]);
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outfname);

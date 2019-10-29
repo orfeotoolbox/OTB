@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,6 +25,7 @@
 
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
+#include <string>
 
 namespace otb
 {
@@ -40,7 +41,7 @@ class OTBApplicationEngine_EXPORT OutputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputVectorDataParameter      Self;
+  typedef OutputVectorDataParameter     Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -59,76 +60,56 @@ public:
   itkGetObjectMacro(VectorData, VectorDataType);
 
   /** Return true if a filename is set */
-  bool HasValue() const override
-  {
-    std::string filename(this->GetFileName());
-    return !filename.empty();
-  }
+  bool HasValue() const override;
 
   /** Return any value */
-  void SetValue(VectorDataType* vd)
-  {
-    m_VectorData = vd;
-    SetActive(true);
-  }
+  void SetValue(VectorDataType* vd);
 
   /** Return any value */
-  VectorDataType* GetValue( void )
-  {
-    return m_VectorData;
-  }
+  VectorDataType* GetValue(void);
 
-  void SetFileName (const char* filename)
-  {
-    m_FileName = filename;
-    SetActive(true);
-  }
-  void SetFileName (const std::string& filename)
-  {
-    this->SetFileName(filename.c_str());
-  }
+  void SetFileName(const char* filename);
+  void SetFileName(const std::string& filename);
 
   itkGetStringMacro(FileName);
 
-  void Write()
+  void                Write();
+  itk::ProcessObject* GetWriter();
+  void                InitializeWriters();
+
+  ParameterType GetType() const override
   {
-    m_Writer->SetFileName(m_FileName);
-    m_Writer->SetInput(m_VectorData);
-    m_Writer->Update();
+    return ParameterType_OutputVectorData;
   }
 
-  itk::ProcessObject* GetWriter()
+  std::string ToString() const override
   {
-    return m_Writer;
+    return GetFileName();
   }
 
-  void InitializeWriters()
+  void FromString(const std::string& value) override
   {
-    m_Writer = otb::VectorDataFileWriter<VectorDataType>::New();
+    SetFileName(value);
   }
 
 protected:
   /** Constructor */
-  OutputVectorDataParameter()
-  {
-    this->SetName("Output Vector Data");
-    this->SetKey("outvd");
-  }
+  OutputVectorDataParameter();
 
   /** Destructor */
   ~OutputVectorDataParameter() override
-  {}
+  {
+  }
 
 
   VectorDataType::Pointer m_VectorData;
-  std::string m_FileName;
+  std::string             m_FileName;
 
   otb::VectorDataFileWriter<VectorDataType>::Pointer m_Writer;
 
 private:
-  OutputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
-
+  OutputVectorDataParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 };
 
 } // End namespace Wrapper

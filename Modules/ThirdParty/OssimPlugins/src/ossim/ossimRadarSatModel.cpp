@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -158,24 +158,24 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
   ossimFilename dataFilePath;
   ossimFilename volumeDirectoryFilePath;
   std::string input_file = file;
-  string::size_type loc_DAT = input_file.find( "DAT_01", 0 );
-  string::size_type loc_dat = input_file.find( "dat_01", 0 );
-  if ( (loc_DAT != string::npos ) || ( loc_dat != string::npos ) )
+  std::string::size_type loc_DAT = input_file.find( "DAT_01", 0 );
+  std::string::size_type loc_dat = input_file.find( "dat_01", 0 );
+  if ( (loc_DAT != std::string::npos ) || ( loc_dat != std::string::npos ) )
     {
     dataFilePath = input_file.c_str();
-    if (loc_DAT != string::npos ) input_file.replace(loc_DAT, 6, "VDF_DAT");
-    if (loc_dat != string::npos ) input_file.replace(loc_dat, 6, "vdf_dat");
+    if (loc_DAT != std::string::npos ) input_file.replace(loc_DAT, 6, "VDF_DAT");
+    if (loc_dat != std::string::npos ) input_file.replace(loc_dat, 6, "vdf_dat");
     volumeDirectoryFilePath = input_file.c_str();
     }
   else
     {
-    string::size_type loc_VDF = input_file.find( "VDF_DAT", 0 );
-    string::size_type loc_vdf = input_file.find( "vdf_dat", 0 );
-    if ( (loc_VDF != string::npos ) || ( loc_vdf != string::npos ) )
+    std::string::size_type loc_VDF = input_file.find( "VDF_DAT", 0 );
+    std::string::size_type loc_vdf = input_file.find( "vdf_dat", 0 );
+    if ( (loc_VDF != std::string::npos ) || ( loc_vdf != std::string::npos ) )
       {
       volumeDirectoryFilePath = input_file.c_str();
-      if (loc_VDF != string::npos ) input_file.replace(loc_VDF, 7, "DAT_01");
-      if (loc_vdf != string::npos ) input_file.replace(loc_vdf, 7, "dat_01");
+      if (loc_VDF != std::string::npos ) input_file.replace(loc_VDF, 7, "DAT_01");
+      if (loc_vdf != std::string::npos ) input_file.replace(loc_vdf, 7, "dat_01");
       dataFilePath = input_file.c_str();
       }
     else
@@ -224,7 +224,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
   RadarSatRecordHeader headerVDF;
   VolumeDirFactory factoryVDF;
-  ifstream volumeDirFile (volumeDirectoryFilePath.c_str(), ios::in|ios::binary);
+  std::ifstream volumeDirFile (volumeDirectoryFilePath.c_str(), std::ios::in|std::ios::binary);
   volumeDirFile>>headerVDF;
   if(volumeDirFile.eof())
     {
@@ -269,7 +269,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
         //Reading of the remaining of the volume directory file
 
         volumeDirFile.close();
-        volumeDirFile.open(volumeDirectoryFilePath.c_str(), ios::in | ios::binary);
+        volumeDirFile.open(volumeDirectoryFilePath.c_str(), std::ios::in | std::ios::binary);
         volumeDirFile >> *_volumeDir;
         volumeDirFile.close();
 
@@ -280,7 +280,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
         RadarSatRecordHeader headerDAT;
         DataFactory factoryDAT;
-        ifstream dataFile (dataFilePath.c_str(), ios::in|ios::binary);
+        std::ifstream dataFile (dataFilePath.c_str(), std::ios::in|std::ios::binary);
         dataFile>>headerDAT;
         if(dataFile.eof())
           {
@@ -302,7 +302,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
             /*
              * Reading the remaining of the data file
              */
-            dataFile.open(dataFilePath.c_str(), ios::in|ios::binary);
+            dataFile.open(dataFilePath.c_str(), std::ios::in|std::ios::binary);
             dataFile>>*_data;
             dataFile.close();
 
@@ -329,12 +329,12 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
          * Warning : the filename case has to be homogenous
          */
         std::string leader_file = dataFilePath;
-        string::size_type loc = leader_file.find( "DAT_01", 0 );
-        if( loc != string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
+        std::string::size_type loc = leader_file.find( "DAT_01", 0 );
+        if( loc != std::string::npos ) leader_file.replace(loc, 6, "LEA_01" ); // upper case test
         else
           {
           loc = leader_file.find( "dat_01", 0 );
-          if( loc != string::npos ) leader_file.replace(loc, 6, "lea_01" ); // lower case test
+          if( loc != std::string::npos ) leader_file.replace(loc, 6, "lea_01" ); // lower case test
           else
             {
             ossimNotify(ossimNotifyLevel_DEBUG) << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
@@ -355,7 +355,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           /*
            * Leader file data reading
            */
-          ifstream leaderFile (leaderFilePath.c_str(), ios::in|ios::binary);
+          std::ifstream leaderFile (leaderFilePath.c_str(), std::ios::in|std::ios::binary);
           leaderFile>>*_leader;
           leaderFile.close();
           if(traceDebug())
@@ -370,11 +370,11 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
          */
         std::string trailer_file = dataFilePath;
         loc = trailer_file.find( "DAT_01", 0 );
-        if( loc != string::npos ) trailer_file.replace(loc, 6, "TRA_01" ); // upper case test
+        if( loc != std::string::npos ) trailer_file.replace(loc, 6, "TRA_01" ); // upper case test
         else
           {
           loc = trailer_file.find( "dat_01", 0 );
-          if( loc != string::npos ) trailer_file.replace(loc, 6, "tra_01" ); // lower case test
+          if( loc != std::string::npos ) trailer_file.replace(loc, 6, "tra_01" ); // lower case test
           else
             {
             ossimNotify(ossimNotifyLevel_DEBUG) << "File Name not coherent (searching for *DAT_01* or *dat_01*)  : " << file << std::endl;
@@ -395,7 +395,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
           /*
            * Trailer file data reading
            */
-          ifstream trailerFile (trailerFilePath.c_str(), ios::in|ios::binary);
+          std::ifstream trailerFile (trailerFilePath.c_str(), std::ios::in|std::ios::binary);
           trailerFile>>*_trailer;
           trailerFile.close();
           if(traceDebug())

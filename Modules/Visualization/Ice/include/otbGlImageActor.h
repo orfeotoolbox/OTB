@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,11 +22,10 @@
 #define otb_GlImageActor_h
 
 
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 #include "itkCenteredRigid2DTransform.h"
 
-#include "otbFragmentShader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeoInterface.h"
 #include "otbGlActor.h"
@@ -36,11 +35,19 @@
 #include "otbVectorRescaleIntensityImageFilter.h"
 #include "otbVectorImage.h"
 
+#include <string>
+
 
 namespace otb
 {
 
-class OTBIce_EXPORT GlImageActor 
+namespace gl
+{
+struct Mesh;
+}
+
+
+class OTBIce_EXPORT GlImageActor
   : public GlActor, public GeoInterface
 {
 public:
@@ -62,7 +69,7 @@ public:
   typedef VectorImageType::SpacingType                    SpacingType;
   typedef VectorImageType::PointType                      PointType;
   typedef VectorRescaleIntensityImageFilter<VectorImageType,UCharVectorImageType> RescaleFilterType;
-  
+
   struct ResolutionAlgorithm
   {
     enum type
@@ -75,7 +82,7 @@ public:
                     ///performances, better quality)
       MAX__};
     };
-  
+
   // Initialize with a new image
   void Initialize(const std::string & filename);
 
@@ -124,11 +131,7 @@ public:
   itkSetMacro(TileSize,unsigned int);
   itkGetMacro(TileSize,unsigned int);
 
-  itkBooleanMacro(SoftwareRendering );
-  itkSetMacro(SoftwareRendering, bool );
-  itkGetMacro(SoftwareRendering, bool );
-
-  void CreateShader();
+  void CreateShader() override;
 
   void SetResolutionAlgorithm(ResolutionAlgorithm::type alg)
   {
@@ -143,8 +146,8 @@ public:
   virtual void SetRedIdx(const unsigned int idx)
   {
   if ( this->m_RedIdx != idx )
-   { 
-   this->m_RedIdx = vcl_min(this->GetNumberOfComponents(),idx);
+   {
+   this->m_RedIdx = std::min(this->GetNumberOfComponents(),idx);
    this->Modified();
    }
   }
@@ -152,25 +155,25 @@ public:
   virtual void SetGreenIdx(const unsigned int idx)
   {
   if ( this->m_GreenIdx != idx )
-    { 
-    this->m_GreenIdx = vcl_min(this->GetNumberOfComponents(),idx);
+    {
+    this->m_GreenIdx = std::min(this->GetNumberOfComponents(),idx);
     this->Modified();
     }
-  }  
+  }
 
   virtual void SetBlueIdx(const unsigned int idx)
   {
   if ( this->m_BlueIdx != idx )
-    { 
-    this->m_BlueIdx = vcl_min(this->GetNumberOfComponents(),idx);
-    this->Modified(); 
+    {
+    this->m_BlueIdx = std::min(this->GetNumberOfComponents(),idx);
+    this->Modified();
     }
   }
 
   PointType ViewportToImageTransform(const PointType & in, bool physical = true) const;
 
   PointType ImageToViewportTransform(const PointType & in, bool physical = true) const;
-  
+
   bool GetPixelFromViewport( const PointType & in, PixelType & pixel ) const;
 
   bool GetPixelFromViewport( const PointType & view,
@@ -179,9 +182,6 @@ public:
 			     IndexType & index ) const;
 
   bool GetPixel( const PointType & physical, PixelType & pixel, IndexType & index ) const;
-
-  itkGetObjectMacro(Shader,FragmentShader);
-  itkSetObjectMacro(Shader,FragmentShader);
 
   itkGetObjectMacro( ImageSettings, ImageSettings );
 
@@ -202,7 +202,7 @@ public:
 
 protected:
   GlImageActor();
-  
+
   ~GlImageActor() override;
 
   typedef ImageFileReader<VectorImageType>                                        ReaderType;
@@ -215,33 +215,23 @@ protected:
   class Tile
   {
   public:
-    Tile()
-      : m_Loaded(false),
-        m_TextureId(0),
-        m_ImageRegion(),
-        m_TileSize(0),
-        m_Image(),
-        m_UL(),
-        m_UR(),
-        m_LL(),
-        m_LR(),
-        m_Resolution(1),
-        m_RedIdx(1),
-        m_GreenIdx(2),
-        m_BlueIdx(3),
-        m_RescaleFilter(ITK_NULLPTR)
-    {
-      m_UL.Fill(0);
-      m_UR.Fill(0);
-      m_LL.Fill(0);
-      m_LR.Fill(0);
-    }
+    Tile();
+
+    ~Tile();
+
+    void Link( ReaderType::OutputImageType * );
+
+    ReaderType::OutputImageType::Pointer const &
+    Image() const noexcept
+      { return m_Image; }
+
+    void Acquire() noexcept;
+    void Release();
 
     bool m_Loaded;
     unsigned int m_TextureId;
     RegionType m_ImageRegion;
     unsigned int m_TileSize;
-    VectorImageType::Pointer m_Image;
     PointType m_UL;
     PointType m_UR;
     PointType m_LL;
@@ -251,10 +241,14 @@ protected:
     unsigned int m_GreenIdx;
     unsigned int m_BlueIdx;
     RescaleFilterType::Pointer m_RescaleFilter;
+
+  private:
+    VectorImageType::Pointer m_Image;
+
   };
 
-  typedef std::vector<Tile>                                                       TileVectorType;    
-  
+  typedef std::list< Tile > TileVectorType;
+
 private:
   // prevent implementation
   GlImageActor(const Self&);
@@ -262,7 +256,7 @@ private:
 
   // Load tile to GPU
   void LoadTile(Tile& tile);
-  
+
   // Unload tile from GPU
   void UnloadTile(Tile& tile);
 
@@ -282,11 +276,11 @@ private:
   void ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const;
 
   void UpdateResolution();
- 
+
   unsigned int m_TileSize;
 
   std::string m_FileName;
-  
+
   ReaderType::Pointer m_FileReader;
 
   TileVectorType m_LoadedTiles;
@@ -307,7 +301,6 @@ private:
   unsigned int m_NumberOfComponents;
 
   ImageSettings::Pointer m_ImageSettings;
-  FragmentShader::Pointer m_Shader;
 
   RSTransformType::Pointer m_ViewportToImageTransform;
   RSTransformType::Pointer m_ImageToViewportTransform;
@@ -317,7 +310,8 @@ private:
 
   ResolutionAlgorithm::type m_ResolutionAlgorithm;
 
-  bool m_SoftwareRendering;
+  /** OpenGL quad. */
+  std::unique_ptr< gl::Mesh > m_Mesh;
 
 }; // End class GlImageActor
 

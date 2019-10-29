@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -27,7 +27,10 @@
 #define ossimSentinel1Model_HEADER
 
 #include <iosfwd>
+#include <string>
 #include <boost/config.hpp>
+
+#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimFilename.h>
@@ -39,7 +42,6 @@
 //#include <ossim/projection/ossimSensorModel.h>
 //#include <ossim/projection/ossimCoarseGridModel.h>
 #include "ossim/ossimSarSensorModel.h"
-#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
 
@@ -120,7 +122,7 @@ namespace ossimplugins
 
       bool initImageSize(ossimIpt& imageSize) const;
 
-      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const;
+      virtual void imagingRay(ossimDpt const& image_point, ossimEcefRay& image_ray) const override;
 
       bool isSLC() const { return  theSLC; }
       bool isOCN() const { return  theOCN; }
@@ -140,8 +142,14 @@ namespace ossimplugins
          theManifestDirectory = d;
       }
    protected:
-
-      TYPE_DATA;
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+      TYPE_DATA
+#pragma clang diagnostic pop
+#else
+      TYPE_DATA
+#endif
 
    private:
       bool read(ossimFilename const& annotationXml);
@@ -156,6 +164,7 @@ namespace ossimplugins
       void readGeoLocationGrid(ossimXmlNode const& productRoot);
       void addOrbitStateVectors(ossimXmlNode const& orbitList);
       void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
+      void addAzimuthFmRateCoefficients(ossimXmlNode const& aziFmRateList);
       bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
       ossimFilename      theManifestDirectory;

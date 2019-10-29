@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,45 +22,45 @@
 #define otbWrapperMacros_h
 
 
-#define otbAppLogFATAL(x) \
-  { \
-    std::ostringstream msg; \
-    msg << "" x << std::endl; \
-    this->GetLogger()->Fatal(msg.str()); \
-    {                                                                                          \
-      std::ostringstream message;                                                              \
-      message << "otb::ApplicationException " x;                                               \
-      ::otb::ApplicationException e_(__FILE__, __LINE__, message.str().c_str(), ITK_LOCATION); \
-      throw e_; /* Explicit naming to work around Intel compiler bug.  */                      \
-    } \
+#define otbAppLogFATAL(x)                                                              \
+  {                                                                                    \
+    std::ostringstream msg;                                                            \
+    msg << "" x << std::endl;                                                          \
+    this->GetLogger()->Fatal(msg.str());                                               \
+    {                                                                                  \
+      std::ostringstream message;                                                      \
+      message << "otb::ApplicationException " x;                                       \
+      ::otb::ApplicationException e_(__FILE__, __LINE__, message.str(), ITK_LOCATION); \
+      throw e_; /* Explicit naming to work around Intel compiler bug.  */              \
+    }                                                                                  \
   }
 
-#define otbAppLogCRITICAL(x) \
-  { \
-  std::ostringstream msg; \
-  msg << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::CRITICAL, msg.str() ); \
+#define otbAppLogCRITICAL(x)                                        \
+  {                                                                 \
+    std::ostringstream msg;                                         \
+    msg << "" x << std::endl;                                       \
+    this->GetLogger()->Write(itk::LoggerBase::CRITICAL, msg.str()); \
   }
 
-#define otbAppLogWARNING(x) \
-  { \
-  std::ostringstream msg; \
-  msg << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::WARNING, msg.str() ); \
+#define otbAppLogWARNING(x)                                        \
+  {                                                                \
+    std::ostringstream msg;                                        \
+    msg << "" x << std::endl;                                      \
+    this->GetLogger()->Write(itk::LoggerBase::WARNING, msg.str()); \
   }
 
-#define otbAppLogINFO(x) \
-  { \
-  std::ostringstream msg; \
-  msg << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::INFO, msg.str() ); \
+#define otbAppLogINFO(x)                                        \
+  {                                                             \
+    std::ostringstream msg;                                     \
+    msg << "" x << std::endl;                                   \
+    this->GetLogger()->Write(itk::LoggerBase::INFO, msg.str()); \
   }
 
-#define otbAppLogDEBUG(x) \
-  { \
-  std::ostringstream msg; \
-  msg << "" x << std::endl; \
-  this->GetLogger()->Write( itk::LoggerBase::DEBUG, msg.str() ); \
+#define otbAppLogDEBUG(x)                                        \
+  {                                                              \
+    std::ostringstream msg;                                      \
+    msg << "" x << std::endl;                                    \
+    this->GetLogger()->Write(itk::LoggerBase::DEBUG, msg.str()); \
   }
 
 #endif

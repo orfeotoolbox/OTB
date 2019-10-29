@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include "otbImage.h"
 
@@ -28,27 +26,27 @@
 #include "otbImageFileWriter.h"
 #include "otbHarrisImageFilter.h"
 
-int otbHarrisImage(int itkNotUsed(argc), char * argv[])
+int otbHarrisImage(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  double SigmaD((double) ::atof(argv[3]));
-  double SigmaI((double) ::atof(argv[4]));
-  double Alpha((double) ::atof(argv[5]));
+  double SigmaD((double)::atof(argv[3]));
+  double SigmaI((double)::atof(argv[4]));
+  double Alpha((double)::atof(argv[5]));
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>                  OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                    ReaderType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::HarrisImageFilter<InputImageType, OutputImageType> FunctionType;
-  typedef otb::ImageFileWriter<OutputImageType>                   WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  ReaderType::Pointer   reader   = ReaderType::New();
-  WriterType::Pointer   writer   = WriterType::New();
+  ReaderType::Pointer   reader = ReaderType::New();
+  WriterType::Pointer   writer = WriterType::New();
   FunctionType::Pointer harris = FunctionType::New();
 
   reader->SetFileName(inputFilename);

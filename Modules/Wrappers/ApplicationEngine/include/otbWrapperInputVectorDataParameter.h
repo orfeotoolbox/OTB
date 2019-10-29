@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbWrapperParameter.h"
+#include <string>
 
 namespace otb
 {
@@ -51,20 +52,35 @@ public:
 
   typedef double CoordinatePrecisionType;
   typedef double ValuePrecisionType;
-  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType>  VectorDataType;
+  typedef otb::VectorData<CoordinatePrecisionType, 2, ValuePrecisionType> VectorDataType;
 
   /** Set value from filename */
   bool SetFromFileName(const std::string& filename);
-  itkGetConstReferenceMacro( FileName, std::string );
+  itkGetConstReferenceMacro(FileName, std::string);
 
-  const VectorDataType * GetVectorData() const;
-  VectorDataType * GetVectorData();
+  const VectorDataType* GetVectorData() const;
+  VectorDataType*       GetVectorData();
 
   void SetVectorData(VectorDataType* vectorData);
 
   bool HasValue() const override;
 
   void ClearValue() override;
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_InputVectorData;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFromFileName(value);
+  }
 
 protected:
   /** Constructor */
@@ -74,17 +90,16 @@ protected:
   ~InputVectorDataParameter() override;
 
   typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
-  VectorDataType::Pointer m_VectorData;
-  VectorDataFileReaderType::Pointer m_Reader;
+  VectorDataType::Pointer                           m_VectorData;
+  VectorDataFileReaderType::Pointer                 m_Reader;
 
   std::string m_FileName;
 
   std::string m_PreviousFileName;
 
 private:
-  InputVectorDataParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
-
+  InputVectorDataParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 };
 
 } // End namespace Wrapper

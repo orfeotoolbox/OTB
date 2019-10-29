@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,18 +55,16 @@ namespace otb
  *
  * \ingroup OTBDisparityMap
  */
-template <class TDisparityImage, class TOutputImage =  otb::VectorImage<float,2>,
-          class TMaskImage = otb::Image<unsigned char>, class TResidueImage = otb::Image<float> >
-class ITK_EXPORT MultiDisparityMapTo3DFilter :
-    public itk::ImageToImageFilter<TDisparityImage,TOutputImage>
+template <class TDisparityImage, class TOutputImage = otb::VectorImage<float, 2>, class TMaskImage = otb::Image<unsigned char>,
+          class TResidueImage = otb::Image<float>>
+class ITK_EXPORT MultiDisparityMapTo3DFilter : public itk::ImageToImageFilter<TDisparityImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef MultiDisparityMapTo3DFilter                       Self;
-  typedef itk::ImageToImageFilter<TDisparityImage,
-                                  TOutputImage>             Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef MultiDisparityMapTo3DFilter Self;
+  typedef itk::ImageToImageFilter<TDisparityImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,37 +73,32 @@ public:
   itkTypeMacro(MultiDisparityMapTo3DFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef TDisparityImage         DisparityMapType;
-  typedef TOutputImage            OutputImageType;
-  typedef TMaskImage              MaskImageType;
-  typedef TResidueImage           ResidueImageType;
+  typedef TDisparityImage DisparityMapType;
+  typedef TOutputImage    OutputImageType;
+  typedef TMaskImage      MaskImageType;
+  typedef TResidueImage   ResidueImageType;
 
-  typedef typename OutputImageType::RegionType         RegionType;
-  typedef typename OutputImageType::PixelType          DEMPixelType;
+  typedef typename OutputImageType::RegionType RegionType;
+  typedef typename OutputImageType::PixelType  DEMPixelType;
 
   // 3D RS transform
   // TODO: Allow tuning precision (i.e. double or float)
-  typedef double                  PrecisionType;
-  typedef otb::GenericRSTransform
-    <PrecisionType,3,3>           RSTransformType;
+  typedef double PrecisionType;
+  typedef otb::GenericRSTransform<PrecisionType, 3, 3> RSTransformType;
 
   // 3D points
-  typedef typename RSTransformType::InputPointType  TDPointType;
+  typedef typename RSTransformType::InputPointType TDPointType;
 
   typedef otb::LineOfSightOptimizer<PrecisionType>  OptimizerType;
   typedef typename OptimizerType::PointSetType      PointSetType;
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
 
-  typedef otb::ImageKeywordlist                     ImageKeywordListType;
+  typedef otb::ImageKeywordlist ImageKeywordListType;
 
-  typedef std::map
-    <unsigned int,
-     itk::ImageRegionConstIterator<DisparityMapType> >   DispMapIteratorList;
+  typedef std::map<unsigned int, itk::ImageRegionConstIterator<DisparityMapType>> DispMapIteratorList;
 
-  typedef std::map
-    <unsigned int,
-     itk::ImageRegionConstIterator<MaskImageType> >      MaskIteratorList;
+  typedef std::map<unsigned int, itk::ImageRegionConstIterator<MaskImageType>> MaskIteratorList;
 
   /** Set the number of moving images (referred earlier as N) */
   void SetNumberOfMovingImages(unsigned int nb);
@@ -114,43 +107,43 @@ public:
   unsigned int GetNumberOfMovingImages();
 
   /** Set horizontal disparity map input corresponding to the moving image 'index' */
-  void SetHorizontalDisparityMapInput(unsigned int index, const TDisparityImage * hmap);
+  void SetHorizontalDisparityMapInput(unsigned int index, const TDisparityImage* hmap);
 
   /** Set vertical disparity map input corresponding to the moving image 'index'*/
-  void SetVerticalDisparityMapInput(unsigned int index, const TDisparityImage * vmap);
+  void SetVerticalDisparityMapInput(unsigned int index, const TDisparityImage* vmap);
 
   /** Set mask associated to disparity maps corresponding to the moving image 'index'
    * (optional, pixels with a null mask value are ignored)
    */
-  void SetDisparityMaskInput(unsigned int index, const TMaskImage * mask);
+  void SetDisparityMaskInput(unsigned int index, const TMaskImage* mask);
 
   /** Get the inputs */
-  const TDisparityImage * GetHorizontalDisparityMapInput(unsigned int index) const;
-  const TDisparityImage * GetVerticalDisparityMapInput(unsigned int index) const;
-  const TMaskImage  * GetDisparityMaskInput(unsigned int index) const;
+  const TDisparityImage* GetHorizontalDisparityMapInput(unsigned int index) const;
+  const TDisparityImage* GetVerticalDisparityMapInput(unsigned int index) const;
+  const TMaskImage* GetDisparityMaskInput(unsigned int index) const;
 
   /** Get residue output*/
-  const TResidueImage * GetResidueOutput() const;
-  TResidueImage * GetResidueOutput();
+  const TResidueImage* GetResidueOutput() const;
+  TResidueImage*       GetResidueOutput();
 
   /** Set keywordlist of the reference image */
   void SetReferenceKeywordList(const ImageKeywordListType kwl)
-    {
+  {
     this->m_ReferenceKeywordList = kwl;
     this->Modified();
-    }
+  }
 
   /** Get keywordlist of the reference image */
-  const ImageKeywordListType & GetReferenceKeywordList() const
-    {
+  const ImageKeywordListType& GetReferenceKeywordList() const
+  {
     return this->m_ReferenceKeywordList;
-    }
+  }
 
-   /** Set keywordlist of the moving image 'index' */
+  /** Set keywordlist of the moving image 'index' */
   void SetMovingKeywordList(unsigned int index, const ImageKeywordListType kwl);
 
   /** Get keywordlist of the moving image 'index' */
-  const ImageKeywordListType & GetMovingKeywordList(unsigned int index) const;
+  const ImageKeywordListType& GetMovingKeywordList(unsigned int index) const;
 
 protected:
   /** Constructor */
@@ -169,11 +162,11 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MultiDisparityMapTo3DFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  MultiDisparityMapTo3DFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Keywordlist of reference sensor image */
   ImageKeywordListType m_ReferenceKeywordList;
@@ -190,7 +183,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultiDisparityMapTo3DFilter.txx"
+#include "otbMultiDisparityMapTo3DFilter.hxx"
 #endif
 
 #endif

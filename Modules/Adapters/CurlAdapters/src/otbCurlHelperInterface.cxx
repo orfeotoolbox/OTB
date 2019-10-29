@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,25 +23,24 @@
 #include "otbCurlHelperInterface.h"
 
 #ifdef OTB_USE_CURL
-  #include "otb_curl.h"
+#include "otb_curl.h"
 #endif
 
-namespace otb {
+namespace otb
+{
 
-bool
-CurlHelperInterface::IsCurlAvailable()
+bool CurlHelperInterface::IsCurlAvailable()
 {
 #ifdef OTB_USE_CURL
   const bool curlAvailable = true;
 #else
-  const bool curlAvailable = false;
+  const bool curlAvailable      = false;
 #endif
 
   return curlAvailable;
 }
 
-bool
-CurlHelperInterface::IsCurlMultiAvailable()
+bool CurlHelperInterface::IsCurlMultiAvailable()
 {
 #ifdef OTB_CURL_MULTI_AVAILABLE
   const bool curlMultiAvailable = true;
@@ -51,5 +50,4 @@ CurlHelperInterface::IsCurlMultiAvailable()
 
   return curlMultiAvailable;
 }
-
 }

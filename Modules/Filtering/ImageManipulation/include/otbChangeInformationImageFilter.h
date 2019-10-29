@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,9 +37,8 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template< typename TInputImage >
-class ChangeInformationImageFilter:
-  public itk::ChangeInformationImageFilter< TInputImage >
+template <typename TInputImage>
+class ChangeInformationImageFilter : public itk::ChangeInformationImageFilter<TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -55,38 +54,41 @@ public:
   itkTypeMacro(ChangeInformationImageFilter, itk::ChangeInformationImageFilter);
 
   /** Set key names to change */
-  void SetChangeMetaData(const char *keyname, bool flag);
+  void SetChangeMetaData(const char* keyname, bool flag);
 
   /** Ask if a metadata will be changed */
-  bool GetChangeMetaData(const char *keyname);
+  bool GetChangeMetaData(const char* keyname);
 
   /** Set output values for metadata, passing a NULL value will remove the
    *  metadata from output. If not set for a key name in the change list,
    *  the metadata will also be set.
    */
-  template<typename T>
-  void SetOutputMetaData(const char *keyname, const T * value);
+  template <typename T>
+  void SetOutputMetaData(const char* keyname, const T* value);
 
 protected:
-  ChangeInformationImageFilter() {}
-  ~ChangeInformationImageFilter() override {}
+  ChangeInformationImageFilter()
+  {
+  }
+  ~ChangeInformationImageFilter() override
+  {
+  }
 
   /** Apply changes to the output image metadata. */
   void GenerateOutputInformation() override;
 
 private:
-  ChangeInformationImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ChangeInformationImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** List of metadata keys to change */
   std::set<std::string> m_ChangedKeys;
-
 };
 
 } // End of namespace OTB
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbChangeInformationImageFilter.txx"
+#include "otbChangeInformationImageFilter.hxx"
 #endif
 
 #endif

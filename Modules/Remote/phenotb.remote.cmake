@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,5 +27,5 @@ A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/phenotb
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/phenotb.git
-  GIT_TAG c9349eb89a652a18b28a40dfb3fa352b76388527
-)
+  GIT_TAG 72ba22feac301ae00869b5604c2eef17d6a3fae5
+  )

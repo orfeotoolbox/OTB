@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,16 +45,13 @@ namespace otb
  *
  * \ingroup OTBDisparityMap
  */
-template<class TFixedImage, class TMovingImage, class TDisplacementField>
-class ITK_EXPORT NCCRegistrationFunction :
-  public itk::PDEDeformableRegistrationFunction<TFixedImage,
-      TMovingImage, TDisplacementField>
+template <class TFixedImage, class TMovingImage, class TDisplacementField>
+class ITK_EXPORT NCCRegistrationFunction : public itk::PDEDeformableRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
   typedef NCCRegistrationFunction Self;
-  typedef itk::PDEDeformableRegistrationFunction<TFixedImage,
-      TMovingImage, TDisplacementField>    Superclass;
+  typedef itk::PDEDeformableRegistrationFunction<TFixedImage, TMovingImage, TDisplacementField> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -62,8 +59,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(NCCRegistrationFunction,
-               PDEDeformableRegistrationFunction);
+  itkTypeMacro(NCCRegistrationFunction, PDEDeformableRegistrationFunction);
 
   /** MovingImage image type. */
   typedef typename Superclass::MovingImageType    MovingImageType;
@@ -77,9 +73,8 @@ public:
   typedef typename FixedImageType::SpacingType   SpacingType;
 
   /** Displacement field type. */
-  typedef typename Superclass::DisplacementFieldType DisplacementFieldType;
-  typedef typename Superclass::DisplacementFieldTypePointer
-  DisplacementFieldTypePointer;
+  typedef typename Superclass::DisplacementFieldType        DisplacementFieldType;
+  typedef typename Superclass::DisplacementFieldTypePointer DisplacementFieldTypePointer;
 
   /** Inherit some enums from the superclass. */
   itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
@@ -88,17 +83,16 @@ public:
   typedef typename Superclass::PixelType        PixelType;
   typedef typename Superclass::RadiusType       RadiusType;
   typedef typename Superclass::NeighborhoodType NeighborhoodType;
-//  typedef typename Superclass::NeighborhoodType    BoundaryNeighborhoodType;
+  //  typedef typename Superclass::NeighborhoodType    BoundaryNeighborhoodType;
   typedef typename Superclass::FloatOffsetType FloatOffsetType;
   typedef typename Superclass::TimeStepType    TimeStepType;
 
   /** Interpolator type. */
-  typedef double                                                       CoordRepType;
+  typedef double CoordRepType;
   typedef itk::InterpolateImageFunction<MovingImageType, CoordRepType> InterpolatorType;
-  typedef typename InterpolatorType::Pointer                           InterpolatorPointer;
-  typedef typename InterpolatorType::PointType                         PointType;
-  typedef itk::LinearInterpolateImageFunction<MovingImageType, CoordRepType>
-  DefaultInterpolatorType;
+  typedef typename InterpolatorType::Pointer   InterpolatorPointer;
+  typedef typename InterpolatorType::PointType PointType;
+  typedef itk::LinearInterpolateImageFunction<MovingImageType, CoordRepType> DefaultInterpolatorType;
 
   /** Covariant vector type. */
   typedef itk::CovariantVector<double, itkGetStaticConstMacro(ImageDimension)> CovariantVectorType;
@@ -108,35 +102,35 @@ public:
   typedef typename GradientCalculatorType::Pointer            GradientCalculatorPointer;
 
   /** Set the moving image interpolator. */
-  void SetMovingImageInterpolator(InterpolatorType * ptr)
+  void SetMovingImageInterpolator(InterpolatorType* ptr)
   {
     m_MovingImageInterpolator = ptr;
   }
 
   /** Get the moving image interpolator. */
-  InterpolatorType * GetMovingImageInterpolator(void)
+  InterpolatorType* GetMovingImageInterpolator(void)
   {
     return m_MovingImageInterpolator;
   }
 
   /** This class uses a constant timestep of 1. */
-  TimeStepType ComputeGlobalTimeStep(void * itkNotUsed(GlobalData)) const override
+  TimeStepType ComputeGlobalTimeStep(void* itkNotUsed(GlobalData)) const override
   {
     return m_TimeStep;
   }
 
   /** Return a pointer to a global data structure that is passed to
    * this object from the solver at each calculation.  */
-  void *GetGlobalDataPointer() const override
+  void* GetGlobalDataPointer() const override
   {
-    GlobalDataStruct *global = new GlobalDataStruct();
+    GlobalDataStruct* global = new GlobalDataStruct();
     return global;
   }
 
   /** Release memory for global data structure. */
-  void ReleaseGlobalDataPointer(void *GlobalData) const override
+  void ReleaseGlobalDataPointer(void* GlobalData) const override
   {
-    delete (GlobalDataStruct *) GlobalData;
+    delete (GlobalDataStruct*)GlobalData;
   }
 
   /** Set the object's state before each iteration. */
@@ -144,13 +138,13 @@ public:
 
   /** This method is called by a finite difference solver image filter at
    * each pixel that does not lie on a data set boundary */
-  PixelType  ComputeUpdate(const NeighborhoodType& neighborhood,
-                                   void *globalData,
-                                   const FloatOffsetType& offset = FloatOffsetType(0.0)) override;
+  PixelType ComputeUpdate(const NeighborhoodType& neighborhood, void* globalData, const FloatOffsetType& offset = FloatOffsetType(0.0)) override;
 
 protected:
   NCCRegistrationFunction();
-  ~NCCRegistrationFunction() override {}
+  ~NCCRegistrationFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** FixedImage image neighborhood iterator type. */
@@ -164,8 +158,8 @@ protected:
   };
 
 private:
-  NCCRegistrationFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  NCCRegistrationFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Cache fixed image information. */
   SpacingType m_FixedImageSpacing;
@@ -187,13 +181,12 @@ private:
   double m_IntensityDifferenceThreshold;
 
   mutable double m_MetricTotal;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbNCCRegistrationFunction.txx"
+#include "otbNCCRegistrationFunction.hxx"
 #endif
 
 #endif

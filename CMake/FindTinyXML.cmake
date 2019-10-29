@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -61,7 +61,7 @@ find_library( TINYXML_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set TINYXML_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( TinyXML DEFAULT_MSG TINYXML_LIBRARY TINYXML_INCLUDE_DIR )
+find_package_handle_standard_args( TinyXML DEFAULT_MSG TINYXML_LIBRARY TINYXML_INCLUDE_DIR )
 
 mark_as_advanced( TINYXML_INCLUDE_DIR TINYXML_LIBRARY )
 

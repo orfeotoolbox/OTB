@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,7 +39,6 @@ namespace otb
 class OTBMetadata_EXPORT OpticalImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
-
   typedef OpticalImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -48,14 +47,14 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(OpticalImageMetadataInterface, ImageMetadataInterfaceBase);
 
-  typedef Superclass::ImageType                      ImageType;
-  typedef Superclass::MetaDataDictionaryType         MetaDataDictionaryType;
-  typedef Superclass::VectorType                     VectorType;
-  typedef Superclass::VariableLengthVectorType       VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType           ImageKeywordlistType;
+  typedef Superclass::ImageType                ImageType;
+  typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
+  typedef Superclass::VectorType               VectorType;
+  typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
+  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   typedef FilterFunctionValues                              FilterFunctionValuesType;
-  typedef otb::ObjectList <FilterFunctionValuesType>        InternalWavelengthSpectralBandVectorType;
+  typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
   /** Get the sun elevation from the ossim metadata */
@@ -96,18 +95,20 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
-  virtual WavelengthSpectralBandVectorType GetSpectralSensitivity ()  const = 0;
+  virtual WavelengthSpectralBandVectorType GetSpectralSensitivity() const = 0;
+
 protected:
   OpticalImageMetadataInterface();
-  ~OpticalImageMetadataInterface() override {}
+  ~OpticalImageMetadataInterface() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 
 private:
-  OpticalImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  OpticalImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

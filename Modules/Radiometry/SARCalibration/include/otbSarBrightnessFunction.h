@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,15 +46,13 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarBrightnessFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
-      TCoordRep>
+class ITK_EXPORT SarBrightnessFunction
+    : public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef SarBrightnessFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
-      TCoordRep>                        Superclass;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType, TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -76,13 +74,13 @@ public:
 
 
   /** Datatype used for the evaluation */
-  typedef double                                                 RealType;
-  typedef otb::Functor::SarBrightnessFunctor<RealType, RealType>  FunctorType;
-  typedef typename FunctorType::RealType                         FunctorRealType;
+  typedef double RealType;
+  typedef otb::Functor::SarBrightnessFunctor<RealType, RealType> FunctorType;
+  typedef typename FunctorType::RealType FunctorRealType;
 
-  typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
-  typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
-  typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
+  typedef otb::SarParametricMapFunction<InputImageType> ParametricFunctionType;
+  typedef typename ParametricFunctionType::Pointer      ParametricFunctionPointer;
+  typedef typename ParametricFunctionType::ConstPointer ParametricFunctionConstPointer;
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -94,8 +92,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -106,7 +103,7 @@ public:
    * \warning this method caches BufferedRegion information.
    * If the BufferedRegion has changed, user must call
    * SetInputImage again to update cached values. */
-  void SetInputImage( const InputImageType * ptr ) override;
+  void SetInputImage(const InputImageType* ptr) override;
 
 
   /** Get/Set the Scale value */
@@ -140,25 +137,27 @@ public:
 
 protected:
   SarBrightnessFunction();
-  ~SarBrightnessFunction() override{}
+  ~SarBrightnessFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SarBrightnessFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  SarBrightnessFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  FunctorRealType             m_Scale;
-  ParametricFunctionPointer   m_Noise;
-  bool                        m_EnableNoise;
-  ParametricFunctionPointer   m_AntennaPatternNewGain;
-  ParametricFunctionPointer   m_AntennaPatternOldGain;
-  ParametricFunctionPointer   m_RangeSpreadLoss;
+  FunctorRealType           m_Scale;
+  ParametricFunctionPointer m_Noise;
+  bool                      m_EnableNoise;
+  ParametricFunctionPointer m_AntennaPatternNewGain;
+  ParametricFunctionPointer m_AntennaPatternOldGain;
+  ParametricFunctionPointer m_RangeSpreadLoss;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarBrightnessFunction.txx"
+#include "otbSarBrightnessFunction.hxx"
 #endif
 
 #endif

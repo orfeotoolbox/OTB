@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,13 +27,10 @@ otbDisparityMapToDEMFilter.cxx
 otbDisparityMapMedianFilter.cxx
 otbDisparityTranslateFilter.cxx
 otbSubPixelDisparityImageFilter.cxx
-otbDisparityMapEstimationMethodNew.cxx
 otbDisparityMapTo3DFilter.cxx
 otbMultiDisparityMapTo3DFilter.cxx
-otbFineRegistrationImageFilterNew.cxx
 otbFineRegistrationImageFilterTest.cxx
 otbNCCRegistrationFilter.cxx
-otbNCCRegistrationFilterNew.cxx
 otbPixelWiseBlockMatchingImageFilter.cxx
 )
 
@@ -44,7 +41,7 @@ otb_module_target_label(otbDisparityMapTestDriver)
 # Tests Declaration
 
 otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDriver
-  --compare-ascii ${NOTOL}
+  --compare-ascii ${EPSILON_3}
   ${BASELINE_FILES}/dmDisparityMapEstimationOutput1.txt
   ${TEMP}/dmDisparityMapEstimationOutput1.txt
   otbDisparityMapEstimationMethod
@@ -52,7 +49,7 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   ${INPUTDATA}/moving.png
   ${INPUTDATA}/pointSet.png
   ${TEMP}/dmDisparityMapEstimationOutput1.txt
-  20 20
+  10 10
   )
 
 #otb_add_test(NAME dmTvDisparityMapToDEMFilter COMMAND otbDisparityMapTestDriver
@@ -61,8 +58,8 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   #${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
   #otbDisparityMapToDEMFilter
   #${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-  #${EXAMPLEDATA}/sensor_stereo_left.tif
-  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${INPUTDATA}/sensor_stereo_left.tif
+  #${INPUTDATA}/sensor_stereo_right.tif
   #${INPUTDATA}/sensor_stereo_rectif_left.tif
   #${INPUTDATA}/sensor_stereo_rectif_right.tif
   #${TEMP}/dmTvDisparityMapToDEMFilterOutput.tif
@@ -72,12 +69,6 @@ otb_add_test(NAME dmTvDisparityMapEstimationMethod COMMAND otbDisparityMapTestDr
   #2.5
   #${INPUTDATA}/sensor_stereo_dmap_mask.tif
   #)
-
-otb_add_test(NAME dmTuDisparityMapToDEMFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapToDEMFilterNew)
-
-otb_add_test(NAME dmTuDisparityMapMedianFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapMedianFilterNew)
 
 otb_add_test(NAME dmTvDisparityMapMedianFilter COMMAND otbDisparityMapTestDriver
   --compare-image ${NOTOL}
@@ -98,12 +89,9 @@ otb_add_test(NAME dmTvDisparityTranslateFilter COMMAND otbDisparityMapTestDriver
   ${INPUTDATA}/sensor_stereo_blockmatching_output.tif
   ${INPUTDATA}/sensor_stereo_rectif_inv_left.tif
   ${INPUTDATA}/sensor_stereo_rectif_right.tif
-  ${EXAMPLEDATA}/sensor_stereo_left.tif
+  ${INPUTDATA}/sensor_stereo_left.tif
   ${TEMP}/dmTvDisparityTranslateFilterOutput.tif
   )
-
-otb_add_test(NAME dmTuDisparityTranslateFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityTranslateFilterNew)
 
 otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 3
@@ -114,8 +102,8 @@ otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTes
   ${BASELINE}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
   ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
   otbSubPixelDisparityImageFilter
-  ${EXAMPLEDATA}/StereoFixed.png
-  ${EXAMPLEDATA}/StereoMoving.png
+  ${INPUTDATA}/StereoFixed.png
+  ${INPUTDATA}/StereoMoving.png
   ${INPUTDATA}/StereoPixelWiseBlockMatchingDisparity.tif
   ${INPUTDATA}/StereoPixelWiseBlockMatchingMetric.tif
   ${TEMP}/dmTvSubPixelWiseBlockMatchingImageFilterNCCOutputHDisparity.tif
@@ -128,31 +116,19 @@ otb_add_test(NAME dmTvSubPixelDisparityImageFilterNCC COMMAND otbDisparityMapTes
   -2 2 # vdisp threshold
   )
 
-otb_add_test(NAME dmTuSubPixelDisparityImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbSubPixelDisparityImageFilterNew)
-
-otb_add_test(NAME dmTuDisparityMapEstimationMethodNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapEstimationMethodNew)
-
 #otb_add_test(NAME dmTvDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
   #--compare-image ${EPSILON_6}
   #${BASELINE}/dmTvDisparityMapTo3DFilterOutput.tif
   #${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
   #otbDisparityMapTo3DFilter
   #${INPUTDATA}/sensor_stereo_blockmatching_output.tif
-  #${EXAMPLEDATA}/sensor_stereo_left.tif
-  #${EXAMPLEDATA}/sensor_stereo_right.tif
+  #${INPUTDATA}/sensor_stereo_left.tif
+  #${INPUTDATA}/sensor_stereo_right.tif
   #${INPUTDATA}/sensor_stereo_rectif_left.tif
   #${INPUTDATA}/sensor_stereo_rectif_right.tif
   #${TEMP}/dmTvDisparityMapTo3DFilterOutput.tif
   #${INPUTDATA}/sensor_stereo_dmap_mask.tif
   #)
-
-otb_add_test(NAME dmTuDisparityMapTo3DFilterNew COMMAND otbDisparityMapTestDriver
-  otbDisparityMapTo3DFilterNew)
-
-otb_add_test(NAME dmTuMultiDisparityMapTo3DFilterNew COMMAND otbDisparityMapTestDriver
-  otbMultiDisparityMapTo3DFilterNew)
 
 otb_add_test(NAME dmTvMultiDisparityMapTo3DFilter COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_6} 2
@@ -172,9 +148,6 @@ otb_add_test(NAME dmTvMultiDisparityMapTo3DFilter COMMAND otbDisparityMapTestDri
   ${TEMP}/dmTvMultiDisparityMapTo3DFilterResidue.tif
   )
 
-otb_add_test(NAME dmTuFineRegistrationImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbFineRegistrationImageFilterNew
-  )
 otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif
@@ -182,18 +155,18 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanSquare COMMAND otbD
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif
   otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+  ${INPUTDATA}/StereoFixed.png # fixedFileName
+  ${INPUTDATA}/StereoMoving.png # movingFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareMetric.tif # output correlFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanSquareField.tif  # output fieldFileName
-  3 # radius
-  2 # sradius
+  1 # radius
+  1 # sradius
   0.01 # precision
   2 # Mean square
   1 # Grid step
   0 # Initial offset x
   0 # Initial offset y
-  0 0 80 65 # region to proceed
+  0 0 32 32 # region to proceed
   )
 otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifference COMMAND otbDisparityMapTestDriver
   --compare-n-images ${EPSILON_10} 2
@@ -202,8 +175,8 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenc
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif
   otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+  ${INPUTDATA}/StereoFixed.png # fixedFileName
+  ${INPUTDATA}/StereoMoving.png # movingFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceMetric.tif # output correlFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithMeanReciprocalDifferenceField.tif  # output fieldFileName
   3 # radius
@@ -222,8 +195,8 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithNormalizedCorrelation C
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif
   otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+  ${INPUTDATA}/StereoFixed.png # fixedFileName
+  ${INPUTDATA}/StereoMoving.png # movingFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationMetric.tif # output correlFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithNormalizedCorrelationField.tif  # output fieldFileName
   3 # radius
@@ -242,8 +215,8 @@ otb_add_test(NAME dmTvFineRegistrationImageFilterTestWithCorrelation COMMAND otb
   ${BASELINE}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
   ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif
   otbFineRegistrationImageFilterTest
-  ${EXAMPLEDATA}/StereoFixed.png # fixedFileName
-  ${EXAMPLEDATA}/StereoMoving.png # movingFileName
+  ${INPUTDATA}/StereoFixed.png # fixedFileName
+  ${INPUTDATA}/StereoMoving.png # movingFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationMetric.tif # output correlFileName
   ${TEMP}/feTvFineRegistrationImageFilterTestWithCorrelationField.tif  # output fieldFileName
   3 # radius
@@ -264,10 +237,7 @@ otb_add_test(NAME dmTvNCCRegistrationFilter COMMAND otbDisparityMapTestDriver
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles_sub_warped_sinus.tif
   ${TEMP}/dmNCCRegistrationFilterOutput.tif
   5 1.0 2)
-otb_add_test(NAME dmTuNCCRegistrationFilterNew COMMAND otbDisparityMapTestDriver
-  otbNCCRegistrationFilterNew)
-otb_add_test(NAME dmTuPixelWiseBlockMatchingImageFilterNew COMMAND otbDisparityMapTestDriver
-  otbPixelWiseBlockMatchingImageFilterNew)
+
 otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbDisparityMapTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
@@ -275,8 +245,8 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilterNCC COMMAND otbDisparityM
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
   otbPixelWiseBlockMatchingImageFilterNCC
-  ${EXAMPLEDATA}/StereoFixed.png
-  ${EXAMPLEDATA}/StereoMoving.png
+  ${INPUTDATA}/StereoFixed.png
+  ${INPUTDATA}/StereoMoving.png
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputDisparity.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterNCCOutputMetric.tif
   2
@@ -289,8 +259,8 @@ otb_add_test(NAME dmTvPixelWiseBlockMatchingImageFilter COMMAND otbDisparityMapT
   ${BASELINE}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
   otbPixelWiseBlockMatchingImageFilter
-  ${EXAMPLEDATA}/StereoFixed.png
-  ${EXAMPLEDATA}/StereoMoving.png
+  ${INPUTDATA}/StereoFixed.png
+  ${INPUTDATA}/StereoMoving.png
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputDisparity.tif
   ${TEMP}/dmTvPixelWiseBlockMatchingImageFilterOutputMetric.tif
   2

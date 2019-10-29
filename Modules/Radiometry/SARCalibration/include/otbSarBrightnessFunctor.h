@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,36 +38,36 @@ namespace Functor
  *
  * \ingroup OTBSARCalibration
  */
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ITK_EXPORT SarBrightnessFunctor
 {
 public:
-  typedef TInput                                            InputType;
-  typedef TOutput                                           OutputType;
-  typedef typename itk::NumericTraits<InputType>::AbsType   RealType;
+  typedef TInput                                          InputType;
+  typedef TOutput                                         OutputType;
+  typedef typename itk::NumericTraits<InputType>::AbsType RealType;
 
   SarBrightnessFunctor()
   {
-    m_Noise = 0.0;
-    m_Scale = 1.0;
+    m_Noise                 = 0.0;
+    m_Scale                 = 1.0;
     m_AntennaPatternOldGain = 1.0;
     m_AntennaPatternNewGain = 1.0;
-    m_RangeSpreadLoss = 1.0;
+    m_RangeSpreadLoss       = 1.0;
   };
 
   ~SarBrightnessFunctor(){};
 
-  inline TOutput operator ()(const TInput& value) const
+  inline TOutput operator()(const TInput& value) const
   {
-    RealType digitalNumber = static_cast<RealType> (vcl_abs(value));
+    RealType digitalNumber = static_cast<RealType>(std::abs(value));
     RealType beta;
 
-    beta  = m_Scale * (digitalNumber * digitalNumber - m_Noise);
+    beta = m_Scale * (digitalNumber * digitalNumber - m_Noise);
     beta *= m_AntennaPatternOldGain;
     beta /= m_AntennaPatternNewGain;
     beta *= m_RangeSpreadLoss;
 
-    if(beta < 0.0)
+    if (beta < 0.0)
     {
       beta = 0.0;
     }
@@ -136,14 +136,13 @@ public:
   }
 
 private:
-  RealType   m_Noise;
-  RealType   m_Scale;
-  RealType   m_AntennaPatternNewGain;
-  RealType   m_AntennaPatternOldGain;
-  RealType   m_RangeSpreadLoss;
+  RealType m_Noise;
+  RealType m_Scale;
+  RealType m_AntennaPatternNewGain;
+  RealType m_AntennaPatternOldGain;
+  RealType m_RangeSpreadLoss;
 };
 }
-
 }
 
 #endif

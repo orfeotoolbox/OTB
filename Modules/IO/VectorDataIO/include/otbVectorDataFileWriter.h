@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 #include "itkProcessObject.h"
 #include "itkMacro.h"
 #include "otbVectorDataIOBase.h"
+#include <string>
 
 namespace otb
 {
@@ -40,18 +41,14 @@ public:
   itkTypeMacro(VectorDataFileWriterException, ExceptionObject);
 
   /** Constructor. */
-  VectorDataFileWriterException(const char *file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
+  VectorDataFileWriterException(const char* file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : ExceptionObject(file, line, message, loc)
   {
   }
 
   /** Constructor. */
-  VectorDataFileWriterException(const std::string& file, unsigned int line,
-                                const char* message = "Error in IO",
-                                const char* loc = "Unknown") :
-    ExceptionObject(file, line, message, loc)
+  VectorDataFileWriterException(const std::string& file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : ExceptionObject(file, line, message, loc)
   {
   }
 };
@@ -68,7 +65,6 @@ template <class TInputVectorData>
 class ITK_EXPORT VectorDataFileWriter : public itk::ProcessObject
 {
 public:
-
   /** Standard class typedefs. */
   typedef VectorDataFileWriter          Self;
   typedef itk::ProcessObject            Superclass;
@@ -86,9 +82,9 @@ public:
 
   /** Set/Get the image input of this writer.  */
   using Superclass::SetInput;
-  void SetInput(const InputVectorDataType *input);
-  const InputVectorDataType * GetInput(void);
-  const InputVectorDataType * GetInput(unsigned int idx);
+  void SetInput(const InputVectorDataType* input);
+  const InputVectorDataType* GetInput(void);
+  const InputVectorDataType* GetInput(unsigned int idx);
 
   /** Does the real work. */
   virtual void Write();
@@ -110,21 +106,20 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  std::string m_FileName; // The file to be read
+  std::string                            m_FileName; // The file to be read
   typename VectorDataIOBaseType::Pointer m_VectorDataIO;
-  bool m_UserSpecifiedVectorDataIO;  // track whether the VectorDataIO
-  bool m_FactorySpecifiedVectorDataIO;
+  bool                                   m_UserSpecifiedVectorDataIO; // track whether the VectorDataIO
+  bool                                   m_FactorySpecifiedVectorDataIO;
 
 private:
-  VectorDataFileWriter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  VectorDataFileWriter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataFileWriter.txx"
+#include "otbVectorDataFileWriter.hxx"
 #endif
 
 #endif // otbVectorDataFileWriter_h

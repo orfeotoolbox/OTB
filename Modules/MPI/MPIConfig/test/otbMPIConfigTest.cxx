@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,16 +23,16 @@
 #include <iostream>
 #include "itkMultiThreader.h"
 
-int otbMPIConfigTest(int argc, char* argv[]) {
+int otbMPIConfigTest(int argc, char* argv[])
+{
 
   // MPI Configuration
-  typedef otb::MPIConfig    MPIConfigType;
+  typedef otb::MPIConfig MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
-  config->Init(argc,argv,true);
+  config->Init(argc, argv, true);
 
   // Test
-  std::cout<<"OTB MPI config test. I am process "<<config->GetMyRank()<<" among "<<config->GetNbProcs()<<"."<<std::endl;
+  std::cout << "OTB MPI config test. I am process " << config->GetMyRank() << " among " << config->GetNbProcs() << "." << std::endl;
 
   return EXIT_SUCCESS;
 }
-

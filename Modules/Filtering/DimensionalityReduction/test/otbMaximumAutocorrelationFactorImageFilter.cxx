@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,27 +25,20 @@
 
 typedef otb::VectorImage<unsigned short, 2> ImageType;
 typedef otb::VectorImage<double, 2>         OutputImageType;
-typedef otb::ImageFileReader<ImageType>    ReaderType;
+typedef otb::ImageFileReader<ImageType>       ReaderType;
 typedef otb::ImageFileWriter<OutputImageType> WriterType;
 typedef otb::MaximumAutocorrelationFactorImageFilter<ImageType, OutputImageType> MADFilterType;
-
-int otbMaximumAutocorrelationFactorImageFilterNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  MADFilterType::Pointer  madFilter = MADFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbMaximumAutocorrelationFactorImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  char * infname = argv[1];
-  char * outfname = argv[2];
+  char* infname  = argv[1];
+  char* outfname = argv[2];
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
 
-  MADFilterType::Pointer  madFilter = MADFilterType::New();
+  MADFilterType::Pointer madFilter = MADFilterType::New();
   madFilter->SetInput(reader->GetOutput());
 
   WriterType::Pointer writer = WriterType::New();
@@ -53,11 +46,11 @@ int otbMaximumAutocorrelationFactorImageFilter(int itkNotUsed(argc), char* argv[
   writer->SetFileName(outfname);
   writer->Update();
 
-  std::cout<<"V: "<<std::endl;
-  std::cout<<madFilter->GetV()<<std::endl;
+  std::cout << "V: " << std::endl;
+  std::cout << madFilter->GetV() << std::endl;
 
-  std::cout<<"Auto-correlation: "<<std::endl;
-  std::cout<<madFilter->GetAutoCorrelation()<<std::endl;
+  std::cout << "Auto-correlation: " << std::endl;
+  std::cout << madFilter->GetAutoCorrelation() << std::endl;
 
   return EXIT_SUCCESS;
 }

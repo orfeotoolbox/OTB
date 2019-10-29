@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -39,7 +39,7 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const SQ_ADSR& data)
    {
-      os<<"zero_doppler_time:"<<data._zero_doppler_time.c_str()<<std::endl;
+      os<<"zero_doppler_time:"<<data._zero_doppler_time <<std::endl;
 
       os<<"attach_flag:"<<data._attach_flag<<std::endl;
 

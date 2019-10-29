@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -48,10 +48,10 @@ set(installed_dirs)
 list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/include/${otb_dir_name}")
 # lib/{otb,python} directory
 list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/otb")
+# share/otb directory
+list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/otb")
 # lib/cmake/OTB-X.Y directory
 list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/lib/cmake/${otb_dir_name}")
-# share/OTB-X.Y directory
-list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/${otb_dir_name}")
 # share/doc/OTB-X.Y directory
 list(APPEND installed_dirs "@CMAKE_INSTALL_PREFIX@/share/doc/${otb_dir_name}")
 

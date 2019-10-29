@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -70,14 +70,16 @@ public:
   typedef itk::DataObject::Pointer DataObjectPointer;
 
   using Superclass::SetInput;
-  virtual void SetInput(const InputListType *input);
-  const InputListType * GetInput(void);
+  virtual void SetInput(const InputListType* input);
+  const InputListType* GetInput(void);
 
 protected:
   /** Constructor */
   ObjectListToObjectListFilter();
   /** Destructor */
-  ~ObjectListToObjectListFilter() override {}
+  ~ObjectListToObjectListFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -89,10 +91,12 @@ protected:
 
   virtual void BeforeThreadedGenerateData();
 
-  virtual void AfterThreadedGenerateData() {}
+  virtual void AfterThreadedGenerateData()
+  {
+  }
 
-  virtual int SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements,
-                                   unsigned int& startIndex, unsigned int& stopIndex);
+  virtual int SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements, unsigned int& startIndex,
+                                   unsigned int& stopIndex);
 
   /** startIndex and stopIndex represent the indices of the Objects
    * to examine in thread threadId */
@@ -101,7 +105,7 @@ protected:
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void *arg);
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void* arg);
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -114,15 +118,14 @@ protected:
   /** End Multi-threading implementation */
 
 private:
-  ObjectListToObjectListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  ObjectListToObjectListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectListToObjectListFilter.txx"
+#include "otbObjectListToObjectListFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,15 +32,14 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TPath>
-class ITK_EXPORT PathListToPathListFilter
-  : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> >
+class ITK_EXPORT PathListToPathListFilter : public ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath>>
 {
 public:
   /** Standard typedefs */
-  typedef PathListToPathListFilter                                            Self;
-  typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath> > Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef PathListToPathListFilter Self;
+  typedef ObjectListToObjectListFilter<ObjectList<TPath>, ObjectList<TPath>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -61,13 +60,15 @@ public:
 
 protected:
   /** Constructor */
-  PathListToPathListFilter() {};
+  PathListToPathListFilter(){};
   /** Destructor */
-  ~PathListToPathListFilter() override {}
+  ~PathListToPathListFilter() override
+  {
+  }
 
 private:
-  PathListToPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PathListToPathListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 

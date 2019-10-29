@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,21 +27,21 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbCloudEstimatorFilter(int itkNotUsed(argc), char * argv[])
+int otbCloudEstimatorFilter(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension                                                   = 2;
-  typedef double                                                             PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                             VectorImageType;
-  typedef otb::Image<PixelType, Dimension>                                   ImageType;
-  typedef VectorImageType::PixelType                                         VectorPixelType;
-  typedef otb::Functor::CloudEstimatorFunctor<VectorPixelType, PixelType>    FunctorType;
+  const unsigned int Dimension = 2;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
+  typedef otb::Image<PixelType, Dimension>       ImageType;
+  typedef VectorImageType::PixelType VectorPixelType;
+  typedef otb::Functor::CloudEstimatorFunctor<VectorPixelType, PixelType> FunctorType;
   typedef otb::CloudEstimatorFilter<VectorImageType, ImageType, FunctorType> CloudEstimatorFilterType;
-  typedef otb::ImageFileReader<VectorImageType>                              ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                    WriterType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType>       WriterType;
 
-  //Parameters
-  const char *    inputFileName(argv[1]);
-  const char *    outputFileName(argv[2]);
+  // Parameters
+  const char*     inputFileName(argv[1]);
+  const char*     outputFileName(argv[2]);
   VectorPixelType referencePixel;
   referencePixel.SetSize(4);
   referencePixel.Fill(0.);
@@ -53,12 +53,12 @@ int otbCloudEstimatorFilter(int itkNotUsed(argc), char * argv[])
 
   const double variance = (atof(argv[7]));
 
-// Instantiating object
-  ReaderType::Pointer               reader = ReaderType::New();
+  // Instantiating object
+  ReaderType::Pointer               reader         = ReaderType::New();
   CloudEstimatorFilterType::Pointer cloudEstimator = CloudEstimatorFilterType::New();
-  WriterType::Pointer               writer = WriterType::New();
+  WriterType::Pointer               writer         = WriterType::New();
 
-  //Initialization parameters
+  // Initialization parameters
   reader->SetFileName(inputFileName);
 
   cloudEstimator->SetInput(reader->GetOutput());
@@ -70,5 +70,4 @@ int otbCloudEstimatorFilter(int itkNotUsed(argc), char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

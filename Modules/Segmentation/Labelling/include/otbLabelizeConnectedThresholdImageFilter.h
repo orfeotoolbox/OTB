@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,19 +35,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConnectedThresholdImageFilter
-  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> >
+    : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage>>
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeConnectedThresholdImageFilter
-  Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self>
-  Pointer;
-  typedef itk::SmartPointer<const Self>
-  ConstPointer;
+  typedef LabelizeConnectedThresholdImageFilter Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConnectedThresholdImageFilter<TInputImage, TOutputImage>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
@@ -82,15 +77,17 @@ public:
 
 protected:
   LabelizeConnectedThresholdImageFilter();
-  ~LabelizeConnectedThresholdImageFilter() override {}
+  ~LabelizeConnectedThresholdImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
   void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeConnectedThresholdImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  LabelizeConnectedThresholdImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Delta + threshold for growing region */
   InputPixelType m_UpperThresholdDelta;
@@ -106,7 +103,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelizeConnectedThresholdImageFilter.txx"
+#include "otbLabelizeConnectedThresholdImageFilter.hxx"
 #endif
 
 #endif

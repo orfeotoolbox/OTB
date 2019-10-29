@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,23 +19,21 @@
  */
 
 
-
-
 #include "otbImageToPointSetFilter.h"
 #include "otbImage.h"
 #include "itkPointSet.h"
 
-int otbImageToPointSetFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbImageToPointSetFilterTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-/*
-  const unsigned int Dimension = 2;
+  /*
+    const unsigned int Dimension = 2;
 
-  typedef unsigned char PixelType;
+    typedef unsigned char PixelType;
 
-  typedef otb::Image<PixelType, Dimension>                    ImageType;
-  typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
+    typedef otb::Image<PixelType, Dimension>                    ImageType;
+    typedef itk::PointSet<PixelType, Dimension>                 PointSetType;
 
-  //FunctionType::Pointer function = FunctionType::New();
-*/
+    //FunctionType::Pointer function = FunctionType::New();
+  */
   return EXIT_SUCCESS;
 }

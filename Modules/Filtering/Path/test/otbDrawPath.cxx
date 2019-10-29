@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "itkPolyLineParametricPath.h"
@@ -29,18 +27,18 @@
 #include "otbDrawPathFilter.h"
 #include "otbImageFileWriter.h"
 
-int otbDrawPathDessinCarre(int itkNotUsed(argc), char * argv[])
+int otbDrawPathDessinCarre(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
-  typedef InputImageType::PointType              InputImagePointType;
+  typedef InputImageType::PointType InputImagePointType;
 
   typedef itk::PolyLineParametricPath<Dimension> PathType;
 
@@ -49,9 +47,9 @@ int otbDrawPathDessinCarre(int itkNotUsed(argc), char * argv[])
 
   typedef otb::DrawPathFilter<InputImageType, PathType, OutputImageType> DrawPathFilterType;
 
-  ReaderType::Pointer reader         = ReaderType::New();
-  WriterType::Pointer writer         = WriterType::New();
-  PathType::Pointer   VertexList     = PathType::New();
+  ReaderType::Pointer reader     = ReaderType::New();
+  WriterType::Pointer writer     = WriterType::New();
+  PathType::Pointer   VertexList = PathType::New();
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);

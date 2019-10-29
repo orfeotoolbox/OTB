@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,8 +49,7 @@ public:
   /** Standard typedefs */
   typedef PolyLineImageConstIterator Self;
 
-  itkStaticConstMacro(ImageIteratorDimension, unsigned int,
-                      TImage::ImageDimension);
+  itkStaticConstMacro(ImageIteratorDimension, unsigned int, TImage::ImageDimension);
 
   typedef typename TImage::IndexType             IndexType;
   typedef typename TImage::IndexValueType        IndexValueType;
@@ -91,35 +90,35 @@ public:
   /** Is the iterator at the end of the line? */
   bool IsAtEnd()
   {
-    return (m_InternalVertexIterator == m_Path->GetVertexList()->End())
-           && m_InternalImageIterator.IsAtEnd();
+    return (m_InternalVertexIterator == m_Path->GetVertexList()->End()) && m_InternalImageIterator.IsAtEnd();
   }
   /** Move an iterator to the beginning of the line. */
   void GoToBegin();
   /** Walk forward along the line to the next index in the image. */
-  void operator ++();
+  void operator++();
   /** operator= is provided to make sure the handle to the image is properly
    * reference counted. */
-  Self& operator =(const Self& it);
+  Self& operator=(const Self& it);
   /** Constructor establishes an iterator to walk along a line */
-  PolyLineImageConstIterator(const ImageType * imagePtr, const PathType * pathPtr);
+  PolyLineImageConstIterator(const ImageType* imagePtr, const PathType* pathPtr);
   /** Default Destructor. */
-  virtual ~PolyLineImageConstIterator() {}
+  virtual ~PolyLineImageConstIterator()
+  {
+  }
 
-protected: //made protected so other iterators can access
-
+protected: // made protected so other iterators can access
   /** Smart pointer to the source image. */
   typename ImageType::ConstWeakPointer m_Image;
 
   /** Smart pointer to the path */
   typename PathType::ConstPointer m_Path;
-  InternalImageIteratorType m_InternalImageIterator;
-  VertexIteratorType        m_InternalVertexIterator;
+  InternalImageIteratorType       m_InternalImageIterator;
+  VertexIteratorType              m_InternalVertexIterator;
 };
 
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolyLineImageConstIterator.txx"
+#include "otbPolyLineImageConstIterator.hxx"
 #endif
 
 #endif

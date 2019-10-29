@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,25 +34,24 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension = 2;
-  typedef double                                                  InternalPixelType;
+  typedef double     InternalPixelType;
   typedef otb::VectorImage<InternalPixelType, Dimension>          ImageType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType> ImageResamplerType;
 
   // Instantiate a Resampler
   ImageResamplerType::Pointer resampler = ImageResamplerType::New();
 
-  if (argc== 4)
-    {
-    const char * infname = argv[1];
-    const char * outfname = argv[3];
+  if (argc == 4)
+  {
+    const char*  infname  = argv[1];
+    const char*  outfname = argv[3];
     unsigned int isize    = atoi(argv[2]);
 
-    typedef itk::AffineTransform<
-        InternalPixelType, Dimension>              AffineTransformType;
-    typedef otb::ImageFileReader<ImageType>         ReaderType;
+    typedef itk::AffineTransform<InternalPixelType, Dimension> AffineTransformType;
+    typedef otb::ImageFileReader<ImageType> ReaderType;
 
     // Instantiate an affine transformation Pointer
-    AffineTransformType::Pointer affineTransform    = AffineTransformType::New();
+    AffineTransformType::Pointer affineTransform = AffineTransformType::New();
 
     // Instantiate reader
     ReaderType::Pointer reader = ReaderType::New();
@@ -63,21 +62,22 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
 
     /** Set the options. */
     ImageResamplerType::OriginType centerOfRotation;
-    centerOfRotation[ 0 ] = -3.0; centerOfRotation[ 1 ] = -3.0;
-    affineTransform->SetCenter( centerOfRotation );
+    centerOfRotation[0] = -3.0;
+    centerOfRotation[1] = -3.0;
+    affineTransform->SetCenter(centerOfRotation);
 
     /** Create and set parameters. */
-    AffineTransformType::ParametersType parameters( affineTransform->GetNumberOfParameters() );
-    parameters[ 0 ] =   1.1;
-    parameters[ 1 ] =   0.1;
-    parameters[ 2 ] =  -0.2;
-    parameters[ 3 ] =   0.9;
-    parameters[ 4 ] =  10.3;
-    parameters[ 5 ] = -33.8;
-    affineTransform->SetParameters( parameters );
+    AffineTransformType::ParametersType parameters(affineTransform->GetNumberOfParameters());
+    parameters[0] = 1.1;
+    parameters[1] = 0.1;
+    parameters[2] = -0.2;
+    parameters[3] = 0.9;
+    parameters[4] = 10.3;
+    parameters[5] = -33.8;
+    affineTransform->SetParameters(parameters);
 
     // Get the size specified by the user
-    ImageType::SizeType   size;
+    ImageType::SizeType size;
     size.Fill(isize);
 
     // Default value builder
@@ -93,17 +93,17 @@ int otbStreamingResampleImageFilterWithAffineTransform(int argc, char* argv[])
     resampler->SetEdgePaddingValue(defaultValue);
 
     // Write the resampled image
-    typedef otb::ImageFileWriter<ImageType>    WriterType;
-    WriterType::Pointer writer= WriterType::New();
+    typedef otb::ImageFileWriter<ImageType> WriterType;
+    WriterType::Pointer                     writer = WriterType::New();
     writer->SetNumberOfDivisionsTiledStreaming(4);
     writer->SetFileName(outfname);
     writer->SetInput(resampler->GetOutput());
     writer->Update();
-    }
+  }
   else
-    {
-    std::cout <<" Unit Test"<< std::endl;
-    }
+  {
+    std::cout << " Unit Test" << std::endl;
+  }
 
 
   return EXIT_SUCCESS;

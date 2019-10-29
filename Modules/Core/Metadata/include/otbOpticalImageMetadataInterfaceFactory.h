@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,9 +36,9 @@ class OTBMetadata_EXPORT OpticalImageMetadataInterfaceFactory : public itk::Obje
 public:
   /** Standard class typedefs. */
   typedef OpticalImageMetadataInterfaceFactory Self;
-  typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::Object                          Superclass;
+  typedef itk::SmartPointer<Self>              Pointer;
+  typedef itk::SmartPointer<const Self>        ConstPointer;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -64,9 +64,8 @@ protected:
   ~OpticalImageMetadataInterfaceFactory() override;
 
 private:
-  OpticalImageMetadataInterfaceFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  OpticalImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

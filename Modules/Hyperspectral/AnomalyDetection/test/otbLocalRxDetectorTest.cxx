@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,67 +19,56 @@
  */
 
 #include "otbImageFileReader.h"
-#include "otbImage.h"
-#include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
 #include "otbLocalRxDetectorFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
-int LocalRXDetectorNewTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int LocalRXDetectorTest(int itkNotUsed(argc), char* argv[])
 {
-       typedef double PixelType;
-       typedef otb::VectorImage<PixelType, 2> VectorImageType;
-       typedef otb::Image<PixelType, 2> ImageType;
-       typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+  typedef otb::Image<PixelType, 2>       ImageType;
+  typedef otb::Functor::LocalRxDetectionFunctor<PixelType> LocalRxDetectorFunctorType;
 
-       LocalRxDetectorFilterType::Pointer rxDetector = LocalRxDetectorFilterType::New();
-        return EXIT_SUCCESS;
-}
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
-int LocalRXDetectorTest(int itkNotUsed(argc), char * argv[])
-{
-       typedef double PixelType;
-       typedef otb::VectorImage<PixelType, 2> VectorImageType;
-       typedef otb::Image<PixelType, 2> ImageType;
-       typedef otb::LocalRxDetectorFilter<VectorImageType, ImageType> LocalRxDetectorFilterType;
+  typedef unsigned char                        WritePixelType;
+  typedef otb::Image<WritePixelType>           WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
 
-       typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  /////////// PARAMETERS ///////////
 
-       typedef unsigned char WritePixelType;
-       typedef otb::Image<WritePixelType> WriteImageType;
-       typedef otb::ImageFileWriter<WriteImageType> WriterType;
-       typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
+  const char*        filename       = argv[1];
+  const char*        outputFilename = argv[2];
+  const unsigned int externalRadius = atoi(argv[3]);
+  const unsigned int internalRadius = atoi(argv[4]);
 
+  //////// RX Filtering /////////
 
-       /////////// PARAMETERS ///////////
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
 
+  LocalRxDetectorFunctorType detectorFunctor;
 
-       const char * filename = argv[1];
-       const char * outputFilename = argv[2];
-       const int externalRadius = atoi(argv[3]);
-       const int internalRadius = atoi(argv[4]);
+  detectorFunctor.SetInternalRadius(internalRadius, internalRadius);
 
-       //////// RX Filtering /////////
+  auto rxDetector = otb::NewFunctorFilter(detectorFunctor, {{externalRadius, externalRadius}});
 
-       ReaderType::Pointer reader = ReaderType::New();
-       reader->SetFileName(filename);
+  rxDetector->SetInputs(reader->GetOutput());
 
-       LocalRxDetectorFilterType::Pointer rxDetector = LocalRxDetectorFilterType::New();
-       rxDetector->SetExternalRadius(externalRadius);
-       rxDetector->SetInternalRadius(internalRadius);
-       rxDetector->SetInput(reader->GetOutput());
+  //////// Rescaling /////////
 
-       RescalerType::Pointer rescaler = RescalerType::New();
-       rescaler->SetOutputMinimum(0);
-       rescaler->SetOutputMaximum(255);
-       rescaler->SetInput(rxDetector->GetOutput());
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput(rxDetector->GetOutput());
 
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(rescaler->GetOutput());
+  writer->Update();
 
-       WriterType::Pointer writer = WriterType::New();
-       writer->SetFileName(outputFilename);
-       writer->SetInput(rescaler->GetOutput());
-       writer->Update();
-
-       return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

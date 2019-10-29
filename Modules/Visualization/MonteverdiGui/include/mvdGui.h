@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -107,10 +107,7 @@ enum Resolution
 /**
  * Constant naming effect values.
  */
-OTBMonteverdiGUI_EXPORT
-extern
-char const * const
-RESOLUTION_NAMES[ RESOLUTION_COUNT ];
+OTBMonteverdiGUI_EXPORT extern char const* const RESOLUTION_NAMES[RESOLUTION_COUNT];
 
 /**
  */
@@ -131,17 +128,11 @@ enum TileSize
 /**
  * Constant naming effect values.
  */
-OTBMonteverdiGUI_EXPORT
-extern
-char const * const
-TILE_SIZE_NAMES[ TILE_SIZE_COUNT ];
+OTBMonteverdiGUI_EXPORT extern char const* const TILE_SIZE_NAMES[TILE_SIZE_COUNT];
 
 /**
  */
-OTBMonteverdiGUI_EXPORT
-extern
-int
-TILE_SIZE_VALUE[ TILE_SIZE_COUNT ];
+OTBMonteverdiGUI_EXPORT extern int TILE_SIZE_VALUE[TILE_SIZE_COUNT];
 
 /**
  */
@@ -167,16 +158,10 @@ namespace mvd
 
 /**
  */
-OTBMonteverdiGUI_EXPORT
-void
-AddItemsInto( QComboBox * comboBox,
-	      const char * context,
-	      char const * const names[],
-	      size_t count );
+OTBMonteverdiGUI_EXPORT void AddItemsInto(QComboBox* comboBox, const char* context, char const* const names[], size_t count);
 /**
  */
-QMessageBox & CustomizeMessageBox( QMessageBox & messageBox,
-                                   QWidget * widget );
+QMessageBox& CustomizeMessageBox(QMessageBox& messageBox, QWidget* widget);
 
 } // end namespace 'mvd'.
 

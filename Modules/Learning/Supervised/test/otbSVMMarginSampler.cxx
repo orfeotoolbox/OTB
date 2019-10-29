@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,23 +20,9 @@
 
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "itkListSample.h"
 #include "otbSVMMarginSampler.h"
 #include "otbLibSVMMachineLearningModel.h"
-
-int otbSVMMarginSamplerNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  typedef itk::VariableLengthVector<double>                 SampleType;
-  typedef itk::Statistics::ListSample<SampleType>           SampleListType;
-  typedef otb::LibSVMMachineLearningModel<double,unsigned int> SVMModelType;
-  typedef otb::SVMMarginSampler<SampleListType,SVMModelType>     MarginSamplerType;
-
-  MarginSamplerType::Pointer  marginSampler = MarginSamplerType::New();
-
-  std::cout << marginSampler << std::endl;
-
-  return EXIT_SUCCESS;
-}

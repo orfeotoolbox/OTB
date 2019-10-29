@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,15 +41,13 @@ namespace otb
  * \ingroup OTBTextures
  */
 template <class TInputImage, class TFunctor, class TCoordRep = float>
-class ITK_EXPORT TextureImageFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-      TCoordRep>
+class ITK_EXPORT TextureImageFunction
+    : public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef TextureImageFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-      TCoordRep> Superclass;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -86,8 +84,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  RealType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -120,22 +117,23 @@ public:
 
 protected:
   TextureImageFunction();
-  ~TextureImageFunction() override {}
+  ~TextureImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  TextureImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  TextureImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   SizeType   m_Radius;
   OffsetType m_Offset;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbTextureImageFunction.txx"
+#include "otbTextureImageFunction.hxx"
 #endif
 
 #endif

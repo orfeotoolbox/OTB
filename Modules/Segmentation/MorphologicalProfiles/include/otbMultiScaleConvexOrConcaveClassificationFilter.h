@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,13 +21,33 @@
 #ifndef otbMultiScaleConvexOrConcaveClassificationFilter_h
 #define otbMultiScaleConvexOrConcaveClassificationFilter_h
 
-#include "otbQuaternaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
+
 namespace otb
 {
 namespace Functor
 {
+namespace MultiScaleConvexOrConcaveDecisionRule_tags
+{
+struct max_opening_profile_derivative
+{
+};
+struct max_closing_profile_derivative
+{
+};
+struct opening_profile_characteristics
+{
+};
+struct closing_profile_characteristics
+{
+};
+
+} // End namespace MultiScaleConvexOrConcaveDecisionRule_tags
+
 /** \class MultiScaleConvexOrConcaveDecisionRule
  *  \brief This Functor apply a classification rule on two membership value along with two labels.
+ *
+ * Use otb::MultiScaleConvexOrConcaveClassificationFilter to apply it image-wise.
  *
  * \par
  * This algorithm is based on the following publication:
@@ -57,7 +77,7 @@ namespace Functor
  *
  * \ingroup OTBMorphologicalProfiles
  */
-template<class TInput, class TLabeled>
+template <class TInput, class TLabeled>
 class MultiScaleConvexOrConcaveDecisionRule
 {
 
@@ -67,13 +87,15 @@ public:
    */
   MultiScaleConvexOrConcaveDecisionRule()
   {
-    m_Sigma = 0.0;
+    m_Sigma          = 0.0;
     m_LabelSeparator = 10;
   }
   /**
    * Destructor
    */
-  virtual ~MultiScaleConvexOrConcaveDecisionRule() {}
+  virtual ~MultiScaleConvexOrConcaveDecisionRule()
+  {
+  }
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
@@ -82,21 +104,18 @@ public:
    * \param opDeChar The characteristic of the opening profile
    * \param cloDeChar The characteristic of the closing profile
    */
-  inline TLabeled operator ()(const TInput& opDeMax,
-                              const TInput& cloDeMax,
-                              const TLabeled& opDeChar,
-                              const TLabeled& cloDeChar)
+  TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax, const TLabeled& opDeChar, const TLabeled& cloDeChar) const
   {
     TLabeled resp = 0;
 
     if (opDeMax > cloDeMax && static_cast<double>(opDeMax) > m_Sigma)
-      {
+    {
       resp = m_LabelSeparator + opDeChar;
-      }
+    }
     else if (cloDeMax > opDeMax && static_cast<double>(cloDeMax) > m_Sigma)
-      {
+    {
       resp = cloDeChar;
-      }
+    }
     return resp;
   }
   /**
@@ -137,122 +156,32 @@ private:
   double m_Sigma;
   /** Separate between convex and concave labels */
   TLabeled m_LabelSeparator;
-
 };
-} //end namespace Functor
+} // end namespace Functor
 
-/** \class MultiScaleConvexOrConcaveClassificationFilter
- *  \brief Apply the MultiScaleConvexOrConcaveDecisionRule to whole images.
+/** \typedef MultiScaleConvexOrConcaveClassificationFilter
+ *  \brief Apply the otb::Functor::MultiScaleConvexOrConcaveDecisionRule to whole images.
  *
- * See MultiScaleConvexOrConcaveDecisionRule functor documentation for more details.
+ * See otb::Functor::MultiScaleConvexOrConcaveDecisionRule functor documentation for more details.
  *
+ * Set inputs with:
+ * \code
+ *
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative>(in1);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative>(in2);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics>(in3);
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>(in4);
+ *
+ * \endcode
  *
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultiScaleConvexOrConcaveClassificationFilter
-  : public QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
-      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
-{
-public:
-  /** Standard typedefs */
-  typedef MultiScaleConvexOrConcaveClassificationFilter Self;
-  typedef QuaternaryFunctorImageFilter<TInputImage, TInputImage, TOutputImage, TOutputImage, TOutputImage,
-      Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
-  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  /** Type macro */
-  itkNewMacro(Self);
-
-  /** Creation through object factory macro */
-  itkTypeMacro(MultiScaleConvexOrConcaveClassificationFilter, QuaternaryFunctorImageFilter);
-
-  /** Template class typedef */
-  typedef TInputImage                         InputImageType;
-  typedef TOutputImage                        OutputImageType;
-  typedef typename OutputImageType::PixelType LabelType;
-  typedef Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> DecisionFunctorType;
-  /**
-   * Set the opening profile derivative maxima image
-   * \param derivativeMaxima the opening profile derivative maxima image
-   *
-   */
-  void SetOpeningProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
-  {
-    this->SetInput1(derivativeMaxima);
-  }
-  /**
-   * Set the opening profile characteristics image
-   * \param characteristics the opening profile characteristics image
-   *
-   */
-  void SetOpeningProfileCharacteristics(const TOutputImage * characteristics)
-  {
-    this->SetInput3(characteristics);
-  }
-  /**
-   * Set the closing profile derivative maxima image
-   * \param derivativeMaxima the closing profile derivative maxima image
-   *
-   */
-  void SetClosingProfileDerivativeMaxima(const TInputImage * derivativeMaxima)
-  {
-    this->SetInput2(derivativeMaxima);
-  }
-  /**
-   * Set the closing profile characteristics image
-   * \param characteristics the closing profile characteristics image
-   *
-   */
-  void SetClosingProfileCharacteristics(const TOutputImage * characteristics)
-  {
-    this->SetInput4(characteristics);
-  }
-
-  /** Set/Get the tolerance value */
-  itkSetMacro(Sigma, double);
-  itkGetMacro(Sigma, double);
-  /** Set/Get the label separator */
-  itkSetMacro(LabelSeparator, LabelType);
-  itkGetMacro(LabelSeparator, LabelType);
-
-  /** Set the functor parameters before calling the ThreadedGenerateData() */
-  void BeforeThreadedGenerateData(void) override
-  {
-    this->GetFunctor().SetLabelSeparator(m_LabelSeparator);
-    this->GetFunctor().SetSigma(m_Sigma);
-  }
-
-protected:
-  /** Constructor */
-  MultiScaleConvexOrConcaveClassificationFilter()
-    {
-    m_LabelSeparator = 10;
-    m_Sigma          = 0.0;
-    };
-  /** Destructor */
-  ~MultiScaleConvexOrConcaveClassificationFilter() override {}
-  /**PrintSelf method */
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override
-  {
-    Superclass::PrintSelf(os, indent);
-    os << indent << "LabelSeparator: " << m_LabelSeparator << std::endl;
-    os << indent << "Sigma: " << m_Sigma << std::endl;
-  }
-
-private:
-  MultiScaleConvexOrConcaveClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
-  /** Label separator between convex and concave labels */
-  LabelType m_LabelSeparator;
-  /** Tolerance value */
-  double m_Sigma;
-};
+using MultiScaleConvexOrConcaveClassificationFilter =
+    FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>>;
 } // End namespace otb
 #endif

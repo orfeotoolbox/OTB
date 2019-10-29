@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -48,18 +48,16 @@ namespace otb
  *
  * \ingroup OTBSOM
  */
-template <class TNeuron = itk::VariableLengthVector<double>,
-          class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,
-    unsigned int VMapDimension = 2>
-class ITK_EXPORT SOMMap
-  : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>
+template <class TNeuron = itk::VariableLengthVector<double>, class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,
+          unsigned int VMapDimension = 2>
+class ITK_EXPORT       SOMMap : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>
 {
 public:
   /** Standard typedefs */
-  typedef SOMMap                                                           Self;
+  typedef SOMMap Self;
   typedef otb::VectorImage<typename TNeuron::ComponentType, VMapDimension> Superclass;
-  typedef itk::SmartPointer<Self>                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -97,13 +95,13 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMMap(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  SOMMap(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMMap.txx"
+#include "otbSOMMap.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,15 +41,14 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet>
-class ITK_EXPORT PointSetExtractROI :
-  public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
+class ITK_EXPORT PointSetExtractROI : public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef PointSetExtractROI                                        Self;
+  typedef PointSetExtractROI Self;
   typedef PointSetToPointSetFilter<TInputPointSet, TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TInputPointSet                       InputPointSetType;
   typedef TOutputPointSet                      OutputPointSetType;
@@ -78,15 +77,17 @@ public:
 
 protected:
   PointSetExtractROI();
-  ~PointSetExtractROI() override {}
+  ~PointSetExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate Requested Data */
   void GenerateData(void) override;
 
 private:
-  PointSetExtractROI(const PointSetExtractROI &); //purposely not implemented
-  void operator =(const PointSetExtractROI&); //purposely not implemented
+  PointSetExtractROI(const PointSetExtractROI&) = delete;
+  void operator=(const PointSetExtractROI&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -99,7 +100,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetExtractROI.txx"
+#include "otbPointSetExtractROI.hxx"
 #endif
 
 #endif

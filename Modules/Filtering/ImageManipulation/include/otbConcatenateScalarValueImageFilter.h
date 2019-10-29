@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,8 @@
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ConcatenateScalarValueFunctor
  *
@@ -36,17 +37,21 @@ namespace Functor {
  *
  * \ingroup OTBImageManipulation
  */
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ConcatenateScalarValueFunctor
 {
 public:
-  typedef TInput     InputType;
-  typedef TOutput    OutputType;
+  typedef TInput  InputType;
+  typedef TOutput OutputType;
 
   typedef typename InputType::ComponentType ComponentType;
 
-  ConcatenateScalarValueFunctor() : m_ScalarValue(0) {}
-  virtual ~ConcatenateScalarValueFunctor() {}
+  ConcatenateScalarValueFunctor() : m_ScalarValue(0)
+  {
+  }
+  virtual ~ConcatenateScalarValueFunctor()
+  {
+  }
 
   const ComponentType& GetScalarValue()
   {
@@ -58,23 +63,23 @@ public:
     m_ScalarValue = p;
   }
 
-  bool operator !=(const ConcatenateScalarValueFunctor& itkNotUsed(other)) const
+  bool operator!=(const ConcatenateScalarValueFunctor& itkNotUsed(other)) const
   {
     return false;
   }
 
-  bool operator ==(const ConcatenateScalarValueFunctor& other) const
+  bool operator==(const ConcatenateScalarValueFunctor& other) const
   {
     return !(*this != other);
   }
 
-  OutputType operator ()(const InputType& in)
+  OutputType operator()(const InputType& in)
   {
     OutputType out(in.Size() + 1);
     for (unsigned int j = 0; j < in.Size(); ++j)
-      {
+    {
       out[j] = in[j];
-      }
+    }
     out[in.Size()] = m_ScalarValue;
     return out;
   }
@@ -94,27 +99,20 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ConcatenateScalarValueImageFilter :
-  public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::ConcatenateScalarValueFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT ConcatenateScalarValueImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::ConcatenateScalarValueFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef ConcatenateScalarValueImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter
-     <TInputImage,
-      TOutputImage,
-      Functor::ConcatenateScalarValueFunctor<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType>
-     >                                  Superclass;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Functor::ConcatenateScalarValueFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef Functor::ConcatenateScalarValueFunctor<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType> FunctorType;
+  typedef Functor::ConcatenateScalarValueFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctorType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -123,9 +121,9 @@ public:
   itkTypeMacro(ConcatenateScalarValueImageFilter, otb::UnaryFunctorImageFilter);
 
   /** Pixel types. */
-  typedef typename TInputImage::PixelType         InputPixelType;
-  typedef typename InputPixelType::ComponentType  InputComponentType;
-  typedef typename TOutputImage::PixelType        OutputPixelType;
+  typedef typename TInputImage::PixelType        InputPixelType;
+  typedef typename InputPixelType::ComponentType InputComponentType;
+  typedef typename TOutputImage::PixelType       OutputPixelType;
 
   const InputComponentType& GetScalarValue()
   {
@@ -141,24 +139,24 @@ public:
 protected:
   ConcatenateScalarValueImageFilter();
 
-  ~ConcatenateScalarValueImageFilter() override {}
+  ~ConcatenateScalarValueImageFilter() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation() override;
 
 private:
-  ConcatenateScalarValueImageFilter(const Self &); //purposely not implemented
+  ConcatenateScalarValueImageFilter(const Self&) = delete;
 
-  void operator =(const Self&); //purposely not implemented
-
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConcatenateScalarValueImageFilter.txx"
+#include "otbConcatenateScalarValueImageFilter.hxx"
 #endif
 
 #endif
-

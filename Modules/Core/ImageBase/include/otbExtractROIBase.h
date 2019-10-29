@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,15 +45,14 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ExtractROIBase :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ExtractROIBase : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ExtractROIBase                                     Self;
+  typedef ExtractROIBase Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -80,15 +79,12 @@ public:
   typedef typename TInputImage::SizeType   InputImageSizeType;
 
   /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
-  typedef
-  itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
-      itkGetStaticConstMacro(OutputImageDimension)>
-  ExtractROIBaseRegionCopierType;
+  typedef itk::ImageToImageFilterDetail::ExtractImageFilterRegionCopier<itkGetStaticConstMacro(InputImageDimension),
+                                                                        itkGetStaticConstMacro(OutputImageDimension)>
+      ExtractROIBaseRegionCopierType;
 
   itkGetMacro(ExtractionRegion, InputImageRegionType);
 
@@ -108,7 +104,9 @@ public:
 
 protected:
   ExtractROIBase();
-  ~ExtractROIBase() override {}
+  ~ExtractROIBase() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateInputRequestedRegion() override;
@@ -133,8 +131,7 @@ protected:
    * support output images of a lower dimension that the input.
    *
    * \sa ImageToImageFilter::CallCopyRegion() */
-  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion,
-                                                 const OutputImageRegionType& srcRegion) override;
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
 
   /** ExtractROIBase can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData()
@@ -146,13 +143,11 @@ protected:
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
 
-//  ATTENTION bizarre
+  //  ATTENTION bizarre
 
-  void ThreadedGenerateData(const OutputImageRegionType& /*outputRegionForThread*/,
-                            itk::ThreadIdType /*threadId*/) override
+  void ThreadedGenerateData(const OutputImageRegionType& /*outputRegionForThread*/, itk::ThreadIdType /*threadId*/) override
 
   {
-
   }
 
   /** Set/Get the output image region.
@@ -166,8 +161,8 @@ protected:
   OutputImageRegionType m_OutputImageRegion;
 
 private:
-  ExtractROIBase(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ExtractROIBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** X/Y coordinates of the first point of the region to extract. */
   unsigned long m_StartX;
@@ -175,13 +170,12 @@ private:
   /** Number of X/Y pixels of the region to extract. */
   unsigned long m_SizeX;
   unsigned long m_SizeY;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbExtractROIBase.txx"
+#include "otbExtractROIBase.hxx"
 #endif
 
 #endif

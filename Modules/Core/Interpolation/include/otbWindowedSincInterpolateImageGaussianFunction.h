@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,10 +37,13 @@ namespace Function
  *
  * \ingroup OTBInterpolation
  */
-template<class TInput = double, class TOutput = double>
+template <class TInput = double, class TOutput = double>
 class GaussianWindowFunction
 {
 public:
+  GaussianWindowFunction() : m_Radius(1), m_Factor(-2.0 / CONST_PI)
+  {
+  } // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
     m_Radius = radius;
@@ -55,19 +58,20 @@ public:
     return m_Radius;
   }
 
-  inline TOutput operator ()(const TInput& A) const
+  inline TOutput operator()(const TInput& A) const
   {
-    double x = static_cast<double>(A);
-    double px = CONST_PI * x;
-    double temp = vcl_exp(px * px * m_Factor);
-    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * vcl_sin(px) / px);
+    double x    = static_cast<double>(A);
+    double px   = CONST_PI * x;
+    double temp = std::exp(px * px * m_Factor);
+    return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
+
 private:
-  double       m_Factor;
   unsigned int m_Radius;
+  double       m_Factor;
 };
 
-} //namespace Function
+} // namespace Function
 
 /**
  * \class WindowedSincInterpolateImageGaussianFunction
@@ -84,24 +88,18 @@ private:
  *
  * \ingroup OTBInterpolation
  */
-template<class TInputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep =
-      double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageGaussianFunction :
-  public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::GaussianWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
+template <class TInputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double,
+          class TInputInterpolator = double, class TOutputInterpolator = double>
+class ITK_EXPORT WindowedSincInterpolateImageGaussianFunction
+    : public WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::GaussianWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                      TBoundaryCondition, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageGaussianFunction Self;
-  typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::GaussianWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
-  Superclass;
+  typedef WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::GaussianWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                   TBoundaryCondition, TCoordRep>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -126,16 +124,18 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
 protected:
-  WindowedSincInterpolateImageGaussianFunction() {};
-  ~WindowedSincInterpolateImageGaussianFunction() override {}
+  WindowedSincInterpolateImageGaussianFunction(){};
+  ~WindowedSincInterpolateImageGaussianFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageGaussianFunction(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  WindowedSincInterpolateImageGaussianFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

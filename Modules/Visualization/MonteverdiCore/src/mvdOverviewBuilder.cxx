@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -71,47 +71,34 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-OverviewBuilder
-::OverviewBuilder( const GDALOverviewsBuilderVector & builders,
-		   QObject * p ) :
-  AbstractWorker( p ),
-  ProgressInterface(),
-  m_GDALOverviewsBuilders( builders ),
-  m_Index( 0 ),
-  m_Count( 0 )
+OverviewBuilder::OverviewBuilder(const GDALOverviewsBuilderVector& builders, QObject* p)
+  : AbstractWorker(p), ProgressInterface(), m_GDALOverviewsBuilders(builders), m_Index(0), m_Count(0)
 {
 }
 
 /*******************************************************************************/
-OverviewBuilder
-::~OverviewBuilder()
+OverviewBuilder::~OverviewBuilder()
 {
   // qDebug() << this << "destroyed.";
 }
 
 /*******************************************************************************/
-void
-OverviewBuilder
-::SetProgress( double value )
+void OverviewBuilder::SetProgress(double value)
 {
-  assert( m_Count>0 );
-  assert( m_Index>=0 && m_Index<m_Count );
-  assert( value>=0.0 && value<=1.0 );
+  assert(m_Count > 0);
+  assert(m_Index >= 0 && m_Index < m_Count);
+  assert(value >= 0.0 && value <= 1.0);
 
   // qDebug()
   //   << m_Index << "/" << m_Count
   //   << value << "\t"
   //   << ( 100 * m_Index + static_cast< int >( 100.0 * value ) );
 
-  emit ProgressValueChanged(
-    100 * m_Index + static_cast< int >( 100.0 * value )
-  );
+  emit ProgressValueChanged(100 * m_Index + static_cast<int>(100.0 * value));
 }
 
 /*******************************************************************************/
-QObject *
-OverviewBuilder
-::virtual_Do()
+QObject* OverviewBuilder::virtual_Do()
 {
   /*
   emit ProgressTextChanged(
@@ -126,65 +113,44 @@ OverviewBuilder
   // Count elements to process.
   m_Count = 0;
 
-  for( GDALOverviewsBuilderVector::const_iterator it(
-	 m_GDALOverviewsBuilders.begin()
-       );
-       it!=m_GDALOverviewsBuilders.end();
-       ++ it )
-    if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
-      ++ m_Count;
+  for (GDALOverviewsBuilderVector::const_iterator it(m_GDALOverviewsBuilders.begin()); it != m_GDALOverviewsBuilders.end(); ++it)
+    if (!it->IsNull() && (*it)->GetNbResolutions() > 0)
+      ++m_Count;
 
-  emit ProgressRangeChanged( 0, 100 * m_Count );
+  emit ProgressRangeChanged(0, 100 * m_Count);
 
   //
   // Process elements.
   m_Index = 0;
 
   {
-    ProcessObjectObserver::Pointer observer( ProcessObjectObserver::New() );
+    ProcessObjectObserver::Pointer observer(ProcessObjectObserver::New());
 
-    observer->SetProgressInterface( this );
+    observer->SetProgressInterface(this);
 
-    for( GDALOverviewsBuilderVector::const_iterator it(
-	   m_GDALOverviewsBuilders.begin()
-	 );
-	 it!=m_GDALOverviewsBuilders.end();
-	 ++ it, ++ m_Index )
-      if( !it->IsNull() && ( *it )->GetNbResolutions()>0 )
-	{
-	unsigned long id =
-	  ( *it )->AddObserver( itk::ProgressEvent(), observer );
+    for (GDALOverviewsBuilderVector::const_iterator it(m_GDALOverviewsBuilders.begin()); it != m_GDALOverviewsBuilders.end(); ++it, ++m_Index)
+      if (!it->IsNull() && (*it)->GetNbResolutions() > 0)
+      {
+        unsigned long id = (*it)->AddObserver(itk::ProgressEvent(), observer);
 
-	( *it )->Update();
+        (*it)->Update();
 
-	( *it )->RemoveObserver( id );
+        (*it)->RemoveObserver(id);
 
-	emit ProgressTextChanged(
-	  QString(
-	    tr( "Generating overviews for file %1/%2 '%3'." )
-	  )
-	  .arg( m_Index + 1 )
-	  .arg( m_Count )
-	  .arg(
-	    QFile::decodeName(
-	      ( *it )->GetInputFileName().c_str()
-	    )
-	  )
-	);
-	}
+        emit ProgressTextChanged(
+            QString(tr("Generating overviews for file %1/%2 '%3'.")).arg(m_Index + 1).arg(m_Count).arg(QFile::decodeName((*it)->GetInputFileName().c_str())));
+      }
   }
 
-  emit ProgressValueChanged( 100 * m_Count );
- 
+  emit ProgressValueChanged(100 * m_Count);
+
   return NULL;
 }
 
 /*******************************************************************************/
-QString
-OverviewBuilder
-::virtual_GetFirstProgressText() const
+QString OverviewBuilder::virtual_GetFirstProgressText() const
 {
-  return QString( tr( "Preparing to build GDAL overviews..." ) );
+  return QString(tr("Preparing to build GDAL overviews..."));
 }
 
 /*******************************************************************************/

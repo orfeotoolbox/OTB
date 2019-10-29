@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBCartoTests
 otbCartoTestDriver.cxx
-otbMapFileProductWriterNew.cxx
 otbImageToOSMVectorDataGenerator.cxx
 otbMapFileProductWriter.cxx
 otbOSMDataToVectorDataTests.cxx
@@ -35,23 +34,17 @@ otb_module_target_label(otbCartoTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME ioTuMapFileProductWriterNew COMMAND otbCartoTestDriver
-  otbMapFileProductWriterNew
-  )
 
-otb_add_test(NAME ioTuImageToOSMVectorDataGeneratorNew COMMAND otbCartoTestDriver
-  otbImageToOSMVectorDataGeneratorNew
-  )
 
 otb_add_test(NAME ioTvImageToOSMVectorDataGenerator COMMAND otbCartoTestDriver
   --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
   otbImageToOSMVectorDataGenerator
-  -in  ${EXAMPLEDATA}/qb_RoadExtract.tif
-  -osm ${INPUTDATA}/qb_road.osm
-  -out ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
-  -key highvay,motorway
+  ${INPUTDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_road.osm
+  ${TEMP}/ioTvImageToOSMVectorDataGenerator_highway_motorway.shp
+  highvay,motorway
   )
 set_property(TEST ioTvImageToOSMVectorDataGenerator PROPERTY RESOURCE_LOCK web_access)
 
@@ -65,17 +58,13 @@ otb_add_test(NAME ioTvMapFileProductWriter COMMAND otbCartoTestDriver
   )
 set_property(TEST ioTvMapFileProductWriter PROPERTY RESOURCE_LOCK web_access)
 
-otb_add_test(NAME ioTuOSMToVectorDataGenerator COMMAND otbCartoTestDriver
-  otbOSMToVectorDataGeneratorNew
-  )
-
 otb_add_test(NAME ioTvOSMToVectorDataGeneratorByName COMMAND otbCartoTestDriver
   --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/ioTvOSMToVectorDataFilterByName_highway.shp
   ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   otbOSMToVectorDataGeneratorByName
-  -osm ${INPUTDATA}/qb_road.osm
-  -vd ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
+  ${INPUTDATA}/qb_road.osm
+  ${TEMP}/ioTvOSMToVectorDataFilterByName_highway.shp
   )
 set_property(TEST ioTvOSMToVectorDataGeneratorByName PROPERTY RESOURCE_LOCK web_access)
 

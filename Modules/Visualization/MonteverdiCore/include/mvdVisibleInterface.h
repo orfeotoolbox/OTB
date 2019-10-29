@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -78,19 +76,18 @@ class OTBMonteverdiCore_EXPORT VisibleInterface
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  VisibleInterface( bool =true );
+  VisibleInterface(bool = true);
 
   /** \brief Destructor. */
   virtual ~VisibleInterface();
 
   /**
    */
-  inline void SetVisible( bool );
+  inline void SetVisible(bool);
 
   /**
    */
@@ -98,27 +95,25 @@ public:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  virtual void virtual_SignalVisibilityChanged( bool );
+  virtual void virtual_SignalVisibilityChanged(bool);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-  bool m_IsVisible: 1;
+  bool m_IsVisible : 1;
 };
 
 } // end namespace 'mvd'.
@@ -147,23 +142,17 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-bool
-VisibleInterface
-::IsVisible() const
+inline bool VisibleInterface::IsVisible() const
 {
   return m_IsVisible;
 }
 
 /*****************************************************************************/
-inline
-void
-VisibleInterface
-::SetVisible( bool state )
+inline void VisibleInterface::SetVisible(bool state)
 {
   m_IsVisible = state;
 
-  virtual_SignalVisibilityChanged( state );
+  virtual_SignalVisibilityChanged(state);
 }
 
 } // end namespace 'mvd'

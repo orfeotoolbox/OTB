@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,19 +24,19 @@
 
 #include "otbDataNode.h"
 
-int otbDataNodeTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbDataNodeTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef otb::DataNode<double, 2>  DataNodeType;
+  typedef otb::DataNode<double, 2> DataNodeType;
   typedef DataNodeType::PointType   PointType;
   typedef DataNodeType::LineType    LineType;
   typedef DataNodeType::PolygonType PolygonType;
 
-  DataNodeType::Pointer root = DataNodeType::New();
+  DataNodeType::Pointer root     = DataNodeType::New();
   DataNodeType::Pointer document = DataNodeType::New();
-  DataNodeType::Pointer folder = DataNodeType::New();
-  DataNodeType::Pointer point = DataNodeType::New();
-  DataNodeType::Pointer line = DataNodeType::New();
-  DataNodeType::Pointer polygon = DataNodeType::New();
+  DataNodeType::Pointer folder   = DataNodeType::New();
+  DataNodeType::Pointer point    = DataNodeType::New();
+  DataNodeType::Pointer line     = DataNodeType::New();
+  DataNodeType::Pointer polygon  = DataNodeType::New();
 
   root->SetNodeType(otb::ROOT);
   document->SetNodeType(otb::DOCUMENT);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetChoiceParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 namespace otb
 {
@@ -41,15 +39,15 @@ class OTBQtWidget_EXPORT QtWidgetChoiceParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*);
+  QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetChoiceParameter() override;
 
 protected slots:
-  void SetValue( int value );
+  void SetValue(int value);
 
 private:
-  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&); //purposely not implemented
-  void operator=(const QtWidgetChoiceParameter&); //purposely not implemented
+  QtWidgetChoiceParameter(const QtWidgetChoiceParameter&) = delete;
+  void operator=(const QtWidgetChoiceParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -57,19 +55,18 @@ private:
 
   ChoiceParameter::Pointer m_ChoiceParam;
 
-  QHBoxLayout*    m_MainHLayout;
+  QHBoxLayout* m_MainHLayout;
 
   QComboBox*      m_ComboBox;
   QStackedWidget* m_StackWidget;
 
-  QVBoxLayout*    m_VLayout;
-  QGroupBox*      m_VLayoutGroup;
+  QVBoxLayout* m_VLayout;
+  QGroupBox*   m_VLayoutGroup;
 
   typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
+  typedef WidgetListType::iterator            WidgetListIteratorType;
+  WidgetListType                              m_WidgetList;
 };
-
 }
 }
 

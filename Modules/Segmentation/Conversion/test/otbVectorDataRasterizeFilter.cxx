@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,24 +28,16 @@
 #include "otbRasterizeVectorDataFilter.h"
 #include "otbStandardOneLineFilterWatcher.h"
 
-typedef otb::VectorImage<float, 2>                            ImageType;
-typedef otb::VectorData<>                                     VectorDataType;
-typedef otb::ImageFileReader<ImageType>                       ReaderType;
-typedef otb::VectorDataFileReader<VectorDataType>             VDReaderType;
-typedef otb::VectorDataProjectionFilter<VectorDataType,
-                                        VectorDataType>       VDProjectionType;
-typedef otb::ImageFileWriter<ImageType>              WriterType;
-typedef otb::RasterizeVectorDataFilter<VectorDataType,
-                                       ImageType,
-                                       ImageType>             RasterizationFilterType;
+typedef otb::VectorImage<float, 2> ImageType;
+typedef otb::VectorData<>                         VectorDataType;
+typedef otb::ImageFileReader<ImageType>           ReaderType;
+typedef otb::VectorDataFileReader<VectorDataType> VDReaderType;
+typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VDProjectionType;
+typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::RasterizeVectorDataFilter<VectorDataType, ImageType, ImageType> RasterizationFilterType;
 
-int otbVectorDataRasterizeFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
-  return EXIT_SUCCESS;
-}
 
-int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char* argv[])
 {
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -63,7 +55,7 @@ int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char * argv[])
   vdproj->Update();
 
   // rasterize
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
+  RasterizationFilterType::Pointer rasterization = RasterizationFilterType::New();
   rasterization->SetInput(reader->GetOutput());
   rasterization->AddVectorData(vdproj->GetOutput());
 
@@ -76,10 +68,10 @@ int otbVectorDataRasterizeFilter(int itkNotUsed(argc), char * argv[])
   outputcolor[3] = 0.;
   rasterization->AddColor(outputcolor);
 
-  WriterType::Pointer writer  = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(rasterization->GetOutput());
   writer->Update();
 
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

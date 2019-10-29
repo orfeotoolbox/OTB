@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -66,15 +66,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TImage, class TStructuringElement>
-class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter
-  : public ImageToImageListFilter<TImage, TImage>
+class ITK_EXPORT GeodesicMorphologyIterativeDecompositionImageFilter : public ImageToImageListFilter<TImage, TImage>
 {
 public:
   /** Standard typedefs */
   typedef GeodesicMorphologyIterativeDecompositionImageFilter Self;
-  typedef ImageToImageListFilter<TImage, TImage>              Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef ImageToImageListFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through object factory macro */
   itkNewMacro(Self);
   /** Type macro */
@@ -99,10 +98,8 @@ public:
   typedef TStructuringElement StructuringElementType;
 
   /** Typedef of the decomposition filter */
-  typedef GeodesicMorphologyDecompositionImageFilter<InputImageType, InputImageType,
-      StructuringElementType> DecompositionFilterType;
-  typedef typename DecompositionFilterType::Pointer
-  DecompositionFilterPointerType;
+  typedef GeodesicMorphologyDecompositionImageFilter<InputImageType, InputImageType, StructuringElementType> DecompositionFilterType;
+  typedef typename DecompositionFilterType::Pointer DecompositionFilterPointerType;
 
   /** Accessors */
   itkSetMacro(Step, unsigned int);
@@ -121,18 +118,20 @@ public:
    * Get convex membership function for each scale
    * \return The convex membership function for each scale.
    */
-  OutputImageListType * GetConvexOutput(void);
+  OutputImageListType* GetConvexOutput(void);
   /**
    * Get The concave membership function for each scale
    * \return The concave membership function for each scale.
    */
-  OutputImageListType * GetConcaveOutput(void);
+  OutputImageListType* GetConcaveOutput(void);
 
 protected:
   /** Constructor */
   GeodesicMorphologyIterativeDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyIterativeDecompositionImageFilter() override {}
+  ~GeodesicMorphologyIterativeDecompositionImageFilter() override
+  {
+  }
   /** Generate output information */
   void GenerateOutputInformation() override;
   /** Generate input requested region */
@@ -151,12 +150,11 @@ private:
   unsigned int m_NumberOfIterations;
   /** Progress accumulator to report internal filter progress */
   itk::ProgressAccumulator::Pointer m_Progress;
-
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeodesicMorphologyIterativeDecompositionImageFilter.txx"
+#include "otbGeodesicMorphologyIterativeDecompositionImageFilter.hxx"
 #endif
 
 #endif

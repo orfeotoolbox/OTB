@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,28 +49,17 @@ namespace mvd
 */
 
 /*******************************************************************************/
-AbstractModelController
-::AbstractModelController( QWidget* widget, QObject* p ):
-  QObject( p ),
-  m_Widget( widget ),
-  m_Model( NULL )
+AbstractModelController::AbstractModelController(QWidget* widget, QObject* p) : QObject(p), m_Widget(widget), m_Model(NULL)
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  QObject::connect(
-    this, SIGNAL( destroyed( QObject* ) ),
-    this, SLOT( OnDestroyed( QObject* ) )
-  );
+  QObject::connect(this, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 
-  QObject::connect(
-    widget, SIGNAL( destroyed( QObject* ) ),
-    this, SLOT( OnDestroyed( QObject* ) )
-  );
+  QObject::connect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 }
 
 /*******************************************************************************/
-AbstractModelController
-::~AbstractModelController()
+AbstractModelController::~AbstractModelController()
 {
   /*
   assert( m_Model==NULL && "AbstractModelController::m_Model should be
@@ -79,15 +68,13 @@ AbstractModelController
 }
 
 /*****************************************************************************/
-void
-AbstractModelController
-::SetModel( AbstractModel* model )
+void AbstractModelController::SetModel(AbstractModel* model)
 {
   // Disconnect previously connected model and signal listeners.
-  private_Disconnect( m_Model );
+  private_Disconnect(m_Model);
 
   // Disable GUI widget while there is no model.
-  GetWidget()->setEnabled( false );
+  GetWidget()->setEnabled(false);
 
   // Clear widget from previous values.
   private_ClearWidget();
@@ -98,76 +85,62 @@ AbstractModelController
   m_Model = NULL;
 
   // Connect new model and signal listeners.
-  private_Connect( model );
+  private_Connect(model);
 
   // Remember newly connected model.
   m_Model = model;
 
   // Enable GUI widget when there is a model.
-  if( m_Model!=NULL )
-    {
-    virtual_ResetWidget( true );
+  if (m_Model != NULL)
+  {
+    virtual_ResetWidget(true);
 
-    GetWidget()->setEnabled( true );
-    }
+    GetWidget()->setEnabled(true);
+  }
 }
 
 /*****************************************************************************/
-void
-AbstractModelController
-::private_Connect( AbstractModel* model )
+void AbstractModelController::private_Connect(AbstractModel* model)
 {
-  if( model==NULL )
+  if (model == NULL)
     return;
 
-  emit AboutToConnectModel( model );
+  emit AboutToConnectModel(model);
 
-  QObject::connect(
-    model, SIGNAL( destroyed( QObject* ) ),
-    this, SLOT( OnDestroyed( QObject* ) )
-  );
+  QObject::connect(model, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 
-  Connect( model );
+  Connect(model);
 
-  emit ModelConnected( model );
+  emit ModelConnected(model);
 }
 
 /*****************************************************************************/
-void
-AbstractModelController
-::private_Disconnect( AbstractModel* model )
+void AbstractModelController::private_Disconnect(AbstractModel* model)
 {
-  if( model==NULL )
+  if (model == NULL)
     return;
 
-  emit AboutToDisconnectModel( model );
+  emit AboutToDisconnectModel(model);
 
-  Disconnect( model );
+  Disconnect(model);
 
-  QObject::disconnect(
-    model, SIGNAL( destroyed( QObject* ) ),
-    this, SLOT( OnDestroyed( QObject* ) )
-  );
+  QObject::disconnect(model, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 
-  emit ModelDisconnected( model );
+  emit ModelDisconnected(model);
 }
 
 /*****************************************************************************/
-void
-AbstractModelController
-::private_ClearWidget()
+void AbstractModelController::private_ClearWidget()
 {
   // Reset UI from model.
   ClearWidget();
 }
 
 /*****************************************************************************/
-void
-AbstractModelController
-::ResetWidget()
+void AbstractModelController::ResetWidget()
 {
   // Reset UI from model.
-  virtual_ResetWidget( false );
+  virtual_ResetWidget(false);
 
 #if 0
   // Signal model has been updated.
@@ -180,21 +153,17 @@ AbstractModelController
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-AbstractModelController
-::RefreshWidget()
+void AbstractModelController::RefreshWidget()
 {
 }
 
 /*******************************************************************************/
-void
-AbstractModelController
-::OnDestroyed( QObject* object )
+void AbstractModelController::OnDestroyed(QObject* object)
 {
-  assert( object!=NULL );
+  assert(object != NULL);
 
-  if( object==m_Widget )
-    {
+  if (object == m_Widget)
+  {
     // qDebug() << "Disconnect (widget) on destroy.";
 
     // When wrapped widget is destroyed, auto-destroy controller which
@@ -203,9 +172,9 @@ AbstractModelController
     // N.B.: Qt will automatically disconnect all signals from deleted
     // object.
     deleteLater();
-    }
-  else if( object==m_Model )
-    {
+  }
+  else if (object == m_Model)
+  {
 #if 0
     qDebug() << "Disconnect (model" << object << ") on destroy.";
 
@@ -217,7 +186,7 @@ AbstractModelController
     // quite bit faster.
     private_Disconnect( m_Model );
 #endif
-    }
+  }
 }
 
 /*******************************************************************************/

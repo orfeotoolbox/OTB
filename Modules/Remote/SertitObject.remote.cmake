@@ -1,3 +1,23 @@
+#
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 #Contact: arnaud.durand@sertit.u-strasbg.fr
 
 #SERTIT - University of Strasbourg http://sertit.u-strasbg.fr
@@ -26,7 +46,7 @@ median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
   GIT_REPOSITORY https://github.com/gpo-geo/SertitObject
-  GIT_TAG 4e6c46b239760b206d4cee379c0e90ee33abf613
+  GIT_TAG b725cb16255fa46ce5662956523ac1ecba733d02
 )
 
 # use a temporary fork because pull request #8 not merged yet

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,13 +22,12 @@
 #define otbQtFileSelectionWidget_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperInputImageListParameter.h"
 #include "otbWrapperInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {
@@ -46,7 +45,7 @@ class OTBQtWidget_EXPORT QtFileSelectionWidget : public QWidget
 public:
   enum IOMode
   {
-    IO_MODE_INPUT = 0,
+    IO_MODE_INPUT  = 0,
     IO_MODE_OUTPUT = 1,
   };
 
@@ -58,14 +57,14 @@ public:
     return m_Checkbox->isChecked();
   }
 
-  void SetChecked( bool val )
+  void SetChecked(bool val)
   {
-    return m_Checkbox->setChecked( val );
+    return m_Checkbox->setChecked(val);
   }
 
   std::string GetFilename()
   {
-    return QFile::encodeName( m_Input->text() ).constData();
+    return QFile::encodeName(m_Input->text()).constData();
   }
 
   void ClearFilename()
@@ -78,7 +77,7 @@ public:
     return m_Input;
   }
 
-  void SetIOMode( IOMode );
+  void   SetIOMode(IOMode);
   IOMode GetIOMode() const;
 
 signals:
@@ -87,25 +86,23 @@ signals:
 protected slots:
   void SelectFile();
   void CallFilenameChanged();
-  void SetFileName(const QString &);
+  void SetFileName(const QString&);
 
 private:
-  QtFileSelectionWidget(const QtFileSelectionWidget&); //purposely not implemented
-  void operator=(const QtFileSelectionWidget&); //purposely not implemented
+  QtFileSelectionWidget(const QtFileSelectionWidget&) = delete;
+  void operator=(const QtFileSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit * m_Input;
-  QPushButton * m_Button;
-  QCheckBox * m_Checkbox;
-  IOMode m_IOMode;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
+  QCheckBox*   m_Checkbox;
+  IOMode       m_IOMode;
 };
-
-
 }
 }
 

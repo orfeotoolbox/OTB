@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,17 +42,15 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataTransformFilter :
-      public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
+class ITK_EXPORT VectorDataTransformFilter : public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 
 public:
   /** Standard class typedefs. */
-  typedef VectorDataTransformFilter         Self;
-  typedef otb::VectorDataToVectorDataFilter
-  <TInputVectorData, TOutputVectorData>      Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef VectorDataTransformFilter Self;
+  typedef otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TInputVectorData                        InputVectorDataType;
   typedef TOutputVectorData                       OutputVectorDataType;
@@ -60,7 +58,7 @@ public:
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
   /** Some typedefs. */
-  typedef itk::Transform<double, 2, 2>           GenericTransformType;
+  typedef itk::Transform<double, 2, 2> GenericTransformType;
   typedef typename GenericTransformType::Pointer GenericTransformPointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
@@ -71,9 +69,9 @@ public:
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
 
-  typedef typename InputVectorDataType::DataTreeType::TreeNodeType    InputInternalTreeNodeType;
-  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType   OutputInternalTreeNodeType;
-  typedef typename InputInternalTreeNodeType::ChildrenListType        InputChildrenListType;
+  typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename InputInternalTreeNodeType::ChildrenListType      InputChildrenListType;
 
 
   typedef typename OutputDataNodeType::PointType            PointType;
@@ -102,7 +100,7 @@ public:
 
 protected:
   VectorDataTransformFilter();
-  ~VectorDataTransformFilter() override {};
+  ~VectorDataTransformFilter() override{};
 
   PointType ProcessPoint(PointType point) const override;
   LinePointerType ProcessLine(LinePointerType line) const override;
@@ -112,8 +110,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  VectorDataTransformFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  VectorDataTransformFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   GenericTransformPointerType m_Transform;
 };
@@ -121,7 +119,7 @@ private:
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbVectorDataTransformFilter.txx"
+#include "otbVectorDataTransformFilter.hxx"
 #endif
 
 #endif

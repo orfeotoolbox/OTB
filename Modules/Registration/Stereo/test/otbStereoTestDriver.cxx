@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,16 +22,11 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbBijectionCoherencyFilterNew);
   REGISTER_TEST(otbBijectionCoherencyFilter);
-  REGISTER_TEST(otbMulti3DMapToDEMFilterNew);
   REGISTER_TEST(otbMulti3DMapToDEMFilterEPSG);
   REGISTER_TEST(otbMulti3DMapToDEMFilterManual);
   REGISTER_TEST(otbMulti3DMapToDEMFilter);
-  REGISTER_TEST(otbAdhesionCorrectionFilterNew);
   REGISTER_TEST(otbAdhesionCorrectionFilter);
-  REGISTER_TEST(otbStereoSensorModelToElevationMapFilterNew);
   REGISTER_TEST(otbStereoSensorModelToElevationMapFilter);
   REGISTER_TEST(otbStereorectificationDisplacementFieldSource);
-  REGISTER_TEST(otbStereorectificationDisplacementFieldSourceNew);
 }

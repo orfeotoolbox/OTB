@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,9 +21,14 @@
 #ifndef otbWrapperInputImageParameter_h
 #define otbWrapperInputImageParameter_h
 
+
 #include "otbImageFileReader.h"
-#include "itkImageBase.h"
+#include "otbClampImageFilter.h"
 #include "otbWrapperParameter.h"
+
+#include "itkImageBase.h"
+
+#include <string>
 
 namespace otb
 {
@@ -50,32 +55,54 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageParameter, Parameter);
 
+  typedef struct
+  {
+    itk::Object::Pointer app;
+    std::string          key;
+    bool                 isMem;
+  } Connector;
+
   /** Set value from filename */
-  bool SetFromFileName( const std::string & filename );
-  itkGetConstReferenceMacro( FileName, std::string );
+  bool SetFromFileName(const std::string& filename);
+  itkGetConstReferenceMacro(FileName, std::string);
 
+  void SetConnection(Connector c)
+  {
+    m_Connection = c;
+  }
 
-  /** Get the input image as FloatVectorImageType. */
-  FloatVectorImageType* GetImage();
+  const Connector& GetConnection() const
+  {
+    return m_Connection;
+  }
+
+  void SetConnectionMode(bool isMem)
+  {
+    m_Connection.isMem = isMem;
+  }
+
+  /** Get input-image as ImageBaseType. */
+  ImageBaseType const* GetImage() const;
+  ImageBaseType*       GetImage();
 
   /** Get the input image as XXXImageType */
-  UInt8ImageType* GetUInt8Image();
+  UInt8ImageType*  GetUInt8Image();
   UInt16ImageType* GetUInt16Image();
-  Int16ImageType* GetInt16Image();
+  Int16ImageType*  GetInt16Image();
   UInt32ImageType* GetUInt32Image();
-  Int32ImageType* GetInt32Image();
-  FloatImageType* GetFloatImage();
+  Int32ImageType*  GetInt32Image();
+  FloatImageType*  GetFloatImage();
   DoubleImageType* GetDoubleImage();
 
-  UInt8VectorImageType* GetUInt8VectorImage();
+  UInt8VectorImageType*  GetUInt8VectorImage();
   UInt16VectorImageType* GetUInt16VectorImage();
-  Int16VectorImageType* GetInt16VectorImage();
+  Int16VectorImageType*  GetInt16VectorImage();
   UInt32VectorImageType* GetUInt32VectorImage();
-  Int32VectorImageType* GetInt32VectorImage();
-  FloatVectorImageType* GetFloatVectorImage();
+  Int32VectorImageType*  GetInt32VectorImage();
+  FloatVectorImageType*  GetFloatVectorImage();
   DoubleVectorImageType* GetDoubleVectorImage();
 
-  UInt8RGBImageType* GetUInt8RGBImage();
+  UInt8RGBImageType*  GetUInt8RGBImage();
   UInt8RGBAImageType* GetUInt8RGBAImage();
 
   // Complex image
@@ -91,23 +118,22 @@ public:
 
   /** Get the input image as templated image type. */
   template <class TImageType>
-    TImageType* GetImage();
-
-  /** Set a FloatVectorImageType image.*/
-  void SetImage(FloatVectorImageType* image);
+  TImageType* GetImage();
 
   /** Set a templated image.*/
-  template <class TImageType>
-    void SetImage(TImageType* image);
+  void SetImage(ImageBaseType* image);
 
 
   /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
-  TOutputImage*  CastImage();
+  TOutputImage* CastImage();
 
   bool HasValue() const override;
-
   void ClearValue() override;
+
+  ParameterType GetType() const override;
+  std::string   ToString() const override;
+  void FromString(const std::string& value) override;
 
 protected:
   /** Constructor */
@@ -116,48 +142,30 @@ protected:
   /** Destructor */
   ~InputImageParameter() override;
 
-  ImageBaseType::Pointer m_Image;
-  std::string m_FileName;
+private:
+  InputImageParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
-  /** Readers typedefs */
-
-  typedef otb::ImageFileReader<UInt8ImageType> UInt8ReaderType;
-  typedef otb::ImageFileReader<Int16ImageType> Int16ReaderType;
-  typedef otb::ImageFileReader<UInt16ImageType> UInt16ReaderType;
-  typedef otb::ImageFileReader<Int32ImageType> Int32ReaderType;
-  typedef otb::ImageFileReader<UInt32ImageType> UInt32ReaderType;
-  typedef otb::ImageFileReader<FloatImageType> FloatReaderType;
-  typedef otb::ImageFileReader<DoubleImageType> DoubleReaderType;
-
-  typedef otb::ImageFileReader<UInt8VectorImageType> UInt8VectorReaderType;
-  typedef otb::ImageFileReader<Int16VectorImageType> Int16VectorReaderType;
-  typedef otb::ImageFileReader<UInt16VectorImageType> UInt16VectorReaderType;
-  typedef otb::ImageFileReader<Int32VectorImageType> Int32VectorReaderType;
-  typedef otb::ImageFileReader<UInt32VectorImageType> UInt32VectorReaderType;
-  typedef otb::ImageFileReader<FloatVectorImageType> FloatVectorReaderType;
-  typedef otb::ImageFileReader<DoubleVectorImageType> DoubleVectorReaderType;
-
-
-  typedef otb::ImageFileReader<UInt8RGBImageType>  UInt8RGBReaderType;
-  typedef otb::ImageFileReader<UInt8RGBAImageType> UInt8RGBAReaderType;
-
-  // Complex
-  typedef otb::ImageFileReader<ComplexInt16ImageType> ComplexInt16ReaderType;
-  typedef otb::ImageFileReader<ComplexInt32ImageType> ComplexInt32ReaderType;
-  typedef otb::ImageFileReader<ComplexFloatImageType> ComplexFloatReaderType;
-  typedef otb::ImageFileReader<ComplexDoubleImageType> ComplexDoubleReaderType;
-
-  typedef otb::ImageFileReader<ComplexInt16VectorImageType> ComplexInt16VectorReaderType;
-  typedef otb::ImageFileReader<ComplexInt32VectorImageType> ComplexInt32VectorReaderType;
-  typedef otb::ImageFileReader<ComplexFloatVectorImageType> ComplexFloatVectorReaderType;
-  typedef otb::ImageFileReader<ComplexDoubleVectorImageType> ComplexDoubleVectorReaderType;
-
+  std::string                 m_FileName;
   itk::ProcessObject::Pointer m_Reader;
-  itk::ProcessObject::Pointer m_Caster;
+
+  ImageBaseType::Pointer m_Image;
+
+  itk::ProcessObject::Pointer m_InputCaster;
+  itk::ProcessObject::Pointer m_OutputCaster;
 
 private:
-  InputImageParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  /** */
+  template <typename T>
+  using InputClampImageFilter = ClampImageFilter<T, otb::Wrapper::DoubleVectorImageType>;
+
+  /** */
+  template <typename T>
+  using OutputClampImageFilter = ClampImageFilter<otb::Wrapper::DoubleVectorImageType, T>;
+
+  /** */
+  template <typename TOutputImage, typename TInputImage>
+  TOutputImage* Cast(TInputImage*);
 
   /** Store the loaded image filename */
   std::string m_PreviousFileName;
@@ -165,13 +173,15 @@ private:
   /** flag : are we using a filename or an image pointer as an input */
   bool m_UseFilename;
 
+  Connector m_Connection;
+
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWrapperInputImageParameter.txx"
+#include "otbWrapperInputImageParameter.hxx"
 #endif
 
 #endif

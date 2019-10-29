@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,28 +26,27 @@
 
 #include "itkMacro.h"
 
-int otbMorphologicalClosingProfileFilter(int itkNotUsed(argc), char * argv[])
+int otbMorphologicalClosingProfileFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename = argv[1];
-  const char *       outputFilenamePrefix = argv[2];
-  const char *       outputFilenameSuffix = argv[3];
-  const unsigned int profileSize = atoi(argv[4]);
-  const unsigned int initialValue = atoi(argv[5]);
-  const unsigned int step = atoi(argv[5]);
+  const char*        inputFilename        = argv[1];
+  const char*        outputFilenamePrefix = argv[2];
+  const char*        outputFilenameSuffix = argv[3];
+  const unsigned int profileSize          = atoi(argv[4]);
+  const unsigned int initialValue         = atoi(argv[5]);
+  const unsigned int step                 = atoi(argv[5]);
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>           ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
-  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>
-  ClosingProfileFilterType;
+  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType> ClosingProfileFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -67,14 +66,14 @@ int otbMorphologicalClosingProfileFilter(int itkNotUsed(argc), char * argv[])
   std::ostringstream oss;
   // Writing the results images
   for (unsigned int i = 1; i <= profileSize; ++i)
-    {
-    writer =  WriterType::New();
+  {
+    writer = WriterType::New();
     oss << outputFilenamePrefix << i << "." << outputFilenameSuffix;
     writer->SetInput(profileFilter->GetOutput()->GetNthElement(i - 1));
-    writer->SetFileName(oss.str().c_str());
+    writer->SetFileName(oss.str());
     writer->Update();
     oss.str("");
-    }
+  }
 
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,30 +22,15 @@ otb_module_test()
 
 set(OTBMetadataTests
 otbMetadataTestDriver.cxx
-otbOpticalDefaultImageMetadataInterfaceNew.cxx
 otbSarImageMetadataInterfaceTest.cxx
-otbDefaultImageMetadataInterfaceFactoryNew.cxx
-otbOpticalDefaultImageMetadataInterfaceFactoryNew.cxx
-otbPleiadesImageMetadataInterfaceNew.cxx
 otbImageMetadataInterfaceBaseTest.cxx
 otbSarDefaultImageMetadataInterface.cxx
-otbSarDefaultImageMetadataInterfaceNew.cxx
 otbOpticalImageMetadataInterfaceTest.cxx
-otbSarDefaultImageMetadataInterfaceFactoryNew.cxx
-otbFormosatImageMetadataInterfaceNew.cxx
 otbOpticalDefaultImageMetadataInterface.cxx
-otbSpot6ImageMetadataInterfaceNew.cxx
-otbSpotImageMetadataInterfaceNew.cxx
-otbQuickBirdImageMetadataInterfaceNew.cxx
-otbIkonosImageMetadataInterfaceNew.cxx
-otbTerraSarImageMetadataInterfaceNew.cxx
-otbSentinel1ImageMetadataInterfaceNew.cxx
-otbWorldView2ImageMetadataInterfaceNew.cxx
 otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
-otbRadarsat2ImageMetadataInterfaceNew.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -53,9 +38,6 @@ target_link_libraries(otbMetadataTestDriver ${OTBMetadata-Test_LIBRARIES})
 otb_module_target_label(otbMetadataTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbOpticalDefaultImageMetadataInterfaceNew )
 
 #otb_add_test(NAME ioTvSarImageMetadataInterfaceTest_TSX1dims COMMAND otbMetadataTestDriver
   #--compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvSarImageMetadataInterface_TSX1dims.txt
@@ -113,21 +95,6 @@ otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterfaceNew COMMAND otbMetadat
   #${TEMP}/ioTvImageMetadataInterfaceBase_RADARSAT2.txt
   #)
 
-otb_add_test(NAME ioTuSentinel1ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSentinel1ImageMetadataInterfaceNew )
-
-otb_add_test(NAME ioTuRadarsat2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbRadarsat2ImageMetadataInterfaceNew )
-
-otb_add_test(NAME ioTuDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
-  otbDefaultImageMetadataInterfaceFactoryNew )
-
-otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
-  otbOpticalDefaultImageMetadataInterfaceFactoryNew )
-
-otb_add_test(NAME ioTuPleiadesImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbPleiadesImageMetadataInterfaceNew
-  )
 
 #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SPOT COMMAND otbMetadataTestDriver
   #--compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SPOT.txt
@@ -236,9 +203,6 @@ otb_add_test(NAME ioTuPleiadesImageMetadataInterfaceNew COMMAND otbMetadataTestD
 otb_add_test(NAME ioTuSarDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
   otbSarDefaultImageMetadataInterface )
 
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterfaceNew )
-
 otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_QBCevennes COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
   ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
@@ -303,39 +267,15 @@ otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 COMMAND otbMet
   ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
   )
 
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterfaceFactoryNew COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterfaceFactoryNew )
-
-otb_add_test(NAME ioTuFormosatImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbFormosatImageMetadataInterfaceNew
-  )
 
 otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
   otbOpticalDefaultImageMetadataInterface )
 
-otb_add_test(NAME ioTuSpot6ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSpot6ImageMetadataInterfaceNew
-  )
 
-otb_add_test(NAME ioTuSpotImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbSpotImageMetadataInterfaceNew
-  )
 
-otb_add_test(NAME ioTuQuickBirdImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbQuickBirdImageMetadataInterfaceNew
-  )
 
-otb_add_test(NAME ioTuIkonosImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbIkonosImageMetadataInterfaceNew
-  )
 
-otb_add_test(NAME ioTuTerraSarImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbTerraSarImageMetadataInterfaceNew
-  )
 
-otb_add_test(NAME ioTuWorldView2ImageMetadataInterfaceNew COMMAND otbMetadataTestDriver
-  otbWorldView2ImageMetadataInterfaceNew
-  )
 
 otb_add_test(NAME ioTuDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterface )
@@ -344,7 +284,7 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
   ${TEMP}/ioTvImageMetadataInterface.txt
   otbImageMetadataInterfaceTest2
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract.tif
   ${TEMP}/ioTvImageMetadataInterface.txt
   )
 

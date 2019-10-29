@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,24 +25,23 @@
 int otbOGRVectorDataIOTestCanRead(int argc, char* argv[])
 {
   if (argc != 2)
-    {
-    std::cerr << "Usage: " << argv[0]
-              << "<vectorData>" << std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << "<vectorData>" << std::endl;
     std::cerr << "Called here with " << argc << " arguments\n";
     for (int i = 1; i < argc; ++i)
-      {
+    {
       std::cerr << " - " << argv[i] << "\n";
-      }
-    return EXIT_FAILURE;
     }
-  typedef otb::OGRVectorDataIO  OGRVectorDataIOType;
-  OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
+    return EXIT_FAILURE;
+  }
+  typedef otb::OGRVectorDataIO OGRVectorDataIOType;
+  OGRVectorDataIOType::Pointer object   = OGRVectorDataIOType::New();
   bool                         lCanRead = object->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::OGRVectorDataIO : impossible to open the file " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

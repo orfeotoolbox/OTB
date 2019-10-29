@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,12 +25,12 @@
 #include "otbVectorImage.h"
 #include "otbMacro.h"
 
-int otbReadingComplexDataIntoComplexImageTest(int itkNotUsed(argc), char * argv[])
+int otbReadingComplexDataIntoComplexImageTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::Image<PixelType, 2>              ImageType;
-  typedef otb::VectorImage<RealType, 2>         VectorImageType;
+  typedef double                 RealType;
+  typedef std::complex<RealType> PixelType;
+  typedef otb::Image<PixelType, 2>      ImageType;
+  typedef otb::VectorImage<RealType, 2> VectorImageType;
   typedef otb::ImageFileReader<ImageType>       Reader1Type;
   typedef otb::ImageFileReader<VectorImageType> Reader2Type;
 
@@ -70,12 +70,10 @@ int otbReadingComplexDataIntoComplexImageTest(int itkNotUsed(argc), char * argv[
   std::cout << "Image value (vector ): " << vectorValue << std::endl;
 
   otbControlConditionTestMacro(vectorValue.Size() < 2, "VectorImage has less than 2 components. No input complex data.");
-  otbControlConditionTestMacro(
-    complexValue.real() != vectorValue[0],
-    "The real part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
-  otbControlConditionTestMacro(
-    complexValue.imag() != vectorValue[1],
-    "The imaginary part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
+  otbControlConditionTestMacro(complexValue.real() != vectorValue[0],
+                               "The real part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
+  otbControlConditionTestMacro(complexValue.imag() != vectorValue[1],
+                               "The imaginary part is not read properly. Have a look at the file itk::ConvertPixelBuffer, the problem might be there.");
 
   return EXIT_SUCCESS;
 }

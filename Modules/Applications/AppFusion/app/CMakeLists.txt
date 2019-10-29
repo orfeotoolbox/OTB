@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,6 +27,3 @@ otb_create_application(
   NAME           Pansharpening
   SOURCES        otbPansharpening.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-# Mantis-1427 : temporary fix
-add_dependencies(${otb-module}-all otbapp_Superimpose)

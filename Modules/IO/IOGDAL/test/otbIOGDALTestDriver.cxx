@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@ void RegisterTests()
   REGISTER_TEST(otbGDALImageIOTest_uint8);
   REGISTER_TEST(otbGDALImageIOTest_uint16);
   REGISTER_TEST(otbGDALImageIOTestWriteMetadata);
-  REGISTER_TEST(otbGDALOverviewsBuilderNew);
   REGISTER_TEST(otbGDALOverviewsBuilder);
-  REGISTER_TEST(otbOGRVectorDataIONew);
   REGISTER_TEST(otbGDALImageIOTestCanWrite);
   REGISTER_TEST(otbOGRVectorDataIOCanWrite);
   REGISTER_TEST(otbGDALReadPxlComplexFloat);

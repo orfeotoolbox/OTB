@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,6 @@
 #define otbGeodesicMorphologyDecompositionImageFilter_h
 
 #include "otbGeodesicMorphologyLevelingFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkOpeningByReconstructionImageFilter.h"
 #include "itkClosingByReconstructionImageFilter.h"
@@ -83,15 +82,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT GeodesicMorphologyDecompositionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef GeodesicMorphologyDecompositionImageFilter         Self;
+  typedef GeodesicMorphologyDecompositionImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -103,19 +101,13 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef TStructuringElement
-  StructuringElementType;
+  typedef TStructuringElement                         StructuringElementType;
   typedef typename StructuringElementType::RadiusType RadiusType;
-  typedef itk::OpeningByReconstructionImageFilter<InputImageType, InputImageType,
-      StructuringElementType> OpeningFilterType;
-  typedef itk::ClosingByReconstructionImageFilter<InputImageType, InputImageType,
-      StructuringElementType> ClosingFilterType;
-  typedef itk::SubtractImageFilter<InputImageType, InputImageType,
-      OutputImageType>                       ConvexFilterType;
-  typedef itk::SubtractImageFilter<OutputImageType, InputImageType,
-      OutputImageType>                      ConcaveFilterType;
-  typedef otb::GeodesicMorphologyLevelingFilter<InputImageType, OutputImageType,
-      OutputImageType>         LevelingFilterType;
+  typedef itk::OpeningByReconstructionImageFilter<InputImageType, InputImageType, StructuringElementType> OpeningFilterType;
+  typedef itk::ClosingByReconstructionImageFilter<InputImageType, InputImageType, StructuringElementType> ClosingFilterType;
+  typedef itk::SubtractImageFilter<InputImageType, InputImageType, OutputImageType>                       ConvexFilterType;
+  typedef itk::SubtractImageFilter<OutputImageType, InputImageType, OutputImageType>                      ConcaveFilterType;
+  typedef otb::GeodesicMorphologyLevelingFilter<InputImageType, OutputImageType, OutputImageType>         LevelingFilterType;
 
   /** Pointers typedefs*/
   typedef typename OpeningFilterType::Pointer  OpeningFilterPointerType;
@@ -132,13 +124,13 @@ public:
    * Get the convex likehood map.
    * \return The convex likehood map.
    */
-  OutputImageType * GetConvexMap(void);
+  OutputImageType* GetConvexMap(void);
 
   /**
    * Get the concave likehood map.
    * \return The concave likehood map.
    */
-  OutputImageType * GetConcaveMap(void);
+  OutputImageType* GetConcaveMap(void);
 
   /** FullyConnected flag */
   itkSetMacro(FullyConnected, bool);
@@ -153,13 +145,15 @@ protected:
   /** Constructor */
   GeodesicMorphologyDecompositionImageFilter();
   /** Destructor */
-  ~GeodesicMorphologyDecompositionImageFilter() override {}
+  ~GeodesicMorphologyDecompositionImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  GeodesicMorphologyDecompositionImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GeodesicMorphologyDecompositionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the structuring element */
   RadiusType m_Radius;
@@ -179,11 +173,10 @@ private:
   bool m_FullyConnected;
   /** Progress accumulator to report internal filter progress */
   itk::ProgressAccumulator::Pointer m_Progress;
-
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGeodesicMorphologyDecompositionImageFilter.txx"
+#include "otbGeodesicMorphologyDecompositionImageFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,20 +19,19 @@
  */
 
 
-
 #include "otbMRFOptimizerICM.h"
 #include <cstdlib>
 
-int otbMRFOptimizerICM(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbMRFOptimizerICM(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef otb::MRFOptimizerICM MRFOptimizerICMType;
 
   MRFOptimizerICMType::Pointer object = MRFOptimizerICMType::New();
 
   if (object->Compute(-1) != true || object->Compute(1) != false)
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

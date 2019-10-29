@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -69,39 +69,33 @@ namespace
 /*******************************************************************************/
 ImageProperties
 #if IMAGE_PROPERTIES_IS_QOBJECT
-::ImageProperties( QObject* p ) :
-  QObject( p ),
+    ::ImageProperties(QObject* p)
+  : QObject(p),
 #else
-::ImageProperties() :
+    ::ImageProperties()
+  :
 #endif
-  m_Flags(),
-  m_NoData( ComponentType( 0 ) )
+    m_Flags(),
+    m_NoData(ComponentType(0))
 {
   m_Flags.m_NoData = false;
 }
 
 /*******************************************************************************/
-ImageProperties
-::~ImageProperties()
+ImageProperties::~ImageProperties()
 {
 }
 
 /*******************************************************************************/
-bool
-ImageProperties
-::operator == ( const ImageProperties & other ) const
+bool ImageProperties::operator==(const ImageProperties& other) const
 {
-  return
-    other.m_Flags.m_NoData==m_Flags.m_NoData &&
-    other.m_NoData==m_NoData;
+  return other.m_Flags.m_NoData == m_Flags.m_NoData && other.m_NoData == m_NoData;
 }
 
 /*******************************************************************************/
-bool
-ImageProperties
-::operator != ( const ImageProperties & other ) const
+bool ImageProperties::operator!=(const ImageProperties& other) const
 {
-  return !operator == ( other );
+  return !operator==(other);
 }
 
 /*******************************************************************************/

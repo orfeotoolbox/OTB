@@ -1,4 +1,4 @@
-Orfeo Toolbox (OTB) Copyright 2005-2017 Centre National d'Etudes Spatiales (CNES)
+Orfeo Toolbox (OTB) Copyright 2005-2019 Centre National d'Etudes Spatiales (CNES)
 
 This software is distributed under the Apache Software License (ASL) v2.0, see
 LICENSE file or http://www.apache.org/licenses/LICENSE-2.0 for details.
@@ -15,7 +15,7 @@ Toolkit (ITK) project.
 
 This software includes code that been developed by CS Systemes d'Information
 (CS SI) during internships and self-financed studies.
-  Copyright 2005-2017, CS Systemes d'Information
+  Copyright 2005-2019, CS Systemes d'Information
   This code was contributed under Apache Software License (ASL) v2.0:
   http://www.apache.org/licenses/LICENSE-2.0
 
@@ -139,13 +139,6 @@ This software includes code from the libkml project.
   https://github.com/google/libkml
   libkml is released under BSD 3-Clause license:
   https://github.com/google/libkml/blob/master/LICENSE
-
-
-This software includes code from the Mapnik project.
-  Copyright (c) 2015, Artem Pavlenko
-  http://mapnik.org/
-  Mapnik is released under GNU LGPL v2.1 license:
-  http://mapnik.org/pages/license.html
 
 
 This software includes code from the MuParser project.
@@ -341,20 +334,6 @@ binaries:
     http://www.boost.org/LICENSE_1_0.txt
 
 
-* CMake/UseJava.cmake
-    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
-    Copyright 2010 Ben Boeckel <ben.boeckel@kitware.com>
-    BSD 3-Clause license
-    https://opensource.org/licenses/BSD-3-Clause
-
-
-* CMake/UseJavaClassFilelist.cmake
-* CMake/UseJavaSymlinks.cmake
-    Copyright 2010-2011 Andreas schneider <asn@redhat.com>
-    BSD 3-Clause license
-    https://opensource.org/licenses/BSD-3-Clause
-
-
 * CMake/UseSWIGLocal.cmake
     Copyright 2004-2009 Kitware, Inc.
     Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
@@ -378,3 +357,30 @@ binaries:
     Copyright (c) 2016, Even Rouault <even.rouault@spatialys.com>
     MIT license
     https://opensource.org/licenses/MIT
+
+
+Some parts of the software may be licensed differently in the following
+cases described below:
+
+
+* Modules/Applications/AppDomainTransform/app/otbDomainTransform.cxx
+    When ITK is built using FFTW, the binary application DomainTransform
+    becomes licensed under GNU GPL v3.
+
+
+* Module/Remote/OTBTemporalGapFilling/*
+  Module/Remote/OTBPhenology/*
+  Module/Remote/OTBBioVars/*
+    These remote modules, when enabled, are licensed under GNU Affero GPL v3
+
+
+* Module/Remote/SertitObject/*
+    This remote module, when enabled, is licensed under CeCILL-B
+
+
+* Module/Remote/otbGRM/*
+    This remote module, when enabled, is licensed under GNU GPL v3
+
+
+* Module/Remote/OTBFFSforGMM/*
+    This remote module, when enabled, is licensed under Apache v2 license

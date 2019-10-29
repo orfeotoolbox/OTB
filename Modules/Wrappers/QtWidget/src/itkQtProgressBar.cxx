@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,18 +24,19 @@
 #include "itkQtProgressBar.h"
 
 
-namespace itk {
+namespace itk
+{
 
 
 /** Constructor */
-QtProgressBar::QtProgressBar( QWidget *par):QProgressBar(par)
+QtProgressBar::QtProgressBar(QWidget* par) : QProgressBar(par)
 {
   m_RedrawCommand = RedrawCommandType::New();
-  m_RedrawCommand->SetCallbackFunction( this, &QtProgressBar::ProcessEvent );
-  m_RedrawCommand->SetCallbackFunction( this, &QtProgressBar::ConstProcessEvent );
+  m_RedrawCommand->SetCallbackFunction(this, &QtProgressBar::ProcessEvent);
+  m_RedrawCommand->SetCallbackFunction(this, &QtProgressBar::ConstProcessEvent);
 
   m_Caller = itk::Object::New();
-  this->setMaximum( 100 );
+  this->setMaximum(100);
   this->reset();
 }
 
@@ -46,56 +47,46 @@ QtProgressBar::~QtProgressBar()
 }
 
 /** Get Command */
-QtProgressBar::RedrawCommandType *
-QtProgressBar::GetRedrawCommand( void ) const
+QtProgressBar::RedrawCommandType* QtProgressBar::GetRedrawCommand(void) const
 {
   return m_RedrawCommand.GetPointer();
 }
 
 /** Manage a Progress event */
-void
-QtProgressBar::ProcessEvent( itk::Object * caller,
-                             const itk::EventObject & ev )
+void QtProgressBar::ProcessEvent(itk::Object* caller, const itk::EventObject& ev)
 {
-  if( typeid( itk::ProgressEvent ) == typeid( ev ) )
-    {
-    ::itk::ProcessObject::Pointer  process =
-      dynamic_cast< itk::ProcessObject *>( caller );
+  if (typeid(itk::ProgressEvent) == typeid(ev))
+  {
+    ::itk::ProcessObject::Pointer process = dynamic_cast<itk::ProcessObject*>(caller);
 
     if (process)
-      {
-      const int value2 = static_cast<int>(
-        process->GetProgress() * this->maximum() );
-      emit SetValueChanged( value2 );
-      }
+    {
+      const int value2 = static_cast<int>(process->GetProgress() * this->maximum());
+      emit      SetValueChanged(value2);
     }
+  }
 }
 
-void
-QtProgressBar::ConstProcessEvent( const itk::Object * caller,
-                                  const itk::EventObject & ev )
+void QtProgressBar::ConstProcessEvent(const itk::Object* caller, const itk::EventObject& ev)
 {
-  if( typeid( itk::ProgressEvent ) == typeid( ev ) )
-    {
-    itk::ProcessObject::ConstPointer  process =
-      dynamic_cast< const itk::ProcessObject *>( caller );
+  if (typeid(itk::ProgressEvent) == typeid(ev))
+  {
+    itk::ProcessObject::ConstPointer process = dynamic_cast<const itk::ProcessObject*>(caller);
 
     if (process)
-      {
-      const int v = static_cast<int>(
-        process->GetProgress() * this->maximum() );
+    {
+      const int v = static_cast<int>(process->GetProgress() * this->maximum());
 
-      emit SetValueChanged( v );
-      }
+      emit SetValueChanged(v);
     }
+  }
 }
 
 /** Manage a Progress event */
-void
-QtProgressBar::Observe( itk::Object *caller )
+void QtProgressBar::Observe(itk::Object* caller)
 {
   m_Caller = caller;
-  m_Caller->AddObserver(  itk::ProgressEvent(), m_RedrawCommand.GetPointer() );
+  m_Caller->AddObserver(itk::ProgressEvent(), m_RedrawCommand.GetPointer());
 }
 
 } // end namespace fltk

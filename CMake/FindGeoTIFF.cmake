@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -58,9 +58,8 @@ mark_as_advanced( GEOTIFF_INCLUDE_DIR GEOTIFF_LIBRARY )
 # handle the QUIETLY and REQUIRED arguments and set GEOTIFF_FOUND to TRUE if 
 # all listed variables are TRUE
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( GeoTIFF DEFAULT_MSG
-                                    GEOTIFF_LIBRARY
-                                    GEOTIFF_INCLUDE_DIR)
+find_package_handle_standard_args( GeoTIFF DEFAULT_MSG
+  GEOTIFF_LIBRARY GEOTIFF_INCLUDE_DIR)
 
 if(GEOTIFF_FOUND)
   set( GEOTIFF_INCLUDE_DIRS ${GEOTIFF_INCLUDE_DIR} )

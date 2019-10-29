@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,19 +19,17 @@
  */
 
 
-
-
-#include "itkMacro.h"
+#include "otbMacro.h"
 #include "itkPolyLineParametricPath.h"
 #include "otbOrientationPathFunction.h"
 #include "otbPathListToHistogramGenerator.h"
 #include "otbMath.h"
 
-int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
+int otbPathListToHistogramGenerator(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int       NbOfBins((unsigned int) ::atoi(argv[1]));
-  unsigned int       NbOfPointsPerHistogram((unsigned int) ::atoi(argv[2]));
-  const unsigned int Dimension = 2;
+  unsigned int                                   NbOfBins((unsigned int)::atoi(argv[1]));
+  unsigned int                                   NbOfPointsPerHistogram((unsigned int)::atoi(argv[2]));
+  const unsigned int                             Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef PathType::Pointer                      PathPointer;
   typedef otb::ObjectList<PathType>              PathListType;
@@ -48,7 +46,7 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
   PathList->Clear();
 
   for (int i = 0; i < NbAngle; ++i)
-    {
+  {
     PathPointer pathElt = PathType::New();
     pathElt->Initialize();
     cindex[0] = 30;
@@ -56,18 +54,18 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
     pathElt->AddVertex(cindex);
 
     float Theta = 2.0 * static_cast<float>(otb::CONST_PI) * static_cast<float>(i) / static_cast<float>(NbAngle);
-    cindex[0] = 30 + vcl_cos(Theta);
-    cindex[1] = 30 + vcl_sin(Theta);
+    cindex[0]   = 30 + std::cos(Theta);
+    cindex[1]   = 30 + std::sin(Theta);
     pathElt->AddVertex(cindex);
 
     PathList->PushBack(pathElt);
-    }
+  }
 
   HistogramGeneratorType::Pointer histogramGenerator = HistogramGeneratorType::New();
 
   typedef HistogramGeneratorType::SizeType HistogramSizeType;
-  HistogramSizeType hsize(1);
-  hsize[0] = NbOfBins;  // number of bins for the Red   channel
+  HistogramSizeType                        hsize(1);
+  hsize[0] = NbOfBins; // number of bins for the Red   channel
 
   histogramGenerator->SetInput(PathList);
   histogramGenerator->SetNumberOfBins(hsize);
@@ -75,21 +73,20 @@ int otbPathListToHistogramGenerator(int itkNotUsed(argc), char * argv[])
 
   typedef HistogramGeneratorType::HistogramType HistogramType;
 
-  const HistogramType * histogram = histogramGenerator->GetOutput();
+  const HistogramType* histogram = histogramGenerator->GetOutput();
 
   const unsigned int histogramSize = histogram->Size();
-  std::cout << "Histogram size " << histogramSize << std::endl;
+  otbLogMacro(Info, << "Histogram size " << histogramSize);
 
   for (unsigned int bin = 0; bin < histogramSize; bin++)
-    {
+  {
     if (histogram->GetFrequency(bin, 0) != NbOfPointsPerHistogram)
-      {
-      std::cout << "Error in histogram value !" << std::endl;
+    {
+      otbLogMacro(Warning, << "Error in histogram value !");
       return EXIT_FAILURE;
-      }
-    std::cout << "bin = " << bin << " frequency = ";
-    std::cout << histogram->GetFrequency(bin, 0) << std::endl;
     }
+    otbLogMacro(Debug, << "bin = " << bin << " frequency = " << histogram->GetFrequency(bin, 0));
+  }
 
   return EXIT_SUCCESS;
 }

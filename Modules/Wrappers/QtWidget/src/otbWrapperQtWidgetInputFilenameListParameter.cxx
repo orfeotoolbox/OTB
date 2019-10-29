@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,20 +29,15 @@ namespace Wrapper
 {
 
 /*****************************************************************************/
-QtWidgetInputFilenameListParameter
-::QtWidgetInputFilenameListParameter( InputFilenameListParameter * param,
-				      QtWidgetModel * m ) :
-  QtWidgetParameterList( param, m )
+QtWidgetInputFilenameListParameter::QtWidgetInputFilenameListParameter(InputFilenameListParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterList(param, m, parent)
 {
 }
 
 
 /*****************************************************************************/
-QtWidgetInputFilenameListParameter
-::~QtWidgetInputFilenameListParameter()
+QtWidgetInputFilenameListParameter::~QtWidgetInputFilenameListParameter()
 {
 }
-
 }
-
 }

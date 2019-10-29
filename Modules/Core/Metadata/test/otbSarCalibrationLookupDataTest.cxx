@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include <iostream>
 #include "itkMacro.h"
 #include "otbImage.h"
@@ -28,33 +27,32 @@
 
 int otbSarCalibrationLookupDataTest(int argc, char* argv[])
 {
-  typedef double                                  RealType;
-  typedef otb::SarImageMetadataInterface             ImageMetadataInterfaceType;
-  typedef otb::SarCalibrationLookupData              LookupDataType;
-  typedef otb::Image<double,  2>                     InputImageType;
-  typedef otb::ImageFileReader<InputImageType>       ImageReaderType;
+  typedef double                         RealType;
+  typedef otb::SarImageMetadataInterface ImageMetadataInterfaceType;
+  typedef otb::SarCalibrationLookupData  LookupDataType;
+  typedef otb::Image<double, 2> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 
-  if (argc < 3 )
-    {
-    std::cerr << "Usage: otbSarCalibationLookupDataTest /path/to/input/file /path/to/output/file  !"<< std::endl;
+  if (argc < 3)
+  {
+    std::cerr << "Usage: otbSarCalibationLookupDataTest /path/to/input/file /path/to/output/file  !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-  const char *  outFileName = argv[2];
+  const char*   outFileName = argv[2];
   std::ofstream outfile;
   outfile.open(outFileName);
 
-  ImageMetadataInterfaceType::Pointer imageMetadataInterface =
-    otb::SarImageMetadataInterfaceFactory::CreateIMI( reader->GetOutput()->GetMetaDataDictionary() );
+  ImageMetadataInterfaceType::Pointer imageMetadataInterface = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
 
   if (!imageMetadataInterface.IsNotNull())
-    {
+  {
     std::cerr << "cannot create a otb::SarImageMetadataInterface for input image." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   const std::string sensorId = imageMetadataInterface->GetSensorID();
 
@@ -63,16 +61,15 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
   LookupDataType::Pointer lookupDataObj = imageMetadataInterface->GetCalibrationLookupData(0);
 
   if (!lookupDataObj.IsNotNull())
-    {
-    std::cerr << "lookupDataObj is Null"<< std::endl;
+  {
+    std::cerr << "lookupDataObj is Null" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(10,19));
+  RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(10, 19));
 
   outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl;
   outfile << lutVal << std::endl;
 
   return EXIT_SUCCESS;
-
 }

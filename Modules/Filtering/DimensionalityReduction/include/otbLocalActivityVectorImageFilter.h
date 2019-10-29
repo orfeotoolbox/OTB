@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,14 +35,18 @@ namespace Functor
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInput, class TOutput >
+template <class TInput, class TOutput>
 class LocalActivityOperator
 {
 public:
-  LocalActivityOperator() { }
-  virtual ~LocalActivityOperator() { }
+  LocalActivityOperator()
+  {
+  }
+  virtual ~LocalActivityOperator()
+  {
+  }
 
-  TOutput operator() ( const TInput & input )
+  TOutput operator()(const TInput& input)
   {
     /*
      * it is assumed that input and output have the same size
@@ -50,27 +54,26 @@ public:
     typename TInput::PixelType centerPixel = input.GetCenterPixel();
 
     unsigned int neighborSize = input.Size();
-    unsigned int vectorSize = centerPixel.Size();
+    unsigned int vectorSize   = centerPixel.Size();
 
-    if ( neighborSize == 1 )
+    if (neighborSize == 1)
       return centerPixel;
 
-    TOutput output ( vectorSize );
+    TOutput output(vectorSize);
 
-    for ( unsigned int i = 0; i < vectorSize; ++i )
+    for (unsigned int i = 0; i < vectorSize; ++i)
     {
-      typename TOutput::ValueType out
-          = itk::NumericTraits< typename TOutput::ValueType >::Zero;
-      for ( unsigned int j = 0; j < neighborSize/2; ++j )
+      typename TOutput::ValueType out = itk::NumericTraits<typename TOutput::ValueType>::Zero;
+      for (unsigned int j = 0; j < neighborSize / 2; ++j)
       {
         out += input.GetPixel(j)[i];
       }
-      for ( unsigned int j = neighborSize/2+1; j < neighborSize; ++j )
+      for (unsigned int j = neighborSize / 2 + 1; j < neighborSize; ++j)
       {
         out += input.GetPixel(j)[i];
       }
 
-      output[i] = centerPixel[i] - out / static_cast<double>( neighborSize-1 );
+      output[i] = centerPixel[i] - out / static_cast<double>(neighborSize - 1);
     }
 
     return output;
@@ -84,21 +87,18 @@ public:
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInputImage, class TOutputImage >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LocalActivityVectorImageFilter
-  : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalActivityOperator<
-              typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > >
+    : public UnaryFunctorNeighborhoodVectorImageFilter<
+          TInputImage, TOutputImage, Functor::LocalActivityOperator<typename itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs */
   typedef LocalActivityVectorImageFilter Self;
-  typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalActivityOperator<
-              typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > >  Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef UnaryFunctorNeighborhoodVectorImageFilter<
+      TInputImage, TOutputImage, Functor::LocalActivityOperator<typename itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -108,13 +108,17 @@ public:
   itkTypeMacro(LocalActivityVectorImageFilter, ImageToImageFilter);
 
 protected:
-  LocalActivityVectorImageFilter() { }
-  ~LocalActivityVectorImageFilter() override { }
+  LocalActivityVectorImageFilter()
+  {
+  }
+  ~LocalActivityVectorImageFilter() override
+  {
+  }
 
 private:
-  LocalActivityVectorImageFilter( const Self & ); // Not implemented
-  void operator=( const Self & ); // Not implemented
-}; // end of class
+  LocalActivityVectorImageFilter(const Self&); // Not implemented
+  void operator=(const Self&);                 // Not implemented
+};                                             // end of class
 
 } // end of namespace otb
 

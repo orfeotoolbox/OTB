@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,14 +19,13 @@
  */
 
 
-
 #include "otbMassOfBelief.h"
 #include "otbJointMassOfBeliefFilter.h"
 #include "otbMath.h"
 
 int otbJointMassOfBeliefFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
+  typedef otb::MassOfBelief<std::string>                         MassOfBeliefFunctionType;
   typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
 
   std::vector<double> baseline, results;
@@ -40,8 +39,8 @@ int otbJointMassOfBeliefFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   baseline.push_back(0.869275);
   baseline.push_back(1.);
 
-  MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
-  MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer    mass1           = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer    mass2           = MassOfBeliefFunctionType::New();
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
 
   MassOfBeliefFunctionType::LabelSetType universe;
@@ -98,29 +97,27 @@ int otbJointMassOfBeliefFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   results.push_back(jointMass->GetBelief(hyp));
   results.push_back(jointMass->GetPlausibility(hyp));
 
-  for (unsigned int i=0; i<baseline.size(); ++i)
+  for (unsigned int i = 0; i < baseline.size(); ++i)
+  {
+    if (std::abs(baseline[i] - results[i]) >= .000001)
     {
-    if (vcl_abs(baseline[i] - results[i]) >= .000001)
-      {
       std::cout << "Non-regression test [" << i << "] failed: "
-                << "baseline[i](" << baseline[i]
-                << ") != results[i](" << results[i]
-                << std::endl;
+                << "baseline[i](" << baseline[i] << ") != results[i](" << results[i] << std::endl;
 
       return EXIT_FAILURE;
-      }
     }
+  }
 
   return EXIT_SUCCESS;
 }
 
 int otbJointMassOfBeliefFilterLimit(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef otb::MassOfBelief<std::string> MassOfBeliefFunctionType;
+  typedef otb::MassOfBelief<std::string>                         MassOfBeliefFunctionType;
   typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
 
-  MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
-  MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer    mass1           = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer    mass2           = MassOfBeliefFunctionType::New();
   JointMassOfBeliefFilterType::Pointer jointMassFilter = JointMassOfBeliefFilterType::New();
 
   // Example from
@@ -155,12 +152,12 @@ int otbJointMassOfBeliefFilterLimit(int itkNotUsed(argc), char* itkNotUsed(argv)
 
   MassOfBeliefFunctionType::Pointer jointMass = jointMassFilter->GetOutput();
 
-  std::cout<<"Mass 1: "<<std::endl;
-  std::cout<<mass1<<std::endl;
-  std::cout<<"Mass 2: "<<std::endl;
-  std::cout<<mass2<<std::endl;
-  std::cout<<"Joint Mass: "<<std::endl;
-  std::cout<<jointMass<<std::endl;
+  std::cout << "Mass 1: " << std::endl;
+  std::cout << mass1 << std::endl;
+  std::cout << "Mass 2: " << std::endl;
+  std::cout << mass2 << std::endl;
+  std::cout << "Joint Mass: " << std::endl;
+  std::cout << jointMass << std::endl;
 
   return EXIT_SUCCESS;
 }

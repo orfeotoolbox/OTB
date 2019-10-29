@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -119,13 +119,15 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTermsSingleChannel();
   /** Destructor */
-  ~AtmosphericRadiativeTermsSingleChannel() override {}
+  ~AtmosphericRadiativeTermsSingleChannel() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericRadiativeTermsSingleChannel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AtmosphericRadiativeTermsSingleChannel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The intrinsic atmospheric reflectance. */
   double m_IntrinsicAtmosphericReflectance;
@@ -185,8 +187,8 @@ public:
 
   typedef AtmosphericRadiativeTermsSingleChannel::Pointer ValueType;
   typedef std::vector<ValueType>                          VectorValueType;
-  typedef std::vector<double>                                DataVectorType;
-  typedef DataVectorType::size_type                      DataVectorSizeType;
+  typedef std::vector<double>                             DataVectorType;
+  typedef DataVectorType::size_type                       DataVectorSizeType;
   /**
    * Set/Get the values.
    */
@@ -266,13 +268,15 @@ protected:
   /** Constructor */
   AtmosphericRadiativeTerms();
   /** Destructor */
-  ~AtmosphericRadiativeTerms() override {}
+  ~AtmosphericRadiativeTerms() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AtmosphericRadiativeTerms(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AtmosphericRadiativeTerms(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The vector containing each channel information. */
   VectorValueType m_Values;

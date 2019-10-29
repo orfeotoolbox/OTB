@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,12 +22,13 @@
 #ifndef otbMuellerToReciprocalCovarianceImageFilter_h
 #define otbMuellerToReciprocalCovarianceImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class MuellerToReciprocalCovarianceFunctor
  * \brief Evaluate the  MLC image from the Mueller image
@@ -54,6 +55,8 @@ namespace Functor {
  * The output image has 6 channels : the diagonal and the upper element of the reciprocal matrix.
  * Element are stored from left to right, line by line.
  *
+ * Use otb::MuellerToReciprocalCovarianceImageFilter to apply
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
@@ -64,106 +67,67 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class MuellerToReciprocalCovarianceFunctor
 {
 public:
-  typedef std::complex<double>                      ComplexType;
-  typedef typename TOutput::ValueType               OutputValueType;
+  typedef std::complex<double>        ComplexType;
+  typedef typename TOutput::ValueType OutputValueType;
 
-
-  inline TOutput operator()( const TInput & Mueller ) const
+  inline void operator()(TOutput& result, const TInput& Mueller) const
   {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-
     // Keep the upper diagonal of the matrix
-    const double M11 =  static_cast<double>(Mueller[0]);
-    const double M12 =  static_cast<double>(Mueller[1]);
-    const double M13 =  static_cast<double>(Mueller[2]);
-    const double M14 =  static_cast<double>(Mueller[3]);
-    const double M22 =  static_cast<double>(Mueller[5]);
-    const double M23 =  static_cast<double>(Mueller[6]);
-    const double M24 =  static_cast<double>(Mueller[7]);
-    const double M33 =  static_cast<double>(Mueller[10]);
-    const double M34 =  static_cast<double>(Mueller[11]);
-    const double M44 =  static_cast<double>(Mueller[15]);
+    const double M11 = static_cast<double>(Mueller[0]);
+    const double M12 = static_cast<double>(Mueller[1]);
+    const double M13 = static_cast<double>(Mueller[2]);
+    const double M14 = static_cast<double>(Mueller[3]);
+    const double M22 = static_cast<double>(Mueller[5]);
+    const double M23 = static_cast<double>(Mueller[6]);
+    const double M24 = static_cast<double>(Mueller[7]);
+    const double M33 = static_cast<double>(Mueller[10]);
+    const double M34 = static_cast<double>(Mueller[11]);
+    const double M44 = static_cast<double>(Mueller[15]);
 
-    
-    const ComplexType A(0.5*(M11+M22+2*M12));
-    const ComplexType B(0.5*vcl_sqrt(2.0)*(M13+M23), 0.5*vcl_sqrt(2.0)*(M14+M24));
-    const ComplexType C(-0.5*(M33+M44), -M34);
-    const ComplexType E(M11-M22, 0.0);
-    const ComplexType F(0.5*vcl_sqrt(2.0)*(M13-M23), 0.5*vcl_sqrt(2.0)*(M14-M24));
-    const ComplexType I(0.5*(M11+M22-2*M12));
 
-    result[0] = static_cast<OutputValueType>( A );
-    result[1] = static_cast<OutputValueType>( B );
-    result[2] = static_cast<OutputValueType>( C );
-    result[3] = static_cast<OutputValueType>( E );
-    result[4] = static_cast<OutputValueType>( F );
-    result[5] = static_cast<OutputValueType>( I );
+    const ComplexType A(0.5 * (M11 + M22 + 2 * M12));
+    const ComplexType B(0.5 * std::sqrt(2.0) * (M13 + M23), 0.5 * std::sqrt(2.0) * (M14 + M24));
+    const ComplexType C(-0.5 * (M33 + M44), -M34);
+    const ComplexType E(M11 - M22, 0.0);
+    const ComplexType F(0.5 * std::sqrt(2.0) * (M13 - M23), 0.5 * std::sqrt(2.0) * (M14 - M24));
+    const ComplexType I(0.5 * (M11 + M22 - 2 * M12));
 
-    return result;
+    result[0] = static_cast<OutputValueType>(A);
+    result[1] = static_cast<OutputValueType>(B);
+    result[2] = static_cast<OutputValueType>(C);
+    result[3] = static_cast<OutputValueType>(E);
+    result[4] = static_cast<OutputValueType>(F);
+    result[5] = static_cast<OutputValueType>(I);
   }
 
-  unsigned int GetOutputSize()
-    {
-     return m_NumberOfComponentsPerPixel;
-    }
-
-  /** Constructor */
-  MuellerToReciprocalCovarianceFunctor() : m_NumberOfComponentsPerPixel(6)  {}
-
-  /** Destructor */
-  virtual ~MuellerToReciprocalCovarianceFunctor() {}
-
- private:
-  unsigned int m_NumberOfComponentsPerPixel;
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 6;
+  }
 };
-}
+} // namespace Functor
 
-
-/** \class otbMuellerToReciprocalCovarianceImageFilter
- * \brief Compute the MLC  image
- * from the Mueller image (16 real channels)
- * For more details, lease refer to the class MuellerToReciprocalCovarianceFunctor.
+/**
+ * \typedef MuellerToReciprocalCovarianceImageFilter
+ * \brief Applies otb::Functor::MuellerToReciprocalCovarianceFunctor
+ * \sa otb::Functor::MuellerToReciprocalCovarianceFunctor
  *
- * \ingroup SARPolarimetry
- * \sa MuellerToReciprocalCovarianceFunctor
- *
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MuellerToReciprocalCovarianceImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToReciprocalCovarianceFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef MuellerToReciprocalCovarianceImageFilter  Self;
-   typedef Functor::MuellerToReciprocalCovarianceFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
+template <typename TInputImage, typename TOutputImage>
+using MuellerToReciprocalCovarianceImageFilter =
+    FunctorImageFilter<Functor::MuellerToReciprocalCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(MuellerToReciprocalCovarianceImageFilter, UnaryFunctorImageFilter);
-
-
-protected:
-   MuellerToReciprocalCovarianceImageFilter() {}
-  ~MuellerToReciprocalCovarianceImageFilter() override {}
-
-private:
-  MuellerToReciprocalCovarianceImageFilter(const Self&); // purposely not implemented
-  void operator=(const Self&);          // purposely not implemented
-};
 
 } // end namespace otb
 

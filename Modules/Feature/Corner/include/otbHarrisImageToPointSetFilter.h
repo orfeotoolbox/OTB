@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,24 +33,19 @@ namespace otb
  * \ingroup OTBCorner
  */
 
-template <class TInputImage,
-    class TOutputPointSet = itk::PointSet<typename TInputImage::PixelType, 2> >
-class ITK_EXPORT HarrisImageToPointSetFilter :
-  public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+template <class TInputImage, class TOutputPointSet = itk::PointSet<typename TInputImage::PixelType, 2>>
+class ITK_EXPORT HarrisImageToPointSetFilter : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 public:
-
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   typedef TInputImage     InputImageType;
   typedef TOutputPointSet OutputPointSetType;
 
-  typedef HarrisImageToPointSetFilter                               Self;
+  typedef HarrisImageToPointSetFilter Self;
   typedef ImageToPointSetFilter<InputImageType, OutputPointSetType> Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
 
@@ -59,9 +54,8 @@ public:
   typedef typename InputImageType::PixelType InputPixelType;
   typedef typename InputImageType::SizeType  SizeType;
 
-  typedef typename otb::HarrisImageFilter<InputImageType, InputImageType> HarrisImageFilterType;
-  typedef typename otb::ThresholdImageToPointSetFilter<InputImageType,
-      OutputPointSetType>       ThresholdImageToPointSetType;
+  typedef typename otb::HarrisImageFilter<InputImageType, InputImageType>                  HarrisImageFilterType;
+  typedef typename otb::ThresholdImageToPointSetFilter<InputImageType, OutputPointSetType> ThresholdImageToPointSetType;
 
   typedef typename OutputPointSetType::PixelType OutputPixelType;
 
@@ -78,15 +72,17 @@ public:
 
 protected:
   HarrisImageToPointSetFilter();
-  ~HarrisImageToPointSetFilter() override {}
+  ~HarrisImageToPointSetFilter() override
+  {
+  }
 
   void GenerateData() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HarrisImageToPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  HarrisImageToPointSetFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputPixelType m_LowerThreshold;
   InputPixelType m_UpperThreshold;
@@ -94,14 +90,13 @@ private:
   double         m_SigmaI;
   double         m_Alpha;
 
-  typename HarrisImageFilterType::Pointer m_HarrisFilter;
+  typename HarrisImageFilterType::Pointer        m_HarrisFilter;
   typename ThresholdImageToPointSetType::Pointer m_ThresholdFilter;
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHarrisImageToPointSetFilter.txx"
+#include "otbHarrisImageToPointSetFilter.hxx"
 #endif
 
 #endif

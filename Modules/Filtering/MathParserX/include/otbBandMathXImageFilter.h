@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,6 +31,7 @@
 #include "otbParserX.h"
 
 #include <vector>
+#include <string>
 
 
 namespace otb
@@ -60,16 +61,15 @@ namespace otb
  * \ingroup OTBMathParserX
  */
 
-template< class TImage >
-class ITK_EXPORT BandMathXImageFilter
-  : public itk::ImageToImageFilter< TImage , TImage >
+template <class TImage>
+class ITK_EXPORT BandMathXImageFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BandMathXImageFilter< TImage >                 Self;
-  typedef itk::ImageToImageFilter< TImage , TImage>             Superclass;
-  typedef itk::SmartPointer< Self >                     Pointer;
-  typedef itk::SmartPointer< const Self >               ConstPointer;
+  typedef BandMathXImageFilter<TImage> Self;
+  typedef itk::ImageToImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -78,32 +78,32 @@ public:
   itkTypeMacro(BandMathXImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TImage                                      ImageType;
-  typedef typename ImageType::ConstPointer           ConstImagePointer;
-  typedef typename ImageType::Pointer                ImagePointer;
-  typedef typename ImageType::RegionType             ImageRegionType;
+  typedef TImage                                                      ImageType;
+  typedef typename ImageType::ConstPointer                            ConstImagePointer;
+  typedef typename ImageType::Pointer                                 ImagePointer;
+  typedef typename ImageType::RegionType                              ImageRegionType;
   typedef typename itk::ConstNeighborhoodIterator<TImage>::RadiusType RadiusType;
-  typedef typename ImageType::PixelType::ValueType   PixelValueType;
-  typedef typename ImageType::PixelType              PixelType;
-  typedef typename ImageType::IndexType              IndexType;
-  typedef typename ImageType::PointType              OrigineType;
-  typedef typename ImageType::SpacingType            SpacingType;
-  typedef ParserX                                     ParserType;
-  typedef typename ParserType::ValueType             ValueType;
-  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  typedef typename ImageType::PixelType::ValueType                    PixelValueType;
+  typedef typename ImageType::PixelType                               PixelType;
+  typedef typename ImageType::IndexType                               IndexType;
+  typedef typename ImageType::PointType                               OrigineType;
+  typedef typename ImageType::SpacingType                             SpacingType;
+  typedef ParserX                                                     ParserType;
+  typedef typename ParserType::ValueType                              ValueType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType          DataObjectPointerArraySizeType;
 
   /** Typedef for statistic computing. */
-  typedef StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
-  typedef typename StreamingStatisticsVectorImageFilterType::Pointer StreamingStatisticsVectorImageFilterPointerType;
+  typedef StreamingStatisticsVectorImageFilter<ImageType>               StreamingStatisticsVectorImageFilterType;
+  typedef typename StreamingStatisticsVectorImageFilterType::Pointer    StreamingStatisticsVectorImageFilterPointerType;
   typedef typename StreamingStatisticsVectorImageFilterType::MatrixType MatrixType;
 
   /** Set the nth filter input with or without a specified associated variable name */
   using Superclass::SetNthInput;
-  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image);
-  void SetNthInput( DataObjectPointerArraySizeType idx, const ImageType * image, const std::string& varName);
+  void SetNthInput(DataObjectPointerArraySizeType idx, const ImageType* image);
+  void SetNthInput(DataObjectPointerArraySizeType idx, const ImageType* image, const std::string& varName);
 
   /** Return a pointer on the nth filter input */
-  ImageType * GetNthInput(DataObjectPointerArraySizeType idx);
+  ImageType* GetNthInput(DataObjectPointerArraySizeType idx);
 
   /** Set an expression to be parsed */
   void SetManyExpressions(bool flag);
@@ -111,8 +111,8 @@ public:
   /** Set an expression to be parsed */
   void SetExpression(const std::string& expression);
 
-  /** Return the nth expression to be parsed */
-  std::string GetExpression(int) const;
+  /** Return the nth expression to be parsed*/
+  std::string GetExpression(unsigned int IDExpression) const;
 
   /** Set a matrix (or a vector) */
   void SetMatrix(const std::string& name, const std::string& definition);
@@ -126,11 +126,17 @@ public:
   /** Import constants and expressions from a given filename */
   void ImportContext(const std::string& filename);
 
+  /** Clear all previously set expression*/
+  void ClearExpression();
   /** Return the variable and constant names */
   std::vector<std::string> GetVarNames() const;
 
+  bool GlobalStatsDetected() const
+  {
+    return !m_StatsVarDetected.empty();
+  }
 
-protected :
+protected:
   BandMathXImageFilter();
   ~BandMathXImageFilter() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -139,26 +145,21 @@ protected :
   void GenerateInputRequestedRegion() override;
 
   void BeforeThreadedGenerateData() override;
-  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void ThreadedGenerateData(const ImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void AfterThreadedGenerateData() override;
 
-private :
-
-  bool globalStatsDetected() const
+private:
+  typedef struct
   {
-    return (m_StatsVarDetected.size()>0);
-  }
-
-  typedef struct {
-      std::string name;
-      ValueType   value;
-      int         type;
-      int         info[5];
+    std::string name;
+    ValueType   value;
+    int         type;
+    int         info[5];
   } adhocStruct;
 
 
-  BandMathXImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  BandMathXImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void AddVariable(adhocStruct&);
   void CheckImageDimensions();
@@ -166,36 +167,35 @@ private :
   void PrepareParsersGlobStats();
   void OutputsDimensions();
 
-  std::vector<std::string>                  m_Expression;
-  std::vector< std::vector<ParserType::Pointer> > m_VParser;
-  std::vector< std::vector<adhocStruct> >   m_AImage;
-  std::vector< adhocStruct >                m_VVarName;
-  std::vector< adhocStruct >                m_VAllowedVarNameAuto;
-  std::vector< adhocStruct >                m_VAllowedVarNameAddedByUser;
-  std::vector< adhocStruct >                m_VFinalAllowedVarName;   // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
-  std::vector< adhocStruct >                m_VNotAllowedVarName;
-  std::vector< unsigned int >                        m_outputsDimensions;
+  std::vector<std::string>                      m_Expression;
+  std::vector<std::vector<ParserType::Pointer>> m_VParser;
+  std::vector<std::vector<adhocStruct>>         m_AImage;
+  std::vector<adhocStruct>                      m_VVarName;
+  std::vector<adhocStruct>                      m_VAllowedVarNameAuto;
+  std::vector<adhocStruct>                      m_VAllowedVarNameAddedByUser;
+  std::vector<adhocStruct>                      m_VFinalAllowedVarName; // m_VFinalAllowedVarName = m_VAllowedVarNameAuto + m_VAllowedVarNameAddedByUser
+  std::vector<adhocStruct>                      m_VNotAllowedVarName;
+  std::vector<unsigned int>                     m_outputsDimensions;
 
-  unsigned int                             m_SizeNeighbourhood;
+  unsigned int m_SizeNeighbourhood;
 
-  std::vector< int >                        m_StatsVarDetected; // input image ID for which global statistics have been detected
+  std::vector<int> m_StatsVarDetected; // input image ID for which global statistics have been detected
 
-  std::vector< unsigned int >              m_NeighDetected; // input image ID for which neighbourhood have been detected
-  std::vector < RadiusType >                m_NeighExtremaSizes;
+  std::vector<unsigned int> m_NeighDetected; // input image ID for which neighbourhood have been detected
+  std::vector<RadiusType>   m_NeighExtremaSizes;
 
-  long                                  m_UnderflowCount;
-  long                                  m_OverflowCount;
-  itk::Array<long>                      m_ThreadUnderflow;
-  itk::Array<long>                      m_ThreadOverflow;
+  long             m_UnderflowCount;
+  long             m_OverflowCount;
+  itk::Array<long> m_ThreadUnderflow;
+  itk::Array<long> m_ThreadOverflow;
 
-  bool                                  m_ManyExpressions;
-
+  bool m_ManyExpressions;
 };
 
-}//end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbBandMathXImageFilter.txx"
+#include "otbBandMathXImageFilter.hxx"
 #endif
 
 #endif

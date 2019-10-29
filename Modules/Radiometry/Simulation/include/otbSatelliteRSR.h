@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,6 @@
 
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbSpectralResponse.h"
@@ -45,37 +44,39 @@ namespace otb
  *
  * \ingroup OTBSimulation
  */
-template<class TPrecision = double, class TValuePrecision = double>
-class SatelliteRSR: public itk::DataObject
+template <class TPrecision = double, class TValuePrecision = double>
+class SatelliteRSR : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef SatelliteRSR Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SatelliteRSR                  Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macros */
-  itkNewMacro(Self)
-; itkTypeMacro(SatelliteRSR, DataObject)
-;
+  itkNewMacro(Self);
+  ;
+  itkTypeMacro(SatelliteRSR, DataObject);
+  ;
 
   /** Set the number of band of the satellite from an ASCII file
    * Need to parse first all the file to determine the number of columns */
-  itkGetConstMacro(NbBands, unsigned int)
-; itkSetMacro(NbBands, unsigned int)
-;
+  itkGetConstMacro(NbBands, unsigned int);
+  ;
+  itkSetMacro(NbBands, unsigned int);
+  ;
 
-  itkSetMacro(SortBands, bool)
-;
+  itkSetMacro(SortBands, bool);
+  ;
 
   /** Template parameters typedef */
-  typedef TPrecision PrecisionType;
+  typedef TPrecision      PrecisionType;
   typedef TValuePrecision ValuePrecisionType;
 
   typedef SpectralResponse<TPrecision, TValuePrecision> SpectralResponseType;
-  typedef typename SpectralResponseType::Pointer SpectralResponsePointerType;
-  typedef std::vector<SpectralResponsePointerType> RSRVectorType;
+  typedef typename SpectralResponseType::Pointer        SpectralResponsePointerType;
+  typedef std::vector<SpectralResponsePointerType>      RSRVectorType;
   typedef typename SpectralResponseType::VectorPairType VectorPairType;
 
   /** Clear the vector data  */
@@ -85,11 +86,10 @@ public:
   virtual int Size() const;
 
   /** Fill from a ASCII file (spectral gauge)*/
-  void Load(const std::string & filename, ValuePrecisionType coefNormalization = 1.0);
+  void Load(const std::string& filename, ValuePrecisionType coefNormalization = 1.0);
 
   /** Fill from user defined criteria (sampling band from lambdaMin to lambdaMax with Bandwidth width) */
-  void Load(PrecisionType lambdaMin, PrecisionType lambdaMax, PrecisionType sampling,
-            ValuePrecisionType coefNormalization = 1.0);
+  void Load(PrecisionType lambdaMin, PrecisionType lambdaMax, PrecisionType sampling, ValuePrecisionType coefNormalization = 1.0);
 
   /** Compare RSR response (order bands from high to low frequency)*/
   struct sort_band
@@ -102,17 +102,17 @@ public:
       typename VectorPairType::const_iterator it = a->GetResponse().begin();
 
       while ((*it).second == 0)
-        {
+      {
         ++it;
-        }
+      }
       aFirstNotNull = (*it).first;
 
       typename VectorPairType::const_iterator it2 = b->GetResponse().begin();
 
       while ((*it2).second == 0)
-        {
+      {
         ++it2;
-        }
+      }
       bFirstNotNull = (*it2).first;
 
       return aFirstNotNull < bFirstNotNull;
@@ -124,13 +124,13 @@ public:
    * \param Band
    * \return The interpolated value of the SR for the numBand (band num 0 to band num (m_NbBands-1)).
    */
-  inline ValuePrecisionType operator()(const PrecisionType & lambda, const unsigned int numBand);
+  inline ValuePrecisionType operator()(const PrecisionType& lambda, const unsigned int numBand);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of RSR */
-  RSRVectorType & GetRSR()
+  RSRVectorType& GetRSR()
   {
     return m_RSR;
   }
@@ -145,18 +145,15 @@ protected:
   /** Constructor */
   SatelliteRSR();
   /** Constructor from a ASCII file */
-  //SatelliteRSR( const std::string & filename );
+  // SatelliteRSR( const std::string & filename );
   /** Destructor */
-  ~SatelliteRSR() override
-  {
-  }
-;
+  ~SatelliteRSR() override{};
 
   bool m_SortBands;
 
 private:
-  SatelliteRSR(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  SatelliteRSR(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Vector of SpectralResponse */
   RSRVectorType m_RSR;
@@ -167,12 +164,11 @@ private:
   unsigned int m_NbBands;
 };
 
-}// end namespace otb
+} // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSatelliteRSR.txx"
+#include "otbSatelliteRSR.hxx"
 #endif
 
 #endif
-

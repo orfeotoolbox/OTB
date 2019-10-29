@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,38 +19,25 @@
  */
 
 
-
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
 
-int otbVectorDataToRandomLineGeneratorNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::VectorData<>                                        VectorDataType;
-  typedef otb::VectorDataToRandomLineGenerator<VectorDataType>     GeneratorType;
-
-  // instantiation
-  GeneratorType::Pointer generator = GeneratorType::New();
-
-  std::cout << generator << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbVectorDataToRandomLineGenerator(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputVD  = argv[1];
-  const char * outputVD  = argv[2];
+  const char* inputVD  = argv[1];
+  const char* outputVD = argv[2];
 
-  typedef otb::VectorData<>                                        VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>                VectorDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>                VectorDataWriterType;
-  typedef otb::VectorDataToRandomLineGenerator<VectorDataType>     GeneratorType;
+  typedef otb::VectorData<>                                    VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType>            VectorDataReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType>            VectorDataWriterType;
+  typedef otb::VectorDataToRandomLineGenerator<VectorDataType> GeneratorType;
 
   // instantiation
-  VectorDataReaderType::Pointer  reader     = VectorDataReaderType::New();
-  VectorDataWriterType::Pointer  writer     = VectorDataWriterType::New();
-  GeneratorType::Pointer         generator  = GeneratorType::New();
+  VectorDataReaderType::Pointer reader    = VectorDataReaderType::New();
+  VectorDataWriterType::Pointer writer    = VectorDataWriterType::New();
+  GeneratorType::Pointer        generator = GeneratorType::New();
 
   reader->SetFileName(inputVD);
   reader->Update();

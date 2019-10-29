@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,24 +36,23 @@ class CvKNearest;
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT KNearestNeighborsMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT KNearestNeighborsMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef KNearestNeighborsMachineLearningModel           Self;
+  typedef KNearestNeighborsMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(KNearestNeighborsMachineLearningModel, MachineLearningModel);
@@ -72,7 +71,12 @@ public:
    *   - KNN_MEAN : output mean value of neighbors
    *   - KNN_MEDIAN : output median value of neighbors
    */
-  enum {KNN_VOTING, KNN_MEAN, KNN_MEDIAN};
+  enum
+  {
+    KNN_VOTING,
+    KNN_MEAN,
+    KNN_MEDIAN
+  };
 
   /** Setters/Getters to the decision rule */
   itkGetMacro(DecisionRule, int);
@@ -82,18 +86,18 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
 protected:
@@ -104,20 +108,19 @@ protected:
   ~KNearestNeighborsMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=ITK_NULLPTR) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
-  
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  KNearestNeighborsMachineLearningModel(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KNearestNeighborsMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::KNearest> m_KNearestModel;
 #else
-  CvKNearest * m_KNearestModel;
+  CvKNearest* m_KNearestModel;
 #endif
   int m_K;
 
@@ -126,7 +129,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKNearestNeighborsMachineLearningModel.txx"
+#include "otbKNearestNeighborsMachineLearningModel.hxx"
 #endif
 
 #endif

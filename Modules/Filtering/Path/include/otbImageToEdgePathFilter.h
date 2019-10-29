@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,15 +55,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToEdgePathFilter
-  : public ImageToPathFilter<TInputImage, TOutputPath>
+class ITK_EXPORT ImageToEdgePathFilter : public ImageToPathFilter<TInputImage, TOutputPath>
 {
 public:
   /** standards typedefs */
-  typedef ImageToEdgePathFilter                       Self;
+  typedef ImageToEdgePathFilter Self;
   typedef ImageToPathFilter<TInputImage, TOutputPath> Superclass;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /// Creation through the object factory
   itkNewMacro(Self);
@@ -78,7 +77,7 @@ public:
   typedef typename OutputPathType::ContinuousIndexType ContinuousIndexType;
 
   typedef typename InputImageType::PixelType PixelType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename InputImageType::SizeType  SizeType;
 
   /** Set and Get foreground value */
   itkSetMacro(ForegroundValue, PixelType);
@@ -86,14 +85,18 @@ public:
 
 protected:
   ImageToEdgePathFilter();
-  ~ImageToEdgePathFilter() override {}
+  ~ImageToEdgePathFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  void GenerateOutputInformation() override {}  //does nothing
+  void GenerateOutputInformation() override
+  {
+  } // does nothing
   void GenerateData() override;
 
 private:
-  ImageToEdgePathFilter(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  ImageToEdgePathFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   PixelType m_ForegroundValue;
 };
@@ -101,7 +104,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToEdgePathFilter.txx"
+#include "otbImageToEdgePathFilter.hxx"
 #endif
 
 #endif

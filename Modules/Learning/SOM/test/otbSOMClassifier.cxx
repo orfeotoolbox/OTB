@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <fstream>
 #include "otbImage.h"
 #include "otbSOMMap.h"
@@ -33,31 +31,30 @@
 int otbSOMClassifier(int argc, char* argv[])
 {
   if (argc != 4)
-    {
-    std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage"
-              << std::endl;
+  {
+    std::cout << "Usage : " << argv[0] << " inputImage modelFile outputImage" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * imageFilename  = argv[1];
-  const char * mapFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* imageFilename  = argv[1];
+  const char* mapFilename    = argv[2];
+  const char* outputFilename = argv[3];
 
-  typedef double InputPixelType;
-  typedef int    LabelPixelType;
+  typedef double     InputPixelType;
+  typedef int        LabelPixelType;
   const unsigned int Dimension = 2;
 
-  typedef itk::VariableLengthVector<InputPixelType>                  PixelType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>              DistanceType;
-  typedef otb::SOMMap<PixelType, DistanceType, Dimension>            SOMMapType;
-  typedef otb::VectorImage<InputPixelType, Dimension>                InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                       ReaderType;
-  typedef otb::ImageFileReader<SOMMapType>                           SOMReaderType;
-  typedef itk::Statistics::ListSample<PixelType>                     SampleType;
+  typedef itk::VariableLengthVector<InputPixelType>           PixelType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
+  typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::ImageFileReader<SOMMapType>       SOMReaderType;
+  typedef itk::Statistics::ListSample<PixelType> SampleType;
   typedef otb::SOMClassifier<SampleType, SOMMapType, LabelPixelType> ClassifierType;
-  typedef otb::Image<LabelPixelType, Dimension>                      OutputImageType;
-  typedef itk::ImageRegionIterator<OutputImageType>                  OutputIteratorType;
-  typedef otb::ImageFileWriter<OutputImageType>                      WriterType;
+  typedef otb::Image<LabelPixelType, Dimension> OutputImageType;
+  typedef itk::ImageRegionIterator<OutputImageType> OutputIteratorType;
+  typedef otb::ImageFileWriter<OutputImageType>     WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(imageFilename);
@@ -77,10 +74,10 @@ int otbSOMClassifier(int argc, char* argv[])
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     listSample->PushBack(it.Get());
     ++it;
-    }
+  }
 
   ClassifierType::Pointer classifier = ClassifierType::New();
   classifier->SetSample(listSample.GetPointer());
@@ -94,18 +91,18 @@ int otbSOMClassifier(int argc, char* argv[])
   outputImage->Allocate();
 
   ClassifierType::OutputType*               membershipSample = classifier->GetOutput();
-  ClassifierType::OutputType::ConstIterator m_iter =  membershipSample->Begin();
-  ClassifierType::OutputType::ConstIterator m_last =  membershipSample->End();
+  ClassifierType::OutputType::ConstIterator m_iter           = membershipSample->Begin();
+  ClassifierType::OutputType::ConstIterator m_last           = membershipSample->End();
 
   OutputIteratorType outIt(outputImage, outputImage->GetLargestPossibleRegion());
   outIt.GoToBegin();
 
   while (m_iter != m_last && !outIt.IsAtEnd())
-    {
+  {
     outIt.Set(m_iter.GetClassLabel());
     ++m_iter;
     ++outIt;
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFilename);

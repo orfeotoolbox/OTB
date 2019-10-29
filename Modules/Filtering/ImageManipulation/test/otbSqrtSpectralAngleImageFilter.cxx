@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,7 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
+int otbSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
   typedef otb::VectorImage<double, Dimension> InputImageType;
@@ -45,8 +45,8 @@ int otbSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
   ReaderType::Pointer                       reader = ReaderType::New();
   WriterType::Pointer                       writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char*  inputFilename  = argv[1];
+  const char*  outputFilename = argv[2];
   unsigned int blueValue(::atoi(argv[3]));
   unsigned int greenValue(::atoi(argv[4]));
   unsigned int redValue(::atoi(argv[5]));
@@ -69,5 +69,4 @@ int otbSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

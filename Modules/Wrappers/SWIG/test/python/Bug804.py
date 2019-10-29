@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,5 +21,5 @@
 
 def test(otb, argv):
 	app = otb.Registry.CreateApplication('TrainImagesClassifier')
-	app.SetParameterFloat('classifier.libsvm.opt',True)
+	app.SetParameterInt('classifier.libsvm.opt',True)
 	print( app.GetParameterValue('classifier.libsvm.opt') )

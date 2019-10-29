@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,56 +23,50 @@
 #include "itkMacro.h"
 
 typedef otb::AutoencoderModel<double, shark::LogisticNeuron> LogAutoencoderModel;
-typedef LogAutoencoderModel::InputListSampleType InputListSampleType;
+typedef LogAutoencoderModel::InputListSampleType  InputListSampleType;
 typedef LogAutoencoderModel::TargetListSampleType TargetListSampleType;
 
-int otbAutoencoderModelNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  LogAutoencoderModel::Pointer model = LogAutoencoderModel::New();
 
-  return EXIT_SUCCESS;
-}
-
-int otbAutoencoderModelCanRead(int argc, char * argv [])
+int otbAutoencoderModelCanRead(int argc, char* argv[])
 {
   if (argc < 2)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " <model>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   LogAutoencoderModel::Pointer model = LogAutoencoderModel::New();
-  std::string filename(argv[1]);
-  if (! model->CanReadFile(filename) )
-    {
-    std::cerr << "Failed to read model file : "<< filename << std::endl;
+  std::string                  filename(argv[1]);
+  if (!model->CanReadFile(filename))
+  {
+    std::cerr << "Failed to read model file : " << filename << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   return EXIT_SUCCESS;
 }
 
-int otbAutoencoderModeTrain(int argc, char * argv [])
+int otbAutoencoderModeTrain(int argc, char* argv[])
 {
   if (argc < 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " letter.scale  model.out" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   // Extract data from letter.scale
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer target = TargetListSampleType::New();
+  InputListSampleType::Pointer  samples = InputListSampleType::New();
+  TargetListSampleType::Pointer target  = TargetListSampleType::New();
   if (!otb::ReadDataFile(argv[1], samples, target))
-    {
+  {
     std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   itk::Array<unsigned int> nb_neuron;
-  itk::Array<float> noise;
-  itk::Array<float> regularization;
-  itk::Array<float> rho;
-  itk::Array<float> beta;
+  itk::Array<float>        noise;
+  itk::Array<float>        regularization;
+  itk::Array<float>        rho;
+  itk::Array<float>        beta;
 
   nb_neuron.SetSize(1);
   noise.SetSize(1);
@@ -80,11 +74,11 @@ int otbAutoencoderModeTrain(int argc, char * argv [])
   rho.SetSize(1);
   beta.SetSize(1);
 
-  nb_neuron[0] = 14;
-  noise[0] = 0.0;
+  nb_neuron[0]      = 14;
+  noise[0]          = 0.0;
   regularization[0] = 0.01;
-  rho[0] = 0.0;
-  beta[0] = 0.0;
+  rho[0]            = 0.0;
+  beta[0]           = 0.0;
 
   LogAutoencoderModel::Pointer model = LogAutoencoderModel::New();
   model->SetNumberOfHiddenNeurons(nb_neuron);

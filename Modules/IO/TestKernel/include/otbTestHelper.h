@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,7 @@
 #include "otbStringUtils.h"
 
 #include "otbMetaDataKey.h"
+#include "OTBTestKernelExport.h"
 
 class OGRFeature;
 class OGRGeometry;
@@ -43,10 +44,9 @@ namespace otb
  *
  * \ingroup OTBTestKernel
  */
-class ITK_ABI_EXPORT TestHelper : public itk::Object
+class OTBTestKernel_EXPORT TestHelper : public itk::Object
 {
 public:
-
   /** Standard class typedefs. */
   typedef TestHelper                    Self;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -56,80 +56,54 @@ public:
   itkTypeMacro(TestHelper, itk::Object);
   itkNewMacro(Self);
 
-  typedef std::vector<std::string> StringList;
+  typedef std::vector<std::string>   StringList;
   typedef StringList::const_iterator StringListIt;
 
-  TestHelper() :
-    m_ToleranceDiffValue(0),
-    m_Epsilon(0),
-    m_EpsilonBoundaryChecking(1.0e-30),
-    m_ReportErrors(false),
-    m_IgnoreLineOrder(false),
-    m_MaxArea(1024*1024)
-  {
-    m_SpecialTokens.push_back(std::pair<std::string,std::string>(
-      std::string("Integer"),std::string("Integer64")));
-  }
+  typedef std::vector<double>         EpsilonList;
+  typedef EpsilonList::const_iterator EpsilonListIt;
 
-  ~TestHelper() override{}
+  TestHelper();
 
-  int RegressionTestAllImages(const StringList& baselineFilenamesImage,
-                              const StringList& testFilenamesImage);
+  ~TestHelper() override;
 
-  int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData,
-                                const StringList& testFilenamesMetaData);
+  int RegressionTestAllImages(const StringList& baselineFilenamesImage, const StringList& testFilenamesImage, const EpsilonList& epsilons);
 
-  int RegressionTestAllAscii(const StringList& baselineFilenamesAscii,
-                             const StringList& testFilenamesAscii,
+  int RegressionTestAllMetaData(const StringList& baselineFilenamesMetaData, const StringList& testFilenamesMetaData, const EpsilonList& epsilons);
+
+  int RegressionTestAllAscii(const StringList& baselineFilenamesAscii, const StringList& testFilenamesAscii, const EpsilonList& epsilons,
                              const StringList& ignoredLines);
 
-  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii,
-                             const StringList& testFilenamesAscii,
-                             const StringList& ignoredLines);
+  int RegressionTestAllDiff(const StringList& baselineFilenamesAscii, const StringList& testFilenamesAscii, const EpsilonList& epsilons,
+                            const StringList& ignoredLines);
 
-  int RegressionTestAllBinary(const StringList& baselineFilenamesBinary,
-                              const StringList& testFilenamesBinary);
+  int RegressionTestAllBinary(const StringList& baselineFilenamesBinary, const StringList& testFilenamesBinary);
 
-  int RegressionTestAllOgr(const StringList& baselineFilenamesOgr,
-                           const StringList& testFilenamesOgr);
+  int RegressionTestAllOgr(const StringList& baselineFilenamesOgr, const StringList& testFilenamesOgr, const EpsilonList& epsilons);
 
   itkSetMacro(ReportErrors, bool);
   itkBooleanMacro(ReportErrors);
   itkSetMacro(IgnoreLineOrder, bool);
   itkBooleanMacro(IgnoreLineOrder);
 
-  itkSetMacro(ToleranceDiffValue, double);
-  itkSetMacro(Epsilon, double);
   itkSetMacro(EpsilonBoundaryChecking, double);
+  itkSetMacro(ToleranceRatio, double);
 
 private:
+  std::map<std::string, int> RegressionTestBaselines(char* baselineFilename) const;
 
-  std::map<std::string, int> RegressionTestBaselines(char *baselineFilename) const;
+  int RegressionTestImage(int cpt, const char* testImageFilename, const char* baselineImageFilename, const double toleranceDiffPixelImage) const;
 
-  int RegressionTestImage(int cpt, const char *testImageFilename,
-                          const char *baselineImageFilename,
-                          const double toleranceDiffPixelImage) const;
+  int RegressionTestOgrFile(const char* testOgrFilename, const char* baselineOgrFilename, const double toleranceDiffValue) const;
 
-  int RegressionTestOgrFile(const char *testOgrFilename,
-                            const char *baselineOgrFilename,
-                            const double toleranceDiffValue) const;
+  int RegressionTestBinaryFile(const char* testBinaryFileName, const char* baselineBinaryFileName) const;
 
-  int RegressionTestBinaryFile(const char * testBinaryFileName,
-                               const char * baselineBinaryFileName) const;
-
-  int RegressionTestAsciiFile(const char * testAsciiFileName,
-                              const char * baselineAsciiFileName,
-                              const double epsilon,
+  int RegressionTestAsciiFile(const char* testAsciiFileName, const char* baselineAsciiFileName, const double epsilon,
                               std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestDiffFile(const char * testAsciiFileName,
-                              const char * baselineAsciiFileName,
-                              const double epsilon,
-                              std::vector<std::string> ignoredLines) const;
+  int RegressionTestDiffFile(const char* testAsciiFileName, const char* baselineAsciiFileName, const double epsilon,
+                             std::vector<std::string> ignoredLines) const;
 
-  int RegressionTestMetaData(const char *testImageFilename,
-                             const char *baselineImageFilename,
-                             const double toleranceDiffPixelImage) const;
+  int RegressionTestMetaData(const char* testImageFilename, const char* baselineImageFilename, const double toleranceDiffPixelImage) const;
 
   bool isNumber(int i) const;
   bool isHexaNumber(int i) const;
@@ -142,40 +116,33 @@ private:
   bool isHexaPointerAddress(const std::string& str, size_t pos, size_t size) const;
   bool isToBeIgnoredForAnyComparison(const std::string& str) const;
   std::string VectorToString(const otb::MetaDataKey::VectorType& vector) const;
-  int TokenizeLine(const std::string &line, StringList &tokens) const;
+  int TokenizeLine(const std::string& line, StringList& tokens) const;
 
-  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator> &token);
+  static bool IsTokenEmpty(boost::iterator_range<std::string::const_iterator>& token);
 
   // TODO : maybe merge this function with isToBeIgnoredForAnyComparison
-  bool IsLineValid(const std::string& str, const StringList &ignoredLines) const;
-  //FIXME parameters have to be cleaned up later (this is the first step of refactoring)
-  bool CompareLines(const std::string& strfileref,
-                    const std::string& strfiletest,
-                    int& nbdiff,
-                    std::ofstream& fluxfilediff,
-                    int& numLine,
-                    std::vector<std::string>& listStrDiffLineFileRef,
-                    std::vector<std::string>& listStrDiffLineFileTest,
-                    double epsilon) const;
+  bool IsLineValid(const std::string& str, const StringList& ignoredLines) const;
+  // FIXME parameters have to be cleaned up later (this is the first step of refactoring)
+  bool CompareLines(const std::string& strfileref, const std::string& strfiletest, int& nbdiff, std::ofstream& fluxfilediff, int& numLine,
+                    std::vector<std::string>& listStrDiffLineFileRef, std::vector<std::string>& listStrDiffLineFileTest, double epsilon) const;
 
-  void
-  ogrReportOnLayer(OGRLayer * ref_poLayer, const char *ref_pszWHERE, OGRGeometry *ref_poSpatialFilter,
-                   OGRLayer * test_poLayer, const char *test_pszWHERE, OGRGeometry *test_poSpatialFilter,
-                   int& nbdiff) const;
+  void ogrReportOnLayer(OGRLayer* ref_poLayer, const char* ref_pszWHERE, OGRGeometry* ref_poSpatialFilter, OGRLayer* test_poLayer, const char* test_pszWHERE,
+                        OGRGeometry* test_poSpatialFilter, int& nbdiff, double epsilon) const;
 
-  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = ITK_NULLPTR);
-  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char * pszPrefix, char** papszOptions = ITK_NULLPTR);
+  static void DumpOGRFeature(FILE* fileid, OGRFeature* feature, char** papszOptions = nullptr);
+  static void DumpOGRGeometry(FILE* fileid, OGRGeometry* geometry, const char* pszPrefix, char** papszOptions = nullptr);
 
-  double m_ToleranceDiffValue;
-  double m_Epsilon;
-  double m_EpsilonBoundaryChecking;
-  bool   m_ReportErrors;
-  bool   m_IgnoreLineOrder;
+  double             m_ToleranceRatio;
+  double             m_EpsilonBoundaryChecking;
+  bool               m_ReportErrors;
+  bool               m_IgnoreLineOrder;
   const unsigned int m_MaxArea;
 
-  void AddWhiteSpace(const std::string& strIn, std::string &strOut) const;
+  void AddWhiteSpace(const std::string& strIn, std::string& strOut) const;
 
-  std::vector<std::pair<std::string, std::string> > m_SpecialTokens;
+  void CheckValueTolerance(const char* Comment, double ref, double test, int& count, bool report, double epsilon) const;
+
+  std::vector<std::pair<std::string, std::string>> m_SpecialTokens;
 };
 }
 

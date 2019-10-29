@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,7 @@
 #include "itkImageToImageFilter.h"
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include <vcl_algorithm.h>
+#include <algorithm>
 
 
 namespace otb
@@ -34,13 +34,14 @@ namespace otb
 namespace Meanshift
 {
 
-template<typename T> inline T simple_pow(T const& v, unsigned int p)
+template <typename T>
+inline T simple_pow(T const& v, unsigned int p)
 {
   T res = 1;
   for (unsigned int i = 0; i != p; ++i)
-    {
+  {
     res *= v;
-    }
+  }
   return res;
 }
 
@@ -53,39 +54,37 @@ template<typename T> inline T simple_pow(T const& v, unsigned int p)
  *
  * \ingroup OTBSmoothing
  */
-template<class TInputImage, class TOutputJointImage>
+template <class TInputImage, class TOutputJointImage>
 class SpatialRangeJointDomainTransform
 {
 public:
   typedef double RealType;
 
-  SpatialRangeJointDomainTransform()
+  SpatialRangeJointDomainTransform() : m_ImageDimension(0), m_NumberOfComponentsPerPixel(0), m_OutputSize(0)
   {
   }
-  // ~SpatialRangeJointDomainTransform() {}
 
-  typename TOutputJointImage::PixelType operator()(const typename TInputImage::PixelType & inputPixel,
-                                                   const typename TInputImage::IndexType & index) const
+  typename TOutputJointImage::PixelType operator()(const typename TInputImage::PixelType& inputPixel, const typename TInputImage::IndexType& index) const
   {
     typename TOutputJointImage::PixelType jointPixel(m_ImageDimension + m_NumberOfComponentsPerPixel);
 
     for (unsigned int comp = 0; comp < m_ImageDimension; comp++)
-      {
+    {
       jointPixel[comp] = index[comp] + m_GlobalShift[comp];
-      }
+    }
     for (unsigned int comp = 0; comp < m_NumberOfComponentsPerPixel; comp++)
-      {
+    {
       jointPixel[m_ImageDimension + comp] = inputPixel[comp];
-      }
+    }
     return jointPixel;
   }
 
   void Initialize(unsigned int _ImageDimension, unsigned int numberOfComponentsPerPixel_, typename TInputImage::IndexType globalShift_)
   {
-    m_ImageDimension = _ImageDimension;
+    m_ImageDimension             = _ImageDimension;
     m_NumberOfComponentsPerPixel = numberOfComponentsPerPixel_;
-    m_OutputSize = m_ImageDimension + m_NumberOfComponentsPerPixel;
-    m_GlobalShift = globalShift_;
+    m_OutputSize                 = m_ImageDimension + m_NumberOfComponentsPerPixel;
+    m_GlobalShift                = globalShift_;
   }
 
   unsigned int GetOutputSize() const
@@ -94,9 +93,9 @@ public:
   }
 
 private:
-  unsigned int m_ImageDimension;
-  unsigned int m_NumberOfComponentsPerPixel;
-  unsigned int m_OutputSize;
+  unsigned int                    m_ImageDimension;
+  unsigned int                    m_NumberOfComponentsPerPixel;
+  unsigned int                    m_OutputSize;
   typename TInputImage::IndexType m_GlobalShift;
 };
 
@@ -129,7 +128,7 @@ public:
 
   RealType operator()(RealType x) const
   {
-    return vcl_exp(-0.5 * x);
+    return std::exp(-0.5 * x);
   }
 
   RealType GetRadius(RealType bandwidth) const
@@ -145,34 +144,32 @@ public:
  *
  * \ingroup OTBSmoothing
  */
-template<typename TImage>
-class FastImageRegionConstIterator: public itk::ImageRegionConstIterator<TImage>
+template <typename TImage>
+class FastImageRegionConstIterator : public itk::ImageRegionConstIterator<TImage>
 {
 public:
   /** Standard class typedef. */
-  typedef FastImageRegionConstIterator<TImage> Self;
+  typedef FastImageRegionConstIterator<TImage>  Self;
   typedef itk::ImageRegionConstIterator<TImage> Superclass;
 
-  typedef typename Superclass::ImageType ImageType;
+  typedef typename Superclass::ImageType  ImageType;
   typedef typename Superclass::RegionType RegionType;
 
-  typedef typename TImage::PixelType PixelType;
+  typedef typename TImage::PixelType         PixelType;
   typedef typename TImage::InternalPixelType InternalPixelType;
 
-  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator)
-;
+  itkTypeMacro(FastImageRegionConstIterator, ImageRegionConstIterator);
+  ;
 
-  FastImageRegionConstIterator() :
-    Superclass()
+  FastImageRegionConstIterator() : Superclass()
   {
   }
-  FastImageRegionConstIterator(const ImageType *ptr, const RegionType &region) :
-    Superclass(ptr, region)
+  FastImageRegionConstIterator(const ImageType* ptr, const RegionType& region) : Superclass(ptr, region)
   {
     m_NumberOfComponentsPerPixel = ptr->GetNumberOfComponentsPerPixel();
   }
 
-  const InternalPixelType * GetPixelPointer() const
+  const InternalPixelType* GetPixelPointer() const
   {
     return this->m_Buffer + (this->m_Offset * m_NumberOfComponentsPerPixel);
   }
@@ -181,7 +178,7 @@ private:
   unsigned int m_NumberOfComponentsPerPixel;
 };
 
-#if 0 //disable bucket mode
+#if 0 // disable bucket mode
 /** \class BucketImage
  *
  * This class indexes pixels in a N-dimensional image into a N+1-dimensional
@@ -246,8 +243,8 @@ public:
     while (!inputIt.IsAtEnd())
       {
       const PixelType &p = inputIt.Get();
-      minValue = vcl_min(minValue, p[m_SpectralCoordinate]);
-      maxValue = vcl_max(maxValue, p[m_SpectralCoordinate]);
+      minValue = std::min(minValue, p[m_SpectralCoordinate]);
+      maxValue = std::max(maxValue, p[m_SpectralCoordinate]);
       ++inputIt;
       }
 
@@ -437,7 +434,8 @@ private:
  *
  * MeanShifVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
  * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
- * ModeSearch is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a path covered in convergence steps.
+ * ModeSearch is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a
+ * path covered in convergence steps.
  *
  * For more information on mean shift techniques, one might consider reading the following article:
  *
@@ -455,38 +453,39 @@ private:
  *
  * \ingroup OTBSmoothing
  */
-template<class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform,
-    class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension> >
-class ITK_EXPORT MeanShiftSmoothingImageFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TKernel = Meanshift::KernelUniform,
+          class TOutputIterationImage = otb::Image<unsigned int, TInputImage::ImageDimension>>
+class ITK_EXPORT MeanShiftSmoothingImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
   typedef MeanShiftSmoothingImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef double RealType;
+  typedef double                        RealType;
 
   /** Type macro */
-  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter)
-; itkNewMacro(Self)
-;
+  itkTypeMacro(MeanShiftSmoothingImageFilter, ImageToImageFilter);
+  ;
+  itkNewMacro(Self);
+  ;
 
   /** Template parameters typedefs */
 
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef typename InputImageType::PixelType InputPixelType;
-  typedef typename InputImageType::IndexType InputIndexType;
-  typedef typename InputImageType::SizeType InputSizeType;
+  typedef TInputImage                             InputImageType;
+  typedef typename InputImageType::Pointer        InputImagePointerType;
+  typedef typename InputImageType::PixelType      InputPixelType;
+  typedef typename InputImageType::IndexType      InputIndexType;
+  typedef typename InputImageType::SizeType       InputSizeType;
   typedef typename InputImageType::IndexValueType InputIndexValueType;
-  typedef typename InputImageType::PointType PointType;
-  typedef typename InputImageType::RegionType RegionType;
-  typedef typename InputImageType::SizeType SizeType;
+  typedef typename InputImageType::PointType      PointType;
+  typedef typename InputImageType::RegionType     RegionType;
+  typedef typename InputImageType::SizeType       SizeType;
 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::Pointer OutputImagePointerType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
   typedef TOutputIterationImage OutputIterationImageType;
@@ -495,7 +494,7 @@ public:
   typedef otb::Image<LabelType, InputImageType::ImageDimension> OutputLabelImageType;
 
   typedef otb::VectorImage<RealType, InputImageType::ImageDimension> OutputSpatialImageType;
-  typedef typename OutputSpatialImageType::Pointer OutputSpatialImagePointerType;
+  typedef typename OutputSpatialImageType::Pointer   OutputSpatialImagePointerType;
   typedef typename OutputSpatialImageType::PixelType OutputSpatialPixelType;
 
   typedef TKernel KernelType;
@@ -518,11 +517,11 @@ public:
   itkSetMacro(RangeBandwidth, RealType);
   itkGetConstReferenceMacro(RangeBandwidth, RealType);
 
-   /** Sets the range bandwidth ramp. If > 0, the range bandwidth
-    * will be y = RangeBandwidthRamp * x + RangeBandwidth, where x is
-    * the band value. */
+  /** Sets the range bandwidth ramp. If > 0, the range bandwidth
+   * will be y = RangeBandwidthRamp * x + RangeBandwidth, where x is
+   * the band value. */
   itkSetMacro(RangeBandwidthRamp, RealType);
-  itkGetConstReferenceMacro(RangeBandwidthRamp,RealType);
+  itkGetConstReferenceMacro(RangeBandwidthRamp, RealType);
 
   /** Sets the maximum number of algorithm iterations */
   itkGetConstReferenceMacro(MaxIterationNumber, unsigned int);
@@ -550,28 +549,27 @@ public:
 
   /** Global shift allows tackling down numerical instabilities by
   aligning pixel indices when performing tile processing */
-  itkSetMacro(GlobalShift,InputIndexType);
+  itkSetMacro(GlobalShift, InputIndexType);
 
   /** Returns the const spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
-  const OutputSpatialImageType * GetSpatialOutput() const;
+  const OutputSpatialImageType* GetSpatialOutput() const;
   /** Returns the const spectral image output */
-  const OutputImageType * GetRangeOutput() const;
+  const OutputImageType* GetRangeOutput() const;
   /** Returns the const number of iterations map. */
-  const OutputIterationImageType * GetIterationOutput() const;
+  const OutputIterationImageType* GetIterationOutput() const;
   /** Returns the const image of region labels. This output does not have sense without mode search optimization (each label codes for one mode)*/
-  const OutputLabelImageType * GetLabelOutput() const;
+  const OutputLabelImageType* GetLabelOutput() const;
 
   /** Returns the spatial image output,spatial image output is a displacement map (pixel position after convergence minus pixel index)  */
-  OutputSpatialImageType * GetSpatialOutput();
+  OutputSpatialImageType* GetSpatialOutput();
   /** Returns the spectral image output */
-  OutputImageType * GetRangeOutput();
+  OutputImageType* GetRangeOutput();
   /** Returns the number of iterations done at each pixel */
-  OutputIterationImageType * GetIterationOutput();
+  OutputIterationImageType* GetIterationOutput();
   /** Returns the image of region labels. This output does not have sense without mode search optimization (each label codes for one mode) */
-  OutputLabelImageType * GetLabelOutput();
+  OutputLabelImageType* GetLabelOutput();
 
 protected:
-
   /** GenerateOutputInformation
    *  Define output pixel size
    *
@@ -608,17 +606,15 @@ protected:
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr,
-                                        const RealVector& jointPixel, const OutputRegionType& outputRegion,
-                                        const RealVector& bandwidth,
-                                        RealVector& meanShiftVector);
+  virtual void CalculateMeanShiftVector(const typename RealVectorImageType::Pointer inputImagePtr, const RealVector& jointPixel,
+                                        const OutputRegionType& outputRegion, const RealVector& bandwidth, RealVector& meanShiftVector);
 #if 0
   virtual void CalculateMeanShiftVectorBucket(const RealVector& jointPixel, RealVector& meanShiftVector);
 #endif
 
 private:
-  MeanShiftSmoothingImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MeanShiftSmoothingImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Range bandwidth */
   RealType m_RangeBandwidth;
@@ -676,13 +672,12 @@ private:
 #endif
 
   InputIndexType m_GlobalShift;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMeanShiftSmoothingImageFilter.txx"
+#include "otbMeanShiftSmoothingImageFilter.hxx"
 #endif
 
 #endif

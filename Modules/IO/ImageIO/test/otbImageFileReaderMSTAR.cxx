@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,11 +32,11 @@ int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
 {
   typedef float         InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int InputDimension = 2;
+  const unsigned int    InputDimension = 2;
 
   typedef otb::Image<itk::FixedArray<InputPixelType, 2>, InputDimension> InputImageType;
-  typedef otb::Image<InputPixelType, InputDimension>                     InternalImageType;
-  typedef otb::Image<OutputPixelType, InputDimension>                    OutputImageType;
+  typedef otb::Image<InputPixelType, InputDimension>  InternalImageType;
+  typedef otb::Image<OutputPixelType, InputDimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType> ReaderType;
 
@@ -56,8 +56,8 @@ int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
   inputStart[0] = 0;
   inputStart[1] = 0;
 
-  size[0]  = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  size[1]  = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  size[0] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
+  size[1] = reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
 
   inputRegion.SetSize(size);
   inputRegion.SetIndex(inputStart);
@@ -74,31 +74,29 @@ int otbImageFileReaderMSTAR(int itkNotUsed(argc), char* argv[])
 
   InternalImageType::Pointer magnitude = InternalImageType::New();
   magnitude->SetRegions(inputRegion);
-  const InternalImageType::SpacingType& spacing = reader->GetOutput()->GetSignedSpacing();
+  const InternalImageType::SpacingType& spacing     = reader->GetOutput()->GetSignedSpacing();
   const InternalImageType::PointType&   inputOrigin = reader->GetOutput()->GetOrigin();
   double                                outputOrigin[InputDimension];
 
   for (unsigned int i = 0; i < InputDimension; ++i)
-    {
+  {
     outputOrigin[i] = inputOrigin[i] + spacing[i] * inputStart[i];
-    }
+  }
 
   magnitude->SetSignedSpacing(spacing);
   magnitude->SetOrigin(outputOrigin);
   magnitude->Allocate();
 
   ConstIteratorType inputIt(reader->GetOutput(), inputRegion);
-  IteratorType      outputIt(magnitude,         outputRegion);
+  IteratorType      outputIt(magnitude, outputRegion);
 
-  for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd();
-       ++inputIt, ++outputIt)
-    {
+  for (inputIt.GoToBegin(), outputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt, ++outputIt)
+  {
     outputIt.Set(inputIt.Get()[0]);
-//    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
-    }
+    //    std::cout << inputIt.Get()[0] << " - " << inputIt.Get()[1] << std::endl;
+  }
 
-  typedef itk::RescaleIntensityImageFilter<InternalImageType,
-      OutputImageType> RescalerType;
+  typedef itk::RescaleIntensityImageFilter<InternalImageType, OutputImageType> RescalerType;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(itk::NumericTraits<OutputPixelType>::min());

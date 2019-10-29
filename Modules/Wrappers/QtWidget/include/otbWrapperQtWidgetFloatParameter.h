@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,10 @@
 #define otbWrapperQtWidgetFloatParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetSpinBoxes.h"
 
 namespace otb
 {
@@ -41,27 +41,26 @@ class OTBQtWidget_EXPORT QtWidgetFloatParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*);
+  QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetFloatParameter() override;
 
-protected slots:
-  void SetValue( double value );
+private slots:
+  void OnCleared();
+  void OnValueChanged(double);
+  void OnEditingFinished();
 
 private:
-  QtWidgetFloatParameter(const QtWidgetFloatParameter&); //purposely not implemented
-  void operator=(const QtWidgetFloatParameter&); //purposely not implemented
+  QtWidgetFloatParameter(const QtWidgetFloatParameter&) = delete;
+  void operator=(const QtWidgetFloatParameter&) = delete;
 
   void DoCreateWidget() override;
-
   void DoUpdateGUI() override;
 
-  QHBoxLayout *           m_QHBoxLayout;
-  QDoubleSpinBox *        m_QDoubleSpinBox;
+  QHBoxLayout*           m_QHBoxLayout;
+  QtWidgetDoubleSpinBox* m_QDoubleSpinBox;
 
   FloatParameter::Pointer m_FloatParam;
 };
-
-
 }
 }
 

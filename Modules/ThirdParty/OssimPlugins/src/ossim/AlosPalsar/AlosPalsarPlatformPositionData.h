@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2008-2010 by Centre for Remote Imaging, Sensing and Processing (CRISP)
  *
  * This file is licensed under MIT license:
@@ -27,12 +27,12 @@
 #ifndef AlosPalsarPlatformPositionData_h
 #define AlosPalsarPlatformPositionData_h
 
-#include <iostream>
 #include <cstdlib>
 #include <AlosPalsar/AlosPalsarRecord.h>
 #include <AlosPalsar/AlosPalsarRecordHeader.h>
 
 #include <AlosPalsar/AlosPalsarPositionVectorRecord.h>
+#include <string>
 
 namespace ossimplugins
 {

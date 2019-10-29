@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,7 @@
 #include "otbGeometriesProjectionFilter.h"
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>
-#include "ogr_srs_api.h" // OCTDestroyCoordinateTransformation
+#include "ogr_srs_api.h"    // OCTDestroyCoordinateTransformation
 #include "ogr_spatialref.h" // OGRCoordinateTransformation
 #include "itkMacro.h"
 #include "otbGeometriesSet.h"
@@ -45,28 +45,28 @@ void do_transform(OGRLinearRing & g) const
 }
 #endif
 
-void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPoint & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPoint& g) const
 {
   typedef InternalTransformType::InputPointType  InputPointType;
   typedef InternalTransformType::OutputPointType OutputPointType;
   // in our case:
   BOOST_MPL_ASSERT((boost::is_same<InputPointType, OutputPointType>));
-  const double rawPoint[] = { g.getX(), g.getY() };
-  const InputPointType inPoint(rawPoint);
+  const double          rawPoint[] = {g.getX(), g.getY()};
+  const InputPointType  inPoint(rawPoint);
   const OutputPointType outPoint = m_Transform->TransformPoint(inPoint);
   g.setX(outPoint[0]);
   g.setY(outPoint[1]);
 }
 
-void otb::internal::ReprojectTransformationFunctor::do_transform(OGRLineString & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRLineString& g) const
 {
   OGRPoint point;
-  for (int i=0, N=g.getNumPoints(); i!=N; ++i)
-    {
+  for (int i = 0, N = g.getNumPoints(); i != N; ++i)
+  {
     g.getPoint(i, &point);
     do_transform(point); // no need to go through the redispatch cycle
     g.setPoint(i, &point);
-    }
+  }
 }
 
 #if 0
@@ -76,7 +76,7 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRCurve & g) c
 }
 #endif
 
-void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon & g) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon& g) const
 {
   // Note: OGRPolygon interface states that rings obtained through
   // getInteriorRing() and getExteriorRing() shall not be modified.
@@ -85,23 +85,23 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRPolygon & g)
   // just been cloned in the () operator.
   // The fact that OGRPolygon::transform() directly works on each sub-ring seems
   // to confirm that hyppothesis.
-  for (int i=0, N=g.getNumInteriorRings(); i!=N; ++i)
-    {
-    OGRLinearRing * ring = g.getInteriorRing(i);
+  for (int i = 0, N = g.getNumInteriorRings(); i != N; ++i)
+  {
+    OGRLinearRing* ring = g.getInteriorRing(i);
     assert(ring && "Rings in polygons are not expected to be nil");
     if (ring)
-      {
+    {
       do_transform(*ring); // no need to go through the redispatch cycle
       // how to commit the change ? Are ring modifications automatically committed ?
-      }
     }
-  OGRLinearRing * ring = g.getExteriorRing();
+  }
+  OGRLinearRing* ring = g.getExteriorRing();
   assert(ring && "Rings in polygons are not expected to be nil");
   if (ring)
-    {
+  {
     do_transform(*ring); // no need to go through the redispatch cycle
     // how to commit the change ? Are ring modifications automatically committed ?
-    }
+  }
 }
 
 #if 0
@@ -123,26 +123,24 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRMultiPolygon
 }
 #endif
 
-void otb::internal::ReprojectTransformationFunctor::do_transform(OGRGeometryCollection & col) const
+void otb::internal::ReprojectTransformationFunctor::do_transform(OGRGeometryCollection& col) const
 {
-  for (int i=0, N=col.getNumGeometries(); i!=N; ++i)
-    {
-    OGRGeometry * g = col.getGeometryRef(i);
+  for (int i = 0, N = col.getNumGeometries(); i != N; ++i)
+  {
+    OGRGeometry* g = col.getGeometryRef(i);
     assert(g && "geometries to transform shall not be null");
     apply_inplace(g);
-    }
+  }
 }
 
-otb::ogr::UniqueGeometryPtr
-otb::internal::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
+otb::ogr::UniqueGeometryPtr otb::internal::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
 // otb::internal::ReprojectTransformationFunctor::apply(OGRGeometry const* in) const
 {
-  otb::ogr::UniqueGeometryPtr res
-    = ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
+  otb::ogr::UniqueGeometryPtr res = ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
   return otb::move(res);
 }
 
-void otb::internal::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * inout) const
+void otb::internal::ReprojectTransformationFunctor::apply_inplace(OGRGeometry* inout) const
 {
   if (inout)
     ogr::apply<void>(inout, InPlace(*this));
@@ -152,9 +150,7 @@ void otb::internal::ReprojectTransformationFunctor::apply_inplace(OGRGeometry * 
 /*======================[ GeometriesProjectionFilter ]=======================*/
 /*===========================================================================*/
 
-otb::GeometriesProjectionFilter::GeometriesProjectionFilter()
-: m_InputImageReference(*this)
-, m_OutputImageReference(*this)
+otb::GeometriesProjectionFilter::GeometriesProjectionFilter() : m_InputImageReference(*this), m_OutputImageReference(*this)
 {
 }
 
@@ -168,8 +164,8 @@ void otb::GeometriesProjectionFilter::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
 
-  OutputGeometriesType::Pointer  output = this->GetOutput();
-  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
+  OutputGeometriesType::Pointer output = this->GetOutput();
+  itk::MetaDataDictionary&      dict   = output->GetMetaDataDictionary();
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);
 }
@@ -203,28 +199,27 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialization()
   m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
   // InputGeometriesType::ConstPointer   input      = this->GetInput();
-  OutputGeometriesType::Pointer       output     = this->GetOutput();
+  OutputGeometriesType::Pointer output = this->GetOutput();
   output->SetImageReference(m_OutputImageReference);
 }
 
 /*virtual*/
-OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialReference(
-  ogr::Layer const& itkNotUsed(source)) const
+OGRSpatialReference* otb::GeometriesProjectionFilter::DoDefineNewLayerSpatialReference(ogr::Layer const& itkNotUsed(source)) const
 {
   if (!m_OutputProjectionRef.empty())
-    {
-    char const* wkt_string = m_OutputProjectionRef.c_str();
-    OGRSpatialReference * osr = static_cast <OGRSpatialReference*>(OSRNewSpatialReference(wkt_string));
+  {
+    char const*          wkt_string = m_OutputProjectionRef.c_str();
+    OGRSpatialReference* osr        = static_cast<OGRSpatialReference*>(OSRNewSpatialReference(wkt_string));
     return osr;
-    }
+  }
   else
-    {
-    return ITK_NULLPTR;
-    }
+  {
+    return nullptr;
+  }
 }
 
 /*virtual*/
-void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, ogr::Layer & destination) const
+void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, ogr::Layer& destination) const
 {
   // Finish the initialization phase as somethings depends on the current layer
   // to process.
@@ -232,16 +227,16 @@ void otb::GeometriesProjectionFilter::DoProcessLayer(ogr::Layer const& source, o
   m_Transform->InstantiateTransform();
 
   if (source == destination)
-    {
-    itkExceptionMacro(<<"Geometries projection filter cannot work in-place as the resulting layers will have a new spatial reference."
-      " Please supply too different geometries sets to work on.");
-    }
+  {
+    itkExceptionMacro(<< "Geometries projection filter cannot work in-place as the resulting layers will have a new spatial reference."
+                         " Please supply too different geometries sets to work on.");
+  }
 
   m_TransformationFunctor(source, destination); // if TransformedElementType == layer
 }
 
 /*virtual*/
-void otb::GeometriesProjectionFilter::DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer & dest) const
+void otb::GeometriesProjectionFilter::DoDefineNewLayerFields(ogr::Layer const& source, ogr::Layer& dest) const
 
 {
   m_TransformationFunctor.DefineFields(source, dest);

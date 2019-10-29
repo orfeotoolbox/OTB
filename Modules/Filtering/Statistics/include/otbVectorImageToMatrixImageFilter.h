@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,16 +50,15 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentVectorImageToMatrixFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentVectorImageToMatrixFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentVectorImageToMatrixFilter           Self;
+  typedef PersistentVectorImageToMatrixFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -82,20 +81,20 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
-  //typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
-  typedef InternalPixelType RealType;
-  typedef itk::VariableLengthVector<RealType>                      RealPixelType;
+  // typedef typename itk::NumericTraits<InternalPixelType>::RealType RealType;
+  typedef InternalPixelType                   RealType;
+  typedef itk::VariableLengthVector<RealType> RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef vnl_matrix<RealType>                          MatrixType;
-  typedef itk::SimpleDataObjectDecorator<MatrixType>    MatrixObjectType;
+  typedef vnl_matrix<RealType>                       MatrixType;
+  typedef itk::SimpleDataObjectDecorator<MatrixType> MatrixObjectType;
 
   /** Return the computed matrix as a DataObject */
-  MatrixObjectType* GetMatrixOutput();
+  MatrixObjectType*       GetMatrixOutput();
   const MatrixObjectType* GetMatrixOutput() const;
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -114,13 +113,15 @@ public:
 
 protected:
   PersistentVectorImageToMatrixFilter();
-  ~PersistentVectorImageToMatrixFilter() override {}
+  ~PersistentVectorImageToMatrixFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentVectorImageToMatrixFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentVectorImageToMatrixFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 }; // end of class PersistentVectorImageToMatrixFilter
 
 /**===========================================================================*/
@@ -145,17 +146,15 @@ private:
  * \ingroup OTBStatistics
  */
 
-template<class TInputImage>
-class ITK_EXPORT VectorImageToMatrixImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentVectorImageToMatrixFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT VectorImageToMatrixImageFilter : public PersistentFilterStreamingDecorator<PersistentVectorImageToMatrixFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef VectorImageToMatrixImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentVectorImageToMatrixFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef VectorImageToMatrixImageFilter                                                       Self;
+  typedef PersistentFilterStreamingDecorator<PersistentVectorImageToMatrixFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                              Pointer;
+  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -163,18 +162,18 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(VectorImageToMatrixImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef TInputImage                                 InputImageType;
-  typedef typename Superclass::FilterType             PersistentFilterType;
+  typedef TInputImage                     InputImageType;
+  typedef typename Superclass::FilterType PersistentFilterType;
 
-  typedef typename PersistentFilterType::MatrixType             MatrixType;
-  typedef typename PersistentFilterType::MatrixObjectType       MatrixObjectType;
+  typedef typename PersistentFilterType::MatrixType       MatrixType;
+  typedef typename PersistentFilterType::MatrixObjectType MatrixObjectType;
 
   using Superclass::SetInput;
-  void SetInput(InputImageType * input)
+  void SetInput(InputImageType* input)
   {
     this->GetFilter()->SetInput(input);
   }
-  const InputImageType * GetInput()
+  const InputImageType* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -195,19 +194,21 @@ public:
 
 protected:
   /** Constructor */
-  VectorImageToMatrixImageFilter() {};
+  VectorImageToMatrixImageFilter(){};
   /** Destructor */
-  ~VectorImageToMatrixImageFilter() override {}
+  ~VectorImageToMatrixImageFilter() override
+  {
+  }
 
 private:
-  VectorImageToMatrixImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorImageToMatrixImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorImageToMatrixImageFilter.txx"
+#include "otbVectorImageToMatrixImageFilter.hxx"
 #endif
 
 #endif

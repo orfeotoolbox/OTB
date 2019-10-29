@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 
 #include "otbVectorImage.h"
@@ -28,17 +27,17 @@
 #include "otbReciprocalCovarianceToReciprocalCoherencyImageFilter.h"
 
 
-int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int itkNotUsed(argc), char * argv[])
+int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double                   PixelType;
-  typedef std::complex<PixelType>  InputPixelType;
+  typedef double                           PixelType;
+  typedef std::complex<PixelType>          InputPixelType;
   typedef otb::VectorImage<InputPixelType> ImageType;
   typedef otb::ReciprocalCovarianceToReciprocalCoherencyImageFilter<ImageType, ImageType> FilterType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -47,7 +46,7 @@ int otbReciprocalCovarianceToReciprocalCoherencyImageFilter(int itkNotUsed(argc)
   reader->SetFileName(inputFilename);
 
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput(reader->GetOutput());
+  filter->SetInput<0>(reader->GetOutput());
 
   writer->SetFileName(outputFilename);
   writer->SetInput(filter->GetOutput());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,13 +25,13 @@
 int otbOGRVectorDataIOCanWrite(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::OGRVectorDataIO OGRVectorDataIOType;
-  OGRVectorDataIOType::Pointer object = OGRVectorDataIOType::New();
+  OGRVectorDataIOType::Pointer object    = OGRVectorDataIOType::New();
   bool                         lCanWrite = object->CanWriteFile(argv[1]);
   if (lCanWrite == false)
-    {
+  {
     std::cerr << "Erreur otb::OGRVectorDataIO : impossible to create the file " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

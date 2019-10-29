@@ -13,8 +13,7 @@ Other binaries can be available as packages (OSGeo packages,
 Debian/Ubuntu packages, OpenSuse packages), however be advised that they
 may not be up-to-date nor delivered with full features. If you want to
 build from source or if we don’t provide packages for your system,
-information is available in the `Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_,
-in the section "Building from Source".
+information is available in the :ref:`compilingfromsource` section.
 
 You can get latest binary packages from our `Download page <https://www.orfeo-toolbox.org/download>`__.
 
@@ -24,7 +23,7 @@ Windows
 .. include:: Installation_Windows.rst
 
 Linux
-------------
+-----
 
 .. include:: Installation_Linux.rst
 
@@ -38,7 +37,7 @@ Other packages
 
 Warning! These packages may not be up-to-date with latest OTB
 releases. In addition, some features of the library may not be available
-on every platform. Some of these are not maintained by OTB-team. If you
+on every platform. Some of these are not maintained by the OTB-team. If you
 want to get involved in the packaging of OTB for your favourite
 platform, please contact us through the developer’s mailing list:
 otb-developers@googlegroups.com.
@@ -93,7 +92,7 @@ You will then need to run:
     sudo aptitude install otb-bin otb-bin-qt python-otb
 
 If you are using *Synaptic*, you can add the repositories, update and
-install the packages through the graphical interface.
+install the packages through the graphical user interface.
 
 For further information about Ubuntu packages go to
 `ubuntugis-unstable <https://launchpad.net/~ubuntugis/+archive/ubuntugis-unstable>`__
@@ -153,3 +152,15 @@ following repositories with these command-lines:
     http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 
 and then add the OTB packages as shown above.
+
+
+Archlinux
+~~~~~~~~~~
+
+Package is in AUR (Arch User Repository).
+You will then need to run (if you use yaourt, you could use trizen instead):
+
+::
+
+    yaourt -S orfeo-toolbox
+

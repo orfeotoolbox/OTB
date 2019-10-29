@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,10 @@
 #define otbWrapperQtWidgetIntParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
+
+#include "otbWrapperQtWidgetSpinBoxes.h"
 
 
 namespace otb
@@ -42,27 +42,26 @@ class OTBQtWidget_EXPORT QtWidgetIntParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetIntParameter(IntParameter*, QtWidgetModel*);
+  QtWidgetIntParameter(IntParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetIntParameter() override;
 
-protected slots:
-  void SetValue( int value );
+private slots:
+  void OnCleared();
+  void OnValueChanged(int);
+  void OnEditingFinished();
 
 private:
-  QtWidgetIntParameter(const QtWidgetIntParameter&); //purposely not implemented
-  void operator=(const QtWidgetIntParameter&); //purposely not implemented
+  QtWidgetIntParameter(const QtWidgetIntParameter&) = delete;
+  void operator=(const QtWidgetIntParameter&) = delete;
 
   void DoCreateWidget() override;
-
   void DoUpdateGUI() override;
 
-  QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QHBoxLayout*     m_QHBoxLayout;
+  QtWidgetSpinBox* m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };
-
-
 }
 }
 

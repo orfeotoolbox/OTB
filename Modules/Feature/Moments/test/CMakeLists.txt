@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,12 +24,9 @@ set(OTBMomentsTests
 otbMomentsTestDriver.cxx
 otbComplexMomentPathFloat.cxx
 otbRadiometricMomentsImageFunction.cxx
-otbComplexMomentPathNew.cxx
 otbHuMomentsImageFunction.cxx
 otbRealMomentsImageFunction.cxx
 otbComplexMomentsImageFunction.cxx
-otbHuPathNew.cxx
-otbFlusserPathNew.cxx
 otbFlusserMomentsImageFunction.cxx
 otbHuPath.cxx
 otbFlusserPath.cxx
@@ -51,9 +48,6 @@ otb_add_test(NAME feTvComplexMomentPathFloat COMMAND otbMomentsTestDriver
   1
   ${TEMP}/feComplexMomentPathFloat.txt)
 
-otb_add_test(NAME feTuRadiometricMomentsImageFunctionNew COMMAND otbMomentsTestDriver
-  otbRadiometricMomentsImageFunctionNew
-  )
 
 otb_add_test(NAME feTvRadiometricMomentsImageFunction COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRadiometricMomentsImageFunction.txt
@@ -63,9 +57,6 @@ otb_add_test(NAME feTvRadiometricMomentsImageFunction COMMAND otbMomentsTestDriv
   ${TEMP}/feTvRadiometricMomentsImageFunction.txt)
 
 
-
-otb_add_test(NAME feTuComplexMomentPathNew COMMAND otbMomentsTestDriver
-  otbComplexMomentPathNew)
 
 otb_add_test(NAME feTvHuMomentsImageFunction COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvHuMomentsImageFunction.txt
@@ -80,9 +71,6 @@ otb_add_test(NAME feTvHuMomentsImageFunctionScaleInvariant COMMAND otbMomentsTes
   ${INPUTDATA}/poupees.png
   )
 
-otb_add_test(NAME feTuHuMomentsImageFunctionNew COMMAND otbMomentsTestDriver
-  otbHuMomentsImageFunctionNew
-  )
 
 otb_add_test(NAME feTvHuMomentsImageFunctionRotationInvariant COMMAND otbMomentsTestDriver
   otbHuMomentsImageFunctionRotationInvariant
@@ -90,9 +78,6 @@ otb_add_test(NAME feTvHuMomentsImageFunctionRotationInvariant COMMAND otbMoments
   90
   )
 
-otb_add_test(NAME feTuRealMomentsImageFunctionNew COMMAND otbMomentsTestDriver
-  otbRealMomentsImageFunctionNew
-  )
 
 otb_add_test(NAME feTvRealMomentsImageFunction COMMAND otbMomentsTestDriver
   --compare-ascii ${NOTOL}     ${BASELINE_FILES}/feTvRealMomentsImageFunction.txt
@@ -115,9 +100,6 @@ otb_add_test(NAME feTvComplexMomentsImageFunction COMMAND otbMomentsTestDriver
   ${TEMP}/feTvComplexMomentsImageFunction.txt
   )
 
-otb_add_test(NAME feTuComplexMomentsImageFunctionNew COMMAND otbMomentsTestDriver
-  otbComplexMomentsImageFunctionNew
-  )
 
 otb_add_test(NAME feTvComplexMomentsImageFunctionScaleInvariant COMMAND otbMomentsTestDriver
   otbComplexMomentsImageFunctionScaleInvariant
@@ -127,18 +109,9 @@ otb_add_test(NAME feTvComplexMomentsImageFunctionScaleInvariant COMMAND otbMomen
   )
 
 
-otb_add_test(NAME feTuHuPathNew COMMAND otbMomentsTestDriver
-  otbHuPathNew)
 
 
 
-
-otb_add_test(NAME feTuFlusserPathNew COMMAND otbMomentsTestDriver
-  otbFlusserPathNew)
-
-otb_add_test(NAME feTuFlusserMomentsImageFunctionNew COMMAND otbMomentsTestDriver
-  otbFlusserMomentsImageFunctionNew
-  )
 
 otb_add_test(NAME feTvFlusserMomentsImageFunctionScaleInvariant COMMAND otbMomentsTestDriver
   otbFlusserMomentsImageFunctionScaleInvariant
@@ -182,9 +155,6 @@ otb_add_test(NAME feTvComplexMomentPath COMMAND otbMomentsTestDriver
   1
   ${TEMP}/feComplexMomentPath.txt)
 
-
-otb_add_test(NAME feTuRadiometricMomentsImageFilterNew COMMAND otbMomentsTestDriver
-  otbRadiometricMomentsImageFilterNew)
 
 otb_add_test(NAME feTvRadiometricMomentsImageFilter COMMAND otbMomentsTestDriver
   --compare-image ${EPSILON_8}

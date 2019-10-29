@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,6 @@
 #define otbImageToLuminanceImageFilter_h
 
 #include <otbImageToRadianceImageFilter.h>
-#include <vcl_deprecated_header.h>
 
 namespace otb
 {
@@ -37,8 +36,7 @@ namespace otb
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToLuminanceImageFilter :
-  public ImageToRadianceImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ImageToLuminanceImageFilter : public ImageToRadianceImageFilter<TInputImage, TOutputImage>
 {
 };
 
