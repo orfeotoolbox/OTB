@@ -415,7 +415,6 @@ private:
 
   /**
    */
-  bool m_isGLSLAvailable : 1;
   bool m_ForceNoGLSL : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/

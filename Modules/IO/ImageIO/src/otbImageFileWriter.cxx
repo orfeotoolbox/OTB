@@ -23,7 +23,7 @@
 namespace otb
 {
 
-// Explicit instanciation of common types
+// Explicit instantiation of common types
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<unsigned int, 2>>;
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<int, 2>>;
 template class OTBImageIO_EXPORT_EXPLICIT_TEMPLATE ImageFileWriter<Image<unsigned char, 2>>;
