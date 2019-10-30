@@ -161,7 +161,7 @@ void MultiImageFileWriter::InitializeStreaming()
       unsigned int smallestNbDiv = m_NumberOfDivisions;
       for (unsigned int i = 0; i < m_SinkList.size(); ++i)
       {
-        unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetInput()->GetLargestPossibleRegion(), m_NumberOfDivisions);
+        unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetRegionToWrite(), m_NumberOfDivisions);
         smallestNbDiv    = std::min(div, smallestNbDiv);
       }
       if (smallestNbDiv == m_NumberOfDivisions)
@@ -383,14 +383,22 @@ void MultiImageFileWriter::GenerateData()
   int numInputs = m_SinkList.size();
   for (int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
   {
-    m_SinkList[inputIndex]->Write(m_StreamRegionList[inputIndex]);
+    auto region = m_StreamRegionList[inputIndex];
+    
+    auto shiftIndex =  m_SinkList[inputIndex]->GetRegionToWrite().GetIndex();
+    auto index = region.GetIndex();
+    index[0] -= shiftIndex[0];
+    index[1] -= shiftIndex[1];
+    
+    region.SetIndex(index);
+    m_SinkList[inputIndex]->Write(region);
   }
 }
 
 MultiImageFileWriter::RegionType MultiImageFileWriter::GetStreamRegion(int inputIndex)
 {
   const SinkBase::Pointer sink   = m_SinkList[inputIndex];
-  RegionType              region = sink->GetInput()->GetLargestPossibleRegion();
+  RegionType              region = sink->GetRegionToWrite();
 
   m_StreamingManager->GetSplitter()->GetSplit(m_CurrentDivision, m_NumberOfDivisions, region);
   return region;

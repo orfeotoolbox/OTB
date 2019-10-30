@@ -200,6 +200,8 @@ public:
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
+  itkGetConstObjectMacro(FilenameHelper, FNameHelperType);
+
   /** This override doesn't return a const ref on the actual boolean */
   const bool& GetAbortGenerateData() const override;
 

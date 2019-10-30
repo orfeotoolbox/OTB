@@ -71,6 +71,38 @@ void MultiImageFileWriter::Sink<TImage>::Write(const RegionType& streamRegion)
   m_Writer->UpdateOutputData(nullptr);
 }
 
+template <class TImage>
+itk::ImageRegion<2>
+MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
+{
+  auto fnameHelper = m_Writer->GetFilenameHelper();
+  itk::ImageRegion<2> regionToWrite;
+  
+  
+  if (fnameHelper->BoxIsSet())
+  {
+    std::vector<int> boxVector;
+    Utils::ConvertStringToVector(fnameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    typename itk::ImageRegion<2>::IndexType start;
+    typename itk::ImageRegion<2>::SizeType  size;
+
+    start[0] = boxVector[0]; // first index on X
+    start[1] = boxVector[1]; // first index on Y
+    size[0]  = boxVector[2]; // size along X
+    size[1]  = boxVector[3]; // size along Y
+    regionToWrite.SetSize(size);
+    regionToWrite.SetIndex(start);
+    regionToWrite.Crop(m_InputImage->GetLargestPossibleRegion());
+    
+  }
+  else
+  {
+    regionToWrite = m_InputImage->GetLargestPossibleRegion();
+  }
+  return regionToWrite;
+}
+
 } // end of namespace otb
 
 #endif // otbMultiImageFileWriter_hxx

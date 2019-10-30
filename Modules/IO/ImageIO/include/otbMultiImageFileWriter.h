@@ -247,6 +247,9 @@ private:
     virtual bool                        CanStreamWrite() = 0;
     typedef boost::shared_ptr<SinkBase> Pointer;
 
+
+    virtual itk::ImageRegion<2> GetRegionToWrite() = 0;
+
   protected:
     /** The image on which streaming is performed */
     ImageBaseType::ConstPointer m_InputImage;
@@ -275,7 +278,12 @@ private:
     virtual void Write(const RegionType& streamRegion);
     virtual bool                    CanStreamWrite();
     typedef boost::shared_ptr<Sink> Pointer;
-
+    
+    /** Get the region that should be written. By default this is the largest possible region
+     * of the input image, but this might be overriden by the box extended filename parameter of 
+     * the input writer */
+    virtual itk::ImageRegion<2> GetRegionToWrite();
+  
   private:
     /** Actual writer for this image */
     typename otb::ImageFileWriter<TImage>::Pointer m_Writer;
