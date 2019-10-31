@@ -21,6 +21,7 @@
 # Configuration options for debian-unstable-gcc
 
 set(site_option
-"OTB_USE_MPI:BOOL=OFF
+"OpenCV_DIR:PATH=/usr
+OTB_USE_MPI:BOOL=OFF
 OTB_USE_SHARK:BOOL=OFF
 ")
