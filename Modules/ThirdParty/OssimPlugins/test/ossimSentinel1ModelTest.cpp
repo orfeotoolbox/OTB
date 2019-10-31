@@ -48,7 +48,7 @@ int main(int argc, char * argv[])
 {
    std::clog.precision(20);
 
-   string annotationXml;
+   std::string annotationXml;
    Inverse inverse = undef;
    bool verbose = false;
 
