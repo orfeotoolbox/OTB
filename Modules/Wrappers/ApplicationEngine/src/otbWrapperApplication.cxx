@@ -1241,7 +1241,7 @@ int Application::GetParameterInt(std::string const& key) const
   return GetParameterByKey(key)->ToInt();
 }
 
-float Application::GetParameterFloat(std::string const& key) const
+double Application::GetParameterFloat(std::string const& key) const
 {
   return GetParameterByKey(key)->ToFloat();
 }

@@ -421,7 +421,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Float
    */
-  float GetParameterFloat(std::string const& parameter) const;
+  double GetParameterFloat(std::string const& parameter) const;
 
   /* Get a string parameter value
    *
