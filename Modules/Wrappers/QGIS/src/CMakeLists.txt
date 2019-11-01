@@ -33,6 +33,7 @@ set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
 list(REMOVE_DUPLICATES app_names)
+list(SORT app_names)
 set(dfiles)
 set(generate_descriptor_cmd "$<TARGET_FILE:otbQgisDescriptor>")
 #debian does not use RPATH and build is failing
