@@ -369,8 +369,8 @@ void MultiImageFileWriter::GenerateInputRequestedRegion()
       SizeType   size   = region.GetSize();
       idx[0] += size[0] * (idxRequest[0] - idxLargest[0]) / sizeLargest[0];
       idx[1] += size[1] * (idxRequest[1] - idxLargest[1]) / sizeLargest[1];
-      size[0] *= sizeRequest[0] / sizeLargest[0];
-      size[1] *= sizeRequest[1] / sizeLargest[1];
+      size[0] *= (double) sizeRequest[0] / sizeLargest[0];
+      size[1] *= (double) sizeRequest[1] / sizeLargest[1];
       region.SetIndex(idx);
       region.SetSize(size);
       inputPtr->SetRequestedRegion(region);
