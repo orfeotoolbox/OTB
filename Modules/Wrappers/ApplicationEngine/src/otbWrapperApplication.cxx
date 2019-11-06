@@ -885,7 +885,8 @@ void Application::WriteOutput()
         {
           outputParam->SetRAMValue(ram);
         }
-        outputParam->SetMultiWriting(true);
+
+        outputParam->SetMultiWriting(m_MultiWriting);
         outputParam->SetMultiWriter(multiWriter);
         outputParam->InitializeWriters();
         std::ostringstream progressId;

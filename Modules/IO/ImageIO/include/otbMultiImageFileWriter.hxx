@@ -76,7 +76,6 @@ itk::ImageRegion<2>
 MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
 {
   auto fnameHelper = m_Writer->GetFilenameHelper();
-  
   if (fnameHelper->BoxIsSet())
   {
     std::vector<unsigned int> boxVector;
