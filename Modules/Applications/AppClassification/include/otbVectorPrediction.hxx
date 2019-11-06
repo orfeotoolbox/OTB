@@ -73,23 +73,29 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
 }
 
 template <bool                                                     RegressionMode>
-typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::ReadInputListSample(otb::ogr::Layer const& layer)
+typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::ReadInputListSample(ogr::DataSource::Pointer source)
 {
+  auto layer  = source->GetLayer(0);
   typename ListSampleType::Pointer input = ListSampleType::New();
 
-  const int nbFeatures = GetSelectedItems("feat").size();
+  const unsigned int nbFeatures = GetSelectedItems("feat").size();
   input->SetMeasurementVectorSize(nbFeatures);
 
+  ogr::Feature             feature = layer.ogr().GetNextFeature();
+  std::vector<int> featureFieldIndex(nbFeatures, -1);
+  for (unsigned int i = 0; i < nbFeatures; i++)
+  {
+    featureFieldIndex[i] = feature.ogr().GetFieldIndex(GetChoiceNames("feat")[GetSelectedItems("feat")[i]].c_str());
+    if (featureFieldIndex[i] < 0)
+      otbAppLogFATAL("The field name for feature " << GetChoiceNames("feat")[GetSelectedItems("feat")[i]].c_str() << " has not been found" << std::endl);
+  }
+  layer.ogr().ResetReading();
   for (auto const& feature : layer)
   {
     MeasurementType mv(nbFeatures);
-    for (int idx = 0; idx < nbFeatures; ++idx)
+    for (unsigned int idx = 0; idx < nbFeatures; ++idx)
     {
-      // Beware that itemIndex differs from ogr layer field index
-      unsigned int itemIndex = GetSelectedItems("feat")[idx];
-      std::string  fieldName = GetChoiceNames("feat")[itemIndex];
-
-      auto field = feature[fieldName];
+      auto field = feature[featureFieldIndex[idx]];
       switch (field.GetType())
       {
       case OFTInteger:
@@ -107,6 +113,7 @@ typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPredict
   }
   return input;
 }
+
 
 template <bool                                                     RegressionMode>
 typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::NormalizeListSample(ListSampleType::Pointer input)
@@ -280,13 +287,11 @@ void           VectorPrediction<RegressionMode>::DoExecute()
 
   auto shapefileName = GetParameterString("in");
 
-  auto source = otb::ogr::DataSource::New(shapefileName, otb::ogr::DataSource::Modes::Read);
+  ogr::DataSource::Pointer source  = ogr::DataSource::New(shapefileName, ogr::DataSource::Modes::Read);
   auto layer  = source->GetLayer(0);
-
-  auto input = ReadInputListSample(layer);
+  auto input = ReadInputListSample(source);
 
   ListSampleType::Pointer listSample = NormalizeListSample(input);
-
   typename LabelListSampleType::Pointer target;
 
   // The quality listSample containing confidence values is defined here, but is only used when

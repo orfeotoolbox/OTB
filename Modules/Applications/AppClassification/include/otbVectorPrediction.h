@@ -99,7 +99,7 @@ private:
   bool shouldComputeConfidenceMap() const;
 
   /** Method returning the input list sample from the input layer */
-  typename ListSampleType::Pointer ReadInputListSample(otb::ogr::Layer const& layer);
+  typename ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source);
 
   /** Normalize a list sample using the statistic file given  */
   typename ListSampleType::Pointer NormalizeListSample(ListSampleType::Pointer input);
