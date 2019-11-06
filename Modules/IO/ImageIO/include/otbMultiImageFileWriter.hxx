@@ -87,6 +87,16 @@ MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
     typename itk::ImageRegion<2>::IndexType start;
     typename itk::ImageRegion<2>::SizeType  size;
 
+    if (boxVector.size() != 4)
+    {
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream            msg;
+      msg << "Invalid box option " << fnameHelper->GetBox() << ". The box should contains four elements: startx:starty:sizex:sizey";
+      e.SetDescription(msg.str());
+      e.SetLocation(ITK_LOCATION);
+      throw e;
+    }
+
     start[0] = boxVector[0]; // first index on X
     start[1] = boxVector[1]; // first index on Y
     size[0]  = boxVector[2]; // size along X

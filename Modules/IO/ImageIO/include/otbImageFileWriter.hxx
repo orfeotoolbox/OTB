@@ -454,6 +454,16 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
     std::vector<int> boxVector;
     Utils::ConvertStringToVector(m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
 
+    if (boxVector.size() != 4)
+    {
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream            msg;
+      msg << "Invalid box option " << m_FilenameHelper->GetBox() << ". The box should contains four elements: startx:starty:sizex:sizey";
+      e.SetDescription(msg.str());
+      e.SetLocation(ITK_LOCATION);
+      throw e;
+    }
+
     typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
 
