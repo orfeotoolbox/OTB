@@ -451,7 +451,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   /** Parse region size modes */
   if (m_FilenameHelper->BoxIsSet())
   {
-    std::vector<int> boxVector;
+    std::vector<unsigned int> boxVector;
     Utils::ConvertStringToVector(m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
 
     if (boxVector.size() != 4)
@@ -464,13 +464,9 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       throw e;
     }
 
-    typename InputImageRegionType::IndexType start;
-    typename InputImageRegionType::SizeType  size;
-
-    start[0] = boxVector[0]; // first index on X
-    start[1] = boxVector[1]; // first index on Y
-    size[0]  = boxVector[2]; // size along X
-    size[1]  = boxVector[3]; // size along Y
+    typename itk::ImageRegion<2>::IndexType start {boxVector[0], boxVector[1]};
+    typename itk::ImageRegion<2>::SizeType size {boxVector[2], boxVector[3]};
+    
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
 

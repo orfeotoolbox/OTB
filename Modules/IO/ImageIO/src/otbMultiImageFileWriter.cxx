@@ -126,7 +126,7 @@ void MultiImageFileWriter::InitializeStreaming()
     otbWarningMacro(<< "One of the selected ImageIO does not support streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
     FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
-    RegionType      region  = fakeOut->GetLargestPossibleRegion();
+    RegionType const& region  = fakeOut->GetLargestPossibleRegion();
     m_StreamingManager->PrepareStreaming(fakeOut, region);
   }
 

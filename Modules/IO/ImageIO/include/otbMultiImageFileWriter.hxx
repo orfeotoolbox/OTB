@@ -76,16 +76,11 @@ itk::ImageRegion<2>
 MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
 {
   auto fnameHelper = m_Writer->GetFilenameHelper();
-  itk::ImageRegion<2> regionToWrite;
-  
   
   if (fnameHelper->BoxIsSet())
   {
-    std::vector<int> boxVector;
+    std::vector<unsigned int> boxVector;
     Utils::ConvertStringToVector(fnameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
-
-    typename itk::ImageRegion<2>::IndexType start;
-    typename itk::ImageRegion<2>::SizeType  size;
 
     if (boxVector.size() != 4)
     {
@@ -96,21 +91,17 @@ MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
       e.SetLocation(ITK_LOCATION);
       throw e;
     }
-
-    start[0] = boxVector[0]; // first index on X
-    start[1] = boxVector[1]; // first index on Y
-    size[0]  = boxVector[2]; // size along X
-    size[1]  = boxVector[3]; // size along Y
-    regionToWrite.SetSize(size);
-    regionToWrite.SetIndex(start);
-    regionToWrite.Crop(m_InputImage->GetLargestPossibleRegion());
     
+    typename itk::ImageRegion<2>::IndexType start {boxVector[0], boxVector[1]};
+    typename itk::ImageRegion<2>::SizeType size {boxVector[2], boxVector[3]};
+    itk::ImageRegion<2> regionToWrite {start , size};
+    regionToWrite.Crop(m_InputImage->GetLargestPossibleRegion());
+    return regionToWrite;
   }
   else
   {
-    regionToWrite = m_InputImage->GetLargestPossibleRegion();
+    return m_InputImage->GetLargestPossibleRegion();
   }
-  return regionToWrite;
 }
 
 } // end of namespace otb
