@@ -257,6 +257,8 @@ private:
 
     AddRAMParameter();
 
+    SetMultiWriting(true);
+
     // Doc example parameter settings
     SetDocExampleParameterValue("ref", "StereoFixed.png");
     SetDocExampleParameterValue("sec", "StereoMoving.png");

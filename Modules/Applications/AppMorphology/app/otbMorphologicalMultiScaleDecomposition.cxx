@@ -144,6 +144,7 @@ private:
     SetMinimumParameterIntValue("levels", 1);
 
     AddRAMParameter();
+    SetMultiWriting(true);
 
     SetDocExampleParameterValue("in", "ROI_IKO_PAN_LesHalles.tif");
     SetDocExampleParameterValue("structype", "ball");
