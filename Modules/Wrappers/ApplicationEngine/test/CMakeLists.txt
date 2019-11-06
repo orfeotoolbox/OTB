@@ -56,6 +56,10 @@ otb_add_test(NAME owTvFloatParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperFloatParameterTest
   )
 
+otb_add_test(NAME owTvDoubleParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperDoubleParameterTest
+  )
+
 otb_add_test(NAME owTvIntParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperIntParameterTest
   )

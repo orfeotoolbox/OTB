@@ -127,6 +127,15 @@ public:
     return static_cast<float>(*m_Value);
   }
 
+  double ToDouble() const override
+  {
+    if (!HasValue())
+    {
+      itkExceptionMacro("Cannot convert parameter " << GetKey() << " to double (no value).");
+    }
+    return static_cast<double>(*m_Value);
+  }
+
   void FromInt(int value) override
   {
     SetValue(value);
@@ -191,6 +200,28 @@ public:
   }
 
   void FromFloat(float value) override
+  {
+    SetValue(value);
+  }
+};
+
+class OTBApplicationEngine_EXPORT DoubleParameter : public NumericalParameter<double>
+{
+public:
+  /** Standard class typedef */
+  typedef DoubleParameter                Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(NumericalParameter, Parameter);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Double;
+  }
+
+  void FromDouble(double value) override
   {
     SetValue(value);
   }
