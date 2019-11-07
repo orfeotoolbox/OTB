@@ -114,9 +114,7 @@ private:
         "X and Y offsets, as well as the metric value. A sub-pixel accuracy can "
         "be expected. The input images should have the same size and same "
         "physical space.");
-    SetDocLimitations(
-        "If the 'warp' option is activated, the pipeline will be "
-        "executed twice.");
+    SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
