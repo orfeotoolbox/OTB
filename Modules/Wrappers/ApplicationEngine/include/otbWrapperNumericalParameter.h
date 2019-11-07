@@ -194,7 +194,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Float;
   }
@@ -216,7 +216,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Double;
   }
@@ -238,7 +238,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Int;
   }
@@ -259,7 +259,7 @@ public:
   /** RTTI support */
   itkTypeMacro(RAMParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_RAM;
   }
@@ -291,7 +291,7 @@ public:
     return true;
   }
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Radius;
   }
